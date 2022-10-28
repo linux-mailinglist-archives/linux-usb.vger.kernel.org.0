@@ -2,52 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454CE610EAE
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 12:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F7F610EEB
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 12:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiJ1KiQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 06:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S231129AbiJ1Kpm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 06:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiJ1Khr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 06:37:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718341C73D8;
-        Fri, 28 Oct 2022 03:37:19 -0700 (PDT)
+        with ESMTP id S230467AbiJ1KpQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 06:45:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF09259EB0;
+        Fri, 28 Oct 2022 03:45:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E38462765;
-        Fri, 28 Oct 2022 10:37:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2487FC433C1;
-        Fri, 28 Oct 2022 10:37:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ECC8B82949;
+        Fri, 28 Oct 2022 10:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862DAC433D6;
+        Fri, 28 Oct 2022 10:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666953438;
-        bh=DswN2BfuKinwRunqzOR2Ky9Gy/j+dcMTsxu/K35r21o=;
+        s=korg; t=1666953909;
+        bh=jKcdal1eAeH548wTNr8DKucNg4vasE8ekmVm8y7XImA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gwacUfVNSHnrmULCjz/faapZJe0gYTC5HfgjqJLdAJMfPFCPBavC1/TpIJSxVyUzu
-         k70f5jkQ69xx7+V6TlkrjNEHzbG/PFa7LFFzWJwWq8F5dpRySPr3FuMp17s59P/FsR
-         Fmja8faMy+OerMbRFghlOe1kMUNDb3CuYF7WR6ek=
-Date:   Fri, 28 Oct 2022 12:37:15 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jim Lin <jilin@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+        b=Yj4rM9tk42hh+CVR/IUQmzjUBjxPas+HXIlaEYElR28cd9q8zhAlIGsAKUZPbAnWj
+         IiLLZMdbiBtghSWFCGIT1oFeRr1tG9nRmi/uEt5pxCgoXTXkQHBsN3AEXd5GtYW8WV
+         pB3iHBjQtZqj1JDNwL+yV00dTSsob0fez4TMySg8=
+Date:   Fri, 28 Oct 2022 12:45:06 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Lei Yu <yulei.sh@bytedance.com>, Felipe Balbi <balbi@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v5 1/3] xhci: hub: export symbol on xhci_hub_control
-Message-ID: <Y1uw2zp/XnUdgEwJ@kroah.com>
-References: <20221027133127.27592-1-jilin@nvidia.com>
- <20221027133127.27592-2-jilin@nvidia.com>
- <Y1qOhjOXM4sQW+a/@kroah.com>
- <3c3b175d2031b8e440bfdef9b4c23c0272a5f607.camel@nvidia.com>
- <Y1txBtRZAJ5vpItj@kroah.com>
- <Y1ul9zU2wmbJo3x7@orome>
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH] usb: gadget: aspeed: fix buffer overflow
+Message-ID: <Y1uyssu84kl1INSR@kroah.com>
+References: <20221024094853.2877441-1-yulei.sh@bytedance.com>
+ <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
+ <HK0PR06MB320203EF8E3AD14C34359B0580329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1ueEYJk2epT/g4J@kroah.com>
+ <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1ul9zU2wmbJo3x7@orome>
+In-Reply-To: <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,65 +63,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 11:50:47AM +0200, Thierry Reding wrote:
-> On Fri, Oct 28, 2022 at 08:04:54AM +0200, gregkh@linuxfoundation.org wrote:
-> > On Fri, Oct 28, 2022 at 05:36:41AM +0000, Jim Lin wrote:
-> > > On Thu, 2022-10-27 at 15:58 +0200, Greg KH wrote:
-> > > > External email: Use caution opening links or attachments
-> > > > 
-> > > > 
-> > > > On Thu, Oct 27, 2022 at 09:31:25PM +0800, Jim Lin wrote:
-> > > > > Add EXPORT_SYMBOL_GPL on xhci_hub_control() for other driver module
-> > > > > to invoke and avoid linking error.
-> > > > 
-> > > > What other driver module?
-> > > > 
-> > > > There is no user here :(
-> > > > 
-> > > > confused,
-> > > > 
-> > > 
-> > > In arch/arm/configs/multi_v7_defconfig
-> > > It defines
-> > > CONFIG_USB_XHCI_TEGRA=m
-> > > 
-> > > If I don't add EXPORT_SYMBOL_GPL on xhci_hub_control()
-> > > , I will get compile/linking error like
-> > > 
-> > > ERROR: modpost: "xhci_hub_control" [drivers/usb/host/xhci-tegra.ko]
-> > > undefined!
-> > > 
-> > > if patch
-> > > "[PATCH v5,3/3] xhci: tegra: USB2 pad power controls"
-> > > 
-> > > https://patchwork.kernel.org/project/linux-usb/patch/20221027133127.27592-4-jilin@nvidia.com/
-> > > is added in xhci-tegra.c to invoke xhci_hub_control()
-> > > 
-> > > Should I integrate this patch with [PATCH v5,3/3] as one?
+On Fri, Oct 28, 2022 at 09:55:57AM +0000, Neal Liu wrote:
+> > > > > Thanks for your feedback.
+> > > > > I tried to reproduce it on my side, and it cannot be reproduce it.
+> > > > > Here are my test sequences:
+> > > > > 1. emulate one of the vhub port to usb ethernet through Linux
+> > > > > gadget
+> > > > > (ncm)
+> > > >
+> > > > We are using rndis instead of ncm.
+> > > >
+> > > > > 2. connect BMC vhub to Host
+> > > > > 3. BMC & Host can ping each other (both usb eth dev default mtu is
+> > > > > 1500) 4. Set BMC mtu to 1000 (Host OS cannot set usb eth dev mtu
+> > > > > to 2000, it's maxmtu is 1500)
+> > > >
+> > > > Not sure if it's related, but in my case (USB rndis, Debian 10 OS)
+> > > > it should be able to set MTU to 2000.
+> > >
+> > > Using rndis is able to set MTU to 2000, and the issue can be reproduced.
 > > 
-> > Yes, do not add something that is not needed for that specific commit,
-> > otherwise it causes reviewers to be confused.
+> > Please NEVER use rndis anymore.  I need to go just delete that driver from
+> > the tree.
+> > 
+> > It is insecure-by-design and will cause any system that runs it to be instantly
+> > compromised and it can not be fixed.  Never trust it.
+> > 
+> > Even for data throughput tests, I wouldn't trust it as it does odd things with
+> > packet sizes as you show here.
 > 
-> Other subsystem maintainers prefer core changes to be split from driver
-> changes, so this type of split is commonly encountered elsewhere.
-> 
-> Obviously, since this is your turf you get to make the rules. I'm just
-> trying to say that this kind of advice can be confusing for contributors
-> because when they then sent driver and code changes mixed for their next
-> submission, the subsystem maintainer might tell them otherwise.
+> Thanks for the info, Greg.
+> If rndis will no longer be supported, how to use usb-ethernet on Windows OS?
+> For my understanding, ncm/ecm cannot work on Windows OS.
 
-Sure, but if you do split it up like this, DOCUMENT WHY THE EXPORT IS
-NEEDED.  That didn't happen here so I had no idea why this was even an
-issue.
+rndis should ONLY be there for Windows XP, which is long out-of-support.
+Newer versions of windows have more sane usb protocols built into it and
+this driver is not needed.
 
-And yes, I am very sensitive to this, we have had LOTS of people trying
-to export xhci symbols in the past few years for no in-kernel users,
-despite us constantly telling them that this is not allowed.  It
-happened again, just yesterday:
-	https://lore.kernel.org/r/20221027004050.4192111-1-albertccwang@google.com
-
-And at first glance, I assumed this was much the same as there was no
-description of why this was needed at all.
+As proof of this, Android devices removed this from their kernel
+configuration a few years ago and no one has complained :)
 
 thanks,
 
