@@ -2,74 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB91610B78
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 09:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26BD610C79
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 10:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiJ1HmH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 03:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S230013AbiJ1Itb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 04:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiJ1HmG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 03:42:06 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB7CAC4B1
-        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 00:42:05 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id f68so2080659vkc.8
-        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 00:42:05 -0700 (PDT)
+        with ESMTP id S229531AbiJ1Ita (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 04:49:30 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18E51BB56F;
+        Fri, 28 Oct 2022 01:49:24 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so3916999pjl.3;
+        Fri, 28 Oct 2022 01:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ennOQKFOTwsP0hyLNdo0z1k0y6OG1jhsLXFhNIam/zE=;
-        b=RMQWpuATlVIwbvb2c5IDualoj7xt9KjdY8SfP6kH7GH6Rp7kM+RSjQktoo5ZRwNoaN
-         axAfzAi/ppoWLQp0umuuDbqW9yCjsQNeZM8w9TYJvN5Ii6RV6mpeS/CTkabzbjdUK2li
-         4X9IuQetRuS7p0MMH7l6Uy7FSUCubxgHn2Y8bZoGoUVfew3y7Ovs8+kU39ZtyK++w8o3
-         pFUMWM5Eh73tpsrFT5p7DWui+9qU3mA/k+7rZgQOgVL2YL65Oe4cPdMSR54rEKCvNx94
-         TeZ2RRWBFDZ8y6oPlOlc2Et+dSDVErFGIyNH1X7yqQ1/7eiMMit2dHaUXSAWOgmSOSEM
-         3w3g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+W6HdSggedVNAmKo44TRVUJtR5I0fDVO41SU1t933A=;
+        b=ZlFVufaSjqP/ASYTdwQb9tl7oyw9vZS35rJU/RjqitL7RCi8kuSG7Jsrqd7MSTvNcX
+         h3ODQ0RIBU5a3GQmXSBE83vhrGXPf0qDoO8w8r5a4vICkq+wuJJfzluwzlwMCDaPR8aQ
+         BORQ5MPT+9zEns0XulJEZByS0a/2phk6veX5vW5zl7062SMAcvbR4bngRMKvVpl5YK4y
+         JU7ZjK2/u9SxXAov5rUdsZdKo56RQQbO6hKFbwJ3kTr6PriLeFlvBgvcZzq+N2+kU1zM
+         I/Fs6vN9ApNugZylu8UBaKsPFYe0uRMZ9SdnpcbLB3fiFUxWcZzsh/Nqak85Sil3Qpj8
+         flOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ennOQKFOTwsP0hyLNdo0z1k0y6OG1jhsLXFhNIam/zE=;
-        b=qzqt68zGjcXio31M6igqDaFuCCnf747fySGY0b4Oly+U11oIhmuGj+Yt9xcWmtzTNc
-         mEyNoaJaXjANRHc6QiuQ1MnHr6KLiaJYGb8Db7wuy98J2dar+uGxKqH4Z6UgYhaYWU6o
-         wq4DfRmal/qW+vXmPHDVcClsB/X/QyfqxeaAfGj5YNSxihlQ/MtS4zOe5QN94JELok/e
-         4TuA8o2LQ8/KHxa+agWUdHlYbce9qfhLUwfQh1htDwg4Ooawgv2WVobmlMESoa/14n8z
-         hydS4hiTHCX4J3W+bbm1GAMem84eHZi1DVLlOhSPt7RaeKbxUeqOu4J0zN4ZVyXpEnbG
-         9DQg==
-X-Gm-Message-State: ACrzQf0SvADgZmTEe36zFqdJa9kCGmXQABID3DQxkZyE/fGK4AuoJu7J
-        dAULKhCs+l2cJJZCx9MPP7UWEOODYGzPAQuXmawr4w==
-X-Google-Smtp-Source: AMsMyM5OGqik8I98x+1T7m1YLDt44URvqhh31TER1G3asikOjsHwkZ5yg4Q1WSqd7twier+Ny5ZP2j+htkuzjLnc/QU=
-X-Received: by 2002:ac5:c981:0:b0:3b7:c85d:cfeb with SMTP id
- e1-20020ac5c981000000b003b7c85dcfebmr4176168vkm.30.1666942924249; Fri, 28 Oct
- 2022 00:42:04 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g+W6HdSggedVNAmKo44TRVUJtR5I0fDVO41SU1t933A=;
+        b=phj7gkc/ZQ8Zx4z7vcrGamTU1DaqYLMObyZjmL+v9j0iArEU/a0Ga1D0OYXL39XyCu
+         z/9NBd7WSyByWAueD2xJHdb4DEBv6CdkRCT3BkIebR43RZHsQm26JJZh2NdEtlYskJ6N
+         Al/+UZNcIxO/nHEZQU/FoFTquOjNM7fo/0+llkJkGBg3QggaqoSCfA+CBNLFPckIfmwR
+         Ts/TuoJMnzl7av3aLpMyCUbQEaw1PgbUnd65E2gpY1M0UtFEjBQPuk8yRAvieVmBmTZj
+         6psDY71WzKbnz6R31N8OrNVWlz+UaWdQiaLMp/inVRPkH3kqOdHc1dT69uzUjeNHPLGT
+         INXw==
+X-Gm-Message-State: ACrzQf0F2H3mngJCxJckc3G+Juz7wqw4o01ADcAK1Dg40fmoC/T1lxIH
+        XN70tjgKv9kgQosrYhgmB1I=
+X-Google-Smtp-Source: AMsMyM5gQaPFuvITBpw4qWMCFy8pdSdOeML/FaZqEcgGgF8C4s8zlMAtzeAAUjUUOplktZu9A5XoRg==
+X-Received: by 2002:a17:90b:3646:b0:213:812c:7c62 with SMTP id nh6-20020a17090b364600b00213812c7c62mr5646050pjb.194.1666946964032;
+        Fri, 28 Oct 2022 01:49:24 -0700 (PDT)
+Received: from localhost ([60.27.159.185])
+        by smtp.gmail.com with ESMTPSA id y6-20020a626406000000b0056bc1a41209sm2401584pfb.33.2022.10.28.01.49.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 01:49:23 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+        bruce.chen@unisoc.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: Fix dentry leak in dwc3_gadget_free_endpoints
+Date:   Fri, 28 Oct 2022 16:49:19 +0800
+Message-Id: <20221028084919.21654-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221024094853.2877441-1-yulei.sh@bytedance.com> <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
-In-Reply-To: <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
-From:   Lei Yu <yulei.sh@bytedance.com>
-Date:   Fri, 28 Oct 2022 15:41:53 +0800
-Message-ID: <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
-Subject: RE: [PATCH] usb: gadget: aspeed: fix buffer overflow
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Henry Tian <tianxiaofeng@bytedance.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,42 +68,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 2:59 PM Neal Liu <neal_liu@aspeedtech.com> wrote:
->
-> Thanks for your feedback.
-> I tried to reproduce it on my side, and it cannot be reproduce it.
-> Here are my test sequences:
-> 1. emulate one of the vhub port to usb ethernet through Linux gadget (ncm=
-)
+From: Bruce Chen <bruce.chen@unisoc.com>
 
-We are using rndis instead of ncm.
+When using debugfs_remove_recursive leaks a dentry with
+a hotplug stress test, the phone runs out of memory.
 
-> 2. connect BMC vhub to Host
-> 3. BMC & Host can ping each other (both usb eth dev default mtu is 1500)
-> 4. Set BMC mtu to 1000 (Host OS cannot set usb eth dev mtu to 2000, it's =
-maxmtu is 1500)
+Thus fix the issue by using the newly created debugfs_lookup_and_remove().
 
-Not sure if it's related, but in my case (USB rndis, Debian 10 OS) it
-should be able to set MTU to 2000.
+Signed-off-by: Bruce Chen <bruce.chen@unisoc.com>
+Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+---
+ drivers/usb/dwc3/core.h    | 1 +
+ drivers/usb/dwc3/debugfs.c | 3 ++-
+ drivers/usb/dwc3/gadget.c  | 4 +---
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-> 5. ping BMC with `s -1500` argument from Host OS
-> 6. BMC kernel no oops
->
-> I dumped the `req` related members in ast_vhub_epn_handle_ack() to see if=
- whether the received data length exceeds the buffer length.
-> In my case `req.length` is 16384 bytes, so it never exceeds it in this ca=
-se.
-> I'm wondering what's the value of `req.length` in your test scenario? And=
- how can I reproduce it?
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 8f9959ba9fd4..ba3ecaa7f06c 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1261,6 +1261,7 @@ struct dwc3 {
+ 	u8			num_eps;
+ 
+ 	struct dwc3_hwparams	hwparams;
++	struct dentry		*root;
+ 	struct debugfs_regset32	*regset;
+ 
+ 	u32			dbg_lsp_select;
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index f2b7675c7f62..b9af4a81f51d 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -911,6 +911,7 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+ 	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
+ 
+ 	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
++	dwc->root = root;
+ 	debugfs_create_regset32("regdump", 0444, root, dwc->regset);
+ 	debugfs_create_file("lsp_dump", 0644, root, dwc, &dwc3_lsp_fops);
+ 
+@@ -929,6 +930,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+ 
+ void dwc3_debugfs_exit(struct dwc3 *dwc)
+ {
+-	debugfs_remove(debugfs_lookup(dev_name(dwc->dev), usb_debug_root));
++	debugfs_remove(dwc->root);
+ 	kfree(dwc->regset);
+ }
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 079cd333632e..6d6c188fcbea 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3172,9 +3172,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
+ 			list_del(&dep->endpoint.ep_list);
+ 		}
+ 
+-		debugfs_remove_recursive(debugfs_lookup(dep->name,
+-				debugfs_lookup(dev_name(dep->dwc->dev),
+-					       usb_debug_root)));
++		debugfs_lookup_and_remove(dep->name, dwc->root);
+ 		kfree(dep);
+ 	}
+ }
+-- 
+2.34.1
 
-The last 3 calls of ast_vhub_epn_handle_ack():
-
-ast_vhub_epn_handle_ack=EF=BC=9Areq->last_desc=3D-1
-req.actual=3D1024,req.length=3D1578,ep->ep.maxpacket=3D512
-ast_vhub_epn_handle_ack=EF=BC=9Areq->last_desc=3D-1
-req.actual=3D1536,req.length=3D1578,ep->ep.maxpacket=3D512
-ast_vhub_epn_handle_ack=EF=BC=9Areq->last_desc=3D1
-req.actual=3D1634,req.length=3D1578,ep->ep.maxpacket=3D512
-
-We can see the last packet 1634 exceeds the req.legnth 1578, and
-that's when the buffer overflow occurs.
