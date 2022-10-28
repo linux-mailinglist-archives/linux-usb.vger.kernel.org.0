@@ -2,65 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26BD610C79
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 10:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5C0610C9B
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 11:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJ1Itb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 04:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
+        id S229777AbiJ1JBZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 05:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJ1Ita (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 04:49:30 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18E51BB56F;
-        Fri, 28 Oct 2022 01:49:24 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so3916999pjl.3;
-        Fri, 28 Oct 2022 01:49:24 -0700 (PDT)
+        with ESMTP id S229522AbiJ1JBX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 05:01:23 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B10614EC7A
+        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 02:01:22 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-36fc0644f51so38825807b3.17
+        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 02:01:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g+W6HdSggedVNAmKo44TRVUJtR5I0fDVO41SU1t933A=;
-        b=ZlFVufaSjqP/ASYTdwQb9tl7oyw9vZS35rJU/RjqitL7RCi8kuSG7Jsrqd7MSTvNcX
-         h3ODQ0RIBU5a3GQmXSBE83vhrGXPf0qDoO8w8r5a4vICkq+wuJJfzluwzlwMCDaPR8aQ
-         BORQ5MPT+9zEns0XulJEZByS0a/2phk6veX5vW5zl7062SMAcvbR4bngRMKvVpl5YK4y
-         JU7ZjK2/u9SxXAov5rUdsZdKo56RQQbO6hKFbwJ3kTr6PriLeFlvBgvcZzq+N2+kU1zM
-         I/Fs6vN9ApNugZylu8UBaKsPFYe0uRMZ9SdnpcbLB3fiFUxWcZzsh/Nqak85Sil3Qpj8
-         flOQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hAmqKoUne0t3PzKfRmKr49ptCla0dfe721hyNgLvUyE=;
+        b=cdbdCQIsm/LZ5BUiQ3qFhisI6ul9bB9aozYKXmwBnB2DDANatskHwcMCwULCO23Ktx
+         8gzAjppfmSgbPykMyYAK0yq/BgGXzadwSLnK1qkhx5HLJwcChIZK8d889jr6VgEAteWD
+         ESNrP9NkMM11rEnhK6OPszQ3wGD4cKLefKj9tsn/e6vnl7m6+YFcjdlNJGCJmANjIw2x
+         P1Fk7eXHs2TyQkM+DfLnlvKfJMe2urAPD+AXIGW6qKAG+GqsNW7nW9U0G6rGSvp2ry86
+         seUCrRes+9PsVqVO9xewoImgcxKDme9OcibXYSez5AJgsxdZ3i3TanfsMbr+lM4z1fT1
+         ZqGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g+W6HdSggedVNAmKo44TRVUJtR5I0fDVO41SU1t933A=;
-        b=phj7gkc/ZQ8Zx4z7vcrGamTU1DaqYLMObyZjmL+v9j0iArEU/a0Ga1D0OYXL39XyCu
-         z/9NBd7WSyByWAueD2xJHdb4DEBv6CdkRCT3BkIebR43RZHsQm26JJZh2NdEtlYskJ6N
-         Al/+UZNcIxO/nHEZQU/FoFTquOjNM7fo/0+llkJkGBg3QggaqoSCfA+CBNLFPckIfmwR
-         Ts/TuoJMnzl7av3aLpMyCUbQEaw1PgbUnd65E2gpY1M0UtFEjBQPuk8yRAvieVmBmTZj
-         6psDY71WzKbnz6R31N8OrNVWlz+UaWdQiaLMp/inVRPkH3kqOdHc1dT69uzUjeNHPLGT
-         INXw==
-X-Gm-Message-State: ACrzQf0F2H3mngJCxJckc3G+Juz7wqw4o01ADcAK1Dg40fmoC/T1lxIH
-        XN70tjgKv9kgQosrYhgmB1I=
-X-Google-Smtp-Source: AMsMyM5gQaPFuvITBpw4qWMCFy8pdSdOeML/FaZqEcgGgF8C4s8zlMAtzeAAUjUUOplktZu9A5XoRg==
-X-Received: by 2002:a17:90b:3646:b0:213:812c:7c62 with SMTP id nh6-20020a17090b364600b00213812c7c62mr5646050pjb.194.1666946964032;
-        Fri, 28 Oct 2022 01:49:24 -0700 (PDT)
-Received: from localhost ([60.27.159.185])
-        by smtp.gmail.com with ESMTPSA id y6-20020a626406000000b0056bc1a41209sm2401584pfb.33.2022.10.28.01.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 01:49:23 -0700 (PDT)
-From:   Cixi Geng <gengcixi@gmail.com>
-To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        bruce.chen@unisoc.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: Fix dentry leak in dwc3_gadget_free_endpoints
-Date:   Fri, 28 Oct 2022 16:49:19 +0800
-Message-Id: <20221028084919.21654-1-gengcixi@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hAmqKoUne0t3PzKfRmKr49ptCla0dfe721hyNgLvUyE=;
+        b=vZYCdeGjSkT7j94QvV0NJEof8CRP/nELcSgl74dxIBDl7GYG6nK3pdGC5cXACuVXyM
+         3wHPKa4nmKSPP70TJ/auPlkWXG/JrOLYM2PTrFa7L4pqjnReqp30NRU/jMBCGp8DLWRh
+         ixl6SPf3cWZLs/aP5T5rEHurV63PmbK1AmTwCnp+UhKYVnjHCiPxtzfxxOqGE8ddaXH0
+         KHRMwqAJKUQv74NTj2FrdDuMAMT2uDlp1ReVPGksLB5v9p27IKLNG4+DtAAG5uW/oWFZ
+         /wSr4Pl8glhneuXvE31p2edp/lmhqlDNwfrXw5rOVSdqM3KLhPNlWVQ+dydq6pNzBEdV
+         Ur4w==
+X-Gm-Message-State: ACrzQf16BrVDmBfpcAoN94sd26jLQoxwLk4tJGKwpUTWf+mCSOAU1h2Q
+        k3HaIJmxtAzQFxpsSpjgZgiJ/+QWsNs=
+X-Google-Smtp-Source: AMsMyM6dHm16BB9w0OHIqGP7xzgFMLd6b/b59odbMwdxz2USn5S6oS/M2OAKqikO8ft3lJ5PQVymIH5wxk4=
+X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:c8cf:1264:21c3:c6ff])
+ (user=raychi job=sendgmr) by 2002:a25:bbcc:0:b0:6a8:e269:5eec with SMTP id
+ c12-20020a25bbcc000000b006a8e2695eecmr50520258ybk.219.1666947681755; Fri, 28
+ Oct 2022 02:01:21 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 17:01:16 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+Message-ID: <20221028090116.199601-1-raychi@google.com>
+Subject: [PATCH RESEND v4] usb: core: stop USB enumeration if too many retries
+From:   Ray Chi <raychi@google.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        m.grzeschik@pengutronix.de
+Cc:     albertccwang@google.com, pumahsu@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Ray Chi <raychi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,68 +67,218 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bruce Chen <bruce.chen@unisoc.com>
+When a broken USB accessory connects to a USB host, usbcore might
+keep doing enumeration retries. If the host has a watchdog mechanism,
+the kernel panic will happen on the host.
 
-When using debugfs_remove_recursive leaks a dentry with
-a hotplug stress test, the phone runs out of memory.
+This patch provides an attribute early_stop to limit the numbers of retries
+for each port of a hub. If a port was marked with early_stop attribute,
+unsuccessful connection attempts will fail quickly. In addition, if an
+early_stop port has failed to initialize, it will ignore all future
+connection events until early_stop attribute is clear.
 
-Thus fix the issue by using the newly created debugfs_lookup_and_remove().
-
-Signed-off-by: Bruce Chen <bruce.chen@unisoc.com>
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Signed-off-by: Ray Chi <raychi@google.com>
 ---
- drivers/usb/dwc3/core.h    | 1 +
- drivers/usb/dwc3/debugfs.c | 3 ++-
- drivers/usb/dwc3/gadget.c  | 4 +---
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ Documentation/ABI/testing/sysfs-bus-usb | 11 +++++
+ drivers/usb/core/hub.c                  | 59 +++++++++++++++++++++++++
+ drivers/usb/core/hub.h                  |  4 ++
+ drivers/usb/core/port.c                 | 27 +++++++++++
+ 4 files changed, 101 insertions(+)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 8f9959ba9fd4..ba3ecaa7f06c 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1261,6 +1261,7 @@ struct dwc3 {
- 	u8			num_eps;
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+index 568103d3376e..545c2dd97ed0 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -264,6 +264,17 @@ Description:
+ 		attached to the port will not be detected, initialized,
+ 		or enumerated.
  
- 	struct dwc3_hwparams	hwparams;
-+	struct dentry		*root;
- 	struct debugfs_regset32	*regset;
++What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/early_stop
++Date:		Sep 2022
++Contact:	Ray Chi <raychi@google.com>
++Description:
++		Some USB hosts have some watchdog mechanisms so that the device
++		may enter ramdump if it takes a long time during port initialization.
++		This attribute allows each port just has two attempts so that the
++		port initialization will be failed quickly. In addition, if a port
++		which is marked with early_stop has failed to initialize, it will ignore
++		all future connections until this attribute is clear.
++
+ What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
+ Date:		May 2013
+ Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index bbab424b0d55..5510dbef3243 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3081,6 +3081,48 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+ 	return status;
+ }
  
- 	u32			dbg_lsp_select;
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index f2b7675c7f62..b9af4a81f51d 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -911,6 +911,7 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
- 	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
- 
- 	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
-+	dwc->root = root;
- 	debugfs_create_regset32("regdump", 0444, root, dwc->regset);
- 	debugfs_create_file("lsp_dump", 0644, root, dwc, &dwc3_lsp_fops);
- 
-@@ -929,6 +930,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
- 
- void dwc3_debugfs_exit(struct dwc3 *dwc)
++/*
++ * hub_port_stop_enumerate - stop USB enumeration or ignore port events
++ * @hub: target hub
++ * @port1: port num of the port
++ * @retries: port retries number of hub_port_init()
++ *
++ * Return:
++ *    true: ignore port actions/events or give up connection attempts.
++ *    false: keep original behavior.
++ *
++ * This function will be based on retries to check whether the port which is
++ * marked with early_stop attribute would stop enumeration or ignore events.
++ *
++ * Note:
++ * This function didn't change anything if early_stop is not set, and it will
++ * prevent all connection attempts when early_stop is set and the attempts of
++ * the port are more than 1.
++ */
++static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
++{
++	struct usb_port *port_dev = hub->ports[port1 - 1];
++
++	if (port_dev->early_stop) {
++		if (port_dev->ignore_event)
++			return true;
++
++		/*
++		 * We want unsuccessful attempts to fail quickly.
++		 * Since some devices may need one failure during
++		 * port initialization, we allow two tries but no
++		 * more.
++		 */
++		if (retries < 1)
++			return false;
++
++		port_dev->ignore_event = 1;
++	} else
++		port_dev->ignore_event = 0;
++
++	return port_dev->ignore_event;
++}
++
+ /* Check if a port is power on */
+ int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
  {
--	debugfs_remove(debugfs_lookup(dev_name(dwc->dev), usb_debug_root));
-+	debugfs_remove(dwc->root);
- 	kfree(dwc->regset);
- }
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 079cd333632e..6d6c188fcbea 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3172,9 +3172,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
- 			list_del(&dep->endpoint.ep_list);
- 		}
+@@ -4855,6 +4897,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 					buf->bMaxPacketSize0;
+ 			kfree(buf);
  
--		debugfs_remove_recursive(debugfs_lookup(dep->name,
--				debugfs_lookup(dev_name(dep->dwc->dev),
--					       usb_debug_root)));
-+		debugfs_lookup_and_remove(dep->name, dwc->root);
- 		kfree(dep);
++			if (r < 0 && hub_port_stop_enumerate(hub, port1, retries)) {
++				retval = r;
++				goto fail;
++			}
++
+ 			retval = hub_port_reset(hub, port1, udev, delay, false);
+ 			if (retval < 0)		/* error or disconnect */
+ 				goto fail;
+@@ -5387,6 +5434,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+ 			break;
+ 
++		if (hub_port_stop_enumerate(hub, port1, i))
++			break;
++
+ 		/* When halfway through our retry count, power-cycle the port */
+ 		if (i == (PORT_INIT_TRIES - 1) / 2) {
+ 			dev_info(&port_dev->dev, "attempt power cycle\n");
+@@ -5614,6 +5664,10 @@ static void port_event(struct usb_hub *hub, int port1)
+ 	if (!pm_runtime_active(&port_dev->dev))
+ 		return;
+ 
++	/* skip port actions if ignore_event is true*/
++	if (hub_port_stop_enumerate(hub, port1, 0))
++		return;
++
+ 	if (hub_handle_remote_wakeup(hub, port1, portstatus, portchange))
+ 		connect_change = 1;
+ 
+@@ -5934,6 +5988,9 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 		ret = hub_port_init(parent_hub, udev, port1, i);
+ 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+ 			break;
++
++		if (hub_port_stop_enumerate(parent_hub, port1, i))
++			goto stop_enumerate;
  	}
- }
+ 	mutex_unlock(hcd->address0_mutex);
+ 
+@@ -6022,6 +6079,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 	udev->bos = bos;
+ 	return 0;
+ 
++stop_enumerate:
++	mutex_unlock(hcd->address0_mutex);
+ re_enumerate:
+ 	usb_release_bos_descriptor(udev);
+ 	udev->bos = bos;
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index b2925856b4cb..e23833562e4f 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -90,6 +90,8 @@ struct usb_hub {
+  * @is_superspeed cache super-speed status
+  * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
+  * @usb3_lpm_u2_permit: whether USB3 U2 LPM is permitted.
++ * @early_stop: whether port initialization will be stopped earlier.
++ * @ignore_event: whether events of the port are ignored.
+  */
+ struct usb_port {
+ 	struct usb_device *child;
+@@ -103,6 +105,8 @@ struct usb_port {
+ 	u32 over_current_count;
+ 	u8 portnum;
+ 	u32 quirks;
++	unsigned int early_stop:1;
++	unsigned int ignore_event:1;
+ 	unsigned int is_superspeed:1;
+ 	unsigned int usb3_lpm_u1_permit:1;
+ 	unsigned int usb3_lpm_u2_permit:1;
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index 38c1a4f4fdea..126da9408359 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -17,6 +17,32 @@ static int usb_port_block_power_off;
+ 
+ static const struct attribute_group *port_dev_group[];
+ 
++static ssize_t early_stop_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++
++	return sysfs_emit(buf, "%s\n", port_dev->early_stop ? "yes" : "no");
++}
++
++static ssize_t early_stop_store(struct device *dev, struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	bool value;
++
++	if (kstrtobool(buf, &value))
++		return -EINVAL;
++
++	if (value)
++		port_dev->early_stop = 1;
++	else
++		port_dev->early_stop = 0;
++
++	return count;
++}
++static DEVICE_ATTR_RW(early_stop);
++
+ static ssize_t disable_show(struct device *dev,
+ 			      struct device_attribute *attr, char *buf)
+ {
+@@ -236,6 +262,7 @@ static struct attribute *port_dev_attrs[] = {
+ 	&dev_attr_quirks.attr,
+ 	&dev_attr_over_current_count.attr,
+ 	&dev_attr_disable.attr,
++	&dev_attr_early_stop.attr,
+ 	NULL,
+ };
+ 
 -- 
-2.34.1
+2.38.1.273.g43a17bfeac-goog
 
