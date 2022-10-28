@@ -2,83 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CC161140B
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 16:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B696115A9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 17:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiJ1OHi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 10:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S231205AbiJ1PQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 11:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiJ1OHh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 10:07:37 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C591D586A;
-        Fri, 28 Oct 2022 07:07:34 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y14so13179514ejd.9;
-        Fri, 28 Oct 2022 07:07:34 -0700 (PDT)
+        with ESMTP id S230339AbiJ1PQc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 11:16:32 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07AF209FBE;
+        Fri, 28 Oct 2022 08:16:31 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id r187so6433063oia.8;
+        Fri, 28 Oct 2022 08:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TWCvMt3elQQkvkQ/TKdQKZ3J9fekFt08XY7JDczxDLs=;
-        b=S5eY76mlN2tFMg+4pLeThtnQhlp4ocsMO1J3iG4xW0oV/kkyPzOpnEnvV96kPcbAEX
-         pbGUvnoQJIZ95APLSXS4hW6GB5gy94WKMjEToBbUpw4NokE4TqtkSCm9ACSDWfZGnNQD
-         b7wVwNfYnewVRwljr++Ct92/bcHX7eKuqEDn5CnNEZE+7KkxIzNTS8UpVME4hZhTIKZm
-         bzuBhN9OxJ4li3ASyX2rXrq/8f2r3EURY1gPKsL1td0mHbqjux9QNh48qlZfTruxE9sG
-         bAU1D0LXvoFLKp0wN4wQ5wve7qS/mVmphAbQwyoyPxa3aEv55geRY6CSrrb0aneRY0Tl
-         41iQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+dn3LvliggqMwu/IM8leC7rc7cJb8gzlcVAfQFIHk4A=;
+        b=h1quau0gp/0GF4+bcmlKCzuKxivWRlPioezIkKjWkC8nElVhrOfUCr7ucyKuhfk6WE
+         HTsqjpSaeLVTZZapEdzrMPciuXJu4uHQdhiaqY+5OLds249yg06F4sxMJ0OOy5CTZTEG
+         1rzXzHCxAaesLgoD16vX8bgYoSsuF6vq2zy7p/XJLFPUT98Ippf4US0Qxf8CvgydU5aZ
+         lbdUx2TtTmrI7GSONljaq3U2QH4THWpE2ZwljGtMuaEGdSGlFSj09K3XiXQppa7JglZ7
+         vziqn1tVJFMgeXyOduiKTsiByBdfPGqF+p+AerBxXmi9Gt1VBL3YUhBBR/6OqX2ezkTR
+         Wsgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TWCvMt3elQQkvkQ/TKdQKZ3J9fekFt08XY7JDczxDLs=;
-        b=5vfpgsSzEqpxMK6rhzAuSNrqQgApJICrnHEWgRxjKvY0/mtk2zCsBwKWBdaAEbbpQ/
-         a6S9/MEvv6GjbJAJz12rPEa0Z3Ij3qadlOCPeSIZWSwCmO3/vSP4QHAfW8vokZgcXlXm
-         szyEsa6xdYzed3vGKhKJvOrpxGD4P8A8zeKdofWAtn0us8N9aBZ78qBm+RYH8JRZZs8H
-         p6w0guBgCZHGKCKEyD+4O3kF5NoO+n3O7qteC7m86ZDlJaylVCW5hjT4FZgeHm8fv3lb
-         Q0uhoAPoQEuNC4/KhUg+IDtD+/0l/ojccSI/SokhjNnD+awkOIiU9/pA8VpyBvUGxNl9
-         AsQg==
-X-Gm-Message-State: ACrzQf2n5XP2uc33XGMeiSkRDZzn0+Nae79SExJggmPTEpd31Zib/lUP
-        ooWxtz8urvjG67wOUT642vM=
-X-Google-Smtp-Source: AMsMyM7D3twQkFaMfCxUy6j9VvCERfNQOjRgLpCvU6hp4Gwe+FiZ4kg6TX2AcUjBQmTjLeWIeDMKGw==
-X-Received: by 2002:a17:906:846c:b0:7a5:ccb:c174 with SMTP id hx12-20020a170906846c00b007a50ccbc174mr25997482ejc.583.1666966053263;
-        Fri, 28 Oct 2022 07:07:33 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id cs8-20020a0564020c4800b00461816beef9sm2736314edb.14.2022.10.28.07.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 07:07:32 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 16:07:30 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        treding@nvidia.com, heikki.krogerus@linux.intel.com,
-        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
-        jckuo@nvidia.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226
- I2C driver
-Message-ID: <Y1viIsL+Nxthc97j@orome>
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-4-waynec@nvidia.com>
- <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
- <Y1vLoT+/dgOgrxjD@orome>
- <7a1c4943-4ae2-cde4-221b-fa972c2baab2@nvidia.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+dn3LvliggqMwu/IM8leC7rc7cJb8gzlcVAfQFIHk4A=;
+        b=IcEAAvyWEQ8zLNuounegCMuRQYsqC9gUZnlTP8yNAtg+PE31svqsz7pAQPH1RgW1SO
+         43gJorQAgcFK7sHOFtNHr4KrEcFWokcnC7frwbkERtyunmt17NPM1h4MMQ6/qiSVBxhl
+         odcHW5qHYjGzoZQd99wNgToTOpJB8jVyfHpRdz32LI5so217i7oJnFhjZvu9ZmhGbzRF
+         gG9G1N4GgNufVQuGkEUShTK7rsi8rMZWrCviCQjld7bPA1xF0NUcatE5VOkgmqNBoVT0
+         6mWOkP1fCLjvm5eTemJfXqQNAn0sKvBKSufecE5pqb/bDL7X1ZbhLwgzyQH8vLgNQ0wu
+         dSwg==
+X-Gm-Message-State: ACrzQf1OVh8cbLyRPxKskGPlB0wNhAdvbnx33IzAVRvEuhCUzEgRbOu6
+        2zfSayCKILhM7dhX2gh4rn0=
+X-Google-Smtp-Source: AMsMyM5cwAs/ShR6qmIwoZgvBqbKWpziGl3MqG4MeW+pmPBZ2NNmgpvYAkZaU5rvq3DgN3FmYZ43+A==
+X-Received: by 2002:a05:6808:308c:b0:354:99ec:bbb7 with SMTP id bl12-20020a056808308c00b0035499ecbbb7mr48262oib.68.1666970191098;
+        Fri, 28 Oct 2022 08:16:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 125-20020a4a1483000000b0047f8ceca22bsm1655725ood.15.2022.10.28.08.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 08:16:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d8185ff7-d1a2-0d74-30d0-03392e630280@roeck-us.net>
+Date:   Fri, 28 Oct 2022 08:16:27 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QbiyuPHHLdatsw0h"
-Content-Disposition: inline
-In-Reply-To: <7a1c4943-4ae2-cde4-221b-fa972c2baab2@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+References: <20221027150525.753064657@goodmis.org>
+ <20221027150928.780676863@goodmis.org>
+ <20221027155513.60b211e2@gandalf.local.home>
+ <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
+ <20221027163453.383bbf8e@gandalf.local.home>
+ <20221027170755.40ee4059@gandalf.local.home>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221027170755.40ee4059@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,174 +102,136 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 10/27/22 14:07, Steven Rostedt wrote:
+> On Thu, 27 Oct 2022 16:34:53 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+>> What about del_timer_try_shutdown(), that if it removes the timer, it sets
+>> the function to NULL (making it equivalent to a successful shutdown),
+>> otherwise it does nothing. Allowing the the timer to be rearmed.
+>>
+>> I think this would work in this case.
+> 
+> Guenter,
+> 
+> Can you apply this patch on top of the series, and see if it makes the
+> warning go away?
+> 
 
---QbiyuPHHLdatsw0h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That patch not only helps, it also fixes the crash seen with openrisc.
+For that crash, I was able to collect some useful data; see the log below.
 
-On Fri, Oct 28, 2022 at 01:42:36PM +0100, Jon Hunter wrote:
->=20
-> On 28/10/2022 13:31, Thierry Reding wrote:
-> > On Wed, Oct 26, 2022 at 08:13:57AM +0100, Jon Hunter wrote:
-> > >=20
-> > > On 24/10/2022 08:41, Wayne Chang wrote:
-> > > > add device-tree binding documentation for Cypress cypd4226 type-C
-> > > > controller's I2C interface. It is a standard i2c slave with GPIO
-> > > > input as IRQ interface.
-> > > >=20
-> > > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> > > > ---
-> > > >    .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++=
-++++++
-> > > >    1 file changed, 86 insertions(+)
-> > > >    create mode 100644 Documentation/devicetree/bindings/usb/cypress=
-,cypd4226.yaml
-> > > >=20
-> > > > diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226=
-=2Eyaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..5ac28ab4e7a1
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> > > > @@ -0,0 +1,86 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Cypress cypd4226 UCSI I2C Type-C Controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Wayne Chang <waynec@nvidia.com>
-> > > > +
-> > > > +description: |
-> > > > +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interfa=
-ce type-C
-> > > > +  controller.
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    const: cypress,cypd4226
-> > > > +
-> > > > +  '#address-cells':
-> > > > +    const: 1
-> > > > +
-> > > > +  '#size-cells':
-> > > > +    const: 0
-> > > > +
-> > > > +  reg:
-> > > > +    const: 0x08
-> > > > +
-> > > > +  interrupts:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  cypress,firmware-build:
-> > > > +    enum:
-> > > > +      - nv
-> > > > +      - gn
-> > > > +    description: |
-> > > > +      the name of the CCGx firmware built for product series.
-> > > > +      should be set one of following:
-> > > > +      - "nv" for the RTX product series
-> > >=20
-> > > Please add 'NVIDIA' so that it is 'for the NVIDIA RTX product series'
-> > >=20
-> > > > +      - "gn" for the Jetson product series
-> > >=20
-> > > Same here please add 'NVIDIA' so that it is 'for the NVIDIA Jetson pr=
-oduct
-> > > series'.
-> > >=20
-> > > Rob, any concerns about this property in general? Unfortunately, ACPI=
- choose
-> > > a 16-bit type for this and used 'nv' for the RTX product. I don't fin=
-d 'gn'
-> > > for Jetson very descriptive but we need a way to differentiate from R=
-TX.
-> > >=20
-> > > This is needed in the Cypress CCGX driver for the following ...
-> > >=20
-> > > https://lore.kernel.org/lkml/20220928150840.3804313-1-waynec@nvidia.c=
-om/
-> > >=20
-> > > Ideally, this should have been included in this series but was sent b=
-efore.
-> > > We can always re-work/update the above patch even though it has been =
-queued
-> > > up now.
-> >=20
-> > The driver seems to use this 16-bit value only to compare with a
-> > corresponding field in the firmware headers. How exactly we obtain this
-> > value is therefore not important. However, since this 16-bit value is
-> > embedded in firmware images, we also cannot substitute them with
-> > something more sensible.
->=20
-> I am actually wondering if this is actually embedded in any images becaus=
-e I
-> see it populated by the i2c-nvidia-gpu.c driver [0]. So I am wondering if=
- we
-> can use PROPERTY_ENTRY_STRING() for this driver instead and have a more
-> descriptive name such as 'nvidia,rtx'?
+Thanks,
+Guenter
 
-What I mean by "embedded in firmware images" is that the value read from
-the property is compared to values read from a firmware blob (either one
-read back from the chip or one loaded using request_firmware()). See for
-example ccg_check_vendor_version() and ccg_check_fw_version().
+---
+WARNING: CPU: 0 PID: 7 at lib/debugobjects.c:502 debug_print_object+0xc0/0xe8
+ODEBUG: free active (active state 0) object type: timer_list hint: rcu_lock_map+0x0/0x14
+Modules linked in:
+CPU: 0 PID: 7 Comm: ksoftirqd/0 Not tainted 6.1.0-rc2-00145-g2c4e85e9ac93 #1
+Call trace:
+[<048ecc8e>] dump_stack_lvl+0x44/0x80
+[<c6a7029c>] dump_stack+0x1c/0x2c
+[<b225e4eb>] __warn+0xdc/0x118
+[<1070b766>] ? debug_print_object+0xc0/0xe8
+[<57923a76>] warn_slowpath_fmt+0x78/0x90
+[<1070b766>] debug_print_object+0xc0/0xe8
+[<b3abbcb0>] __debug_check_no_obj_freed+0x230/0x2b8
+[<508d9b5a>] ? delayed_put_task_struct+0x0/0x84
+[<30f5a2a0>] ? _s_kernel_ro+0x0/0x200
+[<403ab082>] debug_check_no_obj_freed+0x30/0x40
+[<82702c56>] free_pcp_prepare+0xc4/0x2b0
+[<508d9b5a>] ? delayed_put_task_struct+0x0/0x84
+[<7798b190>] free_unref_page+0x44/0x210
+[<d73717e5>] __free_pages+0x108/0x124
+[<a32de4eb>] slob_free_pages+0x9c/0xac
+[<bd51c171>] slob_free+0x40c/0x62c
+[<a2d26e0e>] ? thread_stack_free_rcu+0x0/0x44
+[<24b2df6c>] ? rcu_process_callbacks+0x114/0x224
+[<24b2df6c>] ? rcu_process_callbacks+0x114/0x224
+[<7794ec75>] ? rcu_process_callbacks+0xdc/0x224
+[<7794ec75>] ? rcu_process_callbacks+0xdc/0x224
+[<d76fe88f>] kmem_cache_free+0x64/0xa0
+[<46d25dac>] free_task+0x7c/0xe0
+[<2df25813>] __put_task_struct+0xe8/0x194
+[<64f9675b>] delayed_put_task_struct+0x58/0x84
+[<8755437e>] rcu_process_callbacks+0xf0/0x224
+[<24b2df6c>] ? rcu_process_callbacks+0x114/0x224
+[<020db442>] ? rcu_process_callbacks+0x178/0x224
+[<87626af4>] __do_softirq+0x11c/0x2f8
+[<c3f89a50>] ? smpboot_thread_fn+0x4c/0x304
+[<c3f89a50>] ? smpboot_thread_fn+0x4c/0x304
+[<021b0175>] ? smpboot_thread_fn+0x188/0x304
+[<f2e79ebd>] ? smpboot_thread_fn+0x158/0x304
+[<966be0e6>] run_ksoftirqd+0x4c/0x80
+[<4bf65f60>] smpboot_thread_fn+0x180/0x304
+[<3f914d93>] ? _raw_spin_unlock_irqrestore+0x50/0x84
+[<bef37779>] ? __kthread_parkme+0x60/0xdc
+[<b0798e10>] ? smpboot_thread_fn+0x0/0x304
+[<c463cd92>] kthread+0x11c/0x144
+[<3eaef0b7>] ? kthread+0x0/0x144
+[<ef2f6228>] ret_from_fork+0x1c/0x84
+---[ end trace 0000000000000000 ]---
+Unable to handle kernel access
+  at virtual address 0xbd6ed6a4
 
-So the way that this 16-bit number is used is to define what type of
-vendor firmware we support. So this is also used to avoid trying to load
-a Tegra firmware on a GPU and vice versa.
+Oops#: 0000
+CPU #: 0
+    PC: c0056c78    SR: 00008679    SP: c1027c24
+GPR00: 00000000 GPR01: c1027c24 GPR02: c1027c78 GPR03: 00008279
+GPR04: 00000000 GPR05: 00000000 GPR06: 00000000 GPR07: 00000001
+GPR08: 00000000 GPR09: c0056c64 GPR10: c1026000 GPR11: 00000000
+GPR12: 00000000 GPR13: 00000001 GPR14: c05c0000 GPR15: 00000000
+GPR16: 00000001 GPR17: bd6ed6a4 GPR18: ff4517b0 GPR19: fd145f00
+GPR20: 00000000 GPR21: 00000000 GPR22: 00000000 GPR23: c0760000
+GPR24: c10232a0 GPR25: 00000003 GPR26: 00000000 GPR27: 00000000
+GPR28: c1a00458 GPR29: 00000000 GPR30: c0790000 GPR31: 00000000
+   RES: 00000000 oGPR11: ffffffff
+Process ksoftirqd/0 (pid: 7, stackpage=c10232a0)
 
-So yes, we could potentially still make the i2c-nvidia-gpu.c driver add
-a "nvidia,rtx" string to make it more descriptive like DT, but then we'd
-still need to somehow resolve that to the "nv" string for the assignment
-to uc->fw_build.
+Stack:
+Call trace:
+[<6ce5cfad>] __lock_acquire.constprop.0+0xa8/0x914
+[<4bc14e12>] ? __del_timer_sync+0x0/0x128
+[<da915c87>] lock_acquire.part.0.isra.0+0xd4/0x1ac
+[<4bc14e12>] ? __del_timer_sync+0x0/0x128
+[<9b341df3>] lock_acquire+0x2c/0x44
+[<233b5cbc>] __del_timer_sync+0x64/0x128
+[<4bc14e12>] ? __del_timer_sync+0x0/0x128
+[<05cd2741>] timer_fixup_free+0x34/0x5c
+[<3fa496ad>] __debug_check_no_obj_freed+0x250/0x2b8
+[<508d9b5a>] ? delayed_put_task_struct+0x0/0x84
+[<30f5a2a0>] ? _s_kernel_ro+0x0/0x200
+[<403ab082>] debug_check_no_obj_freed+0x30/0x40
+[<82702c56>] free_pcp_prepare+0xc4/0x2b0
+[<508d9b5a>] ? delayed_put_task_struct+0x0/0x84
+[<7798b190>] free_unref_page+0x44/0x210
+[<d73717e5>] __free_pages+0x108/0x124
+[<a32de4eb>] slob_free_pages+0x9c/0xac
+[<bd51c171>] slob_free+0x40c/0x62c
+[<a2d26e0e>] ? thread_stack_free_rcu+0x0/0x44
+[<24b2df6c>] ? rcu_process_callbacks+0x114/0x224
+[<24b2df6c>] ? rcu_process_callbacks+0x114/0x224
+[<7794ec75>] ? rcu_process_callbacks+0xdc/0x224
+[<7794ec75>] ? rcu_process_callbacks+0xdc/0x224
+[<d76fe88f>] kmem_cache_free+0x64/0xa0
+[<46d25dac>] free_task+0x7c/0xe0
+[<2df25813>] __put_task_struct+0xe8/0x194
+[<64f9675b>] delayed_put_task_struct+0x58/0x84
+[<8755437e>] rcu_process_callbacks+0xf0/0x224
+[<24b2df6c>] ? rcu_process_callbacks+0x114/0x224
+[<020db442>] ? rcu_process_callbacks+0x178/0x224
+[<87626af4>] __do_softirq+0x11c/0x2f8
+[<c3f89a50>] ? smpboot_thread_fn+0x4c/0x304
+[<c3f89a50>] ? smpboot_thread_fn+0x4c/0x304
+[<021b0175>] ? smpboot_thread_fn+0x188/0x304
+[<f2e79ebd>] ? smpboot_thread_fn+0x158/0x304
+[<966be0e6>] run_ksoftirqd+0x4c/0x80
+[<4bf65f60>] smpboot_thread_fn+0x180/0x304
+[<3f914d93>] ? _raw_spin_unlock_irqrestore+0x50/0x84
+[<bef37779>] ? __kthread_parkme+0x60/0xdc
+[<b0798e10>] ? smpboot_thread_fn+0x0/0x304
+[<c463cd92>] kthread+0x11c/0x144
+[<3eaef0b7>] ? kthread+0x0/0x144
+[<ef2f6228>] ret_from_fork+0x1c/0x84
 
-Not sure about how that would impact the AMD bits. Another of those CCGX
-UCSI devices is registered by the i2c-designware-pcidrv.c driver, but it
-doesn't pass a software node. From what I can tell that simply means all
-of those checks will work with fw_build =3D=3D 0x00. Primarily I think that
-will cause flashing of the firmware not to be supported.
-
-So yeah, having that string be something else (i.e. more descriptive)
-and then match on that instead would definitely work. After looking at
-this some more, using existing driver-matching may not work after all
-because while there's ACPI matching and with this series DT matching,
-the various GPU I2C instantiations are purely done in software, so they
-have neither and therefore would need a secondary lookup mechanism. We
-may be stuck with that ccgx,firmware-build property, but as you said it
-should be possible to at least sanitize it.
-
-Thierry
-
->=20
-> Jon
->=20
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/drivers/i2c/busses/i2c-nvidia-gpu.c#n261
-> --=20
-> nvpublic
-
---QbiyuPHHLdatsw0h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNb4iAACgkQ3SOs138+
-s6Fb+xAAmX8j8dRwWMQ2s1lwzVNMk1Jcsa77csUwNBOti7FLrLvg8Mlvy2To7Jm8
-TZ9NcUHoe1ox+EMElJpijz0qYsTGLo0tz38HGVdKOQbnASevsZ/1SoFqZebuGzb5
-IqRi35yCKQa9bRdVP1i874yU4eN8HKSFbcU6p4gFIkJ3pCJtvBDbh0fF8E5z94xI
-gmnDehmn7SSBDzZiyTOymRSEktbFxHJo/qutCB38Ev2C2winovtLIqMWLgnKRG86
-M8dyVJE5+FePHdKH3YkcFNDQn7nvA/vEdp+9xn2uTax+Z7rLNccFW1k3eM3aYnoY
-QMhnZdaYI/rf8GUpmih9jeeoNfyG8sidF2oXkRCeA94RWmyoWaoEeh5mQNOSJEq8
-OooqWxiUKPlJMQZ5mksTiFTJcUYg3fRCw1gLzH9h0ojIWBuIGw8CpizTCPLSzBiS
-zmNYm/vCPn6YRawDw3ngtMBGI7oK2+0lqdQNAGhAlBno7TOFKHqiNCdg32gykHYi
-jmBlK3gGuCvHCJzoZl9YGesXLdcHw1xeqpl70suWxmRwcXsPfFMnuWT6lI+zvSqi
-j2JpsXltKEdhbmNsy6v/HzqL5KMZAaG36oxuphUXf4NIaSvtDDgx1/VQbABjA3Lw
-z5g+HW/ArQqDwfBnasDZFURWw1czK8LcD/rse4hQt+zWeZES9Ow=
-=S/4p
------END PGP SIGNATURE-----
-
---QbiyuPHHLdatsw0h--
