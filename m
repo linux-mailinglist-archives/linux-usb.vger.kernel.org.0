@@ -2,26 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380EF6119CC
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 20:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06826119E7
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 20:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJ1SBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 14:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S229934AbiJ1SKP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 14:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiJ1SBS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 14:01:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD32517D2A1;
-        Fri, 28 Oct 2022 11:01:16 -0700 (PDT)
+        with ESMTP id S230207AbiJ1SJ6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 14:09:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED051F610;
+        Fri, 28 Oct 2022 11:09:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 525C962A03;
-        Fri, 28 Oct 2022 18:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D3FC433C1;
-        Fri, 28 Oct 2022 18:01:13 +0000 (UTC)
-Date:   Fri, 28 Oct 2022 14:01:29 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id 446A5B82C0C;
+        Fri, 28 Oct 2022 18:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02158C433D6;
+        Fri, 28 Oct 2022 18:09:50 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 14:10:07 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org,
@@ -43,11 +43,12 @@ Cc:     linux-kernel@vger.kernel.org,
         John Stultz <jstultz@google.com>
 Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
  before freeing timer
-Message-ID: <20221028140129.040d9acc@gandalf.local.home>
-In-Reply-To: <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
+Message-ID: <20221028141007.05f5c490@gandalf.local.home>
+In-Reply-To: <20221028140129.040d9acc@gandalf.local.home>
 References: <20221027150525.753064657@goodmis.org>
         <20221027150928.983388020@goodmis.org>
         <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
+        <20221028140129.040d9acc@gandalf.local.home>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -61,43 +62,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 27 Oct 2022 22:23:06 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+On Fri, 28 Oct 2022 14:01:29 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> > index bbab424b0d55..397f263ab7da 100644
-> > --- a/drivers/usb/core/hub.c
-> > +++ b/drivers/usb/core/hub.c
-> > @@ -1261,6 +1261,9 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
-> >   
-> >   		/* Don't do a long sleep inside a workqueue routine */
-> >   		if (type == HUB_INIT2) {
-> > +			/* Timers must be shutdown before they are re-initialized */
-> > +			if (hub->init_work.work.func)
-> > +				del_timer_shutdown(&hub->init_work.timer);
-> >   			INIT_DELAYED_WORK(&hub->init_work, hub_init_func3);  
-> 
-> A similar call to INIT_DELAYED_WORK() around line 1085 needs the same change.
-> 
-> It would be great if that can somehow be hidden in INIT_DELAYED_WORK().
+> @@ -813,6 +839,14 @@ void destroy_timer_on_stack(struct timer_list *timer)
+>  }
+>  EXPORT_SYMBOL_GPL(destroy_timer_on_stack);
+>  
+> +static struct timer_base *lock_timer_base(struct timer_list *timer,
+> +					  unsigned long *flags);
+> +
+> +void __timer_reinit_debug_objects(struct timer_list *timer)
+> +{
+> +	return;
+> +}
+> +
+>  #else
+>  static inline void debug_timer_init(struct timer_list *timer) { }
+>  static inline void debug_timer_activate(struct timer_list *timer) { }
 
-I've decided to treat INIT_DELAYED_WORK() like it was before. It only
-checks from the time the timer is added to the time it is removed without
-needing a shutdown call. That's because there's no API in the workqueue
-code that allows for us to require a shutdown on the INIT_DELAYED_WORK's
-timer.
+Bah, the above chunk was leftover from some debugging.
 
-Guenter,
-
-Can you remove all the extra patches that touched the timer.h and timer.c
-code, and replace the last patch with this, and then try again?
+Updated patch:
 
 -- Steve
 
- include/linux/timer.h     | 38 +++++++++++++++++++++++++++--
+ include/linux/timer.h     | 38 +++++++++++++++++++++++++++++++++--
  include/linux/workqueue.h |  4 ++--
- kernel/time/timer.c       | 50 ++++++++++++++++++++++++++++++++++-----
- kernel/workqueue.c        | 12 ++++++++++
- 4 files changed, 94 insertions(+), 10 deletions(-)
+ kernel/time/timer.c       | 42 +++++++++++++++++++++++++++++++++------
+ kernel/workqueue.c        | 12 +++++++++++
+ 4 files changed, 86 insertions(+), 10 deletions(-)
 
 diff --git a/include/linux/timer.h b/include/linux/timer.h
 index 45392b0ac2e1..27e3a8676ff8 100644
@@ -199,7 +193,7 @@ index a0143dd24430..290c96429ce1 100644
  				      (_tflags) | TIMER_IRQSAFE);	\
  	} while (0)
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 5179ac2335a0..9a921843cc4f 100644
+index 5179ac2335a0..ac2e8beb4235 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
 @@ -691,7 +691,11 @@ static bool timer_fixup_init(void *addr, enum debug_obj_state state)
@@ -265,22 +259,7 @@ index 5179ac2335a0..9a921843cc4f 100644
  	debug_object_deactivate(timer, &timer_debug_descr);
  }
  
-@@ -813,6 +839,14 @@ void destroy_timer_on_stack(struct timer_list *timer)
- }
- EXPORT_SYMBOL_GPL(destroy_timer_on_stack);
- 
-+static struct timer_base *lock_timer_base(struct timer_list *timer,
-+					  unsigned long *flags);
-+
-+void __timer_reinit_debug_objects(struct timer_list *timer)
-+{
-+	return;
-+}
-+
- #else
- static inline void debug_timer_init(struct timer_list *timer) { }
- static inline void debug_timer_activate(struct timer_list *timer) { }
-@@ -828,7 +862,7 @@ static inline void debug_init(struct timer_list *timer)
+@@ -828,7 +854,7 @@ static inline void debug_init(struct timer_list *timer)
  
  static inline void debug_deactivate(struct timer_list *timer)
  {
@@ -289,7 +268,7 @@ index 5179ac2335a0..9a921843cc4f 100644
  	trace_timer_cancel(timer);
  }
  
-@@ -1251,8 +1285,10 @@ int __del_timer(struct timer_list *timer, bool free)
+@@ -1251,8 +1277,10 @@ int __del_timer(struct timer_list *timer, bool free)
  	if (timer_pending(timer)) {
  		base = lock_timer_base(timer, &flags);
  		ret = detach_if_pending(timer, base, true);
@@ -301,7 +280,7 @@ index 5179ac2335a0..9a921843cc4f 100644
  		raw_spin_unlock_irqrestore(&base->lock, flags);
  	}
  
-@@ -1272,8 +1308,10 @@ static int __try_to_del_timer_sync(struct timer_list *timer, bool free)
+@@ -1272,8 +1300,10 @@ static int __try_to_del_timer_sync(struct timer_list *timer, bool free)
  
  	if (base->running_timer != timer)
  		ret = detach_if_pending(timer, base, true);
