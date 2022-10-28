@@ -2,137 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A81610710
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 03:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B516107DE
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 04:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbiJ1BGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Oct 2022 21:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S235845AbiJ1CUD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Oct 2022 22:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiJ1BGh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 21:06:37 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C48372281;
-        Thu, 27 Oct 2022 18:06:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id b5so3456272pgb.6;
-        Thu, 27 Oct 2022 18:06:36 -0700 (PDT)
+        with ESMTP id S235700AbiJ1CUC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 22:20:02 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF54BA78
+        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 19:20:01 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id l28so2748426qtv.4
+        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 19:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eouvp87d3Uwj62ptbIwj2FltIDQrDKmm7rl+pdi32U0=;
-        b=nQ7weogHhMIC9v9rAl3TVZ1zfLs3IGvA3QKHPCFBZ+KojUNUj5TChT+OvOY12ityd8
-         VbE20EYGCMWZidXQ0mA4iREKWBtYaSnvAUNEf/MGSFONDmzlPI+MR4CrUM9ksmAsrDKt
-         cj+aWdebIPLIeH6IbKuwGrCytZHTwYkz2OUKYh4KijicqkVXtFp7vt0bi0LKmFm6i4xU
-         q4LDtjxwFqoNAonlD9dnY2gWjZ01CSB3ruJJV2hDr7cYI/uKy5RyQ+vTowUxUWeVa6zy
-         zJdma15Tr6xjC12xRbPs+cXXQMqUWSrtgiCQqqToh1CNrevC/C1rFj6Z+ww6/oTseywE
-         yduw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cykFnUK9bm/0PhHnZ0sXhtZ2At3ENMM99eYPdegdYSI=;
+        b=AQJVYjKsyiTsjDySzOp48brbJiygd9QBWnj3eqx4ycythFdyul1dAGKYj+uTuabOYd
+         R4JA8+FlW70IhjEgqggL9QziGlh7/l3LTgAYQkrzZHeF84hiTphL3mIzJP+Ji1/7KXk6
+         Zxyk/yTJFtxODuiIdNpR1v4Tb/IHo1msssbiT/8gEcpo6dnsy/bBr5SicRVWQ/SYvoGw
+         f6qwZB0YLz/+nKEAZgio2FOp3UFjxD0tDnV+/H+L80njN6vGAonlJVvXHAc6ao7Baxs6
+         mKQQt1FP4htijiDoRDbs8D8DIX0D0JRqct708dGH7QvXcVsbvRvpY6AjgWqW0/q+3mAs
+         VJQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eouvp87d3Uwj62ptbIwj2FltIDQrDKmm7rl+pdi32U0=;
-        b=YJCxjLtFm7y0sEMXbj1eKbX0QlUiXPUngQaAwdCZjhQIzdtbY3aP5QegzsWUN42Wkh
-         0ZEUC0kS0Pf3GYX7vsgB9mz+ayamk/3s5CCGUcDq2Sev3f1sO6Ypqj1ijns1k6DlXNIV
-         ZfGIOK0Bev2YqbHa0133Ags3wYn0jIy1w/wiN49AIqHjcFF34GRBKNt7UUwTArLtbxm7
-         PtqrLHy4fiYgwXTXsaJDA8IiyAqASOCnwOVJXOjhrF+qPgBN4KmEMenBemDCbS6zCUgk
-         tH1zG0cX9ysOHnTEGOyf0NJyr+FyYqV6hRpKYIkWvKPq2iPQ3B0kE5QMCY5xDc5MCiIR
-         RYVw==
-X-Gm-Message-State: ACrzQf2Q7nlWqBWzVMjsinkftkikMq/bES8E2NpaVSH1YUoVrLwSNvV0
-        AlOSiddJ6BFtUnfuW33d+OY=
-X-Google-Smtp-Source: AMsMyM71t2M2+k7329f4iPqjn+WDD27m67jwDQ968XupuMJUSxT0+/ISWLqKZwmQAQWuSE8GPvBuVA==
-X-Received: by 2002:a63:1917:0:b0:43c:1471:52b7 with SMTP id z23-20020a631917000000b0043c147152b7mr43836410pgl.522.1666919195743;
-        Thu, 27 Oct 2022 18:06:35 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:ea9a:801b:ed52:2db1])
-        by smtp.gmail.com with ESMTPSA id u19-20020a170902e21300b0017f57787a4asm1747996plb.229.2022.10.27.18.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 18:06:35 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 18:06:30 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Richard Weinberger <richard@nod.at>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: (subset) [PATCH v1 00/11] Get rid of
- [devm_]gpiod_get_from_of_node() public APIs
-Message-ID: <Y1srFi6mJGl5/3gi@google.com>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <166687787352.847482.10005684512699510391.b4-ty@kernel.org>
+        bh=cykFnUK9bm/0PhHnZ0sXhtZ2At3ENMM99eYPdegdYSI=;
+        b=Q5u1A8gWf651araV2Dezeu1aWA/RwDuhWrIA0n3di2iLVl1NliehA9gefmnw2ENUha
+         DFxL8UD/qNueehfshVwMwbpEa3PtwVjfYK38q1ug1/HeGyUBIPaJiBSHi8cWzFt0iXNg
+         ztvBgQdA8XaS14UXCz1Pt2+mf9x1oZGPz+mz9HCyLBJUEibRnsV+LqKSygsKprIyIliC
+         53tp0qQSfxoBN/M/Ih4pWgU/oxaUsxSdkGtqIxSb9hX4rRnIJb41L9SG3yKzzzlxInD3
+         Q9V0fxISzZH+aOscFeqzjuxsIDYsEg9Mok+/n5xnWl2MBWgfGY/BjaBvSYBE2WgjrIDU
+         TqBw==
+X-Gm-Message-State: ACrzQf2TibbA1uaNzVYpqxszvR6JFZYhmcnYo6MXu8CHYtFnsUap7oUV
+        BHQVcHeDqhB+USUII1uvLAwBaQ==
+X-Google-Smtp-Source: AMsMyM4nFrse7LOawN/dKiRc/aj8ygVoOp4zOOXiLSE5lagp50tusE21h1qz86DoB8x3z2sSytqEbA==
+X-Received: by 2002:ac8:7d94:0:b0:39c:ed3c:98a3 with SMTP id c20-20020ac87d94000000b0039ced3c98a3mr45065437qtd.628.1666923600693;
+        Thu, 27 Oct 2022 19:20:00 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id a24-20020ac86118000000b0039ee562799csm1760187qtm.59.2022.10.27.19.19.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 19:19:59 -0700 (PDT)
+Message-ID: <f5d2c979-a61c-e0d4-7a08-5b6f5b38dffb@linaro.org>
+Date:   Thu, 27 Oct 2022 22:19:57 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <166687787352.847482.10005684512699510391.b4-ty@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 02/11] dt-bindings: usb: Add NVIDIA Tegra XUSB host
+ controller binding
+Content-Language: en-US
+To:     Wayne Chang <waynec@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>, "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        Jui Chang Kuo <jckuo@nvidia.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-3-waynec@nvidia.com>
+ <20221024145446.GA1763588-robh@kernel.org>
+ <52ae737e-eb4f-9eb7-8b79-d58251062276@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <52ae737e-eb4f-9eb7-8b79-d58251062276@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lorenzo,
-
-On Thu, Oct 27, 2022 at 03:38:11PM +0200, Lorenzo Pieralisi wrote:
-> On Sun, 4 Sep 2022 23:30:52 -0700, Dmitry Torokhov wrote:
-> > I would like to stop exporting OF-specific [devm_]gpiod_get_from_of_node()
-> > so that gpiolib can be cleaned a bit. We can do that by switching drivers
-> > to use generic fwnode API ([devm_]fwnode_gpiod_get()). By doing so we open
-> > the door to augmenting device tree and ACPI information through secondary
-> > software properties (once we teach gpiolib how to handle those).
-> > 
-> > I hope that relevant maintainers will take patches through their trees and
-> > then we could merge the last one some time after -rc1.
-> > 
-> > [...]
+On 25/10/2022 04:02, Wayne Chang wrote:
 > 
-> Applied to pci/tegra, thanks!
+>>> +  power-domain-names:
+>>> +    items:
+>>> +      - const: xusb_host
+>>> +      - const: xusb_ss
+>>
+>> Drop 'xusb_'.
 > 
-> [01/11] PCI: tegra: switch to using devm_fwnode_gpiod_get
->         https://git.kernel.org/lpieralisi/pci/c/16e3f4077965
+> The properties are constant and we use the name to get the power domain.
+> 
+> 	tegra->genpd_dev_host = dev_pm_domain_attach_by_name(dev, "xusb_host");
+> 	
+> 	tegra->genpd_dev_ss = dev_pm_domain_attach_by_name(dev, "xusb_ss");
+> 	
+> we might not be able to drop the xusb_
 
-Any chance you could also pick up
+These are new bindings, so why do say they are "constant"? New bindings
+means you did not use them. If you used them before bindings... what can
+we say? Don't?
 
- [06/11] PCI: aardvark: switch to using devm_gpiod_get_optional()
- (20220903-gpiod_get_from_of_node-remove-v1-6-b29adfb27a6c@gmail.com)
+Best regards,
+Krzysztof
 
- - Pali Rohár has acked it.
-
-Thanks!
-
--- 
-Dmitry
