@@ -2,183 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CC6610F64
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 13:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1D0610FA5
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 13:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiJ1LIK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 07:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S230241AbiJ1L1Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 07:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiJ1LIJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 07:08:09 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB7F1D1005;
-        Fri, 28 Oct 2022 04:08:06 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z18so2348483edb.9;
-        Fri, 28 Oct 2022 04:08:06 -0700 (PDT)
+        with ESMTP id S230188AbiJ1L1O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 07:27:14 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711BF1D1029
+        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 04:27:13 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id 8so3182630qka.1
+        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 04:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IozlHscLjpLwJyHsLSyhcI+XmPovR0MZOhHVQZCtsA8=;
-        b=fr2wi2JZTDYzvWpHZjjA+Zc1b7umYk39fA5/USu4s3QzAO7N8Wi+cP6lCvNPZbJbed
-         EySHCFsyH/YKzt+OYTTzbf5WZmyjt7EnD7KJwswQoQ4d2h+HliXjnSho0ituCNg3D+Uz
-         8z+P/EqnM3O3Ba4ASElyazReO8uKrSyUyaU/jWMjFRxgrLee45tMfs6zG/FqRlOR8EEF
-         UPVW+KQabT2FfX++hGkGT14KRXTiVmXD+CZCxXN5bQgtdhgW0IPrvAQ2ri2LJRgneypk
-         hUzcffpnKDdcbmbUGxVfxXNVpWlH5SNT294pt9RFLtEbkP8h+IJchmV9HjRoL1pCFsWl
-         +aXw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n27P9fQzAea5JJ3rcyXtQsWTxD0urj62so3demloRqQ=;
+        b=s3VsWG//KkD/UGRA5ywODMgnFjgOsElESRo8QPf8XegqHktP0/qfkb8meHjwzOWjSf
+         Quq2ROyt8VFaPIeB+1xj6oI72gAuBcNZ5+rJZ4VAtCFpV15SoOVyzXo7H4OfzXTc+xMj
+         MRGbsvy61qw9FzMmxbYYiP9+piZt39XblXjYoV6DXnwlStS10/O1ZHYZ7oBvzBauQHoy
+         utP8L2g93zI+vErg9j684msLNCKn0Jbt5L6R00DAP3X9WmMDAAuRfsgq8m44I+ErlLQk
+         2oDrig9l72iCUk2/aKTshcG3eY2qemwJM2I2HVTZeq7a42Xf7iUABHninoGSUpit8xyN
+         jYew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IozlHscLjpLwJyHsLSyhcI+XmPovR0MZOhHVQZCtsA8=;
-        b=XAWGn2iZXbkFxb6ZLOWFa4qgD1h9JU7byYr9FNQILmsa/pTKPA3+jmS5wMdR1A0NcL
-         UvZeAJtK/ic7QV2pri6y/uaVZBMNxd6jhnSxsVcuMC+bDXejsWb6DCJtOgNYC8Ol164J
-         8euCOqBpFEWzaMpcc4Siudc3uJFlnH5JpLESWULIxlZ2DVBchatp84Z26wTrwK8WR+9r
-         li8QLY0mPLJHdx5XBNOEVnEm9aLLzQYOt5pGqBEtDzR+u2lBEDFyl/7YA7k4hTE0gerM
-         NYA+LT2HTGkjYiqrSd335Lfd4M+lEjjPPcWLHrjPrfHI0BzOLxYdcjq650JvMZho0ejU
-         qNvQ==
-X-Gm-Message-State: ACrzQf0UKqUETUV0ftfCi4mbdOPkex1zQio3KFRDGmll6SIeNPqisH9b
-        uvgVBT2jQjAO29dLPUhuB1Q=
-X-Google-Smtp-Source: AMsMyM4eU4Fxar8xkWV4vt4ckwoxWojY2QN6KHRHYLclIUt72hYropJGj0cFVOGyVEcQuKegJevkPA==
-X-Received: by 2002:a05:6402:440c:b0:43a:1124:e56a with SMTP id y12-20020a056402440c00b0043a1124e56amr51393928eda.134.1666955285152;
-        Fri, 28 Oct 2022 04:08:05 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id bd9-20020a056402206900b004610899742asm2433877edb.13.2022.10.28.04.08.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 04:08:04 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 13:08:02 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Jim Lin <jilin@nvidia.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v5 1/3] xhci: hub: export symbol on xhci_hub_control
-Message-ID: <Y1u4Ei1SUq39CGPW@orome>
-References: <20221027133127.27592-1-jilin@nvidia.com>
- <20221027133127.27592-2-jilin@nvidia.com>
- <Y1qOhjOXM4sQW+a/@kroah.com>
- <3c3b175d2031b8e440bfdef9b4c23c0272a5f607.camel@nvidia.com>
- <Y1txBtRZAJ5vpItj@kroah.com>
- <Y1ul9zU2wmbJo3x7@orome>
- <Y1uw2zp/XnUdgEwJ@kroah.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n27P9fQzAea5JJ3rcyXtQsWTxD0urj62so3demloRqQ=;
+        b=PDFVz3WDy4KWT4iGddtL6ecodxsYfV05jAqsFipXt3lhL5HiUMHfmJpKwj0pvJ9t4V
+         w0pifVniTeavwpCtTBcCPq5fl3GVTUdVzvtkEQHzpPsYhE++HRc6j7xoiJIJOhLsIy7E
+         lKnjaS1NqcZTFeqAx0xxbo/vQznD5arDufKQczyMzhg3RovgkXyOJHuxx4rfE/GxDfF3
+         McVfVkezUSLh0TW8gtksfmnFQwEg+Ar+xRqlK3NHEVnKC10mIJFEbuIhTgauOt2BALRL
+         F/8bP4CU7AWdYE/EqvpvbyYlE8El+vH/JquWlCneeZRah4BnIpE66FwCJz/SBEOD45ZK
+         7AYQ==
+X-Gm-Message-State: ACrzQf2DoSkMZcz4TNH/6VNkVa6nLkxVU4HstYxmNhvoVo+G6vjideml
+        VTfLpjEy0GuGt1pbGNBNbIvU9g==
+X-Google-Smtp-Source: AMsMyM4oWiDhP7JzCJKC5Vj52NzocxJ+zmvdbOC+BFV0wwy5MqyYFVo6KZ9q5UpuKFDMXqnwowNswQ==
+X-Received: by 2002:a37:bb82:0:b0:6fa:e8d:534 with SMTP id l124-20020a37bb82000000b006fa0e8d0534mr297964qkf.738.1666956432590;
+        Fri, 28 Oct 2022 04:27:12 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id w24-20020ac86b18000000b0039764587192sm2223661qts.57.2022.10.28.04.27.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 04:27:11 -0700 (PDT)
+Message-ID: <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
+Date:   Fri, 28 Oct 2022 07:27:09 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5cRpSgsOPvmvY0+n"
-Content-Disposition: inline
-In-Reply-To: <Y1uw2zp/XnUdgEwJ@kroah.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
+ AGX Orin
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        thierry.reding@gmail.com, heikki.krogerus@linux.intel.com,
+        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
+        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
+        jckuo@nvidia.com
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-5-waynec@nvidia.com>
+ <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
+ <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 28/10/2022 05:33, Jon Hunter wrote:
+>>> +			ucsi_ccg: ucsi_ccg@8 {
+>>
+>> No underscores in node names.
+>>
+>>> +				compatible = "cypress,cypd4226";
+>>> +				cypress,firmware-build = "gn";
+>>> +				interrupt-parent = <&gpio>;
+>>> +				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
+>>> +				reg = <0x08>;
+>>> +				status = "okay";
+>>
+>> The pattern of redefining full path in Tegra is confusing - I have no
+>> clue which of these status=okay are correct which are redundant.
+>>
+>> Do you?
+> 
+> I understand you may not like this approach, however, this comment is 
+> not really relevant to just this patch, but a general comment. But yes 
+> we will ensure that this is correct.
+> 
 
---5cRpSgsOPvmvY0+n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Just to clarify - this status looks redundant, but I have no way to tell
+for sure...
 
-On Fri, Oct 28, 2022 at 12:37:15PM +0200, gregkh@linuxfoundation.org wrote:
-> On Fri, Oct 28, 2022 at 11:50:47AM +0200, Thierry Reding wrote:
-> > On Fri, Oct 28, 2022 at 08:04:54AM +0200, gregkh@linuxfoundation.org wr=
-ote:
-> > > On Fri, Oct 28, 2022 at 05:36:41AM +0000, Jim Lin wrote:
-> > > > On Thu, 2022-10-27 at 15:58 +0200, Greg KH wrote:
-> > > > > External email: Use caution opening links or attachments
-> > > > >=20
-> > > > >=20
-> > > > > On Thu, Oct 27, 2022 at 09:31:25PM +0800, Jim Lin wrote:
-> > > > > > Add EXPORT_SYMBOL_GPL on xhci_hub_control() for other driver mo=
-dule
-> > > > > > to invoke and avoid linking error.
-> > > > >=20
-> > > > > What other driver module?
-> > > > >=20
-> > > > > There is no user here :(
-> > > > >=20
-> > > > > confused,
-> > > > >=20
-> > > >=20
-> > > > In arch/arm/configs/multi_v7_defconfig
-> > > > It defines
-> > > > CONFIG_USB_XHCI_TEGRA=3Dm
-> > > >=20
-> > > > If I don't add EXPORT_SYMBOL_GPL on xhci_hub_control()
-> > > > , I will get compile/linking error like
-> > > >=20
-> > > > ERROR: modpost: "xhci_hub_control" [drivers/usb/host/xhci-tegra.ko]
-> > > > undefined!
-> > > >=20
-> > > > if patch
-> > > > "[PATCH v5,3/3] xhci: tegra: USB2 pad power controls"
-> > > >=20
-> > > > https://patchwork.kernel.org/project/linux-usb/patch/20221027133127=
-=2E27592-4-jilin@nvidia.com/
-> > > > is added in xhci-tegra.c to invoke xhci_hub_control()
-> > > >=20
-> > > > Should I integrate this patch with [PATCH v5,3/3] as one?
-> > >=20
-> > > Yes, do not add something that is not needed for that specific commit,
-> > > otherwise it causes reviewers to be confused.
-> >=20
-> > Other subsystem maintainers prefer core changes to be split from driver
-> > changes, so this type of split is commonly encountered elsewhere.
-> >=20
-> > Obviously, since this is your turf you get to make the rules. I'm just
-> > trying to say that this kind of advice can be confusing for contributors
-> > because when they then sent driver and code changes mixed for their next
-> > submission, the subsystem maintainer might tell them otherwise.
->=20
-> Sure, but if you do split it up like this, DOCUMENT WHY THE EXPORT IS
-> NEEDED.  That didn't happen here so I had no idea why this was even an
-> issue.
->=20
-> And yes, I am very sensitive to this, we have had LOTS of people trying
-> to export xhci symbols in the past few years for no in-kernel users,
-> despite us constantly telling them that this is not allowed.  It
-> happened again, just yesterday:
-> 	https://lore.kernel.org/r/20221027004050.4192111-1-albertccwang@google.c=
-om
->=20
-> And at first glance, I assumed this was much the same as there was no
-> description of why this was needed at all.
+Best regards,
+Krzysztof
 
-Agreed. I suppose this could've been spelled out more explicitly in the
-cover letter or in patch 1.
-
-Jim, please make sure to describe this dependency explicitly in v6.
-
-Thierry
-
---5cRpSgsOPvmvY0+n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbuBIACgkQ3SOs138+
-s6FhUxAAhHI43sw1W9y8qsWj9Z2WvDNhDrLUHDhLJTx85BLK8Elgl9cKhWCPSqqP
-FMZz0Q5+DzNyuOXBwN/JnFOf2k0Wr/VrWoKPjyVMyptn0Rp07ihg1WL8FlyduzXV
-uVijpfX7oQHH/a57uR1/Z0SSI1+Gw3LNY5hPKCIt8WfYbbEk+lp52d7gn7ubetZI
-HhTfJ3JOGVdNE1gP99o7vl9yZLU0vAeYuFGNeRnwX0qdzWZU8w3xrXobfZ70rWml
-o9mx0HoRVU3Ct3ED1Wgcv2lfcT2b2FGfiFzyDMVDlkobB8onxWZJwcAmPR8POz+q
-nvqhMvboFOtbVm4wb8BRs8Mu99mP7Ts+VPZNeDQunlYsF3lC5t8cx9edATohDEmn
-Ikl5xCHVwYBk/9Z2yWKAaTgSiCPIU83o0EcOKZAvmj2Xfg5ayGVESnnOoUfzJOym
-haubbuAsMnpJVDBe7dM4Pjeq4pCSh+uhwMPAt2pTauwibzPCJirhgQhDK/BZvJQ7
-mPVklzsq0Y61lHoHcKgOBmAJLiYS8qyL+s0rzjcHFLfSOd1vS+j+fWKir7pv33TN
-QWE7x5EYxis//rVYd/l00xc7URIOg2uNpLTnCbl9TXKdsk8OkREmENVuI0r3k/G0
-CykkgySCrgr+u09oJa00BonyvA9l6Q1r2f7xY2KKo3JGara6a9k=
-=Pl2R
------END PGP SIGNATURE-----
-
---5cRpSgsOPvmvY0+n--
