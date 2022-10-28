@@ -2,66 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7A7611C57
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 23:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8C5611CA9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 23:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiJ1VTX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 17:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S230027AbiJ1VsX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 17:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJ1VTU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 17:19:20 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F7947B8D
-        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 192so5811021pfx.5
-        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
+        with ESMTP id S229998AbiJ1VsW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 17:48:22 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1659E24C115
+        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 14:48:21 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id n18so4929433qvt.11
+        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 14:48:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l3rdludOurvC4fVB6DK3mkTjnKTmpaPqFr2e/WcU1PY=;
-        b=Ba7p35/O4HWTJ6gXbkKVc218UyBTKXLiCvsaBmMU9S9QH0SSlKGUaCiXW8I9NYRB33
-         EweO63dvPYeifzge13DmYlNPALfhSgTjMQR0KaVKRHjFlIbzijOPwCc/WlxEdAZFUG/P
-         bgx7kY6bca4Hfm3vWZGLThlemm7c0jMCm53RQ=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SBJznIFzWZyEQbZ4eSSNW6gDtZq5LgNV4oKX/YjGZaU=;
+        b=S1rpEcjOVlvANLl0lKIzyQw2/HKiR+gzWh/C1KxmlLUp0TymDAoBBY8Ul+cVdpkdD1
+         Qb+bWUawxtnOwh0PeIYsVu+AtzModJPMUMpySwO18TKpURRJCEaWD2UxXDZtkCbTj80K
+         kxoqBKC7J3qx9FOP4/N+MzwlGjX2xZocCYVImbCiIPJZBz59J33i7tRXHqlwImhCpS6r
+         Xc3omikSPEMPvz741LYlnWLNrU5bPK6HMts1n1I4APzrtQdgsB2sd7z89KuD+OsuRFfE
+         Inht9Swb9s7xcvFyzVUOdCUuv8xTNyBBJ9mqwMZKr6At2fkJN5SJC231U7AP+YGuxVuG
+         0JLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l3rdludOurvC4fVB6DK3mkTjnKTmpaPqFr2e/WcU1PY=;
-        b=CnMio8Jh5vkXjnImlvZtGrly8AN5XYMcadsZWJdIuKDKFMzjQd3XnyuwmylSjpTsb7
-         UJlrpbyMCiWJ49r8TxXENo7MDKRlG3IWa8uImMCe6uK6YF039OfgESJizMnqFhkjmgI1
-         e//EKBsZoGcV7vcdB4ZvnWO5xsP9rFBd5pPBNtbAXu2KMKV+PwKdneH0W7DGqMOir5oF
-         lTW9gkg0PXHQt/PwhmpN7xMAC8D0Lk+94f2CzJJKLcvTBH4MndXtpvv0M6Hq4oiQ9QyL
-         y6UrKoLFHRzhGSu7Mf+MPnlipSX2LadazcOoRZiOL3bUlwqXJWMjSipiY6Ioc7rTqhoS
-         pL1g==
-X-Gm-Message-State: ACrzQf25P4HraGDZEtASX7XHLFwsUgsODdY8nVTY8w7gU+zwq/LzzgTN
-        gqpRT+lJXGsXitz0cy3QxelhyQ==
-X-Google-Smtp-Source: AMsMyM6zyE4Kj02pCtPhqS5WKSQqcPsl7sXyYtaqdOEufXYwMr32tdQJVAgcIbgLy0QuXLyErok1Hw==
-X-Received: by 2002:a63:1a07:0:b0:46b:2825:f9cf with SMTP id a7-20020a631a07000000b0046b2825f9cfmr1342652pga.370.1666991959465;
-        Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:65f9:c180:249c:190f])
-        by smtp.gmail.com with UTF8SMTPSA id f2-20020a623802000000b00550724f8ea0sm3250546pfa.128.2022.10.28.14.19.18
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SBJznIFzWZyEQbZ4eSSNW6gDtZq5LgNV4oKX/YjGZaU=;
+        b=ki0wW3id0OI3oFnYDdp+np5RDxO260RKdbj5vkvGKt0O52/Uc37RxRScYs38hVVY80
+         oBfErKyNdGWZRVUZteiggBUUwLYWn5VZcYngIgEP1UwEFZhFXjN4+CKEKVM7b31a0X4W
+         gRI43WdF4SKQknD6PiQ9p90zh8er7CD6nhxmxI2HgcHqsfVGsHw8IgXIMiZ8gczv3JAB
+         +mj+Xmwhc14GIpa0HWeXbfeW61+RSR1eBWfeJNXhP1v96A8GZdxJSo1IN77j0jCTbjyq
+         7ckfD0641LN95Acih9F11t7AP2P3gpkOgSNveRNezYz1LztEttFS+UjE7locytPCvwqi
+         VvCw==
+X-Gm-Message-State: ACrzQf20oEdcBn37qNeYCzJpWQxi27MnsK66YhE56ewztgviMTgK96T+
+        X4IOcq7eARFzznDVXC8NanMLsw==
+X-Google-Smtp-Source: AMsMyM7RVnXDhVMel24hc/A2lGTULvxRB93QAfaenSC9hzmYAcuI1qSvsj4Kp1lV+hm1ywpWSMbBPw==
+X-Received: by 2002:a05:6214:29c9:b0:4bb:b957:cd4a with SMTP id gh9-20020a05621429c900b004bbb957cd4amr1364459qvb.108.1666993700285;
+        Fri, 28 Oct 2022 14:48:20 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id m22-20020a05620a291600b006f926a0572asm3847258qkp.27.2022.10.28.14.48.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Brian Norris <briannorris@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH 2/2] usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS
-Date:   Fri, 28 Oct 2022 14:19:08 -0700
-Message-Id: <20221028141821.2.I5a309231785d3a4e37118a25e84f5caa0136a343@changeid>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-In-Reply-To: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
-References: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
+        Fri, 28 Oct 2022 14:48:19 -0700 (PDT)
+Message-ID: <5392d0d9-ab8c-8945-169f-264114017c1f@linaro.org>
+Date:   Fri, 28 Oct 2022 17:48:17 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
+ AGX Orin
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-5-waynec@nvidia.com>
+ <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
+ <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
+ <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org> <Y1vNU1KeUH8LvG0r@orome>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y1vNU1KeUH8LvG0r@orome>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,35 +86,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This driver often takes on the order of 10ms to start, but in some cases
-takes more than 100ms. It shouldn't have many cross-device dependencies
-to race with, nor racy access to shared state with other drivers, so
-this should be a relatively low risk change.
+On 28/10/2022 08:38, Thierry Reding wrote:
+>>>
+>>> I understand you may not like this approach, however, this comment is 
+>>> not really relevant to just this patch, but a general comment. But yes 
+>>> we will ensure that this is correct.
+>>>
+>>
+>> Just to clarify - this status looks redundant, but I have no way to tell
+>> for sure...
+> 
+> But that's independent of whether we specify this using the full path or
+> reference the node by label, isn't it? The only way to make sure that a
+> status = "okay" is not redundant is by manual inspection. I don't know
+> of an automated way to do that. Perhaps it's something that could be
+> added as a check to DTC?
 
-This driver was pinpointed as part of a survey of top slowest initcalls
-(i.e., are built in, and probing synchronously) on a lab of ChromeOS
-systems.
+With overrides/extends pattern it is easy to spot one case of mistakes -
+you see override, then status might be needed might not. You see new
+node (like here!) - then status=okay is redundant.
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
- drivers/usb/host/xhci-pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 40228a3d77a0..4da03de1be70 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -689,7 +689,8 @@ static struct pci_driver xhci_pci_driver = {
- 	.shutdown = 	usb_hcd_pci_shutdown,
- #ifdef CONFIG_PM
- 	.driver = {
--		.pm = &usb_hcd_pci_pm_ops
-+		.pm = &usb_hcd_pci_pm_ops,
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
- #endif
- };
--- 
-2.38.1.273.g43a17bfeac-goog
+Best regards,
+Krzysztof
 
