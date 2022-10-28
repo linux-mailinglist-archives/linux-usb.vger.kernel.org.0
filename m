@@ -2,157 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D405610DBB
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 11:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F962610DF4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 11:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiJ1Jww (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 05:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
+        id S230369AbiJ1J5g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 05:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiJ1JwV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 05:52:21 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B61C25E8;
-        Fri, 28 Oct 2022 02:50:51 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id b2so11726037eja.6;
-        Fri, 28 Oct 2022 02:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QRV25s9Qm3E2KmaH3Vn0CkgQOv24MvESysG5K9ccwNs=;
-        b=k8hrnQsQ6bs8YzJC+yCNSzYUtxFYpdweIf2g15nT7484v1xuinESOvJjSSL5RfFIVh
-         +I++z8gfItfNpGsGNQdcoGQK0HVah0IC0CJdfTiLdfG0i7M5pIDbsvQm20WYJ5KKywoA
-         +JGSIZoMMnMDXBCiib1DY8uBXPrWPRnHoGjQ2Vv5Vd77dOJO63Q5H6/WRWoBCRyN4c5E
-         3HBqxZ8uHPcdSApnJJgSwQyOLlsYK4di8AoQU3PqmedMJLXMT/+WwHxxpcjURzpEl4Md
-         2Y/5MQr+luoS0w8rljOJ4bia6Dt3ix99Y/06X/PDKT+vY9CN3+jBfnjozFcRjqCWc+n7
-         OF2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QRV25s9Qm3E2KmaH3Vn0CkgQOv24MvESysG5K9ccwNs=;
-        b=MEN4fb56Od5bFnaeZntjQfKPA4eQxNPpS6loIKDcGZtHgTM6zoqy1juMmzWitq8k4S
-         6YecWQkXTi4YsTQl8Z07ICU+uMODmXSTU4Wn5Bv7PvS4rP7obMCE56iqYno1Legxa6/F
-         bocKuOvjf6dVpnxq5zD0xZvT2nazOyoZOBY1tmZBSA9cAQ8HgsRpzAfkX7KdlNHFhqIj
-         RbOkFm0VplUhgDZzQXyhHe4Q58/JXoAu9xOjiLCXz6esD1EH/X79slBgkFGV2TVIPvQD
-         PoGah4FURv3ILwa92oYF/m4elAGiv2PZKS7xH+796OUqBUhrG78dhk5xADkq+DSNwWxd
-         udFA==
-X-Gm-Message-State: ACrzQf1+lrVTa1Ea4ULjjOEIVIWYAZcB1SaTg2ohO+pUPXxwcS1AlrO3
-        cP9vRo/qJ6xmjZ1MqFCCh2g=
-X-Google-Smtp-Source: AMsMyM5xDH41UpDZ1p8bA2U2ywFhVwF/We7xW1fXCGHuMmJgz51HihdjpoffEsQBoS73pu1yzlfGlA==
-X-Received: by 2002:a17:907:2c4a:b0:78d:f5c2:70d1 with SMTP id hf10-20020a1709072c4a00b0078df5c270d1mr46758731ejc.198.1666950649521;
-        Fri, 28 Oct 2022 02:50:49 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ry13-20020a1709068d8d00b007ab1b4cab9bsm2129870ejc.224.2022.10.28.02.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 02:50:48 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 11:50:47 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     Jim Lin <jilin@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+        with ESMTP id S230348AbiJ1J5V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 05:57:21 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2127.outbound.protection.outlook.com [40.107.215.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36856543D2;
+        Fri, 28 Oct 2022 02:56:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Iznz/8wD44Qx7EYna6QXvwZjsBoqa/BA9AyMNqgLufyAeJcC9TxO8wQZM1OrYV0PR9GoQpD00ol4rcBkPV7zml0I8GdJ7Szswof8UIGyLiyCltwPxrIvirov5Orew/DEkXj3PXKpuUzB4XEXUoCnJa11KiCHoW9xQUUFop8aHyCwbJcxY8gYpkj3uZsY+N1NekS8U64MtOFErPOQIVSSkNihY5MW9ywgtveGdU4HMAe9x5kDlLHUapMv4mrOQ5VKqAehcVscYvlrV4CUZejPcgBXr/O/zltWI+Ob0/c7dwc6wRdRQI1yWkvaaRovg1EtiKr6cgxWWTZK5CtK4WGeGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+svCtqOdszc0oBgKaxRnHig4X90ziMVzxJfAGvHGB6I=;
+ b=BX6cZMQoW/CpjcqkKO/VU5hqL/uXmUXFDYJtIcrm1yjj8toNAhlP4ZwhZfjhhaIuT8ebWB4SR2kQvroRdppeq/YfjEXGD+zaIxmFMAbB0ZwWX7Bu3wrtxeg3t9wWDI8jNZAAlt5Ev/4N5r9VXICiJqyzav/8rH5T8dVd+FLdX3eWf0nvzmhLGQcXpFHhy5YRJCmVkMtz9lUFiAr6ayFbg+fQjDVweuq9A52M7ZZ/R/d+aXwGtRH9EpVTNMZXIwHpmyWpi5ocCgcEUmY6hKWge0UDq5MChc0zeI1fSxWZW/H53iQ6ZhuTk3lfPhgo69sDq7saPtGn66b3G49Fp1HBzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+svCtqOdszc0oBgKaxRnHig4X90ziMVzxJfAGvHGB6I=;
+ b=jYt3PzxpFPFHT+F7UlccszHIkx4W9+1pE3BgHjvLRBOef0yBHTRyoczB60QAiZrYP/Ce/ZgI9SWKPfGeQ9sMbCqTMAKGOsoLRIQDDgW1k2aGmsGSbWbYGgbvRiTjYkshG6i1qXtTflHeBOylYWICSpVXtxxGMyAPTnQnLIJUuv6/EAgLjB8Z0MKs9cG3YnABYo0/nI3FMaqRfRWo6XcA0GIyCL3xJQshmHzGn+KHLEV1FhSQzeTVYYqyv94wfP7tGTJpWnoGCa6Vq/nel+aFDwXwIciG/227eTnOT+SABNeEZPB5nl7qRus4g79YoY3zkpult0W9DcZ10/3IU78rtg==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by TY0PR06MB5056.apcprd06.prod.outlook.com (2603:1096:400:1bb::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Fri, 28 Oct
+ 2022 09:55:57 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::9ae1:4f06:2773:f8dc]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::9ae1:4f06:2773:f8dc%4]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
+ 09:55:57 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Lei Yu <yulei.sh@bytedance.com>, Felipe Balbi <balbi@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v5 1/3] xhci: hub: export symbol on xhci_hub_control
-Message-ID: <Y1ul9zU2wmbJo3x7@orome>
-References: <20221027133127.27592-1-jilin@nvidia.com>
- <20221027133127.27592-2-jilin@nvidia.com>
- <Y1qOhjOXM4sQW+a/@kroah.com>
- <3c3b175d2031b8e440bfdef9b4c23c0272a5f607.camel@nvidia.com>
- <Y1txBtRZAJ5vpItj@kroah.com>
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: RE: [PATCH] usb: gadget: aspeed: fix buffer overflow
+Thread-Topic: [PATCH] usb: gadget: aspeed: fix buffer overflow
+Thread-Index: AQHY543fG2IRDKPpjUCvaIBADhhwbq4jYB2AgAASRYCAABWy4IAABOeAgAADxYA=
+Date:   Fri, 28 Oct 2022 09:55:57 +0000
+Message-ID: <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20221024094853.2877441-1-yulei.sh@bytedance.com>
+ <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
+ <HK0PR06MB320203EF8E3AD14C34359B0580329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1ueEYJk2epT/g4J@kroah.com>
+In-Reply-To: <Y1ueEYJk2epT/g4J@kroah.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HK0PR06MB3202:EE_|TY0PR06MB5056:EE_
+x-ms-office365-filtering-correlation-id: e6e908fe-47a9-4bc2-1eb1-08dab8ca9c4c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cnj5RZGd8RIeYc8TwFkFxTu4tdMVYPXZLdltqupK9dtHhb0Iz9m6gMZu2CQyI1uo+rzknmwfFDsvPhC00PMLrV8FYPnM9TIvuwwUKc8yqdNx343sEUVI3+K76ENpJAwZML/QohnoFVlyt3dLQF5BUw0G/WQT/WcrEJUlkzvM2jqA/+xBe3rkV02xsw6l1G1j9UFNWVo/Rr8X8cF5Wk3+6ccyA+XU7GtJYNAA7Xew1hwCxaY3bx01dCxotShyfRITvJxhaw2g3CdPXv6ty4GqeNxcmWbR4i7oBqek7tGUunqFic8NBZMqiGx54g0HctW0FfJMMXloakzf6wxfW8DqrCJVGbgqyQVozH/arcBccpx4whWxHrbmei/4YDIZ48QxVDEJzY/0Pzf9yewTZi9GGgoEbe77l3Z8Dl+Gg7+wejX8LGwuQE2MZ4C+/4EKMUBq4XCsCi5NxiHv8DvE1mJDgm9xxyh85MM/ILwBEeXIbqdRUJIgRXmexV4MIuqkxDR0cjELHO/SyoVYdw4RVR1oxtrPnnVeBiPvFvmlGP9t22D6IuNy7F2VvD2q25nkAZT7OsqQCv4RXmQBlOEbB9v7pNiQWnq6z+CQK25cCZtji+qDKi7kREHpN+xOaXQoifY2URnV6mFKfTeVcCwvs5hsv717I4tZd6KCrEuwC+gEwGAjFsN/mSY+/oeBQP5B/U1H0Serg0EjOmyZ5rBmqyb9lvB0eMjKucK8POqBOPzruIcXaZTDFXpzivaeR49Nk0z0+hDDMcNep+xs2FYO8+gj8g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(136003)(366004)(39850400004)(396003)(451199015)(86362001)(55016003)(54906003)(38070700005)(107886003)(6916009)(71200400001)(316002)(478600001)(33656002)(66556008)(83380400001)(66946007)(2906002)(66446008)(52536014)(4326008)(66476007)(186003)(8676002)(8936002)(7696005)(6506007)(64756008)(76116006)(41300700001)(26005)(5660300002)(38100700002)(122000001)(9686003)(7416002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IJJrYeakPo7AYSB9q4VzqPzNgL4e8CWJsJrqrVt0g7gMPpCTi6Dy6syr0szR?=
+ =?us-ascii?Q?AGgFPpkDUJ01KoIKLd7xTpnjep88zUd0f2Bc94114NMlUemQqthqaLlSaT6h?=
+ =?us-ascii?Q?4jjSN3g11BVH0BUG/tIs9K38RIg6l8FeKgFu+6Zq7s2oJlwVInJPa7rg4Wao?=
+ =?us-ascii?Q?BiceMZCiS+BbfvdizUHvjxqb82E/iyP06RmCkY6SIPQJuv7nanJPO8m1/ijL?=
+ =?us-ascii?Q?Rq+xzfl7LKOcpfDAPQ4akZWb/ltcLxFa2QzfICCTd2Aa5qbHVvy3mQ8PkpCN?=
+ =?us-ascii?Q?8/VMVGoFykZRarvVfBl2+NBwGhzDYtKkaJ92ezOibElajnmIddR7872x43rd?=
+ =?us-ascii?Q?DYkpKAlaKomSXwd06mXqSttQlj9m1kU6Y/lcp+2jaffP1RVOM6DMcJ6l9BHr?=
+ =?us-ascii?Q?ji/tL+KdX5Xgp2zyH8FQuCXhx81NOXeI0bgjKS0cmCmuSYLaXSzLlGrQM5pE?=
+ =?us-ascii?Q?vsUdFVG7TyVXi7YojPBKn5MnkqSi4yZ7n//Tpa3LTHQV6fjM3PeszqdO2muY?=
+ =?us-ascii?Q?UMwuhDBXpuZZ9ej2Z7qPvXzyZPJwCunqroGx2mYJqcedi0ObZ1YntLQW9Fpp?=
+ =?us-ascii?Q?6WVEVT/rubTz4651TlFpxgEGz7CQiHPmla1cKV4IqG2nWfQ+4AJHc1Bx04V7?=
+ =?us-ascii?Q?Hsw89vmXeOZXiMIUHC1zg+FajTn0Ngtuhz1KubS6BlCItAW6HgvF0GbRNLkG?=
+ =?us-ascii?Q?AcXhXxx/tUz6tzd05mY7oc2FONLaxnXSyxxEyPZhvFB0zTv7EvVKqSqLvHJa?=
+ =?us-ascii?Q?vBhqio1kaBN56z5ix5tfCq8cEPR6DQUN2A26lQFJlYSxS9P4+537L6dSMBKf?=
+ =?us-ascii?Q?aHNmM0s+458wJzicGIaaHJxmP0jJq0twOc2hg0FlllrtFWbFCAs/rpVbQZab?=
+ =?us-ascii?Q?SGTrvnCJPwMXJmoIhfkZJ18dbFHxDo/kMwAXtabAYMPJY47dj/UN1qkiiTNL?=
+ =?us-ascii?Q?+ASEoei09qNS3oR8OQ+TRXM4MoTciRVtDR90nN5cIzKUFrC8+QNlT8YHoZ4X?=
+ =?us-ascii?Q?hUR2XLr4yYqzpxvQn1FP0W9YDWfHRX0oJw09FwO0aD9FSUQT/v6Sfh/YMxs5?=
+ =?us-ascii?Q?GbnqHM9uiHWuhSwZRVIHkI6YO5Dq4sjXqPwZ4Xas1Te9H00ejV94t+GAWnoX?=
+ =?us-ascii?Q?MmXokBLVReBb6T6IF9fzMC1/8IgSafTBLtpmHy+wJ+/6L3qIzyVkbuTdXfSs?=
+ =?us-ascii?Q?CjZLaNCTZv0dHA9eCNpmd7gptJkWx+PIAU/vBbpx6+y2gYSThplnXKvygkMF?=
+ =?us-ascii?Q?ngcqXvPlfA0LI/qUftTX7NCi/Ah3pJGARc212nOfqXTxqTnBqH0QK1W70CPY?=
+ =?us-ascii?Q?iPST/u7uJX8q2ObYIAK7GCnHsikBo8x0/BTx/CTJhZUq7Xx/42i8UYDL7HnS?=
+ =?us-ascii?Q?T+po0RYHDBsAwDX4hGqd2mNuJFZnfSomI7yFUZ/GMTs+39qyJFu8kLSmF5ZG?=
+ =?us-ascii?Q?eUMMiisSb+vRTmaig0MIn/6UTkO1hjP/7yUBRVL4utlIVErMkZlQ1GwQ3Mv7?=
+ =?us-ascii?Q?3Ys0Fr4VbBgaE88KGT+xQz4i0xRvy5urdfm3Kwlptxm8/sPfG09IRJnBl1FC?=
+ =?us-ascii?Q?fHIyVNy4BhKTkA98tRFuEgFxDj57kcoUHfDErmyf?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4zhN+v8SOOmzSdBq"
-Content-Disposition: inline
-In-Reply-To: <Y1txBtRZAJ5vpItj@kroah.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6e908fe-47a9-4bc2-1eb1-08dab8ca9c4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2022 09:55:57.0860
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fUq8Nz6l6jNRDgMiGCMjneIzOrwpzaXzQGbB4rUd7tEs7rqgyBdryRc+8AdFAqZoC/8JFRrp1a/rrbw/D4DKjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5056
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---4zhN+v8SOOmzSdBq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Oct 28, 2022 at 08:04:54AM +0200, gregkh@linuxfoundation.org wrote:
-> On Fri, Oct 28, 2022 at 05:36:41AM +0000, Jim Lin wrote:
-> > On Thu, 2022-10-27 at 15:58 +0200, Greg KH wrote:
-> > > External email: Use caution opening links or attachments
-> > >=20
-> > >=20
-> > > On Thu, Oct 27, 2022 at 09:31:25PM +0800, Jim Lin wrote:
-> > > > Add EXPORT_SYMBOL_GPL on xhci_hub_control() for other driver module
-> > > > to invoke and avoid linking error.
-> > >=20
-> > > What other driver module?
-> > >=20
-> > > There is no user here :(
-> > >=20
-> > > confused,
-> > >=20
-> >=20
-> > In arch/arm/configs/multi_v7_defconfig
-> > It defines
-> > CONFIG_USB_XHCI_TEGRA=3Dm
-> >=20
-> > If I don't add EXPORT_SYMBOL_GPL on xhci_hub_control()
-> > , I will get compile/linking error like
-> >=20
-> > ERROR: modpost: "xhci_hub_control" [drivers/usb/host/xhci-tegra.ko]
-> > undefined!
-> >=20
-> > if patch
-> > "[PATCH v5,3/3] xhci: tegra: USB2 pad power controls"
-> >=20
-> > https://patchwork.kernel.org/project/linux-usb/patch/20221027133127.275=
-92-4-jilin@nvidia.com/
-> > is added in xhci-tegra.c to invoke xhci_hub_control()
-> >=20
-> > Should I integrate this patch with [PATCH v5,3/3] as one?
+> > > > Thanks for your feedback.
+> > > > I tried to reproduce it on my side, and it cannot be reproduce it.
+> > > > Here are my test sequences:
+> > > > 1. emulate one of the vhub port to usb ethernet through Linux
+> > > > gadget
+> > > > (ncm)
+> > >
+> > > We are using rndis instead of ncm.
+> > >
+> > > > 2. connect BMC vhub to Host
+> > > > 3. BMC & Host can ping each other (both usb eth dev default mtu is
+> > > > 1500) 4. Set BMC mtu to 1000 (Host OS cannot set usb eth dev mtu
+> > > > to 2000, it's maxmtu is 1500)
+> > >
+> > > Not sure if it's related, but in my case (USB rndis, Debian 10 OS)
+> > > it should be able to set MTU to 2000.
+> >
+> > Using rndis is able to set MTU to 2000, and the issue can be reproduced=
+.
 >=20
-> Yes, do not add something that is not needed for that specific commit,
-> otherwise it causes reviewers to be confused.
+> Please NEVER use rndis anymore.  I need to go just delete that driver fro=
+m
+> the tree.
+>=20
+> It is insecure-by-design and will cause any system that runs it to be ins=
+tantly
+> compromised and it can not be fixed.  Never trust it.
+>=20
+> Even for data throughput tests, I wouldn't trust it as it does odd things=
+ with
+> packet sizes as you show here.
 
-Other subsystem maintainers prefer core changes to be split from driver
-changes, so this type of split is commonly encountered elsewhere.
-
-Obviously, since this is your turf you get to make the rules. I'm just
-trying to say that this kind of advice can be confusing for contributors
-because when they then sent driver and code changes mixed for their next
-submission, the subsystem maintainer might tell them otherwise.
-
-Thierry
-
---4zhN+v8SOOmzSdBq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbpfQACgkQ3SOs138+
-s6HvtA/9HmyQGlNtvFzSY3rQZmOBzX+P6ldztwBEp2MTeyGhl++83iCBJmKdyGx/
-ZpxPXTH9bWb9P1jspNyxV7vYp7rBoqtMTJG4m494V0Nwt4JyvdnD7ORUnawaqQfI
-0KMqtiAjobaTXAGGf17SrdqAlL8FtwnC3uIMGresPnqL/1n126e83rJhdJNyfjRc
-ytPJ3Fm/HIlnWMuzE+uuJO326K8fOxm/FR9GrYx9O/bD4v7FgDJSNLdYxiflMuiB
-SEaLSuObUOtyw8kJTZI/APVii6Ri1Ie7gIS4iG1X/w/zeIsqsj7Dd4AV7ZoupS//
-ctMwehSilsLUbeeH/qz7SY4nTRbJAp69+pgf+NdSK10O0Zk+Rl7ufYv4MFoDfhei
-kur5inGe/mVxmLdyclrgq5kb0rKdLKsMkxfDTK1EgvQ3MP5Oui+q7M30cJMP32Ek
-eWbH0mteCxJ+mP0i6o6Xl852mx1tsDdcriYI3CDsbmaAF9TYbuhYYDoz/27pX0R3
-8U3kO5UGLqTQCkPc2txbgicWYoZbVyqkuNwZ1y1iWGxczkyddBcku6t6gWJB1POa
-9PplX+LGm2ZEoC8svVuWDtf7HbfyUjiUhIwC/qcog3lWlqvDeFURx9Vg21j9R0v8
-B/NTboyCCBgK5q3dbgzDsrLYUkE5/38VafEFD9qFDKgdhfHdfqo=
-=wRkt
------END PGP SIGNATURE-----
-
---4zhN+v8SOOmzSdBq--
+Thanks for the info, Greg.
+If rndis will no longer be supported, how to use usb-ethernet on Windows OS=
+?
+For my understanding, ncm/ecm cannot work on Windows OS.
