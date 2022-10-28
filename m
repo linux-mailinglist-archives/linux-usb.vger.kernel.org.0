@@ -2,124 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95BA611D82
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Oct 2022 00:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD09611E16
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Oct 2022 01:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJ1WqY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 18:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S229738AbiJ1XZm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 19:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJ1WqX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 18:46:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093201D3473;
-        Fri, 28 Oct 2022 15:46:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0F56B82AA2;
-        Fri, 28 Oct 2022 22:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82950C433D6;
-        Fri, 28 Oct 2022 22:46:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666997179;
-        bh=s26jHyd1kGfu++KNYnyX//dTrAoWFdZ+ZNmo3nKnJss=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VxGwJ9O9yotsrKvlxcwXmQ0Fk4p3v9D5+DlTte1u/b8zE1L6oWXtT1okcCGymzc+F
-         uUzTBz6nnK6iiPp7ONuOcluxciyA+H2AWZrZubpDNsGXF9Il1djnbo/LR4hvlZPj9A
-         0kcsvnbXvyZm70ZgqLxx8R3a5VvJzOLCGoXRet/I+ti1hMmQnBvu+tjrjCIr4vv2w6
-         OEFoGL6xEvwVAQA3kmozlS8z6UFzjyJceJxRPFqcAUpN8icgdMmKp9Kauc4XA3OBaI
-         M/O249pRehQLwqy4hrrgyuAQ8mLrPOQJg4gBTCW/3paQdOBy2HRsGcOdxhzSitZK13
-         YSSld8uxG8jGQ==
-Date:   Fri, 28 Oct 2022 15:46:17 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221028154617.3c63ba68@kernel.org>
-In-Reply-To: <20221028183149.2882a29b@gandalf.local.home>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.780676863@goodmis.org>
-        <20221027155513.60b211e2@gandalf.local.home>
-        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-        <20221027163453.383bbf8e@gandalf.local.home>
-        <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
-        <20221027170720.31497319@gandalf.local.home>
-        <20221027183511.66b058c4@gandalf.local.home>
-        <20221028183149.2882a29b@gandalf.local.home>
+        with ESMTP id S229763AbiJ1XZj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 19:25:39 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46C71F811F;
+        Fri, 28 Oct 2022 16:25:37 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id z30so4449277qkz.13;
+        Fri, 28 Oct 2022 16:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=L6ZOWLOEX11BGF0X2VSYkzcJRButopYPzUykJug/GR0=;
+        b=N9VJvCIgWo10v8ZBugLuq279vVIA8JBBxQrU15xejDChn3YT17qE30TZWhUo/YLmLT
+         IjsEK6UgwLVFlKRmhn7OT5pYDfcSMVX/57+5hEHRwSEfnycvcMmfujdlP4jr7z6z4NSK
+         rLvaR0vjjJDO7EcLXQ0oq45LMdRyLcwgEAnQma8SEOs1QsXu1dsURUQUwyyenlhY3pVI
+         gcYGn+dAoDtnhAoLVNXCG/XaFl3XzGpWU2y7j+qhTG8mB41LumvwFrAI9dWgMlqEMUml
+         E6yQkfX0yRPQb4UmDqy0wu4nsS0rz2doLxwfWLQwid/Ye60NBRuWGMJ08Hj+1E8U/EE2
+         sdAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L6ZOWLOEX11BGF0X2VSYkzcJRButopYPzUykJug/GR0=;
+        b=Etikr5SAHdgG/k9AOnAn6F0D7RtfvjI9J6+bKvcAg7/cFvHCVK6QQ8gtxrmCmDW3Ky
+         0wAby9ENup24P2HrgRmq8zas0Xo5xeR0fx6L6LtLOULWyUfFoXVC5XqawGiFvyrGmOQi
+         PYBe4GRhf4YUfO1XiWEsv7IwOMwSuLZ0ToPF3jLe5E+UTSnEI6yL1CGJz0v51prs3nSZ
+         s6maOLwfbnpIeHgf3tkmdthX1+GC6HcncFRNMC8q37fAvjkFBHor8Fbq0mnm+dROyFxA
+         CtU8lBgKK/nqCIc5/5Qr8V6rD8hGpwKUpydLiLOB5g7/gP8cXzwSjMKtN2tALWOGBZSM
+         px6g==
+X-Gm-Message-State: ACrzQf36iClfcJHPD7SF18ky2QiSjKJ9C5dY9lVkKNxaCYnDCPeOwcdd
+        3n+O3MISsH5NyUqhCiJYp5Y=
+X-Google-Smtp-Source: AMsMyM741lPzgEevypdlsE8vYF92OeEjEqksnIX9l3xyzgSpKwqtYRhmgo7muFLOBWWECDCym9XV8g==
+X-Received: by 2002:a37:42d2:0:b0:6ef:241:f7ad with SMTP id p201-20020a3742d2000000b006ef0241f7admr1375784qka.38.1666999536874;
+        Fri, 28 Oct 2022 16:25:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bm11-20020a05620a198b00b006e42a8e9f9bsm3731489qkb.121.2022.10.28.16.25.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 16:25:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6107f2b1-fcd2-918b-328d-401cc22710be@roeck-us.net>
+Date:   Fri, 28 Oct 2022 16:25:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
+ before freeing timer
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        John Stultz <jstultz@google.com>
+References: <20221027150525.753064657@goodmis.org>
+ <20221027150928.983388020@goodmis.org>
+ <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
+ <20221028140129.040d9acc@gandalf.local.home>
+ <20221028141007.05f5c490@gandalf.local.home>
+ <20221028195959.GA1073367@roeck-us.net>
+ <20221028164024.2ab39cc1@gandalf.local.home>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221028164024.2ab39cc1@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 28 Oct 2022 18:31:49 -0400 Steven Rostedt wrote:
-> Could someone from networking confirm (or deny) that the timer being
-> removed in sk_stop_timer() will no longer be used even if del_timer()
-> returns false?
+On 10/28/22 13:40, Steven Rostedt wrote:
+> On Fri, 28 Oct 2022 12:59:59 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> I'll test again with the following changes on top of your published
+>> patch series. I hope this is the current status, but I may have lost
+>> something.
+>>
+>> Looking into it ... deactivate_timer() doesn't do anything
+>> and seems wrong. Did I miss something ?
 > 
-> net/core/sock.c:
+> You mean debug_deactivate_timer() or debug_deactivate?
 > 
-> void sk_stop_timer(struct sock *sk, struct timer_list* timer)
-> {
-> 	if (del_timer(timer))
-> 		__sock_put(sk);
-> }
-> 
-> If this is the case, then I'll add the following interface:
-> 
->    del_timer_sync_shutdown() // the common case which syncs
-> 
->    del_timer_shutdown() // the uncommon case, that returns immediately
->                         // used for those cases that add extra code to
->                         // handle it, like sk_stop_timer()
 
-Sorry too many bugs at once :)
+This:
 
-FWIW Paolo was saying privately earlier today that he spotted some cases
-of reuse, he gave an example of ccid2_hc_tx_packet_recv()
++static void deactivate_timer(struct work_struct *work, bool is_dwork)
++{
++       struct delayed_work *dwork;
++
++       if (!is_dwork)
++               return;
++
++       dwork = to_delayed_work(work);
++}
 
-So we can't convert all cases of sk_stop_timer() in one fell swoop :(
+Guenter
 
-> Which has the same semantics as del_timer_sync() and del_timer()
-> respectively, but will prevent the timer from being rearmed again.
-> 
-> This way we can convert the sk_stop_timer() to:
-> 
-> void sk_stop_timer(struct sock *sk, struct timer_list* timer)
-> {
-> 	if (del_timer_shutdown(timer))
-> 		__sock_put(sk);
-> }
-> 
-> 
-> We can also add the del_timer_shutdown() to other locations that need to
-> put a timer into a shutdown state before freeing, and where it's in a
-> context that can not call del_timer_sync_shutdown().
