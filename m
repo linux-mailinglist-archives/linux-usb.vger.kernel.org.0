@@ -2,180 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367246109B4
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 07:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3576109C3
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Oct 2022 07:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJ1FXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 01:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S229642AbiJ1Fgq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 01:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJ1FXM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 01:23:12 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD0D1B4C7E;
-        Thu, 27 Oct 2022 22:23:11 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id c13-20020a4ac30d000000b0047663e3e16bso642860ooq.6;
-        Thu, 27 Oct 2022 22:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=DIEC4JEAxWqSHyr0NfID2CGIjpJnu67Kcbdtfp2ii0E=;
-        b=nHVLKWTtLs7M+bEpFXa7CzUuzOhWLF/7zSrWkpG8I21gehQjcaRnC6Wt7ObAUjXe5S
-         wYim4BP0ZOtRQt9supq+L2ehlSjg+SS1V5N9mx/Zl3zchCa9ELEkgcwPaivqRC0wZ89F
-         /9pqnKMGu4C8HC4Ft1ViCFY9vL7mKtne3W2N0d+CZdrjYM8W2WL5E8V35oBywUDC5j4+
-         z/2gWWW7axn8yAxlnAkNahgoNeCaFZe5Mj+kZ9XBO5vmcNpF6eDqo+qYuR8zRZn6ExNf
-         QU8F4712Op71PIohaqHZk4JC6egmNltio8jZEeAWgYR38GjpnueiIsVkBJ8QfcNbyymx
-         g33A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DIEC4JEAxWqSHyr0NfID2CGIjpJnu67Kcbdtfp2ii0E=;
-        b=K1y3q7lY9MU62sZGfbMarFBNXQ4HGFopJJvYFU/urxSPrzBgyFTr1/szieRw9/8k6Q
-         ago391lwsAl2HG5IWOqZjQPYl76jC52B/ZbOV9yIx6m3068X1G0i2Umy89rtDCeDDkwZ
-         XGNEBIa9MRsKoxcYD2e4KWL9yGq2qwki8iXqQKH1AydQLdcqZ8oigIWc4MtTwdStOq7+
-         KQO7t/ToSnTM4siH9QeBFFfh+sX/GMFKYPJu2JJc7sc0WpOPjo+bIKTcE8po3ypeklgq
-         F/WO4B/uu920E753B7cs0dztHgaucllqudIG7/slVoae3u/eFXhaVyHcIi3ZKYp9vj+G
-         S/jw==
-X-Gm-Message-State: ACrzQf2RNARDzil6rz0dqWVU8A7TBg+XBlwptwMoB20aDJeJj35sKnjk
-        tGCSrM4jdVwKUDnF92xQ3v0=
-X-Google-Smtp-Source: AMsMyM4fbBOAZeSxCq4AzAu+Oze4l7i1gLi8DggbSUZCX1Ai68QFePj5UmD1t64lJY42gWpP0I4MfQ==
-X-Received: by 2002:a4a:94a6:0:b0:435:f61e:d7a1 with SMTP id k35-20020a4a94a6000000b00435f61ed7a1mr22718453ooi.82.1666934590801;
-        Thu, 27 Oct 2022 22:23:10 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c11-20020a056830000b00b0066ab23e37f6sm1300675otp.10.2022.10.27.22.23.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 22:23:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
-Date:   Thu, 27 Oct 2022 22:23:06 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
- before freeing timer
+        with ESMTP id S229491AbiJ1Fgo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 01:36:44 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73F514088;
+        Thu, 27 Oct 2022 22:36:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WNEg8hHL4vlpbPrxZ85hGpWbvqC+E/xjQVF1FRazfh1p6ySeYIhGwz9kbWe8icsV33tDoWw0oZn88WddTmKq9/gg0Q+dl5kGoAWaYsfmS0J8vl2IiJILCthoGukNwJy03CJ+XO5Bv0ffjeA49W9ShsjvCSNSO3MeU7i6Gm40TDFMTuiCN3j4eCfPnlo35mjbOLK9gHms+gd0BEPp6ehXq2EI8nsUkvwZqKLH+pom9/1LnLi5yjuPNt4/yeXgjZejgXoHCanhXfoLRbEhcN2aW5P5HygiE5CnzvOCjbhCXqp3YIJFLwcp07z5q+vPOy0rPyUqd/LOtCDSHvN4etM+9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B7sSeSBQSSmbcNibEItmgpqZwO2rr8khx0qhkf3yzNg=;
+ b=KKXQ9y0Yf7JfRyHduk0ltv8b38mGujYXEzMf6Qy9AdQuNuvi7A/Oh22hHqLuKFFWh8KxMcvPVVYNvOe4Z5wNP/qUQZ96cbt5uu/v3MJGxRshCE7GAUVe4EOjA/QGJDZweF2ADyA3dSF3X7agtgLOV7u+SwlV5D7ZiCmJuw+VDCKMFrVpjgNbv3bKKKt6G4ERwQLM1OprEGNcsSYUPx3kJvmcbMXv1Mha1SQKya7GI6vFwwYfRqL009I4XT1Tb4SDoJ5oyg2EPQGOehLPav34gdwvqPDIyvj2k+REDEO5fgja5UK2P10IOvk67OMsKGtlzuK3pC2yG3s91QHLeHl7+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B7sSeSBQSSmbcNibEItmgpqZwO2rr8khx0qhkf3yzNg=;
+ b=B/1WrXDK6sZy7LxvxPs6S5HIYei26f40HQIEvgdgoeMElTLscfFrk1Ep3pyGGqRYYaZknmapDtUURHxIe/S70uWoQ/QIEI4PjqVsQS9mKFjFYY+V3rN2hhjNPcg+TE9dvZMIfUaFs3utEJ7Pk4HA8GOGq0Plx7g3dQQriEkmB2SnLYPwf+IGjib+BUOr+bjop/Ya9gq56pSAQKCFnHMQrktxCJexBrLblZF111rN7ip6SgV2rdyKcKiUHUIeA4gXtSgVBBgFrPDsXWuqd3b40o9SPmEc2dslvh+aCBILbTf8cD2CB3zyZdsZUPe9VIg8qhyG7eFzHh5ULPz73AI+Gg==
+Received: from IA1PR12MB6603.namprd12.prod.outlook.com (2603:10b6:208:3a1::17)
+ by MW3PR12MB4521.namprd12.prod.outlook.com (2603:10b6:303:53::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Fri, 28 Oct
+ 2022 05:36:42 +0000
+Received: from IA1PR12MB6603.namprd12.prod.outlook.com
+ ([fe80::ac89:2759:e558:ce6]) by IA1PR12MB6603.namprd12.prod.outlook.com
+ ([fe80::ac89:2759:e558:ce6%7]) with mapi id 15.20.5746.028; Fri, 28 Oct 2022
+ 05:36:42 +0000
+From:   Jim Lin <jilin@nvidia.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     Jonathan Hunter <jonathanh@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Jim Lin <jilin@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v5 1/3] xhci: hub: export symbol on xhci_hub_control
+Thread-Topic: [PATCH v5 1/3] xhci: hub: export symbol on xhci_hub_control
+Thread-Index: AQHY6gh46rv2CS48OEa9DCbRUnopZK4iRFIAgAEGHYA=
+Date:   Fri, 28 Oct 2022 05:36:41 +0000
+Message-ID: <3c3b175d2031b8e440bfdef9b4c23c0272a5f607.camel@nvidia.com>
+References: <20221027133127.27592-1-jilin@nvidia.com>
+         <20221027133127.27592-2-jilin@nvidia.com> <Y1qOhjOXM4sQW+a/@kroah.com>
+In-Reply-To: <Y1qOhjOXM4sQW+a/@kroah.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org
-References: <20221027150525.753064657@goodmis.org>
- <20221027150928.983388020@goodmis.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221027150928.983388020@goodmis.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR12MB6603:EE_|MW3PR12MB4521:EE_
+x-ms-office365-filtering-correlation-id: b16fbf29-75bb-4769-5736-08dab8a664b3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: r2vggGFDBuTnsUvH/ClQhXqDkYktWhUsl4Gf8KScrQ+JD0TeUQIuMWFmouaptN2EF0JaJnzlGdPzcPPhuCa4780mpqfNLLVX1mJMWyEJs0XwnLOkeXaxBPd51+nvpeacfYgGCvMXpYRL4mlj6i49ukt73+C5UPjE5J7Eoqj7b/SePPSfPXIAwJ7JkRTHLhS3mJna4nPZuU0Z9jjZ7QZDr5ylT2Lomw7XkAWN/bG3FqkRwqxzsnXx/P2cDuCWcnF4FrB/YD5N9iwPZcMS/Jc+dpBpV0sq9L0mMdbL69M0ueDgtX3MNVk6LJojxznmGBGfrlfz2QJgDK/543HuXjmklHZLyCjXJMVpC72xDSnzfyJjAvlhFaBVhMVLZQWlYQCKXEJ3Rho8VR3eQ+GPRTCG7yVYvqIxlji47zUjR1Ot90/Uq2kpeQPVe3dSxEb2olV+oOa4CyS9RogzR9+6L2H7Lx6tbAzBTKJknPySPlbWl9FQOzwmkwV78oNQtfLixDQ+gzX/bLOjdkxfs+AQNXi7SaWrqjgURP5QzmC5nA3OU/S3T5jzx18kkqNzy1J+V8Sa5BuQiGH2Iw4IWfpcGpYvwoyEVYogrszU7NVSGfUSSaAyRVCuoFJevnrPevP/fOz2LyTdWYReOndP4hfHfAQh+fJxkrg7I+rWnigsc6QIzxyiXMWGzK3SciOuIEyqobxKDiN/14xGxLMpOiYBgJqzrE5ijD+li86YdSFav0+JHBp75wzN5LECQC08JdNqdFABg+Mo0aqWfLJjI17YcCg4tS2TvtfPDJlYZya6QQ1+6mY/S7BYdzSgL4lojv2zfaIr3tikIvawIBH6XqL5eryx/gKG9oNCZydvXiRBop0R35gY/fayAyYWR/0GFOix6Ngf
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6603.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199015)(6486002)(54906003)(36756003)(186003)(122000001)(4744005)(8936002)(2906002)(38070700005)(86362001)(71200400001)(5660300002)(26005)(316002)(478600001)(91956017)(6512007)(2616005)(966005)(4326008)(66556008)(66446008)(6916009)(66476007)(64756008)(38100700002)(4001150100001)(8676002)(76116006)(6506007)(41300700001)(66946007)(99106002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bGM2b292MFFKdUNoMkIrUFg5Si9aVjN2YzRLVmdsWXpaWWpkeVM5V0laaitv?=
+ =?utf-8?B?clZvZGlTYy9ZSG5XMEhmekRDWVlvWDNrZHNjS3dreVlpNThjUmt4czhPenEz?=
+ =?utf-8?B?ZFhsY3VYTjhnbnNqdDdCOEJRSmNBWkZ2NUVQakYrVlVXajFOemVQbDBkZEhY?=
+ =?utf-8?B?WjVZT1hUMHpXbFFlODNjQzMyelZYTWl2WnJUNGdTZVJwNHR0c2QxTVl6bGNx?=
+ =?utf-8?B?d1pFMk1KY0I4aVM5cUoyTXBQQVUxbmVLQm9XeHhJTHJzZzd1MnFFemJyTW42?=
+ =?utf-8?B?YUpPWStSeWQwbVdld0krdUdqVU9razJlZC8yZTBqUzR1RjN6OTl2bUdHTEJy?=
+ =?utf-8?B?a1hYc25sQkNORlRCUUhUdE1WbGZuQ3ZiVWo2RUwrUEJrNW1temg2VWxpNmJj?=
+ =?utf-8?B?NVhFMGJTTzB5MklSdjVVcnc1NlNoVUxEbi9JbzlocG9SWmVFeGE3Wnk5RCtB?=
+ =?utf-8?B?d214RDBVU09Ta3JYV0VCdWIwQzI4a2xpT0YrMVB2RkhFWW41b3dZOS9rR1d3?=
+ =?utf-8?B?NUxWMGdBc2l1Vkd6ZEZUUHdaMkN2VWlhbnFXTUs0SWNoSGtCQTVYZHJPWjN5?=
+ =?utf-8?B?bGlJYXBYM0V1UEovaFI4TTR1STZGaFVxczBqYzRjUUVFajV6QWJLSmg5anFC?=
+ =?utf-8?B?aGh1OGVWSWVucVRMdDR3YUlid3UwSTh5MVpzZlJkUGk2OUt4emF5Zk13OU1N?=
+ =?utf-8?B?WUViQUVDWkpteFozRTNNZDc3cDFyWVlKVUxaN2VwL3FjcGVzNGhVVHZUNVRZ?=
+ =?utf-8?B?V0dVS0g2eG9lVEJtd0V0Smh6aHd0N1BNRGhsQnkvb0V5UDVsU2xNNDlSTkhu?=
+ =?utf-8?B?YUVmUHhrQzFUcG9uck1ldFNFR2ZXWXpzMTVQdkV5c0ZkZS9OZHpxamdCc3VF?=
+ =?utf-8?B?ZVhESy9hMU1SMzExYzZ2Y05TZGJpbDk2dUJPQVZWVnVpU3ExMkswMThwd3FU?=
+ =?utf-8?B?R0hpTVVhUlBnVklqdWNZbzJjSlpRbmQzTlZqZG50eUVDWGxxdUN6MkRtY2FN?=
+ =?utf-8?B?ejAvSno0c1ZiQkdRNTEzajR0VHRiZ000UitsOXlYR2FZT01QYnNzZ0k0bHJq?=
+ =?utf-8?B?MzhadEoxQ0czRG5NbDdVN2ZDS1NnZzQ5S0Z4UHorQXprODRHYkdQZWNXTkNH?=
+ =?utf-8?B?OFZ2dmtKUW9FcEUzUElhR0dBYzJDc1ZJM1NnbHBJMkhGQ3Q0d05Fc0RQT043?=
+ =?utf-8?B?MGhvWWlaSkpETkR3bDBiK0ZvREFNaTFIUmp6QlYweGtlMmdSTjRibDlKOUVy?=
+ =?utf-8?B?aDVITWtKK2Z4YkRwQUNsRnU1aWgyY0k0UVd5MXpHRFBSOU9VSVdYUkF3YmIx?=
+ =?utf-8?B?emdiVDNvOVozQXFzWXQvYkxYV040bEtCcytlODN3ZElvbG9VdTBsR21nNDFj?=
+ =?utf-8?B?YU1ZUloyQ2I5RGJZUmppWElobFVNSy92YUpwdHBIUk9FaGVTUXBwbENEZm5M?=
+ =?utf-8?B?RVRxRnRlYXovN3Nmc2U3ZlVicFord2NGc0JGM1M1cUdwSUI3MThhL3l3Tm14?=
+ =?utf-8?B?NUNna2FvMXdwbzRrRlZCdlRESjhRMUJWaG9nSVBoNkt6ZWNEUUkydnBsNUwx?=
+ =?utf-8?B?NGx6eUM0S0dPdEIvTVM4a0cxUk0rZFhGNkFYSlR2endLS3FnKzFBeEo5dkty?=
+ =?utf-8?B?MUdVOWRBUGdPeWtKd3IzWEhVak1QTWlxL0FHYndwRHd6bStOdUFqSGF4VUFQ?=
+ =?utf-8?B?QkxGK3NqMXJLOVpWNWs2UURZMFJrbWtmSmhWUGN5LzNBekgvWDI3R3I2VkNH?=
+ =?utf-8?B?WHhtTElUZHVhK1luMjIvR3RrOFM0OVUvT2RRV0NhcXpVaW1Qc0hKN2E3REwr?=
+ =?utf-8?B?a2gxdzg2M25WWm1BVnQ5bFo0aCsxMnp1aDJxR013b29uUk0zc2tXYkdFRkln?=
+ =?utf-8?B?TGVjaTdFYm90TVcwOEZZT2w2QkNyc0dCdHRVMmZXa1dLK0l3S21hNEpYcGZC?=
+ =?utf-8?B?aE1CKzB5RWhKbldMY1NxUXRtVlM0S3ppcUdNSUpoMUN2TkNUMVViQ3pkbFIw?=
+ =?utf-8?B?RW1NN0pTWllKMU5uOE82eTU4NVByYytaTnZMZXNnYWxmT0RzVmh2bG0wU2lV?=
+ =?utf-8?B?NEhwbGRrZU1YelV3eXA5TFNwZy9VZ0U4MkNpRFErZ2JKSE9IOVhzTGRnRU5M?=
+ =?utf-8?Q?EWPlkf2CZ+NXu0QahqaI9Usuc?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <52BAD787651EDD4BAB52FC554DC55180@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6603.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b16fbf29-75bb-4769-5736-08dab8a664b3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2022 05:36:41.9278
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /8l09mJrWPXZ5RB/vwSu84yN8tymUz9SVyy2XPOX3QOKKsgtxbzTatdjH/24AP+AOf67Qmwh1uAJUybMw1R2cA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4521
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/27/22 08:05, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> Before a timer is freed, del_timer_shutdown() must be called.
-> 
-> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Cc: Matthias Kaehlcke <mka@chromium.org>
-> Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> Cc: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
-> Cc: Dan Carpenter <dan.carpenter@oracle.com>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->   drivers/usb/core/hub.c              | 3 +++
->   drivers/usb/gadget/udc/m66592-udc.c | 2 +-
->   drivers/usb/serial/garmin_gps.c     | 2 +-
->   drivers/usb/serial/mos7840.c        | 2 +-
->   4 files changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index bbab424b0d55..397f263ab7da 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -1261,6 +1261,9 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
->   
->   		/* Don't do a long sleep inside a workqueue routine */
->   		if (type == HUB_INIT2) {
-> +			/* Timers must be shutdown before they are re-initialized */
-> +			if (hub->init_work.work.func)
-> +				del_timer_shutdown(&hub->init_work.timer);
->   			INIT_DELAYED_WORK(&hub->init_work, hub_init_func3);
-
-A similar call to INIT_DELAYED_WORK() around line 1085 needs the same change.
-
-It would be great if that can somehow be hidden in INIT_DELAYED_WORK().
-
-Thanks,
-Guenter
-
->   			queue_delayed_work(system_power_efficient_wq,
->   					&hub->init_work,
-> diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-> index 931e6362a13d..a6e2f8358adf 100644
-> --- a/drivers/usb/gadget/udc/m66592-udc.c
-> +++ b/drivers/usb/gadget/udc/m66592-udc.c
-> @@ -1519,7 +1519,7 @@ static int m66592_remove(struct platform_device *pdev)
->   
->   	usb_del_gadget_udc(&m66592->gadget);
->   
-> -	del_timer_sync(&m66592->timer);
-> +	del_timer_shutdown(&m66592->timer);
->   	iounmap(m66592->reg);
->   	free_irq(platform_get_irq(pdev, 0), m66592);
->   	m66592_free_request(&m66592->ep[0].ep, m66592->ep0_req);
-> diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-> index f1a8d8343623..2a53f26468bd 100644
-> --- a/drivers/usb/serial/garmin_gps.c
-> +++ b/drivers/usb/serial/garmin_gps.c
-> @@ -1405,7 +1405,7 @@ static void garmin_port_remove(struct usb_serial_port *port)
->   
->   	usb_kill_anchored_urbs(&garmin_data_p->write_urbs);
->   	usb_kill_urb(port->interrupt_in_urb);
-> -	del_timer_sync(&garmin_data_p->timer);
-> +	del_timer_shutdown(&garmin_data_p->timer);
->   	kfree(garmin_data_p);
->   }
->   
-> diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-> index 6b12bb4648b8..a90a706d27de 100644
-> --- a/drivers/usb/serial/mos7840.c
-> +++ b/drivers/usb/serial/mos7840.c
-> @@ -1726,7 +1726,7 @@ static void mos7840_port_remove(struct usb_serial_port *port)
->   		mos7840_set_led_sync(port, MODEM_CONTROL_REGISTER, 0x0300);
->   
->   		del_timer_sync(&mos7840_port->led_timer1);
-> -		del_timer_sync(&mos7840_port->led_timer2);
-> +		del_timer_shutdown(&mos7840_port->led_timer2);
->   
->   		usb_kill_urb(mos7840_port->led_urb);
->   		usb_free_urb(mos7840_port->led_urb);
-
+T24gVGh1LCAyMDIyLTEwLTI3IGF0IDE1OjU4ICswMjAwLCBHcmVnIEtIIHdyb3RlOg0KPiBFeHRl
+cm5hbCBlbWFpbDogVXNlIGNhdXRpb24gb3BlbmluZyBsaW5rcyBvciBhdHRhY2htZW50cw0KPiAN
+Cj4gDQo+IE9uIFRodSwgT2N0IDI3LCAyMDIyIGF0IDA5OjMxOjI1UE0gKzA4MDAsIEppbSBMaW4g
+d3JvdGU6DQo+ID4gQWRkIEVYUE9SVF9TWU1CT0xfR1BMIG9uIHhoY2lfaHViX2NvbnRyb2woKSBm
+b3Igb3RoZXIgZHJpdmVyIG1vZHVsZQ0KPiA+IHRvIGludm9rZSBhbmQgYXZvaWQgbGlua2luZyBl
+cnJvci4NCj4gDQo+IFdoYXQgb3RoZXIgZHJpdmVyIG1vZHVsZT8NCj4gDQo+IFRoZXJlIGlzIG5v
+IHVzZXIgaGVyZSA6KA0KPiANCj4gY29uZnVzZWQsDQo+IA0KDQpJbiBhcmNoL2FybS9jb25maWdz
+L211bHRpX3Y3X2RlZmNvbmZpZw0KSXQgZGVmaW5lcw0KQ09ORklHX1VTQl9YSENJX1RFR1JBPW0N
+Cg0KSWYgSSBkb24ndCBhZGQgRVhQT1JUX1NZTUJPTF9HUEwgb24geGhjaV9odWJfY29udHJvbCgp
+DQosIEkgd2lsbCBnZXQgY29tcGlsZS9saW5raW5nIGVycm9yIGxpa2UNCg0KRVJST1I6IG1vZHBv
+c3Q6ICJ4aGNpX2h1Yl9jb250cm9sIiBbZHJpdmVycy91c2IvaG9zdC94aGNpLXRlZ3JhLmtvXQ0K
+dW5kZWZpbmVkIQ0KDQppZiBwYXRjaA0KIltQQVRDSCB2NSwzLzNdIHhoY2k6IHRlZ3JhOiBVU0Iy
+IHBhZCBwb3dlciBjb250cm9scyINCg0KaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9q
+ZWN0L2xpbnV4LXVzYi9wYXRjaC8yMDIyMTAyNzEzMzEyNy4yNzU5Mi00LWppbGluQG52aWRpYS5j
+b20vDQppcyBhZGRlZCBpbiB4aGNpLXRlZ3JhLmMgdG8gaW52b2tlIHhoY2lfaHViX2NvbnRyb2wo
+KQ0KDQpTaG91bGQgSSBpbnRlZ3JhdGUgdGhpcyBwYXRjaCB3aXRoIFtQQVRDSCB2NSwzLzNdIGFz
+IG9uZT8NCg0KLS1udnB1YmxpYw0KDQo=
