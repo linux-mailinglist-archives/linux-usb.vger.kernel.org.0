@@ -2,103 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D306611E23
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Oct 2022 01:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E204611EED
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Oct 2022 03:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJ1X3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Oct 2022 19:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
+        id S229761AbiJ2BNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Oct 2022 21:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiJ1X3j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 19:29:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD63FD37;
-        Fri, 28 Oct 2022 16:29:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAF4962AF5;
-        Fri, 28 Oct 2022 23:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CDC3C433C1;
-        Fri, 28 Oct 2022 23:29:34 +0000 (UTC)
-Date:   Fri, 28 Oct 2022 19:29:50 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        John Stultz <jstultz@google.com>
-Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221028192950.1348c620@gandalf.local.home>
-In-Reply-To: <6107f2b1-fcd2-918b-328d-401cc22710be@roeck-us.net>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.983388020@goodmis.org>
-        <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
-        <20221028140129.040d9acc@gandalf.local.home>
-        <20221028141007.05f5c490@gandalf.local.home>
-        <20221028195959.GA1073367@roeck-us.net>
-        <20221028164024.2ab39cc1@gandalf.local.home>
-        <6107f2b1-fcd2-918b-328d-401cc22710be@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229692AbiJ2BNR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Oct 2022 21:13:17 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CEF9D1D4DE0
+        for <linux-usb@vger.kernel.org>; Fri, 28 Oct 2022 18:13:15 -0700 (PDT)
+Received: (qmail 100580 invoked by uid 1000); 28 Oct 2022 21:13:14 -0400
+Date:   Fri, 28 Oct 2022 21:13:14 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: ehci-pci: Set PROBE_PREFER_ASYNCHRONOUS
+Message-ID: <Y1x+KmXhzikbEm8U@rowland.harvard.edu>
+References: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 28 Oct 2022 16:25:32 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
-
-> On 10/28/22 13:40, Steven Rostedt wrote:
-> > On Fri, 28 Oct 2022 12:59:59 -0700
-> > Guenter Roeck <linux@roeck-us.net> wrote:  
-> >>
-> >> I'll test again with the following changes on top of your published
-> >> patch series. I hope this is the current status, but I may have lost
-> >> something.
-> >>
-> >> Looking into it ... deactivate_timer() doesn't do anything
-> >> and seems wrong. Did I miss something ?  
-> > 
-> > You mean debug_deactivate_timer() or debug_deactivate?
-> >   
+On Fri, Oct 28, 2022 at 02:19:07PM -0700, Brian Norris wrote:
+> This driver often takes on the order of 8ms to start, but every little
+> bit counts. It shouldn't have many cross-device dependencies to
+> race with, nor racy access to shared state with other drivers, so this
+> should be a relatively low risk change.
 > 
-> This:
+> This driver was pinpointed as part of a survey of top slowest initcalls
+> (i.e., are built in, and probing synchronously) on a lab of ChromeOS
+> systems.
 > 
-> +static void deactivate_timer(struct work_struct *work, bool is_dwork)
-> +{
-> +       struct delayed_work *dwork;
-> +
-> +       if (!is_dwork)
-> +               return;
-> +
-> +       dwork = to_delayed_work(work);
-> +}
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
 
-Oh, that was part of my trying to figure out WTF delayed work was doing
-with its timers. You can delete it's existence.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Thanks (and I'll go remove it from my tree).
+However, I'm curious to know why this patch makes ehci-pci use 
+PROBE_PREFER_ASYNCHRONOUS even when CONFIG_PM isn't set, whereas the 2/2 
+patch makes xhci-pci use PROBE_PREFER_ASYNCHRONOUS only when CONFIG_PM 
+is set.
 
--- Steve
+Alan Stern
 
+>  drivers/usb/host/ehci-pci.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> index 17f8b6ea0c35..4b148fe5e43b 100644
+> --- a/drivers/usb/host/ehci-pci.c
+> +++ b/drivers/usb/host/ehci-pci.c
+> @@ -411,11 +411,12 @@ static struct pci_driver ehci_pci_driver = {
+>  	.remove =	ehci_pci_remove,
+>  	.shutdown = 	usb_hcd_pci_shutdown,
+>  
+> -#ifdef CONFIG_PM
+>  	.driver =	{
+> -		.pm =	&usb_hcd_pci_pm_ops
+> -	},
+> +#ifdef CONFIG_PM
+> +		.pm =	&usb_hcd_pci_pm_ops,
+>  #endif
+> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+> +	},
+>  };
+>  
+>  static int __init ehci_pci_init(void)
+> -- 
+> 2.38.1.273.g43a17bfeac-goog
+> 
