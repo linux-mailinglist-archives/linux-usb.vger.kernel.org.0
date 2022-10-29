@@ -2,133 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B566E612404
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Oct 2022 16:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86470612464
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Oct 2022 18:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJ2Owp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Oct 2022 10:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
+        id S229786AbiJ2QNY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Oct 2022 12:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiJ2Owo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Oct 2022 10:52:44 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CE2640C;
-        Sat, 29 Oct 2022 07:52:43 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-13bef14ea06so9362296fac.3;
-        Sat, 29 Oct 2022 07:52:43 -0700 (PDT)
+        with ESMTP id S229668AbiJ2QNV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Oct 2022 12:13:21 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1D63FEE9
+        for <linux-usb@vger.kernel.org>; Sat, 29 Oct 2022 09:13:20 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d24so7356719pls.4
+        for <linux-usb@vger.kernel.org>; Sat, 29 Oct 2022 09:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwnCAiei1whE+Be7EoJMLh4TL6YCuvqKCJBzgqzGqOc=;
-        b=eFE1tYG+WmHIhwxjpqC8OAG0cBEHvsJraLzPuHakg0hPooD/nGNhGQHVU//kzoEcNs
-         TO/3ZhQR0N2Bh5luyXh7FfsgDStYQ6K2Yxv5LQzXsgjdpUn50y4qvQmlhO+N4t7EJwgV
-         amMo9YMxEAL89rNwB13nOXMZgGaBQuFd/cfk8LKu+FukGiDR3pz401z3SMVrqvY8pN/T
-         azpf1Lakpv3ArNP1/gF61vpYvIeFqQudUpP1Mh706W2IuSRp3LugfYtcxYvUXxNdZkWS
-         pPch2jmQTPuRGVSx4xvMcVvaYt3aSgyNdZQEWvQ78EJkvFLclCqzkgRMLucp7YNCeITx
-         QQxw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3x0jiWcFWFmlhFBUgMb/KV3f2D1GeO0pHu9fsc01t/c=;
+        b=oh1fOxrXrHC1s7Xx/PRQIpepIGCcPhMFGriWCy6k7pwIZedMIRMqP2sZlVxV3KHvxe
+         wAR9wKr20eolR6fz3BxmjYwCaw23dAZ+0h3cAtwH1Df0qcBVKSSLI+Cc7L3WG5/+8yWg
+         xpt3gFgp6elqtCaxmu07IP1wv0pak33E1jkEovMn24PyvJEO0fJEhMengp7EQU6k0gbZ
+         e1Ci7X0f+4WSn7zmuO4bJ7J3DU0QFQA9urW7C3MCl329pXCoJ8nNFjRDJOYRf40Q/L9P
+         kbFAtIC6A8uYsUOMlbuUJX4KWdjnUAJJX86WaKfRvKbnRYIrl9pNj6qVlIsHf0F9JIbJ
+         ooLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lwnCAiei1whE+Be7EoJMLh4TL6YCuvqKCJBzgqzGqOc=;
-        b=VaYmEfPUaev2MTzzEA9pVocLqwfVIVFPQiMKSRQAxRg3IWWwatVzqeZGSuv8d6MtHv
-         iODjY/PdYNYrkuq83DCVjbR9r45JsA9kkpTL7E/rA2OpLRkBS77flcX4/gZjI63Xl7mh
-         PF8KWYeWCa6qvTazjBXNKqOJEDEZgeg0FQEgZQz8pR2O/jas4hifWZAn4mLu5QyTDIsd
-         4wpSYLxRbrQlqTuskpxeZ64MYki3tq7CRIscZ1cLLaeaAEblrObRXG3BPTfh0gGz6eqr
-         LBnbpLVH/kozEBJjhn/94CD7ckngJNiG0IAfdcfFUR+51UKn2is8jGLcp62mog6GItRY
-         Y80g==
-X-Gm-Message-State: ACrzQf3QZDhw2T8/JAydV8kAt7NBuAF6TACMjusC4+n5wxRm/Ko8GQH3
-        YuQ9WwrYOJMJDTFUJ5pO4Ls=
-X-Google-Smtp-Source: AMsMyM4R6nB9g+5TpuFK/Quhv8UgAR4fbog4Ou/8bXvQI2EioWAaHA8yrPLGi8p6yn7a5Em4gs5vGQ==
-X-Received: by 2002:a05:6870:350e:b0:13c:37cd:dc32 with SMTP id k14-20020a056870350e00b0013c37cddc32mr9821144oah.185.1667055163211;
-        Sat, 29 Oct 2022 07:52:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d13-20020a056870e24d00b0013b1301ce42sm723920oac.47.2022.10.29.07.52.42
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3x0jiWcFWFmlhFBUgMb/KV3f2D1GeO0pHu9fsc01t/c=;
+        b=Qb++Uod/hcnYmt+KGSMwFR4el7gmEMW6dyrl4vxAuwBgNvoGbYhB1cHgtPvDA+Y+zQ
+         LcH6W5D6RCCYe2TWbPQ/Djg9hRpwpFmVh9o6mPzuRQrdyPdEEGQPQrYWqBei04vCMyPN
+         nY2x5AZb3K8JULDN+ztnyOUoKzf9UKajumQHJDHiJOpTNJhkZqFhKml0BKLUy/SkC9+9
+         4CMs77roNtZacdL2ur+9S7hF73v/OTbKCOYs7N3F3ZhGKLlZdkdABZC0NMd2N0anp+cn
+         zILkfUPliRw+ZTF0ctcMFkDYE/RMJX24jBJ+UILsTjw91mIUkCu3v2zi+rHZerkVfkkn
+         dlxg==
+X-Gm-Message-State: ACrzQf3DFoCDk17TsVXHvDogU3jCDrbUaeEc6XOmlcu7g+FGKobfafxc
+        zZtBJ1rz1r00osT46zV2Q0q5p3nwJzAUxrbS
+X-Google-Smtp-Source: AMsMyM5qvCexR8P6Czc0gi95DaOQGd/qFVTsoanDO5UvShtkh4hopAR7+6iL1odgoLX6b+ECumPSNQ==
+X-Received: by 2002:a17:90a:ad08:b0:212:d5f1:e0c6 with SMTP id r8-20020a17090aad0800b00212d5f1e0c6mr21996458pjq.228.1667059999324;
+        Sat, 29 Oct 2022 09:13:19 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c5e:d478:7aa5:ae24:3b52:b714])
+        by smtp.gmail.com with ESMTPSA id a75-20020a621a4e000000b005624e9b3e10sm1361308pfa.210.2022.10.29.09.13.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 07:52:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 29 Oct 2022 07:52:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sat, 29 Oct 2022 09:13:18 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
         Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        John Stultz <jstultz@google.com>
-Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221029145241.GA3296895@roeck-us.net>
-References: <20221027150525.753064657@goodmis.org>
- <20221027150928.983388020@goodmis.org>
- <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
- <20221028140129.040d9acc@gandalf.local.home>
- <20221028141007.05f5c490@gandalf.local.home>
- <20221028195959.GA1073367@roeck-us.net>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] tools: usb: ffs-aio-example: Fix build error with aarch64-*-gnu-gcc toolchain(s)
+Date:   Sat, 29 Oct 2022 21:43:12 +0530
+Message-Id: <20221029161312.171165-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221028195959.GA1073367@roeck-us.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 01:00:02PM -0700, Guenter Roeck wrote:
-> On Fri, Oct 28, 2022 at 02:10:07PM -0400, Steven Rostedt wrote:
-> > On Fri, 28 Oct 2022 14:01:29 -0400
-> > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > > @@ -813,6 +839,14 @@ void destroy_timer_on_stack(struct timer_list *timer)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(destroy_timer_on_stack);
-> > >  
-> > > +static struct timer_base *lock_timer_base(struct timer_list *timer,
-> > > +					  unsigned long *flags);
-> > > +
-> > > +void __timer_reinit_debug_objects(struct timer_list *timer)
-> > > +{
-> > > +	return;
-> > > +}
-> > > +
-> > >  #else
-> > >  static inline void debug_timer_init(struct timer_list *timer) { }
-> > >  static inline void debug_timer_activate(struct timer_list *timer) { }
-> > 
-> > Bah, the above chunk was leftover from some debugging.
-> > 
-> 
-> I'll test again with the following changes on top of your published
-> patch series. I hope this is the current status, but I may have lost
-> something.
-> 
+The tools/usb/aio_simple.c file when cross-compiled with
+aarch64-*-gnu-gcc toolchain(s) leads to the following errors:
 
-With the diffs I sent earlier applied, the warning still seen is
+  aio_simple.c:30:10: fatal error: endian.h: No such file or directory
+  30 | #include <endian.h>
+      |          ^~~~~~~~~~
 
-WARNING: CPU: 0 PID: 9 at lib/debugobjects.c:502 debug_print_object+0xd0/0x100
-ODEBUG: free active (active state 0) object type: timer_list hint: neigh_timer_handler+0x0/0x480
+  aio_simple.c:88:14: note: (near initialization for
+                      'descriptors.fs_count')
+  aio_simple.c:110:14: error: initializer element is not constant
+  110 |  .hs_count = htole32(3),
+      |              ^~~~~~~
+  aio_simple.c:110:14: note: (near initialization for
+                      'descriptors.hs_count')
+  aio_simple.c:124:22: error: initializer element is not constant
+  124 |    .wMaxPacketSize = htole16(512),
+      |                      ^~~~~~~
+  aio_simple.c:124:22: note: (near initialization for
+                       'descriptors.hs_descs.bulk_sink.wMaxPacketSize')
 
-That happens with almost every test, so I may have missed some others
-in the noise.
+Fix these compilation issues by:
+ - Switching to _DEFAULT_SOURCE:
+    _BSD_SOURCE is deprecated and gives a build warning. Let's use
+    _DEFAULT_SOURCE instead.
+ - Currently this file uses library htole16/32 function calls.
+   Replace these with equivalent 'cpu_to_le16/32' calls.
 
-Guenter
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ .../simple/device_app/aio_simple.c            | 44 +++++++++++++------
+ 1 file changed, 31 insertions(+), 13 deletions(-)
+
+diff --git a/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c b/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c
+index 1f44a29818bf..96616eb4600b 100644
+--- a/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c
++++ b/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c
+@@ -25,7 +25,9 @@
+  * For more information, please refer to <http://unlicense.org/>
+  */
+ 
+-#define _BSD_SOURCE /* for endian.h */
++/* $(CROSS_COMPILE)cc -g -o aio_simple aio_simple.c -laio */
++
++#define _DEFAULT_SOURCE /* for endian.h */
+ 
+ #include <endian.h>
+ #include <errno.h>
+@@ -49,6 +51,22 @@
+ 
+ #define BUF_LEN		8192
+ 
++/*
++ * cpu_to_le16/32 are used when initializing structures, a context where a
++ * function call is not allowed. To solve this, we code cpu_to_le16/32 in a way
++ * that allows them to be used when initializing structures.
++ */
++
++#if BYTE_ORDER == __LITTLE_ENDIAN
++#define cpu_to_le16(x)  (x)
++#define cpu_to_le32(x)  (x)
++#else
++#define cpu_to_le16(x)  ((((x) >> 8) & 0xffu) | (((x) & 0xffu) << 8))
++#define cpu_to_le32(x)  \
++	((((x) & 0xff000000u) >> 24) | (((x) & 0x00ff0000u) >>  8) | \
++	(((x) & 0x0000ff00u) <<  8) | (((x) & 0x000000ffu) << 24))
++#endif
++
+ /******************** Descriptors and Strings *******************************/
+ 
+ static const struct {
+@@ -62,12 +80,12 @@ static const struct {
+ 	} __attribute__ ((__packed__)) fs_descs, hs_descs;
+ } __attribute__ ((__packed__)) descriptors = {
+ 	.header = {
+-		.magic = htole32(FUNCTIONFS_DESCRIPTORS_MAGIC_V2),
+-		.flags = htole32(FUNCTIONFS_HAS_FS_DESC |
++		.magic = cpu_to_le32(FUNCTIONFS_DESCRIPTORS_MAGIC_V2),
++		.flags = cpu_to_le32(FUNCTIONFS_HAS_FS_DESC |
+ 				     FUNCTIONFS_HAS_HS_DESC),
+-		.length = htole32(sizeof(descriptors)),
++		.length = cpu_to_le32(sizeof(descriptors)),
+ 	},
+-	.fs_count = htole32(3),
++	.fs_count = cpu_to_le32(3),
+ 	.fs_descs = {
+ 		.intf = {
+ 			.bLength = sizeof(descriptors.fs_descs.intf),
+@@ -89,7 +107,7 @@ static const struct {
+ 			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+ 		},
+ 	},
+-	.hs_count = htole32(3),
++	.hs_count = cpu_to_le32(3),
+ 	.hs_descs = {
+ 		.intf = {
+ 			.bLength = sizeof(descriptors.hs_descs.intf),
+@@ -103,14 +121,14 @@ static const struct {
+ 			.bDescriptorType = USB_DT_ENDPOINT,
+ 			.bEndpointAddress = 1 | USB_DIR_IN,
+ 			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+-			.wMaxPacketSize = htole16(512),
++			.wMaxPacketSize = cpu_to_le16(512),
+ 		},
+ 		.bulk_source = {
+ 			.bLength = sizeof(descriptors.hs_descs.bulk_source),
+ 			.bDescriptorType = USB_DT_ENDPOINT,
+ 			.bEndpointAddress = 2 | USB_DIR_OUT,
+ 			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+-			.wMaxPacketSize = htole16(512),
++			.wMaxPacketSize = cpu_to_le16(512),
+ 		},
+ 	},
+ };
+@@ -125,13 +143,13 @@ static const struct {
+ 	} __attribute__ ((__packed__)) lang0;
+ } __attribute__ ((__packed__)) strings = {
+ 	.header = {
+-		.magic = htole32(FUNCTIONFS_STRINGS_MAGIC),
+-		.length = htole32(sizeof(strings)),
+-		.str_count = htole32(1),
+-		.lang_count = htole32(1),
++		.magic = cpu_to_le32(FUNCTIONFS_STRINGS_MAGIC),
++		.length = cpu_to_le32(sizeof(strings)),
++		.str_count = cpu_to_le32(1),
++		.lang_count = cpu_to_le32(1),
+ 	},
+ 	.lang0 = {
+-		htole16(0x0409), /* en-us */
++		cpu_to_le16(0x0409), /* en-us */
+ 		STR_INTERFACE,
+ 	},
+ };
+-- 
+2.37.3
+
