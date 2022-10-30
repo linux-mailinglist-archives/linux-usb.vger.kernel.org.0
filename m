@@ -2,104 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06E2612B53
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Oct 2022 16:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF93612B99
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Oct 2022 17:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJ3PsT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Oct 2022 11:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S229619AbiJ3QXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Oct 2022 12:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiJ3PsR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Oct 2022 11:48:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E22B1FC;
-        Sun, 30 Oct 2022 08:48:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC65B80EC1;
-        Sun, 30 Oct 2022 15:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0402C433D6;
-        Sun, 30 Oct 2022 15:48:11 +0000 (UTC)
-Date:   Sun, 30 Oct 2022 11:48:28 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        John Stultz <jstultz@google.com>
-Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221030114828.58fdd5d0@gandalf.local.home>
-In-Reply-To: <5ee0b72c-3942-8981-573f-73d97ea7ef08@roeck-us.net>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.983388020@goodmis.org>
-        <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
-        <20221028140129.040d9acc@gandalf.local.home>
-        <20221028141007.05f5c490@gandalf.local.home>
-        <20221028195959.GA1073367@roeck-us.net>
-        <20221029145241.GA3296895@roeck-us.net>
-        <20221029151952.076821f2@gandalf.local.home>
-        <5ee0b72c-3942-8981-573f-73d97ea7ef08@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229520AbiJ3QXV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Oct 2022 12:23:21 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5797810D
+        for <linux-usb@vger.kernel.org>; Sun, 30 Oct 2022 09:23:20 -0700 (PDT)
+Received: (qmail 162170 invoked by uid 1000); 30 Oct 2022 12:23:19 -0400
+Date:   Sun, 30 Oct 2022 12:23:19 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        imv4bel@gmail.com
+Subject: Re: [PATCH v2] char: xillybus: Prevent use-after-free due to race
+ condition
+Message-ID: <Y16k90Lk2fehKqRC@rowland.harvard.edu>
+References: <20221030094209.65916-1-eli.billauer@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221030094209.65916-1-eli.billauer@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 29 Oct 2022 15:56:25 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
-
-> >> WARNING: CPU: 0 PID: 9 at lib/debugobjects.c:502 debug_print_object+0xd0/0x100
-> >> ODEBUG: free active (active state 0) object type: timer_list hint: neigh_timer_handler+0x0/0x480
-> >>
-> >> That happens with almost every test, so I may have missed some others
-> >> in the noise.  
-> > 
-> > Can you add this?
-> >   
+On Sun, Oct 30, 2022 at 11:42:09AM +0200, Eli Billauer wrote:
+> The driver for XillyUSB devices maintains a kref reference count on each
+> xillyusb_dev structure, which represents a physical device. This reference
+> count reaches zero when the device has been disconnected and there are no
+> open file descriptors that are related to the device. When this occurs,
+> kref_put() calls cleanup_dev(), which clears up the device's data,
+> including the structure itself.
 > 
-> It doesn't make a difference.
+> However, when xillyusb_open() is called, this reference count becomes
+> tricky: This function needs to obtain the xillyusb_dev structure that
+> relates to the inode's major and minor (as there can be several such).
+> xillybus_find_inode() (which is defined in xillybus_class.c) is called
+> for this purpose. xillybus_find_inode() holds a mutex that is global in
+> xillybus_class.c to protect the list of devices, and releases this
+> mutex before returning. As a result, nothing protects the xillyusb_dev's
+> reference counter from being decremented to zero before xillyusb_open()
+> increments it on its own behalf. Hence the structure can be freed
+> due to a rare race condition.
+> 
+> To solve this, a mutex is added. It is locked by xillyusb_open() before
+> the call to xillybus_find_inode() and is released only after the kref
+> counter has been incremented on behalf of the newly opened inode. This
+> protects the kref reference counters of all xillyusb_dev structs from
+> being decremented by xillyusb_disconnect() during this time segment, as
+> the call to kref_put() in this function is done with the same lock held.
+> 
+> There is no need to hold the lock on other calls to kref_put(), because
+> if xillybus_find_inode() finds a struct, xillyusb_disconnect() has not
+> made the call to remove it, and hence not made its call to kref_put(),
+> which takes place afterwards. Hence preventing xillyusb_disconnect's
+> call to kref_put() is enough to ensure that the reference doesn't reach
+> zero before it's incremented by xillyusb_open().
+> 
+> It would have been more natural to increment the reference count in
+> xillybus_find_inode() of course, however this function is also called by
+> Xillybus' driver for PCIe / OF, which registers a completely different
+> structure. Therefore, xillybus_find_inode() treats these structures as
+> void pointers, and accordingly can't make any changes.
+> 
+> Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
 
-Ah, it also requires this (I have other debugging in that file, so it may
-only apply with some fuzzing):
+It looks like the xillybus driver already has a private mutex that would 
+have been very well suited for this task: unit_mutex defined in 
+xillybus_class.c.  Of course, there's nothing wrong with using a new 
+mutex instead -- just make sure there aren't any ABBA locking order 
+problems.
 
--- Steve
-
-
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index ac2e8beb4235..f2ccf24a8448 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1282,6 +1296,11 @@ int __del_timer(struct timer_list *timer, bool free)
- 			debug_timer_deactivate(timer, true);
- 		}
- 		raw_spin_unlock_irqrestore(&base->lock, flags);
-+	} else if (free) {
-+		base = lock_timer_base(timer, &flags);
-+		timer->function = NULL;
-+		debug_timer_deactivate(timer, true);
-+		raw_spin_unlock_irqrestore(&base->lock, flags);
- 	}
- 
- 	return ret;
+Alan Stern
