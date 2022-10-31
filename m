@@ -2,66 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E1B613E0B
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Oct 2022 20:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2205613E95
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Oct 2022 20:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJaTLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Oct 2022 15:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S229665AbiJaTzW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Oct 2022 15:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJaTLI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 15:11:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2117F958F
-        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 12:11:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 65944CE1370
-        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 19:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EDA2C43146
-        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 19:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667243463;
-        bh=g/TYRR945q9r09iljwEdZMeDjulxDgLeMWkkoyChGi4=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=LWNCt3uIQZ8GZQoReovua2eMqfUst9CcucI2UYmJhySnbvk5VBWp9ffQjMJRJLK2w
-         t8EpbzsNiLFY0taXuQhtmGlZeK7zuZkqE5vZxZOMYKVafo1QISr6d3YxT8K1h50PV2
-         8RLoxQ14UnwYhinngU4QKg/Qq7o8APzhYQuO9leX8bLiQGMcZqGgu2YMN84yDU6MFx
-         bN8cPzd839t853KKGfMrcDEhi5Fc6/f3WWuaN7Ek+PjnQQFvnD/bq63g0SYOxpSeGW
-         Q2LquxvRLWOYYOQmkgomILGTnA2lwge+hYLtzJxogB5lEhn2PpzsoYp8B/14D/HQH1
-         +ln6HTIF+lg+Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6A53DC433E6; Mon, 31 Oct 2022 19:11:03 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
-Date:   Mon, 31 Oct 2022 19:11:02 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jk@kifmann.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-203419-208809-IgGr9R0Nxw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
-References: <bug-203419-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229766AbiJaTzV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 15:55:21 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DB413F88
+        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 12:55:19 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id a13so19048028edj.0
+        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 12:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DF4wkWvWXegmip018YfFTMUIfpvZ++f68WTZSD1bWH4=;
+        b=b/AhgHxwilfewDUeFdF7w5tS1qudHYwzeXYHCeNTee8gy7zQX39fPcLeEM+Wg2XbVc
+         OMXGEWO82RD7yGQEkDfRc2i0aqOuYklgxxBLGlc3zsxIFDUxm5azTpth70VNAT6C/K0V
+         Sp55l2H8ExCVM971zGFtptSmbXODgOa63SoNl/bpXl2unUrPP8r7gJoRJ5lyg749pl8u
+         tk7UmZgFsHQ6SrAr8fiCmWbrqAdFMgUuBhxhyH5fE2JHga4rzsYrQkaLeck9SCqq868x
+         v9dDgVFzZdrz6jmTK0GaAXL6a36GJmr4G2f5Kt0kQpPmy2lPsBMyIQ8bASyY8Ivup2CE
+         0YnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DF4wkWvWXegmip018YfFTMUIfpvZ++f68WTZSD1bWH4=;
+        b=4gPmS1AqAvZjB3tLi9y88oHA1bd+vqWnusYrIxe+Hl9waXXg5zN/H/+KcufSGkOybY
+         kihhRcJHMOOFZ/I6VyEwTm39u2Bqbw4+KRJfpac9uwv+7Y5V7MoG81pwW2qUY/jTbG2Q
+         dGredIJl55orJAhEYjyj8Fi7UBsbNZRm71yZuKVeJsSOAFMcC9vC8EclNJbUIphe6Bqq
+         oIyY2pHbfWgp+pK3ZRk1M1PQVQ/4wBZh8wm8ZuTNZXwkEuD1d9C3v3rSJlMBOmlr1S8U
+         56gU+JLW/N3FOaaibkHnZbo1YkvtGFTGwUZbM+zixVoi29uwhEI4dfI7DMEdVk0mUIyJ
+         CGGA==
+X-Gm-Message-State: ACrzQf2KfTwbAx6YQ6sorOhQHCM4vQ1CkVg6qmR0EtTC6qWTovRmr1LG
+        7cPxemhE+SX1SiwHNGb9/qCyc3LcB9t5RbWIY96J3Q==
+X-Google-Smtp-Source: AMsMyM56VjnjVqw1pPVrEHK3+oaJydtdMBXaE2SuGomtgUtwtlegLzPacGGZ1UIeWQGuFFHcB8CXww6lQcbWYaPdUiY=
+X-Received: by 2002:a05:6402:1bdc:b0:463:6315:1b96 with SMTP id
+ ch28-20020a0564021bdc00b0046363151b96mr6249924edb.158.1667246118524; Mon, 31
+ Oct 2022 12:55:18 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221021155000.4108406-1-arnd@kernel.org> <20221021155000.4108406-3-arnd@kernel.org>
+In-Reply-To: <20221021155000.4108406-3-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 31 Oct 2022 20:55:07 +0100
+Message-ID: <CACRpkdYayAm4rxg3taUqDa_9YCTK+EFiGKAoMETQd+yg1C83-w@mail.gmail.com>
+Subject: Re: [PATCH 02/11] ARM: sa1100: remove unused board files
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Lubomir Rintel <lkundrak@v3.sk>, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Chubb <peter.chubb@unsw.edu.au>,
+        Stefan Eletzhofer <stefan.eletzhofer@eletztrick.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +78,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D203419
+On Fri, Oct 21, 2022 at 5:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
---- Comment #54 from jk@kifmann.net ---
-(In reply to Peter Newcomb from comment #53)
-> FWIW, I eventually discovered that after I updated the firmware of the
-> device I no longer needed the patch.
-Thanks for the hint about the firmware update, I did not expect one conside=
-ring
-the advanced age of this model, for today's product lifecycle. Using another
-machine to run the latest updater (FWUpdateGroup_9.4.52.exe), it shows ther=
-e is
-in fact an update available for my Logitech Group, 9.1 to 9.4. The info scr=
-een
-reports it would update "audio" and "codec" from 8.6.102 to 8.6.111, leaving
-both "video" and "eeprom" untouched at 1.4. Maybe someone who already has o=
-ne
-with USB device id 0x0882 can verify it has 9.4/8.6.111?
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The Cerf, H3100, Badge4, Hackkit, LART, NanoEngine, PLEB, Shannon and
+> Simpad machines were all marked as unused as there are no known users
+> left. Remove all of these, along with references to them in defconfig
+> files and drivers.
+>
+> Four machines remain now: Assabet, Collie (Zaurus SL5500), iPAQ H3600
+> and Jornada 720, each of which had one person still using them, with
+> Collie also being supported in Qemu.
+>
+> Cc: Peter Chubb <peter.chubb@unsw.edu.au>
+> Cc: Stefan Eletzhofer <stefan.eletzhofer@eletztrick.de>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-As the updater does not hint any roll-back function, I guess there is no ea=
-sy
-way to check things once I updated mine, so I did not do the update yet.
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Considering that this updater is only available as exe, it would make sense
-from my perspective to submit the patch from comment 50 any way. So people =
-who
-can not run the updater or when the updater is no longer available, could s=
-till
-use their Logitech Group.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Yours,
+Linus Walleij
