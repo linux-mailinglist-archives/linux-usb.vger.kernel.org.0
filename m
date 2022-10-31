@@ -2,100 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2205613E95
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Oct 2022 20:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A24613EC3
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Oct 2022 21:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJaTzW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Oct 2022 15:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
+        id S229740AbiJaUOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Oct 2022 16:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiJaTzV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 15:55:21 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DB413F88
-        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 12:55:19 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id a13so19048028edj.0
-        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 12:55:19 -0700 (PDT)
+        with ESMTP id S229589AbiJaUOs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 16:14:48 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750575FF8;
+        Mon, 31 Oct 2022 13:14:47 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id s206so13943822oie.3;
+        Mon, 31 Oct 2022 13:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DF4wkWvWXegmip018YfFTMUIfpvZ++f68WTZSD1bWH4=;
-        b=b/AhgHxwilfewDUeFdF7w5tS1qudHYwzeXYHCeNTee8gy7zQX39fPcLeEM+Wg2XbVc
-         OMXGEWO82RD7yGQEkDfRc2i0aqOuYklgxxBLGlc3zsxIFDUxm5azTpth70VNAT6C/K0V
-         Sp55l2H8ExCVM971zGFtptSmbXODgOa63SoNl/bpXl2unUrPP8r7gJoRJ5lyg749pl8u
-         tk7UmZgFsHQ6SrAr8fiCmWbrqAdFMgUuBhxhyH5fE2JHga4rzsYrQkaLeck9SCqq868x
-         v9dDgVFzZdrz6jmTK0GaAXL6a36GJmr4G2f5Kt0kQpPmy2lPsBMyIQ8bASyY8Ivup2CE
-         0YnA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+VLAemObWTantp1OhH/KpYouhVRu0VK5KWQ1wH473Po=;
+        b=eqGMffpKBI6TLdFp8W46wDX6hIQ/o9QSSefXouBWsKSuOzL20/n4AS6iZ/TymjVZkV
+         fR+FV8cLPAC4/oJENuhSuyjBRjNahX1nDI3d3ILgRTYo8wCZX7NpKbmtsJVvmpkIny8W
+         Gao3C3gjQI7IpA2QbA3GWtWdF7yz2Ou/0yspX6BomYxRzcjV1AYTjkKTT//oTjt/HLel
+         SHbfvVsWdyFDdTyhKG1ZqpBfw0eR6gwU2b9tjwfugVpVsCS1vLudFhfyWZLTL3JU1c3E
+         bnnL1IPbDZGFY3x5rNva2kMCgVtfgoaTHaiG6YrRXRz3tEhui0tS8K2cSuIpKu07Q8Fz
+         BMhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DF4wkWvWXegmip018YfFTMUIfpvZ++f68WTZSD1bWH4=;
-        b=4gPmS1AqAvZjB3tLi9y88oHA1bd+vqWnusYrIxe+Hl9waXXg5zN/H/+KcufSGkOybY
-         kihhRcJHMOOFZ/I6VyEwTm39u2Bqbw4+KRJfpac9uwv+7Y5V7MoG81pwW2qUY/jTbG2Q
-         dGredIJl55orJAhEYjyj8Fi7UBsbNZRm71yZuKVeJsSOAFMcC9vC8EclNJbUIphe6Bqq
-         oIyY2pHbfWgp+pK3ZRk1M1PQVQ/4wBZh8wm8ZuTNZXwkEuD1d9C3v3rSJlMBOmlr1S8U
-         56gU+JLW/N3FOaaibkHnZbo1YkvtGFTGwUZbM+zixVoi29uwhEI4dfI7DMEdVk0mUIyJ
-         CGGA==
-X-Gm-Message-State: ACrzQf2KfTwbAx6YQ6sorOhQHCM4vQ1CkVg6qmR0EtTC6qWTovRmr1LG
-        7cPxemhE+SX1SiwHNGb9/qCyc3LcB9t5RbWIY96J3Q==
-X-Google-Smtp-Source: AMsMyM56VjnjVqw1pPVrEHK3+oaJydtdMBXaE2SuGomtgUtwtlegLzPacGGZ1UIeWQGuFFHcB8CXww6lQcbWYaPdUiY=
-X-Received: by 2002:a05:6402:1bdc:b0:463:6315:1b96 with SMTP id
- ch28-20020a0564021bdc00b0046363151b96mr6249924edb.158.1667246118524; Mon, 31
- Oct 2022 12:55:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221021155000.4108406-1-arnd@kernel.org> <20221021155000.4108406-3-arnd@kernel.org>
-In-Reply-To: <20221021155000.4108406-3-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 31 Oct 2022 20:55:07 +0100
-Message-ID: <CACRpkdYayAm4rxg3taUqDa_9YCTK+EFiGKAoMETQd+yg1C83-w@mail.gmail.com>
-Subject: Re: [PATCH 02/11] ARM: sa1100: remove unused board files
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Lubomir Rintel <lkundrak@v3.sk>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Chubb <peter.chubb@unsw.edu.au>,
-        Stefan Eletzhofer <stefan.eletzhofer@eletztrick.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+VLAemObWTantp1OhH/KpYouhVRu0VK5KWQ1wH473Po=;
+        b=qhNmN4wf17Ux7YUO4hVEaxVCAONZEVgGKgKZjX8nfstiOEYq8NvZpNcUXzMAw0CiIH
+         /jZSKZOv7KbthWuk06nMzuvsO8DEcRP4e4cOcfIlhqKKpIO9CiKM7QyCsHwaZxftzfoJ
+         lEZA8y/H7PUUGJ0eReQ7uQpock83UT0cY3uGtbJ9tqi+2zyqSfiXOrAQhC4JFlll75QG
+         0ENeCHDNT5mf3NXJ/xWH57qvXO6Z7PBsBKiDx1syzqqU1lWsJIbP4LkA/E/BmebAj7Vy
+         rI6V0RTDkb2BKqKMA2R5wXsDzqjNjg9aQ5cvN7hLrZjZ7wFu2qUNQeUXzN+1CMxLEr2Y
+         SQyg==
+X-Gm-Message-State: ACrzQf35Knmb7SV/VTnxAgZb5wh0cOXGDGkkRF4Gt4GZJ3vyLPSfyVeO
+        J7Gj8e6tRQRLMGbQIMaHsmU=
+X-Google-Smtp-Source: AMsMyM7t0BuoDEhluoZ1b1qgno79jzOLIFwCMd9f1AJDh3XbfI5hpIhp/gIcCSF8p22pHvtoMpsRzA==
+X-Received: by 2002:aca:3e56:0:b0:355:afb:cdb1 with SMTP id l83-20020aca3e56000000b003550afbcdb1mr7508817oia.81.1667247286771;
+        Mon, 31 Oct 2022 13:14:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j29-20020a056870169d00b00127fbb7afffsm3538374oae.5.2022.10.31.13.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 13:14:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 31 Oct 2022 13:14:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        John Stultz <jstultz@google.com>
+Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221031201445.GA2977400@roeck-us.net>
+References: <20221027150928.983388020@goodmis.org>
+ <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
+ <20221028140129.040d9acc@gandalf.local.home>
+ <20221028141007.05f5c490@gandalf.local.home>
+ <20221028195959.GA1073367@roeck-us.net>
+ <20221029145241.GA3296895@roeck-us.net>
+ <20221029151952.076821f2@gandalf.local.home>
+ <5ee0b72c-3942-8981-573f-73d97ea7ef08@roeck-us.net>
+ <20221030114828.58fdd5d0@gandalf.local.home>
+ <20221031155056.GB2462187@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031155056.GB2462187@roeck-us.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 5:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, Oct 31, 2022 at 08:50:58AM -0700, Guenter Roeck wrote:
+> On Sun, Oct 30, 2022 at 11:48:28AM -0400, Steven Rostedt wrote:
+> > On Sat, 29 Oct 2022 15:56:25 -0700
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> > 
+> > > >> WARNING: CPU: 0 PID: 9 at lib/debugobjects.c:502 debug_print_object+0xd0/0x100
+> > > >> ODEBUG: free active (active state 0) object type: timer_list hint: neigh_timer_handler+0x0/0x480
+> > > >>
+> > > >> That happens with almost every test, so I may have missed some others
+> > > >> in the noise.  
+> > > > 
+> > > > Can you add this?
+> > > >   
+> > > 
+> > > It doesn't make a difference.
+> > 
+> > Ah, it also requires this (I have other debugging in that file, so it may
+> > only apply with some fuzzing):
+> > 
+> 
+> Almost good, except for the attached backtrace. That seems to happen
+> on shutdown after bootting from a usb drive, but not on all platforms.
+> 
+> The warning is in __mod_timer():
+> 
+>         if (WARN_ON_ONCE(!timer->function))
+>                 return -EINVAL;
+> 
+> This may be due to the change in blk_sync_queue() which I suspect may
+> be called prior to the last mod_timer() call. I'll add some debug code
+> to verify.
+> 
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The Cerf, H3100, Badge4, Hackkit, LART, NanoEngine, PLEB, Shannon and
-> Simpad machines were all marked as unused as there are no known users
-> left. Remove all of these, along with references to them in defconfig
-> files and drivers.
->
-> Four machines remain now: Assabet, Collie (Zaurus SL5500), iPAQ H3600
-> and Jornada 720, each of which had one person still using them, with
-> Collie also being supported in Qemu.
->
-> Cc: Peter Chubb <peter.chubb@unsw.edu.au>
-> Cc: Stefan Eletzhofer <stefan.eletzhofer@eletztrick.de>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+I see that additional requests are sent to the scsi device after the call
+to blk_sync_queue(). The description of this function suggests that this
+may happen. Overall it does not seem to be appropriate to call
+del_timer_shutdown() from blk_sync_queue(). I'll change my test code
+accordingly.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Guenter
