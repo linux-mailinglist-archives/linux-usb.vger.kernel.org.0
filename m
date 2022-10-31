@@ -2,66 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC76A6131FC
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Oct 2022 09:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D220E6132BE
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Oct 2022 10:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiJaIzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Oct 2022 04:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S230184AbiJaJat (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Oct 2022 05:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJaIzE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 04:55:04 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEEF1D3;
-        Mon, 31 Oct 2022 01:55:03 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id y69so16439727ede.5;
-        Mon, 31 Oct 2022 01:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SaCDtOb4CC7gCLWXRM7LGCFxZ6xhFeLhKQUZBpqIEso=;
-        b=hdlOjmenZzoST2wbo4cyhw3wk4diAkv2VwDcj3K7YhHbF8sAePBzEkEYizt/IeO4oX
-         sFyXthuSgOYtzZjG2wWGXyy+ItgCH3D81+MRMmY0gqj1pBDGfCHR7D88n55g73LM0dpK
-         kBocVf2jnnFPb2H7JOmbG/EvZn2uxxKhxm2K+hPFJCX8Gf+UWQsCn9/6H5kayNRnqJ4P
-         YyOT0BYMlrgxsHx+1iYt7X+iR+xUGf4r8fW7IkwS8jgMzlFtP2ULAaZoMkqW4Sss72Bp
-         ccgpVOQZJtrjxE9XIYNU8eYD3FbZOC+USxBJS/9s3Nyahowmwmx7skTkvH3hZBq9aBue
-         kGiw==
+        with ESMTP id S230153AbiJaJas (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 05:30:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C29DEA2
+        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 02:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667208589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=adeZcV5bQeJf8TMnWSAubv09JFdbgKL00xsMhzGx5CA=;
+        b=cpqQ0CkgstDllONVD88aBqZae7kFkR3DoyMZ1fdoTHC74lWzbj7TcNSIeM8iafQogOqW38
+        ZAZ6awpWxvUV/6g74GmOw4WWKyzwCsTbGfJJnD/LMzi396Yzljv3Ydf+KqsOwfq3IlSuOc
+        VZNQ8wbv1nPZNU/I6wBSOb+L7U6ViJ0=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-518-3J4cRuEcM1GHcrUVb3NkyQ-1; Mon, 31 Oct 2022 05:29:48 -0400
+X-MC-Unique: 3J4cRuEcM1GHcrUVb3NkyQ-1
+Received: by mail-lj1-f200.google.com with SMTP id e15-20020a2e8ecf000000b00277113737fdso4554323ljl.17
+        for <linux-usb@vger.kernel.org>; Mon, 31 Oct 2022 02:29:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SaCDtOb4CC7gCLWXRM7LGCFxZ6xhFeLhKQUZBpqIEso=;
-        b=0IKVOgrruPMbb8yAaY4nZoFmb+5CXYuc0ACbzBnu2e7nSCASUHjDAdApvWH/P5HAs0
-         wUDciXwXpHS5ZUFBqNexADE/hrhKUOwqkFTC92tow/0DxmHaEf2Hp/q/DwwCVHhBUiCD
-         KnhzALtt0F6K3dOk9M3W6jL3HS/AMXEfxc6w9D+hNhHD9K9FDWj7M+MfBm5ibMkGIsMh
-         AHnesT3duRGMIC1yinnmCfex1T2IIuMg9Q3Uz78GDxb2Yu1HXzpk9dBl9BxnBsT3CTpe
-         YU3zVtof8TJdOZ+hoi+EGgVL8Behp4kpwPRg9EoAtQrBk9/i7yuJUCC/xHT70HVQWpL6
-         2yZQ==
-X-Gm-Message-State: ACrzQf0WJSYu+3pVjyNpWGQ0gkNhhJ+1NxJKLntdbvwsdhUCV54fTeM5
-        jH8+ROKkx579qhDb08dGPhU=
-X-Google-Smtp-Source: AMsMyM7zMEdcCSwHGEAdX+SK16Z1tsH6y+lkgVydYyeJF3nH2MZmfQBdDl5kEaSPxIULpqdaP4178g==
-X-Received: by 2002:a50:fc03:0:b0:461:5d8d:5811 with SMTP id i3-20020a50fc03000000b004615d8d5811mr12612570edr.351.1667206501456;
-        Mon, 31 Oct 2022 01:55:01 -0700 (PDT)
-Received: from felia.fritz.box (200116b826c494005d8b6b3bdc900ff8.dip.versatel-1u1.de. [2001:16b8:26c4:9400:5d8b:6b3b:dc90:ff8])
-        by smtp.gmail.com with ESMTPSA id w25-20020a056402129900b00463597d2c25sm1156048edv.74.2022.10.31.01.54.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 01:55:00 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] usb: musb: remove left-over after USB_TI_CPPI_DMA removal
-Date:   Mon, 31 Oct 2022 09:54:26 +0100
-Message-Id: <20221031085426.17175-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=adeZcV5bQeJf8TMnWSAubv09JFdbgKL00xsMhzGx5CA=;
+        b=g9IFCjZLjis0Uaw4sWWRbzRJVhpUoFaC1QTf9jovxWLqoVs8oMO/boAO0bzViAoMFI
+         7AgUz/wU1TTfpMdMP2aMAeM1Lc9SKXQSJc9iUWFFcdz4DlXkdsui74Pw88m/Ke9bHH6K
+         2tqXT5eVm2XceJx9QfOAURObadKlpiL2q5tEzsLZxcYDu5Tln9pC3tcKYBgezXZ2anuC
+         etpndBJb7a8x4quTfu+5NqoDO1LzBR+HmcPi3lG6XlVq4S10smXa02irSENEGDFqNb9r
+         4JXepkhGajLSrpvM4TCsGHw+7bRwOBo6+aJnmYtW6FXGWr+SWaIZIo3BZTYunlcLU/E3
+         4mDQ==
+X-Gm-Message-State: ACrzQf3T62Ao7Ip9ecxg9DKUAE6Qr12oLd7fWGkfQx5kzyQ2SpvMk6JW
+        xrrKF+EbV5HyW4OkLKt+kz2RI+nQahCXWF/52stjde8xABjvNNrmJPT/jqfKRyYBlj9NjjmagUc
+        YIKdse64rCdpzCyvHWFuLT6bvgx6zcjDl57JO
+X-Received: by 2002:ac2:46c9:0:b0:4a4:47cc:fc9d with SMTP id p9-20020ac246c9000000b004a447ccfc9dmr5364379lfo.1.1667208586396;
+        Mon, 31 Oct 2022 02:29:46 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6S0p/s8TdsNI4JUs/aUhh7RgPIdGjlxlTxHMA/QDu4+HNl+tNfInExD2i4LaG5JOJvWlDmj0hM+LqlqpzrbB8=
+X-Received: by 2002:ac2:46c9:0:b0:4a4:47cc:fc9d with SMTP id
+ p9-20020ac246c9000000b004a447ccfc9dmr5364376lfo.1.1667208586135; Mon, 31 Oct
+ 2022 02:29:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu> <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com>
+ <CAO-hwJJ7cF-4kd8Mi6bb5n-k5LuMrWbpdMqFs82y7iQOscr-7g@mail.gmail.com>
+ <CABfF9mNfU=swmpVXfVr7pYWs72jrd-HDY8+_NXyBDAKa4CWG5Q@mail.gmail.com>
+ <CAO-hwJ+i3zd=CyU0T+Nb1vGfZfenMBH16ern_ncTTKEpyGAuBA@mail.gmail.com> <CABfF9mNrMx2BzU5tbBeapY15M4Ls_5xYBGfVB=Up5TJu=eWCcg@mail.gmail.com>
+In-Reply-To: <CABfF9mNrMx2BzU5tbBeapY15M4Ls_5xYBGfVB=Up5TJu=eWCcg@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 31 Oct 2022 09:30:47 +0000
+Message-ID: <CAO-hwJJGAWkhZgGeLBruqCoskY5PBP-STs4kh-P6fBvpuSgpUw@mail.gmail.com>
+Subject: Re: Litra Glow on Linux
+To:     Andreas Bergmeier <abergmeier@gmx.net>
+Cc:     linux-input@vger.kernel.org,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jikos@kernel.org>, linux-leds@vger.kernel.org,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,53 +78,139 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 32fee1df5110 ("usb: musb: remove unused davinci support") removes
-the config USB_TI_CPPI_DMA, but misses some left-over references in
-drivers/usb/musb/musb_dma.h.
+[adding linux-leds in Cc]
 
-Remove the left-over dependent on this removed config.
+On Sat, Oct 29, 2022 at 9:21 AM Andreas Bergmeier <abergmeier@gmx.net> wrote:
+>
+> Sorry, another set of questions - seems like I am a bit dense.
+>
+> On Thu, 27 Oct 2022 at 11:44, Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> > It's just Logitech's common HID protocol. The advantage is that if
+> > Logitech reuses the feature on a different hardware, we won't have to
+> > implement anything new in the kernel.
+> Started implementing some illumination code but will take a while
+> until I figure out the driver I think.
+>
+> > But from where you are now, you should probably be able to implement
+> > the basic on/off feature by looking at the function 0x1000 in the
+> > hid-logitech-hidpp code:
+> > - you need define a few macros for your functionality (the class, the
+> > commands, the events)
+> So my approach would be to identify the GLOW device and then at some
+> later point create the
+> illumination state and from there only handle common illumination.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+For identifying the GLOW device you should be adding an id in the
+table of hid-logitech-hidpp, with a driver data that tells the driver
+to look for 0x1990.
+
+>
+> > - you need to add a hook in connect_event to register the led class
+> > device that will hook on to the actual LED of the device
+> I did read all the LED specs/headers that I could find and from what I
+> have seen all you can currently do with this interface is control
+> brightness. There seems to be no way of controlling the Color
+> temperature, though.
+
+Leds can be multicolor. See drivers/hid/hid-playstation.c for an example.
+
+So I think you should be able to give a color to the LED that can be
+controlled as a separate channel, different from the brightness. The
+LEDs folks will know better.
+
+> So either this then would have to be exposed as a special device or
+> get handled entirely in userspace.
+> The latter seems to work against "implementing illumination handling
+> once in driver and reusing it".
+
+I would rather have it handled as a standard LED class, a colored LED
+one. There might be a special structure for colored LEDs, and if not
+you should probably be able to use a multi-color led with just one
+color channel.
+
+>
+> > [0] https://pwr-solaar.github.io/Solaar
+> > [1] https://github.com/pwr-Solaar/Solaar/blob/master/docs/hidpp-documentation.txt
+> Thanks. Never would have found the specs on my own.
+> That said - I read x1990 spec and tried to access getIllumination from
+> userspace.
+
+Oh, good point, Nestor added that spec back in May :)
+Thanks, Nestor!
+
+> The spec seems a bit vague for my limited experience level.
+> For example I have not yet figured out what the communication (bytes)
+> difference between _getIllumination()_ and _illuminationChangedEvent_
+> is.
+> What seems to work is accessing events:
+>
+> So I tried:
+> ```c
+>
+> #define LONG_REPORT_ID 0x11
+>
+>     struct hiddev_usage_ref_multi multi;
+>     memset(&multi, 0, sizeof(multi));
+>     multi.uref.report_type = HID_REPORT_TYPE_INPUT;
+>     multi.uref.report_id = LONG_REPORT_ID;
+>     multi.uref.field_index = 0x0;
+>     multi.uref.usage_index = 0x03;
+>     multi.uref.usage_code = 0xff430002;
+>     multi.num_values = 1;
+>
+>     if (ioctl(fd, HIDIOCGUSAGES, &multi) < 0)
+>     {
+>         perror("HIDIOCGUSAGES getIllumination");
+>         return -11;
+>     }
+>
+>     printf("VALUE: %0x\n", multi.values[0]);
+>
+> ```
+> Which seems to report the illumination state until I press another
+> hardware button. So this seems to access the last event, which seems
+> to be _illuminationChangedEvent_ in my case.
+> No idea currently how to get _getIllumination_ to work.
+
+IIRC, HIDIOCGUSAGES doesn't do anything with the device, you are
+querying the kernel of its current state. Which explains why you are
+not getting the current state, but the previous known state.
+
+What you need to do, is actually emit a command to the device
+(completely untested, of course):
 ---
-Arnd, Bartosz, please ack.
+#define APPLICATION_ID 0x06 // can be anything between 0x01  and 0xF,
+0x1 being the ID from the kernel
 
-Greg, please pick this patch on top of the commit above.
+#define HIDPP_1990_GET_ILLUMINATION 0x00
+#define HIDPP_1990_SET_ILLUMINATION 0x10
+#define ....
 
- drivers/usb/musb/musb_dma.h | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+unsigned char cmd = HIDPP_1990_GET_ILLUMINATION | APPLICATION_ID;
+unsigned char buf[20] = {0x11, 0xff, 0x04}; // HIDPP ID, DEVICE INDEX,
+FEATURE INDEX in the feature table
 
-diff --git a/drivers/usb/musb/musb_dma.h b/drivers/usb/musb/musb_dma.h
-index 7d67b69df0a0..e2445ca3356d 100644
---- a/drivers/usb/musb/musb_dma.h
-+++ b/drivers/usb/musb/musb_dma.h
-@@ -61,12 +61,6 @@ struct musb_hw_ep;
- #define musb_dma_cppi41(musb)		0
- #endif
- 
--#ifdef CONFIG_USB_TI_CPPI_DMA
--#define musb_dma_cppi(musb)		(musb->ops->quirks & MUSB_DMA_CPPI)
--#else
--#define musb_dma_cppi(musb)		0
--#endif
--
- #ifdef CONFIG_USB_TUSB_OMAP_DMA
- #define tusb_dma_omap(musb)		(musb->ops->quirks & MUSB_DMA_TUSB_OMAP)
- #else
-@@ -79,11 +73,10 @@ struct musb_hw_ep;
- #define musb_dma_inventra(musb)		0
- #endif
- 
--#if defined(CONFIG_USB_TI_CPPI_DMA) || defined(CONFIG_USB_TI_CPPI41_DMA)
--#define	is_cppi_enabled(musb)		\
--	(musb_dma_cppi(musb) || musb_dma_cppi41(musb))
-+#if defined(CONFIG_USB_TI_CPPI41_DMA)
-+#define	is_cppi_enabled(musb)		musb_dma_cppi41(musb)
- #else
--#define	is_cppi_enabled(musb)	0
-+#define	is_cppi_enabled(musb)		0
- #endif
- 
- /*
--- 
-2.17.1
+buf[3] = cmd;
+write(fd, buf, sizeof(buf));
+memset(buf, sizeof(buf), 0);
+while (buf[3] != cmd)
+  read(fd, buf, sizeof(buf));
+
+printf("VALUE: %0x\n", buf[4]);
+---
+
+It is important to set an application id so you can differentiate your
+requests from the events (the application ID from an event is always
+0).
+
+With that in mind, you should now be able to understand why you had to
+send {0x11, 0xff, 0x04, 0x10, 0x01} to set the illumination. And
+again, for being sure you can get the feedback you should use 0x16 as
+the fourth byte here, so you can detect your answer.
+
+I hope it makes more sense now.
+
+Cheers,
+Benjamin
 
