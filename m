@@ -2,139 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A24613EC3
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Oct 2022 21:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C90E261428F
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Nov 2022 02:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJaUOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Oct 2022 16:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
+        id S229549AbiKABDa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Oct 2022 21:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiJaUOs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 16:14:48 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750575FF8;
-        Mon, 31 Oct 2022 13:14:47 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id s206so13943822oie.3;
-        Mon, 31 Oct 2022 13:14:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+VLAemObWTantp1OhH/KpYouhVRu0VK5KWQ1wH473Po=;
-        b=eqGMffpKBI6TLdFp8W46wDX6hIQ/o9QSSefXouBWsKSuOzL20/n4AS6iZ/TymjVZkV
-         fR+FV8cLPAC4/oJENuhSuyjBRjNahX1nDI3d3ILgRTYo8wCZX7NpKbmtsJVvmpkIny8W
-         Gao3C3gjQI7IpA2QbA3GWtWdF7yz2Ou/0yspX6BomYxRzcjV1AYTjkKTT//oTjt/HLel
-         SHbfvVsWdyFDdTyhKG1ZqpBfw0eR6gwU2b9tjwfugVpVsCS1vLudFhfyWZLTL3JU1c3E
-         bnnL1IPbDZGFY3x5rNva2kMCgVtfgoaTHaiG6YrRXRz3tEhui0tS8K2cSuIpKu07Q8Fz
-         BMhQ==
+        with ESMTP id S229441AbiKABD2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Oct 2022 21:03:28 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74248DFE5;
+        Mon, 31 Oct 2022 18:03:27 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id y67so14553556oiy.1;
+        Mon, 31 Oct 2022 18:03:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+VLAemObWTantp1OhH/KpYouhVRu0VK5KWQ1wH473Po=;
-        b=qhNmN4wf17Ux7YUO4hVEaxVCAONZEVgGKgKZjX8nfstiOEYq8NvZpNcUXzMAw0CiIH
-         /jZSKZOv7KbthWuk06nMzuvsO8DEcRP4e4cOcfIlhqKKpIO9CiKM7QyCsHwaZxftzfoJ
-         lEZA8y/H7PUUGJ0eReQ7uQpock83UT0cY3uGtbJ9tqi+2zyqSfiXOrAQhC4JFlll75QG
-         0ENeCHDNT5mf3NXJ/xWH57qvXO6Z7PBsBKiDx1syzqqU1lWsJIbP4LkA/E/BmebAj7Vy
-         rI6V0RTDkb2BKqKMA2R5wXsDzqjNjg9aQ5cvN7hLrZjZ7wFu2qUNQeUXzN+1CMxLEr2Y
-         SQyg==
-X-Gm-Message-State: ACrzQf35Knmb7SV/VTnxAgZb5wh0cOXGDGkkRF4Gt4GZJ3vyLPSfyVeO
-        J7Gj8e6tRQRLMGbQIMaHsmU=
-X-Google-Smtp-Source: AMsMyM7t0BuoDEhluoZ1b1qgno79jzOLIFwCMd9f1AJDh3XbfI5hpIhp/gIcCSF8p22pHvtoMpsRzA==
-X-Received: by 2002:aca:3e56:0:b0:355:afb:cdb1 with SMTP id l83-20020aca3e56000000b003550afbcdb1mr7508817oia.81.1667247286771;
-        Mon, 31 Oct 2022 13:14:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j29-20020a056870169d00b00127fbb7afffsm3538374oae.5.2022.10.31.13.14.45
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HkcBrIA7oBQ5mjHwd2UEcYrTi2K7pE4sTmK8J9yJ3xk=;
+        b=Mq2MCGy1T+z8KLT7oleVOs/Tzw1HdSIUIxdT/SzNTos3RyY/MC6cRtZ1T+nbWqLeNG
+         Aw40g51YC4CmKG9AjtaiZcHj44REHFFugnyD2HY2Z3dtedw3CisyG7CbdEBKN214YVkL
+         kKLjTgfiHHFK1Xht9i2KMh8/9J20rdYnTPbnHiK/3yPTXH1qPLEPvb+gQ2rsOS+8FvsE
+         JBnTY/piYCB/vq9yLHfpHGl83CHkwpY5xPYL5W39qaY8bVtrrXoUn9eDp0vcYKHJ9ph6
+         ItABvTn8l4PcLng55G6Pai3XKZmv4BbEBP0PeHlQgwh3UKjTZCjKg0s7EWEei2Tiyvly
+         OLEA==
+X-Gm-Message-State: ACrzQf3b8EhHzBmytm+hBCGdTtjY3RRqNw4pT+u6fjGTtd7wJTGdFEga
+        pf1tOerplPfPmYmBVB5jmA==
+X-Google-Smtp-Source: AMsMyM5Hm6wz1VL2aBS7VdPj2bSUEvAruPZvs7foxPpmncN/mwOsDpLRKL8oEo1akGDpohnZxJPP6w==
+X-Received: by 2002:a05:6808:8d2:b0:354:7fd4:f17b with SMTP id k18-20020a05680808d200b003547fd4f17bmr27480oij.221.1667264606700;
+        Mon, 31 Oct 2022 18:03:26 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056870a70c00b0010d7242b623sm3825007oam.21.2022.10.31.18.03.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 13:14:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 31 Oct 2022 13:14:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Mon, 31 Oct 2022 18:03:26 -0700 (PDT)
+Received: (nullmailer pid 4030032 invoked by uid 1000);
+        Tue, 01 Nov 2022 01:03:27 -0000
+Date:   Mon, 31 Oct 2022 20:03:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>,
+        linux-usb@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        Karl Kurbjun <karl.os@veroson.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        John Stultz <jstultz@google.com>
-Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221031201445.GA2977400@roeck-us.net>
-References: <20221027150928.983388020@goodmis.org>
- <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
- <20221028140129.040d9acc@gandalf.local.home>
- <20221028141007.05f5c490@gandalf.local.home>
- <20221028195959.GA1073367@roeck-us.net>
- <20221029145241.GA3296895@roeck-us.net>
- <20221029151952.076821f2@gandalf.local.home>
- <5ee0b72c-3942-8981-573f-73d97ea7ef08@roeck-us.net>
- <20221030114828.58fdd5d0@gandalf.local.home>
- <20221031155056.GB2462187@roeck-us.net>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-sunxi@lists.linux.dev,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/7] dt-bindings: phy: Add special clock for Allwinner
+ H616 PHY
+Message-ID: <166726460732.4029973.16304467789451504367.robh@kernel.org>
+References: <20221031111358.3387297-1-andre.przywara@arm.com>
+ <20221031111358.3387297-3-andre.przywara@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221031155056.GB2462187@roeck-us.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221031111358.3387297-3-andre.przywara@arm.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 08:50:58AM -0700, Guenter Roeck wrote:
-> On Sun, Oct 30, 2022 at 11:48:28AM -0400, Steven Rostedt wrote:
-> > On Sat, 29 Oct 2022 15:56:25 -0700
-> > Guenter Roeck <linux@roeck-us.net> wrote:
-> > 
-> > > >> WARNING: CPU: 0 PID: 9 at lib/debugobjects.c:502 debug_print_object+0xd0/0x100
-> > > >> ODEBUG: free active (active state 0) object type: timer_list hint: neigh_timer_handler+0x0/0x480
-> > > >>
-> > > >> That happens with almost every test, so I may have missed some others
-> > > >> in the noise.  
-> > > > 
-> > > > Can you add this?
-> > > >   
-> > > 
-> > > It doesn't make a difference.
-> > 
-> > Ah, it also requires this (I have other debugging in that file, so it may
-> > only apply with some fuzzing):
-> > 
+
+On Mon, 31 Oct 2022 11:13:53 +0000, Andre Przywara wrote:
+> The USB PHY IP in the Allwinner H616 SoC requires a quirk that involves
+> some resources from port 2's PHY and HCI IP. In particular the PMU clock
+> for port 2 must be surely ungated before accessing the REG_HCI_PHY_CTL
+> register of port 2. To allow each USB port to be controlled
+> independently of port 2, we need a handle to that particular PMU clock
+> in the *PHY* node, as the HCI and PHY part might be handled by separate
+> drivers.
 > 
-> Almost good, except for the attached backtrace. That seems to happen
-> on shutdown after bootting from a usb drive, but not on all platforms.
+> Add that clock to the requirements of the H616 PHY binding, so that a
+> PHY driver can apply the quirk in isolation, without requiring help from
+> port 2's HCI driver.
 > 
-> The warning is in __mod_timer():
-> 
->         if (WARN_ON_ONCE(!timer->function))
->                 return -EINVAL;
-> 
-> This may be due to the change in blk_sync_queue() which I suspect may
-> be called prior to the last mod_timer() call. I'll add some debug code
-> to verify.
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  .../phy/allwinner,sun8i-h3-usb-phy.yaml       | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 > 
 
-I see that additional requests are sent to the scsi device after the call
-to blk_sync_queue(). The description of this function suggests that this
-may happen. Overall it does not seem to be appropriate to call
-del_timer_shutdown() from blk_sync_queue(). I'll change my test code
-accordingly.
-
-Guenter
+Reviewed-by: Rob Herring <robh@kernel.org>
