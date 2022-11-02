@@ -2,108 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA39F615717
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 02:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DC3615724
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 02:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiKBBnu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Nov 2022 21:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
+        id S229958AbiKBBrB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Nov 2022 21:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKBBnt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 21:43:49 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0791DEB7;
-        Tue,  1 Nov 2022 18:43:47 -0700 (PDT)
-X-UUID: 10c1cc75f1bf4145b338109aa4404950-20221102
-X-CPASD-INFO: 2a120cf4056a498694c479b3fe2b730e@e7FrUl2VlGRcVXitg3yDcFllk2RnZYK
-        CqJ9SkmVjXIWVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3gaNrUmCRlg==
-X-CLOUD-ID: 2a120cf4056a498694c479b3fe2b730e
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:184.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:168.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:0,DUF:7207,ACD:128,DCD:128,SL:0,EISP:0,AG:0,CFC:0.423,CFSR:0.041,UAT:0,
-        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
-        ,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 10c1cc75f1bf4145b338109aa4404950-20221102
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 10c1cc75f1bf4145b338109aa4404950-20221102
-X-User: gehao@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <gehao@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 691345329; Wed, 02 Nov 2022 09:43:49 +0800
-From:   gehao <gehao@kylinos.cn>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     wangwenmei168@163.com, xieming@kylinos.cn, gehao <gehao@kylinos.cn>
-Subject: [RESEND PATCH] xhci: Remove iommu condition for Renesas PCIe controllers
-Date:   Wed,  2 Nov 2022 09:43:40 +0800
-Message-Id: <20221102014340.129587-1-gehao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229487AbiKBBrA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 21:47:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DB8205C5
+        for <linux-usb@vger.kernel.org>; Tue,  1 Nov 2022 18:46:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 804A0617A7
+        for <linux-usb@vger.kernel.org>; Wed,  2 Nov 2022 01:46:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED83C433B5;
+        Wed,  2 Nov 2022 01:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667353617;
+        bh=64GStF0rcxqcPiqEiyKdCqwPGvJnnT36MzMtAUgltd4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K9VV1bkOtS2FQQGcQssteqpOpnISYad1hLV43zGTOsdAR42IFBmZRlvFlahYSbvL+
+         WcKLHtFK6eVQ0+igIo1lkowUumYiYB5N8jsDMF0MzCI4hmSkDTB1QFzQyh2LXpsfqE
+         b3ZbwKXahSlCv8wn3JMURrKl4Cm3UzDpyPkmPyUc=
+Date:   Wed, 2 Nov 2022 02:47:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] USB: serial: ftdi_sio: Extract SIO divisor code
+ to function
+Message-ID: <Y2HMRrSW0UahOyPB@kroah.com>
+References: <20220924102718.2984-1-pali@kernel.org>
+ <20220924102718.2984-4-pali@kernel.org>
+ <Yy7gKiMOtYYiW/oe@kroah.com>
+ <20221009121707.4o3fjxnec3u4mktz@pali>
+ <20221101225057.2i2rsh5latrvn4au@pali>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221101225057.2i2rsh5latrvn4au@pali>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When we use uPD720201 USB 3.0 Host Controller passthrough to VM
-guest os will report follow errors and it can not working.
+On Tue, Nov 01, 2022 at 11:50:57PM +0100, Pali Rohár wrote:
+> On Sunday 09 October 2022 14:17:07 Pali Rohár wrote:
+> > On Saturday 24 September 2022 12:47:06 Greg Kroah-Hartman wrote:
+> > > On Sat, Sep 24, 2022 at 12:27:14PM +0200, Pali Rohár wrote:
+> > > > In preparation for following changes,
+> > > 
+> > > What do you mean by "following changes"?  That doesn't work well when
+> > > looking in a changelog series.  Spell out what you are going to do in a
+> > > future change, as to why this is necessary.
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > 
+> > Ok. Anything else is needed to address?
+> 
+> Ping?
 
-xhci_hcd 0000:09:00.0: Host took too long to start, waited 16000
-microseconds.
-xhci_hcd 0000:09:00.0: startup error -19.
+We have no idea, sorry, as we have no context here at all and it was
+thousands of patches ago in our reviews.  Please just fix things up
+based on this review and resubmit, you never need to ask.
 
-Renesas controllers preserve the top half of the address in internal,
-non visible registers,and end up with half the address coming from the
-kernel, and the other half coming from the firmware.
-
-For guest os,although our dev->iommu_group = NULL,but we are still under
-iommu control.
-
-This condition is not necessary,because for os with noiommu,doing
-anything when there is no iommu is definitely,and when our os with
-iommu,it is safe.
-
-Signed-off-by: gehao <gehao@kylinos.cn>
----
- drivers/usb/host/xhci.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 79d7931c048a..589d54ecd2a4 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -227,7 +227,6 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
- 
- static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
- {
--	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
- 	int err, i;
- 	u64 val;
- 	u32 intrs;
-@@ -241,12 +240,8 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
- 	 * changing the programming leads to extra accesses even if the
- 	 * controller is supposed to be halted. The controller ends up with
- 	 * a fatal fault, and is then ripe for being properly reset.
--	 *
--	 * Special care is taken to only apply this if the device is behind
--	 * an iommu. Doing anything when there is no iommu is definitely
--	 * unsafe...
- 	 */
--	if (!(xhci->quirks & XHCI_ZERO_64B_REGS) || !device_iommu_mapped(dev))
-+	if (!(xhci->quirks & XHCI_ZERO_64B_REGS))
- 		return;
- 
- 	xhci_info(xhci, "Zeroing 64bit base registers, expecting fault\n");
--- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+greg k-h
