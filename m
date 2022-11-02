@@ -2,130 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E90615622
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 00:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA39F615717
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 02:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiKAXav (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Nov 2022 19:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
+        id S229742AbiKBBnu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Nov 2022 21:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKAXas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 19:30:48 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9051A807
-        for <linux-usb@vger.kernel.org>; Tue,  1 Nov 2022 16:30:48 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id l6so8653444ilq.3
-        for <linux-usb@vger.kernel.org>; Tue, 01 Nov 2022 16:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7XXH3S+oTwi7Nohce6z0VIf2/A2DEMYVTX3NOfKR1ro=;
-        b=qMgtrsXDWlwGj+xnIMgjzrY42oY9TpRB/uoiGTXkT+XHoSpTXnkv5nG6hfptaX+5RB
-         4u7U2Rx3B8E1VeO9vRKnvKOA00RG/A9Ud1IkBKDNkALUzJc8T+HAIK0vU+Va56Hl+3Hw
-         j2HWSJxNtIg+QqWktoViMG88x2sbwYB64IhRl69ufKJqud88aISCCZHxlP9Jf9Vryzxm
-         /iucc5N4TsKV3VxJoGKirmZ+/ymIdEcUHc9UP2G67MQ7wQV02zX1vOMrt7A05fJ3843P
-         v7EVJeu0FapUNH6WXEw2zKBa0QpcR4yMxo9rNJpBu9IxGLINeQ3+wmoVn3zbvimeq68U
-         7Zxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7XXH3S+oTwi7Nohce6z0VIf2/A2DEMYVTX3NOfKR1ro=;
-        b=CrvJ880+iyB16CxUERg2kMY7Xu+ug9iDCzdZ/EEqgFP763Tbpk9QUBBtMLscysb5SY
-         umA0pUuQk6ZiQ8Cn37UMW+C91TD4zrQQpB/EOSkXNK2e0YF4krf6Etj9yje5KBLF2/V1
-         dZe2TcSpvGz0bixXJqVPvVdkwzAfTDHZ67S8Z5WAB2XHnX+Mukp1YOUgeWLtb7+0pNsQ
-         JAXW8UXySKEi5oxCJsVMOIOXBGXaNr13Tbb4jFQLRKmS/pInhh5DT8/Wqif3DPZCcFp5
-         o+sNGFetCYJhRvdbT8L4iR3sDZimjcrOrM9Hz7nc0VqspHAlMNKETXNxiMZNUqMe2akD
-         Ex4A==
-X-Gm-Message-State: ACrzQf3q6Kz5PqxoGX1K0JJDfgQs2DXLSOKZHLgvdQd1w4WiL7SX404T
-        9iAMziIGyqGTSwOGvmZ2Hlm86W+IbhDsblXm/jDSbie7UcY=
-X-Google-Smtp-Source: AMsMyM59Sq8Y+AjBbraHYTwQeXjP5pR0kvt1bHhwDNlFwYNmuUAZEvKjNktLEKU0vvEKmi7LIAMHwp0H6Jmb+TCv1Kk=
-X-Received: by 2002:a92:d08e:0:b0:300:c60f:4314 with SMTP id
- h14-20020a92d08e000000b00300c60f4314mr2819130ilh.218.1667345447158; Tue, 01
- Nov 2022 16:30:47 -0700 (PDT)
+        with ESMTP id S229516AbiKBBnt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 21:43:49 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0791DEB7;
+        Tue,  1 Nov 2022 18:43:47 -0700 (PDT)
+X-UUID: 10c1cc75f1bf4145b338109aa4404950-20221102
+X-CPASD-INFO: 2a120cf4056a498694c479b3fe2b730e@e7FrUl2VlGRcVXitg3yDcFllk2RnZYK
+        CqJ9SkmVjXIWVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3gaNrUmCRlg==
+X-CLOUD-ID: 2a120cf4056a498694c479b3fe2b730e
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:184.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:168.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:0,DUF:7207,ACD:128,DCD:128,SL:0,EISP:0,AG:0,CFC:0.423,CFSR:0.041,UAT:0,
+        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
+        ,EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 10c1cc75f1bf4145b338109aa4404950-20221102
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 10c1cc75f1bf4145b338109aa4404950-20221102
+X-User: gehao@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <gehao@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 691345329; Wed, 02 Nov 2022 09:43:49 +0800
+From:   gehao <gehao@kylinos.cn>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wangwenmei168@163.com, xieming@kylinos.cn, gehao <gehao@kylinos.cn>
+Subject: [RESEND PATCH] xhci: Remove iommu condition for Renesas PCIe controllers
+Date:   Wed,  2 Nov 2022 09:43:40 +0800
+Message-Id: <20221102014340.129587-1-gehao@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAMHf4WL66dTxkadqJh3aHTdrnur6svpx0z9CVK4+kg+dRKsCjQ@mail.gmail.com>
-In-Reply-To: <CAMHf4WL66dTxkadqJh3aHTdrnur6svpx0z9CVK4+kg+dRKsCjQ@mail.gmail.com>
-From:   Avichal Rakesh <arakesh@google.com>
-Date:   Tue, 1 Nov 2022 16:30:36 -0700
-Message-ID: <CAMHf4WJQo=56jM5WDP7bWjZqfh8mb42w0N-eka9kuCKDZ41Qwg@mail.gmail.com>
-Subject: Re: UVC gadget driver not working with other gadget functions
-To:     linux-usb@vger.kernel.org
-Cc:     Jayant Chowdhary <jchowdhary@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        laurent.pinchart@ideasonboard.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-cc'ing Eddy for general Android expertise and Laurent as the owner of
-UVC gadget driver.
+When we use uPD720201 USB 3.0 Host Controller passthrough to VM
+guest os will report follow errors and it can not working.
 
-On Wed, Oct 19, 2022 at 3:13 PM Avichal Rakesh <arakesh@google.com> wrote:
->
-> Hey all,
->
-> Disclaimer: I am very new to the kernel space so apologies for any
-> newb mistakes.
->
-> I am working on trying to enable the UVC gadget driver on an Android
-> Device. The device already supports configfs and has a few gadget
-> functions already working. ADB (f_fs) and USB Tethering (f_ncm) are
-> the ones I tested with.
->
-> I added CONFIG_USB_CONFIGFS_F_UVC=y to the kernel's config, was able
-> to create a uvc function following the example in
-> https://docs.kernel.org/usb/gadget-testing.html#uvc-function.
->
-> After symlinking the uvc function to configfs, when the gadget is
-> pulled up I see that all functions including UVC are bound to the
-> composite gadget without any errors. However, while the UVC function
-> is linked, no other function can communicate over their endpoints. The
-> host is able to enumerate all the functions, but is unable to read
-> from or write to non-uvc endpoints. Removing the UVC function from
-> configfs and pulling up the gadget again restores all other functions.
->
-> Testing the UVC gadget shows that the UVC driver is functioning
-> properly and a linux host is able to communicate with the UVC gadget
-> over V4L2 as expected.
->
-> AFAICT, there are no kernel logs showing errors in reading/writing to
-> endpoints even after enabling debug logs. Some rudimentary debugging
-> shows that the endpoints of other functions stop responding if the UVC
-> gadget writes its usb descriptors to its usb_function in
-> uvc_function_bind. I stub out all functionality from the uvc gadget
-> (except alloc and free), the other functions work properly. But if I
-> unstub uvc_function_bind to go as far as writing the descriptor in
-> fs_descriptors (f_uvc.c, uvc_function_bind line#713), the other
-> functions stop working.
->
-> Is this a known issue, or am I missing something obvious? Any help
-> would be appreciated!
->
-> Misc info:
-> - Kernel Version: 5.10.107
-> - USB controller: DWC3 (unfortunately, I don't have devices with any
-> other controllers available)
-> - Changes made: None. The gadget drivers show this behavior without
-> any changes. I tried to copy over changes from ToT
-> https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uvc.c
-> which fixed some crashes, but this behavior sticks.
->
-> Thank you!
->
-> - Avi
+xhci_hcd 0000:09:00.0: Host took too long to start, waited 16000
+microseconds.
+xhci_hcd 0000:09:00.0: startup error -19.
 
+Renesas controllers preserve the top half of the address in internal,
+non visible registers,and end up with half the address coming from the
+kernel, and the other half coming from the firmware.
 
+For guest os,although our dev->iommu_group = NULL,but we are still under
+iommu control.
 
+This condition is not necessary,because for os with noiommu,doing
+anything when there is no iommu is definitely,and when our os with
+iommu,it is safe.
+
+Signed-off-by: gehao <gehao@kylinos.cn>
+---
+ drivers/usb/host/xhci.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 79d7931c048a..589d54ecd2a4 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -227,7 +227,6 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+ 
+ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
+ {
+-	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+ 	int err, i;
+ 	u64 val;
+ 	u32 intrs;
+@@ -241,12 +240,8 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
+ 	 * changing the programming leads to extra accesses even if the
+ 	 * controller is supposed to be halted. The controller ends up with
+ 	 * a fatal fault, and is then ripe for being properly reset.
+-	 *
+-	 * Special care is taken to only apply this if the device is behind
+-	 * an iommu. Doing anything when there is no iommu is definitely
+-	 * unsafe...
+ 	 */
+-	if (!(xhci->quirks & XHCI_ZERO_64B_REGS) || !device_iommu_mapped(dev))
++	if (!(xhci->quirks & XHCI_ZERO_64B_REGS))
+ 		return;
+ 
+ 	xhci_info(xhci, "Zeroing 64bit base registers, expecting fault\n");
 -- 
-- Avi.
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
