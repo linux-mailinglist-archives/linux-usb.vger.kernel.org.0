@@ -2,120 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78884615C59
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 07:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E448615D04
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 08:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiKBGgd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Nov 2022 02:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S229713AbiKBHec (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Nov 2022 03:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiKBGgc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Nov 2022 02:36:32 -0400
-Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08172649C
-        for <linux-usb@vger.kernel.org>; Tue,  1 Nov 2022 23:36:30 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id q7MQoir5CJ83Fq7MQoCnDe; Wed, 02 Nov 2022 07:36:28 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 02 Nov 2022 07:36:28 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next RESEND] net: usb: Use kstrtobool() instead of strtobool()
-Date:   Wed,  2 Nov 2022 07:36:23 +0100
-Message-Id: <d4432a67b6f769cac0a9ec910ac725298b64e102.1667336095.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229557AbiKBHe3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Nov 2022 03:34:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A62823BFD
+        for <linux-usb@vger.kernel.org>; Wed,  2 Nov 2022 00:34:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBD5B61847
+        for <linux-usb@vger.kernel.org>; Wed,  2 Nov 2022 07:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48975C433D6;
+        Wed,  2 Nov 2022 07:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667374467;
+        bh=SHIR8BWrL0+E7p4ksL/alrRiUmRdl0samlbAWxNCWaE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nOJ0ndDdJzXM9ThETQ4j0LOQNZ3YPii5G1v0KkKR0HJNNzLY3i0BE42jlTEsUAAJA
+         304MNloaNFRTTCsrfIHPJGycDP9uPK3HEFGT2tdqLxam2kCQNxb7ybEs6S37sBDRyl
+         J1W9qirMaHx57OwZE90QpJG5rc0sQXW2SpgRwnmINXKEgYRsrsbQjks/hoAsk9LnQu
+         VsmAt0Y+3rGH+tMCLHX8S6Cee/kQB4CpLB5bWoSO/ehCcIrGxqe4r1YlRgpE5GJrH3
+         AnYJ9GL28C5XCqa8blmqCwGv7ard+9n9fd33f8QRPFemXYf8WYwCrQ0FcSs7E/Y34F
+         9ddE9laqce1bQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oq8GJ-00025U-Ci; Wed, 02 Nov 2022 08:34:11 +0100
+Date:   Wed, 2 Nov 2022 08:34:11 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] USB: serial: ftdi_sio: Extract SIO divisor code
+ to function
+Message-ID: <Y2Idc8/LHKnprII1@hovoldconsulting.com>
+References: <20220924102718.2984-1-pali@kernel.org>
+ <20220924102718.2984-4-pali@kernel.org>
+ <Yy7gKiMOtYYiW/oe@kroah.com>
+ <20221009121707.4o3fjxnec3u4mktz@pali>
+ <20221101225057.2i2rsh5latrvn4au@pali>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221101225057.2i2rsh5latrvn4au@pali>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-strtobool() is the same as kstrtobool().
-However, the latter is more used within the kernel.
+On Tue, Nov 01, 2022 at 11:50:57PM +0100, Pali Rohár wrote:
+> On Sunday 09 October 2022 14:17:07 Pali Rohár wrote:
+> > On Saturday 24 September 2022 12:47:06 Greg Kroah-Hartman wrote:
+> > > On Sat, Sep 24, 2022 at 12:27:14PM +0200, Pali Rohár wrote:
+> > > > In preparation for following changes,
+> > > 
+> > > What do you mean by "following changes"?  That doesn't work well when
+> > > looking in a changelog series.  Spell out what you are going to do in a
+> > > future change, as to why this is necessary.
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > 
+> > Ok. Anything else is needed to address?
+> 
+> Ping?
 
-In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-the other function name.
+I'll try to look at this again next week. I did notice that your SoB
+chains are wrong as Marek did not submit these changes and it's not
+clear whether he's an author at all.
 
-While at it, include the corresponding header file (<linux/kstrtox.h>).
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch was part of a serie (see [1]), patch 01/30.
-This is resent as a stand alone patch so that bots and CI can trigger.
-
-[1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
----
- drivers/net/usb/cdc_ncm.c  | 3 ++-
- drivers/net/usb/qmi_wwan.c | 5 +++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 8d5cbda33f66..6b5f24f28dd1 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -43,6 +43,7 @@
- #include <linux/ctype.h>
- #include <linux/etherdevice.h>
- #include <linux/ethtool.h>
-+#include <linux/kstrtox.h>
- #include <linux/workqueue.h>
- #include <linux/mii.h>
- #include <linux/crc32.h>
-@@ -318,7 +319,7 @@ static ssize_t ndp_to_end_store(struct device *d,  struct device_attribute *attr
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
- 	bool enable;
- 
--	if (strtobool(buf, &enable))
-+	if (kstrtobool(buf, &enable))
- 		return -EINVAL;
- 
- 	/* no change? */
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 26c34a7c21bd..30d733c81ed8 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -13,6 +13,7 @@
- #include <linux/ethtool.h>
- #include <linux/etherdevice.h>
- #include <linux/if_arp.h>
-+#include <linux/kstrtox.h>
- #include <linux/mii.h>
- #include <linux/rtnetlink.h>
- #include <linux/usb.h>
-@@ -343,7 +344,7 @@ static ssize_t raw_ip_store(struct device *d,  struct device_attribute *attr, co
- 	bool enable;
- 	int ret;
- 
--	if (strtobool(buf, &enable))
-+	if (kstrtobool(buf, &enable))
- 		return -EINVAL;
- 
- 	/* no change? */
-@@ -492,7 +493,7 @@ static ssize_t pass_through_store(struct device *d,
- 	struct qmi_wwan_state *info;
- 	bool enable;
- 
--	if (strtobool(buf, &enable))
-+	if (kstrtobool(buf, &enable))
- 		return -EINVAL;
- 
- 	info = (void *)&dev->data;
--- 
-2.34.1
-
+Johan
