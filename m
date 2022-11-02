@@ -2,140 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AACB615D06
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 08:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B3A61602D
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 10:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiKBHfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Nov 2022 03:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S230075AbiKBJpX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Nov 2022 05:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiKBHfK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Nov 2022 03:35:10 -0400
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93336240AA;
-        Wed,  2 Nov 2022 00:35:08 -0700 (PDT)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A27URCZ025279;
-        Wed, 2 Nov 2022 00:35:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=OeOU6LvmsQ+2tIGVw/0wcQ6QrZvG6W8FGlz3DwE60q8=;
- b=ZmSYpCibXPW9rLnr22RjdjW5AUDG5aJgAiEQFRfW/6IwlOhwBjJH1esFOzaawImT7lXc
- i0r5cG0XxGjO9p84FxMXA5gpkdU9jJ8iaOr6ZqXRFsAbyGO+cfH4WlDs/2RXaWwv2KNT
- 0jjDCLivzyFM8fpiAJ+ge8Zn01n51hWRJjsH80XteD+qEgYVw6VFAET0tqtbDP0CGMTy
- k/Dd/WPS79J4GNxkL6baalU1+w5gCnpplvfLRdRSp9STunGwDRIwiBvzNwZ1zsMvWUe+
- ROBCqNwuelpf30KxvURYzRf4qid9iwFdX2VBH/LrvXYTfQpRLpqVoghlxf23uLNLI9ld Sg== 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
-        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3kkm7gr0yd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 00:35:04 -0700
+        with ESMTP id S230178AbiKBJpV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Nov 2022 05:45:21 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2085.outbound.protection.outlook.com [40.107.105.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E268233B8
+        for <linux-usb@vger.kernel.org>; Wed,  2 Nov 2022 02:45:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7A4MzHSWR5wUVKRMtl48iceDSxzIOkZSPHCsF7fDaChQJ9pVQTGTzN9UGoxJgwQE/3ajObCjEszfWvvNLZUkvii4ZmXoUZHfLk2HOFUZ3LvrgOromR54Gku/qd88i2JbDI3ecOlrbuXboolJZEHHOOw4X86xVme+5YIkPWKL33xpMrDftD+c8/mEc7f6DZq5lNoXMfzvGTf/v9FQFtHhwKpu+WqHXxDnuUZmfDYoqvZ5APJuFu1rPw2Rf41HySTP+Ecyoji2zNxYRLM9ZhIwgxR2/xn122meaPOd0q03PVgdp0gBTXRmtHl84Ics/ttH6MN3cQSqlsEFqhe7C5gYA==
+ b=EGo7bmPUoooFxEY7lGn2E2QmtTPUZ8hi7hUHSfCPQV3v//62zVIIszjP30sBIHrc0NjlZHDuXwyNYSGVK7FuzKSCjKGmdYQhsw6yk7qm+bBsu3sI5DUWDWvGhBm0rdx7c9l28+BueNEsWmqZ7OK2DZpucdeuod7ehcDMUS5cQv3hSHLzXqNmmZ9Uu0GYWK4nj3pmSukeN9Kbs6eKrPKUQSzJX4ILCGnieFQ8BCdVP1sWeeRHy+XfUuZp+pDn+deXsMroSvLDSV6i/iKzZSxpP8m/9JAP2KiV5t9IUIEfgSer8zVanP+jfmBj8/uO0K5iLWifiEAdy2OfBVabSNq4JA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OeOU6LvmsQ+2tIGVw/0wcQ6QrZvG6W8FGlz3DwE60q8=;
- b=QvXpsjutJy5TWRtd0aj4/BukANnNsCfViRYQhPD2HVj/ZOw91swCs9xjuVKvX6BbjK1xQeXUOigjZvv7br+Xloh5xmeiPn1YsVzVsKoTj9p2Xq5Npw5EUGt2pIAUEmWHoLvhKepHzhiiCZf24yefs7LDh8ekYT4ho32Wfm1E7P9YucW6wrozdV89TqgT7TO/crK0Wm8kVC3J/910bSoXtVgmktA6jJhLYBF1DnefTX3MKihgVbuO/ZvYAH5PjqnX4G9Suqb51efE+yUIsngOSAGMD4ejkT+XZznxkQ455ZzRWlZ3Fqro0R/ZcDrHKEkc27AIMRmtj4lR3/DSK4UVUA==
+ bh=+Oz3QGJBAwFXYySAa0m6HQSWdn79B1UektNbzZNiQxc=;
+ b=ena+TxxtlkouhU7ThlskdVqRjmY+GOYd+awMDFUw5bodEhTtf5oycunxJQQU+1Gy2xreFHJy86r18EBnFcAYysVkxzUzMMt6KgOVtxHri6YSh+0Q6+KVWfePaDsaLC7DuOcSDtIIduDKno9sxTMj40VwXYkjmKzeQKHCy8vccKqt/W7AmAqFxGTTvKvZkQ8e9IebQaeLbaWNIgwNGAInhdPBqJBwVdn+RqpUb8WuRgGg79Co68uUe6ZzQaP3JRC8mr8ZfXgCaQfn0QCPPJPLDgOV5Qrn7tLqhVsH3wviJK3izDsoifqT5GagKeKXOXPtW/1jS7tGN7Dqy4HvKumpXQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OeOU6LvmsQ+2tIGVw/0wcQ6QrZvG6W8FGlz3DwE60q8=;
- b=mOhiy6gbB2aRi2+iRfLJyU/HKM3ZMI0LgtNmHCIOyM+lJKG+RWT8G+S4oAJuVbtSt2KCbTsvu4AhwACXWS49ZpIV/CNL4xII8FVavM0dO6ZEwgdmFT0DNr83cxc6SRkigzdbaZ4YG66MiYUgZXYONe7KvcSgZsWTPfgEd+c+x/k=
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
- by SJ0PR07MB7550.namprd07.prod.outlook.com (2603:10b6:a03:27b::10) with
+ bh=+Oz3QGJBAwFXYySAa0m6HQSWdn79B1UektNbzZNiQxc=;
+ b=DVIXcey1jJLfh89KJnqcjmcxx0fUbHe8d1np5A0hULBCS+ROP+98F8eGNu0wRX+OG4RLk1yp82RJVU/utPzoJsCp2YxkYNd5sMotBr1ld178ZtM+a9WhCDGd2mimGc9/hc8OrdpQFSpnUUo7Z4F0adEe7DcedjlMu8wJXGYlsPk=
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
+ by DU2PR04MB8760.eurprd04.prod.outlook.com (2603:10a6:10:2e3::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Wed, 2 Nov
- 2022 07:35:02 +0000
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::ea7c:b79f:752e:1afc]) by BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::ea7c:b79f:752e:1afc%4]) with mapi id 15.20.5769.015; Wed, 2 Nov 2022
- 07:35:01 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jing Leng <jleng@ambarella.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v3] usb: cdnsp: Fix wrong transmission direction of EP0
-Thread-Topic: [PATCH v3] usb: cdnsp: Fix wrong transmission direction of EP0
-Thread-Index: AQHY7bm9uUxk3j0ujU6Lr3b5nXqmSq4p0U6AgAFt4aA=
-Date:   Wed, 2 Nov 2022 07:35:01 +0000
-Message-ID: <BYAPR07MB5381D40A2B48BCDEA6ED305CDD399@BYAPR07MB5381.namprd07.prod.outlook.com>
-References: <20221101044433.5627-1-3090101217@zju.edu.cn>
- <20221101061730.8991-1-jleng@ambarella.com> <Y2DqOefwSAjmExof@kroah.com>
-In-Reply-To: <Y2DqOefwSAjmExof@kroah.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Wed, 2 Nov
+ 2022 09:45:17 +0000
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::cc4:c5c2:db97:1313]) by PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::cc4:c5c2:db97:1313%9]) with mapi id 15.20.5769.016; Wed, 2 Nov 2022
+ 09:45:17 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Francesco Dolcini <francesco@dolcini.it>
+CC:     "Jun Li (OSS)" <jun.li@oss.nxp.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "philippe.schenker@toradex.com" <philippe.schenker@toradex.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: RE: USB runtime PM issues on i.MX6ULL
+Thread-Topic: USB runtime PM issues on i.MX6ULL
+Thread-Index: AQHY6slI0uttgXhTUkWibWMoTeyBrq4ohyNwgAADqQCAANZ5gIABH8MAgADk9+A=
+Date:   Wed, 2 Nov 2022 09:45:17 +0000
+Message-ID: <PA4PR04MB9640FA4674C8B80A9FEA44DC89399@PA4PR04MB9640.eurprd04.prod.outlook.com>
+References: <Y1vLpaxpc5WBCuGD@francesco-nb.int.toradex.com>
+ <PA4PR04MB9640E8D3E851800492D8FCAD89379@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <Y1/TZqsqy/ZRVNqJ@francesco-nb.int.toradex.com>
+ <PA4PR04MB9640863D2A1F38A10C8BDFDC89369@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <Y2F4tCMaB4x2fZck@francesco-nb.int.toradex.com>
+In-Reply-To: <Y2F4tCMaB4x2fZck@francesco-nb.int.toradex.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZGEzMzZhYTQtNWE4MC0xMWVkLWE4NDgtMDBiZTQzMTQxNTFkXGFtZS10ZXN0XGRhMzM2YWE2LTVhODAtMTFlZC1hODQ4LTAwYmU0MzE0MTUxZGJvZHkudHh0IiBzej0iOTkyIiB0PSIxMzMxMTg0ODA5OTE2MjY5NDQiIGg9IkxTVGg2L3EwRTBwSGg2NkV4Y2p0SHdsQlJ1RT0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: true
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR07MB5381:EE_|SJ0PR07MB7550:EE_
-x-ms-office365-filtering-correlation-id: f0f4f222-baab-4eb3-4209-08dabca4c067
+x-ms-traffictypediagnostic: PA4PR04MB9640:EE_|DU2PR04MB8760:EE_
+x-ms-office365-filtering-correlation-id: a6877f14-e977-4411-81d6-08dabcb6f321
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J4V2iot1xZR3XQtPj26akKGkLP+/el6uJsH1+Xz9JIC8xvmvJZwopJMlLNjWXdcYwhIeWT6Z7bodIbaE4QztKg/Il05+J8+3QLqTBcxCq05KtQGI9x3qCmAmvQnpK2+8uOPSeRi0qfCfmoSD2asnX1D7Mf6Ervo5BlaJDZGBIR8laCHy49LOF4PsKpe3Njg4LAR6mWXzPw3LODlmzS1xscEszi+ZawconnkTMLAyFMqww+eZjChAwEOBLKHGowjJgOREtERVFMNyU9bW+xUHYgCNWYFaR2dmdZfJ5A8frcMk6kJcH4FHBgagRstgstzK2DjZ+9XhQAs7cmrUkNsph99D1saNoQYT40lZmaglT1lf8e6KzQ9LU/UG42rwVvYjqWeHzzaG8E4zMdtF94zIxLxlc0WiNgqib50CSojZE3yeZDmI7Zdm89rxcHq6l1PRxW7pX4od4NC25bIA3WNBm3rtQOe9wvTASrtBFVpjbbKfsDT1XvHkYfWIAHwgZZNW7XSnN8WkRuyv6ksdkMbTFuOCeycdc/XbZTxKvitM0t6JOB691WIno+fyvVL266V5ES8kMkxRKVp3oZSsV585XSHGWZrJmVGmNa0fpbq4D/OHG4pz2a3sSBdZYT7D8Hf9m6lYQtdDsp3juzRYhyAdrZQt8DiCyF4mMx3Xe3NUGraC6BbK8qcTHIGRzQEolkxds9CrPCnr3lhoYGI5WqBsm2QwAzFSjfCdttgWFEwmdy1jlaTa5uvzpMght3J4JHMbou9JKlayl3PzPjyEgN4Jdg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(396003)(136003)(376002)(36092001)(451199015)(316002)(38100700002)(4744005)(2906002)(5660300002)(122000001)(83380400001)(33656002)(52536014)(26005)(86362001)(38070700005)(9686003)(7696005)(186003)(478600001)(54906003)(6506007)(71200400001)(76116006)(110136005)(66446008)(55016003)(64756008)(8676002)(8936002)(66476007)(41300700001)(66556008)(4326008)(66946007);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: tIdN/e2fQXgfMRFX4nS6iCQzqVIhq1feQHWiilNctrjHwiOo1w5jrxUmH/I9Ys4aH2uKo20ZncaAHX0p4qAeKkDE6QqJ8t1nlhHgeBkj/DZ7G/EU4XCuhEKbcWH/EuVUvG/MbTBFCa0VJAmm/t5eWBR8VxezIj7Yfm1iNhPLTtbG4rfc7J9m3/4rBFBmMjRhqeYpTmvYTB9/ys7ZGJmV2L/o1/xKuKF7F39ta/YlNR/GEHM2DlaCFO0sQfsMXOup04YhVo5E9DVKnwEf34sMrcIv1oWrAm/7czs75Aw03n+j8n5QOPI81PqegYopNYp6+hbYnKCRuHV6q0FSvAfUjOAnFbi7ETSJxIFmXN6H/Ph15BEM605gi6/6tsehe+vgR4SdEbtAC73zT/vDECLkUR0G9kf2iUYy5qFFaEvVqFLPeMyE7fUHZ6ypMlVP8+FWeWuue6HoMp18tcDgRYkHGozPHKioidGbQsk5TPPBUBdqVZrSu/QVRSHHvusMOSiJPdB8VZ6YZFqqzaMvZ+FAphaiG11QB5KyziPooqeE4DhJysqOqpuJRRTVIm1qvV8qx2r9Ea090NosbaJ9CJqcUOpys3i9SMAOLdUrwHaWa0mjU5c7ojCbj+EyyKNTRl7Re2E0egj6HaLvBjrwiO8MFnbEfqEBy3PzK03kCmhjLTTrWPuHHsGuGAD5gIzyFY21RmJ1Ibv3sC/X0/wZ8pIfqIBlaeUIkgqC0ww867MMJQj14QdO2V72ETqOF+mNatfdSoWDB3bpSBdc+U/4CFnowg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(366004)(396003)(451199015)(66946007)(316002)(44832011)(26005)(64756008)(6916009)(66476007)(4326008)(66556008)(55016003)(66446008)(76116006)(38070700005)(8676002)(53546011)(9686003)(7416002)(8936002)(33656002)(54906003)(52536014)(6506007)(5660300002)(86362001)(7696005)(41300700001)(186003)(71200400001)(38100700002)(83380400001)(2906002)(122000001)(478600001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FywoJZsYe0cNej/N6/g8EU0OGAXzEw4iDxnmQL7tOjgBgoun3b/7zPe+8d/s?=
- =?us-ascii?Q?f/Pkv0ksyBXvyvL3C3MxuMSwwMlwLDgcLXHAuKbqg1CAMBu4qVMtejUkF/Nc?=
- =?us-ascii?Q?zgzhmqillKGx4dkV1Bd1SSCAboL9G8KpnPSwdLlGehe3UXrWLAJF+yvJuV0J?=
- =?us-ascii?Q?4y77CWxikGJ8d1M22brMGE0h8mvB2NmqfXe300d8pyoLAB+I7DQu85KQv1Fu?=
- =?us-ascii?Q?vItomMO1mEYtOPBkG34rnRbNPXxLnxOBu6thzw7nqPCJLQfFfO6uLkol7Jhy?=
- =?us-ascii?Q?bcM/K7OJ1TBtj9Gr9NlYpMDeV4j69EwEXnlFd30U9IW7hGCzUEfK8/KMw752?=
- =?us-ascii?Q?RO2vjShq3VAf1+qsetyFwRYbNjNrq4spUVcyWrXiFKr8GjF+QNfPhFUJcY/L?=
- =?us-ascii?Q?ZE8kr0NnmkH23zqoVr93FgtYLVNFt1XQrWN5Ngh1m2jXy/YWgm/I+T5XbazK?=
- =?us-ascii?Q?fwtF/fMNT6k1CA+GlLNuFp1lyPcHkOZERnruocLDlym6iaVWZ7mQNjPC/ASh?=
- =?us-ascii?Q?OH0jBjoH+rDjO26WO2FqY/K9uqCSPVad4FfnbI3SsdoOS6j8O/3IhdFiFJdU?=
- =?us-ascii?Q?aY8yH/OaoQ+lI0FcBeSBQAGq9VEXVK54kU8Teurk76evOGKR4rS1ro3uIV6n?=
- =?us-ascii?Q?NCsG4G2oLsljdb623w/IWR9dAg0NqVjr0Ii7jg7/PJ29I2SvkrMXFOiB3ZkZ?=
- =?us-ascii?Q?Ujoto/ZLb8AOCij4iI/AmLH9+DTCma+FYzhsP+PHFGSXv1T2p1hrSZFmHQlv?=
- =?us-ascii?Q?fIu4mlcAZZeyp5/e0OowTY0H4OZ4vXvyeviksMnJQTkwvsZ3fHOp/svJ4hA3?=
- =?us-ascii?Q?r6a4+YfN4LnaLuCD/ZntA4wudGS2OoOky8GZ9WHzOjJvDRytyKOCM0bA5Is0?=
- =?us-ascii?Q?sObGhXap6K8o9DJtOo0nga36h7nHPTYHNAiZPdhHYtcqhyckG/mYnbrRowYg?=
- =?us-ascii?Q?jL5PL+2psYs+JpJpzb7n+KkYlvJDPOC6MA1Y6q1IGEjW3O187ptDAR0Qg5Bd?=
- =?us-ascii?Q?MHZAtIdDNIDQvvrow146xO5pih0c0jTi+8xk7JXJhAyvfnvlParZkiR6ZICV?=
- =?us-ascii?Q?N6xZDwhv4iPJ382SoryQamRSyF15im7M95xRIT+COA2H9M8e6PqQELYeS90d?=
- =?us-ascii?Q?mbNjQr0VqxafPGsItZhEplF7hRQ9J/+wBDv3NAWj+WQDn5hqIE5nsKyPBVwr?=
- =?us-ascii?Q?sjFPQJ/9Z+BTteRnWeE7+978DtNb97lluJp+dzWQkylfNGpnTH9HXILtTwW/?=
- =?us-ascii?Q?sg9FzUYQAVU3wKfT93GO+PIn2ubiL1axM9Em5HCZTnSx+0Ri3t9bLhmdH5Ho?=
- =?us-ascii?Q?AEDwd6O/MALsSc3zsGMPtzCM4Rg7gP0OglMvMyIOV5EOkiJxMV/7ImEXnlw8?=
- =?us-ascii?Q?4WNaGr1sZTU4HlqlYdmIwR0RmoesitrH3ZvFbeeRZ5Ip7gjrtaW4h85Xj4us?=
- =?us-ascii?Q?5F+0nAnpoF40/d84PjufRYHDYKep3xQaA2HpWAz5W7IFto5+QwzB3nb9U+sF?=
- =?us-ascii?Q?Y9D7X0MjNnsFv3jPWirAmSdvigYpFlvo/XRwYAWDWHMXP8kk1OKq7EBkxHK8?=
- =?us-ascii?Q?GdMIeM4dLm4ZC4nzj864k7aizqGIOnH57l66Hy9+?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6MVbgEHSsz9tZ12PsqXHBV6ULHzjISU0163wmgCLmhx6eiKlPcjrSygL/HWD?=
+ =?us-ascii?Q?TojopWRdydLh6uX9T09wywKnhWlbeSPvBr8DMsYCYRW5g+F1kl3JStJNBNOk?=
+ =?us-ascii?Q?fHQVqwEecVRxgitJ/h4ZXTT8S9x068wVxxfryqXbbLz6nKbgoc48XT1OVA4g?=
+ =?us-ascii?Q?E0zuff0xQu6Z43VlTN6M7PI41d2RxnU2u0MbFHfVe4DAVnuep2Tg+xCg0hg5?=
+ =?us-ascii?Q?XWu4Y4Vk6GEntgkVLwJd+dA82Y9NmM1vYy5y5MDr545kMFuODlJ65aQZT1Ff?=
+ =?us-ascii?Q?gSGyWms+QRbhTn29NTzaZ1gqBjygh0TPoepW1FoWWUsscQxq6OoB2iTlbNx5?=
+ =?us-ascii?Q?KR/PZIiQK5xneONAenkr2w5d3cKEXY7r7lMujZZc5W130rJs7N+OxKDFiIBQ?=
+ =?us-ascii?Q?F2iSDTmL4MI0TalXd3EwALJTZPJx+yXL2kCMkT6pJrCMkqgl+tjI9emWwPGh?=
+ =?us-ascii?Q?AukO9N8eD/H3cRid/ztb0bd2zjgs0W/QTOP4vyaEs8Tx2Re0Qwl3WLUVSL5f?=
+ =?us-ascii?Q?655IKGAK8Q+fqeUpJrFGHWlDT0eFgsq8xse5/p/KyzBn5zrSrBg/Jiwvz7c1?=
+ =?us-ascii?Q?V4sC7BAOXZ+0TMKfVp8PGJcONcGW3VEFTh5mcuvNGCdotaU3SNP1O5ElRdYt?=
+ =?us-ascii?Q?60+PvD81eyJX5iWODHUPuToHxgO7EP2hmZ4c8yAZ/MBI26Yz0kMyh889KX7K?=
+ =?us-ascii?Q?PMXigImwX3Lj9Z/cPqqB/yExMx4Y6LNs4QW4ZVbOh4FRZ1n+Gh9GwpufK2yC?=
+ =?us-ascii?Q?+fuLs4HcIbn4uNfUb1ytYgRT4Vhc20RUiEDGCaxsO/M4i6Ky7LMMojAN3keY?=
+ =?us-ascii?Q?2KUEnKcMS8pq3mZJ060X+II6GbND8VYyLWVdF+l2wZ9x7x73Somc3RBhA41P?=
+ =?us-ascii?Q?9Q/D98QHxE2rewGZvL/HmZ3XPxY4bgLv8cbLBzKWGI9bTN7nFbT8i7FROTGN?=
+ =?us-ascii?Q?FYxb5CLqeljPnm31WNJFalPuxPWH04eXk05yomjMgYdBwNNUiQB4dkjcYLTs?=
+ =?us-ascii?Q?oAXk1LWWdBB+eAttsq6XFMb0jmmWBLPaXr3o1ZDOZVlBugA+bNtB9C5FIOLx?=
+ =?us-ascii?Q?8G+rR0Fi+7Ca5JMet2tAVL7/tdgZF17rPTCMsA4NRgsVxwFRdXXhPsqJLyQQ?=
+ =?us-ascii?Q?74OQUmZ4K/ZyinaG5BvI1waltm2lmIdxO5wpRLe+Gw29guiVxLmhV9tTZzpz?=
+ =?us-ascii?Q?KPTtfn8ABF6JKAFUp4Y1o9DC3tQmqfLTVniFH8t5vDCpVhhxOSmiG5p5RTRS?=
+ =?us-ascii?Q?b8lT43VpMxLrOfEtYHSjTLN6/0pBrd89PoqAqtjFWQzQosJT63hUq3OyNLOB?=
+ =?us-ascii?Q?CMabCeHq5LEcl1dmCUkxnloeO059ok7vl31Jv8gsBleiWD7hsvwoF6ujcKwm?=
+ =?us-ascii?Q?ip+korJYjO7jm4dA/SlTN7OQDwGR+OcXblgu2L+logxd4cTBWg8q4wDjUBVs?=
+ =?us-ascii?Q?TwRBKb2MhyBvbccNkiPH59POsNOPQC4jfxGgqypidTFrguTM5LkgSU+1Rq+5?=
+ =?us-ascii?Q?A4GaYIgM6D8IsSMSH2cXjgHCTLHX/cvbEci5MsqFtVUwBL6BdLZfVEnfvnu7?=
+ =?us-ascii?Q?5fvflMTg4Btm/n5wkM8=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0f4f222-baab-4eb3-4209-08dabca4c067
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 07:35:01.4372
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6877f14-e977-4411-81d6-08dabcb6f321
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 09:45:17.4850
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Jat3gu4K+vpHd9F2lbLOl6dfvb5dQwkO52tqLMWVy2onwhr7+cVp7TQImvWGmRc0SzZfN1unC/NBxU+yGGosorcHWOWJcE/mDDOWijzZm70=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB7550
-X-Proofpoint-GUID: IWbxhE7zdfbU_JFVtpe8PwfAbKu07aZk
-X-Proofpoint-ORIG-GUID: IWbxhE7zdfbU_JFVtpe8PwfAbKu07aZk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_04,2022-11-01_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=560 mlxscore=0 malwarescore=0
- phishscore=0 impostorscore=0 adultscore=0 spamscore=0 clxscore=1011
- priorityscore=1501 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211020045
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: yu8vl9/dK/lIWLZksKDvZYH8BUJUnRzWda+njhdXuNvaX2DhUZ5dzCyj1JrlIPi8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8760
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -143,33 +130,92 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
->
->On Tue, Nov 01, 2022 at 02:17:30PM +0800, Jing Leng wrote:
->> EP0 transfer is bi-directional, but in the cdnsp gadget, the
->> transmission direction of EP0 is not changed after it is initialized
->> to IN, so the OUT data from EP0 received by the host is invalid.
->>
->> The value of ep0_expect_in will change according to the value of
->> bRequestType in the SETUP transaction of control transfer, so we can
->> use it as the transmission direction of EP0.
->>
->> Signed-off-by: Jing Leng <jleng@ambarella.com>
 
-Acked-by: Pawel Laszczak <pawell@cadence.com>
+> -----Original Message-----
+> From: Francesco Dolcini <francesco@dolcini.it>
+> Sent: Wednesday, November 2, 2022 3:51 AM
+> To: Jun Li <jun.li@nxp.com>
+> Cc: Francesco Dolcini <francesco@dolcini.it>; Jun Li (OSS)
+> <jun.li@oss.nxp.com>; Peter Chen <peter.chen@kernel.org>;
+> linux-usb@vger.kernel.org; Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
+> Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
+> <linux-imx@nxp.com>; Felipe Balbi <balbi@kernel.org>;
+> philippe.schenker@toradex.com; Francesco Dolcini
+> <francesco.dolcini@toradex.com>
+> Subject: Re: USB runtime PM issues on i.MX6ULL
+>=20
+> Hello Jun Li,
+>=20
+> On Tue, Nov 01, 2022 at 03:10:46AM +0000, Jun Li wrote:
+> > > On Mon, Oct 31, 2022 at 01:40:39PM +0000, Jun Li (OSS) wrote:
+> > > > > I am debugging some unexpected USB behavior on a i.MX6ULL SOC,
+> > > > > chipidea controller ("fsl,imx6ul-usb") and a fsl mxs usbphy
+> > > > > ("fsl,imx6ul-usbphy").
+> > > > >
+> > > > > The HW design has 2 USB interface, the first one is dual-role,
+> > > > > while the second one is a host port with NO way to re-read the
+> > > > > VBUS (USB_OTG2_VBUS is not really connected, there is just a
+> > > > > capacitor to GND).
+> > > >
+> > > > How is your USB_OTG1_VBUS status? Can you try to make your
+> > > > USB_OTG1_VBUS pad has a valid VBUS voltage, then run your Host
+> > > > only port test with runtime PM enabled?
+> > >
+> > > USB_OTG1_VBUS is tied to GND the same way as USB_OTG2_VBUS, not
+> > > really straightforward to do such a test.
+> >
+> > iMX6ULL need at least one valid VBUS(either from OTG1 or OTG2) as
+> > input to power the internal USB LDO if I understand correctly.
+> This surprise me a little bit, since
+>  - the i.MX6ULL datasheet prescribe to keep the VBUS disconnected if
+>    unused
 
-Thanks,
-Pawel Laaszczak
+I think "unused" here means you do not need/enable the port at all.
+=20
+>  - downstream NXP kernel seems to work fine ("seems" since we do have
+>    some patches there, so I could be wrong)
 
->> ---
->> ChangeLog v2->v3:
->> - Repair my email address.
->
->Yes, it works, and it's validated!
->
->Nice job, thanks.  I'll let the cdns3 maintainer review it first, but just=
- wanted to
->say thanks for fixing this up, it makes my life a lot easier when acceptin=
-g
->patches.
->
->greg k-h
+What do you mean by " downstream NXP kernel seems to work fine"?
+The downstream kernel can work on your HW? But upstream kernel
+driver does not?
+
+>  - disabling runtime pm on upstream Linux kernel make it works
+>    perfectly, so there is a way in SW to have this HW configuration
+>    working.
+
+Again I want to make sure the both VBUS pads(OTG1 and OTG2) voltage
+are always at 0v on your HW, can you double check and confirm?
+I ask this again because such situation should cause the USB port
+Cannot work at any cases, but your current status is: only low
+power wakeup cannot work.
+
+>=20
+> > your HW to meet this: for Host only port, you have to connect
+> > USB_OTG2_VBUS to a valid VBUS and make it always present for simple.
+> > You can do some quick HW change to prove this.
+> We have no way to change the HW in reality, therefore doing a one off tes=
+t
+> would be pretty much irrelevant.
+
+My intention of doing this HW rework is just for debug.
+
+>=20
+> Said all of that, given what you wrote, I feel like having a specific dts
+> property in the chipidea driver to disable runtime pm might be the way to
+> go.
+>=20
+> Something like `ci,disable-runtime-pm`? I know the DTS is supposed to
+> describe the HW, so maybe a different property name would be required.
+>=20
+> What do you think about this?
+
+This is the last step to consider, we cannot go this way before root cause
+identified.
+
+Thanks
+Li Jun
+=20
+>=20
+> Francesco
