@@ -2,48 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D96615794
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 03:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B8F6158D2
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 03:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiKBCaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Nov 2022 22:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S231270AbiKBC7H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Nov 2022 22:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiKBCay (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 22:30:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BFD25E0;
-        Tue,  1 Nov 2022 19:30:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40503B8206F;
-        Wed,  2 Nov 2022 02:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29470C433C1;
-        Wed,  2 Nov 2022 02:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667356250;
-        bh=6hA+Dh9bbUrJYJncIJIqV/ZMA60zmxPIRFCVCtsAvK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FTO165lz2zqPi7/J3x9wmFPdj/1UYsm8h65p1V8+M7wg9Zd7Le6c6sdtpmm+zb/3c
-         GdksJNcRWI9SoVNFsKt0EZOGXZcPSPDHqVxyKxwecbjN6Fpp6y5S9EaZ6FLI6UsBYb
-         D5iohCAAM3TaNIHKU5mjJwHTZsdS7IjTguIz3dY4=
-Date:   Wed, 2 Nov 2022 03:31:44 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     gehao <gehao@kylinos.cn>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wangwenmei168@163.com,
-        xieming@kylinos.cn
-Subject: Re: [RESEND PATCH] xhci: Remove iommu condition for Renesas PCIe
- controllers
-Message-ID: <Y2HWkAnvNCRavAZt@kroah.com>
-References: <20221102014340.129587-1-gehao@kylinos.cn>
+        with ESMTP id S231250AbiKBC7G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 22:59:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8546C2228C
+        for <linux-usb@vger.kernel.org>; Tue,  1 Nov 2022 19:59:01 -0700 (PDT)
+Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2BL238WkzRnwG;
+        Wed,  2 Nov 2022 10:54:02 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500023.china.huawei.com
+ (7.221.188.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
+ 2022 10:58:58 +0800
+From:   Peng Wu <wupeng58@huawei.com>
+To:     <vincent.sunplus@gmail.com>, <kishon@ti.com>, <vkoul@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <liwei391@huawei.com>, <wupeng58@huawei.com>
+Subject: [PATCH] phy: sunplus: Fix an IS_ERR() vs NULL bug in sp_usb_phy_probe
+Date:   Wed, 2 Nov 2022 02:56:27 +0000
+Message-ID: <20221102025627.122388-1-wupeng58@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102014340.129587-1-gehao@kylinos.cn>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500023.china.huawei.com (7.221.188.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,66 +43,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 09:43:40AM +0800, gehao wrote:
-> When we use uPD720201 USB 3.0 Host Controller passthrough to VM
-> guest os will report follow errors and it can not working.
-> 
-> xhci_hcd 0000:09:00.0: Host took too long to start, waited 16000
-> microseconds.
+The devm_ioremap() function returns NULL on error, it doesn't return
+error pointers.
 
-No need to wrap this line.
+Fixes: 99d9ccd97385 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+---
+ drivers/phy/sunplus/phy-sunplus-usb2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> xhci_hcd 0000:09:00.0: startup error -19.
-> 
-> Renesas controllers preserve the top half of the address in internal,
-> non visible registers,and end up with half the address coming from the
-> kernel, and the other half coming from the firmware.
-> 
-> For guest os,although our dev->iommu_group = NULL,but we are still under
-> iommu control.
-> 
-> This condition is not necessary,because for os with noiommu,doing
-> anything when there is no iommu is definitely,and when our os with
-> iommu,it is safe.
-> 
-> Signed-off-by: gehao <gehao@kylinos.cn>
+diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
+index b932087c55b2..e827b79f6d49 100644
+--- a/drivers/phy/sunplus/phy-sunplus-usb2.c
++++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
+@@ -256,8 +256,8 @@ static int sp_usb_phy_probe(struct platform_device *pdev)
+ 	usbphy->moon4_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon4");
+ 	usbphy->moon4_regs = devm_ioremap(&pdev->dev, usbphy->moon4_res_mem->start,
+ 					  resource_size(usbphy->moon4_res_mem));
+-	if (IS_ERR(usbphy->moon4_regs))
+-		return PTR_ERR(usbphy->moon4_regs);
++	if (!usbphy->moon4_regs)
++		return -ENOMEM;
+ 
+ 	usbphy->phy_clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(usbphy->phy_clk))
+-- 
+2.17.1
 
-I need a "full" name please, what you use to sign documents.
-
-Also, your email fails to validate, so it looks like it was faked.
-Please fix your email system to properly send validated emails.
-
-> ---
->  drivers/usb/host/xhci.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 79d7931c048a..589d54ecd2a4 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -227,7 +227,6 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
->  
->  static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
->  {
-> -	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
->  	int err, i;
->  	u64 val;
->  	u32 intrs;
-> @@ -241,12 +240,8 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
->  	 * changing the programming leads to extra accesses even if the
->  	 * controller is supposed to be halted. The controller ends up with
->  	 * a fatal fault, and is then ripe for being properly reset.
-> -	 *
-> -	 * Special care is taken to only apply this if the device is behind
-> -	 * an iommu. Doing anything when there is no iommu is definitely
-> -	 * unsafe...
->  	 */
-> -	if (!(xhci->quirks & XHCI_ZERO_64B_REGS) || !device_iommu_mapped(dev))
-> +	if (!(xhci->quirks & XHCI_ZERO_64B_REGS))
-
-I thought this got rejected as it will break systems.  What changed from
-that?
-
-thanks,
-
-greg k-h
