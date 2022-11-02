@@ -2,159 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02B26165E8
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 16:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F186616883
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 17:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiKBPSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Nov 2022 11:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S231495AbiKBQWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Nov 2022 12:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiKBPSi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Nov 2022 11:18:38 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F83F01E
-        for <linux-usb@vger.kernel.org>; Wed,  2 Nov 2022 08:18:23 -0700 (PDT)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EB6BF15D1;
-        Wed,  2 Nov 2022 16:18:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1667402298;
-        bh=Z9YN4ql9pb1ydGQ6sQfrn9jZPCKcv6/S/4DyWVYuY10=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J2G/WIoQrm7aqFQ8TTteU7c0OokbKCVJdSN6n+62Sxf5fo9VPKJdkvzIlNb+fXL7F
-         mvIujK5I67y4vAAlGel5Yf0OEQF2lhxFdYlAZEB8roZL60jBpbTewATiu6012KRgdI
-         rd3Dsc8GY+S3XeYEel4NnwzWxXZVIAdPxGhPRdtY=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        torleiv@huddly.com, mgr@pengutronix.de,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH 4/4] usb: gadget: uvc: Copy XU descriptors during .bind()
-Date:   Wed,  2 Nov 2022 15:17:55 +0000
-Message-Id: <20221102151755.1022841-5-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221102151755.1022841-1-dan.scally@ideasonboard.com>
-References: <20221102151755.1022841-1-dan.scally@ideasonboard.com>
+        with ESMTP id S232068AbiKBQWX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Nov 2022 12:22:23 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FC0326FA;
+        Wed,  2 Nov 2022 09:16:06 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id AEF2432005C1;
+        Wed,  2 Nov 2022 12:16:03 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 02 Nov 2022 12:16:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667405763; x=1667492163; bh=vjsW9AucU8
+        8T88HijQ2DrXg0E5k9G26I+ZgoZYsnzAI=; b=p7Be0evCxVzL9WsdOQE4XYZ+IN
+        fE/97l2ihtQ1rXMk4iqSOBAq8BsukeckaHXigDSbz1F+xQ4OJ7M7BzRNJHOz4i1f
+        Rg5pUXmQ0h+luQXk5iDZuwHt9OJkSE9tEEWf8pktnQ0oDTjsd219fJWQtwXOmfly
+        VxUXn8GoEVjahMbW5xheoI8mKp8uSLr5SSDmmNFvjmN1OCvTUM6hqEoo8XG7V4AU
+        TpkzIq4kRYvw641pcjFf/LFT94vpOcFPuex2rXseTYaP5FxcsjaVTxPDpf2EUffI
+        CFzEEW4VnitwTwsDbn3ELwGo/n2CHSe+NgOJ3xfuHKQRk97ry3vzx+vAPUvg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1667405763; x=1667492163; bh=vjsW9AucU88T88HijQ2DrXg0E5k9G26I+Zg
+        oZYsnzAI=; b=tJYHxDZW6rW4pPnCLpsIta4NrRsfO1HsHdhpmYM7x39dx1b9V34
+        ube4P7qlGDjt3p3xx0FlTOamj8PoQ7GzpWEMiBe+Yy3Xdbb5Omb8mKZ20+3sjz8y
+        XTHTFX9/wdwsTJn7jZHTd94PCGyvidlwa/YwVJQBItyFfqVNU6tqHHh8jL9YhLGa
+        /hoAsCKKsEGhlyV1uO5nmLQGlph7I0/Co9d24rHaWSqhWa7G5Lx7964B24s8vdXO
+        iw2V2n/fSt3ZQwafBaxq3hmAUZShG7tC68SlSeNWovBusHZutNAQvWNt3eTbYBG3
+        Rg6LscQAoyVvh2HO86Q/7q8Dm5mbOqDInVw==
+X-ME-Sender: <xms:wpdiY6HvLI4jQjbUwyrqCQc-xXX3gU4cKUZoWMsX1IaWtIXghsPIWQ>
+    <xme:wpdiY7XJzrb7SjRTev8FnzZPqH6JOoPyJHHvP-BETWm2FR6O0OKQvmvpCfb5hSA4k
+    LGDfII561qe29I0WFw>
+X-ME-Received: <xmr:wpdiY0LYgH9ZUU3TrefF0JiHfLxE90cLtdTq5wBRzM1tizIrKx9XO2a_3_uuMKqyhc9qNvDv0n5n9lmopl9A5h5cazK9bmL9oH3BHVqmMJ0PzyulkOD1QOnYn1Afig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudejgdekhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:wpdiY0HM4ukHeVnwrAjU32g6S62a2t6rCnh4FpmkzLZoTPYESoni5w>
+    <xmx:wpdiYwUiQz-oHg0vNUOEo5d0lxHmtjS0y5JM9AcJTzht7tpAAviybw>
+    <xmx:wpdiY3OWqHNP_2qA_ksAARSYCiVVL6rrDMZ2Ed13NCsbr9pJlQXSdw>
+    <xmx:w5diYyJ_qRPDhwydtkyvKeyfzAPFiDu3ixePL4pwB8_Cxv18jT3YRg>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Nov 2022 12:16:01 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+Subject: [PATCH] usb: typec: tipd: Prevent uninitialized event{1,2} in IRQ handler
+Date:   Wed,  2 Nov 2022 17:15:42 +0100
+Message-Id: <20221102161542.30669-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that extension unit support is available through configfs we need
-to copy the descriptors for the XUs during uvc_function_bind() so that
-they're exposed to the usb subsystem.
+If reading TPS_REG_INT_EVENT1/2 fails in the interrupt handler event1
+and event2 may be uninitialized when they are used to determine
+IRQ_HANDLED vs. IRQ_NONE in the error path.
 
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
+Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
+ drivers/usb/typec/tipd/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I don't especially like UVC_COPY_XU_DESCRIPTOR(), but the need to vary the array
-size for baSourceID and bmControls plus the requirement for the struct to be
-copied to consecutive bytes of memory constrained it a bit. An alternative might
-be to replace baSourceID, bControlSize, bmControls and iExtension in struct
-uvcg_extension_unit_descriptor with a single flexible array member (called data[]
-or something). That would allow the copy to be a much more straight forward
-memcpy(mem, desc, desc->bLength); - but the cost would be reallocating the entire
-struct each time the baSourceID or bmControls attributes was changed. That might
-be a better method, but I thought I'd stick with this for this submission at least
-on the grounds that it's less confusing.
-
- drivers/usb/gadget/function/f_uvc.c | 35 +++++++++++++++++++++++++++++
- drivers/usb/gadget/function/uvc.h   |  1 +
- 2 files changed, 36 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index eca5f36dfa74..e0a308f1355c 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -464,6 +464,25 @@ uvc_register_video(struct uvc_device *uvc)
- 		} \
- 	} while (0)
- 
-+#define UVC_COPY_XU_DESCRIPTOR(mem, dst, desc)					\
-+	do {									\
-+		*(dst)++ = mem;							\
-+		memcpy(mem, desc, 22); /* bLength to bNrInPins */		\
-+		mem += 22;							\
-+										\
-+		memcpy(mem, desc->baSourceID, desc->bNrInPins);			\
-+		mem += desc->bNrInPins;						\
-+										\
-+		memcpy(mem, &desc->bControlSize, 1);				\
-+		mem++;								\
-+										\
-+		memcpy(mem, desc->bmControls, desc->bControlSize);		\
-+		mem += desc->bControlSize;					\
-+										\
-+		memcpy(mem, &desc->iExtension, 1);				\
-+		mem++;								\
-+	} while (0)
-+
- static struct usb_descriptor_header **
- uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index b637e8b378b3..2a77bab948f5 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -474,7 +474,7 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
+ static irqreturn_t cd321x_interrupt(int irq, void *data)
  {
-@@ -475,6 +494,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	const struct usb_descriptor_header * const *src;
- 	struct usb_descriptor_header **dst;
- 	struct usb_descriptor_header **hdr;
-+	struct uvcg_extension *xu;
- 	unsigned int control_size;
- 	unsigned int streaming_size;
- 	unsigned int n_desc;
-@@ -539,6 +559,13 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 		bytes += (*src)->bLength;
- 		n_desc++;
- 	}
-+
-+	list_for_each_entry(xu, uvc->desc.extension_units, list) {
-+		control_size += xu->desc.bLength;
-+		bytes += xu->desc.bLength;
-+		n_desc++;
-+	}
-+
- 	for (src = (const struct usb_descriptor_header **)uvc_streaming_cls;
- 	     *src; ++src) {
- 		streaming_size += (*src)->bLength;
-@@ -565,6 +592,13 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	uvc_control_header = mem;
- 	UVC_COPY_DESCRIPTORS(mem, dst,
- 		(const struct usb_descriptor_header **)uvc_control_desc);
-+
-+	list_for_each_entry(xu, uvc->desc.extension_units, list) {
-+		struct uvcg_extension_unit_descriptor *desc = &xu->desc;
-+
-+		UVC_COPY_XU_DESCRIPTOR(mem, dst, desc);
-+	}
-+
- 	uvc_control_header->wTotalLength = cpu_to_le16(control_size);
- 	uvc_control_header->bInCollection = 1;
- 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
-@@ -988,6 +1022,7 @@ static struct usb_function *uvc_alloc(struct usb_function_instance *fi)
- 	uvc->desc.fs_streaming = opts->fs_streaming;
- 	uvc->desc.hs_streaming = opts->hs_streaming;
- 	uvc->desc.ss_streaming = opts->ss_streaming;
-+	uvc->desc.extension_units = &opts->extension_units;
+ 	struct tps6598x *tps = data;
+-	u64 event;
++	u64 event = 0;
+ 	u32 status;
+ 	int ret;
  
- 	streaming = config_group_find_item(&opts->func_inst.group, "streaming");
- 	if (!streaming)
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 40226b1f7e14..f1a016d20bb6 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -143,6 +143,7 @@ struct uvc_device {
- 		const struct uvc_descriptor_header * const *fs_streaming;
- 		const struct uvc_descriptor_header * const *hs_streaming;
- 		const struct uvc_descriptor_header * const *ss_streaming;
-+		struct list_head *extension_units;
- 	} desc;
+@@ -519,8 +519,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+ {
+ 	struct tps6598x *tps = data;
+-	u64 event1;
+-	u64 event2;
++	u64 event1 = 0;
++	u64 event2 = 0;
+ 	u32 status;
+ 	int ret;
  
- 	unsigned int control_intf;
 -- 
-2.34.1
+2.25.1
 
