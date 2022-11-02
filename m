@@ -2,50 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DC3615724
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 02:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D96615794
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Nov 2022 03:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiKBBrB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Nov 2022 21:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        id S230085AbiKBCaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Nov 2022 22:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKBBrA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 21:47:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DB8205C5
-        for <linux-usb@vger.kernel.org>; Tue,  1 Nov 2022 18:46:58 -0700 (PDT)
+        with ESMTP id S229741AbiKBCay (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Nov 2022 22:30:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BFD25E0;
+        Tue,  1 Nov 2022 19:30:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 804A0617A7
-        for <linux-usb@vger.kernel.org>; Wed,  2 Nov 2022 01:46:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED83C433B5;
-        Wed,  2 Nov 2022 01:46:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40503B8206F;
+        Wed,  2 Nov 2022 02:30:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29470C433C1;
+        Wed,  2 Nov 2022 02:30:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667353617;
-        bh=64GStF0rcxqcPiqEiyKdCqwPGvJnnT36MzMtAUgltd4=;
+        s=korg; t=1667356250;
+        bh=6hA+Dh9bbUrJYJncIJIqV/ZMA60zmxPIRFCVCtsAvK4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K9VV1bkOtS2FQQGcQssteqpOpnISYad1hLV43zGTOsdAR42IFBmZRlvFlahYSbvL+
-         WcKLHtFK6eVQ0+igIo1lkowUumYiYB5N8jsDMF0MzCI4hmSkDTB1QFzQyh2LXpsfqE
-         b3ZbwKXahSlCv8wn3JMURrKl4Cm3UzDpyPkmPyUc=
-Date:   Wed, 2 Nov 2022 02:47:50 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 3/7] USB: serial: ftdi_sio: Extract SIO divisor code
- to function
-Message-ID: <Y2HMRrSW0UahOyPB@kroah.com>
-References: <20220924102718.2984-1-pali@kernel.org>
- <20220924102718.2984-4-pali@kernel.org>
- <Yy7gKiMOtYYiW/oe@kroah.com>
- <20221009121707.4o3fjxnec3u4mktz@pali>
- <20221101225057.2i2rsh5latrvn4au@pali>
+        b=FTO165lz2zqPi7/J3x9wmFPdj/1UYsm8h65p1V8+M7wg9Zd7Le6c6sdtpmm+zb/3c
+         GdksJNcRWI9SoVNFsKt0EZOGXZcPSPDHqVxyKxwecbjN6Fpp6y5S9EaZ6FLI6UsBYb
+         D5iohCAAM3TaNIHKU5mjJwHTZsdS7IjTguIz3dY4=
+Date:   Wed, 2 Nov 2022 03:31:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     gehao <gehao@kylinos.cn>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wangwenmei168@163.com,
+        xieming@kylinos.cn
+Subject: Re: [RESEND PATCH] xhci: Remove iommu condition for Renesas PCIe
+ controllers
+Message-ID: <Y2HWkAnvNCRavAZt@kroah.com>
+References: <20221102014340.129587-1-gehao@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221101225057.2i2rsh5latrvn4au@pali>
+In-Reply-To: <20221102014340.129587-1-gehao@kylinos.cn>
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,26 +51,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 11:50:57PM +0100, Pali Rohár wrote:
-> On Sunday 09 October 2022 14:17:07 Pali Rohár wrote:
-> > On Saturday 24 September 2022 12:47:06 Greg Kroah-Hartman wrote:
-> > > On Sat, Sep 24, 2022 at 12:27:14PM +0200, Pali Rohár wrote:
-> > > > In preparation for following changes,
-> > > 
-> > > What do you mean by "following changes"?  That doesn't work well when
-> > > looking in a changelog series.  Spell out what you are going to do in a
-> > > future change, as to why this is necessary.
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > 
-> > Ok. Anything else is needed to address?
+On Wed, Nov 02, 2022 at 09:43:40AM +0800, gehao wrote:
+> When we use uPD720201 USB 3.0 Host Controller passthrough to VM
+> guest os will report follow errors and it can not working.
 > 
-> Ping?
+> xhci_hcd 0000:09:00.0: Host took too long to start, waited 16000
+> microseconds.
 
-We have no idea, sorry, as we have no context here at all and it was
-thousands of patches ago in our reviews.  Please just fix things up
-based on this review and resubmit, you never need to ask.
+No need to wrap this line.
+
+> xhci_hcd 0000:09:00.0: startup error -19.
+> 
+> Renesas controllers preserve the top half of the address in internal,
+> non visible registers,and end up with half the address coming from the
+> kernel, and the other half coming from the firmware.
+> 
+> For guest os,although our dev->iommu_group = NULL,but we are still under
+> iommu control.
+> 
+> This condition is not necessary,because for os with noiommu,doing
+> anything when there is no iommu is definitely,and when our os with
+> iommu,it is safe.
+> 
+> Signed-off-by: gehao <gehao@kylinos.cn>
+
+I need a "full" name please, what you use to sign documents.
+
+Also, your email fails to validate, so it looks like it was faked.
+Please fix your email system to properly send validated emails.
+
+> ---
+>  drivers/usb/host/xhci.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 79d7931c048a..589d54ecd2a4 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -227,7 +227,6 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+>  
+>  static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
+>  {
+> -	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+>  	int err, i;
+>  	u64 val;
+>  	u32 intrs;
+> @@ -241,12 +240,8 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
+>  	 * changing the programming leads to extra accesses even if the
+>  	 * controller is supposed to be halted. The controller ends up with
+>  	 * a fatal fault, and is then ripe for being properly reset.
+> -	 *
+> -	 * Special care is taken to only apply this if the device is behind
+> -	 * an iommu. Doing anything when there is no iommu is definitely
+> -	 * unsafe...
+>  	 */
+> -	if (!(xhci->quirks & XHCI_ZERO_64B_REGS) || !device_iommu_mapped(dev))
+> +	if (!(xhci->quirks & XHCI_ZERO_64B_REGS))
+
+I thought this got rejected as it will break systems.  What changed from
+that?
+
+thanks,
 
 greg k-h
