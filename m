@@ -2,76 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48785617D94
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 14:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD1B617D97
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 14:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiKCNMy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Nov 2022 09:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S231343AbiKCNM4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Nov 2022 09:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKCNMw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 09:12:52 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2629D140A2
-        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 06:12:50 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l6so1609773pjj.0
-        for <linux-usb@vger.kernel.org>; Thu, 03 Nov 2022 06:12:50 -0700 (PDT)
+        with ESMTP id S231221AbiKCNMy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 09:12:54 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4967315703
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 06:12:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d20so813883plr.10
+        for <linux-usb@vger.kernel.org>; Thu, 03 Nov 2022 06:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qW4gA4/+DJWMLlFKdym0SavPVOtUXQ/aM3xm/iknIAY=;
-        b=ZodLdYP8lVPofd3B+oGsbQc367anhy5Z1zIbLllCkCs5hrPGWsNZeaDVg6iqggLZ2X
-         PYHvImabBOwQdJXpwvWpcjQxHPsozq0dVT8tpOtk7pP9hgu/jQz5p4ypTfeL3kzdzyRe
-         H5I2Gc7OMVjcDdDmfMh+Oam2ryPHSQt4/OMQc=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=La6137YO6O3TJK/0GFcDignRrRdua80P+6PCRQgIvsM=;
+        b=DSclgAj23WinjREjPzdCRDM1MdJhbVwuzU56c+TRZXuKWWkmEci1xkgsiDFwn+eJRC
+         2n8y6N+snvNwKCwxvvPe42FZ3i7KJO3npl4+HIJpKit6MQkJ3hH3j1MIg6YJwCzqV5aS
+         F8DogQkMVdadB5/zArnJD6RKDiFRoznOXT3Sg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qW4gA4/+DJWMLlFKdym0SavPVOtUXQ/aM3xm/iknIAY=;
-        b=KIBUmJw/wWdSO2N4TIx0yXkAzAdWbeb5HgCVd+rMq7m4kTrDecZZttF/EV4UpKXeBR
-         2HiR/tUMDN47yk9zYFeUdlLex+/9KX68JxWcaA3OZc65W3UdkSt5Nk3zDInxtaq0DPLa
-         oTl8FG//fvYCjmWMm6eMUrEczpt3FYC34V1i6WNH/DJr8A1I2Xy+GG945i31pDG0vta8
-         H+e1t/7ZVTugpM56DJumMsc65CUNO+PbIb6/Iu/njHe/FbiIyxncH4djZdRQLGnHNXYD
-         g3PCntmJRcfffv6+sK/MsGrOKMz9oG6HRFSHAq0N+UwE3kKRDdX1pSvhuBQ5/0Te+orx
-         vnZw==
-X-Gm-Message-State: ACrzQf391Q+hDBVFDvqrKWBehYf33BxOX+O1J1GqhOYnyY31kd4NUFB0
-        lRgEOt5OMCCxEZn8zuKrzayy+g==
-X-Google-Smtp-Source: AMsMyM7bFYT5XNLn8m3prIt0FA0POqOU3cUEsL0nsCNLmS94LTYBXYnQNl/5s1+8joJQPsF2fQMb5w==
-X-Received: by 2002:a17:90a:17eb:b0:212:8210:c92e with SMTP id q98-20020a17090a17eb00b002128210c92emr47687897pja.62.1667481169633;
-        Thu, 03 Nov 2022 06:12:49 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=La6137YO6O3TJK/0GFcDignRrRdua80P+6PCRQgIvsM=;
+        b=jETWdxbKzfhqoHf7NjKVGLjwbCKLdeDinm4MOyhF39Ls2XQnO+DD3BDTY+sjfxkTX2
+         mTMYZj+S3gwiUiKQRCm6Uo+QGJ14pcavSaFpMXEZJnwSZIKFeHyWHpJ+2g27yQzSCHT4
+         hJ5sIrZ97o8nurvLjT0cR3apC6zzvxS9cBtvIdasw66mstx/QAw6dbh4M3PfdF91VjdP
+         2peBwkanJ3u1whEDoukzNPEFydnjONfEJwXU0rNpyeeGq/SYOzlxVeBx7v29UFMOgGoG
+         +IpvONG9hH0FxAbO+ERyUGcJZXkHMIpxUzN2r9xhF85u8tEUAGnq3AOafpfuNg2RO2LU
+         z3Kg==
+X-Gm-Message-State: ACrzQf17xFd+RlAyVkrdJJENx3fWWaMFGobUyYwNLRpFleoi2H7CK1a2
+        9ZgvzVf+3Els8ResoRtRwtz9nw==
+X-Google-Smtp-Source: AMsMyM6ClraYowbRIAKelQ6pTDvpQgmVyIo4USpCdTVNAETdzJHfp7GFC3E43dtoSMFxGytnh9WuJg==
+X-Received: by 2002:a17:902:8c92:b0:178:29d4:600f with SMTP id t18-20020a1709028c9200b0017829d4600fmr30344420plo.40.1667481172527;
+        Thu, 03 Nov 2022 06:12:52 -0700 (PDT)
 Received: from shuah-tx13.. ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id p8-20020a1709027ec800b0018703bf3ec9sm647871plb.61.2022.11.03.06.12.46
+        by smtp.gmail.com with ESMTPSA id p8-20020a1709027ec800b0018703bf3ec9sm647871plb.61.2022.11.03.06.12.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 06:12:48 -0700 (PDT)
+        Thu, 03 Nov 2022 06:12:51 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     shuah@kernel.org, valentina.manea.m@gmail.com
 Cc:     Shuah Khan <skhan@linuxfoundation.org>, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Fix uninit and signed integer overflow errors
-Date:   Thu,  3 Nov 2022 07:12:41 -0600
-Message-Id: <cover.1667480280.git.skhan@linuxfoundation.org>
+Subject: [PATCH 1/2] usb/usbip: fix uninitialized variables errors
+Date:   Thu,  3 Nov 2022 07:12:42 -0600
+Message-Id: <76654f2f1cc30b27be10ac9b177bb449a7ad7068.1667480280.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1667480280.git.skhan@linuxfoundation.org>
+References: <cover.1667480280.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix uninitialized variable and signed integer overflow errors reported
-by cppcheck.
+Fix uninitialized variable errors reported by cppcheck. One example
+below.
 
-Shuah Khan (2):
-  usb/usbip: fix uninitialized variables errors
-  usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK define
+usbip/stub_main.c:284:10: error: Uninitialized variables: priv.seqnum, priv.sdev, priv.urbs, priv.sgl, priv.num_urbs, priv.completed_urbs, priv.urb_status, priv.unlinking [uninitvar]
+  return priv;
 
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
  drivers/usb/usbip/stub_main.c     | 2 +-
  drivers/usb/usbip/stub_rx.c       | 4 ++--
  drivers/usb/usbip/stub_tx.c       | 4 ++--
@@ -80,10 +83,176 @@ Shuah Khan (2):
  drivers/usb/usbip/vhci_rx.c       | 2 +-
  drivers/usb/usbip/vhci_tx.c       | 4 ++--
  drivers/usb/usbip/vudc_dev.c      | 2 +-
- drivers/usb/usbip/vudc_rx.c       | 7 +++++--
+ drivers/usb/usbip/vudc_rx.c       | 2 +-
  drivers/usb/usbip/vudc_transfer.c | 4 ++--
- 10 files changed, 18 insertions(+), 15 deletions(-)
+ 10 files changed, 14 insertions(+), 14 deletions(-)
 
+diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
+index e8c3131a8543..e1248b971218 100644
+--- a/drivers/usb/usbip/stub_main.c
++++ b/drivers/usb/usbip/stub_main.c
+@@ -277,7 +277,7 @@ static DRIVER_ATTR_WO(rebind);
+ 
+ static struct stub_priv *stub_priv_pop_from_listhead(struct list_head *listhead)
+ {
+-	struct stub_priv *priv, *tmp;
++	struct stub_priv *priv = NULL, *tmp;
+ 
+ 	list_for_each_entry_safe(priv, tmp, listhead, list) {
+ 		list_del_init(&priv->list);
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index fc01b31bbb87..08e11948834b 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -206,7 +206,7 @@ static int stub_recv_cmd_unlink(struct stub_device *sdev,
+ {
+ 	int ret, i;
+ 	unsigned long flags;
+-	struct stub_priv *priv;
++	struct stub_priv *priv = NULL;
+ 
+ 	spin_lock_irqsave(&sdev->priv_lock, flags);
+ 
+@@ -440,7 +440,7 @@ static void masking_bogus_flags(struct urb *urb)
+ 
+ static int stub_recv_xbuff(struct usbip_device *ud, struct stub_priv *priv)
+ {
+-	int ret;
++	int ret = 0;
+ 	int i;
+ 
+ 	for (i = 0; i < priv->num_urbs; i++) {
+diff --git a/drivers/usb/usbip/stub_tx.c b/drivers/usb/usbip/stub_tx.c
+index b1c2f6781cb3..3d3d2b5a680d 100644
+--- a/drivers/usb/usbip/stub_tx.c
++++ b/drivers/usb/usbip/stub_tx.c
+@@ -132,7 +132,7 @@ static void setup_ret_unlink_pdu(struct usbip_header *rpdu,
+ static struct stub_priv *dequeue_from_priv_tx(struct stub_device *sdev)
+ {
+ 	unsigned long flags;
+-	struct stub_priv *priv, *tmp;
++	struct stub_priv *priv = NULL, *tmp;
+ 
+ 	spin_lock_irqsave(&sdev->priv_lock, flags);
+ 
+@@ -343,7 +343,7 @@ static int stub_send_ret_submit(struct stub_device *sdev)
+ static struct stub_unlink *dequeue_from_unlink_tx(struct stub_device *sdev)
+ {
+ 	unsigned long flags;
+-	struct stub_unlink *unlink, *tmp;
++	struct stub_unlink *unlink = NULL, *tmp;
+ 
+ 	spin_lock_irqsave(&sdev->priv_lock, flags);
+ 
+diff --git a/drivers/usb/usbip/usbip_event.c b/drivers/usb/usbip/usbip_event.c
+index 26513540bcdb..8d782c8d8893 100644
+--- a/drivers/usb/usbip/usbip_event.c
++++ b/drivers/usb/usbip/usbip_event.c
+@@ -143,7 +143,7 @@ void usbip_finish_eh(void)
+ 
+ void usbip_event_add(struct usbip_device *ud, unsigned long event)
+ {
+-	struct usbip_event *ue;
++	struct usbip_event *ue = NULL;
+ 	unsigned long flags;
+ 
+ 	if (ud->event & USBIP_EH_BYE)
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 233265550fc6..79503ffc3db8 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -957,7 +957,7 @@ static void vhci_cleanup_unlink_list(struct vhci_device *vdev,
+ 	struct vhci_hcd *vhci_hcd = vdev_to_vhci_hcd(vdev);
+ 	struct usb_hcd *hcd = vhci_hcd_to_hcd(vhci_hcd);
+ 	struct vhci *vhci = vhci_hcd->vhci;
+-	struct vhci_unlink *unlink, *tmp;
++	struct vhci_unlink *unlink = NULL, *tmp;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&vhci->lock, flags);
+diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
+index 7f2d1c241559..8edb699aed23 100644
+--- a/drivers/usb/usbip/vhci_rx.c
++++ b/drivers/usb/usbip/vhci_rx.c
+@@ -12,7 +12,7 @@
+ /* get URB from transmitted urb queue. caller must hold vdev->priv_lock */
+ struct urb *pickup_urb_and_free_priv(struct vhci_device *vdev, __u32 seqnum)
+ {
+-	struct vhci_priv *priv, *tmp;
++	struct vhci_priv *priv = NULL, *tmp;
+ 	struct urb *urb = NULL;
+ 	int status;
+ 
+diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
+index 0ae40a13a9fe..78b96c915724 100644
+--- a/drivers/usb/usbip/vhci_tx.c
++++ b/drivers/usb/usbip/vhci_tx.c
+@@ -33,7 +33,7 @@ static void setup_cmd_submit_pdu(struct usbip_header *pdup,  struct urb *urb)
+ 
+ static struct vhci_priv *dequeue_from_priv_tx(struct vhci_device *vdev)
+ {
+-	struct vhci_priv *priv, *tmp;
++	struct vhci_priv *priv = NULL, *tmp;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&vdev->priv_lock, flags);
+@@ -168,7 +168,7 @@ static int vhci_send_cmd_submit(struct vhci_device *vdev)
+ 
+ static struct vhci_unlink *dequeue_from_unlink_tx(struct vhci_device *vdev)
+ {
+-	struct vhci_unlink *unlink, *tmp;
++	struct vhci_unlink *unlink = NULL, *tmp;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&vdev->priv_lock, flags);
+diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
+index 2bc428f2e261..ddf7e6f18439 100644
+--- a/drivers/usb/usbip/vudc_dev.c
++++ b/drivers/usb/usbip/vudc_dev.c
+@@ -90,7 +90,7 @@ static void nuke(struct vudc *udc, struct vep *ep)
+ static void stop_activity(struct vudc *udc)
+ {
+ 	int i;
+-	struct urbp *urb_p, *tmp;
++	struct urbp *urb_p = NULL, *tmp;
+ 
+ 	udc->address = 0;
+ 
+diff --git a/drivers/usb/usbip/vudc_rx.c b/drivers/usb/usbip/vudc_rx.c
+index d4a2f30a7580..a6ca27f10b68 100644
+--- a/drivers/usb/usbip/vudc_rx.c
++++ b/drivers/usb/usbip/vudc_rx.c
+@@ -63,7 +63,7 @@ static int v_recv_cmd_unlink(struct vudc *udc,
+ 				struct usbip_header *pdu)
+ {
+ 	unsigned long flags;
+-	struct urbp *urb_p;
++	struct urbp *urb_p = NULL;
+ 
+ 	spin_lock_irqsave(&udc->lock, flags);
+ 	list_for_each_entry(urb_p, &udc->urb_queue, urb_entry) {
+diff --git a/drivers/usb/usbip/vudc_transfer.c b/drivers/usb/usbip/vudc_transfer.c
+index 7e801fee33bf..fd5547f85de9 100644
+--- a/drivers/usb/usbip/vudc_transfer.c
++++ b/drivers/usb/usbip/vudc_transfer.c
+@@ -183,7 +183,7 @@ static int handle_control_request(struct vudc *udc, struct urb *urb,
+ static int transfer(struct vudc *udc,
+ 		struct urb *urb, struct vep *ep, int limit)
+ {
+-	struct vrequest	*req;
++	struct vrequest	*req = NULL;
+ 	int sent = 0;
+ top:
+ 	/* if there's no request queued, the device is NAKing; return */
+@@ -303,7 +303,7 @@ static void v_timer(struct timer_list *t)
+ {
+ 	struct vudc *udc = from_timer(udc, t, tr_timer.timer);
+ 	struct transfer_timer *timer = &udc->tr_timer;
+-	struct urbp *urb_p, *tmp;
++	struct urbp *urb_p = NULL, *tmp;
+ 	unsigned long flags;
+ 	struct usb_ep *_ep;
+ 	struct vep *ep;
 -- 
 2.34.1
 
