@@ -2,87 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2661E6178A4
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 09:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCD7617A3C
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 10:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiKCI0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Nov 2022 04:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        id S230381AbiKCJtl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Nov 2022 05:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKCI0d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 04:26:33 -0400
-X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 01:26:31 PDT
-Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1055F46;
-        Thu,  3 Nov 2022 01:26:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id C93CDFB03;
-        Thu,  3 Nov 2022 09:19:46 +0100 (CET)
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kSYW95dxwuxO; Thu,  3 Nov 2022 09:19:45 +0100 (CET)
-Date:   Thu, 3 Nov 2022 09:19:41 +0100
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hector Martin <marcan@marcan.st>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH] usb: typec: tipd: Prevent uninitialized event{1,2} in
- IRQ handler
-Message-ID: <Y2N5ncIbvvsnI0r2@qwark.sigxcpu.org>
-References: <20221102161542.30669-1-sven@svenpeter.dev>
+        with ESMTP id S230394AbiKCJtj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 05:49:39 -0400
+X-Greylist: delayed 1123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 02:49:37 PDT
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9258F21
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 02:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=F87mc8lkAHj0ylbRzx8NYMGKOr+gBp0AZS8QBKStObU=; b=QsDYs
+        F71nCGPDzVSTdCbNiSDGazL1Av4CuGRvsNlUpWmfQZ/cSEjKoYA09WpubDofsPWwouvqEDTEoV9XT
+        fu/0v1UyOLqq3xEZhTthJLJQ5Cv2JW5xJFSos633tqj+jlJJuSiNoW2R27lwTcU+8KSavkjMAoMRR
+        Ea6eXClssAuMDl4nZrdmvL1fRdfkCAuym0TqxaTy34S8wPPRAM3k4L/CDChPmD9zXbbd+5Z2Us9YK
+        ij4Znkrdam/XTH4VH4MrLgiHXP6NVMAoZUPcLEgWoC2rZ1SKbpbo/n2/oFGYd3QoMw1/rVLxeVlJI
+        XWv3QN/CyJpTkxHEzWzpKDc9TWCcg==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1oqWYg-0004GU-Ud;
+        Thu, 03 Nov 2022 09:30:48 +0000
+Date:   Thu, 3 Nov 2022 09:30:43 +0000
+From:   John Keeping <john@metanate.com>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH] usb: gadget: f_fs: Prevent race between
+ functionfs_unbind & ffs_ep0_queue_wait
+Message-ID: <Y2OKQ5xS23VYeRyj@donbot>
+References: <20221103073821.8210-1-quic_ugoswami@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221102161542.30669-1-sven@svenpeter.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103073821.8210-1-quic_ugoswami@quicinc.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-On Wed, Nov 02, 2022 at 05:15:42PM +0100, Sven Peter wrote:
-> If reading TPS_REG_INT_EVENT1/2 fails in the interrupt handler event1
-> and event2 may be uninitialized when they are used to determine
-> IRQ_HANDLED vs. IRQ_NONE in the error path.
+On Thu, Nov 03, 2022 at 01:08:21PM +0530, Udipto Goswami wrote:
+> While performing fast composition switch, there is a possibility that the
+> process of ffs_ep0_write/ffs_ep0_read get into a race condition
+> due to ep0req being freed up from functionfs_unbind.
 > 
-> Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
-> Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> Consider the scenario that the ffs_ep0_write calls the ffs_ep0_queue_wait
+> by taking a lock &ffs->ev.waitq.lock. However, the functionfs_unbind isn't
+> bounded so it can go ahead and mark the ep0req to NULL, and since there
+> is no NULL check in ffs_ep0_queue_wait we will end up in use-after-free.
+> 
+> Fix this by introducing a NULL check before any req operation.
+> Also to ensure the serialization, perform the ep0req ops inside
+> spinlock &ffs->ev.waitq.lock.
+> 
+> Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
 > ---
->  drivers/usb/typec/tipd/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/usb/gadget/function/f_fs.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index b637e8b378b3..2a77bab948f5 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -474,7 +474,7 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
->  static irqreturn_t cd321x_interrupt(int irq, void *data)
->  {
->  	struct tps6598x *tps = data;
-> -	u64 event;
-> +	u64 event = 0;
->  	u32 status;
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 73dc10a77cde..39980b2bf285 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -279,6 +279,13 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
+>  	struct usb_request *req = ffs->ep0req;
 >  	int ret;
 >  
-> @@ -519,8 +519,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  {
->  	struct tps6598x *tps = data;
-> -	u64 event1;
-> -	u64 event2;
-> +	u64 event1 = 0;
-> +	u64 event2 = 0;
->  	u32 status;
->  	int ret;
+> +	if (!req)
+> +		return -EINVAL;
+> +	/*
+> +	 * Even if ep0req is freed won't be a problem since the local
+> +	 * copy of the request will be used here.
+> +	 */
 
-Reviewed-by: Guido Günther <agx@sigxcpu.org>
+This doesn't sound right - if we set ep0req to NULL then we've called
+usb_ep_free_request() on it so the request is not longer valid.
 
-Cheers,
- -- Guido
+>  	req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
+>  
+>  	spin_unlock_irq(&ffs->ev.waitq.lock);
+> @@ -1892,11 +1899,13 @@ static void functionfs_unbind(struct ffs_data *ffs)
+>  	ENTER();
+>  
+>  	if (!WARN_ON(!ffs->gadget)) {
+> +		spin_lock_irq(&ffs->ev.waitq.lock);
+>  		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
+>  		ffs->ep0req = NULL;
+>  		ffs->gadget = NULL;
+>  		clear_bit(FFS_FL_BOUND, &ffs->flags);
+>  		ffs_data_put(ffs);
+> +		spin_unlock_irq(&ffs->ev.waitq.lock);
+
+ffs may have been freed in ffs_data_put() so accessing the lock here is
+unsafe.
