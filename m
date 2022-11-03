@@ -2,109 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7218461832E
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 16:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CE7618331
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 16:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbiKCPoa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Nov 2022 11:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S231542AbiKCPpk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Nov 2022 11:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiKCPoM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 11:44:12 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBC61B7BA;
-        Thu,  3 Nov 2022 08:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667490251; x=1699026251;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z/HJ+bj6Eo7qiPd6yeWolEz7ykFhuBQJvEbNeL9/IcA=;
-  b=dWpMi6y41EeVuh3OS1hVLK+6SfkyzuztoUw7lAJJJJ7l4XRX+fB82o0b
-   RP/i9RmColt7BB54k/KP4KQCQUnj3Infx7X0UBq20aHvbBMzr2aNshxbv
-   IyaEB1pawMj3lc1O+FxiLy5wbBjt4uQr4CE8IGV0CWo5zqb2wRsxVvZCi
-   D2/PdgGLNUhsIKzYUGj02g9OO8l0V/guQnMO9dKbz15i3jMpy21RVeWig
-   HebCeLktc+8/mz0B18y6k6e+zHGvlisWohpvgryAF8K/8wQj/hlsoiJRW
-   03cf5VWHhgk6yNCr8DkptItewsT/QmQvzzKWr3o7tPMJKRMsfhCE99vIg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308436630"
-X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
-   d="scan'208";a="308436630"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 08:44:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="777351032"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="777351032"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 03 Nov 2022 08:43:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 03 Nov 2022 17:43:52 +0200
-Date:   Thu, 3 Nov 2022 17:43:52 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hector Martin <marcan@marcan.st>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Subject: Re: [PATCH] usb: typec: tipd: Prevent uninitialized event{1,2} in
- IRQ handler
-Message-ID: <Y2PhuIM7OJ/Xjsf8@kuha.fi.intel.com>
-References: <20221102161542.30669-1-sven@svenpeter.dev>
+        with ESMTP id S232112AbiKCPpU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 11:45:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809971C92B
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 08:45:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E88DB828EB
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 15:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D5B87C433B5
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 15:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667490311;
+        bh=IW4TzLsZ3hmwKkXMeVL4lqKWcF2UDyIrHHfanGEUKMc=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=o4fzGaWfMAWuhULPoiq+EOO1Tm2h4E5HfG7RcaKN9+N6ebFTCTrxxiUr5mLahCPGW
+         3c5VBcDJXq4mxXvtULHlz4deva4JXLgcuz8Fe7iiBkL/7ehwu8llZe7Eb10y6bs/JY
+         Cs4PX0k9qyt7SBIC1i1EU+3nPectgWuHfbg4XJzxOnWkKLIojlDKGWUR9ZV5bLdDVV
+         LYg8+QCKRByfD1iDGss6nN5kUcpMkjZVuekJtjoE6AIrUvFiDihmUcUN+ELil4TKew
+         tfUfsrZqW5iVSPmqzY+huq61TErvjM3wEWmK9LyKNaYD11WBFZn6MQlv5CDzR3guxl
+         YsNTFHDWBTdNg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C8B5CC433E9; Thu,  3 Nov 2022 15:45:11 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214259] Discrete Thunderbold Controller 8086:1137 throws DMAR
+ and XHCI errors and is only partially functional
+Date:   Thu, 03 Nov 2022 15:45:11 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjorn@helgaas.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DUPLICATE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-214259-208809-usyzZ1V71y@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214259-208809@https.bugzilla.kernel.org/>
+References: <bug-214259-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102161542.30669-1-sven@svenpeter.dev>
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 05:15:42PM +0100, Sven Peter wrote:
-> If reading TPS_REG_INT_EVENT1/2 fails in the interrupt handler event1
-> and event2 may be uninitialized when they are used to determine
-> IRQ_HANDLED vs. IRQ_NONE in the error path.
-> 
-> Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
-> Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214259
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Bjorn Helgaas (bjorn@helgaas.com) changed:
 
-> ---
->  drivers/usb/typec/tipd/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index b637e8b378b3..2a77bab948f5 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -474,7 +474,7 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
->  static irqreturn_t cd321x_interrupt(int irq, void *data)
->  {
->  	struct tps6598x *tps = data;
-> -	u64 event;
-> +	u64 event = 0;
->  	u32 status;
->  	int ret;
->  
-> @@ -519,8 +519,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  {
->  	struct tps6598x *tps = data;
-> -	u64 event1;
-> -	u64 event2;
-> +	u64 event1 = 0;
-> +	u64 event2 = 0;
->  	u32 status;
->  	int ret;
->  
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |bjorn@helgaas.com
 
-thanks,
+--- Comment #25 from Bjorn Helgaas (bjorn@helgaas.com) ---
+I don't know the connection to the DMAR faults, but from the first log
+(https://bugzilla.kernel.org/attachment.cgi?id=3D298567):
 
--- 
-heikki
+  BIOS-e820: [mem 0x000000006bc00000-0x00000000efffffff] reserved
+  pci_bus 0000:00: root bus resource [mem 0x71000000-0xdfffffff window]
+
+This entire PCI host bridge aperture is "reserved" in the E820 map, which m=
+eans
+we won't allocate any PCI BARs in that area, which means hot-add won't work.
+
+The current workaround for this is https://git.kernel.org/linus/d341838d776a
+("x86/PCI: Disable E820 reserved region clipping via quirks"), which appear=
+ed
+in v5.19.
+
+I think the underlying issue is that this machine has EFI, Linux converts t=
+he
+EFI memory map to E820 format, and it converts EFI_MEMORY_MAPPED_IO to
+E820_TYPE_RESERVED.  EFI_MEMORY_MAPPED_IO means "the OS must map this memory
+for use by EFI runtime services."  It does *not* mean "the OS can never use
+this memory."  I think Linux should omit EFI_MEMORY_MAPPED_IO areas complet=
+ely
+from the E820 map.
+
+This is basically the same issue as bug #216565.  I attached a patch there =
+to
+omit EFI_MEMORY_MAPPED_IO.
+
+I would love to hear from anybody with a Clevo machine that shows similar
+problems.  If you can, please boot with the patch at
+https://bugzilla.kernel.org/attachment.cgi?id=3D303123 with the "efi=3Ddebu=
+g"
+kernel parameter, open new bugzilla with the complete dmesg log, and assign=
+ it
+to me.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
