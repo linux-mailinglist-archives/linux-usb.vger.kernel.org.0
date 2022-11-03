@@ -2,59 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4283A617FD5
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 15:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B526E617FDC
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 15:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiKCOnV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Nov 2022 10:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
+        id S231708AbiKCOow (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Nov 2022 10:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiKCOnT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 10:43:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E281838E;
-        Thu,  3 Nov 2022 07:43:18 -0700 (PDT)
+        with ESMTP id S231698AbiKCOou (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 10:44:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE69A6306;
+        Thu,  3 Nov 2022 07:44:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F284B828A4;
-        Thu,  3 Nov 2022 14:43:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF06C433D6;
-        Thu,  3 Nov 2022 14:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667486595;
-        bh=claiLflm+5thNilZ4cUGBCpj6+MocHH7QuSKQ2lHGH4=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54769B8284C;
+        Thu,  3 Nov 2022 14:44:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1AFC433D7;
+        Thu,  3 Nov 2022 14:44:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667486686;
+        bh=zpIoOAp++gfJWBGUr1xLhQLP/Ei+SAt+CRXOkkI0Ed8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u/lvl7xUbmGFjB8MZFkXzSnAtW5/qDXG8oJRlGuh8vsGThNeqQ8TnY0w3ipUbWLSA
-         zNmZ32Px8IHyx7su4Tlo9cpFIlG9AmvkdVpBX+KTC3aJCPSvFk6N5nuymYTRc4GSKa
-         A4wCJ617WUyT3WzT2nEQ3aKSrPAyVUUqNl6ejhewuHtsYxitzkbmDOBStLrBqOYp86
-         iQhcnlrvj3Gyzs0S7KSnNptflqyVikRtez0e799P2INdYYl92fuQ3S+KnL4h3ujtk4
-         EG5K7Y4PGgMwKVZoE2evM+1xb7Hrmpokbk+lcA/eh1BzD/1kq7LKfdnePl4aWgOJTp
-         rPe6+g8BZxtCQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oqbQo-0003c5-JI; Thu, 03 Nov 2022 15:42:58 +0100
-Date:   Thu, 3 Nov 2022 15:42:58 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Stefan Agner <stefan@agner.ch>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH 2/2] of: export of_device_add()
-Message-ID: <Y2PTckTXbBysjrUm@hovoldconsulting.com>
-References: <20221103141233.20179-1-m.szyprowski@samsung.com>
- <CGME20221103141239eucas1p167f44609369010a20293d5123214426d@eucas1p1.samsung.com>
- <20221103141233.20179-2-m.szyprowski@samsung.com>
- <Y2PSzCEr2c2g9ZJp@kroah.com>
+        b=tLlvXT7eqnDmXV82jCcydWhdwge20oYiju4qgJA8Kox1+0uoy2CqxS6OcWT4GfXdm
+         7kaYJceK3jPK0/nfxnvCCM6OfULtd6rZCoerS/DEQ8m18vOMsw026P1vJZPjNqXxtD
+         38F9pa943O07I6qaA2qUdRKx02dy4qaYDZbbdpY0=
+Date:   Thu, 3 Nov 2022 23:45:26 +0900
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jing Leng <jleng@ambarella.com>
+Cc:     pawell@cadence.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] usb: cdnsp: Fix wrong transmission direction of EP0
+Message-ID: <Y2PUBvh3z/5QPSy+@kroah.com>
+References: <20221101044433.5627-1-3090101217@zju.edu.cn>
+ <20221101061730.8991-1-jleng@ambarella.com>
+ <Y2DqOefwSAjmExof@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2PSzCEr2c2g9ZJp@kroah.com>
+In-Reply-To: <Y2DqOefwSAjmExof@kroah.com>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,32 +51,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:40:12PM +0900, Greg Kroah-Hartman wrote:
-> On Thu, Nov 03, 2022 at 03:12:33PM +0100, Marek Szyprowski wrote:
-> > Export of_device_add() function to let DWC3 driver (Exynos variant) to
-> > instantiate DWC3 core device from the respective child OF-node with a
-> > custom, addtional properties added.
+On Tue, Nov 01, 2022 at 10:43:21AM +0100, Greg KH wrote:
+> On Tue, Nov 01, 2022 at 02:17:30PM +0800, Jing Leng wrote:
+> > EP0 transfer is bi-directional, but in the cdnsp gadget, the
+> > transmission direction of EP0 is not changed after it is
+> > initialized to IN, so the OUT data from EP0 received by the host
+> > is invalid.
 > > 
-> > Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > The value of ep0_expect_in will change according to the value of
+> > bRequestType in the SETUP transaction of control transfer, so we
+> > can use it as the transmission direction of EP0.
+> > 
+> > Signed-off-by: Jing Leng <jleng@ambarella.com>
 > > ---
-> >  drivers/of/device.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/of/device.c b/drivers/of/device.c
-> > index 8cefe5a7d04e..bc60c9b6863c 100644
-> > --- a/drivers/of/device.c
-> > +++ b/drivers/of/device.c
-> > @@ -52,6 +52,7 @@ int of_device_add(struct platform_device *ofdev)
-> >  
-> >  	return device_add(&ofdev->dev);
-> >  }
-> > +EXPORT_SYMBOL(of_device_add);
+> > ChangeLog v2->v3:
+> > - Repair my email address.
 > 
-> I do not see any user of this symbol after this patch (no 3/2?)
+> Yes, it works, and it's validated!
 > 
-> So why is it needed?  No driver should ever be calling this function
-> directly.
+> Nice job, thanks.  I'll let the cdns3 maintainer review it first, but
+> just wanted to say thanks for fixing this up, it makes my life a lot
+> easier when accepting patches.
 
-It was used by 1/2 so this would have broken bisectability.
+Oops, I missed that email footer, sorry.  That is NOT compatible with
+Linux kernel development, and as per the recommendation from my legal
+people, I have to go revert that change as we can't take it as-is
+because it might have been sent out incorrectly as it was stated to be
+"Proprietary and/or Confidential Information" which is not allowed in
+the Linux kernel.
 
-Johan
+thanks,
+
+greg k-h
