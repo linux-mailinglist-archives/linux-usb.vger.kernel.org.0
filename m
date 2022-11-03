@@ -2,128 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0466C617B17
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 11:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297B3617B34
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 12:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiKCKxF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Nov 2022 06:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S231290AbiKCLAP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Nov 2022 07:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKCKwu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 06:52:50 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF30F11162
-        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 03:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=PI8AQFArlwu1sam0CnlBbhcmPS87Nd3uhw6fQu9XXYI=; b=0VKSt
-        5ecs3v72vAA2xb6b1xIIDQmguXp08wxwRX6jcMMa5nyKfNbDeq7s7gYspcbbGXgWvqvfdMJAOJim9
-        jo9QLg1Iv6xmjsB4truYZILHTFPfGY/oMX5Drhb1j824mek0lyAiSKSn/E+JtekHItEDg6mEWrEQd
-        tHd93XWBt5IpKYYOWVFv3v32kRxtNi4cVREbdgqMP5oQxXgmDBB6exDlBhLIjnR/ZwRO1EG0YMSDe
-        2IMdmV39ZfAfeOD0heJt6mX6UNeEa3UN/B6yv7YOJ+8WzD5hDDEBJ2kR/gnBpUkupoInCFlMZiJPJ
-        2ejN7aP6XM+VowLzl12meicdvvpEA==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1oqXpz-0005bT-Ht;
-        Thu, 03 Nov 2022 10:52:45 +0000
-Date:   Thu, 3 Nov 2022 10:52:43 +0000
-From:   John Keeping <john@metanate.com>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH] usb: gadget: f_fs: Prevent race between
- functionfs_unbind & ffs_ep0_queue_wait
-Message-ID: <Y2Ode1eyrBHEFzGw@donbot>
-References: <20221103073821.8210-1-quic_ugoswami@quicinc.com>
- <Y2OKQ5xS23VYeRyj@donbot>
- <6b3e061f-f606-b498-cf5d-5fbfd79ced67@quicinc.com>
+        with ESMTP id S231312AbiKCLAN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 07:00:13 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A05163AC
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 04:00:10 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so5219634pjh.1
+        for <linux-usb@vger.kernel.org>; Thu, 03 Nov 2022 04:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=autocrypt:subject:from:content-language:to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aqf7pFPzhT29hpUxWZB53yOxzjtIJTfmtGOLNnOR9D4=;
+        b=FflOuyY9vKV9dAOps/lnRDLuXux0iQw0N/0WcARlgMs1PjvnfKdckZNVfdckANeMLZ
+         mpYpRpZjYC3iqLEUh2oM+DLYxYpODxlaqO+8F/V4k8E8ImWfo8Glm6GWSE4nEz3LiGR/
+         AudsIg+QuqCCgdXYZDMFMtmrFDdIGLodvAcEId9R11Bh1zedgEn7xNuQKI5huIBN1T+e
+         RmXReM98Sll6TwmGCUvIMSMxP9yamseL8rc1SRLwUYjskSc6qbsJJGgj5N7oDNA0fv4o
+         LSatb1DUmPpIR+X0OmSajN8dBMI7DOYla98Az8wja1IITgDmhiPzwLg+5M2DKPpBdg8S
+         ki7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=autocrypt:subject:from:content-language:to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Aqf7pFPzhT29hpUxWZB53yOxzjtIJTfmtGOLNnOR9D4=;
+        b=fusHnkgL95NobqJnGRl+c1BEcfsl7aiC3DPLXUjR9VO0lumBylWIsps4OApuntPGLH
+         7PVWZ+tjmmsSpP6tyGSM3UWzTNfdTxJ6AplEG6OMTrgxalTObBaSixlHQZfOk8Zm/V/L
+         Wi/Pkd60EJinmsCv8/MrhGwtj1RppazZDJRDR+UgzUIgNv7EOXKE+niSXlLBALENmvcr
+         dx1bUr6hDdEQ7VgMla//McJqcS9XcCjn4pDbf42Xn2SIOeU/sz60aM1ju1BSfFX33XlB
+         qMe7Xyuanll+qVm6RyvL01hyaxZrhrt2M8qnGHJcoAik5qCZaTJl5Mve1hKHgRLaKsdA
+         mEpw==
+X-Gm-Message-State: ACrzQf1+m3pyhE6ULwV1KCdaoppBiny+uwL17cWBHgU8kcwfjXSJVHcs
+        +jniI5cgHlDeWyDiOvIR3hhQZqg7sXo=
+X-Google-Smtp-Source: AMsMyM4RFIgkdrAr75O8ZgBRyQSOYxJEex2pLT9hm0QgX6/FKROlYPCF9prgvpKxjRRcktXvreS2lA==
+X-Received: by 2002:a17:902:c702:b0:186:e151:6b27 with SMTP id p2-20020a170902c70200b00186e1516b27mr30170071plp.69.1667473209494;
+        Thu, 03 Nov 2022 04:00:09 -0700 (PDT)
+Received: from ?IPV6:2405:6e00:496:f944:a6ae:89b7:6dc1:907b? ([2405:6e00:496:f944:a6ae:89b7:6dc1:907b])
+        by smtp.gmail.com with ESMTPSA id x29-20020aa7941d000000b0056bf4f8d542sm485091pfo.74.2022.11.03.04.00.07
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 04:00:08 -0700 (PDT)
+Message-ID: <f36495ab-4fa6-a3b1-23b9-f970cd2870ce@gmail.com>
+Date:   Thu, 3 Nov 2022 22:00:04 +1100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b3e061f-f606-b498-cf5d-5fbfd79ced67@quicinc.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+To:     linux-usb@vger.kernel.org
+Content-Language: en-AU
+From:   Albert Zhou <albert.zhou.50@gmail.com>
+Subject: r8152 module out of date
+Autocrypt: addr=albert.zhou.50@gmail.com; keydata=
+ xjMEYkX5gxYJKwYBBAHaRw8BAQdAsW8QQjKnmpKC5G1d1QFYNvd9ddMxwYZs+xTT0dyqvtbN
+ JkFsYmVydCBaaG91IDxhbGJlcnQuemhvdS41MEBnbWFpbC5jb20+wosEExYIADMWIQRLx2w8
+ czp1EBJaieEhj+NExaaGfQUCYkX5gwIbAwULCQgHAgYVCAkKCwIFFgIDAQAACgkQIY/jRMWm
+ hn2rKAEAlOVVAsYIpmGTEng+e/HHT7JJjCjcX4lh+pFZdUy2DGgBAM/EwKNYoNB43H5EJpb8
+ I68MS+ZZSQ3swJWAu1OJKXIJzjgEYkX5gxIKKwYBBAGXVQEFAQEHQNk/Nf/E1Uttgm29quUB
+ Xgc9RDwqKTHbtHLS5SOkZzhUAwEIB8J4BBgWCAAgFiEES8dsPHM6dRASWonhIY/jRMWmhn0F
+ AmJF+YMCGwwACgkQIY/jRMWmhn0KRwD7Bv1kWYB2m8c5tRQUg7i3zIaJ4kpfqMj4bwYQ9xEk
+ e3oA/11CMCzdPMcoveB279og31mtUISG5mXMDJmiE4y61akN
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------7cNslbGzL2ftQ7xkMUNUsBpM"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:57:02PM +0530, Udipto Goswami wrote:
-> On 11/3/22 3:00 PM, John Keeping wrote:
-> > On Thu, Nov 03, 2022 at 01:08:21PM +0530, Udipto Goswami wrote:
-> > > While performing fast composition switch, there is a possibility that the
-> > > process of ffs_ep0_write/ffs_ep0_read get into a race condition
-> > > due to ep0req being freed up from functionfs_unbind.
-> > > 
-> > > Consider the scenario that the ffs_ep0_write calls the ffs_ep0_queue_wait
-> > > by taking a lock &ffs->ev.waitq.lock. However, the functionfs_unbind isn't
-> > > bounded so it can go ahead and mark the ep0req to NULL, and since there
-> > > is no NULL check in ffs_ep0_queue_wait we will end up in use-after-free.
-> > > 
-> > > Fix this by introducing a NULL check before any req operation.
-> > > Also to ensure the serialization, perform the ep0req ops inside
-> > > spinlock &ffs->ev.waitq.lock.
-> > > 
-> > > Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
-> > > Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> > > ---
-> > >   drivers/usb/gadget/function/f_fs.c | 9 +++++++++
-> > >   1 file changed, 9 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > > index 73dc10a77cde..39980b2bf285 100644
-> > > --- a/drivers/usb/gadget/function/f_fs.c
-> > > +++ b/drivers/usb/gadget/function/f_fs.c
-> > > @@ -279,6 +279,13 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
-> > >   	struct usb_request *req = ffs->ep0req;
-> > >   	int ret;
-> > > +	if (!req)
-> > > +		return -EINVAL;
-> > > +	/*
-> > > +	 * Even if ep0req is freed won't be a problem since the local
-> > > +	 * copy of the request will be used here.
-> > > +	 */
-> > 
-> > This doesn't sound right - if we set ep0req to NULL then we've called
-> > usb_ep_free_request() on it so the request is not longer valid.
-> 
-> Yes I agree as soon as we spin_unlock it the functionfs_unbind will execute
-> and free_up the req, so performing and ep_queue after that even if it is a
-> local copy could be fatal.
-> 
->          ret = usb_ep_queue(ffs->gadget->ep0, req, GFP_ATOMIC);
->          if (unlikely(ret < 0))
->                  return ret;
-> 
->         spin_unlock_irq(&ffs->ev.waitq.lock);
->  We can move the spin_unlock after to queue operation perhaps ?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------7cNslbGzL2ftQ7xkMUNUsBpM
+Content-Type: multipart/mixed; boundary="------------u9bqoezmI0OxelDCzCMi6Ztq";
+ protected-headers="v1"
+From: Albert Zhou <albert.zhou.50@gmail.com>
+To: linux-usb@vger.kernel.org
+Message-ID: <f36495ab-4fa6-a3b1-23b9-f970cd2870ce@gmail.com>
+Subject: r8152 module out of date
 
-I don't think it's that simple.  The documentation for
-usb_ep_free_request() says:
+--------------u9bqoezmI0OxelDCzCMi6Ztq
+Content-Type: multipart/mixed; boundary="------------hHv700hTfs9K01qAR2HNv0qz"
 
-	* Caller guarantees the request is not queued, and that it will
-	* no longer be requeued (or otherwise used).
+--------------hHv700hTfs9K01qAR2HNv0qz
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-so some extra synchronisation is required here.
+VGhlIGxpbnV4IGtlcm5lbCB2Ni4xLXJjMyBzdGlsbCBoYXMgdGhlIG9sZCB2MSBkcml2ZXIg
+Zm9yIGRldmljZXMgUlRMODE1Mi9SVEw4MTUzOiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1
+Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQvdHJlZS9kcml2ZXJz
+L25ldC91c2IvcjgxNTIuYz9oPXY2LjEtcmMzDQoNClRoaXMgcmVzdWx0cyBpbiBzbG93IGV0
+aGVybmV0IHNwZWVkcyAoSSBoYWQgdGhpcyBwcm9ibGVtIGFuZCBmaXhlZCB0aGlzIGJ5IHVw
+ZGF0aW5nIHRoZSBkcml2ZXIpOyBzZWUgYWxzbzoNCg0KaHR0cHM6Ly9idWd6aWxsYS5rZXJu
+ZWwub3JnL3Nob3dfYnVnLmNnaT9pZD0yMDU5MjMNCmh0dHBzOi8vYnVnemlsbGEua2VybmVs
+Lm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MjEzNjg1DQpodHRwczovL2J1Z3ppbGxhLmtlcm5lbC5v
+cmcvc2hvd19idWcuY2dpP2lkPTEwMzE5MQ0KDQpJIGZpeGVkIHRoaXMgaXNzdWUgKGFsYmVp
+dCBvbiB2NS4xNS4wLTUyIG9uIGFuIHVidW50dSBrZXJuZWwpIGJ5IHVwZGF0aW5nIHRoZSBk
+cml2ZXIgdG8gdGhlIGxhdGVzdCB2MjogaHR0cHM6Ly93d3cucmVhbHRlay5jb20vZW4vY29t
+cG9uZW50L3pvby9jYXRlZ29yeS9uZXR3b3JrLWludGVyZmFjZS1jb250cm9sbGVycy0xMC0x
+MDAtMTAwMG0tZ2lnYWJpdC1ldGhlcm5ldC11c2ItMy0wLXNvZnR3YXJlDQoNClRoZSBuZXcg
+ZHJpdmVyIGlzIEdQTHYyLiBJdCB3b3VsZCBiZSBncmVhdCBpZiB0aGlzIGNvdWxkIGJlIGlu
+Y2x1ZGVkIGluIHRoZSBsaW51eCBrZXJuZWwuDQotLSANCiBGcm9tIEFsYmVydCBaaG91DQo=
 
-By the time we get to functionfs_unbind() everything should be disabled
-by ffs_func_disable() and ffs_func_unbind() has drained the workqueue,
-but none of that applies to ep0.
+--------------hHv700hTfs9K01qAR2HNv0qz
+Content-Type: application/pgp-keys; name="OpenPGP_0x218FE344C5A6867D.asc"
+Content-Disposition: attachment; filename="OpenPGP_0x218FE344C5A6867D.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-I think ffs_unbind() needs to dequeue the ep0 request.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-In addition to that, I think we need a new ep0 status variable in struct
-ffs_data so that req is not accessed after wait_for_completion() in
-__ffs_ep0_queue_wait() and that status is set in ffs_ep0_complete().
+xjMEYkX5gxYJKwYBBAHaRw8BAQdAsW8QQjKnmpKC5G1d1QFYNvd9ddMxwYZs+xTT
+0dyqvtbNJkFsYmVydCBaaG91IDxhbGJlcnQuemhvdS41MEBnbWFpbC5jb20+wosE
+ExYIADMWIQRLx2w8czp1EBJaieEhj+NExaaGfQUCYkX5gwIbAwULCQgHAgYVCAkK
+CwIFFgIDAQAACgkQIY/jRMWmhn2rKAEAlOVVAsYIpmGTEng+e/HHT7JJjCjcX4lh
++pFZdUy2DGgBAM/EwKNYoNB43H5EJpb8I68MS+ZZSQ3swJWAu1OJKXIJzjgEYkX5
+gxIKKwYBBAGXVQEFAQEHQNk/Nf/E1Uttgm29quUBXgc9RDwqKTHbtHLS5SOkZzhU
+AwEIB8J4BBgWCAAgFiEES8dsPHM6dRASWonhIY/jRMWmhn0FAmJF+YMCGwwACgkQ
+IY/jRMWmhn0KRwD7Bv1kWYB2m8c5tRQUg7i3zIaJ4kpfqMj4bwYQ9xEke3oA/11C
+MCzdPMcoveB279og31mtUISG5mXMDJmiE4y61akN
+=3D+2qf
+-----END PGP PUBLIC KEY BLOCK-----
 
-With the spin_unlock_irq() moved to immediately before
-wait_for_completion() in __ffs_ep0_queue_wait() it looks like everything
-is then safe.
+--------------hHv700hTfs9K01qAR2HNv0qz--
+
+--------------u9bqoezmI0OxelDCzCMi6Ztq--
+
+--------------7cNslbGzL2ftQ7xkMUNUsBpM
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wnsEABYIACMWIQRLx2w8czp1EBJaieEhj+NExaaGfQUCY2OfNAUDAAAAAAAKCRAhj+NExaaGfZsL
+AQCKwjLo2gBXxSxEZeKDLyLesGg7uRYaauFSj3P7ZOeUIQEAxpLq2+w9dENmoFwgJ9BN9aLJQxCn
+0Kk7gebmuly02Ag=
+=7qR5
+-----END PGP SIGNATURE-----
+
+--------------7cNslbGzL2ftQ7xkMUNUsBpM--
