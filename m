@@ -2,46 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA61617DD1
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 14:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1746617DE6
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Nov 2022 14:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiKCNXn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Nov 2022 09:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S231496AbiKCN2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Nov 2022 09:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiKCNXm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 09:23:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1FAC53;
-        Thu,  3 Nov 2022 06:23:41 -0700 (PDT)
+        with ESMTP id S231510AbiKCN1z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Nov 2022 09:27:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B9C13F03
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 06:27:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A551B82798;
-        Thu,  3 Nov 2022 13:23:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9903AC433D7;
-        Thu,  3 Nov 2022 13:23:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27C3D61EAC
+        for <linux-usb@vger.kernel.org>; Thu,  3 Nov 2022 13:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CF5C433C1;
+        Thu,  3 Nov 2022 13:27:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667481819;
-        bh=Ptts9H7CMiwi/Nx896qtMeZvxnyHeELD05B85Sla9Yk=;
+        s=korg; t=1667482073;
+        bh=iMSXsUzCuEbonVY7obEcfOm5dNsI3CQUoXtyMb8jFzM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H0jYwksaXvB5Vk5tvv3rWzUqTcxijVVas/QEdj/xij+0Fy6/Nj8zXLyG6HjShpIoj
-         cC1vGftaHsd76TGUaIzhrORqJ+vXtQYWHEEP8j6CTOKPo6ne6ZNam0FO6aDGR/5NnS
-         dqhZBldoSuX8EbW4nuQKa4P0v9318WIdc6rU+aaI=
-Date:   Thu, 3 Nov 2022 22:24:19 +0900
+        b=QO5shPhblT/xZybrlZsOwgpYIHYM1dPWMhPjKE1Ui0rK5eigtE6zKREfQ2uAbeaxH
+         goHxGcPcpYN8A9NbnM3HUgQAFQNqg7p2j/+pffaj6ElbMmuKTqM9hcQzgqGQcbOitO
+         Txyr2YB30S+5Ecp55EGAtNjayirHb0osAcGUaVN4=
+Date:   Thu, 3 Nov 2022 22:28:34 +0900
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, valentina.manea.m@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK
- define
-Message-ID: <Y2PBA5hmqm9G/DNT@kroah.com>
-References: <cover.1667480280.git.skhan@linuxfoundation.org>
- <c9790c485bfe31c55bbd2f9b270548ecefddc91a.1667480280.git.skhan@linuxfoundation.org>
+To:     Albert Zhou <albert.zhou.50@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: r8152 module out of date
+Message-ID: <Y2PCAn8wB7aiK+1x@kroah.com>
+References: <f36495ab-4fa6-a3b1-23b9-f970cd2870ce@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c9790c485bfe31c55bbd2f9b270548ecefddc91a.1667480280.git.skhan@linuxfoundation.org>
+In-Reply-To: <f36495ab-4fa6-a3b1-23b9-f970cd2870ce@gmail.com>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,38 +48,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 07:12:43AM -0600, Shuah Khan wrote:
-> Fix v_recv_cmd_submit() to use PIPE_BULK define instead of hard coded
-> values. This also fixes the following signed integer overflow error
-> reported by cppcheck. This is not an issue since pipe is unsigned int.
-> However, this change improves the code to use proper define.
+On Thu, Nov 03, 2022 at 10:00:04PM +1100, Albert Zhou wrote:
+> The linux kernel v6.1-rc3 still has the old v1 driver for devices RTL8152/RTL8153: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/usb/r8152.c?h=v6.1-rc3
 > 
-> drivers/usb/usbip/vudc_rx.c:152:26: error: Signed integer overflow for expression '3<<30'. [integerOverflow]
->  urb_p->urb->pipe &= ~(3 << 30);
+> This results in slow ethernet speeds (I had this problem and fixed this by updating the driver); see also:
 > 
-> In addition, add a sanity check for PIPE_BULK != 3 as the code path depends
-> on PIPE_BULK = 3.
+> https://bugzilla.kernel.org/show_bug.cgi?id=205923
+> https://bugzilla.kernel.org/show_bug.cgi?id=213685
+> https://bugzilla.kernel.org/show_bug.cgi?id=103191
 > 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  drivers/usb/usbip/vudc_rx.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> I fixed this issue (albeit on v5.15.0-52 on an ubuntu kernel) by updating the driver to the latest v2: https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-usb-3-0-software
 > 
-> diff --git a/drivers/usb/usbip/vudc_rx.c b/drivers/usb/usbip/vudc_rx.c
-> index a6ca27f10b68..e7e0eb6bbca0 100644
-> --- a/drivers/usb/usbip/vudc_rx.c
-> +++ b/drivers/usb/usbip/vudc_rx.c
-> @@ -149,7 +149,10 @@ static int v_recv_cmd_submit(struct vudc *udc,
->  	urb_p->urb->status = -EINPROGRESS;
->  
->  	/* FIXME: more pipe setup to please usbip_common */
-> -	urb_p->urb->pipe &= ~(3 << 30);
-> +#if PIPE_BULK != 3
-> +#error "Sanity check failed, this code presumes PIPE_... to range from 0 to 3"
-> +#endif
+> The new driver is GPLv2. It would be great if this could be included in the linux kernel.
 
-Perhaps use BUILD_BUG_ON() instead of hand-rolling one?
+Wonderful, please submit patches to update the driver to the latest
+version and we will be glad to take it.  Be sure to follow the rules
+documented in the kernel tree for how to properly submit patches.
 
 thanks,
 
 greg k-h
+
