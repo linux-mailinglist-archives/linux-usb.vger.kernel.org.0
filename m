@@ -2,120 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38749619C42
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 16:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B001619CCC
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 17:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbiKDPzm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Nov 2022 11:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        id S231893AbiKDQOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Nov 2022 12:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231901AbiKDPzb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 11:55:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB5831238;
-        Fri,  4 Nov 2022 08:55:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DBCF62275;
-        Fri,  4 Nov 2022 15:55:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F297C433B5;
-        Fri,  4 Nov 2022 15:55:26 +0000 (UTC)
-Message-ID: <66a6a8aa-4a06-1bf0-8c08-70569e4d129e@xs4all.nl>
-Date:   Fri, 4 Nov 2022 16:55:25 +0100
+        with ESMTP id S231401AbiKDQOt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 12:14:49 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0469B9C;
+        Fri,  4 Nov 2022 09:14:48 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id v81so5651447oie.5;
+        Fri, 04 Nov 2022 09:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vkBGgKFgg4QPXCpHtMi6j0J3ZcIgUdwyTJWClmiO8n8=;
+        b=ZXT4b7xGHkwhtyRx7V1geQfUresoJ3Ad36AKxZcA+hYEkLlZTMmJdsg3FLF6RZb4Bm
+         /Th2KOsiFM+wv4AFPnrljoJs2GpR7KNawydYt2C5cew9YFo+qW0UidzKrk4BDuG1u7w+
+         m3w563eSaiPwL3l4sGKZaD+ak6hpgQhlR7eGCpJqdUtIM7CX7IVrS9HVCezWAA8wIfI4
+         tbWxHgw8jm41jK3k3dRhGJKkPfEdX95COskXHfzG/e/VIoBDLovAFvOX7zEd4Utr1gQo
+         7jv8BY+ymXeC+5KaWJgeXULPlc8QwCY2a+1Wc4m/cSjP0OKV+9XQ8V5888RvdMmc7n4q
+         obpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vkBGgKFgg4QPXCpHtMi6j0J3ZcIgUdwyTJWClmiO8n8=;
+        b=d8eBCYZinmkIS92p4B1dmXTy21acZvhKMOQ7ejoPvtcF8qtvkPPxJmi6VPwBt4EZhe
+         XsrPPvZsO/KH+viUNwFr5Gj2ZkCyTLvBX/t1V9Z0WVI7F4Uwak/4kJCg4Bj6blyewcq2
+         KTmaxQytYsyfDS9bQKMO5V3cUSeHLRy2DOrjz5+oU+YOkMjy1SU8wdbW8aOTv0dd5ZsW
+         tuq7fDqirJeAkdSPGC1Tj8qSt0+2Bh1IrtZ0mTMRd4pvgdvvcNu5ns1pi5S0SLFkqA8/
+         blDFVxMNv4aGQXpOpEM5wAHkwmYO2mkAV2voDDECHQFn6tXWjAzjgABjRbptPtyEyHwe
+         gTuQ==
+X-Gm-Message-State: ACrzQf3mtVO+xYSFFG0ZlR16/Z4nvI/TM1qoC4xZ6cTZfmu60g2gSJJe
+        4PXn7gu2O4hEojPBUD4E0pY=
+X-Google-Smtp-Source: AMsMyM7iFweEsB11T8MsAxnRkCeRKLOBdX0O0x9jUekHKEg87JfqIXfJu5mpVtFVdszEhc175Hq8Tw==
+X-Received: by 2002:aca:d841:0:b0:35a:5959:590d with SMTP id p62-20020acad841000000b0035a5959590dmr2855416oig.120.1667578488108;
+        Fri, 04 Nov 2022 09:14:48 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p36-20020a05687056a400b0013b1301ce42sm1894684oao.47.2022.11.04.09.14.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 09:14:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 4 Nov 2022 09:14:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221104161445.GA1866159@roeck-us.net>
+References: <20221027163453.383bbf8e@gandalf.local.home>
+ <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
+ <20221027170720.31497319@gandalf.local.home>
+ <20221027183511.66b058c4@gandalf.local.home>
+ <20221028183149.2882a29b@gandalf.local.home>
+ <20221028154617.3c63ba68@kernel.org>
+ <27a6a587fee5e9172e41acd16ae1bc1f556fdbd7.camel@redhat.com>
+ <20221103175123.744d0f37@rorschach.local.home>
+ <CANn89iLv9cak6_vXJG5t=Kq+eiMPdMxF8w4AAuAuFB5sOsy2zg@mail.gmail.com>
+ <20221104015139.58f17730@rorschach.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Content-Language: en-US
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de, stable <stable@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-References: <20221026184212.366897-1-m.grzeschik@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [PATCH 1/2] media: videobuf2-dma-sg: fix vmap and vunmap
- callbacks
-In-Reply-To: <20221026184212.366897-1-m.grzeschik@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104015139.58f17730@rorschach.local.home>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Marek,
-
-Can you review this? It looks good to me, but I wonder if videobuf2-dma-config.c
-has a similar problem. That looks to be mapping as well, but there is no vunmap.
-
-Michael, I have a comment below:
-
-On 26/10/2022 20:42, Michael Grzeschik wrote:
-> For dmabuf import users to be able to use the vaddr from another
-> videobuf2-dma-sg source, the exporter needs to set a proper vaddr on
-> vb2_dma_sg_dmabuf_ops_vmap callback.
+On Fri, Nov 04, 2022 at 01:51:39AM -0400, Steven Rostedt wrote:
+> On Thu, 3 Nov 2022 17:00:20 -0700
+> Eric Dumazet <edumazet@google.com> wrote:
 > 
-> This patch adds vm_map_ram on map if buf->vaddr was not set, and also
-> adds the vb2_dma_sg_dmabuf_ops_vunmap function to remove the mapping
-> afterwards.
+> >  inet_csk_clear_xmit_timers() can be called multiple times during TCP
+> > socket lifetime.
+> > 
+> > (See tcp_disconnect(), which can be followed by another connect() ... and loop)
+> > 
+> > Maybe add a second parameter, or add a new
+> > inet_csk_shutdown_xmit_timers() only called from tcp_v4_destroy_sock() ?
+> > 
 > 
-> Cc: stable <stable@kernel.org>
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> ---
->  drivers/media/common/videobuf2/videobuf2-dma-sg.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+> I guess.
 > 
-> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> index fa69158a65b1fd..8d6e154bbbc8b0 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> @@ -496,11 +496,25 @@ static int vb2_dma_sg_dmabuf_ops_vmap(struct dma_buf *dbuf,
->  {
->  	struct vb2_dma_sg_buf *buf = dbuf->priv;
->  
-> +	if (!buf->vaddr)
-> +		buf->vaddr = vm_map_ram(buf->pages, buf->num_pages, -1);
+> > >
+> > >  void inet_csk_delete_keepalive_timer(struct sock *sk)
+> > >  {
+> > > -       sk_stop_timer(sk, &sk->sk_timer);
+> > > +       sk_shutdown_timer(sk, &sk->sk_timer);  
+> > 
+> > SO_KEEPALIVE can be called multiple times in a TCP socket lifetime,
+> > on/off/on/off/...
+> > 
+> > I suggest leaving sk_stop_timer() here.
+> > 
+> > Eventually  inet_csk_clear_xmit_timers( sk, destroy=true) (or
+> > inet_csk_shutdown_xmit_timers(())
+> >    will  be called before the socket is destroyed.
+> 
+> OK. 
+> 
+> Guenter,
+> 
+> I posted a new series, but did not include this change. If you want to
+> test that other series, I would suggest to at least add the first part
+> of this patch, otherwise it will trigger. But we want to see if there's
+> other locations of issue that we should care about.
+> 
 
-The comments before the vm_map_ram function state that it should be used for
-up to 256 KB only, and video buffers are definitely much larger. It recommends
-using vmap in that case. Any reason for not switching to vmap()?
+I'll run a test on the other series without change first. We'll see what
+happens. If necessary I'll add [parts of] this patch and re-test, but
+before doing that I would like to get a sense for the status of your
+series as-is.
 
-Regards,
-
-	Hans
-
-> +
->  	iosys_map_set_vaddr(map, buf->vaddr);
->  
->  	return 0;
->  }
->  
-> +static void vb2_dma_sg_dmabuf_ops_vunmap(struct dma_buf *dbuf,
-> +				      struct iosys_map *map)
-> +{
-> +	struct vb2_dma_sg_buf *buf = dbuf->priv;
-> +
-> +	if (buf->vaddr)
-> +		vm_unmap_ram(buf->vaddr, buf->num_pages);
-> +
-> +	buf->vaddr = NULL;
-> +}
-> +
->  static int vb2_dma_sg_dmabuf_ops_mmap(struct dma_buf *dbuf,
->  	struct vm_area_struct *vma)
->  {
-> @@ -515,6 +529,7 @@ static const struct dma_buf_ops vb2_dma_sg_dmabuf_ops = {
->  	.begin_cpu_access = vb2_dma_sg_dmabuf_ops_begin_cpu_access,
->  	.end_cpu_access = vb2_dma_sg_dmabuf_ops_end_cpu_access,
->  	.vmap = vb2_dma_sg_dmabuf_ops_vmap,
-> +	.vunmap = vb2_dma_sg_dmabuf_ops_vunmap,
->  	.mmap = vb2_dma_sg_dmabuf_ops_mmap,
->  	.release = vb2_dma_sg_dmabuf_ops_release,
->  };
-
+Thanks,
+Guenter
