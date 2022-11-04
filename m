@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824AB619448
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 11:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 155F661945F
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 11:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiKDKQR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Nov 2022 06:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S231504AbiKDKV7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Nov 2022 06:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiKDKQQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 06:16:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72182B604
-        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 03:16:15 -0700 (PDT)
+        with ESMTP id S231304AbiKDKV5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 06:21:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DE2D118
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 03:21:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D5B062123
-        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 10:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D5876C433D7
-        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 10:16:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A34B162093
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 10:21:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FE2CC433C1
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 10:21:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667556974;
-        bh=nffHvu+YRE0sLrZJfJKzTdeu2HVWE8GxQNXULhnZ1EA=;
+        s=k20201202; t=1667557316;
+        bh=jtWdTj1dEtRpPk3/spMNlN+zhkyR3U7eYyUFdifdlpc=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jBSXBGkOxiDl06NRB9rbCTzkiU0CYbeDMDxfq+p/nXDw00RADL1ZBP2oiD0c9jkOs
-         3I6gSs530V7/qc9zk5dZARriRywTG+FxAR+d+ht5xgKAzOCRc5QGSM1m91gsAjdYHc
-         wXdKiOE8gZ739X7nHXuK24imgukyeq2qfsxWa78CSdXj1SVHDcRGtHs4oahOc8PThE
-         xyj6Rn/gdDTH61z0xt7XzmBsLZhmaEmDj70LLMRVIlZg6NWKcNzCSJN5ZH9FAp8Ujr
-         fCwS+lbIDGzubY5AUoSslDp3Vql38VxrhpfQjqP1tRJmXmqhZUTu8XSpJ30RehY32g
-         TE93P0Np6eeYQ==
+        b=hJN76HlsWDERiYKBaOnqj3K5HSbiXywcuwxaUh9PFG8CIh/NWtaJrf7xeUJMS/0Gz
+         5L5ayaERgKl+lUjx7nbI51ZWaCjxuydVVCsbw/6NE0gNX+/9g9i92qe49zkNE3MKq1
+         qQCz3rVZXwop4eSsbSoyg0IXccbRjiOozsAaZK1jWdLqGgX2OoF9uS92/y39tyGZX8
+         7eaoEByuzg9cmFZR0VKYX1OfpCIVhNtwtfR6QQvldDANg5kCcFZ8bGmZ5Quuj790lp
+         5V+TWOmLC/FbeuvYxTK5vUffQG30eYlQBE0YnE8RH0+H2gixGLghB3f5CD41uStAR4
+         bIJEPK1zPBJGw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C013EC433E4; Fri,  4 Nov 2022 10:16:14 +0000 (UTC)
+        id EF084C433E7; Fri,  4 Nov 2022 10:21:55 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 214259] Discrete Thunderbold Controller 8086:1137 throws DMAR
  and XHCI errors and is only partially functional
-Date:   Fri, 04 Nov 2022 10:16:14 +0000
+Date:   Fri, 04 Nov 2022 10:21:55 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-214259-208809-JqVXwqvVuz@https.bugzilla.kernel.org/>
+Message-ID: <bug-214259-208809-ujpKpsPgJ8@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-214259-208809@https.bugzilla.kernel.org/>
 References: <bug-214259-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,20 +72,20 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D214259
 
---- Comment #27 from Konrad J Hambrick (kjhambrick@gmail.com) ---
-Created attachment 303131
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303131&action=3Dedit
-Linux 5.15.77 with Discrete Thunderbolt Enabled ( no patch )
+--- Comment #28 from Konrad J Hambrick (kjhambrick@gmail.com) ---
+Created attachment 303132
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303132&action=3Dedit
+This is 5.15.77 with your patch applied
 
-Bjorn --
+This is linux 5.15.77 with your patch applied.
 
-This dmesg for linux 5.15.77 without your Patch.
+There are extra log entries before event 'do_add_efi_memmap' at timestamp
+[0.000000]
 
-When I enable 'Discrete Thunderbolt' in the Insyde BIOS there is a long del=
-ay
-for each of the three DMAR Errors and a final delay for Thunderbolt ( see t=
-ime
-stamp: [11.534560] thru [88.380241]
+The same three DMAR faults and timeouts still happen between timestamps
+[26.938364] and [88.372760] and there is still a Discrete Thunderbold error=
+ at
+[88.378716]
 
 --=20
 You may reply to this email to add a comment.
