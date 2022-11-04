@@ -2,124 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD9261A2A5
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 21:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D257761A2F4
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 22:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiKDUrj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Nov 2022 16:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S229826AbiKDVNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Nov 2022 17:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiKDUri (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 16:47:38 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF7042984
-        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 13:47:37 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id w13-20020a056e021c8d00b00300ad5b16a0so4546701ill.7
-        for <linux-usb@vger.kernel.org>; Fri, 04 Nov 2022 13:47:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mMcUo3E8P00VPKuetMbQKg3svT224XRpO7k7+T4p6Aw=;
-        b=IeIWDByh0QOqvV+yGa/W0LiZaopW912gNbRg/wEjxjzvTq45T9AlUg/mjx73fkE0cC
-         AAFwfMqtYflDXpIppx/DZYIpnca9Dk+hpyW7pa4ETTsJF5aq2QB0QAwnX7zE7t62Y0OZ
-         OTD0IJuqWHIpUhKRknNec6mVhWksi62yEcACcdUUlkSN+XTnXTztjEd2OcnOrkzNytIo
-         o01fot6Yj1XK6+N7N6sqGKEmndvI0u71XhTzsGvka5E09fULwAUUK9Tydm7QqVrbl9fA
-         1ztleHFt+hAziJYxbmKoth/48XXOTq0qaKQusfYNXZ+PEIOLvKpoqH9FgIkLdDKl1d8e
-         p2Bw==
-X-Gm-Message-State: ACrzQf1jGoZaMXptQP9QU/KyzGHRwV/dxUm1cQrjXMGxZULFaxAYmZ8W
-        9I61ZxI2FLdETGWMfogc/2c41zYJ6hZDAZE8z01i2XNmd6eI
-X-Google-Smtp-Source: AMsMyM78bicH4K8m851cxvZOJk2DMBuF7xAwb7xHGU7YOQ/2hEWp3nGMFcgv1tTwwX73mkXGlkV5pM2l64vVuC4sx0pK6WRP6ucE
-MIME-Version: 1.0
-X-Received: by 2002:a6b:c3cc:0:b0:6d8:b8e8:4694 with SMTP id
- t195-20020a6bc3cc000000b006d8b8e84694mr134523iof.193.1667594856427; Fri, 04
- Nov 2022 13:47:36 -0700 (PDT)
-Date:   Fri, 04 Nov 2022 13:47:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000bf89905ecab2f86@google.com>
-Subject: [syzbot] WARNING in usbtmc_ioctl_request/usb_submit_urb
-From:   syzbot <syzbot+588a3c76a3b2f453a909@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        with ESMTP id S229676AbiKDVNG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 17:13:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61DB4D5F2
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 14:13:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BD9F6233F
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 21:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C0620C43140
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 21:13:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667596384;
+        bh=6VexYpOSeLd/J5gzOaleXoGlgM7DeT0BRMKtadjQi4c=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=UuKxVUUwL999n53l3ni43YexV/rJJ2jVkpr06g/rk6+CKBB3lVaCIpHYtjZO5M+Ql
+         on4Zz24QM1JYq+tChTizZoTKDE9461q6PkDfDrCggzgRwu6AP+36jApFHXmO778vqd
+         OEv/X71EhQdSxiAlq0LMHRE7m6O1O3QUi+BySCySvud0D0vzHrubO7WukI0pr7pDwa
+         1xtNsxiaaNAwUNheSIDNJ89g+oKk/iRKIl98yT+X2sqfIYr0cPPF3RX++pLFev588s
+         id4DiyTMKy5Ae7/NcAzxv4xAlnxwCJOm2f6Z8OWfLvxJULfon5IGrFiVxABl0Q0uHt
+         tAlwmNrxlH5Bg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id A5475C433E9; Fri,  4 Nov 2022 21:13:04 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214259] Discrete Thunderbold Controller 8086:1137 throws DMAR
+ and XHCI errors and is only partially functional
+Date:   Fri, 04 Nov 2022 21:13:04 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjorn@helgaas.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DUPLICATE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214259-208809-nM1Q68IAak@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214259-208809@https.bugzilla.kernel.org/>
+References: <bug-214259-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214259
 
-syzbot found the following issue on:
+--- Comment #31 from Bjorn Helgaas (bjorn@helgaas.com) ---
+Thank you very much for all this work, Konrad!
 
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1111f646880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=701f2aae1cb0470e
-dashboard link: https://syzkaller.appspot.com/bug?extid=588a3c76a3b2f453a909
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+I'm confused.  Comments #16 and #17 suggest that this DMAR issue was fixed =
+by
+https://git.kernel.org/linus/d341838d776a ("x86/PCI: Disable E820 reserved
+region clipping via quirks"), which appeared in v5.19.  Can you confirm tha=
+t?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+--=20
+You may reply to this email to add a comment.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d9d974225814/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a71771368ee9/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2f6c9e8f9713/bzImage-b229b6ca.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+588a3c76a3b2f453a909@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-usb 5-1: BOGUS control dir, pipe 80005f80 doesn't match bRequestType ff
-WARNING: CPU: 1 PID: 25513 at drivers/usb/core/urb.c:413 usb_submit_urb+0x12f4/0x1920 drivers/usb/core/urb.c:411
-Modules linked in:
-CPU: 1 PID: 25513 Comm: syz-executor.2 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:usb_submit_urb+0x12f4/0x1920 drivers/usb/core/urb.c:411
-Code: 20 84 c0 0f 85 a3 05 00 00 48 8b 44 24 18 44 0f b6 00 48 c7 c7 20 ff 53 8b 48 8b 74 24 60 48 89 da 89 e9 31 c0 e8 9c ed 38 fb <0f> 0b 4d 89 e6 44 8b 64 24 48 4c 8b 7c 24 58 e9 c5 f2 ff ff 89 d9
-RSP: 0018:ffffc90015a67a90 EFLAGS: 00010246
-RAX: 47ea9dc414312400 RBX: ffff88807e3da410 RCX: 0000000000040000
-RDX: ffffc9000d9ea000 RSI: 0000000000005526 RDI: 0000000000005527
-RBP: 0000000080005f80 R08: ffffffff816ced5d R09: fffff52002b4cf0d
-R10: fffff52002b4cf0d R11: 1ffff92002b4cf0c R12: dffffc0000000000
-R13: ffff8880565d4b00 R14: dffffc0000000000 R15: ffff88806bd570a8
-FS:  00007f4059244700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f96fa5a7110 CR3: 0000000021e2b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_start_wait_urb+0x10e/0x510 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x2a5/0x4b0 drivers/usb/core/message.c:153
- usbtmc_ioctl_request+0x421/0x920 drivers/usb/class/usbtmc.c:1954
- usbtmc_ioctl+0x63f/0x800 drivers/usb/class/usbtmc.c:2097
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f405848b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4059244168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f40585ac050 RCX: 00007f405848b5a9
-RDX: 0000000020000280 RSI: 00000000c0105b08 RDI: 0000000000000004
-RBP: 00007f40584e67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd78225cef R14: 00007f4059244300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
