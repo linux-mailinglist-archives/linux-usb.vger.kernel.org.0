@@ -2,55 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50716619067
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 06:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6A9619085
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 06:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbiKDFt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Nov 2022 01:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
+        id S231693AbiKDF4A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Nov 2022 01:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbiKDFsx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 01:48:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF49428714;
-        Thu,  3 Nov 2022 22:48:50 -0700 (PDT)
+        with ESMTP id S231561AbiKDFzW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 01:55:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163B22A424;
+        Thu,  3 Nov 2022 22:52:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D877620CE;
-        Fri,  4 Nov 2022 05:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F4BC43470;
-        Fri,  4 Nov 2022 05:48:49 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZr-007191-2K;
-        Fri, 04 Nov 2022 01:49:15 -0400
-Message-ID: <20221104054915.557680781@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:41:13 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1CAAB82BFE;
+        Fri,  4 Nov 2022 05:51:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F079C433D6;
+        Fri,  4 Nov 2022 05:51:41 +0000 (UTC)
+Date:   Fri, 4 Nov 2022 01:51:39 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org
-Subject: [RFC][PATCH v3 20/33] timers: usb: Use timer_shutdown_sync() before freeing timer
-References: <20221104054053.431922658@goodmis.org>
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221104015139.58f17730@rorschach.local.home>
+In-Reply-To: <CANn89iLv9cak6_vXJG5t=Kq+eiMPdMxF8w4AAuAuFB5sOsy2zg@mail.gmail.com>
+References: <20221027150525.753064657@goodmis.org>
+        <20221027150928.780676863@goodmis.org>
+        <20221027155513.60b211e2@gandalf.local.home>
+        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
+        <20221027163453.383bbf8e@gandalf.local.home>
+        <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
+        <20221027170720.31497319@gandalf.local.home>
+        <20221027183511.66b058c4@gandalf.local.home>
+        <20221028183149.2882a29b@gandalf.local.home>
+        <20221028154617.3c63ba68@kernel.org>
+        <27a6a587fee5e9172e41acd16ae1bc1f556fdbd7.camel@redhat.com>
+        <20221103175123.744d0f37@rorschach.local.home>
+        <CANn89iLv9cak6_vXJG5t=Kq+eiMPdMxF8w4AAuAuFB5sOsy2zg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -60,68 +74,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu, 3 Nov 2022 17:00:20 -0700
+Eric Dumazet <edumazet@google.com> wrote:
 
-Before a timer is freed, timer_shutdown_sync() must be called.
+>  inet_csk_clear_xmit_timers() can be called multiple times during TCP
+> socket lifetime.
+> 
+> (See tcp_disconnect(), which can be followed by another connect() ... and loop)
+> 
+> Maybe add a second parameter, or add a new
+> inet_csk_shutdown_xmit_timers() only called from tcp_v4_destroy_sock() ?
+> 
 
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+I guess.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/usb/gadget/udc/m66592-udc.c | 2 +-
- drivers/usb/serial/garmin_gps.c     | 2 +-
- drivers/usb/serial/mos7840.c        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> >  void inet_csk_delete_keepalive_timer(struct sock *sk)
+> >  {
+> > -       sk_stop_timer(sk, &sk->sk_timer);
+> > +       sk_shutdown_timer(sk, &sk->sk_timer);  
+> 
+> SO_KEEPALIVE can be called multiple times in a TCP socket lifetime,
+> on/off/on/off/...
+> 
+> I suggest leaving sk_stop_timer() here.
+> 
+> Eventually  inet_csk_clear_xmit_timers( sk, destroy=true) (or
+> inet_csk_shutdown_xmit_timers(())
+>    will  be called before the socket is destroyed.
 
-diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-index 931e6362a13d..c7e421b449f3 100644
---- a/drivers/usb/gadget/udc/m66592-udc.c
-+++ b/drivers/usb/gadget/udc/m66592-udc.c
-@@ -1519,7 +1519,7 @@ static int m66592_remove(struct platform_device *pdev)
- 
- 	usb_del_gadget_udc(&m66592->gadget);
- 
--	del_timer_sync(&m66592->timer);
-+	timer_shutdown_sync(&m66592->timer);
- 	iounmap(m66592->reg);
- 	free_irq(platform_get_irq(pdev, 0), m66592);
- 	m66592_free_request(&m66592->ep[0].ep, m66592->ep0_req);
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index f1a8d8343623..670e942fdaaa 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -1405,7 +1405,7 @@ static void garmin_port_remove(struct usb_serial_port *port)
- 
- 	usb_kill_anchored_urbs(&garmin_data_p->write_urbs);
- 	usb_kill_urb(port->interrupt_in_urb);
--	del_timer_sync(&garmin_data_p->timer);
-+	timer_shutdown_sync(&garmin_data_p->timer);
- 	kfree(garmin_data_p);
- }
- 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 6b12bb4648b8..8a2d902a1c12 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1726,7 +1726,7 @@ static void mos7840_port_remove(struct usb_serial_port *port)
- 		mos7840_set_led_sync(port, MODEM_CONTROL_REGISTER, 0x0300);
- 
- 		del_timer_sync(&mos7840_port->led_timer1);
--		del_timer_sync(&mos7840_port->led_timer2);
-+		timer_shutdown_sync(&mos7840_port->led_timer2);
- 
- 		usb_kill_urb(mos7840_port->led_urb);
- 		usb_free_urb(mos7840_port->led_urb);
--- 
-2.35.1
+OK. 
+
+Guenter,
+
+I posted a new series, but did not include this change. If you want to
+test that other series, I would suggest to at least add the first part
+of this patch, otherwise it will trigger. But we want to see if there's
+other locations of issue that we should care about.
+
+-- Steve
