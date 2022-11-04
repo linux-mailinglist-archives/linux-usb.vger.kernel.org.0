@@ -2,70 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C826193F6
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 10:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713EB619443
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 11:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiKDJ66 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Nov 2022 05:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
+        id S231635AbiKDKO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Nov 2022 06:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKDJ65 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 05:58:57 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630381CFF4;
-        Fri,  4 Nov 2022 02:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667555924; bh=mQO1KZtVW41h4QMxt8zmnc7+t4rWxxBsqaL/3wGPSOs=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=rnLoRfXNGrRvq1Z2tVCUMFlBCcx4s/0Kq5QGJ3cVHXtWdM2W9G4i7PJbY7GYY2dUW
-         unV+zD/UwJAz9V0CIVnQpuKbHpvMBX2ZF6GJtd0UEOD+j07D/kGVW8yTzXHgaLETLu
-         X6kRa5JPN0I37fcF5gabJLEDqQQWYcGS+38BXpCMUAobxpAL5EdTzRdUI4wmiwDmvm
-         BUe0Fc2IA/58p0q+a+8DjqPW6id898WrWxiB2LQHFGRK5C2XOlN73fifLtSMC3iMU4
-         JtV2xrMg2Kte2EEqwu3EZOV0uf/lwJP78Js0NlYqCqqNNJORYiwFjlw40FKDeN4xk/
-         /93bLPtSDa19w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ81-1oTzP71wIv-00WGY4; Fri, 04
- Nov 2022 10:58:44 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-usb@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: chipidea: ci_hdrc_imx: Fix a typo ("regualator")
-Date:   Fri,  4 Nov 2022 10:58:38 +0100
-Message-Id: <20221104095838.2132945-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229756AbiKDKO0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 06:14:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F8A29CA4
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 03:14:25 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A4A4jkx026912;
+        Fri, 4 Nov 2022 10:14:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=df56EA9kuTzZivINC+l189Yuy0+tGAlrpaMvBs6DMv4=;
+ b=JQRmMQhjg++4WeDKeuhk2y3Iv76I4sAtPa3D18bGvfSPMFCtnACizWdpl5BTDPGgiACP
+ IyrNtFzYhYXEcC7S9l5edehdWraY2C9XP/CAugR4OynnIEx6dXib4d2zMU9TJXhx6eEi
+ mWh6vQ+m2OBhfhityYQv496OTCqAYguKPY2qb4Qh+ItYKeGppv7qmeflKmAfjvRCqcYO
+ htOU82hkyuzNQpYT0rgTP+kTQjpHxKJoCWfzxuWucEUcPR/Yj4KE2lGmfQDxBoXwFXpY
+ J7XXobGxEQp0UR7Qgk3+BVnUm+xAJVPuxGe154EUfeD65frwC7nXT9tfV0sQWkFUhj5b WA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kmvjugks1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Nov 2022 10:14:16 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A4AEFt4011193
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 4 Nov 2022 10:14:15 GMT
+Received: from [10.206.25.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 4 Nov 2022
+ 03:14:13 -0700
+Message-ID: <a7bc3084-85fa-0775-baa1-9ea13a31beac@quicinc.com>
+Date:   Fri, 4 Nov 2022 15:44:09 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:V/ucTA5zBC1LuWA4bSeNtvNU5Y6rnvk4Vh3J/CDiJ5maFAgzbi9
- RqS+RYWtthf6ZHDyeONto8Hojjs+kWTMZJYmdj/Z5xfBEH3UCq1GkG/WFiXOpKOgG1HGuDn
- /Rxb3Vz1670tiYNBdRs4uA6QcUwUi5pdZKaAmy83VzIp37/Is2Rbo64WLc5XsA6dSnSDhr6
- M5C5U/aTdB9eBOHNd82EQ==
-UI-OutboundReport: notjunk:1;M01:P0:IAAyuORdYPc=;n45qCqztgHAcf/HjvNCE4GXwxSa
- WrlkqzW+LojMqVoB9AdCMYtcOiF7oZjVth4wzYcBcpyhen3SEvQ3tQNO2vx57yPxax1Amjbxg
- mMHMwztXpkNoeiVnSt60ADsMPT+vKYUV6+GurHGTqD/HOtDoq25j9WxAUJ8244sWpEZdh4cnB
- jxoHydlwxI7A4bLAmnSPYfUHwNMS2h9o0+g7JTqsQ884w5EcwLSM6amK8KYKyhz1w6KZ6L36Y
- YV2YuRJy+d69KkSoOggSmWaNfBkwmCytLWx4J8w6moyQ1Pqa/mwSad9/vWzm/z85lezpyVq17
- ajyqSiAXBR1fPYTjIHmRvoQia38wZ4Pml3EXZd7oPr78KwZj3X3wuLSvRZQ/Nb3cq7S+AF/HZ
- h1YAoFrCR9NVf7CQ4+zCBQq1i3Tq/6xDOC1D8CJ5Eh78He5l24KULBdPspFYTc6ufFe9EqUuE
- Q9rJcgZQ1Q0JxMOorobRjXBGr26EkYgISzE88UO+YHWAHE391x+YsWKT0YUq8TXnp/00VPOVu
- ECQWvVDzpBblFf5ybxemDHxYUBIzlpI3VYG5i0ihF6GXuf3O2DCcFU9nBKzdMifwS3JNAeut1
- kspgATADtVZDsvuIhWBATs5nHOCocrasITCWddaWBcpdpOvjWhvWiN/Cy3gExWbKLSBkbukPu
- IlzkKt0H3R3sEiS9mK2VoZe1zJpR7NuTAljXKDCmAHM/P7y6UFMDEGBFgc1EcJdi2KeDsuXSJ
- pvHcMhWyrxpBsMHdevwFUvMweVIdEJHz0QYMwXKHH1Ev2i40ESAYBqwthn+v9OAY7gkrrNbca
- /8acwR+iWry3JQ2m3hkAXRhqzYGYNbOGSFWc4m0nS/V1jFpFoq5HqkWAZY6tq9fq/+TTyT1f5
- WYPxQlcnwgUZdmEPf4kdPJZ+U8HO6QXMEhJY9LouCZeZIh/uDyud3i77RNakOM1GuAsiqyu01
- b0oWB8D6s0eopSrGSgIDmXtpIto=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] usb: gadget: f_fs: Prevent race between functionfs_unbind
+ & ffs_ep0_queue_wait
+Content-Language: en-US
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     John Keeping <john@metanate.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
+        "Pratham Pratap" <quic_ppratap@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+References: <20221103073821.8210-1-quic_ugoswami@quicinc.com>
+ <Y2OKQ5xS23VYeRyj@donbot> <6b3e061f-f606-b498-cf5d-5fbfd79ced67@quicinc.com>
+ <Y2Ode1eyrBHEFzGw@donbot> <12d74bde-4eb5-d7ec-97c9-08cc99e13983@quicinc.com>
+In-Reply-To: <12d74bde-4eb5-d7ec-97c9-08cc99e13983@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Nd5HzZKIsswBkWrpwWPdFKp86hbQcssm
+X-Proofpoint-ORIG-GUID: Nd5HzZKIsswBkWrpwWPdFKp86hbQcssm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-04_07,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 spamscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=616
+ mlxscore=0 impostorscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211040067
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,28 +82,123 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Change "regualator" to "regulator" in this comment.
+Hi John,
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- drivers/usb/chipidea/ci_hdrc_imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 11/3/22 4:59 PM, Udipto Goswami wrote:
+> Hi John
+> 
+> On 11/3/22 4:22 PM, John Keeping wrote:
+>> On Thu, Nov 03, 2022 at 03:57:02PM +0530, Udipto Goswami wrote:
+>>> On 11/3/22 3:00 PM, John Keeping wrote:
+>>>> On Thu, Nov 03, 2022 at 01:08:21PM +0530, Udipto Goswami wrote:
+>>>>> While performing fast composition switch, there is a possibility 
+>>>>> that the
+>>>>> process of ffs_ep0_write/ffs_ep0_read get into a race condition
+>>>>> due to ep0req being freed up from functionfs_unbind.
+>>>>>
+>>>>> Consider the scenario that the ffs_ep0_write calls the 
+>>>>> ffs_ep0_queue_wait
+>>>>> by taking a lock &ffs->ev.waitq.lock. However, the 
+>>>>> functionfs_unbind isn't
+>>>>> bounded so it can go ahead and mark the ep0req to NULL, and since 
+>>>>> there
+>>>>> is no NULL check in ffs_ep0_queue_wait we will end up in 
+>>>>> use-after-free.
+>>>>>
+>>>>> Fix this by introducing a NULL check before any req operation.
+>>>>> Also to ensure the serialization, perform the ep0req ops inside
+>>>>> spinlock &ffs->ev.waitq.lock.
+>>>>>
+>>>>> Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+>>>>> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+>>>>> ---
+>>>>>    drivers/usb/gadget/function/f_fs.c | 9 +++++++++
+>>>>>    1 file changed, 9 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/usb/gadget/function/f_fs.c 
+>>>>> b/drivers/usb/gadget/function/f_fs.c
+>>>>> index 73dc10a77cde..39980b2bf285 100644
+>>>>> --- a/drivers/usb/gadget/function/f_fs.c
+>>>>> +++ b/drivers/usb/gadget/function/f_fs.c
+>>>>> @@ -279,6 +279,13 @@ static int __ffs_ep0_queue_wait(struct 
+>>>>> ffs_data *ffs, char *data, size_t len)
+>>>>>        struct usb_request *req = ffs->ep0req;
+>>>>>        int ret;
+>>>>> +    if (!req)
+>>>>> +        return -EINVAL;
+>>>>> +    /*
+>>>>> +     * Even if ep0req is freed won't be a problem since the local
+>>>>> +     * copy of the request will be used here.
+>>>>> +     */
+>>>>
+>>>> This doesn't sound right - if we set ep0req to NULL then we've called
+>>>> usb_ep_free_request() on it so the request is not longer valid.
+>>>
+>>> Yes I agree as soon as we spin_unlock it the functionfs_unbind will 
+>>> execute
+>>> and free_up the req, so performing and ep_queue after that even if it 
+>>> is a
+>>> local copy could be fatal.
+>>>
+>>>           ret = usb_ep_queue(ffs->gadget->ep0, req, GFP_ATOMIC);
+>>>           if (unlikely(ret < 0))
+>>>                   return ret;
+>>>
+>>>          spin_unlock_irq(&ffs->ev.waitq.lock);
+>>>   We can move the spin_unlock after to queue operation perhaps ?
+>>
+>> I don't think it's that simple.  The documentation for
+>> usb_ep_free_request() says:
+>>
+>>     * Caller guarantees the request is not queued, and that it will
+>>     * no longer be requeued (or otherwise used).
+>>
+>> so some extra synchronisation is required here.
+>>
+>> By the time we get to functionfs_unbind() everything should be disabled
+>> by ffs_func_disable() and ffs_func_unbind() has drained the workqueue,
+>> but none of that applies to ep0.
+>>
+>> I think ffs_unbind() needs to dequeue the ep0 request.
+>>
+>> In addition to that, I think we need a new ep0 status variable in struct
+>> ffs_data so that req is not accessed after wait_for_completion() in
+>> __ffs_ep0_queue_wait() and that status is set in ffs_ep0_complete().
+>>
+>> With the spin_unlock_irq() moved to immediately before
+>> wait_for_completion() in __ffs_ep0_queue_wait() it looks like everything
+>> is then safe.
+> 
+> Thanks for the suggestions, let me try implementing it.
+> 
+Just curious because i saw __ffs_ep0_queue_wait will only be called from 
+  ffs_ep0_read & ffs_ep0_write, both using a mutex_lock(&ffs->mutex)
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_=
-hdrc_imx.c
-index 9ffcecd3058c1..1d6ee1d894f01 100644
-=2D-- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -355,7 +355,7 @@ static int ci_hdrc_imx_probe(struct platform_device *p=
-dev)
- 		data->hsic_pad_regulator =3D
- 				devm_regulator_get_optional(dev, "hsic");
- 		if (PTR_ERR(data->hsic_pad_regulator) =3D=3D -ENODEV) {
--			/* no pad regualator is needed */
-+			/* no pad regulator is needed */
- 			data->hsic_pad_regulator =3D NULL;
- 		} else if (IS_ERR(data->hsic_pad_regulator))
- 			return dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
-=2D-
-2.35.1
+So if we protect the functionfs_unbind with this mutex, it will be 
+better right?
 
+@@ -1889,12 +1889,13 @@ static int functionfs_bind(struct ffs_data *ffs, 
+struct usb_composite_dev *cdev)
+  static void functionfs_unbind(struct ffs_data *ffs)
+  {
+         ENTER();
+
+         if (!WARN_ON(!ffs->gadget)) {
++               ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK);
+                 usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
+                 ffs->ep0req = NULL;
+                 ffs->gadget = NULL;
+                 clear_bit(FFS_FL_BOUND, &ffs->flags);
++               mutex_unlock(&ffs->mutex);
+                 ffs_data_put(ffs);
+         }
+  }
+
+Perhaps we don't have to take care of the the serialization in that case 
+since it will exit the function __ffs_ep0_queue_wait only after 
+everything is done and hence functionfs_unbind will get the control 
+after the ep0_write/read has completed?
+
+What do you think ?
+
+-Udipto
