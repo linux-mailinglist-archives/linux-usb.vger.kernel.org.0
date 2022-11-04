@@ -2,46 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18258619A4E
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 15:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5D3619A51
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Nov 2022 15:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiKDOlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Nov 2022 10:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        id S230342AbiKDOmV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Nov 2022 10:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbiKDOlK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 10:41:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D703D31F9E
-        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 07:40:01 -0700 (PDT)
+        with ESMTP id S230435AbiKDOlo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Nov 2022 10:41:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE8430548
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 07:40:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64F03B82E2E
-        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 14:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7480C433C1;
-        Fri,  4 Nov 2022 14:39:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68147B82E33
+        for <linux-usb@vger.kernel.org>; Fri,  4 Nov 2022 14:40:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2CF0C4347C;
+        Fri,  4 Nov 2022 14:40:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667572799;
-        bh=FZHcKJtH1nWGlUxJceSsA0/MN+cQyWvrRA3fPDtqXLA=;
+        s=korg; t=1667572842;
+        bh=RDDsPkpNZRpYKK4ozK+ep3DrVYywS+Bc1tJ+1VpuDHA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OmE2B6zx9iLJYezWDtZlnpTo4R7utGZVGk8hNs0GCk7yuuJ5mi3+6bNHgL8ZcG35M
-         Sd1CH8PKKhtamMaA3FibEEiDlh2pwWyzxf+qEYDa6fQ5RHhlp8/WWwlm9tuRPrNlFg
-         Br/BTZfFvgPIafoeRCfC2S+/cg/4u99JPakPA9zI=
-Date:   Fri, 4 Nov 2022 15:39:55 +0100
+        b=nM+yYPv5yXHM3EKyG1ki+xl3tjvmR7Pf5Ehw/0i0d0hMTjvwhlAe+HvNHzw2K1jGU
+         7FZZZgG6zDKaljWV6360kJEHmkwGbTaVPTkbmkqSrfxLD3BfJ/p2hm/9kxHGOBfA4p
+         +UQdtDv+2hxmotX0a8UlI4NbxsADfbkkHifSxd70=
+Date:   Fri, 4 Nov 2022 15:40:38 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Albert Zhou <albert.zhou.50@gmail.com>
 Cc:     linux-usb@vger.kernel.org, nic_swsd@realtek.com
-Subject: Re: [PATCH net-next 1/2] Reverse
- 744d49daf8bd3b17b345c836f2e6f97d49fa6ae8 so that the v2 r8152 driver can use
- netif_set_gso_max_*
-Message-ID: <Y2UkO7N0+A4zH4nu@kroah.com>
+Subject: Re: [PATCH net-next 2/2] Update R8152 module to v2 obtained from the
+ Realtek website, included in a comment in r8152.c. The only other
+ modification to r8152.c is amending netif_napi_add, see comment for
+ explanation.
+Message-ID: <Y2UkZpD+xeShM+jc@kroah.com>
 References: <20221104132526.64530-1-albert.zhou.50@gmail.com>
- <20221104132526.64530-2-albert.zhou.50@gmail.com>
+ <20221104132526.64530-3-albert.zhou.50@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104132526.64530-2-albert.zhou.50@gmail.com>
+In-Reply-To: <20221104132526.64530-3-albert.zhou.50@gmail.com>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,11 +52,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 12:25:25AM +1100, Albert Zhou wrote:
+On Sat, Nov 05, 2022 at 12:25:26AM +1100, Albert Zhou wrote:
 > ---
->  include/linux/netdevice.h | 21 +++++++++++++++++++++
->  net/core/dev.h            | 21 ---------------------
->  2 files changed, 21 insertions(+), 21 deletions(-)
+>  drivers/net/usb/r8152.c               | 17938 +++++++++++++++++++-----
+>  drivers/net/usb/r8152_compatibility.h |   658 +
+>  2 files changed, 15130 insertions(+), 3466 deletions(-)
+>  create mode 100644 drivers/net/usb/r8152_compatibility.h
+> 
 
 Hi,
 
@@ -69,6 +72,9 @@ kernel tree.
 
 You are receiving this message because of the following common error(s)
 as indicated below:
+
+- Your patch contains warnings and/or errors noticed by the
+  scripts/checkpatch.pl tool.
 
 - Your patch does not have a Signed-off-by: line.  Please read the
   kernel file, Documentation/SubmittingPatches and resend it after
