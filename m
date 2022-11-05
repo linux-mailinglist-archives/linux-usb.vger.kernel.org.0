@@ -2,79 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CF061DE39
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 22:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80CA61DE3F
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 22:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiKEVDm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Nov 2022 17:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
+        id S229823AbiKEVH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Nov 2022 17:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKEVDe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 17:03:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BADDFB2;
-        Sat,  5 Nov 2022 14:03:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54DF4B808BF;
-        Sat,  5 Nov 2022 21:03:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FADC433D6;
-        Sat,  5 Nov 2022 21:03:26 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ek158U/I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667682204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eqdLYS8BDcnZ1CTVSLTL2V9mpBrsInljjeWX569KabI=;
-        b=Ek158U/IwAdzp/7JgxH8/niYIDD2c7iDpM/q00frrsf+kptgL3uCiSQ7Xlb7SIQ9YvTtg5
-        hlBVvQrg9GahoQxIsHXxgh/CGzM4sTACdo/WX2PYJwuZbLx0SZ+njeVN3snq9LgpG5MQMr
-        EBxmnADIwq+lyFhZU+rPI7l5k3bHDuo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f7ca4808 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 5 Nov 2022 21:03:23 +0000 (UTC)
-Date:   Sat, 5 Nov 2022 22:03:18 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-bluetooth@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
- timers
-Message-ID: <Y2bPlllkHo5DUmLY@zx2c4.com>
-References: <20221105060024.598488967@goodmis.org>
- <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
- <20221105123642.596371c7@rorschach.local.home>
+        with ESMTP id S229669AbiKEVHZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 17:07:25 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E4A11161;
+        Sat,  5 Nov 2022 14:07:24 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y14so21306142ejd.9;
+        Sat, 05 Nov 2022 14:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hs1jDi6MDHgTf1jm542+fLUkEHEfEymUM9i9SJMIuQs=;
+        b=EU83VSr+4f/dRzu7BrHWHuC+FZM+vpOUF3haqKM6eGmSAXu+USRthwUd9L62hX1cCL
+         UWgXG2sgyxjp6mZcQzSXYw1KjqBoo2nESeGQAdqU5cSLU3bk3BfGi1bFo26+cmFRL+LI
+         dt3ftM2HquC67CEFOjCaoalWoVLJz9CmbpWnNayQtQgHdeWDDBu/VpbD/LMwja7YurXZ
+         bnf2e970QhC9bFcje8zNjfvjBSuvnrYAiQamOXh9i3FQ2/0gmiRWdlvdkU34KsemKyn6
+         P4/X3MGgAssww5hS3JLFzW11uALuf1AF0bTorit9RMT0gsxuQF4fBzowfnc+q8fNnrgi
+         3OGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hs1jDi6MDHgTf1jm542+fLUkEHEfEymUM9i9SJMIuQs=;
+        b=nlDaDq+vL0CbJPNqaS1Suq9kxeFymFrEau2DcJaYTZyoBma2u+6Wn1dmD5KjxP8pVo
+         I8Y2s9SiPJn1R5KYsnYo1gVZEFRDM9HSQoa3aDvQj81T9q/qnhkB7Vxmt6zDpIeScWJe
+         OJLCtu92yAg1u+BDXACFtnoDqdAS5JO6rjS2OvUWBWWSH0aF6bdBsWSWNLgyO+kSeQbD
+         QcgB65YXtc1ODAb/uuxBSFzk/mPNOWxHw0CcSLnFuTzvtZhbjOBh+cbx4fHDVC/Y8RYD
+         vFhy/bL6Fze/UTMbFeqU5ZzyZiDig1fWnk/ZlsZymxjtTIgW+aXBtqJZzW+pktKZDq/h
+         1APA==
+X-Gm-Message-State: ACrzQf2+8LJvvW+ksufibuVZekiSVkRx9RZYjxjYNa4DW9KzvmUtVN1g
+        O9sFzu2Q3Ig7fRO63p1zyRk=
+X-Google-Smtp-Source: AMsMyM4qnYaEHN9tm9Dx5kAMHo2UAPkX2VxnU3giaRhnRkxPmcavexaDdSZAyj2UDFCzgEehUeRyeg==
+X-Received: by 2002:a17:907:a067:b0:7a7:dc5e:eb2d with SMTP id ia7-20020a170907a06700b007a7dc5eeb2dmr41564881ejc.121.1667682442717;
+        Sat, 05 Nov 2022 14:07:22 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id x19-20020a170906711300b0078116c361d9sm1378095ejj.10.2022.11.05.14.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 14:07:22 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, Karl Kurbjun <karl.os@veroson.com>,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 5/7] arm64: dts: allwinner: h616: Add USB nodes
+Date:   Sat, 05 Nov 2022 22:07:20 +0100
+Message-ID: <2120022.irdbgypaU6@jernej-laptop>
+In-Reply-To: <20221031111358.3387297-6-andre.przywara@arm.com>
+References: <20221031111358.3387297-1-andre.przywara@arm.com> <20221031111358.3387297-6-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221105123642.596371c7@rorschach.local.home>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,31 +79,18 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 12:36:42PM -0400, Steven Rostedt wrote:
-> ----------------------8<------------------------
-> @@
-> identifier ptr, timer, rfield, slab;
-> @@
-> (
-> -	del_timer(&ptr->timer);
-> +	timer_shutdown(&ptr->timer);
-> |
-> -	del_timer_sync(&ptr->timer);
-> +	timer_shutdown_sync(&ptr->timer);
-> )
->     ...
-> (
-> 	kfree_rcu(ptr, rfield);
-> |
-> 	kmem_cache_free(slab, ptr);
-> |
-> 	kfree(ptr);
-> )
-> ---------------------->8------------------------
+Dne ponedeljek, 31. oktober 2022 ob 12:13:56 CET je Andre Przywara napisal(a):
+> Add the nodes for the MUSB and the four USB host controllers to the SoC
+> .dtsi, along with the PHY node needed to bind all of them together.
+> 
+> EHCI/OHCI and MUSB are compatible to previous SoCs, but the PHY requires
+> some quirks (handled in the driver).
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-Something that might help here is changing the `...` into
-`... when exists` or into `... when != ptr` or similar.
-See this section of the manual:
-https://coccinelle.gitlabpages.inria.fr/website/docs/main_grammar004.html
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Jason
+Best regards,
+Jernej
+
+
