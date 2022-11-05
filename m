@@ -2,125 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2492261DC90
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 18:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D97061DCCB
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 18:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiKERil (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Nov 2022 13:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S229916AbiKERxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Nov 2022 13:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKERil (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 13:38:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81701C914;
-        Sat,  5 Nov 2022 10:38:39 -0700 (PDT)
+        with ESMTP id S229453AbiKERxp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 13:53:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657E0B7D4;
+        Sat,  5 Nov 2022 10:53:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50A4360B31;
-        Sat,  5 Nov 2022 17:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D554C433C1;
-        Sat,  5 Nov 2022 17:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667669918;
-        bh=Z7I+GuKl3dh2ub+VRNcy2mNWPcynPt2H6oRWtPE+IOg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N5mAQpIQ6X7AELP/gFmcbw3avM3HrDF+DQilqmf4/x3YR6Fhact3vuUo04NPzDtv8
-         NMJX89R6MyAbq4k4fTjXWCH2nFrsWyPiaTniMb0FO/J8C4xk4jMb4rihvbA5RQW5wv
-         52ePz6Pl1zNc0BjRomdtFhIpXdu97VfwaYqnaQ80=
-Date:   Sat, 5 Nov 2022 18:38:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-Message-ID: <Y2afm9xFIvJnwXh/@kroah.com>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com>
- <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
- <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C95DB8006F;
+        Sat,  5 Nov 2022 17:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 199F5C433D6;
+        Sat,  5 Nov 2022 17:53:40 +0000 (UTC)
+Date:   Sat, 5 Nov 2022 13:53:38 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-bluetooth@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
+ timers
+Message-ID: <20221105135338.14309ea1@rorschach.local.home>
+In-Reply-To: <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
+References: <20221105060024.598488967@goodmis.org>
+        <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
-> On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > On Sat, Nov 05, 2022 at 02:16:04AM +0900, Vincent Mailhol wrote:
-> > > > ES58x devices report below information in their usb product info
-> > > > string:
-> > > >
-> > > >   * the firmware version
-> > > >   * the bootloader version
-> > > >   * the hardware revision
-> > > >
-> > > > Report the firmware version through ethtool_drvinfo::fw_version.
-> > > > Because struct ethtool_drvinfo has no fields to report the boatloader
-> > > > version nor the hardware revision, continue to print these in the
-> > > > kernel log (c.f. es58x_get_product_info()).
-> > > >
-> > > > While doing so, bump up copyright year of each modified files.
-> > >
-> > > Why not just stick to the normal USB interface here and not try to tie
-> > > it into ethtool?  These values are all availble today in sysfs or in
-> > > libusb, right?
-> >
-> > The simple answer is ignorance. I am more familiar with ethtool than
-> > libusb and I just did not think to explore that second option.
-> > Thanks for the review, comments taken. I will study sysfs and libusb
-> > and will rework that.
+On Sat, 5 Nov 2022 08:59:36 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> Others in the series were *definitely* not scripted, doing clearly
+> manual cleanups:
 > 
-> I double checked following options:
->   * CONFIG_USB_ANNOUNCE_NEW_DEVICES
->   * lsusb -v from usbutils
->   * sysfs
+> -    if (dch->timer.function) {
+> -        del_timer(&dch->timer);
+> -        dch->timer.function = NULL;
+> -    }
+> +    timer_shutdown(&dch->timer);
 > 
-> None of those will return the firmware version. The only strings I am
-> getting are: the Product name, the Manufacturer and the SerialNumber.
+> so no, this does *not* make me feel "ok, this is all trivial".
 
-Those are the default strings that a device can have, so it's good that
-the core tries to get them.
+I just ran the script and the above code turned to:
 
-Anything other than those are "custom" strings and you can use libusb
-for that.  For some reason I thought sysfs also had custom strings, but
-as they are so rare I don't know if anyone has tried that.
+diff --git a/drivers/isdn/hardware/mISDN/hfcmulti.c b/drivers/isdn/hardware/mISDN/hfcmulti.c
+index 4f7eaa17fb27..2695bbde52db 100644
+--- a/drivers/isdn/hardware/mISDN/hfcmulti.c
++++ b/drivers/isdn/hardware/mISDN/hfcmulti.c
+@@ -4544,7 +4544,7 @@ release_port(struct hfc_multi *hc, struct dchannel *dch)
+        spin_lock_irqsave(&hc->lock, flags);
+ 
+        if (dch->timer.function) {
+-               del_timer(&dch->timer);
++               timer_shutdown(&dch->timer);
+                dch->timer.function = NULL;
+        }
+ 
+Which is silly. Because timer_shutdown() makes timer.function = NULL.
 
-> I guess you were expecting some default behavior from the device, but
-> unfortunately, this is not the case.
-> On this device, the firmware version is stored at some arbitrary
-> descriptor index (if you ask me: 6). Unless you query that magic
-> number, the information will not pot up.
-> 
-> So as far as I can see, this does not duplicate existing mechanisms.
-> With this patch, the firmware version becomes available using:
->   $ ethtool -i canX
+That's why I changed it. And it really shouldn't be touching
+timer.function anyway.
 
-It's late right now, and I can't remember the whole USB spec, but I
-think the device provides a list of the string ids that are valid for
-it.  If so, we can add that to sysfs for any USB device out there, no
-matter the string descriptor number.
-
-If not, maybe we can just iterate the 255 values and populate sysfs
-files if they are present?  I'll dig up the USB spec tomorrow...
-
-I say do this at the USB core level, that way it works for any USB
-device, and you don't have a device-specific sysfs file and custom
-userspace code just for this.
-
-Sound reasonable?
-
-greg k-h
+-- Steve
