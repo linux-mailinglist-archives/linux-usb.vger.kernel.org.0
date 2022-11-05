@@ -2,285 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6929461DB4F
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 16:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B0861DBCD
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 17:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiKEPBx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Nov 2022 11:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
+        id S229822AbiKEQAM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Nov 2022 12:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiKEPBw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 11:01:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DC310571;
-        Sat,  5 Nov 2022 08:01:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBB2C60B55;
-        Sat,  5 Nov 2022 15:01:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B64EC433D6;
-        Sat,  5 Nov 2022 15:01:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667660510;
-        bh=TBIj1mpwPyTGiXuI59G7PkFJo6KYSisNE21WUW4k6SM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GMqTorvHY8jV64G0TO+pDsym29r59kOL0wNee1FD9Ia3N0hJu85JsV3Lq4qK9rf3l
-         2AQ33U/nb+Exfdc5Jcoe/zaNk193oQ4Zgl//U59DGxWdQqopYPT+JwQ9w8EXBAotN+
-         tmMm9rwr6ho/ovP1Y+UcBmzUXaCd1MZacMadl3BtKAyci7DPz5TjxlnGa7sPr9UaXQ
-         y+7/LEyt84MeJiFLS69L4X6/ya/YP1vUNj2bKzt1ZEPPOHep2Gf0Djd0GM1aHFJ5e2
-         0olFd60MX5cZuUtFnnfOpz5NXdJi9HBpUP0JpZHsflWvmYfh65NcyiJxFa3HBXt+hw
-         tt2HlZ5eoe8Iw==
-Date:   Sat, 5 Nov 2022 20:31:45 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        jonathanh@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
-        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
-        jckuo@nvidia.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 09/11] phy: tegra: xusb: Add Tegra234 support
-Message-ID: <Y2Z62Ua1DDWx9YwS@matsya>
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-10-waynec@nvidia.com>
+        with ESMTP id S230029AbiKEQAL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 12:00:11 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66ADFAF3
+        for <linux-usb@vger.kernel.org>; Sat,  5 Nov 2022 09:00:07 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id a27so4876581qtw.10
+        for <linux-usb@vger.kernel.org>; Sat, 05 Nov 2022 09:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GP8p4dRzNVpyUotOfaypMmYTGE9lsMcq6qB3gjhmc04=;
+        b=iIDJL03zNkH0lS9YORaCB4Nnx18G1RT5PAxkqTBkren7bOYLdVGnhhilx+OlS481lw
+         gQr71gF/2R0QtX/qOni1Pt9vrqOkIr43rj0MZrH/uG69dzQgSBZeGC3nRHzTa1HEb5Zv
+         OhEAlIPPkZmfK8ER3fSUpMd0BmaBeM97bdw94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GP8p4dRzNVpyUotOfaypMmYTGE9lsMcq6qB3gjhmc04=;
+        b=Br5KW0vH1ly2NGqYktpATsyt7T4sZtK8z+uFYBvorlr9/zFLt6eT+U0hbvXIP29uds
+         aUwXr2xcIRaHsxYIFQ/jl6Z5IUmYvEn6mxutJ2sWfxrjwoLKotsWqAT7DtT8Gv5XAXS8
+         pBtx4zRRukSsYUajUG9cA4sWZTa7ITmKYz18zm0IlTUY+zRlBAOBmu/5iOiR7TqaU28L
+         BjJxEJ3lpF19Qpzq+mzgG60s6zUQU9SeRWUW392CYs52lribALV1Np2ZMG3RCjSfz3IZ
+         qjJBEpCJYttCnK/LFRB/pjLyz5qu8ob5PlIwgT7OYnHNlioJdY2zHQLrHitatDvyPfx0
+         QM6A==
+X-Gm-Message-State: ACrzQf0g8e/W15qJlKA6ReKnn00Q+RC8OB0+I5pSy6ygaArAY7zwIrBe
+        pGL5zkY60vWsdVasXfmei4cmJrLBa0viOw==
+X-Google-Smtp-Source: AMsMyM7Ip1XEXdkDow3057h1E4i99Ej6aZxGML6W7bo8uR4+FHXue9zWeLH0zm1qv3InQascB8L9Pg==
+X-Received: by 2002:ac8:5e86:0:b0:3a5:1de9:2844 with SMTP id r6-20020ac85e86000000b003a51de92844mr28425932qtx.522.1667664006540;
+        Sat, 05 Nov 2022 09:00:06 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05620a134800b006ecb9dfdd15sm2047312qkl.92.2022.11.05.09.00.03
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Nov 2022 09:00:04 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3321c2a8d4cso68805877b3.5
+        for <linux-usb@vger.kernel.org>; Sat, 05 Nov 2022 09:00:03 -0700 (PDT)
+X-Received: by 2002:a81:114e:0:b0:36a:fc80:fa62 with SMTP id
+ 75-20020a81114e000000b0036afc80fa62mr40431421ywr.58.1667663992806; Sat, 05
+ Nov 2022 08:59:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024074128.1113554-10-waynec@nvidia.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221105060024.598488967@goodmis.org>
+In-Reply-To: <20221105060024.598488967@goodmis.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 5 Nov 2022 08:59:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
+Message-ID: <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
+Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing timers
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-bluetooth@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24-10-22, 15:41, Wayne Chang wrote:
-> From: Sing-Han Chen <singhanc@nvidia.com>
-> 
-> Add support for the XUSB pad controller found on Tegra234 SoCs. It is
-> mostly similar to the same IP found on Tegra194, because most of
-> the Tegra234 XUSB PADCTL registers definition and programming sequence
-> are the same as Tegra194, Tegra234 XUSB PADCTL can share the same
-> driver with Tegra186 and Tegra194 XUSB PADCTL.
-> 
-> Introduce a new feature, USB2 HW tracking, for Tegra234.
-> The feature is to enable HW periodical PAD tracking which measure
-> and capture the electric parameters of USB2.0 PAD.
+On Fri, Nov 4, 2022 at 11:01 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> Patch 1 fixes an issue with sunrpc/xprt where it incorrectly uses
+> del_singleshot_timer_sync() for something that is not a oneshot timer. As this
+> will be converted to shutdown, this needs to be fixed first.
 
-why cant this patch be sent separately, are phy patches dependent on
-rest..? If not consider splitting per subsystem and sending
-independently..
+So this is the kind of thing that I would *not* want to get eartly.
 
-> 
-> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> Co-developed-by: Wayne Chang <waynec@nvidia.com>
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
->  drivers/phy/tegra/Makefile        |  1 +
->  drivers/phy/tegra/xusb-tegra186.c | 65 +++++++++++++++++++++++++++++--
->  drivers/phy/tegra/xusb.c          |  6 +++
->  drivers/phy/tegra/xusb.h          | 23 +++++++++++
->  4 files changed, 92 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/phy/tegra/Makefile b/drivers/phy/tegra/Makefile
-> index 89b84067cb4c..eeeea72de117 100644
-> --- a/drivers/phy/tegra/Makefile
-> +++ b/drivers/phy/tegra/Makefile
-> @@ -7,4 +7,5 @@ phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_132_SOC) += xusb-tegra124.o
->  phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_210_SOC) += xusb-tegra210.o
->  phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_186_SOC) += xusb-tegra186.o
->  phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_194_SOC) += xusb-tegra186.o
-> +phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_234_SOC) += xusb-tegra186.o
->  obj-$(CONFIG_PHY_TEGRA194_P2U) += phy-tegra194-p2u.o
-> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
-> index f121b4ffbbfd..cc02cea65a21 100644
-> --- a/drivers/phy/tegra/xusb-tegra186.c
-> +++ b/drivers/phy/tegra/xusb-tegra186.c
-> @@ -89,6 +89,11 @@
->  #define  USB2_TRK_START_TIMER(x)		(((x) & 0x7f) << 12)
->  #define  USB2_TRK_DONE_RESET_TIMER(x)		(((x) & 0x7f) << 19)
->  #define  USB2_PD_TRK				BIT(26)
-> +#define  USB2_TRK_COMPLETED			BIT(31)
-> +
-> +#define XUSB_PADCTL_USB2_BIAS_PAD_CTL2		0x28c
-> +#define  USB2_TRK_HW_MODE			BIT(0)
-> +#define  CYA_TRK_CODE_UPDATE_ON_IDLE		BIT(31)
->  
->  #define XUSB_PADCTL_HSIC_PADX_CTL0(x)		(0x300 + (x) * 0x20)
->  #define  HSIC_PD_TX_DATA0			BIT(1)
-> @@ -609,9 +614,32 @@ static void tegra186_utmi_bias_pad_power_on(struct tegra_xusb_padctl *padctl)
->  	value &= ~USB2_PD_TRK;
->  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
->  
-> -	udelay(100);
-> +	if (padctl->soc->poll_trk_completed) {
-> +		err = padctl_readl_poll(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL1,
-> +					USB2_TRK_COMPLETED, USB2_TRK_COMPLETED, 100);
-> +		if (err) {
-> +			/* The failure with polling on trk complete will not
-> +			 * cause the failure of powering on the bias pad.
-> +			 */
-> +			dev_warn(dev, "failed to poll USB2 trk completed: %d\n",
-> +				err);
+I really would want to get just the infrastructure in to let people
+start doing conversions.
 
-Single line.. should this be dev_err
+And then the "mindlessly obvious patches that are done by scripting
+and can not possibly matter".
 
-> +		}
->  
-> -	clk_disable_unprepare(priv->usb2_trk_clk);
-> +		value = padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
-> +		value |= USB2_TRK_COMPLETED;
-> +		padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
-> +	} else {
-> +		udelay(100);
-> +	}
-> +
-> +	if (padctl->soc->trk_hw_mode) {
-> +		value = padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
-> +		value |= USB2_TRK_HW_MODE;
-> +		value &= ~CYA_TRK_CODE_UPDATE_ON_IDLE;
-> +		padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
-> +	} else {
-> +		clk_disable_unprepare(priv->usb2_trk_clk);
-> +	}
->  
->  	mutex_unlock(&padctl->lock);
->  }
-> @@ -637,6 +665,13 @@ static void tegra186_utmi_bias_pad_power_off(struct tegra_xusb_padctl *padctl)
->  	value |= USB2_PD_TRK;
->  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
->  
-> +	if (padctl->soc->trk_hw_mode) {
-> +		value = padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
-> +		value &= ~USB2_TRK_HW_MODE;
-> +		padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
-> +		clk_disable_unprepare(priv->usb2_trk_clk);
-> +	}
-> +
->  	mutex_unlock(&padctl->lock);
->  }
->  
-> @@ -1560,7 +1595,8 @@ const struct tegra_xusb_padctl_soc tegra186_xusb_padctl_soc = {
->  EXPORT_SYMBOL_GPL(tegra186_xusb_padctl_soc);
->  #endif
->  
-> -#if IS_ENABLED(CONFIG_ARCH_TEGRA_194_SOC)
-> +#if IS_ENABLED(CONFIG_ARCH_TEGRA_194_SOC) || \
-> +	IS_ENABLED(CONFIG_ARCH_TEGRA_234_SOC)
->  static const char * const tegra194_xusb_padctl_supply_names[] = {
->  	"avdd-usb",
->  	"vclamp-usb",
-> @@ -1616,8 +1652,31 @@ const struct tegra_xusb_padctl_soc tegra194_xusb_padctl_soc = {
->  	.supply_names = tegra194_xusb_padctl_supply_names,
->  	.num_supplies = ARRAY_SIZE(tegra194_xusb_padctl_supply_names),
->  	.supports_gen2 = true,
-> +	.poll_trk_completed = true,
->  };
->  EXPORT_SYMBOL_GPL(tegra194_xusb_padctl_soc);
-> +
-> +const struct tegra_xusb_padctl_soc tegra234_xusb_padctl_soc = {
-> +	.num_pads = ARRAY_SIZE(tegra194_pads),
-> +	.pads = tegra194_pads,
-> +	.ports = {
-> +		.usb2 = {
-> +			.ops = &tegra186_usb2_port_ops,
-> +			.count = 4,
-> +		},
-> +		.usb3 = {
-> +			.ops = &tegra186_usb3_port_ops,
-> +			.count = 4,
-> +		},
-> +	},
-> +	.ops = &tegra186_xusb_padctl_ops,
-> +	.supply_names = tegra194_xusb_padctl_supply_names,
-> +	.num_supplies = ARRAY_SIZE(tegra194_xusb_padctl_supply_names),
-> +	.supports_gen2 = true,
-> +	.poll_trk_completed = true,
-> +	.trk_hw_mode = true,
-> +};
-> +EXPORT_SYMBOL_GPL(tegra234_xusb_padctl_soc);
->  #endif
->  
->  MODULE_AUTHOR("JC Kuo <jckuo@nvidia.com>");
-> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-> index 95091876c422..23d179b1a5b5 100644
-> --- a/drivers/phy/tegra/xusb.c
-> +++ b/drivers/phy/tegra/xusb.c
-> @@ -71,6 +71,12 @@ static const struct of_device_id tegra_xusb_padctl_of_match[] = {
->  		.compatible = "nvidia,tegra194-xusb-padctl",
->  		.data = &tegra194_xusb_padctl_soc,
->  	},
-> +#endif
-> +#if defined(CONFIG_ARCH_TEGRA_234_SOC)
-> +	{
-> +		.compatible = "nvidia,tegra234-xusb-padctl",
-> +		.data = &tegra234_xusb_padctl_soc,
-> +	},
->  #endif
->  	{ }
->  };
-> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-> index 8cfbbdbd6e0c..ec0b5b023ad1 100644
-> --- a/drivers/phy/tegra/xusb.h
-> +++ b/drivers/phy/tegra/xusb.h
-> @@ -8,6 +8,7 @@
->  #define __PHY_TEGRA_XUSB_H
->  
->  #include <linux/io.h>
-> +#include <linux/iopoll.h>
->  #include <linux/mutex.h>
->  #include <linux/workqueue.h>
->  
-> @@ -433,6 +434,8 @@ struct tegra_xusb_padctl_soc {
->  	unsigned int num_supplies;
->  	bool supports_gen2;
->  	bool need_fake_usb3_port;
-> +	bool poll_trk_completed;
-> +	bool trk_hw_mode;
->  };
->  
->  struct tegra_xusb_padctl {
-> @@ -475,6 +478,23 @@ static inline u32 padctl_readl(struct tegra_xusb_padctl *padctl,
->  	return value;
->  }
->  
-> +static inline u32 padctl_readl_poll(struct tegra_xusb_padctl *padctl,
-> +	unsigned long offset, u32 val, u32 mask, int us)
-> +{
-> +	u32 regval;
-> +	int err;
-> +
-> +	err = readl_poll_timeout_atomic(padctl->regs + offset, regval,
-> +					 (regval & mask) == val, 1, us);
-> +	dev_dbg(padctl->dev, "%08lx poll > %08x\n", offset, regval);
-> +	if (err) {
-> +		dev_err(padctl->dev, "%08lx poll timeout > %08x\n", offset,
-> +			regval);
-> +	}
-> +
-> +	return err;
-> +}
-> +
->  struct tegra_xusb_lane *tegra_xusb_find_lane(struct tegra_xusb_padctl *padctl,
->  					     const char *name,
->  					     unsigned int index);
-> @@ -491,5 +511,8 @@ extern const struct tegra_xusb_padctl_soc tegra186_xusb_padctl_soc;
->  #if defined(CONFIG_ARCH_TEGRA_194_SOC)
->  extern const struct tegra_xusb_padctl_soc tegra194_xusb_padctl_soc;
->  #endif
-> +#if defined(CONFIG_ARCH_TEGRA_234_SOC)
-> +extern const struct tegra_xusb_padctl_soc tegra234_xusb_padctl_soc;
-> +#endif
->  
->  #endif /* __PHY_TEGRA_XUSB_H */
-> -- 
-> 2.25.1
+The kinds that do not *need* review, because they are mechanical, and
+that just cause pointless noise for the rest of the patches that *do*
+want review.
 
--- 
-~Vinod
+Not this kind of thing that is so subtle that you have to explain it.
+That's not a "scripted patch for no semantic change".
+
+So leave the del_singleshot_timer_sync() cases alone, they are
+irrelevant for the new infrastructure and for the "mindless scripted
+conversion" patches.
+
+> Patches 2-4 changes existing timer_shutdown() functions used locally in ARM and
+> some drivers to better namespace names.
+
+Ok, these are relevant.
+
+> Patch 5 implements the new timer_shutdown() and timer_shutdown_sync() functions
+> that disable re-arming the timer after they are called.
+
+This is obviously what I'd want early so that people can start doign
+this in their trees.
+
+> Patches 6-28 change all the locations where there's a kfree(), kfree_rcu(),
+> kmem_cache_free() and one call_rcu() call where the RCU function frees the
+> timer (the workqueue patch) in the same function as the del_timer{,_sync}() is
+> called on that timer, and there's no extra exit path between the del_timer and
+> freeing of the timer.
+
+So honestly, I was literally hoping for a "this is the coccinelle
+script" kind of patch.
+
+Now there seems to be a number of patches here that are actualyl
+really hard to see that they are "obviously correct" and I can't tell
+if they are actually scripted or not.
+
+They don't *look* scripted, but I can't really tell.  I looked at the
+patches with ten lines of context, and I didn't see the immediately
+following kfree() even in that expanded patch context, so it's fairly
+far away.
+
+Others in the series were *definitely* not scripted, doing clearly
+manual cleanups:
+
+-    if (dch->timer.function) {
+-        del_timer(&dch->timer);
+-        dch->timer.function = NULL;
+-    }
++    timer_shutdown(&dch->timer);
+
+so no, this does *not* make me feel "ok, this is all trivial".
+
+IOW, I'd really want *just* the infrastructure and *just* the provably
+trivial stuff. If it wasn't some scripted really obvious thing that
+cannot possibly change anything and that wasn't then edited manually
+for some reason, I really don't want it early.
+
+IOW, any early conversions I'd take are literally about removing pure
+mindless noise. Not about doing conversions.
+
+And I wouldn't mind it as a single conversion patch that has the
+coccinelle script as the explanation.
+
+Really just THAT kind of "100% mindless conversion".
+
+               Linus
