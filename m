@@ -2,126 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEE861D7D2
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 07:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981B861D88C
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 08:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiKEGBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Nov 2022 02:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S229590AbiKEHpz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Nov 2022 03:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiKEGBe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 02:01:34 -0400
+        with ESMTP id S229461AbiKEHpy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 03:45:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E819331207;
-        Fri,  4 Nov 2022 23:01:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F7213DF6;
+        Sat,  5 Nov 2022 00:45:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 534AA60A67;
-        Sat,  5 Nov 2022 06:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2978BC4347C;
-        Sat,  5 Nov 2022 06:01:30 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1orCFi-007Ooz-0y;
-        Sat, 05 Nov 2022 02:01:58 -0400
-Message-ID: <20221105060158.138331694@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Sat, 05 Nov 2022 02:00:42 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C106023F;
+        Sat,  5 Nov 2022 07:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95302C433D6;
+        Sat,  5 Nov 2022 07:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667634351;
+        bh=oR4nin9GL/nLMFNCIKIq01MhwItWEG8E93FtnI2llfM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e/mNHZ+RpReyyDqxhUaRYAgyXHdz37fOA57eOSMjuAoNIVU/78Q/gJSbnWirNhPzk
+         nwINsKMyhyq5PGTaIj3pLqa5MXkdC1Q5C3FbzXKDgjAaT4I33HENPmf6gq2L21YMd4
+         HI6MKxv9eN84lFPb+CTGBT/sHtuvcvMmWuj0RNhEof6KwpPyc5EtImLES8HIcGAZtt
+         zEdo4RLupRlBOGnC4nyzjsL2XtN4UDkG9bBuCaTybVUj1oKrHilr1GztdrYCOJEAU0
+         tYqRSS/Y31LGF6w8JqQz9hKvIpcHgmvJnUbyADXuGQPEqscqy+H/JGkJoUog1HHSM3
+         gRkaxZaxQmXkA==
+Date:   Sat, 5 Nov 2022 13:15:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v4a 18/38] timers: usb: Use timer_shutdown_sync() before freeing timer
-References: <20221105060024.598488967@goodmis.org>
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, Karl Kurbjun <karl.os@veroson.com>,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 2/7] dt-bindings: phy: Add special clock for Allwinner
+ H616 PHY
+Message-ID: <Y2YUq1IWzjlkVOuz@matsya>
+References: <20221031111358.3387297-1-andre.przywara@arm.com>
+ <20221031111358.3387297-3-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031111358.3387297-3-andre.przywara@arm.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 31-10-22, 11:13, Andre Przywara wrote:
+> The USB PHY IP in the Allwinner H616 SoC requires a quirk that involves
+> some resources from port 2's PHY and HCI IP. In particular the PMU clock
+> for port 2 must be surely ungated before accessing the REG_HCI_PHY_CTL
+> register of port 2. To allow each USB port to be controlled
+> independently of port 2, we need a handle to that particular PMU clock
+> in the *PHY* node, as the HCI and PHY part might be handled by separate
+> drivers.
+> 
+> Add that clock to the requirements of the H616 PHY binding, so that a
+> PHY driver can apply the quirk in isolation, without requiring help from
+> port 2's HCI driver.
 
-Before a timer is freed, timer_shutdown_sync() must be called.
+Applied, thanks
 
-Link: https://lore.kernel.org/all/20221104054053.431922658@goodmis.org/
-
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/usb/gadget/udc/m66592-udc.c | 2 +-
- drivers/usb/serial/garmin_gps.c     | 2 +-
- drivers/usb/serial/mos7840.c        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-index 931e6362a13d..c7e421b449f3 100644
---- a/drivers/usb/gadget/udc/m66592-udc.c
-+++ b/drivers/usb/gadget/udc/m66592-udc.c
-@@ -1519,7 +1519,7 @@ static int m66592_remove(struct platform_device *pdev)
- 
- 	usb_del_gadget_udc(&m66592->gadget);
- 
--	del_timer_sync(&m66592->timer);
-+	timer_shutdown_sync(&m66592->timer);
- 	iounmap(m66592->reg);
- 	free_irq(platform_get_irq(pdev, 0), m66592);
- 	m66592_free_request(&m66592->ep[0].ep, m66592->ep0_req);
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index f1a8d8343623..670e942fdaaa 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -1405,7 +1405,7 @@ static void garmin_port_remove(struct usb_serial_port *port)
- 
- 	usb_kill_anchored_urbs(&garmin_data_p->write_urbs);
- 	usb_kill_urb(port->interrupt_in_urb);
--	del_timer_sync(&garmin_data_p->timer);
-+	timer_shutdown_sync(&garmin_data_p->timer);
- 	kfree(garmin_data_p);
- }
- 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 6b12bb4648b8..8a2d902a1c12 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1726,7 +1726,7 @@ static void mos7840_port_remove(struct usb_serial_port *port)
- 		mos7840_set_led_sync(port, MODEM_CONTROL_REGISTER, 0x0300);
- 
- 		del_timer_sync(&mos7840_port->led_timer1);
--		del_timer_sync(&mos7840_port->led_timer2);
-+		timer_shutdown_sync(&mos7840_port->led_timer2);
- 
- 		usb_kill_urb(mos7840_port->led_urb);
- 		usb_free_urb(mos7840_port->led_urb);
 -- 
-2.35.1
+~Vinod
