@@ -2,159 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D9A61E34F
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Nov 2022 17:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4775261E56E
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Nov 2022 20:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiKFQCO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Nov 2022 11:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S230037AbiKFTCP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Nov 2022 14:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiKFQCN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 11:02:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5E2230;
-        Sun,  6 Nov 2022 08:02:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA1D160C88;
-        Sun,  6 Nov 2022 16:02:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97D59C433D6;
-        Sun,  6 Nov 2022 16:02:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667750531;
-        bh=l8k/9vGfjM85JG5CuAFRMdoK53+DhUwGpfzR5U8Rdjo=;
+        with ESMTP id S229787AbiKFTCO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 14:02:14 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF39FCEF;
+        Sun,  6 Nov 2022 11:02:13 -0800 (PST)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC40B55A;
+        Sun,  6 Nov 2022 20:02:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1667761331;
+        bh=9jNNY0kZG32GFSzV/yaiP+bRjGQWb6Q3XprqSSUCtxQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FA9mYDaqSnHWG1KGRGyKs6XD1JUR0D/Be4jGh6VxBnjK7tdWtE2fgwAlsO/IfrE1k
-         a2SW9BrEydOKNgNzZHpySNs7LLzrBet/yOAHWScfkxXD01zMBbeeXUJiqiP7CFFGxK
-         Q72xAQxZKLf6sikkg6jjFnyuoQw7WUmiethk24Zs=
-Date:   Sun, 6 Nov 2022 17:02:07 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-Message-ID: <Y2faf++qaSq92qmZ@kroah.com>
-References: <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com>
- <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
- <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
- <Y2afm9xFIvJnwXh/@kroah.com>
- <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
- <Y2eYw9Kna712mzR8@kroah.com>
- <CAMZ6RqJVFwhCjxghmDBt2kYeT_KhqE-4h=UGtKaSA1bwke1CaA@mail.gmail.com>
- <Y2fDG9AsuFZh0Dkr@kroah.com>
- <CAMZ6RqLwebh6VuwXdyyxpcdyJjYg3fUt9Opx+dPQRzqZ-2976w@mail.gmail.com>
+        b=QnA80NOyGIGUNfLPIVkRJhoWu1VUt7vT77Vq24hG9mC6L7nEhDV6aV0vpzuLRa8vY
+         Klsx+ZLrZuW8G0zkEE4bVRLpeZjEd8Qp2M5Hf2d3eWvmJprP+x3V5TJhBOr0qNuTT9
+         44PL9tDt0hY2O+bZNle82AXnUSpzgXZYAT5A68Hg=
+Date:   Sun, 6 Nov 2022 21:01:53 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        gregkh@linuxfoundation.org, balbi@kernel.org,
+        kernel@pengutronix.de, stable <stable@kernel.org>
+Subject: Re: [PATCH RESEND 2/2] usb: gadget: uvc: limit isoc_sg to super
+ speed gadgets
+Message-ID: <Y2gEoawCs8L0Kxce@pendragon.ideasonboard.com>
+References: <20221026184212.366897-1-m.grzeschik@pengutronix.de>
+ <20221026184212.366897-2-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMZ6RqLwebh6VuwXdyyxpcdyJjYg3fUt9Opx+dPQRzqZ-2976w@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221026184212.366897-2-m.grzeschik@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 11:44:52PM +0900, Vincent MAILHOL wrote:
-> Le dim. 6 nov. 2022 à 23:22, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> a écrit :
-> >
-> > On Sun, Nov 06, 2022 at 09:47:05PM +0900, Vincent MAILHOL wrote:
-> > > On Sun. 6 Nov. 2022 at 20:25, Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > > On Sat, Nov 05, 2022 at 08:45:10PM -0400, Alan Stern wrote:
-> > > > > On Sat, Nov 05, 2022 at 06:38:35PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
-> > > > > > > On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
-> > > > > > > <mailhol.vincent@wanadoo.fr> wrote:
-> > > > > > > > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
-> > > > > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > > It's late right now, and I can't remember the whole USB spec, but I
-> > > > > > think the device provides a list of the string ids that are valid for
-> > > > > > it.  If so, we can add that to sysfs for any USB device out there, no
-> > > > > > matter the string descriptor number.
-> > > > >
-> > > > > No, there is no such list.
-> > > >
-> > > > Yeah, my fault, nevermind about that, sorry.
-> > > >
-> > > > > > If not, maybe we can just iterate the 255 values and populate sysfs
-> > > > > > files if they are present?  I'll dig up the USB spec tomorrow...
-> > > > >
-> > > > > Yes, we could do that.  But the filename would have to be the string
-> > > > > id, which is not meaningful.  We wouldn't be able to have labels like
-> > > > > "product-info" unless somehow a driver could provide the label.
-> > > >
-> > > > We could have a directory of strings/ with the individual descriptors in
-> > > > there as files with the name being the string id.
-> > > >
-> > > > But that might take a long time to populate, as it can take a few tries
-> > > > to get the string from a device, and to do that 256 times might be
-> > > > noticable at device insertion time.
-> > > >
-> > > > > Also, there's the matter of language.  Devices can have string
-> > > > > descriptors in multiple languages; which one should we show in sysfs?
-> > > > > All of them?  Right now we use just the default language for the strings
-> > > > > that we put in sysfs.
-> > > > >
-> > > > > > I say do this at the USB core level, that way it works for any USB
-> > > > > > device, and you don't have a device-specific sysfs file and custom
-> > > > > > userspace code just for this.
-> > > > >
-> > > > > This is unavoidable to some extent.  Without device-specific information
-> > > > > or userspace code, there is no way to know which string descriptor
-> > > > > contains the data you want.
-> > > >
-> > > > Agreed.
-> > > >
-> > > > Ok, for this specific instance, adding the "we know this string id
-> > > > should be here" as a device-specific sysfs file seems to be the easiest
-> > > > way forward.
-> > > >
-> > > > Vincent, want to try that instead?
-> > >
-> > > OK for me. Will do that and remove the kernel log spam and replace it
-> > > by a sysfs entry.
-> > >
-> > > I have two questions:
-> > >
-> > > 1/ Can I still export and use usb_cache_string()? In other terms, does
-> > > the first patch of this series still apply? This looks like the most
-> > > convenient function to retrieve that custom string to me.
-> >
-> > Everyone seems to just use the usb_string() function, will that not work
-> > for you?
+Hi Michael,
+
+Thank you for the patch.
+
+On Wed, Oct 26, 2022 at 08:42:12PM +0200, Michael Grzeschik wrote:
+> The overhead of preparing sg data is high for transfers with limited
+> payload. When transferring isoc over high-speed usb the maximum payload
+
+What exactly is causing a high overhead, and how big is it ?
+
+> is rather small which is a good argument no to use sg. This patch is
+> changing the uvc_video_encode_isoc_sg encode function only to be used
+> for super speed gadgets.
 > 
-> It is just that I would have to write two or three lines of code less.
-
-Odd, should it be used instead where others are calling usb_string()?
-
-> But if you prefer I can use usb_string(), no problem on that.
-
-Try it both ways.  If it's easier with usb_cache_string(), then we can
-export it.  It's just odd that it hasn't been exported yet.
-
-> > > 2/ Is it a no-go to also populate ethtool_drvinfo::fw_version? Some
-> > > users might look for the value in sysfs, while some might use ethtool.
-> > > If the info is not available in ethtool, people might simply assume it
-> > > is not available at all. So, I would like to provide both.
-> >
-> > That's up to the network developers/maintainers.  I don't know if that's
-> > a required or common api for network devices to have.
+> Cc: stable <stable@kernel.org>
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 > 
-> My question was more to know if you had any objection if I did so.
-> From the documentation, there is no indication that this is required.
-> But I don't like to leave a field empty when I have the information to
-> fill it.
+> ---
+> Since the last time the patch was send, I saw some issues regarding
+> the use of the vaddr. I thought there was a fix needed in this code.
+> 
+> But the problem was to be found in the videobuf2-dma-sg vmap/vunmap
+> implementation. So this patch stays unchanged and is save to be applied,
+> if the corresponding videobuf2-dma-sg patch is applied before it.
+> 
+>  drivers/usb/gadget/function/uvc_queue.c | 9 +++------
+>  drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
+>  2 files changed, 10 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
+> index ec500ee499eed1..31c50ba1774f0d 100644
+> --- a/drivers/usb/gadget/function/uvc_queue.c
+> +++ b/drivers/usb/gadget/function/uvc_queue.c
+> @@ -84,12 +84,9 @@ static int uvc_buffer_prepare(struct vb2_buffer *vb)
+>  		return -ENODEV;
+>  
+>  	buf->state = UVC_BUF_STATE_QUEUED;
+> -	if (queue->use_sg) {
+> -		buf->sgt = vb2_dma_sg_plane_desc(vb, 0);
+> -		buf->sg = buf->sgt->sgl;
+> -	} else {
+> -		buf->mem = vb2_plane_vaddr(vb, 0);
+> -	}
+> +	buf->sgt = vb2_dma_sg_plane_desc(vb, 0);
+> +	buf->sg = buf->sgt->sgl;
 
-No objection from me.
+vb2_dma_sg_plane_desc() is defined as
 
-thanks,
+static inline struct sg_table *vb2_dma_sg_plane_desc(
+		struct vb2_buffer *vb, unsigned int plane_no)
+{
+	return (struct sg_table *)vb2_plane_cookie(vb, plane_no);
+}
 
-greg k-h
+and vb2_plane_cookie() as
+
+void *vb2_plane_cookie(struct vb2_buffer *vb, unsigned int plane_no)
+{
+	if (plane_no >= vb->num_planes || !vb->planes[plane_no].mem_priv)
+		return NULL;
+
+	return call_ptr_memop(cookie, vb, vb->planes[plane_no].mem_priv);
+}
+
+If the queue isn't using scatter-gather (use_sg == false), the cookie
+operation will not be defined, and buf->sgt will be NULL. Dereferencing
+it will thus segfault.
+
+> +	buf->mem = vb2_plane_vaddr(vb, 0);
+>  	buf->length = vb2_plane_size(vb, 0);
+>  	if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+>  		buf->bytesused = 0;
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index bb037fcc90e69e..5081eb3bc5484c 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -448,6 +448,9 @@ static void uvcg_video_pump(struct work_struct *work)
+>   */
+>  int uvcg_video_enable(struct uvc_video *video, int enable)
+>  {
+> +	struct uvc_device *uvc = video->uvc;
+> +	struct usb_composite_dev *cdev = uvc->func.config->cdev;
+> +	struct usb_gadget *gadget = cdev->gadget;
+>  	unsigned int i;
+>  	int ret;
+>  
+> @@ -479,9 +482,11 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+>  	if (video->max_payload_size) {
+>  		video->encode = uvc_video_encode_bulk;
+>  		video->payload_size = 0;
+> -	} else
+> -		video->encode = video->queue.use_sg ?
+> +	} else {
+> +		video->encode = (video->queue.use_sg &&
+> +				 !(gadget->speed <= USB_SPEED_HIGH)) ?
+>  			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
+> +	}
+>  
+>  	video->req_int_count = 0;
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
