@@ -2,73 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8350F61E192
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Nov 2022 11:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6354561E1CE
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Nov 2022 12:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiKFK0a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Nov 2022 05:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S229795AbiKFLVp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Nov 2022 06:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiKFK02 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 05:26:28 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14EC657B
-        for <linux-usb@vger.kernel.org>; Sun,  6 Nov 2022 02:26:26 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id d3so12210560ljl.1
-        for <linux-usb@vger.kernel.org>; Sun, 06 Nov 2022 02:26:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6ytmh4jbXfi9+Pd2tuj2AuZetiod5sILdkUhYFeo1RE=;
-        b=jAp1SS54obPp+wR/9rCqhPETHwKqfwRhPo29/Pmn/B2OJxMlk7nb+3X4t28lyeK2f7
-         RGZTWcII5kTt2q/sybyS4Uzey+EpSsWPzlRuO0gVoEpHoIDG/Njv6DIiXwSIDGL7fJ58
-         G5KqFlYlI5Hj7J9++5jRfbl8au5q6vjC8NeMQ2QpkV0oV4r9vOb4syPachtHY10y/uzH
-         xbKJdo+qIsAvAtztZ1WhI/CIJxfRCM2/y/k3R/XBpFEgPobvNPfKCe4jh4g6FsJvDfXQ
-         Es349T71qwMk+k4KuaORwalm1sxKTALfA5mZNlGM4vu1fW35zZLXda5DMDmKRUsC+Zyz
-         aEog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ytmh4jbXfi9+Pd2tuj2AuZetiod5sILdkUhYFeo1RE=;
-        b=Dme21irUNhbrsUesuJnEN/ccw+OAMAiW+m1FCU7i9WM5mWD0LVJZ77dPO2Lb8se9xU
-         awh65FYdvlpZKp/X7Oo1fOG5MpD9U3TlRz+skRrnAAgolH90sRF5KUy+nXHqKm2dT3P7
-         U5reeqKI7VFxuHDiy18UPXSNhi8MGbLus1x85A09kurMvEEsYDV9MWcxCZlq45mnD4eQ
-         R2whA8//v8d6ouCXjPGwLFan3adbKJAMYKGsi8L7P2NR+F3n/6Gkpi1+6nrDHnSyKtXk
-         FfLDOpKY7el7ehdi3BbEiHdIfdVh0FOrr9EMKVZku38M0I1Eg3eX7Gd/Xwf+N3RaSOHc
-         +sxQ==
-X-Gm-Message-State: ACrzQf0zZbVVDyKPBoBDQq/842zbiGtwfw1fiUj4poJVgk7URnWz9bJ0
-        SsJ9MukI4r0JRLwvMixatMDhZA==
-X-Google-Smtp-Source: AMsMyM42uXgzC4cj2TfFp9j6pGwXckTRPf/v1fSxwWikkVCziEdZD6wSPHYoRKKkqnaYGwa2dAm+ZA==
-X-Received: by 2002:a2e:b6c3:0:b0:277:642d:5733 with SMTP id m3-20020a2eb6c3000000b00277642d5733mr10183917ljo.120.1667730384845;
-        Sun, 06 Nov 2022 02:26:24 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056512314800b004979e231fafsm640888lfi.38.2022.11.06.02.26.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 02:26:24 -0800 (PST)
-Message-ID: <d057f811-5eb1-720a-d94d-7a989def80a0@linaro.org>
-Date:   Sun, 6 Nov 2022 11:26:22 +0100
+        with ESMTP id S229692AbiKFLVo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 06:21:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4322B1137;
+        Sun,  6 Nov 2022 03:21:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C594D60C41;
+        Sun,  6 Nov 2022 11:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF2CC433C1;
+        Sun,  6 Nov 2022 11:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667733703;
+        bh=GDEiaMo72EYwsnRQhUvMFqjofKjnaRYviYufEBkHAFk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BRFl87hARzHv1vnpY9A7EEhYiGdZ2SLYiXQhGi3G/C/IRadktl14YxaxEsC1Bs3jy
+         yUSAx8JkQxAX0VqQzm7mnTetQ1PyTrZe1BMWXNQoHEqLkjv88DmFiklYg1k7QRc5sd
+         4fNn6v49SRhF+wZ1cfdU9KkNzglnWZ4ySZe4Q0fc=
+Date:   Sun, 6 Nov 2022 12:21:39 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
+ through ethtool
+Message-ID: <Y2eYw9Kna712mzR8@kroah.com>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
+ <Y2Ydf6UxVvTe8Zmz@kroah.com>
+ <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
+ <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
+ <Y2afm9xFIvJnwXh/@kroah.com>
+ <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] dt-bindings: usb: usb251xb: Convert to YAML schema
-Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        linux-usb@vger.kernel.org
-References: <20221103203741.116730-1-marex@denx.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103203741.116730-1-marex@denx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,170 +58,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/11/2022 21:37, Marek Vasut wrote:
-> Convert the usb251xb hub DT bindings from text to yaml schema so it is
-> possible to validate DTs against the schema.
+On Sat, Nov 05, 2022 at 08:45:10PM -0400, Alan Stern wrote:
+> On Sat, Nov 05, 2022 at 06:38:35PM +0100, Greg Kroah-Hartman wrote:
+> > On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
+> > > On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > It's late right now, and I can't remember the whole USB spec, but I
+> > think the device provides a list of the string ids that are valid for
+> > it.  If so, we can add that to sysfs for any USB device out there, no
+> > matter the string descriptor number.
 > 
-> Adjust the example to describe two different hubs at different I2C bus
-> addresses, to avoid I2C address collission in the example.
+> No, there is no such list.
+
+Yeah, my fault, nevermind about that, sorry.
+
+> > If not, maybe we can just iterate the 255 values and populate sysfs
+> > files if they are present?  I'll dig up the USB spec tomorrow...
 > 
-> Signed-off-by: Marek Vasut <marex@denx.de>
+> Yes, we could do that.  But the filename would have to be the string 
+> id, which is not meaningful.  We wouldn't be able to have labels like 
+> "product-info" unless somehow a driver could provide the label.
 
-Thank you for your patch. There is something to discuss/improve.
+We could have a directory of strings/ with the individual descriptors in
+there as files with the name being the string id.
 
-> +  dynamic-power-switching:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: |
-> +      enable auto-switching from self- to bus-powered operation if the
-> +      local power source is removed or unavailable (boolean)
-> +
-> +  oc-delay-us:
-> +    enum: [100, 4000, 8000, 16000]
-> +    description: |
-> +      Delay time (in microseconds) for filtering the over-current sense
-> +      inputs. Valid values are 100, 4000, 8000 (default) and 16000. If
+But that might take a long time to populate, as it can take a few tries
+to get the string from a device, and to do that 256 times might be
+noticable at device insertion time.
 
-Drop this sentence and instead add:
+> Also, there's the matter of language.  Devices can have string 
+> descriptors in multiple languages; which one should we show in sysfs?  
+> All of them?  Right now we use just the default language for the strings 
+> that we put in sysfs.
+> 
+> > I say do this at the USB core level, that way it works for any USB
+> > device, and you don't have a device-specific sysfs file and custom
+> > userspace code just for this.
+> 
+> This is unavoidable to some extent.  Without device-specific information 
+> or userspace code, there is no way to know which string descriptor 
+> contains the data you want.
 
-    default: 8000
+Agreed.
 
-> +      an invalid value is given, the default is used instead.
+Ok, for this specific instance, adding the "we know this string id
+should be here" as a device-specific sysfs file seems to be the easiest
+way forward.
 
+Vincent, want to try that instead?
 
-> +
-> +  compound-device:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: |
-> +      indicate the hub is part of a compound device (boolean)
-> +
-> +  port-mapping-mode:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: |
-> +      enable port mapping mode (boolean)
-> +
-> +  led-usb-mode:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: |
-> +      led usb/speed indication mode selection (boolean, default is speed mode)
-> +
-> +  led-speed-mode:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: |
-> +      led usb/speed indication mode selection (boolean, default is speed mode)
-> +
-> +  string-support:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: |
-> +      enable string descriptor support (required for manufacturer, product
-> +      and serial string configuration)
-> +
-> +  non-removable-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    description: |
-> +      Should specify the ports which have a non-removable device connected.
-> +
-> +  sp-disabled-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    description: |
-> +      Specifies the ports which will be self-power disabled
-> +
-> +  bp-disabled-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    description: |
-> +      Specifies the ports which will be bus-power disabled
-> +
-> +  sp-max-total-current-microamp:
-> +    maximum: 100000
-> +    description: |
-> +      Specifies max current consumed by the hub from VBUS when
-> +      operating in self-powered hub. It includes the hub silicon
-> +      along with all associated circuitry including a permanently
-> +      attached peripheral (range: 0 - 100000 uA, default 1000 uA)
+thanks,
 
-Drop the range description.
-
-default: 1000
-
-and similarly in other places
-
-> +
-> +  bp-max-total-current-microamp:
-> +    maximum: 510000
-> +    description: |
-> +      Specifies max current consumed by the hub from VBUS when
-> +      operating in self-powered hub. It includes the hub silicon
-> +      along with all associated circuitry including a permanently
-> +      attached peripheral (range: 0 - 510000 uA, default 100000 uA)
-> +
-> +  sp-max-removable-current-microamp:
-> +    maximum: 100000
-> +    description: |
-> +      Specifies max current consumed by the hub from VBUS when
-> +      operating in self-powered hub. It includes the hub silicon
-> +      along with all associated circuitry excluding a permanently
-> +      attached peripheral (range: 0 - 100000 uA, default 1000 uA)
-> +
-> +  bp-max-removable-current-microamp:
-> +    maximum: 510000
-> +    description: |
-> +      Specifies max current consumed by the hub from VBUS when
-> +      operating in self-powered hub. It includes the hub silicon
-> +      along with all associated circuitry excluding a permanently
-> +      attached peripheral (range: 0 - 510000 uA, default 100000 uA)
-> +
-> +  power-on-time-ms:
-> +    maximum: 510
-> +    description: |
-> +      Specifies the time it takes from the time the host initiates the
-> +      power-on sequence to a port until the port has adequate power.
-> +      The value is given in ms in a 0 - 510 range (default is 100ms).
-> +
-> +  swap-dx-lanes:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    description: |
-> +      Specifies the ports which will swap the differential-pair (D+/D-),
-> +      default is not-swapped.
-> +
-> +unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      usb2512b@2c {
-
-Generic node names, so "usb-hub"
-
-> +        compatible = "microchip,usb2512b";
-> +        reg = <0x2c>;
-> +        reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
-> +      };
-> +
-> +      usb2514b@2d {
-
-usb-hub
-
-> +        compatible = "microchip,usb2514b";
-> +        reg = <0x2d>;
-> +        vendor-id = /bits/ 16 <0x0000>;
-> +        product-id = /bits/ 16 <0x0000>;
-> +        string-support;
-> +        manufacturer = "Foo";
-> +        product = "Foo-Bar";
-> +        serial = "1234567890A";
-> +        /* correct misplaced usb connectors on port 1,2 */
-> +        swap-dx-lanes = <1 2>;
-> +      };
-> +    };
-
-Best regards,
-Krzysztof
-
+greg k-h
