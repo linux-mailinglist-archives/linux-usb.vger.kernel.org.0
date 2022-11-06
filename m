@@ -2,167 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8C661E05C
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Nov 2022 06:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F0D61E122
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Nov 2022 10:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiKFFfR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Nov 2022 01:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S229667AbiKFJCb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Nov 2022 04:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiKFFfP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 01:35:15 -0400
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F6F62E1;
-        Sat,  5 Nov 2022 22:35:10 -0700 (PDT)
-Received: by mail-pf1-f172.google.com with SMTP id g62so7892680pfb.10;
-        Sat, 05 Nov 2022 22:35:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KdcHygyluxlSKZYhnOmBthfqKtj/GWkjEK+v9KvjztY=;
-        b=fW6UwGe8o/Ye2VvIC4G/mRQYZUqUzC3TICxqAIhCgigDzUlNKtzQZ3DWpWaSIS7Dx0
-         Lj0mYdsFtfLSb/VXvUGMe4G1U3O09R1Ialntx4TNGj/8wU+QOBn6ivqyvZOZDScyOwG/
-         +1vyZUR+7Zq/qBzjZ/d4bWsCRCPY2MgR+/H16B30r3F1N9jqhH0FP4LeeYisW9MQe6Cw
-         k8oS33/VpzLXjqnQzuYp1JXwCciUAyDfC1npGZheSNYzNBI2yjI8yLse6raoOV7DJnPe
-         qq1dpVRxoLoQD+6fWi+XU6L41P0fWEfijhddktjTZEr8l8jBLzBK3KjzLRsBKIam7FOw
-         00TA==
-X-Gm-Message-State: ACrzQf1XqOlAZRrRq/8j5rrQFF5XpJZbN31Jccf9VS2pWG1iom/dp3/y
-        jmfxdJ8Lqus9pt9JPPqzdZ6rd8CUQIRBWrgYlFyPD4Ic28UlSQ==
-X-Google-Smtp-Source: AMsMyM7Q8GwZh9SKm3Tco3931Q8FVqiPXIX2xv52FjuT3th+35TD7IfyBqv8xJC1D1lvq8zZgm1YJMpabzvuqegeaYI=
-X-Received: by 2002:a65:6894:0:b0:470:76d:6f4a with SMTP id
- e20-20020a656894000000b00470076d6f4amr19455046pgt.457.1667712910263; Sat, 05
- Nov 2022 22:35:10 -0700 (PDT)
+        with ESMTP id S229564AbiKFJCa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 04:02:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1F2663;
+        Sun,  6 Nov 2022 01:02:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E218B80B30;
+        Sun,  6 Nov 2022 09:02:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2F8C433D6;
+        Sun,  6 Nov 2022 09:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667725346;
+        bh=xjKCgVmFbXFxtKFBYyK+XNvbHjCTI456JH43nwr0lEc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T9unJaNs6HLnI2qRq4XbuONifxSjf0RJRYhKfas+wxK0doTZWhX2Vxi39kuPEzrO1
+         +BV+lm/BOobR6s2lIx1pnCeyyfzWQXnIHRZ0qr9Wgc8MsPH6MehxcEhifAsz/gCVMR
+         wvbdlY7k7tV3PjNt7Ctd0UhP6JiWltIf9hTki/rSmR64249F9Up3gEhGCvzC/K1UUw
+         q9WzrK8uP8dz9slhiVl6SMQbmszxY25erslacG3LzbC9pUj69lwABU9ze9xERKJkcR
+         wekQkPj45xpacM2TntuWA291big5LixYfpfKE1aAa0O4qd/nFGMnoR+QB4LeTUmdNh
+         lMSMKTgYI6f8Q==
+Date:   Sun, 6 Nov 2022 17:02:21 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
+Message-ID: <20221106090221.GA152143@nchen-desktop>
+References: <1666620275-139704-1-git-send-email-pawell@cadence.com>
+ <20221027072421.GA75844@nchen-desktop>
+ <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr> <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com> <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
- <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
- <Y2afm9xFIvJnwXh/@kroah.com> <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
-In-Reply-To: <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 6 Nov 2022 14:34:58 +0900
-Message-ID: <CAMZ6Rq+hc+YObxCAFL8Go3gvc8budzdaxLZY2b4GexcG1xHzdQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun. 6 Nov. 2022 at 09:48, Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Sat, Nov 05, 2022 at 06:38:35PM +0100, Greg Kroah-Hartman wrote:
-> > On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
-> > > On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
-> > > <mailhol.vincent@wanadoo.fr> wrote:
-> > > > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > It's late right now, and I can't remember the whole USB spec, but I
-> > think the device provides a list of the string ids that are valid for
-> > it.  If so, we can add that to sysfs for any USB device out there, no
-> > matter the string descriptor number.
->
-> No, there is no such list.
->
-> > If not, maybe we can just iterate the 255 values and populate sysfs
-> > files if they are present?  I'll dig up the USB spec tomorrow...
->
-> Yes, we could do that.  But the filename would have to be the string
-> id, which is not meaningful.  We wouldn't be able to have labels like
-> "product-info" unless somehow a driver could provide the label.
-
-My shot on this would be like this:
-
-diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-index 549590e9c644..d0a4fc3ffe07 100644
---- a/include/linux/mod_devicetable.h
-+++ b/include/linux/mod_devicetable.h
-@@ -77,6 +77,19 @@ struct ieee1394_device_id {
-  * Use the flag values to control which fields are compared.
-  */
-
-+/**
-+ * struct custom_string - information of custom string and their indexes
-+ * @idx: Index of the custom string descriptor.
-+ * @label: Mnemotechnic, will be used as a filename for the sysfs entry.
-+ *
-+ * USB devices might expose some information in some customs strings. Drivers
-+ * can use this structure to inform the USB core of where to find these.
-+ */
-+struct custom_string {
-+       __u8 idx;
-+       const char *label;
-+};
-+
- /**
-  * struct usb_device_id - identifies USB devices for probing and hotplugging
-  * @match_flags: Bit mask controlling which of the other fields are used to
-@@ -110,6 +123,9 @@ struct ieee1394_device_id {
-  * @driver_info: Holds information used by the driver.  Usually it holds
-  *         a pointer to a descriptor understood by the driver, or perhaps
-  *         device flags.
-+ * @customs_strings_table: devices using customs strings can use this table to
-+ *         inform the USB core of how to retrieve them. If used, must
-contained an
-+ *         empty terminating entry.
-  *
-  * In most cases, drivers will create a table of device IDs by using
-  * USB_DEVICE(), or similar macros designed for that purpose.
-@@ -150,6 +166,7 @@ struct usb_device_id {
-            /* not matched against */
-            kernel_ulong_t  driver_info
-                        __attribute__((aligned(sizeof(kernel_ulong_t))));
-+           const struct custom_string *custom_strings_table;
- };
-
- /* Some useful macros to use to create struct usb_device_id */
-
-
-Then the driver would declare its custom stings like this:
-
-  static const struct custom_string es58x_custom_strings_table[] = {
-          { .idx = 6, .label = "product_info" },
-          { /* Terminating entry */ }
-  };
-
-
-Finally, the USB core can iterate through it and populate the sysfs
-entries using the provided label.
-
-
-> Also, there's the matter of language.  Devices can have string
-> descriptors in multiple languages; which one should we show in sysfs?
-> All of them?  Right now we use just the default language for the strings
-> that we put in sysfs.
-
-I do not have the knowledge to comment on the multiple languages
-issue. FYI, the device which I maintain does not have multiple
-languages.
-
-> > I say do this at the USB core level, that way it works for any USB
-> > device, and you don't have a device-specific sysfs file and custom
-> > userspace code just for this.
->
-> This is unavoidable to some extent.  Without device-specific information
-> or userspace code, there is no way to know which string descriptor
-> contains the data you want.
-
-ACK. I also do not want any userspace code for that. Users should not
-need to know a magic number to retrieve the thing.
-
-> Alan Stern
->
-> > Sound reasonable?
+On 22-10-27 08:46:17, Pawel Laszczak wrote:
+> 
 > >
-> > greg k-h
+> >On 22-10-24 10:04:35, Pawel Laszczak wrote:
+> >> Patch modifies the TD_SIZE in TRB before ZLP TRB.
+> >> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force processing
+> >> ZLP TRB by controller.
+> >>
+> >> cc: <stable@vger.kernel.org>
+> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
+> >> USBSSP DRD Driver")
+> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> >>
+> >> ---
+> >> Changelog:
+> >> v2:
+> >> - returned value for last TRB must be 0
+> >>
+> >>  drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
+> >>  1 file changed, 6 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
+> >> b/drivers/usb/cdns3/cdnsp-ring.c index 04dfcaa08dc4..aa79bce89d8a
+> >> 100644
+> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> >> @@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct
+> >> cdnsp_device *pdev,
+> >>
+> >>  	/* One TRB with a zero-length data packet. */
+> >>  	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
+> >> -	    trb_buff_len == td_total_len)
+> >> +	    trb_buff_len == td_total_len) {
+> >> +		/* Before ZLP driver needs set TD_SIZE=1. */
+> >> +		if (more_trbs_coming)
+> >> +			return 1;
+> >> +
+> >>  		return 0;
+> >> +	}
+> >
+> >Does that fix the issue you want at bulk transfer, which has zero-length packet
+> >at the last packet? It seems not align with your previous fix.
+> >Would you mind explaining more?
+> 
+> Value returned by function cdnsp_td_remainder is used 
+> as TD_SIZE in TRB.
+> 
+> The last TRB in TD should have TD_SIZE=0, so trb for ZLP should have
+> set also TD_SIZE=0. If driver set TD_SIZE=0 on before the last one
+> TRB then the controller stops the transfer and ignore trb for ZLP packet.
+> 
+> To fix this, the driver in such case must set TD_SIZE = 1
+> before the last TRB. 
+
+  	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
+ -	    trb_buff_len == td_total_len)
+ +	    trb_buff_len == td_total_len) {
+ +		/* Before ZLP driver needs set TD_SIZE=1. */
+ +		if (more_trbs_coming)
+ +			return 1;
+ +
+  		return 0;
+ +	}
+
+How your above fix could return TD_SIZE as 1 for last non-ZLP TRB?
+Which conditions are satisfied?
+
+Peter
+
+> e.g.
+> 
+> TD -> TRB1  transfer_length = 64KB, TD_SIZE =0
+>           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
+> 		    ignore this transfer and stop transfer on previous one
+> 
+> TD -> TRB1  transfer_length = 64KB, TD_SIZE =1
+>           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
+> 		    execute this trb and send ZLP
+> 
+> As you noticed previously, previous fix for last TRB returned
+> TD_SIZE = 1 in some cases.
+> Previous fix was working correct but was not compliance with
+> controller specification.
+> 
+> >
+> >>
+> >>  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
+> >>  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
+> >> --
+> >> 2.25.1
+> >>
+> >
+> >--
+> >
+> 
+> Thanks,
+> Pawel Laszczak
+
+-- 
+
+Thanks,
+Peter Chen
