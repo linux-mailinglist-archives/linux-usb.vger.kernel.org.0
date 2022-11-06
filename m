@@ -2,93 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E85A61DEF7
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Nov 2022 22:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B11F261DFD7
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Nov 2022 01:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiKEVsJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Nov 2022 17:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S229556AbiKFApO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Nov 2022 20:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKEVsD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 17:48:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB6F13CCD;
-        Sat,  5 Nov 2022 14:48:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 264E6B801BF;
-        Sat,  5 Nov 2022 21:48:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37383C433D6;
-        Sat,  5 Nov 2022 21:47:58 +0000 (UTC)
-Date:   Sat, 5 Nov 2022 17:47:56 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-bluetooth@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
- timers
-Message-ID: <20221105174756.38062fce@rorschach.local.home>
-In-Reply-To: <CAHk-=wjkkomrdcrAxxFijs-Lih6vHze+A2TgM+v7-Z7ZkXT+WA@mail.gmail.com>
-References: <20221105060024.598488967@goodmis.org>
-        <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
-        <20221105123642.596371c7@rorschach.local.home>
-        <Y2bPlllkHo5DUmLY@zx2c4.com>
-        <CAHk-=wjkkomrdcrAxxFijs-Lih6vHze+A2TgM+v7-Z7ZkXT+WA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229493AbiKFApN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Nov 2022 20:45:13 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EB7C611457
+        for <linux-usb@vger.kernel.org>; Sat,  5 Nov 2022 17:45:11 -0700 (PDT)
+Received: (qmail 394112 invoked by uid 1000); 5 Nov 2022 20:45:10 -0400
+Date:   Sat, 5 Nov 2022 20:45:10 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
+ through ethtool
+Message-ID: <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
+ <Y2Ydf6UxVvTe8Zmz@kroah.com>
+ <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
+ <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
+ <Y2afm9xFIvJnwXh/@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2afm9xFIvJnwXh/@kroah.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 5 Nov 2022 14:13:14 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Sat, Nov 05, 2022 at 06:38:35PM +0100, Greg Kroah-Hartman wrote:
+> On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
+> > On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
+> > <mailhol.vincent@wanadoo.fr> wrote:
+> > > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> It's late right now, and I can't remember the whole USB spec, but I
+> think the device provides a list of the string ids that are valid for
+> it.  If so, we can add that to sysfs for any USB device out there, no
+> matter the string descriptor number.
 
-> (Comparing output is also fun because the ordering of the patches is
-> random, so consecutive runs with the same rule will give different
-> patches. I assume that it's just because it's done in parallel, but it
-> doesn't help the "try to see what changes when you change the script"
-> ;)
+No, there is no such list.
 
-What I do to compare is:
+> If not, maybe we can just iterate the 255 values and populate sysfs
+> files if they are present?  I'll dig up the USB spec tomorrow...
 
- patch -p1 < cocci1.patch
- git commit -a
- git show | patch -p1 -R
- patch -p1 < cocci2.patch
- git diff
+Yes, we could do that.  But the filename would have to be the string 
+id, which is not meaningful.  We wouldn't be able to have labels like 
+"product-info" unless somehow a driver could provide the label.
 
-Then I see how things changed. This is how I was able to show you the
-tweaks I made.
+Also, there's the matter of language.  Devices can have string 
+descriptors in multiple languages; which one should we show in sysfs?  
+All of them?  Right now we use just the default language for the strings 
+that we put in sysfs.
 
--- Steve
+> I say do this at the USB core level, that way it works for any USB
+> device, and you don't have a device-specific sysfs file and custom
+> userspace code just for this.
+
+This is unavoidable to some extent.  Without device-specific information 
+or userspace code, there is no way to know which string descriptor 
+contains the data you want.
+
+Alan Stern
+
+> Sound reasonable?
+> 
+> greg k-h
