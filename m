@@ -2,65 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3873A61E76E
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 00:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430C461E784
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 00:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiKFXFN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Nov 2022 18:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S229941AbiKFXUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Nov 2022 18:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiKFXFM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 18:05:12 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F1CC774
-        for <linux-usb@vger.kernel.org>; Sun,  6 Nov 2022 15:05:11 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id d3so13804166ljl.1
-        for <linux-usb@vger.kernel.org>; Sun, 06 Nov 2022 15:05:11 -0800 (PST)
+        with ESMTP id S229798AbiKFXU3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 18:20:29 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF960A186
+        for <linux-usb@vger.kernel.org>; Sun,  6 Nov 2022 15:20:27 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id 13so26019953ejn.3
+        for <linux-usb@vger.kernel.org>; Sun, 06 Nov 2022 15:20:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=S1UmvPpaovEF+oYsyI6XeFRiyjpGpJnNZ03ZS8xtxoE=;
-        b=EeTZHGBaNvXZzyZ9KdTb2Ofp0qFp6+jf+tXuwv52528QCUbiuv37ABxLOmvhIen564
-         6wC+BnEVPCsJO4Degy+LQotYbywZsrB20XxFYocDABgBK4HTVgrzGmv/dDrsIn2s3ISf
-         FVpQ+umHkur5Bup/MAMHoujI5D7thofKECd8CfCdLtKrC3yQglcCuJuymCJPs7t2HXDC
-         6Yd0oSyBA2BgyXC6nguVuSZq6YGZ7MUNhcbwv/0dyiVr9BG7uFcn/nCRdmcQbx11Gw7p
-         FLbPjW+hZhNVIWdpdadR9LrOx8Y1CMcXe+7pQQ+7xCmlMHlHDUy8sCUNdVtfo6tBrNfa
-         4THw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fC4lW/Qhy2fZHlD2/XbvAAK+i88cBWDvfHjm2okyfsw=;
+        b=bcgkJp1VbSWe3KT3BAO3O9ReAiaGNrm6BYKp1iVtxaztyghKnWsmYQT4ROLwTI22h7
+         1Ayy1RFZt47U77Xcmwtaoqst2NLEExNRfUeecJPIeaYTYs0vOx54gk98IMeEfk3n96Bj
+         7Ubxyc51P81rmk2Jlg7CL//hWqE/7pgt/OYRyvTnmxGBfKZoDaWEyBGYjTHMhADL/qj3
+         vhH3LZNBbCNHA5LyGJiFyJBkJPoUORfsSd6LH/RhZlOfYL4c25XgIpFXXx/uFDyG/TBt
+         u/yQ6bCMF97/PjC1LZYHg+NvuBIUfgsWQSOUHpzX0n0dGdSe3dQ9C7/AGxEj8AD+t+40
+         Tshw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=S1UmvPpaovEF+oYsyI6XeFRiyjpGpJnNZ03ZS8xtxoE=;
-        b=h9qO9tk7va01zXWxp7SvO2gixV23JbUCo48b5e6nxAagNdmL/uDjVtIFg/TLSY3khF
-         Jgfn14bHrRnPxShzN+XKWQ07Ecm7IiFXrbR9HQy+wHd35bfFp22rhXExslLUXw8bU+Uz
-         516DH6H6uaRtCSXOnjelAfETWI5NIt2BdEfHOOwX4h8YdGHH9BrJlXq3p8kCJMwx0F5c
-         Lh7wKTwLzPq/zPhvro97/gF1U3oEPzys/hOtw28eC/sl9feoTj1EtbSVCfpdtf3anqJw
-         sKmvS4kpV7I+IjlvMN171rQBhzey6eA/tzkcwhEB/eTtrh5jKB1iboGV5E+XUWLmI2DQ
-         V+NA==
-X-Gm-Message-State: ACrzQf26rFLvbiTTZ40Ia8LdE/ehJTdWQmedYo43odJLhRAVR33Snqnp
-        vwKw02SKlJZV8dTJvQgI02JGig==
-X-Google-Smtp-Source: AMsMyM6cBYB3iKzqyiEFQBzt802VD7GV9xut6UMRe3aRz9F4S8tMFJYbgP+Nntr9wKu/fOtKuyyBCw==
-X-Received: by 2002:a2e:bd0e:0:b0:268:c03b:cf56 with SMTP id n14-20020a2ebd0e000000b00268c03bcf56mr17346733ljq.393.1667775909973;
-        Sun, 06 Nov 2022 15:05:09 -0800 (PST)
-Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id f3-20020ac24e43000000b0048b1b2233ddsm911988lfr.120.2022.11.06.15.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 15:05:09 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>
-Subject: [PATCH v2] usb: phy: phy-gpio-vbus-usb: Add device tree probing
-Date:   Mon,  7 Nov 2022 00:05:06 +0100
-Message-Id: <20221106230506.1646101-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.37.3
+        bh=fC4lW/Qhy2fZHlD2/XbvAAK+i88cBWDvfHjm2okyfsw=;
+        b=4mC+GDX6PKax1JYrD/xrj986iox/PU2KQQhsbfXwkkCXd+lvf8Hs7E1fIMob+hdJgU
+         NqU17SZQhSmrYaERGowYwJoccjK5FK+VCYhKpRC9tBJm4NUGWxTJDEr7jZIRy/LdfQEb
+         QspABXEr29dQ1D9feEZciwtWmWjiQiyWePlC2caC7r6kIizrM2cgXsAZcjTks0v14BL8
+         JQXSP5/geV7515GwPO6shUjrKRlkH/c42apRHCwWwFUNchppdigxdrAYR0LhR5yacc0g
+         WeGKv8Qa4YnxsDQ9KmPDs68WDEw0zJ1vr5NNmZlVsz4/gs8aqUxGf+cw3NGaRtnTb9hO
+         KrPg==
+X-Gm-Message-State: ACrzQf3Vr3vmi6gGm3MiVDc2/eklgglFQHJ+lH7NPx8zmt7SSHgV+FKB
+        oprSjRpnaOWRjhUEfhQdyVbLnGLVrBhtN/OPWj/BCg==
+X-Google-Smtp-Source: AMsMyM6/LgP3iZcl1XJw9nSeHT5FDROLnFdhThude4AK+/aVJyTAu35aQ4zmVI8DoXvw2uIWeslD/BkEESepKmyl+MU=
+X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
+ d11-20020a1709064c4b00b007ada197b58emr46091190ejw.203.1667776826285; Sun, 06
+ Nov 2022 15:20:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221023144708.3596563-1-linus.walleij@linaro.org>
+In-Reply-To: <20221023144708.3596563-1-linus.walleij@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 7 Nov 2022 00:20:14 +0100
+Message-ID: <CACRpkda=nbOcXSMNjnJjhL6KaCk_yYD42tSZ3qcxD2bBDWQ2Ag@mail.gmail.com>
+Subject: Re: [PATCH 1/3 v1] usb: fotg210: Collect pieces of dual mode controller
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>,
+        Yuan-Hsin Chen <yhchen@faraday-tech.com>,
+        Felipe Balbi <balbi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,77 +66,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make it possible to probe the GPIO VBUS detection driver
-from the device tree compatible for GPIO USB B connectors.
+On Sun, Oct 23, 2022 at 4:49 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-Since this driver is using the "gpio-usb-b-connector"
-compatible, it is important to discern it from the role
-switch connector driver (which does not provide a phy),
-so we add some Kconfig text and depend on !USB_CONN_GPIO.
+> The Faraday FOTG210 is a dual-mode OTG USB controller that can
+> act as host, peripheral or both. To be able to probe from one
+> hardware description and to follow the pattern of other dual-
+> mode controllers such as MUSB or MTU3 we need to collect the
+> two, currently completely separate drivers in the same
+> directory.
+>
+> After this, users need to select the main symbol USB_FOTG210
+> and then each respective subdriver. We pave the road to
+> compile both drivers into the same kernel and select the
+> one we want to use at probe() time, and possibly add OTG
+> support in the end.
+>
+> This patch doesn't do much more than create the new symbol
+> and collect the drivers in one place. We also add a comment
+> for the section of dual-mode controllers in the Kconfig
+> file so people can see what these selections are about.
+>
+> Also add myself as maintainer as there has been little
+> response on my patches to these drivers.
+>
+> Cc: Fabian Vogt <fabian@ritter-vogt.de>
+> Cc: Yuan-Hsin Chen <yhchen@faraday-tech.com>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Cc: Rob Herring <robh@kernel.org>
-Cc: Prashant Malani <pmalani@chromium.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Use the existing DT binding from the gpio-usb-b-connector
----
- drivers/usb/phy/Kconfig             |  6 +++++-
- drivers/usb/phy/phy-gpio-vbus-usb.c | 12 ++++++++++++
- 2 files changed, 17 insertions(+), 1 deletion(-)
+Greg are these fine to merge? I have some more patches coming
+so I would like to establish these as a base.
 
-diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
-index 2acbe41fbf7e..efdcafdbe46d 100644
---- a/drivers/usb/phy/Kconfig
-+++ b/drivers/usb/phy/Kconfig
-@@ -93,12 +93,16 @@ config USB_GPIO_VBUS
- 	tristate "GPIO based peripheral-only VBUS sensing 'transceiver'"
- 	depends on GPIOLIB || COMPILE_TEST
- 	depends on USB_GADGET || !USB_GADGET # if USB_GADGET=m, this can't be 'y'
-+	depends on !USB_CONN_GPIO
- 	select USB_PHY
- 	help
- 	  Provides simple GPIO VBUS sensing for controllers with an
- 	  internal transceiver via the usb_phy interface, and
- 	  optionally control of a D+ pullup GPIO as well as a VBUS
--	  current limit regulator.
-+	  current limit regulator. This driver is for devices that do
-+	  NOT support role switch. OTG devices that can do role switch
-+	  (master/peripheral) shall use the USB based connection
-+	  detection driver USB_CONN_GPIO.
- 
- config OMAP_OTG
- 	tristate "OMAP USB OTG controller driver"
-diff --git a/drivers/usb/phy/phy-gpio-vbus-usb.c b/drivers/usb/phy/phy-gpio-vbus-usb.c
-index f13f5530746c..12dfeff7de3d 100644
---- a/drivers/usb/phy/phy-gpio-vbus-usb.c
-+++ b/drivers/usb/phy/phy-gpio-vbus-usb.c
-@@ -366,12 +366,24 @@ static const struct dev_pm_ops gpio_vbus_dev_pm_ops = {
- 
- MODULE_ALIAS("platform:gpio-vbus");
- 
-+/*
-+ * NOTE: this driver matches against "gpio-usb-b-connector" for
-+ * devices that do NOT support role switch.
-+ */
-+static const struct of_device_id gpio_vbus_of_match[] = {
-+	{
-+		.compatible = "gpio-usb-b-connector",
-+	},
-+	{},
-+};
-+
- static struct platform_driver gpio_vbus_driver = {
- 	.driver = {
- 		.name  = "gpio-vbus",
- #ifdef CONFIG_PM
- 		.pm = &gpio_vbus_dev_pm_ops,
- #endif
-+		.of_match_table = gpio_vbus_of_match,
- 	},
- 	.probe		= gpio_vbus_probe,
- 	.remove		= gpio_vbus_remove,
--- 
-2.37.3
-
+Yours,
+Linus Walleij
