@@ -2,73 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3296261FCE4
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 19:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C62061FD77
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 19:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiKGSKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 13:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S232973AbiKGSY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 13:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiKGSJi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 13:09:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2061D264BB;
-        Mon,  7 Nov 2022 10:06:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A445611EE;
-        Mon,  7 Nov 2022 18:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86128C433C1;
-        Mon,  7 Nov 2022 18:06:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667844375;
-        bh=SDj38zhZ2y6S5wzKuopT3v98OgXjZ5t/qd6hJPfIq1Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gXtmlImi+vjgkpCX3LhfMyz3zFTfaEbT4u/U6S8Pw9RvpKVbkdsOYDOrzCs9ms5Ev
-         73rDkC0ASYixrRLsG4wPx1kv9Lt8nE9oBHLEQY/jKrHD6+w83nCK5tW6rmfD1khPHa
-         AnUPD9FtPcjhWJOC35YDIMYOTUL3ELWV2Me0J8fowbOzfHO0I1jL+PsxKT7xA5NWoz
-         Cw4GRFQtad1E8VEFMIgwchcxZwifrcGntDmUeJBRYSqcf3NOI+1piCumZyU2HUZR18
-         CGhJl4lKkdwH4P4vVily6EKSX9jSDZMEbtt1GuZe3bIGAKnpzeGgIj7xZ8duX9KhiC
-         80Akdomf9Dh+g==
-Date:   Mon, 7 Nov 2022 12:06:13 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc:     wse@tuxedocomputers.com, Konrad J Hambrick <kjhambrick@gmail.com>,
-        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Thunderbolt DMAR errors (bugzilla 214259)
-Message-ID: <20221107180613.GA406714@bhelgaas>
+        with ESMTP id S233053AbiKGSY3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 13:24:29 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D9C28E2D
+        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 10:24:05 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id c1so16276395lfi.7
+        for <linux-usb@vger.kernel.org>; Mon, 07 Nov 2022 10:24:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v/+DmlpUJNQ6H+y2+hAk27Zykcqu9Cxop/8nW/tfq8o=;
+        b=YM6wEP8D2ic+78mnkgabgCawUWu5PRsEDd33Uz5A4ygUYI7EaV1pBVoNegOluHeRBP
+         cpj54KXembu+3W9hDl8Qyro7au79xuQTxdiq6zb58BMrvmw4tzlESZVBcOZ5m3S7FOmU
+         SB8wdGGh7d+J47isBugbdpZrCno3LYjdZ5IUiwRQgUEr3rY11SkXAo7RikONu9QnX1vI
+         HU5YAF3KGAV0c51lqPbYeSrW/SOu7vO7uc9C9PnS8HamJQxPT3KOAS47YGutU11oBIeR
+         fPpPsCH6oP+s8yO3U2EmoHtmH4C3H52m8SAhIKzEd3ZCgijel+Yrtlc/STylA8BJbvK5
+         3/Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v/+DmlpUJNQ6H+y2+hAk27Zykcqu9Cxop/8nW/tfq8o=;
+        b=t2aWbk3Pk0+OXdyVrTYzXxBSl0OoK6Cudz36FMc64b7yybFeA1B3GNDrksf4pP55uN
+         dlrKIvvuRoBP84uZm8UbrBKbtVU+l6Z9r4XAcrP+/j43Fkj9Fac1i4WxB4/mfC8VK5kA
+         APDoTtHeOiWriLshVo1NGWrFTKXPxoaWwWjsT+BAlWRrHgFHm/9Fkgop8u6zEL9gBh4i
+         6YxizerF8sU02hW12Ids2tMnuFZ8FR0DmrkTuKswBjjLvgGnHr64FZBG31jZ4IBj5iUm
+         hVQzZSYiaDe0GRvN/bwyWNNf8TfHalW9oM2c2iAsW2KJBDH0V2173xrAnwO4Be9l16sy
+         QOpg==
+X-Gm-Message-State: ANoB5plmYT4xylK4NbDQ6trGG9Th02iWQQMsERhT56ChbmcHH6TRcGLE
+        8VFsDCdUFQhfPNBQ9QUOk/UI2w==
+X-Google-Smtp-Source: AA0mqf5uwcpb6dUhKs4Vhu0uRUXiku2hqbfLgAsSVoGqbFd7CA76YcTVc/3qG22gp+wuXsTzA+O6sA==
+X-Received: by 2002:a05:6512:374e:b0:4b2:c8b:7a66 with SMTP id a14-20020a056512374e00b004b20c8b7a66mr4976348lfs.498.1667845443689;
+        Mon, 07 Nov 2022 10:24:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id q23-20020a19a417000000b004ab98cd5644sm1358051lfc.182.2022.11.07.10.24.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 10:24:02 -0800 (PST)
+Message-ID: <c10df12c-ccb9-03b7-96be-1aac5feee1aa@linaro.org>
+Date:   Mon, 7 Nov 2022 19:24:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 4/7] dt-bindings: usb: add the Renesas USBF controller
+ binding
+Content-Language: en-US
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221107135825.583877-1-herve.codina@bootlin.com>
+ <20221107135825.583877-5-herve.codina@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107135825.583877-5-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-See https://bugzilla.kernel.org/show_bug.cgi?id=214259
-From comment 42 of this bugzilla:
+On 07/11/2022 14:58, Herve Codina wrote:
+> The Renesas USBF controller is an USB2.0 device controller
+> (UDC) available in Renesas r9a06g032 SoC (RZ/N1 family).
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  .../devicetree/bindings/usb/renesas,usbf.yaml | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/renesas,usbf.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbf.yaml b/Documentation/devicetree/bindings/usb/renesas,usbf.yaml
+> new file mode 100644
+> index 000000000000..f2b146d9d37b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/renesas,usbf.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/renesas,usbf.yaml#
 
-v6.1-rc4 on On Clevo X170KM Barebone:
+Filename based on compatible, so renesas,rzn1-usbf.yaml.
 
-  [    0.000000] BIOS-e820: [mem 0x00000000694af000-0x000000006b2fefff] reserved
-  [    0.739226] pci 0000:05:00.0: [8086:1137] type 00 class 0x0c0340
-  [    0.739266] pci 0000:05:00.0: reg 0x10: [mem 0x425a000000-0x425a03ffff 64bit pref]
-  [    0.739288] pci 0000:05:00.0: reg 0x18: [mem 0x425a040000-0x425a040fff 64bit pref]
-  [    1.587809] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   23.594763] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   44.074761] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   64.554820] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   85.031314] thunderbolt 0000:05:00.0: failed to send driver ready to ICM
-  [   85.031403] thunderbolt: probe of 0000:05:00.0 failed with error -110
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas USBF (USB Function) controller binding
+> +
+> +description: |
+> +   The Renesas USBF controller is an USB2.0 device
+> +   controller (UDC).
+> +
+> +maintainers:
+> +  - Herve Codina <herve.codina@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
 
-The initial report from wse@ was on v5.15 (faults at the exact same
-address).
+You have only one possibility, so oneOf is not needed. Unless you
+already predict it will grow with new incompatible lists?
+
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a06g032-usbf
+> +          - const: renesas,rzn1-usbf
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Internal bus clock (AHB) for Function
+> +      - description: Internal bus clock (AHB) for Power Management
+
+Blank line
+
+> +  clock-names:
+> +    items:
+> +      - const: hclkf
+> +      - const: hclkpm
+> +
+> +  interrupts:
+> +    items:
+> +      - description: The USBF EPC interrupt
+> +      - description: The USBF AHB-EPC interrupt
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
+> +
+> +    usb@4001e000 {
+> +        compatible = "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
+> +        reg = <0x4001e000 0x2000>;
+> +        interrupts =
+
+No need for line break. It's not helping in readability.
+
+
+> +            <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> +            <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&sysctrl R9A06G032_HCLK_USBF>,
+> +                 <&sysctrl R9A06G032_HCLK_USBPM>;
+> +        clock-names = "hclkf", "hclkpm";
+> +    };
+
+Best regards,
+Krzysztof
+
