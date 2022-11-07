@@ -2,120 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC8661F66B
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 15:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BCD61F687
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 15:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiKGOnO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 7 Nov 2022 09:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S231599AbiKGOsj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 09:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbiKGOnJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 09:43:09 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6144B1A3BB;
-        Mon,  7 Nov 2022 06:43:02 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id j6so8184969qvn.12;
-        Mon, 07 Nov 2022 06:43:02 -0800 (PST)
+        with ESMTP id S231249AbiKGOsi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 09:48:38 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815FD1581D;
+        Mon,  7 Nov 2022 06:48:36 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id z14so16575551wrn.7;
+        Mon, 07 Nov 2022 06:48:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L1N3AZluJC5PMpvDgMOhDOY9j2qE8n3HGiZz4zfJ5qE=;
+        b=Rkma8QkCBGz3zCp7ddqCDHMuRgU+2izMkr6rzs57tin6XmNxRbMNYFmppsEOzu3wC2
+         hNmOzbRFJE+74isWC8SSJm7e2W//5OXwaD5IZp6A80s+S2134FKGJMc1T7caEhBPYP5w
+         7ODJYi3CQclJS72auvHJd6ht/V6ADz7jr1t9FL5VIocQO/UsL71DL9GmAFrc+eQUE2+O
+         D0rqz+TcfQVdd5x4LTIdEMp1GkUeZH0Ngi+uhZmZNrw8jszu3bRqG18DtubxS2SjrwCa
+         I3iJbFsxOfOH9aauVXOPlJDmwRWMZGRG/hiFsjVGtIR+1TChqqjGiUqHgw6BjOjpMGgk
+         Rhsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=unzujgx2IFO2xv07GVYQlpwOttD9eRvw4Avn0aUkXh0=;
-        b=ikEUrvshKQKGXyGHSxNs+XWwWvhkNuKFWYf2rr8sMbaLhf/AK/2B8mi0plcv0DaF8n
-         rk0EKBqXt5jPxzGc+GCJCT+C1AkOnmydldvaqh1AhAW1jWdrE7RDJOkdOFlCLyUFxWuh
-         je67RAPN8XcczpPn5yr9OKJ0rxzVtVmi2Mc8tpZkTjIGrbJl1lHg3wZnxZjxA+U6QvcX
-         Lmt+MquDZrmIPb5RRjUsffsSFXR6UCdz5Xo5uEdkUhQfbgT8i/LMQh98rt4zlEu1fbck
-         SCTyebp9D1tI3JtpgUgPj+lUsqJW0mwlGqG9mErg1zAMEOR9NpmPsJG/bOr0ZFdW0mxZ
-         56cw==
-X-Gm-Message-State: ACrzQf2tc5mFwjagLvnuRPOqa71yTP5vwUzjrS45laddeSKrOnvEA5Tq
-        DKCy2YyYfGBKacpFIThe9ONv2D1pz1T3KA==
-X-Google-Smtp-Source: AMsMyM4YdpqCnMUIlta2r1PoISSOqxEC2UNRJ7E3az1m+YbJI4n82Lz6v04AWIjTdxhE2+F0YZLPRQ==
-X-Received: by 2002:a05:6214:1a48:b0:4bb:604d:fb2c with SMTP id fi8-20020a0562141a4800b004bb604dfb2cmr44477643qvb.93.1667832181400;
-        Mon, 07 Nov 2022 06:43:01 -0800 (PST)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id 69-20020a370c48000000b006eea4b5abcesm6821459qkm.89.2022.11.07.06.43.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 06:43:01 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id 131so9452079ybl.3;
-        Mon, 07 Nov 2022 06:43:01 -0800 (PST)
-X-Received: by 2002:a05:6902:503:b0:6cf:c510:6a23 with SMTP id
- x3-20020a056902050300b006cfc5106a23mr30806206ybs.380.1667832180877; Mon, 07
- Nov 2022 06:43:00 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L1N3AZluJC5PMpvDgMOhDOY9j2qE8n3HGiZz4zfJ5qE=;
+        b=Y5ILIWttf4c9U058Mca3LTdbGS8DCy9plRqTP/L9nPf0NDkU3VKGKckBAmoRh8Okzs
+         kBTwQ1puRIWlrJ9Ists12gKis9bwR4+wuAip3liZoggF4vyqZ+qpu0mtpGz8bn9kplqU
+         y0cdA/kJlnKQfaJQ+XyC8WOBMWWGrrpE+3T+wk3PKDuEj2J8YjIgS9sXakEIplixeo+E
+         I3nmI3rrw8PwuAmKNbhzRUOy2NuFu0nD+jUxpKAYv3cpXlao0DnUva+SE/LgpJ3UVfiD
+         P7HrXZ1too4Q8iL6lTa9OBlVng+hy8sH/ltz0GvNH+153PW3N7TghxjPNRzP7r1+qEzw
+         s50A==
+X-Gm-Message-State: ACrzQf3ycsBwCc7iftKn+ob1lV5vBTUY93kgLgeuJWB6jbDEAi3QoXnN
+        n+LT5AN4KSHvNCx0vxUny8w=
+X-Google-Smtp-Source: AMsMyM5csMmCF4sPQjKZxYDdIAvNi0HAaSVzsB8zbHm1KYlUHCevLnyCUiLlWhfuEGTYLQivB1eXpQ==
+X-Received: by 2002:a5d:5e84:0:b0:236:cdb8:c67f with SMTP id ck4-20020a5d5e84000000b00236cdb8c67fmr25941828wrb.159.1667832514985;
+        Mon, 07 Nov 2022 06:48:34 -0800 (PST)
+Received: from localhost.localdomain ([95.183.227.98])
+        by smtp.gmail.com with ESMTPSA id m1-20020a7bca41000000b003c6c3fb3cf6sm8418820wml.18.2022.11.07.06.48.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 06:48:34 -0800 (PST)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Marek Vasut <marex@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH] extcon: usbc-tusb320: Call the Type-C IRQ handler only if a port is registered
+Date:   Mon,  7 Nov 2022 17:48:10 +0300
+Message-Id: <20221107144810.588755-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221107135825.583877-1-herve.codina@bootlin.com> <20221107135825.583877-8-herve.codina@bootlin.com>
-In-Reply-To: <20221107135825.583877-8-herve.codina@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 7 Nov 2022 15:42:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVip_e7dZ2P7sv1OH+P48dQyjnmsJBoATHLAqzPEcwDdw@mail.gmail.com>
-Message-ID: <CAMuHMdVip_e7dZ2P7sv1OH+P48dQyjnmsJBoATHLAqzPEcwDdw@mail.gmail.com>
-Subject: Re: [PATCH 7/7] MAINTAINERS: add the Renesas RZ/N1 USBF controller entry
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hervé,
+From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-On Mon, Nov 7, 2022 at 3:00 PM Herve Codina <herve.codina@bootlin.com> wrote:
-> After contributing the driver, add myself as the maintainer
-> for Renesas RZ/N1 USBF controller.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Commit bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
+added an optional Type-C interface to the driver but missed to check
+if it is in use when calling the IRQ handler. This causes an oops on
+devices currently using the old extcon interface. Check if a Type-C
+port is registered before calling the Type-C IRQ handler.
 
-Thanks for your patch!
+Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
+ drivers/extcon/extcon-usbc-tusb320.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17627,6 +17627,14 @@ S:     Maintained
->  F:     Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
->  F:     drivers/rtc/rtc-rzn1.c
->
-> +RENESAS RZ/N1 USBF CONTROLLER DRIVER
-> +M:     Herve Codina <herve.codina@bootlin.com>
+diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+index 41041ff0fadb..037bc11b2a48 100644
+--- a/drivers/extcon/extcon-usbc-tusb320.c
++++ b/drivers/extcon/extcon-usbc-tusb320.c
+@@ -327,7 +327,14 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 
+ 	tusb320_extcon_irq_handler(priv, reg);
+-	tusb320_typec_irq_handler(priv, reg);
++
++	/*
++	 * Type-C support is optional for backward compatibility.
++	 * Only call the Type-C handler if a port had been registered
++	 * previously.
++	 */
++	if (priv->port)
++		tusb320_typec_irq_handler(priv, reg);
+ 
+ 	regmap_write(priv->regmap, TUSB320_REG9, reg);
+ 
+-- 
+2.38.1
 
-Hervé?
-
-> +L:     linux-renesas-soc@vger.kernel.org
-> +L:     linux-usb@vger.kernel.org
-> +S:     Maintained
-> +F:     Documentation/devicetree/bindings/usb/renesas,usbf.yaml
-> +F:     drivers/usb/gadget/udc/renesas_usbf.c
-> +
->  RENESAS R-CAR GEN3 & RZ/N1 NAND CONTROLLER DRIVER
->  M:     Miquel Raynal <miquel.raynal@bootlin.com>
->  L:     linux-mtd@lists.infradead.org
-
-Up to you, so
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
