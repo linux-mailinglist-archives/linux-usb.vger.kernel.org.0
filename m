@@ -2,117 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E5461F7BB
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 16:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D7D61F826
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 17:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiKGPdi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 10:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S232502AbiKGQBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 11:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbiKGPdh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 10:33:37 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10DB13F2B;
-        Mon,  7 Nov 2022 07:33:35 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id t1so7111642wmi.4;
-        Mon, 07 Nov 2022 07:33:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QNmLWsv0kOPbaij43L8PfdGtUfA1FHnBM0jiToGdqOU=;
-        b=WdC3MC8z3itl9c+IF64z/rV5qalzXE8UZBKgROyfzxrEug7x8+e7Yj+iOtliqkZRTj
-         w6wrfjO0jJwzKusjCm4hScyZer/toiJA5g0NgkesWIWAw+QqpumKaspbMZSY/Pwy+d69
-         z9eOeFSvNlS8vIl9ohb1dmwlpb/kjmmVMK3RXlWL/DLSb9UU18uJs4BwhiH8G2fO2iSr
-         8ss8/oZYahLx2JuDgRYyP5qfT4uma3I+w25lta2M55Ufg1brVLNGKqs+tplpqFkQXfzS
-         Hl0931T+In5lF+VxJIulpTSuiSCtdGz4LRUFKxm6eGQDs2GtgEQ5/Qbz215+JVD8oQ6Y
-         0qgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QNmLWsv0kOPbaij43L8PfdGtUfA1FHnBM0jiToGdqOU=;
-        b=F0uxlylgbft2DkRO9OhU4yXId8ZmvytJs+z0mSxAVCwr16Oxn3YDPeM47WS5+L6tCK
-         VFo/h9ULwf9Jaqu1Pv7xmypd36uVv0hnfQvItBQRka92HdlocU+qhoCuPGU4AX185crC
-         wEOBIiP5jKnJXNn81wNYVLepkz7wO70tEZg4B7l5p6EsTR3E5SPqis2TQKpJxnROakhw
-         06O5Zh8yf86Z1d/oNMTyVsxB3WtwMOsOBjpc4Dw8jola5iT+utWd9XscN1SFSvej/7PI
-         1X6FzXwQF735BzIEPFEZ1XZ2fncFMMN/gwEZWm3tfcGVK1DGdnp4M97+rJCk6RnwuboK
-         hLEA==
-X-Gm-Message-State: ACrzQf1Ftfv79U9ir6CRQJ30LDaCAPKMpXW18TJcVv7h7W4VQ3VmlnAo
-        FbG+QXUtJcdHXBwk/CeGFV8=
-X-Google-Smtp-Source: AMsMyM6GDea4zCfO3UsQihQEQjc+aE0RhRYzlNhDtrmkpHRHyxYERIh+UUAWqLS9TxenW2dd2rVB4A==
-X-Received: by 2002:a05:600c:2150:b0:3cf:6c05:b4ab with SMTP id v16-20020a05600c215000b003cf6c05b4abmr31346030wml.161.1667835214116;
-        Mon, 07 Nov 2022 07:33:34 -0800 (PST)
-Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id q5-20020adf9dc5000000b002364835caacsm7393291wre.112.2022.11.07.07.33.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 07:33:33 -0800 (PST)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Marek Vasut <marex@denx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH v2] extcon: usbc-tusb320: Call the Type-C IRQ handler only if a port is registered
-Date:   Mon,  7 Nov 2022 18:33:17 +0300
-Message-Id: <20221107153317.657803-1-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231910AbiKGQBL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 11:01:11 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DAC1A3AE;
+        Mon,  7 Nov 2022 08:01:09 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B3F2A5C0089;
+        Mon,  7 Nov 2022 11:01:08 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Mon, 07 Nov 2022 11:01:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1667836868; x=1667923268; bh=Oc
+        MqlVPjKlmKhzuxKa/KdFDe8vaSPreulhqqsYoyPb4=; b=Up9vkF7jYQ1ujCZ/jg
+        9tR1Fodo8WoCA38omMpmbTKogh7+VsfyUZmzQ+fNBR3u0lEtBkd1JS7vXC03ARS8
+        P6HHgQY70t5+z6rTSfTA2bhPyBA7ugGprWAXrzp+PyKuYXUqVj/3pLFS7pa9lXzQ
+        R2/FMn8tLnCddF50pImXfny+KkhkA5/5QMAKGL777+dciORgveJF9vXGGwmzJuVk
+        mRq/Wm17dUQY3+F9jqBAwLzsYOqnWXD/4a/Noc8h9BkQ1YpOiqjx8W5fWXexGUUf
+        qunHhDLgYlQCEDjyaWf90MAlG1TbW0cxqadTrFjjFth1Pc2oi83CGQ3i2dOB0dbA
+        DNlA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1667836868; x=1667923268; bh=OcMqlVPjKlmKhzuxKa/KdFDe8vaS
+        PreulhqqsYoyPb4=; b=ivKfXQ13nP9UNGqwk1nOVSNfuQh+VttwMZtlqnh5X28+
+        WKEIfuMFKCNK3LbwOnSq6sS0SoSJgCYHFnuGtTt4KvIEKRI/ZBDcw/fPcAxA4ocH
+        +tVkc5BFqyGo/2ojaWntoG788LQZ+VxBkJAM0TrwFMNceB8g4Q5/5yB7GGMf2qjI
+        tcTp3DEBtDWK4xAakDZcVVFPUt6j9/mxjBeuEVkOf13kvX5xshuG2OUPtvsUE2V5
+        OCjFeFi/jQi5K0mFEMDdz+3uQCivf/8EokYl6qJaeTF7WsS0hMEPivsmTvsnaTJL
+        A0+zGL0YMI1dVQ5mK7sQFaE77REbahc4UFA3+pvMBw==
+X-ME-Sender: <xms:wytpY4Q9ubqgOYIIoU7btC0XVb9HB-Bo24nQ_ANmFN8Ni1kEkDhQjg>
+    <xme:wytpY1zlyWNaIXIegmj-exZgT-4fOx6zWoIVlkpmAL7PZsLCKzELxwXfsj45OTaTq
+    WrPVGY0mT-YOllfWmE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdekvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:xCtpY12oNxHYaqKGZv5tZS1BffNlMwuhSc-3wHgQBCUhlWau8cAb7Q>
+    <xmx:xCtpY8CplXYN-aa9GmIIp2QLRTD0vVvrONBNqAvmGj504BaAf01frg>
+    <xmx:xCtpYxiLfy3iLPstkNtKrOi_FsH9HSeBmTUUcv2BOo9WDRVnYVijeA>
+    <xmx:xCtpY_buKGjdSvF1x8m6WLwB607VZT-TBk5_HHW5YiFNj1NYLZn1Pw>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D70BFA6007C; Mon,  7 Nov 2022 11:01:07 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <0bc7b309-6f3b-4821-81d0-435671d64e2f@app.fastmail.com>
+In-Reply-To: <Y2jrQgj53z/mhHmm@smile.fi.intel.com>
+References: <20221106214804.2814-1-j@jannau.net>
+ <Y2jrQgj53z/mhHmm@smile.fi.intel.com>
+Date:   Mon, 07 Nov 2022 17:00:47 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Janne Grunau" <j@jannau.net>
+Cc:     linux-usb@vger.kernel.org, stable@kernel.org,
+        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Andrey Smirnov" <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: dwc3: Do not get extcon device when usb-role-switch is
+ used
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+On Mon, Nov 7, 2022, at 12:25, Andy Shevchenko wrote:
+> On Sun, Nov 06, 2022 at 10:48:04PM +0100, Janne Grunau wrote:
+>> The change breaks device tree based platforms with PHY device and use
+>> usb-role-switch instead of an extcon switch. extcon_find_edev_by_node()
+>> will return EPROBE_DEFER if it can not find a device so probing without
+>> an extcon device will be deferred indefinitely. Fix this by
+>> explicitly checking for usb-role-switch.
+>> At least the out-of-tree USB3 support on Apple silicon based platforms
+>> using dwc3 with tipd USB Type-C and PD controller is affected by this
+>> issue.
+>
+> We don't care about out-of-tree modules, do we?
+>
+> OTOH, the problem you are trying to workaround is probably in a (mis)use of
+> deferred probe somewhere.
+>
+> Btw, does it prevent the system boot or you just see the extcon in the list of
+> deferred devices after booting?
 
-Commit bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
-added an optional Type-C interface to the driver but missed to check
-if it is in use when calling the IRQ handler. This causes an oops on
-devices currently using the old extcon interface. Check if a Type-C
-port is registered before calling the Type-C IRQ handler.
+Which extcon? The commit description already mentions that the issue is that there
+is no extcon and that the dwc3 probe gets stuck with EPROBE_DEFER forever.
 
-Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Reviewed-by: Marek Vasut <marex@denx.de>
----
-Changes since v1:
-- Drop "for backward compatibility" from comment to avoid confusion on
-  whether Type-C is meant to be the old or new interface.
+This happens because the code after Janne's new check looks for the PHY and then
+just assumes that if the PHY has a "port" that the other end always is an extcon.
+It then tries extcon_find_edev_by_node which will always fail with EPROBE_DEFER
+if that node never registers an extcon.
 
- drivers/extcon/extcon-usbc-tusb320.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+If "usb-role-switch" is used and configured in the DT there is no extcon.
+There actually cannot ever be a working extcon with "usb-role-switch" because
+the very first thing dwc3_drd_init does is to look for a role switch partner
+and then skip the entire extcon setup:
 
-diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-index 41041ff0fadb..2a120d8d3c27 100644
---- a/drivers/extcon/extcon-usbc-tusb320.c
-+++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -327,7 +327,13 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
- 		return IRQ_NONE;
- 
- 	tusb320_extcon_irq_handler(priv, reg);
--	tusb320_typec_irq_handler(priv, reg);
-+
-+	/*
-+	 * Type-C support is optional. Only call the Type-C handler if a
-+	 * port had been registered previously.
-+	 */
-+	if (priv->port)
-+		tusb320_typec_irq_handler(priv, reg);
- 
- 	regmap_write(priv->regmap, TUSB320_REG9, reg);
- 
--- 
-2.38.1
+int dwc3_drd_init(struct dwc3 *dwc)
+{
+	int ret, irq;
 
+	if (ROLE_SWITCH &&
+	    device_property_read_bool(dwc->dev, "usb-role-switch"))
+		return dwc3_setup_role_switch(dwc);
+[....]
+
+
+This entire issue was actually first fixed in ab7aa2866d29, then broken
+again in 0f0101719138 due to a merge resolution, then fixed again with
+7a84e7353e23 (where we actually had a brief discussion about this already
+on the ML) and then broken again in d182c2e1bc92.
+
+Janne's fix is much less subtle and should hopefully survive this time.
+
+For the patch:
+
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+
+
+Best,
+
+Sven
