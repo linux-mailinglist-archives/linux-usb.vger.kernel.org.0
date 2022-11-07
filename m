@@ -2,252 +2,303 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CBF61EACA
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 07:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD8661EC10
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 08:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiKGGB1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 01:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S231513AbiKGH3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 02:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiKGGB0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 01:01:26 -0500
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C18BCBD;
-        Sun,  6 Nov 2022 22:01:25 -0800 (PST)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A6FGFHt014854;
-        Sun, 6 Nov 2022 22:01:14 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=JvUa5D7vCrvDjTpxZCMGQHPbW+ZeLmifemHqIlbjHbQ=;
- b=TlFejhDugPxcAwbn1uTLjZGY03kZxCA/IljQo0EepMM9DqSKgrdFgTYu/2NmDAz7LgwR
- bv7PE/N0I3bQASOyQqrw8PqgLs6Jnam9Qdjvovs3GgcNcJoR0ZjRAKJ8JuClAhm6uwB1
- YvI02DyJNRtCqqt8EahYzvSsI86ZU7SeR41p8XK8kcii/zKj2ROeP57gtGLGgZ7glOoJ
- JgDlsi3cQ7TSriab+Odw/Cf2YG61TSzjwXshehRBR1SRgfiY6mHGXK++Xo4cJQBbW7dH
- +lN4wkqoKOGDW9qERJqtRL0p5GXMX+rdsCzmm8Dzoy94ovr31yBfLbFCprxgqC/hWvA1 tQ== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3kpe5jt726-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Nov 2022 22:01:13 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OllfnA55FAOgslCOH4hkACS9BVyOk4Zmp4BsBLQvp7AxJCs1r6VJDQltyqEUONfdt/pLpXeXM4RplpXqsSMYJGEIqsGY6zy+J8Xpekn/12gRhrYn1WU1JplUfK/Nyl46VC9eqtiWdoKaeyngA9oPdxEsz/OWINO5alRqcK+m3GPWOqK4D7I7yyVRJfLLWn840OAkZGSCFY2PnUJ4wTGE5szMHT6OltfG/QqetViTnNPn85Ik2wuEPA8nbQOMqYMtG2bXn+KeL7Klk33Pd28e3/9MZYE96wpY0K0xZ8SCxPbOwagyuBcEnN5kYQzxRCb9+AcjW+1jn/YcQSTPKUj+BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JvUa5D7vCrvDjTpxZCMGQHPbW+ZeLmifemHqIlbjHbQ=;
- b=K+PHBmpG1RquL8cqEqaRhshiYsHLYuUISQ5Nl5jGlRCmVZHpc5cc8TSNMzjAyPIw179pt91LLMRLF4tNHIUz5IoKp20JJ7sHqIfN/4c/EyRgjeIIomL+CpvIhGH9rkfu96AJdupHpvpE8VUnoGSjW4vB5HjqYbhodPStB8NXefBv0peem6lQY3fpUEjlDw1XBhkOSaDv49k4H9Mv8CtJqffY3RXDQBpYuatH06Oa+A8Dbtit9PJcSLEZvbpNwBQcQIFoodeU6f5MNElQ5iKNYDcH/RSfYPl4cEUPGktafoorgLkjY32zltZdlT1nbtj6xVsp6qGnBDnekM4ZeEuqPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JvUa5D7vCrvDjTpxZCMGQHPbW+ZeLmifemHqIlbjHbQ=;
- b=1klURKPLzgIji1lj4XAFvdbhZ9x3FqR0Ifk7ODe+G3T8Gb1i5vjEZLUTF0O0/lxXFp0eh/5RKoji1GYWuky5wOvspmRAitPEO4x5dcEIOJE0xKt9m6/B/GiQGkfSYCL2vOFxl9PCc7oZV7riy7hq3IHTFhtIxEAV2R2xk6pe1gg=
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
- by CO1PR07MB9179.namprd07.prod.outlook.com (2603:10b6:303:15a::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Mon, 7 Nov
- 2022 06:01:11 +0000
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::ea7c:b79f:752e:1afc]) by BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::ea7c:b79f:752e:1afc%4]) with mapi id 15.20.5791.025; Mon, 7 Nov 2022
- 06:01:11 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Peter Chen <peter.chen@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
-Thread-Topic: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
-Thread-Index: AQHY6R6Kb+CO20jKM0iAijOjlYxMN64xrF6AgAFZHNA=
-Date:   Mon, 7 Nov 2022 06:01:10 +0000
-Message-ID: <BYAPR07MB538173AA9BFCC5C7CE02A07CDD3C9@BYAPR07MB5381.namprd07.prod.outlook.com>
-References: <20221026093710.449809-1-pawell@cadence.com>
- <20221106090815.GB152143@nchen-desktop>
-In-Reply-To: <20221106090815.GB152143@nchen-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOTI5Y2VhMWYtNWU2MS0xMWVkLWE4NDgtMDBiZTQzMTQxNTFkXGFtZS10ZXN0XDkyOWNlYTIxLTVlNjEtMTFlZC1hODQ4LTAwYmU0MzE0MTUxZGJvZHkudHh0IiBzej0iMzI5OCIgdD0iMTMzMTIyNzQ0NjkzMDE3NjMwIiBoPSIvUERiUVlwS29wRllUNEM5a3JramNqeGJNMHM9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR07MB5381:EE_|CO1PR07MB9179:EE_
-x-ms-office365-filtering-correlation-id: cbf45496-48ff-4242-a29b-08dac0857872
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vJ3D/WFA9TJVbKvwg1P3OpLhh+46qV6ax7/Y/iSJAnhSSKpFNz2oLd6S0IsuU8Z4jXqHFO3mBFLhOo4033KjfbH+PVyMvB6FftlmQ3ObFjTPqxeJGfu4aNl4czCSpSJFgbowuiJDUkxvP1pC6+OvZ3KPFb2qM0lcfzVnNm6PfzUImehsqnY0sOr3D1HnslrstPJesi3GpDCeSft7/5YTu+zIOGbb7DpWIp1adj4A39KDZ9+zWRRdPKCzy9ND7UOPDea8pgIkD69ppvjt35g/CBkCsadwnj0YsBUdjFa7XBzgpYVq8veC7ght0JUU/jNStus+pMFauUTdHJW3VQdQftPR9A4EFX7VEopRipba5SR0TxTMXPMJuRfKO/HnuVy0WLDQK44dXGe8yWLi2c95pNwNfwVGw9rYI2C4eS4TPyovAWTMytzzqvQ1eEYKfXMGlJsp6JahiMGEPQqJSQdGnHFHUHnEx3ltqfzbub4uV41UMIcw/hgdjrAYw5w1oxpWMkzXYpgQp1md3q+0sdK+4CjjkNqkLWBphPYmckuYzHOEVPJuByBPGDDVY90/SSAurdHhtjHoRYPH4aCkZq4CcM43OWJhUbwj+60hJKaMkWZJ7v0c1B57hbYBswxDVUSQALMid2qdB/0nNyOy0W8kE8tGrZDrOuCx+bYa3Ijz5/lHw+pHNK7rC9cjBrmoLUrI5MrEJFm6fhPd1NdydQtr0DDm1U/8pXC/lsNyY49HCaKn1BU8CXIWTOlmbbSJBpVSG1SvTwkNjNEJGIVyuIJT+g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(366004)(376002)(346002)(36092001)(451199015)(2906002)(5660300002)(54906003)(6916009)(9686003)(26005)(7696005)(6506007)(71200400001)(66556008)(66446008)(64756008)(66476007)(316002)(86362001)(33656002)(38070700005)(8676002)(55016003)(52536014)(8936002)(186003)(41300700001)(478600001)(83380400001)(4326008)(38100700002)(122000001)(66946007)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dbPrPa7mqEUhRHnnGCAFtTvQzqGw/Ma/YG8KwpdYS1obQJOEu9xBUWejvxqN?=
- =?us-ascii?Q?SDnBn/YXdJLfFEkfR47GuCZC/p03+sTreZUjiGnynlmc1yqJYUyyHMZQHjnv?=
- =?us-ascii?Q?t+KTRS/idj3WdTQLHrBR2UhcDrVHORmNcbJQbLQoA+u+JUCc/XqGoPHJ76Ci?=
- =?us-ascii?Q?KFfN7C39QLntFO+JVfRBzkMvHa8Lf/U+0QCmHDyfXIW6limfgSB24oTe8g0H?=
- =?us-ascii?Q?Q28GJv1FDFI1OgSFtFWqGVPNmeZpTWmzmOkF8qXMaeGrsNqxY5TGjVyu56Jo?=
- =?us-ascii?Q?UYy+rg65Z6F7ZqY5pcHT2viFG/0LBY5KOGVEDCgV+fOHpyYtTSl3wByTHVlE?=
- =?us-ascii?Q?eeto8lyAdtsNY6WQj9ZWjJUQwPG2OIc8jUmpT7aSUpaUBV/Wz4+qXTrLEC47?=
- =?us-ascii?Q?zGcQ1J9dDnbDxTAvWvWct53tHbBVgKVfAURwElOFQ628KO+CEBnFYR5rQu/2?=
- =?us-ascii?Q?MgjD8L1gS51grwnoK3pT0JTxUPLIsuzv0Ut3W9DocHkKP6QyeAWPxSusMnLq?=
- =?us-ascii?Q?jKYUQVMgCw0NpUKTTaYLUXZD++o1dQZ5NXHM4aRebO9ZRIuRGa7QARaohizp?=
- =?us-ascii?Q?ujmvGxMeITqAitxTWnn13Vre0mP70kMRxxsdRMElhfIsTTSCpgWWuStNxTQi?=
- =?us-ascii?Q?eF5l2XTiA+tfNRFQTeFtZnnSE9wwRs0w881GJkMMP6QIKlpMmtTidRwDGvPn?=
- =?us-ascii?Q?ChhosRXpCG7Pl6Z0UR1oxvqCR+iz60ie9REqkMQDcWpdfqRdjcPaEuxfWrgT?=
- =?us-ascii?Q?QLUf07ilGGlNvCI2K1iFKQLGfq3EbkbehDyyvhJtwJRYaopq2XzI2+MTiRnH?=
- =?us-ascii?Q?HNtkPsrATsmNjeCek9mmUe3H+aYUJbOcxNDkrb6fDiXQ5iM47w0mY3ivYAoi?=
- =?us-ascii?Q?MtFOeCNVFahP0pCCUMx4/qoEc+qhm3NahWieNsEF7aVP/OO9Yhd6M4UjZkCp?=
- =?us-ascii?Q?hbYbxiQNcLpfVKcGnWtiskva5vdrTs/+HJeh9HMCIj+n5slam9Flv3DqkaUO?=
- =?us-ascii?Q?+hlbauWjwxA4nVfDdMoyyMvnjKq43yoBFABT/PR5mT9bFH9aUn4LH1k/a/qM?=
- =?us-ascii?Q?zDzr5+KifkCLm1nwUlV1QJXuKbwjMuiSVOa8Z4mFPf1XXdR9FebGgSEoSBpq?=
- =?us-ascii?Q?6JnyHcjLEK3CSWFVXT3CZwkfBJyEnkhQCzC4d3pwOSTpyGFdx8QUqtFOF1Ky?=
- =?us-ascii?Q?nyFmtdWLITFfUktci/JVkgBvSAaCJGha5U/4Dou4UyDmrJVavrrVfVl2Xr4E?=
- =?us-ascii?Q?8C4s0d9j7lEcadBus3vhEr6hWjAoJX7z/CnJcOCtQNWZA5NTtv3LjIoE9X0S?=
- =?us-ascii?Q?Rse4UsQKuHuzEhCudijSFjIcmAe6V1MNEpmNSBkmZWBmGJj4oKR3fklsIUOr?=
- =?us-ascii?Q?MGX8R9ZryLjyG4JsUM7PpJ6Sm79RJZNQsRSQ2aIvnjaP9BQi2vR8H1Od6kkn?=
- =?us-ascii?Q?EviqGbQLHAtCvXj9FCeQib1iXdnhZMM61hSY5HeH2/B3rwdkHf2Yxqa7G0h9?=
- =?us-ascii?Q?h/uzv41+gZbES1BqcFLxrTTSBzP6aQehQPBUGod8/4asIJbflWuBWqwR6IsQ?=
- =?us-ascii?Q?tLBCPl2fJCVB3lkM/VwjiOHok/F5jUrHbl7dQMD1oGC4KVqO7xhmapY+IobN?=
- =?us-ascii?Q?WA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbf45496-48ff-4242-a29b-08dac0857872
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 06:01:10.9683
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cgys4HBiP8j2aRkIcE9yxRzSzkFNfXsUn9YGQYJ/rjm5O/kX+DwKWYEfePw5vqEF3UreSyejBM/3JS3JywFL2CzqHCi+788WLPpjb6+NYt0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR07MB9179
-X-Proofpoint-GUID: x639djqNcdnPtcgdCTdNizHlnsU5qwq8
-X-Proofpoint-ORIG-GUID: x639djqNcdnPtcgdCTdNizHlnsU5qwq8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-06_16,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 bulkscore=0
- impostorscore=0 adultscore=0 mlxscore=0 phishscore=0 mlxlogscore=605
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211070051
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231222AbiKGH3B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 02:29:01 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E00140F7
+        for <linux-usb@vger.kernel.org>; Sun,  6 Nov 2022 23:28:00 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-349423f04dbso102307297b3.13
+        for <linux-usb@vger.kernel.org>; Sun, 06 Nov 2022 23:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UZIa3TPodu5p4r3EQIwk/znAe98Z3Rc479m8woaBUnA=;
+        b=aEZzUeFpa53BR08+bOZCPAJp68yJPGO5DYXJaFjDC+eK3wbOJd/13AecPzXdUbvVrs
+         M2AyNgf9LIupmkjImHuk4oIu9jcmStSYc7EaoOL4VuSTRsT3z3s1PFACXjmzBMrQI48v
+         3rIuZ0wm5Tcc8UFVMfhF6AsW+DxTh+tTTQT4i+ZJ1yHinLbw2ISFllk/ldwcJWHiO4yQ
+         7PLbNNtcrQWQ7m6C7z7i+MtfYtvSGZKEWpxJwh98T7CYSMpTWyiaJjwyyIRMHVUSRIwI
+         iYazraq5PDyCRJnjyz1hrMgGZqBUoX4DgVUL/+hs3u/1/ub80dwR+p/XvGcATp/kzwd+
+         lSkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UZIa3TPodu5p4r3EQIwk/znAe98Z3Rc479m8woaBUnA=;
+        b=cCNSus2Glyim18OFiaTuCAfyK+siVxMPlkqFY/zvuPOsPAHCAKzQa3n8Qn1FHJjCxE
+         9QcXuATsdAVg7aCL/ChNoM7d/xoVT6eKAsGgjkXO61ZkP4CrgElNQj+Bo0A5ja7IcRHS
+         1GHPyo2JcwyN55XurNKtFp6dOdTXaqGXLzcs4042CbVuno3ml7JnJrhkSU1oXmPnxolb
+         aHmdqZbLbvwmoFLmLnr0BI2slzHDIMK9uxPku3O+5+dxZ8aaLzSU7hGazTp7gZYhMcAd
+         USulVAo/9H3bFkMbQ5DE3DOCT5QltujSXD9i4LofzfkMYivtJfooI/3OnxlhCY2NdZv1
+         P4Vw==
+X-Gm-Message-State: ACrzQf1wbnm7sw1EDUf8DSbevG1P5jm9HV+WjgRM0cbsvRRVOalxoMOs
+        RWUe/oiUV70qfQHS/jY9U2JqUKivbBU=
+X-Google-Smtp-Source: AMsMyM6NT1BnynqufCzLVkZCmh7tZAfIYYrUmNaM8lkfWYxzxvUJnMs7cyuWsW2mdYEknS42bGjdynlQ8n8=
+X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:f4f4:86d8:c505:8643])
+ (user=raychi job=sendgmr) by 2002:a25:d491:0:b0:6cf:e8f1:df9b with SMTP id
+ m139-20020a25d491000000b006cfe8f1df9bmr523202ybf.355.1667806079793; Sun, 06
+ Nov 2022 23:27:59 -0800 (PST)
+Date:   Mon,  7 Nov 2022 15:27:54 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221107072754.3336357-1-raychi@google.com>
+Subject: [Patch v5] usb: core: stop USB enumeration if too many retries
+From:   Ray Chi <raychi@google.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        m.grzeschik@pengutronix.de
+Cc:     albertccwang@google.com, pumahsu@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Ray Chi <raychi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
->On 22-10-26 05:37:10, Pawel Laszczak wrote:
->> During handling Clear Halt Endpoint Feature request driver invokes
->> Reset Endpoint command. Because this command has some issue with
->
->What are issues? Would you please explain more?
+When a broken USB accessory connects to a USB host, usbcore might
+keep doing enumeration retries. If the host has a watchdog mechanism,
+the kernel panic will happen on the host.
 
-I don't know the internal behavior of controller. I know that there is the =
-issue with resetting endpoint
-in running state, resulting in the  controller after rearming start handlin=
-g incorrect TRB.
+This patch provides an attribute early_stop to limit the numbers of retries
+for each port of a hub. If a port was marked with early_stop attribute,
+unsuccessful connection attempts will fail quickly. In addition, if an
+early_stop port has failed to initialize, it will ignore all future
+connection events until early_stop attribute is clear.
 
->
->> transition endpoint from Running to Idle state the driver must stop
->> the endpoint by using Stop Endpoint command.
->>
->> cc: <stable@vger.kernel.org>
->> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
->> USBSSP DRD Driver")
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->>  drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
->>  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
->>  2 files changed, 6 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c
->> b/drivers/usb/cdns3/cdnsp-gadget.c
->> index e2e7d16f43f4..0576f9b0e4aa 100644
->> --- a/drivers/usb/cdns3/cdnsp-gadget.c
->> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
->> @@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device
->> *pdev,
->>
->>  	trace_cdnsp_ep_halt(value ? "Set" : "Clear");
->>
->> -	if (value) {
->> -		ret =3D cdnsp_cmd_stop_ep(pdev, pep);
->> -		if (ret)
->> -			return ret;
->> +	ret =3D cdnsp_cmd_stop_ep(pdev, pep);
->> +	if (ret)
->> +		return ret;
->>
->
->In your change ,it call cdnsp_cmd_stop_ep unconditionally, no matter set o=
-r
->clear halt? Is it your expectation? If it is, why?
+Signed-off-by: Ray Chi <raychi@google.com>
+---
 
-No exactly unconditionally.
+Changes since v4:
+ - change the location of calling hub_port_stop_enumerate()
+ - modify if statement in hub_port_stop_enumerate()
+ - modify if statement in port_event()
 
-The below condition:
-	if (ep_state =3D=3D EP_STATE_STOPPED || ep_state =3D=3D EP_STATE_DISABLED=
-=20
-		||   ep_state =3D=3D EP_STATE_HALTED) {
-			goto ep_stopped;
+Changes since v3:
+ - rename the attribute from quick_init to early_stop
+ - rename the variable of port_dev from ignore_connect to ignore_event
+ - modify changelog, documentation
+ - add more comments for hub_port_stop_enumerate()
 
-Will decide whether command will be called or not.
-It will be called only when endpoint is in RUNNING state.
+Changes since v2:
+ - replace the quirk with the attribute
+ - Document the attribute
+ - modify hub_port_stop_enumerate() position in port_event()
+ - modify the changelog
 
-Pawel
+Changes since v1:
+ - remove usb_hub_set_port_power()
+ - add a variable ignore_connect into struct port_dev
+ - modify hub_port_stop_enumerate() and set ignore_connect in
+   this function
+ - avoid calling hub_port_connect_change() in port_event()
 
->
->> +	if (value) {
->>  		if (GET_EP_CTX_STATE(pep->out_ctx) =3D=3D
->EP_STATE_STOPPED) {
->>  			cdnsp_queue_halt_endpoint(pdev, pep->idx);
->>  			cdnsp_ring_cmd_db(pdev);
->> @@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device
->> *pdev,
->>
->>  		pep->ep_state |=3D EP_HALTED;
->>  	} else {
->> -		/*
->> -		 * In device mode driver can call reset endpoint command
->> -		 * from any endpoint state.
->> -		 */
->>  		cdnsp_queue_reset_ep(pdev, pep->idx);
->>  		cdnsp_ring_cmd_db(pdev);
->>  		ret =3D cdnsp_wait_for_cmd_compl(pdev); diff --git
->> a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
->> index 25e5e51cf5a2..aa79bce89d8a 100644
->> --- a/drivers/usb/cdns3/cdnsp-ring.c
->> +++ b/drivers/usb/cdns3/cdnsp-ring.c
->> @@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device
->*pdev, struct cdnsp_ep *pep)
->>  	u32 ep_state =3D GET_EP_CTX_STATE(pep->out_ctx);
->>  	int ret =3D 0;
->>
->> -	if (ep_state =3D=3D EP_STATE_STOPPED || ep_state =3D=3D
->EP_STATE_DISABLED) {
->> +	if (ep_state =3D=3D EP_STATE_STOPPED || ep_state =3D=3D
->EP_STATE_DISABLED ||
->> +	    ep_state =3D=3D EP_STATE_HALTED) {
->>  		trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
->>  		goto ep_stopped;
->>  	}
->> --
->> 2.25.1
->>
->
->--
->
->Thanks,
->Peter Chen
+---
+ Documentation/ABI/testing/sysfs-bus-usb | 11 +++++
+ drivers/usb/core/hub.c                  | 60 +++++++++++++++++++++++++
+ drivers/usb/core/hub.h                  |  4 ++
+ drivers/usb/core/port.c                 | 27 +++++++++++
+ 4 files changed, 102 insertions(+)
 
-Regards,
-Pawel Laszczak
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+index 568103d3376e..545c2dd97ed0 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -264,6 +264,17 @@ Description:
+ 		attached to the port will not be detected, initialized,
+ 		or enumerated.
+ 
++What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/early_stop
++Date:		Sep 2022
++Contact:	Ray Chi <raychi@google.com>
++Description:
++		Some USB hosts have some watchdog mechanisms so that the device
++		may enter ramdump if it takes a long time during port initialization.
++		This attribute allows each port just has two attempts so that the
++		port initialization will be failed quickly. In addition, if a port
++		which is marked with early_stop has failed to initialize, it will ignore
++		all future connections until this attribute is clear.
++
+ What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
+ Date:		May 2013
+ Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index bbab424b0d55..77e73fc8d673 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3081,6 +3081,48 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+ 	return status;
+ }
+ 
++/*
++ * hub_port_stop_enumerate - stop USB enumeration or ignore port events
++ * @hub: target hub
++ * @port1: port num of the port
++ * @retries: port retries number of hub_port_init()
++ *
++ * Return:
++ *    true: ignore port actions/events or give up connection attempts.
++ *    false: keep original behavior.
++ *
++ * This function will be based on retries to check whether the port which is
++ * marked with early_stop attribute would stop enumeration or ignore events.
++ *
++ * Note:
++ * This function didn't change anything if early_stop is not set, and it will
++ * prevent all connection attempts when early_stop is set and the attempts of
++ * the port are more than 1.
++ */
++static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
++{
++	struct usb_port *port_dev = hub->ports[port1 - 1];
++
++	if (port_dev->early_stop) {
++		if (port_dev->ignore_event)
++			return true;
++
++		/*
++		 * We want unsuccessful attempts to fail quickly.
++		 * Since some devices may need one failure during
++		 * port initialization, we allow two tries but no
++		 * more.
++		 */
++		if (retries < 2)
++			return false;
++
++		port_dev->ignore_event = 1;
++	} else
++		port_dev->ignore_event = 0;
++
++	return port_dev->ignore_event;
++}
++
+ /* Check if a port is power on */
+ int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
+ {
+@@ -4796,6 +4838,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 	do_new_scheme = use_new_scheme(udev, retry_counter, port_dev);
+ 
+ 	for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
++		if (hub_port_stop_enumerate(hub, port1, retries)) {
++			retval = -ENODEV;
++			break;
++		}
++
+ 		if (do_new_scheme) {
+ 			struct usb_device_descriptor *buf;
+ 			int r = 0;
+@@ -5246,6 +5293,11 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 	status = 0;
+ 
+ 	for (i = 0; i < PORT_INIT_TRIES; i++) {
++		if (hub_port_stop_enumerate(hub, port1, i)) {
++			status = -ENODEV;
++			break;
++		}
++
+ 		usb_lock_port(port_dev);
+ 		mutex_lock(hcd->address0_mutex);
+ 		retry_locked = true;
+@@ -5614,6 +5666,10 @@ static void port_event(struct usb_hub *hub, int port1)
+ 	if (!pm_runtime_active(&port_dev->dev))
+ 		return;
+ 
++	/* skip port actions if ignore_event and early_stop are true */
++	if (port_dev->ignore_event && port_dev->early_stop)
++		return;
++
+ 	if (hub_handle_remote_wakeup(hub, port1, portstatus, portchange))
+ 		connect_change = 1;
+ 
+@@ -5927,6 +5983,10 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 	mutex_lock(hcd->address0_mutex);
+ 
+ 	for (i = 0; i < PORT_INIT_TRIES; ++i) {
++		if (hub_port_stop_enumerate(parent_hub, port1, i)) {
++			ret = -ENODEV;
++			break;
++		}
+ 
+ 		/* ep0 maxpacket size may change; let the HCD know about it.
+ 		 * Other endpoints will be handled by re-enumeration. */
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index b2925856b4cb..e23833562e4f 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -90,6 +90,8 @@ struct usb_hub {
+  * @is_superspeed cache super-speed status
+  * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
+  * @usb3_lpm_u2_permit: whether USB3 U2 LPM is permitted.
++ * @early_stop: whether port initialization will be stopped earlier.
++ * @ignore_event: whether events of the port are ignored.
+  */
+ struct usb_port {
+ 	struct usb_device *child;
+@@ -103,6 +105,8 @@ struct usb_port {
+ 	u32 over_current_count;
+ 	u8 portnum;
+ 	u32 quirks;
++	unsigned int early_stop:1;
++	unsigned int ignore_event:1;
+ 	unsigned int is_superspeed:1;
+ 	unsigned int usb3_lpm_u1_permit:1;
+ 	unsigned int usb3_lpm_u2_permit:1;
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index 015204fc67a1..06a8f1f84f6f 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -18,6 +18,32 @@ static int usb_port_block_power_off;
+ 
+ static const struct attribute_group *port_dev_group[];
+ 
++static ssize_t early_stop_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++
++	return sysfs_emit(buf, "%s\n", port_dev->early_stop ? "yes" : "no");
++}
++
++static ssize_t early_stop_store(struct device *dev, struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	bool value;
++
++	if (kstrtobool(buf, &value))
++		return -EINVAL;
++
++	if (value)
++		port_dev->early_stop = 1;
++	else
++		port_dev->early_stop = 0;
++
++	return count;
++}
++static DEVICE_ATTR_RW(early_stop);
++
+ static ssize_t disable_show(struct device *dev,
+ 			      struct device_attribute *attr, char *buf)
+ {
+@@ -237,6 +263,7 @@ static struct attribute *port_dev_attrs[] = {
+ 	&dev_attr_quirks.attr,
+ 	&dev_attr_over_current_count.attr,
+ 	&dev_attr_disable.attr,
++	&dev_attr_early_stop.attr,
+ 	NULL,
+ };
+ 
+-- 
+2.38.1.431.g37b22c650d-goog
+
