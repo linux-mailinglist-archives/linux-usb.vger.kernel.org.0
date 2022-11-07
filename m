@@ -2,186 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C62061FD77
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 19:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC0761FE3F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 20:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbiKGSY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 13:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S232636AbiKGTJi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 14:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbiKGSY3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 13:24:29 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D9C28E2D
-        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 10:24:05 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id c1so16276395lfi.7
-        for <linux-usb@vger.kernel.org>; Mon, 07 Nov 2022 10:24:05 -0800 (PST)
+        with ESMTP id S232906AbiKGTJ0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 14:09:26 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E84248F1;
+        Mon,  7 Nov 2022 11:09:25 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id 13so32838773ejn.3;
+        Mon, 07 Nov 2022 11:09:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v/+DmlpUJNQ6H+y2+hAk27Zykcqu9Cxop/8nW/tfq8o=;
-        b=YM6wEP8D2ic+78mnkgabgCawUWu5PRsEDd33Uz5A4ygUYI7EaV1pBVoNegOluHeRBP
-         cpj54KXembu+3W9hDl8Qyro7au79xuQTxdiq6zb58BMrvmw4tzlESZVBcOZ5m3S7FOmU
-         SB8wdGGh7d+J47isBugbdpZrCno3LYjdZ5IUiwRQgUEr3rY11SkXAo7RikONu9QnX1vI
-         HU5YAF3KGAV0c51lqPbYeSrW/SOu7vO7uc9C9PnS8HamJQxPT3KOAS47YGutU11oBIeR
-         fPpPsCH6oP+s8yO3U2EmoHtmH4C3H52m8SAhIKzEd3ZCgijel+Yrtlc/STylA8BJbvK5
-         3/Zw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wc34CxtEOLkSkiQr361kqOgarEc3e05LL4CC8n3q+Yg=;
+        b=MfJt6vqUvl9d2QwzN79EWkGlv9xQvsKg6qW/nuvZj3vutK07lQREteD9jvTdwD4mUs
+         cCe2VwZo3iEJF6ZVHT4lp+dSS5XgBxg9O/SdckevvjaiK92s6OPeQtPRbE26fiKGNr1s
+         Xm05WlDJc9s4nVcFIcISpz4vHrFkOpb87Kvx/AggAEjHwP97g78jEUq9nU3YIlVk+yvX
+         Vw2UGW6EOVcTEs8cesZj5GtkEndzTKKIBL8mZdR0Gs+x5RWLcU/oNIYPNcDmXvfkkAp+
+         31I9CxdidxbQ30o8A6EqGJ2W4STLOoG/uss/ng536xqR6ijghJbrTrnO++Jps53BaECt
+         lPNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/+DmlpUJNQ6H+y2+hAk27Zykcqu9Cxop/8nW/tfq8o=;
-        b=t2aWbk3Pk0+OXdyVrTYzXxBSl0OoK6Cudz36FMc64b7yybFeA1B3GNDrksf4pP55uN
-         dlrKIvvuRoBP84uZm8UbrBKbtVU+l6Z9r4XAcrP+/j43Fkj9Fac1i4WxB4/mfC8VK5kA
-         APDoTtHeOiWriLshVo1NGWrFTKXPxoaWwWjsT+BAlWRrHgFHm/9Fkgop8u6zEL9gBh4i
-         6YxizerF8sU02hW12Ids2tMnuFZ8FR0DmrkTuKswBjjLvgGnHr64FZBG31jZ4IBj5iUm
-         hVQzZSYiaDe0GRvN/bwyWNNf8TfHalW9oM2c2iAsW2KJBDH0V2173xrAnwO4Be9l16sy
-         QOpg==
-X-Gm-Message-State: ANoB5plmYT4xylK4NbDQ6trGG9Th02iWQQMsERhT56ChbmcHH6TRcGLE
-        8VFsDCdUFQhfPNBQ9QUOk/UI2w==
-X-Google-Smtp-Source: AA0mqf5uwcpb6dUhKs4Vhu0uRUXiku2hqbfLgAsSVoGqbFd7CA76YcTVc/3qG22gp+wuXsTzA+O6sA==
-X-Received: by 2002:a05:6512:374e:b0:4b2:c8b:7a66 with SMTP id a14-20020a056512374e00b004b20c8b7a66mr4976348lfs.498.1667845443689;
-        Mon, 07 Nov 2022 10:24:03 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id q23-20020a19a417000000b004ab98cd5644sm1358051lfc.182.2022.11.07.10.24.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 10:24:02 -0800 (PST)
-Message-ID: <c10df12c-ccb9-03b7-96be-1aac5feee1aa@linaro.org>
-Date:   Mon, 7 Nov 2022 19:24:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/7] dt-bindings: usb: add the Renesas USBF controller
- binding
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wc34CxtEOLkSkiQr361kqOgarEc3e05LL4CC8n3q+Yg=;
+        b=xiAvGx+pbzhjiFZ75KtV5/2kbRzPmwjbpv2e3HehKLvPE6Hausa8CLGiWvZn8cyT8c
+         ge7zyncd3y4j0k4lIGYNDYRjdRXnqeXHjdOkFpXeno1De5hUhAPQcUlAvb6Gsp94sLz6
+         wKDWVos+/wQkEFY98OgyqQcWMw7gKOh6eImJPiDjtfhMSkF5TvevocfakENsNOgWxV0W
+         YEhZecwQAUjvQIVWR7v+pvY9/gKCQGFOUJ6TwFAw93sdnB9eNvKiEDGZOD6746N3MhIO
+         eu2KbGjEqfRZlgwaH1VADwDrIgtErBQzchsgESs0qwnHTrROVSmLkXnm1aPvxxl6t6xL
+         Pi3g==
+X-Gm-Message-State: ACrzQf2y5VfIW6+s1Qf3n2JGuYgpS9cdmVEePLEOLoqrP0A3CfdJgDUh
+        MLhdiwxzzUfop02DUD8PcPw=
+X-Google-Smtp-Source: AMsMyM7RT31J7AYXOqj7NXxs7sV37GSZBoUybdyBFoXG5ZdfIxCN8Q5j0SVVcDS70m8z7me697XQFA==
+X-Received: by 2002:a17:906:730d:b0:78e:9ca5:3269 with SMTP id di13-20020a170906730d00b0078e9ca53269mr49378907ejc.366.1667848164346;
+        Mon, 07 Nov 2022 11:09:24 -0800 (PST)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id k10-20020a17090632ca00b007adaca75bd0sm3783218ejk.179.2022.11.07.11.09.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 11:09:23 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221107135825.583877-1-herve.codina@bootlin.com>
- <20221107135825.583877-5-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107135825.583877-5-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, Karl Kurbjun <karl.os@veroson.com>,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 0/7] arm64: sunxi: h616: Add USB support
+Date:   Mon, 07 Nov 2022 20:09:22 +0100
+Message-ID: <111191160.nniJfEyVGO@kista>
+In-Reply-To: <20221031111358.3387297-1-andre.przywara@arm.com>
+References: <20221031111358.3387297-1-andre.przywara@arm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/11/2022 14:58, Herve Codina wrote:
-> The Renesas USBF controller is an USB2.0 device controller
-> (UDC) available in Renesas r9a06g032 SoC (RZ/N1 family).
+Dne ponedeljek, 31. oktober 2022 ob 12:13:51 CET je Andre Przywara napisal(a):
+> This is a fixed and rebased update of the previous version, with only
+> the DT binding and one DT seeing changes, triggered by Krzysztof's
+> comments. For a changelog see below.
+> Thanks to Karl for testing this on the OrangePi Zero 2!
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  .../devicetree/bindings/usb/renesas,usbf.yaml | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/renesas,usbf.yaml
+> ------------------------
+> The USB IP used in the Allwinner H616 SoC is very similar to the one
+> used in the H3 chip: it contains four USB 2.0 host controllers and four
+> PHYs, where the first PHY is shared with a separate USB-OTG controller.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbf.yaml b/Documentation/devicetree/bindings/usb/renesas,usbf.yaml
-> new file mode 100644
-> index 000000000000..f2b146d9d37b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/renesas,usbf.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/renesas,usbf.yaml#
+> But out of the four ports, only port 2 works out of the box, the other
+> ports require some resources and registers of port 2 to be enabled as
+> well.
+> 
+> Implement the required workaround in the Allwinner USB PHY driver, and
+> key this off the respective compatible string. This core code is
+> contained in patch 3/7. The first two patches add the respective DT
+> binding documentation, whereas patch 4/7 encodes all the configuration
+> options for the H616 USB PHY into the driver.
+> The last three patches add the respective devicetree nodes, to the H616
+> .dtsi, but also to the DTs of the two supported boards.
+> 
+> This allows USB to be used on any H616 based machine. This was tested on
+> the X96 Mate box.
+> 
+> The patches in this series were originally contained in the initial H616
+> support series, but where dropped there to speed up mainlining of the
+> basic support.
+> 
+> It is now based on v6.1-rc3 and is also available here:
+> https://github.com/apritzel/linux/commits/h616-usb-v2
+> 
+> Please have a look and test on your hardware, especically on all ports
+> exposed on header pins of the OrangePi Zero2 board.
+> 
+> Cheers,
+> Andre
+> 
+> Changelog v1 .. v2:
+> - Add Krzysztof's ACK
+> - wrap If: clause in allOf: (patch 2/7)
+> - limit old (H3) PHYs to 4 clocks (else clause, patch 2/7)
+> - change subsystem to phy: in subject (patch 2/7)
+> - use "regulator-" prefix for DT node name (patch 6/7)
+> - drop unneeded status property in regulator node (patch 6/7)
+> 
+> Andre Przywara (7):
+>   dt-bindings: usb: Add H616 compatible string
+>   dt-bindings: phy: Add special clock for Allwinner H616 PHY
+>   phy: sun4i-usb: Introduce port2 SIDDQ quirk
+>   phy: sun4i-usb: Add support for the H616 USB PHY
+>   arm64: dts: allwinner: h616: Add USB nodes
+>   arm64: dts: allwinner: h616: OrangePi Zero 2: Add USB nodes
+>   arm64: dts: allwinner: h616: X96 Mate: Add USB nodes
 
-Filename based on compatible, so renesas,rzn1-usbf.yaml.
-
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas USBF (USB Function) controller binding
-> +
-> +description: |
-> +   The Renesas USBF controller is an USB2.0 device
-> +   controller (UDC).
-> +
-> +maintainers:
-> +  - Herve Codina <herve.codina@bootlin.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-
-You have only one possibility, so oneOf is not needed. Unless you
-already predict it will grow with new incompatible lists?
-
-> +      - items:
-> +          - enum:
-> +              - renesas,r9a06g032-usbf
-> +          - const: renesas,rzn1-usbf
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Internal bus clock (AHB) for Function
-> +      - description: Internal bus clock (AHB) for Power Management
-
-Blank line
-
-> +  clock-names:
-> +    items:
-> +      - const: hclkf
-> +      - const: hclkpm
-> +
-> +  interrupts:
-> +    items:
-> +      - description: The USBF EPC interrupt
-> +      - description: The USBF AHB-EPC interrupt
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
-> +
-> +    usb@4001e000 {
-> +        compatible = "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
-> +        reg = <0x4001e000 0x2000>;
-> +        interrupts =
-
-No need for line break. It's not helping in readability.
-
-
-> +            <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
-> +            <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&sysctrl R9A06G032_HCLK_USBF>,
-> +                 <&sysctrl R9A06G032_HCLK_USBPM>;
-> +        clock-names = "hclkf", "hclkpm";
-> +    };
+Applied patches 1, 5, 6, 7. Thanks!
 
 Best regards,
-Krzysztof
+Jernej
+
 
