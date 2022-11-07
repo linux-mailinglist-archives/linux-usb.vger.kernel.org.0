@@ -2,67 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B910061F416
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 14:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C3561F47D
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 14:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbiKGNQS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 08:16:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
+        id S232116AbiKGNiv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 08:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiKGNQR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 08:16:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D91615C
-        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 05:16:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBA9CB8108F
-        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 13:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 869EBC433C1
-        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 13:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667826973;
-        bh=ihTlMDnJVkkScWDP7/zYVvrPBBse/CERhinpQSKeqpQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Tl7rNkjjKz+hWuDZ9Rw72t0rTGt/7z083UWw72xXq6ql31RQsaPSbBj9EjZM64RPT
-         ZqIleY5NkGepZlPur6B4XK2kDJ0lDqHCS0ivWjVu0+0QngSuRNFyv8ldjIzkQJrxJy
-         K/2unhJH3/pcG8CO7Z+UCkfEOM9wrBIAjPWBUm2SoRY+rOYZ+0zJTnaYkjlZqAsfJn
-         ojzjecvV6ZBWqA9iWExkiOD1+kWaahakDGdLDEXYF7s4AeVLIiC/vx4i5xralUP5Dl
-         wLpXxpGsio7E2hlZU3pge3zvgok6rXNPDFR16BxQIGag80fw2NeH8b0+2DIxWb4aZG
-         XyN/hPlfksy4A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 7718CC433E9; Mon,  7 Nov 2022 13:16:13 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214259] Discrete Thunderbold Controller 8086:1137 throws DMAR
- and XHCI errors and is only partially functional
-Date:   Mon, 07 Nov 2022 13:16:13 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: wse@tuxedocomputers.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DUPLICATE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214259-208809-xosCxD73CO@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214259-208809@https.bugzilla.kernel.org/>
-References: <bug-214259-208809@https.bugzilla.kernel.org/>
+        with ESMTP id S231365AbiKGNit (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 08:38:49 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783521B797
+        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 05:38:47 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id a5so17563324edb.11
+        for <linux-usb@vger.kernel.org>; Mon, 07 Nov 2022 05:38:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NXfA7HOVJTMMe3XIw68HaDTdqMKJ79WSb+xmFhw8Na4=;
+        b=OVAHmdYlCb2hKRvGgZMTG7VWJicSrxOacC3921VsKiYzqi9jTC7F4nw3KvKcIrxO8k
+         bxFF9dKpwqPFi2KcKo/aLkVbNQK/tl43zU3ULTxaqfwA2cYaUraDQZkIL2gqBnObL0gr
+         MtbJbmv18JmHA0cHOFNB9NCAGdhyHOG2leETwRlpAUNU0popFySYEhVPiVlxbgJ++mPy
+         dd6QYUmKnQhXQR1+CwMgTomwGWrczHM25hS8OsKsIUk/IElfbt4nv4Y2CGITM54MeauP
+         r8/Da6uoo8G1+TiX5chwTpJajJJzusueIobhTbZo9YqM9iLEnjYznwtp1Gs91U6pDdR2
+         DbwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NXfA7HOVJTMMe3XIw68HaDTdqMKJ79WSb+xmFhw8Na4=;
+        b=Qf09/5tDpJcR7fU2f2eDVlajuxJE7vjrOYSjwMbKJ2Ig/5e1Sd1OveRMdET4YtoQJz
+         1tN5MVnRJaUkuNXyWDnIOSdbv7JAhlLKV9B5pSKcRmza4V1laEmxwxQ9ARfMKJffSkl4
+         lIbyGItTf4P0LdvAIOXW0aBU3vycQXxBN3EgIF+uRZonovdpJKzbvU180Iwqt6kUSX0c
+         OS6xgYsgwrhPJW02DTPed6i1Vdg9KYSJjUJO4Wtq4joaQlf0dCBeZRNlovf8NHgPjRHM
+         MP7LbkrjfMFEskzjx23zIg4ienT9RPZhmr6PItlGVxKnb4iiT84P5ArrDMgRTCksO2hg
+         77kA==
+X-Gm-Message-State: ACrzQf1RjYcEvHMYNA13kJdd2v2kWpOiVvOxwcnturUqKPpmXNhPgWYA
+        Q9opBD+v3y4/7bPZUE0doG7+m1WHrqu3fxTrGG9Cxg==
+X-Google-Smtp-Source: AMsMyM52qq852Pp9zRkbf0eshzC0HsiGQf7v0fBkykI+7bn0jlMuAXakg3BsPOTSQ2puDufFqE/UDmvRQR/x/sNZuK0=
+X-Received: by 2002:aa7:c718:0:b0:462:ff35:95dc with SMTP id
+ i24-20020aa7c718000000b00462ff3595dcmr49167040edq.32.1667828326065; Mon, 07
+ Nov 2022 05:38:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20221107090753.1404679-1-linus.walleij@linaro.org>
+In-Reply-To: <20221107090753.1404679-1-linus.walleij@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 7 Nov 2022 14:38:35 +0100
+Message-ID: <CACRpkdasVj1j6Jyik_fRp8_0TydhCXmB+edzG6kYsxacDgq3eg@mail.gmail.com>
+Subject: Re: [PATCH] USB: bcma: Make GPIO explicitly optional
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Chuhong Yuan <hslester96@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,13 +68,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214259
+On Mon, Nov 7, 2022 at 10:07 AM Linus Walleij <linus.walleij@linaro.org> wr=
+ote:
 
---- Comment #34 from wse@tuxedocomputers.com ---
-But I think we should propably open another bugreport for this.
+> What the code does is to not check the return value from
+> devm_gpiod_get() and then avoid using an erroneous GPIO descriptor
+> with IS_ERR_OR_NULL().
+>
+> This will miss real errors from the GPIO core that should not be
+> ignored, such as probe deferral.
+>
+> Instead request the GPIO as explicitly optional, which means that
+> if it doesn't exist, the descriptor returned will be NULL.
+>
+> Then we can add error handling and also avoid just doing this on
+> the device tree path, and simplify the site where the optional
+> GPIO descriptor is used.
+>
+> There were some problems with cleaning up this GPIO descriptor
+> use in the past, but this is the proper way to deal with it.
+>
+> Cc: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> Cc: Chuhong Yuan <hslester96@gmail.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
---=20
-You may reply to this email to add a comment.
+Actually I think this is something of a regression that needs
+a Cc: stable tag.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+On my router (DIR-890L) this is needed for the USB ports to probe
+and work, I think due to recent refactorings involving device links
+and whatnot, i.e. probe deferral happens all the time and the
+deferral error has to be handled. I think many BCM systems are
+affected.
+
+Yours,
+Linus Walleij
