@@ -2,303 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD8661EC10
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 08:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F2A61EC92
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 09:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiKGH3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 02:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S231560AbiKGIIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 03:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiKGH3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 02:29:01 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E00140F7
-        for <linux-usb@vger.kernel.org>; Sun,  6 Nov 2022 23:28:00 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-349423f04dbso102307297b3.13
-        for <linux-usb@vger.kernel.org>; Sun, 06 Nov 2022 23:28:00 -0800 (PST)
+        with ESMTP id S231557AbiKGIIH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 03:08:07 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480EA12AB3
+        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 00:08:06 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id j4so15731644lfk.0
+        for <linux-usb@vger.kernel.org>; Mon, 07 Nov 2022 00:08:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=UZIa3TPodu5p4r3EQIwk/znAe98Z3Rc479m8woaBUnA=;
-        b=aEZzUeFpa53BR08+bOZCPAJp68yJPGO5DYXJaFjDC+eK3wbOJd/13AecPzXdUbvVrs
-         M2AyNgf9LIupmkjImHuk4oIu9jcmStSYc7EaoOL4VuSTRsT3z3s1PFACXjmzBMrQI48v
-         3rIuZ0wm5Tcc8UFVMfhF6AsW+DxTh+tTTQT4i+ZJ1yHinLbw2ISFllk/ldwcJWHiO4yQ
-         7PLbNNtcrQWQ7m6C7z7i+MtfYtvSGZKEWpxJwh98T7CYSMpTWyiaJjwyyIRMHVUSRIwI
-         iYazraq5PDyCRJnjyz1hrMgGZqBUoX4DgVUL/+hs3u/1/ub80dwR+p/XvGcATp/kzwd+
-         lSkQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t33PrZNjyM279K9PQ8T9tJZdu/EDxPT6K4ux2xaOCHQ=;
+        b=QJgKzsAsQm/R3C0V+DeOMgLX/aFB+Q+OErmN2vjSgPy6tXMXOjKBQ320RzFDM3e57J
+         KtuVDjcF9d8jppKmstXsJqnJ9Ogx5l1Snxz7zDSkr40HPT+nrtJRJU751I1+17JFc50C
+         5GpTOFsLEUNYDIHmRSxWgpGrwSoN4PmdWaYc90yTnB49OxDzNv6jVY9KOYB+qN08FjY7
+         KtawOk8vpKyDlrGt2qALzBIDXe8KkASTHm95gApgmoAPqJTob1w18ZtV9liyEXDDsDvh
+         H5d7VcvSQugotLUKVGJGrU7hP3SEIjUr9Yrg1+X5bVJXv79Gs3Fbv7fIPJQvZZ4k0j7R
+         jj0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UZIa3TPodu5p4r3EQIwk/znAe98Z3Rc479m8woaBUnA=;
-        b=cCNSus2Glyim18OFiaTuCAfyK+siVxMPlkqFY/zvuPOsPAHCAKzQa3n8Qn1FHJjCxE
-         9QcXuATsdAVg7aCL/ChNoM7d/xoVT6eKAsGgjkXO61ZkP4CrgElNQj+Bo0A5ja7IcRHS
-         1GHPyo2JcwyN55XurNKtFp6dOdTXaqGXLzcs4042CbVuno3ml7JnJrhkSU1oXmPnxolb
-         aHmdqZbLbvwmoFLmLnr0BI2slzHDIMK9uxPku3O+5+dxZ8aaLzSU7hGazTp7gZYhMcAd
-         USulVAo/9H3bFkMbQ5DE3DOCT5QltujSXD9i4LofzfkMYivtJfooI/3OnxlhCY2NdZv1
-         P4Vw==
-X-Gm-Message-State: ACrzQf1wbnm7sw1EDUf8DSbevG1P5jm9HV+WjgRM0cbsvRRVOalxoMOs
-        RWUe/oiUV70qfQHS/jY9U2JqUKivbBU=
-X-Google-Smtp-Source: AMsMyM6NT1BnynqufCzLVkZCmh7tZAfIYYrUmNaM8lkfWYxzxvUJnMs7cyuWsW2mdYEknS42bGjdynlQ8n8=
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:f4f4:86d8:c505:8643])
- (user=raychi job=sendgmr) by 2002:a25:d491:0:b0:6cf:e8f1:df9b with SMTP id
- m139-20020a25d491000000b006cfe8f1df9bmr523202ybf.355.1667806079793; Sun, 06
- Nov 2022 23:27:59 -0800 (PST)
-Date:   Mon,  7 Nov 2022 15:27:54 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221107072754.3336357-1-raychi@google.com>
-Subject: [Patch v5] usb: core: stop USB enumeration if too many retries
-From:   Ray Chi <raychi@google.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        m.grzeschik@pengutronix.de
-Cc:     albertccwang@google.com, pumahsu@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Ray Chi <raychi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t33PrZNjyM279K9PQ8T9tJZdu/EDxPT6K4ux2xaOCHQ=;
+        b=AaXol41jlgPy5HTfVVbgfAb58nXUG1hBCrEC1NtpOEpBHKDYtIxMP93GLvsezJCj7J
+         Rqsu/iTyJMwkx84rQEKDj9A8NwlgaZHrKS/pEmsOh2DXi14UWe22vIPNVGiBcF/NKbJX
+         LSV0Iia4ACChb17HEMt8Sd1nP+ZAzh31DNkiG4BqDbawmPz1loTYxhVWYEGJECSv/R77
+         Q6dNiiMDEHYuU9LxOWY2eM77LUkaLRVZYwyXJ5+3VC+5FqRWL6dHECEsfVt5U5pJ64/Z
+         611ytIzSVuHz6RzOpN3WN2CiiU2r2nxCGidUoZ8YhA9Uh2KlfkZPeOi3lkercFXzRge/
+         n7xg==
+X-Gm-Message-State: ACrzQf13eSEkQiRyCFN1ZVR+4r4rUhLaYUV/hF5AE7s0mjAZAkTiPv7Z
+        j9vKQSbmysLgSQ1b6HOc7kMDkg==
+X-Google-Smtp-Source: AMsMyM5kOdoblEEly6Q/0rdLMvnQsaLIP0nnygRpDSbgrPK1mYfSxpTHHwmTML57YWNfjJJNF63qiQ==
+X-Received: by 2002:a05:6512:3d1d:b0:4a2:588b:d78 with SMTP id d29-20020a0565123d1d00b004a2588b0d78mr19643444lfv.375.1667808484549;
+        Mon, 07 Nov 2022 00:08:04 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id w9-20020a05651c102900b0026fbac7468bsm1060085ljm.103.2022.11.07.00.08.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 00:08:03 -0800 (PST)
+Message-ID: <64359734-9014-a0a9-9655-7e673214da23@linaro.org>
+Date:   Mon, 7 Nov 2022 09:08:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] dt-bindings: usb: usb251xb: Convert to YAML schema
+To:     Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        linux-usb@vger.kernel.org
+References: <20221106223438.223592-1-marex@denx.de>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221106223438.223592-1-marex@denx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When a broken USB accessory connects to a USB host, usbcore might
-keep doing enumeration retries. If the host has a watchdog mechanism,
-the kernel panic will happen on the host.
+On 06/11/2022 23:34, Marek Vasut wrote:
+> Convert the usb251xb hub DT bindings from text to yaml schema so it is
+> possible to validate DTs against the schema.
 
-This patch provides an attribute early_stop to limit the numbers of retries
-for each port of a hub. If a port was marked with early_stop attribute,
-unsuccessful connection attempts will fail quickly. In addition, if an
-early_stop port has failed to initialize, it will ignore all future
-connection events until early_stop attribute is clear.
 
-Signed-off-by: Ray Chi <raychi@google.com>
----
+> +
+> +  power-on-time-ms:
+> +    maximum: 510
+> +    default: 100
+> +    description: |
+> +      Specifies the time it takes from the time the host initiates the
+> +      power-on sequence to a port until the port has adequate power.
+> +
+> +  swap-dx-lanes:
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +    description: |
+> +      Specifies the ports which will swap the differential-pair (D+/D-),
+> +      default is not-swapped.
+> +
+> +unevaluatedProperties: false
 
-Changes since v4:
- - change the location of calling hub_port_stop_enumerate()
- - modify if statement in hub_port_stop_enumerate()
- - modify if statement in port_event()
+I should notice it earlier - this should be additionalProperties: false,
+because you do not reference any other schema in top level.
 
-Changes since v3:
- - rename the attribute from quick_init to early_stop
- - rename the variable of port_dev from ignore_connect to ignore_event
- - modify changelog, documentation
- - add more comments for hub_port_stop_enumerate()
+With this:
 
-Changes since v2:
- - replace the quirk with the attribute
- - Document the attribute
- - modify hub_port_stop_enumerate() position in port_event()
- - modify the changelog
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Changes since v1:
- - remove usb_hub_set_port_power()
- - add a variable ignore_connect into struct port_dev
- - modify hub_port_stop_enumerate() and set ignore_connect in
-   this function
- - avoid calling hub_port_connect_change() in port_event()
-
----
- Documentation/ABI/testing/sysfs-bus-usb | 11 +++++
- drivers/usb/core/hub.c                  | 60 +++++++++++++++++++++++++
- drivers/usb/core/hub.h                  |  4 ++
- drivers/usb/core/port.c                 | 27 +++++++++++
- 4 files changed, 102 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-index 568103d3376e..545c2dd97ed0 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -264,6 +264,17 @@ Description:
- 		attached to the port will not be detected, initialized,
- 		or enumerated.
- 
-+What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/early_stop
-+Date:		Sep 2022
-+Contact:	Ray Chi <raychi@google.com>
-+Description:
-+		Some USB hosts have some watchdog mechanisms so that the device
-+		may enter ramdump if it takes a long time during port initialization.
-+		This attribute allows each port just has two attempts so that the
-+		port initialization will be failed quickly. In addition, if a port
-+		which is marked with early_stop has failed to initialize, it will ignore
-+		all future connections until this attribute is clear.
-+
- What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
- Date:		May 2013
- Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index bbab424b0d55..77e73fc8d673 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3081,6 +3081,48 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
- 	return status;
- }
- 
-+/*
-+ * hub_port_stop_enumerate - stop USB enumeration or ignore port events
-+ * @hub: target hub
-+ * @port1: port num of the port
-+ * @retries: port retries number of hub_port_init()
-+ *
-+ * Return:
-+ *    true: ignore port actions/events or give up connection attempts.
-+ *    false: keep original behavior.
-+ *
-+ * This function will be based on retries to check whether the port which is
-+ * marked with early_stop attribute would stop enumeration or ignore events.
-+ *
-+ * Note:
-+ * This function didn't change anything if early_stop is not set, and it will
-+ * prevent all connection attempts when early_stop is set and the attempts of
-+ * the port are more than 1.
-+ */
-+static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
-+{
-+	struct usb_port *port_dev = hub->ports[port1 - 1];
-+
-+	if (port_dev->early_stop) {
-+		if (port_dev->ignore_event)
-+			return true;
-+
-+		/*
-+		 * We want unsuccessful attempts to fail quickly.
-+		 * Since some devices may need one failure during
-+		 * port initialization, we allow two tries but no
-+		 * more.
-+		 */
-+		if (retries < 2)
-+			return false;
-+
-+		port_dev->ignore_event = 1;
-+	} else
-+		port_dev->ignore_event = 0;
-+
-+	return port_dev->ignore_event;
-+}
-+
- /* Check if a port is power on */
- int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
- {
-@@ -4796,6 +4838,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 	do_new_scheme = use_new_scheme(udev, retry_counter, port_dev);
- 
- 	for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
-+		if (hub_port_stop_enumerate(hub, port1, retries)) {
-+			retval = -ENODEV;
-+			break;
-+		}
-+
- 		if (do_new_scheme) {
- 			struct usb_device_descriptor *buf;
- 			int r = 0;
-@@ -5246,6 +5293,11 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 	status = 0;
- 
- 	for (i = 0; i < PORT_INIT_TRIES; i++) {
-+		if (hub_port_stop_enumerate(hub, port1, i)) {
-+			status = -ENODEV;
-+			break;
-+		}
-+
- 		usb_lock_port(port_dev);
- 		mutex_lock(hcd->address0_mutex);
- 		retry_locked = true;
-@@ -5614,6 +5666,10 @@ static void port_event(struct usb_hub *hub, int port1)
- 	if (!pm_runtime_active(&port_dev->dev))
- 		return;
- 
-+	/* skip port actions if ignore_event and early_stop are true */
-+	if (port_dev->ignore_event && port_dev->early_stop)
-+		return;
-+
- 	if (hub_handle_remote_wakeup(hub, port1, portstatus, portchange))
- 		connect_change = 1;
- 
-@@ -5927,6 +5983,10 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
- 	mutex_lock(hcd->address0_mutex);
- 
- 	for (i = 0; i < PORT_INIT_TRIES; ++i) {
-+		if (hub_port_stop_enumerate(parent_hub, port1, i)) {
-+			ret = -ENODEV;
-+			break;
-+		}
- 
- 		/* ep0 maxpacket size may change; let the HCD know about it.
- 		 * Other endpoints will be handled by re-enumeration. */
-diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-index b2925856b4cb..e23833562e4f 100644
---- a/drivers/usb/core/hub.h
-+++ b/drivers/usb/core/hub.h
-@@ -90,6 +90,8 @@ struct usb_hub {
-  * @is_superspeed cache super-speed status
-  * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
-  * @usb3_lpm_u2_permit: whether USB3 U2 LPM is permitted.
-+ * @early_stop: whether port initialization will be stopped earlier.
-+ * @ignore_event: whether events of the port are ignored.
-  */
- struct usb_port {
- 	struct usb_device *child;
-@@ -103,6 +105,8 @@ struct usb_port {
- 	u32 over_current_count;
- 	u8 portnum;
- 	u32 quirks;
-+	unsigned int early_stop:1;
-+	unsigned int ignore_event:1;
- 	unsigned int is_superspeed:1;
- 	unsigned int usb3_lpm_u1_permit:1;
- 	unsigned int usb3_lpm_u2_permit:1;
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index 015204fc67a1..06a8f1f84f6f 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -18,6 +18,32 @@ static int usb_port_block_power_off;
- 
- static const struct attribute_group *port_dev_group[];
- 
-+static ssize_t early_stop_show(struct device *dev,
-+			    struct device_attribute *attr, char *buf)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+
-+	return sysfs_emit(buf, "%s\n", port_dev->early_stop ? "yes" : "no");
-+}
-+
-+static ssize_t early_stop_store(struct device *dev, struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	bool value;
-+
-+	if (kstrtobool(buf, &value))
-+		return -EINVAL;
-+
-+	if (value)
-+		port_dev->early_stop = 1;
-+	else
-+		port_dev->early_stop = 0;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(early_stop);
-+
- static ssize_t disable_show(struct device *dev,
- 			      struct device_attribute *attr, char *buf)
- {
-@@ -237,6 +263,7 @@ static struct attribute *port_dev_attrs[] = {
- 	&dev_attr_quirks.attr,
- 	&dev_attr_over_current_count.attr,
- 	&dev_attr_disable.attr,
-+	&dev_attr_early_stop.attr,
- 	NULL,
- };
- 
--- 
-2.38.1.431.g37b22c650d-goog
+Best regards,
+Krzysztof
 
