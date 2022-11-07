@@ -2,95 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D39561FB1A
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 18:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6AA61FB4C
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 18:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbiKGRTe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 12:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S232773AbiKGR0z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 12:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiKGRTc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 12:19:32 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3499D1DF18;
-        Mon,  7 Nov 2022 09:19:31 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id y14so31977269ejd.9;
-        Mon, 07 Nov 2022 09:19:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qu2FEOZRSY9IYT6eXjzTtKMMNTggAYYqVs1ygedKPq8=;
-        b=eP5ltGXdVJCTEnfFtucRNeoiDO5ISElM4ZgzkK3SF43MMp6aAHv4/ErdPHVGtlA/k+
-         fVY5bwSwb2xnDbU7WgI0MzBFD2e0CfvwXjQvJ8PF0YAxl3187R+6KDI6cfhDgP0ORfVY
-         3R6PFcO2XHWhAXPMASTCWpAKIcOHU885WW0tkCW5Ru9//iZw1EohBjJJlCeb2X0Bk+OI
-         eKJkTRWaQd9GPAybx3k9MUln2IJG9A63ws42uE3087CsVN4nu+MzvbQcnN/TSLVMIQjy
-         rDzJIgswPG4pItlOEbw6HXDD6jeBUrK4WWx+T+1Qdozru/hxX769+VXqQ4nWwlqWWN/h
-         /kGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qu2FEOZRSY9IYT6eXjzTtKMMNTggAYYqVs1ygedKPq8=;
-        b=csCWk1NMLQIzpOy3o+QoKhaS0wnmluQFonLtO4JbwZRv4xjEOGxgGHysTJcIH8DImo
-         8neKD8VeNd8Pg3Ty8LSznVNEfiA2+7e77kpa/r+EgjUU5fV/LsqF0V8Uwm12hVNeAl46
-         Y0nHILZniETkgmRz0Sr2Iyj3QeVXfCS71kATnqD1QCdhyrkhHGxdkvRdeM1A8OJEyfQT
-         //o+xy5Px9kTh9NjTsKs5iaPAJ9KLpHoY2qJvkwOLL/ieI2xCWIJC1sWl7N1ugBd3MJK
-         8Cig1i0DA8AqaX5xuqTQZZi2P1bDh1ssWtIgJpeQylC+054rArSsqRWoAWa2HJP1I+hm
-         eOmQ==
-X-Gm-Message-State: ACrzQf2WmyZLnRFv9CApe7PtttbJAGQu+z5MMMv765YCjmiUmkm0eirj
-        TZ9y0jEVFekrhBQJcSVF5W0=
-X-Google-Smtp-Source: AMsMyM6LCBPpdH5Hhccy3tvFaUxUzv+rtYf8WatcRANMUVqlYQrqC2RObFbO+iRqfgVOlcqQlUZMnQ==
-X-Received: by 2002:a17:907:1c01:b0:79d:637c:7848 with SMTP id nc1-20020a1709071c0100b0079d637c7848mr49606542ejc.513.1667841569716;
-        Mon, 07 Nov 2022 09:19:29 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id r24-20020aa7da18000000b004643f1524f3sm4485651eds.44.2022.11.07.09.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 09:19:29 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        with ESMTP id S232881AbiKGR0v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 12:26:51 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA76323BEB;
+        Mon,  7 Nov 2022 09:26:49 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A023C24000A;
+        Mon,  7 Nov 2022 17:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667842007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zv+yUunUjsjy2ElQRsQJL+bVnY9BR/J89WhE/UA/CSM=;
+        b=gGVonuLcssp6dLp7SlC1kwVDa35VVpmaTyA4BQ+tc43/U6b2FhrXPTp7Qw19hfxwslGtuB
+        omk03iWiaTXKAl2+wbgcZ7mJJ1eDHuoKqKERRQIplI+QJg+vD5GjXb58ey3fmgSeGnwQx0
+        fcnEap3BQkwsXWZj2menKRqe5BPjBahPjbAcgxQf5FxrviqgI5+vKFOlV+QDM0dmnD+4n9
+        9wBd5FZwMHpVbhrY3wziYE1svF0mLr9+4lD+hKJ4JI37S4o+msPn/iutZ0+l0liDhRGLlU
+        /hKEtywwQouaGOvt9AkiXbXr6RDJx+72CDSY6yti5y6gQ+rd+lW2yafzI51n7w==
+Date:   Mon, 7 Nov 2022 18:26:42 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 06/11] ARM: dts: suniv: licheepi-nano: enable USB
-Date:   Mon, 07 Nov 2022 18:19:27 +0100
-Message-ID: <4780198.31r3eYUQgx@kista>
-In-Reply-To: <20221106154826.6687-7-andre.przywara@arm.com>
-References: <20221106154826.6687-1-andre.przywara@arm.com> <20221106154826.6687-7-andre.przywara@arm.com>
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+Message-ID: <20221107182642.05a09f2f@bootlin.com>
+In-Reply-To: <CAMuHMdXoyE+MP4N=5o6a=u83gcsYD_RijpjrYf15i5MR85gEJg@mail.gmail.com>
+References: <20221107135825.583877-1-herve.codina@bootlin.com>
+        <20221107135825.583877-3-herve.codina@bootlin.com>
+        <CAMuHMdXoyE+MP4N=5o6a=u83gcsYD_RijpjrYf15i5MR85gEJg@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne nedelja, 06. november 2022 ob 16:48:21 CET je Andre Przywara napisal(a):
-> From: Icenowy Zheng <uwu@icenowy.me>
-> 
-> Lichee Pi Nano has a Micro-USB connector, with its D+, D- pins connected
-> to the USB pins of the SoC and ID pin connected to PE2 GPIO.
-> 
-> Enable the USB functionality.
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Hi Geert,
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+On Mon, 7 Nov 2022 16:14:10 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-Best regards,
-Jernej
+> Hi Herv=C3=A9,
+>=20
+> On Mon, Nov 7, 2022 at 2:59 PM Herve Codina <herve.codina@bootlin.com> wr=
+ote:
+> > Add the h2mode property to force the USBs mode ie:
+> >  - 2 hosts
+> > or
+> >  - 1 host and 1 device
+> >
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+>=20
+> Thanks for your patch!
+>=20
+> > --- a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl=
+.yaml
+> > +++ b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl=
+.yaml
+> > @@ -39,6 +39,16 @@ properties:
+> >    '#power-domain-cells':
+> >      const: 0
+> >
+> > +  renesas,h2mode:
+> > +    description: |
+> > +      Configure the USBs mode.
+> > +        - <0> : the USBs are in 1 host and 1 device mode.
+> > +        - <1> : the USBs are in 2 host mode.
+> > +      If the property is not present, the value used is the one alread=
+y present
+> > +      in the CFG_USB register (from reset or set by the bootloader).
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [0, 1]
+> > +
+> >    '#address-cells':
+> >      const: 1 =20
+>=20
+> While the H2MODE register bit is indeed located in the sysctrl's
+> address space, and handling it here makes it simpler for the drivers
+> (especially w.r.t. the default handling), this is really a property
+> of the switchable usbh/f core...
+> Perhaps it can be moved there? Or not?
+
+Moving the property outside sysctrl (and so its handling) will not
+be that easy especially if some more operations are needed (as you
+mention in your patch 3/4 review).
+
+Not sure about what is the best thing to do.
+(a) Keep it simple and stay in sysctrl
+  or
+(b) Create an usb_role_switch driver.
+
+>=20
+> Gr{oetje,eeting}s,
+>=20
+>                         Geert
+>=20
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>=20
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
 
 
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
