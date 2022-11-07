@@ -2,100 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430C461E784
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 00:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9273461E9B5
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 04:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiKFXUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Nov 2022 18:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S231246AbiKGDdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Nov 2022 22:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiKFXU3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 18:20:29 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF960A186
-        for <linux-usb@vger.kernel.org>; Sun,  6 Nov 2022 15:20:27 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id 13so26019953ejn.3
-        for <linux-usb@vger.kernel.org>; Sun, 06 Nov 2022 15:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fC4lW/Qhy2fZHlD2/XbvAAK+i88cBWDvfHjm2okyfsw=;
-        b=bcgkJp1VbSWe3KT3BAO3O9ReAiaGNrm6BYKp1iVtxaztyghKnWsmYQT4ROLwTI22h7
-         1Ayy1RFZt47U77Xcmwtaoqst2NLEExNRfUeecJPIeaYTYs0vOx54gk98IMeEfk3n96Bj
-         7Ubxyc51P81rmk2Jlg7CL//hWqE/7pgt/OYRyvTnmxGBfKZoDaWEyBGYjTHMhADL/qj3
-         vhH3LZNBbCNHA5LyGJiFyJBkJPoUORfsSd6LH/RhZlOfYL4c25XgIpFXXx/uFDyG/TBt
-         u/yQ6bCMF97/PjC1LZYHg+NvuBIUfgsWQSOUHpzX0n0dGdSe3dQ9C7/AGxEj8AD+t+40
-         Tshw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fC4lW/Qhy2fZHlD2/XbvAAK+i88cBWDvfHjm2okyfsw=;
-        b=4mC+GDX6PKax1JYrD/xrj986iox/PU2KQQhsbfXwkkCXd+lvf8Hs7E1fIMob+hdJgU
-         NqU17SZQhSmrYaERGowYwJoccjK5FK+VCYhKpRC9tBJm4NUGWxTJDEr7jZIRy/LdfQEb
-         QspABXEr29dQ1D9feEZciwtWmWjiQiyWePlC2caC7r6kIizrM2cgXsAZcjTks0v14BL8
-         JQXSP5/geV7515GwPO6shUjrKRlkH/c42apRHCwWwFUNchppdigxdrAYR0LhR5yacc0g
-         WeGKv8Qa4YnxsDQ9KmPDs68WDEw0zJ1vr5NNmZlVsz4/gs8aqUxGf+cw3NGaRtnTb9hO
-         KrPg==
-X-Gm-Message-State: ACrzQf3Vr3vmi6gGm3MiVDc2/eklgglFQHJ+lH7NPx8zmt7SSHgV+FKB
-        oprSjRpnaOWRjhUEfhQdyVbLnGLVrBhtN/OPWj/BCg==
-X-Google-Smtp-Source: AMsMyM6/LgP3iZcl1XJw9nSeHT5FDROLnFdhThude4AK+/aVJyTAu35aQ4zmVI8DoXvw2uIWeslD/BkEESepKmyl+MU=
-X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
- d11-20020a1709064c4b00b007ada197b58emr46091190ejw.203.1667776826285; Sun, 06
- Nov 2022 15:20:26 -0800 (PST)
+        with ESMTP id S230265AbiKGDdC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Nov 2022 22:33:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D587D9FCC;
+        Sun,  6 Nov 2022 19:33:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6628D60EA7;
+        Mon,  7 Nov 2022 03:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 780BFC433C1;
+        Mon,  7 Nov 2022 03:32:58 +0000 (UTC)
+Date:   Sun, 6 Nov 2022 22:32:56 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-bluetooth@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Subject: [GIT PULL] treewide: timers: Use timer_shutdown*() before freeing
+ timers
+Message-ID: <20221106223256.4bbdb018@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221023144708.3596563-1-linus.walleij@linaro.org>
-In-Reply-To: <20221023144708.3596563-1-linus.walleij@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 7 Nov 2022 00:20:14 +0100
-Message-ID: <CACRpkda=nbOcXSMNjnJjhL6KaCk_yYD42tSZ3qcxD2bBDWQ2Ag@mail.gmail.com>
-Subject: Re: [PATCH 1/3 v1] usb: fotg210: Collect pieces of dual mode controller
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>,
-        Yuan-Hsin Chen <yhchen@faraday-tech.com>,
-        Felipe Balbi <balbi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 4:49 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-> The Faraday FOTG210 is a dual-mode OTG USB controller that can
-> act as host, peripheral or both. To be able to probe from one
-> hardware description and to follow the pattern of other dual-
-> mode controllers such as MUSB or MTU3 we need to collect the
-> two, currently completely separate drivers in the same
-> directory.
->
-> After this, users need to select the main symbol USB_FOTG210
-> and then each respective subdriver. We pave the road to
-> compile both drivers into the same kernel and select the
-> one we want to use at probe() time, and possibly add OTG
-> support in the end.
->
-> This patch doesn't do much more than create the new symbol
-> and collect the drivers in one place. We also add a comment
-> for the section of dual-mode controllers in the Kconfig
-> file so people can see what these selections are about.
->
-> Also add myself as maintainer as there has been little
-> response on my patches to these drivers.
->
-> Cc: Fabian Vogt <fabian@ritter-vogt.de>
-> Cc: Yuan-Hsin Chen <yhchen@faraday-tech.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Greg are these fine to merge? I have some more patches coming
-so I would like to establish these as a base.
+Linus,
 
-Yours,
-Linus Walleij
+As discussed here:
+
+  https://lore.kernel.org/all/20221106212427.739928660@goodmis.org/
+
+Add a "shutdown" state for timers. This is performed by the new
+timer_shutdown_sync() and timer_shutdown() function calls. When this is
+called on a timer, it will no longer be able to be re-armed. This should
+be called before a timer is freed to prevent it from being re-armed after
+being removed from the timer queue and then causing a crash in the timer
+code when the timer triggers.
+
+This required renaming some functions that were using the name
+timer_shutdown() statically to something more appropriate.
+
+Then a coccinelle script was executed on the entire kernel tree to find
+the trivial locations that remove the timer and then frees the object that
+the timer exists on.
+
+These changes are not enough to solve all the locations where timers may
+be of an issue. But by adding the shutdown infrastructure and the obvious
+cases, the more complex cases can be added after they have been reviewed
+more closely.
+
+
+Please pull the following tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+add-timer-shutdown
+
+Tag SHA1: 7685328352dfd2908e23048f563e328dbd3526e9
+Head SHA1: 870556da63870e01ade9bb8418ac5a21862f2f10
+
+
+Steven Rostedt (Google) (5):
+      ARM: spear: Do not use timer namespace for timer_shutdown() function
+      clocksource/drivers/arm_arch_timer: Do not use timer namespace for timer_shutdown() function
+      clocksource/drivers/sp804: Do not use timer namespace for timer_shutdown() function
+      timers: Add timer_shutdown_sync() and timer_shutdown() to be called before freeing timers
+      treewide: Convert del_timer*() to timer_shutdown*()
+
+----
+ .../RCU/Design/Requirements/Requirements.rst       |  2 +-
+ Documentation/core-api/local_ops.rst               |  2 +-
+ Documentation/kernel-hacking/locking.rst           |  5 ++
+ arch/arm/mach-spear/time.c                         |  8 +--
+ arch/sh/drivers/push-switch.c                      |  2 +-
+ block/blk-iocost.c                                 |  2 +-
+ block/blk-iolatency.c                              |  2 +-
+ block/kyber-iosched.c                              |  2 +-
+ drivers/acpi/apei/ghes.c                           |  2 +-
+ drivers/atm/idt77252.c                             |  6 +-
+ drivers/block/drbd/drbd_main.c                     |  2 +-
+ drivers/block/loop.c                               |  2 +-
+ drivers/bluetooth/hci_bcsp.c                       |  2 +-
+ drivers/bluetooth/hci_qca.c                        |  4 +-
+ drivers/clocksource/arm_arch_timer.c               | 12 ++--
+ drivers/clocksource/timer-sp804.c                  |  6 +-
+ drivers/gpu/drm/i915/i915_sw_fence.c               |  2 +-
+ drivers/hid/hid-wiimote-core.c                     |  2 +-
+ drivers/input/keyboard/locomokbd.c                 |  2 +-
+ drivers/input/keyboard/omap-keypad.c               |  2 +-
+ drivers/input/mouse/alps.c                         |  2 +-
+ drivers/isdn/mISDN/l1oip_core.c                    |  4 +-
+ drivers/isdn/mISDN/timerdev.c                      |  4 +-
+ drivers/leds/trigger/ledtrig-activity.c            |  2 +-
+ drivers/leds/trigger/ledtrig-heartbeat.c           |  2 +-
+ drivers/leds/trigger/ledtrig-pattern.c             |  2 +-
+ drivers/leds/trigger/ledtrig-transient.c           |  2 +-
+ drivers/media/pci/ivtv/ivtv-driver.c               |  2 +-
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c            | 16 +++---
+ drivers/media/usb/s2255/s2255drv.c                 |  4 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |  6 +-
+ drivers/net/ethernet/marvell/sky2.c                |  2 +-
+ drivers/net/ethernet/sun/sunvnet.c                 |  2 +-
+ drivers/net/usb/sierra_net.c                       |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/btcoex.c  |  2 +-
+ drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c   |  2 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/sta.c       |  2 +-
+ drivers/net/wireless/intersil/hostap/hostap_ap.c   |  2 +-
+ drivers/net/wireless/marvell/mwifiex/main.c        |  2 +-
+ drivers/net/wireless/microchip/wilc1000/hif.c      |  6 +-
+ drivers/nfc/pn533/pn533.c                          |  2 +-
+ drivers/nfc/pn533/uart.c                           |  2 +-
+ drivers/pcmcia/bcm63xx_pcmcia.c                    |  2 +-
+ drivers/pcmcia/electra_cf.c                        |  2 +-
+ drivers/pcmcia/omap_cf.c                           |  2 +-
+ drivers/pcmcia/pd6729.c                            |  4 +-
+ drivers/pcmcia/yenta_socket.c                      |  4 +-
+ drivers/scsi/qla2xxx/qla_edif.c                    |  4 +-
+ drivers/staging/media/atomisp/i2c/atomisp-lm3554.c |  2 +-
+ drivers/tty/n_gsm.c                                |  2 +-
+ drivers/tty/sysrq.c                                |  2 +-
+ drivers/usb/gadget/udc/m66592-udc.c                |  2 +-
+ drivers/usb/serial/garmin_gps.c                    |  2 +-
+ drivers/usb/serial/mos7840.c                       |  4 +-
+ fs/ext4/super.c                                    |  2 +-
+ fs/nilfs2/segment.c                                |  2 +-
+ include/linux/timer.h                              | 62 +++++++++++++++++++--
+ kernel/time/timer.c                                | 64 ++++++++++++----------
+ net/802/garp.c                                     |  2 +-
+ net/802/mrp.c                                      |  4 +-
+ net/bridge/br_multicast.c                          |  8 +--
+ net/bridge/br_multicast_eht.c                      |  4 +-
+ net/core/gen_estimator.c                           |  2 +-
+ net/ipv4/ipmr.c                                    |  2 +-
+ net/ipv6/ip6mr.c                                   |  2 +-
+ net/mac80211/mesh_pathtbl.c                        |  2 +-
+ net/netfilter/ipset/ip_set_list_set.c              |  2 +-
+ net/netfilter/ipvs/ip_vs_lblc.c                    |  2 +-
+ net/netfilter/ipvs/ip_vs_lblcr.c                   |  2 +-
+ net/netfilter/xt_IDLETIMER.c                       |  4 +-
+ net/netfilter/xt_LED.c                             |  2 +-
+ net/rxrpc/conn_object.c                            |  2 +-
+ net/sched/cls_flow.c                               |  2 +-
+ net/sunrpc/svc.c                                   |  2 +-
+ net/tipc/discover.c                                |  2 +-
+ net/tipc/monitor.c                                 |  2 +-
+ sound/i2c/other/ak4117.c                           |  2 +-
+ sound/synth/emux/emux.c                            |  2 +-
+ 78 files changed, 207 insertions(+), 148 deletions(-)
+---------------------------
