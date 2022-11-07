@@ -2,126 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B7F61EE3B
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 10:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9459861F044
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Nov 2022 11:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiKGJIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Nov 2022 04:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S231617AbiKGKV6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Nov 2022 05:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiKGJH6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 04:07:58 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3797D167D4
-        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 01:07:57 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id i21so16428057edj.10
-        for <linux-usb@vger.kernel.org>; Mon, 07 Nov 2022 01:07:57 -0800 (PST)
+        with ESMTP id S231566AbiKGKVt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Nov 2022 05:21:49 -0500
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63EF18E25
+        for <linux-usb@vger.kernel.org>; Mon,  7 Nov 2022 02:21:26 -0800 (PST)
+Received: by mail-oi1-x243.google.com with SMTP id b124so11629697oia.4
+        for <linux-usb@vger.kernel.org>; Mon, 07 Nov 2022 02:21:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7xx5tJV+VJyItj+vrgYOnwXxDZAezPx0YoT/Cqlipao=;
-        b=mD9PE1fuRXhYxhwfO1pUx1reoDZ/uojqrvJB7QslbbFmRS6z9snUTNU3vkphyCweii
-         80UACwqk/79pf5SknSPa37ng+C40N/MztlKJksb46a2D3THiRXpLR9R9UIPvelgnvqob
-         klIYCm1+LKeb0a/Kuq6YJxZV9tFBgEu10J+QHxSiFJWHbMAWGFtqkmCPEm2bO2FcjCUr
-         JZB+crHIliqQdxGCmwIIkLtv7ALv2+/5IWVa/YoOKuSyMLbCk8II3TjrMkSNNE9+CKvl
-         4rvVhA0Muc/YffrMXWcpW15sM8Esam4jkd/69WTzn7pvq+yrB8R4Tiv21hMAip9/Lfal
-         3I6Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=L9okY7Icb0Gf5ctoFsS3m7Ms6FyffuhIG/wumllqb99pGSDM0eKoVdXRomu4k2Vvje
+         vaAAA5b5CG4T9vL3DYzTbt6i7ilTYVRiZHeAf51qWroCKMi/06UV8twkwYbbvcb58b0c
+         O8aiXYIeKLPGKFxD8AeTNjdm9XiiwAwYXXYnxXnBzQtt4ZaPQYbu2mn3d4/wBF5dq0sI
+         fYgKey8dWac3TMQ3pm+aZLL8XgADS0c8wc9DQhJYDoGLimjkDspSigMMA/pe1/be4Mmf
+         FTMTprRtatoAeN10/4e16TIuQYPcJ6zZ7AsqjnUqg8Bde3BWUPkO4V20s/KjpolOjYbD
+         1dVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7xx5tJV+VJyItj+vrgYOnwXxDZAezPx0YoT/Cqlipao=;
-        b=2GOTlnaodIR0TKhmCGZi2iHvduovWim6X6k38dsxDrdVeEjdLwOI/FzgC/WyYNQz0p
-         hXVyU14QDgANbClzHlcM1iMudJQ3Co1CaLzpP94Qqjbn3r8CAi5w/tuTen/PnGcOhkPC
-         ffnqhTUrcWxn136tLjpft7ka0PBCS1ImYZWj9oq1vArglbAA/07f34+U/cODTGa9dbdn
-         SLremf+KnlJjWlrwpldPeCmOlVZG667Lqil4tQzqMEaUJkC6qfcH0Jwakxncvp7j+EL/
-         V+P/3Xw81Y1grLo4B5g0AxUkdlGi1xyUd8fXGVJQM1gOsLyyRh/CpkpUhhdGZjU7/7b5
-         Z8DA==
-X-Gm-Message-State: ACrzQf21YXY9RUf0Zsna7u1InqoAOE6LTC0ALNyu58jlPVCi9mrTLFc6
-        hd/rRMhsLpalW2CdLHpuK1dybw==
-X-Google-Smtp-Source: AMsMyM4SCWYswmdQLsr0TW2iJuRuwZ6HTS2Rb1SI4ROMGPAGTngJDTClA1R0rKexLFeEMDVrsOAAgA==
-X-Received: by 2002:a05:6402:2201:b0:44f:443e:2a78 with SMTP id cq1-20020a056402220100b0044f443e2a78mr47889908edb.76.1667812075798;
-        Mon, 07 Nov 2022 01:07:55 -0800 (PST)
-Received: from fedora.. ([85.235.10.72])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056402038700b0046150ee13besm3781658edv.65.2022.11.07.01.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 01:07:55 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] USB: bcma: Make GPIO explicitly optional
-Date:   Mon,  7 Nov 2022 10:07:53 +0100
-Message-Id: <20221107090753.1404679-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=5xvrgRWdLOd98M/0p9O2BJ6jvLusbD1mVovnrSKJbw9SX41xJeka01uy6XVStwi4SH
+         zCBH3Ak8NQEcLjTsyN0rK8xJ9R5SCyi6a4A5wDQczbC9sraEE0+EToWH3dFd0lV+FD9x
+         UBsqlmjwOUTk/7qqeA3ixMDVAq7uMiXHx7I763DzDmp8n1gmNJuN5nyNtHFUIbQIKvh6
+         vVCFLHbPb/WYL1rzT/PpXO8msfi6m4iGIx0kdI+KEnqxkEIL611FcACs10QQlysXBBPb
+         aoEI+lD0Y/+QcYR8lFTHn3l9kbgZKfarubv+kqY4NbGm/4DMIztEbbOljScH6z5pTAu6
+         OOdA==
+X-Gm-Message-State: ACrzQf3aL1F0imqsFmftNLUgWkj1rigM2nrLtebEZr8lklWsPJz5/paN
+        mtmA44cuCdLdmgZuyYB6LGWmtt26tIojty3/gPrsQ3rrEfk=
+X-Google-Smtp-Source: AMsMyM4Z92xjGZXgCyg2wym9Bu3/u65n6EL2ZpWI9kWf7s8xWZden0QG/zdZVfFd3uCVmOfceIs+YigxV7lXSF4Af+Y=
+X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id
+ mr19-20020a17090b239300b00213ecb22e04mr38944517pjb.100.1667816475223; Mon, 07
+ Nov 2022 02:21:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
+ 02:21:14 -0800 (PST)
+Reply-To: contact@ammico.it
+From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
+Date:   Mon, 7 Nov 2022 11:21:14 +0100
+Message-ID: <CAHAXD+Z_SoFK+TjW_6apBCCLtc_awXEjaqOdf77jdLRxxup3TA@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_40,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:243 listed in]
+        [list.dnswl.org]
+        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+        *      [score: 0.2547]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [977638ib[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-What the code does is to not check the return value from
-devm_gpiod_get() and then avoid using an erroneous GPIO descriptor
-with IS_ERR_OR_NULL().
-
-This will miss real errors from the GPIO core that should not be
-ignored, such as probe deferral.
-
-Instead request the GPIO as explicitly optional, which means that
-if it doesn't exist, the descriptor returned will be NULL.
-
-Then we can add error handling and also avoid just doing this on
-the device tree path, and simplify the site where the optional
-GPIO descriptor is used.
-
-There were some problems with cleaning up this GPIO descriptor
-use in the past, but this is the proper way to deal with it.
-
-Cc: Rafał Miłecki <rafal@milecki.pl>
-Cc: Chuhong Yuan <hslester96@gmail.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/usb/host/bcma-hcd.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/host/bcma-hcd.c b/drivers/usb/host/bcma-hcd.c
-index 2df52f75f6b3..7558cc4d90cc 100644
---- a/drivers/usb/host/bcma-hcd.c
-+++ b/drivers/usb/host/bcma-hcd.c
-@@ -285,7 +285,7 @@ static void bcma_hci_platform_power_gpio(struct bcma_device *dev, bool val)
- {
- 	struct bcma_hcd_device *usb_dev = bcma_get_drvdata(dev);
- 
--	if (IS_ERR_OR_NULL(usb_dev->gpio_desc))
-+	if (!usb_dev->gpio_desc)
- 		return;
- 
- 	gpiod_set_value(usb_dev->gpio_desc, val);
-@@ -406,9 +406,11 @@ static int bcma_hcd_probe(struct bcma_device *core)
- 		return -ENOMEM;
- 	usb_dev->core = core;
- 
--	if (core->dev.of_node)
--		usb_dev->gpio_desc = devm_gpiod_get(&core->dev, "vcc",
--						    GPIOD_OUT_HIGH);
-+	usb_dev->gpio_desc = devm_gpiod_get_optional(&core->dev, "vcc",
-+						     GPIOD_OUT_HIGH);
-+	if (IS_ERR(usb_dev->gpio_desc))
-+		return dev_err_probe(&core->dev, PTR_ERR(usb_dev->gpio_desc),
-+				     "error obtaining VCC GPIO");
- 
- 	switch (core->id.id) {
- 	case BCMA_CORE_USB20_HOST:
--- 
-2.34.1
-
+Hei ja miten voit?
+Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
+ toivolla
+v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
+leikkaus
+t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
+suudet selviyty=C3=A4.
+Mutta ennen kuin min=C3=A4
+Tee toinen vaarallinen operaatio, annan sen sinulle
+Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
+sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
+voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
+iden auttamista
+ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
+=C3=A4 minulla ei ole niit=C3=A4
+kenelt=C3=A4 perii rahaa.
+Vastaa minulle nopeasti
+terveisi=C3=A4
+Rouva Monika Evereen
+Florida, Amerikan Yhdysvallat
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+Hi and how are you?
+My name is Mrs. Evereen, I am sending this message with great hope for
+an immediate response, as I have to undergo heart reoperation in my
+current poor health with little chance of survival. But before I
+undertake the second dangerous operation, I will give you the
+$6,550,000 I have in my US bank account to invest well, manage and use
+the profits to run a charity project for me. I count helping the sick
+and the poor as my last wish on earth, because I have no one to
+inherit money from.
+Please give me a quick reply
+regards
+Mrs. Monika Evereen
+Florida, United States of America
