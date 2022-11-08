@@ -2,105 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96ACB620EEE
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 12:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1760620F13
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 12:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbiKHLYZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Nov 2022 06:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S234070AbiKHL2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Nov 2022 06:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbiKHLYS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 06:24:18 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E17B4AF07
-        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 03:24:14 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id 7so7295012ilg.11
-        for <linux-usb@vger.kernel.org>; Tue, 08 Nov 2022 03:24:14 -0800 (PST)
+        with ESMTP id S233771AbiKHL23 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 06:28:29 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44572B25C
+        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 03:28:27 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id j16so20753186lfe.12
+        for <linux-usb@vger.kernel.org>; Tue, 08 Nov 2022 03:28:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
-        b=LXzLwEfFEIjs9nRQ/0D9sK0UdFF/hcYD1/7lPcxtKxGf+ipiOyxIUkG9FxWjTQwnxI
-         D0k1pcJ4r9HbGweGR8VttiL8E2qc4lcsz3jC3X1z+Myzw30J2a8GCz5AS/bkRvOOAlHD
-         E+tAU65cwh01zP65Dht/AwghXmg8POvqM5wMW+NclASoJJ1M+p89BgFOSDch5BgQ0Avc
-         9JiZIkvYkz5qbwJiVyZnhn8aEs4dsNPEV6aJ60VBa1B1c4nkJvkSo/q1xUjbvGvnQsI2
-         YCKRfjADZRvavXIhrgWVqvohpAMKlTCL5cT3Ex4YqBvyGRv/IX591YGJ8Vqkx1vqKbDZ
-         WAQg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/4bF5b4uSR+PiYI+2EWUk5/vuKUO/CvUGHdFYYb5oFo=;
+        b=eQF7DappUd2N5b981o9yxaOb99guRAo/uqgsDGSn0OHT6KEsr9JBcQZsnjJryaoGQu
+         Lzd7refSfqCHKxgt/iggiTidS17wYvvC5/njGYkdC7HWK5XCGhl+Eogk13MTtcjuyj7w
+         dDDkX4Lov7LGbMfUDGJqQdlf/PwCVg5LcwJ9numup5jCw/DOl9OZUsByaXBbjqTwsT+N
+         YjxwKE0BouFoXlnRZnOaxl0uOnh8gTFc0/DyiJACGRQzvjg0M9eiPLWCNRjcV6KeTg64
+         ORO/CyTHsaZuXplWrTB4h9ClRxhgLqDCGVJvYxeY4MqGlvWkP1SUxntZZmZmFEsL+YO9
+         0Fzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
-        b=Em+sWv6TZuPkmL/wLJPGGU2GmIoFUw2eZN+X5OLAOqBzWYlNFzqdqXZ5b3QqXVQ8Y0
-         k32JYLM4q0EfybpaShAs4F+7OzJMeEE9BoO52ul0Df4JAPkxdnofNhq98yllK4N+QbZl
-         mG4xY3BiTHHR990c40qv8MmBpNdm8nVIHCIPtIEzTjM5YEw7WkGoI7ZQGLqjg6Xx68xW
-         t8j3y6fvSGvIFjDwCx0ZXAMEmXzfDpx222hlLX9JR55lhv7xDouLzKJkfs7FVHmg6OYM
-         95WY+Wy9oftdUd5X+BjyJArWMd0JbFxuKD6FoT4hUD8nELJgopJ4TPIcuwODAOVo90wt
-         GSJg==
-X-Gm-Message-State: ACrzQf1P9Pin3xPzJlmCvcumGgktzSS99DAVWl4bFUDaMDP5o/K3TcJw
-        LzVqmCOW5DP1OFVg8eJCcpcWAsdNaVo7kdSL1So=
-X-Google-Smtp-Source: AMsMyM7l9664LpWj9QcPDmFBWC92J2k8lgTtaMBq0d8Kn2LaY6/WvjL6jmQ58ep7k3CUc1mU0tvXdcs9IQAedNtHTSY=
-X-Received: by 2002:a92:bf0e:0:b0:300:cc8e:fe07 with SMTP id
- z14-20020a92bf0e000000b00300cc8efe07mr18642833ilh.184.1667906653482; Tue, 08
- Nov 2022 03:24:13 -0800 (PST)
+        bh=/4bF5b4uSR+PiYI+2EWUk5/vuKUO/CvUGHdFYYb5oFo=;
+        b=BefcXj+R6hZKZgDH4NVMxtUCuI69sCd3ORKYL/YzL29ftv782D6BdEJeSCjpcWDYSt
+         Tz2tKkfhACePWb7SpYzwHTiuIe5mbAr3sZPck0kpOkngDvVj1EKK4NTvacv4jzCmM+Is
+         kvfoyggMjvVX+UXyDWGSY+3FqP4SkUqqNYMiz1O6grkBm0xVt47zZoELD/7Mb25UG+oh
+         Tspg4ChBfIq3C3Dz+N4hkqk43NaovgLGTE/yq1AmNnNjNO7QU0QHhmHHccwg2Jfm6tvv
+         JCPCLiamcpRvO2Rd38JEUidVDCgQ3hqcpgiTjA1d7K10S/Mzm0oLYGJk5davP3B3Djik
+         biQg==
+X-Gm-Message-State: ACrzQf2/ME/wYcdGQ96BYplUTAJCvu7YlxiBVw9WBX0NlSN7aRqdLSqQ
+        fj4RHIZ3LzMzKNl2zKO2j3OSlw==
+X-Google-Smtp-Source: AMsMyM4yHGNR2Ct1uNwRmvEy3UsNs7Pg4gtxGic+wGvnBCnfwKCtFXI0kII1QiSaoswtC8dY0bIHIg==
+X-Received: by 2002:a05:6512:150c:b0:4aa:f81e:6c17 with SMTP id bq12-20020a056512150c00b004aaf81e6c17mr20752532lfb.275.1667906906320;
+        Tue, 08 Nov 2022 03:28:26 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id v21-20020a2e9255000000b002776ce08326sm1699183ljg.29.2022.11.08.03.28.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 03:28:25 -0800 (PST)
+Message-ID: <fd9ee5df-0b9d-59c1-92c6-4874312aae1c@linaro.org>
+Date:   Tue, 8 Nov 2022 12:28:24 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1921:0:0:0:0 with HTTP; Tue, 8 Nov 2022 03:24:13
- -0800 (PST)
-Reply-To: mrinvest1010@gmail.com
-From:   "K. A. Mr. Kairi" <ctocik10@gmail.com>
-Date:   Tue, 8 Nov 2022 03:24:13 -0800
-Message-ID: <CAEbPynvxfjzGLRVVaaVB9fasgmGPWiH+Ceaj9c3oE5eqT5_+0Q@mail.gmail.com>
-Subject: Re: My Response..
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:132 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrinvest1010[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ctocik10[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ctocik10[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 5/7] ARM: dts: hpe: Add UDC nodes
+Content-Language: en-US
+To:     richard.yu@hpe.com, verdun@hpe.com, nick.hawkins@hpe.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20221103160625.15574-1-richard.yu@hpe.com>
+ <20221103160625.15574-6-richard.yu@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221103160625.15574-6-richard.yu@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Dear
+On 03/11/2022 17:06, richard.yu@hpe.com wrote:
+> From: Richard Yu <richard.yu@hpe.com>
+> 
+> Add support for the USB drivers on HPE GXP SoC.
+> 
+> Signed-off-by: Richard Yu <richard.yu@hpe.com>
+> ---
+>  arch/arm/boot/dts/hpe-gxp.dtsi | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
+> index cf735b3c4f35..60f2d3b15d90 100644
+> --- a/arch/arm/boot/dts/hpe-gxp.dtsi
+> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
+> @@ -59,6 +59,36 @@
+>  			ranges = <0x0 0xc0000000 0x30000000>;
+>  			dma-ranges;
+>  
+> +			vuhc0: vuhc@80400000 {
+> +				compatible = "hpe,gxp-vuhc", "syscon";
+> +				reg = <0x80400000 0x80>;
+> +			};
+> +
+> +			udc_system_controller: system-controller@80400800 {
+> +				compatible = "hpe,gxp-udcg", "syscon";
+> +				reg = <0x80400800 0x200>;
+> +			};
+> +
+> +			gadget0: udc@80401000 {
+> +				compatible = "hpe,gxp-udc";
+> +				reg = <0x80401000 0x1000>;
+> +				interrupts = <13>;
+> +				interrupt-parent = <&vic1>;
+> +				vdevnum = <0>;
+> +				fepnum = <7>;
+> +				hpe,syscon-phandle = <&udc_system_controller>;
+> +			};
+> +
+> +			gadget1: udc@80402000 {
+> +				compatible = "hpe,gxp-udc";
+> +				reg = <0x80402000 0x1000>;
+> +				interrupts = <13>;
+> +				interrupt-parent = <&vic1>;
+> +				vdevnum = <1>;
+> +				fepnum = <7>;
+> +				hpe,syscon-phandle = <&udc_system_controller>;
 
-How are you, I have a serious client, whom will be interested to
-invest in your country, I got your Details through the Investment
-Network and world Global Business directory.
+Based on your bindings explanation, UDC should be rather the device
+with multiple children representing actual devices.
 
-Let me know if you are interested for more details.....
+Best regards,
+Krzysztof
 
-Sincerely,
-Mr. Kairi Andrew
