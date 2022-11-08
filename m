@@ -2,70 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1760620F13
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 12:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0451B620F1A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 12:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbiKHL2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Nov 2022 06:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S234011AbiKHLap (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Nov 2022 06:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233771AbiKHL23 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 06:28:29 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44572B25C
-        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 03:28:27 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id j16so20753186lfe.12
-        for <linux-usb@vger.kernel.org>; Tue, 08 Nov 2022 03:28:27 -0800 (PST)
+        with ESMTP id S233744AbiKHLao (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 06:30:44 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41B510B75
+        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 03:30:42 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id l8so20627472ljh.13
+        for <linux-usb@vger.kernel.org>; Tue, 08 Nov 2022 03:30:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/4bF5b4uSR+PiYI+2EWUk5/vuKUO/CvUGHdFYYb5oFo=;
-        b=eQF7DappUd2N5b981o9yxaOb99guRAo/uqgsDGSn0OHT6KEsr9JBcQZsnjJryaoGQu
-         Lzd7refSfqCHKxgt/iggiTidS17wYvvC5/njGYkdC7HWK5XCGhl+Eogk13MTtcjuyj7w
-         dDDkX4Lov7LGbMfUDGJqQdlf/PwCVg5LcwJ9numup5jCw/DOl9OZUsByaXBbjqTwsT+N
-         YjxwKE0BouFoXlnRZnOaxl0uOnh8gTFc0/DyiJACGRQzvjg0M9eiPLWCNRjcV6KeTg64
-         ORO/CyTHsaZuXplWrTB4h9ClRxhgLqDCGVJvYxeY4MqGlvWkP1SUxntZZmZmFEsL+YO9
-         0Fzg==
+        bh=Df/2yQeWb1d9To2ggEgy9JGgAa1dKPEwPJTnp7RFKKI=;
+        b=EGFgZfWK7iun8X4qrBI1QRrVUzXrZHgr2HFTDssPuXHld6e8Xff5dU+7CK6LgoZcKj
+         VssQGbAgiwR9Gzn3En0qjbNygDiU+SR1mlKF773u8yeQjlcMYsBcBWen7rJGWtLa5Vwe
+         GDDdv0ND0P0qgO4+rk5YfUdGa6HupktHiuwh05B3qfqYD9ew/E7bbwSiOsKESe9ZUo/y
+         u+gGusZQi8Gp2XOH36SN6AATQzDVT3HlIEfFzGpnCuGaHzS1kitrfKBRiliff+su6GC6
+         7csYZ1r6Ksqe/Vvcf96JWHr3OzVSLAaD94108//PzpeM1OOMi1YEGxVGRg8Hh9BgEsIG
+         mv4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/4bF5b4uSR+PiYI+2EWUk5/vuKUO/CvUGHdFYYb5oFo=;
-        b=BefcXj+R6hZKZgDH4NVMxtUCuI69sCd3ORKYL/YzL29ftv782D6BdEJeSCjpcWDYSt
-         Tz2tKkfhACePWb7SpYzwHTiuIe5mbAr3sZPck0kpOkngDvVj1EKK4NTvacv4jzCmM+Is
-         kvfoyggMjvVX+UXyDWGSY+3FqP4SkUqqNYMiz1O6grkBm0xVt47zZoELD/7Mb25UG+oh
-         Tspg4ChBfIq3C3Dz+N4hkqk43NaovgLGTE/yq1AmNnNjNO7QU0QHhmHHccwg2Jfm6tvv
-         JCPCLiamcpRvO2Rd38JEUidVDCgQ3hqcpgiTjA1d7K10S/Mzm0oLYGJk5davP3B3Djik
-         biQg==
-X-Gm-Message-State: ACrzQf2/ME/wYcdGQ96BYplUTAJCvu7YlxiBVw9WBX0NlSN7aRqdLSqQ
-        fj4RHIZ3LzMzKNl2zKO2j3OSlw==
-X-Google-Smtp-Source: AMsMyM4yHGNR2Ct1uNwRmvEy3UsNs7Pg4gtxGic+wGvnBCnfwKCtFXI0kII1QiSaoswtC8dY0bIHIg==
-X-Received: by 2002:a05:6512:150c:b0:4aa:f81e:6c17 with SMTP id bq12-20020a056512150c00b004aaf81e6c17mr20752532lfb.275.1667906906320;
-        Tue, 08 Nov 2022 03:28:26 -0800 (PST)
+        bh=Df/2yQeWb1d9To2ggEgy9JGgAa1dKPEwPJTnp7RFKKI=;
+        b=iFlz+QWcK42PNxgnzKJOpT/+/L7WW+Ph0ZHmi81YzAntAxhynGuva8kBnXcJj8PeHL
+         V0TaFduMXSXz6+LCifdTVb/47yE3MZn9sK3RMZUZENbnNbuzqPtRBSZahQpF+BkA09i3
+         SUU4WEiDnR7toBE2ELeJTeiUU8OI4kAJi0Y6kEw4ESK+55HQsNEe8RrCsSNC0h9aMp0w
+         6/Y+c5hTLkCRxSK2IZ9EWzI/6yGgyA+pshEWY3LxUxMN/k01nd0l7fDn5VCUQ7Uu4xYN
+         kRSJu4wRlAmM6kwNmUga0eMYHK5vLKh4i2n2sYb5QaDHPnO/38InVC8K40CgizcZoWkf
+         9xbA==
+X-Gm-Message-State: ACrzQf2PDDZDqVXJwArHKRBBiRuEzk7L9aTrD40zz2HHjF/YpKbjFaBD
+        7s25JrWOnMKYW/0CU2QDDhU4ljgaJ5+KOw==
+X-Google-Smtp-Source: AMsMyM4e3RprgOpTHPLpEtvIddL3m+QxWSPCTr4lHwgBI3qmC3SEGP42bF556j32ASbvjV3XzlbtRg==
+X-Received: by 2002:a2e:550:0:b0:277:e8c:a5a4 with SMTP id 77-20020a2e0550000000b002770e8ca5a4mr7011231ljf.311.1667907040968;
+        Tue, 08 Nov 2022 03:30:40 -0800 (PST)
 Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id v21-20020a2e9255000000b002776ce08326sm1699183ljg.29.2022.11.08.03.28.25
+        by smtp.gmail.com with ESMTPSA id n1-20020ac24901000000b004971a83f839sm1744968lfi.39.2022.11.08.03.30.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 03:28:25 -0800 (PST)
-Message-ID: <fd9ee5df-0b9d-59c1-92c6-4874312aae1c@linaro.org>
-Date:   Tue, 8 Nov 2022 12:28:24 +0100
+        Tue, 08 Nov 2022 03:30:40 -0800 (PST)
+Message-ID: <c199600a-aad9-5639-ea57-a4d59d719ade@linaro.org>
+Date:   Tue, 8 Nov 2022 12:30:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v1 5/7] ARM: dts: hpe: Add UDC nodes
+Subject: Re: [PATCH v1 2/7] dt-bindings: usb: hpe,gxp-udc: Add binding for gxp
+ gadget
 Content-Language: en-US
-To:     richard.yu@hpe.com, verdun@hpe.com, nick.hawkins@hpe.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        balbi@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+To:     "Yu, Richard" <richard.yu@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
 References: <20221103160625.15574-1-richard.yu@hpe.com>
- <20221103160625.15574-6-richard.yu@hpe.com>
+ <20221103160625.15574-3-richard.yu@hpe.com>
+ <b85230d4-8fce-ba49-0d6b-8c4d20132cda@linaro.org>
+ <SJ0PR84MB2085E6B922DAF1070DC802EF8D3C9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103160625.15574-6-richard.yu@hpe.com>
+In-Reply-To: <SJ0PR84MB2085E6B922DAF1070DC802EF8D3C9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,55 +88,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/11/2022 17:06, richard.yu@hpe.com wrote:
-> From: Richard Yu <richard.yu@hpe.com>
+On 07/11/2022 21:16, Yu, Richard wrote:
+> Hi Mr. Kozlowski,
 > 
-> Add support for the USB drivers on HPE GXP SoC.
+>>> +
+>>> +  vdevnum:
+>>> +    description:
+>>> +      virtual device number.
 > 
-> Signed-off-by: Richard Yu <richard.yu@hpe.com>
-> ---
->  arch/arm/boot/dts/hpe-gxp.dtsi | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
+>> That's unusual property... Why numbering devices is part of DT (hardware description)?
 > 
-> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
-> index cf735b3c4f35..60f2d3b15d90 100644
-> --- a/arch/arm/boot/dts/hpe-gxp.dtsi
-> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-> @@ -59,6 +59,36 @@
->  			ranges = <0x0 0xc0000000 0x30000000>;
->  			dma-ranges;
->  
-> +			vuhc0: vuhc@80400000 {
-> +				compatible = "hpe,gxp-vuhc", "syscon";
-> +				reg = <0x80400000 0x80>;
-> +			};
-> +
-> +			udc_system_controller: system-controller@80400800 {
-> +				compatible = "hpe,gxp-udcg", "syscon";
-> +				reg = <0x80400800 0x200>;
-> +			};
-> +
-> +			gadget0: udc@80401000 {
-> +				compatible = "hpe,gxp-udc";
-> +				reg = <0x80401000 0x1000>;
-> +				interrupts = <13>;
-> +				interrupt-parent = <&vic1>;
-> +				vdevnum = <0>;
-> +				fepnum = <7>;
-> +				hpe,syscon-phandle = <&udc_system_controller>;
-> +			};
-> +
-> +			gadget1: udc@80402000 {
-> +				compatible = "hpe,gxp-udc";
-> +				reg = <0x80402000 0x1000>;
-> +				interrupts = <13>;
-> +				interrupt-parent = <&vic1>;
-> +				vdevnum = <1>;
-> +				fepnum = <7>;
-> +				hpe,syscon-phandle = <&udc_system_controller>;
+> In HPE GXP virtual EHCI controller chipset, it can support up to 8 virtual devices(gadgets). Each device/gadget will be represented by a bit in 8 bits register. For example, the interrupt register bit 0 indicates the interrupt from device 0, bit 1 for device 1 ... so on.  When a user defines a device/gadget, he/she can define the device number as between 0 and 7. Thus, the driver can look up to the bit position. That is why we have numbering devices as part of DT.
 
-Based on your bindings explanation, UDC should be rather the device
-with multiple children representing actual devices.
+Wrap your lines properly, it's impossible to reply in-line to such messages.
+
+Then how do you specify two devices? You allow here only one, right?
+
+Which bit in which register? Your devices have separate address space,
+so why they cannot poke the same register, right? Then just always set
+it to 0...
+
+I might miss here something but so far it looks to me like some hacky
+description matching the driver, not hardware, not existing bindings.
+
+> 
+>>> +
+>>> +  fepnum:
+>>> +    description:
+>>> +      number of the flexible end-points this device is needed.
+> 
+>> Similar question.
+> 
+> In HPE GXP virtual EHCI Controller chipset, there is a flexible End-Point(EP) pool. Each flexible EP has its own mapping register. The mapping register bit 0 to 3 is for device number (vdevnum) and bit 4 to 7 is for EP number inside the device. The device driver configures the mapping register to assign a flexible EP to a specific device.  Here, "fepnum" is the input letting the driver know how many EPs are needed for this device/gadget.
+
+Nope. So you create here some weird IDs to poke into syscon register.
+First, syscon has offset if you need. You could treat it maybe as bits?
+I don't know... but even then your design is poor - two devices changing
+the same register. Even though it is sunchronized by regmap, it is
+conflicting, obfuscated access.
 
 Best regards,
 Krzysztof
