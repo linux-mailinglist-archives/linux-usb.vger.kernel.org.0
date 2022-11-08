@@ -2,101 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29AC620DB9
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 11:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96ACB620EEE
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 12:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbiKHKuz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Nov 2022 05:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S234048AbiKHLYZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Nov 2022 06:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiKHKui (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 05:50:38 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B545419AB
-        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 02:50:20 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id n12so37430741eja.11
-        for <linux-usb@vger.kernel.org>; Tue, 08 Nov 2022 02:50:20 -0800 (PST)
+        with ESMTP id S234052AbiKHLYS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 06:24:18 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E17B4AF07
+        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 03:24:14 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id 7so7295012ilg.11
+        for <linux-usb@vger.kernel.org>; Tue, 08 Nov 2022 03:24:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cI1zMfq3lTc8UzWRLodrLvVbxywyN3pwGfeoh4TP7Pk=;
-        b=HbSjHAG+XMjuE1yuF4Dqsww1Soriw/tDonvjEn0RhbG+dx+XK/8rNeqM9nIhaOci/i
-         IhP4Iu9O+G4vaxfHK2IvYHtLJ3wrdJ7/2pByztIlpV6zD6khoDqfZwfecGHBtSu6Kbuh
-         QMhjVDGzCZhCkUNYa1oFs+lzelwJLwKAWi22MirwImE3XSBLphjrI6wB9baH2oYH9Ijj
-         nIWof0HDKDJUzG2DkSO5EmnherOt+8ASNa0iRG56Y1hzmQg9xkxB/o56l9XI/qvzUjaI
-         XRh0xaRroeM3nx65FnZlrRtcNMAxDGy3d1RVQw2LFNcj215HWrk9t017EfrBrP070Rj+
-         EDog==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=LXzLwEfFEIjs9nRQ/0D9sK0UdFF/hcYD1/7lPcxtKxGf+ipiOyxIUkG9FxWjTQwnxI
+         D0k1pcJ4r9HbGweGR8VttiL8E2qc4lcsz3jC3X1z+Myzw30J2a8GCz5AS/bkRvOOAlHD
+         E+tAU65cwh01zP65Dht/AwghXmg8POvqM5wMW+NclASoJJ1M+p89BgFOSDch5BgQ0Avc
+         9JiZIkvYkz5qbwJiVyZnhn8aEs4dsNPEV6aJ60VBa1B1c4nkJvkSo/q1xUjbvGvnQsI2
+         YCKRfjADZRvavXIhrgWVqvohpAMKlTCL5cT3Ex4YqBvyGRv/IX591YGJ8Vqkx1vqKbDZ
+         WAQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cI1zMfq3lTc8UzWRLodrLvVbxywyN3pwGfeoh4TP7Pk=;
-        b=vKBVBFWhS//pE7WstxX9TDJE8evqmh+lCKVvU5uA9pcaZrN6Mf+DMXSoL47Bi0lw32
-         TF33tRs55CXkWk27Kl6nvpfbjbv3eaR3tjks2Z8CxcCQRbs5M5YiOPIzzG0IOhyB1uFM
-         dvvuUpWUKqrCgunO8jN1dkPxsYoxVzVfRpGHZGXnYaH97RdWqY57YBtMx7V2uLiZDQlh
-         xi5ehex7PEpeYuS5TTkDKhNZaMc4nbL/5Ru+M6lFsyo+s0BRxSyvh+VUxysGpvIISrhp
-         VyNDdjxZ0PoKXDlsEsZXu/q3TSoaIxuCNfBIao1AxmHlLvScij96NtZRHIVS/53aCi36
-         SIdA==
-X-Gm-Message-State: ACrzQf0iSR7YRm4DWvrIgB8jRU54itQ7mGORkU+6N8bRDuQ67ntNNAop
-        a7p0gJb9/b2xESK96ztJxvgUASGJmJvtKaAq4QrOqA==
-X-Google-Smtp-Source: AMsMyM6TWlffPm2NhzhPMpDHWJ7vQjbA7Kdk+SXNums04xc/5fH3UzZ48rtJuLU8M+7f5WqkQMIJWkoF20YdR/IBeKQ=
-X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
- d11-20020a1709064c4b00b007ada197b58emr53429067ejw.203.1667904619249; Tue, 08
- Nov 2022 02:50:19 -0800 (PST)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=Em+sWv6TZuPkmL/wLJPGGU2GmIoFUw2eZN+X5OLAOqBzWYlNFzqdqXZ5b3QqXVQ8Y0
+         k32JYLM4q0EfybpaShAs4F+7OzJMeEE9BoO52ul0Df4JAPkxdnofNhq98yllK4N+QbZl
+         mG4xY3BiTHHR990c40qv8MmBpNdm8nVIHCIPtIEzTjM5YEw7WkGoI7ZQGLqjg6Xx68xW
+         t8j3y6fvSGvIFjDwCx0ZXAMEmXzfDpx222hlLX9JR55lhv7xDouLzKJkfs7FVHmg6OYM
+         95WY+Wy9oftdUd5X+BjyJArWMd0JbFxuKD6FoT4hUD8nELJgopJ4TPIcuwODAOVo90wt
+         GSJg==
+X-Gm-Message-State: ACrzQf1P9Pin3xPzJlmCvcumGgktzSS99DAVWl4bFUDaMDP5o/K3TcJw
+        LzVqmCOW5DP1OFVg8eJCcpcWAsdNaVo7kdSL1So=
+X-Google-Smtp-Source: AMsMyM7l9664LpWj9QcPDmFBWC92J2k8lgTtaMBq0d8Kn2LaY6/WvjL6jmQ58ep7k3CUc1mU0tvXdcs9IQAedNtHTSY=
+X-Received: by 2002:a92:bf0e:0:b0:300:cc8e:fe07 with SMTP id
+ z14-20020a92bf0e000000b00300cc8efe07mr18642833ilh.184.1667906653482; Tue, 08
+ Nov 2022 03:24:13 -0800 (PST)
 MIME-Version: 1.0
-References: <Y2nKIbKxHAMimxII@google.com>
-In-Reply-To: <Y2nKIbKxHAMimxII@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 11:50:07 +0100
-Message-ID: <CACRpkdaW-dwKNtTQ2_Mj4JpG34N3m19g+s5xcs3Xj=2kAdE0cw@mail.gmail.com>
-Subject: Re: [PATCH] soc: fsl: qe: request pins non-exclusively
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Qiang Zhao <qiang.zhao@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
-        Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
+Received: by 2002:a05:6638:1921:0:0:0:0 with HTTP; Tue, 8 Nov 2022 03:24:13
+ -0800 (PST)
+Reply-To: mrinvest1010@gmail.com
+From:   "K. A. Mr. Kairi" <ctocik10@gmail.com>
+Date:   Tue, 8 Nov 2022 03:24:13 -0800
+Message-ID: <CAEbPynvxfjzGLRVVaaVB9fasgmGPWiH+Ceaj9c3oE5eqT5_+0Q@mail.gmail.com>
+Subject: Re: My Response..
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:132 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrinvest1010[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ctocik10[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ctocik10[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 4:16 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+-- 
+Dear
 
-> Commit 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()") changed
-> qe_pin_request() to request and hold GPIO corresponding to a given pin.
-> Unfortunately this does not work, as fhci-hcd requests these GPIOs
-> first, befor calling qe_pin_request() (see
-> drivers/usb/host/fhci-hcd.c::of_fhci_probe()).
-> To fix it change qe_pin_request() to request GPIOs non-exclusively, and
-> free them once the code determines GPIO controller and offset for each
-> GPIO/pin.
->
-> Also reaching deep into gpiolib implementation is not the best idea. We
-> should either export gpio_chip_hwgpio() or keep converting to the global
-> gpio numbers space until we fix the driver to implement proper pin
-> control.
->
-> Fixes: 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+How are you, I have a serious client, whom will be interested to
+invest in your country, I got your Details through the Investment
+Network and world Global Business directory.
 
-Wow! Thanks for fixing this!
+Let me know if you are interested for more details.....
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-I just sent that patch into the SoC patch tracker (soc@kernel.org)
-with a not to apply it directly, I suggest you do the same (or ask me
-to sign it off and send it).
-
-Yours,
-Linus Walleij
+Sincerely,
+Mr. Kairi Andrew
