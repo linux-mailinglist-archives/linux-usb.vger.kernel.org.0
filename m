@@ -2,75 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDDD62193C
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 17:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A438D62196C
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 17:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbiKHQUn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Nov 2022 11:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S234117AbiKHQcC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Nov 2022 11:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbiKHQUn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 11:20:43 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CA2A1AE;
-        Tue,  8 Nov 2022 08:20:42 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id p12so9119814plq.4;
-        Tue, 08 Nov 2022 08:20:42 -0800 (PST)
+        with ESMTP id S233964AbiKHQcB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 11:32:01 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C762A1C401
+        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 08:32:00 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id t62so16025456oib.12
+        for <linux-usb@vger.kernel.org>; Tue, 08 Nov 2022 08:32:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fcOTwRt74ZUVDeA76qVKozYMO1aqfbJjR0DYqZfdJoQ=;
-        b=jgOlJCy9S5gp21jGo9mQxzBK+hBiRAXgddp+NZJ6U5V5orcLW9BzzSJOD9Qsky6ITl
-         teDTlteRzITS5V8xd2L2VW/zflT0w4cs7WiZsOw4z++zYSDHtVADYshhQbgi/16YZrV2
-         2af3rZUPvFyr1JVtmJa24pm/fK++e4PCUDnlThz+G6LckZAMWGoysf+6Epd6TjDRv1uA
-         bm+ksxg+auVmeaBc3OvCXCtijS6gbjV6hTycASzez1w6qJO55qO6ILh8u92RqHcdN5Ga
-         W/cIjE4Go4/RJh2Cc8T4eUKEfNADi2aOQs8MQbLbsnjIzfqfDpuB3ea6y3poIp+ZHGnX
-         531A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V9AsNF0vhXSTY/5zm1gn+1Vq724Od58JoAr4hbjBQZ4=;
+        b=a98VZ9QyL2laarTHIMp5C52TALfqV+MlqZteonpdMrl0FrZbrMltnvEkqTxySXjQaF
+         llQ1SCmURuLVrzAl+ozaLAQDGlZhxWDpnuillZaRD+cnwHNc0DVgg1ON+PkailkYzg0U
+         NgF4Sh4LYLWaOgGOgqn0W9779b/6oeZ3tkyUwPImr62aHyji8BsvWTSZCcAkiBqAH3Uk
+         sHSq999lIs8im2D8uoS/9go1X13b8nzZDNH7kmbcuJGipNaaanLcCUDWoQ9ti4wH4YBr
+         iAC47S/UJ8PG4FlQ9E0dTAR4+A4yXGpDH0SEA+fDQ68kb1qp17rKJKqpQdwUnS3YYFPf
+         rcAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fcOTwRt74ZUVDeA76qVKozYMO1aqfbJjR0DYqZfdJoQ=;
-        b=AwxJ8qJpJC7k/lbvtHB/vQHQVcUbbSU3FRy2Fo37MLBUKi1h0ngImJzd6ChNQLX9bM
-         gvWMguW3Lln5nwOEcgUFG3jqYSh4GW3oZPJKGhbJz5arI3sv9v7+7gAeYe+EPaNzViHz
-         NTK+bcpy/a5j329e2gFUlwZXQ3fuf7lzVZ8Gi8ZBUG2TCMxGIQColOVzVkRvut6RIz4r
-         yRIkCyMIzB/vnB3Wvoj1D+4r939bj5miLjm33gIW00AuvFELaQtFc+8tdF+FiI09GMia
-         hoE5d3KWSehVfmcV5UYllO5HxMDQ3VEFHSQxSX0jiUm/7WLeAuTy98HXAGXGQblLVVVY
-         PhFA==
-X-Gm-Message-State: ACrzQf1vnO37lPTRpV0614EmJeY5tIgoLT2u/4Qp5phHbTEzec6hv3HM
-        1ku4V6/M7epKGQld0qeBQm4=
-X-Google-Smtp-Source: AMsMyM5JNkw4ZkI3BmSYbnomBaqSCJ9lcpfu/3fXi6rQ1LR5WG8SRwMJ2atG+pMlOBzMySNhkzYCDg==
-X-Received: by 2002:a17:90a:d794:b0:20b:590:46b1 with SMTP id z20-20020a17090ad79400b0020b059046b1mr1025563pju.83.1667924441551;
-        Tue, 08 Nov 2022 08:20:41 -0800 (PST)
-Received: from ?IPv6:::1? ([2607:fb90:8e10:f652:ac39:6d51:4e64:df08])
-        by smtp.gmail.com with ESMTPSA id p6-20020a63e646000000b0046b2ebb0a52sm5883889pgj.17.2022.11.08.08.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 08:20:40 -0800 (PST)
-Date:   Tue, 08 Nov 2022 08:20:38 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     Qiang Zhao <qiang.zhao@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
-        Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] soc: fsl: qe: request pins non-exclusively
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CACRpkdaW-dwKNtTQ2_Mj4JpG34N3m19g+s5xcs3Xj=2kAdE0cw@mail.gmail.com>
-References: <Y2nKIbKxHAMimxII@google.com> <CACRpkdaW-dwKNtTQ2_Mj4JpG34N3m19g+s5xcs3Xj=2kAdE0cw@mail.gmail.com>
-Message-ID: <490B1A14-9DD0-4001-9F39-869F42F7AAA7@gmail.com>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V9AsNF0vhXSTY/5zm1gn+1Vq724Od58JoAr4hbjBQZ4=;
+        b=CJHEA4KsZlgL5CbZ/Js1nAp1oEiVncZUhbk81plYLLgG+4ztAjU8f1jPxY4EsR+hVa
+         v7+UQXnEot+g8PJUC1UYIn9VJ6Uodj5AvLDr70GoVOWQo2jVlAx3SuZ5gg/rR0+nXbrz
+         ePUidA1pfEaTJ10zpeD2+AzxiockVZ5rZ1r6ecyjZiDgsmdC1d4uPPH+4gRcIBAkuQLk
+         74e72ySm6eW28ROVXqTI/GPv/WIznYWyS4qUt9GkvWwRrjuMiwgMc1tNvvvjg9QJ5BdV
+         Px/Vci84CzJi7qsdqmo1fjca+oMWt+B+dXHXj+tcSUP4qqNnGfL8otOh/6D51+bY0RHx
+         G50w==
+X-Gm-Message-State: ACrzQf37jyHgSu8GdyWbT2xXrHyhup2bBy6zfd+jLB0whki+CNFiN8We
+        9JEp1JFOgz+aUc3oZVodXX8=
+X-Google-Smtp-Source: AMsMyM62NQm3z8IYklR50GKMAc7reCFeBWAlG7o54K4MNwcxWvwwo5naEDxJep+mxi87Czhay5e9VA==
+X-Received: by 2002:aca:b655:0:b0:35a:4fb4:c3d2 with SMTP id g82-20020acab655000000b0035a4fb4c3d2mr16058544oif.96.1667925120075;
+        Tue, 08 Nov 2022 08:32:00 -0800 (PST)
+Received: from testvm.. ([185.215.195.243])
+        by smtp.googlemail.com with ESMTPSA id w21-20020a056870e2d500b0013b9ee734dcsm4809511oad.35.2022.11.08.08.31.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 08:31:59 -0800 (PST)
+From:   Davide Tronchin <davide.tronchin.94@gmail.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        larsm17@gmail.com, marco.demarco@posteo.net,
+        cesare.marzano@gmail.com,
+        Davide Tronchin <davide.tronchin.94@gmail.com>
+Subject: [PATCH v4 1/3] USB: serial: option: remove old LARA-R6 PID
+Date:   Tue,  8 Nov 2022 17:29:59 +0100
+Message-Id: <20221108163001.18454-1-davide.tronchin.94@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y1qRkuOghwRCGZIT@hovoldconsulting.com>
+References: <Y1qRkuOghwRCGZIT@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,45 +73,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On November 8, 2022 2:50:07 AM PST, Linus Walleij <linus=2Ewalleij@linaro=
-=2Eorg> wrote:
->On Tue, Nov 8, 2022 at 4:16 AM Dmitry Torokhov
-><dmitry=2Etorokhov@gmail=2Ecom> wrote:
->
->> Commit 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()") change=
-d
->> qe_pin_request() to request and hold GPIO corresponding to a given pin=
-=2E
->> Unfortunately this does not work, as fhci-hcd requests these GPIOs
->> first, befor calling qe_pin_request() (see
->> drivers/usb/host/fhci-hcd=2Ec::of_fhci_probe())=2E
->> To fix it change qe_pin_request() to request GPIOs non-exclusively, and
->> free them once the code determines GPIO controller and offset for each
->> GPIO/pin=2E
->>
->> Also reaching deep into gpiolib implementation is not the best idea=2E =
-We
->> should either export gpio_chip_hwgpio() or keep converting to the globa=
-l
->> gpio numbers space until we fix the driver to implement proper pin
->> control=2E
->>
->> Fixes: 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
->> Signed-off-by: Dmitry Torokhov <dmitry=2Etorokhov@gmail=2Ecom>
->
->Wow! Thanks for fixing this!
->
->Reviewed-by: Linus Walleij <linus=2Ewalleij@linaro=2Eorg>
->
->I just sent that patch into the SoC patch tracker (soc@kernel=2Eorg)
->with a not to apply it directly, I suggest you do the same (or ask me
->to sign it off and send it)=2E
+The LARA-R6 module old PID (defined as: UBLOX_PRODUCT_R6XX
+0x90fa) has been removed since is no longer used by the
+current u-blox LARA-R6 product.
 
-I am not really plugged into soc patch/workflow so if you could do that th=
-at would be wonderful=2E=20
+The USB composition has been changed by u-blox to meet new
+requirements (3 serial ports over USB).
 
-Thanks!
+Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+---
 
+V3 -> V4: as requested, the patch has been split to 3 sub-patches.
+Fix comment format.
 
---=20
-Dmitry
+V2 -> V3: added this section to tracking changes with previous versions.
+Added some explanations about the RSVD(4) in the description session.
+Added reservation to port 4 of VID:PID 0x05C6:0x908B to meet other
+companies QMI net interface implementation.
+
+V1 -> V2: define UBLOX_PRODUCT_LARA_R6 0x908b has been deleted together
+with the previosly provided definition of USB_DEVICE since the PID
+is used by another vendor.
+The LARA-L6 patch part is the same of the previosly provided one.
+
+ drivers/usb/serial/option.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 697683e3fbff..068c65228d4d 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -240,7 +240,6 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_UC15			0x9090
+ /* These u-blox products use Qualcomm's vendor ID */
+ #define UBLOX_PRODUCT_R410M			0x90b2
+-#define UBLOX_PRODUCT_R6XX			0x90fa
+ /* These Yuga products use Qualcomm's vendor ID */
+ #define YUGA_PRODUCT_CLM920_NC5			0x9625
+ 
+@@ -1124,8 +1123,6 @@ static const struct usb_device_id option_ids[] = {
+ 	/* u-blox products using Qualcomm vendor ID */
+ 	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
+ 	  .driver_info = RSVD(1) | RSVD(3) },
+-	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R6XX),
+-	  .driver_info = RSVD(3) },
+ 	/* Quectel products using Quectel vendor ID */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
+ 	  .driver_info = NUMEP2 },
+-- 
+2.34.1
+
