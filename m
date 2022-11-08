@@ -2,66 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE36621E07
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 21:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F16621E38
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 22:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiKHUud (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Nov 2022 15:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
+        id S229811AbiKHVI5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Nov 2022 16:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiKHUuc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 15:50:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E178F17A87;
-        Tue,  8 Nov 2022 12:50:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F5E0B81B37;
-        Tue,  8 Nov 2022 20:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129FEC433C1;
-        Tue,  8 Nov 2022 20:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667940629;
-        bh=NiWLCrqi8SEYd4gMYpSXF/lQeJWzCw371dvWXcPCWhg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tjLFIxhKQ1AZ6Li8p8u7p41HcFCFIOpqY70BFqUlYo9ryNGuo0C27PciJpETvO/xk
-         8L/szZvxqDcTqqWfqFLLsBMItrZi75YA72cZ4cfENt+QmOEYeG9TDuejFsQMGC+rwc
-         mfep0sxt1paQr9DiEamaL3vjAFOaxjQsWuxqt4165CNFUetfYLOsWHNwmEP/OQz1WR
-         eJEE8tYv3nxK5tm0znLvdnLNXhIQA5NWHrq0pPTHYJCOgtkXrYvVyMPRDT8xNMDWFG
-         eXbngyexZ5owpdNrr1RAgKQeQDjKwnrEs6R5VRe/LXewFTmMlFaJ6cDz4U3wRmX0A4
-         JZPI16qeykexw==
-Date:   Tue, 8 Nov 2022 12:50:28 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
+        with ESMTP id S229447AbiKHVI4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 16:08:56 -0500
+X-Greylist: delayed 279 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Nov 2022 13:08:55 PST
+Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018FE5E9FA
+        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 13:08:54 -0800 (PST)
+Received: from violet.fr.zoreil.com ([127.0.0.1])
+        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 2A8L3aB3680699;
+        Tue, 8 Nov 2022 22:03:36 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 2A8L3aB3680699
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
+        s=v20220413; t=1667941417;
+        bh=UHITPECF7qMl8PYIdIJWCD7l8l/q2a5WJN+lwJTtqDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bXC7v8aa+T0zAVkVYSlU0z5Z8eWo8UFKlLm2k1DzoQHX6ZvJte/AXW5h0myU/VjAQ
+         971UN1HSgCRad8hE5eMjqRP/jiaVgEKUzHQgbK3XZW7bfwfEkYKx7zBN4QCUIx6Djd
+         2CmQgeX8svtFg6ku78vxs4BTP6mWjP8El51Y03Z4=
+Received: (from romieu@localhost)
+        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 2A8L3apU680698;
+        Tue, 8 Nov 2022 22:03:36 +0100
+Date:   Tue, 8 Nov 2022 22:03:36 +0100
+From:   Francois Romieu <romieu@fr.zoreil.com>
 To:     Albert Zhou <albert.zhou.50@gmail.com>
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         nic_swsd@realtek.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        Hayes Wang <hayeswang@realtek.com>
 Subject: Re: [PATCH net-next RFC 0/5] Update r8152 to version two
-Message-ID: <20221108125028.35a765be@kernel.org>
-In-Reply-To: <20221108153342.18979-1-albert.zhou.50@gmail.com>
+Message-ID: <Y2rEKOXDqLvL++hR@electric-eye.fr.zoreil.com>
 References: <20221108153342.18979-1-albert.zhou.50@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108153342.18979-1-albert.zhou.50@gmail.com>
+X-Organisation: Land of Sunshine Inc.
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed,  9 Nov 2022 02:33:37 +1100 Albert Zhou wrote:
+Albert Zhou <albert.zhou.50@gmail.com> :
 > This patch integrates the version-two r8152 drivers from Realtek into
 > the kernel. I am new to kernel development, so apologies if I make
 > newbie mistakes.
-> 
-> I have tested the updated module in v6.1 on my machine, without any
-> issues.
 
-What are you trying to achieve? Copy pasting 18k LoC into the kernel 
-in a single patch is definitely not the way we do development. If there
-are features missing in the upstream driver, or you see discrepancies
-in the operation - please prepare targeted patches.
+While it makes sense to minimize differences betwenn Realtek's in-house
+driver and kernel r8152 driver, it does not mean that the out-of-tree
+driver is suitable for a straight kernel inclusion.
+
+If you want things to move forward in a not too painful way, you should
+split the more than 650 ko patch into smaller, more focused patches
+(huge patches also makes bisection mildly effective btw).
+
+In its current form, the submission is imho a bit abrasive to review.
+
+[...]
+> Albert Zhou (5):
+>   net: move back netif_set_gso_max helpers
+>   r8152: update to version two
+
+This code misuses mutex in {read, write}_mii_word.
+
+It includes code and data that should be moved to firmware files.
+
+>   r8152: remove backwards compatibility
+
+Backwards compatibility code should had been avoided in the first
+place.
+
+[...]
+>   r8152: remove redundant code
+
+Same thing.
+
+-- 
+Ueimor
