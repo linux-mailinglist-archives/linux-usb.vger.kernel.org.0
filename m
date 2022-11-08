@@ -2,90 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F16621E38
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 22:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E57621EAE
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Nov 2022 22:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiKHVI5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Nov 2022 16:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S229797AbiKHVnH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Nov 2022 16:43:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKHVI4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 16:08:56 -0500
-X-Greylist: delayed 279 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Nov 2022 13:08:55 PST
-Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018FE5E9FA
-        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 13:08:54 -0800 (PST)
-Received: from violet.fr.zoreil.com ([127.0.0.1])
-        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 2A8L3aB3680699;
-        Tue, 8 Nov 2022 22:03:36 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 2A8L3aB3680699
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
-        s=v20220413; t=1667941417;
-        bh=UHITPECF7qMl8PYIdIJWCD7l8l/q2a5WJN+lwJTtqDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bXC7v8aa+T0zAVkVYSlU0z5Z8eWo8UFKlLm2k1DzoQHX6ZvJte/AXW5h0myU/VjAQ
-         971UN1HSgCRad8hE5eMjqRP/jiaVgEKUzHQgbK3XZW7bfwfEkYKx7zBN4QCUIx6Djd
-         2CmQgeX8svtFg6ku78vxs4BTP6mWjP8El51Y03Z4=
-Received: (from romieu@localhost)
-        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 2A8L3apU680698;
-        Tue, 8 Nov 2022 22:03:36 +0100
-Date:   Tue, 8 Nov 2022 22:03:36 +0100
-From:   Francois Romieu <romieu@fr.zoreil.com>
-To:     Albert Zhou <albert.zhou.50@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        nic_swsd@realtek.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: Re: [PATCH net-next RFC 0/5] Update r8152 to version two
-Message-ID: <Y2rEKOXDqLvL++hR@electric-eye.fr.zoreil.com>
-References: <20221108153342.18979-1-albert.zhou.50@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108153342.18979-1-albert.zhou.50@gmail.com>
-X-Organisation: Land of Sunshine Inc.
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229795AbiKHVnF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Nov 2022 16:43:05 -0500
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C2361B98
+        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 13:43:03 -0800 (PST)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221108214301euoutp0234abf8f5569c2463df99767f89f92df1~lugg-ozET2689126891euoutp02i
+        for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 21:43:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221108214301euoutp0234abf8f5569c2463df99767f89f92df1~lugg-ozET2689126891euoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667943781;
+        bh=7PFzQzZuRqIsMoS+PTjvImnvaLoj2mDytyqrGhPf8lo=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=LRfaPxsWS4OwL+DWgtPRv8swHDpkpenxkyIsRJOgWSv90fAvup+k21wu9m2HjWHxf
+         okEaSfKbFoS7yoc3JFuG0fAitvTGdcRCOLshJDFVzlGS6zJcTDl2pQ712Ma/eszrEc
+         bnD17++SwsZDcesOTp53I4Gzv20r41a9bwn//8b0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20221108214301eucas1p231aacff643c48f958b6f09cd6b5bef9f~luggrYdk20220602206eucas1p2-;
+        Tue,  8 Nov 2022 21:43:01 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id A2.9E.09549.56DCA636; Tue,  8
+        Nov 2022 21:43:01 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221108214300eucas1p22140957c56a1cf2f5203e171118e3d0b~luggHLoQa0092600926eucas1p2H;
+        Tue,  8 Nov 2022 21:43:00 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221108214300eusmtrp14b6bb0c9311249357e10c6f5ce44af1f~luggGptW71361613616eusmtrp1F;
+        Tue,  8 Nov 2022 21:43:00 +0000 (GMT)
+X-AuditID: cbfec7f5-f5dff7000000254d-c3-636acd65c24c
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 92.BE.08916.46DCA636; Tue,  8
+        Nov 2022 21:43:00 +0000 (GMT)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221108214300eusmtip2413149577861fc2be1faf2af2dce8614~lugfn0CJZ0187301873eusmtip2V;
+        Tue,  8 Nov 2022 21:43:00 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH] usb: dwc3: exynos: Fix remove() function
+Date:   Tue,  8 Nov 2022 22:42:49 +0100
+Message-Id: <20221108214249.32528-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrEIsWRmVeSWpSXmKPExsWy7djP87qpZ7OSDbad4LB4MG8bm0Xz4vVs
+        Fntfb2W3mHF+H5PFomWtzBZrj9xlt1i14AC7A7vHnWt72Dz2z13D7tG3ZRWjx5b9nxk9Pm+S
+        C2CN4rJJSc3JLEst0rdL4Mpo+rmHqaCDq2JCT3UD4yGOLkZODgkBE4kFR+eydjFycQgJrGCU
+        aG9/yQLhfGGU2Px5AROE85lR4smCxcwwLe/m7oNqWc4ocWj1eya4lss3jzKCVLEJGEp0ve1i
+        A7FFBBwkliy9wwZSxCzwllHi8Iad7CAJYQFLif1H3jGB2CwCqhLHZm4As3kFbCUOHJjFArFO
+        XmL1hgNQq/+yS/TuNYKwXSSOHeiFqhGWeHV8CzuELSNxenIP2BMSAu2MEgt+32eCcCYwSjQ8
+        v8UIUWUtcefcL6CTOIBO0pRYv0sfIuwocXfnGrCwhACfxI23giBhZiBz0rbpzBBhXomONiGI
+        ajWJWcfXwa09eOES1JkeEseWXwWLCwnESqx8uIZtAqPcLIRdCxgZVzGKp5YW56anFhvnpZbr
+        FSfmFpfmpesl5+duYgQmg9P/jn/dwbji1Ue9Q4xMHIyHGCU4mJVEeNesy0oW4k1JrKxKLcqP
+        LyrNSS0+xCjNwaIkzss2QytZSCA9sSQ1OzW1ILUIJsvEwSnVwCS6xXDVslpbdofNUUH3ekOX
+        +1zpPCuUMqn8mcTSbi+VY1z3F8+tLlbtX7Da/Vq9+2nh22vrOFUnLxQ4oHT9zod3gfE3sli/
+        JRnmKp1OYQr9I2elqfju5+UXV3SkJ7b7bcqyNPurabhZq9Yv5YdG67VMSX7mh3b/WfdY69te
+        ivsvZj1fWjH0gODlTf5nzTaXC50TYeTr3j9LSHd78d6gTbM09514Kq8wWWnlDN9JOi22bipy
+        99dO+NLQxL455xdb8tazAst+/Zr2OOHp97bv76a5vt11x7d+9hnXmrjzwcdPaPOITOed17F8
+        7Z7pO66Kv5oYs3gyh6kYV6Eln+3pHyu1/r+cG5/2KLHl+5YK3V9KLMUZiYZazEXFiQAVGK6Q
+        dQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBLMWRmVeSWpSXmKPExsVy+t/xe7opZ7OSDd6tV7B4MG8bm0Xz4vVs
+        Fntfb2W3mHF+H5PFomWtzBZrj9xlt1i14AC7A7vHnWt72Dz2z13D7tG3ZRWjx5b9nxk9Pm+S
+        C2CN0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0Mto
+        +rmHqaCDq2JCT3UD4yGOLkZODgkBE4l3c/exdjFycQgJLGWUmL94AwtEQkbi5LQGVghbWOLP
+        tS42iKJPjBLn/y9mB0mwCRhKdL0FSXByiAg4SXSuPQ1WxCzwnlFi+YkXjCAJYQFLif1H3jGB
+        2CwCqhLHZm4As3kFbCUOHJgFtU1eYvWGA8wTGHkWMDKsYhRJLS3OTc8tNtQrTswtLs1L10vO
+        z93ECAzCbcd+bt7BOO/VR71DjEwcjIcYJTiYlUR416zLShbiTUmsrEotyo8vKs1JLT7EaAq0
+        byKzlGhyPjAO8kriDc0MTA1NzCwNTC3NjJXEeT0LOhKFBNITS1KzU1MLUotg+pg4OKUamPg6
+        +OSqpHhjOhXDp/92MNx1w7dn54Y3G8SVTvt+vl756czjRbs2v1sp5hLuUiBh8P4Oy620p+91
+        lsucb3o/Nbzn0qJnGzh39rp6/zY4ltraLXSi8PxflfImv/dCEmusGi8kS7+yzHuWGdVzIL6B
+        mTFtEwOj3tbeFe4LWW+FsHke8dcNKNzZI73tziFRa/0L92cnntkYp9Fj9Erw3424F+Efz2u0
+        582pqrnSdaZd5tBFxX+FnmxsN5yDc6/uVZzb21i5rdiDo6HX6q8gf+uStwL1C7PZF0z2MG3/
+        fNZQWcJ/Yucy3/KSrjV7/yTlXbR+dk1sjtWH8pM73LX1OErWHeFfOnOjTNKit+/Ortv2TIml
+        OCPRUIu5qDgRAOKd0ELLAgAA
+X-CMS-MailID: 20221108214300eucas1p22140957c56a1cf2f5203e171118e3d0b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20221108214300eucas1p22140957c56a1cf2f5203e171118e3d0b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20221108214300eucas1p22140957c56a1cf2f5203e171118e3d0b
+References: <CGME20221108214300eucas1p22140957c56a1cf2f5203e171118e3d0b@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Albert Zhou <albert.zhou.50@gmail.com> :
-> This patch integrates the version-two r8152 drivers from Realtek into
-> the kernel. I am new to kernel development, so apologies if I make
-> newbie mistakes.
+The core DWC3 device node was not properly removed by the custom
+dwc3_exynos_remove_child() function. Replace it with generic
+of_platform_depopulate() which does that job right.
 
-While it makes sense to minimize differences betwenn Realtek's in-house
-driver and kernel r8152 driver, it does not mean that the out-of-tree
-driver is suitable for a straight kernel inclusion.
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/usb/dwc3/dwc3-exynos.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-If you want things to move forward in a not too painful way, you should
-split the more than 650 ko patch into smaller, more focused patches
-(huge patches also makes bisection mildly effective btw).
-
-In its current form, the submission is imho a bit abrasive to review.
-
-[...]
-> Albert Zhou (5):
->   net: move back netif_set_gso_max helpers
->   r8152: update to version two
-
-This code misuses mutex in {read, write}_mii_word.
-
-It includes code and data that should be moved to firmware files.
-
->   r8152: remove backwards compatibility
-
-Backwards compatibility code should had been avoided in the first
-place.
-
-[...]
->   r8152: remove redundant code
-
-Same thing.
-
+diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
+index 0ecf20eeceee..4be6a873bd07 100644
+--- a/drivers/usb/dwc3/dwc3-exynos.c
++++ b/drivers/usb/dwc3/dwc3-exynos.c
+@@ -37,15 +37,6 @@ struct dwc3_exynos {
+ 	struct regulator	*vdd10;
+ };
+ 
+-static int dwc3_exynos_remove_child(struct device *dev, void *unused)
+-{
+-	struct platform_device *pdev = to_platform_device(dev);
+-
+-	platform_device_unregister(pdev);
+-
+-	return 0;
+-}
+-
+ static int dwc3_exynos_probe(struct platform_device *pdev)
+ {
+ 	struct dwc3_exynos	*exynos;
+@@ -142,7 +133,7 @@ static int dwc3_exynos_remove(struct platform_device *pdev)
+ 	struct dwc3_exynos	*exynos = platform_get_drvdata(pdev);
+ 	int i;
+ 
+-	device_for_each_child(&pdev->dev, NULL, dwc3_exynos_remove_child);
++	of_platform_depopulate(&pdev->dev);
+ 
+ 	for (i = exynos->num_clks - 1; i >= 0; i--)
+ 		clk_disable_unprepare(exynos->clks[i]);
 -- 
-Ueimor
+2.17.1
+
