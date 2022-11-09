@@ -2,177 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72654622A3C
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 12:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013DB622A88
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 12:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiKILUe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 06:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S229829AbiKIL3s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 06:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiKILUb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 06:20:31 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4F0617B;
-        Wed,  9 Nov 2022 03:20:30 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id b62so15989038pgc.0;
-        Wed, 09 Nov 2022 03:20:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lrBsfJmSKV4cwRoLh38yD7n6qhsn+bIUuWaRARzt1RY=;
-        b=YPk6I4VdG4LfCmNMzrCFRlh/0vyZTgomLdzdbHOtxC96b+ulhDwwSSNoJxCALRZevF
-         DIrNj3jy9h4QzpS8S/uEkDhRiO5wD3ihq858iRJBsVIEdGqqzD3cJd80Ww2jTedIQ4XR
-         qlv4RjcXks0sUFGVTr2aLMYFLKAtjV0IImp49XtKG1y6hPLc3icXGpMDoH8gL7gcN1n9
-         k8qNRfXVJb3Sj2IFmHQxno4d6+f+8+GxzF227LRaYFYRH3c270AzCey529fwAmkFa2Dy
-         GVH/7jq08WZEG1voINOikUP7puNHccmRIHXdQ2JdzHq/D+l2f+82+bjZZYZpOHkSl/Ct
-         nLcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lrBsfJmSKV4cwRoLh38yD7n6qhsn+bIUuWaRARzt1RY=;
-        b=IA3GWTM8kzWgg5ApHzm/7Uzdb1ebi7dJYTX0XLtaENOlPpuA6GBeEfbN4CqmddgnxW
-         cwbb96uK9rCWH9T8hWhbFJXnEKsZfbt63+w9VAn3IM1Ql24lnfPn8MP0bqSUG8mk1d2c
-         8BMnk5bGGD4p4P8PMtKDX8wh+xK/Er6IS1CrpRh3MRX7bcwFeCjjf1qAUVgmrQCXtkXZ
-         jMQVXaWO3HCrQ+4z4oCSwJrBfWOpkDAvuEXzx6XaCkyvm4BnR18wtWibWYEQW4UxkUFK
-         Chi0AwKUOfub1VMOVuDWe/I+dyJAtAhO+0ubZHjD23YYgJ6pcOISUN0K56UGmygmnFFp
-         GPaw==
-X-Gm-Message-State: ANoB5plDPLmRS3ah0TDUp2uYqT9f4u9xNrwXST+j24lTbnrrKxKKoWYd
-        1r6aAXAHNrTKZPurTfmlxTE=
-X-Google-Smtp-Source: AA0mqf4Hqn0OA1df5YWnPIjGr8Pv2pC3u3+9NxJmxeKub9E3h/zkzNCvFZKdB/Q9GO1tG4BjXXzO5g==
-X-Received: by 2002:a05:6a00:24c5:b0:56e:b06c:f97a with SMTP id d5-20020a056a0024c500b0056eb06cf97amr24683808pfv.57.1667992829425;
-        Wed, 09 Nov 2022 03:20:29 -0800 (PST)
-Received: from [10.1.1.173] ([220.244.252.98])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902a38600b0018685257c0dsm8795343pla.58.2022.11.09.03.20.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:20:28 -0800 (PST)
-Message-ID: <9539bd4d-ee52-5148-73fd-3753dd5a616d@gmail.com>
-Date:   Wed, 9 Nov 2022 22:20:21 +1100
+        with ESMTP id S229987AbiKIL3o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 06:29:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F5910054;
+        Wed,  9 Nov 2022 03:29:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DDF9619E1;
+        Wed,  9 Nov 2022 11:29:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF761C4347C;
+        Wed,  9 Nov 2022 11:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667993380;
+        bh=vL0H/xg+uyXS8iiPDew7LK7Mbki2qfEr/CbZcV15j8w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sIYdJJb5vWalABgOzySHd+vPCnVOhmAFGdCq0wa+NtT1jBIED2Jb9Y2A9mT74nGIh
+         Ev8M9oLZlkblhyVsb69RPlWlnCmIrFDwGZ75S/BKFdy3rphDkw9IxUyTXlK3eyL51M
+         gM64kryzubzXqLBqTrsrjhxVdc4aexRwxS/OHswo=
+Date:   Wed, 9 Nov 2022 12:29:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nicolas Dumazet <ndumazet@google.com>
+Cc:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        Petar Kostic <petar@kostic.dev>,
+        Oliver Neukum <oneukum@suse.com>, Ole Ernst <olebowle@gmx.com>,
+        Hannu Hartikainen <hannu@hrtk.in>,
+        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: add NO_LPM quirk for Realforce 87U Keyboard
+Message-ID: <Y2uPIItkmcYgDy6k@kroah.com>
+References: <20221027090342.38928-1-ndumazet@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next RFC 0/5] Update r8152 to version two
-To:     Hayes Wang <hayeswang@realtek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20221108153342.18979-1-albert.zhou.50@gmail.com>
- <77e816857bbd46ec8357134f767be785@realtek.com>
-Content-Language: en-AU
-From:   Albert Zhou <albert.zhou.50@gmail.com>
-Autocrypt: addr=albert.zhou.50@gmail.com; keydata=
- xjMEYkX5gxYJKwYBBAHaRw8BAQdAsW8QQjKnmpKC5G1d1QFYNvd9ddMxwYZs+xTT0dyqvtbN
- JkFsYmVydCBaaG91IDxhbGJlcnQuemhvdS41MEBnbWFpbC5jb20+wosEExYIADMWIQRLx2w8
- czp1EBJaieEhj+NExaaGfQUCYkX5gwIbAwULCQgHAgYVCAkKCwIFFgIDAQAACgkQIY/jRMWm
- hn2rKAEAlOVVAsYIpmGTEng+e/HHT7JJjCjcX4lh+pFZdUy2DGgBAM/EwKNYoNB43H5EJpb8
- I68MS+ZZSQ3swJWAu1OJKXIJzjgEYkX5gxIKKwYBBAGXVQEFAQEHQNk/Nf/E1Uttgm29quUB
- Xgc9RDwqKTHbtHLS5SOkZzhUAwEIB8J4BBgWCAAgFiEES8dsPHM6dRASWonhIY/jRMWmhn0F
- AmJF+YMCGwwACgkQIY/jRMWmhn0KRwD7Bv1kWYB2m8c5tRQUg7i3zIaJ4kpfqMj4bwYQ9xEk
- e3oA/11CMCzdPMcoveB279og31mtUISG5mXMDJmiE4y61akN
-In-Reply-To: <77e816857bbd46ec8357134f767be785@realtek.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------FAvgt7UPn3SkZjIgK9IU0RN6"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027090342.38928-1-ndumazet@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------FAvgt7UPn3SkZjIgK9IU0RN6
-Content-Type: multipart/mixed; boundary="------------MgoHGP9020Aw5HuBmfNO49Co";
- protected-headers="v1"
-From: Albert Zhou <albert.zhou.50@gmail.com>
-To: Hayes Wang <hayeswang@realtek.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- nic_swsd <nic_swsd@realtek.com>, "davem@davemloft.net"
- <davem@davemloft.net>, "edumazet@google.com" <edumazet@google.com>,
- "kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com"
- <pabeni@redhat.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <9539bd4d-ee52-5148-73fd-3753dd5a616d@gmail.com>
-Subject: Re: [PATCH net-next RFC 0/5] Update r8152 to version two
-References: <20221108153342.18979-1-albert.zhou.50@gmail.com>
- <77e816857bbd46ec8357134f767be785@realtek.com>
-In-Reply-To: <77e816857bbd46ec8357134f767be785@realtek.com>
+On Thu, Oct 27, 2022 at 11:03:42AM +0200, Nicolas Dumazet wrote:
+> Before adding this quirk, this (mechanical keyboard) device would not be
+> recognized, logging:
+> 
+>   new full-speed USB device number 56 using xhci_hcd
+>   unable to read config index 0 descriptor/start: -32
+>   chopping to 0 config(s)
+> 
+> It would take dozens of plugging/unpuggling cycles for the keyboard to
+> be recognized. Keyboard seems to simply work after applying this quirk.
+> 
+> This issue had been reported by users in two places already ([1], [2])
+> but nobody tried upstreaming a patch yet. After testing I believe their
+> suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
+> little overkill. I assume this particular combination was tested because
+> it had been previously suggested in [3], but only NO_LPM seems
+> sufficient for this device.
+> 
+> [1]: https://qiita.com/float168/items/fed43d540c8e2201b543
+> [2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
+> [3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
+> 
+> ---
+> Changes in v2:
+>   - add the entry to the right location (sorting entries by
+>     vendor/device id).
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
+> ---
 
---------------MgoHGP9020Aw5HuBmfNO49Co
-Content-Type: multipart/mixed; boundary="------------CldSIYaYo2LfzVE0L9X4Grcx"
+By putting your s-o-b below the --- line, tools will drop it, how did
+you test this?
 
---------------CldSIYaYo2LfzVE0L9X4Grcx
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Put the v2 stuff below the --- line, don't add a new one.  See the
+thousands of examples on the list for how to do this correctly (as well
+as the kernel documentation.)
 
-T24gOS8xMS8yMiAyMjowMiwgSGF5ZXMgV2FuZyB3cm90ZToNCj4gQWxiZXJ0IFpob3U8YWxi
-ZXJ0Lnpob3UuNTBAZ21haWwuY29tPg0KPj4gU2VudDogVHVlc2RheSwgTm92ZW1iZXIgOCwg
-MjAyMiAxMTozNCBQTQ0KPj4gU3ViamVjdDogW1BBVENIIG5ldC1uZXh0IFJGQyAwLzVdIFVw
-ZGF0ZSByODE1MiB0byB2ZXJzaW9uIHR3bw0KPj4NCj4+IFRoaXMgcGF0Y2ggaW50ZWdyYXRl
-cyB0aGUgdmVyc2lvbi10d28gcjgxNTIgZHJpdmVycyBmcm9tIFJlYWx0ZWsgaW50bw0KPj4g
-dGhlIGtlcm5lbC4gSSBhbSBuZXcgdG8ga2VybmVsIGRldmVsb3BtZW50LCBzbyBhcG9sb2dp
-ZXMgaWYgSSBtYWtlDQo+PiBuZXdiaWUgbWlzdGFrZXMuDQo+IFRoZSBSZWFsdGVrJ3MgaW4t
-aG91c2UgZHJpdmVyIGRvZXNuJ3Qgc2F0aXNmeSB0aGUgcnVsZXMgb3IgcmVxdWVzdHMgb2YN
-Cj4gTGludXgga2VybmVsLCBzbyBJIGRvbid0IHRoaW5rIHlvdSBjb3VsZCB1c2UgaXQgdG8g
-cmVwbGFjZSB0aGUgTGludXgNCj4ga2VybmVsIHI4MTUyIGRyaXZlci4NCj4gDQo+IFRoZSB2
-ZXJzaW9uIGlzIHVzZWQgdG8gZGlzdGluZ3Vpc2ggYmV0d2VlbiB0aGUgUmVhbHRlaydzIGlu
-LWhvdXNlIGRyaXZlcg0KPiBhbmQgTGludXgga2VybmVsIHI4MTUyIGRyaXZlci4gSXQgZG9l
-c24ndCBtZWFuIHlvdSBoYXZlIHRvIHVzZSB2ZXJzaW9uIDIsDQo+IGV2ZW4gdGhlIHZlcnNp
-b24gMiBtYXkgY29udGFpbiBtb3JlIGV4cGVyaW1lbnQgZmVhdHVyZXMuDQo+IA0KPiBCZXN0
-IFJlZ2FyZHMsDQo+IEhheWVzDQo+IA0KDQpUaGFua3MgZm9yIGNsYXJpZnlpbmcgdGhpcywg
-YW5kIHRoYW5rcyBHcmVnIGZvciB5b3VyIGFkdmljZSBpbiB0aGUNCnByZXZpb3VzIG1lc3Nh
-Z2UuIEkgd2lsbCBmb2xsb3cgR3JlZydzIGFkdmljZSBhbmQgdHJ5IGFuZCBpZGVudGlmeSB0
-aGF0DQpiaXRzIG9mIGNvZGUgdGhhdCBmaXhlcyBteSBpc3N1ZSBvZiBoYXZpbmcgdGhyb3R0
-bGVkIGRhdGEtdHJhbnNmZXIgc3BlZWQNCnZpYSBldGhlcm5ldC4NCg0KSWYgeW91IGhhdmUg
-c29tZSBraW5kIG9mIGluLWhvdXNlIGNoYW5nZWxvZyB0aGF0IHlvdSBjb3VsZCBtYWtlDQph
-dmFpbGFibGUgdG8gbWUsIEkgd291bGQgYmUgZ3JhdGVmdWwuDQoNCkJlc3QsDQoNCkFsYmVy
-dA0K
---------------CldSIYaYo2LfzVE0L9X4Grcx
-Content-Type: application/pgp-keys; name="OpenPGP_0x218FE344C5A6867D.asc"
-Content-Disposition: attachment; filename="OpenPGP_0x218FE344C5A6867D.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Can you fix this up and resend a v3 please?
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+thanks,
 
-xjMEYkX5gxYJKwYBBAHaRw8BAQdAsW8QQjKnmpKC5G1d1QFYNvd9ddMxwYZs+xTT
-0dyqvtbNJkFsYmVydCBaaG91IDxhbGJlcnQuemhvdS41MEBnbWFpbC5jb20+wosE
-ExYIADMWIQRLx2w8czp1EBJaieEhj+NExaaGfQUCYkX5gwIbAwULCQgHAgYVCAkK
-CwIFFgIDAQAACgkQIY/jRMWmhn2rKAEAlOVVAsYIpmGTEng+e/HHT7JJjCjcX4lh
-+pFZdUy2DGgBAM/EwKNYoNB43H5EJpb8I68MS+ZZSQ3swJWAu1OJKXIJzjgEYkX5
-gxIKKwYBBAGXVQEFAQEHQNk/Nf/E1Uttgm29quUBXgc9RDwqKTHbtHLS5SOkZzhU
-AwEIB8J4BBgWCAAgFiEES8dsPHM6dRASWonhIY/jRMWmhn0FAmJF+YMCGwwACgkQ
-IY/jRMWmhn0KRwD7Bv1kWYB2m8c5tRQUg7i3zIaJ4kpfqMj4bwYQ9xEke3oA/11C
-MCzdPMcoveB279og31mtUISG5mXMDJmiE4y61akN
-=3D+2qf
------END PGP PUBLIC KEY BLOCK-----
-
---------------CldSIYaYo2LfzVE0L9X4Grcx--
-
---------------MgoHGP9020Aw5HuBmfNO49Co--
-
---------------FAvgt7UPn3SkZjIgK9IU0RN6
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wnsEABYIACMWIQRLx2w8czp1EBJaieEhj+NExaaGfQUCY2uM9QUDAAAAAAAKCRAhj+NExaaGfWma
-AQC0vUM48I+Q0ZIHQtGbtq7R23xogKxccjkYALK4zmDPCgEA0vtzcprWHnZzsfi+1h+FRAloGEGc
-CMw1l91GPhUyswc=
-=ZV4q
------END PGP SIGNATURE-----
-
---------------FAvgt7UPn3SkZjIgK9IU0RN6--
+greg k-h
