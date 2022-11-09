@@ -2,134 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA3E622D4B
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 15:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870D7622E34
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 15:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbiKIOQ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 09:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        id S230267AbiKIOoM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 09:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiKIOQw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 09:16:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D02186C3
-        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 06:16:51 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oslsn-0003oC-Pt; Wed, 09 Nov 2022 15:16:49 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oslsn-0005ge-DY; Wed, 09 Nov 2022 15:16:49 +0100
-Date:   Wed, 9 Nov 2022 15:16:49 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v5] usb: gadget: uvc: add validate and fix function for
- uvc response
-Message-ID: <20221109141649.GE19806@pengutronix.de>
-References: <20221025222657.1883922-1-m.grzeschik@pengutronix.de>
- <Y2t/jskm7y1lDyBn@kroah.com>
- <20221109140412.GC19806@pengutronix.de>
- <Y2u076AZb+1O1tAf@kroah.com>
+        with ESMTP id S230210AbiKIOoL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 09:44:11 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20E2186EB;
+        Wed,  9 Nov 2022 06:44:09 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id l190so16732400vsc.10;
+        Wed, 09 Nov 2022 06:44:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pd3oCLn1GKk4PquKayZllpj3KkafLGWk7nWdgAL1e1Q=;
+        b=SNhfXW7DsOWLFsYLC55azBYl0sk5kMq1wYeALdVSIOTR7CrbGXE7cLcER54edpbFAV
+         Ufq/ULlrBM0UDVysT4m8CR/bpjJBFlk7mp7Auy1UTJjj4VqXMJS0Nk6U01U9vwbsphTN
+         2fAPwt2XlJGDvDBHBAiy5UI5Ck3mkhhu0QuA6v34pyiDaIi8o2uULuSvjxJhiVfX+hnp
+         AYZXnRPWtl7mai2DLNS/FkTK6AhfYub9PjmHQ2J7bamLOOdpCOpR+80dYdakFlf153ZW
+         qKxR9brYh5DjBfs7L3qSHK0iHmex012ILrNfKN6NxlHzYsRIzdQ/A9kFs9q9Uq54j8zt
+         N89w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pd3oCLn1GKk4PquKayZllpj3KkafLGWk7nWdgAL1e1Q=;
+        b=DakOjKjHGO6hsJb/lBn/lBdN7h3ZHl9R8m0TFP/uHlgth1Myks8C9f1NcY2e9I6nvr
+         TJl5N1WDdNHdoXR3Rm8qISBScM0lp9neOu+Fxt/3ROVvgbxIYKBdPZpDHlRyq0T+JhR+
+         uLM54bhKd4OGN67f8SfI75wmAoQSDMlvnGFTfYBSVVq+pZlVsvuCLfnrova9CLf6oNRG
+         WjnaAlV7sTv/+UC2WqGVNhl4RTKOgQzkEUKnRSOO885/r8e0IZ+bRO88PA/WDDG1CVZ4
+         F1YcDlaSw+5p2Z4JFg4ySNApaujcyUUsucKlNzhWuZTuyv8HNwmBLvhSX950rW6GJm7a
+         3Ffg==
+X-Gm-Message-State: ACrzQf2cxEUwzysJbycnQTFv1NzuUjP3PbIPPEphLYn0mlVxKbwxDJ2z
+        OGiU+UKW2a7STtdgzKRvKpyf8i0bWIST+ZelwYQ/BQt6
+X-Google-Smtp-Source: AMsMyM4RFlhx8Oigq3QssJQ8TvCY/9/mUUXM9K82HK3ax46rGx/SbmF1FLe/QBfFZPFztNFikj8AhihgjxZ+AN5UPKA=
+X-Received: by 2002:a67:dc18:0:b0:3aa:4149:510c with SMTP id
+ x24-20020a67dc18000000b003aa4149510cmr31149048vsj.20.1668005048879; Wed, 09
+ Nov 2022 06:44:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="10jrOL3x2xqLmOsH"
-Content-Disposition: inline
-In-Reply-To: <Y2u076AZb+1O1tAf@kroah.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221026093710.449809-1-pawell@cadence.com>
+In-Reply-To: <20221026093710.449809-1-pawell@cadence.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Wed, 9 Nov 2022 22:43:06 +0800
+Message-ID: <CAL411-qwmC8xuZUtrrVjtiiyaD-aLamO6GJAeMbLd1X73UDSmQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---10jrOL3x2xqLmOsH
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Nov 09, 2022 at 03:10:55PM +0100, Greg KH wrote:
->On Wed, Nov 09, 2022 at 03:04:12PM +0100, Michael Grzeschik wrote:
->> On Wed, Nov 09, 2022 at 11:23:10AM +0100, Greg KH wrote:
->> > On Wed, Oct 26, 2022 at 12:26:57AM +0200, Michael Grzeschik wrote:
->> > > When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_M=
-IN,
->> > > UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This da=
-ta
->> > > needs to be validated. Since the kernel also knows the limits for va=
-lid
->> > > cases, it can fixup the values in case the userspace is setting inva=
-lid
->> > > data.
->> > >
->> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> > >
->> > > ---
->> > > v1: -> v4:
->> > > - new patch
->> > > v4: -> v5:
->> > > - changed uvcg_info to uvcg_dbg for fixups, updated info strings
->> >
->> > What commit id does this fix?  Validating userspace data is a good
->> > thing, so shouldn't this also go to stable kernels?
->>
->> This patch makes use of the uvc_get_frame_size function, which was
->> introduced with in v6.0.
->>
->> "e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
->>
->> So this should not go in as a stable patch.
+On Wed, Oct 26, 2022 at 5:37 PM Pawel Laszczak <pawell@cadence.com> wrote:
 >
->So why wouldn't 6.0 and 6.1 need this?
+> During handling Clear Halt Endpoint Feature request driver invokes
 
-It would apply, but since it is a feature I would not tag it as a fix.
+Add "," between request and driver. Otherwise, it is okay for me.
 
-However you can add:
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
-Fixes: e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
+Peter
 
-Thanks,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---10jrOL3x2xqLmOsH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNrtk4ACgkQC+njFXoe
-LGR1mA/+NEuC6VScXEV8qXl+Jjr5RDtWyqU/1oy5xU88IeFZ7fQOBpLmvNqoI0yn
-q9CZPsT5NkAsFal/ieQq+gJiTd/m1WWqk2gDnvnl5GoWpHNjKzNWDsLmGpbeLxRp
-3lvXkx7zZbXLB9sw+PI+xnL8c5GNcvaDKG1yZSkY76JMe2kpTUCn032/vQlE/AVu
-Op74ylfG9dbcMkCu7SArLGxaW5Mg+XE1AmxhiKd37iIzoywZDleURVeHfCNfdebN
-EjqQUB0/QVD98EEkx5jSo+I6HKd8Q6EG5jcL5wwcYA2a7HDGaBD4xc7YOTf1vOnI
-ZV8cuHLzJFobCPIcjBwxgk0qYm4UnC8Slui/vwfKJAZWlsN/rNmfzsRqXk6yOTrv
-WHhFy+K17+4qIwE0TtXRGlITMD0bLtYr5xQ378ddBw7d258gyZulBO/DedqmN4k+
-GUHApypFThesVf8D0PTLqMHprU5mHETdO66sNOL8a4wEefGcVUSasV+Wwih3N/3/
-NTbxSn2Fe//fxudA/cCsmzpLQtH+5yuJD74RUh3qD7TkkBog0CooOQqtchvbK/UC
-G1evetsWMXmkZdNhWHWhE+bS4HOkIs0ib4614ZDiR+NqXpeURvuKNl6VE0tj3v+L
-f8LbWDDKzSXTNslpqvBoPpG3Bp1c+K76orJXeLbgBIStqhXG/mo=
-=pqG8
------END PGP SIGNATURE-----
-
---10jrOL3x2xqLmOsH--
+> Reset Endpoint command. Because this command has some issue with
+> transition endpoint from Running to Idle state the driver must
+> stop the endpoint by using Stop Endpoint command.
+>
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
+>  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
+>  2 files changed, 6 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index e2e7d16f43f4..0576f9b0e4aa 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+>
+>         trace_cdnsp_ep_halt(value ? "Set" : "Clear");
+>
+> -       if (value) {
+> -               ret = cdnsp_cmd_stop_ep(pdev, pep);
+> -               if (ret)
+> -                       return ret;
+> +       ret = cdnsp_cmd_stop_ep(pdev, pep);
+> +       if (ret)
+> +               return ret;
+>
+> +       if (value) {
+>                 if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_STOPPED) {
+>                         cdnsp_queue_halt_endpoint(pdev, pep->idx);
+>                         cdnsp_ring_cmd_db(pdev);
+> @@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+>
+>                 pep->ep_state |= EP_HALTED;
+>         } else {
+> -               /*
+> -                * In device mode driver can call reset endpoint command
+> -                * from any endpoint state.
+> -                */
+>                 cdnsp_queue_reset_ep(pdev, pep->idx);
+>                 cdnsp_ring_cmd_db(pdev);
+>                 ret = cdnsp_wait_for_cmd_compl(pdev);
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index 25e5e51cf5a2..aa79bce89d8a 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+>         u32 ep_state = GET_EP_CTX_STATE(pep->out_ctx);
+>         int ret = 0;
+>
+> -       if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED) {
+> +       if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED ||
+> +           ep_state == EP_STATE_HALTED) {
+>                 trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
+>                 goto ep_stopped;
+>         }
+> --
+> 2.25.1
+>
