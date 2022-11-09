@@ -2,204 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BCD622B91
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 13:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDE1622D1C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 15:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiKIMb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 07:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
+        id S230345AbiKIOES (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 09:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbiKIMbv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 07:31:51 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5332B1CB24
-        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 04:31:50 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id d123so13753009iof.7
-        for <linux-usb@vger.kernel.org>; Wed, 09 Nov 2022 04:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9/8I1rq/9nNUNgEvrAw1I2H7rJYkeruix8Wij72Kk0c=;
-        b=Up6XcKZxF9E2QURDa9Su+pl0U+SHea3KY70DWc1Ogar6GPpj1asV3mfwrpklQMd0tZ
-         9z43cYUb7lofKpP5QV9QdZEExux0+lbQAadMlUx/y6j5ag3M3Z8Z9JzzHsE2mfhSqAs7
-         NQy2NpOhkDmBbMDHH9PmENxg0zbcYIpNeh4Bvg/NNPWwgZOZ8k395OQd0bn/AVB47XSh
-         utLjX2sycZ49WBY7BbCysDpCGutn8z28HHY/abiS3i5CxPmmrXN/SybsLLe99FAySewV
-         E+InhE7YwsljZZD/uLYJnsYStgzwHeX5BgJvRDVDpD8UvpHrXbhI8iww0Bwj91IpLhic
-         tBiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9/8I1rq/9nNUNgEvrAw1I2H7rJYkeruix8Wij72Kk0c=;
-        b=GBGDToE1NMnyBa8mHv2g3EfJMYb97BvJUXNjNrpuJ1dJtiyyzE3ttephKrY89obl/j
-         nuUcVFHzrZDiqDw3/otxHGNB0XjN3m9FlcReHGZs5siKOxPvCIZ3D84cowBoF5lWWjzs
-         HZaT3wZ9jqvW6Qm0GWUCtRtX0wMAlz8sW90nTnWGoloXzCs/fD7jQmTWQ257LmZVMDeD
-         ss4TJx9iYEZAMf+1mTLVwl9f/w1dgdI5Fg3DRtPN1vzcLeJXYWRGyDDXOG11jBMYLHGi
-         IO13BeBCWKrY5qsrJZ/FyEPapI4sMJlmUnpQdfC+0LX0JLlXamNW+ApobRwZqdvDJith
-         uliw==
-X-Gm-Message-State: ACrzQf3IX5Z/rBz9heyLbxR5YLQ2LGmMZXYy+F4d6FyJrSDpU2t85wOa
-        0Td+0hNOK/DXQlEmtZNDwk2fYL1xiXAjPwm0PucoM2yWJkU=
-X-Google-Smtp-Source: AMsMyM6WIgbhPIffuYu2nJXpggadzifpgyzIo1PIr7J3wDOGwa3zOo4GgX76HqJHmnHwI5hSbwgqXzoHrOwPzI5/tCQ=
-X-Received: by 2002:a6b:8dcd:0:b0:6d3:c9df:bc7d with SMTP id
- p196-20020a6b8dcd000000b006d3c9dfbc7dmr1645703iod.142.1667997109467; Wed, 09
- Nov 2022 04:31:49 -0800 (PST)
+        with ESMTP id S230218AbiKIOEQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 09:04:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38703167DE
+        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 06:04:14 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oslgb-0001zO-BL; Wed, 09 Nov 2022 15:04:13 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oslga-0004mT-U1; Wed, 09 Nov 2022 15:04:12 +0100
+Date:   Wed, 9 Nov 2022 15:04:12 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v5] usb: gadget: uvc: add validate and fix function for
+ uvc response
+Message-ID: <20221109140412.GC19806@pengutronix.de>
+References: <20221025222657.1883922-1-m.grzeschik@pengutronix.de>
+ <Y2t/jskm7y1lDyBn@kroah.com>
 MIME-Version: 1.0
-References: <20221027090342.38928-1-ndumazet@google.com> <Y2uPIItkmcYgDy6k@kroah.com>
-In-Reply-To: <Y2uPIItkmcYgDy6k@kroah.com>
-From:   Nicolas Dumazet <ndumazet@google.com>
-Date:   Wed, 9 Nov 2022 13:31:33 +0100
-Message-ID: <CANZQvtgQyATwCyomGqtdOhthnkVc4_jEHY_U-s1x4u4kp5YKow@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: add NO_LPM quirk for Realforce 87U Keyboard
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-        Petar Kostic <petar@kostic.dev>,
-        Oliver Neukum <oneukum@suse.com>, Ole Ernst <olebowle@gmx.com>,
-        Hannu Hartikainen <hannu@hrtk.in>,
-        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000039429005ed08d7dc"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nmemrqcdn5VTmUEE"
+Content-Disposition: inline
+In-Reply-To: <Y2t/jskm7y1lDyBn@kroah.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---00000000000039429005ed08d7dc
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Nov 9, 2022 at 12:29 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Oct 27, 2022 at 11:03:42AM +0200, Nicolas Dumazet wrote:
-> > Before adding this quirk, this (mechanical keyboard) device would not be
-> > recognized, logging:
-> >
-> >   new full-speed USB device number 56 using xhci_hcd
-> >   unable to read config index 0 descriptor/start: -32
-> >   chopping to 0 config(s)
-> >
-> > It would take dozens of plugging/unpuggling cycles for the keyboard to
-> > be recognized. Keyboard seems to simply work after applying this quirk.
-> >
-> > This issue had been reported by users in two places already ([1], [2])
-> > but nobody tried upstreaming a patch yet. After testing I believe their
-> > suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
-> > little overkill. I assume this particular combination was tested because
-> > it had been previously suggested in [3], but only NO_LPM seems
-> > sufficient for this device.
-> >
-> > [1]: https://qiita.com/float168/items/fed43d540c8e2201b543
-> > [2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
-> > [3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
-> >
-> > ---
-> > Changes in v2:
-> >   - add the entry to the right location (sorting entries by
-> >     vendor/device id).
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
-> > ---
->
-> By putting your s-o-b below the --- line, tools will drop it, how did
-> you test this?
->
-> Put the v2 stuff below the --- line, don't add a new one.  See the
-> thousands of examples on the list for how to do this correctly (as well
-> as the kernel documentation.)
->
-> Can you fix this up and resend a v3 please?
+--nmemrqcdn5VTmUEE
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Duh -- apologies for this rookie mistake. v3 sent your way.
-
+On Wed, Nov 09, 2022 at 11:23:10AM +0100, Greg KH wrote:
+>On Wed, Oct 26, 2022 at 12:26:57AM +0200, Michael Grzeschik wrote:
+>> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
+>> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
+>> needs to be validated. Since the kernel also knows the limits for valid
+>> cases, it can fixup the values in case the userspace is setting invalid
+>> data.
+>>
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>
+>> ---
+>> v1: -> v4:
+>> - new patch
+>> v4: -> v5:
+>> - changed uvcg_info to uvcg_dbg for fixups, updated info strings
 >
-> thanks,
->
-> greg k-h
+>What commit id does this fix?  Validating userspace data is a good
+>thing, so shouldn't this also go to stable kernels?
 
---00000000000039429005ed08d7dc
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+This patch makes use of the uvc_get_frame_size function, which was
+introduced with in v6.0.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-3THKPWAG9jcUnLFr5tdwMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBMchz/m9DAzkDk
-6JtxR1Ns3Ux0kJZKyIxCFNDOJpN4XUGpRlddEC/cWrtsX1AR5872/c9DekBJ9gQ7eZVBDR5VReKg
-tpG21RU7CCXjAwBDtfLz+nkGxnuq1XJef2OwL1/Rr2xXJ+nraZV7EcpNW92RNDsKzTWI8kmsXyK9
-XDDJDhNvFcAO3K4lbACkuxCfrE9tzdp9uG2Y/1aDALr2r8XZi9uiMb0js2p08tT7cCgh+WLF8pDP
-Ng5Bs1uZYJrY+Lrgg0GsQFiFpBI/e0m8VwvFbDUEexpaPEWdBYP53cVDFD/R6kVj+rHiAI57DZ9k
-0Bk/2Ylow6FBQrPzcK2D4OqEMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABkqWti5VJYTIDwUw2I1HaMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBQ
-fpQpYfZbbo1wpniBg4s2UfVKvPxwolh+YB7qdTTZPTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMDkxMjMxNDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAV13+bwDT2rk+8lHF88lw
-q5lpgmkVVYJrOFtusMH6rV7gIIHS1yGDhN+0r75sAYX0+CWlEiLCadV7tAGvgJsRkstNIql9SV0Q
-ZIcp6cGSAfgtqH1Iji3WqJdiNItRhmMZNfbDWS/IwTMAsmumGGbQ7NQdKFYgMSGMTSUlLA1HC5E+
-PAx2I7PwXzLKm6V3715mJifSkPXGIggwhIqcdsdXPQvDWezjB/ipjazI0QomJxthUmY+fR+UZGch
-MFqNreSaQDVcA0/6R4+C3GgBqjzGoP1AtjMvm8hm2J+m0h4yfWMu9gWL9IbdpjdsdVVtHqL0hNSK
-FDs6b3dE6mQzy6tYHw==
---00000000000039429005ed08d7dc--
+"e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
+
+So this should not go in as a stable patch.
+
+Thanks,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--nmemrqcdn5VTmUEE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNrs1oACgkQC+njFXoe
+LGR8eg/8Chh6kF0PKQhAFYF0OaRMummhmrftNTBYgUz6tLr7MHP37r3/vwC8f7U3
+GlbwJtbtte8JnnqK9lKrVIGhbBsXFFx8zuSmMUr6fCEqy+shHkf88Y8byQXrTmAt
+IrHGKq7BfZOL81ZFPeU7Si9FQI85U9Oh49WLV/L9j7C3qDM1lbvsJPOxyl7hN/Bb
+wecA2oLkd3i2sbzTZ5tQzxPpwuRCSCfDw6i4G4obAqzA0AZsGA0QXgW+X/Uslivr
+6QQ9QOlQIHeABDyh504Gd5Ocv8xBMXhOnWKK3QoJ41WlZtd+LYUVzIuzqAMhdfmW
+c8uHZAYaCHH+wmRRPMMGuiG6OsMSjRlaVn/rdp8nNwva8WmupGrqm6IcMh0tzGKS
+eQ6oBbsQIxvbCiiTm92o4UlEFYc/rM3aPfuA0sQ8z4DN84bwC2x2v76GYec0pSXh
+k9xucCWeZL8wzzYmuc621pqMP9ghxEp6I5k+uh/T65605a8JnoTwiwHUz/ld3Hlj
+vuZUOq1ewsVdHN3uxFNcHkbBusgI16ftWkNZtQYGrv8Ojhb7YyHtt+i196sRiQWD
+8NVDUVnVnl392IDtiMr8tRAh2EifjvDA7r5LejzV7eiJQLhVfrKeL045li3HCXGd
+Yr7CvoQSGYl6BdTRoB40AoJakmqNyE8LnCisF+tN2f424C2wpk8=
+=941F
+-----END PGP SIGNATURE-----
+
+--nmemrqcdn5VTmUEE--
