@@ -2,95 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1416228E4
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 11:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAEC622979
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 12:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiKIKrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 05:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S230038AbiKILDZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 9 Nov 2022 06:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiKIKrC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 05:47:02 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFDDEA8
-        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 02:47:01 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 489A611EC;
-        Wed,  9 Nov 2022 11:46:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1667990820;
-        bh=MqnggFOy/8U5C56JPdGT8FLprlKtaeEFNELJwDWXaJI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Dflq2lzttVWmHAlxvAop0Wv/6kxhcfwEJEsKP9pim0sMy3Y0Bj8nlVNpMYcwg4Rw/
-         YWpAg9S+fzQ88pK24Etge/e847nBJoUCzVtMhn7vF3MMcOEksAarLVsr2zcn/7gSvq
-         kMlHlS5cg3zImZr+XwXTA2YkDYvBX6Qidsph6oVQ=
-Message-ID: <963901c2-7a8c-ee21-fe25-d6a95d09cdfc@ideasonboard.com>
-Date:   Wed, 9 Nov 2022 10:46:56 +0000
+        with ESMTP id S229714AbiKILDY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 06:03:24 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48CB713D23;
+        Wed,  9 Nov 2022 03:03:19 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2A9B2FAz8022767, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2A9B2FAz8022767
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 9 Nov 2022 19:02:15 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 9 Nov 2022 19:02:53 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 9 Nov 2022 19:02:53 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Wed, 9 Nov 2022 19:02:53 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Albert Zhou <albert.zhou.50@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH net-next RFC 0/5] Update r8152 to version two
+Thread-Topic: [PATCH net-next RFC 0/5] Update r8152 to version two
+Thread-Index: AQHY84eCZedYEX+95EOjyKXiF2YVV642Rxog
+Date:   Wed, 9 Nov 2022 11:02:52 +0000
+Message-ID: <77e816857bbd46ec8357134f767be785@realtek.com>
+References: <20221108153342.18979-1-albert.zhou.50@gmail.com>
+In-Reply-To: <20221108153342.18979-1-albert.zhou.50@gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/11/9_=3F=3F_09:47:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] uvc: gadget: uvc: Defer uvcg_complete_buffer() until
- .complete()
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        kieran@linuxembedded.co.uk, balbi@kernel.org, mgr@pengutronix.de,
-        w36195@motorola.com
-References: <20221019124535.2712902-1-dan.scally@ideasonboard.com>
- <Y2uE94G9y99ynP7r@kroah.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <Y2uE94G9y99ynP7r@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
+Albert Zhou <albert.zhou.50@gmail.com>
+> Sent: Tuesday, November 8, 2022 11:34 PM
+> Subject: [PATCH net-next RFC 0/5] Update r8152 to version two
+> 
+> This patch integrates the version-two r8152 drivers from Realtek into
+> the kernel. I am new to kernel development, so apologies if I make
+> newbie mistakes.
 
-On 09/11/2022 10:46, Greg KH wrote:
-> On Wed, Oct 19, 2022 at 01:45:35PM +0100, Daniel Scally wrote:
->> Calling uvcg_complete_buffer() from uvc_video_encode_isoc() sometimes
->> causes the final isoc packet for a video frame to be delayed long
->> enough to cause the USB controller to drop it. The first isoc packet
->> of the next video frame is then received by the host, which interprets
->> the toggled FID bit correctly such that the stream continues without
->> interruption, but the first frame will be missing the last isoc
->> packet's worth of bytes.
->>
->> To fix the issue delay the call to uvcg_complete_buffer() until the
->> usb_request's .complete() callback, as already happens when the data
->> is encoded via uvc_video_encode_isoc_sg(). For consistency's sake the
->> same change is applied to uvc_video_encode_bulk().
->>
->> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->> ---
->>
->> Changes in v2:
->>
->> 	- Applied the same change to uvc_video_encode_bulk() for consistency
->>
->> @Dan - In the end I thought this is probably worth separating from your "usb:
->> gadget: uvc: fix sg handling in error case" patch, since it fixes a separate
->> issue by itself. I _think_ they're separable but I wasn't experiencing the
->> problem you were so I can't test that - let me know if I'm wrong.
->>
->> @Michael - I dropped your R-b since I made the change to uvc_video_encode_bulk()
->> too, didn't want to jump the gun :)
->
-> Does not apply to my tree anymore :(
->
-> Can you rebase against the usb-linus branch of usb.git and resend?
+The Realtek's in-house driver doesn't satisfy the rules or requests of
+Linux kernel, so I don't think you could use it to replace the Linux
+kernel r8152 driver.
 
+The version is used to distinguish between the Realtek's in-house driver
+and Linux kernel r8152 driver. It doesn't mean you have to use version 2,
+even the version 2 may contain more experiment features.
 
-Sure thing
+Best Regards,
+Hayes
 
->
-> thanks,
->
-> greg k-h
+> I have tested the updated module in v6.1 on my machine, without any
+> issues.
+> 
+> A final note, when I removed all the code for earlier kernel versions,
+> the header r8152_compatibility.h reduced dramatically in size. This
+> leads me to suspect that some of the headers like <linux/init.h> are no
+> longer  needed. However, I left them in there just in case.
+
