@@ -2,112 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8DB6224C8
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 08:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B782D6225B0
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 09:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiKIHmO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 02:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
+        id S229634AbiKIIpF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 03:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKIHmN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 02:42:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C01A04A;
-        Tue,  8 Nov 2022 23:42:12 -0800 (PST)
+        with ESMTP id S229591AbiKIIpE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 03:45:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14572231;
+        Wed,  9 Nov 2022 00:44:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC536616E4;
-        Wed,  9 Nov 2022 07:42:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDBB5C433B5;
-        Wed,  9 Nov 2022 07:42:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 650C3B81D46;
+        Wed,  9 Nov 2022 08:44:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC5DC433C1;
+        Wed,  9 Nov 2022 08:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667979731;
-        bh=1HMVBU8FNkTDsc3uJV2sC86erzOihnDIe2G3LUvxAbs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=00Ndco2Lv3D4vZksG1Qs3mTUfeuaRxZCOXXYWnnszLap3axnKdd+E/caHX/lIQCS8
-         ZGoYBeC1zrJvFG5/7oQ/IKmpCMNR24+EqMLdDJvJ2jB5HyA0qsf2ze/5iDjNTQwqRY
-         EYqIIsPZvbtdCOoIKj3vtyjOIj0/pmQO8iDR9qhc=
-Date:   Wed, 9 Nov 2022 08:42:08 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Albert Zhou <albert.zhou.50@gmail.com>
-Cc:     linux-usb@vger.kernel.org, nic_swsd@realtek.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next RFC 2/5] r8152: update to version two
-Message-ID: <Y2tZ0KIaQSVtrREg@kroah.com>
-References: <20221108153342.18979-1-albert.zhou.50@gmail.com>
- <20221108153342.18979-3-albert.zhou.50@gmail.com>
- <Y2qRyqiVuJ0LwySh@kroah.com>
- <370e2420-e875-3543-0128-57f7bce6be40@gmail.com>
+        s=korg; t=1667983496;
+        bh=gubP5wUhKwsJa2PWsBZNowl7hrwhl0rnCsCJXTmXSnY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pBT6BNA5qf/wh+ppx/PLc1yeErH5HcRlf2fmSiKdNg+3QN4nB1uGZQEjSZw/aQs3o
+         ZGnMI6DtDXlqry99ie+yx/ba0zE6wv7pd1EqFq8A4rfkiQULuLfEjvsMVfeZxbdeiR
+         m4spPUsmqc4dkSfd4OiKDbyaIoQjMtU8IfJZwc4k=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v2] USB: gadget: dummy_hcd: switch char * to u8 *
+Date:   Wed,  9 Nov 2022 09:44:50 +0100
+Message-Id: <20221109084450.2181848-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <370e2420-e875-3543-0128-57f7bce6be40@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2518; i=gregkh@linuxfoundation.org; h=from:subject; bh=gubP5wUhKwsJa2PWsBZNowl7hrwhl0rnCsCJXTmXSnY=; b=owGbwMvMwCRo6H6F97bub03G02pJDMnZGQ2T+6cf/i25Rm1n+DX7Tw1cHwu23cg6IX06d8ln9+0/ 30pO74hlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJFGkxzBW4+Z1X74b99RXchX5pXY oT1jktms+wYGNFXQzT4ll67TtDRHt5P+/749ohDwA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 03:50:59PM +1100, Albert Zhou wrote:
-> On 9/11/22 04:28, Greg KH wrote:
-> > >   // SPDX-License-Identifier: GPL-2.0-only
-> > >   /*
-> > > - *  Copyright (c) 2014 Realtek Semiconductor Corp. All rights reserved.
-> > > + *  Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.
-> > > + *
-> > > + * This program is free software; you can redistribute it and/or
-> > > + * modify it under the terms of the GNU General Public License
-> > > + * version 2 as published by the Free Software Foundation.
-> > To start with, this is not correct.  Don't add back license boiler-plate
-> > code.
-> 
-> Hi Greg,
-> 
-> My apologies, I was unaware of this. This can be easily removed.
-> 
-> > 
-> > And you just changed the copyright notice incorrectly, that is not ok.
-> > 
-> 
-> When I replaced the version-one code with the version-two code, I assumed
-> the authors' copyright would be correct. What is the correct copyright
-> notice?
+The function handle_control_request() casts the urb buffer to a char *,
+and then treats it like a unsigned char buffer when assigning data to
+it.  On some architectures, "char" is really signed, so let's just
+properly set this pointer to a u8 to take away any potential problems as
+that's what is really wanted here.
 
-The correct way would be to list all years that the copyright was
-asserted for the file.  Your patch removed the copyright notice for an
-older year, which isn't ok.
+Use put_unaligned_le16() to copy the full 16bits into the buffer,
+it's not a problem just yet as only 7 bits are being used here, but this
+protects us when/if the USB spec changes in the future to define more of
+these bits.
 
-But the larger issue here is that just wholesale replacing the in-tree
-driver with an out-of-tree one isn't going to work.  As others have
-pointed out, you need to break the changes up into
-one-patch-per-logical-change and drag the driver forward that way.
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Jakob Koschel <jakobkoschel@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+v2: - use put_unaligned_le16() on Linus's recommendation as a simpler and
+      more obvious way to describe the data being copied here.
+    - update device: comment based on Alan's review
 
-The easiest way for you to do this is to clean up the out-of-tree driver
-on its own, removing all the backwards compatibility stuff, and then try
-to figure out what features are different and add them to the in-kernel
-driver, one by one.
+ drivers/usb/gadget/udc/dummy_hcd.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-It's not an easy task, but as you have the hardware to test with, should
-be doable.
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index 899ac9f9c279..7c59c20c8623 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -1740,13 +1740,13 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 		if (setup->bRequestType == Dev_InRequest
+ 				|| setup->bRequestType == Intf_InRequest
+ 				|| setup->bRequestType == Ep_InRequest) {
+-			char *buf;
++			u8 *buf;
+ 			/*
+-			 * device: remote wakeup, selfpowered
++			 * device: remote wakeup, selfpowered, LTM, U1, or U2
+ 			 * interface: nothing
+ 			 * endpoint: halt
+ 			 */
+-			buf = (char *)urb->transfer_buffer;
++			buf = urb->transfer_buffer;
+ 			if (urb->transfer_buffer_length > 0) {
+ 				if (setup->bRequestType == Ep_InRequest) {
+ 					ep2 = find_endpoint(dum, w_index);
+@@ -1755,10 +1755,9 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 						break;
+ 					}
+ 					buf[0] = ep2->halted;
+-				} else if (setup->bRequestType ==
+-					   Dev_InRequest) {
+-					buf[0] = (u8)dum->devstatus;
+-				} else
++				} else if (setup->bRequestType == Dev_InRequest)
++					put_unaligned_le16(dum->devstatus, buf);
++				else
+ 					buf[0] = 0;
+ 			}
+ 			if (urb->transfer_buffer_length > 1)
+-- 
+2.38.1
 
-good luck!
-
-> > > + *
-> > > + *  This product is covered by one or more of the following patents:
-> > > + *  US6,570,884, US6,115,776, and US6,327,625.
-> > Oh wow.  That's playing with fire...
-> 
-> Do you believe this prohibits the code from being in the kernel?
-
-No I do not.  It's just not something that is normally advertised in the
-kernel for obvious reasons :)
-
-thanks,
-
-greg k-h
