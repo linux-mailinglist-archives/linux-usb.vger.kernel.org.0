@@ -2,97 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB8C62271A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 10:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A3F622844
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 11:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiKIJer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 04:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S229724AbiKIKUx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 05:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiKIJeq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 04:34:46 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4BD9FDE
-        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 01:34:44 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso1286169pjg.5
-        for <linux-usb@vger.kernel.org>; Wed, 09 Nov 2022 01:34:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WFSSdVklwFsT0FnXDKy+AASSNrfWR6TVw+PL7Udgr8I=;
-        b=FfFAHzQ9kGO9EYb6Y1yvgno3odA/iXwfY5iTYNiCNhqtwNyONZJNwtoLGp9NgfnJ0o
-         iP1aTTnltSabyWjBceWx0n5yajHNzyOAVqj+BWceR8CRREmQO2OClEuJdbrXoQ2jK+sk
-         xBn03dPJ+hyeFSoFdpcfrKw7fuDcJjzl/C7aSuq/FcNnlUrPZzQOjnFnQmxK94lqSkAC
-         zeLEKPGAG3E4wkVoXLim6Gmqb1RuOEEaPAR3MfJdnN9S1C4GpMWSBhQsOT44KF4v1wRZ
-         jx/Xm/zGFxqk3Y3EyeGzBu0fjuOizHOAOttIw9ILueB90+jKHA6aX34MLxW8r9BmmZTQ
-         c/WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WFSSdVklwFsT0FnXDKy+AASSNrfWR6TVw+PL7Udgr8I=;
-        b=eVdvuOxeYBHMOqukNh8IgtX9v9W25nfpMyyxMc8oENawKPOypOr2bCNgHhuCGVqJg5
-         mCHDpjIhG1bfLSntejOJKKrV/8VG5ak81Jpb5PCcV3jPpFCPUFDdnrBfA7BNw8rhSv02
-         zvM6IH4hscD+Q5sOj62vm6K3ojJK1c3HpDE7fTVB9jbZ+odFu6wfOWloVvF+uAYj2Yry
-         F8hh4wuSqps0mD9ZBND7aefxQW33XzqSR0FeQS0xehhwYIRhMTU7wIsTJ7Uv2Vut+8lG
-         GnfrONvj8UxgwSd/4X5NVssCfrakPL0MTL8VLu49RQs0ZvLEy3Nr9pt5PA+NLd+2g1ZT
-         EKaQ==
-X-Gm-Message-State: ACrzQf100rZRIkU6tbMO9JykjkEWNVaGraP/aiXTgeLsA+XxhdAtlIiw
-        Vk7S6xf/xOs1Y5p7uCzs0EU=
-X-Google-Smtp-Source: AMsMyM4YYZd/ju+yCuQ8DrTc1ydRXjgatYZ0xJ8zU0weMTcjWSxeGPsCKHj4An/VKI8U6QqSoSBvXA==
-X-Received: by 2002:a17:902:aa01:b0:187:2e5a:5bcf with SMTP id be1-20020a170902aa0100b001872e5a5bcfmr45983308plb.63.1667986483805;
-        Wed, 09 Nov 2022 01:34:43 -0800 (PST)
-Received: from [192.168.1.5] ([61.7.181.142])
-        by smtp.googlemail.com with ESMTPSA id i36-20020a635864000000b00464aa9ea6fasm7118396pgm.20.2022.11.09.01.34.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 01:34:43 -0800 (PST)
-Message-ID: <6572c4e6-d8bc-b8d3-4396-d879e4e76338@gmail.com>
-Date:   Wed, 9 Nov 2022 16:34:35 +0700
+        with ESMTP id S229492AbiKIKUv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 05:20:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533E622283
+        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 02:20:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14A23B81D80
+        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 10:20:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49785C433D6;
+        Wed,  9 Nov 2022 10:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667989248;
+        bh=dBDcZhFC3Pj5W4jyWnS/BdRGABR35oIvA66LiMYux58=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RvGaslmahUXK5Ik/nUmvgzrtTV4Ego/pmc5Mv1obu/gkrVQ1EOKRw1XDv6kAfaI2W
+         pbIg9TPxUpS8BX6zhhjegVUJ/Vay7LLi9W51pxWzhM72AVXVQpOI6BD8YGjV/3+SgN
+         oHbuIxgJbRwR56Aa58JAxKyGUAj2DMcbWShAG6N0=
+Date:   Wed, 9 Nov 2022 11:20:45 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Daniel Scally <dan.scally@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
+        torleiv@huddly.com, mgr@pengutronix.de
+Subject: Re: [PATCH 1/4] usb: gadget: uvc: Make bSourceID read/write
+Message-ID: <Y2t+/Sjl3NSsSMht@kroah.com>
+References: <20221102151755.1022841-1-dan.scally@ideasonboard.com>
+ <20221102151755.1022841-2-dan.scally@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 1/3] USB: serial: option: remove old LARA-R6 PID
-Content-Language: en-US
-To:     Davide Tronchin <davide.tronchin.94@gmail.com>, johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        marco.demarco@posteo.net, cesare.marzano@gmail.com
-References: <Y1qRkuOghwRCGZIT@hovoldconsulting.com>
- <20221108163001.18454-1-davide.tronchin.94@gmail.com>
-From:   Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20221108163001.18454-1-davide.tronchin.94@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102151755.1022841-2-dan.scally@ideasonboard.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/8/2022 23:29, Davide Tronchin wrote:
+On Wed, Nov 02, 2022 at 03:17:52PM +0000, Daniel Scally wrote:
+> At the moment, the UVC function graph is hardcoded IT -> PU -> OT.
+> To add XU support we need the ability to insert the XU descriptors
+> into the chain. To facilitate that, make the output terminal's
+> bSourceID attribute writeable so that we can configure its source.
+> 
+> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> ---
+>  drivers/usb/gadget/function/uvc_configfs.c | 59 +++++++++++++++++++++-
+>  1 file changed, 58 insertions(+), 1 deletion(-)
 
-> The LARA-R6 module old PID (defined as: UBLOX_PRODUCT_R6XX
-> 0x90fa) has been removed since is no longer used by the
-> current u-blox LARA-R6 product.
+Isn't there a documentation update needed here too?
 
-UBlox is not the only company reselling these dongles/cards, a quick 
-google of "vid_05c6&pid_90fa&mi_00" shows that another two resellers has 
-Win drivers for it, GosuncnWelink and Meig.
-You are now removing the linux driver support that a customer
-of them currently have.
+thanks,
 
-If you are a UBlox employee/representative then I suggest that you tell 
-UBlox that reselling dongles/cards with Qualcomms vid:pid is a bad idea. 
-Qualcomm can provide UBlox with software to personalize the product with 
-UBlox own vid:pid.
-
-
-thanks
-/Lars
-
+greg k-h
