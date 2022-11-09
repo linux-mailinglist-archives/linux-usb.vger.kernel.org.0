@@ -2,102 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4AD6235D9
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 22:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C8E623669
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 23:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbiKIVb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 16:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S231373AbiKIWUD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 17:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiKIVby (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 16:31:54 -0500
-X-Greylist: delayed 431 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 13:31:53 PST
-Received: from mr6.vodafonemail.de (mr6.vodafonemail.de [145.253.228.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CA1DE8D
-        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 13:31:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-mb-mr2-21dec; t=1668029080;
-        bh=8mNG5aVXXZO+HzN3OwVtpepFqMvCQHikmsI2FNt7nTA=;
-        h=Date:From:To:Subject:Message-ID:Content-Type:From;
-        b=iSSVlfZvp6XIf9U3PdrvXpZwSQIupg5dU09runMNrUJYp9YNJKa02UoWWNOcFKy3s
-         8/OyiJ7+CP47czwph4YktB3Ce+NpkmpwPcMdDahYzfxOz8bL3d4tpuxzhLdRqdOgFE
-         u+X7ZQHn9SnOH1CefMgVGPJ3b2pF6cCZ3nFqwxR4=
-Received: from smtp.vodafone.de (unknown [10.0.0.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mr6.vodafonemail.de (Postfix) with ESMTPS id 4N6yfJ2HS8z1y4X;
-        Wed,  9 Nov 2022 21:24:40 +0000 (UTC)
-Received: from arcor.de (p3ee2cbb5.dip0.t-ipconnect.de [62.226.203.181])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 4N6yfD67bRz9sDx;
-        Wed,  9 Nov 2022 21:24:33 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 22:24:15 +0100
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH] USB: serial: option: add Fibocom FM160 0x0111 composition
-Message-ID: <Y2waf9O37lJiF8z1@arcor.de>
+        with ESMTP id S230262AbiKIWUC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 17:20:02 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 14:19:59 PST
+Received: from mailfilter06-out40.webhostingserver.nl (mailfilter06-out40.webhostingserver.nl [195.211.73.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B9120AA
+        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 14:19:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=BwQD9pj5b/WWSsnWxPYCsQ/PgXjWas3i27VLj8Y6Clc=;
+        b=ZkY8uv6/hN9/FoAwFfXnWm4GMQg7cJ1jSyMvQ7tJ+ilUOB7nPzqBfUU8u/Z2Snwf1/rbGnOPQvmRA
+         x4K23/yrAMk6SoyyKB9dEolvHKnk0AHgF6bWTNPXFG7pjTfsyiyxWMOOec/B9KdKGtY+3oUTBdEQN0
+         NSAp+DGOdSRPl3ctQAjzhVRqft37d73lqpX5/3cyuq1oTGW+JOPllcQb0MmM1CVOW9WZBJR2IFirVm
+         aYBgmvkm/Low6Sf6QtTClCfZILKJWtJ+0ZmOqaPC/UQhOy0vULvq7pXS4KY/5Xn4b6sfod+Rhjgrdo
+         HR8ICGNM9BzzHnCac3HStBcVZzQ+2rw==
+X-Halon-ID: 7f4b7a72-607c-11ed-837b-001a4a4cb958
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter06.webhostingserver.nl (Halon) with ESMTPSA
+        id 7f4b7a72-607c-11ed-837b-001a4a4cb958;
+        Wed, 09 Nov 2022 23:18:54 +0100 (CET)
+Received: from 2a02-a466-68ed-1-6127-ee99-b8c1-12c4.fixed6.kpn.net ([2a02:a466:68ed:1:6127:ee99:b8c1:12c4] helo=localhost.localdomain)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1ostPK-002HIn-0s;
+        Wed, 09 Nov 2022 23:18:54 +0100
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Stephen Boyd <stephen.boyd@linaro.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ferry Toth <ftoth@exalondelft.nl>
+Subject: [PATCH v1 1/1] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+Date:   Wed,  9 Nov 2022 23:17:49 +0100
+Message-Id: <20221109221749.8210-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-size: 2363
-X-purgate-ID: 155817::1668029080-F27D34DE-9150AB24/0/0
+Content-Transfer-Encoding: 8bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for the following Fibocom FM160 composition:
+Since commit 0f010171
+Dual Role support on Intel Merrifield platform broke due to rearranging
+the call to dwc3_get_extcon().
 
-0x0111: MBIM + MODEM + DIAG + AT
+It appears to be caused by ulpi_read_id() on the first test write failing
+with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+DT when the test write fails and returns 0 in that case even if DT does not
+provide the phy. Due to the timeout being masked dwc3 probe continues by
+calling dwc3_core_soft_reset() followed by dwc3_get_extcon() which happens
+to return -EPROBE_DEFER. On deferred probe ulpi_read_id() finally succeeds.
 
-T:  Bus=01 Lev=02 Prnt=125 Port=01 Cnt=02 Dev#= 93 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2cb7 ProdID=0111 Rev= 5.04
-S:  Manufacturer=Fibocom
-S:  Product=Fibocom FM160 Modem_SN:12345678
-S:  SerialNumber=12345678
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+This patch changes ulpi_read_id() to return -ETIMEDOUT when it occurs and
+catches the error in dwc3_core_init(). It handles the error by calling
+dwc3_core_soft_reset() after which it requests -EPROBE_DEFER. On deferred
+probe ulpi_read_id() again succeeds.
 
-Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
+Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
 ---
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 697683e3fbff..693dd0e94e6e 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2167,6 +2167,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x010a, 0xff) },			/* Fibocom MA510 (ECM mode) */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0xff, 0x30) },	/* Fibocom FG150 Diag */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0, 0) },		/* Fibocom FG150 AT */
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0111, 0xff) },			/* Fibocom FM160 (MBIM mode) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a2, 0xff) },			/* Fibocom FM101-GL (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a4, 0xff),			/* Fibocom FM101-GL (laptop MBIM) */
+ drivers/usb/common/ulpi.c | 5 +++--
+ drivers/usb/dwc3/core.c   | 5 ++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index d7c8461976ce..d8f22bc2f9d0 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -206,8 +206,9 @@ static int ulpi_read_id(struct ulpi *ulpi)
+ 
+ 	/* Test the interface */
+ 	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+-	if (ret < 0)
+-		goto err;
++	if (ret < 0) {
++		return ret;
++	}
+ 
+ 	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+ 	if (ret < 0)
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 648f1c570021..e293ef70039b 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1106,8 +1106,11 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 
+ 	if (!dwc->ulpi_ready) {
+ 		ret = dwc3_core_ulpi_init(dwc);
+-		if (ret)
++		if (ret) {
++			dwc3_core_soft_reset(dwc);
++			ret = -EPROBE_DEFER;
+ 			goto err0;
++		}
+ 		dwc->ulpi_ready = true;
+ 	}
+ 
+-- 
+2.34.1
+
