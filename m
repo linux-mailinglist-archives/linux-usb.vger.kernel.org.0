@@ -2,62 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9F8622976
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 12:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB8C62271A
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Nov 2022 10:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiKILCg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 06:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S230132AbiKIJer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 04:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbiKILCZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 06:02:25 -0500
-X-Greylist: delayed 4201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 03:02:25 PST
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B5913CDB
-        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 03:02:25 -0800 (PST)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id AAE9982A83; Tue,  8 Nov 2022 09:15:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1667898955; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=JAN1z8F4gHpR9QmoWVrwy2vipyvsMSUrqjkkKaDvucySEBW6UwjFHPRt4UCmSdMNR
-         Ni6W7huUtChuJNRmc8Xqp295d3B2f4IH67Z78zw5td9KZdzJKAFIqQ7waYZKwDzkRV
-         Qq+yqrAOP1ozBKVHMcKsFeQ/rbwVUcy6C3NXBSpbrk/nQHNtX966JU6UIbnsmt+fT0
-         8p1hm5NIpwGlNZ6SKuIrANM7qsRdIREBjwAd8yJMy3kKnLEcd5XW/9gAUq8iutWCc+
-         0ZVTjw7euk8uzczSghM11EF0l2cef4FWAaXfBUSxG4/Hxnedj94WdMMFv37n7+XQ7T
-         mfWm0Qy1Z3l1g==
-Received: by mail.lokoho.com for <linux-usb@vger.kernel.org>; Tue,  8 Nov 2022 09:15:34 GMT
-Message-ID: <20221108074500-0.1.24.5p7q.0.2bh61p12n9@lokoho.com>
-Date:   Tue,  8 Nov 2022 09:15:34 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-usb@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S229573AbiKIJeq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 04:34:46 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4BD9FDE
+        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 01:34:44 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso1286169pjg.5
+        for <linux-usb@vger.kernel.org>; Wed, 09 Nov 2022 01:34:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WFSSdVklwFsT0FnXDKy+AASSNrfWR6TVw+PL7Udgr8I=;
+        b=FfFAHzQ9kGO9EYb6Y1yvgno3odA/iXwfY5iTYNiCNhqtwNyONZJNwtoLGp9NgfnJ0o
+         iP1aTTnltSabyWjBceWx0n5yajHNzyOAVqj+BWceR8CRREmQO2OClEuJdbrXoQ2jK+sk
+         xBn03dPJ+hyeFSoFdpcfrKw7fuDcJjzl/C7aSuq/FcNnlUrPZzQOjnFnQmxK94lqSkAC
+         zeLEKPGAG3E4wkVoXLim6Gmqb1RuOEEaPAR3MfJdnN9S1C4GpMWSBhQsOT44KF4v1wRZ
+         jx/Xm/zGFxqk3Y3EyeGzBu0fjuOizHOAOttIw9ILueB90+jKHA6aX34MLxW8r9BmmZTQ
+         c/WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WFSSdVklwFsT0FnXDKy+AASSNrfWR6TVw+PL7Udgr8I=;
+        b=eVdvuOxeYBHMOqukNh8IgtX9v9W25nfpMyyxMc8oENawKPOypOr2bCNgHhuCGVqJg5
+         mCHDpjIhG1bfLSntejOJKKrV/8VG5ak81Jpb5PCcV3jPpFCPUFDdnrBfA7BNw8rhSv02
+         zvM6IH4hscD+Q5sOj62vm6K3ojJK1c3HpDE7fTVB9jbZ+odFu6wfOWloVvF+uAYj2Yry
+         F8hh4wuSqps0mD9ZBND7aefxQW33XzqSR0FeQS0xehhwYIRhMTU7wIsTJ7Uv2Vut+8lG
+         GnfrONvj8UxgwSd/4X5NVssCfrakPL0MTL8VLu49RQs0ZvLEy3Nr9pt5PA+NLd+2g1ZT
+         EKaQ==
+X-Gm-Message-State: ACrzQf100rZRIkU6tbMO9JykjkEWNVaGraP/aiXTgeLsA+XxhdAtlIiw
+        Vk7S6xf/xOs1Y5p7uCzs0EU=
+X-Google-Smtp-Source: AMsMyM4YYZd/ju+yCuQ8DrTc1ydRXjgatYZ0xJ8zU0weMTcjWSxeGPsCKHj4An/VKI8U6QqSoSBvXA==
+X-Received: by 2002:a17:902:aa01:b0:187:2e5a:5bcf with SMTP id be1-20020a170902aa0100b001872e5a5bcfmr45983308plb.63.1667986483805;
+        Wed, 09 Nov 2022 01:34:43 -0800 (PST)
+Received: from [192.168.1.5] ([61.7.181.142])
+        by smtp.googlemail.com with ESMTPSA id i36-20020a635864000000b00464aa9ea6fasm7118396pgm.20.2022.11.09.01.34.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 01:34:43 -0800 (PST)
+Message-ID: <6572c4e6-d8bc-b8d3-4396-d879e4e76338@gmail.com>
+Date:   Wed, 9 Nov 2022 16:34:35 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 1/3] USB: serial: option: remove old LARA-R6 PID
+Content-Language: en-US
+To:     Davide Tronchin <davide.tronchin.94@gmail.com>, johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        marco.demarco@posteo.net, cesare.marzano@gmail.com
+References: <Y1qRkuOghwRCGZIT@hovoldconsulting.com>
+ <20221108163001.18454-1-davide.tronchin.94@gmail.com>
+From:   Lars Melin <larsm17@gmail.com>
+In-Reply-To: <20221108163001.18454-1-davide.tronchin.94@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 11/8/2022 23:29, Davide Tronchin wrote:
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+> The LARA-R6 module old PID (defined as: UBLOX_PRODUCT_R6XX
+> 0x90fa) has been removed since is no longer used by the
+> current u-blox LARA-R6 product.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+UBlox is not the only company reselling these dongles/cards, a quick 
+google of "vid_05c6&pid_90fa&mi_00" shows that another two resellers has 
+Win drivers for it, GosuncnWelink and Meig.
+You are now removing the linux driver support that a customer
+of them currently have.
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+If you are a UBlox employee/representative then I suggest that you tell 
+UBlox that reselling dongles/cards with Qualcomms vid:pid is a bad idea. 
+Qualcomm can provide UBlox with software to personalize the product with 
+UBlox own vid:pid.
 
 
-Pozdrawiam
-Adam Charachuta
+thanks
+/Lars
+
