@@ -2,111 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB10D6242DD
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 14:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F56624315
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 14:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiKJNG2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Nov 2022 08:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S229892AbiKJNU0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Nov 2022 08:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiKJNG1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 08:06:27 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867071C42F;
-        Thu, 10 Nov 2022 05:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668085586; x=1699621586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=an1ylUNuZ2dll3Mmjef2xo1ov+81kI78C4VBcxjtKwk=;
-  b=d6JFuJyE5p/lS5R6VnKgeswIv7s81gtfieH3TLkqNBvCIGlqQwn3n1gg
-   14Krj1x6HA19NSD44iqt2Ez0WYmBJacLqcVTPCjUH72e05PlPCzPX+1e7
-   ksdSO7mLvEvX3PlzH+QGyFQBonJtlFvKC4NExmj4Hu43Fk2C9Yf+aa/73
-   muUqLWOAfgHuS1gV6ZQA3GNAitRrCItQqt0ngkLOBsOP0RrkKC5jMIqx1
-   Mw/rFPdmj6WlJvCqTP2Omlq6Y5CFX282EyBaT0Fz+jH/anB32HnloKTUZ
-   Wp5sXAf7q9ec2J0bVzxfILTaC9BnnDIrMr+sFy4VicPKs7zWn+taraFMR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="308925386"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="308925386"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 05:06:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="779766240"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="779766240"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 10 Nov 2022 05:06:22 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 10 Nov 2022 15:06:21 +0200
-Date:   Thu, 10 Nov 2022 15:06:21 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ferry Toth <ftoth@exalondelft.nl>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Stephen Boyd <stephen.boyd@linaro.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] usb: ulpi: defer ulpi_register on ulpi_read_id
- timeout
-Message-ID: <Y2z3TdqouULfKyrN@kuha.fi.intel.com>
-References: <20221109221749.8210-1-ftoth@exalondelft.nl>
+        with ESMTP id S229675AbiKJNUY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 08:20:24 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8726B399;
+        Thu, 10 Nov 2022 05:20:22 -0800 (PST)
+Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7Mrk0CVMz15MPv;
+        Thu, 10 Nov 2022 21:20:06 +0800 (CST)
+Received: from [10.136.108.160] (10.136.108.160) by
+ kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 21:20:19 +0800
+Subject: [PATCH] USB: gadget: Fix use-after-free during usb config switch
+References: <20221110130754.3904-1-xuetao09@huawei.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Caiyadong <caiyadong@huawei.com>, <suzhuangluan@hisilicon.com>,
+        xuhaiyang <xuhaiyang5@hisilicon.com>
+From:   jiantao zhang <water.zhangjiantao@huawei.com>
+X-Forwarded-Message-Id: <20221110130754.3904-1-xuetao09@huawei.com>
+Message-ID: <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
+Date:   Thu, 10 Nov 2022 21:20:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109221749.8210-1-ftoth@exalondelft.nl>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221110130754.3904-1-xuetao09@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.136.108.160]
+X-ClientProxiedBy: dggpeml500011.china.huawei.com (7.185.36.84) To
+ kwepemi500002.china.huawei.com (7.221.188.171)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:17:49PM +0100, Ferry Toth wrote:
-> Since commit 0f010171
-> Dual Role support on Intel Merrifield platform broke due to rearranging
-> the call to dwc3_get_extcon().
-> 
-> It appears to be caused by ulpi_read_id() on the first test write failing
-> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
-> DT when the test write fails and returns 0 in that case even if DT does not
-> provide the phy. Due to the timeout being masked dwc3 probe continues by
-> calling dwc3_core_soft_reset() followed by dwc3_get_extcon() which happens
-> to return -EPROBE_DEFER. On deferred probe ulpi_read_id() finally succeeds.
-> 
-> This patch changes ulpi_read_id() to return -ETIMEDOUT when it occurs and
-> catches the error in dwc3_core_init(). It handles the error by calling
-> dwc3_core_soft_reset() after which it requests -EPROBE_DEFER. On deferred
-> probe ulpi_read_id() again succeeds.
-> 
-> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
-> ---
->  drivers/usb/common/ulpi.c | 5 +++--
->  drivers/usb/dwc3/core.c   | 5 ++++-
->  2 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-> index d7c8461976ce..d8f22bc2f9d0 100644
-> --- a/drivers/usb/common/ulpi.c
-> +++ b/drivers/usb/common/ulpi.c
-> @@ -206,8 +206,9 @@ static int ulpi_read_id(struct ulpi *ulpi)
->  
->  	/* Test the interface */
->  	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
-> -	if (ret < 0)
-> -		goto err;
-> +	if (ret < 0) {
-> +		return ret;
-> +	}
+In the process of switching USB config from rndis to other config,
+if the hardware does not support the ->pullup callback, or the
+hardware encounters a low probability fault, both of them may cause
+the ->pullup callback to fail, which will then cause a system panic
+(use after free).
 
-No need for the curly brackets.
+The gadget drivers sometimes need to be unloaded regardless of the
+hardware's behavior.
 
-thanks,
+Analysis as follows:
+=======================================================================
+(1) write /config/usb_gadget/g1/UDC "none" (init.usb.configfs.rc:2)
+
+gether_disconnect+0x2c/0x1f8 (dev->port_usb = NULL)
+rndis_disable+0x4c/0x74
+composite_disconnect+0x74/0xb0
+configfs_composite_disconnect+0x60/0x7c
+usb_gadget_disconnect+0x70/0x124
+usb_gadget_unregister_driver+0xc8/0x1d8
+gadget_dev_desc_UDC_store+0xec/0x1e4
+
+In function usb_gadget_disconnect(),The ->disconnect() callback will
+not be called when gadget->ops->pullup() return an error, therefore,
+pointer dev->port will not be set to NULL. If pointer dev->port_usb
+is not null, it will cause an exception of use-after-free in step3.
+
+(2) rm /config/usb_gadget/g1/configs/b.1/f1 (init.usb.configfs.rc:8)
+(f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
+
+rndis_deregister+0x28/0x54 (kfree(params))
+rndis_free+0x44/0x7c (kfree(rndis))
+usb_put_function+0x14/0x1c
+config_usb_cfg_unlink+0xc4/0xe0
+configfs_unlink+0x124/0x1c8
+vfs_unlink+0x114/0x1dc
+
+(3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
+(init.usb.configfs.rc:11)
+
+Call trace:
+panic+0x1fc/0x3d0
+die+0x29c/0x2a8
+do_page_fault+0xa8/0x46c
+do_mem_abort+0x3c/0xac
+el1_sync_handler+0x40/0x78
+0xffffff801138f880 (params->resp_avail is an illegal func pointer)
+rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
+eth_stop+0x74/0x110 (if dev->port_usb != NULL, call rndis_close)
+__dev_close_many+0x134/0x194
+dev_close_many+0x48/0x194
+rollback_registered_many+0x118/0x814
+unregister_netdevice_queue+0xe0/0x168
+unregister_netdev+0x20/0x30
+gether_cleanup+0x1c/0x38
+rndis_free_inst+0x2c/0x58
+rndis_attr_release+0xc/0x14
+kref_put+0x74/0xb8
+config_item_put+0x14/0x1c
+configfs_rmdir+0x314/0x374
+
+In step3,function pointer params->resp_avail() is a wild pointer
+becase pointer params has been freed in step2.
+
+Free mem stack(in step2):
+usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
+
+use-after-free stack(in step3):
+eth_stop -> rndis_close -> rndis_signal_disconnect ->
+rndis_indicate_status_msg -> params->resp_avail()
+
+In function eth_stop(), if pointer dev->port_usb is NULL, function
+rndis_close() will not be called.
+If gadget->ops->pullup() return an error in step1,dev->port_usb will
+not be set to null. So, a panic will be caused in step3.
+=======================================================================
+Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
+callback from usb_gadget_disconnect())
+Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+Signed-off-by: TaoXue <xuetao09@huawei.com>
+---
+drivers/usb/gadget/udc/core.c | 12 ++++++------
+1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index c63c0c2cf649..bf9878e1a72a 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
+}
+ret = gadget->ops->pullup(gadget, 0);
+- if (!ret) {
++ if (!ret)
+gadget->connected = 0;
+- mutex_lock(&udc_lock);
+- if (gadget->udc->driver)
+- gadget->udc->driver->disconnect(gadget);
+- mutex_unlock(&udc_lock);
+- }
++
++ mutex_lock(&udc_lock);
++ if (gadget->udc->driver)
++ gadget->udc->driver->disconnect(gadget);
++ mutex_unlock(&udc_lock);
+out:
+trace_usb_gadget_disconnect(gadget, ret);
 
 -- 
-heikki
+2.17.1
+
