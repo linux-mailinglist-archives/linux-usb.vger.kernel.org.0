@@ -2,152 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DAF624254
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 13:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0D7624284
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 13:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiKJMZz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Nov 2022 07:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S229715AbiKJMpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Nov 2022 07:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiKJMZm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 07:25:42 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A278782C4E;
-        Thu, 10 Nov 2022 04:24:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1668083049; bh=Y/3pD6FUy+ra47umFk7PXDjQfRYYAyaZC3z1OD1CCdA=;
-        h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
-        b=iob6GufqwOc51GFy7lbGikmwaCqeLF+fskcBVKJ72RxElBbrrczo+5AdEyI9SG50B
-         Ur+pGX4a1tDS5glWj6WBYHN4gPw7vnqNbXVVo/CRBdljMtg3OJAUPixgVUL4Zcuv1y
-         qXlcMBJeAFcKStxRlp9OXziGKiMYh76stWrW9WzxR3Re+vGPGldn23cMQeAjePK2Og
-         ogMLd6PJtn/Dyq7VFnaNWpmbXetP7wnSeLHHdm1sMbaxlP9PArtYwPmVhLiHKQP3Mf
-         SF6CmYMJz3sXYdQlnd59p+szJz/Xak0bno86Zk02qwJT8WuGajS5DeX6ytJudItcyk
-         yvitqSwKni2lA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from 9300 ([93.221.18.29]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N2E1M-1oyu6J0X9y-013g8e; Thu, 10
- Nov 2022 13:24:09 +0100
-Date:   Thu, 10 Nov 2022 13:24:08 +0100 (CET)
-From:   Andreas Bergmeier <abergmeier@gmx.net>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-cc:     ?Andreas Bergmeier <abergmeier@gmx.net>,
-        linux-input@vger.kernel.org,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jiri Kosina <jikos@kernel.org>, linux-leds@vger.kernel.org,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: Litra Glow on Linux
-In-Reply-To: <CAO-hwJ+PysPKFG=a9+L8vwhiw4uY3F3DZmg4FwgPWGZ7LPt4EA@mail.gmail.com>
-Message-ID: <2a20d7d1-55df-4861-5cf1-dee19536ed5@9300>
-References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu> <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com> <CAO-hwJJ7cF-4kd8Mi6bb5n-k5LuMrWbpdMqFs82y7iQOscr-7g@mail.gmail.com> <CABfF9mNfU=swmpVXfVr7pYWs72jrd-HDY8+_NXyBDAKa4CWG5Q@mail.gmail.com>
- <CAO-hwJ+i3zd=CyU0T+Nb1vGfZfenMBH16ern_ncTTKEpyGAuBA@mail.gmail.com> <CABfF9mNrMx2BzU5tbBeapY15M4Ls_5xYBGfVB=Up5TJu=eWCcg@mail.gmail.com> <CAO-hwJJGAWkhZgGeLBruqCoskY5PBP-STs4kh-P6fBvpuSgpUw@mail.gmail.com> <CABfF9mO3SQZvkQGOC09H5s7EEd2UGhpE=GYB46g_zF3aEOVn=Q@mail.gmail.com>
- <CABfF9mNbpTdAnChkZNKFed6C7n=Hyq-69rMUeDENE8ptLjJMSw@mail.gmail.com> <CAO-hwJ+PysPKFG=a9+L8vwhiw4uY3F3DZmg4FwgPWGZ7LPt4EA@mail.gmail.com>
+        with ESMTP id S229453AbiKJMp3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 07:45:29 -0500
+Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C18EF3E084;
+        Thu, 10 Nov 2022 04:45:28 -0800 (PST)
+Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
+        by radex-web.radex.nl (Postfix) with ESMTPS id 2DAA4240A8;
+        Thu, 10 Nov 2022 13:45:28 +0100 (CET)
+Message-ID: <e0545783-0a8f-3cb7-2cae-ced85c91e51d@gmail.com>
+Date:   Thu, 10 Nov 2022 13:45:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:vdYEGVUHXgIDoGDcRrU7a+A3Blh96jrzfTH6mSlpPGHmCfeyIYp
- cM5H4aqcr5wC+brVAifCV6rDkHwtWoe7zgzRtCTChbtu+a1ZR/CIzLQ+rrIaCAwovrhPbnQ
- D1/xlzzcuKnKfh5lrPVIDni86GbEFoCSpP5UnFBkmHjYrd2wUKmVpmQOShQd+9g8iXVfix9
- 0d+nr0KL53DhupM53HhVw==
-UI-OutboundReport: notjunk:1;M01:P0:7Ddeiq5YNYY=;8m9JXgFojJ6jSj3eIxtD12cy/tt
- THVDUR3uqXWxZgT6AkraHGrl7wS6y4eu9JAUI5N9nZLKJQ3Yx/1eMgCxuOOkNpPIefV/BAiYM
- vEO3+QmZjBnP6kn3dTEZ0g9dsp7Iq80mkcvZlRnfWwnzASTYQ8xHuQx4mq4X39bHs6R5g59nC
- XLnpRLOmanarJb/mzAcHclh2TdyTLSUUhuQdF5PRXdFox/XozBczlO+3xTOSvx++m162Ix5Bb
- 6UwVvithxUdUq9Sy0ALZSGg+KnShynVQx+3To1fTuRtX3PydW4ad1qRMv86tBB+c99R8PQjQQ
- jXGEbDRsqtLbjeLmFNor2iPjLJBy8Dwa6fIF0xX1+Ggwu4wtZGDTeeqOlgOwYP4/b8YeGLtv4
- FG4/lQa8RjdUxAu/dK8Y+Ckv3+kdojUr1Vtz3iEsrKSAHPyp6HiyMCZpPfmykrhxpJe/tb+Hd
- 7UvMe5w6G3GOJi3KGiK+JP2+gbCvRFZyKfDE0mpivJtcCx5mfCuKIy2TaEb5zcCp1bgBFKe16
- w7Rbc+L08yjJMwYUGH1eCWiezJZ7Y4z7JJFjFY3mk319MLtU2KD3LrYjtUb23G4bpGpUkQ0Dz
- PgDQqbqqj1Nj5M62BATXh4i66DdOO5tKmAmAMswvW+y2I4UpKwkOJtbJfa7i+NBa8oo3KpIf/
- ATw7qM4KDiTZBcJV9gbQvLiR9kQIcchjVxxanugvYg55QlMSESmKbBtEwW3XWVzWg5vsEIGoS
- 0AM3CHCN7ZqvvBOEERtYABxeKzhmDjR6BNpzvA6n7IZFnH+zDiKF/RqxZU+ZKlZ6xabjXbyL1
- 6/rwEyriBbZObfcIQqvI6iOcSksmN/TshXegkZd9vcBgrAWhPZ3IQQmhhXkCH2EESZyX81G+u
- oHyDK/CuiIiRW+H0D0FW4IOwmJbx5LnEdhOLwPa42bEM7Ag9pTReaU3loQcT7HILLCj6wVZMW
- ugTsh0GMrj0PVOadQyILVTRaOEA=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH v1 1/1] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20221109221749.8210-1-ftoth@exalondelft.nl>
+ <20221110000643.xdoav4c4653x3tjd@synopsys.com>
+Content-Language: en-US
+In-Reply-To: <20221110000643.xdoav4c4653x3tjd@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+(sorry sent html with previous attempt)
 
-
-On Thu, 10 Nov 2022, Benjamin Tissoires wrote:
-
-> On Thu, Nov 10, 2022 at 4:29 AM Andreas Bergmeier <abergmeier@gmx.net> w=
-rote:
-> >
-> > On Wed, 9 Nov 2022 at 21:27, Andreas Bergmeier <abergmeier@gmx.net> wr=
-ote:
-> > >
-> > > Finally I have an environment where I can test my kernel code.
-> > >
-> > > On Mon, 31 Oct 2022 at 10:29, Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > > For identifying the GLOW device you should be adding an id in the
-> > > > table of hid-logitech-hidpp, with a driver data that tells the dri=
-ver
-> > > > to look for 0x1990.
-> > > >
-> > > > >
-> > > > > > - you need to add a hook in connect_event to register the led =
-class
-> > > > > > device that will hook on to the actual LED of the device
-> > > Sadly my tests did not go very far. The code fails already when
-> > > calling the `probe` callback (`hidpp_probe`).
-> > > When it calls into `hidpp_root_get_protocol_version` it seems to
-> > > receive `HIDPP_ERROR_RESOURCE_ERROR`.
-> > > Which then leads to an error message: Device not connected
-> > > Upon looking at `HIDPP_ERROR_RESOURCE_ERROR` (9) there is no
-> > > documentation what it means in code.
-> > > From a look into the docs it says that 9 is UNSUPPORTED error for 2.=
-0
-> > > devices. Thus I am wondering how the code knows
-> > > that it is a problem with connectivity.
+On 10-11-2022 01:06, Thinh Nguyen wrote:
+> Hi Ferry,
 >
-> From the top of my memory, this was told to us that this is the way we
-> detect if the device was connected or not in the unifying case. Though
-> in your case, it's a USB device, so there is no such thing as "not
-> connected"...
-So isn't the current error handling at a minimum misleading?
+> On Wed, Nov 09, 2022, Ferry Toth wrote:
+>> Since commit 0f010171
+>> Dual Role support on Intel Merrifield platform broke due to rearranging
+>> the call to dwc3_get_extcon().
+>>
+>> It appears to be caused by ulpi_read_id() on the first test write failing
+>> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+>> DT when the test write fails and returns 0 in that case even if DT does not
+>> provide the phy. Due to the timeout being masked dwc3 probe continues by
+>> calling dwc3_core_soft_reset() followed by dwc3_get_extcon() which happens
+>> to return -EPROBE_DEFER. On deferred probe ulpi_read_id() finally succeeds.
+>>
+>> This patch changes ulpi_read_id() to return -ETIMEDOUT when it occurs and
+>> catches the error in dwc3_core_init(). It handles the error by calling
+>> dwc3_core_soft_reset() after which it requests -EPROBE_DEFER. On deferred
+>> probe ulpi_read_id() again succeeds.
+>>
+>> Signed-off-by: Ferry Toth<ftoth@exalondelft.nl>
+>> ---
+>>   drivers/usb/common/ulpi.c | 5 +++--
+>>   drivers/usb/dwc3/core.c   | 5 ++++-
+>>   2 files changed, 7 insertions(+), 3 deletions(-)
+>>
+> Can you split the dwc3 change and ulpi change to separate patches?
 
+Thanks for your comments.
 
-> > > Couldn't it also mean that the
-> > > device is not supporting getting the protocol version?
->
-> Probably. What happens if you comment out that protocol version
-> request and force connected to be true?
-Well I went the other way around. I had a look at the hidpp utility
-sources:
-https://github.com/cvuchener/hidpp/blob/057407fbb7248bbc6cefcfaa860758d071=
-1c01b9/src/libhidpp/hidpp/Device.cpp#L82
-Which seems to do a similar thing. From the top of my head the only
-difference seems to be that they are sending `0x1` as a ping value instead
-of `0x5a`. Might give that a shot next.
-Anyway hidpp-list-features successfully reads the protocol version in
-userspace (4, 2) as seen here:
-https://github.com/abergmeier/litra_glow_linux/blob/main/hidpp-list-featur=
-es
+I will send v2
 
-> In your case though, it would be interesting to know if we should
-> bypass that verification.
-Since reading the protocol version seems generally possible I think we
-should understand what logitech-hidpp does wrong first.
+>> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+>> index d7c8461976ce..d8f22bc2f9d0 100644
+>> --- a/drivers/usb/common/ulpi.c
+>> +++ b/drivers/usb/common/ulpi.c
+>> @@ -206,8 +206,9 @@ static int ulpi_read_id(struct ulpi *ulpi)
+>>   
+>>   	/* Test the interface */
+>>   	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+>> -	if (ret < 0)
+>> -		goto err;
+>> +	if (ret < 0) {
+>> +		return ret;
+>> +	}
+>>   
+>>   	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+>>   	if (ret < 0)
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 648f1c570021..e293ef70039b 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1106,8 +1106,11 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>>   
+>>   	if (!dwc->ulpi_ready) {
+>>   		ret = dwc3_core_ulpi_init(dwc);
+>> -		if (ret)
+>> +		if (ret) {
+>> +			dwc3_core_soft_reset(dwc);
+> We shouldn't need to do soft reset here. The controller shouldn't be at
+> a bad/incorrect state at this point to warrant a soft-reset. There will
+> be a soft-reset when it goes through the initialization again.
 
+It doesn't go through the initialization again unless we set 
+-EPROBE_DEFER. And when we make ulpi_read_id() return -EPROBE_DEFER it 
+will goto err0 here, so skips dwc3_core_soft_reset.
 
-> > Also, looking into `supported_reports` turned out to be 2 (very long).
->
-> Oops, you mistook the bit definition with the value:
-> #define HIDPP_REPORT_SHORT_SUPPORTED  BIT(0)  -> value of 1
-> #define HIDPP_REPORT_LONG_SUPPORTED  BIT(1)  -> value of 2
-> #define HIDPP_REPORT_VERY_LONG_SUPPORTED  BIT(2)  -> value of 4
-Ah indeed, thx.
+Do you mean you prefer something like:
 
-> And this is expected because you don't have VERY_LONG support on your de=
-vice.
-True. The question remains whether the upgrade from LONG to VERY_LONG
-could be needed should a device only support VERY_LONG.
+if (ret) {
+
+     if (ret == -ETIMEDOUT) ret = -EPROBE_DEFER;
+
+     else goto err0;
+
+}
+
+>> +			ret = -EPROBE_DEFER;
+> We shouldn't automatically set every error status to correspond to
+> -EPROBE_DEFER. Check only the approapriate error codes (-ETIMEDOUT +
+> any other?).
+Other could be -ENOMEM. I think no need to do any new handling for that.
+>>   			goto err0;
+>> +		}
+>>   		dwc->ulpi_ready = true;
+>>   	}
+>>   
+>> -- 
+>> 2.34.1
+>>
+> Thanks,
+> Thinh
