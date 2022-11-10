@@ -2,152 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8022E62462C
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 16:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBE76248C1
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 18:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbiKJPls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Nov 2022 10:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
+        id S231517AbiKJRzd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Nov 2022 12:55:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiKJPlr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 10:41:47 -0500
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA95FE7
-        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 07:41:44 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221110154142euoutp02f570f5f6593d80dd611e43a9f5ed1b50~mQ3m_CyYW1376113761euoutp02d
-        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 15:41:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221110154142euoutp02f570f5f6593d80dd611e43a9f5ed1b50~mQ3m_CyYW1376113761euoutp02d
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1668094902;
-        bh=fd5p8aksmy9UiVn+D8PCYzWaUuHsJ2tCEvCv/Rm0KCk=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=LX3ntitBa9x6s55Bt5uFG3nnB27OzWD9LI1PxSaJGAAxXi4cWC6fFe37OqIH3i9GF
-         EOljzwpnfm/NFBTwqq0LsB6VxNa+N9SmBJc8237rUMKTL8sBJzswyONAtmxbhYIcRZ
-         +ECh2seSLq1/CdLNyUaEAXu/SISJlxOTJajDEcv4=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20221110154141eucas1p2ef9f9a1299eb1e9705b0e7d51aeaf5fd~mQ3mmbuFC1919919199eucas1p2m;
-        Thu, 10 Nov 2022 15:41:41 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 31.86.10112.5BB1D636; Thu, 10
-        Nov 2022 15:41:41 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221110154141eucas1p1e69a91704c32c07307a9c73b95e0d9a3~mQ3mOmKio0296002960eucas1p14;
-        Thu, 10 Nov 2022 15:41:41 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221110154141eusmtrp24f23e9429f1247377d2faaddf4137383~mQ3mN8VaS2466524665eusmtrp2m;
-        Thu, 10 Nov 2022 15:41:41 +0000 (GMT)
-X-AuditID: cbfec7f4-cf3ff70000002780-af-636d1bb5c524
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 32.6E.08916.5BB1D636; Thu, 10
-        Nov 2022 15:41:41 +0000 (GMT)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221110154140eusmtip20734298fba776ec0fa098dfceb081455~mQ3lu_fMC1468614686eusmtip2e;
-        Thu, 10 Nov 2022 15:41:40 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: dwc3: exynos: Fix remove() function
-Date:   Thu, 10 Nov 2022 16:41:31 +0100
-Message-Id: <20221110154131.2577-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGIsWRmVeSWpSXmKPExsWy7djP87pbpXOTDR6/VLV4MG8bm0Xz4vVs
-        Fntfb2W3mHF+H5PFomWtzBZrj9xlt1iw8RGjxaoFB9gdODzuXNvD5rF/7hp2j74tqxg9tuz/
-        zOjxeZNcAGsUl01Kak5mWWqRvl0CV8biA7uZCjZyV3zb/JCxgfEqZxcjJ4eEgInEpWmL2LsY
-        uTiEBFYwSjz5fZUZJCEk8IVRonFjAYT9mVFi9lEpmIZprTeYIRqWM0q0Nv9ngnCAGjZfu8oE
-        UsUmYCjR9baLDcQWEXCQWLL0DhtIEbNAO5PE3+1zWEASwgI2Ev8/7wdbxyKgKrF1bzdYnBco
-        /unEWXaIdfISqzccAFsnIdDJIdF86h8LRMJF4siKLqgiYYlXx7dA2TIS/3fOZ4JoaGeUWPD7
-        PpQzgVGi4fktRogqa4k7534B3cQBdJOmxPpd+iCmhICjRMuFKAiTT+LGW0GQYmYgc9K26cwQ
-        YV6JjjYhiBlqErOOr4PbevDCJWYI20Ni4ZHzjJCQi5Xo2fOTcQKj3CyEVQsYGVcxiqeWFuem
-        pxYb5aWW6xUn5haX5qXrJefnbmIEJoXT/45/2cG4/NVHvUOMTByMhxglOJiVRHi5NbKThXhT
-        EiurUovy44tKc1KLDzFKc7AoifOyzdBKFhJITyxJzU5NLUgtgskycXBKNTCtP/CVt9I3ZseC
-        F50N8qY+Hg3S5rb/7ghqnePmybStFHjmV/hX//Irh59CTPcfe5hZFZ1jKA0V/Sdiu+Rw3q1X
-        fNJBaRkfdXw/M2TUBIa+3tWY3HyQOfai0/7nypmPL17a+VnwpvpL9o8P9MwWzn8V15s85xD3
-        9f5UM6eN2fb/+9ftcbn89cbHM6c/RW8PdqlYIp5cdeVhz9xyU9+4p3tkeMJCWrJrutM8i2d6
-        prreVlk6fcOvVyo3DX8KLTVbKdy7MNTuxNwVO5Y76H/tb2XeLbGzIFRgbq24fPYz68XaL7Z8
-        1+Jsf372psGLqvL75kvexd87Ecc351WLMVfykUSL3PgMlpffS287c+0QqlBiKc5INNRiLipO
-        BACEpmNaeQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHLMWRmVeSWpSXmKPExsVy+t/xe7pbpXOTDR6dFrB4MG8bm0Xz4vVs
-        Fntfb2W3mHF+H5PFomWtzBZrj9xlt1iw8RGjxaoFB9gdODzuXNvD5rF/7hp2j74tqxg9tuz/
-        zOjxeZNcAGuUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqR
-        vl2CXsbiA7uZCjZyV3zb/JCxgfEqZxcjJ4eEgInEtNYbzF2MXBxCAksZJd6cXscGkZCRODmt
-        gRXCFpb4c62LDaLoE6PE8qOX2UESbAKGEl1vu8AaRAScJDrXngYrYhboZJLY2b0HLCEsYCPx
-        //N+ZhCbRUBVYuvebhYQmxco/unEWXaIDfISqzccYJ7AyLOAkWEVo0hqaXFuem6xoV5xYm5x
-        aV66XnJ+7iZGYEBuO/Zz8w7Gea8+6h1iZOJgPMQowcGsJMLLrZGdLMSbklhZlVqUH19UmpNa
-        fIjRFGjfRGYp0eR8YEzklcQbmhmYGpqYWRqYWpoZK4nzehZ0JAoJpCeWpGanphakFsH0MXFw
-        SjUw6b89Mzes4GzLNYVFds+TPxatPDrTZlFKQaqzpkiFUsOUdW8eXprsFDDFjkH87bZl7z0U
-        0pqM3rYcVz+Xx1H2+c/j8juOhe/Y+Vs3RcZfiem20rqwi9tz4joLW7NtJqv2/FL6uXjO//eL
-        plmvi+J17lC2WPeoNsvY8dOPi8qCEUtmZXYfvrZw68HPBxXrdZ7emZe74V3Ho4O65+4cT5KV
-        nHxEOnBG0Mqt4r/vnu26tFw7rWahIMe6UHWpY+Xxx9m0unSfbXN3uvlHc3vgpLUTGzLaH1wS
-        XLLl3cm/OyfM2az7Xltgxf5NUqVbvRxM/yuG3le3i1/01+Kr3spvE6x/btFkb1z368vCdc05
-        qmb7OSOUWIozEg21mIuKEwGAGZX+0QIAAA==
-X-CMS-MailID: 20221110154141eucas1p1e69a91704c32c07307a9c73b95e0d9a3
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221110154141eucas1p1e69a91704c32c07307a9c73b95e0d9a3
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221110154141eucas1p1e69a91704c32c07307a9c73b95e0d9a3
-References: <CGME20221110154141eucas1p1e69a91704c32c07307a9c73b95e0d9a3@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231492AbiKJRzb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 12:55:31 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9C049B76;
+        Thu, 10 Nov 2022 09:55:26 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4N7TyM1wSdz9sf0;
+        Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jXLMYtFygd4q; Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4N7TyM17Jrz9sdy;
+        Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 178428B783;
+        Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id zBGArvrCFKJ5; Thu, 10 Nov 2022 18:55:22 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.235.195])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AC0E18B763;
+        Thu, 10 Nov 2022 18:55:22 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2AAHtAZM1214289
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 18:55:10 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2AAHsno81214183;
+        Thu, 10 Nov 2022 18:54:49 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: Check !irq instead of irq == NO_IRQ
+Date:   Thu, 10 Nov 2022 18:54:35 +0100
+Message-Id: <13feefdf6b240817944e6441e26a8ddc1d81ced1.1668102802.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1668102873; l=3474; s=20211009; h=from:subject:message-id; bh=HSINWooMikwRFVroev1T+VEXiZDJXgGlJDwE6td7CO4=; b=BFY+D+aE9KXw68T8bTbQbKyTeD+BxEde04JEUxv2TMpy6Z+n98G9stn/vHtN+kpeN3PJtEWgnkvj KO/dsSJFDU5hhIp5qHP6naQaZzsB4yi0/T3PAMbceDNNcKH0RZ5K
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The core DWC3 device node was not properly removed by the custom
-dwc3_exynos_remove_child() function. Replace it with generic
-of_platform_depopulate() which does that job right.
+NO_IRQ is a relic from the old days. It is not used anymore in core
+functions. By the way, function irq_of_parse_and_map() returns value 0
+on error.
 
-Fixes: adcf20dcd262 ("usb: dwc3: exynos: Use of_platform API to create dwc3 core pdev")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: stable@vger.kernel.org
+In some drivers, NO_IRQ is erroneously used to check the return of
+irq_of_parse_and_map().
+
+It is not a real bug today because the only architectures using the
+drivers being fixed by this patch define NO_IRQ as 0, but there are
+architectures which define NO_IRQ as -1. If one day those
+architectures start using the non fixed drivers, there will be a
+problem.
+
+Long time ago Linus advocated for not using NO_IRQ, see
+https://lkml.org/lkml/2005/11/21/221 . He re-iterated the same view
+recently in https://lkml.org/lkml/2022/10/12/622
+
+So test !irq instead of tesing irq == NO_IRQ.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/usb/dwc3/dwc3-exynos.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ drivers/usb/host/ehci-grlib.c  | 2 +-
+ drivers/usb/host/ehci-ppc-of.c | 2 +-
+ drivers/usb/host/fhci-hcd.c    | 2 +-
+ drivers/usb/host/ohci-ppc-of.c | 2 +-
+ drivers/usb/host/uhci-grlib.c  | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index 0ecf20eeceee..4be6a873bd07 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -37,15 +37,6 @@ struct dwc3_exynos {
- 	struct regulator	*vdd10;
- };
+diff --git a/drivers/usb/host/ehci-grlib.c b/drivers/usb/host/ehci-grlib.c
+index a2c3b4ec8a8b..0717f2ccf49d 100644
+--- a/drivers/usb/host/ehci-grlib.c
++++ b/drivers/usb/host/ehci-grlib.c
+@@ -99,7 +99,7 @@ static int ehci_hcd_grlib_probe(struct platform_device *op)
+ 	hcd->rsrc_len = resource_size(&res);
  
--static int dwc3_exynos_remove_child(struct device *dev, void *unused)
--{
--	struct platform_device *pdev = to_platform_device(dev);
--
--	platform_device_unregister(pdev);
--
--	return 0;
--}
--
- static int dwc3_exynos_probe(struct platform_device *pdev)
- {
- 	struct dwc3_exynos	*exynos;
-@@ -142,7 +133,7 @@ static int dwc3_exynos_remove(struct platform_device *pdev)
- 	struct dwc3_exynos	*exynos = platform_get_drvdata(pdev);
- 	int i;
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+ 			__FILE__);
+ 		rv = -EBUSY;
+diff --git a/drivers/usb/host/ehci-ppc-of.c b/drivers/usb/host/ehci-ppc-of.c
+index 28a19693c19f..62a0a193798c 100644
+--- a/drivers/usb/host/ehci-ppc-of.c
++++ b/drivers/usb/host/ehci-ppc-of.c
+@@ -119,7 +119,7 @@ static int ehci_hcd_ppc_of_probe(struct platform_device *op)
+ 	hcd->rsrc_len = resource_size(&res);
  
--	device_for_each_child(&pdev->dev, NULL, dwc3_exynos_remove_child);
-+	of_platform_depopulate(&pdev->dev);
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+ 			__FILE__);
+ 		rv = -EBUSY;
+diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+index 95a44462bed0..64a64140c2fd 100644
+--- a/drivers/usb/host/fhci-hcd.c
++++ b/drivers/usb/host/fhci-hcd.c
+@@ -676,7 +676,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
  
- 	for (i = exynos->num_clks - 1; i >= 0; i--)
- 		clk_disable_unprepare(exynos->clks[i]);
+ 	/* USB Host interrupt. */
+ 	usb_irq = irq_of_parse_and_map(node, 0);
+-	if (usb_irq == NO_IRQ) {
++	if (!usb_irq) {
+ 		dev_err(dev, "could not get usb irq\n");
+ 		ret = -EINVAL;
+ 		goto err_usb_irq;
+diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
+index 591f675cc930..f2f6c832ec98 100644
+--- a/drivers/usb/host/ohci-ppc-of.c
++++ b/drivers/usb/host/ohci-ppc-of.c
+@@ -120,7 +120,7 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
+ 	}
+ 
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+ 			__FILE__);
+ 		rv = -EBUSY;
+diff --git a/drivers/usb/host/uhci-grlib.c b/drivers/usb/host/uhci-grlib.c
+index 3ef6d52839e5..907d5f01edfd 100644
+--- a/drivers/usb/host/uhci-grlib.c
++++ b/drivers/usb/host/uhci-grlib.c
+@@ -116,7 +116,7 @@ static int uhci_hcd_grlib_probe(struct platform_device *op)
+ 	hcd->rsrc_len = resource_size(&res);
+ 
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		printk(KERN_ERR "%s: irq_of_parse_and_map failed\n", __FILE__);
+ 		rv = -EBUSY;
+ 		goto err_usb;
 -- 
-2.17.1
+2.37.1
 
