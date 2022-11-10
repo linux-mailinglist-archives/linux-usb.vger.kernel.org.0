@@ -2,260 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39706241A6
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 12:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AB66241BC
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 12:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiKJLlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Nov 2022 06:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S230407AbiKJLrH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Nov 2022 06:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiKJLll (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 06:41:41 -0500
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D0C1D0F2;
-        Thu, 10 Nov 2022 03:41:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1668080466; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=gpHXrnifMNIQxnbQ071dEvHIkcB7BFDlAH99zWaW3QKupEJylf13ao5guOnFosFg3rokVAGLLeEivXyNnAUbOB4+Adn1xueD31A3GjqA7tuTMlTqX4OnLjkGeAv31d8gut19X6vvJ1E6IOC3TYTwFcKoPyfULcdWHaGR3Qss3EE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1668080466; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=lcHjw/5r0x9jMsW6Fv3bO0AScM2ZYqXT80Dn0416vto=; 
-        b=jbCU8wIoUv6n6KV7B2Sl7F7MNP7ecNn02mtVv/Ps2BvgVf1K2k5SWUkZB+OYtT2oSBxhYUGX+9pasvOlU0kt0l/BAba2w+eqfWbUvZoH4qsWssROh6admSqMPm/ws32uR7uQ9O4HjlsztA1Y7Rbkj5JN+b/I8Gr1AC9mOaEYqok=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1668080466;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=lcHjw/5r0x9jMsW6Fv3bO0AScM2ZYqXT80Dn0416vto=;
-        b=EkmZcIFMPQsBvMLLQImzWuXYYCfYaw976SnGwlYwzZkTc+1irXodhhXY8IpzuTu6
-        tMg5Lslv7XL28wTc4XtvnwA/g+5R/0OJIoi8kyfRcclSQ2g/Gmc+nt59Tf6x7L7HEAN
-        YbR1YCeeGCNA1kdIPTnrve8WbbDCXWFALr9/PC4Q=
-Received: from edelgard.fodlan.icenowy.me (112.94.100.40 [112.94.100.40]) by mx.zohomail.com
-        with SMTPS id 1668080464088551.2184769854634; Thu, 10 Nov 2022 03:41:04 -0800 (PST)
-Message-ID: <bab3f8068d3ac26fc38048d0d540261d8e94053a.camel@icenowy.me>
-Subject: Re: [PATCH v3 10/11] phy: sun4i-usb: Replace types with explicit
- quirk flags
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        with ESMTP id S230459AbiKJLq5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 06:46:57 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3AB2CE2E;
+        Thu, 10 Nov 2022 03:46:54 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 04A38C0003;
+        Thu, 10 Nov 2022 11:46:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668080813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xiAAdHYzbPaEDUFu+7SLegTpQrvPsJnBynesNdlRAi4=;
+        b=Ut2WXe4mh9+0Aw40DQLRV1z7aqSkaAQZKgB/bxsSuoBJ2VuNjm9EItmXqVrXzCWs7rqhNH
+        bHkxbrsbbtCB8t6WsARNZfqP2B8iBIC/ZqYCzljP80jdqDwSDJSX6mlCH3OBDk+mYpRVOg
+        Cit3Z3zEVwv8+b3UiHDIChUDg3HSSOaWmvmxlGj5Y4ue8jfdRAx55FDlAyslcMI5/B0wMy
+        FxffFMIbPC6vLRzvsAkRcOZbOD8w2XFxcfIRNmwGLNqcdrBNtv6Kxa2iThtDRWmQ5Hk/qv
+        bGrY/bLV2UaoanZ4AAUMOxeNpKTTtUfn7Wbn+zuVhcTqqW3vrMCYCN4A8N61Ow==
+Date:   Thu, 10 Nov 2022 12:46:42 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Date:   Thu, 10 Nov 2022 19:40:58 +0800
-In-Reply-To: <Y2ype6fU6nKyIH1w@matsya>
-References: <20221106154826.6687-1-andre.przywara@arm.com>
-         <20221106154826.6687-11-andre.przywara@arm.com>
-         <D8382138-8943-46F7-B6A6-F83DF98E26AE@icenowy.me> <Y2ype6fU6nKyIH1w@matsya>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH 4/7] dt-bindings: usb: add the Renesas USBF controller
+ binding
+Message-ID: <20221110124642.38bf5edf@bootlin.com>
+In-Reply-To: <c10df12c-ccb9-03b7-96be-1aac5feee1aa@linaro.org>
+References: <20221107135825.583877-1-herve.codina@bootlin.com>
+        <20221107135825.583877-5-herve.codina@bootlin.com>
+        <c10df12c-ccb9-03b7-96be-1aac5feee1aa@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-5ZyoIDIwMjItMTEtMTDmmJ/mnJ/lm5vnmoQgMTM6MDQgKzA1MzDvvIxWaW5vZCBLb3Vs5YaZ6YGT
-77yaCj4gT24gMDYtMTEtMjIsIDIzOjU0LCBJY2Vub3d5IFpoZW5nIHdyb3RlOgo+ID4gCj4gPiAK
-PiA+IOS6jiAyMDIy5bm0MTHmnIg25pelIEdNVCswODowMCDkuIvljYgxMTo0ODoyNSwgQW5kcmUg
-UHJ6eXdhcmEKPiA+IDxhbmRyZS5wcnp5d2FyYUBhcm0uY29tPiDlhpnliLA6Cj4gPiA+IFNvIGZh
-ciB3ZSB3ZXJlIGFzc2lnbmluZyBzb21lIGNydWRlICJ0eXBlIiAoU29DIG5hbWUsIHJlYWxseSkg
-dG8KPiA+ID4gZWFjaAo+ID4gPiBBbGx3aW5uZXIgVVNCIFBIWSBtb2RlbCwgdGhlbiBndWFyZGlu
-ZyBjZXJ0YWluIHF1aXJrcyBiYXNlZCBvbgo+ID4gPiB0aGlzLgo+ID4gPiBUaGlzIGRvZXMgbm90
-IG9ubHkgbG9vayB3ZWlyZCwgYnV0IGdldHMgbW9yZSBvciBtb3JlIGN1bWJlcnNvbWUKPiA+ID4g
-dG8KPiA+ID4gbWFpbnRhaW4uCj4gPiA+IAo+ID4gPiBSZW1vdmUgdGhlIGJvZ3VzIHR5cGUgbmFt
-ZXMgYWx0b2dldGhlciwgaW5zdGVhZCBpbnRyb2R1Y2UgZmxhZ3MKPiA+ID4gZm9yIGVhY2gKPiA+
-ID4gcXVpcmssIGFuZCBleHBsaWNpdGx5IGNoZWNrIGZvciB0aGVtLgo+ID4gPiBUaGlzIGltcHJv
-dmVzIHJlYWRhYmlsaXR5LCBhbmQgc2ltcGxpZmllcyBmdXR1cmUgZXh0ZW5zaW9ucy4KPiA+ID4g
-Cj4gPiA+IFNpZ25lZC1vZmYtYnk6IEFuZHJlIFByenl3YXJhIDxhbmRyZS5wcnp5d2FyYUBhcm0u
-Y29tPgo+ID4gPiAtLS0KPiA+ID4gZHJpdmVycy9waHkvYWxsd2lubmVyL3BoeS1zdW40aS11c2Iu
-YyB8IDUwICsrKysrKysrLS0tLS0tLS0tLS0tLS0KPiA+ID4gLS0tLS0KPiA+ID4gMSBmaWxlIGNo
-YW5nZWQsIDE1IGluc2VydGlvbnMoKyksIDM1IGRlbGV0aW9ucygtKQo+ID4gPiAKPiA+ID4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvcGh5L2FsbHdpbm5lci9waHktc3VuNGktdXNiLmMKPiA+ID4gYi9k
-cml2ZXJzL3BoeS9hbGx3aW5uZXIvcGh5LXN1bjRpLXVzYi5jCj4gPiA+IGluZGV4IDUxZmIyNGM2
-ZGNiMy4uNDIyMTI5YzY2MjgyIDEwMDY0NAo+ID4gPiAtLS0gYS9kcml2ZXJzL3BoeS9hbGx3aW5u
-ZXIvcGh5LXN1bjRpLXVzYi5jCj4gPiA+ICsrKyBiL2RyaXZlcnMvcGh5L2FsbHdpbm5lci9waHkt
-c3VuNGktdXNiLmMKPiA+ID4gQEAgLTk5LDI3ICs5OSwxNyBAQAo+ID4gPiAjZGVmaW5lIERFQk9V
-TkNFX1RJTUXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1zZWNzX3RvX2pp
-ZmZpZXMoNTApCj4gPiA+ICNkZWZpbmUgUE9MTF9USU1FwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1zZWNzX3RvX2ppZmZpZXMoMjUwKQo+ID4gPiAKPiA+ID4g
-LWVudW0gc3VuNGlfdXNiX3BoeV90eXBlIHsKPiA+ID4gLcKgwqDCoMKgwqDCoMKgc3VuNGlfYTEw
-X3BoeSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgc3VuNmlfYTMxX3BoeSwKPiA+ID4gLcKgwqDCoMKg
-wqDCoMKgc3VuOGlfYTMzX3BoeSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgc3VuOGlfYTgzdF9waHks
-Cj4gPiA+IC3CoMKgwqDCoMKgwqDCoHN1bjhpX2gzX3BoeSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKg
-c3VuOGlfcjQwX3BoeSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgc3VuOGlfdjNzX3BoeSwKPiA+ID4g
-LcKgwqDCoMKgwqDCoMKgc3VuNTBpX2E2NF9waHksCj4gPiA+IC3CoMKgwqDCoMKgwqDCoHN1bjUw
-aV9oNl9waHksCj4gPiA+IC19Owo+ID4gPiAtCj4gPiA+IHN0cnVjdCBzdW40aV91c2JfcGh5X2Nm
-ZyB7Cj4gPiA+IMKgwqDCoMKgwqDCoMKgwqBpbnQgbnVtX3BoeXM7Cj4gPiA+IMKgwqDCoMKgwqDC
-oMKgwqBpbnQgaHNpY19pbmRleDsKPiA+ID4gLcKgwqDCoMKgwqDCoMKgZW51bSBzdW40aV91c2Jf
-cGh5X3R5cGUgdHlwZTsKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoHUzMiBkaXNjX3RocmVzaDsKPiA+
-ID4gwqDCoMKgwqDCoMKgwqDCoHUzMiBoY2lfcGh5X2N0bF9jbGVhcjsKPiA+ID4gwqDCoMKgwqDC
-oMKgwqDCoHU4IHBoeWN0bF9vZmZzZXQ7Cj4gPiA+IMKgwqDCoMKgwqDCoMKgwqBib29sIGRlZGlj
-YXRlZF9jbG9ja3M7Cj4gPiA+IMKgwqDCoMKgwqDCoMKgwqBib29sIHBoeTBfZHVhbF9yb3V0ZTsK
-PiA+ID4gK8KgwqDCoMKgwqDCoMKgYm9vbCBwaHkyX2lzX2hzaWM7Cj4gPiAKPiA+IE1heWJlIHVz
-ZSBhIGBpbnQgaHNpY19waHlgIGluc3RlYWQ/IEJ1dCB0aGUgcHJvYmxlbSBpcyB0aGlzCj4gPiBw
-cmFjdGljZSBpcwo+ID4gYXNzdW1pbmcgVVNCMCBjb3VsZCBub3QgYmUgSFNJQyAtLSBhbHRob3Vn
-aCBVU0IwIGlzIHVzdWFsbHkgT1RHLgo+IAo+IHdoeSBzaG91bGQgaXQgYmUgaW50Li4gZG9udCB0
-aGluayBoc2ljX3BoeSBpcyBpbXByb3ZlbWVudCBvdmVyCj4gcGh5Ml9pc19oc2ljPwoKWWVzIGJl
-Y2F1c2UgaXQgbWF5IGV4cHJlc3MgcGh5MV9pc19oc2ljLCBldGMgKGFsdGhvdWdoIHRoaXMga2lu
-ZCBvZgp0aGluZyBoYWRuJ3QgaGFwcGVuZWQgeWV0KS4KCj4gCj4gPiAKPiA+ID4gK8KgwqDCoMKg
-wqDCoMKgYm9vbCBzaWRkcV9pbl9iYXNlOwo+ID4gPiArwqDCoMKgwqDCoMKgwqBib29sIHBvbGxf
-dmJ1c2VuOwo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgaW50IG1pc3NpbmdfcGh5czsKPiA+ID4gfTsK
-PiA+ID4gCj4gPiA+IEBAIC0yNTEsNyArMjQxLDcgQEAgc3RhdGljIHZvaWQgc3VuNGlfdXNiX3Bo
-eV9wYXNzYnkoc3RydWN0Cj4gPiA+IHN1bjRpX3VzYl9waHkgKnBoeSwgaW50IGVuYWJsZSkKPiA+
-ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTVU5YSV9BSEJfSU5DUlhfQUxJR05f
-RU4gfCBTVU5YSV9VTFBJX0JZUEFTU19FTjsKPiA+ID4gCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAv
-KiBBODNUIFVTQjIgaXMgSFNJQyAqLwo+ID4gPiAtwqDCoMKgwqDCoMKgwqBpZiAocGh5X2RhdGEt
-PmNmZy0+dHlwZSA9PSBzdW44aV9hODN0X3BoeSAmJiBwaHktPmluZGV4Cj4gPiA+ID09IDIpCj4g
-PiA+ICvCoMKgwqDCoMKgwqDCoGlmIChwaHlfZGF0YS0+Y2ZnLT5waHkyX2lzX2hzaWMgJiYgcGh5
-LT5pbmRleCA9PSAyKQo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJpdHMg
-fD0gU1VOWElfRUhDSV9IU19GT1JDRSB8Cj4gPiA+IFNVTlhJX0hTSUNfQ09OTkVDVF9JTlQgfAo+
-ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTVU5Y
-SV9IU0lDOwo+ID4gPiAKPiA+ID4gQEAgLTI5NSw4ICsyODUsNyBAQCBzdGF0aWMgaW50IHN1bjRp
-X3VzYl9waHlfaW5pdChzdHJ1Y3QgcGh5Cj4gPiA+ICpfcGh5KQo+ID4gPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoHdyaXRlbCh2YWwsIHBoeS0+cG11ICsgUkVHX0hDSV9QSFlfQ1RM
-KTsKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiA+ID4gCj4gPiA+IC3CoMKgwqDCoMKgwqDCoGlm
-IChkYXRhLT5jZmctPnR5cGUgPT0gc3VuOGlfYTgzdF9waHkgfHwKPiA+ID4gLcKgwqDCoMKgwqDC
-oMKgwqDCoMKgIGRhdGEtPmNmZy0+dHlwZSA9PSBzdW41MGlfaDZfcGh5KSB7Cj4gPiA+ICvCoMKg
-wqDCoMKgwqDCoGlmIChkYXRhLT5jZmctPnNpZGRxX2luX2Jhc2UpIHsKPiA+ID4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAocGh5LT5pbmRleCA9PSAwKSB7Cj4gPiA+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHZhbCA9IHJlYWRsKGRh
-dGEtPmJhc2UgKyBkYXRhLT5jZmctCj4gPiA+ID5waHljdGxfb2Zmc2V0KTsKPiA+ID4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdmFsIHw9IFBIWV9DVExf
-VkJVU1ZMREVYVDsKPiA+ID4gQEAgLTM0MCw4ICszMjksNyBAQCBzdGF0aWMgaW50IHN1bjRpX3Vz
-Yl9waHlfZXhpdChzdHJ1Y3QgcGh5Cj4gPiA+ICpfcGh5KQo+ID4gPiDCoMKgwqDCoMKgwqDCoMKg
-c3RydWN0IHN1bjRpX3VzYl9waHlfZGF0YSAqZGF0YSA9Cj4gPiA+IHRvX3N1bjRpX3VzYl9waHlf
-ZGF0YShwaHkpOwo+ID4gPiAKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoGlmIChwaHktPmluZGV4ID09
-IDApIHsKPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChkYXRhLT5jZmct
-PnR5cGUgPT0gc3VuOGlfYTgzdF9waHkgfHwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBkYXRhLT5jZmctPnR5cGUgPT0gc3VuNTBpX2g2X3BoeSkgewo+ID4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKGRhdGEtPmNmZy0+c2lkZHFfaW5fYmFz
-ZSkgewo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqB2b2lkIF9faW9tZW0gKnBoeWN0bCA9IGRhdGEtPmJhc2UgKwo+ID4gPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+
-Y2ZnLT5waHljdGxfb2Zmc2V0Owo+ID4gPiAKPiA+ID4gQEAgLTQxNCw5ICs0MDIsOCBAQCBzdGF0
-aWMgYm9vbCBzdW40aV91c2JfcGh5MF9wb2xsKHN0cnVjdAo+ID4gPiBzdW40aV91c2JfcGh5X2Rh
-dGEgKmRhdGEpCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAgKiB2YnVzIHVzaW5nIHRoZSBOX1ZCVVNF
-TiBwaW4gb24gdGhlIHBtaWMsIHNvIHdlIG11c3QKPiA+ID4gcG9sbAo+ID4gPiDCoMKgwqDCoMKg
-wqDCoMKgICogd2hlbiB1c2luZyB0aGUgcG1pYyBmb3IgdmJ1cy1kZXQgX2FuZF8gd2UncmUgZHJp
-dmluZwo+ID4gPiB2YnVzLgo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiA+IC3CoMKgwqDC
-oMKgwqDCoGlmICgoZGF0YS0+Y2ZnLT50eXBlID09IHN1bjZpX2EzMV9waHkgfHwKPiA+ID4gLcKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgZGF0YS0+Y2ZnLT50eXBlID09IHN1bjhpX2EzM19waHkpICYm
-Cj4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoCBkYXRhLT52YnVzX3Bvd2VyX3N1cHBseSAmJiBk
-YXRhLQo+ID4gPiA+cGh5c1swXS5yZWd1bGF0b3Jfb24pCj4gPiA+ICvCoMKgwqDCoMKgwqDCoGlm
-IChkYXRhLT5jZmctPnBvbGxfdmJ1c2VuICYmIGRhdGEtPnZidXNfcG93ZXJfc3VwcGx5ICYmCj4g
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoCBkYXRhLT5waHlzWzBdLnJlZ3VsYXRvcl9vbikKPiA+
-ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gdHJ1ZTsKPiA+ID4gCj4g
-PiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gZmFsc2U7Cj4gPiA+IEBAIC04NjEsNyArODQ4LDYg
-QEAgc3RhdGljIGludCBzdW40aV91c2JfcGh5X3Byb2JlKHN0cnVjdAo+ID4gPiBwbGF0Zm9ybV9k
-ZXZpY2UgKnBkZXYpCj4gPiA+IAo+ID4gPiBzdGF0aWMgY29uc3Qgc3RydWN0IHN1bjRpX3VzYl9w
-aHlfY2ZnIHN1bml2X2YxYzEwMHNfY2ZnID0gewo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLm51bV9w
-aHlzID0gMSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgLnR5cGUgPSBzdW40aV9hMTBfcGh5LAo+ID4g
-PiDCoMKgwqDCoMKgwqDCoMKgLmRpc2NfdGhyZXNoID0gMywKPiA+ID4gwqDCoMKgwqDCoMKgwqDC
-oC5waHljdGxfb2Zmc2V0ID0gUkVHX1BIWUNUTF9BMTAsCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAu
-ZGVkaWNhdGVkX2Nsb2NrcyA9IHRydWUsCj4gPiA+IEBAIC04NjksNyArODU1LDYgQEAgc3RhdGlj
-IGNvbnN0IHN0cnVjdCBzdW40aV91c2JfcGh5X2NmZwo+ID4gPiBzdW5pdl9mMWMxMDBzX2NmZyA9
-IHsKPiA+ID4gCj4gPiA+IHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc3VuNGlfdXNiX3BoeV9jZmcgc3Vu
-NGlfYTEwX2NmZyA9IHsKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5udW1fcGh5cyA9IDMsCj4gPiA+
-IC3CoMKgwqDCoMKgwqDCoC50eXBlID0gc3VuNGlfYTEwX3BoeSwKPiA+ID4gwqDCoMKgwqDCoMKg
-wqDCoC5kaXNjX3RocmVzaCA9IDMsCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAucGh5Y3RsX29mZnNl
-dCA9IFJFR19QSFlDVExfQTEwLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLmRlZGljYXRlZF9jbG9j
-a3MgPSBmYWxzZSwKPiA+ID4gQEAgLTg3Nyw3ICs4NjIsNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0
-IHN1bjRpX3VzYl9waHlfY2ZnCj4gPiA+IHN1bjRpX2ExMF9jZmcgPSB7Cj4gPiA+IAo+ID4gPiBz
-dGF0aWMgY29uc3Qgc3RydWN0IHN1bjRpX3VzYl9waHlfY2ZnIHN1bjVpX2ExM19jZmcgPSB7Cj4g
-PiA+IMKgwqDCoMKgwqDCoMKgwqAubnVtX3BoeXMgPSAyLAo+ID4gPiAtwqDCoMKgwqDCoMKgwqAu
-dHlwZSA9IHN1bjRpX2ExMF9waHksCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAuZGlzY190aHJlc2gg
-PSAyLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLnBoeWN0bF9vZmZzZXQgPSBSRUdfUEhZQ1RMX0Ex
-MCwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5kZWRpY2F0ZWRfY2xvY2tzID0gZmFsc2UsCj4gPiA+
-IEBAIC04ODUsMTUgKzg2OSwxNCBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHN1bjRpX3VzYl9waHlf
-Y2ZnCj4gPiA+IHN1bjVpX2ExM19jZmcgPSB7Cj4gPiA+IAo+ID4gPiBzdGF0aWMgY29uc3Qgc3Ry
-dWN0IHN1bjRpX3VzYl9waHlfY2ZnIHN1bjZpX2EzMV9jZmcgPSB7Cj4gPiA+IMKgwqDCoMKgwqDC
-oMKgwqAubnVtX3BoeXMgPSAzLAo+ID4gPiAtwqDCoMKgwqDCoMKgwqAudHlwZSA9IHN1bjZpX2Ez
-MV9waHksCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAuZGlzY190aHJlc2ggPSAzLAo+ID4gPiDCoMKg
-wqDCoMKgwqDCoMKgLnBoeWN0bF9vZmZzZXQgPSBSRUdfUEhZQ1RMX0ExMCwKPiA+ID4gwqDCoMKg
-wqDCoMKgwqDCoC5kZWRpY2F0ZWRfY2xvY2tzID0gdHJ1ZSwKPiA+ID4gK8KgwqDCoMKgwqDCoMKg
-LnBvbGxfdmJ1c2VuID0gdHJ1ZSwKPiA+ID4gfTsKPiA+ID4gCj4gPiA+IHN0YXRpYyBjb25zdCBz
-dHJ1Y3Qgc3VuNGlfdXNiX3BoeV9jZmcgc3VuN2lfYTIwX2NmZyA9IHsKPiA+ID4gwqDCoMKgwqDC
-oMKgwqDCoC5udW1fcGh5cyA9IDMsCj4gPiA+IC3CoMKgwqDCoMKgwqDCoC50eXBlID0gc3VuNGlf
-YTEwX3BoeSwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5kaXNjX3RocmVzaCA9IDIsCj4gPiA+IMKg
-wqDCoMKgwqDCoMKgwqAucGh5Y3RsX29mZnNldCA9IFJFR19QSFlDVExfQTEwLAo+ID4gPiDCoMKg
-wqDCoMKgwqDCoMKgLmRlZGljYXRlZF9jbG9ja3MgPSBmYWxzZSwKPiA+ID4gQEAgLTkwMSwzMSAr
-ODg0LDMxIEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc3VuNGlfdXNiX3BoeV9jZmcKPiA+ID4gc3Vu
-N2lfYTIwX2NmZyA9IHsKPiA+ID4gCj4gPiA+IHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc3VuNGlfdXNi
-X3BoeV9jZmcgc3VuOGlfYTIzX2NmZyA9IHsKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5udW1fcGh5
-cyA9IDIsCj4gPiA+IC3CoMKgwqDCoMKgwqDCoC50eXBlID0gc3VuNmlfYTMxX3BoeSwKPiA+ID4g
-wqDCoMKgwqDCoMKgwqDCoC5kaXNjX3RocmVzaCA9IDMsCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAu
-cGh5Y3RsX29mZnNldCA9IFJFR19QSFlDVExfQTEwLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLmRl
-ZGljYXRlZF9jbG9ja3MgPSB0cnVlLAo+ID4gPiArwqDCoMKgwqDCoMKgwqAucG9sbF92YnVzZW4g
-PSB0cnVlLAo+ID4gPiB9Owo+ID4gPiAKPiA+ID4gc3RhdGljIGNvbnN0IHN0cnVjdCBzdW40aV91
-c2JfcGh5X2NmZyBzdW44aV9hMzNfY2ZnID0gewo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLm51bV9w
-aHlzID0gMiwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgLnR5cGUgPSBzdW44aV9hMzNfcGh5LAo+ID4g
-PiDCoMKgwqDCoMKgwqDCoMKgLmRpc2NfdGhyZXNoID0gMywKPiA+ID4gwqDCoMKgwqDCoMKgwqDC
-oC5waHljdGxfb2Zmc2V0ID0gUkVHX1BIWUNUTF9BMzMsCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAu
-ZGVkaWNhdGVkX2Nsb2NrcyA9IHRydWUsCj4gPiA+ICvCoMKgwqDCoMKgwqDCoC5wb2xsX3ZidXNl
-biA9IHRydWUsCj4gPiA+IH07Cj4gPiA+IAo+ID4gPiBzdGF0aWMgY29uc3Qgc3RydWN0IHN1bjRp
-X3VzYl9waHlfY2ZnIHN1bjhpX2E4M3RfY2ZnID0gewo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLm51
-bV9waHlzID0gMywKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5oc2ljX2luZGV4ID0gMiwKPiA+ID4g
-LcKgwqDCoMKgwqDCoMKgLnR5cGUgPSBzdW44aV9hODN0X3BoeSwKPiA+ID4gwqDCoMKgwqDCoMKg
-wqDCoC5waHljdGxfb2Zmc2V0ID0gUkVHX1BIWUNUTF9BMzMsCj4gPiA+IMKgwqDCoMKgwqDCoMKg
-wqAuZGVkaWNhdGVkX2Nsb2NrcyA9IHRydWUsCj4gPiA+ICvCoMKgwqDCoMKgwqDCoC5zaWRkcV9p
-bl9iYXNlID0gdHJ1ZSwKPiA+ID4gK8KgwqDCoMKgwqDCoMKgLnBoeTJfaXNfaHNpYyA9IHRydWUs
-Cj4gPiA+IH07Cj4gPiA+IAo+ID4gPiBzdGF0aWMgY29uc3Qgc3RydWN0IHN1bjRpX3VzYl9waHlf
-Y2ZnIHN1bjhpX2gzX2NmZyA9IHsKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5udW1fcGh5cyA9IDQs
-Cj4gPiA+IC3CoMKgwqDCoMKgwqDCoC50eXBlID0gc3VuOGlfaDNfcGh5LAo+ID4gPiDCoMKgwqDC
-oMKgwqDCoMKgLmRpc2NfdGhyZXNoID0gMywKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5waHljdGxf
-b2Zmc2V0ID0gUkVHX1BIWUNUTF9BMzMsCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAuZGVkaWNhdGVk
-X2Nsb2NrcyA9IHRydWUsCj4gPiA+IEBAIC05MzUsNyArOTE4LDYgQEAgc3RhdGljIGNvbnN0IHN0
-cnVjdCBzdW40aV91c2JfcGh5X2NmZwo+ID4gPiBzdW44aV9oM19jZmcgPSB7Cj4gPiA+IAo+ID4g
-PiBzdGF0aWMgY29uc3Qgc3RydWN0IHN1bjRpX3VzYl9waHlfY2ZnIHN1bjhpX3I0MF9jZmcgPSB7
-Cj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAubnVtX3BoeXMgPSAzLAo+ID4gPiAtwqDCoMKgwqDCoMKg
-wqAudHlwZSA9IHN1bjhpX3I0MF9waHksCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAuZGlzY190aHJl
-c2ggPSAzLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLnBoeWN0bF9vZmZzZXQgPSBSRUdfUEhZQ1RM
-X0EzMywKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5kZWRpY2F0ZWRfY2xvY2tzID0gdHJ1ZSwKPiA+
-ID4gQEAgLTk0NSw3ICs5MjcsNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHN1bjRpX3VzYl9waHlf
-Y2ZnCj4gPiA+IHN1bjhpX3I0MF9jZmcgPSB7Cj4gPiA+IAo+ID4gPiBzdGF0aWMgY29uc3Qgc3Ry
-dWN0IHN1bjRpX3VzYl9waHlfY2ZnIHN1bjhpX3Yzc19jZmcgPSB7Cj4gPiA+IMKgwqDCoMKgwqDC
-oMKgwqAubnVtX3BoeXMgPSAxLAo+ID4gPiAtwqDCoMKgwqDCoMKgwqAudHlwZSA9IHN1bjhpX3Yz
-c19waHksCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqAuZGlzY190aHJlc2ggPSAzLAo+ID4gPiDCoMKg
-wqDCoMKgwqDCoMKgLnBoeWN0bF9vZmZzZXQgPSBSRUdfUEhZQ1RMX0EzMywKPiA+ID4gwqDCoMKg
-wqDCoMKgwqDCoC5kZWRpY2F0ZWRfY2xvY2tzID0gdHJ1ZSwKPiA+ID4gQEAgLTk1NSwxNiArOTM2
-LDE1IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc3VuNGlfdXNiX3BoeV9jZmcKPiA+ID4gc3VuOGlf
-djNzX2NmZyA9IHsKPiA+ID4gCj4gPiA+IHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc3VuNGlfdXNiX3Bo
-eV9jZmcgc3VuMjBpX2QxX2NmZyA9IHsKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoC5udW1fcGh5cyA9
-IDIsCj4gPiA+IC3CoMKgwqDCoMKgwqDCoC50eXBlID0gc3VuNTBpX2g2X3BoeSwKPiA+ID4gwqDC
-oMKgwqDCoMKgwqDCoC5waHljdGxfb2Zmc2V0ID0gUkVHX1BIWUNUTF9BMzMsCj4gPiA+IMKgwqDC
-oMKgwqDCoMKgwqAuZGVkaWNhdGVkX2Nsb2NrcyA9IHRydWUsCj4gPiA+IMKgwqDCoMKgwqDCoMKg
-wqAuaGNpX3BoeV9jdGxfY2xlYXIgPSBQSFlfQ1RMX1NJRERRLAo+ID4gPiDCoMKgwqDCoMKgwqDC
-oMKgLnBoeTBfZHVhbF9yb3V0ZSA9IHRydWUsCj4gPiA+ICvCoMKgwqDCoMKgwqDCoC5zaWRkcV9p
-bl9iYXNlID0gdHJ1ZSwKPiA+ID4gfTsKPiA+ID4gCj4gPiA+IHN0YXRpYyBjb25zdCBzdHJ1Y3Qg
-c3VuNGlfdXNiX3BoeV9jZmcgc3VuNTBpX2E2NF9jZmcgPSB7Cj4gPiA+IMKgwqDCoMKgwqDCoMKg
-wqAubnVtX3BoeXMgPSAyLAo+ID4gPiAtwqDCoMKgwqDCoMKgwqAudHlwZSA9IHN1bjUwaV9hNjRf
-cGh5LAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLmRpc2NfdGhyZXNoID0gMywKPiA+ID4gwqDCoMKg
-wqDCoMKgwqDCoC5waHljdGxfb2Zmc2V0ID0gUkVHX1BIWUNUTF9BMzMsCj4gPiA+IMKgwqDCoMKg
-wqDCoMKgwqAuZGVkaWNhdGVkX2Nsb2NrcyA9IHRydWUsCj4gPiA+IEBAIC05NzQsMTEgKzk1NCwx
-MSBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHN1bjRpX3VzYl9waHlfY2ZnCj4gPiA+IHN1bjUwaV9h
-NjRfY2ZnID0gewo+ID4gPiAKPiA+ID4gc3RhdGljIGNvbnN0IHN0cnVjdCBzdW40aV91c2JfcGh5
-X2NmZyBzdW41MGlfaDZfY2ZnID0gewo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLm51bV9waHlzID0g
-NCwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgLnR5cGUgPSBzdW41MGlfaDZfcGh5LAo+ID4gPiDCoMKg
-wqDCoMKgwqDCoMKgLnBoeWN0bF9vZmZzZXQgPSBSRUdfUEhZQ1RMX0EzMywKPiA+ID4gwqDCoMKg
-wqDCoMKgwqDCoC5kZWRpY2F0ZWRfY2xvY2tzID0gdHJ1ZSwKPiA+ID4gwqDCoMKgwqDCoMKgwqDC
-oC5waHkwX2R1YWxfcm91dGUgPSB0cnVlLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgLm1pc3Npbmdf
-cGh5cyA9IEJJVCgxKSB8IEJJVCgyKSwKPiA+ID4gK8KgwqDCoMKgwqDCoMKgLnNpZGRxX2luX2Jh
-c2UgPSB0cnVlLAo+ID4gPiB9Owo+ID4gPiAKPiA+ID4gc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9k
-ZXZpY2VfaWQgc3VuNGlfdXNiX3BoeV9vZl9tYXRjaFtdID0gewo+IAoK
+Hi Krzysztof,
 
+On Mon, 7 Nov 2022 19:24:01 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+
+> On 07/11/2022 14:58, Herve Codina wrote:
+> > The Renesas USBF controller is an USB2.0 device controller
+> > (UDC) available in Renesas r9a06g032 SoC (RZ/N1 family).
+> >=20
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > ---
+> >  .../devicetree/bindings/usb/renesas,usbf.yaml | 64 +++++++++++++++++++
+> >  1 file changed, 64 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/renesas,usbf.=
+yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/usb/renesas,usbf.yaml b/=
+Documentation/devicetree/bindings/usb/renesas,usbf.yaml
+> > new file mode 100644
+> > index 000000000000..f2b146d9d37b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/renesas,usbf.yaml
+> > @@ -0,0 +1,64 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/renesas,usbf.yaml# =20
+>=20
+> Filename based on compatible, so renesas,rzn1-usbf.yaml.
+
+Will be fixed in the v2 series.
+
+>=20
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Renesas USBF (USB Function) controller binding
+> > +
+> > +description: |
+> > +   The Renesas USBF controller is an USB2.0 device
+> > +   controller (UDC).
+> > +
+> > +maintainers:
+> > +  - Herve Codina <herve.codina@bootlin.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf: =20
+>=20
+> You have only one possibility, so oneOf is not needed. Unless you
+> already predict it will grow with new incompatible lists?
+
+No new compatible planned right now. So, oneOf will be removed
+in the v2 series.
+
+>=20
+> > +      - items:
+> > +          - enum:
+> > +              - renesas,r9a06g032-usbf
+> > +          - const: renesas,rzn1-usbf
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Internal bus clock (AHB) for Function
+> > +      - description: Internal bus clock (AHB) for Power Management =20
+>=20
+> Blank line
+
+Will be fixed in the v2 series
+
+>=20
+> > +  clock-names:
+> > +    items:
+> > +      - const: hclkf
+> > +      - const: hclkpm
+> > +
+> > +  interrupts:
+> > +    items:
+> > +      - description: The USBF EPC interrupt
+> > +      - description: The USBF AHB-EPC interrupt
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - clock-names
+> > +  - interrupts
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
+> > +
+> > +    usb@4001e000 {
+> > +        compatible =3D "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
+> > +        reg =3D <0x4001e000 0x2000>;
+> > +        interrupts =3D =20
+>=20
+> No need for line break. It's not helping in readability.
+
+Will be fixed in the v2 series
+
+>=20
+>=20
+> > +            <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> > +            <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+> > +        clocks =3D <&sysctrl R9A06G032_HCLK_USBF>,
+> > +                 <&sysctrl R9A06G032_HCLK_USBPM>;
+> > +        clock-names =3D "hclkf", "hclkpm";
+> > +    }; =20
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
+Thanks for the review,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
