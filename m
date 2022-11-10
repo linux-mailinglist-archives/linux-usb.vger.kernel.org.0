@@ -2,199 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B50C624394
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 14:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 703D862441D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 15:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiKJNtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Nov 2022 08:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S231218AbiKJOUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Nov 2022 09:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiKJNtB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 08:49:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB3078305;
-        Thu, 10 Nov 2022 05:48:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB0C616C9;
-        Thu, 10 Nov 2022 13:48:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D22C433D6;
-        Thu, 10 Nov 2022 13:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668088134;
-        bh=HLCW/oVThSO/HT0jcBtzou5jddaCLsz7oAnPj/pj1qY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pf3LTfGbRx9Kxtd+jHy7mPo9An7qsAHa4fQ9AMdFSOGbU4hOdP0eiZa2vN8BOPnDv
-         lM6a3OUyiW9AXykmgeQkX7ZL3PADi8BQlcxH7ddKJCVmq2/aJr2kTsP3zrK16bPfkP
-         QI/pXbJwGYNVb3lx1pAQvwfPUFCD6gImdCpsExTA=
-Date:   Thu, 10 Nov 2022 14:48:51 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     jiantao zhang <water.zhangjiantao@huawei.com>
-Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Caiyadong <caiyadong@huawei.com>, suzhuangluan@hisilicon.com,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-Subject: Re: [PATCH] USB: gadget: Fix use-after-free during usb config switch
-Message-ID: <Y20BQygg8AdHDt8T@kroah.com>
-References: <20221110130754.3904-1-xuetao09@huawei.com>
- <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
+        with ESMTP id S230204AbiKJOUS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 09:20:18 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C2E19C19
+        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 06:20:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1668090012; bh=+xTDdfFwThUHKDUFnP4/O1XXbKLRBMbOgCK43A3Fetc=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=VlxsByVECwmF/y1gNbL7Zb5RX9eI8lM++OObP1UWqKoFGk2jkA4bQhxe2D9/TIHoa
+         XLLF/Lt1/fcezcVjKvtye1FgKFxUiUSvB/viMSKDFybpU/84wNeQOOyk514mtxaEd7
+         1d/W5z8WFV3T5Of2nT7Xpn2HAzCJWBe4pfMJMBgc8tdUOu1iwuoqcG4jgymfBN7tLG
+         qGY4q9XRCQX7FMfaacFK6fuucow0fKpel3FxLU1JFCr9/L8IsYCR0ExuGW5hvScd+g
+         UZrR+jsDZVtvtdeIQvqxQfCaZANUWFZX1cBuCYleoJmw1FMqUF+ULl5fhfX+BtLl4+
+         uoynY8IClZg1Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from 9300 ([93.221.18.29]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4JmN-1osrQg41Gz-000KTC; Thu, 10
+ Nov 2022 15:20:12 +0100
+Date:   Thu, 10 Nov 2022 15:20:11 +0100 (CET)
+From:   Andreas Bergmeier <abergmeier@gmx.net>
+To:     USB mailing list <linux-usb@vger.kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: PATCH: Simplify hidpp_send_rap_command_sync calls
+Message-ID: <d32177ad-f796-62c5-d66f-72d3f6ec2d29@9300>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:EjcIiiEkmGmyFAUWM7wWByGrrbyMzPIJ2mQaiBc22n+kXE8RBxc
+ XmXedfsZbYZhUZ71IUcFo++RBUDFGq96P8ZaLDRHYaD/HYsnzqcvYhej6BSuoFTSair0yq0
+ fNl2kst6AkYZPyiHfgj5fUKTtffKiXEB+XpqC25ynGgZLRhmD+N3DOpHRqJwoCPfjnlYYgT
+ 5XgTHKY0dHJCRhAd3wX0g==
+UI-OutboundReport: notjunk:1;M01:P0:KEecoTkudzo=;QcmphOroHquxILRtfTRYvT7s/H8
+ io5gfQ6tKO9DiaQxx3KFWqxiQn04mBr3RXxVoa2twI/NrBpb/vtAraUMPPDUOrLtLgwbsjn0H
+ DrLhONUhYIh11RAMOIY+lmEWbNVjf9H7vEaZp+XkslLtbaZZYuUOF7FarJr2W7ktIDSoQgRjg
+ 7onLM8aUjg11GrI7cLvZlXc+dpoE7NHLqz06PaS7Agv5e9WuxEia07sJmuwX26G95pRb8xkfw
+ Pz5wIUJJjGKycLK+Sk2FB55bn9F18o7OWAdutyN9pLdhvNbvRojGiQzTXttOVYKiLKj1zbDpB
+ iaw9NqrrWNo9MrgM+I9BXrVnkuUX7RVgEddwkPlOcIldsekDNPMqGHxle8u9LcrABYFjLB7ao
+ DL/pvZFPm8BI4kX9zGuf4Cum4tVkvRsIN0rNH7Xp51GYu/MtVRKGSd58ElKt5OK81WNvdDS32
+ t5yALeZJgwIhJCtI/NReAMoy6+2UCiy2PgRzPbc4coim5Q5DT7HnqkEUP8Gpv2PWCMw6NaokV
+ A8ZTXs2GRJEA2bp68c0IxVClgygybkHOh//oTCYmkxsee8Syw1C6ODW2vhuiMEQrHm7olB673
+ +I6L6ch8jlAs11tI1A5h/eICyjajWpPuDvbLiZjRdljDPtSSNo94u9pAMij2Xyg4tu9e0f/Jl
+ sOFt1iO26ozCL2DCOFCc2QmGlSEbvEvNks4T2dVFexlQzOA7wAzXtjsW9hlbtgPInzxYAVews
+ 5rZzcDCssZATw/ob7DqnN8uJzRvU4/WO8Gu6yxEUIj91mPEB+FYRfrdBhsSfGISZq/jLLHz4J
+ TT4YQzcOeYBvXSdEBQEtr1JWcd+fyW7EWbnQEDREtnn0yW2PrkBudf3E3vsbC33cfKmPXrv1k
+ isEFymbtV3IadEYQ4TX21wxDhVsxStH31RXauGWutz7pgLGHDxl6X++g1Uq6psc5TdtbOThaj
+ EbRB1A==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:20:17PM +0800, jiantao zhang wrote:
-> In the process of switching USB config from rndis to other config,
-> if the hardware does not support the ->pullup callback, or the
-> hardware encounters a low probability fault, both of them may cause
-> the ->pullup callback to fail, which will then cause a system panic
-> (use after free).
-> 
-> The gadget drivers sometimes need to be unloaded regardless of the
-> hardware's behavior.
-> 
-> Analysis as follows:
-> =======================================================================
-> (1) write /config/usb_gadget/g1/UDC "none" (init.usb.configfs.rc:2)
-> 
-> gether_disconnect+0x2c/0x1f8 (dev->port_usb = NULL)
-> rndis_disable+0x4c/0x74
-> composite_disconnect+0x74/0xb0
-> configfs_composite_disconnect+0x60/0x7c
-> usb_gadget_disconnect+0x70/0x124
-> usb_gadget_unregister_driver+0xc8/0x1d8
-> gadget_dev_desc_UDC_store+0xec/0x1e4
-> 
-> In function usb_gadget_disconnect(),The ->disconnect() callback will
-> not be called when gadget->ops->pullup() return an error, therefore,
-> pointer dev->port will not be set to NULL. If pointer dev->port_usb
-> is not null, it will cause an exception of use-after-free in step3.
-> 
-> (2) rm /config/usb_gadget/g1/configs/b.1/f1 (init.usb.configfs.rc:8)
-> (f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
-> 
-> rndis_deregister+0x28/0x54 (kfree(params))
-> rndis_free+0x44/0x7c (kfree(rndis))
-> usb_put_function+0x14/0x1c
-> config_usb_cfg_unlink+0xc4/0xe0
-> configfs_unlink+0x124/0x1c8
-> vfs_unlink+0x114/0x1dc
-> 
-> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
-> (init.usb.configfs.rc:11)
-> 
-> Call trace:
-> panic+0x1fc/0x3d0
-> die+0x29c/0x2a8
-> do_page_fault+0xa8/0x46c
-> do_mem_abort+0x3c/0xac
-> el1_sync_handler+0x40/0x78
-> 0xffffff801138f880 (params->resp_avail is an illegal func pointer)
-> rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
-> eth_stop+0x74/0x110 (if dev->port_usb != NULL, call rndis_close)
-> __dev_close_many+0x134/0x194
-> dev_close_many+0x48/0x194
-> rollback_registered_many+0x118/0x814
-> unregister_netdevice_queue+0xe0/0x168
-> unregister_netdev+0x20/0x30
-> gether_cleanup+0x1c/0x38
-> rndis_free_inst+0x2c/0x58
-> rndis_attr_release+0xc/0x14
-> kref_put+0x74/0xb8
-> config_item_put+0x14/0x1c
-> configfs_rmdir+0x314/0x374
-> 
-> In step3,function pointer params->resp_avail() is a wild pointer
-> becase pointer params has been freed in step2.
-> 
-> Free mem stack(in step2):
-> usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
-> 
-> use-after-free stack(in step3):
-> eth_stop -> rndis_close -> rndis_signal_disconnect ->
-> rndis_indicate_status_msg -> params->resp_avail()
-> 
-> In function eth_stop(), if pointer dev->port_usb is NULL, function
-> rndis_close() will not be called.
-> If gadget->ops->pullup() return an error in step1,dev->port_usb will
-> not be set to null. So, a panic will be caused in step3.
-> =======================================================================
-> Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
-> callback from usb_gadget_disconnect())
-> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-> Signed-off-by: TaoXue <xuetao09@huawei.com>
-> ---
-> drivers/usb/gadget/udc/core.c | 12 ++++++------
-> 1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index c63c0c2cf649..bf9878e1a72a 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
-> }
-> ret = gadget->ops->pullup(gadget, 0);
-> - if (!ret) {
-> + if (!ret)
-> gadget->connected = 0;
-> - mutex_lock(&udc_lock);
-> - if (gadget->udc->driver)
-> - gadget->udc->driver->disconnect(gadget);
-> - mutex_unlock(&udc_lock);
-> - }
-> +
-> + mutex_lock(&udc_lock);
-> + if (gadget->udc->driver)
-> + gadget->udc->driver->disconnect(gadget);
-> + mutex_unlock(&udc_lock);
-> out:
-> trace_usb_gadget_disconnect(gadget, ret);
-> 
-> -- 
-> 2.17.1
-> 
+Inside function, report_id might get overwritten.
+Only REPORT_ID_HIDPP_SHORT is ever passed in.
+So there seems to be no point in passing report_id in the first place.
+Just directly evaluate which report_id to use in the function itself.
 
-Hi,
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+diff --git a/drivers/hid/hid-logitech-hidpp.c
+b/drivers/hid/hid-logitech-hidpp.c
+index 898691a77a58..20ae7f73ef08 100644
+=2D-- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -360,15 +360,16 @@ static int hidpp_send_fap_command_sync(struct
+hidpp_device *hidpp,
+ }
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+ static int hidpp_send_rap_command_sync(struct hidpp_device *hidpp_dev,
+-	u8 report_id, u8 sub_id, u8 reg_address, u8 *params, int
+param_count,
++	u8 sub_id, u8 reg_address, u8 *params, int param_count,
+ 	struct hidpp_report *response)
+ {
+ 	struct hidpp_report *message;
+ 	int ret, max_count;
++	u8 report_id;
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
+-	/* Send as long report if short reports are not supported. */
+-	if (report_id =3D=3D REPORT_ID_HIDPP_SHORT &&
+-	    !(hidpp_dev->supported_reports &
+HIDPP_REPORT_SHORT_SUPPORTED))
++	if (hidpp_dev->supported_reports & HIDPP_REPORT_SHORT_SUPPORTED)
++		report_id =3D REPORT_ID_HIDPP_SHORT;
++	else
+ 		report_id =3D REPORT_ID_HIDPP_LONG;
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+ 	switch (report_id) {
+@@ -549,7 +550,6 @@ static int hidpp10_set_register(struct hidpp_device
+*hidpp_dev,
+ 	u8 params[3] =3D { 0 };
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+ 	ret =3D hidpp_send_rap_command_sync(hidpp_dev,
+-					  REPORT_ID_HIDPP_SHORT,
+ 					  HIDPP_GET_REGISTER,
+ 					  register_address,
+ 					  NULL, 0, &response);
+@@ -562,7 +562,6 @@ static int hidpp10_set_register(struct hidpp_device
+*hidpp_dev,
+ 	params[byte] |=3D value & mask;
 
-thanks,
+ 	return hidpp_send_rap_command_sync(hidpp_dev,
+-					   REPORT_ID_HIDPP_SHORT,
+ 					   HIDPP_SET_REGISTER,
+ 					   register_address,
+ 					   params, 3, &response);
+@@ -658,7 +657,6 @@ static int hidpp10_query_battery_status(struct
+hidpp_device *hidpp)
+ 	int ret, status;
 
-greg k-h's patch email bot
+ 	ret =3D hidpp_send_rap_command_sync(hidpp,
+-					REPORT_ID_HIDPP_SHORT,
+ 					HIDPP_GET_REGISTER,
+ 					HIDPP_REG_BATTERY_STATUS,
+ 					NULL, 0, &response);
+@@ -710,7 +708,6 @@ static int hidpp10_query_battery_mileage(struct
+hidpp_device *hidpp)
+ 	int ret, status;
+
+ 	ret =3D hidpp_send_rap_command_sync(hidpp,
+-					REPORT_ID_HIDPP_SHORT,
+ 					HIDPP_GET_REGISTER,
+ 					HIDPP_REG_BATTERY_MILEAGE,
+ 					NULL, 0, &response);
+@@ -782,7 +779,6 @@ static char *hidpp_unifying_get_name(struct
+hidpp_device *hidpp_dev)
+ 	int len;
+
+ 	ret =3D hidpp_send_rap_command_sync(hidpp_dev,
+-					REPORT_ID_HIDPP_SHORT,
+ 					HIDPP_GET_LONG_REGISTER,
+ 					HIDPP_REG_PAIRING_INFORMATION,
+ 					params, 1, &response);
+@@ -816,7 +812,6 @@ static int hidpp_unifying_get_serial(struct
+hidpp_device *hidpp, u32 *serial)
+ 	u8 params[1] =3D { HIDPP_EXTENDED_PAIRING };
+
+ 	ret =3D hidpp_send_rap_command_sync(hidpp,
+-					REPORT_ID_HIDPP_SHORT,
+ 					HIDPP_GET_LONG_REGISTER,
+ 					HIDPP_REG_PAIRING_INFORMATION,
+ 					params, 1, &response);
+@@ -900,7 +895,6 @@ static int hidpp_root_get_protocol_version(struct
+hidpp_device *hidpp)
+ 	int ret;
+
+ 	ret =3D hidpp_send_rap_command_sync(hidpp,
+-			REPORT_ID_HIDPP_SHORT,
+ 			HIDPP_PAGE_ROOT_IDX,
+ 			CMD_ROOT_GET_PROTOCOL_VERSION,
+ 			ping_data, sizeof(ping_data), &response);
+@@ -3180,7 +3174,6 @@ static int m560_send_config_command(struct
+hid_device *hdev, bool connected)
+
+ 	return hidpp_send_rap_command_sync(
+ 		hidpp_dev,
+-		REPORT_ID_HIDPP_SHORT,
+ 		M560_SUB_ID,
+ 		M560_BUTTON_MODE_REGISTER,
+ 		(u8 *)m560_config_parameter,
+@@ -3719,7 +3712,6 @@ static int hidpp_initialize_hires_scroll(struct
+hidpp_device *hidpp)
+ 		struct hidpp_report response;
+
+ 		ret =3D hidpp_send_rap_command_sync(hidpp,
+-						  REPORT_ID_HIDPP_SHORT,
+ 						  HIDPP_GET_REGISTER,
+
+HIDPP_ENABLE_FAST_SCROLL,
+ 						  NULL, 0, &response);
+
