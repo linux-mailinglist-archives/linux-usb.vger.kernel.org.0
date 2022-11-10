@@ -2,116 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF61C62396A
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 03:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F05623A6B
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 04:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbiKJCCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 21:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S232505AbiKJD3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 22:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiKJCAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 21:00:43 -0500
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D80429CAB
-        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 17:59:05 -0800 (PST)
-Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9MhC1P032550;
-        Wed, 9 Nov 2022 17:58:53 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
- from : subject : to : cc; s=pfptdkimsnps;
- bh=vIgCN0oNyFI270z/Mwpkt+n18yBYbwqWj3IpZdx3lG0=;
- b=Pii0QrX//Cs6pc/xZrygO4XOLcDW71sCbLf4ZiPxXHL5kcLe+KfkqUp/KurVYq3crt6r
- ajCoS+jU7ZJzdXTQ1P9FFGVBPzQoDBBpgyn2yaQ3nA1Nij0RCtCMz01F7SwMFOLtIxZg
- e2RmTZyVmXYwzlGYx9bGsiJNCIZRYzxhnmgD931T/XAiAHINduVyLOEReurJfFjUxq8M
- HkcxzBKZo0/KGUx6rvSBxWoU4j7MjLjrvyukn3gVRRkdO2ev8vikBIjj+qMHL+7a2xkI
- t8GLY4sy6gbTsL1mM3LeueL9KGTJpBeBRzJL2sKMsyBjYj5fj/gygiC7IPqiLJ+rFf9w qg== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3knq35spd5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 17:58:53 -0800
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B3236C00F2;
-        Thu, 10 Nov 2022 01:58:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1668045533; bh=AoEoEa6uFwJm78Uf0fVQjicfHGpQdCufgcaskiCetak=;
-        h=Date:From:Subject:To:Cc:From;
-        b=k9KU+xfr/5NvzY7w6RCQm2ll2WfKR7BWMNuawdLRCXOdWPcB/Lf/qXpfRZkez5nZ/
-         zhOlC4tpRUK7iyZy88cQVsL+SGHue0agEhrMzYPVXailx27BcsvwzaDGCkJ3JmlziV
-         U3ZMg4Kq+xojCTkBMmDTBC9B+pasLt3g5+KTxGvVK0d4bHkGOjNE5M5CnCYJMoFvph
-         ha24w6jQtwXaHLKKyiKXlhi8wBQfM7kFv2IZ0i50U8n5ljNOyFepFOvXfVDcQJq3+5
-         nWC9WCYd371BjOQtWsYJKHfWW+RV5Nk8vX18N6lqyRKMPeCslFrBDBYoYXw3axdvjl
-         J1WJWnYiS9otw==
-Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 18E2AA006F;
-        Thu, 10 Nov 2022 01:58:50 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Wed, 09 Nov 2022 17:58:50 -0800
-Date:   Wed, 09 Nov 2022 17:58:50 -0800
-Message-Id: <5651117207803c26e2f22ddf4e5ce9e865dcf7c7.1668045468.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: gadget: Disable GUSB2PHYCFG.SUSPHY for End Transfer
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-X-Proofpoint-ORIG-GUID: jvjq9bpbdm63bYxBlmohsBiwz3p7DBQE
-X-Proofpoint-GUID: jvjq9bpbdm63bYxBlmohsBiwz3p7DBQE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 clxscore=1015 suspectscore=0
- phishscore=0 impostorscore=0 adultscore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=332 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211100013
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232426AbiKJD3w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 22:29:52 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B54A1ADBB;
+        Wed,  9 Nov 2022 19:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1668050988; bh=Dn25TDAi743E2aB7e66zeKUGnRW9bsP67aus5L5K+68=;
+        h=X-UI-Sender-Class:References:In-Reply-To:From:Date:Subject:To:Cc;
+        b=dCd99CjqZ6xcEWdrKQHDL3kiuUYPh1AWe51oXb1jyH7fpnjVoiyxCaksv2mfu6d4k
+         pCyNc2WJNfwtnIbj6M0CqodozRQe+WsWZol8mxoluXM1DmumO/y+8jt6OtkBQKnnUv
+         LJRET+L7/q6Hq8+Puh6PtWZWQuxVJj/ZHpKpqe5Tx8oZWjXpucKZ94+Voe/pALBsxu
+         NbgEQkdM8TzmabPsN3HL3c23t2N8xgi10jbBaZoQBuNxqemPgeJTzmVXcRtLyO0G7M
+         htnogB2qDRXfqW+ENr6/O2yt832epQpVy8FOkyDcqxYR/QPWgDxG05FtokPAcIYvEv
+         66Di4IsIN7J7Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mail-ej1-f42.google.com ([209.85.218.42]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M9nxt-1owXAP1iE9-005t4E; Thu, 10 Nov 2022 04:29:48 +0100
+Received: by mail-ej1-f42.google.com with SMTP id q9so2004463ejd.0;
+        Wed, 09 Nov 2022 19:29:48 -0800 (PST)
+X-Gm-Message-State: ACrzQf3Do5vYwrgumY1fAKh4fo07SeCfJISI08XMkXBM4asyj/vfZM50
+        gh0b7mbndpQJnkLvxQOkwNMf1z29+kl6unklvpE=
+X-Google-Smtp-Source: AMsMyM4r7FXSGSTWHrkii3EKJv+k8ERelT4VoHJ7mS64++RFsodc+4q07n+wm7wmbterYi20f3BWggwUWV0MYd+wCYw=
+X-Received: by 2002:a17:906:40c6:b0:78d:4ba6:f65a with SMTP id
+ a6-20020a17090640c600b0078d4ba6f65amr2186907ejk.186.1668050987983; Wed, 09
+ Nov 2022 19:29:47 -0800 (PST)
+MIME-Version: 1.0
+References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu> <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com>
+ <CAO-hwJJ7cF-4kd8Mi6bb5n-k5LuMrWbpdMqFs82y7iQOscr-7g@mail.gmail.com>
+ <CABfF9mNfU=swmpVXfVr7pYWs72jrd-HDY8+_NXyBDAKa4CWG5Q@mail.gmail.com>
+ <CAO-hwJ+i3zd=CyU0T+Nb1vGfZfenMBH16ern_ncTTKEpyGAuBA@mail.gmail.com>
+ <CABfF9mNrMx2BzU5tbBeapY15M4Ls_5xYBGfVB=Up5TJu=eWCcg@mail.gmail.com>
+ <CAO-hwJJGAWkhZgGeLBruqCoskY5PBP-STs4kh-P6fBvpuSgpUw@mail.gmail.com> <CABfF9mO3SQZvkQGOC09H5s7EEd2UGhpE=GYB46g_zF3aEOVn=Q@mail.gmail.com>
+In-Reply-To: <CABfF9mO3SQZvkQGOC09H5s7EEd2UGhpE=GYB46g_zF3aEOVn=Q@mail.gmail.com>
+From:   Andreas Bergmeier <abergmeier@gmx.net>
+Date:   Thu, 10 Nov 2022 04:29:35 +0100
+X-Gmail-Original-Message-ID: <CABfF9mNbpTdAnChkZNKFed6C7n=Hyq-69rMUeDENE8ptLjJMSw@mail.gmail.com>
+Message-ID: <CABfF9mNbpTdAnChkZNKFed6C7n=Hyq-69rMUeDENE8ptLjJMSw@mail.gmail.com>
+Subject: Re: Litra Glow on Linux
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jikos@kernel.org>, linux-leds@vger.kernel.org,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:CduAreEgIvBa5+VcPGZyYTXyphIl1+J2e47s5K9LSBl2nHE2Vg2
+ mCfej749CwF+EC08iMNH2vdlF+lyYxnvNehi1Ha709BjFLJAWzEkfBlCMT19FdMqZ3wGWPf
+ yjDSsumxwnYyO9+CUOolAaV708GYVM6mWLVeLNNcDCj0hQNFR/NFmDDzVvBajq07i5Ka5kd
+ IMbKdFTeJf1U4Li3nwX9A==
+UI-OutboundReport: notjunk:1;M01:P0:v2tdjNsKgWY=;JPw36RwZF1SG/33Qkv90/yEeaRd
+ SJfuCrWo2ARRh71WRSP+K7oCIze7ryXPE900vM28AvmixVK6a5KUqONEyraYhay2M+98SNhhR
+ dM9AcmqkKBz9kyWBr4QKNchwzP1xlhWxgY0TdMSZZSHP/+5pwWgrXnV26PixwCtYxg4Lf6Y3n
+ 6LYIUqccj7NUtghNlH2Wv6DxIM8RkEC5K540P3sZeBc7NNgH7PAuGx4s6LIWa7XutUo0snj1h
+ gFdFLWjpm3gew32vD9nlKooFdyMM+re5A6Dh48EuX8DaiyeLFIHzlR87DgVMO638Mea5jrngO
+ oOUZuMdV5CAEDxN42I+4UyqK6Q39K8uj6RX7ACnFa71x8hOgSdkeh63C4uiiIYKP8tKn3GvtJ
+ c/gL5pNU+nnPw/v+4Tp/93vnvgKlKFDDAPNvbe9E25eZVu+KbMZEhN6st+gNFe/hAhY1+WFup
+ HcjJpxvVpjgWwjje/t1t0P0Jd1yUrZeYzVoP00OUUYw+Zia5Rf/RXAiyRBBwqfMfU0mZqo8tn
+ sl44wkDcaDNiS+gXbnV496co5ILXxESrKDenzIMPgkq82mVQtFslDwK5WTCVxwdpBgfAiz4Cv
+ sFNo98NtGywPoY4ehM1fXTbOVtr34nz9cDbYtLBiTkowgp5l/rqn6o06cj0XDSnabpVbQXCo8
+ 6T2jg5b9N1exj/1ZXy912IUV6EcKWQrmFdbrjS8PlxviZRWtD1qVq9Od1YgrmWg1PaayOIn+I
+ 5CIaRu21bI0MEIWjKS4Fm1MDv9516/gImfiype5hwe3CnTfiwdcG3fQ7FuNdZ0KsL77767Oxg
+ IZmRsx3Z3zoQCqWGhdi3XImjeinwr6gP3bPOqBkiOA51lfw9X6gkQAXmFleSWjJRvnRxzVXd6
+ vb1slOlPQqsCF7N8BsJhs1FAKM6PbJTTTZ0my1ZhoO4hAaJy0dBlGTbwora+OVEdVNTcTHsuc
+ tfHGOzbDbrhvrD+cUtlWMiXQb3c=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If there's a disconnection while operating in eSS, there may be a delay
-in VBUS drop response from the connector. In that case, the internal
-link state may drop to operate in usb2 speed while the controller thinks
-the VBUS is still high. The driver must make sure to disable
-GUSB2PHYCFG.SUSPHY when sending endpoint command while in usb2 speed.
-The End Transfer command may be called, and only that command needs to
-go through at this point. Let's keep it simple and unconditionally
-disable GUSB2PHYCFG.SUSPHY whenever we issue the command.
-
-This scenario is not seen in real hardware. In a rare case, our
-prototype type-c controller/interface may have a slow response
-triggerring this issue.
-
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index ecddb144871b..7f4ba78f2644 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -291,7 +291,8 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
- 	 *
- 	 * DWC_usb3 3.30a and DWC_usb31 1.90a programming guide section 3.2.2
- 	 */
--	if (dwc->gadget->speed <= USB_SPEED_HIGH) {
-+	if (dwc->gadget->speed <= USB_SPEED_HIGH ||
-+	    DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_ENDTRANSFER) {
- 		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
- 		if (unlikely(reg & DWC3_GUSB2PHYCFG_SUSPHY)) {
- 			saved_config |= DWC3_GUSB2PHYCFG_SUSPHY;
-
-base-commit: d65e6b6e884a38360fc1cadf8ff31858151da57f
--- 
-2.28.0
-
+On Wed, 9 Nov 2022 at 21:27, Andreas Bergmeier <abergmeier@gmx.net> wrote:
+>
+> Finally I have an environment where I can test my kernel code.
+>
+> On Mon, 31 Oct 2022 at 10:29, Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> > For identifying the GLOW device you should be adding an id in the
+> > table of hid-logitech-hidpp, with a driver data that tells the driver
+> > to look for 0x1990.
+> >
+> > >
+> > > > - you need to add a hook in connect_event to register the led class
+> > > > device that will hook on to the actual LED of the device
+> Sadly my tests did not go very far. The code fails already when
+> calling the `probe` callback (`hidpp_probe`).
+> When it calls into `hidpp_root_get_protocol_version` it seems to
+> receive `HIDPP_ERROR_RESOURCE_ERROR`.
+> Which then leads to an error message: Device not connected
+> Upon looking at `HIDPP_ERROR_RESOURCE_ERROR` (9) there is no
+> documentation what it means in code.
+> From a look into the docs it says that 9 is UNSUPPORTED error for 2.0
+> devices. Thus I am wondering how the code knows
+> that it is a problem with connectivity. Couldn't it also mean that the
+> device is not supporting getting the protocol version?
+> And why is protocol version only enforced for non unifying devices?
+Also, looking into `supported_reports` turned out to be 2 (very long).
+Inside of `hidpp_root_get_protocol_version` it does upgrade SHORT to
+LONG if the former is not supported.
+On a whim I then added upgrade of LONG to VERY LONG if the former is
+not supported. Sadly, the results stayed the same.
