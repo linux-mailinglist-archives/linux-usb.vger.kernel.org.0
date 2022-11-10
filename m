@@ -2,71 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC92F62499D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 19:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D17624AE4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 20:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiKJSjK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Nov 2022 13:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
+        id S231196AbiKJTrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Nov 2022 14:47:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiKJSjJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 13:39:09 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 83B381C916
-        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 10:39:08 -0800 (PST)
-Received: (qmail 10244 invoked by uid 1000); 10 Nov 2022 13:39:07 -0500
-Date:   Thu, 10 Nov 2022 13:39:07 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: Check !irq instead of irq == NO_IRQ
-Message-ID: <Y21FS6q9AW2ioGjw@rowland.harvard.edu>
-References: <13feefdf6b240817944e6441e26a8ddc1d81ced1.1668102802.git.christophe.leroy@csgroup.eu>
+        with ESMTP id S231167AbiKJTrm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 14:47:42 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D5B47306
+        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 11:47:40 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id p184so2070305iof.11
+        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 11:47:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P1FnuNG2bRYfl+49iTwNU1I/yOXgzb8jSaOCKZ4qfj8=;
+        b=EsCYvpQMDeHpAz74mMzxulzivjrWL9eb/CZxFrSZcTAR9I55QFobY3SKK74agPlpRa
+         S5uGjHzZ8pi7AiFFwbaZh3LTAENy3tb9kKkOw7r1MynAoJpwobeGnqQqrQ7n375396n3
+         F1q0D2falmnyhCZtzebdmFPLXf0wP1MBziVtw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P1FnuNG2bRYfl+49iTwNU1I/yOXgzb8jSaOCKZ4qfj8=;
+        b=iKxrlX5NY7P+hXEVH/31LS0j8U0RLiO7QD8G0kd1tFkOULNPSCghkrvdehb84NecP1
+         C0zSgLRiQLTPDX7BWmb2HVbDPf43obLPy3C9M8+SX1CPNHX9TsB6nEqwX3qKr1hQWdZQ
+         XrqDZaQciqoT+qYqtggwfkgSsbXz9+6qZwBlZBV1wm7DbDvc4pbDzpuoS5WsfCcxmHxZ
+         jiIwryGJXKwxd7n7Fo9msZw6uTwSfCV5oiWmsa+5niR2TtPay53aBhInPW7w/3P6tjX0
+         xHETBnBxl4MMInWgwMW0NgMqrSmk38OX6cOdNFQoxCzxYsSCrDGoJycq1y5+LZz3xOnF
+         Qyaw==
+X-Gm-Message-State: ACrzQf180/IJBH8E1ox/1DtRgYnYo2vItpu343kZmma32mD+/Ac1CdBY
+        MsFuVRId9cvVsdWJifi1HkUKQQ==
+X-Google-Smtp-Source: AMsMyM7JogcOwoDfpb4LeYpJkGSLrqDUbWphVenvgUb84nm9tF40jDodVXJ4x6E4O3XoIQF0NfkHWg==
+X-Received: by 2002:a02:7101:0:b0:363:e6b8:2bac with SMTP id n1-20020a027101000000b00363e6b82bacmr3629504jac.229.1668109660183;
+        Thu, 10 Nov 2022 11:47:40 -0800 (PST)
+Received: from shuah-tx13.internal ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x12-20020a026f0c000000b003750f7b7296sm97371jab.179.2022.11.10.11.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 11:47:39 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK define
+Date:   Thu, 10 Nov 2022 12:47:38 -0700
+Message-Id: <20221110194738.38514-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13feefdf6b240817944e6441e26a8ddc1d81ced1.1668102802.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 06:54:35PM +0100, Christophe Leroy wrote:
-> NO_IRQ is a relic from the old days. It is not used anymore in core
-> functions. By the way, function irq_of_parse_and_map() returns value 0
-> on error.
-> 
-> In some drivers, NO_IRQ is erroneously used to check the return of
-> irq_of_parse_and_map().
-> 
-> It is not a real bug today because the only architectures using the
-> drivers being fixed by this patch define NO_IRQ as 0, but there are
-> architectures which define NO_IRQ as -1. If one day those
-> architectures start using the non fixed drivers, there will be a
-> problem.
-> 
-> Long time ago Linus advocated for not using NO_IRQ, see
-> https://lkml.org/lkml/2005/11/21/221 . He re-iterated the same view
-> recently in https://lkml.org/lkml/2022/10/12/622
-> 
-> So test !irq instead of tesing irq == NO_IRQ.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  drivers/usb/host/ehci-grlib.c  | 2 +-
->  drivers/usb/host/ehci-ppc-of.c | 2 +-
->  drivers/usb/host/fhci-hcd.c    | 2 +-
->  drivers/usb/host/ohci-ppc-of.c | 2 +-
->  drivers/usb/host/uhci-grlib.c  | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+Fix v_recv_cmd_submit() to use PIPE_BULK define instead of hard coded
+values. This also fixes the following signed integer overflow error
+reported by cppcheck. This is not an issue since pipe is unsigned int.
+However, this change improves the code to use proper define.
 
-For the [eou]hci-* files:
+drivers/usb/usbip/vudc_rx.c:152:26: error: Signed integer overflow for expression '3<<30'. [integerOverflow]
+ urb_p->urb->pipe &= ~(3 << 30);
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+In addition, add a build time check for PIPE_BULK != 3 as the code path
+depends on PIPE_BULK = 3.
 
-Alan Stern
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+v1 -> v2:
+- Use BUILD_BUG_ON_MSG
+
+ drivers/usb/usbip/vudc_rx.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/usbip/vudc_rx.c b/drivers/usb/usbip/vudc_rx.c
+index d4a2f30a7580..51bb70837b90 100644
+--- a/drivers/usb/usbip/vudc_rx.c
++++ b/drivers/usb/usbip/vudc_rx.c
+@@ -149,7 +149,9 @@ static int v_recv_cmd_submit(struct vudc *udc,
+ 	urb_p->urb->status = -EINPROGRESS;
+ 
+ 	/* FIXME: more pipe setup to please usbip_common */
+-	urb_p->urb->pipe &= ~(3 << 30);
++	BUILD_BUG_ON_MSG(PIPE_BULK != 3, "PIPE_* doesn't range from 0 to 3");
++
++	urb_p->urb->pipe &= ~(PIPE_BULK << 30);
+ 	switch (urb_p->ep->type) {
+ 	case USB_ENDPOINT_XFER_BULK:
+ 		urb_p->urb->pipe |= (PIPE_BULK << 30);
+-- 
+2.34.1
+
