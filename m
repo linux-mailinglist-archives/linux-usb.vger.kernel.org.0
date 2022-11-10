@@ -2,181 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168E8624366
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 14:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B50C624394
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 14:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiKJNkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Nov 2022 08:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
+        id S231246AbiKJNtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Nov 2022 08:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiKJNkV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 08:40:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EED303D7
-        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 05:39:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668087563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aByhD+u7e5ysEhGwu8joJIq9fuZ918iDvc+dlsbuQzI=;
-        b=Em38wTuFC+HFBu6tbO096tDM8dsUNG8yLctrGa3Wkk6P0s7z0dbatRpeps2Gsh2kY6Y3HQ
-        ELpZsJbAX8k/H+FiZMnooaPQ/y38A0V4DQnEY3mLCxl+qq8sY63JiBYGRPTbaiH1L6GI2X
-        0kr+eIoxDnAMk++mtO6Y4OERqeqtdFw=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-544-QetZ37SMMUSZKTIm0LCp6A-1; Thu, 10 Nov 2022 08:39:22 -0500
-X-MC-Unique: QetZ37SMMUSZKTIm0LCp6A-1
-Received: by mail-lj1-f200.google.com with SMTP id a3-20020a2eb163000000b00276fff42408so568750ljm.9
-        for <linux-usb@vger.kernel.org>; Thu, 10 Nov 2022 05:39:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aByhD+u7e5ysEhGwu8joJIq9fuZ918iDvc+dlsbuQzI=;
-        b=Sm+sz/hVTvcnaYOYoQ5T7IuJIOvFa8VnpayaKtSdQjIUXGh8G5k4M5c6Fc3DyQNjNA
-         MULt/FWnsxiIdCR2LgAG+PKFspZwGXApUDgpTtq0btn1GMYKBEuMOxlK+sBCxLqEQwQX
-         fWsepnF+1kEJw5qYH5dfzlGYFGRWAemYZsHijK7vmoIeTabaDPjZltqL2WBVJ3wl/oBT
-         X965nTFTZdtJZHiJ6SrV081ybIMogAarAefXFueXUeWYWmokvAu3lZBdNCG67QaiYRr1
-         C7uZvVNO+TXwpoV6c/8wcgGpY3pQNk+oY+UitdZKDEtnJoOYqCgOCMosqMpuRzdYagP4
-         +A2Q==
-X-Gm-Message-State: ACrzQf3xfSzRg1mOaaEnSVzsz21xQinxF7IzKC2lH4KBYt0syK/q/0gz
-        A0A6UlRjK+avXcJk0pjCLxS2yqnyCb2ADSlMdJs5m00tco3xhBNk6m3hrkGU4yCChivJwguTfol
-        5awIwXCdT8OkLF8L0kAH034zpK3FHNtVIc9e1
-X-Received: by 2002:a19:430c:0:b0:4a9:e27a:1cfa with SMTP id q12-20020a19430c000000b004a9e27a1cfamr1384824lfa.147.1668087560535;
-        Thu, 10 Nov 2022 05:39:20 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5FC1Lj4JEW/VC+s1AS66k2fT2JcDAvUzNE7OVcS/2LY94i+gEjzbK0TImWm8Km08AgxmjPomWFTbR6r4qSu7Y=
-X-Received: by 2002:a19:430c:0:b0:4a9:e27a:1cfa with SMTP id
- q12-20020a19430c000000b004a9e27a1cfamr1384819lfa.147.1668087560288; Thu, 10
- Nov 2022 05:39:20 -0800 (PST)
+        with ESMTP id S231174AbiKJNtB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Nov 2022 08:49:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB3078305;
+        Thu, 10 Nov 2022 05:48:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB0C616C9;
+        Thu, 10 Nov 2022 13:48:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D22C433D6;
+        Thu, 10 Nov 2022 13:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668088134;
+        bh=HLCW/oVThSO/HT0jcBtzou5jddaCLsz7oAnPj/pj1qY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pf3LTfGbRx9Kxtd+jHy7mPo9An7qsAHa4fQ9AMdFSOGbU4hOdP0eiZa2vN8BOPnDv
+         lM6a3OUyiW9AXykmgeQkX7ZL3PADi8BQlcxH7ddKJCVmq2/aJr2kTsP3zrK16bPfkP
+         QI/pXbJwGYNVb3lx1pAQvwfPUFCD6gImdCpsExTA=
+Date:   Thu, 10 Nov 2022 14:48:51 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     jiantao zhang <water.zhangjiantao@huawei.com>
+Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Caiyadong <caiyadong@huawei.com>, suzhuangluan@hisilicon.com,
+        xuhaiyang <xuhaiyang5@hisilicon.com>
+Subject: Re: [PATCH] USB: gadget: Fix use-after-free during usb config switch
+Message-ID: <Y20BQygg8AdHDt8T@kroah.com>
+References: <20221110130754.3904-1-xuetao09@huawei.com>
+ <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
 MIME-Version: 1.0
-References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu> <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com>
- <CAO-hwJJ7cF-4kd8Mi6bb5n-k5LuMrWbpdMqFs82y7iQOscr-7g@mail.gmail.com>
- <CABfF9mNfU=swmpVXfVr7pYWs72jrd-HDY8+_NXyBDAKa4CWG5Q@mail.gmail.com>
- <CAO-hwJ+i3zd=CyU0T+Nb1vGfZfenMBH16ern_ncTTKEpyGAuBA@mail.gmail.com>
- <CABfF9mNrMx2BzU5tbBeapY15M4Ls_5xYBGfVB=Up5TJu=eWCcg@mail.gmail.com>
- <CAO-hwJJGAWkhZgGeLBruqCoskY5PBP-STs4kh-P6fBvpuSgpUw@mail.gmail.com>
- <CABfF9mO3SQZvkQGOC09H5s7EEd2UGhpE=GYB46g_zF3aEOVn=Q@mail.gmail.com>
- <CABfF9mNbpTdAnChkZNKFed6C7n=Hyq-69rMUeDENE8ptLjJMSw@mail.gmail.com>
- <CAO-hwJ+PysPKFG=a9+L8vwhiw4uY3F3DZmg4FwgPWGZ7LPt4EA@mail.gmail.com> <2a20d7d1-55df-4861-5cf1-dee19536ed5@9300>
-In-Reply-To: <2a20d7d1-55df-4861-5cf1-dee19536ed5@9300>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 10 Nov 2022 14:39:08 +0100
-Message-ID: <CAO-hwJJDE-8TL2MbTX2xX3RfKEeh8H5h24UkcZJJhH5ptdpRaQ@mail.gmail.com>
-Subject: Re: Litra Glow on Linux
-To:     Andreas Bergmeier <abergmeier@gmx.net>
-Cc:     linux-input@vger.kernel.org,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jiri Kosina <jikos@kernel.org>, linux-leds@vger.kernel.org,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 1:24 PM Andreas Bergmeier <abergmeier@gmx.net> wrote:
->
->
->
-> On Thu, 10 Nov 2022, Benjamin Tissoires wrote:
->
-> > On Thu, Nov 10, 2022 at 4:29 AM Andreas Bergmeier <abergmeier@gmx.net> wrote:
-> > >
-> > > On Wed, 9 Nov 2022 at 21:27, Andreas Bergmeier <abergmeier@gmx.net> wrote:
-> > > >
-> > > > Finally I have an environment where I can test my kernel code.
-> > > >
-> > > > On Mon, 31 Oct 2022 at 10:29, Benjamin Tissoires
-> > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > > For identifying the GLOW device you should be adding an id in the
-> > > > > table of hid-logitech-hidpp, with a driver data that tells the driver
-> > > > > to look for 0x1990.
-> > > > >
-> > > > > >
-> > > > > > > - you need to add a hook in connect_event to register the led class
-> > > > > > > device that will hook on to the actual LED of the device
-> > > > Sadly my tests did not go very far. The code fails already when
-> > > > calling the `probe` callback (`hidpp_probe`).
-> > > > When it calls into `hidpp_root_get_protocol_version` it seems to
-> > > > receive `HIDPP_ERROR_RESOURCE_ERROR`.
-> > > > Which then leads to an error message: Device not connected
-> > > > Upon looking at `HIDPP_ERROR_RESOURCE_ERROR` (9) there is no
-> > > > documentation what it means in code.
-> > > > From a look into the docs it says that 9 is UNSUPPORTED error for 2.0
-> > > > devices. Thus I am wondering how the code knows
-> > > > that it is a problem with connectivity.
-> >
-> > From the top of my memory, this was told to us that this is the way we
-> > detect if the device was connected or not in the unifying case. Though
-> > in your case, it's a USB device, so there is no such thing as "not
-> > connected"...
-> So isn't the current error handling at a minimum misleading?
->
+On Thu, Nov 10, 2022 at 09:20:17PM +0800, jiantao zhang wrote:
+> In the process of switching USB config from rndis to other config,
+> if the hardware does not support the ->pullup callback, or the
+> hardware encounters a low probability fault, both of them may cause
+> the ->pullup callback to fail, which will then cause a system panic
+> (use after free).
+> 
+> The gadget drivers sometimes need to be unloaded regardless of the
+> hardware's behavior.
+> 
+> Analysis as follows:
+> =======================================================================
+> (1) write /config/usb_gadget/g1/UDC "none" (init.usb.configfs.rc:2)
+> 
+> gether_disconnect+0x2c/0x1f8 (dev->port_usb = NULL)
+> rndis_disable+0x4c/0x74
+> composite_disconnect+0x74/0xb0
+> configfs_composite_disconnect+0x60/0x7c
+> usb_gadget_disconnect+0x70/0x124
+> usb_gadget_unregister_driver+0xc8/0x1d8
+> gadget_dev_desc_UDC_store+0xec/0x1e4
+> 
+> In function usb_gadget_disconnect(),The ->disconnect() callback will
+> not be called when gadget->ops->pullup() return an error, therefore,
+> pointer dev->port will not be set to NULL. If pointer dev->port_usb
+> is not null, it will cause an exception of use-after-free in step3.
+> 
+> (2) rm /config/usb_gadget/g1/configs/b.1/f1 (init.usb.configfs.rc:8)
+> (f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
+> 
+> rndis_deregister+0x28/0x54 (kfree(params))
+> rndis_free+0x44/0x7c (kfree(rndis))
+> usb_put_function+0x14/0x1c
+> config_usb_cfg_unlink+0xc4/0xe0
+> configfs_unlink+0x124/0x1c8
+> vfs_unlink+0x114/0x1dc
+> 
+> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
+> (init.usb.configfs.rc:11)
+> 
+> Call trace:
+> panic+0x1fc/0x3d0
+> die+0x29c/0x2a8
+> do_page_fault+0xa8/0x46c
+> do_mem_abort+0x3c/0xac
+> el1_sync_handler+0x40/0x78
+> 0xffffff801138f880 (params->resp_avail is an illegal func pointer)
+> rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
+> eth_stop+0x74/0x110 (if dev->port_usb != NULL, call rndis_close)
+> __dev_close_many+0x134/0x194
+> dev_close_many+0x48/0x194
+> rollback_registered_many+0x118/0x814
+> unregister_netdevice_queue+0xe0/0x168
+> unregister_netdev+0x20/0x30
+> gether_cleanup+0x1c/0x38
+> rndis_free_inst+0x2c/0x58
+> rndis_attr_release+0xc/0x14
+> kref_put+0x74/0xb8
+> config_item_put+0x14/0x1c
+> configfs_rmdir+0x314/0x374
+> 
+> In step3,function pointer params->resp_avail() is a wild pointer
+> becase pointer params has been freed in step2.
+> 
+> Free mem stack(in step2):
+> usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
+> 
+> use-after-free stack(in step3):
+> eth_stop -> rndis_close -> rndis_signal_disconnect ->
+> rndis_indicate_status_msg -> params->resp_avail()
+> 
+> In function eth_stop(), if pointer dev->port_usb is NULL, function
+> rndis_close() will not be called.
+> If gadget->ops->pullup() return an error in step1,dev->port_usb will
+> not be set to null. So, a panic will be caused in step3.
+> =======================================================================
+> Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
+> callback from usb_gadget_disconnect())
+> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+> Signed-off-by: TaoXue <xuetao09@huawei.com>
+> ---
+> drivers/usb/gadget/udc/core.c | 12 ++++++------
+> 1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index c63c0c2cf649..bf9878e1a72a 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
+> }
+> ret = gadget->ops->pullup(gadget, 0);
+> - if (!ret) {
+> + if (!ret)
+> gadget->connected = 0;
+> - mutex_lock(&udc_lock);
+> - if (gadget->udc->driver)
+> - gadget->udc->driver->disconnect(gadget);
+> - mutex_unlock(&udc_lock);
+> - }
+> +
+> + mutex_lock(&udc_lock);
+> + if (gadget->udc->driver)
+> + gadget->udc->driver->disconnect(gadget);
+> + mutex_unlock(&udc_lock);
+> out:
+> trace_usb_gadget_disconnect(gadget, ret);
+> 
+> -- 
+> 2.17.1
+> 
 
-Maybe, but this is the first time we have that error on a non wireless
-device... so it is not for the supported devices :)
+Hi,
 
->
-> > > > Couldn't it also mean that the
-> > > > device is not supporting getting the protocol version?
-> >
-> > Probably. What happens if you comment out that protocol version
-> > request and force connected to be true?
-> Well I went the other way around. I had a look at the hidpp utility
-> sources:
-> https://github.com/cvuchener/hidpp/blob/057407fbb7248bbc6cefcfaa860758d0711c01b9/src/libhidpp/hidpp/Device.cpp#L82
-> Which seems to do a similar thing. From the top of my head the only
-> difference seems to be that they are sending `0x1` as a ping value instead
-> of `0x5a`. Might give that a shot next.
-> Anyway hidpp-list-features successfully reads the protocol version in
-> userspace (4, 2) as seen here:
-> https://github.com/abergmeier/litra_glow_linux/blob/main/hidpp-list-features
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Hmm... It would seem wrong for me if the firmware suddenly expects to
-have a specific ping value.
-If it works in userspace, it might also mean that the timing is not
-right and we are talking to the device too early, and it can't answer
-yet.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
->
-> > In your case though, it would be interesting to know if we should
-> > bypass that verification.
-> Since reading the protocol version seems generally possible I think we
-> should understand what logitech-hidpp does wrong first.
->
->
-> > > Also, looking into `supported_reports` turned out to be 2 (very long).
-> >
-> > Oops, you mistook the bit definition with the value:
-> > #define HIDPP_REPORT_SHORT_SUPPORTED  BIT(0)  -> value of 1
-> > #define HIDPP_REPORT_LONG_SUPPORTED  BIT(1)  -> value of 2
-> > #define HIDPP_REPORT_VERY_LONG_SUPPORTED  BIT(2)  -> value of 4
-> Ah indeed, thx.
->
-> > And this is expected because you don't have VERY_LONG support on your device.
-> True. The question remains whether the upgrade from LONG to VERY_LONG
-> could be needed should a device only support VERY_LONG.
->
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/email-clients.txt in order to fix this.
 
-I don't think we want that. AFAICT, devices supporting VERY_LONG are
-not very common, and also the length of the report makes it not
-convenient for the generic protocol to be used there. I am not in the
-head of Logitech's engineers, but removing the 20 bytes long report in
-favor of 64 bytes long seems a little bit overkill (the 7 bytes long
-is a different story).
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-And given that we generally add manual support of new devices, I think
-we are safe not implementing something we haven't seen in the wild.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-Cheers,
-Benjamin
+thanks,
 
+greg k-h's patch email bot
