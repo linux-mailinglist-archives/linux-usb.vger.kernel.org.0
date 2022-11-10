@@ -2,221 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27C662388F
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 02:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF61C62396A
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Nov 2022 03:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbiKJBDs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Nov 2022 20:03:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S232417AbiKJCCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Nov 2022 21:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiKJBDr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 20:03:47 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11F9165AA;
-        Wed,  9 Nov 2022 17:03:44 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id g26so59034vkm.12;
-        Wed, 09 Nov 2022 17:03:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ga1eSOq8SQMKvFupLUvr/s6K7BhSFkwDPBTu2UUI57w=;
-        b=OIes9SHtUrT04ykeMb3sNwNvgpdq98hlwYeAoA2Z6OKy4pywpR9ILPB9ugH01Y2bjk
-         jH7U8qQUC6t2iaCBlEWP6EqdhuE2S+xISP8QotfUTTGTM2bEQz+Sx6wFyMU7y5wI+REX
-         Uj4sW4y1P6GYWx6F9rSdKyGc15ARTtCiSPAyHvn6pfmtHVImjztnlt+b5/WORPVRIU4l
-         6JnyHkOlcWMm3BFWiWVcvaeO7MXHQYWRSW+1TeAzmeozzbNeIesr/FCij3tG6VSgpOfa
-         sNgLWvS3wI4EcAa8tJHRHrjkwnIOtXS9zLX+EwixPwUteBZh1zvgXg7E/RpfLGsdUBD1
-         zcLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ga1eSOq8SQMKvFupLUvr/s6K7BhSFkwDPBTu2UUI57w=;
-        b=AkpuCTlELB2OTeRZr4n21rr9i6azTiCHFSRGTsr7JV5nY4Fj5Lp0ZcikCwKb2wQlnF
-         yW5oCqanPN75DsnByaZCxGZPdHbtNB6FbIPlYj2ktUBUVrYeq883kH29tt2Gxhf7iqs+
-         pXFtTYn5vBKqa5F5rEyFf3qTYGiFKlSug6pYUo8ponFBsvAemPsoZbIA+lYheDLQxq3V
-         N2RvFXOrywLqC+STiAAzCizoaZdn6b8vdK9dJUPoHubAFRddQ0ora9aIKrXkeGhFcmES
-         XyshhkwfTBi7S+xZvfWh7VoiJDlSUaDnJjNgbLWyr2fz4U/pB9kuZHZ121MaMR/T3tf1
-         oQbQ==
-X-Gm-Message-State: ACrzQf2OM88P1XfiEavkPhCQh/rLyfv8sdDc0psMrhei1veYXHKAx0ju
-        obuzVoH0v7uPabxxlVttyB4FWNuqXslyty317/8=
-X-Google-Smtp-Source: AMsMyM5KgKQxJezvDSv7tV9vGPGq7gElIXUnslLNufHFaWPquMPDx873Fsh4VyI0AHoF2Ie79xZtomIGvZq/vQK1N4k=
-X-Received: by 2002:a05:6122:9a4:b0:3b8:53e6:6ad0 with SMTP id
- g36-20020a05612209a400b003b853e66ad0mr14346409vkd.41.1668042223886; Wed, 09
- Nov 2022 17:03:43 -0800 (PST)
-MIME-Version: 1.0
-References: <1666620275-139704-1-git-send-email-pawell@cadence.com>
- <20221027072421.GA75844@nchen-desktop> <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
- <20221106090221.GA152143@nchen-desktop> <BYAPR07MB5381CD42617915D95122D56FDD3C9@BYAPR07MB5381.namprd07.prod.outlook.com>
-In-Reply-To: <BYAPR07MB5381CD42617915D95122D56FDD3C9@BYAPR07MB5381.namprd07.prod.outlook.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 10 Nov 2022 09:02:40 +0800
-Message-ID: <CAL411-qttOGNyZH28bURje0Y3_zVF4XuzVS1zQh2DgPNN0smWw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S232527AbiKJCAn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Nov 2022 21:00:43 -0500
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D80429CAB
+        for <linux-usb@vger.kernel.org>; Wed,  9 Nov 2022 17:59:05 -0800 (PST)
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+        by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9MhC1P032550;
+        Wed, 9 Nov 2022 17:58:53 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
+ from : subject : to : cc; s=pfptdkimsnps;
+ bh=vIgCN0oNyFI270z/Mwpkt+n18yBYbwqWj3IpZdx3lG0=;
+ b=Pii0QrX//Cs6pc/xZrygO4XOLcDW71sCbLf4ZiPxXHL5kcLe+KfkqUp/KurVYq3crt6r
+ ajCoS+jU7ZJzdXTQ1P9FFGVBPzQoDBBpgyn2yaQ3nA1Nij0RCtCMz01F7SwMFOLtIxZg
+ e2RmTZyVmXYwzlGYx9bGsiJNCIZRYzxhnmgD931T/XAiAHINduVyLOEReurJfFjUxq8M
+ HkcxzBKZo0/KGUx6rvSBxWoU4j7MjLjrvyukn3gVRRkdO2ev8vikBIjj+qMHL+7a2xkI
+ t8GLY4sy6gbTsL1mM3LeueL9KGTJpBeBRzJL2sKMsyBjYj5fj/gygiC7IPqiLJ+rFf9w qg== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3knq35spd5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 17:58:53 -0800
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B3236C00F2;
+        Thu, 10 Nov 2022 01:58:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1668045533; bh=AoEoEa6uFwJm78Uf0fVQjicfHGpQdCufgcaskiCetak=;
+        h=Date:From:Subject:To:Cc:From;
+        b=k9KU+xfr/5NvzY7w6RCQm2ll2WfKR7BWMNuawdLRCXOdWPcB/Lf/qXpfRZkez5nZ/
+         zhOlC4tpRUK7iyZy88cQVsL+SGHue0agEhrMzYPVXailx27BcsvwzaDGCkJ3JmlziV
+         U3ZMg4Kq+xojCTkBMmDTBC9B+pasLt3g5+KTxGvVK0d4bHkGOjNE5M5CnCYJMoFvph
+         ha24w6jQtwXaHLKKyiKXlhi8wBQfM7kFv2IZ0i50U8n5ljNOyFepFOvXfVDcQJq3+5
+         nWC9WCYd371BjOQtWsYJKHfWW+RV5Nk8vX18N6lqyRKMPeCslFrBDBYoYXw3axdvjl
+         J1WJWnYiS9otw==
+Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 18E2AA006F;
+        Thu, 10 Nov 2022 01:58:50 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Wed, 09 Nov 2022 17:58:50 -0800
+Date:   Wed, 09 Nov 2022 17:58:50 -0800
+Message-Id: <5651117207803c26e2f22ddf4e5ce9e865dcf7c7.1668045468.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: gadget: Disable GUSB2PHYCFG.SUSPHY for End Transfer
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
+X-Proofpoint-ORIG-GUID: jvjq9bpbdm63bYxBlmohsBiwz3p7DBQE
+X-Proofpoint-GUID: jvjq9bpbdm63bYxBlmohsBiwz3p7DBQE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ lowpriorityscore=0 spamscore=0 bulkscore=0 clxscore=1015 suspectscore=0
+ phishscore=0 impostorscore=0 adultscore=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=332 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211100013
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 1:39 PM Pawel Laszczak <pawell@cadence.com> wrote:
->
-> >
-> >
-> >On 22-10-27 08:46:17, Pawel Laszczak wrote:
-> >>
-> >> >
-> >> >On 22-10-24 10:04:35, Pawel Laszczak wrote:
-> >> >> Patch modifies the TD_SIZE in TRB before ZLP TRB.
-> >> >> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
-> >> >> processing ZLP TRB by controller.
-> >> >>
-> >> >> cc: <stable@vger.kernel.org>
-> >> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
-> >> >> USBSSP DRD Driver")
-> >> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >> >>
-> >> >> ---
-> >> >> Changelog:
-> >> >> v2:
-> >> >> - returned value for last TRB must be 0
-> >> >>
-> >> >>  drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
-> >> >>  1 file changed, 6 insertions(+), 1 deletion(-)
-> >> >>
-> >> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
-> >> >> b/drivers/usb/cdns3/cdnsp-ring.c index 04dfcaa08dc4..aa79bce89d8a
-> >> >> 100644
-> >> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> >> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> >> >> @@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct
-> >> >> cdnsp_device *pdev,
-> >> >>
-> >> >>   /* One TRB with a zero-length data packet. */
-> >> >>   if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
-> >> >> -     trb_buff_len == td_total_len)
-> >> >> +     trb_buff_len == td_total_len) {
-> >> >> +         /* Before ZLP driver needs set TD_SIZE=1. */
-> >> >> +         if (more_trbs_coming)
-> >> >> +                 return 1;
-> >> >> +
-> >> >>           return 0;
-> >> >> + }
-> >> >
-> >> >Does that fix the issue you want at bulk transfer, which has
-> >> >zero-length packet at the last packet? It seems not align with your previous
-> >fix.
-> >> >Would you mind explaining more?
-> >>
-> >> Value returned by function cdnsp_td_remainder is used as TD_SIZE in
-> >> TRB.
-> >>
-> >> The last TRB in TD should have TD_SIZE=0, so trb for ZLP should have
-> >> set also TD_SIZE=0. If driver set TD_SIZE=0 on before the last one TRB
-> >> then the controller stops the transfer and ignore trb for ZLP packet.
-> >>
-> >> To fix this, the driver in such case must set TD_SIZE = 1 before the
-> >> last TRB.
-> >
-> >       if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
-> > -         trb_buff_len == td_total_len)
-> > +         trb_buff_len == td_total_len) {
-> > +             /* Before ZLP driver needs set TD_SIZE=1. */
-> > +             if (more_trbs_coming)
-> > +                     return 1;
-> > +
-> >               return 0;
-> > +     }
-> >
-> >How your above fix could return TD_SIZE as 1 for last non-ZLP TRB?
-> >Which conditions are satisfied?
->
-> For last non-ZLP TRB TD_SIZE should be 0 or 1.
->
-> We have three casess:
-> 1.
->         TRB1 - length > 1
->         TRb2 - ZLP
->
-> In this case TRB1 should have set TD_SIZE = 1. In this case the condition
->         if (more_trbs_coming)
->                 return 1;
->
-> returns TD_SIZE=1. In this case more_trb_comming for TRB1 is 1 and for TRB2 is 0
->
+If there's a disconnection while operating in eSS, there may be a delay
+in VBUS drop response from the connector. In that case, the internal
+link state may drop to operate in usb2 speed while the controller thinks
+the VBUS is still high. The driver must make sure to disable
+GUSB2PHYCFG.SUSPHY when sending endpoint command while in usb2 speed.
+The End Transfer command may be called, and only that command needs to
+go through at this point. Let's keep it simple and unconditionally
+disable GUSB2PHYCFG.SUSPHY whenever we issue the command.
 
-This one is my question. How below condition is true for your case 1:
+This scenario is not seen in real hardware. In a rare case, our
+prototype type-c controller/interface may have a slow response
+triggerring this issue.
 
- if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
-          trb_buff_len == td_total_len)
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ drivers/usb/dwc3/gadget.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index ecddb144871b..7f4ba78f2644 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -291,7 +291,8 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 	 *
+ 	 * DWC_usb3 3.30a and DWC_usb31 1.90a programming guide section 3.2.2
+ 	 */
+-	if (dwc->gadget->speed <= USB_SPEED_HIGH) {
++	if (dwc->gadget->speed <= USB_SPEED_HIGH ||
++	    DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_ENDTRANSFER) {
+ 		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+ 		if (unlikely(reg & DWC3_GUSB2PHYCFG_SUSPHY)) {
+ 			saved_config |= DWC3_GUSB2PHYCFG_SUSPHY;
 
-Peter
+base-commit: d65e6b6e884a38360fc1cadf8ff31858151da57f
+-- 
+2.28.0
 
-
-
->
-> 2.
->         TRB1 - length >1 and we don't except ZLP
->
-> In this case TD_SIZE should be set to 0 for TRB1 and function returns 0, more_trbs_comming for TRB1 will be set to 0.
->
-> 3 More TRBs without ZLP:
->         e.g.
->         TRB1  -  length > 0,  more_trbs_comming = 1 - TD_SIZE  > 0
->         TRB2 -  length > 0, more_trbs_comming = 1  - TD_SIZE > 0
->         TRB3 - length >= 0, more_trbs_comming = 0 -  TD_SIZE  = 0
->
-> Pawel
->
-> >
-> >Peter
-> >
-> >> e.g.
-> >>
-> >> TD -> TRB1  transfer_length = 64KB, TD_SIZE =0
-> >>           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
-> >>                  ignore this transfer and stop transfer on previous one
-> >>
-> >> TD -> TRB1  transfer_length = 64KB, TD_SIZE =1
-> >>           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
-> >>                  execute this trb and send ZLP
-> >>
-> >> As you noticed previously, previous fix for last TRB returned TD_SIZE
-> >> = 1 in some cases.
-> >> Previous fix was working correct but was not compliance with
-> >> controller specification.
-> >>
-> >> >
-> >> >>
-> >> >>   maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
-> >> >>   total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
-> >> >> --
-> >> >> 2.25.1
-> >> >>
-> >> >
-> >> >--
-> >> >
-> >>
-> >> Thanks,
-> >> Pawel Laszczak
-> >
-> >--
-> >
-> >Thanks,
-> >Peter Chen
->
-> Regards,
-> Pawel Laszczak
