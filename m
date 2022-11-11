@@ -2,66 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABFE625FE7
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 17:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F79A62606E
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 18:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiKKQ5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Nov 2022 11:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S233907AbiKKRcj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Nov 2022 12:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233180AbiKKQ52 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 11:57:28 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33CF14083;
-        Fri, 11 Nov 2022 08:57:27 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id v7so3277943wmn.0;
-        Fri, 11 Nov 2022 08:57:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZWE3AHjm+gVGD7RjCCyAAkQNQ6fQcTinGqa03Nm0yY=;
-        b=M57CLED+h6xY1FdHDVIKLrr7HuIBw1ojq+s7RW+ZVVLFwCms6Sln9BMUam1LKX9MMZ
-         1PY3I48TtXvWDU8MoccKdaEww2T043SS1049ZnY5Vzu7N8W3JY4SXNioIt2Vk0cH8o/Z
-         oOiKodoMiJNL2SM/V4k1EmQrzdfAOAJGhq99hBquE6a9QxKHRYAbVThXwDCqjNoIeEt+
-         +hZuL3jJ2KfbZyk+NJ1ZPFdIN38C+jfyIdOSHglSgX/3RyV28hTatew3zU3g2X7JRsS3
-         aHOcjXg5SkfE3aZNTAtomPFoOp/ANaUZLPzNdKVv2jAaaPaQCoN0gNl6rAg7xUDUpXtK
-         6jWg==
+        with ESMTP id S233495AbiKKRch (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 12:32:37 -0500
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EADB1A815;
+        Fri, 11 Nov 2022 09:32:36 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so742090ooi.5;
+        Fri, 11 Nov 2022 09:32:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mZWE3AHjm+gVGD7RjCCyAAkQNQ6fQcTinGqa03Nm0yY=;
-        b=mAA3P7Kvy2ngqY2pbuUnwVaurHI4/noW5yQOXT9yI3jSJdKESWqxv44LebCrHB03M/
-         vytYslF6luIOuh/CqM3pHj0Wjz7htsE68XPW7cuDcW5gyQMJ+WwIwOJ8Nup5Q6CK2hvi
-         veF++qSIxHGk9ANsi37Iu1iP/Rzp8IET2UL9oqafd8PFoRIAcRsriLgzkLbItSr8hFvq
-         62ZZTGmqmDp9AjFhaHP4nyn5fmNVD3E7CqGsKnV7cCZkaIy6kR7UXPprNz+GrSQmBg8W
-         lFfnDP1coh47+hdD82VpNfXNrXcIx+X393VgjxVHNvx/QXpv9OySvLJIJU8jcUcmuAcn
-         5IXw==
-X-Gm-Message-State: ANoB5plcmL4ymT8hxmaAAQfBdIu9y8NgW4Ap/7eamU4eG/s0+a0XP3lQ
-        IL237OpUYQ60f/Us9iAAgnVMsk15n2DR8g==
-X-Google-Smtp-Source: AA0mqf7a6cJmLgQuXV2EMAULPMVyJhpIuKWjQrCUXJmxXe7mNEM/97RVv5bU3KVaJEUAGgklO6L4cA==
-X-Received: by 2002:a05:600c:3b83:b0:3cf:5d41:b74b with SMTP id n3-20020a05600c3b8300b003cf5d41b74bmr1849391wms.184.1668185846282;
-        Fri, 11 Nov 2022 08:57:26 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f7-20020adfe907000000b0023677081f3asm2302241wrm.42.2022.11.11.08.57.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=po5PnrsJOrtibdnuIvtZD7NvBSBhlNi4tJ/oxCe6Y54=;
+        b=jmxR6IKM9dqcj9G9TrskMylPFv5RloIgAzl+OCCYtSun8kgucvQcU/F6q3xVBrj3KP
+         GXcYqaeFZYDsBNDtlXZYbSBefSOJdMtZllCtlriashRiT8MhgdYhhJgkmnwj1d+CooKb
+         FELCWilELDlAopGB4emihseZmOmhNL3HojMk0w90b7+BgT359zBiRi01pxLhIGutjCgS
+         BTFFlOOQiDcPwYeMeEr/pvbRDZzGgPkXpWic7X01zoKwHFAO0NENJdMcF/G9IjAUai2Y
+         v5QcJJetEle+LGgric1evzJsPqKe34zgzNXDGWRqsqjFVY3JfUxkwGKsva0A6GTEnSRl
+         A6Jg==
+X-Gm-Message-State: ANoB5pmcE1RgqcE7b2Ic3DueyyuLoiNloxnZSPm3UVWWBP8DdQmX1qDu
+        SkCQKZ4ergOH3EE5XmxLaw==
+X-Google-Smtp-Source: AA0mqf4Z94tBfrdLD8Dbj2VxNYqWTWzdRAPZ/PPQAwiuJKHfq3mYjcMCQnCCnCuCCJIqaSvKoTgpGg==
+X-Received: by 2002:a4a:a78b:0:b0:498:260c:d780 with SMTP id l11-20020a4aa78b000000b00498260cd780mr1380739oom.27.1668187955744;
+        Fri, 11 Nov 2022 09:32:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i2-20020a4ac502000000b00480816a5b8csm999120ooq.18.2022.11.11.09.32.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 08:57:25 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>, linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: ftdi-elan: remove variable l
-Date:   Fri, 11 Nov 2022 16:57:24 +0000
-Message-Id: <20221111165724.557152-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 11 Nov 2022 09:32:35 -0800 (PST)
+Received: (nullmailer pid 3566720 invoked by uid 1000);
+        Fri, 11 Nov 2022 17:32:36 -0000
+Date:   Fri, 11 Nov 2022 11:32:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Wayne Chang <waynec@nvidia.com>, mathias.nyman@intel.com,
+        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-tegra@vger.kernel.org,
+        singhanc@nvidia.com, balbi@kernel.org,
+        linux-phy@lists.infradead.org, vkoul@kernel.org,
+        thierry.reding@gmail.com, ajayg@nvidia.com,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        treding@nvidia.com, jckuo@nvidia.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 02/13] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
+Message-ID: <20221111173236.GA3561612-robh@kernel.org>
+References: <20221111101509.999589-1-waynec@nvidia.com>
+ <20221111101509.999589-3-waynec@nvidia.com>
+ <166817308790.3060162.14990231448404857914.robh@kernel.org>
+ <5782d31a-9a0c-33da-ff84-20cae29f977e@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5782d31a-9a0c-33da-ff84-20cae29f977e@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,35 +73,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Variable l is just being accumulated and it's never used
-anywhere else. The variable and the addition are redundant so
-remove it.
+On Fri, Nov 11, 2022 at 02:38:21PM +0000, Jon Hunter wrote:
+> 
+> On 11/11/2022 13:30, Rob Herring wrote:
+> > 
+> > On Fri, 11 Nov 2022 18:14:58 +0800, Wayne Chang wrote:
+> > > Add device-tree binding documentation for the XUSB host controller present
+> > > on Tegra234 SoC. This controller supports the USB 3.1 specification.
+> > > 
+> > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > > ---
+> > > V1 -> V2: new change for adding nvidia,tegra234-xusb.yaml
+> > >   .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 ++++++++++++++++++
+> > >   1 file changed, 159 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> > > 
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.27-28 syntax error
+> > FATAL ERROR: Unable to parse input tree
+> > make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile:1492: dt_binding_check] Error 2
+> 
+> This compiles fine on top of -next. We are just missing the change that
+> populates the required definitions.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/misc/ftdi-elan.c | 2 --
- 1 file changed, 2 deletions(-)
+Where exactly is that mentioned in the commit msg?
 
-diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
-index 33b35788bd0b..8ce191e3a4c0 100644
---- a/drivers/usb/misc/ftdi-elan.c
-+++ b/drivers/usb/misc/ftdi-elan.c
-@@ -1624,7 +1624,6 @@ wait:if (ftdi->disconnected > 0) {
- 			char data[30 *3 + 4];
- 			char *d = data;
- 			int m = (sizeof(data) - 1) / 3 - 1;
--			int l = 0;
- 			struct u132_target *target = &ftdi->target[ed];
- 			struct u132_command *command = &ftdi->command[
- 				COMMAND_MASK & ftdi->command_next];
-@@ -1647,7 +1646,6 @@ wait:if (ftdi->disconnected > 0) {
- 				} else if (i++ < m) {
- 					int w = sprintf(d, " %02X", *b++);
- 					d += w;
--					l += w;
- 				} else
- 					d += sprintf(d, " ..");
- 			}
--- 
-2.38.1
+No maintainer can take patches which apply against linux-next, so not a 
+good dependency to mention either.
 
+Rob
