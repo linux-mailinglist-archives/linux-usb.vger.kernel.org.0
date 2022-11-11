@@ -2,111 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4898B625E93
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 16:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABFE625FE7
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 17:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbiKKPpQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Nov 2022 10:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S233903AbiKKQ5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Nov 2022 11:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiKKPpP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 10:45:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7017DFD1;
-        Fri, 11 Nov 2022 07:45:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9AE76B82650;
-        Fri, 11 Nov 2022 15:45:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CECC433D6;
-        Fri, 11 Nov 2022 15:45:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668181511;
-        bh=lR4bMWKhnNrJk1jx2Z3SsRfOPp6SGBKMIvk/tkRMFE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rLVQlPv+lLXhlTc5OR6rS90VGyuYM8MyxP294ig9aUnXlctUdWH6SOnCbaUld8Qms
-         VdbpyEK+529dGe4VwEYJsItIASbcVwtxOxO13K5PlZ2xGH0vpzo0ynKnaXktBnqeFP
-         JwzcIRZe+DzXCLN3NBVPZkg7nOM0UqF64M+BjMHY=
-Date:   Fri, 11 Nov 2022 16:45:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-Message-ID: <Y25uBK8Ty3g9D1aq@kroah.com>
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com>
+        with ESMTP id S233180AbiKKQ52 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 11:57:28 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33CF14083;
+        Fri, 11 Nov 2022 08:57:27 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id v7so3277943wmn.0;
+        Fri, 11 Nov 2022 08:57:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZWE3AHjm+gVGD7RjCCyAAkQNQ6fQcTinGqa03Nm0yY=;
+        b=M57CLED+h6xY1FdHDVIKLrr7HuIBw1ojq+s7RW+ZVVLFwCms6Sln9BMUam1LKX9MMZ
+         1PY3I48TtXvWDU8MoccKdaEww2T043SS1049ZnY5Vzu7N8W3JY4SXNioIt2Vk0cH8o/Z
+         oOiKodoMiJNL2SM/V4k1EmQrzdfAOAJGhq99hBquE6a9QxKHRYAbVThXwDCqjNoIeEt+
+         +hZuL3jJ2KfbZyk+NJ1ZPFdIN38C+jfyIdOSHglSgX/3RyV28hTatew3zU3g2X7JRsS3
+         aHOcjXg5SkfE3aZNTAtomPFoOp/ANaUZLPzNdKVv2jAaaPaQCoN0gNl6rAg7xUDUpXtK
+         6jWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mZWE3AHjm+gVGD7RjCCyAAkQNQ6fQcTinGqa03Nm0yY=;
+        b=mAA3P7Kvy2ngqY2pbuUnwVaurHI4/noW5yQOXT9yI3jSJdKESWqxv44LebCrHB03M/
+         vytYslF6luIOuh/CqM3pHj0Wjz7htsE68XPW7cuDcW5gyQMJ+WwIwOJ8Nup5Q6CK2hvi
+         veF++qSIxHGk9ANsi37Iu1iP/Rzp8IET2UL9oqafd8PFoRIAcRsriLgzkLbItSr8hFvq
+         62ZZTGmqmDp9AjFhaHP4nyn5fmNVD3E7CqGsKnV7cCZkaIy6kR7UXPprNz+GrSQmBg8W
+         lFfnDP1coh47+hdD82VpNfXNrXcIx+X393VgjxVHNvx/QXpv9OySvLJIJU8jcUcmuAcn
+         5IXw==
+X-Gm-Message-State: ANoB5plcmL4ymT8hxmaAAQfBdIu9y8NgW4Ap/7eamU4eG/s0+a0XP3lQ
+        IL237OpUYQ60f/Us9iAAgnVMsk15n2DR8g==
+X-Google-Smtp-Source: AA0mqf7a6cJmLgQuXV2EMAULPMVyJhpIuKWjQrCUXJmxXe7mNEM/97RVv5bU3KVaJEUAGgklO6L4cA==
+X-Received: by 2002:a05:600c:3b83:b0:3cf:5d41:b74b with SMTP id n3-20020a05600c3b8300b003cf5d41b74bmr1849391wms.184.1668185846282;
+        Fri, 11 Nov 2022 08:57:26 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id f7-20020adfe907000000b0023677081f3asm2302241wrm.42.2022.11.11.08.57.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 08:57:25 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: ftdi-elan: remove variable l
+Date:   Fri, 11 Nov 2022 16:57:24 +0000
+Message-Id: <20221111165724.557152-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111152852.2837363-1-allenwebb@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
-> USB devices support the authorized attribute which can be used by
-> user-space to implement trust-based systems for enabling USB devices. It
-> would be helpful when building these systems to be able to know in
-> advance which kernel drivers (or modules) are reachable from a
-> particular USB device.
-> 
-> This information is readily available for external modules in
-> modules.alias. However, builtin kernel modules are not covered. This
-> patch adds a sys-fs attribute to both builtin and loaded modules
-> exposing the matching rules in the modalias format for integration
-> with tools like USBGuard.
-> 
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  drivers/base/Makefile          |   2 +-
->  drivers/base/base.h            |   8 ++
->  drivers/base/bus.c             |  42 ++++++
->  drivers/base/mod_devicetable.c | 241 +++++++++++++++++++++++++++++++++
->  drivers/usb/core/driver.c      |   2 +
->  include/linux/device/bus.h     |   8 ++
->  include/linux/module.h         |   1 +
->  kernel/module/internal.h       |   2 +
->  kernel/module/sysfs.c          | 100 ++++++++++++++
->  kernel/params.c                |   2 +
->  10 files changed, 407 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/base/mod_devicetable.c
-> 
+Variable l is just being accumulated and it's never used
+anywhere else. The variable and the addition are redundant so
+remove it.
 
-Hi,
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/misc/ftdi-elan.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
+index 33b35788bd0b..8ce191e3a4c0 100644
+--- a/drivers/usb/misc/ftdi-elan.c
++++ b/drivers/usb/misc/ftdi-elan.c
+@@ -1624,7 +1624,6 @@ wait:if (ftdi->disconnected > 0) {
+ 			char data[30 *3 + 4];
+ 			char *d = data;
+ 			int m = (sizeof(data) - 1) / 3 - 1;
+-			int l = 0;
+ 			struct u132_target *target = &ftdi->target[ed];
+ 			struct u132_command *command = &ftdi->command[
+ 				COMMAND_MASK & ftdi->command_next];
+@@ -1647,7 +1646,6 @@ wait:if (ftdi->disconnected > 0) {
+ 				} else if (i++ < m) {
+ 					int w = sprintf(d, " %02X", *b++);
+ 					d += w;
+-					l += w;
+ 				} else
+ 					d += sprintf(d, " ..");
+ 			}
+-- 
+2.38.1
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
