@@ -2,197 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D92E62551A
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 09:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE1062556E
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 09:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbiKKIUn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Nov 2022 03:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S232978AbiKKIgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Nov 2022 03:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiKKIUm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 03:20:42 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E92D70572
-        for <linux-usb@vger.kernel.org>; Fri, 11 Nov 2022 00:20:40 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id f37so7272786lfv.8
-        for <linux-usb@vger.kernel.org>; Fri, 11 Nov 2022 00:20:40 -0800 (PST)
+        with ESMTP id S232471AbiKKIgl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 03:36:41 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC52654D3;
+        Fri, 11 Nov 2022 00:36:40 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id y16so5504598wrt.12;
+        Fri, 11 Nov 2022 00:36:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m7Ka71WJnUiAb9fvGY9CNSs9KdiUBfWOURrQspmYDMA=;
-        b=tD8dVfVTwQei5KACu20o0XLwgAARP34M1YmWgCtHFXL2eE04ultRTvyqqPIEbl41XH
-         3h9a3UlXK9oGLr42gNN2P3fWJQ1FRbQdint+WleKKg+6kfwRimn6bhJ9fQeu8zDSkFIF
-         GYS+MKs2cjHVRJC9+MYoXX30JxfzHFy9ogsdLBUC4gqH6WIDj130tROm195MPYGyL1eO
-         UP1GG6IiIjJ14ky5R6VVvs/nronUHKiknMBsof5jL7IPDw48/ln5ahTjg/met3l+p8FO
-         dIW6XXi7hMAncrN4+oDeeo4LQ/7l8d+RPx4gpXzt8LrVbD06aeQDIQEBVJhDvj/Zxas6
-         s/5g==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3LdKiDa3X5sRwQrkwBd9fsnonVBgPFP/Q0DkSX0juAw=;
+        b=bfRj7QxjEbM/niJkaWqqiz0trKfDz4MiqicdQJwv9oRoVzm47d0EGJ6eXu3tHaQiHE
+         Ugyp05pCuAD2GFL2AicQM4tQggjVqrtd6r7PLcEk9LnbEYS/tOWV2G7Wd0OFORhQVYmZ
+         xJdmnSEnqlRfLV1oM+XGa2TXnhaG7GV6AvDQPBEfOaRM4iMPqonz4npkO4OW/c31H6wI
+         EhZkO2HnbPHCzog7XSelGYmpU6litGhPVm7emL1lpyiDl1t4EE09MqAHO/Qsd3JO/4uI
+         kCFOXDuOVO3hpZu8G8Wl/izyHLYno8ymnqgnJDxpLL8SlgNPimorIW11tLEp03pPzHFI
+         BOSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m7Ka71WJnUiAb9fvGY9CNSs9KdiUBfWOURrQspmYDMA=;
-        b=b/vTe4Ll989kkK65Jp4OSaYEBinMKm1tDh+mkwmRO1FCTZnFzV5oaRTPndUORhTSXa
-         UXA4EfsSgl6hkmSeE/gj7lDfk9QNlyesoVaHiPrVEPDdQcyVnJTqmRKWBRS959xOQQwH
-         P/N/ALByZ/nKIUHMp7h/O488eB1lUa30I+VnwMIPSvkvAiJ6qhExRT6H++KcbQoiWX2g
-         7WM5KMgdXFJipLbdyTtknALtDnec6afA2dVtMJdjqiz36IKZC8lwveTWWbQzMay9nawM
-         tSz7bXaUifR0HYEs/6uuAIyChb4p9k4tFqOZEtEKyxklgYxhT7RxlaaREXmbadCYsY6w
-         t0fg==
-X-Gm-Message-State: ANoB5pkPPsVqcRNwA66s3obrVMcHJu0HdNKcEHI7k09p6xXHpg+N14e7
-        /9ubdTXTMif6RiJxOnWQodFZ83OTugf1iQ==
-X-Google-Smtp-Source: AA0mqf6oEBYq1lUaIJv8EvmNwB7aw0DrLt6oIirmfX4VsIKPBfkQ6dfRACGvX4/i69yzydm/945ajA==
-X-Received: by 2002:ac2:4ecf:0:b0:4a2:741f:1909 with SMTP id p15-20020ac24ecf000000b004a2741f1909mr428635lfr.484.1668154838719;
-        Fri, 11 Nov 2022 00:20:38 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac25922000000b004946a1e045fsm208768lfi.197.2022.11.11.00.20.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 00:20:38 -0800 (PST)
-Message-ID: <8931d67d-6f4a-913e-8873-995703dbb97f@linaro.org>
-Date:   Fri, 11 Nov 2022 09:20:37 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3LdKiDa3X5sRwQrkwBd9fsnonVBgPFP/Q0DkSX0juAw=;
+        b=kHfIBfmVdkpRybFB9xzu1QVqHPIEsESNNt88DVIlo5zNJknor6ZFiS4F4u3sSUAaWd
+         F6whm5MupSzwFFFw751qQl5fkd1uyV/tyJ90Y25ePqGEuAVNEcHYPgSIbOdVc5LixJIT
+         sCFCptz9ATvFvT+GB/ZRpwxHIUZ7mOGjPY94P73062QoTpaRRJGv7iit925xpTyrJiO6
+         lmJfRgsxlmjct3ttFUm9CzBwL7gCCCiMgRNUGnYqhSIVoNbSIF4vLIbocYEgDhvFAMx9
+         CoH+5trO9rRhaSl45mKcnS8f0HM84XmWjw/UfqxFQWL+WmBRZYNaCTur/GPmZ5cx+SDy
+         6LYg==
+X-Gm-Message-State: ANoB5pmLyhZ9FxeTUgGzR/QoYSamwgzx2JlH3hbMSD4EYH1F1XEfmuSP
+        lsSJDe+FNVZOiRezQw6sBRc=
+X-Google-Smtp-Source: AA0mqf5zJnBWSewYJi5CZXCHSfIqp/EIZEL1KUO2jeV1UtAmzpZYjV0gKz5oXlS+9igqzhly82U9UQ==
+X-Received: by 2002:a5d:538d:0:b0:236:6b8e:3a3f with SMTP id d13-20020a5d538d000000b002366b8e3a3fmr577678wrv.159.1668155798966;
+        Fri, 11 Nov 2022 00:36:38 -0800 (PST)
+Received: from tp440p.steeds.sam ([69.63.64.50])
+        by smtp.gmail.com with ESMTPSA id k7-20020a05600c1c8700b003c6b7f5567csm12067507wms.0.2022.11.11.00.36.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 00:36:38 -0800 (PST)
+Date:   Fri, 11 Nov 2022 10:36:33 +0200
+From:   Sicelo <absicsz@gmail.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        maemo-leste@lists.dyne.org, Felipe Balbi <balbi@kernel.org>,
+        phone-devel@vger.kernel.org, Bin Liu <b-liu@ti.com>,
+        Rob Herring <robh@kernel.org>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [maemo-leste] USB PHY Initialization Fails on Nokia N900 Since
+ 5.19
+Message-ID: <Y24JkS3tykIZRH+A@tp440p.steeds.sam>
+References: <Y0PhEOl+MwlQ8HAD@tp440p.steeds.sam>
+ <Y0UBindrJa1ptyR0@atomide.com>
+ <Y0VI+/XJs8nsazwE@tp440p.steeds.sam>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/7] dt-bindings: usb: hpe,gxp-udc: Add binding for gxp
- gadget
-Content-Language: en-US
-To:     "Yu, Richard" <richard.yu@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "Chang, Clay" <clayc@hpe.com>
-References: <20221103160625.15574-1-richard.yu@hpe.com>
- <20221103160625.15574-3-richard.yu@hpe.com>
- <b85230d4-8fce-ba49-0d6b-8c4d20132cda@linaro.org>
- <SJ0PR84MB2085E6B922DAF1070DC802EF8D3C9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
- <c199600a-aad9-5639-ea57-a4d59d719ade@linaro.org>
- <SJ0PR84MB20853F3B0FCCF2A9583524B48D3E9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SJ0PR84MB20853F3B0FCCF2A9583524B48D3E9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0VI+/XJs8nsazwE@tp440p.steeds.sam>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/11/2022 04:37, Yu, Richard wrote:
-> Hi Mr. Kozlowski,
+On Tue, Oct 11, 2022 at 12:44:11PM +0200, Sicelo wrote:
+> On Tue, Oct 11, 2022 at 08:39:22AM +0300, Tony Lindgren wrote:
+> > To me it seems that we now somehow have a probe issue for musb depending
+> > on how it gets probed depending on the following line:
+> > 
+> > device_set_of_node_from_dev(&musb->dev, &pdev->dev);
+> > 
 > 
-> Thank you very much for inputs.
+> Thanks for the suggestion. However, 239071064732 does not fix it for me.
+> With that in place, there is no trace created automatically, but dmesg
+> shows:
 > 
->>>>> +
->>>>> +  vdevnum:
->>>>> +    description:
->>>>> +      virtual device number.
->>
->>>> That's unusual property... Why numbering devices is part of DT (hardware description)?
->>
->>>  In HPE GXP virtual EHCI controller chipset, it can support up to 8  
->>> virtual devices(gadgets). Each device/gadget will be represented  by 
->>> a bit in 8 bits register. For example, the interrupt register bit 0  
->>> indicates the interrupt from device 0, bit 1 for device 1 ... so on.
->>> When a user defines a device/gadget, he/she can define the device 
->>> number as between 0 and 7. Thus, the driver can look up to the bit 
->>> position. That is why we have numbering devices as part of DT.
+>   [    1.389648] musb-hdrc musb-hdrc.0.auto: error -ENXIO: IRQ mc not found
 > 
->> Wrap your lines properly, it's impossible to reply in-line to such messages.
+> I wonder if there is something to update on the N900 dts perhaps, in
+> connection with the recent musb changes?
 > 
-> Sorry for the improper wrapping. Hope the above fixed the problem.
-> 
->> Then how do you specify two devices? You allow here only one, right?
-> 
-> In our current design, to specify two devices, we added the gadget 
-> structure into the device tree, such as  gadget0:udc@80401000{}; gadget1:udc@80402000{};....
-> 
-> No, we can allow up to 8 devices by adding the gadget structure,
-> such as gadget0:udc@80401000{}; gadget1:udc@80402000{};....gadget8:udc@80408000{};
-> 
->> Which bit in which register? Your devices have separate address space, so why they cannot poke the same register, right? Then just always set it to 0...
-> 
-> In HPE GXP vEHCI controller, there are three register groups: standard USB EHCI registers, 
-> virtual device global registers, and virtual device registers.
-> 
-> Standard USB EHCI registers ---- We defined as "hpe,gxp-vudc" in the device tree (vuhc0) 
-> Virtual device global registers --- We defined as "hpe,gxp-udcg" 
-> Virtual device registers -- We defined as "hpe,gxp-udc"
-> 
-> Each virtual device will have its own separate address space. 
-> There is only single address space for the virtual device global registers. 
-> 
-> The virtual device global registers are including vDevice Global Interrupt Status register(EVGISTAT), 
-> vDevice Global Interrupt Enable register(EVGIEN), vEHCI FlexEndpoint Mapping register (EVFEMAP) ....
-> We need the vdevnum for the bit position in EVGISTAT and EVGIEN for each device.  
-> We write vdevnum into the EVFEMAP register to assign an EP to a specific device. 
-> 
->> I might miss here something but so far it looks to me like some hacky description matching the driver, not hardware, not existing bindings.
-> 
-> We create "vdevnum" as device configuration parameter due to our hardware need.
 
-That's not an argument... everything can be a "hardware need".
+Good day
 
-> 
->>>>> +
->>>>> +  fepnum:
->>>>> +    description:
->>>>> +      number of the flexible end-points this device is needed.
->>>
->>>> Similar question.
->>>
->>> In HPE GXP virtual EHCI Controller chipset, there is a flexible End-Point(EP) pool. 
->>> Each flexible EP has its own mapping register. The mapping register 
->>> bit 0 to 3 is for device number (vdevnum) and bit 4 to 7 is for EP number inside the device.
->>> The device driver configures the mapping register to assign a flexible 
->>> EP to a specific device.  Here, "fepnum" is the input letting the 
->>> driver know how many EPs are needed for this device/gadget.
-> 
->> Nope. So you create here some weird IDs to poke into syscon register.
->> First, syscon has offset if you need. You could treat it maybe as bits?
->> I don't know... but even then your design is poor - two devices 
->> changing the same register. Even though it is sunchronized by regmap, it is conflicting, obfuscated access.
-> 
-> The "fepnum" is the input parameter to define how many end-points (EPs) is needed
-> for the device.
-> 
-> You are correct that all devices need to access the virtual 
-> device global registers during the runtime. 
-> Thus, we create " hpe,syscon-phandle = <&udc_system_controller>;'
-> for the driver getting the vDevice Global registers address.
+Just for further testing, I added the very ugly patch below. Applied on
+vanilla 6.1-rc3 (i.e. containing 239071064732), USB works normally on
+the N900.
 
-And how do you solve poking into the same register by two devices? Who
-owns it? You don't...
+I copied the irq numbers from omap3xxx.dtsi. Does this give us any hints
+regarding the cause and resolution of this issue?
 
-> 
-> In our current chip registers layout with the vDevice Global registers, I don’t see
-> a way to avoid "two devices changing the same register".
+Regards
+Sicelo
 
-I see at least an idea - create proper hierarchy, where parent device
-instantiates its children (thus knows and increments the IDs) and is
-responsible for proper handling of shared register (thus the parent owns
-the register).
 
-I understand why you created vdevnum/fepnum properties but the reason is
-not matching DT bindings. These are not additional hardware properties
-which deserve their own DT properties - they are already part of unit
-address and/or just incremented ID based on device number managed by a
-parent.
 
-Best regards,
-Krzysztof
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 03027c6fa3ab..440c917c0133 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -2613,7 +2613,8 @@ musb_init_controller(struct device *dev, int nIrq, void __iomem *ctrl)
+ static int musb_probe(struct platform_device *pdev)
+ {
+        struct device   *dev = &pdev->dev;
+-       int             irq = platform_get_irq_byname(pdev, "mc");
++       //int           irq = platform_get_irq_byname(pdev, "mc");
++       int irq = 92;
+        void __iomem    *base;
+
+        if (irq <= 0)
+diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
+index 7acd1635850d..6c03a5301d01 100644
+--- a/drivers/usb/musb/musbhsdma.c
++++ b/drivers/usb/musb/musbhsdma.c
+@@ -416,7 +416,8 @@ musbhs_dma_controller_create(struct musb *musb, void __iomem *base)
+        struct musb_dma_controller *controller;
+        struct device *dev = musb->controller;
+        struct platform_device *pdev = to_platform_device(dev);
+-       int irq = platform_get_irq_byname(pdev, "dma");
++       //int irq = platform_get_irq_byname(pdev, "dma");
++       int irq= 93;
+
+        if (irq <= 0) {
+                dev_err(dev, "No DMA interrupt line!\n");
+
+
 
