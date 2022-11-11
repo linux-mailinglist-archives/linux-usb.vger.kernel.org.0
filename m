@@ -2,122 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DEA625D50
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 15:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B232D625D61
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 15:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234695AbiKKOkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Nov 2022 09:40:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S234807AbiKKOoj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Nov 2022 09:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiKKOjv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 09:39:51 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B1169DC9;
-        Fri, 11 Nov 2022 06:39:37 -0800 (PST)
+        with ESMTP id S234746AbiKKOnl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 09:43:41 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2050.outbound.protection.outlook.com [40.107.243.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC007342A;
+        Fri, 11 Nov 2022 06:42:36 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bA6nQJxrZ01Zz1XUkoZ6XW23Q/+BP5Dxi224w6E7vd/wuD0/67vF9YmIwGxBjsU3cTS+/tA2kwJL3W71uT2mo+tR3ELVKj9LgD4vZLB17Q5wJSDXBa8pRfUZlV5xIqYwH1z5+OO7/Y28TYQTKxISfZb1iMmdWQG94+v12X4QjoR9I9YhTb5wlUkUTgkptIEoKUlR+83uor93fUfjr0Ouwiu20nlTnPphW4o4p6hrWhtpY5KNnULOhzISKlAeJ8mDRhKFEerU4RNrl+aXIcgrfShDLsomMDezSFLJOxhPaOAM++MEM/dXdM5hLWdloNPKP3VJ25/uOKsNvnDeItxs4g==
+ b=EO8XjHKU360W3U5tbXNdEu+9yrfGaNISPlFwAXJbeM3gAwN56Rmkd26ufyAqdWbZzRHDXtSrGge7VJbfSH/1BA3ionTb8zxkfpSSY6iCJrv1ASOZGHl2t6aB9Abo7D/gYDecFwXf/eOSFGVBRnyX91WBaCtu3U4PM3inlEe8gkhdXtTgwHOoxfahgwShp3rQOeiKTt+1A6r7r2bStBwbeApgbqBj5VQKl2avTsbvxtEp9e/nL1atppbWOs1cZadzlkTYf4XvB8H35/vJ7hE+Zaimt/I9HzNm8yonfkdduc96MtlUIUWbEwiM9cdvtTmdKdYmxfQpK+IocCPiGXbs7A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tKaWpWpjStPB8aFHCJchFP/7URpcrQSc9wv7JC6hINI=;
- b=PruEBZqw2jTST7wtCUN4lJijh3/KK+GCQHhq00boGgeTM5WTmHJqx/5kTgeahK+7hSjgmzvMBZa/E9YcfUkHQpH3CM/JLwOiV0dY93DM3F+khz5KIH/6I/LmVCr2V74ZgQX6b3mWMzK6Z9gHZymPBfHgVzwX3yooBrmqUrna+KRXFK7OFOcayxe3IRNBcb510pbCXHoqkKJU7kT8jZ83QMOzfQ8HmSeuCgxuC7rzhyT1Hlo7OywPuy6c2rbhKzZGaqFecS7QSrHuXYC5WXgwfPHvUMGMAPCOotG6c2xhPtG5uUhgAUDUUT3AAlsxW0VhH7+SKR9Sm/9nQBApIj0l+g==
+ bh=LHGFRp6GaFUnBSJY2arCBCwGL735JaK2xRv/+/PoCAE=;
+ b=GIbdAOsnyfXus3a8Yma7/OBYD9M76MRIyB4Jny6yzFSHOzFmRJYBeLaUXH5OkB1AIVDhA6Ev80+RjM01lHsnODS1UY2xdUamW58fy3FMShbkBLEPIzp9Ti1np8pbXHLAubinccKHw6Jzc+gA46zPlyCkgY+bDdAeLGTskrIv4HfL9CTkCR4ZxNlIDMkjpFSFi5Gz0RtFqZWQKddXapkDVPqH/KK+DqaH7b0yUz5M7rnlJIbVcbdmCjI6whkfEb0Zz/dsSJ8oWrvo3x1FNqjeA99eYQDZ02FpIl93go4ceVSNBH8acV0qLZz/qDJQcKuzo8dXv7Iv4RKXwgUc+QzXIA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tKaWpWpjStPB8aFHCJchFP/7URpcrQSc9wv7JC6hINI=;
- b=e8VuYiJ0SfLEFN5I+g2GQ1+f7jXolyAzb1oyOUWPe9a+J0fmNdW8DcPw3YdVg0bJNOi6U6cnArqgnxX877HDeqMSr5KSFXa97svsKqr0YAchMjnntIx1D0Bv4Q9GE02baA8MZrVdnWgcbRBk6aCkTDsDtoxX3bsdIo5el8fL3Uxxg9sGl51zRJ7KBUTz5Fi2iYav/LGjVS/WGMVlGl5hR8MP8PngxES3tcZtkJBboXi3JdxqXUDcwpibdHeLmJeQ0Q9biRrnU/Yr5QCjOYlcWlryYpKw+9OEXDgJElokqGlVCPLDWpkXtvYA0F8vErkQYA6P1Qaz5LuaKFelftRvOA==
+ bh=LHGFRp6GaFUnBSJY2arCBCwGL735JaK2xRv/+/PoCAE=;
+ b=Gb9qrUbgt3VjvwvIhKUSs0bSuTbcR1Cs2G92uf9jb6eGBoVONyQPAWYDQuCzxbRfpaHl4htpkQTxrdIeR/wifjaGyxKclwFfwJumXCqcX20fB7nzILya5DeJfTheRMZDBtNQM14omIO3uTJMpBcJEPl7DvItp9mzqSctRhEl6fPVrwDh+vO8IBaSoKJAOEqa89YJlDjxNJY73nVvzbFginL3w6yhP3zAR1WYqtASvqMwKXueW6TCYrHYLzeR0p+kJoDg8uSgefRsJUIlFVpYmD1s02FzB7nb8tKuwVGSvPiuGkw34ooiCP/O42vm0UJF7WEvRk9svcZORBtAAWiu/A==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MW4PR12MB7118.namprd12.prod.outlook.com (2603:10b6:303:213::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Fri, 11 Nov
- 2022 14:39:36 +0000
+ CH0PR12MB5154.namprd12.prod.outlook.com (2603:10b6:610:b9::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.13; Fri, 11 Nov 2022 14:42:34 +0000
 Received: from CO6PR12MB5444.namprd12.prod.outlook.com
  ([fe80::1912:a3a8:1a8d:a960]) by CO6PR12MB5444.namprd12.prod.outlook.com
  ([fe80::1912:a3a8:1a8d:a960%4]) with mapi id 15.20.5791.030; Fri, 11 Nov 2022
- 14:39:36 +0000
-Message-ID: <ac1a91ff-7fda-f0ba-254c-cc389c519a5f@nvidia.com>
-Date:   Fri, 11 Nov 2022 14:39:30 +0000
+ 14:42:34 +0000
+Message-ID: <82c2f6e7-f22a-ad3c-93a7-e8b483f685e1@nvidia.com>
+Date:   Fri, 11 Nov 2022 14:42:27 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v7 2/3] xhci: hub: export symbol on xhci_hub_control
+Subject: Re: [PATCH v7 3/3] xhci: tegra: USB2 pad power controls
 Content-Language: en-US
 To:     Jim Lin <jilin@nvidia.com>, thierry.reding@gmail.com,
         gregkh@linuxfoundation.org
 Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Petlozu Pravareshwar <petlozup@nvidia.com>
 References: <20221111101813.32482-1-jilin@nvidia.com>
- <20221111101813.32482-3-jilin@nvidia.com>
+ <20221111101813.32482-4-jilin@nvidia.com>
 From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20221111101813.32482-3-jilin@nvidia.com>
+In-Reply-To: <20221111101813.32482-4-jilin@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0075.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:8::15) To CO6PR12MB5444.namprd12.prod.outlook.com
+X-ClientProxiedBy: LO4P123CA0111.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:192::8) To CO6PR12MB5444.namprd12.prod.outlook.com
  (2603:10b6:5:35e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|MW4PR12MB7118:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ce6ebb1-2128-4508-caa1-08dac3f28e27
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|CH0PR12MB5154:EE_
+X-MS-Office365-Filtering-Correlation-Id: fed2a5ec-a567-4ace-0248-08dac3f2f86a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7cbQ5tj5fvY7AQ7BSaoA0SBvgrNOshExPm/gNEQes9/Itm5mRDgvArTmnGB5kQ+NyPSgk59Q6RTaDpDc8Ew0D7yWzH+YqNK7k4CU/jmp6uDjWzRhvooI2iZTnEKUSe6x0h/ZR/Qc3tYVYnoNJyQ4qdHvMI0cjobtt2s2cmhqKOrUFArM2fvP5NNaJTODVIab0tC5XKBct3xGCAtwgwbn+3MrU5eEfS2daJOYKox2OdljTIjfJRz03IHdJqP5cAp1h/MNjKl15foikixbpBJHgvAy1LgKCTVnnAJYrelLoISctebG8+vC5Lvef9YkkkbJO0cNZnAsFUAnUxD3vRjsGZYJV7yA9xHA4VLv7aAZ8yUaj2JpC59K4EQEqfL+wmUn5EJx/kQSTaRV/k5CFOanfaaTyAKh2xxRGAyj49W6qvl9DfpZZRAKBrZV4qlhItBCUhWaH1gYzrmMuDk0b/Ktce1HGLehOo5djWciglami2ULxbN1+R0E9OW5Pwqs8gGxTResdmGBngsbJoZJ6X0RSHZVBrUzTFJWyNzYcS17QLBdNfdB7ONUmVNKkEQdZppnriXz+XJ8/1LBzW+4SqLRP8dplwFQdxHt+YL7ls3zRQYDIRNAo8+noWZDNX47F4WLYt6CD6zXztKnfxjlSwZle7+wxCE71cqpX4ox3H6iGvtA/pGZ7WENquw58N+qx6aJX6YJzt1c1tBBvIgTtwCFMSQWDArhMzJ7oav7bVml5TsVnvebucPka2Q+jqu1UkzPh66SNaJbt8G5eSyWWKcftz8jit+BnRQUje8WzOuxZwQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(366004)(451199015)(31686004)(41300700001)(38100700002)(5660300002)(36756003)(8676002)(478600001)(66476007)(2906002)(8936002)(66946007)(6486002)(316002)(4326008)(86362001)(66556008)(83380400001)(186003)(53546011)(2616005)(31696002)(6506007)(6512007)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: PsdyiqjOUT4oyZuM/lHl3PyCB48gn1U/8GqbhDnEbXifqvlAOdF9ko3y0SHtFHvl8kU7HkE12o7Fgo4i+1KelMJxo/7EO62v5mdA8+76AoPY7TyGmXAXhCMkgH2BjoGXfX8XaurcOFPNd7cEgqjNqgMQc4vWzqt0YLdjdd1Hk1+ztdUiDtS8p4DuFRZtKmYs8XLK8fJEn/2Dnc/r5r2VfYyEXaBRq0VVyugtS6BJMIdSjknPaJWTmImARmBcYO4bR4FgPqmNBrZakE7BqG6xRXa3b6To4LiWsqFz3pTGEV3mBnieSxhgN0SRBbHHv0NPXwPCt3rkiXRezhf+4Og1LykL0zDhPRMKBlPvmE389hqGkOhsY2DngTVUkiuAWk0qdafoDlfLqU3ehkW7NBTYCz3cT8PcyYN8Nc9i8GvqYZqjJ2WG+8SmrxKCKDOGSoc9LObfzrJAel7CjScY49JluTKW3DaVFCujt1mNTKJr2n3dasxn5UdK12BckGRCTUMa275OfGefwryZ8C1SsankM5ZSUxPbcBOmZG3bBM08tOGqVp4mASMfZthACAhLLSXpLb0xCthX6jomJ+EjN3gTL3wdsKjpYTq9sJ3tSPe/TjjRq4QsaxY/Z+tuPLxSUeQ03EEymRxaJVC0hkWbeUnX3LMNQKJ+3fRWYSWaWFnS8ctEkK6/hCuVQBzaTH3AiGflFXed+eGy7yTDMQQUKSx9Lce5b0sAI2BlCadql+jOVMzsEDmIDiw+Ycu+0RJ8Gc27vm09iv551xGntPVw1JLpJKedksN/7VLxRRVcb42Zu90=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(366004)(396003)(136003)(346002)(451199015)(107886003)(66946007)(36756003)(66556008)(66476007)(5660300002)(4326008)(316002)(2906002)(8676002)(186003)(2616005)(31696002)(38100700002)(41300700001)(8936002)(86362001)(83380400001)(6486002)(478600001)(31686004)(53546011)(6512007)(6506007)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUx0K1E3SVhOdXc5Z0NZRlJyemFVcjNmTXoxNGk4YzNsTG12ZmdLNlFqZEZr?=
- =?utf-8?B?RTNIK01NSlhFTEk1QWlSc0k2R0g0S2RXNGYwUDJleGpjcFhvcjVtWGw2OWpp?=
- =?utf-8?B?YlVZR3c4OGVKa2RhYnNQV01ETHdQZnhUUmFUTlZuVDUyN0tOQkdpWkgwQkFu?=
- =?utf-8?B?VlAyYWdrdDNGbi9IVXBjMUlrNytFL3VwZTkwN25iWEpydXh5SEJTcUFFa1BS?=
- =?utf-8?B?OElHb0NoYUhkOFZkdU82N3EvdldOUUJnNEJPWTlUUHV0bVo3Wnc4K3QzYmhW?=
- =?utf-8?B?VnF3WTZwVjJLVkxWcnBNbS96VGpwemlYcTc3MzU4bk1MckoxWGM4dlJOVHd3?=
- =?utf-8?B?dlhiTHAzQnpRTTBibXg5a1hQS3lGUTZZNzVmbmZwbHl1QXBkNnJmRFNFd3RZ?=
- =?utf-8?B?bi95NFd0RGRaRStNOEVKbTJlMW1MaHhCSzI3RzJxWkY2aEI4ZnVYSFV2MVlq?=
- =?utf-8?B?QmRrQ2Rab1lVTjBESlo5YkNIQk1ndWlBWTJZcUxVRTFRMGlJamxvMmZtemM4?=
- =?utf-8?B?Tko4aEVvRDdGeTFRVXZiYXM4SndjTTdQb0ZOUjhoalNVOG15ZXdCampsYjBr?=
- =?utf-8?B?Tnh5d081NFAwYmxEdzNoeGthZ1cyWVdEYndETjAybGJENXlLOXJHMkU1dzRX?=
- =?utf-8?B?SndpQ09EQWxzVHdma2VCVVhnQ2lNYmhmNEpWdHc4eU9tVEZ1SGZlVVhHVlps?=
- =?utf-8?B?Q2VFZ0NmaWZzYjJNQ0RTQTJRMDlvWDdJUTQ2bk9pMGIrNjN6d1JCeExJd1Bj?=
- =?utf-8?B?eVo2M1NOQ0tGL0djcHJxTHdKMjl1N3p1Z1orbGU3WjE5SWpmWDBic3lpYXRC?=
- =?utf-8?B?VkJ0SXhiS0RjZnQzaFF6ZWg0VlBBNEh5cmZFcDNtNkdka2dGaklRYXp2VmZT?=
- =?utf-8?B?VXMwRUVLRnYzNzlQd2o4VTNkdEZrQmVHbG5nVFBlWFA1c0VIVzU1b0Z6aUN1?=
- =?utf-8?B?NlhCYUpSVW9nRUNxeUFRZFVEN2ZTOURDM3l3MWtJRlVNN29KMjJXNjE2MTEr?=
- =?utf-8?B?QlR5UzIrQnlwL3h1d3BGRjdNRUZrcElIZXh5NGVGV2gzMzh6SzhCQWlqOUFV?=
- =?utf-8?B?VE4wenlkNkw5UW5EdUJGL3pWYmlaK0QyM0ZiOElzMU9LeFVlUk9NMmg3VlNr?=
- =?utf-8?B?R3ZONml2L2p1N2lUbVRJbzNWT09NcWRkQmtpYzhPQ05ZblMraXY2cHdEZDc2?=
- =?utf-8?B?OXh1UkhSOXBzU1htWmxTbUhWQVNXbDNVblVlSit5VStvSzhQVVpRc09Fbkp2?=
- =?utf-8?B?YTlWektWNDEyaVdLOG5PczRyUXdtSmFsVThnTzJ6MlVEMzNUcSsvTVJZeHh1?=
- =?utf-8?B?cnRGYzNhVjlQQXlIM0xNNzd6d3cxM0FVUkw0emFXWXNxbC8wQlJkOXdocDNW?=
- =?utf-8?B?ZG5mcUorcEJHRjNid01Sa3FyM1k0OFNqT1hSWVM2WExZNWtHV3dTMkNlL1J2?=
- =?utf-8?B?QXBGajVuT0RPNkIvdFVMKzhOTUtJZmNFandjWUxRRFNoeUhYOHZjeHVSSkNX?=
- =?utf-8?B?ZzhDQUswQURJMm0zeGhxWFUwbmRydG9lMTk1MDdKVEQ2QTROVG9HbldUQUlq?=
- =?utf-8?B?NXoxSDJuQVVWYTVRT3ZocnFpa1dycnF1SmtxM0szd2NyME1tV3NyVlVyNW83?=
- =?utf-8?B?akdQSFFmTWdGU2VzNEltN201MlgwZDNGRElndzBzWDBZWWZ5cEQzaytKRFl4?=
- =?utf-8?B?RTV2UTIrQzNJK3o4a2pLOEphTjhFemtQbXNGTnBkWEdMUkVjRmQ2SDFGWEZF?=
- =?utf-8?B?RFVNc3pWWlhHTXh1TTRNYmFjR3JJWGNQSWlWb1poTmVIQ1o4b1ZERU9KZmhL?=
- =?utf-8?B?WG1TejVrUUZNdkJPUFVFb2xiOWViWXYxYjI4RHBTblZtYVFyWFFVQXQ3SE1F?=
- =?utf-8?B?NVh3S1FlbnR2VC9ZWEVlL1RvVXNkMmZHZ2VHZ3ZWMmVuTnlQOFhXcXhubjJS?=
- =?utf-8?B?aHlKNjZDT0JXUDBnVE9MZ0J1OThseVl2M1FnL2lGV2p5WUpXQTg0dHRLZ25u?=
- =?utf-8?B?c3prSm5jTFdxZFp4ZWk3eWFNZXVCdjFqWHRZM2U0L2IySy80RzdMUE5PQ0w1?=
- =?utf-8?B?Z2tpUWxHSCtxRXd2MFFRVzB3VWVDMzEyOUZLNldQMnFPR0pEdmtBaVBZUzhJ?=
- =?utf-8?B?ekdTWm81SzU5d0xUZ1dHSXZhek9ERGhFc2NrQURHcUpVRE4yODhySFMvSTFJ?=
- =?utf-8?B?M2lXOExLMTVGRmlEUlZKKy9jZ1JHbXFINVloU1JOVXgxSXBQODBTWDNLSlJO?=
- =?utf-8?B?WCt1RDg3MU9pYWpxT1RxRkFKYkJBPT0=?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?alhOUHBsQnFEY3llckN2ZzBDaDE4bU8rOGNNa05icDJPQ0E4N3hOQ0VkNTho?=
+ =?utf-8?B?MHNiR3FWTDUzMnNwUVRjV3cwbTl2NTBWNExSZW1WWThQYkxYUm50ZXlXdDJF?=
+ =?utf-8?B?T3hOTXpVZVZXeHAwZG1IT0xXUm9hckpxRzVBTUFRdHpvREpNTmVMdXdCaXRt?=
+ =?utf-8?B?cmNVejcyTjYxOWxRTTQvYlBpMnJBRisrVDZzZmxSTTlsMzFENllqTG1uTFFI?=
+ =?utf-8?B?UUgrbGt0WXE0bzJEb0p0ZUFxcys3UTBGdklqUk9PcWFHd2QzV3g1aWlmS2t6?=
+ =?utf-8?B?NDZ3OTJTV2NicjhLQkE1aVVJMFhRVURIakpTZWcwbHF1Y0puY09jcXFoOHEw?=
+ =?utf-8?B?MUxsUUNuOVN4OWJIUXE5RzRNM3J2cVk2Y0hOMXFES2dYZGI0a3ZycFFGV0x3?=
+ =?utf-8?B?NDZCY3YySjByTlJMdzgvSysvb0NuTUZ0VnU2OWhobDduUGxsc3V3bGcyQVgw?=
+ =?utf-8?B?RytUakU0VTNZNlp4SHZBQUZZYlpMZ3lhYXA1bWNiS28xY3BFOGV2VlBCeU12?=
+ =?utf-8?B?WHVsTUhtbUVCbDk3ODlrY2M4Vmg0dWo5VDlBRnVQZS9JOTlFZ0RaNElSckM3?=
+ =?utf-8?B?S2JJb1FBQXI0Y0E2ajdxZW05b2cwMW96TFBEUVBUM1JKT2pMYzdyWFE1UmJS?=
+ =?utf-8?B?U3VUUEk5TDNwbmlTZEczY2JuRC9rcU91SytKMEEyVyt5WWhXNm9kMmowc3Rs?=
+ =?utf-8?B?ZHdaQkZ5MS81OStQOEN0VEVsRjhmRE92ZElzWEgyLzlOMUdyME9QSjZ4eUVT?=
+ =?utf-8?B?UXZZMjVIZG5XbjRuQW9SUkY4RjlZZUZ6VnVTeEtMTmVSSjBKa1J4N2I1WGtT?=
+ =?utf-8?B?VGl1c01qcmpnTVJTWXBTRWxvUUQ2UlNVWXBLQ3dTaUMrNUZOL1NTTG9LOVcx?=
+ =?utf-8?B?U3JLdTZXVDZadmVqU3FiUnF4ejZSNXk0RDczUVE1Q3Z2WkJqNXpRS2pWb1Jt?=
+ =?utf-8?B?M2tWVjRiTXN4czRNTUplQUhDNkZ3bEgxR1NHVnljS3lNekRMTFJvOEszYXFD?=
+ =?utf-8?B?K0p3RmVLTWxjKzNUM2FaemV1cXdDRjZTRVc1aGdCdDZ5M0lXUW0xaU1uL0NV?=
+ =?utf-8?B?bTBaRGphT1dpQkVrK01GamJPUGdlSEtkT0g4QVdkckdtZVhBNmF0c3BoTVFT?=
+ =?utf-8?B?b2paN2dPY09RS1JHTDhLVjRWOW5kcUFVeVZiWFQ3bFZIN09yTVFJQnJkTHFm?=
+ =?utf-8?B?RnQ1cU9CM0U1cEhHYy9uS21zMnJtQ3FNNnNtc0RYS1YwSUV1UmxVNlBZWnd3?=
+ =?utf-8?B?QVdVM21naDBEVmxjZTVYc0s1QzhJdHVVS0Vrd3dNYkQ5STRXZXYzMUVZV2l1?=
+ =?utf-8?B?aFlVUGdSL0d5a0hiUXZTbVprbVlNSmsrNFh6RTB0SFdNOEtCaXZieFBRWjB6?=
+ =?utf-8?B?ZWpmeFJ4dFU4cmY5UVpBcnB1WUZUdWZDdGdRSm41c1RHbEg5N0hDaFozYm9Q?=
+ =?utf-8?B?L3QvbW93NXROZ1pZKzhrVndlWkhPZi8rSitFVDV1VGkxTDRlTGdCRzJGYi84?=
+ =?utf-8?B?cVhtOStaQUdTcnZmRXE2aWozUHAyWnV6cDE4YkhmMnh1RkVxMmdYYmlmbFpK?=
+ =?utf-8?B?ZzBFeUYrQi9NYmgxNGFHWmhFMngwNmNYZDNud2hwbk9JMWk1RHg2RUZwZ3dN?=
+ =?utf-8?B?VEhJaGRrNStFOHFNY3NZMy9jWGtVSXpacE5vNFhha3dXblVLMDRHVmZZTFlO?=
+ =?utf-8?B?Zmc3N1l4Zk5TcGVTZ0FWdWNscnhLaElWYU40c1VGOVJ1NW5GUnB3ZGJwS2dW?=
+ =?utf-8?B?ZGZzTmRaYkJWc1l5VmZSUkVJamE5SGJOQ0hId0R4c2tLdVAwcERrcmlabDhv?=
+ =?utf-8?B?N1dqeTY5d1o3TnVzUjg3ZVFGU3dxVGF5M0VGZ1dMZms1Tm9vaGgwOVdxTmxm?=
+ =?utf-8?B?OXJVSUxRSi92K1lQRko0NngwaWhZa0xqbW1SUlNwRHJJV1RyYk44Z3M0TVA0?=
+ =?utf-8?B?a3c0cDkvY01LQzBxTFZUN1U4ZXNSYUlOc25aS015NmI0cjVFcGdtdlJ6TXJn?=
+ =?utf-8?B?WXludm52M3NyVGcwUFBTQm93WlFRbkI5cnVyN0NzdXJqcnptVGZkdHkyeGRR?=
+ =?utf-8?B?QjdER01jUWZSWEJDRnpFUmsvK2VJOUJnbHZKZXNXdG5nN0ZFWm9oRkJOcWta?=
+ =?utf-8?B?aE42OVdhTVZuWktTOUpLWjhzQTFUbG8xZWpTaHZPTnQrc1BIWkpIQTg0Y1FX?=
+ =?utf-8?B?bzcxQjhaUlJXcnlpdHBtYjZvMzdBeVRXSTdHb3pKQ004eWZvbHd6dHBwK0h3?=
+ =?utf-8?B?NFJLdDQycnM3Z251R2ErKzBFb1NBPT0=?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ce6ebb1-2128-4508-caa1-08dac3f28e27
+X-MS-Exchange-CrossTenant-Network-Message-Id: fed2a5ec-a567-4ace-0248-08dac3f2f86a
 X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 14:39:36.3633
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 14:42:34.6826
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XyFYB5bYnUmYPxRgBhz1H1Tvq/7EJBoFW2VcUwMwMZqI7zUHG1XbC+L+lDs4ln1tRBT0O/kL1uiQ+GZhLXz6VQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7118
+X-MS-Exchange-CrossTenant-UserPrincipalName: r1VY/FWkD/YEXEs2DxEyN3NIRn8YgQhcmJjBT4JGnlzl8dABSQMLa2AHVJTBEf8DAlsnCUYXwHMVoPSbpYgPxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5154
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
@@ -130,34 +130,215 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 On 11/11/2022 10:18, Jim Lin wrote:
-> XHCI host drivers may override the default xhci_hub_control() with
-> their own device specific function. To allow these host drivers to
-> call the xhci_hub_control() function from within their own
-> hub_control() callback and be built as a module, export the symbol
-> for xhci_hub_control.
+> From: Petlozu Pravareshwar <petlozup@nvidia.com>
 > 
+> Program USB2 pad PD controls during port connect/disconnect, port
+> suspend/resume, and test mode, to reduce power consumption on
+> disconnect or suspend.
+> 
+> Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+> Co-developed-by: Jim Lin <jilin@nvidia.com>
 > Signed-off-by: Jim Lin <jilin@nvidia.com>
 > 
 > ---
-> v5: new change
-> v6: modify commit message
-> v7: change commit message
+> v2: Fix issue that wrong tegra->phys[] may be accessed on tegra124
+> v3: No change on copyright
+> v4: Remove hcd_to_tegra_xusb() function which is used only once.
+> v5: Update .hub_control in tegra_xhci_overrides (xhci-tegra.c)
+>      Invoke xhci_hub_control() directly (xhci-tegra.c)
+> v6: Change author to Petlozu
+>      Changed from u32 to u8 for variable enable_utmi_pad_after_lp0_exit
+>      Modified tegra_xhci_disable_phy_wake(), tegra_xhci_program_utmi_power_lp0_exit(),
+>      tegra_xhci_hub_control()
+> v7: no change
 > 
->   drivers/usb/host/xhci-hub.c | 1 +
->   1 file changed, 1 insertion(+)
+>   drivers/usb/host/xhci-tegra.c | 125 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 125 insertions(+)
 > 
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index af946c42b6f0..4f20cdae2a89 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -1604,6 +1604,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->   	spin_unlock_irqrestore(&xhci->lock, flags);
->   	return retval;
->   }
-> +EXPORT_SYMBOL_GPL(xhci_hub_control);
+> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> index c8af2cd2216d..b5ed06ddbbac 100644
+> --- a/drivers/usb/host/xhci-tegra.c
+> +++ b/drivers/usb/host/xhci-tegra.c
+> @@ -274,6 +274,7 @@ struct tegra_xusb {
 >   
->   /*
->    * Returns 0 if the status hasn't changed, or the number of bytes in buf.
+>   	bool suspended;
+>   	struct tegra_xusb_context context;
+> +	u8 lp0_utmi_pad_mask;
+>   };
+>   
+>   static struct hc_driver __read_mostly tegra_xhci_hc_driver;
+> @@ -1951,10 +1952,24 @@ static void tegra_xhci_disable_phy_wake(struct tegra_xusb *tegra)
+>   	struct tegra_xusb_padctl *padctl = tegra->padctl;
+>   	unsigned int i;
+>   
+> +	for (i = 0; i < tegra->num_usb_phys; i++) {
+> +		struct phy *phy = tegra_xusb_get_phy(tegra, "usb2", i);
+> +
+> +		if (!phy)
+> +			continue;
+> +
+> +		if (tegra_xusb_padctl_remote_wake_detected(padctl, phy))
+> +			tegra_phy_xusb_utmi_pad_power_on(phy);
+> +	}
+> +
+>   	for (i = 0; i < tegra->num_phys; i++) {
+>   		if (!tegra->phys[i])
+>   			continue;
+>   
+> +		if (tegra_xusb_padctl_remote_wake_detected(padctl, tegra->phys[i]))
+> +			dev_dbg(tegra->dev, "%pOF remote wake detected\n",
+> +				tegra->phys[i]->dev.of_node);
+> +
+>   		tegra_xusb_padctl_disable_phy_wake(padctl, tegra->phys[i]);
+>   	}
+>   }
+> @@ -1972,6 +1987,28 @@ static void tegra_xhci_disable_phy_sleepwalk(struct tegra_xusb *tegra)
+>   	}
+>   }
+>   
+> +static void tegra_xhci_program_utmi_power_lp0_exit(struct tegra_xusb *tegra)
+> +{
+> +	unsigned int i, index_to_usb2;
+> +	struct phy *phy;
+> +
+> +	for (i = 0; i < tegra->soc->num_types; i++) {
+> +		if (strcmp(tegra->soc->phy_types[i].name, "usb2") == 0)
+> +			index_to_usb2 = i;
+> +	}
+> +
+> +	for (i = 0; i < tegra->num_usb_phys; i++) {
+> +		if (!is_host_mode_phy(tegra, index_to_usb2, i))
+> +			continue;
+> +
+> +		phy = tegra_xusb_get_phy(tegra, "usb2", i);
+> +		if (tegra->lp0_utmi_pad_mask & BIT(i))
+> +			tegra_phy_xusb_utmi_pad_power_on(phy);
+> +		else
+> +			tegra_phy_xusb_utmi_pad_power_down(phy);
+> +	}
+> +}
+> +
+>   static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+>   {
+>   	struct xhci_hcd *xhci = hcd_to_xhci(tegra->hcd);
+> @@ -1980,6 +2017,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+>   	unsigned int i;
+>   	int err;
+>   	u32 usbcmd;
+> +	u32 portsc;
+>   
+>   	dev_dbg(dev, "entering ELPG\n");
+>   
+> @@ -1993,6 +2031,15 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+>   		goto out;
+>   	}
+>   
+> +	for (i = 0; i < tegra->num_usb_phys; i++) {
+> +		if (!xhci->usb2_rhub.ports[i])
+> +			continue;
+> +		portsc = readl(xhci->usb2_rhub.ports[i]->addr);
+> +		tegra->lp0_utmi_pad_mask &= ~BIT(i);
+> +		if (((portsc & PORT_PLS_MASK) == XDEV_U3) || ((portsc & DEV_SPEED_MASK) == XDEV_FS))
+> +			tegra->lp0_utmi_pad_mask |= BIT(i);
+> +	}
+> +
+>   	err = xhci_suspend(xhci, wakeup);
+>   	if (err < 0) {
+>   		dev_err(tegra->dev, "failed to suspend XHCI: %d\n", err);
+> @@ -2066,6 +2113,8 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb *tegra, bool runtime)
+>   
+>   		phy_power_on(tegra->phys[i]);
+>   	}
+> +	if (tegra->suspended)
+> +		tegra_xhci_program_utmi_power_lp0_exit(tegra);
+>   
+>   	tegra_xusb_config(tegra);
+>   	tegra_xusb_restore_context(tegra);
+> @@ -2437,8 +2486,84 @@ static int tegra_xhci_setup(struct usb_hcd *hcd)
+>   	return xhci_gen_setup(hcd, tegra_xhci_quirks);
+>   }
+>   
+> +static int tegra_xhci_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
+> +				  char *buf, u16 length)
+> +{
+> +	struct tegra_xusb *tegra = dev_get_drvdata(hcd->self.controller);
+> +	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> +	struct xhci_hub *rhub;
+> +	struct xhci_bus_state *bus_state;
+> +	int port = (index & 0xff) - 1;
+> +	unsigned int i;
+> +	struct xhci_port **ports;
+> +	u32 portsc;
+> +	int ret;
+> +	struct phy *phy;
+> +
+> +	rhub = &xhci->usb2_rhub;
+> +	bus_state = &rhub->bus_state;
+> +	if (bus_state->resuming_ports && hcd->speed == HCD_USB2) {
+> +		ports = rhub->ports;
+> +		i = rhub->num_ports;
+> +		while (i--) {
+> +			if (!test_bit(i, &bus_state->resuming_ports))
+> +				continue;
+> +			portsc = readl(ports[i]->addr);
+> +			if ((portsc & PORT_PLS_MASK) == XDEV_RESUME)
+> +				tegra_phy_xusb_utmi_pad_power_on(
+> +					tegra_xusb_get_phy(tegra, "usb2", (int) i));
+> +		}
+> +	}
+> +
+> +	if (hcd->speed == HCD_USB2) {
+> +		phy = tegra_xusb_get_phy(tegra, "usb2", port);
+> +		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_SUSPEND)) {
+> +			if (!index || index > rhub->num_ports)
+> +				return -EPIPE;
+> +			tegra_phy_xusb_utmi_pad_power_on(phy);
+> +		}
+> +		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_RESET)) {
+> +			if (!index || index > rhub->num_ports)
+> +				return -EPIPE;
+> +			ports = rhub->ports;
+> +			portsc = readl(ports[port]->addr);
+> +			if (portsc & PORT_CONNECT)
+> +				tegra_phy_xusb_utmi_pad_power_on(phy);
+> +		}
+> +	}
+> +
+> +	ret = xhci_hub_control(hcd, type_req, value, index, buf, length);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (hcd->speed == HCD_USB2) {
+> +		/* Use phy where we set previously */
+> +		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_SUSPEND))
+> +			/* We don't suspend the PAD while HNP role swap happens on the OTG port */
+> +			if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
+> +				tegra_phy_xusb_utmi_pad_power_down(phy);
+> +
+> +		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_C_CONNECTION)) {
+> +			ports = rhub->ports;
+> +			portsc = readl(ports[port]->addr);
+> +			if (!(portsc & PORT_CONNECT)) {
+> +				/* We don't suspend the PAD while HNP role swap happens on the OTG
+> +				 * port
+> +				 */
+> +				if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
+> +					tegra_phy_xusb_utmi_pad_power_down(phy);
+> +			}
+> +		}
+> +		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_TEST))
+> +			tegra_phy_xusb_utmi_pad_power_on(phy);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>   static const struct xhci_driver_overrides tegra_xhci_overrides __initconst = {
+>   	.reset = tegra_xhci_setup,
+> +	.hub_control = tegra_xhci_hub_control,
+>   };
+>   
+>   static int __init tegra_xusb_init(void)
 
 Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 Tested-by: Jon Hunter <jonathanh@nvidia.com>
