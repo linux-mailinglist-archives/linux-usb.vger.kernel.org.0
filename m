@@ -2,141 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE1062556E
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 09:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 895A2625625
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 10:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiKKIgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Nov 2022 03:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S233369AbiKKJEz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Nov 2022 04:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiKKIgl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 03:36:41 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC52654D3;
-        Fri, 11 Nov 2022 00:36:40 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id y16so5504598wrt.12;
-        Fri, 11 Nov 2022 00:36:40 -0800 (PST)
+        with ESMTP id S233438AbiKKJEd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 04:04:33 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1101D77E7A
+        for <linux-usb@vger.kernel.org>; Fri, 11 Nov 2022 01:03:22 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p8so7384096lfu.11
+        for <linux-usb@vger.kernel.org>; Fri, 11 Nov 2022 01:03:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3LdKiDa3X5sRwQrkwBd9fsnonVBgPFP/Q0DkSX0juAw=;
-        b=bfRj7QxjEbM/niJkaWqqiz0trKfDz4MiqicdQJwv9oRoVzm47d0EGJ6eXu3tHaQiHE
-         Ugyp05pCuAD2GFL2AicQM4tQggjVqrtd6r7PLcEk9LnbEYS/tOWV2G7Wd0OFORhQVYmZ
-         xJdmnSEnqlRfLV1oM+XGa2TXnhaG7GV6AvDQPBEfOaRM4iMPqonz4npkO4OW/c31H6wI
-         EhZkO2HnbPHCzog7XSelGYmpU6litGhPVm7emL1lpyiDl1t4EE09MqAHO/Qsd3JO/4uI
-         kCFOXDuOVO3hpZu8G8Wl/izyHLYno8ymnqgnJDxpLL8SlgNPimorIW11tLEp03pPzHFI
-         BOSA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uDzd4abq0tgpR4GqgHbA/G3xdUvZ33DQ50+3Ct7HstM=;
+        b=M+DQSdgqsVfklmIHa3xlZJLS/n1PyRc/At+iRSsFl510UA3YJZVwul42HKajdZ/jcf
+         bQBihPAUIXFMyQuWPmfT/2MnVqXMUb+lEOEa7v+SAr0ReYuFV8hIV/DKPM/SFPypNol9
+         jmlCUqJaJQ6WAxLAoTJUDKOSjWg3xxl2hHy4WNt+0NaiIzNHlOZ3yIy6K/GRSqShudHC
+         AlGdiWv2g0FisPttdypsGbyw5CHtv89fBSDaTqkAUr5SV3c+LVLApx3Ffz3XMJ25CMcw
+         qY346R9d5ujn2/eWlOsiXGtOHc6YMVG4vqc0yeC/QrjrNQ+ObHUX1t7YrRJG/W0g901A
+         ZuKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3LdKiDa3X5sRwQrkwBd9fsnonVBgPFP/Q0DkSX0juAw=;
-        b=kHfIBfmVdkpRybFB9xzu1QVqHPIEsESNNt88DVIlo5zNJknor6ZFiS4F4u3sSUAaWd
-         F6whm5MupSzwFFFw751qQl5fkd1uyV/tyJ90Y25ePqGEuAVNEcHYPgSIbOdVc5LixJIT
-         sCFCptz9ATvFvT+GB/ZRpwxHIUZ7mOGjPY94P73062QoTpaRRJGv7iit925xpTyrJiO6
-         lmJfRgsxlmjct3ttFUm9CzBwL7gCCCiMgRNUGnYqhSIVoNbSIF4vLIbocYEgDhvFAMx9
-         CoH+5trO9rRhaSl45mKcnS8f0HM84XmWjw/UfqxFQWL+WmBRZYNaCTur/GPmZ5cx+SDy
-         6LYg==
-X-Gm-Message-State: ANoB5pmLyhZ9FxeTUgGzR/QoYSamwgzx2JlH3hbMSD4EYH1F1XEfmuSP
-        lsSJDe+FNVZOiRezQw6sBRc=
-X-Google-Smtp-Source: AA0mqf5zJnBWSewYJi5CZXCHSfIqp/EIZEL1KUO2jeV1UtAmzpZYjV0gKz5oXlS+9igqzhly82U9UQ==
-X-Received: by 2002:a5d:538d:0:b0:236:6b8e:3a3f with SMTP id d13-20020a5d538d000000b002366b8e3a3fmr577678wrv.159.1668155798966;
-        Fri, 11 Nov 2022 00:36:38 -0800 (PST)
-Received: from tp440p.steeds.sam ([69.63.64.50])
-        by smtp.gmail.com with ESMTPSA id k7-20020a05600c1c8700b003c6b7f5567csm12067507wms.0.2022.11.11.00.36.36
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uDzd4abq0tgpR4GqgHbA/G3xdUvZ33DQ50+3Ct7HstM=;
+        b=kSuKsxgATUn1AtCJKPvkQSVIUtmmCrfIe64FMsxnsGxhDdfP/pTfFMsnhkY5iEum7N
+         hK7teELlR1t6d6thzFmBbS4u2XwuX9+FD8qwoViSTTC0KUMROYvOCImrB7h2stj6OEHU
+         Jni7hSP5AzKaAedb651pVAFgcdCNcHS/Icw/Etfk6WpYFzBH+ZY8KdPDeQSFcQlBjrWP
+         fROMhg/AMYwOv91mKhKu1QmhiVV0ofML8B1NXuuH89UiNosgmQOQnBtJ8ZNox14r43gj
+         TyvLaXZiGdLc6iyk7QgKBVhmu8qMspT/VsZAu0ZopHNvwnJTaL3AJN5cgeb7zpKW3HjZ
+         nfvw==
+X-Gm-Message-State: ANoB5pkyW33vuSadDEw+Vl5KUqFqdqhCI02o6D/IOkTAIb3eSTJeW5yp
+        xZtu3lCZ0GXET4oQjuWKjIRMD0dDggP7Vw==
+X-Google-Smtp-Source: AA0mqf59Ci1jwDchk91a7u7/2lETERyIke4rZm6O8WrNpiRLI/gLP3+dOxvMbgA6I290Izlh2+ke7g==
+X-Received: by 2002:a19:7b15:0:b0:492:c88a:17a8 with SMTP id w21-20020a197b15000000b00492c88a17a8mr401639lfc.250.1668157400439;
+        Fri, 11 Nov 2022 01:03:20 -0800 (PST)
+Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id d25-20020a19e619000000b004a2386b8cf9sm221143lfh.206.2022.11.11.01.03.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 00:36:38 -0800 (PST)
-Date:   Fri, 11 Nov 2022 10:36:33 +0200
-From:   Sicelo <absicsz@gmail.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        maemo-leste@lists.dyne.org, Felipe Balbi <balbi@kernel.org>,
-        phone-devel@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Rob Herring <robh@kernel.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: Re: [maemo-leste] USB PHY Initialization Fails on Nokia N900 Since
- 5.19
-Message-ID: <Y24JkS3tykIZRH+A@tp440p.steeds.sam>
-References: <Y0PhEOl+MwlQ8HAD@tp440p.steeds.sam>
- <Y0UBindrJa1ptyR0@atomide.com>
- <Y0VI+/XJs8nsazwE@tp440p.steeds.sam>
+        Fri, 11 Nov 2022 01:03:19 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] usb: fotg210-udc: Fix ages old endianness issues
+Date:   Fri, 11 Nov 2022 10:03:17 +0100
+Message-Id: <20221111090317.94228-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0VI+/XJs8nsazwE@tp440p.steeds.sam>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:44:11PM +0200, Sicelo wrote:
-> On Tue, Oct 11, 2022 at 08:39:22AM +0300, Tony Lindgren wrote:
-> > To me it seems that we now somehow have a probe issue for musb depending
-> > on how it gets probed depending on the following line:
-> > 
-> > device_set_of_node_from_dev(&musb->dev, &pdev->dev);
-> > 
-> 
-> Thanks for the suggestion. However, 239071064732 does not fix it for me.
-> With that in place, there is no trace created automatically, but dmesg
-> shows:
-> 
->   [    1.389648] musb-hdrc musb-hdrc.0.auto: error -ENXIO: IRQ mc not found
-> 
-> I wonder if there is something to update on the N900 dts perhaps, in
-> connection with the recent musb changes?
-> 
+The code in the FOTG210 driver isn't entirely endianness-agnostic
+as reported by the kernel robot sparse testing. This came to
+the surface while moving the files around.
 
-Good day
+The driver is only used on little-endian systems, so this causes
+no real-world regression, but it is nice to be strict and have
+some compile coverage also on big endian machines, so fix it
+up with the right LE accessors.
 
-Just for further testing, I added the very ugly patch below. Applied on
-vanilla 6.1-rc3 (i.e. containing 239071064732), USB works normally on
-the N900.
+Fixes: b84a8dee23fd ("usb: gadget: add Faraday fotg210_udc driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/linux-usb/202211110910.0dJ7nZCn-lkp@intel.com/
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/usb/fotg210/fotg210-udc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-I copied the irq numbers from omap3xxx.dtsi. Does this give us any hints
-regarding the cause and resolution of this issue?
-
-Regards
-Sicelo
-
-
-
-
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index 03027c6fa3ab..440c917c0133 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -2613,7 +2613,8 @@ musb_init_controller(struct device *dev, int nIrq, void __iomem *ctrl)
- static int musb_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
+index 7757aaa11d6f..3c357ce42d3b 100644
+--- a/drivers/usb/fotg210/fotg210-udc.c
++++ b/drivers/usb/fotg210/fotg210-udc.c
+@@ -630,10 +630,10 @@ static void fotg210_request_error(struct fotg210_udc *fotg210)
+ static void fotg210_set_address(struct fotg210_udc *fotg210,
+ 				struct usb_ctrlrequest *ctrl)
  {
-        struct device   *dev = &pdev->dev;
--       int             irq = platform_get_irq_byname(pdev, "mc");
-+       //int           irq = platform_get_irq_byname(pdev, "mc");
-+       int irq = 92;
-        void __iomem    *base;
-
-        if (irq <= 0)
-diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
-index 7acd1635850d..6c03a5301d01 100644
---- a/drivers/usb/musb/musbhsdma.c
-+++ b/drivers/usb/musb/musbhsdma.c
-@@ -416,7 +416,8 @@ musbhs_dma_controller_create(struct musb *musb, void __iomem *base)
-        struct musb_dma_controller *controller;
-        struct device *dev = musb->controller;
-        struct platform_device *pdev = to_platform_device(dev);
--       int irq = platform_get_irq_byname(pdev, "dma");
-+       //int irq = platform_get_irq_byname(pdev, "dma");
-+       int irq= 93;
-
-        if (irq <= 0) {
-                dev_err(dev, "No DMA interrupt line!\n");
-
-
+-	if (ctrl->wValue >= 0x0100) {
++	if (le16_to_cpu(ctrl->wValue) >= 0x0100) {
+ 		fotg210_request_error(fotg210);
+ 	} else {
+-		fotg210_set_dev_addr(fotg210, ctrl->wValue);
++		fotg210_set_dev_addr(fotg210, le16_to_cpu(ctrl->wValue));
+ 		fotg210_set_cxdone(fotg210);
+ 	}
+ }
+@@ -714,17 +714,17 @@ static void fotg210_get_status(struct fotg210_udc *fotg210,
+ 
+ 	switch (ctrl->bRequestType & USB_RECIP_MASK) {
+ 	case USB_RECIP_DEVICE:
+-		fotg210->ep0_data = 1 << USB_DEVICE_SELF_POWERED;
++		fotg210->ep0_data = cpu_to_le16(1 << USB_DEVICE_SELF_POWERED);
+ 		break;
+ 	case USB_RECIP_INTERFACE:
+-		fotg210->ep0_data = 0;
++		fotg210->ep0_data = cpu_to_le16(0);
+ 		break;
+ 	case USB_RECIP_ENDPOINT:
+ 		epnum = ctrl->wIndex & USB_ENDPOINT_NUMBER_MASK;
+ 		if (epnum)
+ 			fotg210->ep0_data =
+-				fotg210_is_epnstall(fotg210->ep[epnum])
+-				<< USB_ENDPOINT_HALT;
++				cpu_to_le16(fotg210_is_epnstall(fotg210->ep[epnum])
++					    << USB_ENDPOINT_HALT);
+ 		else
+ 			fotg210_request_error(fotg210);
+ 		break;
+-- 
+2.38.1
 
