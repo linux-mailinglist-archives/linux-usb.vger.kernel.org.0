@@ -2,119 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10466625A9A
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 13:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48593625B41
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Nov 2022 14:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiKKMkn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Nov 2022 07:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
+        id S234008AbiKKNai (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Nov 2022 08:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbiKKMkm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 07:40:42 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B40E7B20B
-        for <linux-usb@vger.kernel.org>; Fri, 11 Nov 2022 04:40:41 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id c2so4142129plz.11
-        for <linux-usb@vger.kernel.org>; Fri, 11 Nov 2022 04:40:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z+pSb3nKIXHaiftR3v+Evz/+SDGPAA0OKtaaUaJuams=;
-        b=Sjp+mfbMzTuBd24OSiZRNL5zBW3SR3VhtM052t7yx/J6peolwpXst7LHpoNhlP9dD8
-         9mseGD3RSu7bRw7aHIcBd1wSnaU5o6nLd7pEv3S+kb9HP0IcUDkg2hUASCyg+4M+IOyE
-         08L8NwAfmRui4CAQhMSxF+aTuV/l8wcqkMXVYZbjWVQYWPDnBNNNiJEr6Kxm8PeX1vgH
-         FLI4W3mxjcPdLzWn3o6pv0if/c7n2L6SagBoUnKYUCGKsYHLGdAYMDvhe06ghDz5HLG8
-         PfvCLm5t2xvoWdnWkk5Pt1zDQKOuBgzys4CtR9MMJ7PJFtqbRtt4/W5uBhyl6vpt7Kjf
-         3lxg==
+        with ESMTP id S233989AbiKKNa2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 08:30:28 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E6D6035E;
+        Fri, 11 Nov 2022 05:30:27 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id j25-20020a056830015900b0066ca2cd96daso2781936otp.10;
+        Fri, 11 Nov 2022 05:30:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z+pSb3nKIXHaiftR3v+Evz/+SDGPAA0OKtaaUaJuams=;
-        b=dqUf5u6UtSHECPKRTZZmyUDtE7tv021bXQbNFjO/NnKqj49h3GfpqQZSPrjV2NNUKC
-         ucQyIFztWmX7qGs2h+jfVt4FOVoVbm3AXAE6EGXwOtNPUoy6oiIyaD0PeL/IoQDrozWt
-         KlMw2tDiYuQjqMpziTHDgeUGDmVZex31YH4xtwe/MPXXDCffxqmrCn6mSo0+JXt7Mqyq
-         DofT1b41nE6U4vixvqd3M1Hf1UMZfC9MsSLV3inKzh6bzGqoAjIH5sEm4RGYNYAbzcmc
-         EQ9lF+C/55BLtvhnfMUbehZmEOXB5RdjFjTNQcvpXU26MqWd7tf3IeEByaQQ+9ic2BmD
-         FRLQ==
-X-Gm-Message-State: ANoB5plnP7+e0PYqwYbFhIl23JqrS2qGCDG/64xe+rc5B2PT9HLrvXrg
-        NNXN2hrGLrTuQIaG1+t1qhrMXe7nCBpIMTWZpdxjZg==
-X-Google-Smtp-Source: AA0mqf4ti3oIKNWdDvRGk3CYFGxw+N1DPpSsx+LEvKJ59w+/d/YXkMZ5jOTCwUxB+wZd+6Fsj3xULFkVVj/qRccDZtQ=
-X-Received: by 2002:a17:90a:f18f:b0:218:8f4:bad5 with SMTP id
- bv15-20020a17090af18f00b0021808f4bad5mr1786731pjb.55.1668170440958; Fri, 11
- Nov 2022 04:40:40 -0800 (PST)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+H4vFKcVhdT5utr9Kqit7Ee08fhFyoKnskQwRap40i4=;
+        b=t/njWBcXTa8Dr+fhkIyziRfPcs94khjPZeqZpD/0IwIOarofKfEBKVLV7kW1EBVIGR
+         Lu5zJ1tG+soMxGaMzNdDKQLWSFDkQM5lxg2tQ3crX2hEHWIgcl2QySh1k9htjAQeAWXp
+         Khv3h3tc0hwkHviXpkOXExXEIKzhWaH8HyTFpFISusGxcRlmTfhzmpHcgRWrPDbrAEMK
+         pwaVEn9HMaARs+g3xeYxb6WajXVtm5QmgRhffFpI+L6qbxn34kp82F8UyEDLY8/mae3i
+         /r524jTMvqXYh7kMSwnmXBjBD+sKvu1lozc16obcmdgxD8H8NLqmRGSTlt6aHVedmacq
+         42/g==
+X-Gm-Message-State: ANoB5pnGvFUVgRCQ+ATsmrC/WJyE/foJdaMseSdafI1UWtCbdRWU7Tp3
+        /EXn6aGLlYFSYOLd5+0joQ==
+X-Google-Smtp-Source: AA0mqf5Qj3/GbhqnO2Nl2v5FMmObS8qqaAWio4R7QoQud1x66XkXmTZ4UJUHtqj+lywkDe6kiB/IQA==
+X-Received: by 2002:a05:6830:4122:b0:66c:2b2c:e7aa with SMTP id w34-20020a056830412200b0066c2b2ce7aamr1162463ott.303.1668173426609;
+        Fri, 11 Nov 2022 05:30:26 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 124-20020a4a1582000000b0047f72b6988fsm766425oon.45.2022.11.11.05.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 05:30:26 -0800 (PST)
+Received: (nullmailer pid 3073768 invoked by uid 1000);
+        Fri, 11 Nov 2022 13:30:24 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <CGME20221110154141eucas1p1e69a91704c32c07307a9c73b95e0d9a3@eucas1p1.samsung.com>
- <20221110154131.2577-1-m.szyprowski@samsung.com>
-In-Reply-To: <20221110154131.2577-1-m.szyprowski@samsung.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 11 Nov 2022 13:40:29 +0100
-Message-ID: <CAPLW+4mpZWJHg6qQi1SOAwB-KRrzQo1sOnY4ku5FV3zgVAqNYw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: dwc3: exynos: Fix remove() function
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     mathias.nyman@intel.com, p.zabel@pengutronix.de,
+        jonathanh@nvidia.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux-tegra@vger.kernel.org, singhanc@nvidia.com, balbi@kernel.org,
+        linux-phy@lists.infradead.org, vkoul@kernel.org,
+        thierry.reding@gmail.com, ajayg@nvidia.com,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        treding@nvidia.com, jckuo@nvidia.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org
+In-Reply-To: <20221111101509.999589-3-waynec@nvidia.com>
+References: <20221111101509.999589-1-waynec@nvidia.com>
+ <20221111101509.999589-3-waynec@nvidia.com>
+Message-Id: <166817308790.3060162.14990231448404857914.robh@kernel.org>
+Subject: Re: [PATCH v2 02/13] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
+Date:   Fri, 11 Nov 2022 07:30:24 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 16:41, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
->
-> The core DWC3 device node was not properly removed by the custom
-> dwc3_exynos_remove_child() function. Replace it with generic
-> of_platform_depopulate() which does that job right.
->
-> Fixes: adcf20dcd262 ("usb: dwc3: exynos: Use of_platform API to create dwc3 core pdev")
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Cc: stable@vger.kernel.org
+
+On Fri, 11 Nov 2022 18:14:58 +0800, Wayne Chang wrote:
+> Add device-tree binding documentation for the XUSB host controller present
+> on Tegra234 SoC. This controller supports the USB 3.1 specification.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
 > ---
+> V1 -> V2: new change for adding nvidia,tegra234-xusb.yaml
+>  .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 ++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> 
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
->  drivers/usb/dwc3/dwc3-exynos.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-> index 0ecf20eeceee..4be6a873bd07 100644
-> --- a/drivers/usb/dwc3/dwc3-exynos.c
-> +++ b/drivers/usb/dwc3/dwc3-exynos.c
-> @@ -37,15 +37,6 @@ struct dwc3_exynos {
->         struct regulator        *vdd10;
->  };
->
-> -static int dwc3_exynos_remove_child(struct device *dev, void *unused)
-> -{
-> -       struct platform_device *pdev = to_platform_device(dev);
-> -
-> -       platform_device_unregister(pdev);
-> -
-> -       return 0;
-> -}
-> -
->  static int dwc3_exynos_probe(struct platform_device *pdev)
->  {
->         struct dwc3_exynos      *exynos;
-> @@ -142,7 +133,7 @@ static int dwc3_exynos_remove(struct platform_device *pdev)
->         struct dwc3_exynos      *exynos = platform_get_drvdata(pdev);
->         int i;
->
-> -       device_for_each_child(&pdev->dev, NULL, dwc3_exynos_remove_child);
-> +       of_platform_depopulate(&pdev->dev);
->
->         for (i = exynos->num_clks - 1; i >= 0; i--)
->                 clk_disable_unprepare(exynos->clks[i]);
-> --
-> 2.17.1
->
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.27-28 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
