@@ -2,137 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33DC626A47
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 16:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B092626C26
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 23:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234969AbiKLPkq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 12 Nov 2022 10:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S235091AbiKLWPy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Nov 2022 17:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiKLPkp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Nov 2022 10:40:45 -0500
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E65B1ADAC;
-        Sat, 12 Nov 2022 07:40:44 -0800 (PST)
-Received: by mail-pg1-f172.google.com with SMTP id 136so6687276pga.1;
-        Sat, 12 Nov 2022 07:40:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JFmEovQuih3sC0ACkx1NqUHQ6cWP4h8cIyeW3MWuhGY=;
-        b=GziSfrdP4WDbfkR4yrd9a3/FbqVd11+6faQmdncSQvQsGWMoa+Gehd2LJTPNbpF6/d
-         KqC/qR1ELHj06ue5Vgd2i3z1siVAwAX0gWwWOFP2CkccpvpzwnnW76vyW9A0o/TDKJi5
-         Dvun6PfBq9lN66ePWLM64NsZnXVKevEmGNb8DynGs4BqfnWrIoA/Jhjam6k35GbqdN79
-         gSwp2nncIzbQggLsPgzj2CixrWUiRyi8pPblkU8GhEtVK9rae8H25MtgmlMyznrcvuaf
-         Do6dD/T7BNUXtsaMwKHQVDxXc10lHLwljWQQBlDkOU6bAsUzexCV+fAFFW8QRqR9Pd7T
-         5Z7g==
-X-Gm-Message-State: ANoB5pmTRQHPaZYueJxtKJJ/AyoDpe7C9yDyqkcW1rmQyrZr5ATcVZDA
-        THSWn0yzo1v2c60llBxU+5orbLwkZYtxZ3b79W0fKt9VqLA=
-X-Google-Smtp-Source: AA0mqf45ci/2udy38PrCir2ebdsKsLN4JFAx8FeKjFhrpyNi9bASzqETpUJxdcijsb0IYwuBi/qSs4D6d2xNIgk8O38=
-X-Received: by 2002:a63:4e53:0:b0:473:f7fb:d2c7 with SMTP id
- o19-20020a634e53000000b00473f7fbd2c7mr5730598pgl.535.1668267643484; Sat, 12
- Nov 2022 07:40:43 -0800 (PST)
+        with ESMTP id S235077AbiKLWPx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Nov 2022 17:15:53 -0500
+Received: from mailfilter01-out31.webhostingserver.nl (mailfilter01-out31.webhostingserver.nl [141.138.168.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9113F58F
+        for <linux-usb@vger.kernel.org>; Sat, 12 Nov 2022 14:15:51 -0800 (PST)
+X-Halon-ID: 8facb85a-62d7-11ed-a6af-001a4a4cb906
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter01.webhostingserver.nl (Halon) with ESMTPSA
+        id 8facb85a-62d7-11ed-a6af-001a4a4cb906;
+        Sat, 12 Nov 2022 23:15:48 +0100 (CET)
+Received: from 2a02-a466-68ed-1-a5fa-fe38-3b47-f838.fixed6.kpn.net ([2a02:a466:68ed:1:a5fa:fe38:3b47:f838])
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <fntoth@gmail.com>)
+        id 1otymz-003a5N-07;
+        Sat, 12 Nov 2022 23:15:49 +0100
+Message-ID: <1800f8ea-2dde-a420-3e99-56237bde1bb0@gmail.com>
+Date:   Sat, 12 Nov 2022 23:15:47 +0100
 MIME-Version: 1.0
-References: <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com> <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
- <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
- <Y2afm9xFIvJnwXh/@kroah.com> <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
- <Y2eYw9Kna712mzR8@kroah.com> <CAMZ6RqJVFwhCjxghmDBt2kYeT_KhqE-4h=UGtKaSA1bwke1CaA@mail.gmail.com>
- <Y2fDG9AsuFZh0Dkr@kroah.com> <CAMZ6RqLwebh6VuwXdyyxpcdyJjYg3fUt9Opx+dPQRzqZ-2976w@mail.gmail.com>
- <Y2faf++qaSq92qmZ@kroah.com>
-In-Reply-To: <Y2faf++qaSq92qmZ@kroah.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 13 Nov 2022 00:40:31 +0900
-Message-ID: <CAMZ6Rq+N7Dbs7AENU12PJu-M2coBeoEF-YLpvQp79cSChAR6hg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: dwc3: core: configure PHY before initializing host
+ in dwc3_set_mode
+Content-Language: en-US
+To:     Sven Peter <sven@svenpeter.dev>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20221112102506.34990-1-sven@svenpeter.dev>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20221112102506.34990-1-sven@svenpeter.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon. 7 nov. 2022 at 01:18, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Sun, Nov 06, 2022 at 11:44:52PM +0900, Vincent MAILHOL wrote:
-> > On Sun. 6 Nov. 2022 à 23:22, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > On Sun, Nov 06, 2022 at 09:47:05PM +0900, Vincent MAILHOL wrote:
-> > > > On Sun. 6 Nov. 2022 at 20:25, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > > 1/ Can I still export and use usb_cache_string()? In other terms, does
-> > > > the first patch of this series still apply? This looks like the most
-> > > > convenient function to retrieve that custom string to me.
-> > >
-> > > Everyone seems to just use the usb_string() function, will that not work
-> > > for you?
-> >
-> > It is just that I would have to write two or three lines of code less.
->
-> Odd, should it be used instead where others are calling usb_string()?
->
-> > But if you prefer I can use usb_string(), no problem on that.
->
-> Try it both ways.  If it's easier with usb_cache_string(), then we can
-> export it.  It's just odd that it hasn't been exported yet.
+Hi Sven,
 
-I tried both. Not counting the line breaks, the empty lines and the
-comments, the usb_string() version needs 6 more lines. Not a huge
-difference but the usb_cache_string() remains easier (at least in my
-eyes).
+Op 12-11-2022 om 11:25 schreef Sven Peter:
+> Usually, first the PHY is set to the correct mode and then the host or
+> device side of the controller is initialized afterwards. Otherwise a PHY
+> that's already used has to be reconfigured.
+> dwc3_core_init_mode() does this correctly for both host and device and
+> __dwc3_set_mode() does it correctly when switching to device mode.
+> When setting up host mode however it first initializes xhci and only
+> then changes the PHY's mode. Let's also do the operations in the correct
+> order here.
+> 
+> Fixes: 958d1a4c40dd ("usb: dwc3: core: program PHY for proper DRD modes")
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+>   drivers/usb/dwc3/core.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index ad4d644e21a4..759d23d908fa 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -212,14 +212,15 @@ static void __dwc3_set_mode(struct work_struct *work)
+>   
+>   	switch (dwc->desired_dr_role) {
+>   	case DWC3_GCTL_PRTCAP_HOST:
+> +		if (dwc->usb2_phy)
+> +			otg_set_vbus(dwc->usb2_phy->otg, true);
+> +		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+> +		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+> +
+>   		ret = dwc3_host_init(dwc);
+>   		if (ret) {
+>   			dev_err(dwc->dev, "failed to initialize host\n");
+>   		} else {
+> -			if (dwc->usb2_phy)
+> -				otg_set_vbus(dwc->usb2_phy->otg, true);
+> -			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+> -			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>   			if (dwc->dis_split_quirk) {
+>   				reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
+>   				reg |= DWC3_GUCTL3_SPLITDISABLE;
+This patch breaks usb host mode on Intel Merrifield platform. I am 
+testing this on top of v6.0 +
+* my 2 "usb: dwc3: core: defer probe on ulpi_read_id timeout" patches 
+(otherwise tusb1210 will not be probed on this platform)
+* Revert "usb: dwc3: disable USB core PHY management" (with/without this 
+patch makes no difference)
+* usb: dwc3: Do not get extcon device when usb-role-switch is used 
+(with/without this patch makes no difference)
 
-For reference, here is the diff before and after using usb_cache_string():
+ftrace shows tusb1210 is indeed still probed, nevertheless in host mode 
+it seems vbus is not powered as my connected smsc95xx based hub is not 
+active (seems not plugged).
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-b/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-index 4ff0332f6f50..c1d220d0d35f 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-@@ -178,17 +178,10 @@ void es58x_create_file(struct device *dev)
- {
-        struct es58x_device *es58x_dev = dev_get_drvdata(dev);
-        char *prod_info;
--       int ret;
+Flipping the switch to device mode gadgets work fine.
 
--       prod_info = kmalloc(ES58X_PROD_INFO_SIZE, GFP_KERNEL);
--       if (!prod_info)
--               return;
--
--        ret = usb_string(es58x_dev->udev, ES58X_PROD_INFO_IDX,
--                        prod_info, ES58X_PROD_INFO_SIZE);
--        if (ret < 0) {
-+       prod_info = usb_cache_string(es58x_dev->udev, ES58X_PROD_INFO_IDX);
-+       if (!prod_info) {
-                dev_warn(dev, "could not retrieve the product info string\n");
--               kfree(prod_info);
-                return;
-        }
-
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-b/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-index 62347ffa0214..a204aa5344a8 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-@@ -14,13 +14,6 @@
- /* USB descriptor index containing the product information string. */
- #define ES58X_PROD_INFO_IDX 6
-
--/* Maximum size for the USB information custom string. USB strings are
-- * at most 127 characters and es58x devices only use ASCII (i.e. one
-- * byte). Also, empirical observations show a maximum length of 83
-- * bytes for the product information.
-- */
--#define ES58X_PROD_INFO_SIZE (127 + 1)
--
- void es58x_create_file(struct device *dev);
- void es58x_remove_file(struct device *dev);
+Could it be dwc3_host_init() needs to be called prior to otg_set_vbus()?
