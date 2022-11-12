@@ -2,57 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3446626C2E
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 23:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610E5626C31
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 23:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbiKLWY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Nov 2022 17:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S234317AbiKLWqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Nov 2022 17:46:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiKLWY5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Nov 2022 17:24:57 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445C8DF05
-        for <linux-usb@vger.kernel.org>; Sat, 12 Nov 2022 14:24:56 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id t10so8482243ljj.0
-        for <linux-usb@vger.kernel.org>; Sat, 12 Nov 2022 14:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dcomp-ufs-br.20210112.gappssmtp.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ubEOvQPEdqwdfEAm9eb5dhMxLq/OLHh0bdZoUEb/QVc=;
-        b=CdH8qowgrTag5BesKp6JuJ1TY38n1HX7qUUNyqfGadszqfoBqYuhy4jw8E7+LMzyPa
-         HG2w2VXm+eMMeKCTaH5B3uHdafofiK3q8zqQ2Pex9WyYd5HyM4pMWAWke4T3Gre8/38+
-         deNiJOZYgeh6rEcnAQb2mZ1npzp+02WFv2TzjYtYe3wXCHbLidbaYnh6BnvsezbkbVv3
-         wUypCwM04X8wiiKxQIBaU1w51Pa5hWVHcVNuQFJeE1XH/HXEnCsx2Ivt3WZn73Po9V6A
-         BZvGgB09/ZC6iCQARSYNBnmbIspM+fuBco/+3Sf5XKHWIVsFEyiZ8PFlmCdEKiquAhVc
-         Y1FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ubEOvQPEdqwdfEAm9eb5dhMxLq/OLHh0bdZoUEb/QVc=;
-        b=vIP+MxUpUNT0R7sf9f5Z0uW/LdJsQB0pbv9v2MvZSZpkBNyoyhyAWnrETG034BbmBv
-         jhGGGAg5/yB9XUFlWeaahyPyI+yFoucfr6qWlUDpALYEfnrOQG00qJvv95mkqnUhAHci
-         eLT1CLY407v86j01YcDh9bo7NxUk234jjSQbvlsdGVaUbH9jctTd6BmUduYwYwjJLLu9
-         munviKGVx8ZNbojLM0Z3ki9GMmW9230Xm8wOq5Rds5+s9D2irXGiAVnyAKIRktR7mcQo
-         8bDSqMuSi+jJK6q76QVOqwR+8OubWdLarm6UmPjbfa9P7jImx1ryidVZLzoaGYQsRn7f
-         P5yQ==
-X-Gm-Message-State: ANoB5pmfANeU0/SMGjNP6Bb+1ZObu8AvcEnojFxKex7eich1YZBjX5he
-        pR/YuG7z643WFItEMpKFFgpGmkTM+GKT9lJkHGSBUEoGTEhHOQ==
-X-Google-Smtp-Source: AA0mqf7g2pAEei4+oZIJsttyKKV+aHicvsvkVxFpusb87gRsRI/zKnJVMT72jDzSU+F7yiXib+NO6qiVG9b8v40WryM=
-X-Received: by 2002:a05:651c:491:b0:277:21c8:a94f with SMTP id
- s17-20020a05651c049100b0027721c8a94fmr2164761ljc.28.1668291894204; Sat, 12
- Nov 2022 14:24:54 -0800 (PST)
-MIME-Version: 1.0
-From:   Gabriel Oliveira Santos <gabrielos@dcomp.ufs.br>
-Date:   Sat, 12 Nov 2022 19:24:43 -0300
-Message-ID: <CAGoM2ZU1ez0sCi5GuTd44xnCM8oVmxWTjUMbi_2L+0S=ERN8BQ@mail.gmail.com>
-Subject: How to configure a Linux USB driver to have higher precedence than usbhid?
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S230147AbiKLWqq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Nov 2022 17:46:46 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE54D15A3C;
+        Sat, 12 Nov 2022 14:46:44 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C949D32002D8;
+        Sat, 12 Nov 2022 17:46:41 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Sat, 12 Nov 2022 17:46:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1668293201; x=1668379601; bh=UR
+        6IZENSs9Hhv2gtReWHrfdfYMNRxyX0JgKvZaNESMM=; b=gqmiTzPVUIKICbV0rT
+        mYa/C3SOcK3X4P0ZSAxIYw5XX/9zm+iy3FRh02ISej1X6QSUGFnDkf5MJgq42UXG
+        7dsRMfcpvZoTo5s7cYmi4SHoRKzgUjVZ869jm2hUPbgG9GoCj+LDNSmYtTYfSe+F
+        UKQ2bj8VPaZTXZ2gl23zSnwtEGPg/i9DvlG3NMCzTAvUYZ0YpL1RZq347QH79ux8
+        br3Q+kzL/ufOhEV2AYUFpnTkmVGe0omDxzdfPPTgE6uPqu5DNQxZPJpLXEX+3ICA
+        zYnC+ERsPHlD6iq5Yne2ba4eAcrzuh+1FZRtd5/kMOPjYK1oQniVCLK4amVrdH5Q
+        g37Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668293201; x=1668379601; bh=UR6IZENSs9Hhv2gtReWHrfdfYMNR
+        xyX0JgKvZaNESMM=; b=QZ2bB0r3zIF4kBQgSYHmtzqd0hii9X91zrRLeLrmb/Fl
+        ro8qPsKnJ44OcHKgh+PkrSbd5je148LiMQU2dCgUIQ2W0l8gzf8GG6qo5rWde9U2
+        G4tLUH5Jd84sfniPiruyPntl7YERjnfTtfhREGVAGFzaFJ8+vnb7/mYYl5fPeXgk
+        QnulMaIi4ARTpKZnEfZGVdg7tRm2osNwGBicEt7hE6RNf5B//lhsb3k4JcRTBmRX
+        MCB66rXHgKZ9uTyFla470S5xwvDm8FCCweD6lPRk8fbKihOf7br7ts5qz1mckMdY
+        qnDV1qBqLGcjFXeEhhi118i8QwPUx/0qEjH7geZE8w==
+X-ME-Sender: <xms:UCJwYyrvkZkXszrrPN7gpZdYr7IjkREz_uMKX8yE6IY17G2r-wY9hg>
+    <xme:UCJwYwqtsK5h1Vkj8Xh9XduQVPOlwE0DkYx-YJZOs8fk7MABOVFR1LHCPZTIBwYg2
+    drdxy5GhE_eUF_h41I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeelgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:UCJwY3MBSUUZVTvODuISst857emTpFL1HAd0hUuXDbX-lnMrsvhD0Q>
+    <xmx:UCJwYx5cSmxf4TfBTUDoAZEXxxKpMwi-VfVNaFJeNh50ARnF235QVQ>
+    <xmx:UCJwYx7xVxbSrW0o_HVQtW7Oe-XdZ6S77WNw_xD25DzHL_5eyiMRLw>
+    <xmx:USJwY00mUeXTQCvjvI47wKPthQbd75cqjXm-Pac1EVZl8OfVwbfA_w>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D94A7A60084; Sat, 12 Nov 2022 17:46:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <f3378173-2e15-467c-b159-7d523533ffc5@app.fastmail.com>
+In-Reply-To: <1800f8ea-2dde-a420-3e99-56237bde1bb0@gmail.com>
+References: <20221112102506.34990-1-sven@svenpeter.dev>
+ <1800f8ea-2dde-a420-3e99-56237bde1bb0@gmail.com>
+Date:   Sat, 12 Nov 2022 23:46:19 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Ferry Toth" <fntoth@gmail.com>
+Cc:     "Felipe Balbi" <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] usb: dwc3: core: configure PHY before initializing host in
+ dwc3_set_mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,19 +88,97 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi! My name is Gabriel Santos and I'm developing a USB driver based on
-https://github.com/torvalds/linux/blob/master/drivers/hid/usbhid/usbmouse.c
-for a USB joystick.
+Hi Ferry,
 
-I changed the device table to use the joystick's vendor and product
-id, like the table in
-https://github.com/torvalds/linux/blob/master/drivers/usb/usb-skeleton.c.
+On Sat, Nov 12, 2022, at 23:15, Ferry Toth wrote:
+> Hi Sven,
+>
+> Op 12-11-2022 om 11:25 schreef Sven Peter:
+>> Usually, first the PHY is set to the correct mode and then the host or
+>> device side of the controller is initialized afterwards. Otherwise a PHY
+>> that's already used has to be reconfigured.
+>> dwc3_core_init_mode() does this correctly for both host and device and
+>> __dwc3_set_mode() does it correctly when switching to device mode.
+>> When setting up host mode however it first initializes xhci and only
+>> then changes the PHY's mode. Let's also do the operations in the correct
+>> order here.
+>> 
+>> Fixes: 958d1a4c40dd ("usb: dwc3: core: program PHY for proper DRD modes")
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>>   drivers/usb/dwc3/core.c | 9 +++++----
+>>   1 file changed, 5 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index ad4d644e21a4..759d23d908fa 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -212,14 +212,15 @@ static void __dwc3_set_mode(struct work_struct *work)
+>>   
+>>   	switch (dwc->desired_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_HOST:
+>> +		if (dwc->usb2_phy)
+>> +			otg_set_vbus(dwc->usb2_phy->otg, true);
+>> +		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>> +		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>> +
+>>   		ret = dwc3_host_init(dwc);
+>>   		if (ret) {
+>>   			dev_err(dwc->dev, "failed to initialize host\n");
+>>   		} else {
+>> -			if (dwc->usb2_phy)
+>> -				otg_set_vbus(dwc->usb2_phy->otg, true);
+>> -			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>> -			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>>   			if (dwc->dis_split_quirk) {
+>>   				reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
+>>   				reg |= DWC3_GUCTL3_SPLITDISABLE;
+> This patch breaks usb host mode on Intel Merrifield platform. I am 
+> testing this on top of v6.0 +
+> * my 2 "usb: dwc3: core: defer probe on ulpi_read_id timeout" patches 
+> (otherwise tusb1210 will not be probed on this platform)
+> * Revert "usb: dwc3: disable USB core PHY management" (with/without this 
+> patch makes no difference)
+> * usb: dwc3: Do not get extcon device when usb-role-switch is used 
+> (with/without this patch makes no difference)
+>
+> ftrace shows tusb1210 is indeed still probed, nevertheless in host mode 
+> it seems vbus is not powered as my connected smsc95xx based hub is not 
+> active (seems not plugged).
+>
+> Flipping the switch to device mode gadgets work fine.
+>
+> Could it be dwc3_host_init() needs to be called prior to otg_set_vbus()?
 
-Currently, if I rmmod usbhid, insmod my driver and plug in the
-joystick, everything works. But I do need to rmmod usbhid in order for
-my driver to be probed.
+Huh, thanks for testing!
 
-Is there a way to make my driver have higher precedence than usbhid,
-so I don't need to rmmod usbhid?
+For the platform I'm working on I need to set the phy mode before dwc3_host_init()
+and then found the same code further below in dwc3_core_init_mode,
 
-Thanks in advance.
+static int dwc3_core_init_mode(struct dwc3 *dwc)
+{
+[...]
+	case USB_DR_MODE_HOST:
+		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+
+		if (dwc->usb2_phy)
+			otg_set_vbus(dwc->usb2_phy->otg, true);
+		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+
+		ret = dwc3_host_init(dwc);
+		if (ret)
+			return dev_err_probe(dev, ret, "failed to initialize host\n");
+		break;
+[...]
+}
+
+so I'm quite surprised it causes issue in __dwc3_set_mode now.
+If otg_set_vbus indeed needs to happen after dwc3_host_init it should probably
+also be called afterwards in dwc3_core_init_mode as well.
+
+
+Best,
+
+
+Sven
