@@ -2,205 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1CB6265C8
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 01:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F7262668E
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 04:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiKLAFh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Nov 2022 19:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S233915AbiKLDNC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Nov 2022 22:13:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiKLAF2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 19:05:28 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E0E252B0
-        for <linux-usb@vger.kernel.org>; Fri, 11 Nov 2022 16:05:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668211527; x=1699747527;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=f6EnZpDiHw457F8m5Z5N1s84Jnu6zSHUeqJGIh2QXIo=;
-  b=T0vLxtZfSD2evSnLHfWEUWU+9F/Jq+wl0xv5EGGmQDtXIh9E1Wrh2yPW
-   X8syC1jIHWA0gKSjvaKoY1zc6q2UObg+WKqQRUe1NtckzOvs4EuF0VOTZ
-   m9qvmc+kiqo2QvnIQvqbqQFIhP6e2xQkBTupX56Fg+srubMHUvdkm6bxN
-   QvipC7Rtc2RQuHWds6p+aGWKUFSCQyi2L0AodedIV20RzJUaNy2TCCs9Q
-   5RXjfkIvb/Vkhj7ZBUyV1lt/iOjasRs0p6S2N9innccYHj51IhAfDQjYg
-   9LL7gPwJ2973SuzRppvz953+oMmeuQLFmNDWSNrYMwEtTaHMr2y/yep5U
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="292083361"
-X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="292083361"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 16:05:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="743430247"
-X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="743430247"
-Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Nov 2022 16:05:25 -0800
-Received: from kbuild by e783503266e8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ote1V-0004Ne-0H;
-        Sat, 12 Nov 2022 00:05:25 +0000
-Date:   Sat, 12 Nov 2022 08:04:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD REGRESSION
- dd65a243a915ca319ed5fee9161a168c836fa2f2
-Message-ID: <636ee30e.xtmxoJdkM1DEUt2q%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229991AbiKLDNA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Nov 2022 22:13:00 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438E96A6AA;
+        Fri, 11 Nov 2022 19:12:56 -0800 (PST)
+Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N8LGY1VrZzHvp6;
+        Sat, 12 Nov 2022 11:12:21 +0800 (CST)
+Received: from [10.136.108.160] (10.136.108.160) by
+ kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 11:12:47 +0800
+Subject: [PATCH v2] USB: gadget: Fix use-after-free during usb config switch
+References: <20221112030433.4945-1-xuetao09@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        <jakobkoschel@gmail.com>, <geert+renesas@glider.be>,
+        =?UTF-8?B?5byg5bu65rab?= <water.zhangjiantao@huawei.com>,
+        <colin.i.king@gmail.com>,
+        =?UTF-8?B?6Jab5rab?= <xuetao09@huawei.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     =?UTF-8?B?6JSh5Lqa5Lic?= <caiyadong@huawei.com>,
+        =?UTF-8?B?5b6Q5rW35rSL?= <xuhaiyang5@hisilicon.com>,
+        <suzhuangluan@hisilicon.com>
+From:   jiantao zhang <water.zhangjiantao@huawei.com>
+X-Forwarded-Message-Id: <20221112030433.4945-1-xuetao09@huawei.com>
+Message-ID: <27f1534f-a985-06e9-b94f-ba60167e74d2@huawei.com>
+Date:   Sat, 12 Nov 2022 11:12:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20221112030433.4945-1-xuetao09@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.136.108.160]
+X-ClientProxiedBy: dggpeml100024.china.huawei.com (7.185.36.115) To
+ kwepemi500002.china.huawei.com (7.221.188.171)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: dd65a243a915ca319ed5fee9161a168c836fa2f2  usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK define
+In the process of switching USB config from rndis to other config,
+if the hardware does not support the ->pullup callback, or the
+hardware encounters a low probability fault, both of them may cause
+the ->pullup callback to fail, which will then cause a system panic
+(use after free).
 
-Error/Warning reports:
+The gadget drivers sometimes need to be unloaded regardless of the
+hardware's behavior.
 
-https://lore.kernel.org/oe-kbuild-all/202211112132.0BUPGKCd-lkp@intel.com
+Analysis as follows:
+=======================================================================
+(1) write /config/usb_gadget/g1/UDC "none" (init.usb.configfs.rc:2)
 
-Error/Warning: (recently discovered and may have been fixed)
+gether_disconnect+0x2c/0x1f8 (dev->port_usb = NULL)
+rndis_disable+0x4c/0x74
+composite_disconnect+0x74/0xb0
+configfs_composite_disconnect+0x60/0x7c
+usb_gadget_disconnect+0x70/0x124
+usb_gadget_unregister_driver+0xc8/0x1d8
+gadget_dev_desc_UDC_store+0xec/0x1e4
 
-fotg210-core.c:(.init.text+0x26): undefined reference to `usb_disabled'
-fotg210-hcd.c:(.exit.text+0x32): undefined reference to `usb_hcds_loaded'
-fotg210-hcd.c:(.init.text+0x26): undefined reference to `usb_disabled'
-fotg210-hcd.c:(.text+0x1654): undefined reference to `usb_hub_clear_tt_buffer'
-fotg210-hcd.c:(.text+0x25b4): undefined reference to `ehci_cf_port_reset_rwsem'
-fotg210-hcd.c:(.text+0x5e3e): undefined reference to `usb_calc_bus_time'
-fotg210-hcd.c:(.text+0x76b4): undefined reference to `usb_hcd_link_urb_to_ep'
-fotg210-hcd.c:(.text+0x8a56): undefined reference to `usb_hc_died'
-fotg210-hcd.c:(.text+0x8b70): undefined reference to `usb_hcd_check_unlink_urb'
-fotg210-hcd.c:(.text+0x8c9a): undefined reference to `usb_disabled'
-fotg210-hcd.c:(.text+0x90a0): undefined reference to `usb_remove_hcd'
-fotg210-hcd.c:(.text+0xda2): undefined reference to `usb_hcd_unlink_urb_from_ep'
-s390-linux-ld: fotg210-hcd.c:(.init.text+0x3e): undefined reference to `usb_hcds_loaded'
-s390-linux-ld: fotg210-hcd.c:(.text+0x5f38): undefined reference to `usb_calc_bus_time'
-s390-linux-ld: fotg210-hcd.c:(.text+0x7500): undefined reference to `usb_hcd_link_urb_to_ep'
-s390-linux-ld: fotg210-hcd.c:(.text+0x7564): undefined reference to `usb_hcd_unlink_urb_from_ep'
-s390-linux-ld: fotg210-hcd.c:(.text+0x8af6): undefined reference to `usb_hcd_poll_rh_status'
-s390-linux-ld: fotg210-hcd.c:(.text+0x8d00): undefined reference to `usb_create_hcd'
-s390-linux-ld: fotg210-hcd.c:(.text+0x8f30): undefined reference to `usb_add_hcd'
-s390-linux-ld: fotg210-hcd.c:(.text+0x8fc8): undefined reference to `usb_put_hcd'
-s390-linux-ld: fotg210-hcd.c:(.text+0xdc2): undefined reference to `usb_hcd_giveback_urb'
+In function usb_gadget_disconnect(),The ->disconnect() callback will
+not be called when gadget->ops->pullup() return an error, therefore,
+pointer dev->port will not be set to NULL. If pointer dev->port_usb
+is not null, it will cause an exception of use-after-free in step3.
 
-Error/Warning ids grouped by kconfigs:
+(2) rm /config/usb_gadget/g1/configs/b.1/f1 (init.usb.configfs.rc:8)
+(f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
 
-gcc_recent_errors
-`-- s390-randconfig-c031-20221110
-    |-- fotg210-core.c:(.init.text):undefined-reference-to-usb_disabled
-    |-- fotg210-hcd.c:(.exit.text):undefined-reference-to-usb_hcds_loaded
-    |-- fotg210-hcd.c:(.init.text):undefined-reference-to-usb_disabled
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-ehci_cf_port_reset_rwsem
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_calc_bus_time
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_disabled
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_hc_died
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_hcd_check_unlink_urb
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_hcd_link_urb_to_ep
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_hcd_unlink_urb_from_ep
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_hub_clear_tt_buffer
-    |-- fotg210-hcd.c:(.text):undefined-reference-to-usb_remove_hcd
-    |-- s390-linux-ld:fotg210-hcd.c:(.init.text):undefined-reference-to-usb_hcds_loaded
-    |-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_add_hcd
-    |-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_calc_bus_time
-    |-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_create_hcd
-    |-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_hcd_giveback_urb
-    |-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_hcd_link_urb_to_ep
-    |-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_hcd_poll_rh_status
-    |-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_hcd_unlink_urb_from_ep
-    `-- s390-linux-ld:fotg210-hcd.c:(.text):undefined-reference-to-usb_put_hcd
+rndis_deregister+0x28/0x54 (kfree(params))
+rndis_free+0x44/0x7c (kfree(rndis))
+usb_put_function+0x14/0x1c
+config_usb_cfg_unlink+0xc4/0xe0
+configfs_unlink+0x124/0x1c8
+vfs_unlink+0x114/0x1dc
 
-elapsed time: 720m
+(3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
+(init.usb.configfs.rc:11)
 
-configs tested: 73
-configs skipped: 2
+Call trace:
+panic+0x1fc/0x3d0
+die+0x29c/0x2a8
+do_page_fault+0xa8/0x46c
+do_mem_abort+0x3c/0xac
+el1_sync_handler+0x40/0x78
+0xffffff801138f880 (params->resp_avail is an illegal func pointer)
+rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
+eth_stop+0x74/0x110 (if dev->port_usb != NULL, call rndis_close)
+__dev_close_many+0x134/0x194
+dev_close_many+0x48/0x194
+rollback_registered_many+0x118/0x814
+unregister_netdevice_queue+0xe0/0x168
+unregister_netdev+0x20/0x30
+gether_cleanup+0x1c/0x38
+rndis_free_inst+0x2c/0x58
+rndis_attr_release+0xc/0x14
+kref_put+0x74/0xb8
+config_item_put+0x14/0x1c
+configfs_rmdir+0x314/0x374
 
-gcc tested configs:
-arc                                 defconfig
-alpha                               defconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-sh                               allmodconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                           rhel-8.3-kvm
-arm                                 defconfig
-x86_64                        randconfig-a006
-m68k                             allmodconfig
-x86_64                         rhel-8.3-kunit
-arc                              allyesconfig
-x86_64                           rhel-8.3-syz
-alpha                            allyesconfig
-x86_64                               rhel-8.3
-arc                  randconfig-r043-20221111
-m68k                             allyesconfig
-x86_64                              defconfig
-i386                                defconfig
-s390                                defconfig
-ia64                             allmodconfig
-arm64                            allyesconfig
-riscv                randconfig-r042-20221111
-arm                              allyesconfig
-s390                 randconfig-r044-20221111
-s390                             allmodconfig
-x86_64                        randconfig-a013
-x86_64                           allyesconfig
-x86_64                        randconfig-a011
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                            allnoconfig
-i386                             allyesconfig
-s390                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-arm                       imx_v6_v7_defconfig
-mips                 decstation_r4k_defconfig
-arm                        oxnas_v6_defconfig
-m68k                          hp300_defconfig
-arm                         at91_dt_defconfig
-mips                 randconfig-c004-20221111
-i386                          randconfig-c001
+In step3,function pointer params->resp_avail() is a wild pointer
+becase pointer params has been freed in step2.
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-hexagon              randconfig-r041-20221111
-hexagon              randconfig-r045-20221111
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a006
-i386                          randconfig-a013
-arm                           omap1_defconfig
-arm                       netwinder_defconfig
-i386                          randconfig-a011
-i386                          randconfig-a015
-mips                        qi_lb60_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                     skiroot_defconfig
-powerpc                  mpc866_ads_defconfig
-x86_64                        randconfig-k001
+Free mem stack(in step2):
+usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
+
+use-after-free stack(in step3):
+eth_stop -> rndis_close -> rndis_signal_disconnect ->
+rndis_indicate_status_msg -> params->resp_avail()
+
+In function eth_stop(), if pointer dev->port_usb is NULL, function
+rndis_close() will not be called.
+If gadget->ops->pullup() return an error in step1,dev->port_usb will
+not be set to null. So, a panic will be caused in step3.
+=======================================================================
+
+Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
+callback from usb_gadget_disconnect())
+Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+Signed-off-by: TaoXue <xuetao09@huawei.com>
+---
+V1 -> V2: V1 will affect the original function, V2 just move the
+callback after "if" statement, so that the original function will not be 
+affected.
+And fixed formatting issues.
+
+drivers/usb/gadget/udc/core.c | 12 ++++++------
+1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index c63c0c2cf649..bf9878e1a72a 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
+}
+ret = gadget->ops->pullup(gadget, 0);
+- if (!ret) {
++ if (!ret)
+gadget->connected = 0;
+- mutex_lock(&udc_lock);
+- if (gadget->udc->driver)
+- gadget->udc->driver->disconnect(gadget);
+- mutex_unlock(&udc_lock);
+- }
++
++ mutex_lock(&udc_lock);
++ if (gadget->udc->driver)
++ gadget->udc->driver->disconnect(gadget);
++ mutex_unlock(&udc_lock);
+out:
+trace_usb_gadget_disconnect(gadget, ret);
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
+.
+
