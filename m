@@ -2,124 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7166268DC
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 11:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9F362691B
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Nov 2022 12:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234787AbiKLKZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Nov 2022 05:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S234875AbiKLLSf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Nov 2022 06:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbiKLKZW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Nov 2022 05:25:22 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDB22FC12;
-        Sat, 12 Nov 2022 02:25:18 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 922435C00EE;
-        Sat, 12 Nov 2022 05:25:16 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 12 Nov 2022 05:25:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1668248716; x=1668335116; bh=qJfGBhZiTW
-        ulvBK64Qdm+CqQnbSC354FNmkmvzVs8Q8=; b=P4bRPkGFH8dx3o+518cE2uqVKj
-        GP0y7JWPhLiaF6TkrxidvwSXZXwljCNaDzsn/jQ02gnyvmM31F2riZoObuzHJ0cf
-        Bvg2O1nW2oHvU9n/rzkPNtolYUoFDqVanDOtZ9XZsNKsuJ2d5d8Gb6joVHKu/JYk
-        dX7Cw07yUp/2qBWwrJaLYuWZ4d3Sun+tRULVEi6JJp6x/S4y0NTly6HN1RGRddHZ
-        m0ZwPzodW6FbGegU15axtHC912ujxvZbNCVVpsRLlwrVDXbyYsyhuFIUPmSt2Et/
-        p8/zhw2mt5Q108rjXCCWJ3jN/QZw1xGLl9nxaix5gPTaIFNNBZkk7c5FbdBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1668248716; x=1668335116; bh=qJfGBhZiTWulvBK64Qdm+CqQnbSC354FNmk
-        mvzVs8Q8=; b=SojtWf0siDBsuZmgt8IC+2ZQY+72PRBIRZVDkCoGYx5gcBpqHN0
-        cAoRrMZDdEi5nuRem71ptZp6lvxY64czborDZejTcFjv+uUuR+FgzRYZ2YAVjTRv
-        09rUekkVIdRMfdLWBoOa49wCy7c+hRKWdkyeJqaSMTZ55RcrwMyvqg5GrK/UUbDD
-        0GN+pg8SdG+X1Dxywu3dzpS/pq/6LYF4PFJJHgjhgLOmXWDn7+DIGOFiXpr5Nl68
-        vdliMXeg+EGr+xNWVlS8LuvAO112v4CTDDytGv2ORPav9Au2Bo3vUjJT17oE75rE
-        GZLUC3UsQkg7bwa9pV/VI578EDCZc2A+3cQ==
-X-ME-Sender: <xms:i3RvY-S93xrXhrw6sTqeWJ78rtoXwjMbywMSrMXsJWTvZbeyH2Gyhg>
-    <xme:i3RvYzzOBIS8tSaDMltAh2Xw5q8dMW9O6mvP4az4WxaCpsmztxfS5M1a5BvxtRcgK
-    90zobE9V0o27Trf3qc>
-X-ME-Received: <xmr:i3RvY70PBqa_vqhRCqPpIfOauRnYgx3hhZArb26PbH35fUEEyjxgnc4E9p6n_69VGJ9ZaPe4kRr_EeRFTu1vgNPCPOR9nlSTEY50i9l3QMgEgPb3dh51S6aTZucj9Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeekgdduiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
-    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
-    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
-    hsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:i3RvY6Dt18-ddLR4gyLnKN_BKdvVLE7fu8cPv95EKgSZB1alxa-L0Q>
-    <xmx:i3RvY3ixMYqN0irLUMIrHLRTx3AUmYe1r4xA3XAEcgucv5aRrJ6fyA>
-    <xmx:i3RvY2r8IKiC4OWVsj9ybMfMtsky9ENL2mj6voIs5j6O95GuAfdsnQ>
-    <xmx:jHRvY3cCTVWoiB_yqsRXSMq9oE8n3gKALIA_4rlLvfHN8Bk0l6Hj0Q>
-Feedback-ID: i51094778:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 12 Nov 2022 05:25:14 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: core: configure PHY before initializing host in dwc3_set_mode
-Date:   Sat, 12 Nov 2022 11:25:06 +0100
-Message-Id: <20221112102506.34990-1-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        with ESMTP id S234864AbiKLLSc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Nov 2022 06:18:32 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7283A222;
+        Sat, 12 Nov 2022 03:18:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1668251878;
+        bh=pCQDOALh79Wg0//BO+hwd+gUI9nb61JMC5A9n1oxDJo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=tC3jbkeFkyX2cGN5JP1yoh4sVVWUa5ymY5NF+It/5QcNljZdruXu1yBVIN1g7T1qe
+         A9EZgSPfohPm/l3mHuWUeS7927l1fYBKiP92ZCzzfkBYfSPL6g9MJKb5L6xUFkg/Ev
+         Zs83RBF1wRw1eWZzTCO53hJPyo4Qyx3iucl4Ubpg5VuJb9njcoms2FNpgpo8MArnfT
+         Ih2beDS9/awFyP+bWyZYtoxCk7MOHZUYLjpGuqCRsGAkmR0KZBHzVSThSGMoyPOes6
+         t0lAgaAU0zI5LXWOfKpRfmNlOZ2VWyBKNCcj8LM4bWG+heAeLkxJpZx8861Zjdh7Mk
+         sjTeHAcdWDPbg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [157.180.227.41] ([157.180.227.41]) by web-mail.gmx.net
+ (3c-app-gmx-bs18.server.lan [172.19.170.70]) (via HTTP); Sat, 12 Nov 2022
+ 12:17:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <trinity-33afde2b-7023-45f4-844c-db49f68e38aa-1668251877983@3c-app-gmx-bs18>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Aw: [PATCH v4 02/11] dt-bindings: phy: mediatek,tphy: add support
+ for mt7986
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 12 Nov 2022 12:17:58 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20221112091518.7846-3-linux@fw-web.de>
+References: <20221112091518.7846-1-linux@fw-web.de>
+ <20221112091518.7846-3-linux@fw-web.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:IdjKRZAc4G6HLMosS9W3l4ACXAgHyMBKtsfZjV4glKnOIzpgLETAF/Ge5C5uC/JhQ6zhZ
+ /Zvg98qbTZFOmoFYCHzhZG5sxbYMoGDfz5NyaC58aArUlPzICX8mFJZzw2ZfO9S3lKXGy3BetKKi
+ 339Em2xQ9y3WF05mYO60eRivo3jDP2APs7nYnDZn9c/qjxP/IGwmfTaMoq30YO1xt8nfdyTEj7R7
+ O9m8Dghdk8Dqr+rq2rF69B43EIqlU6iSuD3jvw35BgDi6pJ7SDX59buR56WIYe8gzXP8s1CDX/Oa
+ Ik=
+UI-OutboundReport: notjunk:1;M01:P0:Wc91JkxEs9I=;xIIdT2P6VfTS19OEOCIzPeazsU1
+ n1qm5hLpvysdWBP1oqyWMAFpe5vNdlKFVrtIPzSrbmEmH2ED6XNLsi46eP617uq7hhQJH/zBM
+ DS8FrSx2mFuk38mJsDr4xMLcinXuQswZN/dpJH/qHFTSHwxlonxzT24tZNsYn2UABe0C4Ulgk
+ rlbfKzC1cEbF9kYOWByhDvnWQKEq0RvuB9QM3uPOFiXec3DAchkKMrwJIRgtG+z5bjs5EkHll
+ 6DoZGD9DgxJxQ5ToSH2nKlNyq52WLWXYWWikIJCano2QLV816u2+i2L72C/h4nXsUsdDIP5d/
+ CBeRv6+U3qcDm4Pi6RnFU/xgqFNqsLdKIlYRRRcB24qZt0aBPpnJlkwGU4YMGgnCjbdEW/Dex
+ sqRrXwV3Kqyssq6xwMvlQd5Yp3Acgw0BNy3gv7p6bwO7DtrMVf3PUNmsurROoX42gHKseyAc7
+ qskz+HyFSwMlwl3EUGwgviSYfHjp2BpBLjyhAh6EhgLuKpQR9f1rc3f1W8txvGBN/7W6gywdq
+ LTdwp3Sisurq1EyHwhxINCvnziH6Kvx9X8316+4ipx1QJwO/918v99elQFXmL+c5Qxh2AxP9d
+ dnXPTRbigZEa/VgW4Pd/W+bw9nLTlAggS5LA1w7ZrJ65ybPFvJobDAdrN4tdk9lfoJb1uillM
+ UsfOV8TItHB+Moe2oYOJzqyH3aS17kHLAq0SIXMuhYHiujRTCLsfZ5/oMjepyVcm+s5fQ95T6
+ QGAQg5UQxreUGlHKg/3bGRhWCzrRRevxxfmd4FCOhM5vhi7vSEb5YfTDJZpH1LqIX0ebqHQM+
+ sCXz0Qoiz9HGFjvpLC87PgYg==
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Usually, first the PHY is set to the correct mode and then the host or
-device side of the controller is initialized afterwards. Otherwise a PHY
-that's already used has to be reconfigured.
-dwc3_core_init_mode() does this correctly for both host and device and
-__dwc3_set_mode() does it correctly when switching to device mode.
-When setting up host mode however it first initializes xhci and only
-then changes the PHY's mode. Let's also do the operations in the correct
-order here.
+i've noticed that i missed the Ack from Krzysztof i've got in v1 [1]
 
-Fixes: 958d1a4c40dd ("usb: dwc3: core: program PHY for proper DRD modes")
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- drivers/usb/dwc3/core.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index ad4d644e21a4..759d23d908fa 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -212,14 +212,15 @@ static void __dwc3_set_mode(struct work_struct *work)
- 
- 	switch (dwc->desired_dr_role) {
- 	case DWC3_GCTL_PRTCAP_HOST:
-+		if (dwc->usb2_phy)
-+			otg_set_vbus(dwc->usb2_phy->otg, true);
-+		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
-+		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
-+
- 		ret = dwc3_host_init(dwc);
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
- 		} else {
--			if (dwc->usb2_phy)
--				otg_set_vbus(dwc->usb2_phy->otg, true);
--			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
--			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
- 			if (dwc->dis_split_quirk) {
- 				reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
- 				reg |= DWC3_GUCTL3_SPLITDISABLE;
--- 
-2.25.1
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20221017104141.7338-2-linux@fw-web.de/
 
+regards Frank
