@@ -2,199 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5C7626EA7
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 10:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC212626EAD
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 10:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbiKMJM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Nov 2022 04:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S235194AbiKMJOX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Nov 2022 04:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbiKMJM1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 04:12:27 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75E311C3A;
-        Sun, 13 Nov 2022 01:12:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668330744; x=1699866744;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uldxEetAwx1p9WOcOe/kKGthIwO8v4ywlMbj0CLYCSU=;
-  b=K3QndspvDxdw4z4isBrjAfnhWx6sCH0pUWysjdlA57UAeMU7ug7UWmwt
-   6GxSCxxkByjFn+sgGef5eiYnfy/JWgp5L1bnDmfnXDNRhTH2j5AV11KIA
-   hYmEEXIwwpF5wKb7zaZpLbhf+lgijEcqdBaAxqz173LXgQ80JO2e5lik1
-   OuZP1ibqqL3Qbays5yMoB1gm93tKVr9ufUeftQ6B6uhcYHfdtSOebdYbG
-   jbbeNtF/JKTl1TauUUEghA+vVGmKhGu/Xr1d3OO4PvkzzYM/BFhFWjeaL
-   oAey/R1fDAKK1r1mLWrKrjEmbrBRcPLPzJGZrWtHDKU/rtnZjGIH5BxYp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="311801630"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="311801630"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 01:12:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="615922753"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="615922753"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 13 Nov 2022 01:12:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1ou92H-00BbUQ-2o;
-        Sun, 13 Nov 2022 11:12:17 +0200
-Date:   Sun, 13 Nov 2022 11:12:17 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     jiantao zhang <water.zhangjiantao@huawei.com>
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        jakobkoschel@gmail.com, geert+renesas@glider.be,
-        colin.i.king@gmail.com, =?utf-8?B?6Jab5rab?= <xuetao09@huawei.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?B?6JSh5Lqa5Lic?= <caiyadong@huawei.com>,
-        =?utf-8?B?5b6Q5rW35rSL?= <xuhaiyang5@hisilicon.com>
-Subject: Re: [PATCH v2] USB: gadget: Fix use-after-free during usb config
- switch
-Message-ID: <Y3C08ftGoOSFSPg/@smile.fi.intel.com>
-References: <20221112030433.4945-1-xuetao09@huawei.com>
- <cc99f08d-4e2f-120c-fd37-03809c92e819@huawei.com>
+        with ESMTP id S234204AbiKMJOW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 04:14:22 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92575FE3;
+        Sun, 13 Nov 2022 01:14:21 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id g24so7642828plq.3;
+        Sun, 13 Nov 2022 01:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jm8CPr0nbrT5CX5c1JBR2j22AkvfIMg2xW2ALzqRYHc=;
+        b=qoegYSEzF6W2EQAKMzO+HkowdDxrQ7A5mQu0KWbhd8a96SHhc/mnIKxuBM0tLq54uu
+         6zxavP+qNWOIlOaq/81HD9NuqKZxKyy2HWQAzR+q2lJgSIHL/7nRJBOEUuztLXRlzbIw
+         62v7uh46Q4bbW3Xc2wwq6tUqdLoUFgFqO7CXTifbKIQRTcDDVJlhnwNU6h+9KlzKD2vZ
+         W8ngAeB6FwhlIAlfr3nO4PJJ9f/50kYbEj5tknlSG9O8CQ4Xo6Z1EhZORjF/WunrMwSr
+         XQ9aRFg7KqwLY7RnWl9ss1kmn+nqP0G5gM711CTjwepIRgkj0FXiGjVN3Ksn0z09Klbz
+         8t5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jm8CPr0nbrT5CX5c1JBR2j22AkvfIMg2xW2ALzqRYHc=;
+        b=yNvBweSkDKuWZkT8ilrjD9d5DyVG9MIArezS2jOn2hP19W2ttIZ0UxNmS+nvELzj0Q
+         MAuPEUEcrM/8qMmDbbXxQ5NROKCKqU3cpAd0g60AWLhQ4CazVJsuTZctGFfkUxXt5VQ4
+         JOZ9AK5ZSK5JYzeLbyCdHgVTMasv0dz0mjwCzrVXz+bjwyDJl4eF/wpNRd4zDWQhhFfo
+         lYoNeEinwSGz8LwN14xdsnO8ktFlsqv9fimpI2e4b1rqip82HyAU58VSE6Yvbzg/AqCQ
+         Gx5hXdD9yWC7NLGfAv5y34xHe48yrBp+KWpAlpTFSw97lTLTLGgsAD0mm2gjNnoFo98n
+         28JA==
+X-Gm-Message-State: ANoB5plHRc2O4y/QvOu73KJNufSTPAIYnTwrTXsFTeogGTdmAk7I6On/
+        bHowuRu+ISaELkfW4VLxDig=
+X-Google-Smtp-Source: AA0mqf5wTaSV0glZxJYamyH1IuEgvK0gXd3ogOGGQfj4a1xJ9Ptbf1VrNeBan/X57KSsNfoWJcQMXA==
+X-Received: by 2002:a17:902:bc83:b0:186:8af2:8bc8 with SMTP id bb3-20020a170902bc8300b001868af28bc8mr9322491plb.146.1668330860802;
+        Sun, 13 Nov 2022 01:14:20 -0800 (PST)
+Received: from ubuntu ([211.193.26.134])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902a50700b00182d25a1e4bsm4772280plq.259.2022.11.13.01.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 01:14:20 -0800 (PST)
+Date:   Sun, 13 Nov 2022 01:14:15 -0800
+From:   Hyunwoo Kim <imv4bel@gmail.com>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, imv4bel@gmail.com
+Subject: Re: [PATCH v2] char: xillybus: Prevent use-after-free due to race
+ condition
+Message-ID: <20221113091415.GA8314@ubuntu>
+References: <20221030094209.65916-1-eli.billauer@gmail.com>
+ <20221113080558.GA5854@ubuntu>
+ <2a8f59ac-9d49-ffa3-b035-809f2fac38ec@gmail.com>
+ <20221113084740.GA6458@ubuntu>
+ <c9a03f08-8117-cd24-b4e3-9e097e3069f2@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cc99f08d-4e2f-120c-fd37-03809c92e819@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c9a03f08-8117-cd24-b4e3-9e097e3069f2@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 04:14:27PM +0800, jiantao zhang wrote:
-> In the process of switching USB config from rndis to other config,
-> if the hardware does not support the ->pullup callback, or the
-> hardware encounters a low probability fault, both of them may cause
-> the ->pullup callback to fail, which will then cause a system panic
-> (use after free).
+On Sun, Nov 13, 2022 at 11:03:20AM +0200, Eli Billauer wrote:
+> On 13/11/2022 10:47, Hyunwoo Kim wrote:
+> > And, even if the mutex_unlock(&unit_mutex); of xillybus_find_inode()
+> > is finally moved, xdev may be released before kref_get() is executed
+> > if xillyusb_disconnect() ends just before the function returns.
+> > (Of course, this is an extremely rare case.)
+> > 
+> > So, in xillyusb_open() we need to move kref_get() above xillybus_find_inode().
 > 
-> The gadget drivers sometimes need to be unloaded regardless of the
-> hardware's behavior.
+> First of all, that's impossible. kref_get() is called on a member of a
+> specific @xdev's struct, and it's xillybus_find_inode()'s job to find it. So
+> before the call to xillybus_find_inode(), we don't know which @xdev it is.
+> That's the tricky part of all this.
 > 
-> Analysis as follows:
-> =======================================================================
-> (1) write /config/usb_gadget/g1/UDC "none"   (init.usb.configfs.rc:2)
+> The solution of this submitted patch was a lock that briefly prevents the
+> kref_put() of all @xdevs. The way it works is that if an @xdev is found by
+> xillybus_find_inode(), it necessarily means that xillyusb_disconnect()'s
+> call to xillybus_cleanup_chrdev() hasn't returned (yet). Therefore, holding
+> @kref_mutex guarantees that the kref_put() call, which is later on, isn't
+> reached for the @xdev that has been found.
 > 
-> gether_disconnect+0x2c/0x1f8           (dev->port_usb = NULL)
-> rndis_disable+0x4c/0x74
-> composite_disconnect+0x74/0xb0
-> configfs_composite_disconnect+0x60/0x7c
-> usb_gadget_disconnect+0x70/0x124
-> usb_gadget_unregister_driver+0xc8/0x1d8
-> gadget_dev_desc_UDC_store+0xec/0x1e4
-> 
-> In function usb_gadget_disconnect(),The ->disconnect() callback will
-> not be called when gadget->ops->pullup() return an error, therefore,
-> pointer dev->port will not be set to NULL. If pointer dev->port_usb
-> is not null, it will cause an exception of use-after-free in step3.
-> 
-> (2) rm /config/usb_gadget/g1/configs/b.1/f1   (init.usb.configfs.rc:8)
->     (f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
-> 
-> rndis_deregister+0x28/0x54        (kfree(params))
-> rndis_free+0x44/0x7c              (kfree(rndis))
-> usb_put_function+0x14/0x1c
-> config_usb_cfg_unlink+0xc4/0xe0
-> configfs_unlink+0x124/0x1c8
-> vfs_unlink+0x114/0x1dc
-> 
-> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
->     (init.usb.configfs.rc:11)
-> 
-> Call trace:
-> panic+0x1fc/0x3d0
-> die+0x29c/0x2a8
-> do_page_fault+0xa8/0x46c
-> do_mem_abort+0x3c/0xac
-> el1_sync_handler+0x40/0x78
-> 0xffffff801138f880    (params->resp_avail is an illegal func pointer)
-> rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
-> eth_stop+0x74/0x110   (if dev->port_usb != NULL, call rndis_close)
-> __dev_close_many+0x134/0x194
-> dev_close_many+0x48/0x194
-> rollback_registered_many+0x118/0x814
-> unregister_netdevice_queue+0xe0/0x168
-> unregister_netdev+0x20/0x30
-> gether_cleanup+0x1c/0x38
-> rndis_free_inst+0x2c/0x58
-> rndis_attr_release+0xc/0x14
-> kref_put+0x74/0xb8
-> config_item_put+0x14/0x1c
-> configfs_rmdir+0x314/0x374
+> If you've found a flaw in this mechanism, please be more specific about it.
 
-Please, read the Submitting Patches document on how to provide backtraces in
-the commit messages and update yours accordingly.
+you're right.
 
-> In step3,function pointer params->resp_avail() is a wild pointer
-> becase pointer params has been freed in step2.
-> 
-> Free mem stack(in step2):
->     usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
-> 
-> use-after-free stack(in step3):
->     eth_stop -> rndis_close -> rndis_signal_disconnect ->
->     rndis_indicate_status_msg -> params->resp_avail()
-> 
-> In function eth_stop(), if pointer dev->port_usb is NULL, function
-> rndis_close() will not be called.
-> If gadget->ops->pullup() return an error in step1,dev->port_usb will
-> not be set to null. So, a panic will be caused in step3.
-> =======================================================================
-
-> Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
-> callback from usb_gadget_disconnect())
-
-This is malformed tag. Please, read the Submitting Patches document and fix
-this accordingly.
-
-> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-> Signed-off-by: TaoXue <xuetao09@huawei.com>
-> ---
->  V1 -> V2: V1 will affect the original function, V2 just move the callback
-> after "if" statement, so that the original function will  not be affected.
-> And fixed formatting issues.
-> 
->  drivers/usb/gadget/udc/core.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index c63c0c2cf649..bf9878e1a72a 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
->  	}
->   	ret = gadget->ops->pullup(gadget, 0);
-> -	if (!ret) {
-> +	if (!ret)
->  		gadget->connected = 0;
-> -		mutex_lock(&udc_lock);
-> -		if (gadget->udc->driver)
-> -			gadget->udc->driver->disconnect(gadget);
-> -		mutex_unlock(&udc_lock);
-> -	}
-> +
-> +	mutex_lock(&udc_lock);
-> +	if (gadget->udc->driver)
-> +		gadget->udc->driver->disconnect(gadget);
-> +	mutex_unlock(&udc_lock);
->   out:
->  	trace_usb_gadget_disconnect(gadget, ret);
-> -- 
-> 2.17.1
-> 
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
+It seems that you only need to move the location of unit_mutex 
+in xillybus_find_inode().
 
 
+Regards,
+Hyunwoo Kim
