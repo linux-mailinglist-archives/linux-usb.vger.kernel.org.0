@@ -2,90 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C66C627309
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 23:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFEC62739E
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 00:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbiKMWlK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Nov 2022 17:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
+        id S235085AbiKMXwj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Nov 2022 18:52:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbiKMWlH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 17:41:07 -0500
+        with ESMTP id S229692AbiKMXwi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 18:52:38 -0500
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947DAFCF1;
-        Sun, 13 Nov 2022 14:41:06 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 094EE5C009F;
-        Sun, 13 Nov 2022 17:41:06 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6C2B1E2;
+        Sun, 13 Nov 2022 15:52:37 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0884B5C0004;
+        Sun, 13 Nov 2022 18:52:35 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 13 Nov 2022 17:41:06 -0500
+  by compute1.internal (MEProxy); Sun, 13 Nov 2022 18:52:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668379266; x=
-        1668465666; bh=Zro3JnOVSvXjXtDx/e2Z/r/RhYG0V57L3bmv0eP/xkM=; b=K
-        Pkzc21ryJ8mWRn0lw4mxKhqwB+WqcPVNLVHOa/+Kv7SR4Uo6/CI5JG4HY/E2NHHo
-        5R5ou5lPsmhi9pw82wsXyDnXfFv6JU7OOdLVV0p1NuB62cNf1OGjyhJJEuoQYzBn
-        P0mITeWfQPmnseBuG0pi4B7ALfEYfi1kd8J8SFu1AsTg39Rey1FZgSGnHXh0Lo2z
-        VxbIEcQ8zMsv7j6eMsud+6dsvtVrZ7udtnt6z/DsmusQGuWn9/TQglFCNeSvNoB4
-        SV2MhCdvABXq1+E9ywbxswzJ6n71bW8VeQgr9yd3B3113EhGn9qTc1p6+S4EfigW
-        1jD3o7QR3LeZswQbXtv9A==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668383555; x=
+        1668469955; bh=A1qCJOUp0QpjL2/Kd4K7cMVRGDRzG+dWyUIbUehmaoc=; b=C
+        0E+yoyxLEgGO7iC18IQRFmc5933zobUI4SwVPrOccR5rmk+48VReTwEZLYUzQNRC
+        Edp7OoFitE1i8agthD+psT368zAatLPgvvJKhygxQDmcxqyZWuoIPcCyVsEvFa5n
+        5Ly+mzN08O4+9Ij7YFs+5FFMw0Wm4bSr2Pt2qiZ3JYWX0K3S0ISXn54tdqDgoz8a
+        7D7drigvJfam3KoJw9uBmuLN2xxVJG9QukXdi+ksEtH2EnOsdItrP4U8QJlDGtuu
+        KyfbLMYO0KU0EexvaTxsqX+dv6Jg1mxCdk8bkbTQ63607L6e/6VD3OHZ5Xj8tL2i
+        LMvwZcXG6tWEsiXQxcRZQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668379266; x=
-        1668465666; bh=Zro3JnOVSvXjXtDx/e2Z/r/RhYG0V57L3bmv0eP/xkM=; b=a
-        0NV50iwtoTUMewCHG3SmmrxeIISEhg8qxXVbLcBc3AqOatzcJhwsdA46iM9TOf9p
-        4k9rWMfuDTCYobU64tlmMjnrBMC1ONGVpPHMqK9B4816k8eZwvSc0lJji0XlDG0y
-        HkbFPENjpt/zGLW57WKhaLjbAFhFp1ui5Zzd5dpUqOhbflrYL+bXGe/UZYAtY+YP
-        TWUqjXr0f6jWodg54SRAWK3W5QJ65M6SJIN4Oo5RGfqqW+pdVrqr0XDrFlynjAyM
-        MPbqKWBJ0kTcj4URkaN15xIOhRRHP8XP9ayiGSHhlTWrxFPDenhSrIavYx3PE62o
-        Ine2RVe1mY5zzuXZ71T4A==
-X-ME-Sender: <xms:gXJxY77Emsp6b2AffTwsN3UOEV4ELDYrt2AoYrpWun4ks-SjczZURg>
-    <xme:gXJxYw6VxrvS7Tq1_yBimqCxXnyardEgMPk1UGHL8ybfFk1Q03SiVB4z7bbGDc8My
-    uYNL0u8yWEYwXiw6A>
-X-ME-Received: <xmr:gXJxYydjwOFth0JF1j8OQII2cMpURMoOLaMvdCrX3dz8ho5_8jempdDYGZDj2laGGzVWIrA63ErtCNmlRG62c9uZbb9ldFxaKK0cK2dOcyPi-YOQ4kxJlQ1aWA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugddtudcutefuodetggdotefrodftvf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668383555; x=
+        1668469955; bh=A1qCJOUp0QpjL2/Kd4K7cMVRGDRzG+dWyUIbUehmaoc=; b=L
+        FtAOhrhaiEr1PjpPVS2l5wJmCptnNpXvrtjwu7ZIkfYmkcOBPXJL/6id7m+gFrVQ
+        Qs/ODM9m2VE14s50iREpLczF3wMobC49hvqMYk0mbF8Mad0LwVINdFuIij46S4sl
+        kTChOpDQlJ1+DrNN6WY+0KXqHN60TgrTnkjdk+l1rLNcFSGh534aM4L5oOzmgkyy
+        HcjMCgBwLAhiMazvxBmmDcgogOHDoRB5ebuHzMlosnKwUz6H1VgB7DU+xVt8EkbA
+        5qqv20cUdfox2pdkr6nOvumhYfWbtN88kQf5Re0E1GSOp1zJLbZyC46OBOxC63Kk
+        zo8k9J5npQ0pXjOnsMUkA==
+X-ME-Sender: <xms:QoNxYzpkSvsxW7YbvX9D4Z6AAwVBaFde7RT2EwknGDg8gFflymhFnw>
+    <xme:QoNxY9rkJs6729LL4zGUZMv9YNUYaO-v1GELEJHr4RJPeTrrJnl1uMGgFvjyqi69e
+    U4JdHR77TGbR0YCHg>
+X-ME-Received: <xmr:QoNxYwOlg7TNqj_Kyb0vX4wxCm9j6Hgm_2QwUTcrHn_vt-H1QtGyJBuf-MK02ZSB4RTXnYcIBQZPO1CJk91SF0DW2Zv_rnhgFkf7AoVu4EQP1n6h6fSHIE5I5A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugdduhecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
-    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    ftrfgrthhtvghrnhepgfdtgfelffekveelvdeuteetfefgleelhfejteeiuefhheetueef
+    fefgheefveefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:gXJxY8Kt1navcaV5rqsZgXUV_vx_WPjU5jOeIHPpujigSENaZiY0LA>
-    <xmx:gXJxY_ILoCDvim-xQyGWtLT6kkWCApVI7KJupA8VWtLEuIykLIe2AQ>
-    <xmx:gXJxY1we3w4pjwtxnKYolnDQIT0T8q-nWxfSjQe5eeV0NgVzX0C3dw>
-    <xmx:gnJxYxyAKQWDHmzV8vDEW6wm1BQCGdR75h8nnn4opfFXpSti8Kon2w>
+X-ME-Proxy: <xmx:QoNxY25g9R9n8r4cWQpXJEu1uY2a9m_CTmcONKygxkHTYK1H1aM96Q>
+    <xmx:QoNxYy6nyJUdWoQkjy9Zf82k7iIUTWShHz7TCrQ97-MWNCMjbvTdqg>
+    <xmx:QoNxY-ge8Y_FJ4lx3iNVn_bVIkY4D9wGjFcUkZZYIxf3f61L_fU17w>
+    <xmx:Q4NxY1JovrwwsaVar9lSOpVMx0jvRjfsZy_pOaxujJPqpaA9h9kqKA>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 13 Nov 2022 17:41:05 -0500 (EST)
-Message-ID: <7d7a84bd-78e2-868b-6659-9dcc596c718c@sholland.org>
-Date:   Sun, 13 Nov 2022 16:41:04 -0600
+ 13 Nov 2022 18:52:33 -0500 (EST)
+Message-ID: <7b2606df-3ae5-2699-66bd-12815ffc785b@sholland.org>
+Date:   Sun, 13 Nov 2022 17:52:33 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH v3 09/11] ARM: dts: suniv: add device tree for PopStick
- v1.1
+Subject: Re: [PATCH v3 10/11] phy: sun4i-usb: Replace types with explicit
+ quirk flags
 Content-Language: en-US
-To:     Andre Przywara <andre.przywara@arm.com>,
+To:     Icenowy Zheng <uwu@icenowy.me>,
+        Andre Przywara <andre.przywara@arm.com>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Icenowy Zheng <uwu@icenowy.me>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     soc@kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
 References: <20221106154826.6687-1-andre.przywara@arm.com>
- <20221106154826.6687-10-andre.przywara@arm.com>
+ <20221106154826.6687-11-andre.przywara@arm.com>
+ <D8382138-8943-46F7-B6A6-F83DF98E26AE@icenowy.me>
 From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20221106154826.6687-10-andre.przywara@arm.com>
+In-Reply-To: <D8382138-8943-46F7-B6A6-F83DF98E26AE@icenowy.me>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -96,151 +99,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/6/22 09:48, Andre Przywara wrote:
-> From: Icenowy Zheng <uwu@icenowy.me>
+On 11/6/22 09:54, Icenowy Zheng wrote:
 > 
-> PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
-> wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
-> an on-board CH340 USB-UART converted connected to F1C200s's UART0.
 > 
-> Add a device tree for it. As F1C200s is just F1C100s with a different
-> DRAM chip co-packaged, directly use F1C100s DTSI here.
+> 于 2022年11月6日 GMT+08:00 下午11:48:25, Andre Przywara <andre.przywara@arm.com> 写到:
+>> So far we were assigning some crude "type" (SoC name, really) to each
+>> Allwinner USB PHY model, then guarding certain quirks based on this.
+>> This does not only look weird, but gets more or more cumbersome to
+>> maintain.
+>>
+>> Remove the bogus type names altogether, instead introduce flags for each
+>> quirk, and explicitly check for them.
+>> This improves readability, and simplifies future extensions.
+>>
+>> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+>> ---
+>> drivers/phy/allwinner/phy-sun4i-usb.c | 50 ++++++++-------------------
+>> 1 file changed, 15 insertions(+), 35 deletions(-)
+>>
+>> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
+>> index 51fb24c6dcb3..422129c66282 100644
+>> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+>> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+>> @@ -99,27 +99,17 @@
+>> #define DEBOUNCE_TIME			msecs_to_jiffies(50)
+>> #define POLL_TIME			msecs_to_jiffies(250)
+>>
+>> -enum sun4i_usb_phy_type {
+>> -	sun4i_a10_phy,
+>> -	sun6i_a31_phy,
+>> -	sun8i_a33_phy,
+>> -	sun8i_a83t_phy,
+>> -	sun8i_h3_phy,
+>> -	sun8i_r40_phy,
+>> -	sun8i_v3s_phy,
+>> -	sun50i_a64_phy,
+>> -	sun50i_h6_phy,
+>> -};
+>> -
+>> struct sun4i_usb_phy_cfg {
+>> 	int num_phys;
+>> 	int hsic_index;
+>> -	enum sun4i_usb_phy_type type;
+>> 	u32 disc_thresh;
+>> 	u32 hci_phy_ctl_clear;
+>> 	u8 phyctl_offset;
+>> 	bool dedicated_clocks;
+>> 	bool phy0_dual_route;
+>> +	bool phy2_is_hsic;
 > 
-> This commit covers the v1.1 version of this board, which is now shipped.
-> v1.0 is some internal sample that have not been shipped at all.
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |  3 +-
->  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 99 +++++++++++++++++++
->  2 files changed, 101 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 6aa7dc4db2fc..0249c07bd8a6 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
->  	sun9i-a80-optimus.dtb \
->  	sun9i-a80-cubieboard4.dtb
->  dtb-$(CONFIG_MACH_SUNIV) += \
-> -	suniv-f1c100s-licheepi-nano.dtb
-> +	suniv-f1c100s-licheepi-nano.dtb \
-> +	suniv-f1c200s-popstick-v1.1.dtb
->  dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
->  	tegra20-acer-a500-picasso.dtb \
->  	tegra20-asus-tf101.dtb \
-> diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> new file mode 100644
-> index 000000000000..7d69b5fcb905
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-> + */
-> +
-> +/dts-v1/;
-> +#include "suniv-f1c100s.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "Popcorn Computer PopStick v1.1";
-> +	compatible = "sourceparts,popstick-v1.1", "sourceparts,popstick",
-> +		     "allwinner,suniv-f1c200s", "allwinner,suniv-f1c100s";
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +
-> +	reg_vcc3v3: regulator-3v3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +	};
-> +};
-> +
-> +&mmc0 {
-> +	cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
-> +	bus-width = <4>;
-> +	disable-wp;
-> +	vmmc-supply = <&reg_vcc3v3>;
-> +	status = "okay";
-> +};
-> +
-> +&otg_sram {
-> +	status = "okay";
-> +};
-> +
-> +&spi0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi0_pc_pins>;
-> +	status = "okay";
-> +
-> +	flash@0 {
-> +		compatible = "spi-nand";
-> +		reg = <0>;
-> +		spi-max-frequency = <40000000>;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +
-> +		partitions {
-> +			compatible = "fixed-partitions";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			partition@0 {
-> +				label = "u-boot-with-spl";
-> +				reg = <0x0 0x100000>;
-> +			};
-> +
-> +			ubi@100000 {
-> +				label = "ubi";
-> +				reg = <0x100000 0x7f00000>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_pe_pins>;
-> +	status = "okay";
-> +};
-> +
-> +&usb_otg {
-> +	dr_mode = "peripheral";
+> Maybe use a `int hsic_phy` instead? But the problem is this practice is
+> assuming USB0 could not be HSIC -- although USB0 is usually OTG.
 
-The patch description says the board has a USB Type-A port. Why is the
-USB controller set to peripheral mode?
+There is already a `hsic_index` variable in the struct we can use.
 
 Regards,
 Samuel
-
-> +	status = "okay";
-> +};
-> +
-> +&usbphy {
-> +	status = "okay";
-> +};
 
