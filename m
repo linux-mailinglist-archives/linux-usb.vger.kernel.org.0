@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFAE6272F7
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 23:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF036272FC
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 23:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbiKMWcM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Nov 2022 17:32:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
+        id S235508AbiKMWe7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Nov 2022 17:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiKMWcL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 17:32:11 -0500
+        with ESMTP id S234130AbiKMWe6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 17:34:58 -0500
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C900EE0E;
-        Sun, 13 Nov 2022 14:32:10 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id B93555C00A9;
-        Sun, 13 Nov 2022 17:32:07 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C52DF9F;
+        Sun, 13 Nov 2022 14:34:57 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4A9EC5C0053;
+        Sun, 13 Nov 2022 17:34:57 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 13 Nov 2022 17:32:07 -0500
+  by compute2.internal (MEProxy); Sun, 13 Nov 2022 17:34:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668378727; x=
-        1668465127; bh=D0UDPOcJzT1RD0W0b6Z42Zcs34D8+nlMSqsxaHZ8s4c=; b=G
-        bue/7XmTaxL+fotI1cBfc0OkeDdpw4W8BtHH6JVQ4XCT1wiwX+957v3rQQRvb3fP
-        P4cWNpmf4XNxD46NBbdzUgO6WjOvB90Q62JIPnCv72M/87PBYgLfpANQiDhbMcEt
-        65lmqINiagjIsRmJy9p9I9JMDhgxX45NX7PvIu+bUdetJ3+YWCqT1w1BTL3lqNhA
-        75fy6vrVGTC1P3SnXLIVv4mnlmtyMcqW4zew8PCZssy52LwIpuADafu2feSj8zLq
-        VJfdZjtyqcH3pCSngZrCx7inMh48doGUcjEdJr/mZpbCNPbEeA7UbAw0DwSeChBY
-        4aNGTOppRgvW7v0YdZZGQ==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668378897; x=
+        1668465297; bh=aa9u7KFGnoEFdEcyyA3MaXZLY+Tt4imQzrHCuo0hs98=; b=i
+        J8aP5U5Zd8RlTG1fVlAkw9sWUEdy9PxZhXAOVXYvNNtffCC28Jrkm9T0xKmafyS1
+        jPw49jdB/gGethgYwHPv2k84lzcF4FuHTGHz4BRQPEnA4/bVh2zcZGpqOtkIQSW2
+        BdFcQnmnQXQMBkNc1hptHFUPFoQ3xTUyX9Ylc11UTLo9vDOCMx32EAZ7mj1L6CGm
+        IV9O0Tmz8guRNcBBpxP41Lttaxx77YrZYJ3I7hvAZ72rZizlHpenwaAYZIhJY22x
+        SBZ8usYeKFRTUmwJDbRr55BXJSxUfBybCc1NDYaKcUvA9pPzQ7wIB7V59vReloLQ
+        1ZzSmduxpLNDDa+1sUxHw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668378727; x=
-        1668465127; bh=D0UDPOcJzT1RD0W0b6Z42Zcs34D8+nlMSqsxaHZ8s4c=; b=a
-        nb+ypKQbTHUP1Nibk45YU4XBzrt6WwCBU9uEiKxaaDze7rmGH4SCw1MIAp4wnfQA
-        TG3WzsD7TGMTLT0YRlzmEZFLdgO4CGiU50R9zPrffvzeuBNGnc6sjkXPAP32arcn
-        DR/G4cwvNb/CKiJTLyM9K/vo6NEz2fiLAju5mxcnxBy72HS3oi9sZdA0bQ68Xi6x
-        S19JGhNa7hfuiLheEO07FFgfUL5dtLpaugiNCrv5MqxwzmdpiRsB8JPx/EK4iCKx
-        oiSkr4SWZOErm6Ex7cbJURRUjlF+9Hzmr9mtIbgml98mOaZMPqpf6Quk96z57hJA
-        viumyG0xPJiz+fdsECZVA==
-X-ME-Sender: <xms:Z3BxY6sNlWRNXoJ0Uk_EsOMxRDO5QjiTyx7gp7TmVkOTsYl9V50rKQ>
-    <xme:Z3BxY_ePWOm4O-fz6PRTTJvJH6mFYa2wufmtIwpWLbtn3fWUhl6bikG6Fezi4WoZC
-    MF-8z_Fxt-jqQUCcg>
-X-ME-Received: <xmr:Z3BxY1yOIc2cRUWSykAQHsoED1lPSPRiiAxiawUEnxriafk2DnKSuCvOKR49Va2zFWOnmfOq1OBV5pnSkSbFsglMLcM0cnV33VKztR7Qj2KC_CM1E53Lfx4RrQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedtgdduieegucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668378897; x=
+        1668465297; bh=aa9u7KFGnoEFdEcyyA3MaXZLY+Tt4imQzrHCuo0hs98=; b=B
+        SXMT9/5cb/oMyC8+OrCV6wZIilF4Zj86+aooYhewjhhfIx+hRl+ZfI/XKn6PqL9f
+        YoKyeoKgp0kFMJ50ljmxhmEO6bH7PUxUZQr3Zt1MByw+dS6baqrwCmWYk58ygj9f
+        pqz10ySGpFJz1SDNCY5xwZ7OIVyBhWYCzAM+XFddfcpc1ANu3EZgJ9/WoRE9OVps
+        HtNNroJELcmbpUNn3ShKoUI9ZObErqXnO91dvikx8sRRl5afc//g4b16Lf4fH41p
+        tRN+FkAefrmvYdNrlgcCH24UY9IeqrbX8Gjbqj3cGBRAYSlEDotOzC6tvKWF3LSB
+        DYUpvNH9tsVIJjSInQ5gA==
+X-ME-Sender: <xms:EHFxY5jbCMk1gAPoCIG6uRJbVNZwoBKgKgMD4zvgV4xFx2VhTLqBvQ>
+    <xme:EHFxY-ArJhY_XHDeRQ9NtUVdauZCnaZdbOLKud9vkutPmbpSEP3PNOkAUp0LQf1Xx
+    TxiJKyeKeO3Amjenw>
+X-ME-Received: <xmr:EHFxY5FGjGMFU2_jd2rEc5FyP_hq68AhfxZ-Y-neOrDVh0deD7f94FH_ctBKSREOEFx-ytist9zs7Im3a-keToVA9W9S7g-M7JQhb_SAhLzVf0WgyIFvq3E7ng>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedtgdduieehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
@@ -55,20 +55,20 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedtgdduieegucetufdoteggod
     ggtffrrghtthgvrhhnpeekjeelleefiedthfdtgfekgeehudefudeugeffvdfhudekleel
     fedtteejhedutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:Z3BxY1Ox48ZDy-gRZWa2cXiBYSqqBG-hduR7JOCw58BMJzqf5K9aeg>
-    <xmx:Z3BxY6_WCu_QxiKm8f_NX9NWb2oEaOgzr33bpZZhbdyoCNEY0BV8uQ>
-    <xmx:Z3BxY9U-ubDYE8EEYjXnJePxrgsW2A2VSEzuDTHOvAiKDN2PTkJBUQ>
-    <xmx:Z3BxY1UscQ742TzqufOkY6b8RkpYRN5fe4n-zZjw2Fa8F345IC2org>
+X-ME-Proxy: <xmx:EHFxY-S9r3oo8m6pThj8rC60dwCF4fVjDtG6BKs35zVXYfWUjGiUCw>
+    <xmx:EHFxY2x24iMN-daquE6-nAjO6HsIZkQB2P3R3_-BeJJLKRtYxkSaQQ>
+    <xmx:EHFxY04QSBJab15tHZxLmWgEybHXUPKFuwxJjAksqWbuawLG7v6slg>
+    <xmx:EXFxYxq-iUWWshp9tpTRUVZlZa7DwsBhHA9CRBEUOdFgstB_ywqGQA>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 13 Nov 2022 17:32:06 -0500 (EST)
-Message-ID: <5c909a91-ced8-8a86-1385-f7d3bca00fc4@sholland.org>
-Date:   Sun, 13 Nov 2022 16:32:04 -0600
+ 13 Nov 2022 17:34:56 -0500 (EST)
+Message-ID: <e1ab922c-36d5-d5d9-93ea-b8a257c9c633@sholland.org>
+Date:   Sun, 13 Nov 2022 16:34:55 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH v3 01/11] dt-bindings: phy: add binding document for
- Allwinner F1C100s USB PHY
+Subject: Re: [PATCH v3 02/11] dt-bindings: usb: sunxi-musb: add F1C100s MUSB
+ compatible string
 Content-Language: en-US
 To:     Andre Przywara <andre.przywara@arm.com>,
         Chen-Yu Tsai <wens@csie.org>,
@@ -80,11 +80,11 @@ To:     Andre Przywara <andre.przywara@arm.com>,
 Cc:     soc@kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 References: <20221106154826.6687-1-andre.przywara@arm.com>
- <20221106154826.6687-2-andre.przywara@arm.com>
+ <20221106154826.6687-3-andre.przywara@arm.com>
 From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20221106154826.6687-2-andre.przywara@arm.com>
+In-Reply-To: <20221106154826.6687-3-andre.przywara@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -100,24 +100,33 @@ X-Mailing-List: linux-usb@vger.kernel.org
 On 11/6/22 09:48, Andre Przywara wrote:
 > From: Icenowy Zheng <uwu@icenowy.me>
 > 
-> Allwinner F1C100s has the most simple USB PHY among all Allwinner SoCs,
-> because it has only one OTG USB controller, no host-only OHCI/EHCI
-> controllers.
+> Allwinner F1C100s has a hybrid MUSB controller between the A10 one and
+> the A33 one.
 > 
-> Add a binding document for it. Following the current situation of one
-> YAML file per SoC, this one is based on
-> allwinner,sun8i-v3s-usb-phy.yaml, but with OHCI/EHCI-related bits
-> removed. (The same driver in Linux, phy-sun4i-usb, covers all these
-> binding files now.)
+> Add a compatible string for it.
 > 
 > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 > ---
->  .../phy/allwinner,suniv-f1c100s-usb-phy.yaml  | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.yaml
+>  .../devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml        | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml b/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
+> index 8992eff6ce38..9ae634280bf4 100644
+> --- a/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
+> @@ -17,6 +17,7 @@ properties:
+>        - const: allwinner,sun6i-a31-musb
+>        - const: allwinner,sun8i-a33-musb
+>        - const: allwinner,sun8i-h3-musb
+> +      - const: allwinner,suniv-f1c100s-musb
+
+This would be a good place to use an enum. Either way:
 
 Reviewed-by: Samuel Holland <samuel@sholland.org>
+
+>        - items:
+>            - enum:
+>                - allwinner,sun8i-a83t-musb
 
