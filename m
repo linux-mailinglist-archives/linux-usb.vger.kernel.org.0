@@ -2,86 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFBB626E69
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 09:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF59A626E6F
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 09:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235221AbiKMIAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Nov 2022 03:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S233069AbiKMIGG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Nov 2022 03:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbiKMIAV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 03:00:21 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85128F002;
-        Sun, 13 Nov 2022 00:00:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1668326398;
-        bh=3acDHfn8jKJnznMLsVG0xCR20xZJ2jmq57QrDlNGNmc=;
-        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
-         References;
-        b=IM+By4R5MXaGf8bPD/mJ57quLcj85g60ZIbuX0vfB6x12ARuOZ8NXkbwpuvNZJl+c
-         kz2QYQsuuuu5alnb0lFKMOUXY1JIml+vkdxn/jBmiQwQ2Iuu+XPjFHdvSWYPn2gQLh
-         sDOotj1Lu65K7r+8nyr5XuZwCxo7gcbkS15mmIjCuTNv4M2V22TfBfHP5N29pEvoV/
-         cRfsGN/wcCdV0jLgiqpXxEy8jUQ3emWxNMcVhLEvmcGqX8M2jHVuZ5Urz8PmlG4WMN
-         ihkvTRJ/beuUYYvi0rPzZg2DMUb/5RNk8nGq75fylfR8s1KUUCxlX87imu0AVNew91
-         DqUmSyITTX99A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [127.0.0.1] ([80.245.74.27]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M42jK-1ou7uI0vwG-0007QC; Sun, 13
- Nov 2022 08:59:58 +0100
-Date:   Sun, 13 Nov 2022 08:59:53 +0100
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-CC:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_04/11=5D_dt-bindings=3A_PCI=3A_m?= =?US-ASCII?Q?ediatek-gen3=3A_add_SoC_based_clock_config?=
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <20221112091518.7846-5-linux@fw-web.de>
-References: <20221112091518.7846-1-linux@fw-web.de> <20221112091518.7846-5-linux@fw-web.de>
-Message-ID: <F894EE66-6824-43C7-AE04-7AE6FF1C52AC@public-files.de>
+        with ESMTP id S231252AbiKMIGF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 03:06:05 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D5C1006E;
+        Sun, 13 Nov 2022 00:06:05 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id q71so7786278pgq.8;
+        Sun, 13 Nov 2022 00:06:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6zM9r/sE2arMe1ziHsoXHyeiwa3rJRhwbTpoZQenkP0=;
+        b=eZ8puorRy851lsvelSzqMSeeLyZ4dV/kj02RSvfxz1CQuX7fx1TxcZtxfNmbGjMJGF
+         +ZI2oYdWVxBDMCpXj0YQrvConklIYJ02MeF8RCBnxAS/3CF2C86NQNdmSNg8FpbuIpy2
+         QKqg4xH9KvokMAZKtLksRBhc7koYM57D36C3vQFkHeYkVvxR+zriFm5Aw/SnoFFklqPV
+         2OPFS4DiqmQfxaeB/SEQpfM2Lw7erJQmU+ZqbnyJ1mWTg509s68ce3avOo5e9kzojrmQ
+         rN8MzWbATBEdqg0YAoC5NPb6ixEwkGgSxANFHOhHD6n56sS+QehH7/sDMu/Vgd9VVG6f
+         UNlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6zM9r/sE2arMe1ziHsoXHyeiwa3rJRhwbTpoZQenkP0=;
+        b=NChT5FCNlPH0XW/UQ0UiylJ+VYF1VnRI5oeqelJ0ZhZKv8lhu/UlI3m53jVf9pSFQk
+         HcMT3c8J/CVYutXY8AZOL/BFGzPHZRanB9zsH54M3OjVXp1iwGbJeExL6zgO0I2oNcka
+         aeyGz1yFlLqQ9e7SvtAygVygrvJJBB/Fa+o0yZuO1Nhr97XkKCZ1lZGEr37JxZ5VbuOi
+         gIv2N/u97gh+yUzgo3pFlKY7NESpgVGT+KrbIGRg60rSy192aJf/XH79CEPCFgi1J5Zy
+         //Ygst8R+TvFqGNKYjKJWmsVCTxZ1wluAYc1nZSZW6FJsSsgqX1fjX2EVjKW6IdGpzTQ
+         s17A==
+X-Gm-Message-State: ANoB5plngP02X9in9q8sCjpqFLyacaqSUM40uoF/WMa5JTR3aFxwmsW8
+        xKgX21cBNfOY4LAL23+j3No=
+X-Google-Smtp-Source: AA0mqf62uGra28MbBIJtSsfR0SDiKM8zckf3fK3DM9gnnUl+ck/7KxqUed0gBGcKx0jO/XbDtT/KEQ==
+X-Received: by 2002:a05:6a00:1592:b0:56b:e2db:5b88 with SMTP id u18-20020a056a00159200b0056be2db5b88mr9358474pfk.27.1668326764475;
+        Sun, 13 Nov 2022 00:06:04 -0800 (PST)
+Received: from ubuntu ([211.193.26.134])
+        by smtp.gmail.com with ESMTPSA id f193-20020a6238ca000000b0056d2797bf05sm4279947pfa.217.2022.11.13.00.06.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 00:06:04 -0800 (PST)
+Date:   Sun, 13 Nov 2022 00:05:58 -0800
+From:   Hyunwoo Kim <imv4bel@gmail.com>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, imv4bel@gmail.com
+Subject: Re: [PATCH v2] char: xillybus: Prevent use-after-free due to race
+ condition
+Message-ID: <20221113080558.GA5854@ubuntu>
+References: <20221030094209.65916-1-eli.billauer@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:GUCsNyzDalZvWOJYdXrFPJmqG2HqRf25PM8dw6TA7DzeHRVC53P
- uLC2wpK1PjOwQKyB/73jGq1NLinwFc1rN1/UFJkrLbqnpkH5NBT1nP4asPu4hqBhT3Tpilt
- urMDX2Sk1pMqFUC07KwwCBywFgrKRLck1KxsgDdiQHJ22yVfECODzaB/RG+jgJHptT3PxmZ
- 5Vlna3KMRTIB8N+Nhs7xA==
-UI-OutboundReport: notjunk:1;M01:P0:pUUva5akvIk=;DbmGJfxgnH1QL1fCq2YPuyMYNlt
- pIxwd5dNSo4z+ai0OzGHBcupfJZyt2rveBjwVPyz5o8/YKl/Ae+En/QCgE3dRQLoAG2lWqek/
- iB7CdcHTtg9NBxQ9xhI6RtyyMSBOe8rJGiTmxNBze/JMX2Ho2MXUvzhOpKGnsy5c2kz2MONX/
- OK/dqTjNzyth3cXZXU/4RNKS1aau9pC1FOfjHdsy4zp0TePszfMAold9FyC/bNxu0D7CSK/x4
- jOP4dw1UHSaJ9juq6X03BXxWF/vaxpIsiPWlbb6sRV0MuMhQI/4sWz72LLfF1OhSUHf20qIGz
- iNTS07ivBgQuRcz+yNu59z+5tQ7ZvX64CXY0rtStfUlUKKNIsZN3wQXgy5EVWWmeajRp97XkF
- aSB1tBg4e4MlamIAEEbJYkuhguo0+QoiPy09JzOoCp4qUjizaLjWVK8esh59jBUJuXtiiWJdg
- 14/KvkHiD95hgi+zoyVgiQxdkrYwlgdLcxcyqpDvCq0M7mZIA4vrgQ+A7X2ygH5J5VZac9LY/
- ikjyAjIokHQGO7FCwknlYVJUGBbqb1XP/DJES6pEbj6pPs26c8egt5X/K9czIy3FhT+oIyv68
- 13eRA61sYVKFBIv1gnXwBipiStwmp2sgypwp2ER0MSLTARh+05xqBKC8j6Id/k44GKQ/AoyyO
- 3bqOMbkKZ0TfWWQBU4OpT3dTbGiCfuiVGF0dKxSsrd+TKXQFnGr3X8dkdEQtxRBsxzxGQR6/c
- L/qbkaSFiDMgELGvWX5SXCE9CIo5rGOFS2APHgjUPbT+CkP8NtDFc7diZqkiLEB3ikCEeUZ2p
- RnFC/GdYRNlhlASqX/4wy8c/e6GI9PO8ZztyzgTyeDisxj8edULt1ozo+kDqMg0nqL5lTm9wA
- rZx0M+jtbKhZHe7hagMhXn1dFufOLaaDRmIm/meA0KcK7FNhZ+fzRI29PCB1pN8PLV0ejo4xw
- RVOhwXaqC1n8BOlcnz2aMO9W1NA=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221030094209.65916-1-eli.billauer@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,10 +72,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I missed ack i've got here:
+Dear,
 
-https://patchwork=2Ekernel=2Eorg/project/linux-mediatek/patch/202210291758=
-06=2E14899-2-frank-w@public-files=2Ede/
+Sorry for the late review.
 
-Acked-by: Jianjun Wang <jianjun=2Ewang@mediatek=2Ecom>
-regards Frank
+This patch cannot prevent the UAF scenario I presented:
+```
+                cpu0                                                cpu1
+       1. xillyusb_open()
+          mutex_lock(&kref_mutex);    // unaffected lock
+          xillybus_find_inode()
+          mutex_lock(&unit_mutex);
+          unit = iter;
+          mutex_unlock(&unit_mutex);
+                                                             2. xillyusb_disconnect()
+                                                                xillybus_cleanup_chrdev()
+                                                                mutex_lock(&unit_mutex);
+                                                                kfree(unit);
+                                                                mutex_unlock(&unit_mutex);
+       3. *private_data = unit->private_data;   // UAF
+
+```
+
+This is a UAF for 'unit', not a UAF for 'xdev'.
+So, the added 'kref_mutex' has no effect.
+
+
+Regards,
+Hyunwoo Kim
