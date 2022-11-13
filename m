@@ -2,56 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC62D627148
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 18:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0896271D1
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Nov 2022 19:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbiKMRij (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Nov 2022 12:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S235423AbiKMStP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Nov 2022 13:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiKMRii (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 12:38:38 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33D1BC19
-        for <linux-usb@vger.kernel.org>; Sun, 13 Nov 2022 09:38:36 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ouGwE-000801-GB; Sun, 13 Nov 2022 18:38:34 +0100
-Message-ID: <0d7b7d44-e2b9-9ea8-86b2-cf0f4b53eedd@leemhuis.info>
-Date:   Sun, 13 Nov 2022 18:38:34 +0100
+        with ESMTP id S235591AbiKMSs4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Nov 2022 13:48:56 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9AC13D02
+        for <linux-usb@vger.kernel.org>; Sun, 13 Nov 2022 10:48:46 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id AE3A284FB3;
+        Sun, 13 Nov 2022 19:48:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1668365324;
+        bh=u6LjaDcZN7FiuqGgRMUt8yy4yxHrbqA4kHRpJaldoxM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o2NlBs8DjFfYHgVQtjQwssKNVVIc+OjnhFsvu/mUxxby8OTnaqggFQeBhkrsOzIJ/
+         Uzf1uR+WLKlY63yllym4UW81XxSjRj4js55P54yGDpH6WbpISySQ1gy5zJ8WOMKiEG
+         BpQ87HroneQVj9p03su2n+xdEWeDe3GskvQV7siHQdW7oKOPSXYFFKPCv0ejq0MIA3
+         1VQHHqAPpVJ1fiKazJdaGa2RFyws5Nlq2S+rDsoI1ZHlOV5lgNYH1fgi8K4SlQ9HXO
+         kQW8ztG69dvg9ZDUZ2e5UOf642Pbb+TCZVh8BBecQb3+33SsCrJg6Ui0b6H8lLeff2
+         Kas6CctfXvltg==
+Message-ID: <576b2fe7-4753-73c3-f2f1-0387da175ad9@denx.de>
+Date:   Sun, 13 Nov 2022 19:48:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
 Subject: Re: [PATCH 2/2] extcon: usbc-tusb320: Add USB TYPE-C support
- #forregzbot
-Content-Language: en-US, de-DE
-To:     linux-usb@vger.kernel.org
-Cc:     regressions@lists.linux.dev, Peter Rosin <peda@axentia.se>
+To:     Peter Rosin <peda@axentia.se>, linux-usb@vger.kernel.org
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
+        regressions@lists.linux.dev
 References: <fd0f2d56-495e-6fdd-d1e8-ff40b558101e@axentia.se>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
 In-Reply-To: <fd0f2d56-495e-6fdd-d1e8-ff40b558101e@axentia.se>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668361116;2d5fab26;
-X-HE-SMSGID: 1ouGwE-000801-GB
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
-
-[reduced set or recipients, as this is only for regzbot]
-
-On 13.11.22 17:59, Peter Rosin wrote:
+On 11/13/22 17:59, Peter Rosin wrote:
 > On Sat, Jul 30, 2022 at 08:05:00PM +0200, Marek Vasut wrote:
 >> The TI TUSB320 seems like a better fit for USB TYPE-C subsystem,
 >> which can expose details collected by the TUSB320 in a far more
@@ -82,16 +91,12 @@ On 13.11.22 17:59, Peter Rosin wrote:
 > problem go away.
 > 
 > Any suggestions?
-> 
-> Cheers,
-> Peter
-> 
-> regzbot: introduced bf7571c00dca
 
-Peter, many thx for getting regzbot in the loop, there was a small typo,
-let me take care of that:
+Can you test:
 
-#regzbot ^introduced bf7571c00dca
-#regzbot title usb: devices are not powered anymore and sometimes reset
+341fd15e2e18c ("extcon: usbc-tusb320: Call the Type-C IRQ handler only 
+if a port is registered")
 
-Ciao, Thorsten
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-linus&id=341fd15e2e18c24d5c738496cfc3d7a272241201
+
+?
