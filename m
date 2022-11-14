@@ -2,105 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478A56285BB
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 17:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD746285CE
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 17:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237885AbiKNQnG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 11:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S237971AbiKNQqU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Nov 2022 11:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237881AbiKNQnE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 11:43:04 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6017F65F9
-        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 08:43:02 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id v81so5239316vkv.5
-        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 08:43:02 -0800 (PST)
+        with ESMTP id S237962AbiKNQqS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 11:46:18 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B2B2F02C;
+        Mon, 14 Nov 2022 08:46:17 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id n20so9190222ejh.0;
+        Mon, 14 Nov 2022 08:46:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6+Uc7KspS9LnQ7lQ8KADE8xYhNwIZ0EslnJy4rOJIQ=;
-        b=pXlLzqqea3rFwcAo0BCKnnKZine2dIaVs1WKl0zC8f4r5mX8yfoWOTYXBcNQ2k/CTC
-         gyonvxZA1RIE8qxHdaqSwRlS7sZDrmqAVs0CnAJqR8m8BRyFOMRk+o05e9V4RPFowx1h
-         y8ZHwMXLftERyS8j3xA5e3N3ogEVd/3ej8xV8nVh2rGuMmI36uy1Dbrm6fTf6+LaUeu1
-         hEBfdKjruLa+K7j9XDqq64OZyLc4emGZDSwhaT9X1htGTY289G/xd4+E26slJ6ESzO5f
-         y1NivQybEzJ7mRb8u4RBBFZYiCZx8WczDldkFTGRjok2QuPet9Ciklqo50m3x4u0pcXp
-         5e0A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1kVfk9iOxCR/5AAUDXuX1JTXcnEKT9zRZYZEq/zn0mI=;
+        b=VoH7Gqrmt/D1SiqudtHQ9uV+QqM9cPEZOsM5bQmL8o7hSpdo5FLEFaybHyPCO2na58
+         QcIAzYy/EFwfvwRjshhHv7Xjhyss56bwlj11H35+TkU5xFfMK4Q7WbEdijnzsNOm6QK8
+         j+uMJ/GkdorbthBu90IR87N5zcE4sX5kTZ5yE1uqdTPpTyMqqvKDEdlHBrmJoSzBxtu1
+         X7vOmAhPaJ9OaW/jPwLjkiVci0Bqd1Z6uiUGJnlsNj1XLUyCjAGPx9Ql9XlO5zfGf02+
+         8VEBqXmK3SZUwP4VTF1MiH/38Jqwt5dLzNgMUV+dnKHnANj64OxdVQ9fmRNpvKWd+ZOw
+         JUrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r6+Uc7KspS9LnQ7lQ8KADE8xYhNwIZ0EslnJy4rOJIQ=;
-        b=12vyvKBx544a7GhQ26VQzfojM+yuLWEwSm3t30Du6se+kAAinCuD0pKvFOyaSDivmR
-         1kUnq8xFP2qK0hdxqxgsCJrXl18Ky/QOKZ8p/4wWQqqpTrB9bTR/9CG9uOzb96EmnYBh
-         j3hxf0QYjuPxqIpE00FxHtIGBHOAjxPB9iwRKkjE4OnvCUIhpgq02Y76Yr8ZQWNdRjbh
-         ZkFzRxSYNAwzDCHEvFdFYXQG2Vmgj/BSZvybN0Ilyu4SsK097ufTZtFYjNQMRaqLXAEF
-         QestNk0/mbeQ3iWOy8CA14YZqrjTS2UkG5QU/05c1LmNwx+ObYl5sZ2KUNp2X7f0L3ye
-         72RA==
-X-Gm-Message-State: ANoB5pk9o2/c/BLJdqmSqVNl8MTcCtFTTrPBt6SsxYYFRAI3JRoMuNcV
-        OEqXT5E4spRS+ps7g7hrnHjSh6PEbktZayo9hWZ1zQ==
-X-Google-Smtp-Source: AA0mqf4JZZcyI0e3LlhvIJqy5/kKz/rCYZl9cgjvokgRpT+9Gh2L4+/4nkyXKZB7aoi88JomTTlBCNt8+58AZgDef1U=
-X-Received: by 2002:a05:6122:1989:b0:3b8:1bb4:b750 with SMTP id
- bv9-20020a056122198900b003b81bb4b750mr6892769vkb.20.1668444181396; Mon, 14
- Nov 2022 08:43:01 -0800 (PST)
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1kVfk9iOxCR/5AAUDXuX1JTXcnEKT9zRZYZEq/zn0mI=;
+        b=7Ms5lfayL87HsOH/AC7i5f+TwjWpwpglScOyKRGyuUIAe4XQZUt7ebX+Uvxfj/Oigu
+         WbSLTQWGCZ7rFlV+GshYyCYOB5e+v5CgHWyTNHH+HCwJaqbgMYzUhoskebvV64xvLtSZ
+         EsASxusLFQDl0IIk3c4JPM2dJrS86vDMzplScRuzU9eS1RgRpsMcIypNLpTzJFP5x4Tu
+         tV6XmLfav+h/dTz38wGQK7n49AhARVcxtD5DT8aTThBokRZJs4QQClKGiv6dCkO/TDvn
+         X7n/TDWjAKUVGFK3Urvy450I9xe1wYXRYSd/yKG82pm8yTdN0SHwegmoMw+PfbY9Od/s
+         U3pg==
+X-Gm-Message-State: ANoB5pkhmINdKSsOf62psTFR7xg86th5dSK2R9IgkE6kgjtGv7H2Mr2t
+        hLee3W4Q0v2N7IG7uzaDqBU=
+X-Google-Smtp-Source: AA0mqf4W69/VYs/D0BKB3i9BfY1aEYPlK0zhv/SK6keEEj+53h/u38atQzUZktzE3ZZcU/vTZjsDeg==
+X-Received: by 2002:a17:906:6d52:b0:7ad:9673:8b73 with SMTP id a18-20020a1709066d5200b007ad96738b73mr11358757ejt.14.1668444376036;
+        Mon, 14 Nov 2022 08:46:16 -0800 (PST)
+Received: from [192.168.1.10] ([46.249.74.23])
+        by smtp.googlemail.com with ESMTPSA id c20-20020a17090603d400b007417041fb2bsm4403671eja.116.2022.11.14.08.46.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 14 Nov 2022 08:46:15 -0800 (PST)
+Subject: Re: [PATCH] usb: phy: add dedicated notifier for charger events
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, felipe.balbi@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
+        tony@atomide.com
+References: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <Y3JpfDU7T2Ks/H4m@kroah.com>
+From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+Message-ID: <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
+Date:   Mon, 14 Nov 2022 18:46:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com> <Y26UcbviRaoK9a3C@bombadil.infradead.org>
-In-Reply-To: <Y26UcbviRaoK9a3C@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Mon, 14 Nov 2022 10:42:50 -0600
-Message-ID: <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3JpfDU7T2Ks/H4m@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 12:29 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
-> > USB devices support the authorized attribute which can be used by
-> > user-space to implement trust-based systems for enabling USB devices. It
-> > would be helpful when building these systems to be able to know in
-> > advance which kernel drivers (or modules) are reachable from a
-> > particular USB device.
-> >
-> > This information is readily available for external modules in
-> > modules.alias. However, builtin kernel modules are not covered. This
-> > patch adds a sys-fs attribute to both builtin and loaded modules
-> > exposing the matching rules in the modalias format for integration
-> > with tools like USBGuard.
-> >
-> > Signed-off-by: Allen Webb <allenwebb@google.com>
->
-> Thanks for the patch Allen!
->
-> I'd rather have something generic though, and it would seem kmod [0] already
-> does this, have you seen the kmod support for builtin.alias.bin
->
-> Can't that be used?
+Hi,
 
-Probably, but I don't see the builtin.alias.bin in my build. Is it experimental?
+On 14.11.22 г. 18:14 ч., Greg KH wrote:
+> On Mon, Nov 14, 2022 at 02:56:02PM +0200, Ivaylo Dimitrov wrote:
+>> usb_phy::notifier is already used by various PHY drivers (including
+>> phy_generic) to report VBUS status changes and its usage conflicts with
+>> charger current limit changes reporting.
+> 
+> How exactly does it conflict?
+> 
 
->
-> [0] git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
->
->   Luis
+see below
+
+>> Fix that by introducing a second notifier that is dedicated to usb charger
+>> notifications. Add usb_charger_XXX_notifier functions. Fix charger drivers
+>> that currently (ab)use usb_XXX_notifier() to use the new API.
+> 
+> Why not just set the notifier type to be a new one instead of adding a
+> whole new notifier list?  Or use a real callback?  notifier lists are
+> really horrid and should be avoided whenever possible.
+> 
+
+Not sure what you mean by "notifier type', but if that is that val 
+parameter of atomic_notifier_call_chain(), the way it is used by usb 
+charger FW:
+
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy.c#L132
+
+is not compatible with:
+
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy-generic.c#L185
+
+for example, IIUC.
+
+The former wants to send max current as val, while latter sends event 
+type as val. Sure, I may create some kind of hack, like using the MSB to 
+denote charger events, but that doesn't feel right.
+
+Or, shall I do something else and fix the usage all over the place? 
+Please elaborate.
+
+In regards to callback - I didn't want to come-up with a whole new API, 
+but just fix the current one. Also, a single callback will not be enough 
+- imagine a case with 2 batteries that have to be charged by a single 
+USB port, so 2 separate charger devices, most-probably. We will have to 
+keep a list of callback functions somehow. I admit my lack of knowledge, 
+but, do we already have such API to use?
+
+>> Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
+>>
+>> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+> 
+> You can't have a blank line between there, checkpatch.pl should have
+> complained.
+> 
+
+it didn't:
+
+./scripts/checkpatch.pl 
+0001-usb-phy-add-dedicated-notifier-for-charger-events.patch
+total: 0 errors, 0 warnings, 90 lines checked
+
+0001-usb-phy-add-dedicated-notifier-for-charger-events.patch has no 
+obvious style problems and is ready for submission.
+
+Will fix, if I am to send v2
+
+Thanks,
+Ivo
+
+> thanks,
+> 
+> greg k-h
+> 
