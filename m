@@ -2,60 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53203627D1F
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 12:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2E6627D21
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 12:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236942AbiKNL4p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 06:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
+        id S237039AbiKNL4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Nov 2022 06:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236923AbiKNL4b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 06:56:31 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E9724952
-        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 03:52:09 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id h12so12815411ljg.9
-        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 03:52:09 -0800 (PST)
+        with ESMTP id S236995AbiKNL4c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 06:56:32 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B986248D9
+        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 03:52:13 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp15so18784009lfb.13
+        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 03:52:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=23J2rxW29+aENYRjYQO3CvbM83oXKeca0v4ut8EgLyc=;
-        b=SSqYE2X6QeuX6Oc6rgira/TUu8ELeOHcfffGwFc1Jjku0sOgO4gIum4DoqTQNT5qNk
-         hcbN7I69awhwye9HmUNBROziQ1TlnxA+U6LVOkFHQ3YIE9Bb7hXNRCPjotMA1gBy/+Wp
-         wi2pmlaPqGtHVKecw5bV/vZenlc6Nvg+zwbCebB1fn9A2PuvdEO0SejLUp2A/BDu3dhE
-         nmRZNsVyk0Rrir4Zc/D9H0Rku9EnlC/GUpOn4JLVtn2J7Vzm2xvZdwPAF3XDhvG8JCT2
-         t0kXticvcPgHboc6IVMENf27bFBfyu6zKs2Lo7iXqID4R5R1+qrMNdkZ5w4iFiVyIeHl
-         cZNw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=490Ahm7yaCTQkYNJWQbuTL/BW7+rQHebePQfeeMmwms=;
+        b=NbJ2xWM59vGj5Q4Ani3KZYob6uYLhu545lKWD1FXdO1GmeZs377Gx0qkVGilK5G1qq
+         B6ajpQaojSxMxxNMbPYxPMgUgSd0CapE2YybDt9or9tZ9W3W5AWV8OLPdMFP4Q5SY65l
+         34r3VlTq3nPt4iT8qpuUbaCLmAGz6+qfgRm2NN3qKjTktAfgqUNeRpjNosQCh2J3JnyW
+         elbQT7JuhiMTuTDE/twVEY/hc7MbVVjgZc3T9sAH4Gg5Q2yTZKtfyenUqhGc0WJ5bnLX
+         edpCTPRVvHPh67DeD6wA/bDxR/hXJIJ67JKlfFJsHTA1+7fg6oB1HFYSkmHZsXLjV7Cm
+         BNtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=23J2rxW29+aENYRjYQO3CvbM83oXKeca0v4ut8EgLyc=;
-        b=iJev4WOPhpkh4sxIXagT4Y4ODIcuCG5wOeQRttp0NBdY8cWpsuVg4vPg4qWt0H3mtN
-         g8Jm3EI5CIktlNxMIZ/gHvQ3C+RLTr+UKIxaM2PNclWtWaEckuFrVywhUDtdnNleKn8E
-         NYHgKv4ZxGJ0iKVp0NBtUuRyBkMsrsofj79AvlqiRTRSQW8aYd9uttTw4FdMGpa4vqdp
-         Iap2QRXdAbBE0CV6AR2+g3e3jchCxSrn17dXDRVuRoOeugEAunjgRQF8gMyU8EzODf71
-         bD3LZXhwBBr0wxuKnpU1hM6Q16YuzatauumXQRK5Hi2vrBe2ju9FqTNs7F9PBqnflJCh
-         AoLA==
-X-Gm-Message-State: ANoB5pnsIDSY6PzLsuAm3rMt5lgQfmC+u30ct4BJBAjY0iFIVGrpIXRI
-        MrRQzR7GeJMVneRNVjf8fGGxLEOl8U5FHQ==
-X-Google-Smtp-Source: AA0mqf7XeSBAJW33aWa+cj4Lwq//cEDc+UOJ45dGGge6iVbcmhseP5juMhNmoC3w2qnm4TwB/KLfJg==
-X-Received: by 2002:a2e:be0a:0:b0:277:a8b:4a53 with SMTP id z10-20020a2ebe0a000000b002770a8b4a53mr3849259ljq.197.1668426728192;
-        Mon, 14 Nov 2022 03:52:08 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=490Ahm7yaCTQkYNJWQbuTL/BW7+rQHebePQfeeMmwms=;
+        b=ENtLhcfKhvkEJ/sMTKXYo8m9QwOzjhB3ETCBN+mFM53v6og3Fe84uV3eUF75Ip28i3
+         4ho2z3kEKILvnxkkAUviP5iW+LWonxay4Oe6rp4giIr2ehrHDPyq28Rovw4HPPYZ31TV
+         bu58iGTppzvoaMH/d1LctNRWYjUai+iG8hmW/HDtDpAICLqXe81/yTtojCWSFBfPs9a0
+         BYfVmnWP5Fww7LXEOYYEFagLJj5F+AXiGk8ekEdhMHH+S0m3EkPbRUhPhFNFwDCETMyU
+         Bj0KSX6lWZiQOLPwN8nQmqFPfeYiyicn/Zt/DAbpm3GcZPcY93zSLuoj31+8xqSIcI1u
+         rBFg==
+X-Gm-Message-State: ANoB5pmMhRpkEENpRESEkOlFvDY9YLF6/vVJMVDY8dWOmC4nz2RS2Qbm
+        6lRAsHiaJ3OxMfZyFWuGWXVO2w==
+X-Google-Smtp-Source: AA0mqf5aInL6CGbekkcCLO6Q/9AWq2rxeNDM4dHGxZKTfnpdVX9Syelrj6Syo+HCWbOQd2MIdTjlmQ==
+X-Received: by 2002:a05:6512:329c:b0:494:79b6:c7a2 with SMTP id p28-20020a056512329c00b0049479b6c7a2mr4426474lfe.513.1668426731461;
+        Mon, 14 Nov 2022 03:52:11 -0800 (PST)
 Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id h8-20020a05651c124800b0027758f0619fsm1981531ljh.132.2022.11.14.03.52.07
+        by smtp.gmail.com with ESMTPSA id h8-20020a05651c124800b0027758f0619fsm1981531ljh.132.2022.11.14.03.52.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 03:52:07 -0800 (PST)
+        Mon, 14 Nov 2022 03:52:11 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>
 Cc:     linux-usb@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 1/4] fotg210-udc: Use dev pointer in probe and dev_messages
-Date:   Mon, 14 Nov 2022 12:51:58 +0100
-Message-Id: <20221114115201.302887-1-linus.walleij@linaro.org>
+Subject: [PATCH 2/4] fotg210-udc: Support optional external PHY
+Date:   Mon, 14 Nov 2022 12:51:59 +0100
+Message-Id: <20221114115201.302887-2-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221114115201.302887-1-linus.walleij@linaro.org>
+References: <20221114115201.302887-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,64 +70,165 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a local struct device *dev pointer and use dev_err()
-etc to report status.
+This adds support for an optional external PHY to the FOTG210
+UDC driver.
+
+Tested with the GPIO VBUS PHY driver on the Gemini SoC.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/usb/fotg210/fotg210-udc.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/usb/fotg210/fotg210-udc.c | 72 +++++++++++++++++++++++++++++++
+ drivers/usb/fotg210/fotg210-udc.h |  2 +
+ 2 files changed, 74 insertions(+)
 
 diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index 3c357ce42d3b..b3106e4b3194 100644
+index b3106e4b3194..4026103330e1 100644
 --- a/drivers/usb/fotg210/fotg210-udc.c
 +++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -1091,6 +1091,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
- 	struct resource *res, *ires;
- 	struct fotg210_udc *fotg210 = NULL;
- 	struct fotg210_ep *_ep[FOTG210_MAX_NUM_EP];
-+	struct device *dev = &pdev->dev;
- 	int ret = 0;
+@@ -15,6 +15,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/usb/ch9.h>
+ #include <linux/usb/gadget.h>
++#include <linux/usb/otg.h>
++#include <linux/usb/phy.h>
+ 
+ #include "fotg210.h"
+ #include "fotg210-udc.h"
+@@ -1008,11 +1010,19 @@ static int fotg210_udc_start(struct usb_gadget *g,
+ {
+ 	struct fotg210_udc *fotg210 = gadget_to_fotg210(g);
+ 	u32 value;
++	int ret;
+ 
+ 	/* hook up the driver */
+ 	driver->driver.bus = NULL;
+ 	fotg210->driver = driver;
+ 
++	if (!IS_ERR_OR_NULL(fotg210->phy)) {
++		ret = otg_set_peripheral(fotg210->phy->otg,
++					 &fotg210->gadget);
++		if (ret)
++			dev_err(fotg210->dev, "can't bind to phy\n");
++	}
++
+ 	/* enable device global interrupt */
+ 	value = ioread32(fotg210->reg + FOTG210_DMCR);
+ 	value |= DMCR_GLINT_EN;
+@@ -1054,6 +1064,9 @@ static int fotg210_udc_stop(struct usb_gadget *g)
+ 	struct fotg210_udc *fotg210 = gadget_to_fotg210(g);
+ 	unsigned long	flags;
+ 
++	if (!IS_ERR_OR_NULL(fotg210->phy))
++		return otg_set_peripheral(fotg210->phy->otg, NULL);
++
+ 	spin_lock_irqsave(&fotg210->lock, flags);
+ 
+ 	fotg210_init(fotg210);
+@@ -1069,12 +1082,50 @@ static const struct usb_gadget_ops fotg210_gadget_ops = {
+ 	.udc_stop		= fotg210_udc_stop,
+ };
+ 
++/**
++ * fotg210_phy_event - Called by phy upon VBus event
++ * @nb: notifier block
++ * @action: phy action, is vbus connect or disconnect
++ * @data: the usb_gadget structure in fotg210
++ *
++ * Called by the USB Phy when a cable connect or disconnect is sensed.
++ *
++ * Returns NOTIFY_OK or NOTIFY_DONE
++ */
++static int fotg210_phy_event(struct notifier_block *nb, unsigned long action,
++			     void *data)
++{
++	struct usb_gadget *gadget = data;
++
++	if (!gadget)
++		return NOTIFY_DONE;
++
++	switch (action) {
++	case USB_EVENT_VBUS:
++		usb_gadget_vbus_connect(gadget);
++		return NOTIFY_OK;
++	case USB_EVENT_NONE:
++		usb_gadget_vbus_disconnect(gadget);
++		return NOTIFY_OK;
++	default:
++		return NOTIFY_DONE;
++	}
++}
++
++static struct notifier_block fotg210_phy_notifier = {
++	.notifier_call = fotg210_phy_event,
++};
++
+ int fotg210_udc_remove(struct platform_device *pdev)
+ {
+ 	struct fotg210_udc *fotg210 = platform_get_drvdata(pdev);
  	int i;
  
-@@ -1122,7 +1123,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
+ 	usb_del_gadget_udc(&fotg210->gadget);
++	if (!IS_ERR_OR_NULL(fotg210->phy)) {
++		usb_unregister_notifier(fotg210->phy, &fotg210_phy_notifier);
++		usb_put_phy(fotg210->phy);
++	}
+ 	iounmap(fotg210->reg);
+ 	free_irq(platform_get_irq(pdev, 0), fotg210);
  
- 	fotg210->reg = ioremap(res->start, resource_size(res));
- 	if (fotg210->reg == NULL) {
--		pr_err("ioremap error.\n");
-+		dev_err(dev, "ioremap error\n");
- 		goto err_alloc;
- 	}
+@@ -1114,6 +1165,22 @@ int fotg210_udc_probe(struct platform_device *pdev)
+ 	if (fotg210 == NULL)
+ 		goto err;
  
-@@ -1133,8 +1134,8 @@ int fotg210_udc_probe(struct platform_device *pdev)
- 	fotg210->gadget.ops = &fotg210_gadget_ops;
- 
- 	fotg210->gadget.max_speed = USB_SPEED_HIGH;
--	fotg210->gadget.dev.parent = &pdev->dev;
--	fotg210->gadget.dev.dma_mask = pdev->dev.dma_mask;
-+	fotg210->gadget.dev.parent = dev;
-+	fotg210->gadget.dev.dma_mask = dev->dma_mask;
- 	fotg210->gadget.name = udc_name;
- 
- 	INIT_LIST_HEAD(&fotg210->gadget.ep_list);
-@@ -1180,15 +1181,15 @@ int fotg210_udc_probe(struct platform_device *pdev)
- 	ret = request_irq(ires->start, fotg210_irq, IRQF_SHARED,
- 			  udc_name, fotg210);
- 	if (ret < 0) {
--		pr_err("request_irq error (%d)\n", ret);
-+		dev_err(dev, "request_irq error (%d)\n", ret);
++	fotg210->dev = dev;
++
++	fotg210->phy = devm_usb_get_phy_by_phandle(dev->parent, "usb-phy", 0);
++	if (IS_ERR(fotg210->phy)) {
++		ret = PTR_ERR(fotg210->phy);
++		if (ret == -EPROBE_DEFER)
++			goto err;
++		dev_info(dev, "no PHY found\n");
++		fotg210->phy = NULL;
++	} else {
++		ret = usb_phy_init(fotg210->phy);
++		if (ret)
++			goto err;
++		dev_info(dev, "found and initialized PHY\n");
++	}
++
+ 	for (i = 0; i < FOTG210_MAX_NUM_EP; i++) {
+ 		_ep[i] = kzalloc(sizeof(struct fotg210_ep), GFP_KERNEL);
+ 		if (_ep[i] == NULL)
+@@ -1185,6 +1252,9 @@ int fotg210_udc_probe(struct platform_device *pdev)
  		goto err_req;
  	}
  
--	ret = usb_add_gadget_udc(&pdev->dev, &fotg210->gadget);
-+	ret = usb_add_gadget_udc(dev, &fotg210->gadget);
++	if (!IS_ERR_OR_NULL(fotg210->phy))
++		usb_register_notifier(fotg210->phy, &fotg210_phy_notifier);
++
+ 	ret = usb_add_gadget_udc(dev, &fotg210->gadget);
  	if (ret)
  		goto err_add_udc;
- 
--	dev_info(&pdev->dev, "version %s\n", DRIVER_VERSION);
-+	dev_info(dev, "version %s\n", DRIVER_VERSION);
- 
+@@ -1194,6 +1264,8 @@ int fotg210_udc_probe(struct platform_device *pdev)
  	return 0;
+ 
+ err_add_udc:
++	if (!IS_ERR_OR_NULL(fotg210->phy))
++		usb_unregister_notifier(fotg210->phy, &fotg210_phy_notifier);
+ 	free_irq(ires->start, fotg210);
+ 
+ err_req:
+diff --git a/drivers/usb/fotg210/fotg210-udc.h b/drivers/usb/fotg210/fotg210-udc.h
+index 08c32957503b..e3067d22a895 100644
+--- a/drivers/usb/fotg210/fotg210-udc.h
++++ b/drivers/usb/fotg210/fotg210-udc.h
+@@ -234,6 +234,8 @@ struct fotg210_udc {
+ 
+ 	unsigned long		irq_trigger;
+ 
++	struct device			*dev;
++	struct usb_phy			*phy;
+ 	struct usb_gadget		gadget;
+ 	struct usb_gadget_driver	*driver;
  
 -- 
 2.38.1
