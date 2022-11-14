@@ -2,82 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C20B628A99
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 21:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C4D628B16
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 22:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236559AbiKNUiM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 15:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S237742AbiKNVJH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Nov 2022 16:09:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbiKNUiK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 15:38:10 -0500
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624BB1145E
-        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 12:38:08 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id ugDVoF0uQzQOKugDVozxfW; Mon, 14 Nov 2022 21:38:06 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 14 Nov 2022 21:38:06 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: fotg210-udc: Remove a useless assignment
-Date:   Mon, 14 Nov 2022 21:38:04 +0100
-Message-Id: <deab9696fc4000499470e7ccbca7c36fca17bd4e.1668458274.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S237580AbiKNVIu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 16:08:50 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DACCBE18;
+        Mon, 14 Nov 2022 13:08:43 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CCBD540002;
+        Mon, 14 Nov 2022 21:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668460122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WUcN8Hyfr1CcrMqYvHeNHTB6GPer8+O1tgop6jO/i4o=;
+        b=LoY2BISB89oKKYW3bgqoV/6ifu5d0aCRaj643or12/Zq89QFtRZr3S3ZrVgAij0TEk8XXQ
+        AhUZdvHzKr7WlOZYmyp79CsK6/2kgZ7LuKbnTNhEy/2F00YleILJTTbt4XWLv6EcWHkddO
+        07N+3CbUW3UjsWpTpWswfjJa5YcWwUPAbHvRjcx+CRzClWi6Oemsy2iDr6ntRAimB6b9qB
+        xqyjY+iJaKWSW//kWkKE5ce0oW0tNfg2vyhksnqzqDD/LLdbUHis+e1Roj4fwu7T+UZ4Iq
+        g/nCFdH3jroKXyOxlPcbfVVZki+yfk+NVUNqr6/xsMpotUg6GrfrQW179o9zdQ==
+Date:   Mon, 14 Nov 2022 22:08:38 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Sekhar Nori <nsekhar@ti.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-staging@lists.linux.dev,
+        Russell King <linux@armlinux.org.uk>,
+        linux-clk@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-media@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Kevin Hilman <khilman@baylibre.com>,
+        David Lechner <david@lechnology.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Brown <broonie@kernel.org>, linux-rtc@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alsa-devel@alsa-project.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        linux-ide@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Bin Liu <b-liu@ti.com>, Takashi Iwai <tiwai@suse.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: Re: [PATCH 00/14] ARM: remove unused davinci board & drivers
+Message-ID: <166846004404.2111985.9223963351202037616.b4-ty@bootlin.com>
+References: <20221019152947.3857217-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to use an intermediate array for these memory allocations,
-so, axe it.
+On Wed, 19 Oct 2022 17:29:26 +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> As part of removing all board files that were previously marked as unused,
+> I looked through the davinci platform and recursively removed everything
+> that has now become unused.
+> 
+> In particular, this is for all dm3xx support, in addition to the dm64xx
+> support removed previously. The remaining support is now for da8xx using
+> devicetree only, which means a lot of the da8xx specific device support
+> can also go away.
+> 
+> [...]
 
-While at it, turn a '== NULL' into a shorter '!' when testing memory
-allocation failure.
+Applied, thanks!
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/fotg210/fotg210-udc.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+[08/14] rtc: remove davinci rtc driver
+        commit: 6274ef3c7eb5e9792a708c23757e16b444e4267f
 
-diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index 3c357ce42d3b..52b1d69843dd 100644
---- a/drivers/usb/fotg210/fotg210-udc.c
-+++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -1090,7 +1090,6 @@ int fotg210_udc_probe(struct platform_device *pdev)
- {
- 	struct resource *res, *ires;
- 	struct fotg210_udc *fotg210 = NULL;
--	struct fotg210_ep *_ep[FOTG210_MAX_NUM_EP];
- 	int ret = 0;
- 	int i;
- 
-@@ -1114,10 +1113,9 @@ int fotg210_udc_probe(struct platform_device *pdev)
- 		goto err;
- 
- 	for (i = 0; i < FOTG210_MAX_NUM_EP; i++) {
--		_ep[i] = kzalloc(sizeof(struct fotg210_ep), GFP_KERNEL);
--		if (_ep[i] == NULL)
-+		fotg210->ep[i] = kzalloc(sizeof(struct fotg210_ep), GFP_KERNEL);
-+		if (!fotg210->ep[i])
- 			goto err_alloc;
--		fotg210->ep[i] = _ep[i];
- 	}
- 
- 	fotg210->reg = ioremap(res->start, resource_size(res));
+Best regards,
+
 -- 
-2.34.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
