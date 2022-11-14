@@ -2,108 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34655627C20
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 12:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5640628155
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 14:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236339AbiKNLVZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 06:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
+        id S236331AbiKNNcV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 14 Nov 2022 08:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbiKNLVB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 06:21:01 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528C66475;
-        Mon, 14 Nov 2022 03:17:35 -0800 (PST)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AEA5lcD016147;
-        Mon, 14 Nov 2022 06:17:09 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3ktwrrp6ck-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 06:17:09 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2AEBH7Jm006008
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 14 Nov 2022 06:17:07 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 14 Nov
- 2022 06:17:07 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 14 Nov 2022 06:17:06 -0500
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.157])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AEBGh5h031805;
-        Mon, 14 Nov 2022 06:16:45 -0500
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <steve.glendinning@shawell.net>,
-        <UNGLinuxDriver@microchip.com>, <andre.edich@microchip.com>,
-        <linux-usb@vger.kernel.org>
-Subject: [net] net: usb: smsc95xx: fix external PHY reset
-Date:   Mon, 14 Nov 2022 15:16:43 +0200
-Message-ID: <20221114131643.19450-1-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S235560AbiKNNcS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 08:32:18 -0500
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417491DF36;
+        Mon, 14 Nov 2022 05:32:17 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id x15so7753866qvp.1;
+        Mon, 14 Nov 2022 05:32:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pMhSV0Cl1EFcHm2JcZW7TSJN/o+qIpdcOTKCD0tUyyw=;
+        b=Z0sGqRNZfpC3637mrDyRBsKh3YdpcdVL9SA/FNR7afYaaGiuYjj1HUB7EnjDpu+4Ns
+         9b6lA43KBYLlrG1ZJ6HRoCfp3wAphnXMApKZauTrR1LvhgGXaFmi0Kb07nxkB+qjMQFf
+         jXbPX01aYc/oXcABL29jotVw+gLSbXTLA+L7BZKIt4rGfy9shaoIUi/Dob3HHM1yqkDc
+         0Bh8T6gYUxo52y9wcqmD3J6Te2pzz1Y07qrAihYJ7ZyTD/oApQHc5DPSoQF5SzLJamA4
+         fhk7MUVfL0dlLGKpeyHcs5ZSD8hGDBqDfZZU/csGhr8KN1jTRylGenMqdSd+CEkFv9Za
+         bcFA==
+X-Gm-Message-State: ANoB5plYgOISTMZG0uCmvz3XgsAMMbSIKbrQcKtV8TRDLiswmYdwNarh
+        /zEZahieipYTVWX9Rnjw8t4pzjrU9m0YFA==
+X-Google-Smtp-Source: AA0mqf6oFLmxXYoZKWmXAwRl78hgaAGu71UAhfAMwqP9V+/DIVGSmAMrFUUxqOLZPVZrPqF6ljQX2w==
+X-Received: by 2002:a0c:e949:0:b0:4af:b750:b569 with SMTP id n9-20020a0ce949000000b004afb750b569mr12479468qvo.83.1668432736100;
+        Mon, 14 Nov 2022 05:32:16 -0800 (PST)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id dm56-20020a05620a1d7800b006eeb51bb33dsm6443645qkb.78.2022.11.14.05.32.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 05:32:15 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id j2so13406451ybb.6;
+        Mon, 14 Nov 2022 05:32:15 -0800 (PST)
+X-Received: by 2002:a25:18c5:0:b0:6de:6183:c5c3 with SMTP id
+ 188-20020a2518c5000000b006de6183c5c3mr12383197yby.89.1668432735124; Mon, 14
+ Nov 2022 05:32:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: 4Fuyddp9qQM8wFjQvmTtI4D4ho-JUD95
-X-Proofpoint-GUID: 4Fuyddp9qQM8wFjQvmTtI4D4ho-JUD95
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_10,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- priorityscore=1501 clxscore=1011 bulkscore=0 mlxlogscore=759
- malwarescore=0 impostorscore=0 mlxscore=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211140082
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221114111513.1436165-1-herve.codina@bootlin.com> <20221114111513.1436165-4-herve.codina@bootlin.com>
+In-Reply-To: <20221114111513.1436165-4-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Nov 2022 14:32:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVrx3ug+RKuNXauCLKFYr5qZedrj7KmME0vzRysoqFzPQ@mail.gmail.com>
+Message-ID: <CAMuHMdVrx3ug+RKuNXauCLKFYr5qZedrj7KmME0vzRysoqFzPQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] soc: renesas: r9a06g032-sysctrl: Handle h2mode
+ device-tree property
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An external PHY needs settling time after power up or reser.
-In the bind() function an mdio bus is registered. If at this point
-the external PHY is still initialising, no valid PHY ID will be
-read and on phy_find_first() the bind() function will fail.
+Hi Hervé,
 
-If an external PHY is present, wait the maximum time specified
-in 802.3 45.2.7.1.1.
+On Mon, Nov 14, 2022 at 12:15 PM Herve Codina <herve.codina@bootlin.com> wrote:
+>
+> Handle the h2mode property and forces the CFG_USB[H2MODE] bit
+> accordingly.
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- drivers/net/usb/smsc95xx.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Thanks for the update!
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index bfb58c91db04..5ed001c0cd56 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1134,8 +1134,15 @@ static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
- 		goto free_mdio;
- 
- 	is_internal_phy = !(val & HW_CFG_PSEL_);
--	if (is_internal_phy)
-+	if (is_internal_phy) {
- 		pdata->mdiobus->phy_mask = ~(1u << SMSC95XX_INTERNAL_PHY_ID);
-+	} else {
-+		/* Driver has no knowledge at this point about the external PHY.
-+		 * The 802.3 specifies that the reset process shall
-+		 * be completed within 0.5 s.
-+		 */
-+		fsleep(500000);
-+	}
- 
- 	pdata->mdiobus->priv = dev;
- 	pdata->mdiobus->read = smsc95xx_mdiobus_read;
--- 
-2.34.1
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Minor nit below.
 
+> @@ -966,6 +967,26 @@ static int __init r9a06g032_clocks_probe(struct platform_device *pdev)
+>         clocks->reg = of_iomap(np, 0);
+>         if (WARN_ON(!clocks->reg))
+>                 return -ENOMEM;
+> +
+> +       error = of_property_read_u32(np, "renesas,h2mode", &h2mode);
+> +       if (!error) {
+> +               usb = readl(clocks->reg + R9A06G032_SYSCTRL_USB);
+> +               switch (h2mode) {
+> +               case 0:
+> +                       /* 1 host, 1 device */
+> +                       usb &= ~R9A06G032_SYSCTRL_USB_H2MODE;
+> +                       break;
+> +               case 1:
+> +                       /* 2 hosts */
+> +                       usb |= R9A06G032_SYSCTRL_USB_H2MODE;
+> +                       break;
+> +               default:
+> +                       dev_err(dev, "invalid h2mode %d\n", h2mode);
+
+%u
+
+> +                       return -EINVAL;
+> +               }
+> +               writel(usb, clocks->reg + R9A06G032_SYSCTRL_USB);
+> +       }
+> +
+>         for (i = 0; i < ARRAY_SIZE(r9a06g032_clocks); ++i) {
+>                 const struct r9a06g032_clkdesc *d = &r9a06g032_clocks[i];
+>                 const char *parent_name = d->source ?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
