@@ -2,33 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD9B628767
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 18:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E2C628798
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 18:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237647AbiKNRrY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 12:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S237690AbiKNR5g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Nov 2022 12:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237435AbiKNRrX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 12:47:23 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4905DB7EC;
-        Mon, 14 Nov 2022 09:47:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uC2or5Vi29/ILL+10ZunUsXoSK2kh2fnZB6/reHnjHU=; b=eixZyTc84zaknlvIhRid19qxBv
-        1ErWk6J1F6A5nX9R3Gq1xqT3S452frgG5qvxXsSeOBb29oqb9giLYMGzwt1BQiyS0zLW8CBJ7T3Wc
-        IcuCuIc/FUMLYb5ikR7pyoIP9rkKawUPtzIzfCDacq+J+jMM1+wacfwbd1QwvRM/61TvXCaAWpUY2
-        802jFBXCWyQxTSBSpyQuqQcDQQNhh42Yc+zOMrBbx+8eYqwpHEuzS/O1Fb0+YRpeN3zmynbe1CdgV
-        NTwTsYp8ECm3e504wlVNbiwLg5+K5+fFBAzx66zNmw6bTGiSwXvIKETxqE8S+/7/MdvalhTVu1d8G
-        ZM9LI9Mg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oudYH-00FcPV-4x; Mon, 14 Nov 2022 17:47:21 +0000
-Date:   Mon, 14 Nov 2022 17:47:21 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S237844AbiKNR5Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 12:57:24 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC0B25EBA;
+        Mon, 14 Nov 2022 09:57:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668448643; x=1699984643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cc3hg2VIM6L+Sab51F6eBaTWDmyo6t4XvJHG+xF3G0U=;
+  b=KtdNY1sXkyV/Xc+Avm4b9uu2Czba0SM3YPIdhar0OrgbmTTB0SgSsTj7
+   qMEvdIzC8gyL+wP9XlioFMIzlRXsxEkuEGxYOYySNW2sHt/U1GmqwAKTT
+   OTPE5uMJYrqD89mak15ydH6W76eucLfJfG6vJ4tYuWQ4AcsEmDOzUtkJ5
+   jzK7lgaNyaO7QwFahmemv5Upj0WoFNUOdNfeVh+mG1YkpMxafzxtIVsxm
+   J3Jj4jU5AwyiPcfa/VwrRTUXMkINGBHz0iLyb0wP1mzJKKnrcpj92/c1U
+   x0e9K9c+XdefShCr66OFa5bCrsJQbNWo9YBmQe8caZktpb6M9mdiBM3GC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="310746983"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="310746983"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 09:57:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="671657096"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="671657096"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 14 Nov 2022 09:57:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oudhs-00CHlc-2X;
+        Mon, 14 Nov 2022 19:57:16 +0200
+Date:   Mon, 14 Nov 2022 19:57:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
 Cc:     kernel test robot <lkp@intel.com>,
         Jakob Koschel <jakobkoschel@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,16 +55,18 @@ Cc:     kernel test robot <lkp@intel.com>,
         Linux Memory Management List <linux-mm@kvack.org>
 Subject: Re: [PATCH v1 1/4] list: Introduce list_count() to count existing
  nodes
-Message-ID: <Y3J/KUBu3adGPiwT@casper.infradead.org>
+Message-ID: <Y3KBfLLyQZ7Q95bG@smile.fi.intel.com>
 References: <20221114112842.38565-1-andriy.shevchenko@linux.intel.com>
  <202211142350.i0ngTfIl-lkp@intel.com>
  <Y3JmtNExJulq2CEE@smile.fi.intel.com>
+ <Y3J/KUBu3adGPiwT@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3JmtNExJulq2CEE@smile.fi.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <Y3J/KUBu3adGPiwT@casper.infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,9 +74,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 06:03:00PM +0200, Andy Shevchenko wrote:
-> Oh, nice! I will fix this for v2.
+On Mon, Nov 14, 2022 at 05:47:21PM +0000, Matthew Wilcox wrote:
+> On Mon, Nov 14, 2022 at 06:03:00PM +0200, Andy Shevchenko wrote:
+> > Oh, nice! I will fix this for v2.
+> 
+> list_count() is an antipattern.  I don't have any of the patches in
+> my inbox, so maybe there's a great reason for doing this, but my
+> immediate response is: NAK.
 
-list_count() is an antipattern.  I don't have any of the patches in
-my inbox, so maybe there's a great reason for doing this, but my
-immediate response is: NAK.
+When we are trying to hide iterator variable in many cases, leaving the current
+code alive will allow explicit access to it. If it's not a problem, why to
+bother with the other list APIs then?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
