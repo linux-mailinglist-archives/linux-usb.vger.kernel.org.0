@@ -2,96 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC26F62888D
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 19:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AED6288FC
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 20:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbiKNSsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 13:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S235707AbiKNTPz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Nov 2022 14:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235954AbiKNSsR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 13:48:17 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE67619035;
-        Mon, 14 Nov 2022 10:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668451697; x=1699987697;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AHgkLYtPHhgu7JKiPxVsv3AUt6xSMXEpy9zlW59ER+8=;
-  b=Hd/WpQA5Z/A2jtLwU1dRfNnaK1l7rekliILwLMGrDlFt1KkSBpFZzMHz
-   1/iWOYyRrdi6OZiyyH0A81fdvkcMceTl91hjID/OIAVvRQoX1rWbpErDY
-   zhuWfhL/12gZXtS/K2uhKy5IjTDVQ2vaYgrbaqDOCi5WA1ggDoAlhESRz
-   AxBsCfod3SoAiPjqbfz7EqNcR2/e1C85ohMXjZ7xnwZM8uXrhduBYhNlL
-   Z1de2EQZXF/442LTau/yv8OFEiTBMI13GkyCpaLsYElYYedLXfO1TOx5K
-   dTzMtPkda2O1WoG3SEde5dk3rISjCClhjBfvgc6GrrXaCTGCQ1dDIzSBo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313197923"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="313197923"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:48:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="813369368"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="813369368"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 14 Nov 2022 10:48:13 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oueV7-00CJ1A-27;
-        Mon, 14 Nov 2022 20:48:09 +0200
-Date:   Mon, 14 Nov 2022 20:48:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Ruhl, Michael J" <michael.j.ruhl@intel.com>
+        with ESMTP id S236661AbiKNTPy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 14:15:54 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9916A2656C;
+        Mon, 14 Nov 2022 11:15:52 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so12967449pjh.1;
+        Mon, 14 Nov 2022 11:15:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=36v5gUBpLgcJSUQwqRiwLsp80Jc3uoS+E8w6Xxeu30A=;
+        b=Lrq1SGsh/h58DcJ11Hw1HOf0hbKqOEcqq8+wNMBXe4s2lYB/Kg31XMTaPFCFKc5aQB
+         mzKRTsTGzCUXsb3dGiFhjWLInKi8TjgiyQB1ejK5k+jWj7+Gb+4iqY4yvslZL6j5cA/5
+         G3kUrThX86oevlypswDZ6GD7XNF+YPxPG7h6C1kf8td+DZlE7X+n+idVkexUksjD3MH+
+         UV2CINhcjBNH1p7HkdUeXZEh9bgJajppw8x+VUngopg5zJxVaG3pZWlX5Psd+CzAsfMm
+         CROhYczvRvN2FMe14wZaL7v7yx5MA6E2uGrcAZ1HlNAgiMPqVXNvOB067JdDfm4Ov1Aa
+         +hLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=36v5gUBpLgcJSUQwqRiwLsp80Jc3uoS+E8w6Xxeu30A=;
+        b=2YOhwkew4/Ad9fRnu4nAVcLopPaBx/WFo4oXYipY1qmHGCsP/xqG+PhlXQ7lP0ArJj
+         CsnGYUiDrOiDYK1NrepmZVOhEWF9zT2IGssliLL9lHj4+eGOzf9OvB/sK5ROHqqMM0jr
+         Jj/MvovsrwhKuHc7oj0u02gtcZyLDRxjqLIJ0I71HSBt45wfMTHc+3KkAvYusG9R3Gkt
+         2Mrpp2zTzJSbgsUgKJJ2QDiQiAueNBSR+8MgxjyTTchG7lWRM9T+4j0s7ROZiVxlv6+N
+         jC50jplQS0ZcUzbXTY3JNQL/PI5ohPEjLrbHY76gttFXw5KsQI20hJE+Lra3jOP3rGmJ
+         ZBLw==
+X-Gm-Message-State: ANoB5pnGq1dgxSZiOEKvp0ukzP7a9B4WtMxNtWc+i/4WR8i1BBpRK/KZ
+        WjCoQtD79Thtn3r8O7CMk41/p34amepSeK6FyhtjFJWP1eM=
+X-Google-Smtp-Source: AA0mqf6HcqmbOriLzooDOJRI/wFT8MKO0/1BkR9i+ilXDZI1f8IfqeRx2lE5fCdClkvOV2A7x79j/kh6t+2r/nxz1kI=
+X-Received: by 2002:a17:90a:8990:b0:212:dc2f:7ee7 with SMTP id
+ v16-20020a17090a899000b00212dc2f7ee7mr14696996pjn.172.1668453352083; Mon, 14
+ Nov 2022 11:15:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com> <20221114162207.62559-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221114162207.62559-2-andriy.shevchenko@linux.intel.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 14 Nov 2022 16:15:35 -0300
+Message-ID: <CAOMZO5CJvuMUNwPQ7GUQh0dinYSfQ5TTLMawUt7hMVKJD4S3GQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] usb: gadget: hid: Convert to use list_count()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         Kevin Cernekee <cernekee@gmail.com>,
-        "Nyman, Mathias" <mathias.nyman@intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 1/4] i915: Move list_count() to list.h for broader use
-Message-ID: <Y3KNaZjhqJZYjxrn@smile.fi.intel.com>
-References: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
- <DM5PR11MB1324523623D88188493D7518C1059@DM5PR11MB1324.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM5PR11MB1324523623D88188493D7518C1059@DM5PR11MB1324.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 06:11:51PM +0000, Ruhl, Michael J wrote:
+On Mon, Nov 14, 2022 at 1:22 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The list API now provides the list_count() to help with counting
+> existing nodes in the list. Uilise it.
 
-...
-
-> So all of the non-list_for_each code appears to be an inline.
-
-This is not true.
-
-> This which, resembles the non-list_for_each pattern is a macro?
-> 
-> Just curious as to why the macro rather than inline?
-
-See above. However, I'm fine with the inline.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+s/Uilise/Utilise
