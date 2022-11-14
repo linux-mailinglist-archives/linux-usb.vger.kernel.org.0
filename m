@@ -2,115 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB09C6285FC
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 17:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB9C62866A
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 18:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbiKNQuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 11:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S238110AbiKNRAr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Nov 2022 12:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238030AbiKNQu1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 11:50:27 -0500
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3452F67D;
-        Mon, 14 Nov 2022 08:49:16 -0800 (PST)
-Received: by mail-pj1-f41.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso11237018pjc.2;
-        Mon, 14 Nov 2022 08:49:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8mzxDj+mA+La36bwra6nbOYkYl8KiO9soSvMTuQsXDE=;
-        b=lju5IcZYyZjggJDhNyl3d1E4q2R3IZEvxlcaW4t7teeIq8uwwew3cqQeIV4MfR1/6l
-         Fk+TqvFprS1lVwnf1ps19/jCAi4phUkk9YQbq6M2XFPeEKh3B2yEYv9Ug94bt9cCmSQh
-         1knT5qB49FgvjdHGj1wgGPzDKn1no1ZFD17wPpq96gH4kGEKOBeR5yDC9wDmkVCo/yYH
-         wipbpQKQihg6NnwbOryzMmTJLqu8wK0tMziOmIBxUKMrqASYul0MsXNxSqRiZ2RAnXcu
-         ewDPCWT46bngOEO33YMWuv33StI178OFf7up4JM1/NZ90qQgOZrrwiAYUZi5xpnv/V9u
-         RxaA==
-X-Gm-Message-State: ANoB5pnuPsbkD5m0QYaZtJXVgCs0z3cOgq9HsvH2LHJ5TU8JRzloGIYG
-        hYO4r5N2LVma+f4Fr4qC6BJITHaSSVA/d8o4/0BL6Gi8mnI=
-X-Google-Smtp-Source: AA0mqf6XAxehGJwMf5feUmqitNO/qqOsBOB6BHIcUE4Pj6QUzQ5gohUxuEE1OtexiIrmiFVLX1+DMIQFoQwUFWFmAhQ=
-X-Received: by 2002:a17:902:ed41:b0:175:105a:3087 with SMTP id
- y1-20020a170902ed4100b00175105a3087mr141889plb.65.1668444556100; Mon, 14 Nov
- 2022 08:49:16 -0800 (PST)
+        with ESMTP id S238108AbiKNRAN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 12:00:13 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4F8317CF;
+        Mon, 14 Nov 2022 08:59:35 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 17FDC5C0197;
+        Mon, 14 Nov 2022 11:59:32 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 14 Nov 2022 11:59:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1668445172; x=1668531572; bh=yKRgGvprbc
+        oIqEkAWWNc2PNyMEcpae3Af/heeqEz8UQ=; b=iOsUoNfHwTvT0XulboXuoSXg/k
+        2G1WgarGXIWbdDvh/mz+3P4qmXmoXgVrmXE3irKW3Ev8dr+6TX2DCyCkT1Uw4Pn5
+        pnyhGdLUQ+PBbVonXW/d9u6F2Hi0XaQP0FwV0k2s+70ADMhhChA6w/qBqWUnlb0l
+        nhXTy1V1K/99LvkwzsddgtCZGCswmA+uLopbmfqt2bfGtggfwrDUDE6UUL0ck2aQ
+        juUX49UKP7//5Rxa+caLYLuku+taXmO7iUohrrHdfckmsakiRPSs7NJrnE1CULoG
+        IgBZ251kA9cA38NKqVTQWRd1N7iXuy4Z34AtDWkToVyjljVpCGln5i1ykArw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1668445172; x=1668531572; bh=yKRgGvprbcoIqEkAWWNc2PNyMEcpae3Af/h
+        eeqEz8UQ=; b=T32XE8s2ywBn+GqAV1ujFSrQIje1n1zhqOEAD/4bABuM9CfpPF8
+        EQBEkT0yoEJ6KsaSfTTrJHW4Wz9j+JvQu1r/IVBiyKT/RGVh4F/zB4Tq46sJ8kRG
+        PsJtvoOQTdyJwwEPtNFGXZJzMuGOd00i6D4lKKcgUE1u9KU6lVE1xRliyNE9/VSR
+        SuNRjynMHSsCNHg6bIL6mR07Tal97PVXmhR2Ucj60e+n/D+nBIPIlsvd/Px/GqNn
+        TvzxZqEe2aZBHcdGiB5eyVofd5fqJQSzZhNqkLCLN7dhztizfeH1Fja1cHX6YuhE
+        jPbUlpx2WGqigMS0SiB5uOzKr0xBcB0LzyQ==
+X-ME-Sender: <xms:83NyY6vfb1bUjeof0I70mLX2b6zF9tXYGkrmOcQb5wIaxWQi3YLJWw>
+    <xme:83NyY_f5LxREFsWGIbm6Hx249Xl-GHX3JqU4Dk0Vucw60cNRQ0O-z9RONt_BR--Ya
+    jqa1rPkHWCNhHOEfhg>
+X-ME-Received: <xmr:83NyY1ywFUw4MfCiAn4_Lvnjpyhjw5_exALQbaYEoeswwXWIY-J4fu5xetikz0EtQWxFgyoE7XhooxFPRhnncG12gS8VPqahr7szK1w5moOdzGM6GMk-6bzIpXJ9pg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgdeikecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:83NyY1MrYoPAtbm6nDzuAzXqcV-8qqrPQvfteyDmhD7U6yyKskYnZg>
+    <xmx:83NyY6_IgEoU_VwHvctKI148NJRHRtqvfdXOxZLTnqv-vKCr3MTeYQ>
+    <xmx:83NyY9VIXbGpiPlycWcQwd5NOhw_LkxjN3emDmuM3UWdGxFBcl9x6g>
+    <xmx:9HNyYxYUtIQJLJ_bSSdSbXrX37p6CVuSvCMCq0U5KeqpteBckaH63Q>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Nov 2022 11:59:31 -0500 (EST)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: Check for ops->exit instead of ops->enter in altmode_exit
+Date:   Mon, 14 Nov 2022 17:59:24 +0100
+Message-Id: <20221114165924.33487-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221113040108.68249-1-mailhol.vincent@wanadoo.fr> <Y3Ef4K5lbilY3EQT@lunn.ch>
-In-Reply-To: <Y3Ef4K5lbilY3EQT@lunn.ch>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 15 Nov 2022 01:49:04 +0900
-Message-ID: <CAMZ6RqLjcxDG_yCK3dfYr2dWb7sddRPMDGwXRy62c6WHDH5=Gw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] can: etas_es58x: report firmware, bootloader and
- hardware version
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon. 14 Nov. 2022 at 02:03, Andrew Lunn <andrew@lunn.ch> wrote:
-> On Sun, Nov 13, 2022 at 01:01:05PM +0900, Vincent Mailhol wrote:
-> > The goal of this series is to report the firmware version, the
-> > bootloader version and the hardware revision of ETAS ES58x
-> > devices.
-> >
-> > These are already reported in the kernel log but this isn't best
-> > practise. Remove the kernel log and instead export all these in
-> > sysfs. In addition, the firmware version is also reported through
-> > ethtool.
->
-> Sorry to only comment on version 3, rather than version 1. I don't
-> normally look at CAN patches.
+typec_altmode_exit checks if ops->enter is not NULL but then calls
+ops->exit a few lines below. Fix that and check for the function
+pointer it's about to call instead.
 
-Actually, I only started to CC linux-usb mailing from version 2.
-Regardless, thanks a lot, this is a valuable feedback.
+Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+ drivers/usb/typec/bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Have you considered using devlink?
->
-> https://www.kernel.org/doc/html/latest/networking/devlink/devlink-info.html
+diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+index 26ea2fdec17d..31c2a3130cad 100644
+--- a/drivers/usb/typec/bus.c
++++ b/drivers/usb/typec/bus.c
+@@ -134,7 +134,7 @@ int typec_altmode_exit(struct typec_altmode *adev)
+ 	if (!adev || !adev->active)
+ 		return 0;
+ 
+-	if (!pdev->ops || !pdev->ops->enter)
++	if (!pdev->ops || !pdev->ops->exit)
+ 		return -EOPNOTSUPP;
+ 
+ 	/* Moving to USB Safe State */
+-- 
+2.25.1
 
-I have not thought about this (I simply did not know the existence of
-this feature). A first quick look makes me think it is a good idea. I
-will continue to investigate.
-
-> fw and asic.id would cover two of your properties. Maybe talk to Jiri
-> about the bootloader. It might make sense to add it is a new common
-> property, or to use a custom property.
-
-I will try to report the firmware version and the hardware version in
-a first step and then see what we can do for the bootloader.
-
-> devlink has the advantage of being a well defined, standardised API,
-> rather than just random, per device sys files.
-
-ACK.
-
-> There might also be other interesting features in devlink, once you
-> have basic support. Many Ethernet switch drivers use devlink regions
-> to dump all the registers, for example.
-
-I am aware of ethtool_drvinfo (which I implemented in the last patch
-of this series to report the firmware version).
-Do you have any reference of how to dump the other registers?
-
-> Since there is a bootloader, i
-> assume the firmware is upgradeable? devlink supports that.
-
-True, it is upgradeable, however, I do not have an environment to test
-for upgrades so there are no plans right now to develop an upgrade
-feature.
-
-
-Yours sincerely,
-Vincent Mailhol
