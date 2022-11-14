@@ -2,121 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F635627D15
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 12:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53203627D1F
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 12:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbiKNLzp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 06:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S236942AbiKNL4p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Nov 2022 06:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236950AbiKNLz3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 06:55:29 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24670286CB;
-        Mon, 14 Nov 2022 03:50:57 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C52B66016A3;
-        Mon, 14 Nov 2022 11:50:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668426644;
-        bh=rSfdqTdE8g5pVk/aI7ZmXOStoeYghRLVH9p0R1kbpRA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Oe9YtSXjQQZ85Odb4k7Zlo2gY1T6Pw6uTs4XnOSaGwOtBwjrlL/shpUE+8AwAPDyu
-         BPT/+46VoUrSr7eQL6KX/zgvZEU5PuxB23s7JdhVAHS7StyypCG7x1pXa7WTjmiPhQ
-         +BgeRFiCq+M0R00ir4qJZMiiiv/d/M+7YPeeAApO5qGZglKpxqqRLoDCHyu7O3BjNO
-         zFEBTURCKFB+YlltZtZRry22VE5EupoBc/m+kY75QGTFNzpTlkXCVDKKPKFJY9oM27
-         eSL8ajonPwMRxDNz3LRlmonlq1rQnJ1rEHfV20GUujukIJZCKZfzvtLrjubpgOICyg
-         2+2xmua4gbetw==
-Message-ID: <ee410f80-1697-6146-9755-981f2d45e88f@collabora.com>
-Date:   Mon, 14 Nov 2022 12:50:40 +0100
+        with ESMTP id S236923AbiKNL4b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 06:56:31 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E9724952
+        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 03:52:09 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id h12so12815411ljg.9
+        for <linux-usb@vger.kernel.org>; Mon, 14 Nov 2022 03:52:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=23J2rxW29+aENYRjYQO3CvbM83oXKeca0v4ut8EgLyc=;
+        b=SSqYE2X6QeuX6Oc6rgira/TUu8ELeOHcfffGwFc1Jjku0sOgO4gIum4DoqTQNT5qNk
+         hcbN7I69awhwye9HmUNBROziQ1TlnxA+U6LVOkFHQ3YIE9Bb7hXNRCPjotMA1gBy/+Wp
+         wi2pmlaPqGtHVKecw5bV/vZenlc6Nvg+zwbCebB1fn9A2PuvdEO0SejLUp2A/BDu3dhE
+         nmRZNsVyk0Rrir4Zc/D9H0Rku9EnlC/GUpOn4JLVtn2J7Vzm2xvZdwPAF3XDhvG8JCT2
+         t0kXticvcPgHboc6IVMENf27bFBfyu6zKs2Lo7iXqID4R5R1+qrMNdkZ5w4iFiVyIeHl
+         cZNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=23J2rxW29+aENYRjYQO3CvbM83oXKeca0v4ut8EgLyc=;
+        b=iJev4WOPhpkh4sxIXagT4Y4ODIcuCG5wOeQRttp0NBdY8cWpsuVg4vPg4qWt0H3mtN
+         g8Jm3EI5CIktlNxMIZ/gHvQ3C+RLTr+UKIxaM2PNclWtWaEckuFrVywhUDtdnNleKn8E
+         NYHgKv4ZxGJ0iKVp0NBtUuRyBkMsrsofj79AvlqiRTRSQW8aYd9uttTw4FdMGpa4vqdp
+         Iap2QRXdAbBE0CV6AR2+g3e3jchCxSrn17dXDRVuRoOeugEAunjgRQF8gMyU8EzODf71
+         bD3LZXhwBBr0wxuKnpU1hM6Q16YuzatauumXQRK5Hi2vrBe2ju9FqTNs7F9PBqnflJCh
+         AoLA==
+X-Gm-Message-State: ANoB5pnsIDSY6PzLsuAm3rMt5lgQfmC+u30ct4BJBAjY0iFIVGrpIXRI
+        MrRQzR7GeJMVneRNVjf8fGGxLEOl8U5FHQ==
+X-Google-Smtp-Source: AA0mqf7XeSBAJW33aWa+cj4Lwq//cEDc+UOJ45dGGge6iVbcmhseP5juMhNmoC3w2qnm4TwB/KLfJg==
+X-Received: by 2002:a2e:be0a:0:b0:277:a8b:4a53 with SMTP id z10-20020a2ebe0a000000b002770a8b4a53mr3849259ljq.197.1668426728192;
+        Mon, 14 Nov 2022 03:52:08 -0800 (PST)
+Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05651c124800b0027758f0619fsm1981531ljh.132.2022.11.14.03.52.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 03:52:07 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 1/4] fotg210-udc: Use dev pointer in probe and dev_messages
+Date:   Mon, 14 Nov 2022 12:51:58 +0100
+Message-Id: <20221114115201.302887-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4 10/11] arm64: dts: mt7986: add Bananapi R3
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, Ryder Lee <ryder.lee@mediatek.com>,
-        Bo Jiao <Bo.Jiao@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20221112091518.7846-1-linux@fw-web.de>
- <20221112091518.7846-11-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221112091518.7846-11-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 12/11/22 10:15, Frank Wunderlich ha scritto:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add support for Bananapi R3 SBC.
-> 
-> - SD/eMMC support (switching first 4 bits of data-bus with sw6/D)
-> - all rj45 ports and both SFP working (eth1/lan4)
-> - all USB-Ports + SIM-Slot tested
-> - i2c and all uarts tested
-> - wifi tested (with eeprom calibration data)
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Add a local struct device *dev pointer and use dev_err()
+etc to report status.
 
-..snip..
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/usb/fotg210/fotg210-udc.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-> +
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-> new file mode 100644
-> index 000000000000..def16e36f1e6
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-> @@ -0,0 +1,458 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * Copyright (C) 2021 MediaTek Inc.
-> + * Authors: Sam.Shih <sam.shih@mediatek.com>
-> + *          Frank Wunderlich <frank-w@public-files.de>
-> + *          Daniel Golle <daniel@makrotopia.org>
-> + */
-> +
-> +/dts-v1/;
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/pinctrl/mt65xx.h>
-> +
-> +#include "mt7986a.dtsi"
-> +
-> +/ {
-> +	model = "Bananapi BPI-R3";
-> +	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
-
-You have to add the machine compatible to devicetree/bindings/arm/mediatek.yaml
-or you get dtb check issues.
-
-Regards,
-Angelo
+diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
+index 3c357ce42d3b..b3106e4b3194 100644
+--- a/drivers/usb/fotg210/fotg210-udc.c
++++ b/drivers/usb/fotg210/fotg210-udc.c
+@@ -1091,6 +1091,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
+ 	struct resource *res, *ires;
+ 	struct fotg210_udc *fotg210 = NULL;
+ 	struct fotg210_ep *_ep[FOTG210_MAX_NUM_EP];
++	struct device *dev = &pdev->dev;
+ 	int ret = 0;
+ 	int i;
+ 
+@@ -1122,7 +1123,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
+ 
+ 	fotg210->reg = ioremap(res->start, resource_size(res));
+ 	if (fotg210->reg == NULL) {
+-		pr_err("ioremap error.\n");
++		dev_err(dev, "ioremap error\n");
+ 		goto err_alloc;
+ 	}
+ 
+@@ -1133,8 +1134,8 @@ int fotg210_udc_probe(struct platform_device *pdev)
+ 	fotg210->gadget.ops = &fotg210_gadget_ops;
+ 
+ 	fotg210->gadget.max_speed = USB_SPEED_HIGH;
+-	fotg210->gadget.dev.parent = &pdev->dev;
+-	fotg210->gadget.dev.dma_mask = pdev->dev.dma_mask;
++	fotg210->gadget.dev.parent = dev;
++	fotg210->gadget.dev.dma_mask = dev->dma_mask;
+ 	fotg210->gadget.name = udc_name;
+ 
+ 	INIT_LIST_HEAD(&fotg210->gadget.ep_list);
+@@ -1180,15 +1181,15 @@ int fotg210_udc_probe(struct platform_device *pdev)
+ 	ret = request_irq(ires->start, fotg210_irq, IRQF_SHARED,
+ 			  udc_name, fotg210);
+ 	if (ret < 0) {
+-		pr_err("request_irq error (%d)\n", ret);
++		dev_err(dev, "request_irq error (%d)\n", ret);
+ 		goto err_req;
+ 	}
+ 
+-	ret = usb_add_gadget_udc(&pdev->dev, &fotg210->gadget);
++	ret = usb_add_gadget_udc(dev, &fotg210->gadget);
+ 	if (ret)
+ 		goto err_add_udc;
+ 
+-	dev_info(&pdev->dev, "version %s\n", DRIVER_VERSION);
++	dev_info(dev, "version %s\n", DRIVER_VERSION);
+ 
+ 	return 0;
+ 
+-- 
+2.38.1
 
