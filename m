@@ -2,110 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717E462A377
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 21:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6A262A460
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 22:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238611AbiKOUxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 15:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S230394AbiKOVm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 16:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiKOUxJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 15:53:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E7B30544;
-        Tue, 15 Nov 2022 12:53:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4201617C1;
-        Tue, 15 Nov 2022 20:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17C4C433C1;
-        Tue, 15 Nov 2022 20:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668545587;
-        bh=xix7qGSZe5Jl75liUDWPNa2To8YhX6K5xaN0+29LycA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jcDE2u79xGa6akEBQHAP2LtAacwlyFZb5F4HipKkJeJeuB1MqKyXax3PL2hQPbFeP
-         nD6ZFhNWF00ECB6W6BDZLFXWoHz8d2gutvXa4bViaMWE4P29JI850znFObL3lN3h/n
-         jeikIwf3Cst6L71l6BcgVxjIk9Bg8mLONyQ9h+I4MAM42ZTAD+loH7HUyz0epbXBXI
-         3HxribkLH0DdIKjoQ4FuuuJjvrxyLZSIzcGUMZJGJJ6tZLEphQPQniy5awO24DOPpA
-         LFwjQj97bBiF44JNZPUZ+qrmmypneqPmQS7uEVCODFHAPJcuWQoy4HNfLt1cvEAS2n
-         Fvz3O/SzX20Jg==
-Date:   Tue, 15 Nov 2022 21:53:04 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        jonathanh@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 09/13] i2c: nvidia-gpu: Remove ccgx,firmware-build
- property
-Message-ID: <Y3P8MNxuGnsUMtCy@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
-        jckuo@nvidia.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
-References: <20221114124053.1873316-1-waynec@nvidia.com>
- <20221114124053.1873316-10-waynec@nvidia.com>
+        with ESMTP id S232096AbiKOVme (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 16:42:34 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286972E9F6
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 13:42:15 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id t25so39448191ejb.8
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 13:42:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Nl9X2dBBteRxXc88z+X5/Ev/rJGuG6QGv1Den2poAo=;
+        b=QwtGfdLExqGEA3JBttYR2zaNYjZe26Vt6/fFPWMuk54OnoMDs1FRgye8GpGvi457VX
+         Ehd3UvkUHaqnWVtNl5Yhok3ciBieqGeJ9smgarRrEGrMZD8wJ+RyK21O1kVfszahcKAQ
+         1JfCR6GMKLmQcAF9S1lxq4qq8ETCraVQ14j3eil805xRkwv8JB1xNJfzM70HMHId4Jt1
+         PnNeXtzsgQz4YFIlo84bs2XPdiyl8yg7hne1bsU55rk10UVgYx+/WPW3qNUlFy+MHL95
+         y6N/nWy8aDChycA4rZleL+UpFoFcldr4dg3+v8PTbq1siLVeRsRHll6eGEfTe1Mtm8Mc
+         kP6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Nl9X2dBBteRxXc88z+X5/Ev/rJGuG6QGv1Den2poAo=;
+        b=yG4FSU8woAqvw+aOOyh5kLGzBsISkHOJiEbbsByh2vQ+tA7725m3Eold0S6YB2dnB7
+         3wL7yAPWrpQ0aKCID/oQMBqSeyCv5c2Rl8iCQvUTBmHu5wk3oiRGZfNUQAkTQKAMD+Ub
+         J+U+20XEAnzDQGUzdQTVzY60dOiFhT3xsKysyCm7Fd7qRfjaKu+jBnGh80HNKUPN/TWW
+         6FiBU60G3GVKAXTyr1X3O8en+r8LJYA0LQxuhYi10dczURxRcrtLZsT5YnXbp1VLdJwD
+         ef7PfqihCorUid/2uiFdaw85JW5fZnC+llhGcfYEfX3hthqNvVfGS0acMhHI1Rr/UedR
+         qupQ==
+X-Gm-Message-State: ANoB5pl1s6g9Hknw/eBFPh15sEjj/Hwj9a9mAMpW3JrAKqU2hYCGy1sC
+        t2y6F9Wag7yKOxu1sakK9auQuENrEQREDjfT460qXddx3HI=
+X-Google-Smtp-Source: AA0mqf4Cv2JnITywTHhrkvL/GTP6vT4b3f6IswQJeiG7a8Mg9w83igu2bpdNd9+ZL4uYMG7Wi/gfCKeZ/s/hdK39c9A=
+X-Received: by 2002:a17:906:4911:b0:7ad:9891:8756 with SMTP id
+ b17-20020a170906491100b007ad98918756mr15884330ejq.203.1668548533646; Tue, 15
+ Nov 2022 13:42:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="P9ojcTZHksKM/pfV"
-Content-Disposition: inline
-In-Reply-To: <20221114124053.1873316-10-waynec@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <deab9696fc4000499470e7ccbca7c36fca17bd4e.1668458274.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <deab9696fc4000499470e7ccbca7c36fca17bd4e.1668458274.git.christophe.jaillet@wanadoo.fr>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 15 Nov 2022 22:42:02 +0100
+Message-ID: <CACRpkdY4+FtRc63GY_A2Gwr-cstMfsMvojHmQ_o2UQP0ymasig@mail.gmail.com>
+Subject: Re: [PATCH] usb: fotg210-udc: Remove a useless assignment
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 9:38 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 
---P9ojcTZHksKM/pfV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> There is no need to use an intermediate array for these memory allocations,
+> so, axe it.
+>
+> While at it, turn a '== NULL' into a shorter '!' when testing memory
+> allocation failure.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-On Mon, Nov 14, 2022 at 08:40:49PM +0800, Wayne Chang wrote:
-> Remove the property ccgx,firmware-build as we have added well-known
-> regex cypress,firmware-build.
->=20
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+Fair enough!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+I have sent some other cleanups to this code only
+yesterday, so they might collide and they you might have
+to rebase.
 
-
---P9ojcTZHksKM/pfV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNz/DAACgkQFA3kzBSg
-KbYXCA/+JyumlhvdQelQ+1dRI1Iz7WsTCLrStJKUFlyj8JcxlGeR9Rg9KGjpf/Go
-/7VhPqydV67ZBElkxgagTg7eCqDFu6kQo2AYURxQaT+oAOtWkCSGXeeaIxpUNBxj
-PHJ7mmGmzTDsz+xRyNvYXqUYHBvXiCqz6ntnAz+DWNuah3wGPlBzVPlNWSPAwG4b
-v0w780R5psx2pUSyNEwVIE3v3TrdG3BrcBpvCDycKx2ygAkKSvk9tvpn+8iAbxft
-MUV6zvugS86t1aBQfsAE61Jhjw0pncaAW6GrfKyzU0kUx3mMQEave8f7kqmoAdap
-+0EWOQ2yIwDe9dwRw2o3qs8XIYJDMmSboDmyyblbPnUJJo9wvcuY5D56ExVXyKs/
-KXR+VK1aJCVS6XLKI5LnlO8H/0dSXgWgQpU5WqJ0uXo+t3l45NOgWZI64yOW15D5
-SZJWKbJu4ULGAOr+hEcs6UpdVaREQYZmL7WqOGXsEJonxaw2j5GkKblVsIrASsma
-JESKRN1iN50Omv5BdRTaw7meu+2N/cyDzoQrWsYXPga8OFVOtf9oi/EjxbcuEh16
-2cmct2z6TSMuxr9DwtEMhZrFMdruSZrVYZevqBv3zni3yf2SsBjLX6s3eqkqK3FK
-FdbFSaNvy63nDBJm+gXLpTqROtadqtcTLqMNmhc5EDzXjlN2v1M=
-=XGbU
------END PGP SIGNATURE-----
-
---P9ojcTZHksKM/pfV--
+Yours,
+Linus Walleij
