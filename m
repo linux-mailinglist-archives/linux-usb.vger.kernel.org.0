@@ -2,104 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDDC6295B2
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 11:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E0E6295E4
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 11:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236128AbiKOKXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 05:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S238235AbiKOKcM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 05:32:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232917AbiKOKXU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 05:23:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE9B1F62A
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 02:23:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26B20B81889
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 10:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4528C433C1;
-        Tue, 15 Nov 2022 10:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668507796;
-        bh=ujNdQw8NWmtkyygs6WvIm0wY/ubY+Nrs9zVyOD500QI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bZWI+FLEf1GsxLvBivZC/DNtxkOuDl72lmsSDj+eubSHv/A8ac5QMmyeMgQWtpBSc
-         lI2Ajj7WFrBahV7qTitEe2rB0mAtFG2VR5xMaFvubbB22cLGcmWjcN2R2QG2NR6XMn
-         uV+0QJLPD9Vx4X5JRSHiGKB2/sDJHo+K/7MATYrX8d1POSRKNxWA44Fr3ATbMHgMUY
-         sfkiHyheJtKmNvxwY5LFy4ui5WsfA9eLUDR5ClJWFsRTJ7U64a7OtSTcSIXwVLsVJW
-         eqD+F8/Y7WVLGcj7EPeiZ/RJ1TzQiKUTqXLDVGYuuwPMwYZ9fYPH/gH7PIWV3ODILA
-         6ihi7Km5mYIhw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1out5a-00064L-Ok; Tue, 15 Nov 2022 11:22:46 +0100
-Date:   Tue, 15 Nov 2022 11:22:46 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Davide Tronchin <davide.tronchin.94@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        larsm17@gmail.com, marco.demarco@posteo.net,
-        cesare.marzano@gmail.com
-Subject: Re: [PATCH v4 3/3] USB: serial: option: add u-blox LARA-L6 modem
-Message-ID: <Y3NodufBpWHAl1qG@hovoldconsulting.com>
-References: <Y1qRkuOghwRCGZIT@hovoldconsulting.com>
- <20221108163001.18454-1-davide.tronchin.94@gmail.com>
- <20221108163001.18454-3-davide.tronchin.94@gmail.com>
- <Y3NnaMkDraj5fwvu@hovoldconsulting.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3NnaMkDraj5fwvu@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S237885AbiKOKcJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 05:32:09 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B147E22BFA;
+        Tue, 15 Nov 2022 02:32:08 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id z14so23321805wrn.7;
+        Tue, 15 Nov 2022 02:32:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u3hleG+JBlWKiyuOBiHTr/k3gF4VUiw+qWAWvRBF4c8=;
+        b=kREM6saglq8HeIc5QRINVA75AkeornAxvkaWg3odA22W+AWraA655sTtPT9UsniIW9
+         ouZ5W/R5HwMQ0atdoXyB8gfGPLrUEzoYicEDe0ELWbfdm4gVMjiRZjqFgo605z+tDNB9
+         sO2TyDHWfRmxYQuZmqkEQp5ZZf0+4Uys2QFeShUc8UIsjzvu3SZd/yvVPqJNuqj+d72m
+         Be2j8n7/yBRMPZluYE5/tndN96jWhoeafOEiZnxVtx6v1BPshmAy6SCrLz5+Q8jLDnvu
+         URZr/YhxWNVGvmg49akb0179406dsnQlagbBLFAFfs9Hs3A0gRxsgKg3WGoH40G2fL94
+         94wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u3hleG+JBlWKiyuOBiHTr/k3gF4VUiw+qWAWvRBF4c8=;
+        b=pmbOUPFmYud2uCW3qd0IjrfOhwsdUxwioM6vLAulSLigblPPNfN4/qN/qSTnouambk
+         cza86KmlO/Hs82jj6/ySOnSdezrK4jqM9POaWik5u5V+h8eul4PlMVaq8C45VeXBTiwk
+         ki6dJlk3wFJVq3EgwDWWxwMcqqIfZDCWch5NCUTzEH7rFeJ0gi3IK2yqSYKdQXHnHr19
+         LvPGOSB4BnpH1zUJvVqbcK/2/TOks/+6HSN8fL6fpPAtvPVC6GW7InynC34IeW0cUSI1
+         QzqivWhY/pxJWAHS78kzkupWhfEQ1igQciUuYNwemdNqWFrca59Swlq4J2Kn8gYusTz6
+         w/Hg==
+X-Gm-Message-State: ANoB5pnNVLSc5L61A4g7C8wAhyBSolP+RivgMCwjYjeIUtvnEEFO8ho/
+        smrAwh6a+8Hslscs4bIpwB8=
+X-Google-Smtp-Source: AA0mqf7SuuYyRKlOJch4Qlmd4Yoooeu9BbQHtWGy3R/vQjMgsmeMAOIHLFk0ze0X5QTotT0AkHMZqg==
+X-Received: by 2002:a5d:6407:0:b0:238:238:cae3 with SMTP id z7-20020a5d6407000000b002380238cae3mr10355518wru.685.1668508327067;
+        Tue, 15 Nov 2022 02:32:07 -0800 (PST)
+Received: from felia.fritz.box (200116b826a73f00a9cec1b8eddc8521.dip.versatel-1u1.de. [2001:16b8:26a7:3f00:a9ce:c1b8:eddc:8521])
+        by smtp.gmail.com with ESMTPSA id t5-20020adfe445000000b00236740c6e6fsm11940207wrm.100.2022.11.15.02.32.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 02:32:06 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Marek Vasut <marex@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: rectify entry for MICROCHIP USB251XB DRIVER
+Date:   Tue, 15 Nov 2022 11:31:53 +0100
+Message-Id: <20221115103153.28502-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:18:17AM +0100, Johan Hovold wrote:
-> On Tue, Nov 08, 2022 at 05:30:01PM +0100, Davide Tronchin wrote:
-> > Add LARA-L6 PIDs for three different USB compositions.
-> > 
-> > LARA-L6 module can be configured (by AT interface) in three different
-> > USB modes:
-> > * Default mode (Vendor ID: 0x1546 Product ID: 0x1341) with 4 serial
-> > interfaces
-> > * RmNet mode (Vendor ID: 0x1546 Product ID: 0x1342) with 4 serial
-> > interfaces and 1 RmNet virtual network interface
-> > * CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1343) with 4 serial
-> > interface and 1 CDC-ECM virtual network interface
-> > 
-> > In default mode LARA-L6 exposes the following interfaces:
-> > If 0: Diagnostic
-> > If 1: AT parser
-> > If 2: AT parser
-> > If 3: AT parser/alternative functions
+Commit fff61d4ccf3d ("dt-bindings: usb: usb251xb: Convert to YAML schema")
+converts usb251xb.txt to usb251xb.yaml, but misses to adjust its reference
+in MAINTAINERS.
+
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
+
+Repair this file reference in MICROCHIP USB251XB DRIVER.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Marek, please ack.
+
+Greg, please pick this minor non-urgent patch on top of the commit above.
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fdcf1e020a5a..43f9e2abe893 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13726,7 +13726,7 @@ MICROCHIP USB251XB DRIVER
+ M:	Richard Leitner <richard.leitner@skidata.com>
+ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/usb/usb251xb.txt
++F:	Documentation/devicetree/bindings/usb/usb251xb.yaml
+ F:	drivers/usb/misc/usb251xb.c
  
-> > @@ -1125,6 +1130,13 @@ static const struct usb_device_id option_ids[] = {
-> >  	  .driver_info = RSVD(1) | RSVD(3) },
-> >  	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x908b), /* u-blox LARA-R6 00B */
-> >  	  .driver_info = RSVD(4) },
-> > +	/* u-blox products using u-blox vendor ID */
-> > +	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6),
-> > +	  .driver_info = RSVD(4) },
-> 
-> Why are you reserving interface 4 here? This should be removed or
-> explained in the commit message.
+ MICROCHIP USBA UDC DRIVER
+-- 
+2.17.1
 
-Apparently Lars already pointed this out, but again you ignored review
-feedback without any comment and sent a v5.
-
-Mistakes happen, but this is starting to look like more than that.
-
-> > +	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6_RMNET),
-> > +	  .driver_info = RSVD(4) },
-> > +	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6_ECM),
-> > +	  .driver_info = RSVD(4) },
-> >  	/* Quectel products using Quectel vendor ID */
-> >  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
-> >  	  .driver_info = NUMEP2 },
- 
-Johan
