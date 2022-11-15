@@ -2,97 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46E7629629
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 11:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38104629674
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 11:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237401AbiKOKod convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 15 Nov 2022 05:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S237995AbiKOKzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 05:55:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiKOKoc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 05:44:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 074E921E09;
-        Tue, 15 Nov 2022 02:44:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1232B13D5;
-        Tue, 15 Nov 2022 02:44:37 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 061473F73B;
-        Tue, 15 Nov 2022 02:44:28 -0800 (PST)
-Date:   Tue, 15 Nov 2022 10:44:26 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Icenowy Zheng <uwu@icenowy.me>, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on
- F1C100s SoC
-Message-ID: <20221115104426.20728ba5@donnerap.cambridge.arm.com>
-In-Reply-To: <52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
-References: <20221106154826.6687-1-andre.przywara@arm.com>
-        <20221106154826.6687-4-andre.przywara@arm.com>
-        <Y2ypy0CM8rJGu2g4@matsya>
-        <4438485.LvFx2qVVIh@jernej-laptop>
-        <52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        with ESMTP id S236156AbiKOKyi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 05:54:38 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5E426AD3;
+        Tue, 15 Nov 2022 02:53:03 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id B0293850C5;
+        Tue, 15 Nov 2022 11:52:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1668509581;
+        bh=Sfq699fVyCuxgQtDnzj42a7oOy6n7K1r2GEoIrxP9rw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VmF3sXovf1DW1vddaddwy9gozL/2h+yUgOj/ocEbNmHuhN940hqdBsPAVC2guizQK
+         RsHhYoFvd/lmSuFSp0Wh/BTJXhy4UQKI08lkpLKk2dnbzca02qdA0JbDJkJj8vwpjt
+         FtFX0NxJcBuVxf03rovecmskcEFmIRuA28C7/OOZKn0bSTSqtuPGupiXSQeKHfGj4R
+         E9waarvZi0dmnISPPJa2eV6n9JqNyZvAClEbq+zL+60ej4/68cia6V7Gb2AObyj8Gw
+         vSlPw0onlBin1Y2fYAhWR1BSFtASbUtefpxka9P7rbfZ8/j4Jo8eTlI7Ksle5TiNiN
+         PiJd56L6VUFQA==
+Message-ID: <0750d2e8-766b-3c5c-5472-4c9d6e9ec3c4@denx.de>
+Date:   Tue, 15 Nov 2022 11:52:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] MAINTAINERS: rectify entry for MICROCHIP USB251XB DRIVER
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Richard Leitner <richard.leitner@skidata.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221115103153.28502-1-lukas.bulwahn@gmail.com>
+ <c21e0e3d-5970-d905-3b6f-54a1ddacd052@linaro.org>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <c21e0e3d-5970-d905-3b6f-54a1ddacd052@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 15 Nov 2022 11:03:24 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On 11/15/22 11:35, Krzysztof Kozlowski wrote:
+> On 15/11/2022 11:31, Lukas Bulwahn wrote:
+>> Commit fff61d4ccf3d ("dt-bindings: usb: usb251xb: Convert to YAML schema")
+>> converts usb251xb.txt to usb251xb.yaml, but misses to adjust its reference
+>> in MAINTAINERS.
+>>
+>> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+>> broken reference.
+>>
+>> Repair this file reference in MICROCHIP USB251XB DRIVER.
+>>
+> You know this could be just one sentence (instead of three paragraphs)
+> with a Fixes tag...
 
-Hi,
+On the other hand, the content is educational, e.g. about the usage of 
+get_maintainer.pl script .
 
-> On 15/11/2022 07:01, Jernej Škrabec wrote:
-> > Dne četrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul napisal(a):  
-> >> On 06-11-22, 15:48, Andre Przywara wrote:  
-> >>> From: Icenowy Zheng <uwu@icenowy.me>
-> >>>
-> >>> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
-> >>>
-> >>> Add support for its USB PHY.  
-> >>
-> >> This does not apply for me, please rebase and resend
-> >>
-> >> Also, consider splitting phy patches from this. I dont think there is
-> >> any dependency  
-> > 
-> > DT patches in this series depend on functionality added here.
-> >   
-> 
-> DTS always goes separately from driver changes because it is a hardware
-> description. Depending on driver means you have potential ABI break, so
-> it is already a warning sign.
-
-We understand that ;-)
-What Jernej meant was that the DTS patches at the end depend on patch
-01/10, which adds to the PHY binding doc. I am not sure if Vinod's
-suggestion was about splitting off 01/10, 03/10, and 10/10, or just the
-two latter which touch the driver.
-
-I can split off 03/10 and 10/10, rebased on top of linux-phy.git/next, and
-send that to Vinod.
-Then I would keep 01/10 in a respin of this series here, to satisfy the
-dependency of the later DTS patches, and Vinod can pick that one patch from
-there?
-
-Cheers,
-Andre
+Acked-by: Marek Vasut <marex@denx.de>
