@@ -2,68 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6243062969E
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 12:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 487076294A9
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 10:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiKOLCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 06:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S237977AbiKOJpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 04:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbiKOLBg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 06:01:36 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD13C264B2;
-        Tue, 15 Nov 2022 03:01:08 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id e189so10378451iof.1;
-        Tue, 15 Nov 2022 03:01:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kCerPG4/dIVYiG6pu2aobx55zKrbPRV4qVM/Qg/oZ1Y=;
-        b=PIPQx6szR9QKl8aLceRVROj79PfcF80u789pDfauQWD6M+7h3i9jJ8+2XEFMSbTzuV
-         Bgtxag/g61ubrMaZA0QJXO+ji1Bx74AH+SUU8efJ/4xNYT4YFjiuDD4EXo2Y2efIOset
-         ZXE8xfUCrjbalNnY0xMsA6tiLIeeGkiy13bVJEykisSvtBEXH9VATc7PhYfUVprYwC8m
-         ShIKB8uN7orDQHZITAR8MBjPKAl6KFdVYNdJGT2ejzRdnbfc7I5c8Ub1P5mSREhRG6gB
-         pCJ6VDL6gLeVzcbOhvrRnI0DlthHYmMeHTYVaS1w0VjO0jQZcgLfN/niv3ZdvSn2JEkf
-         eW8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kCerPG4/dIVYiG6pu2aobx55zKrbPRV4qVM/Qg/oZ1Y=;
-        b=Ml9oYanCmjDLDvtoirN7FpatQyhCwG5TBEWLkClnPnUmX+6z1xd+dfV8p87ouejawz
-         zKOiJoMvrwlsB/+68bPQ2TjUxPjW7cA9Q5dsw/NBPYhvcUvtHfSwFHdyPl+x/HJBiWI+
-         V6zMLp5L8AcHNNLkOLxm83xZvhs4w2UZzlRssJsYIcTflqrsKGJez4eZw1n+wQoXIR1K
-         UQL97MAof4+tar7nLfQWpsfMpIje31ZvoqIbEfX+ufHrunTtk2oJFeJAx4gGFuR041Hk
-         DpsesZOawjjxrB+c1hXY1o3lWsBI1B5aYAeRKpxMrv3Brxkn2m9xEsetTImrLy27IhAX
-         gggA==
-X-Gm-Message-State: ANoB5plgYCiYdB9Ql5Bjdn3PD7CYQu5c2fhJsooFI7qlRhidw8PQlJmJ
-        xPoysF7JVquLZ6nMjKIPx3dYdHNezFMRqA==
-X-Google-Smtp-Source: AA0mqf7DcweC56Tp7uRKx2fD3JpxgIrpPJeuNMREHYmNxGtXFgDgDZoFUqhIl0xKeuf8r6R4k/NUig==
-X-Received: by 2002:a02:85ac:0:b0:363:6dfb:afb8 with SMTP id d41-20020a0285ac000000b003636dfbafb8mr7875615jai.256.1668510068051;
-        Tue, 15 Nov 2022 03:01:08 -0800 (PST)
-Received: from labdl-itc-sw04.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
-        by smtp.googlemail.com with ESMTPSA id x2-20020a92dc42000000b002f956529892sm4956702ilq.2.2022.11.15.03.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 03:01:07 -0800 (PST)
-From:   Enrico Sau <enrico.sau@gmail.com>
-To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Enrico Sau <enrico.sau@gmail.com>
-Subject: [PATCH 1/1] net: usb: qmi_wwan: add Telit 0x103a composition
-Date:   Tue, 15 Nov 2022 11:58:59 +0100
-Message-Id: <20221115105859.14324-1-enrico.sau@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S237119AbiKOJpX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 04:45:23 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F6B101D2;
+        Tue, 15 Nov 2022 01:45:22 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF9XLoA002200;
+        Tue, 15 Nov 2022 04:44:58 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kuuqhv5w8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 04:44:57 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2AF9iup1041297
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Nov 2022 04:44:56 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 15 Nov 2022 04:44:55 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 15 Nov 2022 04:44:55 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 15 Nov 2022 04:44:55 -0500
+Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.160])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AF9iatT023257;
+        Tue, 15 Nov 2022 04:44:38 -0500
+From:   Alexandru Tachici <alexandru.tachici@analog.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <steve.glendinning@shawell.net>,
+        <UNGLinuxDriver@microchip.com>, <andre.edich@microchip.com>,
+        <linux-usb@vger.kernel.org>
+Subject: [net v2 0/1] net: usb: smsc95xx: fix external PHY reset
+Date:   Tue, 15 Nov 2022 13:44:33 +0200
+Message-ID: <20221115114434.9991-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: LS6EtJn5ATURK72BSOcYumpvAnU-d_Wq
+X-Proofpoint-GUID: LS6EtJn5ATURK72BSOcYumpvAnU-d_Wq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_04,2022-11-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=896
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 spamscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211150067
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,113 +73,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the following Telit LE910C4-WWX composition:
+An external PHY needs settling time after power up or reset.
+In the bind() function an mdio bus is registered. If at this point
+the external PHY is still initialising, no valid PHY ID will be
+read and on phy_find_first() the bind() function will fail.
 
-0x103a: rmnet
+If an external PHY is present, wait the maximum time specified
+in 802.3 45.2.7.1.1.
 
-Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
----
+Alexandru Tachici (1):
+  net: usb: smsc95xx: fix external PHY reset
 
-This is the lsusb verbose output:
+Changelog v1 -> v2:
+  - fixed typo in commit message
+  - added reset() callback to the mii_bus
+  - moved fsleep() call to smsc95xx_mdiobus_reset()
+  - moved is_internal_phy bool in struct smsc95xx_priv
+  - added an explicit PHY_RST_ command to PM_CTRL in smsc95xx_mdiobus_reset()
 
-$ lsusb -v -d 1bc7:103a
+ drivers/net/usb/smsc95xx.c | 46 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 42 insertions(+), 4 deletions(-)
 
-Bus 001 Device 008: ID 1bc7:103a Telit Wireless Solutions LE910C4-WWX
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0 
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0        64
-  idVendor           0x1bc7 Telit Wireless Solutions
-  idProduct          0x103a 
-  bcdDevice            0.00
-  iManufacturer           3 Telit
-  iProduct                2 LE910C4-WWX
-  iSerial                 4 e1b117c7
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0027
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          1 Telit Configuration
-    bmAttributes         0xe0
-      Self Powered
-      Remote Wakeup
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-Device Qualifier (for other device speed):
-  bLength                10
-  bDescriptorType         6
-  bcdUSB               2.00
-  bDeviceClass            0 
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0        64
-  bNumConfigurations      1
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0000
-  (Bus Powered)
-
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 30d733c81ed8..c36caf9d6553 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1358,6 +1358,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
- 	{QMI_FIXED_INTF(0x2357, 0x9000, 4)},	/* TP-LINK MA260 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1031, 3)}, /* Telit LE910C1-EUX */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x103a, 0)}, /* Telit LE910C4-WWX */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1057, 2)},	/* Telit FN980 */
 -- 
-2.25.1
+2.34.1
 
