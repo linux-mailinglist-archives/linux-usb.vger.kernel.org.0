@@ -2,144 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABF662993C
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 13:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F342629993
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 14:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiKOMwK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 07:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S237761AbiKONFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 08:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiKOMwJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 07:52:09 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251EB27FC5;
-        Tue, 15 Nov 2022 04:52:07 -0800 (PST)
-Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBQzV5FXczHvsT;
-        Tue, 15 Nov 2022 20:51:34 +0800 (CST)
-Received: from [10.136.108.160] (10.136.108.160) by
- kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 20:52:03 +0800
-Message-ID: <d3393e2f-a79c-d2c1-f752-71bd21a7ddbf@huawei.com>
-Date:   Tue, 15 Nov 2022 20:52:02 +0800
+        with ESMTP id S236796AbiKONFm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 08:05:42 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4FD12ACB
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 05:05:41 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id g12so24359319lfh.3
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 05:05:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mdvIIl4cgeDqGAAZabaWbNUrV+o8u8RyyIYZ5puj5yk=;
+        b=qOtJaIwH5zDp2x+c7JZp5p6url0leqnsVkLXKiytCF+mj9qC/OPnLPj+LipgqD5BoI
+         hfd1LAOrqW8F0caLVPawRfohG+XUQdZMRPGQDRmQndRQpOke7jigxlvXImtU0edjAQsx
+         xFJGxCvvnvcm158dkvd4JFuB0TEz4P7c9P7L/CTPyZrQNGFHJlqpI8U48Ztgi5c+rysz
+         mDLJ+ZjLe6xNgIuWvquFNs1ureCvY4ydvXC/UtTMJ4pAXLkC7lQuZ7fzfuguWyYRh6+5
+         HhOUZ/+sGDPkLAa6p5dj7ekCJIxNILV+zs3IPIUQnORa0pK9Yb3LJq1ULLXemoB2apHk
+         Nd5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mdvIIl4cgeDqGAAZabaWbNUrV+o8u8RyyIYZ5puj5yk=;
+        b=bsZIVVFLOMKak3/YzSTSB2SH1+lh7rEjDlvO+UbEUMCzd2PUqsgymqqDer8WmmK+zH
+         MVeED/2yitKgn0l8KV3pquyVFXpprz104U9X2mURmgSGjbLgOYxn1TdE/0GvdtjBF6n5
+         3V6eKOSS5+dy9pw7GKC/lVhWJxNG3JG8Kow52XIQ6Fu2ply2XokWHsps5zn1zxT70xGr
+         PAYmboMDAVIrIkNhqoJ+Po6cSw91tBwir+E5D6rT6zmFRnZBjnh3q0x9XL+KQUp4aEMP
+         rvCPLil35E6ht4WxTNViQi/dDOqTA+/JEyvTzOW1JkTntdDJ4EeQ6V3gbPivjM01343Z
+         7n8Q==
+X-Gm-Message-State: ANoB5pmG2RYTFfyly9Tjc59E1KHmV3ERjIAyTVPgPNjt8GkB95r/Y4zW
+        0j6LddYSfNRdANjL3hcPk79zgQ==
+X-Google-Smtp-Source: AA0mqf6kInCc+A0yhclN+A1KPhxr4No2Ve/TJmp4KVoenUiZl6E/W2ygFzWNtp+0/7LIUoFw4og0aw==
+X-Received: by 2002:a19:e30e:0:b0:4a2:5163:f61b with SMTP id a14-20020a19e30e000000b004a25163f61bmr5403368lfh.177.1668517539513;
+        Tue, 15 Nov 2022 05:05:39 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id e10-20020a19674a000000b0049311968ca4sm2194132lfj.261.2022.11.15.05.05.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 05:05:38 -0800 (PST)
+Message-ID: <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+Date:   Tue, 15 Nov 2022 14:05:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: [PATCH v3] USB: gadget: Fix use-after-free during usb config switch
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
 Content-Language: en-US
-References: <20221115065404.6067-1-xuetao09@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <jakobkoschel@gmail.com>, <geert+renesas@glider.be>,
-        =?UTF-8?B?5byg5bu65rab?= <water.zhangjiantao@huawei.com>,
-        <colin.i.king@gmail.com>,
-        =?UTF-8?B?6Jab5rab?= <xuetao09@huawei.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Caiyadong <caiyadong@huawei.com>,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-From:   jiantao zhang <water.zhangjiantao@huawei.com>
-In-Reply-To: <20221115065404.6067-1-xuetao09@huawei.com>
-X-Forwarded-Message-Id: <20221115065404.6067-1-xuetao09@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221114111513.1436165-3-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.136.108.160]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500002.china.huawei.com (7.221.188.171)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the process of switching USB config from rndis to other config,
-if the hardware does not support the ->pullup callback, or the
-hardware encounters a low probability fault, both of them may cause
-the ->pullup callback to fail, which will then cause a system panic
-(use after free).
+On 14/11/2022 12:15, Herve Codina wrote:
+> Add the h2mode property to force the USBs mode ie:
+>  - 2 hosts
+> or
+>  - 1 host and 1 device
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  .../bindings/clock/renesas,r9a06g032-sysctrl.yaml      | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+> index 95bf485c6cec..f9e0a58aa4fb 100644
+> --- a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+> +++ b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+> @@ -39,6 +39,16 @@ properties:
+>    '#power-domain-cells':
+>      const: 0
+>  
+> +  renesas,h2mode:
+> +    description: |
+> +      Configure the USBs mode.
+> +        - <0> : the USBs are in 1 host and 1 device mode.
+> +        - <1> : the USBs are in 2 host mode.
+> +      If the property is not present, the value used is the one already present
+> +      in the CFG_USB register (from reset or set by the bootloader).
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1]
 
-The gadget drivers sometimes need to be unloaded regardless of the
-hardware's behavior.
+0/1 are quite cryptic. Why not making it a string which is easy to read
+and understand? Can be something like "two-hosts" and "one-host". Or
+anything you find more readable...
 
-Analysis as follows:
-=======================================================================
-(1) write /config/usb_gadget/g1/UDC "none"
-
-gether_disconnect+0x2c/0x1f8
-rndis_disable+0x4c/0x74
-composite_disconnect+0x74/0xb0
-configfs_composite_disconnect+0x60/0x7c
-usb_gadget_disconnect+0x70/0x124
-usb_gadget_unregister_driver+0xc8/0x1d8
-gadget_dev_desc_UDC_store+0xec/0x1e4
-
-(2) rm /config/usb_gadget/g1/configs/b.1/f1
-
-rndis_deregister+0x28/0x54
-rndis_free+0x44/0x7c
-usb_put_function+0x14/0x1c
-config_usb_cfg_unlink+0xc4/0xe0
-configfs_unlink+0x124/0x1c8
-vfs_unlink+0x114/0x1dc
-
-(3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
-
-panic+0x1fc/0x3d0
-do_page_fault+0xa8/0x46c
-do_mem_abort+0x3c/0xac
-el1_sync_handler+0x40/0x78
-0xffffff801138f880
-rndis_close+0x28/0x34
-eth_stop+0x74/0x110
-dev_close_many+0x48/0x194
-rollback_registered_many+0x118/0x814
-unregister_netdev+0x20/0x30
-gether_cleanup+0x1c/0x38
-rndis_attr_release+0xc/0x14
-kref_put+0x74/0xb8
-configfs_rmdir+0x314/0x374
-
-If gadget->ops->pullup() return an error, function rndis_close() will be
-called, then it will causes a use-after-free problem.
-=======================================================================
-
-Fixes: 0a55187a1ec8 ("USB: gadget core: Issue ->disconnect() callback 
-from usb_gadget_disconnect()")
-Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-Signed-off-by: TaoXue <xuetao09@huawei.com>
----
-V2 -> V3: Solved the format issues of Fixes and backtraces.
-V1 -> V2: V1 will affect the original function, V2 just move the callback
-after "if" statement, so that the original function will not be affected.
-And fixed formatting issues.
-
-  drivers/usb/gadget/udc/core.c | 12 ++++++------
-  1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index c63c0c2cf649..bf9878e1a72a 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
-  	}
-   	ret = gadget->ops->pullup(gadget, 0);
--	if (!ret) {
-+	if (!ret)
-  		gadget->connected = 0;
--		mutex_lock(&udc_lock);
--		if (gadget->udc->driver)
--			gadget->udc->driver->disconnect(gadget);
--		mutex_unlock(&udc_lock);
--	}
-+
-+	mutex_lock(&udc_lock);
-+	if (gadget->udc->driver)
-+		gadget->udc->driver->disconnect(gadget);
-+	mutex_unlock(&udc_lock);
-   out:
-  	trace_usb_gadget_disconnect(gadget, ret);
--- 
-2.17.1
+Best regards,
+Krzysztof
 
