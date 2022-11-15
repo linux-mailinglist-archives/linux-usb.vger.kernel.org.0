@@ -2,137 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C937629CD7
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 16:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC3E629D02
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 16:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiKOPBA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 10:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
+        id S230491AbiKOPJ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 10:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKOPA7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 10:00:59 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF442BB20
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 07:00:58 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id b3so24837924lfv.2
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 07:00:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F4jUAwmhTQdTrwQKeKo2XqBWyE1rzqyVY9EqrXd1rb4=;
-        b=yWlfIKfy1RjmW4cqzHEQYZ0P6H3bTMh70oUTOEi7dAkF6t8/GEcAvUZrYY7ugZZsqp
-         /Hdlt3APkEkt28div8SyumBc1+KVCvgc+INVTlcp1s0IjvJP1g3lG8iXVGjywGKjifnQ
-         aBxGT/fImyqWcbDHuZo0DLe7CU3jeOKDALA+4i5GjRScq2+6OkW7Bae3IW6l4ALmAWyJ
-         k8ItIm9bclRbK98aOf6+tZRbqG+vjjwR2z5J/m1NugPrip33q9SXyHy7JM2XyUf1ivkS
-         4ygWO41BOOQG7sz54oV2TzccEwfKTVfRC/qbv8duc9T/J5XeHLurKqwVbKDi+C4ljgf1
-         13Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4jUAwmhTQdTrwQKeKo2XqBWyE1rzqyVY9EqrXd1rb4=;
-        b=XpeIfD1eSKj6COkkEjip0Fqx+3osYQDrImRfOyimUUoe5dKUV5KkqFovt+hZEBW1TE
-         tQyScZZKQh6lw8B2ZsJ5i2IpRKGPbb06ORfuiHRAVY5z8sUWbqneQvxEZen/vA15YdX8
-         tTXDxkEqm+ALiZR/5fla+q4jjz/tyDkSx7yTkxTCPeDrolYx3mOPRgn/ubtz2lV+mXKB
-         3/v+g8Gb1szi7oHYaGNrKli4fS7PcGQooWjtN3D6iPdl4AYfs3VYCWfYgLk1tDvxx1uE
-         bjkBrZwklvxHLfGOlsHl9NxfE0BwCv5AP4qUsZNWn2SMb1SO4QaWmVCtGktRZ5+K8qJF
-         hG3g==
-X-Gm-Message-State: ANoB5plY9CkodjF0Xkcd8wkxY2fiG4FpbqN14ELiUmj256+rSHMTKhN0
-        TG8eyYvEg7B4INIKe2Qu1jmhqg==
-X-Google-Smtp-Source: AA0mqf7YV/RWxvpJd+exJ8ozFBpdV0AmoKBtjMSdoMFabRmcv88VA/ScE0Y/rh2lP/33+6Vl6LgfIg==
-X-Received: by 2002:ac2:5396:0:b0:4a4:6ee3:f57b with SMTP id g22-20020ac25396000000b004a46ee3f57bmr5439911lfh.17.1668524456417;
-        Tue, 15 Nov 2022 07:00:56 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y29-20020a19641d000000b004a22599c4ddsm2234896lfb.268.2022.11.15.07.00.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 07:00:55 -0800 (PST)
-Message-ID: <4516dcfb-b928-d454-18a6-bd725f39cc24@linaro.org>
-Date:   Tue, 15 Nov 2022 16:00:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on
- F1C100s SoC
-Content-Language: en-US
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
+        with ESMTP id S230165AbiKOPJZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 10:09:25 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630037664;
+        Tue, 15 Nov 2022 07:09:21 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 47A9AC0006;
+        Tue, 15 Nov 2022 15:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668524960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=52nZTyzLtyLE0oMbZMuPmwJjms8J7lFPa4BIfaCMGt8=;
+        b=Qdgpyqb++6k8h2Ul3v4+WDXeTugffLUG8/ox2YuZ9jkQakjENUumrptpRObBjztTwMiSJW
+        /UktSqmj/blsk2CPlU645Te7QzJWC6T/KO+gusI8l9yE0SYLzDMW7WGWFIJ2HKPe70u7KJ
+        7IjpyUTnISrtXARiMfZ97to3FiW9zSosv8CnXeu8bwUgH5b0qzQCzOa/T6a1pZrHdEQ56Q
+        yir514nkITii/3WblZTLcb39qjCoU+juEipCLiP2wgbdqlYYkvb5nZk54mxAYCWRV7h6Ka
+        SR/3hWaW52GXwRzFGCF2ZUDZ81kOeOG1qG98I/gIW1MxVWHorJFgGMFBRPv5GQ==
+Date:   Tue, 15 Nov 2022 16:09:17 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Icenowy Zheng <uwu@icenowy.me>, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-References: <20221106154826.6687-1-andre.przywara@arm.com>
- <20221106154826.6687-4-andre.przywara@arm.com> <Y2ypy0CM8rJGu2g4@matsya>
- <4438485.LvFx2qVVIh@jernej-laptop>
- <52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
- <20221115104426.20728ba5@donnerap.cambridge.arm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115104426.20728ba5@donnerap.cambridge.arm.com>
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 6/7] ARM: dts: r9a06g032: Add the USBF controller
+ node
+Message-ID: <20221115160917.73e7b4ef@bootlin.com>
+In-Reply-To: <20221115142754.6253881b@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        <20221114111513.1436165-7-herve.codina@bootlin.com>
+        <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
+        <20221115142754.6253881b@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/11/2022 11:44, Andre Przywara wrote:
-> On Tue, 15 Nov 2022 11:03:24 +0100
+Hi Krzysztof
+
+On Tue, 15 Nov 2022 14:27:54 +0100
+Herve Codina <herve.codina@bootlin.com> wrote:
+
+> Hi Krzysztof,
+>=20
+> On Tue, 15 Nov 2022 14:16:27 +0100
 > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
-> Hi,
-> 
->> On 15/11/2022 07:01, Jernej Škrabec wrote:
->>> Dne četrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul napisal(a):  
->>>> On 06-11-22, 15:48, Andre Przywara wrote:  
->>>>> From: Icenowy Zheng <uwu@icenowy.me>
->>>>>
->>>>> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
->>>>>
->>>>> Add support for its USB PHY.  
->>>>
->>>> This does not apply for me, please rebase and resend
->>>>
->>>> Also, consider splitting phy patches from this. I dont think there is
->>>> any dependency  
->>>
->>> DT patches in this series depend on functionality added here.
->>>   
->>
->> DTS always goes separately from driver changes because it is a hardware
->> description. Depending on driver means you have potential ABI break, so
->> it is already a warning sign.
-> 
-> We understand that ;-)
-> What Jernej meant was that the DTS patches at the end depend on patch
-> 01/10, which adds to the PHY binding doc. I am not sure if Vinod's
-> suggestion was about splitting off 01/10, 03/10, and 10/10, or just the
-> two latter which touch the driver.
-> 
-> I can split off 03/10 and 10/10, rebased on top of linux-phy.git/next, and
-> send that to Vinod.
-> Then I would keep 01/10 in a respin of this series here, to satisfy the
-> dependency of the later DTS patches, and Vinod can pick that one patch from
-> there?
+>=20
+> > On 14/11/2022 12:15, Herve Codina wrote: =20
+> > > Add the USBF controller available in the r9a06g032 SoC.
+> > >=20
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > > ---
+> > >  arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
+> > >  1 file changed, 12 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a=
+06g032.dtsi
+> > > index 563024c9a4ae..a4bb069457a3 100644
+> > > --- a/arch/arm/boot/dts/r9a06g032.dtsi
+> > > +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+> > > @@ -117,6 +117,18 @@ dmamux: dma-router@a0 {
+> > >  			};
+> > >  		};
+> > > =20
+> > > +		udc: usb@4001e000 {
+> > > +			compatible =3D "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
+> > > +			reg =3D <0x4001e000 0x2000>;
+> > > +			interrupts =3D <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> > > +				     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+> > > +			clocks =3D <&sysctrl R9A06G032_HCLK_USBF>,
+> > > +				 <&sysctrl R9A06G032_HCLK_USBPM>;
+> > > +			clock-names =3D "hclkf", "hclkpm";
+> > > +			power-domains =3D <&sysctrl>;
+> > > +			status =3D "disabled";   =20
+> >=20
+> > If you provided all resources (clocks, power domains etc), why disablin=
+g it? =20
+>=20
+> Because I forgot to remove the 'status' property ...
+> 'status' will be simply removed in v3.
+> Sorry for this mistake.
+>=20
+> Thanks for the review,
+> Herv=C3=A9
+>=20
 
-There is no hard dependency of DTS on bindings. You can split these (and
-some maintainers prefer that way) and in DTS patches just provide the
-link to the bindings, saying it is in progress.
+I said something completely wrong for this point.
 
-The bindings should be however kept with driver changes as it goes the
-same way.
+status is set disabled because it is a .dtsi and can be
+included by several dts to represent a board.
+This node (USB device) can be wired on some board and not on
+some others.
+So, the node will be enabled in each dts board that has the USBF
+device wired and used.
 
-Best regards,
-Krzysztof
+Herv=C3=A9
 
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
