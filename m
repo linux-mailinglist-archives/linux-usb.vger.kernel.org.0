@@ -2,152 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C505629F14
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 17:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D34D629F80
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 17:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238670AbiKOQay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 11:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S231976AbiKOQr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 11:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiKOQax (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 11:30:53 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C8F64F4
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 08:30:52 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id d20so18189444ljc.12
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 08:30:52 -0800 (PST)
+        with ESMTP id S232144AbiKOQrX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 11:47:23 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288A426101
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 08:47:23 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso13543055wme.5
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 08:47:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WgmhkilsxspOz5NWRqSMIhLipP/HJEPgQBayMZdWBrw=;
-        b=FGIToAWnLxWH/nNXH4Bc8NPARTKs+TGdOcxBxW+NwDA8ogN+41Yy9hAXq6hZYmg5rm
-         E5WwGRSzNfdPh4RKw/qzCgAmNx8PB8fXQiJY2BhtgUBmp2Wg7DPDkLXeTQW5jCRBpxUY
-         5ZI96mIUE34Ez+kcUW/KBPbPmebd5pme11C81WRfl+TtOWA8AetIBdJ4T/5GXw1AdiD8
-         A0t+yrlvyW45uGPQND8zUBzZ4ec5l4T6aWUCCFvntu2dB2D4qP1ff4rpqYZ0Q1cbiNC1
-         6tPcToXU5iuwpTLyY1xq8ZYZB7aO47yzHWDD+rngVtDKcK04TfoXgLJvMDDzuW1ExSho
-         dvBQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cFmINEhyGbM7uHzxf1eCXGgs4FcqEpShAwAlqKgu+SI=;
+        b=oIhg1e565mdyLPnSC20xyadQ76N7zeF6RaG/EAJIF9kQVkOmvT/gq05XJfMHxqJsBN
+         PxxuS8mJpzIIvAKTCZ6jTs/AcPy12mMn0ztMdresLQlc+51+nrtrctH227bAXkV1UwHs
+         +Ec3WRyI4wBLdxNtHg6bbUPj5zmatopfQPu0K7GsKNGiMOEudXXKY+gGOfbg5zZpBO6E
+         OdAS395hjRzTk9aEX+6tTm0DIY7/CF0KHOSawoARs9Z7msSla3y5k+ebbVsDxT4pKzLd
+         aI+ZbV9yzn6IBglD5zshKAU3T/VIincGN2+2z9/aPTyIkjZPZm3gV355sguXJVAeGAmH
+         UOCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WgmhkilsxspOz5NWRqSMIhLipP/HJEPgQBayMZdWBrw=;
-        b=Lg1CBPNzqdf1MC+af4ZO/+7T4kkloUiuYK1acbZpA8CIMY7yXZuVnDzR+kleZW+chf
-         uz8TnR5t9SxKTyDT1HRtLBhDTWiA8V0ONuaGB9R9uQkLopncvmjJ+LH5mIn2jTZMUomw
-         iNBktVMN8B4hqzsJGmVhLGfjm2VDWvCc8yXUeFQxYcuceeybLu0RRZqGpDWZ1iz0Mqr2
-         yAlD7m3MMki2MjihEpDK+LF4G16Y3V0ZnQT4+REjyLYuEqfMCoAKofqKtgQf5p7HMHjS
-         C3Jm99Xk5tHkBx+ux7iLFIR8cHN30nhpcVIXSo3qlhZr3j5v3Lf5rT4DvYTF4u5U+eHV
-         /RQg==
-X-Gm-Message-State: ANoB5pmJEsYwsdA/5g1uqlY8Yj+NKkoBOTYpNxFiLqKlmFidPSqjl3rZ
-        Uz3ONzwrXa96bpcVQ34VrFxy9Q==
-X-Google-Smtp-Source: AA0mqf6Tx5INGoZ78d+9myc+vdTm5mzsmp5rLWprRQV1O1l0dTir56KzqEnejFqId0Li9Ws03Fr7Vw==
-X-Received: by 2002:a05:651c:2314:b0:277:2123:120e with SMTP id bi20-20020a05651c231400b002772123120emr6513113ljb.4.1668529850815;
-        Tue, 15 Nov 2022 08:30:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v14-20020ac258ee000000b004998d9ccb62sm2262902lfo.99.2022.11.15.08.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 08:30:50 -0800 (PST)
-Message-ID: <8e80a8ae-41dd-3f17-b165-eaba5335ae68@linaro.org>
-Date:   Tue, 15 Nov 2022 17:30:49 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cFmINEhyGbM7uHzxf1eCXGgs4FcqEpShAwAlqKgu+SI=;
+        b=XVrpchLYZx5SiY+Oydi+Pb78stDZaOqV0F1aI0gyjQO8RwtXFAR5vkq0CNfFz/vMud
+         yLDZdjSkdnEeWyiEMX3IdRrhvIwad+adnYUmPbNsooePBCHoDTABDynG8NfH/QTm4dma
+         2BVHaNGtXDGup3jJ6HoarmyZKpDnDXkQKb79bqGHEg7z5eX2n8xaSHoVLrsxXtCZjzBx
+         zzOjBRdVBboc7CSKjafbcr0R061oE0T58dwJSLOUnw4f7RYQ8zLjT45cNiqUXFzY70sE
+         sqF5BRO+1C+3ppyXcbNJsdmqTwCc9d1V9FfD8vGFs9LbehueFF1H72WCryxsoEmpAACB
+         Lmlg==
+X-Gm-Message-State: ANoB5pkhUn3dFq8H/KQmgBJOMQZg/Qo98c5BGbMQSAaRLDvEFyPSQvVR
+        dfyXmCZ+bcvaR2Pv90U8MPM=
+X-Google-Smtp-Source: AA0mqf6IZgHPgtwcH3BJmtWrj/rAYKbZVCgMbCYMkIMcWQfn/9jfsPfm53Qw8Pw4qE3yugEXRLDURw==
+X-Received: by 2002:a7b:cb0c:0:b0:3cf:d08d:3eb2 with SMTP id u12-20020a7bcb0c000000b003cfd08d3eb2mr2207687wmj.129.1668530841569;
+        Tue, 15 Nov 2022 08:47:21 -0800 (PST)
+Received: from testvm.. ([185.215.195.243])
+        by smtp.googlemail.com with ESMTPSA id m6-20020a05600c4f4600b003c6cd82596esm23895514wmq.43.2022.11.15.08.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 08:47:21 -0800 (PST)
+From:   Davide Tronchin <davide.tronchin.94@gmail.com>
+To:     johan@kernel.org
+Cc:     cesare.marzano@gmail.com, davide.tronchin.94@gmail.com,
+        gregkh@linuxfoundation.org, larsm17@gmail.com,
+        linux-usb@vger.kernel.org, marco.demarco@posteo.net
+Subject: Re: [PATCH v5 1/3] USB: serial: option: remove old LARA-R6 PID
+Date:   Tue, 15 Nov 2022 17:46:54 +0100
+Message-Id: <20221115164654.38632-1-davide.tronchin.94@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y3NmKk0Xte04qxwS@hovoldconsulting.com>
+References: <Y3NmKk0Xte04qxwS@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 6/7] ARM: dts: r9a06g032: Add the USBF controller node
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
- <20221114111513.1436165-7-herve.codina@bootlin.com>
- <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
- <20221115142754.6253881b@bootlin.com> <20221115160917.73e7b4ef@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115160917.73e7b4ef@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/11/2022 16:09, Herve Codina wrote:
-> Hi Krzysztof
-> 
-> On Tue, 15 Nov 2022 14:27:54 +0100
-> Herve Codina <herve.codina@bootlin.com> wrote:
-> 
->> Hi Krzysztof,
->>
->> On Tue, 15 Nov 2022 14:16:27 +0100
->> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>
->>> On 14/11/2022 12:15, Herve Codina wrote:  
->>>> Add the USBF controller available in the r9a06g032 SoC.
->>>>
->>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->>>> ---
->>>>  arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
->>>>  1 file changed, 12 insertions(+)
->>>>
->>>> diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
->>>> index 563024c9a4ae..a4bb069457a3 100644
->>>> --- a/arch/arm/boot/dts/r9a06g032.dtsi
->>>> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
->>>> @@ -117,6 +117,18 @@ dmamux: dma-router@a0 {
->>>>  			};
->>>>  		};
->>>>  
->>>> +		udc: usb@4001e000 {
->>>> +			compatible = "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
->>>> +			reg = <0x4001e000 0x2000>;
->>>> +			interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
->>>> +				     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
->>>> +			clocks = <&sysctrl R9A06G032_HCLK_USBF>,
->>>> +				 <&sysctrl R9A06G032_HCLK_USBPM>;
->>>> +			clock-names = "hclkf", "hclkpm";
->>>> +			power-domains = <&sysctrl>;
->>>> +			status = "disabled";    
->>>
->>> If you provided all resources (clocks, power domains etc), why disabling it?  
->>
->> Because I forgot to remove the 'status' property ...
->> 'status' will be simply removed in v3.
->> Sorry for this mistake.
->>
->> Thanks for the review,
->> Hervé
->>
-> 
-> I said something completely wrong for this point.
-> 
-> status is set disabled because it is a .dtsi and can be
-> included by several dts to represent a board.
-> This node (USB device) can be wired on some board and not on
-> some others.
-> So, the node will be enabled in each dts board that has the USBF
-> device wired and used.
+My apologies, this is my first attempt to submit a patch to the kernel
+community.
 
-So it depends on having the connector? Yes, makes sense as well.
-Actually my recommendation was about internal parts of OS, which usually
-do not require anything from board. I missed the part that it is an USB...
+> We've asked you repeatedly whether you for u-blox or not, but you keep
+> ignoring this question. Knowing this would allow us to better evaluate
+> the reasoning and motivation behind this this change.
 
-Best regards,
-Krzysztof
+Yes, i am a u-blox employee and i've been asked to integrate LARA-L6 in
+the linux kernel and update the current code for LARA-R6 00B (updating
+the PID from 0x90fa to 0x908b).
 
+> The above commit message still does not explain why you want to remove
+> it and whether it would be safe to do so. Why was added in the first
+> place? What u-blox products used the old PID?
+
+The first prototype of LARA-R6 00B had 0x90fa PID but, just before the
+product finalization, it has been decided to adopt a new USB composition
+and consequently a change of PID was necessary.
+The 0x90fa PID has been used only for some internal prototypes, hence
+no u-blox products with that PID have been shipped to customers.
+As pointed out in the discussion, the 0x90fa PID is used by other module
+vendors which sell Qualcomm based modems, hence i proposed to remove the
+association between u-blox (thedefine UBLOX_PRODUCT_R6XX) and 0x90fa,
+moving it directly in the option_ids array.
+
+> By just removing the define this is less of an issue, but you should
+> not make the life of reviewers harder by ignoring request to properly
+> motivate your changes and explain why they are safe to apply.
+
+My apologies again, thanks for the patience.
+
+> You can either put a shared changelog for the whole series in a cover
+> letter, or you describe changes to each individual patch. But mixing the
+> two styles as you do in this entry is just confusing.
+
+Thanks for the suggestions. In order to simplify the submission process,
+i propose to split the submission for the LARA-L6 patches and the update
+for LARA-R6 00B.
+Do you think could it be feasible?
+
+Davide
