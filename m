@@ -2,179 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8856294AC
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 10:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC98629852
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 13:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238007AbiKOJpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 04:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S237972AbiKOMOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 07:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238005AbiKOJp1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 04:45:27 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE551FFA0;
-        Tue, 15 Nov 2022 01:45:26 -0800 (PST)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF74xAB028085;
-        Tue, 15 Nov 2022 04:45:00 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kuvksuxek-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 04:44:59 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2AF9iwXR057517
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Nov 2022 04:44:58 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 15 Nov
- 2022 04:44:57 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 15 Nov 2022 04:44:57 -0500
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.160])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AF9iatU023257;
-        Tue, 15 Nov 2022 04:44:53 -0500
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <steve.glendinning@shawell.net>,
-        <UNGLinuxDriver@microchip.com>, <andre.edich@microchip.com>,
-        <linux-usb@vger.kernel.org>
-Subject: [net v2 1/1] net: usb: smsc95xx: fix external PHY reset
-Date:   Tue, 15 Nov 2022 13:44:34 +0200
-Message-ID: <20221115114434.9991-2-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115114434.9991-1-alexandru.tachici@analog.com>
-References: <20221115114434.9991-1-alexandru.tachici@analog.com>
+        with ESMTP id S237700AbiKOMOg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 07:14:36 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2061.outbound.protection.outlook.com [40.107.244.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCF61EAF0;
+        Tue, 15 Nov 2022 04:14:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mz5UQoWFI9jYQo/HPdTmEiOyejT1Jcuvr8iKAjYyHWj+t/5U5cJM/638FPKXmXCevKfWDX+M4xpDcgYb3yrUM5dyDz/EYiO2U+akQ02ZsSK3uNHOXQsNHeaJONedKF6QCt+elU57mh2t7+VCISr+O1F5BbBZoe1L+wInVC110Bt6DKivCSnbTSClq6Nzlzir0UNNEqkQkRMc89LPZwWodS1M2mPoqWkcSk8RDgioKdQHfjzzXDNam1u0XQzJxo9Bwj4cyGz8IigOWrFIGxUQGMQu+ao5EBSreeE8P3S/GbprOOs28Yz9BMYQjH1qMV+Z3a31m57biZD71cSbk3WlQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j7lju3MOafITt9bLR37vsQ/X/JuaXAliLKqCeAQLruA=;
+ b=eGS2fQVGRlr1Gm7UEi0qZwXzho7VUAyuYBSMUG6a+Zf+d4rNSG/gpj21+Q/CozO3nl3SJROv15KfvPX9WJBjoagw/gTw5quz+fTzJOE6AKY8I4wNvYtTgcUdKSoHiGK46hJ4fj0U1EoWkKr6/2PnpoZshwm9C0iysZKUMyyrPzKHgZk9Mc5Gpcd8JE1u4ER4XYfO4ZjTnOp8ttPlsEB5abph0SFMMHs1kRH1I875T0LOc49GVpJbgqJST71EhcvUdf6vGqlxULK0a4KGAvr/+2o9BQVtXy/UfkpatZjtfRBb9ut09ZKtB2Nkcwr1wUtmCvLE+q4zeiVdevPncwTV6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j7lju3MOafITt9bLR37vsQ/X/JuaXAliLKqCeAQLruA=;
+ b=oapZ5a4gs4RuexsskgmA596ZboVxlW2ttWgzHbwiNATjre3qVvEhmtJIgnXp4h+6uPpG4LBISM0XKOb/0Y7iJlGX/mkZaVmYp+bIoQcCEzM3UGgTr4x4DrTk3F+7294eg1iMPGWGhvwkgNJudvnAbGPmjT72U4CPXsghzvbco3xSr+UcOG1aLgixTOcz3hMmKwNuRmgassMgzGHsg7WyiIgh3+GAiGSqY41iMkKu4DIsGVk1oyAGn0Jy2kjvnfOJDoSgRpjg4dN/PLKruxEY6QwZVYpKnUBGImSB+MRs/F0tKTgg5TD3fSl0y+aMZGuqzDPDZkYduP91A2DHsPlv0A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ SJ0PR12MB7082.namprd12.prod.outlook.com (2603:10b6:a03:4ae::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
+ 2022 12:14:29 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::8edd:6269:6f31:779e]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::8edd:6269:6f31:779e%5]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
+ 12:14:29 +0000
+Message-ID: <49345de8-319c-ce75-fd35-3d9cc673d988@nvidia.com>
+Date:   Tue, 15 Nov 2022 12:14:21 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 01/13] dt-bindings: usb: tegra-xudc: Add Tegra234 XUSB
+ controller support
+Content-Language: en-US
+To:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        treding@nvidia.com, thierry.reding@gmail.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+References: <20221114124053.1873316-1-waynec@nvidia.com>
+ <20221114124053.1873316-2-waynec@nvidia.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20221114124053.1873316-2-waynec@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO3P265CA0005.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:bb::10) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: B14qenhWzzHc7iPdXb2si1YDU4hGhPjY
-X-Proofpoint-ORIG-GUID: B14qenhWzzHc7iPdXb2si1YDU4hGhPjY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_04,2022-11-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=717
- lowpriorityscore=0 spamscore=0 mlxscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 adultscore=0 clxscore=1015 phishscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211150067
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|SJ0PR12MB7082:EE_
+X-MS-Office365-Filtering-Correlation-Id: acb4fdd7-38e3-40e5-3c88-08dac702f214
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: juDKQrJvNTVs1VH+eQyTI17530RM/uIpbGCXzhFdY2htyakkbcKcGi2UoWalw1WymN9jW1JO+nu4HIjXAP20A4ToXA20bPKU3x+PVmc1EXHyt4yBqVcJiYpW89E+hSW+cdZNT5bQMhk6KiWbSwtU2Qm9Szmpk/g2ngwe5/5LDiY2vFiLg7ABO4I1OrhBl2HpENp64uZ/NwHN4fHo1ff/qvSMb2eNclihguQDcgb9br4mm4PNk9GS/zDrzpWIcwSbBXvEp3bFhOmIEKSAeAKUBdzwCuQu4FRh1Mhn/cevo7Xo7tWoXgBUP6XVz+5WfMwUGIBrrWg0dDanSzXRj0wXo1UsUp1DCUV0n42DmGem+IQjn8XdnAoKRM+OxYLhRKNGvKHSyjWSfIgXVDL2UymBnwb1GXiqfN5VxIWwOvq3m8svUPP0zjURjhXMDgwukVxJYhkEGdIWQ9eMOCGJip8PU3Zce2Item3+n2NKLteLB2RmfNObpZKo73k+YBVd11JZhtQRn/DjOyo/JaumBMnnOeas2yy99QMoEbZAjP7lrj/jDC32ol29S6q+2rHIkvriuonJEHUsOhnn8EVrcBnvP5tW06+yrxECYHim35UOp/RSHYdwGsHRmiBfRFCNd1Qb1bYKKR4Kh/n7J868Wkrjw4NrZh4AXkToTUkJVXVPiDBwTnOvbEupw1lr5evjn0312eppERs7X3wdk4UQxEomvOdm4yV1g4ETi7XLNQMBqGi+wTVtcSlpdNIqgPvA582E9rWDUXGivgI20C0my7WQEX600cN5UwY1RF3QqVSMDnrywPGmy3VgfKfbbVPrMx10
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(136003)(366004)(451199015)(4326008)(26005)(66476007)(6512007)(66946007)(36756003)(41300700001)(5660300002)(7416002)(186003)(2616005)(8936002)(8676002)(66556008)(316002)(55236004)(31696002)(86362001)(38100700002)(53546011)(83380400001)(2906002)(921005)(6666004)(31686004)(6636002)(6506007)(6486002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WVFteW5PaGVqa3NRUEJzdG1TRUx4SUczcG9JallCUUoyMFYxcGhENXMvZTIx?=
+ =?utf-8?B?NkRFejBqL04xcS9YVi91SVdiQVhHQThxbGdwZmxCN093U3JVc2h0bW42S1VZ?=
+ =?utf-8?B?MTNNM1lYVGVnOU1HK3lCaDR2eXUveWd2ZzJzcVVMTVlNaGo4d1pEbmR0bjhw?=
+ =?utf-8?B?ZHNLTzM2SnVCTmxpZy9MOUJlM1EydGZ3Zis3YnRoTlBta3RDRGZXVngwNWtH?=
+ =?utf-8?B?TUI0dmZ2VTg4d3dlUUs3dU5LYXcvanRvUHlKNjdLemZmbjB2QzVrN1UraWlw?=
+ =?utf-8?B?b3U0OEhRK0V2Tm51U0ZhTzBsWmNJU0RKR0RoOXIwdVluT3J5dlovbTUvc2dT?=
+ =?utf-8?B?Y1JNWnJPOEpyNmR3eWhISHI5SlZrUHI4Wi83VjFJbjB2aFhFUTZHdkhtZS8z?=
+ =?utf-8?B?OW12TXhTYlVrcEswUy9FRnpmVUt0aVlpdm1zc200dHZ6S25mMk1ka095dXR6?=
+ =?utf-8?B?TTh2QWNuMndJQlpqUnJwMGpGUVphTnB2dUJzamxqN2tUYTI5SHFqQklwOTRI?=
+ =?utf-8?B?MFRZbWJoUHBmODEzeVlyWEl5TFAwR1VRSEhSRk5aN2hkT1hKeTZBek9OY3dE?=
+ =?utf-8?B?VVl3N0h5ejMrUTkwdzdyUlZJRUdPQlBlaUwyOVNvNW5SVnk5Nys3c0xtbDlj?=
+ =?utf-8?B?dE9BWlZWdm53RE8xTVNNa0plbWY3YVg0TjZkV0hlRnp2a2tYbjdMY1JEYVFh?=
+ =?utf-8?B?OEg0aFV4b00vNG1PclB1UlFFYTkzc083UTBOUVFhMWJFV0ZsSlZvL2t6TmtW?=
+ =?utf-8?B?dGw0aTgvR3dNbVBoc1dmdGluR05iY2RVMHFSSDlRZVJKQmdwRjNmaUx6M3BX?=
+ =?utf-8?B?clA1aEZHdnk1emlCeUJEeXl5MmVYVWcxMkljSUdYS2RlaGdCOWlzL1VLVnI3?=
+ =?utf-8?B?b04vb0dNU3lLQWtEMFpCVnlYUDRtWmRTUlZlblIzQSsrSVJ4enBSQ1hTZ1NT?=
+ =?utf-8?B?ZVRhUG45NmNRVGFaS2JQRlVTRjhic2pqWi9VMWJGUnFVVDhoWmdDWHVJTzdY?=
+ =?utf-8?B?aU1TQVZKU1JOblNPTHZoSHhIRk01bVhTNHM5cWs4OUhhMWNJMHBnZWluZE5w?=
+ =?utf-8?B?MDhadkZESXFkNXNSd1pVNHMyQ2ZhSmw5RTdGakM2bUQ3NDc0bS95ZnRZU09l?=
+ =?utf-8?B?SlNpQml6VXpMNFdwRGVFVTdmNlYxWkQvRFBvL2ZkUVVock1vV1pGckRpTmZm?=
+ =?utf-8?B?c1BiM0crNXlQYXFGWCtEL0pKaS91VjAxY1lDRStZNHVIUzdiVDdCeUlWQVF1?=
+ =?utf-8?B?bVNmTDFCMlIrdnJtWmlaUHNVbHFoSitISkYwMFpHeGxsRloza3cvT1NySmRP?=
+ =?utf-8?B?SjFWdytyeEtkUmNuVjR6YkJxUnRjbjN2K2c5S2FxNXdvQ2lHd1EwVS80NHhG?=
+ =?utf-8?B?UHdaV3FOb2M5MHNlaDZNNHFRMUlhV2RMdTZ3S1FjT1BjbGdKNE94VnpPMDNF?=
+ =?utf-8?B?cnVzTnYrVXYzRlJjdnBsQlBCWnJMRktDeDRGZjJaWXNrRWhzVU54azZiY1NY?=
+ =?utf-8?B?S0szTTVBek41Qm9uSzN4bCtlbVFZN1BzZXNYd3R2VmdwM3cxMUNpbWpMUWU1?=
+ =?utf-8?B?MkNJUit3Vm9kWjhGclRnTlYzeUQ3WGZDUExxdGdFUEdsekJPVDBhRlFkZ0Nt?=
+ =?utf-8?B?WUlZL2grZ0lyem1kWDJtQ3pzeFVpanIxalAzYmpQY0M4YmIvWVdRT3R2cjhu?=
+ =?utf-8?B?ajBqd0xhZFpSMlJNMHdCK2h0M0FtaHpuZ2pTZ1I0YVR0Mk9UbjNBRlg3c2lt?=
+ =?utf-8?B?WXpxK29LYXdlS0E2S1piL3VpaTNQZ3VRaVpBM0NZVnBtYW85elowU3daOURa?=
+ =?utf-8?B?TTNKOFp1T3BRbFk5WkpwbGZmK1V2dlNFMUxZc1UzRFlsZGRlMThIeWExU3E4?=
+ =?utf-8?B?VUt2NlI5c1lnbXlOTE5QYnRGZ1MyQm1HNEQweDNzWjk2U3JvWVNjU2tnendu?=
+ =?utf-8?B?bzVqUVVLd2hTYVVRL1RXN2pDY3dEa3RtcnZmWUd6Q1pEb0hRdGxsRFllanNI?=
+ =?utf-8?B?cWtabmFuaE95dFRRNVEycmx2YytOZHB6dE5rQ3ZucUdxWGRhbWVhUzlFb2Fm?=
+ =?utf-8?B?ME9mUU00eVN6SmNoUUNhNzFSTGlESzBmRkQ1NjNtbkNEVkVDNlJ3bFBEbzYr?=
+ =?utf-8?B?a3dlV091Y2ZSOVNoc0s1aWR3TWZmNzZ0NWNHd0JFMVVObks3R0lXT3BOOVBV?=
+ =?utf-8?B?T1E9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acb4fdd7-38e3-40e5-3c88-08dac702f214
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 12:14:29.4589
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0Vb1qADWLw3kfOrOkjg5TBOD7VVd6TMEGHEs6Y04YSc1Z9DkE316DCW0sBGjE0zOjn816d3kerGtw5m3AlQsgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7082
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An external PHY needs settling time after power up or reset.
-In the bind() function an mdio bus is registered. If at this point
-the external PHY is still initialising, no valid PHY ID will be
-read and on phy_find_first() the bind() function will fail.
 
-If an external PHY is present, wait the maximum time specified
-in 802.3 45.2.7.1.1.
+On 14/11/2022 12:40, Wayne Chang wrote:
+> Extend the Tegra XUSB controller device tree binding with Tegra234
+> support.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+> V2 -> V3:nothing has changed
+> V1 -> V2:address the issue on phy-names property
+>   .../bindings/usb/nvidia,tegra-xudc.yaml       | 24 ++++++++++++-------
+>   1 file changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> index fd6e7c81426e..52488a731c4e 100644
+> --- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> @@ -22,6 +22,7 @@ properties:
+>             - nvidia,tegra210-xudc # For Tegra210
+>             - nvidia,tegra186-xudc # For Tegra186
+>             - nvidia,tegra194-xudc # For Tegra194
+> +          - nvidia,tegra234-xudc # For Tegra234
+>   
+>     reg:
+>       minItems: 2
+> @@ -90,21 +91,27 @@ properties:
+>   
+>     phys:
+>       minItems: 1
+> +    maxItems: 8
+>       description:
+>         Must contain an entry for each entry in phy-names.
+>         See ../phy/phy-bindings.txt for details.
+>   
+>     phy-names:
+>       minItems: 1
+> +    maxItems: 8
+>       items:
+> -      - const: usb2-0
+> -      - const: usb2-1
+> -      - const: usb2-2
+> -      - const: usb2-3
+> -      - const: usb3-0
+> -      - const: usb3-1
+> -      - const: usb3-2
+> -      - const: usb3-3
+> +      enum:
+> +        - usb2-0
+> +        - usb2-1
+> +        - usb2-2
+> +        - usb2-3
+> +        - usb3-0
+> +        - usb3-1
+> +        - usb3-2
+> +        - usb3-3
+> +
+> +  dma-coherent:
+> +    type: boolean
+>   
+>     avddio-usb-supply:
+>       description: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
+> @@ -153,6 +160,7 @@ allOf:
+>               enum:
+>                 - nvidia,tegra186-xudc
+>                 - nvidia,tegra194-xudc
+> +              - nvidia,tegra234-xudc
+>       then:
+>         properties:
+>           reg:
 
-Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- drivers/net/usb/smsc95xx.c | 46 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index bfb58c91db04..32d2c60d334d 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -66,6 +66,7 @@ struct smsc95xx_priv {
- 	spinlock_t mac_cr_lock;
- 	u8 features;
- 	u8 suspend_flags;
-+	bool is_internal_phy;
- 	struct irq_chip irqchip;
- 	struct irq_domain *irqdomain;
- 	struct fwnode_handle *irqfwnode;
-@@ -252,6 +253,43 @@ static void smsc95xx_mdio_write(struct usbnet *dev, int phy_id, int idx,
- 	mutex_unlock(&dev->phy_mutex);
- }
- 
-+static int smsc95xx_mdiobus_reset(struct mii_bus *bus)
-+{
-+	struct smsc95xx_priv *pdata;
-+	struct usbnet *dev;
-+	u32 val;
-+	int ret;
-+
-+	dev = bus->priv;
-+	pdata = dev->driver_priv;
-+
-+	if (pdata->is_internal_phy)
-+		return 0;
-+
-+	mutex_lock(&dev->phy_mutex);
-+
-+	ret = smsc95xx_read_reg(dev, PM_CTRL, &val);
-+	if (ret < 0)
-+		goto reset_out;
-+
-+	val |= PM_CTL_PHY_RST_;
-+
-+	ret = smsc95xx_write_reg(dev, PM_CTRL, val);
-+	if (ret < 0)
-+		goto reset_out;
-+
-+	/* Driver has no knowledge at this point about the external PHY.
-+	 * The 802.3 specifies that the reset process shall
-+	 * be completed within 0.5 s.
-+	 */
-+	fsleep(500000);
-+
-+reset_out:
-+	mutex_unlock(&dev->phy_mutex);
-+
-+	return 0;
-+}
-+
- static int smsc95xx_mdiobus_read(struct mii_bus *bus, int phy_id, int idx)
- {
- 	struct usbnet *dev = bus->priv;
-@@ -1052,7 +1090,6 @@ static void smsc95xx_handle_link_change(struct net_device *net)
- static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
- {
- 	struct smsc95xx_priv *pdata;
--	bool is_internal_phy;
- 	char usb_path[64];
- 	int ret, phy_irq;
- 	u32 val;
-@@ -1133,13 +1170,14 @@ static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
- 	if (ret < 0)
- 		goto free_mdio;
- 
--	is_internal_phy = !(val & HW_CFG_PSEL_);
--	if (is_internal_phy)
-+	pdata->is_internal_phy = !(val & HW_CFG_PSEL_);
-+	if (pdata->is_internal_phy)
- 		pdata->mdiobus->phy_mask = ~(1u << SMSC95XX_INTERNAL_PHY_ID);
- 
- 	pdata->mdiobus->priv = dev;
- 	pdata->mdiobus->read = smsc95xx_mdiobus_read;
- 	pdata->mdiobus->write = smsc95xx_mdiobus_write;
-+	pdata->mdiobus->reset = smsc95xx_mdiobus_reset;
- 	pdata->mdiobus->name = "smsc95xx-mdiobus";
- 	pdata->mdiobus->parent = &dev->udev->dev;
- 
-@@ -1160,7 +1198,7 @@ static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
- 	}
- 
- 	pdata->phydev->irq = phy_irq;
--	pdata->phydev->is_internal = is_internal_phy;
-+	pdata->phydev->is_internal = pdata->is_internal_phy;
- 
- 	/* detect device revision as different features may be available */
- 	ret = smsc95xx_read_reg(dev, ID_REV, &val);
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+
+Thanks
+Jon
+
 -- 
-2.34.1
-
+nvpublic
