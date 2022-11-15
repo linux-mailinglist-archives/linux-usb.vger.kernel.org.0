@@ -2,160 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749B762A08C
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 18:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A973962A0CA
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 18:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiKORlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 12:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        id S229678AbiKOR5P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 15 Nov 2022 12:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiKORlo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 12:41:44 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E3E303C6
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 09:41:41 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id c23-20020a6b4e17000000b006db1063fc9aso7525503iob.14
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 09:41:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6lzrTGpNuD5WpRn39fmzoICUymwqNlnZd4YQjkBHO4g=;
-        b=5JeUwYQsgJKq74ehZHcEQ7iofEghjqKS+Ai0MarnI/HfWoUZ1Y9SmEDMwvCBCr3xZU
-         7sq/XEUQY6UGS4FsRmKWnHZsbc7eUAq1U7prW5AyW7t/un8ZQSGiCUzGglrY9pQN/O+v
-         hi/4tFI43Pwo6nZzq6r1iCUTqHS1h85yC5DjA3cqgr2f8UAjW9MyKp9cfgZD+TTjxe/l
-         Mu5WYOb0WX5siaeuk8pu25KdZInAcz0YYazt5teoX/DEpcTZvr1g7RB11S4rl/O1jx60
-         agprbvgf/o/iJFrMsx63xkNiDWUGdmlKX317UiMrXIUsNFEfY5hC+WVjtuCWidKyR8yd
-         k4wg==
-X-Gm-Message-State: ANoB5pmdL1BFzItjEwt2q/kF0DmZYa8DMF7dyeqJE8mX6EgcyltxHi7i
-        udlBW3JFWIVWn9YZTFipI8fxuzSuOLR9nwIX/CLnzbv5otM7
-X-Google-Smtp-Source: AA0mqf5vWiT3lcaXR1PtHnm2eG8zlqwI6344TV0jlaBKJsDDGTnXLjxbQd8pukmM0+Sj7ZVvgndEWdsDDof5j0YoKYttcvJMKawV
+        with ESMTP id S229593AbiKOR5O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 12:57:14 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D4322613;
+        Tue, 15 Nov 2022 09:57:13 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3662F13D5;
+        Tue, 15 Nov 2022 09:57:19 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 023943F587;
+        Tue, 15 Nov 2022 09:57:10 -0800 (PST)
+Date:   Tue, 15 Nov 2022 17:57:08 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Icenowy Zheng <uwu@icenowy.me>, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on
+ F1C100s SoC
+Message-ID: <20221115175708.3e69dcd8@donnerap.cambridge.arm.com>
+In-Reply-To: <e861e62f-4148-b867-0155-e71b1cee0b81@linaro.org>
+References: <20221106154826.6687-1-andre.przywara@arm.com>
+        <20221106154826.6687-4-andre.przywara@arm.com>
+        <Y2ypy0CM8rJGu2g4@matsya>
+        <4438485.LvFx2qVVIh@jernej-laptop>
+        <52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
+        <20221115104426.20728ba5@donnerap.cambridge.arm.com>
+        <4516dcfb-b928-d454-18a6-bd725f39cc24@linaro.org>
+        <20221115161917.328ec91a@donnerap.cambridge.arm.com>
+        <e861e62f-4148-b867-0155-e71b1cee0b81@linaro.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1b07:b0:372:f7ed:9f78 with SMTP id
- cb7-20020a0566381b0700b00372f7ed9f78mr8623687jab.245.1668534100574; Tue, 15
- Nov 2022 09:41:40 -0800 (PST)
-Date:   Tue, 15 Nov 2022 09:41:40 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005c4be705ed85de52@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in hid_report_raw_event (2)
-From:   syzbot <syzbot+8b1641d2f14732407e23@syzkaller.appspotmail.com>
-To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, 15 Nov 2022 17:29:09 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-syzbot found the following issue on:
+Hi,
 
-HEAD commit:    4bbf3422df78 Merge tag 'net-6.1-rc5' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1001828e880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=480ba0fb2fd243ac
-dashboard link: https://syzkaller.appspot.com/bug?extid=8b1641d2f14732407e23
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13556dfe880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16de4db9880000
+> On 15/11/2022 17:19, Andre Przywara wrote:
+> > On Tue, 15 Nov 2022 16:00:54 +0100
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > 
+> > Hi,
+> >   
+> >> On 15/11/2022 11:44, Andre Przywara wrote:  
+> >>> On Tue, 15 Nov 2022 11:03:24 +0100
+> >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >>>
+> >>> Hi,
+> >>>     
+> >>>> On 15/11/2022 07:01, Jernej Škrabec wrote:    
+> >>>>> Dne četrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul napisal(a):      
+> >>>>>> On 06-11-22, 15:48, Andre Przywara wrote:      
+> >>>>>>> From: Icenowy Zheng <uwu@icenowy.me>
+> >>>>>>>
+> >>>>>>> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
+> >>>>>>>
+> >>>>>>> Add support for its USB PHY.      
+> >>>>>>
+> >>>>>> This does not apply for me, please rebase and resend
+> >>>>>>
+> >>>>>> Also, consider splitting phy patches from this. I dont think there is
+> >>>>>> any dependency      
+> >>>>>
+> >>>>> DT patches in this series depend on functionality added here.
+> >>>>>       
+> >>>>
+> >>>> DTS always goes separately from driver changes because it is a hardware
+> >>>> description. Depending on driver means you have potential ABI break, so
+> >>>> it is already a warning sign.    
+> >>>
+> >>> We understand that ;-)
+> >>> What Jernej meant was that the DTS patches at the end depend on patch
+> >>> 01/10, which adds to the PHY binding doc. I am not sure if Vinod's
+> >>> suggestion was about splitting off 01/10, 03/10, and 10/10, or just the
+> >>> two latter which touch the driver.
+> >>>
+> >>> I can split off 03/10 and 10/10, rebased on top of linux-phy.git/next, and
+> >>> send that to Vinod.
+> >>> Then I would keep 01/10 in a respin of this series here, to satisfy the
+> >>> dependency of the later DTS patches, and Vinod can pick that one patch from
+> >>> there?    
+> >>
+> >> There is no hard dependency of DTS on bindings. You can split these (and
+> >> some maintainers prefer that way) and in DTS patches just provide the
+> >> link to the bindings, saying it is in progress.  
+> > 
+> > But that breaks "make dtbs_check", doesn't it?  
+> 
+> The check will be broken anyway because binding goes via driver
+> subsystem and DTS goes via arm-soc.
+> 
+> If both make to the linux-next and next release, then it's not a problem.
+> 
+> > 
+> > I would think that the DT bits - bindings first, then DTS files using it -
+> > should be bundled. This is how I imagine the future(TM), where DTs and
+> > bindings live outside the kernel repo.  
+> 
+> Yes, that's preferred. Therefore in DTS patch you say the binding is not
+> merged and it is here - lore link.
+> 
+> >   
+> >> The bindings should be however kept with driver changes as it goes the
+> >> same way.  
+> > 
+> > I understand that the bindings describe the contract the driver acts on,
+> > but going forward I think driver changes would need to come later, then
+> > (since they will live in a separate repo at some day)?
+> > Maybe pointing to the binding changes in progress?  
+> 
+> Later as one commit later - yes. Later as other option - not really, why?
+> 
+> > So with a separate repo we would actually need to upstream just the
+> > bindings first, then could push driver changes and .dts files
+> > independently?  
+> 
+> There is no separate repo, so we talk about Linux case now.
+> 
+> > And for now it looks like we are stuck with putting everything in one
+> > series, to make both checkpatch and dtbs_check happy.  
+> 
+> You should rather make maintainers happy :) and here one asked to split.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3f5450859d5d/disk-4bbf3422.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d5ef9126ce18/vmlinux-4bbf3422.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a806f631e533/bzImage-4bbf3422.xz
+Well, he asked to split off the USB PHY patches from the rest of the
+series, since there is some conflict with the recently merged H616 USB PHY
+patches. It is still unclear to me whether this split includes the binding
+patch, or just the two patches touching the actual code.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8b1641d2f14732407e23@syzkaller.appspotmail.com
-
-microsoft 0003:045E:07DA.0001: hid_field_extract() called with n (128) > 32! (swapper/0)
-================================================================================
-UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:1323:20
-shift exponent 127 is too large for 32-bit type 'int'
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc4-syzkaller-00159-g4bbf3422df78 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x3a6/0x420 lib/ubsan.c:322
- snto32 drivers/hid/hid-core.c:1323 [inline]
- hid_input_fetch_field drivers/hid/hid-core.c:1572 [inline]
- hid_process_report drivers/hid/hid-core.c:1665 [inline]
- hid_report_raw_event+0xd56/0x18b0 drivers/hid/hid-core.c:1998
- hid_input_report+0x408/0x4f0 drivers/hid/hid-core.c:2066
- hid_irq_in+0x459/0x690 drivers/hid/usbhid/hid-core.c:284
- __usb_hcd_giveback_urb+0x369/0x530 drivers/usb/core/hcd.c:1671
- dummy_timer+0x86b/0x3110 drivers/usb/gadget/udc/dummy_hcd.c:1988
- call_timer_fn+0xf5/0x210 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers+0x76a/0x980 kernel/time/timer.c:1790
- run_timer_softirq+0x63/0xf0 kernel/time/timer.c:1803
- __do_softirq+0x277/0x75b kernel/softirq.c:571
- __irq_exit_rcu+0xec/0x170 kernel/softirq.c:650
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x91/0xb0 arch/x86/kernel/apic/apic.c:1107
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
-RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:22 [inline]
-RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
-RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
-RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:113 [inline]
-RIP: 0010:acpi_idle_do_entry drivers/acpi/processor_idle.c:572 [inline]
-RIP: 0010:acpi_idle_enter+0x43d/0x800 drivers/acpi/processor_idle.c:709
-Code: ff e8 a7 8d 38 f7 48 83 e3 08 44 8b 7c 24 04 0f 85 00 01 00 00 e8 33 4d 3f f7 66 90 e8 cc 88 38 f7 0f 00 2d f5 af c4 00 fb f4 <4c> 89 e3 48 c1 eb 03 42 80 3c 2b 00 74 08 4c 89 e7 e8 7d 64 8d f7
-RSP: 0018:ffffffff8ca07b80 EFLAGS: 000002d3
-RAX: ffffffff8a512d84 RBX: 0000000000000000 RCX: ffffffff8cabb7c0
-RDX: 0000000000000000 RSI: ffffffff8aad68a0 RDI: ffffffff8b0ac540
-RBP: ffffffff8ca07c30 R08: ffffffff8a512d69 R09: fffffbfff19576f9
-R10: fffffbfff19576f9 R11: 1ffffffff19576f8 R12: ffffffff8ca07bc0
-R13: dffffc0000000000 R14: ffff8880121c6800 R15: 0000000000000001
- cpuidle_enter_state+0x50b/0xf50 drivers/cpuidle/cpuidle.c:239
- cpuidle_enter+0x59/0x90 drivers/cpuidle/cpuidle.c:356
- call_cpuidle kernel/sched/idle.c:155 [inline]
- cpuidle_idle_call kernel/sched/idle.c:236 [inline]
- do_idle+0x3da/0x680 kernel/sched/idle.c:303
- cpu_startup_entry+0x15/0x20 kernel/sched/idle.c:400
- rest_init+0x24f/0x270 init/main.c:729
- arch_call_rest_init+0xa/0xa init/main.c:890
- start_kernel+0x4b6/0x565 init/main.c:1145
- secondary_startup_64_no_verify+0xcf/0xdb
- </TASK>
-================================================================================
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	e8 a7 8d 38 f7       	callq  0xf7388dac
-   5:	48 83 e3 08          	and    $0x8,%rbx
-   9:	44 8b 7c 24 04       	mov    0x4(%rsp),%r15d
-   e:	0f 85 00 01 00 00    	jne    0x114
-  14:	e8 33 4d 3f f7       	callq  0xf73f4d4c
-  19:	66 90                	xchg   %ax,%ax
-  1b:	e8 cc 88 38 f7       	callq  0xf73888ec
-  20:	0f 00 2d f5 af c4 00 	verw   0xc4aff5(%rip)        # 0xc4b01c
-  27:	fb                   	sti
-  28:	f4                   	hlt
-* 29:	4c 89 e3             	mov    %r12,%rbx <-- trapping instruction
-  2c:	48 c1 eb 03          	shr    $0x3,%rbx
-  30:	42 80 3c 2b 00       	cmpb   $0x0,(%rbx,%r13,1)
-  35:	74 08                	je     0x3f
-  37:	4c 89 e7             	mov    %r12,%rdi
-  3a:	e8 7d 64 8d f7       	callq  0xf78d64bc
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Cheers,
+Andre.
