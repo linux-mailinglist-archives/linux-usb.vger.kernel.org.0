@@ -2,151 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F615629DFD
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 16:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396D5629E72
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 17:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiKOPrT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 10:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
+        id S230373AbiKOQFt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 11:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbiKOPqo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 10:46:44 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3EA2C652;
-        Tue, 15 Nov 2022 07:46:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668527195; x=1700063195;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=2h1puenqV2GbE9aSnvmb1LwGLVQPnIy1raebHUUmONY=;
-  b=gjK+52V/49w3Ao/enpPmYbXfvHdZd4rhjV9UTzxkhGB8/+kQ7kFuLwM2
-   PNYnOv83Y/KVdu/Y+QEePUTFRI4Tqt1LZ2HCooIMS36uTph0fY/ZBK53a
-   IfBHU77C9RVxsWrQT10OAM17WPmtldIqJqDwpo9kCSx+oIv5u5NA06R4x
-   4RQvvJHuniCdvZ9LwAk+WHqu/E9JBb+F/OZ2/qipMZulKzLSVldPSQYHL
-   rSEdR0Syl3wJ0DOGRh03YYrnFfQLTUkPZoC0kvBHUBmaBijat9DhmUYww
-   eyBcQE+S5jI58WQosTygT0ccmqAZKnLPr/vVjV7RtxObUyUGaBs+9+AQ4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314093212"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="314093212"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:46:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641248834"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="641248834"
-Received: from golubevv-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.58.73])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:46:30 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 1/4] i915: Move list_count() to list.h for broader use
-In-Reply-To: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
-Date:   Tue, 15 Nov 2022 17:46:28 +0200
-Message-ID: <87leoc2pbf.fsf@intel.com>
+        with ESMTP id S230193AbiKOQFs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 11:05:48 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DD62F7
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 08:05:47 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id w2so3186406uap.1
+        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 08:05:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lC7HjZv0YJWdCVBbJCdX8oFBfIQJ4Z3YaREpAMcE+Wk=;
+        b=KgVjl7BfpCjRgjtSt2c/YBlO7fe/v0kF+BVh0VYOX/B/FaIDt++uPju25o7yqcAQ3Y
+         17By9vzo9dpgu3y88VCU0NtpPmJAiFbr5iTH9vfwhKUAmkLkxlg9A411Vdw2LXOge+4x
+         QQNiWdTmaD6rFo80fd1cdH7kERGpZaCRgblqBAR4bfDHiPQGKzTyHCgWKDLETrz8JIh3
+         Ns7kNVu+m4hB5wbqtTQQ+B1hFiGZTkpCPW7AuOGq0xNfFRULnaza5rMNMBQbug+F5CDk
+         +Q30rkH5YEHY4r2mBwxhXFKUAj0RCByz+Cbzg6l7awtZNPBMWqQ1aieAMin5+XLAKNuJ
+         F7fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lC7HjZv0YJWdCVBbJCdX8oFBfIQJ4Z3YaREpAMcE+Wk=;
+        b=8EkI0TYPrsPIURG97NYQJ+1sF4VY2Qo1hPbbSVgzaa1jqCY6ABJB6WF4vMQaOTDaZV
+         WBcGgsXop2EU+b6aIy2nYHEBpu0Pd4jS+JbU+gwac+l3I3/t0r6DKg9Tx9+P8xOZmLhw
+         DFVTj1KUSTCo2HTP4s4DVqEv+IKqFMMC+M1wiadhJbl0lKSYH60YiqAhdMoL044KmKuw
+         /g0bEI7Gp+9KyybEV9s3xcptzo9eoNIhExTvqJIxtGlOtkQEd0jcUV/kHc2sBYv6Xm1/
+         r8KXQeJ36TjCpMUFEW5tArEWNjnctXaIqsWpJzIFay9/XubYidUjvlfwX++AxGjSDaw6
+         Dz8g==
+X-Gm-Message-State: ANoB5pkQ3B6xNO+jMXjZ75wkMNxCTwBHcoPAMz7YhCk0An3L5PGGXP8o
+        2sNUT/KzEZ2bddAZ0YyldiqVxp5pftBtznSj0mHOVQ==
+X-Google-Smtp-Source: AA0mqf7XZPLE4b06KBKnQS2e/lwLCOJPIb0LYbRgKMs1aOxiUs5qRglW1N48luGT5NFDiDl8N53CwuC13k5IFjoy8BA=
+X-Received: by 2002:ab0:2044:0:b0:411:7c09:b011 with SMTP id
+ g4-20020ab02044000000b004117c09b011mr10000001ual.95.1668528346162; Tue, 15
+ Nov 2022 08:05:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
+ <20221111152852.2837363-1-allenwebb@google.com> <Y26UcbviRaoK9a3C@bombadil.infradead.org>
+ <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com> <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan>
+In-Reply-To: <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan>
+From:   Allen Webb <allenwebb@google.com>
+Date:   Tue, 15 Nov 2022 10:05:35 -0600
+Message-ID: <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
+Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 14 Nov 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> Some of the existing users, and definitely will be new ones, want to
-> count existing nodes in the list. Provide a generic API for that by
-> moving code from i915 to list.h.
+On Mon, Nov 14, 2022 at 11:22 AM Lucas De Marchi
+<lucas.demarchi@intel.com> wrote:
+>
+> On Mon, Nov 14, 2022 at 10:42:50AM -0600, Allen Webb wrote:
+> >On Fri, Nov 11, 2022 at 12:29 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >>
+> >> On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
+> >> > USB devices support the authorized attribute which can be used by
+> >> > user-space to implement trust-based systems for enabling USB devices. It
+> >> > would be helpful when building these systems to be able to know in
+> >> > advance which kernel drivers (or modules) are reachable from a
+> >> > particular USB device.
+> >> >
+> >> > This information is readily available for external modules in
+> >> > modules.alias. However, builtin kernel modules are not covered. This
+> >> > patch adds a sys-fs attribute to both builtin and loaded modules
+> >> > exposing the matching rules in the modalias format for integration
+> >> > with tools like USBGuard.
+> >> >
+> >> > Signed-off-by: Allen Webb <allenwebb@google.com>
+> >>
+> >> Thanks for the patch Allen!
+> >>
+> >> I'd rather have something generic though, and it would seem kmod [0] already
+> >> does this, have you seen the kmod support for builtin.alias.bin
+> >>
+> >> Can't that be used?
+> >
+> >Probably, but I don't see the builtin.alias.bin in my build. Is it experimental?
+>
+> no. That is generated by depmod since v27 using modules.builtin.modinfo
+> generated by the kernel build system. Highly recommend v30 though
+> as there were fixes in v28 and v29 and some changes to speed up its
+> generation/use in v30:  See entries mentioning
+> builtin.alias and bultin.modinfo in
+> https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/NEWS
+>
+> libkmod/modprobe/modinfo also have the corresponding changes to lookup that
+> index when resolving aliases.
 
-I think I'd find list_length() a much more natural name for this.
-
-*shrug*
-
-Acked-by: Jani Nikula <jani.nikula@intel.com>
-
-regardless of what you decide to do with name or static inline etc.
-
+I see the file but it is largely missing the aliases I am interested
+in, so it looks like I might need to modify my patch that creates
+buildin.alias to add the missing alias defines in the header along
+with the other module metadata for builtin modules. Does this sound
+right to you?
 
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: dropped the duplicate code in i915 (LKP)
->  drivers/gpu/drm/i915/gt/intel_engine_cs.c | 13 +------------
->  include/linux/list.h                      | 13 +++++++++++++
->  2 files changed, 14 insertions(+), 12 deletions(-)
+> Lucas De Marchi
 >
-> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> index 6ae8b07cfaa1..b5d474be564d 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> @@ -2085,17 +2085,6 @@ static void print_request_ring(struct drm_printer *m, struct i915_request *rq)
->  	}
->  }
->  
-> -static unsigned long list_count(struct list_head *list)
-> -{
-> -	struct list_head *pos;
-> -	unsigned long count = 0;
-> -
-> -	list_for_each(pos, list)
-> -		count++;
-> -
-> -	return count;
-> -}
-> -
->  static unsigned long read_ul(void *p, size_t x)
->  {
->  	return *(unsigned long *)(p + x);
-> @@ -2270,7 +2259,7 @@ void intel_engine_dump(struct intel_engine_cs *engine,
->  	spin_lock_irqsave(&engine->sched_engine->lock, flags);
->  	engine_dump_active_requests(engine, m);
->  
-> -	drm_printf(m, "\tOn hold?: %lu\n",
-> +	drm_printf(m, "\tOn hold?: %zu\n",
->  		   list_count(&engine->sched_engine->hold));
->  	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
->  
-> diff --git a/include/linux/list.h b/include/linux/list.h
-> index 61762054b4be..098eccf8c1b6 100644
-> --- a/include/linux/list.h
-> +++ b/include/linux/list.h
-> @@ -655,6 +655,19 @@ static inline void list_splice_tail_init(struct list_head *list,
->  	     !list_is_head(pos, (head)); \
->  	     pos = n, n = pos->prev)
->  
-> +/**
-> + * list_count - count nodes in the list
-> + * @head:	the head for your list.
-> + */
-> +#define list_count(head)		\
-> +({					\
-> +	struct list_head *__tmp;	\
-> +	size_t __i = 0;			\
-> +	list_for_each(__tmp, head)	\
-> +		__i++;			\
-> +	__i;				\
-> +})
-> +
->  /**
->   * list_entry_is_head - test if the entry points to the head of the list
->   * @pos:	the type * to cursor
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+>
+> >
+> >>
+> >> [0] git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
+> >>
+> >>   Luis
