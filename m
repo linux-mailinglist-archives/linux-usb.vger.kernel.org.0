@@ -2,105 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40160629678
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 11:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6243062969E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 12:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbiKOK4I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 05:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S231178AbiKOLCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 06:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbiKOKzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 05:55:41 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CFC26480
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 02:54:23 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id b9so17011586ljr.5
-        for <linux-usb@vger.kernel.org>; Tue, 15 Nov 2022 02:54:23 -0800 (PST)
+        with ESMTP id S237915AbiKOLBg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 06:01:36 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD13C264B2;
+        Tue, 15 Nov 2022 03:01:08 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id e189so10378451iof.1;
+        Tue, 15 Nov 2022 03:01:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LcdMK6pyq6QRrGL0Z9BG95K8ZsYDf0IuGpvJl7z2gQo=;
-        b=SqiVoxqjHssIuk0phQrkPORoueZJcLR/XFveKKnHYiZEi83mz3Yv6iHgpU4fy1ye3t
-         wKV28TJiB+5gcqJFbgQLl2KdMhcaJSAyyte7nADjJR3OBwejSeTNCGE3YuKRmWr3P/BR
-         Ehnqv/13JgxdeQE4zvqdXrsWf/aajirXtBQMbLIw+m07Bt6Kopdu1MBk7C9zgWWqxkQZ
-         CiaRp+OKx9CJsmiUwnbLXZBdggjms9VdnZ887iAfvKWcuy/MgxiKEMQDS8bST53yA9/t
-         PIB6cXTFfsJ5K/IcXNg1s2D0t9BxrKrvGsctf5V5DSnvih7KCEs3HwJa00MG2riPYIe6
-         jeqg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCerPG4/dIVYiG6pu2aobx55zKrbPRV4qVM/Qg/oZ1Y=;
+        b=PIPQx6szR9QKl8aLceRVROj79PfcF80u789pDfauQWD6M+7h3i9jJ8+2XEFMSbTzuV
+         Bgtxag/g61ubrMaZA0QJXO+ji1Bx74AH+SUU8efJ/4xNYT4YFjiuDD4EXo2Y2efIOset
+         ZXE8xfUCrjbalNnY0xMsA6tiLIeeGkiy13bVJEykisSvtBEXH9VATc7PhYfUVprYwC8m
+         ShIKB8uN7orDQHZITAR8MBjPKAl6KFdVYNdJGT2ejzRdnbfc7I5c8Ub1P5mSREhRG6gB
+         pCJ6VDL6gLeVzcbOhvrRnI0DlthHYmMeHTYVaS1w0VjO0jQZcgLfN/niv3ZdvSn2JEkf
+         eW8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LcdMK6pyq6QRrGL0Z9BG95K8ZsYDf0IuGpvJl7z2gQo=;
-        b=gS4RJO0ZZ9XVWZz4bj5gvD3BMDW0yAuy/6bt0S++W06iw9OrH46Ps53a6bo0Vj2c1N
-         97di9JhMtYRpx8RgJPHYgctEsopDVbFYg5feh0AligCOMkEKvWv/qtoD7Nj/rOSR/cOj
-         pfYv6X6pK/uy+JYXwXGcD7YTaAjAt/nfMylTcGTtEK0lRaKmF1D3eKN/8DYPlG6gMtY1
-         a4+gfXRCadzIylNwwdUbu2CdDow1zluaijkZpnZh7yuEHemSwl2lI9DqcpXXl32Q90N+
-         1lq4xB0g9dxRATNKopn0QZ7UbyURSYXUnjBNgZOWSDEhlw1KNxXHyyf4E00C28A2uVb8
-         5Dxg==
-X-Gm-Message-State: ANoB5pk0YZgnQkt1Fqaez5SEKuJKzwyzXwfcU8O9x863f9l/9vnKUW4L
-        7hEjqcQ2BqpidOVghiqL81kHxg==
-X-Google-Smtp-Source: AA0mqf54UoATcbcODLPVTFYROSL09YrLMVi1vrCB9iC5LjPXeUx5nxpm7ns+BmA/Ry7vjKAgLndhYQ==
-X-Received: by 2002:a05:651c:17a1:b0:277:f8b:bb4f with SMTP id bn33-20020a05651c17a100b002770f8bbb4fmr6158885ljb.161.1668509661805;
-        Tue, 15 Nov 2022 02:54:21 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c8-20020a056512324800b0049a5a59aa68sm2182351lfr.10.2022.11.15.02.54.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 02:54:21 -0800 (PST)
-Message-ID: <0eb1a6a5-771c-6cc1-f95b-9708468f1d90@linaro.org>
-Date:   Tue, 15 Nov 2022 11:54:15 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kCerPG4/dIVYiG6pu2aobx55zKrbPRV4qVM/Qg/oZ1Y=;
+        b=Ml9oYanCmjDLDvtoirN7FpatQyhCwG5TBEWLkClnPnUmX+6z1xd+dfV8p87ouejawz
+         zKOiJoMvrwlsB/+68bPQ2TjUxPjW7cA9Q5dsw/NBPYhvcUvtHfSwFHdyPl+x/HJBiWI+
+         V6zMLp5L8AcHNNLkOLxm83xZvhs4w2UZzlRssJsYIcTflqrsKGJez4eZw1n+wQoXIR1K
+         UQL97MAof4+tar7nLfQWpsfMpIje31ZvoqIbEfX+ufHrunTtk2oJFeJAx4gGFuR041Hk
+         DpsesZOawjjxrB+c1hXY1o3lWsBI1B5aYAeRKpxMrv3Brxkn2m9xEsetTImrLy27IhAX
+         gggA==
+X-Gm-Message-State: ANoB5plgYCiYdB9Ql5Bjdn3PD7CYQu5c2fhJsooFI7qlRhidw8PQlJmJ
+        xPoysF7JVquLZ6nMjKIPx3dYdHNezFMRqA==
+X-Google-Smtp-Source: AA0mqf7DcweC56Tp7uRKx2fD3JpxgIrpPJeuNMREHYmNxGtXFgDgDZoFUqhIl0xKeuf8r6R4k/NUig==
+X-Received: by 2002:a02:85ac:0:b0:363:6dfb:afb8 with SMTP id d41-20020a0285ac000000b003636dfbafb8mr7875615jai.256.1668510068051;
+        Tue, 15 Nov 2022 03:01:08 -0800 (PST)
+Received: from labdl-itc-sw04.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
+        by smtp.googlemail.com with ESMTPSA id x2-20020a92dc42000000b002f956529892sm4956702ilq.2.2022.11.15.03.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 03:01:07 -0800 (PST)
+From:   Enrico Sau <enrico.sau@gmail.com>
+To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Enrico Sau <enrico.sau@gmail.com>
+Subject: [PATCH 1/1] net: usb: qmi_wwan: add Telit 0x103a composition
+Date:   Tue, 15 Nov 2022 11:58:59 +0100
+Message-Id: <20221115105859.14324-1-enrico.sau@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] MAINTAINERS: rectify entry for MICROCHIP USB251XB DRIVER
-Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Richard Leitner <richard.leitner@skidata.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221115103153.28502-1-lukas.bulwahn@gmail.com>
- <c21e0e3d-5970-d905-3b6f-54a1ddacd052@linaro.org>
- <0750d2e8-766b-3c5c-5472-4c9d6e9ec3c4@denx.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0750d2e8-766b-3c5c-5472-4c9d6e9ec3c4@denx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/11/2022 11:52, Marek Vasut wrote:
-> On 11/15/22 11:35, Krzysztof Kozlowski wrote:
->> On 15/11/2022 11:31, Lukas Bulwahn wrote:
->>> Commit fff61d4ccf3d ("dt-bindings: usb: usb251xb: Convert to YAML schema")
->>> converts usb251xb.txt to usb251xb.yaml, but misses to adjust its reference
->>> in MAINTAINERS.
->>>
->>> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
->>> broken reference.
->>>
->>> Repair this file reference in MICROCHIP USB251XB DRIVER.
->>>
->> You know this could be just one sentence (instead of three paragraphs)
->> with a Fixes tag...
-> 
-> On the other hand, the content is educational, e.g. about the usage of 
-> get_maintainer.pl script .
+Add the following Telit LE910C4-WWX composition:
 
-Education is good, but I don't see a point to grow commit log with this.
-The warning would be useful, but the command? Just store it in
-Documentation if the intention is to educate.
+0x103a: rmnet
 
-Best regards,
-Krzysztof
+Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
+---
+
+This is the lsusb verbose output:
+
+$ lsusb -v -d 1bc7:103a
+
+Bus 001 Device 008: ID 1bc7:103a Telit Wireless Solutions LE910C4-WWX
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x1bc7 Telit Wireless Solutions
+  idProduct          0x103a 
+  bcdDevice            0.00
+  iManufacturer           3 Telit
+  iProduct                2 LE910C4-WWX
+  iSerial                 4 e1b117c7
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0027
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          1 Telit Configuration
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               5
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+can't get debug descriptor: Resource temporarily unavailable
+Device Status:     0x0000
+  (Bus Powered)
+
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 30d733c81ed8..c36caf9d6553 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1358,6 +1358,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
+ 	{QMI_FIXED_INTF(0x2357, 0x9000, 4)},	/* TP-LINK MA260 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1031, 3)}, /* Telit LE910C1-EUX */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x103a, 0)}, /* Telit LE910C4-WWX */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1057, 2)},	/* Telit FN980 */
+-- 
+2.25.1
 
