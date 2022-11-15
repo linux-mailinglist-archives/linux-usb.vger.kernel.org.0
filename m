@@ -2,79 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789D2628BA4
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Nov 2022 22:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AB16291B5
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 07:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237118AbiKNVzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Nov 2022 16:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S232147AbiKOGBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 01:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiKNVzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Nov 2022 16:55:41 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D79E089;
-        Mon, 14 Nov 2022 13:55:40 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id bj12so31592422ejb.13;
-        Mon, 14 Nov 2022 13:55:40 -0800 (PST)
+        with ESMTP id S232114AbiKOGBj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 01:01:39 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECCD1EAC7;
+        Mon, 14 Nov 2022 22:01:38 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l11so20423785edb.4;
+        Mon, 14 Nov 2022 22:01:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F6ROxNTXIADOvvm1oDqKgevEgxWpoOw7xcRSJwQ0+mw=;
-        b=Y8pQ6J8w5ocpEEHFcgYQqZiDcc+1KD6NeLV93RRdX3NtQFxjm9EJH/7e4lo7b1C4PW
-         9LnLtaoUYZxBqTOwyvRCIu7irVtaSh3tpFAqDBqYNgqPYYR/4KVL26H4ZrmlZcqhr6+S
-         rAt0OotrJQDNgW3qaQSxrdrl6tSyUnagSfG6mdrJ64YUi26XhH1OoABNGSU3GSncsAWC
-         D8UTa+fE4Hs5FqRIl9P4h7UHAvr5Me3KwWUR8QUsE81ejBeIjr9SHfesAxk3Af7M/G1r
-         S47n493zIVvZrs1gJ+Rp1ay41xCA9b2hpZ+eAHifefYNDzEL4U9F1QLHJuXoRVg459F1
-         0XeA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Myor8n787DIBkDuVhefOsckVQpCRvL9+vEoJMW5tQZ0=;
+        b=pPsj20BpS4ORtdE6mibv0QMuBA6Ig37PW4ZlcrAv+d715th7RdYh0EB2hkzYzQ116G
+         l8a+1qOaYcWxpbDwBeO8aK4RJ7AWy0oJnUkQd2bgia2sBEy21hUDzkXmnjMiD7zcKhE+
+         JU5HghiJELpmf4tF8PkOxK0+Yjo+EQWO59ou+P+UI8dmmJbbGbQ2V8OcAQ+/SNWUj/W8
+         AEmsjk4NFxfkYxhGZraXXO7pxBTB+yUibGUwfN1co3AUZFvLQqrj6WNar9AE2SS/KuaN
+         eE0qPp6XzMIZkYyo/QXK50m8fu/fA6Bxqze9Kxcqa01E7UavD9zQPNYjuGdfiMV4RrWp
+         5mRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F6ROxNTXIADOvvm1oDqKgevEgxWpoOw7xcRSJwQ0+mw=;
-        b=YjtOJuQlRN1m4YcmZl/zqDls8Y6Krq0WbqB1FKiYQgHvXnib11biDVfbQ2GZMoyZ7/
-         XlPXGij2XErDVY/Dhjwpt5J3W/6XGcoTYD6i+Ur2wtZjNw+uKsQ0v13gnMnIByuJQ+3W
-         LS9sLTJnHTooeno4dCi7jp8HGPvEHWCAMDjUePVhfy+/CZHDoqsNKB2vr+vfRt4sTQba
-         3Aj+GfobhFrBY+jCRoZ2hB20L+msxK+SIZ+w67vJ6M4bC62X3PaIBbe1ISEEp8fT1PJf
-         c/UBlr1QDgZBG85nH7EpfMWq8k5eF1aPYO/I1Srn2N3CoWIi567eH19aL68siodRmhXp
-         mQFA==
-X-Gm-Message-State: ANoB5pl1mOhfOi/bslSHMfdLiDk53b9ZHLLsqPvny+fTrEOjOF9koawP
-        0+4jTkSRtXh/yxJOAldM6MU=
-X-Google-Smtp-Source: AA0mqf6g4N78DzMRMt8k0FPC6+XJqpf4AkBqvvdvoB8Ha8UYqCfQFrpHs3k/qaLqZnexIG0KpUDuxw==
-X-Received: by 2002:a17:906:7b4f:b0:78d:f40b:42f8 with SMTP id n15-20020a1709067b4f00b0078df40b42f8mr11866540ejo.129.1668462939255;
-        Mon, 14 Nov 2022 13:55:39 -0800 (PST)
-Received: from ?IPV6:2a02:a466:68ed:1:dc32:99d6:97a8:f82? (2a02-a466-68ed-1-dc32-99d6-97a8-f82.fixed6.kpn.net. [2a02:a466:68ed:1:dc32:99d6:97a8:f82])
-        by smtp.gmail.com with ESMTPSA id r2-20020a1709061ba200b0074136cac2e7sm4629085ejg.81.2022.11.14.13.55.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 13:55:38 -0800 (PST)
-Message-ID: <b8fb2ead-6177-ea22-4d5c-a10a994eda2d@gmail.com>
-Date:   Mon, 14 Nov 2022 22:55:38 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Myor8n787DIBkDuVhefOsckVQpCRvL9+vEoJMW5tQZ0=;
+        b=7861tvYmXaU9fSmAUzTSluYqzyn1TF/Ns9dTDGIJ3awksrw+msS7cLLVvl+Ux0IFt0
+         kK9rTUs/0LuUfah1frxT259h3YFBe7uapA3yR6sertxfn8/hV1l8JdVKkzAST8E8wOHU
+         wUzgYwzGgWSuOc0cievISQcU3SlgpQ1O8G+92eXVA0j7ggl0y2+JZj52vF/z8UZQeHg3
+         wEoB82suG3O1MRS78TRDWCLwp4YTBVBUIZn9SEUHQsHvjtqpnCUx/jPbP54zLtfhtlbm
+         XclqUtsfzZ4MWVJoak4P1jjIEuzJY3H9oEOBHJNJW6JyzBG5IE8mjoq4fW70dn+v+3hr
+         FHPA==
+X-Gm-Message-State: ANoB5pk8LyqLin7JTQbCDf9sv8GdiDrVhC8SLyLd3yw2hKd59ZBZOigM
+        iiVHYIb+dCmhvBpZm+XhSjI=
+X-Google-Smtp-Source: AA0mqf6i/3jHh060R/CT+OjGDanwY7AeoEfxktpAznZjdGnSsvDp8mT/+1qho0mFOEhF9tNVyrlqiA==
+X-Received: by 2002:a05:6402:17c2:b0:459:443a:faf4 with SMTP id s2-20020a05640217c200b00459443afaf4mr13748008edy.297.1668492097365;
+        Mon, 14 Nov 2022 22:01:37 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id 3-20020a170906328300b007aec1b39478sm4953604ejw.188.2022.11.14.22.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 22:01:36 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Icenowy Zheng <uwu@icenowy.me>, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
+Date:   Tue, 15 Nov 2022 07:01:34 +0100
+Message-ID: <4438485.LvFx2qVVIh@jernej-laptop>
+In-Reply-To: <Y2ypy0CM8rJGu2g4@matsya>
+References: <20221106154826.6687-1-andre.przywara@arm.com> <20221106154826.6687-4-andre.przywara@arm.com> <Y2ypy0CM8rJGu2g4@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
- timeout
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stephen Boyd <swboyd@chromium.org>
-References: <20221110211132.297512-1-ftoth@exalondelft.nl>
- <20221110211132.297512-2-ftoth@exalondelft.nl> <Y23m5H5zRbv5fwcF@kroah.com>
-Content-Language: en-US
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <Y23m5H5zRbv5fwcF@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,50 +78,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Op 11-11-2022 om 07:08 schreef Greg Kroah-Hartman:
-> On Thu, Nov 10, 2022 at 10:11:31PM +0100, Ferry Toth wrote:
->> Since commit 0f010171
->> Dual Role support on Intel Merrifield platform broke due to rearranging
->> the call to dwc3_get_extcon().
-> 
-> Please see the kernel documentation for how to refer to commits.  This
-> should be written as:
-> 
-> 	Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if
-> 	extcon is present"), Dual role....
+Dne =C4=8Detrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul napisal(a=
+):
+> On 06-11-22, 15:48, Andre Przywara wrote:
+> > From: Icenowy Zheng <uwu@icenowy.me>
+> >=20
+> > The F1C100s SoC has one USB OTG port connected to a MUSB controller.
+> >=20
+> > Add support for its USB PHY.
+>=20
+> This does not apply for me, please rebase and resend
+>=20
+> Also, consider splitting phy patches from this. I dont think there is
+> any dependency
 
-Thanks I'll fix that in v3.
+DT patches in this series depend on functionality added here.
 
->> It appears to be caused by ulpi_read_id() on the first test write failing
->> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
->> DT when the test write fails and returns 0 in that case even if DT does not
->> provide the phy. As a result usb probe completes without phy.
->>
->> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
-> 
-> What commit does this fix?
+Best regards,
+Jernej
 
-It's complicated, not sure how to explain this clearly:
-ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT") started to 
-hide -ETIMEDOUT by returning 0. That problem was hidden due to another
-problem causing dwc3 to be deferred. But not properly, causing an 
-infinite probe loop. This was fixed for quite some time by an out of 
-tree patch. Now 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral 
-if extcon is present") accidentally fixes the probe loop, makes the out 
-tree patch obsolete, but exposes the initial problem.
 
-In short this patch fixes ef6a7bcfb01c ("usb: ulpi: Support device 
-discovery via DT") by returning -ETIMEDOUT to its user, who should 
-handle it appropriately. In case of dwc3 probe it sets -EPROBE_DEFER and 
-bails out.
-
-I'll add the short fixes: in v3.
-
-> Should this also get a cc: stable?
-
-I will add.
-
-> thanks,
-> 
-> greg k-h
 
