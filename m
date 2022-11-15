@@ -2,129 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B934629AC4
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 14:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD00629B72
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Nov 2022 15:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238294AbiKONkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Nov 2022 08:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
+        id S238529AbiKOOEh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Nov 2022 09:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKONkb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 08:40:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A808713FA6;
-        Tue, 15 Nov 2022 05:40:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49DADB80B31;
-        Tue, 15 Nov 2022 13:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53335C433D6;
-        Tue, 15 Nov 2022 13:40:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668519625;
-        bh=+busdJntlcYmMJqAKez2ryHOpDCXIeLB8fPlmR69uhY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hNTVNQQ8FI7huuGqsX1cb6JOdZHNGowb7PkByv0OZx9Gv7eTEuffohFgFWRV0vSr3
-         eGECc4Ne/r0K2Gtkjwhvfpt7kYGC2Fm2V+rIPjnRPu1TK/6MhEEv7E6reYSYyo1ApL
-         svB+vqnElp3Qrgv+30kToMzUGpapUNAGEvErveEs=
-Date:   Tue, 15 Nov 2022 14:40:22 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     jiantao zhang <water.zhangjiantao@huawei.com>
-Cc:     stern@rowland.harvard.edu, jakobkoschel@gmail.com,
-        geert+renesas@glider.be, colin.i.king@gmail.com,
-        =?utf-8?B?6Jab5rab?= <xuetao09@huawei.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Caiyadong <caiyadong@huawei.com>,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-Subject: Re: [PATCH v3] USB: gadget: Fix use-after-free during usb config
- switch
-Message-ID: <Y3OWxrVQzglNtrEM@kroah.com>
-References: <20221115065404.6067-1-xuetao09@huawei.com>
- <d3393e2f-a79c-d2c1-f752-71bd21a7ddbf@huawei.com>
+        with ESMTP id S231294AbiKOOEe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Nov 2022 09:04:34 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246AD2B249;
+        Tue, 15 Nov 2022 06:04:27 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 80E43240007;
+        Tue, 15 Nov 2022 14:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668521066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m52RNtELDDNqeiQtokfOg67uyM39sRsLuDiZvZRE3B0=;
+        b=NudmAyB06AsNNnCsJt4iwJTc6oYb518K4zCuIOTgbH8Jph8xyl9lERBCB2rnRwhIGlKBQp
+        0SCkDrVS9j7Y6KCJBn7R/kjc9dvG7aYqFHfIRuJSmjqhK2bOqQeAl44Si8MpfBCh22fcNk
+        NlRqtIHOgh45m2guJrdSSJ7SxCHrVVUvxxzkG6xjm6yA9uxRs9d4YUexh8zpT6WRdv0RTk
+        PGhDPkAejvpA8OGDZ98Mz+prO9BXnSRl7YWadgkJb8aicuF1+vFP11gcp+xcyUH9SQ0rym
+        SAsKehe8H7y8d99gTxn8KMhegCxtNBHK1+2Xsdo4DLgiWtxwdUHLQ2QRvebGqQ==
+Date:   Tue, 15 Nov 2022 15:04:17 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl:
+ Add h2mode property
+Message-ID: <20221115150417.513955a7@bootlin.com>
+In-Reply-To: <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        <20221114111513.1436165-3-herve.codina@bootlin.com>
+        <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+        <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3393e2f-a79c-d2c1-f752-71bd21a7ddbf@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:52:02PM +0800, jiantao zhang wrote:
-> In the process of switching USB config from rndis to other config,
-> if the hardware does not support the ->pullup callback, or the
-> hardware encounters a low probability fault, both of them may cause
-> the ->pullup callback to fail, which will then cause a system panic
-> (use after free).
-> 
-> The gadget drivers sometimes need to be unloaded regardless of the
-> hardware's behavior.
-> 
-> Analysis as follows:
-> =======================================================================
-> (1) write /config/usb_gadget/g1/UDC "none"
-> 
-> gether_disconnect+0x2c/0x1f8
-> rndis_disable+0x4c/0x74
-> composite_disconnect+0x74/0xb0
-> configfs_composite_disconnect+0x60/0x7c
-> usb_gadget_disconnect+0x70/0x124
-> usb_gadget_unregister_driver+0xc8/0x1d8
-> gadget_dev_desc_UDC_store+0xec/0x1e4
-> 
-> (2) rm /config/usb_gadget/g1/configs/b.1/f1
-> 
-> rndis_deregister+0x28/0x54
-> rndis_free+0x44/0x7c
-> usb_put_function+0x14/0x1c
-> config_usb_cfg_unlink+0xc4/0xe0
-> configfs_unlink+0x124/0x1c8
-> vfs_unlink+0x114/0x1dc
-> 
-> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
-> 
-> panic+0x1fc/0x3d0
-> do_page_fault+0xa8/0x46c
-> do_mem_abort+0x3c/0xac
-> el1_sync_handler+0x40/0x78
-> 0xffffff801138f880
-> rndis_close+0x28/0x34
-> eth_stop+0x74/0x110
-> dev_close_many+0x48/0x194
-> rollback_registered_many+0x118/0x814
-> unregister_netdev+0x20/0x30
-> gether_cleanup+0x1c/0x38
-> rndis_attr_release+0xc/0x14
-> kref_put+0x74/0xb8
-> configfs_rmdir+0x314/0x374
-> 
-> If gadget->ops->pullup() return an error, function rndis_close() will be
-> called, then it will causes a use-after-free problem.
-> =======================================================================
-> 
-> Fixes: 0a55187a1ec8 ("USB: gadget core: Issue ->disconnect() callback from
-> usb_gadget_disconnect()")
-> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-> Signed-off-by: TaoXue <xuetao09@huawei.com>
-> ---
-> V2 -> V3: Solved the format issues of Fixes and backtraces.
-> V1 -> V2: V1 will affect the original function, V2 just move the callback
-> after "if" statement, so that the original function will not be affected.
-> And fixed formatting issues.
+Hi Krzysztof,
 
-This patch is really corrupted and can not be applied.  How did you
-generate it?
+On Tue, 15 Nov 2022 14:07:52 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-The email is also showing up as unauthenticated and seems like it might
-be spoofed from your huawei.com domain, which is not good.
+> On 15/11/2022 14:05, Krzysztof Kozlowski wrote:
+> > On 14/11/2022 12:15, Herve Codina wrote: =20
+> >> Add the h2mode property to force the USBs mode ie:
+> >>  - 2 hosts
+> >> or
+> >>  - 1 host and 1 device
+> >>
+> >> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> >> ---
+> >>  .../bindings/clock/renesas,r9a06g032-sysctrl.yaml      | 10 ++++++++++
+> >>  1 file changed, 10 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/clock/renesas,r9a06g032=
+-sysctrl.yaml b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-s=
+ysctrl.yaml
+> >> index 95bf485c6cec..f9e0a58aa4fb 100644
+> >> --- a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctr=
+l.yaml
+> >> +++ b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctr=
+l.yaml
+> >> @@ -39,6 +39,16 @@ properties:
+> >>    '#power-domain-cells':
+> >>      const: 0
+> >> =20
+> >> +  renesas,h2mode:
+> >> +    description: |
+> >> +      Configure the USBs mode.
+> >> +        - <0> : the USBs are in 1 host and 1 device mode.
+> >> +        - <1> : the USBs are in 2 host mode.
+> >> +      If the property is not present, the value used is the one alrea=
+dy present
+> >> +      in the CFG_USB register (from reset or set by the bootloader).
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    enum: [0, 1] =20
+> >=20
+> > 0/1 are quite cryptic. Why not making it a string which is easy to read
+> > and understand? Can be something like "two-hosts" and "one-host". Or
+> > anything you find more readable... =20
+>=20
+> ...but actually you should rather make it a property of your USB
+> controller, not clock controller. You have two controllers and we have a
+> generic property for them - dr_mode.
+>=20
+> Best regards,
+> Krzysztof
+>=20
 
-Please fix up both of those issues if you wish for this to be accepted.
+IMHO, this property in the USB controllers does not make sense.
+Indeed each controller cannot have a different 'mode'.
+Some controllers are USB host only (EHCI and OHCI) and the USBF
+controller I worked on is device only.
+'h2mode' allows to choose between host or device on one of the USB
+but not at the USB controller level.
 
-thanks,
+This property should be handle outside the USB controller nodes.
 
-greg k-h
+Currently, this node (declared as a clock node) is in fact a sysctrl
+node and can do some configuration not related to clocks.
+
+I agree with you something related to choosing USB Host/Device in
+a clock node seems strange.
+
+Some discussion were already opened related to this property and how
+to handle it:
+  https://lore.kernel.org/all/20221107182642.05a09f2f@bootlin.com/
+  https://lore.kernel.org/all/20221107173614.474707d7@bootlin.com/
+
+Regards,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
