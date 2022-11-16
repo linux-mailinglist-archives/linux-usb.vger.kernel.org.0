@@ -2,109 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB5962C28A
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 16:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF36A62C348
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 17:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234780AbiKPP33 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 10:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
+        id S233672AbiKPQAi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 11:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbiKPP30 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 10:29:26 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFC013F1B;
-        Wed, 16 Nov 2022 07:29:25 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-13b6c1c89bdso20405831fac.13;
-        Wed, 16 Nov 2022 07:29:25 -0800 (PST)
+        with ESMTP id S233066AbiKPQAh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 11:00:37 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA234D5CC
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 08:00:36 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id i186-20020a1c3bc3000000b003cfe29a5733so1943862wma.3
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 08:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cqnN+HwKF3yOXWIqEca3FS0DaVbgfsnsprqsCj3gozc=;
+        b=YIYmnvgJhpkA9r73b4Nkt81d0RElDCRyIxF22hnQM+rdc+1XtoCcUlQ/bgLvURbWuQ
+         dXzYwY16FkCruarThfxqo5ZCgF+iXHP/R/pwXCdpLuDFfVmLYR7qwXzjUd68fHi44xor
+         I8EF+12gM7Pu4mPW87chWKg/RU2ViCgxV2TefyzvlOcrM1lzU7LI/0/3R2Hx/3/GCUFw
+         oczpT4hBAqX/6xjiOk3fihh6yFhr/PTp/a33+G6KshNKSPyNao8f4RecPvS9wgWfVUXQ
+         5TvPJr/poZjU2m/zTljhS1Ktz7zyxk4FzWvYkK+eAE7mcwNBmZwZWgnvImZntK/DN5En
+         EacA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XPzMQJE0sIInrmJgvIUaGCOnQHQglKZ2xgPC26zj0FM=;
-        b=32too+zWllgn++nYu+Vt3C6rYb3saEYWF3cK3g9hBwtPI/cyg++FJnCfHuB5/SEwf3
-         hh7d29xm0sqyEAzyP3lN/HiEgG3obn9W/5usP9YUttoD+D3XAOBzTv2MwQnXLmYBqrpp
-         d9ZWUFw1Gj3bD9ki01bhjlPiCix8xEMiT63UK0zVBXUGts2omdJsGvDBgUoM/sYeCIe1
-         9lymaLWukjOU9webVvB8Fa+qtVHhpIl+mYGhBRSE6CxPkSYzdU2ALtreI2RBwfp5gbuM
-         gCXd1BXcn6wJ08H/STlJ1Jgb8FYVzWctRxk9FDERPCJSzZdMi3CCpMKO/RJiir8o95WG
-         TGUA==
-X-Gm-Message-State: ANoB5pm+svmjRdRv6CdmyppzDh8OggOItWF0CwyrymRiaGPB/Ham+FEm
-        0s3/9Q5A6pTdrNKpwnpMwg==
-X-Google-Smtp-Source: AA0mqf5WtlQBm6tGUxpRuJD+A87MvWsxy0LPjPhNylxH3rll3lgbTL4A8p0bL4mc8zLXTg9ySeG0ag==
-X-Received: by 2002:a05:6870:b529:b0:13b:d2ae:ee0e with SMTP id v41-20020a056870b52900b0013bd2aeee0emr2039111oap.19.1668612564707;
-        Wed, 16 Nov 2022 07:29:24 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t37-20020a056870f22500b0013d6d924995sm8178831oao.19.2022.11.16.07.29.23
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cqnN+HwKF3yOXWIqEca3FS0DaVbgfsnsprqsCj3gozc=;
+        b=Tpk3aldICc/ujyknRutMtd+Us6mxMzJF2I7zhVEj7XEtciW2Ti/2jVfna+Ze+6+xNb
+         MkGtq+sDVCHIm1NGowoDP4ZXLVu4GEunXESc6/IMdDkmTy6XL3zw9AzIb2bpr+MqeVV3
+         rRK9BLo4ZtHI8jtKfUTiT1ZnAuvORbjr3Cq5nu4nHhYtbAoJs4K6sR/kSDynunA4jY0+
+         xbceO+5o0pJa35i1zZHDE3KluRGDQPfR1xPloojsUBAD52xeuFP9IJ87vqH7LK5AET78
+         Rw5fo+WjzZNDFudD73sEU+myu3V52sK3Ykk4Ppd2pUlhPyQrnsVm2lgOh/WcLRbQwOGd
+         tqGA==
+X-Gm-Message-State: ANoB5pmDu1zkye4PPYdzgg0H17XSklpGRbr615V24A50iqaU0NLRBQS/
+        sO496SX1dLGrwpRWA9KS9no=
+X-Google-Smtp-Source: AA0mqf5xuOQClU2F712+h3aoy8rhP9aPbqLUlapJLmZhzhzOmkXrDeZweMeSmgqkvSLD1SmP+tXqAQ==
+X-Received: by 2002:a05:600c:6890:b0:3c5:dbf4:baaf with SMTP id fn16-20020a05600c689000b003c5dbf4baafmr2489369wmb.105.1668614434426;
+        Wed, 16 Nov 2022 08:00:34 -0800 (PST)
+Received: from testvm.. ([185.215.195.243])
+        by smtp.googlemail.com with ESMTPSA id z4-20020a5d4c84000000b00236733f0f98sm15298795wrs.107.2022.11.16.08.00.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 07:29:24 -0800 (PST)
-Received: (nullmailer pid 4083494 invoked by uid 1000);
-        Wed, 16 Nov 2022 15:29:23 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 16 Nov 2022 08:00:33 -0800 (PST)
+From:   Davide Tronchin <davide.tronchin.94@gmail.com>
+To:     johan@kernel.org
+Cc:     cesare.marzano@gmail.com, davide.tronchin.94@gmail.com,
+        gregkh@linuxfoundation.org, larsm17@gmail.com,
+        linux-usb@vger.kernel.org, marco.demarco@posteo.net
+Subject: [PATCH v6 1/3] USB: serial: option: remove old LARA-R6 PID
+Date:   Wed, 16 Nov 2022 16:59:48 +0100
+Message-Id: <20221116155950.59609-1-davide.tronchin.94@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y3SzfG9ljTbeQyWU@hovoldconsulting.com>
+References: <Y3SzfG9ljTbeQyWU@hovoldconsulting.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-scsi@vger.kernel.org
-In-Reply-To: <20221116123019.2753230-3-abel.vesa@linaro.org>
-References: <20221116123019.2753230-1-abel.vesa@linaro.org>
- <20221116123019.2753230-3-abel.vesa@linaro.org>
-Message-Id: <166861225059.4037759.2587193031779915176.robh@kernel.org>
-Subject: Re: [RFC PATCH 2/3] dt-bindings: usb: Add qcom,snps-eusb2-repeater schema
-Date:   Wed, 16 Nov 2022 09:29:23 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Remove the UBLOX_PRODUCT_R6XX 0x90fa association since LARA-R6 00B final
+product uses a new USB composition with different PID. 0x90fa PID used
+only by LARA-R6 internal prototypes.
 
-On Wed, 16 Nov 2022 14:30:18 +0200, Abel Vesa wrote:
-> Add dt-binding schema for the Qualcomm SNPS eUSB2 repeater.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  .../usb/qcom,snps-eusb2-repeater.yaml         | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,snps-eusb2-repeater.yaml
-> 
+Move 0x90fa PID directly in the option_ids array since used by other
+Qualcomm based modem vendors as pointed in:
+https://lore.kernel.org/all/6572c4e6-d8bc-b8d3-4396-d879e4e76338@gmail.com
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+---
 
-yamllint warnings/errors:
+V5 -> V6: change the commit message and text wrapped correctly.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,snps-eusb2-repeater.example.dtb: pmic@7: compatible:0: 'qcom,pm8550' is not one of ['qcom,pm6150', 'qcom,pm6150l', 'qcom,pm6350', 'qcom,pm660', 'qcom,pm660l', 'qcom,pm7250b', 'qcom,pm7325', 'qcom,pm8004', 'qcom,pm8005', 'qcom,pm8009', 'qcom,pm8019', 'qcom,pm8028', 'qcom,pm8110', 'qcom,pm8150', 'qcom,pm8150b', 'qcom,pm8150c', 'qcom,pm8150l', 'qcom,pm8226', 'qcom,pm8350', 'qcom,pm8350b', 'qcom,pm8350c', 'qcom,pm8841', 'qcom,pm8909', 'qcom,pm8916', 'qcom,pm8941', 'qcom,pm8950', 'qcom,pm8953', 'qcom,pm8994', 'qcom,pm8998', 'qcom,pma8084', 'qcom,pmd9635', 'qcom,pmi8950', 'qcom,pmi8962', 'qcom,pmi8994', 'qcom,pmi8998', 'qcom,pmk8002', 'qcom,pmk8350', 'qcom,pmm8155au', 'qcom,pmp8074', 'qcom,pmr735a', 'qcom,pmr735b', 'qcom,pms405', 'qcom,pmx55', 'qcom,pmx65', 'qcom,smb2351']
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,snps-eusb2-repeater.example.dtb: pmic@7: 'usb-repeater@fd00' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'extcon@[0-9a-f]+$', 'gpio(s)?@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$', 'pwm@[0-9a-f]+$'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-Documentation/devicetree/bindings/usb/qcom,snps-eusb2-repeater.example.dtb:0:0: /example-0/pmic@7: failed to match any schema with compatible: ['qcom,pm8550', 'qcom,spmi-pmic']
+V4 -> V5: kept PID 0x90fa to maintain the support for other products
+which use VID:PID 0x05c6:0x90fa. Remove interface 4 from blacklist
+for LARA-L6 default mode since it is not needed.
 
-doc reference errors (make refcheckdocs):
+V3 -> V4: as requested, the patch has been split to 3 sub-patches.
+Fix comment format.
 
-See https://patchwork.ozlabs.org/patch/
+V2 -> V3: added this section to tracking changes with previous versions.
+Added some explanations about the RSVD(4) in the description session.
+Added reservation to port 4 of VID:PID 0x05C6:0x908B to meet other
+companies QMI net interface implementation.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+V1 -> V2: define UBLOX_PRODUCT_LARA_R6 0x908b has been deleted together
+with the previosly provided definition of USB_DEVICE since the PID
+is used by another vendor.
+The LARA-L6 patch part is the same of the previosly provided one.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+ drivers/usb/serial/option.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 697683e3fbff..b93285b5175b 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -240,7 +240,6 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_UC15			0x9090
+ /* These u-blox products use Qualcomm's vendor ID */
+ #define UBLOX_PRODUCT_R410M			0x90b2
+-#define UBLOX_PRODUCT_R6XX			0x90fa
+ /* These Yuga products use Qualcomm's vendor ID */
+ #define YUGA_PRODUCT_CLM920_NC5			0x9625
+ 
+@@ -1124,7 +1123,7 @@ static const struct usb_device_id option_ids[] = {
+ 	/* u-blox products using Qualcomm vendor ID */
+ 	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
+ 	  .driver_info = RSVD(1) | RSVD(3) },
+-	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R6XX),
++	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x90fa),
+ 	  .driver_info = RSVD(3) },
+ 	/* Quectel products using Quectel vendor ID */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
+-- 
+2.34.1
 
