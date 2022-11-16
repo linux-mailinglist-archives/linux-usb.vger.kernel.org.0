@@ -2,92 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B91C62C5F9
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 18:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD40C62C743
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 19:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiKPRKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 12:10:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S233854AbiKPSJp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 13:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233256AbiKPRKC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 12:10:02 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ED324092
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 09:09:59 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id d3so22668826ljl.1
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 09:09:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1r4D8rfU1yDWW4dWo6ifO0ci3Mgqwv1FlOWu/XE/YOw=;
-        b=G1FxQufYFuB4pLtu9UXpQOAAM8HrhD3xOV3pzYACokkQ1QMPy7Mgfw2xw4Q7hEuSQP
-         L0ocuI43O8YbZNeKeMNKVjI36i4GQj169v4C2XqrfIUL4gzsRyJixe+V3zhinBCzxl6v
-         Ld8m4ZUH2qHxAHsoUhMjQxHMMFAhNkblj6HwhZ69mb6bsZxMt7dU/EYfW8accfSX3ucy
-         QbSDN7wmgjt0oMk+bcysUKWQ7p0NFU+yQBUmlZa/4h3snT2JjWXEyAFzBUjVt1eR7YFj
-         5pHFZFQ42RtIexX62TZa40kn7bqMOWtchDlll45/6NXIWfmvg1g+bLUQ3M0QnCySVyP3
-         ISsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1r4D8rfU1yDWW4dWo6ifO0ci3Mgqwv1FlOWu/XE/YOw=;
-        b=manEsZiIrSbB6sqnZ5pdVIn1/kXdanCoboyiGFSEw9ZflcWbloqqJ7kJwox4nIBBL6
-         byKfJPDSRZhkmpajdd/HatYnfjbt9BNcATmFbVfU9OFk2CP/XkHeEePswWNdmyXiw1ci
-         Do1CaEkoihOkKImyBOjFqVhqEdcoSW7pl2J/JxM7TGzuDizhbvNDLnaZUnATB3J2fuIw
-         YWpqNF6QMjYo+XL3uYvAuXGWDOpnIdzxPJULerUVAhFXVTQcTVgmecHcYQWptCWdvNZW
-         XQ6b5+joSIuyyc4CNgJ/9b6FWkHb2mqrH6WMOcD4URbv5Xrd2b3Szlm/EQLM9P33kusw
-         g2HA==
-X-Gm-Message-State: ANoB5pmYmcFJWXD9LGvadFWiAZyKrLXjHh4Br+A1TLp1PV3893qLuWB/
-        Z0gyVcgcd523e6CHhkI95R6hgw==
-X-Google-Smtp-Source: AA0mqf729AblIIVVU3rMV2SnXkffUGszfKYygmHz7Fv7TNmIRxLyRPgqhficbC5G+GEZ70l6ikejow==
-X-Received: by 2002:a2e:8892:0:b0:277:9847:286a with SMTP id k18-20020a2e8892000000b002779847286amr7546321lji.309.1668618597885;
-        Wed, 16 Nov 2022 09:09:57 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a19-20020a2eb553000000b002776eb5b1cesm3110526ljn.8.2022.11.16.09.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 09:09:57 -0800 (PST)
-Message-ID: <48989f14-e377-0fa3-fd9e-69d3d5d77c25@linaro.org>
-Date:   Wed, 16 Nov 2022 18:09:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: usb: dwc3: Add SM8550 compatible
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        with ESMTP id S229489AbiKPSJo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 13:09:44 -0500
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64A765DC;
+        Wed, 16 Nov 2022 10:09:42 -0800 (PST)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9c:2c00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 2AGI9CfT1223379
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 16 Nov 2022 18:09:14 GMT
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9c:2c02:34cc:c78d:869d:3d9d])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 2AGI97Nh3152598
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 16 Nov 2022 19:09:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1668622147; bh=jtyIbh1dY7XyEMajfvkSl+SKwUTaVXtQNcZ1xCMTwYQ=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=PhNyJRin7mlxIxKx/2Jse+2p+9InxdBMxDkQNOWQ3IGG2XKyMpHzbfwCPJK+pB+Bk
+         4sJH8sIEUAcw36yjFHEQfM7SnvHCPGIIe7GWZBwSWMcpdnLavLfVXxexz4vBAyXZGC
+         htPbhUVKupI7xOCvpQa+uvfX7cFTe/WVD5IgVb7U=
+Received: (nullmailer pid 458000 invoked by uid 1000);
+        Wed, 16 Nov 2022 18:09:07 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Enrico Sau <enrico.sau@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-References: <20221116150600.3011160-1-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116150600.3011160-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add Telit 0x103a composition
+Organization: m
+References: <20221115105859.14324-1-enrico.sau@gmail.com>
+Date:   Wed, 16 Nov 2022 19:09:07 +0100
+In-Reply-To: <20221115105859.14324-1-enrico.sau@gmail.com> (Enrico Sau's
+        message of "Tue, 15 Nov 2022 11:58:59 +0100")
+Message-ID: <87y1sa7ovw.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.7 at canardo
+X-Virus-Status: Clean
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16/11/2022 16:06, Abel Vesa wrote:
-> Document the SM8550 dwc3 compatible.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Enrico Sau <enrico.sau@gmail.com> writes:
 
+> Add the following Telit LE910C4-WWX composition:
+>
+> 0x103a: rmnet
+>
+> Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Looks good.  Thanks
 
-Best regards,
-Krzysztof
-
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
