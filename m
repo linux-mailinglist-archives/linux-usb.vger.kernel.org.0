@@ -2,100 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C1E62B581
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 09:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B543C62B59A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 09:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbiKPIsH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 03:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S233434AbiKPIv3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 03:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiKPIsC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 03:48:02 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF7E1AF3C
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 00:47:59 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id g26so7886142vkm.12
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 00:47:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uYCvssQsxQyryDqf1tPUFmRDfpsreHuLMV/WL4ug3xw=;
-        b=KFKTNh5yNJjTsIW0ivcfbd6zzT/EtDfGlQEqtZdRWnfYKW4zzesLNO3jOhj8PDwuZB
-         /77LdbFscoegmgsvY1ipEGnSkJKIpatYJGU285kI8Ap6D8JO/9Q0w6T5aLiVDa4wd4IZ
-         jpZhQ7OXabuuYIzn4k8ViVbe9K9Y147cZTd1Pp1PzybdMCIFhlTbcoAePSykK++uFGPE
-         3Enheudhi7953nJP1W3+EqlbuD7UNcPtv6Md5iFxZL2K20CY5xhC85WANm6cKaPDcSQF
-         aWixzPj3b+VfinQ7Lw13gWuWw1ftSk0mCswC8Gh8QpNJu8EXDw/X3XCy+YPdfGEQOBdN
-         J+Rg==
+        with ESMTP id S232045AbiKPIv0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 03:51:26 -0500
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A18C19C17;
+        Wed, 16 Nov 2022 00:51:25 -0800 (PST)
+Received: by mail-qk1-f170.google.com with SMTP id x21so11219429qkj.0;
+        Wed, 16 Nov 2022 00:51:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uYCvssQsxQyryDqf1tPUFmRDfpsreHuLMV/WL4ug3xw=;
-        b=UvrJt9uH39l50/1le5J2yLHFV1HO62tGKMcfzAYHQXYreyIQ0gcACcHjPU7WFKvUC+
-         tinqs9O68wqgWfxK3q9moiBuqR1kBVb8A5EJE07TjB3BVP7C7Rnd+GmW6ZPnXUZ5MroN
-         /nd+2FZ6E5TyemQU6k8ga1rg7yTFtqRfhdFo6abDaF09VCqnwW009Ss72eWf7PYvxv0Y
-         auJQZ0rjWdLqz94Plv+3NAA4exjeKOtN2Y6oZCazt8jGBFpZ776N3f8KeQYB6s33SkUo
-         +pxO2sybHjgVqRDY2N60tbrchjtSeZVgxA1KY/on/b/c0/etjdm6e6Jtl6J2IZhSjWyY
-         /65w==
-X-Gm-Message-State: ANoB5pnoRuC34LVIPyVe53JY2SDYllqSiQ0yul4DF0gKEoYxhroVPEXL
-        bGDOtcJrPc4vCyo3jlVG3tTO9ySKh5TyRUr8384=
-X-Google-Smtp-Source: AA0mqf4P4XJXVrPXh2UlSGHGYj5Vqtuet8hnUVaUu0aCTR3u6ynrGfmMOR2GXCyuZ01YnlnAI9FZRK4i73iGa3IGjmw=
-X-Received: by 2002:a1f:ab81:0:b0:3b6:1aa6:49b4 with SMTP id
- u123-20020a1fab81000000b003b61aa649b4mr12089967vke.18.1668588479047; Wed, 16
- Nov 2022 00:47:59 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bQu4Kk2VsAJA/MwzBFNdfwCCKiskjqEECAV5YXUKBl0=;
+        b=3+SdDdWVIdgHg+BPtj0En8ex0aZMy0RY/vOFu35sOKrh/n9NOTngM87XsiVq/11cIf
+         myAQoz7gL8gydwPjj1s1LD9CrSlPyZJCwlzrDoU2cPZZXSU1ZJRf7b0PJO3/iFlVK+J5
+         27TUyBzpJFPtLEYMiaJsztNRVuUmDiAuoLAwiv471dbF+ztDs/8t9uuwvGDxZ9EELUIz
+         9+ciYFMRAlHqz1Vs9shyF1OFmftD5r2bJYSPCykECOa5kPYsyktHscXWGLOL6MYWdqeM
+         BXNCE08TueczSxcrm58lCamlLwNd03xfxMURFIgUjvTdkqKJxvK1gYuq1RE1oa0YbeIV
+         BnuQ==
+X-Gm-Message-State: ANoB5pm1LusAugHc//IVHMzczl+2bxDAUxMDp2kcz4MKZ36vzzFmluJJ
+        xH2TpXzRSIzsZ+G2TJWEWkvUtldHjkwKSA==
+X-Google-Smtp-Source: AA0mqf7xKyaPimgenMIqplwMStWHpyoWD+X4MgPtzcG2aaUVND4AHhhfv37J5ZPzn/Gb0nkCRZxQ6Q==
+X-Received: by 2002:a05:620a:15ae:b0:6ea:3fa0:bbfb with SMTP id f14-20020a05620a15ae00b006ea3fa0bbfbmr18218551qkk.473.1668588684352;
+        Wed, 16 Nov 2022 00:51:24 -0800 (PST)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id bp32-20020a05620a45a000b006fbaf9c1b70sm376197qkb.133.2022.11.16.00.51.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 00:51:24 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-382f0906929so69848417b3.10;
+        Wed, 16 Nov 2022 00:51:23 -0800 (PST)
+X-Received: by 2002:a81:4ed2:0:b0:370:202b:f085 with SMTP id
+ c201-20020a814ed2000000b00370202bf085mr20953147ywb.502.1668588683661; Wed, 16
+ Nov 2022 00:51:23 -0800 (PST)
 MIME-Version: 1.0
-From:   chao zeng <chao.zengup@gmail.com>
-Date:   Wed, 16 Nov 2022 16:46:51 +0800
-Message-ID: <CAGzEXPYzhJdw5M+F0SdcrtN8Hnew_LCjD6bC=ANBJzBxVRM_NA@mail.gmail.com>
-Subject: Some problems about xhci_ring_expansion
-To:     mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org
+References: <20221114111513.1436165-1-herve.codina@bootlin.com> <20221114111513.1436165-7-herve.codina@bootlin.com>
+In-Reply-To: <20221114111513.1436165-7-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 16 Nov 2022 09:51:12 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUzRqaAYZou5y6GivUcTfSAOx=ETDZXHhdK=iTGohUZNQ@mail.gmail.com>
+Message-ID: <CAMuHMdUzRqaAYZou5y6GivUcTfSAOx=ETDZXHhdK=iTGohUZNQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] ARM: dts: r9a06g032: Add the USBF controller node
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-hello!
-  Thank you for taking the time to look at my question.
+On Mon, Nov 14, 2022 at 12:15 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> Add the USBF controller available in the r9a06g032 SoC.
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-  At file xhci-ring.c
-static inline int room_on_ring(struct xhci_hcd *xhci, struct xhci_ring *ring,
-                unsigned int num_trbs)
-{
-        int num_trbs_in_deq_seg;
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-        if (ring->num_trbs_free < num_trbs)
-                return 0;
+Gr{oetje,eeting}s,
 
-        if (ring->type != TYPE_COMMAND && ring->type != TYPE_EVENT) {
-                num_trbs_in_deq_seg = ring->dequeue - ring->deq_seg->trbs;
-                if (ring->num_trbs_free < num_trbs + num_trbs_in_deq_seg)
-                        return 0;////suppose return here
-        }
+                        Geert
 
-        return 1;
-}
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Suppose the function room_on_ring returns in my bolded condition.
-num_trbs_needed will be a very large value because the num_trbs <
-num_trbs_free. In this way , we will just double the total ring size.
-Is this as expected or should add one segment size instead?
-                num_trbs_needed = num_trbs - ep_ring->num_trbs_free;//
-unsigned int num_trbs_needed will be very large value
-                if (xhci_ring_expansion(xhci, ep_ring, num_trbs_needed,
-                                        mem_flags)) {
-                        xhci_err(xhci, "Ring expansion failed\n");
-                        return -ENOMEM;
-                }
-
-
-
-BR
-Chao.Zeng
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
