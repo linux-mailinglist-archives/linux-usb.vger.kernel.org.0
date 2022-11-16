@@ -2,108 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAA362B72D
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 11:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3159A62BB39
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 12:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbiKPKHZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 05:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S239119AbiKPLRW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 06:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbiKPKHY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 05:07:24 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E66FAFE
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 02:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668593243; x=1700129243;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=wrr9cINTL00hJEDG3QVPbzyrrYAG4QuCPK8+ZSDIZO0=;
-  b=NEh8Tf7cju+/B/FL3PN25rum9v2hzLAsj6ULpdyRfo3tvBzsOisY6Gc3
-   CQ52FZCkZmr5JCKY0Egly8y7PUm8Gtnv9khkUv2OEd34BBL7VH2DY0Cpt
-   zKnH4cMDKz4IPulTRgg/UHdA+FWKfQ7+yTjhuZFO4KHrgs0Rf4zSQ1uBR
-   1AMnBb4hJzCMpczyT4AfWW3hQjVDTqH97Xs9Qz13zlMHjN34acr8Ngfjn
-   rd+QGhcQqLmCBbZIGoCyBv3S0l5oirD1QsW3VjOSY/SZbEp4VoA/jiwhP
-   HEn5YAkMk7nct7GpdJzlMi4u1i5Yqo3Bbfp9aiPFbdbwxbcdvl3BCvxVX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="398792503"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="398792503"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 02:05:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781706243"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="781706243"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Nov 2022 02:05:09 -0800
-Message-ID: <fa7d7926-5944-e58d-7f90-5284fdaeeb55@linux.intel.com>
-Date:   Wed, 16 Nov 2022 12:06:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-To:     chao zeng <chao.zengup@gmail.com>, mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org
-References: <CAGzEXPYzhJdw5M+F0SdcrtN8Hnew_LCjD6bC=ANBJzBxVRM_NA@mail.gmail.com>
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: Some problems about xhci_ring_expansion
-In-Reply-To: <CAGzEXPYzhJdw5M+F0SdcrtN8Hnew_LCjD6bC=ANBJzBxVRM_NA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S239232AbiKPLRE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 06:17:04 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0553549B6F;
+        Wed, 16 Nov 2022 03:05:09 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso1185512wmp.5;
+        Wed, 16 Nov 2022 03:05:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nt8q54IUjG8fYZGllQ5PibnFEuFeXBcb2ZdQ9kqflsc=;
+        b=NqMS/k9x7OCLXkiVB/M6SRtzbLqnvSefXDCcNF4681VtRicjMHUZdDb467XItyzKPk
+         AfpTcuAuyapgKR057L39vb4DCZz+QOOv4bQ0ZrX4Agj09RArmsW+JgMURhqP08BrcHY8
+         +29zTda1y5S8FNUH0rznaNQfBMeb0oyicLmRQ+Aw0U4rpxgldnPoPmejkJv2K2QZnACX
+         yhsv7x5BuWkuaFwiChUcjETiF/V4JS3WcEZYltst/i6C3FAe82B4z59yTWC8grfewC0w
+         lZgBpAzZx5YHxUiTJFfrNEpPMmddA+0vp22AHYfQd97mwSiX5Y2ePbDm2PZnJt42C9gY
+         qhOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nt8q54IUjG8fYZGllQ5PibnFEuFeXBcb2ZdQ9kqflsc=;
+        b=huCkGSZsAJ3w+Df09756gYhtUheAuDtg9PoNd9t9lgmYw/JWXuCt4OkXGzmhRJ+emI
+         BZS1S3F3PFPzdsi2HRQtrmqE4Whkl08U86yggXye3nR0foafDQ/M8E7Bol01dxPGwryW
+         x2tOQD0oOpIc5T/ZR5/XbMzmfz01qiIP1NxWBbEZfSgjBtIxUWk9JRCgnkzPEzZeSLKh
+         JEM5bZsuZB84m+DibmbZf+lBdobwyxoomg1q0Mj5faFWDZ1gNbDL4zexT7AdD9gjfOGR
+         fn402nOXGjefB+dsoi7QRcSa3GYFMLAodo6iKeoowZ+TfHUMonkuPB4rAabanF8rB79J
+         yHNA==
+X-Gm-Message-State: ANoB5pmYFKw15Pi+nLB3PlkuXr7oVHE5v+dHFmfG0ghA9Vl3JKSHUAfK
+        gR+tqY8jIqtkV7MZ+VZAsJyni+xkiHQ=
+X-Google-Smtp-Source: AA0mqf5vxmmcTH1fH17jwPxcH/8LGgjrFM8xrkw7QSUdiXmyDyzdHIII54vZlYmnyQVMhLrZrl/2cQ==
+X-Received: by 2002:a1c:29c5:0:b0:3cf:6263:bfc5 with SMTP id p188-20020a1c29c5000000b003cf6263bfc5mr1807409wmp.137.1668596707374;
+        Wed, 16 Nov 2022 03:05:07 -0800 (PST)
+Received: from felia.fritz.box (200116b826c55000c59461cca0b9a159.dip.versatel-1u1.de. [2001:16b8:26c5:5000:c594:61cc:a0b9:a159])
+        by smtp.gmail.com with ESMTPSA id h14-20020a05600c2cae00b003cfd0bd8c0asm1841370wmc.30.2022.11.16.03.05.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 03:05:06 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] usb: dwc3: improve the config dependency of USB_DWC3_XILINX
+Date:   Wed, 16 Nov 2022 12:04:44 +0100
+Message-Id: <20221116110444.8340-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+A request to Manish Narani (see Link) asked for clarification of the
+reference to the config ARCH_VERSAL in the support of Xilinx SoCs with
+DesignWare Core USB3 IP.
 
-On 16.11.2022 10.46, chao zeng wrote:
-> hello!
->    Thank you for taking the time to look at my question.
-> 
->    At file xhci-ring.c
-> static inline int room_on_ring(struct xhci_hcd *xhci, struct xhci_ring *ring,
->                  unsigned int num_trbs)
-> {
->          int num_trbs_in_deq_seg;
-> 
->          if (ring->num_trbs_free < num_trbs)
->                  return 0;
-> 
->          if (ring->type != TYPE_COMMAND && ring->type != TYPE_EVENT) {
->                  num_trbs_in_deq_seg = ring->dequeue - ring->deq_seg->trbs;
->                  if (ring->num_trbs_free < num_trbs + num_trbs_in_deq_seg)
->                          return 0;////suppose return here
->          }
-> 
->          return 1;
-> }
-> 
-> Suppose the function room_on_ring returns in my bolded condition.
-> num_trbs_needed will be a very large value because the num_trbs <
-> num_trbs_free. In this way , we will just double the total ring size.
+As there is no response, clean up the reference to the non-existing config
+symbol. While at it, follow up on Felipe Balbi's request to add the
+alternative COMPILE_TEST dependency.
 
-You are correct, good point.
-So it turns out we almost always double the ring size when we need
-more space, and we do this just because num_trbs_neeed is completely incorrect.
-(trying to store negative value in unsigned int)
+Link: https://lore.kernel.org/all/CAKXUXMwgWfX8+OvY0aCwRNukencwJERAZzU7p4eOLXQ2zv6rAg@mail.gmail.com/
 
-> Is this as expected or should add one segment size instead?
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ drivers/usb/dwc3/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-That's a good question.
-Code should be fixed, but do we want to continue doubling ring size, or add
-just enough segments to fit actual num_trbs_needed, or perhaps add enough
-segments to fit twice the amount of needed trbs?
-
-Would you like work on this? patches are welcome
-
-Thanks
--Mathias
-
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index 03ededa86da1..b2f72b0e75c6 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -152,11 +152,11 @@ config USB_DWC3_IMX8MP
+ 
+ config USB_DWC3_XILINX
+ 	tristate "Xilinx Platforms"
+-	depends on (ARCH_ZYNQMP || ARCH_VERSAL) && OF
++	depends on (ARCH_ZYNQMP || COMPILE_TEST) && OF
+ 	default USB_DWC3
+ 	help
+ 	  Support Xilinx SoCs with DesignWare Core USB3 IP.
+-	  This driver handles both ZynqMP and Versal SoC operations.
++	  This driver handles ZynqMP SoC operations.
+ 	  Say 'Y' or 'M' if you have one such device.
+ 
+ config USB_DWC3_AM62
+-- 
+2.17.1
 
