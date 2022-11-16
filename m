@@ -2,74 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A832F62CB43
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 21:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9212A62CC39
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 22:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbiKPUmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 15:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S231634AbiKPVGV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 16:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233893AbiKPUmW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 15:42:22 -0500
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A102529D
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 12:42:20 -0800 (PST)
-Received: by mail-vk1-xa29.google.com with SMTP id o24so8339361vkl.9
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 12:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vO5311Qe6LB2FIy4YoKv4H8uuO4JMc6A/UgteLfosX8=;
-        b=O8RLzwCakZklUR+LYHgZkLukNV+NhgiYievXBxx4o4/BXnIgG41Be2zTmlxvo7qqgr
-         gv7dHNBotogbw3kQ1MpQxeHtZ2+CcXIeJ0rOI1js52OXbz0aeYXiVJ1daCjsZQzuP/QV
-         kFDJopCQXw2i+PcPpmHV1LQvL5AvElPnKE0RzI9nN8EioMIWYNfJ7nNMtTFqkiEqm0jk
-         P98f2CdUcgVPCjDX/4BpKwLVUSToTtzKw5idfP4e9XTK/MXqIxUW2yi3etTuBBHeCAL2
-         4aWHCdJN9rarL3tS5x/USPAug5rp260aTN7LayEmjBkqqKAEsgxwvBvryNm9ZvspZ0Sq
-         5HKA==
+        with ESMTP id S233836AbiKPVFw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 16:05:52 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2936768C4E;
+        Wed, 16 Nov 2022 13:05:01 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso11228518otb.2;
+        Wed, 16 Nov 2022 13:05:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vO5311Qe6LB2FIy4YoKv4H8uuO4JMc6A/UgteLfosX8=;
-        b=KkUT7UfAnolzSbOhbm6pfy7eD0sTO2b9XhxSGU0VY6Heg1QVCwWx1u4qPNBVpJGV75
-         IFCWC4mJyLMvB/wAuxokDyIncNBSbqengfEtsPch/vVK56vHusDPYJ+hjFynsFJ04Dfs
-         qZcF36fKkmdXJ1eTa23+A3hra6pVfbxGKPZ5hGOQFzn3oqapT1xfLLEvutcA2iMB6xv3
-         UvClwbR2vdAkgkGMfJdHII5oIewXVh6aEaaDOcRswSB08EMVCasFJoCLnoJGC//0VTgs
-         1cIQF7SfuVrhKLzsvtWscRo8hg0kKo9x1GKIyki8k/sgYPviw5Wl3GjxCE8EBMpKP70d
-         /QUA==
-X-Gm-Message-State: ANoB5pm2m5XfY+3L53Y3YXlOIBu8Seon6PX6FPHjsazyY1m9fY69BpS4
-        TW1L21yk6cYxan4RFElScbxh3UZ7k4PoYfaIdfGJ4w==
-X-Google-Smtp-Source: AA0mqf5XJefBQw6SXETwoEsAo80++wTS4Jn4DgAC/4bK8t42Go+Rf+yfdLi5Z73mZyPRSK4J97lCSjZicQ4PktnYuno=
-X-Received: by 2002:a1f:19d4:0:b0:3bb:ebc4:cab4 with SMTP id
- 203-20020a1f19d4000000b003bbebc4cab4mr12792135vkz.26.1668631339343; Wed, 16
- Nov 2022 12:42:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RPb+hxEbevRL4EpwGZMxw2145qAIDik/fJZXBGeTjRQ=;
+        b=3LTdG47CkYi/JKP5SweaxBShdG+ToZaNGc9S5gjbvI+SaIonaDMqxWIVrVnIZb/rt1
+         f/OZDSaC7gE5c/VqzHh84dZciNra2rg5ebwsTKHVCsSItH9hMrAYodlEX2ljetm5FYKA
+         svdbnGdr4Emb/TIGQK0eDdG1uRGXm+dYYFmbYcP85cDNq/3HSjmk1eA7OhjwYoB5w7kq
+         8IKmgEgWYX1zZ3WUQ578kMJ9SknFJnPOQBE0AgHF1aND/kAdTVQARHbqZTJAroT23gka
+         Mq6u8HiPhBkA5EedYDmBD5Z5oK9D7fJ2pBuPvsPKmV84aax083RwgbaUgCeFrwI8lrwH
+         ZR+A==
+X-Gm-Message-State: ANoB5pnlZfmSowqslnX6VedakvP7wU421TP6VhoWl7W8Rxkqj3ZKUJgy
+        b/8rCsIz7PCNpRgcW5F63w==
+X-Google-Smtp-Source: AA0mqf71d/wGKKxQlFEfSQxfiLFxHauKFXXJRWt4PDDX7gax2bvQbIjxEflrHDuY7Vb/+ZE8LPPSeg==
+X-Received: by 2002:a9d:6d89:0:b0:66c:6f0c:d278 with SMTP id x9-20020a9d6d89000000b0066c6f0cd278mr12122160otp.375.1668632700314;
+        Wed, 16 Nov 2022 13:05:00 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l17-20020a05683016d100b006393ea22c1csm7026075otr.16.2022.11.16.13.04.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 13:04:59 -0800 (PST)
+Received: (nullmailer pid 884378 invoked by uid 1000);
+        Wed, 16 Nov 2022 21:05:01 -0000
+Date:   Wed, 16 Nov 2022 15:05:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 01/13] dt-bindings: usb: tegra-xudc: Add Tegra234 XUSB
+ controller support
+Message-ID: <20221116210501.GA877429-robh@kernel.org>
+References: <20221114124053.1873316-1-waynec@nvidia.com>
+ <20221114124053.1873316-2-waynec@nvidia.com>
 MIME-Version: 1.0
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com> <Y26UcbviRaoK9a3C@bombadil.infradead.org>
- <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com>
- <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan> <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
- <Y3PN0GZYvFyUF83g@bombadil.infradead.org> <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
-In-Reply-To: <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Wed, 16 Nov 2022 14:42:08 -0600
-Message-ID: <CAJzde06o9acw4gW1bn9UXkCOPHSRTyDxroTiWZFU3aORaAy9+g@mail.gmail.com>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114124053.1873316-2-waynec@nvidia.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,116 +71,78 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I think I am misunderstanding something because the aliases visible
-through kmod_config_get_aliases don't look anything like the
-modaliases used by udev to match devices to modules.
+On Mon, Nov 14, 2022 at 08:40:41PM +0800, Wayne Chang wrote:
+> Extend the Tegra XUSB controller device tree binding with Tegra234
+> support.
 
-I have some concern that making the changes necessary to use kmod
-would result in the files/indexes being much larger to include all the
-extra values that are being left out, so I think the sysfs approach
-might be the better way to go.
+Why do you need any order and number of phys? Please explain in the 
+commit msg.
 
-On Tue, Nov 15, 2022 at 12:40 PM Allen Webb <allenwebb@google.com> wrote:
->
-> When i get the modinfo for usbhid, there are no aliases listed:
-> ```
-> localhost ~ # modinfo usbhid
-> name:           usbhid
-> filename:       (builtin)
-> author:         Andreas Gal
-> author:         Vojtech Pavlik
-> author:         Jiri Kosina
-> description:    USB HID core driver
-> file:           drivers/hid/usbhid/usbhid
-> license:        GPL
-> parm:           quirks:Add/modify USB HID quirks by specifying
-> quirks=vendorID:productID:quirks where vendorID, productID, and quirks
-> are all in 0x-prefixed hex (array of charp)
-> parm:           ignoreled:Autosuspend with active leds (uint)
-> parm:           kbpoll:Polling interval of keyboards (uint)
-> parm:           jspoll:Polling interval of joysticks (uint)
-> parm:           mousepoll:Polling interval of mice (uint)
-> ```
->
-> bluetooth however has an alias listed:
-> ```
-> localhost ~ # modinfo bluetooth
-> filename:
-> /lib/modules/5.10.154-20424-gea7532c123d8/kernel/net/bluetooth/bluetooth.ko.gz
-> author:         Marcel Holtmann <marcel@holtmann.org>
-> description:    Bluetooth Core ver 2.22
-> version:        2.22
-> license:        GPL
-> alias:          net-pf-31
-> vermagic:       5.10.154-20424-gea7532c123d8 SMP preempt mod_unload
-> name:           bluetooth
-> intree:         Y
-> retpoline:      Y
-> depends:        ecdh_generic
-> srcversion:     F8E46CD048C50B0AA1CD471
-> parm:           disable_esco:Disable eSCO connection creation (bool)
-> parm:           enable_ecred:Enable enhanced credit flow control mode (bool)
-> parm:           disable_ertm:Disable enhanced retransmission mode (bool)
-> ```
->
-> I believe the reason for this is many modules use `#define
-> MODULE_DEVICE_TABLE(type, name)` which is a noop for buildin modules.
-> I have a local patch that resolves that issue here:
-> See: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3840672/1/include/linux/module.h#b246
->
-> However, I probably ought to rework that patch to create the
-> MODULE_ALIAS defines instead of the buildin.alias file.
->
-> On Tue, Nov 15, 2022 at 11:35 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Tue, Nov 15, 2022 at 10:05:35AM -0600, Allen Webb wrote:
-> > > On Mon, Nov 14, 2022 at 11:22 AM Lucas De Marchi
-> > > <lucas.demarchi@intel.com> wrote:
-> > > >
-> > > > On Mon, Nov 14, 2022 at 10:42:50AM -0600, Allen Webb wrote:
-> > > > >On Fri, Nov 11, 2022 at 12:29 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > >>
-> > > > >> On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
-> > > > >> > USB devices support the authorized attribute which can be used by
-> > > > >> > user-space to implement trust-based systems for enabling USB devices. It
-> > > > >> > would be helpful when building these systems to be able to know in
-> > > > >> > advance which kernel drivers (or modules) are reachable from a
-> > > > >> > particular USB device.
-> > > > >> >
-> > > > >> > This information is readily available for external modules in
-> > > > >> > modules.alias. However, builtin kernel modules are not covered. This
-> > > > >> > patch adds a sys-fs attribute to both builtin and loaded modules
-> > > > >> > exposing the matching rules in the modalias format for integration
-> > > > >> > with tools like USBGuard.
-> > > > >> >
-> > > > >> > Signed-off-by: Allen Webb <allenwebb@google.com>
-> > > > >>
-> > > > >> Thanks for the patch Allen!
-> > > > >>
-> > > > >> I'd rather have something generic though, and it would seem kmod [0] already
-> > > > >> does this, have you seen the kmod support for builtin.alias.bin
-> > > > >>
-> > > > >> Can't that be used?
-> > > > >
-> > > > >Probably, but I don't see the builtin.alias.bin in my build. Is it experimental?
-> > > >
-> > > > no. That is generated by depmod since v27 using modules.builtin.modinfo
-> > > > generated by the kernel build system. Highly recommend v30 though
-> > > > as there were fixes in v28 and v29 and some changes to speed up its
-> > > > generation/use in v30:  See entries mentioning
-> > > > builtin.alias and bultin.modinfo in
-> > > > https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/NEWS
-> > > >
-> > > > libkmod/modprobe/modinfo also have the corresponding changes to lookup that
-> > > > index when resolving aliases.
-> > >
-> > > I see the file but it is largely missing the aliases I am interested
-> > > in, so it looks like I might need to modify my patch that creates
-> > > buildin.alias to add the missing alias defines in the header along
-> > > with the other module metadata for builtin modules. Does this sound
-> > > right to you?
-> >
-> > Can you clarify what is missing and why? And an RFC is welcomed if it
-> > helps demonstrates what you mean.
-> >
-> >   Luis
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+> V2 -> V3:nothing has changed
+> V1 -> V2:address the issue on phy-names property
+>  .../bindings/usb/nvidia,tegra-xudc.yaml       | 24 ++++++++++++-------
+>  1 file changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> index fd6e7c81426e..52488a731c4e 100644
+> --- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> @@ -22,6 +22,7 @@ properties:
+>            - nvidia,tegra210-xudc # For Tegra210
+>            - nvidia,tegra186-xudc # For Tegra186
+>            - nvidia,tegra194-xudc # For Tegra194
+> +          - nvidia,tegra234-xudc # For Tegra234
+>  
+>    reg:
+>      minItems: 2
+> @@ -90,21 +91,27 @@ properties:
+>  
+>    phys:
+>      minItems: 1
+> +    maxItems: 8
+>      description:
+>        Must contain an entry for each entry in phy-names.
+>        See ../phy/phy-bindings.txt for details.
+>  
+>    phy-names:
+>      minItems: 1
+> +    maxItems: 8
+>      items:
+> -      - const: usb2-0
+> -      - const: usb2-1
+> -      - const: usb2-2
+> -      - const: usb2-3
+> -      - const: usb3-0
+> -      - const: usb3-1
+> -      - const: usb3-2
+> -      - const: usb3-3
+> +      enum:
+> +        - usb2-0
+> +        - usb2-1
+> +        - usb2-2
+> +        - usb2-3
+> +        - usb3-0
+> +        - usb3-1
+> +        - usb3-2
+> +        - usb3-3
+> +
+> +  dma-coherent:
+> +    type: boolean
+>  
+>    avddio-usb-supply:
+>      description: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
+> @@ -153,6 +160,7 @@ allOf:
+>              enum:
+>                - nvidia,tegra186-xudc
+>                - nvidia,tegra194-xudc
+> +              - nvidia,tegra234-xudc
+>      then:
+>        properties:
+>          reg:
+> -- 
+> 2.25.1
+> 
+> 
