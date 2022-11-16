@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362C762BD47
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 13:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD69362BD5C
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 13:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiKPMMV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 07:12:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S233755AbiKPMSO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 07:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238814AbiKPML7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 07:11:59 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AE8C7;
-        Wed, 16 Nov 2022 04:05:47 -0800 (PST)
+        with ESMTP id S238515AbiKPMR3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 07:17:29 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB278BC39;
+        Wed, 16 Nov 2022 04:13:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668600347; x=1700136347;
+  t=1668600798; x=1700136798;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZEzeXOg/8KU5GCB+dlcVcysuMwxKjq6Ze02vnWC84VM=;
-  b=e7bUhimGnN443Asg4/+rgTKV4wW6tlZiMQgQs3GX+fjRr2rK8LjO52Z8
-   PAiPdZvV6VmVCGo+e9AiOQfeDXPw/CQXhjEB0k8f0Jmabw7yfzrTE/uMT
-   Ua9+WJOKMxzrkihkp+9b3rwNS28Xv2AX3y3k5Qew4t3WpWvTfMrqiwh4j
-   rqoa2UWgy+gLDY152JGqSAF+/gBqj2X7HeQix9ALRIVdjtzCf/NnkfqjF
-   kJ3t18ymwJdcbDELvcdX6seYraBiuahNyZeSqUKlGrmAS0lLNwYQeAZti
-   EMBFeSa/RdCSQx/mAYBpprJv3D+Ep8uo229TqMg/+oZDCuaVq8TAVxih2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="374660330"
+  bh=bIII9nqAa33Yiw1THwvOqyZ2a3+KL2FjBXLs9hG8bVk=;
+  b=E02QI3u41BWb/kGwv+eclktm4T5Q/NpG8BR5+jP7QwitkuxbkTJ+pwev
+   d/GdjPsfQiQF5sdIVEski3Ae8KXvMMfnEN4QmVjTxeHBHP4yMAklB2BIt
+   /H9cq3iCAD3AJ/lGzoAa4QZt985ITV/jGQN1onPt03mwUCrPiFBEXBMb1
+   BGAjuF/bwkzbivvTw4lheV3wzhcYQKO2EjDZRnKEbLS9ozkGsNHwS3hmF
+   g2Czo89+3HAFGYctJU5wPqpXs1Zzd1R2MhDZ2ftVnQ62JOcvjm1IVEsZ6
+   ZvbsPV9Jn23hUCKomPNr0Y73UVdkvzaafi8YhW+3p5S/DpJb0OHzrrL58
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314343637"
 X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="374660330"
+   d="scan'208";a="314343637"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 04:05:46 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 04:13:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781743266"
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781745068"
 X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="781743266"
+   d="scan'208";a="781745068"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 16 Nov 2022 04:05:43 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Nov 2022 14:05:43 +0200
-Date:   Wed, 16 Nov 2022 14:05:43 +0200
+  by fmsmga001.fm.intel.com with SMTP; 16 Nov 2022 04:13:15 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Nov 2022 14:13:15 +0200
+Date:   Wed, 16 Nov 2022 14:13:15 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Sven Peter <sven@svenpeter.dev>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: Check for ops->exit instead of ops->enter in
- altmode_exit
-Message-ID: <Y3TSF+2XkejIk8UG@kuha.fi.intel.com>
-References: <20221114165924.33487-1-sven@svenpeter.dev>
+Subject: Re: [PATCH 1/4] usb: typec: tipd: Cleanup resources if
+ devm_tps6598_psy_register fails
+Message-ID: <Y3TT23pkf3g0VC+g@kuha.fi.intel.com>
+References: <20221114174449.34634-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221114165924.33487-1-sven@svenpeter.dev>
+In-Reply-To: <20221114174449.34634-1-sven@svenpeter.dev>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,35 +61,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 05:59:24PM +0100, Sven Peter wrote:
-> typec_altmode_exit checks if ops->enter is not NULL but then calls
-> ops->exit a few lines below. Fix that and check for the function
-> pointer it's about to call instead.
+On Mon, Nov 14, 2022 at 06:44:46PM +0100, Sven Peter wrote:
+> We can't just return if devm_tps6598_psy_register fails since previous
+> resources are not devres managed and have yet to be cleaned up.
 > 
-> Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+> Fixes: 10eb0b6ac63a ("usb: typec: tps6598x: Export some power supply properties")
 > Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
-No Cc: stable@...?
+I think this should also automatically go to the stable tree.
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/bus.c | 2 +-
+>  drivers/usb/typec/tipd/core.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
-> index 26ea2fdec17d..31c2a3130cad 100644
-> --- a/drivers/usb/typec/bus.c
-> +++ b/drivers/usb/typec/bus.c
-> @@ -134,7 +134,7 @@ int typec_altmode_exit(struct typec_altmode *adev)
->  	if (!adev || !adev->active)
->  		return 0;
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 748ff4f6b5f6..ebc786d728e2 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -827,7 +827,7 @@ static int tps6598x_probe(struct i2c_client *client)
 >  
-> -	if (!pdev->ops || !pdev->ops->enter)
-> +	if (!pdev->ops || !pdev->ops->exit)
->  		return -EOPNOTSUPP;
+>  	ret = devm_tps6598_psy_register(tps);
+>  	if (ret)
+> -		return ret;
+> +		goto err_role_put;
 >  
->  	/* Moving to USB Safe State */
+>  	tps->port = typec_register_port(&client->dev, &typec_cap);
+>  	if (IS_ERR(tps->port)) {
 
 thanks,
 
