@@ -2,85 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E13662B609
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 10:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9507962B6E9
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 10:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbiKPJIZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 04:08:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S229907AbiKPJvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 04:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbiKPJHQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 04:07:16 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3113F220ED;
-        Wed, 16 Nov 2022 01:07:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1668589604;
-        bh=JzsGOJXboxKM/3crZDIoEMyOlym1tEKRyGk1X7tJOE0=;
-        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
-         References;
-        b=opY5scHBUpdgu5gihOElocUqXf9RoIIv/ruFjs3wkFGtMi7OrUoBj9UWUP5fxuXSo
-         br3rUPMDQozK77dNdkOfSr2fkymMLkCQmPGhM102cMWD2uTP0aBUD1WyyaeS45Gb+B
-         5XDLEpHZ9JasvKi+X/HWsAszFj/ia+/rEtlKvJDiAqsTcaDauawUzsWuZVSA9W9AsO
-         zV6C5vzi/3vFefLseQVKv77r7wSiSKAisu+yO76O9lHkBV0rqk0hqRW8IRFlQ8t7Ki
-         Q6tGUgbEnbSOgfEOOp0YoNCEx2Isk7NOVqdF+vXAjyTrIJpnYNOjNczzXX0+2xaykX
-         agQm3qRyt4gYg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [127.0.0.1] ([80.187.100.158]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQgC-1p8NaF3cga-00vPwN; Wed, 16
- Nov 2022 10:06:44 +0100
-Date:   Wed, 16 Nov 2022 10:06:29 +0100
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-CC:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Bo Jiao <Bo.Jiao@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 10/11] arm64: dts: mt7986: add Bananapi R3
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <Y3QMMKGc6uNFyfWb@makrotopia.org>
-References: <20221112091923.9562-1-frank-w@public-files.de> <Y3QMMKGc6uNFyfWb@makrotopia.org>
-Message-ID: <46481C3B-3B46-440F-B923-02934E0445F1@public-files.de>
+        with ESMTP id S229495AbiKPJvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 04:51:18 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFD563A7
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 01:51:17 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id w14so28979438wru.8
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 01:51:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EmNY9q9DX97g2St/O30t2bUNctOXRrK6tcjOyVP/O74=;
+        b=f9nYnagLQ49/D/j0di/jae0cIH4o4i15RzHwffiQAKuJo4R6HbzCD67UEwleWTq4bj
+         5rSvupCCv8VC3aq05io6wFZB+v3MJ2b/la9D+Ko3fXj9IuN/O02HD6G+gB+Iqc/pdFeA
+         V81yMaBj9LggBMQd75TzaABt9poAicRftwMD5ZrZW4QskEOA/XAQt9QyihzuM/nqh7X5
+         Q/7xE/vg6CMk5n01NAI8uYZZ6FT/eSAj9/hef70Tu0CIyMoheucjHz2kh0YYJh03HMMU
+         q7I0oiuD8R6XKdzelYxTdXHq1q/s/kCXFckY98MKznD063DaY/8SYOV26HiiIzEwQ5lo
+         B1iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EmNY9q9DX97g2St/O30t2bUNctOXRrK6tcjOyVP/O74=;
+        b=IBh86K4r4y56I9H3JolJ7ZMIMJ0wb//RF8WzQ6BbDXgAFiTwzzoSQrdvviPb2gxQtM
+         99vzn5Q2XTnT04JyqsWT8S5u7s1l28JkhgDD2zwLTaeXDedS55dUrC8Sx36MUkwU+ggo
+         EDAakdwXSr4YstDkca3Z32M3UgQTkstfdNCXpTqA3EzZRYQ5CwHXY62rAhja0YxDHV7z
+         ArpC1ypByX+ilgWnMUYe3EQKSqX/0eWZwh+UTUYXV1e/QPfjQcXJXMP+WEwGL+hPkc0F
+         MulI+49j8B/9hhWTgfhDh6lUNBwkQB+SUOgSvMkFMbKVSyvPZQ4Vi2jsN0SZVoPERbJS
+         ekuA==
+X-Gm-Message-State: ANoB5pk1g08WU7fr1YTv/ohG/D8JoUUmpyUKN9/NUpYQ30X0Vcr6YHxj
+        tLbigVbwy5DUh6cCeezhIQk=
+X-Google-Smtp-Source: AA0mqf5l8sAeb+nLsVFVeAGd+EsZg9bfHqk5Z0Vr1+gBOCpk1aJbNw/1SD+AxP1dUnOHCNVihENLEg==
+X-Received: by 2002:a05:6000:1363:b0:241:9a82:a44c with SMTP id q3-20020a056000136300b002419a82a44cmr4766202wrz.37.1668592275950;
+        Wed, 16 Nov 2022 01:51:15 -0800 (PST)
+Received: from testvm.. ([185.215.195.243])
+        by smtp.googlemail.com with ESMTPSA id m42-20020a05600c3b2a00b003cf47556f21sm1690562wms.2.2022.11.16.01.51.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 01:51:15 -0800 (PST)
+From:   Davide Tronchin <davide.tronchin.94@gmail.com>
+To:     johan@kernel.org
+Cc:     cesare.marzano@gmail.com, davide.tronchin.94@gmail.com,
+        gregkh@linuxfoundation.org, larsm17@gmail.com,
+        linux-usb@vger.kernel.org, marco.demarco@posteo.net
+Subject: Re: [PATCH v5 1/3] USB: serial: option: remove old LARA-R6 PID
+Date:   Wed, 16 Nov 2022 10:50:42 +0100
+Message-Id: <20221116095042.57026-1-davide.tronchin.94@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y3SZsdUk1L9v6SUs@hovoldconsulting.com>
+References: <Y3SZsdUk1L9v6SUs@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rehvp2Q0a87CjyOMm8vKg+p92Q77SPjMTuCe012oBGxdzZVfWkj
- YBh88W32HzaGgeWQE2MShbKCC2M8d7DdJ+2MymyUSTbOkv2FYOM9ET0Mn6XgDYnx8OFUq6S
- SSw+BL6nm/b4319IdgAFFtTT6NNFY8YtUpBsWG5J9mI0veVyaOSZoFrI4zqlAEECYUHVBaX
- lRsvvsSTTxZWwYq3YenCg==
-UI-OutboundReport: notjunk:1;M01:P0:Yg1rpNvtESI=;ewnDyjRW58XaqRskOpwg+Ef6gi4
- z+IL/9QzhsodSKsHI/5SHVaLHQpep7uQgTUwzQAkCPdoYNfy500OwbUhxx+3ES6OG+l7uVG7F
- OdJbr8H5FN0v7LmRJfm4iDnpO0TovFG/DRTdt3QT+74WXv0eotk4t/SRPbLAeAkMQHwlB8JEO
- QyeADG1ErlosH+9tb86Wx47c0sJCrmsEUnk0zMrc1a8i47mgdX2wzSInH3k793pv9FCeRL3Wt
- G8yApQmnbY39qh7deX/etzqg3DFcPso2KOLBFt3a6/SMeMFs54DB8HD/l492z8pbCjmjPnn/m
- adxbvtuodEgCFpEzvgwwZVTtXIM1yDH3ZT0Gz3eR+vHbV7yQMghLQKVDTB56EwoczrTA6mdaT
- 9Jv3BSIKQP65wnJhoQDlKE5sorcTEwoHbnH1xMykMaB8zIvynuC7Z9dfc7FccR7tIhV/wmuji
- eRzD4KuYKrZpLjOAL6Mk+O2rNjfyl8EFbBje3IZY9t2jBSJsrqtqiXIfZOYPTMlzaSpAMb6ia
- UHWW9jOSWosQ+9yfA352aX73A6DlHZrGkUCOwxFh4AABRaI6tBs4/Q+3BzSeZVSUXRvjAO5EN
- /xgAk+sPiN7pv2fDPfRc4hdv9QWeCqe1MYRu7DgY4+2o5rWf/azq8N5ilRrOse7UsUXuOaDRc
- 6m9JaGCsNgiKkbq7YkRJCibNQEnB87UC7X0LsyROAJHMFlgvAx8wh2h3mTZzlbynHryjI7zcA
- CdXJmYhLpCmDgx4CX0PaYDJA5VT2k3yKO2UOKET9RCn5LT8hCHVmCc0RPdl60rqHcQqquZg0I
- dqyV38X6IXWgjZwtNBL4nyNbUSz8fniDGcvlF9OFJH1X5rUZjsQljHZ+RLubfDNeM1xzdfYcM
- Xuy5PqUh7qLrRX5/3tL5nPRy2m7dmf+64JoGN5EexBLz9NKxlYm+ej/rh7XS1E4ydD6f0s5n4
- U4NNqtWhoGf+DmliGDuE0KSyqpc=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,39 +72,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am 15=2E November 2022 23:01:20 MEZ schrieb Daniel Golle <daniel@makrotopia=
-=2Eorg>:
-
-
->The device can boot from all 4 storage options=2E Both, SPI and MMC, can
->be switched using hardware switches on the board, see
->https://wiki=2Ebanana-pi=2Eorg/Banana_Pi_BPI-R3#Jumper_setting
+> > Yes, i am a u-blox employee and i've been asked to integrate LARA-L6 in
+> > the linux kernel and update the current code for LARA-R6 00B (updating
+> > the PID from 0x90fa to 0x908b).
 >
->So why do the SPI-NAND vs=2E SPI-NOR switching with device tree overlays
->and the SD card vs=2E eMMC switching with dtsi + 2x dts? To me this looks
->inconsitent=2E Use either one or the other method=2E
+> Thanks. Was it it also a colleague of yours that submitted the initial
+> PID then?
 
-Hi Daniel
+Correct, the initial PID has been submitted by another u-blox employee.
 
-It is still in discussion,if mainline-kernel will support devicetree-overl=
-ays [1]=2E
+> > The first prototype of LARA-R6 00B had 0x90fa PID but, just before the
+> > product finalization, it has been decided to adopt a new USB composition
+> > and consequently a change of PID was necessary.
+> > The 0x90fa PID has been used only for some internal prototypes, hence
+> > no u-blox products with that PID have been shipped to customers.
+> > As pointed out in the discussion, the 0x90fa PID is used by other module
+> > vendors which sell Qualcomm based modems, hence i proposed to remove the
+> > association between u-blox (thedefine UBLOX_PRODUCT_R6XX) and 0x90fa,
+> > moving it directly in the option_ids array.
+>
+> Thanks, this is the kind of details we've been asking for. Please put
+> some of this in the commit in some form so that it is obvious from just
+> reading the commit message that the patch is correct and safe to apply.
+>
+> Make sure to mention that this Qualcomm PID is used by other products
+> and that's why you're leaving it in. Perhaps a Link tag with a
+> reference to Lars message pointing this out is in place. For example:
 
-I used this way to have at least 1 dtb without overlay for booting kernel =
-from sdcard which is the only external storage=2E
+Ok thanks for the suggestions. I will add all the details to the v6 1/3
+patch.
 
-If mainline kernel rejects dto, we have no "broken" dtb which only allows =
-bootup with initrd=2E We can boot this board from sdcard with mainline code=
- only (maybe some users don't need emmc,nand,nor)=2E
+> > Thanks for the suggestions. In order to simplify the submission process,
+> > i propose to split the submission for the LARA-L6 patches and the update
+> > for LARA-R6 00B.
+> > Do you think could it be feasible?
+>
+> I don't think that's necessary now that you've provided some more
+> details. Just respin the series and address the review comments given
+> so far (either by rejecting a suggestion and explaining why, or by
+> incorporating it in your next submission).
+>
+> It seems you only need to tweak some of the commit messages in a v6.
 
-As you cannot delete (sd specific) properties in overlays,i added emmc var=
-iant=2E And now we can use overlays to support spi devices,which are not ne=
-eded for first bootup,but to access emmc=2E
+I will submit a v6 version of the patch with the provided suggestions.
 
-Imho my current sd/emmc dts can be easily converted to dtso and base dtsi =
-needs only to be renamed=2E But all only if the big question below is answe=
-red=2E
+I have just one doubt, in patch v6, should i edit also the previous
+sent changelog by describing changes to each indiviual sub-patch?
 
-[1] https://patchwork=2Ekernel=2Eorg/project/linux-mediatek/patch/20221106=
-085034=2E12582-12-linux@fw-web=2Ede/#25085681
-
-regards Frank
+Thank you for the patience.
+Davide
