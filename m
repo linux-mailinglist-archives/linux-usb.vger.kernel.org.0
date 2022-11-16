@@ -2,70 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521E862C34B
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 17:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C90E62C401
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 17:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiKPQAm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 11:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S234344AbiKPQWH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 11:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233678AbiKPQAl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 11:00:41 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7D453EF0
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 08:00:38 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so3087713wmi.1
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 08:00:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/BF5PL3tMarYSladvLAUAdbHJa8XKRhmvy0pGOiheE=;
-        b=pIbGRIzB8p/7/nDoZK1kLmPdHHEq4sGNav0hy8MMoy7BL/oJZyaUDrZuLv9n0fT57/
-         ZcknoQvMB9Bc755z8jSt/CTlc7yC+PZjqN/bdWF27nXdYGhI4Uh76pqmmcL4bls4Fuad
-         nzfReHBGFjWS0+mMqYdY12MSi8Je+b42V5fslZXAgGEtsBATSRcmnnCruBirEz+mscvA
-         4PIc25pmmS0ZFTvuku6SjCZrP4ljF4fT/y6EOE3OdGE/rPLoONmgopK3aNecBAKMlOty
-         qbmp+jS/IwQSwMdewmHQJIQVSwaly1ql1+wd1B9r+xWRpcynXdLIFTXmmI8oIConMNRy
-         9XBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s/BF5PL3tMarYSladvLAUAdbHJa8XKRhmvy0pGOiheE=;
-        b=LXkkZwCMl4OHQynf0NCQYy7nk3pgOoNJ5S8chEzpNGhe4RfAPptd5/Q0hYWFN/VGY5
-         9mKZfZ301Sc3LK77CRSDBp98G2BYJXSMxb4VzpsPDO9Pwc8Sd/g1CcrE0oqrdNLvZ86X
-         v8NUdnxzDaSbjzNHJK0Fx+brYZW01TAYijYk3g8EHAar8YF/8K5KMucc9SzBa3Lp+JLx
-         BHIZVOh0yx1p1qNER3YkLZUMka+jgS0xTIZid4emDHB56G9dPV9hK7eTdvtqS/anLu0I
-         ETWfVHUONwgyQLkdf5BMLLjzqoJ4KjMdBDa9nHqZPTSDrnaQmKtQE+Ssknf5cHQ8IUaf
-         Gffg==
-X-Gm-Message-State: ANoB5plytEEQz+F4DVD5hK36bLceT2WjdTXln7FaQ+l1gQRIJ7WUlOX/
-        kxt+6/jVoOalbtHS5XAa2mI=
-X-Google-Smtp-Source: AA0mqf6jOWDWzJmsMevH6gQar0VFxBFMmNAN4WLvzYO2VoFTZ7hjG1S9uCHtnzEeSOGdoF+LDB87Kg==
-X-Received: by 2002:a05:600c:3110:b0:3cf:b07a:cd56 with SMTP id g16-20020a05600c311000b003cfb07acd56mr2474350wmo.143.1668614436899;
-        Wed, 16 Nov 2022 08:00:36 -0800 (PST)
-Received: from testvm.. ([185.215.195.243])
-        by smtp.googlemail.com with ESMTPSA id z4-20020a5d4c84000000b00236733f0f98sm15298795wrs.107.2022.11.16.08.00.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 08:00:36 -0800 (PST)
-From:   Davide Tronchin <davide.tronchin.94@gmail.com>
-To:     johan@kernel.org
-Cc:     cesare.marzano@gmail.com, davide.tronchin.94@gmail.com,
-        gregkh@linuxfoundation.org, larsm17@gmail.com,
-        linux-usb@vger.kernel.org, marco.demarco@posteo.net
-Subject: [PATCH v6 3/3] USB: serial: option: add u-blox LARA-L6 modem
-Date:   Wed, 16 Nov 2022 16:59:50 +0100
-Message-Id: <20221116155950.59609-3-davide.tronchin.94@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221116155950.59609-1-davide.tronchin.94@gmail.com>
-References: <Y3SzfG9ljTbeQyWU@hovoldconsulting.com>
- <20221116155950.59609-1-davide.tronchin.94@gmail.com>
+        with ESMTP id S233205AbiKPQWC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 11:22:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB42326E8;
+        Wed, 16 Nov 2022 08:22:00 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668615717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VtCslIGlEzy614T2a8IHyZzYUS3h+qQy0DKVc9BzNdg=;
+        b=GzY5cgNDoWBa/lbOwfd9mX/PwG123YTrjFa/2RWy/MxTGTTbo5ThPzbyy9v6dG3zYsF1pZ
+        N+iegswchbcXUAHRtbTykseR0L6W+HQIgfgiX9SSYYN5RgrOfoZwE1DQPFiaVifugRbmwD
+        AyBCdUHkwK+OSb4pBPykW240H0ST1UqF503Aq8rnG+/8xoyKFITxQ5Wo6+vQYoyof/YpGg
+        mwgQRVb20rIizIFIJqJNAksD+xCwoZHyDaiU+3Ezmava1OwpI8+ReSgzmSupdlYX72TX7m
+        HSxs3KVDXxdWRzVgOd+h/0zRrlR+P8zbX1vczS2jWcXMvKgDHE79PmhU5YDATQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668615717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VtCslIGlEzy614T2a8IHyZzYUS3h+qQy0DKVc9BzNdg=;
+        b=vFkQ9WmGMftRn2ZYMrgPBYAnAbFOKcqTla1ih+Fi5GvDPVQBXzB/7++jTAHdNGmTFP2e82
+        KdXuR59uIU7zsfBw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH printk v5 00/40] reduce console_lock scope
+Date:   Wed, 16 Nov 2022 17:27:12 +0106
+Message-Id: <20221116162152.193147-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,91 +91,133 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add LARA-L6 PIDs for three different USB compositions.
+This is v5 of a series to prepare for threaded/atomic
+printing. v4 is here [0]. This series focuses on reducing the
+scope of the BKL console_lock. It achieves this by switching to
+SRCU and a dedicated mutex for console list iteration and
+modification, respectively. The console_lock will no longer
+offer this protection.
 
-LARA-L6 module can be configured (by AT interface) in three different
-USB modes:
-* Default mode (Vendor ID: 0x1546 Product ID: 0x1341) with 4 serial
-interfaces
-* RmNet mode (Vendor ID: 0x1546 Product ID: 0x1342) with 4 serial
-interfaces and 1 RmNet virtual network interface
-* CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1343) with 4 serial
-interface and 1 CDC-ECM virtual network interface
+Also, during the review of v2 it came to our attention that
+many console drivers are checking CON_ENABLED to see if they
+are registered. Because this flag can change without
+unregistering and because this flag does not represent an
+atomic point when an (un)registration process is complete,
+a new console_is_registered() function is introduced. This
+function uses the console_list_lock to synchronize with the
+(un)registration process to provide a reliable status.
 
-In default mode LARA-L6 exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parser/alternative functions
+All users of the console_lock for list iteration have been
+modified. For the call sites where the console_lock is still
+needed (for other reasons), comments are added to explain
+exactly why the console_lock is needed.
 
-In RmNet mode LARA-L6 exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parset/alternative functions
-If 4: RMNET interface
+All users of CON_ENABLED for registration status have been
+modified to use console_is_registered(). Note that there are
+still users of CON_ENABLED, but this is for legitimate purposes
+about a registered console being able to print.
 
-In CDC-ECM mode LARA-L6 exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parset/alternative functions
-If 4: CDC-ECM interface
+The base commit for this series is from Paul McKenney's RCU tree
+and provides an NMI-safe SRCU implementation [1]. Without the
+NMI-safe SRCU implementation, this series is not less safe than
+mainline. But we will need the NMI-safe SRCU implementation for
+atomic consoles anyway, so we might as well get it in
+now. Especially since it _does_ increase the reliability for
+mainline in the panic path.
 
-Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
----
+Changes since v4:
 
-V5 -> V6: no changes.
+printk:
 
-V4 -> V5: kept PID 0x90fa to maintain the support for other products
-which use VID:PID 0x05c6:0x90fa. Remove interface 4 from blacklist
-for LARA-L6 default mode since it is not needed.
+- Introduce console_init_seq() to handle the now rather complex
+  procedure to find an appropriate start sequence number for a
+  new console upon registration.
 
-V3 -> V4: as requested, the patch has been split to 3 sub-patches.
-Fix comment format.
+- When registering a non-boot console and boot consoles are
+  registered, try to flush all the consoles to get the next @seq
+  value before falling back to use the @seq of the enabled boot
+  console that is furthest behind.
 
-V2 -> V3: added this section to tracking changes with previous versions.
-Added some explanations about the RSVD(4) in the description session.
-Added reservation to port 4 of VID:PID 0x05C6:0x908B to meet other
-companies QMI net interface implementation.
+- For console_force_preferred_locked(), make the console the
+  head of the console list.
 
-V1 -> V2: define UBLOX_PRODUCT_LARA_R6 0x908b has been deleted together
-with the previosly provided definition of USB_DEVICE since the PID
-is used by another vendor.
-The LARA-L6 patch part is the same of the previosly provided one.
+John Ogness
 
- drivers/usb/serial/option.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+[0] https://lore.kernel.org/lkml/20221114162932.141883-1-john.ogness@linutronix.de
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/log/?h=srcunmisafe.2022.11.09a
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 011b9a3b7571..f892a3c80cf1 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -580,6 +580,11 @@ static void option_instat_callback(struct urb *urb);
- #define OPPO_VENDOR_ID				0x22d9
- #define OPPO_PRODUCT_R11			0x276c
- 
-+/* These u-blox products use u-blox's vendor ID */
-+#define UBLOX_VENDOR_ID				0x1546
-+#define UBLOX_PRODUCT_LARA_L6			0x1341
-+#define UBLOX_PRODUCT_LARA_L6_RMNET		0x1342
-+#define UBLOX_PRODUCT_LARA_L6_ECM		0x1343
- 
- /* Device flags */
- 
-@@ -1127,6 +1132,12 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(3) },
- 	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x908b), /* u-blox LARA-R6 00B */
- 	  .driver_info = RSVD(4) },
-+	/* u-blox products using u-blox vendor ID */
-+	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6) },
-+	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6_RMNET),
-+	  .driver_info = RSVD(4) },
-+	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6_ECM),
-+	  .driver_info = RSVD(4) },
- 	/* Quectel products using Quectel vendor ID */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
- 	  .driver_info = NUMEP2 },
+John Ogness (38):
+  printk: Prepare for SRCU console list protection
+  printk: register_console: use "registered" for variable names
+  printk: move @seq initialization to helper
+  printk: fix setting first seq for consoles
+  um: kmsg_dump: only dump when no output console available
+  tty: serial: kgdboc: document console_lock usage
+  tty: tty_io: document console_lock usage
+  proc: consoles: document console_lock usage
+  printk: introduce console_list_lock
+  console: introduce wrappers to read/write console flags
+  um: kmsg_dumper: use srcu console list iterator
+  kdb: use srcu console list iterator
+  printk: console_flush_all: use srcu console list iterator
+  printk: __pr_flush: use srcu console list iterator
+  printk: console_is_usable: use console_srcu_read_flags
+  printk: console_unblank: use srcu console list iterator
+  printk: console_flush_on_panic: use srcu console list iterator
+  printk: console_device: use srcu console list iterator
+  console: introduce console_is_registered()
+  serial_core: replace uart_console_enabled() with
+    uart_console_registered()
+  tty: nfcon: use console_is_registered()
+  efi: earlycon: use console_is_registered()
+  tty: hvc: use console_is_registered()
+  tty: serial: earlycon: use console_is_registered()
+  tty: serial: pic32_uart: use console_is_registered()
+  tty: serial: samsung_tty: use console_is_registered()
+  tty: serial: xilinx_uartps: use console_is_registered()
+  usb: early: xhci-dbc: use console_is_registered()
+  netconsole: avoid CON_ENABLED misuse to track registration
+  printk, xen: fbfront: create/use safe function for forcing preferred
+  tty: tty_io: use console_list_lock for list synchronization
+  proc: consoles: use console_list_lock for list iteration
+  tty: serial: kgdboc: use srcu console list iterator
+  tty: serial: kgdboc: use console_list_lock for list traversal
+  tty: serial: kgdboc: synchronize tty_find_polling_driver() and
+    register_console()
+  tty: serial: kgdboc: use console_list_lock to trap exit
+  printk: relieve console_lock of list synchronization duties
+  tty: serial: sh-sci: use setup() callback for early console
+
+Thomas Gleixner (2):
+  serial: kgdboc: Lock console list in probe function
+  printk: Convert console_drivers list to hlist
+
+ .clang-format                       |   1 +
+ arch/m68k/emu/nfcon.c               |   9 +-
+ arch/um/kernel/kmsg_dump.c          |  24 +-
+ drivers/firmware/efi/earlycon.c     |   8 +-
+ drivers/net/netconsole.c            |  21 +-
+ drivers/tty/hvc/hvc_console.c       |   4 +-
+ drivers/tty/serial/8250/8250_core.c |   2 +-
+ drivers/tty/serial/earlycon.c       |   4 +-
+ drivers/tty/serial/kgdboc.c         |  46 ++-
+ drivers/tty/serial/pic32_uart.c     |   4 +-
+ drivers/tty/serial/samsung_tty.c    |   2 +-
+ drivers/tty/serial/serial_core.c    |  14 +-
+ drivers/tty/serial/sh-sci.c         |  20 +-
+ drivers/tty/serial/xilinx_uartps.c  |   2 +-
+ drivers/tty/tty_io.c                |  18 +-
+ drivers/usb/early/xhci-dbc.c        |   2 +-
+ drivers/video/fbdev/xen-fbfront.c   |  12 +-
+ fs/proc/consoles.c                  |  21 +-
+ include/linux/console.h             | 129 +++++++-
+ include/linux/serial_core.h         |  10 +-
+ kernel/debug/kdb/kdb_io.c           |  18 +-
+ kernel/printk/printk.c              | 493 +++++++++++++++++++++-------
+ 22 files changed, 680 insertions(+), 184 deletions(-)
+
+
+base-commit: f733615e39aa2d6ddeef33b7b2c9aa6a5a2c2785
 -- 
-2.34.1
+2.30.2
 
