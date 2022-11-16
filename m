@@ -2,186 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D033962B3CB
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 08:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435D162B47F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 09:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiKPHMM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 02:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S232908AbiKPIFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 03:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiKPHMK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 02:12:10 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9963E1F9F2;
-        Tue, 15 Nov 2022 23:12:09 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id f18so8853529ejz.5;
-        Tue, 15 Nov 2022 23:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=64PHYzAaFNNc1OQHFrqI08dbrqVbheTU+HNpi6jOPKE=;
-        b=K8fjKo3b50WStXGX7mS7x584mtPrnFCscjiMqZtbdNDvs+EUWuEpagbvbzQeuVR/99
-         PozQqpXhxBTKv8iku5Qm5IdJzCo1d4boLB5pX3D6apTHqgdO++mRtU/TgAA3+5llB89V
-         JNJOjttYkFoRTzyTJnFCNq48vaFLT7zdSTG6ARV/QPL5nI5YzlHA8eWCnYpy0752JLQZ
-         40Wypbu41/Kz9WyxVdAYkAVJIRY63iuHWBeY8d9P/Dg6Jomi1l0yNanXgQJlHNnxdLns
-         C0XLnaBM/INZ00UDm64e+4JGO0VLWlkjxxe30IHarlO1OlLf0DUX4xevrO9Q5I1u7Xw1
-         vN3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=64PHYzAaFNNc1OQHFrqI08dbrqVbheTU+HNpi6jOPKE=;
-        b=hhXFD6GmY/Hf/PuKDTftuHsGvdeEezDCQfXSmIDu2zYBt1BySpw3InSGgXvO3guion
-         nyaXRb92mwrGeeATuQjHccX/eOUMGwsU6wixpDEEBFtuNPgDEByRtU+9dS9wfmxYS1l1
-         4i/fBoVshQNm18Y0Z5hFY3c9sjIWjDInlepBNX0ebiQ82rp0/T+ukxjEBI3olD5TNEek
-         2N+1XkrEhNW0Ol7WGbu874Pak7prtWA/rJQ/m3+uRijl6pzejqJzgmwyZDXaf+6lZlZB
-         1EdBpuYsg6wnmH7C1jJeoXQJEg7p0oBuHYrmGJLvCPPjQKdGJlYUtl1ERsKQD2HzSU39
-         Yagw==
-X-Gm-Message-State: ANoB5pmZ2t6jyLhkj/0jqJzb2nLUG97tcd4wl6Pt7/sciajIPbu2jWAm
-        IFJEsEIIJ9cp6R63ReX8vUohFY3nXw0=
-X-Google-Smtp-Source: AA0mqf5bmMmMPcgQR1q13tr41JJouzX6gBWCVH/gNDDtSaMBVebkyEaMWaIi1BQWCaW+B94NTJN2QQ==
-X-Received: by 2002:a17:907:1010:b0:78d:cd84:9a40 with SMTP id ox16-20020a170907101000b0078dcd849a40mr17044375ejb.167.1668582728066;
-        Tue, 15 Nov 2022 23:12:08 -0800 (PST)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id j17-20020a17090623f100b0078d76ee7543sm6454091ejg.222.2022.11.15.23.12.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Nov 2022 23:12:07 -0800 (PST)
-Subject: Re: [PATCH] usb: phy: add dedicated notifier for charger events
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>, felipe.balbi@linux.intel.com
-Cc:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-usb@vger.kernel.org, tony@atomide.com
-References: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <Y3JpfDU7T2Ks/H4m@kroah.com> <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
-Message-ID: <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
-Date:   Wed, 16 Nov 2022 09:11:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        with ESMTP id S232859AbiKPIFk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 03:05:40 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7356F60CF
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 00:05:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9945CCE19DE
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 08:05:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E41C433C1;
+        Wed, 16 Nov 2022 08:05:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668585935;
+        bh=KsvBR1K/gGp40k/jwBJC54/tP3gUZiwGcPQGPQMXs2s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q4UER1tc2cBZ8in37eRiScftKKtuKQGrilA9ue0AgwXWIh2UuOPQveMecf9PpM2eM
+         yIlvervL22XypCJ0eaAiIC2NFxXKIXWCq5WWlIdSPUEJG+VubKrL/OkRNU5laFTcb/
+         y7mJWtBEl50985ybvzhbyCOG3ZSpq/LmoLsqmuLVfnsYVdXWMSQO+x2tPM2b4QgXW2
+         mg6U7RLO+XiH9jqiBxpdQQO3KaB+iSDelQdTMCOKH9jkapdZb39T7weaItdLFf8hh5
+         f23fV+CvTTZG39CVQbb9JQA5ozALHg9YDj+M5waK3PeKJQl0d+X4Layl+SXD5+xKUd
+         SEj0Exn/U6r6w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ovDPt-0003nO-K1; Wed, 16 Nov 2022 09:05:05 +0100
+Date:   Wed, 16 Nov 2022 09:05:05 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Davide Tronchin <davide.tronchin.94@gmail.com>
+Cc:     cesare.marzano@gmail.com, gregkh@linuxfoundation.org,
+        larsm17@gmail.com, linux-usb@vger.kernel.org,
+        marco.demarco@posteo.net
+Subject: Re: [PATCH v5 1/3] USB: serial: option: remove old LARA-R6 PID
+Message-ID: <Y3SZsdUk1L9v6SUs@hovoldconsulting.com>
+References: <Y3NmKk0Xte04qxwS@hovoldconsulting.com>
+ <20221115164654.38632-1-davide.tronchin.94@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115164654.38632-1-davide.tronchin.94@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Nov 15, 2022 at 05:46:54PM +0100, Davide Tronchin wrote:
+> My apologies, this is my first attempt to submit a patch to the kernel
+> community.
+> 
+> > We've asked you repeatedly whether you for u-blox or not, but you keep
+> > ignoring this question. Knowing this would allow us to better evaluate
+> > the reasoning and motivation behind this this change.
+> 
+> Yes, i am a u-blox employee and i've been asked to integrate LARA-L6 in
+> the linux kernel and update the current code for LARA-R6 00B (updating
+> the PID from 0x90fa to 0x908b).
 
+Thanks. Was it it also a colleague of yours that submitted the initial
+PID then?
 
-On 14.11.22 г. 18:46 ч., Ivaylo Dimitrov wrote:
-> Hi,
+> > The above commit message still does not explain why you want to remove
+> > it and whether it would be safe to do so. Why was added in the first
+> > place? What u-blox products used the old PID?
 > 
-> On 14.11.22 г. 18:14 ч., Greg KH wrote:
->> On Mon, Nov 14, 2022 at 02:56:02PM +0200, Ivaylo Dimitrov wrote:
->>> usb_phy::notifier is already used by various PHY drivers (including
->>> phy_generic) to report VBUS status changes and its usage conflicts with
->>> charger current limit changes reporting.
->>
->> How exactly does it conflict?
->>
-> 
-> see below
-> 
->>> Fix that by introducing a second notifier that is dedicated to usb 
->>> charger
->>> notifications. Add usb_charger_XXX_notifier functions. Fix charger 
->>> drivers
->>> that currently (ab)use usb_XXX_notifier() to use the new API.
->>
->> Why not just set the notifier type to be a new one instead of adding a
->> whole new notifier list?  Or use a real callback?  notifier lists are
->> really horrid and should be avoided whenever possible.
->>
-> 
-> Not sure what you mean by "notifier type', but if that is that val 
-> parameter of atomic_notifier_call_chain(), the way it is used by usb 
-> charger FW:
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy.c#L132
-> 
-> is not compatible with:
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy-generic.c#L185 
-> 
-> 
-> for example, IIUC.
-> 
-> The former wants to send max current as val, while latter sends event 
-> type as val. Sure, I may create some kind of hack, like using the MSB to 
-> denote charger events, but that doesn't feel right.
-> 
-> Or, shall I do something else and fix the usage all over the place? 
-> Please elaborate.
-> 
+> The first prototype of LARA-R6 00B had 0x90fa PID but, just before the
+> product finalization, it has been decided to adopt a new USB composition
+> and consequently a change of PID was necessary.
+> The 0x90fa PID has been used only for some internal prototypes, hence
+> no u-blox products with that PID have been shipped to customers.
+> As pointed out in the discussion, the 0x90fa PID is used by other module
+> vendors which sell Qualcomm based modems, hence i proposed to remove the
+> association between u-blox (thedefine UBLOX_PRODUCT_R6XX) and 0x90fa,
+> moving it directly in the option_ids array.
 
-Digging further into that, it seems phy-ab8500-usb.c is also using 
-usb_phy::notifier in non-standard way, it sends events from 
-ux500_musb_vbus_id_status instead of usb_phy_events. I don't know the 
-history behind, but right now we have at least 3 incompatible usages of 
-usb_phy::notifier:
+Thanks, this is the kind of details we've been asking for. Please put
+some of this in the commit in some form so that it is obvious from just
+reading the commit message that the patch is correct and safe to apply.
 
-1. Most of the phy and charger drivers use usb_phy_events as notifier type
+Make sure to mention that this Qualcomm PID is used by other products
+and that's why you're leaving it in. Perhaps a Link tag with a
+reference to Lars message pointing this out is in place. For example:
 
-2. phy-ab8500-usb.c uses ux500_musb_vbus_id_status as notifier type, I 
-am not the only one to hit that it seems 
-https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/power/supply/ab8500_charger.c#L3191
+Link: https://lore.kernel.org/all/6572c4e6-d8bc-b8d3-4396-d879e4e76338@gmail.com/
 
-3. USB charger framework uses max charging current as notifier type.
+> > By just removing the define this is less of an issue, but you should
+> > not make the life of reviewers harder by ignoring request to properly
+> > motivate your changes and explain why they are safe to apply.
+> 
+> My apologies again, thanks for the patience.
+> 
+> > You can either put a shared changelog for the whole series in a cover
+> > letter, or you describe changes to each individual patch. But mixing the
+> > two styles as you do in this entry is just confusing.
+> 
+> Thanks for the suggestions. In order to simplify the submission process,
+> i propose to split the submission for the LARA-L6 patches and the update
+> for LARA-R6 00B.
+> Do you think could it be feasible?
 
-Moreover, a charger driver in a system that has gadget drivers support 
-and phy that has extcon charger cable detection support and registers to 
-phy notifier, will inevitably receive (1) and (3) types of 
-notifications, without any way to distinguish I was able to find.
+I don't think that's necessary now that you've provided some more
+details. Just respin the series and address the review comments given
+so far (either by rejecting a suggestion and explaining why, or by
+incorporating it in your next submission).
 
-I don't really see how those can be merged to use one notifier only, 
-without fixing most of USB phy and gadget drivers and half of charger 
-drivers. Not that I like adding the second notifier, I just don;t see 
-other way.
+It seems you only need to tweak some of the commit messages in a v6.
 
-Regards,
-Ivo
-
-> In regards to callback - I didn't want to come-up with a whole new API, 
-> but just fix the current one. Also, a single callback will not be enough 
-> - imagine a case with 2 batteries that have to be charged by a single 
-> USB port, so 2 separate charger devices, most-probably. We will have to 
-> keep a list of callback functions somehow. I admit my lack of knowledge, 
-> but, do we already have such API to use?
-> 
->>> Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
->>>
->>> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
->>
->> You can't have a blank line between there, checkpatch.pl should have
->> complained.
->>
-> 
-> it didn't:
-> 
-> ./scripts/checkpatch.pl 
-> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch
-> total: 0 errors, 0 warnings, 90 lines checked
-> 
-> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch has no 
-> obvious style problems and is ready for submission.
-> 
-> Will fix, if I am to send v2
-> 
-> Thanks,
-> Ivo
-> 
->> thanks,
->>
->> greg k-h
->>
+Johan
