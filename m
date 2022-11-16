@@ -2,191 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074F462CC63
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 22:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E5B62CEA5
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 00:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbiKPVOi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 16:14:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S233903AbiKPXUh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 18:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbiKPVO2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 16:14:28 -0500
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5CF4C240;
-        Wed, 16 Nov 2022 13:14:27 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id 94-20020a9d0067000000b0066c8d13a33dso11216653ota.12;
-        Wed, 16 Nov 2022 13:14:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cV6uRSj5A0RfJrnNHT9JxaI5Eiomkz3u/uqtM/E+nQs=;
-        b=qWIazrZzLzHB5zQTycHemsuZxvlCBODJHgG+159Rsv+hkh4/2+Uw3zXcCnlflyTZCV
-         IyB36U5uUECVI56grLiuzu1wPKSWJhwHLrJLYEl1miZpShHu/+BpoVPZhxdBifcl2xSE
-         GwCXBByvFte4N8cJNdw8SZw7tqR9bnXjprntO2ndbycMsfgKFBXkZwY8FEj9c1GNtbfC
-         iKgwtHKylgPdltHbiPWS/808TIMDmgKmUJADCwhnrewRKFEdM7Popi8rWNhvjn3aPB9W
-         pAvPWnhp09nk/EAUy3jvsc2KkBXoSWJ4Jvxyb4luhz+ug/GQozpcFTqB/7nxLpzo8YEw
-         IzFg==
-X-Gm-Message-State: ANoB5pnAnYevMSGf0xwN3ATkWwLajjE1pwdA8oW7wIuT+JYzPAnPhfZO
-        bPzg6E56ueVTpiqgAR8dpA==
-X-Google-Smtp-Source: AA0mqf6cpJwbBEertTrRB0QkgjpFroc/t0HskBTyjwQPspYfyJWlf51lrnxI7AnVUgQrnmwEgAHRCw==
-X-Received: by 2002:a9d:19a2:0:b0:66c:4ed7:fea9 with SMTP id k31-20020a9d19a2000000b0066c4ed7fea9mr1409otk.57.1668633267157;
-        Wed, 16 Nov 2022 13:14:27 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r15-20020a4aad0f000000b004908a9542f8sm6441166oon.31.2022.11.16.13.14.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 13:14:26 -0800 (PST)
-Received: (nullmailer pid 953152 invoked by uid 1000);
-        Wed, 16 Nov 2022 21:14:28 -0000
-Date:   Wed, 16 Nov 2022 15:14:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 03/13] dt-bindings: usb: Add binding for Cypress
- cypd4226 I2C driver
-Message-ID: <20221116211428.GA884584-robh@kernel.org>
-References: <20221114124053.1873316-1-waynec@nvidia.com>
- <20221114124053.1873316-4-waynec@nvidia.com>
+        with ESMTP id S229910AbiKPXUg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 18:20:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7F623A4;
+        Wed, 16 Nov 2022 15:20:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13ED86201F;
+        Wed, 16 Nov 2022 23:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62AFEC433C1;
+        Wed, 16 Nov 2022 23:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668640834;
+        bh=o+VByynSeoTOtbxxqGW88pHtPLAYkDbDYL2ejaugK5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vo2WlpWiBNqo6NvDjaOMy0R26oBiKme/8b7U3aRpZZpWjfevhHiqcJaRWhs8YAvVX
+         gPos+QeomRrfbc37iBHqNvzviu7HnGy15a87mJJzQ/hEdyDTSnL9UKfLBSsBhzNhdh
+         EB9yFOoN0IGAuRAdU5U6AHbkGS2YpY0YNronMcPmFHWRbBU8F885Eu97PvXG4YDvty
+         jZLT5dWxqUz8Ubuahc9Naujw605R00a6TLHOjS0LSZPQWcRSuX8lbk0WQGyuYl+kjb
+         KJg8p/+hDhwea0YbPkpnvjg2NPigbVvm3gMfg8Ap1aWMlKu1hM5ZorZnVemkdSgSyW
+         rTBSxHy3rBwlA==
+Date:   Wed, 16 Nov 2022 15:20:33 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 2/3] can: etas_es58x: export firmware, bootloader and
+ hardware versions in sysfs
+Message-ID: <Y3VwQdZoStfryz3q@x130.lan>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221113040108.68249-1-mailhol.vincent@wanadoo.fr>
+ <20221113040108.68249-3-mailhol.vincent@wanadoo.fr>
+ <Y3QW/ufhuYnHWcli@x130.lan>
+ <CAMZ6RqKUKLUf1Y6yL=J6n+N2Uz+JuFnHXdfVDXTZaDQ89=9DzQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221114124053.1873316-4-waynec@nvidia.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZ6RqKUKLUf1Y6yL=J6n+N2Uz+JuFnHXdfVDXTZaDQ89=9DzQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 08:40:43PM +0800, Wayne Chang wrote:
-> add device-tree binding documentation for Cypress cypd4226 type-C
-> controller's I2C interface. It is a standard I2C slave with GPIO
-> input as IRQ interface.
+On 16 Nov 09:36, Vincent MAILHOL wrote:
+>On Wed. 16 Nov. 2022 at 07:50, Saeed Mahameed <saeed@kernel.org> wrote:
+>> On 13 Nov 13:01, Vincent Mailhol wrote:
+>> >ES58x devices report below information in their usb product info
+>> >string:
+>> >
+>> >  * the firmware version
+>> >  * the bootloader version
+>> >  * the hardware revision
+>> >
+>> >Parse this string, store the results in struct es58x_dev and create
+>> >three new sysfs entries.
+>> >
+>>
+>> will this be the /sys/class/net/XXX sysfs  ?
+>
+>I am dropping the idea of using sysfs and I am now considering using
+>devlink following Andrew's message:
+>https://lore.kernel.org/linux-can/Y3Ef4K5lbilY3EQT@lunn.ch/
+>
 
-For the subject:
++1
 
-dt-bindings: usb: Add Cypress cypd4226 Type-C controller
+>> We try to avoid adding device specific entries in there,
+>>
+>> Couldn't you just squeeze the firmware and hw version into the
+>> ethtool->drvinfo->fw_version
+>>
+>> something like:
+>> fw_version: %3u.%3u.%3u (%c.%3u.%3u)
+>
+>This looks like a hack. There is no way for the end user to know, just
+>from the ethtool output, what these in brackets values would mean.
 
-> 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
-> V2 -> V3:fix additionalProperties warning on new schema
-> V1 -> V2:based on the review comments. Fix some addressed issues on
-> description, interrupts, cypress,firmware-build, connector, and 
-> additionalProperties properties. And also remove the status in the example.
->  .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
->  1 file changed, 86 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> new file mode 100644
-> index 000000000000..854fe2f9181c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> @@ -0,0 +1,86 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cypress cypd4226 UCSI I2C Type-C Controller
-> +
-> +maintainers:
-> +  - Wayne Chang <waynec@nvidia.com>
-> +
-> +description:
-> +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface type-C
-> +  controller.
-> +
-> +properties:
-> +  compatible:
-> +    const: cypress,cypd4226
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  reg:
-> +    const: 0x08
-> +
-> +  interrupts:
-> +    items:
-> +      - description: cypd4226 I2C interrupt
-> +
-> +  cypress,firmware-build:
-> +    enum:
-> +      - nvidia,gpu
-> +      - nvidia,jetson-agx-xavier
-> +    description: |
-> +      the name of the CCGx firmware built for product series.
-> +      should be set one of following:
-> +      - "nvidia,gpu" for the NVIDIA RTX product series
-> +      - "nvidia,jetson-agx-xavier" for the NVIDIA Jetson product series
+it's not, there is no well defined format for what to put in the version,
+as long as it clearly describes what FW is currently running.
+at the end of the day, it's just a text you copy&paste when you contact
+customer support.
 
-Standard 'firmware-name' property doesn't work for you?
+>
+>> and bootloader into ethtool->drvinfo->erom_version:
+>>   * @erom_version: Expansion ROM version string; may be an empty string
+>
+>Same. I considered doing this in the early draft of this series and
+>dropped the idea because an expansion ROM and a boot loader are two
+>things different.
+>
+>I will continue to study devlink and only use the drvinfo only for the
+>firmware version.
+>
 
-> +
-> +patternProperties:
-> +  '^connector@[0-1]+$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/tegra194-gpio.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      #interrupt-cells = <2>;
-> +
-> +      ucsi-ccg@8 {
-> +        compatible = "cypress,cypd4226";
-> +        interrupt-parent = <&gpio_aon>;
-> +        interrupts = <TEGRA194_AON_GPIO(BB, 2) IRQ_TYPE_LEVEL_LOW>;
-> +        reg = <0x08>;
-> +        cypress,firmware-build = "nvidia,jetson-agx-xavier";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        ccg_typec_con0: connector@0 {
-> +          compatible = "usb-c-connector";
-> +          reg = <0>;
-> +          label = "USB-C";
-> +          data-role = "dual";
-> +          port {
-> +            ucsi_ccg_p0: endpoint {
-> +              remote-endpoint = <&usb_role_switch0>;
-> +            };
-> +          };
-> +        };
-> +      };
-> +    };
-> -- 
-> 2.25.1
-> 
-> 
+100% devlink is a great options.
