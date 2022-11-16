@@ -2,68 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EDC62BFE8
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 14:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0293162C1C3
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Nov 2022 16:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbiKPNql (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 08:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S234047AbiKPPGL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 10:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiKPNqk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 08:46:40 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B466B17E29;
-        Wed, 16 Nov 2022 05:46:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=pefjafUqIIIDXpqaasVAKbU2CnZvuItW0KOov0jNJWk=; b=ZUqNLY66MzSOhd4yZEOq32HA9w
-        l85AxyW0RhyRztBgGBYkauOHhKOph57L6usUE94sMgIyPHJoQml/jMbwPh6/CZMtvMmLNTIJ0Lm6i
-        v6TUegfVp13hb9SnpU2e97LoWYINp8SWR53iSUaJFLHC6QSAFp9EHx9C4Pk5Z6yxopU0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ovIjz-002ZXZ-KD; Wed, 16 Nov 2022 14:46:11 +0100
-Date:   Wed, 16 Nov 2022 14:46:11 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexandru Tachici <alexandru.tachici@analog.com>
-Cc:     linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
-        andre.edich@microchip.com, linux-usb@vger.kernel.org
-Subject: Re: [net v2 1/1] net: usb: smsc95xx: fix external PHY reset
-Message-ID: <Y3Tpo6wo2ytMRpXf@lunn.ch>
-References: <20221115114434.9991-1-alexandru.tachici@analog.com>
- <20221115114434.9991-2-alexandru.tachici@analog.com>
+        with ESMTP id S233354AbiKPPGJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 10:06:09 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324B129C8A
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 07:06:07 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso1812961wme.5
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 07:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N0oCOvRm1EK9AxTWCP4M9BHamp1imaGXhcVhBQlLE/I=;
+        b=Tfpg/KEk5Zv7mnqGj0ZgkiFXW/54J1Nx92o0nXLAdGLQIvVzqVDc0IV6Ird1vNZ4zD
+         ODxgB3YiSR5DseYPNjYTTeYNNoHCH3VZ3vf9a13LbZnUSONY1BiXi4elUMKwbeFmWw5I
+         Ir/JQSqiKQGdMj3A5YXlmdpwu6raDAXsQxbS8uWau8GqyEqAqs158S0+lYwp8dtYklIb
+         PJgDJTGiW1ZBUK6lBO1WWsD5Huqtsw4oIcixi8Tn91bvLJwyt1Uv3VrbhbgNHjOTiWOa
+         pjt7+GFVkyXReiJAplELl8i96u2qznoQwuB+3RS8kg5COZ/cidhd+VgKM90s+SmpFZtg
+         O6tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N0oCOvRm1EK9AxTWCP4M9BHamp1imaGXhcVhBQlLE/I=;
+        b=btZ2m/WtIZZREvhDyRNXKUm4T7otNQxag/jJZKSMl78wAuMyXbYtD+KqYkESv8R9Wu
+         Ie4ErnDv8tDFmTh2BDcjjwxLxWtQwMOju4TuNH8/IQpEdKLBkJRvQqSj7kttrdvzbCMc
+         gNqsgwvRrQdq0q/PyfVsLlrfshphfiXHoxeu1TwteuirDyRUdEdhbzY4E7CmVps27nIB
+         IsDTxCwzXj+smn+r01HlT5SMfW5++wqE0lySSjc9ZCljUVxpqVMvKbY4fpKhrRwjhKVA
+         eB0QVluuSZxac41cq5AjauGY3yJYWFF6aUomjk7CAE8aZXoqAiZhsp+ulxWOBFsFAGjq
+         z6vQ==
+X-Gm-Message-State: ANoB5plborvZabY3SG7ryUPyFRyS7E3J0dbd+AaFK6dg6ED9wyRMJAPU
+        QLrjk/iqWQqEgkeXG7XXx6AYkg==
+X-Google-Smtp-Source: AA0mqf5adF1AaQLjFwL8N1PwblL1LOFK81oGm1HDjWvOrcnHHBLZciTGXu5ZT+MUPW+g+uvuy/6k5g==
+X-Received: by 2002:a1c:7701:0:b0:3cf:6c2f:950c with SMTP id t1-20020a1c7701000000b003cf6c2f950cmr2433855wmi.146.1668611165768;
+        Wed, 16 Nov 2022 07:06:05 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id s15-20020a7bc38f000000b003cf6a55d8e8sm2260038wmj.7.2022.11.16.07.06.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 07:06:05 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: dwc3: Add SM8550 compatible
+Date:   Wed, 16 Nov 2022 17:06:00 +0200
+Message-Id: <20221116150600.3011160-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115114434.9991-2-alexandru.tachici@analog.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 01:44:34PM +0200, Alexandru Tachici wrote:
-> An external PHY needs settling time after power up or reset.
-> In the bind() function an mdio bus is registered. If at this point
-> the external PHY is still initialising, no valid PHY ID will be
-> read and on phy_find_first() the bind() function will fail.
-> 
-> If an external PHY is present, wait the maximum time specified
-> in 802.3 45.2.7.1.1.
-> 
-> Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+Document the SM8550 dwc3 compatible.
 
-Thanks for making Russell suggested change.
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index a6e6abb4dfa9..a3f8a3f49852 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -39,6 +39,7 @@ properties:
+           - qcom,sm8250-dwc3
+           - qcom,sm8350-dwc3
+           - qcom,sm8450-dwc3
++          - qcom,sm8550-dwc3
+       - const: qcom,dwc3
+ 
+   reg:
+@@ -301,6 +302,7 @@ allOf:
+               - qcom,sm8150-dwc3
+               - qcom,sm8250-dwc3
+               - qcom,sm8450-dwc3
++              - qcom,sm8550-dwc3
+     then:
+       properties:
+         clocks:
+@@ -358,6 +360,7 @@ allOf:
+               - qcom,sm8250-dwc3
+               - qcom,sm8350-dwc3
+               - qcom,sm8450-dwc3
++              - qcom,sm8550-dwc3
+     then:
+       properties:
+         interrupts:
+-- 
+2.34.1
 
-    Andrew
