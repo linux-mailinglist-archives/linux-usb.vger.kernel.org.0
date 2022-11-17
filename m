@@ -2,105 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5277662E62B
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 21:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885F762E671
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 22:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbiKQUyn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 15:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
+        id S240718AbiKQVJr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 16:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234821AbiKQUym (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 15:54:42 -0500
-Received: from mailfilter01-out40.webhostingserver.nl (mailfilter01-out40.webhostingserver.nl [195.211.73.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DC0218D
-        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 12:54:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-         subject:cc:to:from:from;
-        bh=c3TOJ8pLm5BTTzG2jJheyd3COeod2HsVvmxYNZzeA0Y=;
-        b=OitFVDhGl+xE2L/yPPVmM2x/+/zb0GEoILRwTaL/meW8inP2r9oXA9+HZ+L7SCnbZ3RD+HrihIz9a
-         OnHHU2AE/+fstcLs8lM6JOSHNo2Gqc76oE2DzIpHI/qghZvrb+YZ0WtQvQucS9LXhgRKRgkIBPCEIt
-         RcqHnVW1glSUtUKKKa8/tQHne9fEMujKdoYnNbRU9lOUyr23XxItvw8dDdXivoZRCyXiTR7BHlDhZs
-         DR8x/hidI+6685pGo3LWrkiZ4qM8Xr2NVwp/yyqswuFz2pK0A1qrvq5NhHHYlqsVRrNq/bB5ryK2fS
-         dcEaMExaVLZ3ujtlwbzcP4KtA84ZikA==
-X-Halon-ID: 0c702c26-66ba-11ed-a6af-001a4a4cb906
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter01.webhostingserver.nl (Halon) with ESMTPSA
-        id 0c702c26-66ba-11ed-a6af-001a4a4cb906;
-        Thu, 17 Nov 2022 21:54:37 +0100 (CET)
-Received: from 2a02-a466-68ed-1-6f6f-9a68-8ab0-3e9e.fixed6.kpn.net ([2a02:a466:68ed:1:6f6f:9a68:8ab0:3e9e] helo=delfion.fritz.box)
-        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
-        (envelope-from <ftoth@exalondelft.nl>)
-        id 1ovlu9-0054mk-31;
-        Thu, 17 Nov 2022 21:54:38 +0100
-From:   Ferry Toth <ftoth@exalondelft.nl>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        stable@vger.kernel.org, Ferry Toth <ftoth@exalondelft.nl>
-Subject: [PATCH v3 2/2] usb: dwc3: core: defer probe on ulpi_read_id timeout
-Date:   Thu, 17 Nov 2022 21:54:11 +0100
-Message-Id: <20221117205411.11489-3-ftoth@exalondelft.nl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221117205411.11489-1-ftoth@exalondelft.nl>
-References: <20221117205411.11489-1-ftoth@exalondelft.nl>
+        with ESMTP id S240580AbiKQVJ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 16:09:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E761005D;
+        Thu, 17 Nov 2022 13:08:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9584361E76;
+        Thu, 17 Nov 2022 21:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1255C433D6;
+        Thu, 17 Nov 2022 21:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668719309;
+        bh=HYS9XYfwOlhjzRSnx323mT7QdkoJmUme8EZAv392/H4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IZQXChmNt4PzZ/4eVwmyyX7mfZRL2T0Esdhbo6eE3+oUqhqCw+C2pOiDTGwVqYO+Z
+         7AaOmb82L7xZj1vAD6AZZkqqH0xFTdirm5qUOyKqDaBjllGzXnerFRkyalkUkiFMFC
+         aksBgsnZUJALSLllmgle5Jecs+ILhWFQ+4fIDq94=
+Date:   Thu, 17 Nov 2022 22:07:52 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 6.1-rc6
+Message-ID: <Y3aiqDVXybMnLp8u@kroah.com>
+References: <Y3YdxR2djUf0ibBC@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3YdxR2djUf0ibBC@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since commit 0f010171
-Dual Role support on Intel Merrifield platform broke due to rearranging
-the call to dwc3_get_extcon().
+On Thu, Nov 17, 2022 at 12:40:53PM +0100, Johan Hovold wrote:
+> The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
+> 
+>   Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.1-rc6
 
-It appears to be caused by ulpi_read_id() masking the timeout on the first
-test write. In the past dwc3 probe continued by calling dwc3_core_soft_reset()
-followed by dwc3_get_extcon() which happend to return -EPROBE_DEFER.
-On deferred probe ulpi_read_id() finally succeeded.
+Pulled and pushed out, thanks.
 
-As we now changed ulpi_read_id() to return -ETIMEDOUT in this case, we
-need to handle the error by calling dwc3_core_soft_reset() and request
--EPROBE_DEFER. On deferred probe ulpi_read_id() is retried and succeeds.
-
-Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
----
- drivers/usb/dwc3/core.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 648f1c570021..2779f17bffaf 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1106,8 +1106,13 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 
- 	if (!dwc->ulpi_ready) {
- 		ret = dwc3_core_ulpi_init(dwc);
--		if (ret)
-+		if (ret) {
-+			if (ret == -ETIMEDOUT) {
-+				dwc3_core_soft_reset(dwc);
-+				ret = -EPROBE_DEFER;
-+			}
- 			goto err0;
-+		}
- 		dwc->ulpi_ready = true;
- 	}
- 
--- 
-2.37.2
-
+greg k-h
