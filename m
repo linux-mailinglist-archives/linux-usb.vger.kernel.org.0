@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519B562D829
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 11:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683F462D82E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 11:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239619AbiKQKhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 05:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S239607AbiKQKhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 05:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239572AbiKQKhN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 05:37:13 -0500
+        with ESMTP id S234781AbiKQKhP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 05:37:15 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 506FF2FA;
-        Thu, 17 Nov 2022 02:37:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49CC432BA0;
+        Thu, 17 Nov 2022 02:37:12 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8730D153B;
-        Thu, 17 Nov 2022 02:37:16 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E0B31570;
+        Thu, 17 Nov 2022 02:37:18 -0800 (PST)
 Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 73A143F73B;
-        Thu, 17 Nov 2022 02:37:08 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A7D43F73B;
+        Thu, 17 Nov 2022 02:37:10 -0800 (PST)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -31,9 +31,9 @@ Cc:     Icenowy Zheng <uwu@icenowy.me>,
         devicetree@vger.kernel.org, soc@kernel.org,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH v4 04/11] ARM: dts: suniv: add USB-related device nodes
-Date:   Thu, 17 Nov 2022 10:36:49 +0000
-Message-Id: <20221117103656.1085840-5-andre.przywara@arm.com>
+Subject: [PATCH v4 05/11] ARM: dts: suniv: licheepi-nano: enable USB
+Date:   Thu, 17 Nov 2022 10:36:50 +0000
+Message-Id: <20221117103656.1085840-6-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221117103656.1085840-1-andre.przywara@arm.com>
 References: <20221117103656.1085840-1-andre.przywara@arm.com>
@@ -49,56 +49,54 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Icenowy Zheng <uwu@icenowy.me>
 
-The suniv SoC has a USB OTG controller and a USB PHY like other
-Allwinner SoCs.
+Lichee Pi Nano has a Micro-USB connector, with its D+, D- pins connected
+to the USB pins of the SoC and ID pin connected to PE2 GPIO.
 
-Add their device tree node.
+Enable the USB functionality.
 
 Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- arch/arm/boot/dts/suniv-f1c100s.dtsi | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ .../arm/boot/dts/suniv-f1c100s-licheepi-nano.dts | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-index 9455d27e516ee..111f8bbc2a805 100644
---- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
-+++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-@@ -133,6 +133,32 @@ mmc1: mmc@1c10000 {
- 			#size-cells = <0>;
- 		};
+diff --git a/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts b/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts
+index 04e59b8381cb8..43896723a994c 100644
+--- a/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts
++++ b/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts
+@@ -6,6 +6,8 @@
+ /dts-v1/;
+ #include "suniv-f1c100s.dtsi"
  
-+		usb_otg: usb@1c13000 {
-+			compatible = "allwinner,suniv-f1c100s-musb";
-+			reg = <0x01c13000 0x0400>;
-+			clocks = <&ccu CLK_BUS_OTG>;
-+			resets = <&ccu RST_BUS_OTG>;
-+			interrupts = <26>;
-+			interrupt-names = "mc";
-+			phys = <&usbphy 0>;
-+			phy-names = "usb";
-+			extcon = <&usbphy 0>;
-+			allwinner,sram = <&otg_sram 1>;
-+			status = "disabled";
-+		};
++#include <dt-bindings/gpio/gpio.h>
 +
-+		usbphy: phy@1c13400 {
-+			compatible = "allwinner,suniv-f1c100s-usb-phy";
-+			reg = <0x01c13400 0x10>;
-+			reg-names = "phy_ctrl";
-+			clocks = <&ccu CLK_USB_PHY0>;
-+			clock-names = "usb0_phy";
-+			resets = <&ccu RST_USB_PHY0>;
-+			reset-names = "usb0_reset";
-+			#phy-cells = <1>;
-+			status = "disabled";
-+		};
+ / {
+ 	model = "Lichee Pi Nano";
+ 	compatible = "licheepi,licheepi-nano", "allwinner,suniv-f1c100s";
+@@ -50,8 +52,22 @@ flash@0 {
+ 	};
+ };
+ 
++&otg_sram {
++	status = "okay";
++};
 +
- 		ccu: clock@1c20000 {
- 			compatible = "allwinner,suniv-f1c100s-ccu";
- 			reg = <0x01c20000 0x400>;
+ &uart0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart0_pe_pins>;
+ 	status = "okay";
+ };
++
++&usb_otg {
++	dr_mode = "otg";
++	status = "okay";
++};
++
++&usbphy {
++	usb0_id_det-gpios = <&pio 4 2 GPIO_ACTIVE_HIGH>; /* PE2 */
++	status = "okay";
++};
 -- 
 2.25.1
 
