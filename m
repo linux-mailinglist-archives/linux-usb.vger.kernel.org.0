@@ -2,184 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC5562D835
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 11:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8516162D9AB
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 12:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239668AbiKQKhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 05:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S239305AbiKQLlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 06:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239620AbiKQKhc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 05:37:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BB31532F7;
-        Thu, 17 Nov 2022 02:37:24 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A59C150C;
-        Thu, 17 Nov 2022 02:37:30 -0800 (PST)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 360613F73B;
-        Thu, 17 Nov 2022 02:37:22 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bin Liu <b-liu@ti.com>
-Cc:     Icenowy Zheng <uwu@icenowy.me>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, soc@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v4 11/11] ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
-Date:   Thu, 17 Nov 2022 10:36:56 +0000
-Message-Id: <20221117103656.1085840-12-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117103656.1085840-1-andre.przywara@arm.com>
-References: <20221117103656.1085840-1-andre.przywara@arm.com>
+        with ESMTP id S239870AbiKQLl1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 06:41:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3151F19C04;
+        Thu, 17 Nov 2022 03:41:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1C0F60B8F;
+        Thu, 17 Nov 2022 11:41:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29362C433C1;
+        Thu, 17 Nov 2022 11:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668685281;
+        bh=WphV4BiGGuQqGN4b0cOIfXIPPOBlEwuMai1atk2YE+k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a+68R2sxxE4JabramqssF9v1bk3Ah547dW85ViBSiYAGAvnlIZJEy/AB0+DpqJszX
+         XGuBgWMpFn5wb72qfhlfXwqcOq9htFRb80tupmx5kS/MH+6LBwFoILM+n6XXl1q60R
+         ZN9k7Sc8xKSyUcmxk6px8vpMgkDZLp4lJIoLGQPzH/INdlufN02sTsJCoMvFFSbySj
+         O9uPghjC6SBECdx5hBWgz+jQi99qIV5NTO9F+KcqVRjN9zmx6Zmdh2jgex4EE6X+/+
+         nNlUM5PbfCmatto4qi3GhkUicFCRlK9b4HVDuRUwnZqIvL/MvTOm8E/YCtZKMUK1m/
+         fYVqJWDBpYvTA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ovdGH-00041b-JW; Thu, 17 Nov 2022 12:40:53 +0100
+Date:   Thu, 17 Nov 2022 12:40:53 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 6.1-rc6
+Message-ID: <Y3YdxR2djUf0ibBC@hovoldconsulting.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Lctech Pi F1C200s (also previously known under the Cherry Pi brand)
-is a small development board with the Allwinner F1C200s SoC. This is the
-same as the F1C100s, but with 64MB instead of 32MB co-packaged DRAM.
+The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
 
-Alongside the obligatory micro-SD card slot, the board features a
-SPI-NAND flash chip, LCD and touch connectors, and unpopulated
-expansion header pins.
-There are two USB Type-C ports on the board: One supplies the power, also
-connects to the USB MUSB OTG controller port. The other one is connected
-to an CH340 USB serial chip, which in turn is connected to UART1.
+  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
 
-Add a devicetree file, so that the board can be used easily.
+are available in the Git repository at:
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- arch/arm/boot/dts/Makefile                    |  1 +
- arch/arm/boot/dts/suniv-f1c100s.dtsi          |  6 ++
- arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 +++++++++++++++++++
- 3 files changed, 83 insertions(+)
- create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.1-rc6
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0249c07bd8a6b..52f8ab0eacb29 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1392,6 +1392,7 @@ dtb-$(CONFIG_MACH_SUN9I) += \
- 	sun9i-a80-cubieboard4.dtb
- dtb-$(CONFIG_MACH_SUNIV) += \
- 	suniv-f1c100s-licheepi-nano.dtb \
-+	suniv-f1c200s-lctech-pi.dtb \
- 	suniv-f1c200s-popstick-v1.1.dtb
- dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
- 	tegra20-acer-a500-picasso.dtb \
-diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-index 111f8bbc2a805..3c61d59ab5f86 100644
---- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
-+++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-@@ -207,6 +207,12 @@ uart0_pe_pins: uart0-pe-pins {
- 				pins = "PE0", "PE1";
- 				function = "uart0";
- 			};
-+
-+			/omit-if-no-ref/
-+			uart1_pa_pins: uart1-pa-pins {
-+				pins = "PA2", "PA3";
-+				function = "uart1";
-+			};
- 		};
- 
- 		i2c0: i2c@1c27000 {
-diff --git a/arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts b/arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
-new file mode 100644
-index 0000000000000..2d2a3f026df33
---- /dev/null
-+++ b/arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2022 Arm Ltd,
-+ * based on work:
-+ *   Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-+ */
-+
-+/dts-v1/;
-+#include "suniv-f1c100s.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	model = "Lctech Pi F1C200s";
-+	compatible = "lctech,pi-f1c200s", "allwinner,suniv-f1c200s",
-+		     "allwinner,suniv-f1c100s";
-+
-+	aliases {
-+		serial0 = &uart1;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	reg_vcc3v3: regulator-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+};
-+
-+&mmc0 {
-+	broken-cd;
-+	bus-width = <4>;
-+	disable-wp;
-+	vmmc-supply = <&reg_vcc3v3>;
-+	status = "okay";
-+};
-+
-+&otg_sram {
-+	status = "okay";
-+};
-+
-+&spi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi0_pc_pins>;
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "spi-nand";
-+		reg = <0>;
-+		spi-max-frequency = <40000000>;
-+	};
-+};
-+
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart1_pa_pins>;
-+	status = "okay";
-+};
-+
-+/*
-+ * This is a Type-C socket, but CC1/2 are not connected, and VBUS is connected
-+ * to Vin, which supplies the board. Host mode works (if the board is powered
-+ * otherwise), but peripheral is probably the intention.
-+ */
-+&usb_otg {
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	status = "okay";
-+};
--- 
-2.25.1
+for you to fetch changes up to c1547f12df8b8e9ca2686accee43213ecd117efe:
 
+  USB: serial: option: add u-blox LARA-L6 modem (2022-11-16 17:19:43 +0100)
+
+----------------------------------------------------------------
+USB-serial fixes for 6.1-rc6
+
+Here are some new modem device ids for 6.1.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Benoît Monin (1):
+      USB: serial: option: add Sierra Wireless EM9191
+
+Davide Tronchin (3):
+      USB: serial: option: remove old LARA-R6 PID
+      USB: serial: option: add u-blox LARA-R6 00B modem
+      USB: serial: option: add u-blox LARA-L6 modem
+
+Reinhard Speyerer (1):
+      USB: serial: option: add Fibocom FM160 0x0111 composition
+
+ drivers/usb/serial/option.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
