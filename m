@@ -2,106 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7B162D3EA
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 08:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EFC62D41F
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 08:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239125AbiKQHTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 02:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        id S239280AbiKQHbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 02:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234503AbiKQHTD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 02:19:03 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC2328E20;
-        Wed, 16 Nov 2022 23:19:01 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id f18so2891832ejz.5;
-        Wed, 16 Nov 2022 23:19:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T81/5fLCvQ7zJ3Q+OGaVNq/xGeY/shWwLqml1r4UttA=;
-        b=g+JlJalFyfkuRhZgHgB1WiVyFtcCzlXAKGT0Hhz5ioaV/axZtkgdxBoxLeYRd3lyCE
-         BZDOTfUZMDH6gzoIvIwW5uh3iXT5Hup7pn+QZTP4CUguTmVNdDS2KLIHJhQq/Ely5dMq
-         fu3kOGVPmoHdXuHDe4Usm8J9Ojy3Ol8Rt84kJs/H2JznXL+t041Zza5RrG5wdkxaiwVu
-         o6XgaoTbkakzydz2x8MFwLg/AKw1Gu6xnmhBMz0MScMUXdtq4SPsmEZL7Z6A3yplx8xK
-         9zcLXugEAYjK3m3Gj35G+YANGL4yE5QJ3INj/KHv20ckVXEFI7kDi6fpMOOvnKoZ6Qrd
-         b4jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T81/5fLCvQ7zJ3Q+OGaVNq/xGeY/shWwLqml1r4UttA=;
-        b=ms2JawHDsyZ5YTPQxhfTCRrigOXlA2KnGSjd+q4l4IywOMTuF2suapZH+4NiU/rNUD
-         0axvx6+aIQ/zyxLeq3w1zxQQhZ0mLk1y4XhnRlueQFGMs0TFM0/pWIlazEQc3DxF/jXw
-         asw/57LbdxJ4HgihsV9SsPILdgTcZahU2y88heOEArGsopynLkZi+sNndApDgnQaemwv
-         LH0BujIsx7kpfY5iyEWPNChACFp47XzTbFtlcyx4R+1xHFIAmdIQmlQsEH5h9lxXRDRO
-         oqaCxktyJlOfLvRi4RrVj39yryRwr0gXPp245cr3LolmW9BxFKuyvQSN74Tx/uzIq8lm
-         Erng==
-X-Gm-Message-State: ANoB5plKd9vacrjc35q1cRr8gw81jGD4+bnpGmE7NltsPA3SbR0U6ulw
-        ogGaiRd2EdKHmt19bLAwosI=
-X-Google-Smtp-Source: AA0mqf5OG6D/pxIWa7/stkwqLg6Spam6QLL78l5FqXWpvJ925eTGaqfdsxHMJcAcxpRaRG4GCwggmw==
-X-Received: by 2002:a17:906:229a:b0:78d:d762:5457 with SMTP id p26-20020a170906229a00b0078dd7625457mr1158533eja.67.1668669539494;
-        Wed, 16 Nov 2022 23:18:59 -0800 (PST)
-Received: from localhost (89-138-235-186.bb.netvision.net.il. [89.138.235.186])
-        by smtp.gmail.com with ESMTPSA id en20-20020a056402529400b00461bb7e7ef1sm154207edb.30.2022.11.16.23.18.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 16 Nov 2022 23:18:58 -0800 (PST)
-From:   Eli Billauer <eli.billauer@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, imv4bel@gmail.com,
-        stern@rowland.harvard.edu, Eli Billauer <eli.billauer@gmail.com>
-Subject: [PATCH] char: xillybus: Fix trivial bug with mutex
-Date:   Thu, 17 Nov 2022 09:18:25 +0200
-Message-Id: <20221117071825.3942-1-eli.billauer@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233220AbiKQHbW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 02:31:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB4329824
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 23:31:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E96A4B81FA2
+        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 99372C43148
+        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:31:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668670278;
+        bh=snXNkoluSZVVSm1IvZJRXamDEphz5cpjI/bUGrCIj0o=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=rVApkfibN5fPpUO/LeCZ1HBy9ccwKdeNWaY8s7qOA1p+Tb0Xrh55DBl2CmqZTa9yx
+         PAsMq/KPdnjETU4tCaJ2y7a7RHczaQuq5NUEmv9yKXyNhL/Y3e3ABiNa+sp61MH97E
+         zipn3MjURWAFROyyQ1ITZINw+H29VKL9ifJWXL82g7eOYtlXaPGgTO0fLk+nphWYZ6
+         jZxlFhblW1uXwZ+vTjFPSXcppLMgO8OU3sgALj1efXkZbP11qiGEojtGFDtM257BdS
+         AjnLdbr43YQHcetI8DAkO8l8G13NslJO8xdi5tteXQgxeeyNPJf+VpYzoIrnKaB09p
+         B0NyBWuw6mRcg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 88DACC433E7; Thu, 17 Nov 2022 07:31:18 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Thu, 17 Nov 2022 07:31:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: denis@speran.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-210425-208809-WPcAWxVnZn@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-@unit_mutex protects @unit from being freed, so obviously it should be
-released after @unit is used, and not before.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-This is a follow-up to commit 282a4b71816b ("char: xillybus: Prevent
-use-after-free due to race condition") which ensures, among others, the
-protection of @private_data after @unit_mutex has been released.
+Dennis (denis@speran.info) changed:
 
-Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
-Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
----
- drivers/char/xillybus/xillybus_class.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |denis@speran.info
 
-diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
-index 0f238648dcfe..e9a288e61c15 100644
---- a/drivers/char/xillybus/xillybus_class.c
-+++ b/drivers/char/xillybus/xillybus_class.c
-@@ -227,14 +227,15 @@ int xillybus_find_inode(struct inode *inode,
- 			break;
- 		}
- 
--	mutex_unlock(&unit_mutex);
--
--	if (!unit)
-+	if (!unit) {
-+		mutex_unlock(&unit_mutex);
- 		return -ENODEV;
-+	}
- 
- 	*private_data = unit->private_data;
- 	*index = minor - unit->lowest_minor;
- 
-+	mutex_unlock(&unit_mutex);
- 	return 0;
- }
- EXPORT_SYMBOL(xillybus_find_inode);
--- 
-2.17.1
+--- Comment #43 from Dennis (denis@speran.info) ---
+I'm not sure if it's okay to report here, but it seems like changes made he=
+re
+breake resume from suspend on my laptop.=20
+Archlinux kernel 6.0.6- resumes fine
+Archlinux kernel 6.0.7- hangs on resume, laptop appears to stuck, nothing w=
+orks
+except GUI displayed but not updated and I get errors saying something like
+RIP: 0010:ucsi_resume+0x2a/0x70
 
+Lenovo ThinkBook 13s-IML
+
+If it's inappropriate to report such issue here, could you please guide me =
+how
+to report, I'm totally new to kernel issue reporting.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
