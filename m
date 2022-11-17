@@ -2,150 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A3F62E673
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 22:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15A462E865
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 23:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240221AbiKQVJt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 16:09:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S234902AbiKQW3z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 17:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240624AbiKQVJZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 16:09:25 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCA87722F;
-        Thu, 17 Nov 2022 13:08:04 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4969620007;
-        Thu, 17 Nov 2022 21:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668719281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=72JrUM6NacHh18cxNPJTokOPFIy2MlvUmUZu6AVg77s=;
-        b=kQ3WnKEHtW817TTGo/51w1BLV9fElm+d4PRny19l0Xo5WVvRKUWbYa4RLUCeb4hzAu+blU
-        gN78c5WiYd88yo78Tac1K8UgLdjF8sGEUg2eG4K4KIGZ2aSd/NCisT3pEqKgpi8MG9t8wo
-        Mhed7VoKwoPF1Ad6rnk8zscQKUda7EVdabBo89uHsVUfKLNbVRCzBabKqvqOG3TKdkeI5N
-        elXTmNOrt8pOHvUy7n2mYZBmGVFue71mi4Gp0X7blRdSkQQj+FNRIx2l1Hm3E/1dFZjljQ
-        ITXz8XlIez/SUSB6b7UDZFkg18YUByW5VovCJRgF+828mYPwuo2FHFq7f7zwSg==
-Date:   Thu, 17 Nov 2022 22:07:56 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Message-ID: <20221117220756.7a1bf734@xps-13>
-In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
-        <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S230287AbiKQW3y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 17:29:54 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF724BF7F;
+        Thu, 17 Nov 2022 14:29:52 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id 21so4686895edv.3;
+        Thu, 17 Nov 2022 14:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l7K+2+hb50PgBvImpYfRCmrZDiumqAIoMLO+SRy2BjY=;
+        b=OW8Sf6bOy/sCfRmUTV1Jn9JpRbQqH2u+fqVW7VD2h/eJW2dpOxkbe90k0zJTN4gAJ4
+         gi/dGTx5ZPclge1JRDpCh73zPeMtOPChP0YMVcZo2Ah8KufSyuT72LhV3cmlbtCDbL65
+         UHe7SKts67iQyKQALQ3XpcCSOuSNa+6hrNJAcOU7/Zkl3UwULhXMdztK7HD6AviiFEmO
+         LWY8bT1+Ux0EvQs0/Mj+DgPyPeRwbjBQipMEBTtiC/8MkcJEC8krB0XmCJHX9/uyqiHy
+         2boukPOWjy7bBGTjy/aSUP0ys4fx0RQjGgj2v5RjeLK+LIXRKo2OQjhdCdugzbamdD9t
+         1euw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l7K+2+hb50PgBvImpYfRCmrZDiumqAIoMLO+SRy2BjY=;
+        b=I/dzjHugphbDffrt+O9JTVmxyeBF67qsFU96ukBZXgBypLHtEEocimGNu98jEYv0kc
+         vy9XeG47Kt4o6XgB1SaAKUqbVC7lK07Qxd8oEkFtjwBMKH4pFIBRYp8aOvZH4CbBP7fL
+         f8fV+QptkJaCiySwTc3Jia1QOmgXzKeaQHTBdZF2+63UOtOBdxkRt7OTyz6ljl5wrr/P
+         HyQ1LEe49e5F1bxFejCowXMYE13h9B6JQ4tKuK2+67/7ZI3Bzz+Dy5ydPaJIkL6BZG4o
+         R7z5OSF+HK90wUsRZYB7bCjmmLXZJvXU5zw3hfGXpnKNkKkBNXry7YTCGjktFPBlSceJ
+         koeg==
+X-Gm-Message-State: ANoB5pkXn8Lp5GoiaSFU3xmz0gd6biK2GQcHz/5H19xrOuJyq9wAX1ID
+        34LkMDSRtYk57xEYl3OEjRo=
+X-Google-Smtp-Source: AA0mqf5oLozVoWkc8kyT9DFV87DVXFHiYgdXSJjg30pW9ms02tIgyRzoBtVLyPgG54wncIMrJJEmHw==
+X-Received: by 2002:a05:6402:2993:b0:462:845:ba98 with SMTP id eq19-20020a056402299300b004620845ba98mr3862361edb.12.1668724191287;
+        Thu, 17 Nov 2022 14:29:51 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id v10-20020aa7dbca000000b0044dbecdcd29sm1034459edt.12.2022.11.17.14.29.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 14:29:50 -0800 (PST)
+Date:   Thu, 17 Nov 2022 23:29:49 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jim Lin <jilin@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] xhci: Add hub_control to xhci_driver_overrides
+Message-ID: <Y3a13Q+iSosDUOW3@orome>
+References: <20221111101813.32482-1-jilin@nvidia.com>
+ <20221111101813.32482-2-jilin@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jnB12ol0gjctK1Jc"
+Content-Disposition: inline
+In-Reply-To: <20221111101813.32482-2-jilin@nvidia.com>
+User-Agent: Mutt/2.2.8 (2022-11-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
 
-krzysztof.kozlowski@linaro.org wrote on Thu, 17 Nov 2022 13:38:42 +0100:
+--jnB12ol0gjctK1Jc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The Devicetree bindings document does not have to say in the title that
-> it is a "binding", but instead just describe the hardware.  For shared
-> (re-usable) schemas, name them all as "common properties".
+On Fri, Nov 11, 2022 at 06:18:11PM +0800, Jim Lin wrote:
+> Add a hub_control() callback to the xhci_driver_overrides structure to
+> allow host drivers to override the default hub_control function. This
+> is required for Tegra which requires device specific actions for power
+> management to be executed during USB state transitions.
 >=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
+>=20
 > ---
->  Documentation/devicetree/bindings/clock/qcom,gcc.yaml         | 2 +-
->  Documentation/devicetree/bindings/dma/dma-common.yaml         | 2 +-
->  Documentation/devicetree/bindings/dma/dma-controller.yaml     | 4 ++--
->  Documentation/devicetree/bindings/dma/dma-router.yaml         | 4 ++--
->  Documentation/devicetree/bindings/iio/adc/adc.yaml            | 2 +-
->  .../devicetree/bindings/media/video-interface-devices.yaml    | 2 +-
->  Documentation/devicetree/bindings/media/video-interfaces.yaml | 2 +-
->  Documentation/devicetree/bindings/mmc/mmc-controller.yaml     | 2 +-
->  Documentation/devicetree/bindings/mtd/nand-chip.yaml          | 2 +-
->  Documentation/devicetree/bindings/mtd/nand-controller.yaml    | 2 +-
->  .../bindings/net/bluetooth/bluetooth-controller.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/can/can-controller.yaml | 2 +-
->  .../devicetree/bindings/net/ethernet-controller.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/ethernet-phy.yaml       | 2 +-
->  Documentation/devicetree/bindings/net/mdio.yaml               | 2 +-
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml        | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml      | 2 +-
->  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
->  .../devicetree/bindings/soundwire/soundwire-controller.yaml   | 2 +-
->  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
->  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 2 +-
->  21 files changed, 23 insertions(+), 23 deletions(-)
+> v5: new change
+> v6: adjust parameter alignment (xhci.h hub_control)
+> v7: change commit message
 >=20
+>  drivers/usb/host/xhci.c | 2 ++
+>  drivers/usb/host/xhci.h | 2 ++
+>  2 files changed, 4 insertions(+)
 
-[...]
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Docum=
-entation/devicetree/bindings/mtd/nand-chip.yaml
-> index 97ac3a3fbb52..20b195ef9b70 100644
-> --- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> =20
-> -title: NAND Chip and NAND Controller Generic Binding
-> +title: NAND Chip and NAND Controller common properties
+--jnB12ol0gjctK1Jc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I only see this now but the title should be
+-----BEGIN PGP SIGNATURE-----
 
-	"NAND chip common properties"
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN2tdoACgkQ3SOs138+
+s6Heyw//S8yCagyOrYQmjUJ/unCk4QbLBERULyACz8zFu9dU5pv3FwGQ3wt5Gype
+DoRh0fqnPOQO7raK4fbXp+ZtC8DrykmJFBhAsi+ePH3fihusMHjrbCr6CMjENH6d
+xAkY0YKEdYywz12smypRGxrwoD10IkwV8AEWoxJbzbJSJetKJ01ot0V7BUpZbt8o
+oCSzQmOmWXCX8InlZKaRm6zKrNU9Cy5mbgnv17tVv8XMrkuju00c8GrzVcdiFOkP
+H1LK0z/B66NQJFUyeAxNPYXwlntpc6hubdLOcKbx/VozrU/eKu4mXnGIuRNJx+x6
+eTO4MN8rcGCQ8ZGb9wEm8xkh0HedddjRh+xD9X9rugWdcEk22rlRO3bGS/FLS61r
+hHfM3YFhzHt08Xtyj6GnEMmncno+ZVVtP0jpb9StkuvqRSuJK2/73fI+Y4F760cY
+jTv0+PvgzNUgeBdK+c0UE7RCk6/jvhDXpPLC5K72qR5eKTWzF3+sH80tkgOKLuKc
+0+LCAQlKuC1cJAyHucUE3pKmlNxMeorP/MJmEUtXs1WyvHWfu4eNq7ZDQFP1r7z1
+AyEj8Wj3rkSzXQr1oNrglVuX8BPPnw0t0qeAtmwNVrdYLvshYC+1r46rQ91/HSPg
+NxBG6K+GWQZU68TUXDpqopbcymlFXpxsmNvAC5ztf4vIq3BOwh4=
+=RD/t
+-----END PGP SIGNATURE-----
 
-> =20
->  maintainers:
->    - Miquel Raynal <miquel.raynal@bootlin.com>
-> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b=
-/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-> index 359a015d4e5a..a004efc42842 100644
-> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> =20
-> -title: NAND Chip and NAND Controller Generic Binding
-> +title: NAND Chip and NAND Controller common properties
-
-And here just "NAND controller..."
-
-Of course the original purpose of your series is more to clean those
-titles rather than fixing them and if you disagree I am fine doing it
-myself aside, but if you could at the same time make the title more
-accurate that would be perfect.
-
-Either ways:
-
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Cheers,
-Miqu=C3=A8l
+--jnB12ol0gjctK1Jc--
