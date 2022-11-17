@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EFC62D41F
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 08:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D82862D478
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 08:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239280AbiKQHbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 02:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S239422AbiKQH4l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 02:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiKQHbW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 02:31:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB4329824
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 23:31:21 -0800 (PST)
+        with ESMTP id S234775AbiKQH4h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 02:56:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82C2716C1
+        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 23:56:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E96A4B81FA2
-        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99372C43148
-        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:31:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93E9BB81FA3
+        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:56:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 547B8C433D7
+        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668670278;
-        bh=snXNkoluSZVVSm1IvZJRXamDEphz5cpjI/bUGrCIj0o=;
+        s=k20201202; t=1668671793;
+        bh=6eyM8cnkh89KixJAERUMMxpMjDbuLQET9BBCMQqvrXE=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=rVApkfibN5fPpUO/LeCZ1HBy9ccwKdeNWaY8s7qOA1p+Tb0Xrh55DBl2CmqZTa9yx
-         PAsMq/KPdnjETU4tCaJ2y7a7RHczaQuq5NUEmv9yKXyNhL/Y3e3ABiNa+sp61MH97E
-         zipn3MjURWAFROyyQ1ITZINw+H29VKL9ifJWXL82g7eOYtlXaPGgTO0fLk+nphWYZ6
-         jZxlFhblW1uXwZ+vTjFPSXcppLMgO8OU3sgALj1efXkZbP11qiGEojtGFDtM257BdS
-         AjnLdbr43YQHcetI8DAkO8l8G13NslJO8xdi5tteXQgxeeyNPJf+VpYzoIrnKaB09p
-         B0NyBWuw6mRcg==
+        b=Xosru2IZgdlKeU5VmBjIpdTzi2qtu81Te9bIRVIHGM9mQfmtltRALhEeCVmqONduW
+         4DU24JNDjwqHjQO65XFu+PnW1j6Rawt5nwAUx8uv/ei0Q28isXl71Ebj7I8yMAu8Cz
+         YpGi+efIv4Fa9CwGaCdT+SHF/oWqdPQ7ivtvtRMRdyI09wGyHR+hwwLNnIHtMm7NdX
+         OhHeu0YePD/heOqh99pcHCYQ0P3zEBSszZO4nFXmnNMzfCS9zNkrHFXF/ZTDwDH2Mk
+         z+2IfqvmfMuFyP3czxYVVX0cLkWQwc0DmNojzLKsHqIBqkcQYKpIhFWZGsBQ8TlpBh
+         f4bVt2R5DCEZA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 88DACC433E7; Thu, 17 Nov 2022 07:31:18 +0000 (UTC)
+        id 457C6C433E7; Thu, 17 Nov 2022 07:56:33 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 210425] Plugging in or unplugging power cord while system is
  suspended does not trigger updates
-Date:   Thu, 17 Nov 2022 07:31:18 +0000
+Date:   Thu, 17 Nov 2022 07:56:32 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -52,8 +52,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-210425-208809-WPcAWxVnZn@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210425-208809-uWI5Xv8gHB@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
 References: <bug-210425-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,27 +72,9 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-Dennis (denis@speran.info) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |denis@speran.info
-
---- Comment #43 from Dennis (denis@speran.info) ---
-I'm not sure if it's okay to report here, but it seems like changes made he=
-re
-breake resume from suspend on my laptop.=20
-Archlinux kernel 6.0.6- resumes fine
-Archlinux kernel 6.0.7- hangs on resume, laptop appears to stuck, nothing w=
-orks
-except GUI displayed but not updated and I get errors saying something like
-RIP: 0010:ucsi_resume+0x2a/0x70
-
-Lenovo ThinkBook 13s-IML
-
-If it's inappropriate to report such issue here, could you please guide me =
-how
-to report, I'm totally new to kernel issue reporting.
+--- Comment #44 from Dennis (denis@speran.info) ---
+Just checked with 6.1.0-rc5-1-mainline package wich is a "patchless" kernel
+from Archlinux AUR and the problem still occurs.
 
 --=20
 You may reply to this email to add a comment.
