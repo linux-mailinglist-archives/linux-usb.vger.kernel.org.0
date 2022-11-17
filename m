@@ -2,47 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7082762E348
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 18:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2E762E388
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 18:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240196AbiKQRjg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 12:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
+        id S240256AbiKQRwf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 12:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239637AbiKQRjP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 12:39:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1357ECA5;
-        Thu, 17 Nov 2022 09:39:04 -0800 (PST)
+        with ESMTP id S240398AbiKQRwN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 12:52:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0CD7FC26;
+        Thu, 17 Nov 2022 09:52:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB6A1B8216C;
-        Thu, 17 Nov 2022 17:39:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDD3C433D7;
-        Thu, 17 Nov 2022 17:38:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668706741;
-        bh=oUtsd8Y3RXK7kabHRg0fHPeFFPGJmxPAgbyGHiGHJug=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09755621E1;
+        Thu, 17 Nov 2022 17:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4C2C433D7;
+        Thu, 17 Nov 2022 17:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668707531;
+        bh=wVcYKV9ryyiDH/YHL+yzTatasapLPFcACLj99oy49LE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sIrQxq9fJB1aCXgL3hr0ktDsC/aITHKnLDhwAf43GzqvtWrJtu+kMOAbF1yqBk85c
-         B81cHOovOQa5b3P/1zjk9jIVG8zFJWHj5oM0Y6LS4wpxDyXzLuaKelrFRPQYfKKwkq
-         qBEo0mY6m2wMaP8z9zprvAn/XVBt/1RMT93BZfRc=
-Date:   Thu, 17 Nov 2022 18:38:16 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3ZxiCJdIOzcC6f5@kroah.com>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3Yt+YixokbWJ8H9@kroah.com>
- <Y3Y2fTeYTvOHF9Sb@google.com>
+        b=a7sDmIc+MIiyHVMXaBusQ6SkTG7PgwM/a0EJ4zKHIvOVy6oKK6b3AT7G6BL7IAhyb
+         tQrGOQ8EZryz0g9CPyeova2t7BapHsbt5mf3emi2EuVCeQXhXqwUn+kqAW/vkW3pTf
+         Kd3saMsh3WvsIsW95EjyysGP+2g6w6bUubvY77zS2JNX3hodGbWwqnkeOfkUkv44d1
+         wVdNvSyfxUXTwGs/CxfcJu1R/YNgmbTF9P0hHUecae9laDee6pIqWGqoCswKxWBQ7e
+         3D8Kmq02sXbN6LrlSaw20+B84srvuF3HVurawDtGLsPyRommshzXNIKHm27diMG12K
+         Io+tfOlGUFb/g==
+Date:   Thu, 17 Nov 2022 17:52:03 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <Y3Z0w6JH1f5zgwvW@spud>
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+ <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3Y2fTeYTvOHF9Sb@google.com>
+In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,61 +69,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 01:26:21PM +0000, Lee Jones wrote:
-> On Thu, 17 Nov 2022, Greg KH wrote:
-> 
-> > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
-> > > A reference to struct f_hidg is shared with this driver's associated
-> > > character device handling component without provision for life-time
-> > > handling.  In some circumstances, this can lead to unwanted
-> > > behaviour depending on the order in which things are torn down.
-> > > 
-> > > Utilise, the reference counting functionality already provided by the
-> > > implanted character device structure to ensure the struct f_hidg's
-> > > memory is only freed once the character device handling has finished
-> > > with it.
-> > > 
-> > > Signed-off-by: Lee Jones <lee@kernel.org>
-> > > ---
-> > >  drivers/usb/gadget/function/f_hid.c | 47 +++++++++++++++++++++++------
-> > >  1 file changed, 37 insertions(+), 10 deletions(-)
-> > 
-> > Hi,
-> > 
-> > This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-> > a patch that has triggered this response.  He used to manually respond
-> > to these common problems, but in order to save his sanity (he kept
-> > writing the same thing over and over, yet to different people), I was
-> > created.  Hopefully you will not take offence and will fix the problem
-> > in your patch and resubmit it so that it can be accepted into the Linux
-> > kernel tree.
-> > 
-> > You are receiving this message because of the following common error(s)
-> > as indicated below:
-> > 
-> > - This looks like a new version of a previously submitted patch, but you
-> >   did not list below the --- line any changes from the previous version.
-> >   Please read the section entitled "The canonical patch format" in the
-> >   kernel file, Documentation/SubmittingPatches for what needs to be done
-> >   here to properly describe this.
-> > 
-> > If you wish to discuss this problem further, or you have questions about
-> > how to resolve this issue, please feel free to respond to this email and
-> > Greg will reply once he has dug out from the pending patches received
-> > from other developers.
-> > 
-> > thanks,
-> > 
-> > greg k-h's patch email bot
-> 
-> This is a completely new solution to the same problem.
-> 
-> I'm treating this as a brand new submission.
+On Thu, Nov 17, 2022 at 01:38:42PM +0100, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
 
-With the identical subject line, which plays havoc with tools :(
 
-This is a v2, next should be v3 please.
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> index 1ab416c83c8d..d2de3d128b73 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Qualcomm Global Clock & Reset Controller Common Bindings
+> +title: Qualcomm Global Clock & Reset Controller common parts
+>  
+>  maintainers:
+>    - Stephen Boyd <sboyd@kernel.org>
 
-thanks,
 
-greg k-h
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> index cf9c2f7bddc2..20ac432dc683 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/opp/opp-v2-base.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Generic OPP (Operating Performance Points) Common Binding
+> +title: Generic OPP (Operating Performance Points) common parts
+>  
+>  maintainers:
+>    - Viresh Kumar <viresh.kumar@linaro.org>
+
+Hey Krzysztof,
+
+Hopefully I've not overlooked something obvious, but it wasnt noted in
+the commit message - how come these two are "parts" rather than
+"properties"? The opp one at least don't seem to have much more than
+properties and patterProperties in it.
+
+Thanks,
+Conor.
+
