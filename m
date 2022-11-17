@@ -2,162 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4822162D094
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 02:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC4162D0DD
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 02:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbiKQBXV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Nov 2022 20:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S233772AbiKQBxl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Nov 2022 20:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKQBXT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 20:23:19 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A5E68C43;
-        Wed, 16 Nov 2022 17:23:18 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id p4so110933vsa.11;
-        Wed, 16 Nov 2022 17:23:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7xKUMGGimUYtJgHLPWFAyDYCp5vd1aYTbMEmjYh3+I=;
-        b=mN1jHmpN8E1dh7RItO9CyHzhnzTdIIBGFSlacYTp6ak7RRJ3IhziTdNZVgA6QWWcoN
-         ADd3ZOduofY/peCyNz+FIyNdIzFjILG8ZzWYSadC0PkMpjDmEIrufdO60uQj2vHs1bKv
-         PmkqEZ2w8gsm7b8ZKETyGP+ZclllROWHSL0wyv8Jq1lH1EZQSFY1DOYiiYgwh68jF/9H
-         NGjsBu9SZbE1Ise0mYsHfT+hlmjjaOW1CKYAslFU3Nq1+nbQdBlM0/pF1B+EJnk6zDCS
-         I3r7COZvkSmX04L3MgbXJrMRIqk8f0JuEOcq0/P+zQpX9xk9E4QxSvDbvIuh6fo8rdbx
-         Xyfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/7xKUMGGimUYtJgHLPWFAyDYCp5vd1aYTbMEmjYh3+I=;
-        b=0JCIQQyzfM8Zxznz8mM9wyA34RhVFuHJe8KQt1CGxuMxP6n1Gh/csxh0WU9gKWqd1T
-         9D8Vo8HwEFYeioELoYbGeJmiWXlCQ9ZkiPjdae2i1gnSFLH4ddBvuVb3nz4Yz+pfVKF0
-         vrr2a4dOS4o7/CWFA++qep8WOv4hBdAK02MpK/aAuQhc7jyBRhE5eevKNYm6JF+PqdwR
-         8xoGladItFlxbqIqX9BF5WMVZzs5kzfkldFGGQK7qmsa0PxS1BX+uISmHrdUjVAa4k/J
-         Q8+ozEXm3WndEwTRhQFO6/ji7SboSUPCOKxRyJR/b++KCyBkS7IWj4UZdC0oIyXrkNKL
-         0pSA==
-X-Gm-Message-State: ANoB5plNfQhGkRgZjDCetbd7kZr7SEVJBFdK3QQpxcls2TfbPKTGeEUq
-        90Q35+eT8s1M519ghy8H3FASGeqCkEWsWtYKIT2rNHSWOuA=
-X-Google-Smtp-Source: AA0mqf4PYta2i51gBc6838T30dAQNpkuvm8cz95Bw9VchHeTHSq8F4L007Q556tdh2nFgHmzCm+iBRcydjZY6H1+Axo=
-X-Received: by 2002:a05:6102:30b1:b0:3aa:8da6:44c0 with SMTP id
- y17-20020a05610230b100b003aa8da644c0mr607589vsd.20.1668648197975; Wed, 16 Nov
- 2022 17:23:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20221115092218.421267-1-pawell@cadence.com>
-In-Reply-To: <20221115092218.421267-1-pawell@cadence.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 17 Nov 2022 09:22:09 +0800
-Message-ID: <CAL411-qwcboX-vTn+3oOPna+tixFNEajYi_E_rgweqrC3CcXCA@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232097AbiKQBxk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Nov 2022 20:53:40 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40162D7D;
+        Wed, 16 Nov 2022 17:53:38 -0800 (PST)
+Received: from mxct.zte.com.cn (unknown [192.168.251.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NCNHP0HlQz4xVnR;
+        Thu, 17 Nov 2022 09:53:37 +0800 (CST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NCNHM2811z501Qn;
+        Thu, 17 Nov 2022 09:53:35 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AH1rUJd095330;
+        Thu, 17 Nov 2022 09:53:30 +0800 (+08)
+        (envelope-from guo.ziliang@zte.com.cn)
+Received: from mapi (xaxapp03[null])
+        by mapi (Zmail) with MAPI id mid32;
+        Thu, 17 Nov 2022 09:53:31 +0800 (CST)
+Date:   Thu, 17 Nov 2022 09:53:31 +0800 (CST)
+X-Zmail-TransId: 2afb6375941bffffffffe743b8a8
+X-Mailer: Zmail v1.0
+Message-ID: <202211170953310238773@zte.com.cn>
+Mime-Version: 1.0
+From:   <guo.ziliang@zte.com.cn>
+To:     <thinh.nguyen@synopsys.com>
+Cc:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <guo.ziliang@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHVzYjogZHdjMzogZ2FkZ2V0OiByZW1vdmUgcmVkdW5kYW50IHJldCB2YXJpYWJsZSBpbiBkd2MzX2dhZGdldF92YnVzX2RyYXc=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AH1rUJd095330
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63759421.000 by FangMail milter!
+X-FangMail-Envelope: 1668650017/4NCNHP0HlQz4xVnR/63759421.000/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<guo.ziliang@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63759421.000/4NCNHP0HlQz4xVnR
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 5:22 PM Pawel Laszczak <pawell@cadence.com> wrote:
->
-> Patch modifies the TD_SIZE in TRB before ZLP TRB.
-> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
-> processing ZLP TRB by controller.
->
-> cc: <stable@vger.kernel.org>
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
-> v2:
-> - returned value for last TRB must be 0
-> v3:
-> - fix issue for request->length > 64KB
->
->  drivers/usb/cdns3/cdnsp-ring.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 794e413800ae..86e1141e150f 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -1763,10 +1763,15 @@ static u32 cdnsp_td_remainder(struct cdnsp_device *pdev,
->                               int trb_buff_len,
->                               unsigned int td_total_len,
->                               struct cdnsp_request *preq,
-> -                             bool more_trbs_coming)
-> +                             bool more_trbs_coming,
-> +                             bool zlp)
->  {
->         u32 maxp, total_packet_count;
->
-> +       /* Before ZLP driver needs set TD_SIZE = 1. */
-> +       if (zlp)
-> +               return 1;
-> +
+From: guo ziliang <guo.ziliang@zte.com.cn>
+Return value from dwc3_gadget_vbus_draw() directly instead of taking
+this in another redundant variable.
 
-Pawel, with your change, the TD_SIZE is 1 or 0, but not like the
-kernel doc defined like below:
+Signed-off-by: guo ziliang <guo.ziliang@zte.com.cn>
+---
+ drivers/usb/dwc3/gadget.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-/*
- * TD size is the number of max packet sized packets remaining in the TD
- * (*not* including this TRB).
- *
- * Total TD packet count = total_packet_count =
- *     DIV_ROUND_UP(TD size in bytes / wMaxPacketSize)
- *
- * Packets transferred up to and including this TRB = packets_transferred =
- *     rounddown(total bytes transferred including this TRB / wMaxPacketSize)
- *
- * TD size = total_packet_count - packets_transferred
- *
- * It must fit in bits 21:17, so it can't be bigger than 31.
- * This is taken care of in the TRB_TD_SIZE() macro
- *
- * The last TRB in a TD must have the TD size set to zero.
- */
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index faf37c6..d984d68 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2904,7 +2904,6 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+ {
+        struct dwc3             *dwc = gadget_to_dwc(g);
+        union power_supply_propval      val = {0};
+-       int                             ret;
 
-Peter
+        if (dwc->usb2_phy)
+                return usb_phy_set_power(dwc->usb2_phy, mA);
+@@ -2913,9 +2912,7 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+                return -EOPNOTSUPP;
 
->         /* One TRB with a zero-length data packet. */
->         if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
->             trb_buff_len == td_total_len)
-> @@ -1960,7 +1965,8 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->                 /* Set the TRB length, TD size, and interrupter fields. */
->                 remainder = cdnsp_td_remainder(pdev, enqd_len, trb_buff_len,
->                                                full_len, preq,
-> -                                              more_trbs_coming);
-> +                                              more_trbs_coming,
-> +                                              zero_len_trb);
->
->                 length_field = TRB_LEN(trb_buff_len) | TRB_TD_SIZE(remainder) |
->                         TRB_INTR_TARGET(0);
-> @@ -2025,7 +2031,7 @@ int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->
->         if (preq->request.length > 0) {
->                 remainder = cdnsp_td_remainder(pdev, 0, preq->request.length,
-> -                                              preq->request.length, preq, 1);
-> +                                              preq->request.length, preq, 1, 0);
->
->                 length_field = TRB_LEN(preq->request.length) |
->                                 TRB_TD_SIZE(remainder) | TRB_INTR_TARGET(0);
-> @@ -2225,7 +2231,7 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->                 /* Set the TRB length, TD size, & interrupter fields. */
->                 remainder = cdnsp_td_remainder(pdev, running_total,
->                                                trb_buff_len, td_len, preq,
-> -                                              more_trbs_coming);
-> +                                              more_trbs_coming, 0);
->
->                 length_field = TRB_LEN(trb_buff_len) | TRB_INTR_TARGET(0);
->
-> --
-> 2.25.1
->
+        val.intval = 1000 * mA;
+-       ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
+-
+-       return ret;
++       return power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
+ }
+
+ /**
+--
+1.8.3.1
