@@ -2,75 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF68F62DCA2
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 14:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A021462DCB4
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 14:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240019AbiKQNYM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 08:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S239965AbiKQN0a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 08:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240016AbiKQNYA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 08:24:00 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC9F67F5F;
-        Thu, 17 Nov 2022 05:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=+G6PrQX4WZ0clAFOG+6oorGnE1VikHeuERGrZVmD//k=; b=vgwvpEFQBvBPGJ4l5Fdl5ZljTl
-        ypo25jDbsASqpcWo44PsikMJUyEh/j8+KuNKwMVnNYUK8cne4i1X7nrUciBY+tVcS/iiHdJ2HFZ/H
-        2esnkjM/ujU0Xuz3sce+hbgODPmYjA5uixlRGmvbn4lmRkP+O1N9/KY5ao9XxabklPQ0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1overO-002grq-5j; Thu, 17 Nov 2022 14:23:18 +0100
-Date:   Thu, 17 Nov 2022 14:23:18 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Message-ID: <Y3Y1xjOjijBsQLZA@lunn.ch>
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
- <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S231463AbiKQN03 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 08:26:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BEA5F85B;
+        Thu, 17 Nov 2022 05:26:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D0B1B82067;
+        Thu, 17 Nov 2022 13:26:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AE5C433D7;
+        Thu, 17 Nov 2022 13:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668691585;
+        bh=IfKmwHiX5GRvwIZolGOLav4sQrf4LjhgufrKC731FrE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sl66rHmMCkfMfxk0dwcuJuE3jaRNgKbrJ4+2BEnnvPDjgvxmVF4Tx1lseKcO4BvfT
+         7MvHkKAmLa6nLnq1qdeFF4RWL4n8d5YFn7oc15/AkvCu+88VSyM8agWoHN+KzZrPl0
+         X26w2fP/8VYpVU+gyWtf19j+Obfiq4jv4I7duUZc8NMafJSx93r5GOoRQuhsj4hXjO
+         nx6loRnRL68eRV2NZ5g5qh0OIjrFn+QH/1sFwrQSGzBmHqYImo0k2d5kvQtulGBF6w
+         qaBIRwl09tc+NLBhf3kFxLPvYACrViIBjzOjuw7WEP5XPwVWlZLrZVLdeOgvpdFLEo
+         buJ0sTt796TxQ==
+Date:   Thu, 17 Nov 2022 13:26:21 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3Y2fTeYTvOHF9Sb@google.com>
+References: <20221117120813.1257583-1-lee@kernel.org>
+ <Y3Yt+YixokbWJ8H9@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3Yt+YixokbWJ8H9@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->  allOf:
-> -  - $ref: "dma-common.yaml#"
-> +  - $ref: dma-common.yaml#
->  
->  
->  allOf:
-> -  - $ref: "dma-common.yaml#"
-> +  - $ref: dma-common.yaml#
+On Thu, 17 Nov 2022, Greg KH wrote:
 
-Looks like some other automated change made its way into this patch.
+> On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
+> > A reference to struct f_hidg is shared with this driver's associated
+> > character device handling component without provision for life-time
+> > handling.  In some circumstances, this can lead to unwanted
+> > behaviour depending on the order in which things are torn down.
+> > 
+> > Utilise, the reference counting functionality already provided by the
+> > implanted character device structure to ensure the struct f_hidg's
+> > memory is only freed once the character device handling has finished
+> > with it.
+> > 
+> > Signed-off-by: Lee Jones <lee@kernel.org>
+> > ---
+> >  drivers/usb/gadget/function/f_hid.c | 47 +++++++++++++++++++++++------
+> >  1 file changed, 37 insertions(+), 10 deletions(-)
+> 
+> Hi,
+> 
+> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> a patch that has triggered this response.  He used to manually respond
+> to these common problems, but in order to save his sanity (he kept
+> writing the same thing over and over, yet to different people), I was
+> created.  Hopefully you will not take offence and will fix the problem
+> in your patch and resubmit it so that it can be accepted into the Linux
+> kernel tree.
+> 
+> You are receiving this message because of the following common error(s)
+> as indicated below:
+> 
+> - This looks like a new version of a previously submitted patch, but you
+>   did not list below the --- line any changes from the previous version.
+>   Please read the section entitled "The canonical patch format" in the
+>   kernel file, Documentation/SubmittingPatches for what needs to be done
+>   here to properly describe this.
+> 
+> If you wish to discuss this problem further, or you have questions about
+> how to resolve this issue, please feel free to respond to this email and
+> Greg will reply once he has dug out from the pending patches received
+> from other developers.
+> 
+> thanks,
+> 
+> greg k-h's patch email bot
 
-      Andrew
+This is a completely new solution to the same problem.
+
+I'm treating this as a brand new submission.
+
+-- 
+Lee Jones [李琼斯]
