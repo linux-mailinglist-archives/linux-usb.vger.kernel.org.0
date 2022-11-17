@@ -2,60 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D82862D478
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 08:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD6662D498
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Nov 2022 09:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239422AbiKQH4l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Nov 2022 02:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
+        id S239082AbiKQIEc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Nov 2022 03:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234775AbiKQH4h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 02:56:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82C2716C1
-        for <linux-usb@vger.kernel.org>; Wed, 16 Nov 2022 23:56:35 -0800 (PST)
+        with ESMTP id S229658AbiKQIEa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Nov 2022 03:04:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AF4C776
+        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 00:04:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93E9BB81FA3
-        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 547B8C433D7
-        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 07:56:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C10B461F74
+        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 08:04:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24D3CC433C1
+        for <linux-usb@vger.kernel.org>; Thu, 17 Nov 2022 08:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668671793;
-        bh=6eyM8cnkh89KixJAERUMMxpMjDbuLQET9BBCMQqvrXE=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Xosru2IZgdlKeU5VmBjIpdTzi2qtu81Te9bIRVIHGM9mQfmtltRALhEeCVmqONduW
-         4DU24JNDjwqHjQO65XFu+PnW1j6Rawt5nwAUx8uv/ei0Q28isXl71Ebj7I8yMAu8Cz
-         YpGi+efIv4Fa9CwGaCdT+SHF/oWqdPQ7ivtvtRMRdyI09wGyHR+hwwLNnIHtMm7NdX
-         OhHeu0YePD/heOqh99pcHCYQ0P3zEBSszZO4nFXmnNMzfCS9zNkrHFXF/ZTDwDH2Mk
-         z+2IfqvmfMuFyP3czxYVVX0cLkWQwc0DmNojzLKsHqIBqkcQYKpIhFWZGsBQ8TlpBh
-         f4bVt2R5DCEZA==
+        s=k20201202; t=1668672269;
+        bh=5moBPAWS/j5XQNcPb7FMO3itAmtdrTj2/ilpL5i+urw=;
+        h=From:To:Subject:Date:From;
+        b=g5LHVmEhpGUIzujG23HfJQajZN16Yqq4Wj3GIp21hUoQ2ZVW6dduymVf2BEHZ59qq
+         B/hBnOyaCqL8e7XbduFk4ho0FrhT6A7T8kFqF2p18tSLRvjDb/v4x1ZcZHL7REwPfj
+         DvohTcW/V4Z2PFJo9kqZe+8CBEgGjMSU6hGbqPc1w/GX1kbMQYbIQwSSoljBoKN3Sr
+         xH1q1+XXGst1zVhPu7tFwokbTwd0KodELdFCjzxNXbxOq5YqQFTIdCEq/VofNjvf3J
+         F0XZXvsWGT+walwHrCb4Nia5P+WDYaKYAAExGUyq+J/B5m4e7zlEB8MeGFZHd1+sc5
+         aGSNSxfP9L1fA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 457C6C433E7; Thu, 17 Nov 2022 07:56:33 +0000 (UTC)
+        id 083EBC433E6; Thu, 17 Nov 2022 08:04:29 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Thu, 17 Nov 2022 07:56:32 +0000
+Subject: [Bug 216697] New: Resume from suspend stopped working
+Date:   Thu, 17 Nov 2022 08:04:28 +0000
 X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
+X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Product: Drivers
 X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
+X-Bugzilla-Severity: high
 X-Bugzilla-Who: denis@speran.info
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-uWI5Xv8gHB@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-216697-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -70,11 +69,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216697
 
---- Comment #44 from Dennis (denis@speran.info) ---
-Just checked with 6.1.0-rc5-1-mainline package wich is a "patchless" kernel
-from Archlinux AUR and the problem still occurs.
+            Bug ID: 216697
+           Summary: Resume from suspend stopped working
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 6.0.7
+          Hardware: Intel
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: high
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: denis@speran.info
+        Regression: No
+
+Created attachment 303190
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303190&action=3Dedit
+photo of errors on resume
+
+It seems like changes made here [1] breake resume from suspend on my laptop=
+.=20
+Archlinux kernel 6.0.6: resumes fine
+Archlinux kernel 6.0.7 - 6.1.0-rc5-1-mainline: hangs on resume, laptop appe=
+ars
+to stuck, nothing works except GUI displayed but not updated and I get erro=
+rs
+saying something like
+RIP: 0010:ucsi_resume+0x2a/0x70
+see attached photo
+
+Lenovo ThinkBook 13s-IML
+
+If it's inappropriate to report such issue here, could you please guide me =
+how
+to report, I'm totally new to kernel issue reporting.
+
+1. - https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
 --=20
 You may reply to this email to add a comment.
