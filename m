@@ -2,50 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DFA62FA57
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 17:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5FF62FA6C
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 17:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbiKRQeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 11:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
+        id S241969AbiKRQh7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 11:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbiKRQeQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 11:34:16 -0500
+        with ESMTP id S242129AbiKRQho (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 11:37:44 -0500
 Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52FB93CC1
-        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 08:34:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD7F94A4A;
+        Fri, 18 Nov 2022 08:37:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
         Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=eOwCWuzDmVHYBcMl1xoDBfPI5DnFpOhIDiik5Ypvrz4=; b=MwzB1
-        Oesh88N2M5bYs/NjfA+Je0Agn0Sf2nEEf2YNBeZoT58lil+IBy1WANlNc4x1mbXBR3clGcvVAHJuw
-        Po1+dEb7blwGlyVKfJKnckMh/Y3ipsQyrrSZaTUGa6rfngRyS2fgYf25qrmJ2Brym3es1nrelSyql
-        HLhqV5x2THufXuQuFffGKTWOAAGfAK8aj+jm5/+DgCPZh7OIzUckbNJ6nYpiWs+l35zAoBJyywUt3
-        jMnpEfTh0zIvtZMt6+TNsdRdZuJb+2+7RHw+ILqNKRrRACU/ibvzjb+6L+kXeIOst2DrN1jlABU9P
-        Pojq/2IlCBEPjAvRMv6B6Mfpskllw==;
+        Content-Description; bh=FiWlnseYeDmvYf6ekVLuoQu6zvB2WYQgiPGiJyyGB7U=; b=3olHQ
+        pwcdzstTqdGOogS4c7XYEkB/GBP5GjnjYxK8e00xx3J2AnZVWeRgJUhniaXd/H5xCpdrlA82VZ5qa
+        xANx4QLa2aQTMozg/E4pjlDIczrfQ/wGTlxh0AasS5Na3ZIICG+TCnfZR/Z7OCkIwG7TwUuV0yllS
+        Mn7Lw1MFwjL/tQ6G3b2gEaNG+JptHhgeJCkrifzq8q6JFgnqMV9kUt5A0i9FOBYCowEFuwA99ZlyB
+        9sse3H3qV6Z1V6cBrv/i5f76ec32Q2zmGSOaxvU/vZYqgD4pdDGhrNBrBzBNf9vIIxnB2dUrtfRTe
+        trUroe17qeBhKzTVtcyKVJlw475Qw==;
 Received: from 188-39-28-98.static.enta.net ([188.39.28.98] helo=donbot)
         by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <john@metanate.com>)
-        id 1ow4Jd-00047H-4p;
-        Fri, 18 Nov 2022 16:34:09 +0000
-Date:   Fri, 18 Nov 2022 16:34:08 +0000
+        id 1ow4Mu-00049L-SR;
+        Fri, 18 Nov 2022 16:37:33 +0000
+Date:   Fri, 18 Nov 2022 16:37:32 +0000
 From:   John Keeping <john@metanate.com>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc:     Jack Pham <quic_jackp@quicinc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH] usb: gadget: configfs: Prevent double delete from
- purge_configs_funcs
-Message-ID: <Y3e0ANWtax4SVONK@donbot>
-References: <20221117053548.28158-1-quic_ugoswami@quicinc.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+        balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3e0zAa7+HiNVrKN@donbot>
+References: <20221117120813.1257583-1-lee@kernel.org>
+ <Y3YuL8rSE9pNfIZN@kroah.com>
+ <Y3Y7MlwV0UFcA3w8@google.com>
+ <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
+ <Y3dIXUmjTfJLpPe7@google.com>
+ <Y3er7nenAhbmBdBy@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221117053548.28158-1-quic_ugoswami@quicinc.com>
+In-Reply-To: <Y3er7nenAhbmBdBy@rowland.harvard.edu>
 X-Authenticated: YES
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
@@ -56,61 +58,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 11:05:48AM +0530, Udipto Goswami wrote:
-> Currently the function purge_configs_funcs isn't protected by any lock
-> So there is a potential race possible there id udc called composite_unbind
-> and say at the same time the configfs_composite_bind also got executed.
-> If bind fails and follows the error path, driver will end up calling the
-> purge_configfs_funcs again, resulting in double free from func_list.
+On Fri, Nov 18, 2022 at 10:59:42AM -0500, Alan Stern wrote:
+> On Fri, Nov 18, 2022 at 08:54:53AM +0000, Lee Jones wrote:
+> > On Thu, 17 Nov 2022, Alan Stern wrote:
+> > 
+> > > On Thu, Nov 17, 2022 at 01:46:26PM +0000, Lee Jones wrote:
+> > > > On Thu, 17 Nov 2022, Greg KH wrote:
+> > > > 
+> > > > > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
+> > > > > > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
+> > > > > > +{
+> > > > > > +	return !!kref_read(&hidg->cdev.kobj.kref);
+> > > > > > +}
+> > > > > 
+> > > > > Ick, sorry, no, that's not going to work and is not allowed at all.
+> > > > > That's some major layering violations there, AND it can change after you
+> > > > > get the value as well.
+> > > > 
+> > > > This cdev belongs solely to this driver.  Hence the *.*.* and not
+> > > > *->*->*.  What is preventing us from reading our own data?  If we
+> > > > cannot do this directly, can I create an API to do it 'officially'?
+> > > > 
+> > > > I do, however, appreciate that a little locking wouldn't go amiss.
+> > > > 
+> > > > If this solution is not acceptable either, then we're left up the
+> > > > creak without a paddle.  The rules you've communicated are not
+> > > > compatible with each other.
+> > > > 
+> > > > Rule 1: Only one item in a data structure can reference count.
+> > > > 
+> > > > Due to the embedded cdev struct, this rules out my first solution of
+> > > > giving f_hidg its own kref so that it can conduct its own life-time
+> > > > management.
+> > > > 
+> > > > A potential option to satisfy this rule would be to remove the cdev
+> > > > attribute and create its data dynamically instead.  However, the
+> > > > staticness of cdev is used to obtain f_hidg (with container_of()) in
+> > > > the character device handling component, so it cannot be removed.
+> > > 
+> > > You have not understood this rule correctly.  Only one item in a data 
+> > > structure can hold a reference count _for that structure_.  But several 
+> > > items in a structure can hold reference counts for themselves.
+> > 
+> > Here was the review comment I was working to on this patch [0]:
+> > 
+> >  "While at first glance, it seems that f_hidg is not reference
+> >   counted, it really is, with the embedded "struct cdev" a few lines
+> >   above this.
+> > 
+> >   That is the reference count that should control the lifecycle of
+> >   this object, not another reference here in the "outer layer"
+> >   structure."
 > 
-> Fix this by introducing mutex gi->lock to make sure serial execution
-> can be maintained. Also, usage of list_for_each_entry_safe is risky
-> here since the tmp variable is still valid for the next iteration, in
-> order to ensure list traversal is clean, use list_last_entry.
-
-I don't understand how this can happen.
-
-purge_configs_funcs() is called from the .bind and .unbind
-usb_gadget_driver hooks, and those should not be able to run at the same
-time - if bind has not succeeded, how does unbinding make sense?
-
-> Fixes: 6cd0fe913879 ("usb: gadget: configfs: Preserve function ordering after bind failure")
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> ---
->  drivers/usb/gadget/configfs.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+> It's worth noting that the review comment goes on to say:
 > 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 3a6b4926193e..f1ac87906897 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -1246,14 +1246,14 @@ static void purge_configs_funcs(struct gadget_info *gi)
->  {
->  	struct usb_configuration	*c;
->  
-> +	mutex_lock(&gi->lock);
->  	list_for_each_entry(c, &gi->cdev.configs, list) {
-> -		struct usb_function *f, *tmp;
-> +		struct usb_function *f;
->  		struct config_usb_cfg *cfg;
->  
->  		cfg = container_of(c, struct config_usb_cfg, c);
-> -
-> -		list_for_each_entry_safe_reverse(f, tmp, &c->functions, list) {
-> -
-> +		while (!list_empty(&c->functions)) {
-> +			f = list_last_entry(&c->functions, struct usb_function, list);
->  			list_move(&f->list, &cfg->func_list);
->  			if (f->unbind) {
->  				dev_dbg(&gi->cdev.gadget->dev,
-> @@ -1269,6 +1269,7 @@ static void purge_configs_funcs(struct gadget_info *gi)
->  		c->highspeed = 0;
->  		c->fullspeed = 0;
->  	}
-> +	mutex_unlock(&gi->lock);
->  }
->  
->  static int configfs_composite_bind(struct usb_gadget *gadget,
-> -- 
-> 2.17.1
+>  "But, the cdev api is tricky and messy and not really set up to control
+>   the lifecycle of objects it is embedded in."
 > 
+> This is a good indication that a separate reference counter really is 
+> needed (in fact it almost contradicts what was written above).
+
+I don't think it's at all simple to fix this - I posted a series
+addressing the lifetime issues here a few years ago but didn't chase it
+up and there was no feedback:
+
+	https://lore.kernel.org/linux-usb/20191028114228.3679219-1-john@metanate.com/
+
+That includes a patch to remove the embedded struct cdev and manage its
+lifetime separately, which I think is needed as there are two different
+struct device objects here and we cannot tie their lifetimes together.
