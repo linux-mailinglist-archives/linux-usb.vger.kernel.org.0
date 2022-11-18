@@ -2,134 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F4B62FC34
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 19:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8266962FCFB
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 19:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241904AbiKRSLB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 13:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S241802AbiKRSu7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 13:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbiKRSLA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 13:11:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E31CC5D;
-        Fri, 18 Nov 2022 10:10:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45F38B824ED;
-        Fri, 18 Nov 2022 18:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94085C433D6;
-        Fri, 18 Nov 2022 18:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668795056;
-        bh=v1LpnWuqqL/42ipq0d18sYX3BkbXM25l/UJTnIgBjLo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=x219XtpZSnkTaYo6hGhYNpOb+isvlAshkhQ4Y8qptbywEz3ASOp9YA9CW0H2WV9oe
-         F0y5aexepvj6GYxHa5SRdvzsqAlS4iSMmhBRI+24aymbgKLx6NVXwKOXHMrf8cJB5u
-         ytQEbrkn/OheK10VQqKHH6/m/C40y1sari1QALig=
-Date:   Fri, 18 Nov 2022 19:10:53 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.1-rc6
-Message-ID: <Y3fKrfyixnq55Poc@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        with ESMTP id S235421AbiKRSu6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 13:50:58 -0500
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6766A684;
+        Fri, 18 Nov 2022 10:50:53 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so3602119otl.10;
+        Fri, 18 Nov 2022 10:50:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JOLYMjkXXvB/weWZsQxyRISw40hXb3p7LqGqtWVTDyk=;
+        b=sTF/mHtX5e0RWJM4kWUnBNqThzunWU5J/qo9/hkGcTQFwClaO9VetXNd8tg5XNR+Bm
+         d5FxSP9Uq3e3SqnBJPBBVBiJGk9P9YmYmEsZneg1rjBFTl8T3HxswfnkmZrHf0hSifWI
+         auhVf/39Nb9clnemKYo46dttBw75Y3yS7xLU0EljSg9EwwS1CdqmlucNVb4sjFcEB263
+         JlI4Waj6sFrHtkELi0sYN9VRV+pZwAYapXVRrIDLeHpieQgACbltPobQ4i+FedlMh2pV
+         uJm5afTPURkRkc25zszPjvN9GLXk2yQ8a+aUCuzSIgGQnZS+LtUpRPmHJTF8UBHveu46
+         0cMQ==
+X-Gm-Message-State: ANoB5pkpChfOo+TPhkgojzaK20crAZceZ6NrLlpbBqo5Y1qyEmnTlXyz
+        njUpllYXDsCm7EG3HtnnyA==
+X-Google-Smtp-Source: AA0mqf7tBcu9Tt0wpRksmHNxtPfG9uapvJ93nee4Ye90gw6t5D9ERUX1LfIp81dsHVG05A5sBN7PqQ==
+X-Received: by 2002:a9d:7e9a:0:b0:66c:6096:1878 with SMTP id m26-20020a9d7e9a000000b0066c60961878mr4549610otp.203.1668797452969;
+        Fri, 18 Nov 2022 10:50:52 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r25-20020a056830135900b00661c0747545sm1889218otq.44.2022.11.18.10.50.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 10:50:52 -0800 (PST)
+Received: (nullmailer pid 856954 invoked by uid 1000);
+        Fri, 18 Nov 2022 18:50:54 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, linux-tegra@vger.kernel.org,
+        treding@nvidia.com, linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        waynec@nvidia.com, Mathias Nyman <mathias.nyman@intel.com>,
+        vkoul@kernel.org, gregkh@linuxfoundation.org
+In-Reply-To: <20221118154006.173082-2-jonathanh@nvidia.com>
+References: <20221118154006.173082-1-jonathanh@nvidia.com>
+ <20221118154006.173082-2-jonathanh@nvidia.com>
+Message-Id: <166879727106.849035.12126185559088998329.robh@kernel.org>
+Subject: Re: [PATCH V4 1/6] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
+Date:   Fri, 18 Nov 2022 12:50:54 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
+On Fri, 18 Nov 2022 15:40:01 +0000, Jon Hunter wrote:
+> From: Wayne Chang <waynec@nvidia.com>
+> 
+> Add device-tree binding documentation for the XUSB host controller present
+> on Tegra234 SoC. This controller supports the USB 3.1 specification.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+> V3 -> V4: minor update to the power-domain description
+> V2 -> V3: nothing has changed
+> V1 -> V2: address the issue on phy-names property
+> 
+>  .../bindings/usb/nvidia,tegra234-xusb.yaml    | 158 ++++++++++++++++++
+>  1 file changed, 158 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> 
 
-are available in the Git repository at:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc6
+yamllint warnings/errors:
 
-for you to fetch changes up to 59a51183be1a6aaaf6f8483aec82e2fbf2c74ab9:
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.29-30 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
-  Merge tag 'usb-serial-6.1-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2022-11-17 22:06:28 +0100)
+doc reference errors (make refcheckdocs):
 
-----------------------------------------------------------------
-USB driver fixes for 6.1-rc6
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221118154006.173082-2-jonathanh@nvidia.com
 
-Here are a number of USB driver fixes and new device ids for 6.1-rc6.
-Included in here are:
-	- new usb-serial device ids
-	- dwc3 driver fixes for reported problems
-	- cdns3 driver fixes
-	- new USB device quirks
-	- typec driver fixes
-	- extcon USB typec driver fix
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-All of these have been in linux-next with no reported issues.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+pip3 install dtschema --upgrade
 
-----------------------------------------------------------------
-Benoît Monin (1):
-      USB: serial: option: add Sierra Wireless EM9191
+Please check and re-submit after running the above command.
 
-Davide Tronchin (3):
-      USB: serial: option: remove old LARA-R6 PID
-      USB: serial: option: add u-blox LARA-R6 00B modem
-      USB: serial: option: add u-blox LARA-L6 modem
-
-Duoming Zhou (1):
-      usb: chipidea: fix deadlock in ci_otg_del_timer
-
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-6.1-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Janne Grunau (1):
-      usb: dwc3: Do not get extcon device when usb-role-switch is used
-
-Johan Hovold (1):
-      Revert "usb: dwc3: disable USB core PHY management"
-
-Li Jun (1):
-      usb: cdns3: host: fix endless superspeed hub port reset
-
-Linus Walleij (1):
-      USB: bcma: Make GPIO explicitly optional
-
-Nicolas Dumazet (1):
-      usb: add NO_LPM quirk for Realforce 87U Keyboard
-
-Rajat Khandelwal (1):
-      usb: typec: mux: Enter safe mode only when pins need to be reconfigured
-
-Reinhard Speyerer (1):
-      USB: serial: option: add Fibocom FM160 0x0111 composition
-
-Sven Peter (1):
-      usb: typec: tipd: Prevent uninitialized event{1,2} in IRQ handler
-
-Thinh Nguyen (1):
-      usb: dwc3: gadget: Return -ESHUTDOWN on ep disable
-
-Yassine Oudjana (1):
-      extcon: usbc-tusb320: Call the Type-C IRQ handler only if a port is registered
-
- drivers/extcon/extcon-usbc-tusb320.c  |  8 ++++-
- drivers/usb/cdns3/host.c              | 56 +++++++++++++++++------------------
- drivers/usb/chipidea/otg_fsm.c        |  2 ++
- drivers/usb/core/quirks.c             |  3 ++
- drivers/usb/dwc3/core.c               | 10 +++++++
- drivers/usb/dwc3/gadget.c             |  2 +-
- drivers/usb/dwc3/host.c               | 10 -------
- drivers/usb/host/bcma-hcd.c           | 10 ++++---
- drivers/usb/serial/option.c           | 19 ++++++++++--
- drivers/usb/typec/mux/intel_pmc_mux.c | 15 ++++++++--
- drivers/usb/typec/tipd/core.c         |  6 ++--
- 11 files changed, 90 insertions(+), 51 deletions(-)
