@@ -2,235 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEA362F322
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 12:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0ACD62F3A2
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 12:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235247AbiKRLCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 06:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S241820AbiKRLYV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 06:24:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241764AbiKRLBx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 06:01:53 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AAF99E8A;
-        Fri, 18 Nov 2022 03:01:38 -0800 (PST)
-X-UUID: ccac951579684566863168889488ab0d-20221118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=gEw4Gu5Gnt8zOHhIWW+1I9wzg2APCr+opeqeiUE5TEE=;
-        b=MCAj3A8P+cjwi6PaRieaXBLrJdn5Lhzqtz6BE/1aqNKlR8CAJVQJuW16N5JYBIpIb3hatk7oNAuRf+/8t8QkdJovjJ8xDwAg1jNqHwFosNY2PDM49h3wc1BmofdiFbMnItGGgRt+18P55FwTDJKFNmVsTFotIjHVELOPkad4XF4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:221a4b70-40e0-44a0-a59a-b0f2fc2dbdfc,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.12,REQID:221a4b70-40e0-44a0-a59a-b0f2fc2dbdfc,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:62cd327,CLOUDID:e3f7a8f8-3a34-4838-abcf-dfedf9dd068e,B
-        ulkID:2211181901279D2G2TU4,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ccac951579684566863168889488ab0d-20221118
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1124821661; Fri, 18 Nov 2022 19:01:26 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 18 Nov 2022 19:01:25 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 18 Nov 2022 19:01:24 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        with ESMTP id S241749AbiKRLXd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 06:23:33 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CC58C7B5;
+        Fri, 18 Nov 2022 03:22:59 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 24094224B6;
+        Fri, 18 Nov 2022 11:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668770578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8+Mt338auMAPyZ6wHbrxbwJ1oWL2/y5Lq8MjJbkctG8=;
+        b=Mqsids9jdixeoyQ3eEblSjOT6qn2nKBBxnXO4YIV6MczkJIueBfOWf5IH+Qgu5GEThrRT6
+        hSgJwbIBgcAARZnSZqZlRalEkqp3F27xcCibtgAVfz9XkwKNyhdLPpWTxITfMMyrMmaYir
+        bQTfFlUi5/jqo+/cVb1R0youfVPvkVY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 871B52C141;
+        Fri, 18 Nov 2022 11:22:56 +0000 (UTC)
+Date:   Fri, 18 Nov 2022 12:22:56 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Eddie Hung" <eddie.hung@mediatek.com>
-Subject: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub has no ports
-Date:   Fri, 18 Nov 2022 19:01:16 +0800
-Message-ID: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH printk v5 00/40] reduce console_lock scope
+Message-ID: <Y3drEOkD1fuZcvV2@alley>
+References: <20221116162152.193147-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116162152.193147-1-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is error log when add a usb3 root hub without ports:
-"hub 4-0:1.0: config failed, hub doesn't have any ports! (err -19)"
+On Wed 2022-11-16 17:27:12, John Ogness wrote:
+> This is v5 of a series to prepare for threaded/atomic
+> printing. v4 is here [0]. This series focuses on reducing the
+> scope of the BKL console_lock. It achieves this by switching to
+> SRCU and a dedicated mutex for console list iteration and
+> modification, respectively. The console_lock will no longer
+> offer this protection.
 
-so omit the shared hcd if either of the root hubs has no ports, but
-usually there is no usb3 port.
+The patchset looks ready for linux-next from my POV.
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/host/xhci-mtk.c | 72 +++++++++++++++++++++++--------------
- 1 file changed, 46 insertions(+), 26 deletions(-)
+I am going to push it there right now to get as much testing
+as possible before the merge window.
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 01705e559c42..cff3c4aea036 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -485,6 +485,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	const struct hc_driver *driver;
- 	struct xhci_hcd *xhci;
- 	struct resource *res;
-+	struct usb_hcd *usb3_hcd;
- 	struct usb_hcd *hcd;
- 	int ret = -ENODEV;
- 	int wakeup_irq;
-@@ -593,6 +594,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 
- 	xhci = hcd_to_xhci(hcd);
- 	xhci->main_hcd = hcd;
-+	xhci->allow_single_roothub = 1;
- 
- 	/*
- 	 * imod_interval is the interrupt moderation value in nanoseconds.
-@@ -602,24 +604,29 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	xhci->imod_interval = 5000;
- 	device_property_read_u32(dev, "imod-interval-ns", &xhci->imod_interval);
- 
--	xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
--			dev_name(dev), hcd);
--	if (!xhci->shared_hcd) {
--		ret = -ENOMEM;
--		goto disable_device_wakeup;
--	}
--
- 	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
- 	if (ret)
--		goto put_usb3_hcd;
-+		goto disable_device_wakeup;
- 
--	if (HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
-+	if (!xhci_has_one_roothub(xhci)) {
-+		xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
-+							 dev_name(dev), hcd);
-+		if (!xhci->shared_hcd) {
-+			ret = -ENOMEM;
-+			goto dealloc_usb2_hcd;
-+		}
-+	}
-+
-+	usb3_hcd = xhci_get_usb3_hcd(xhci);
-+	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
- 	    !(xhci->quirks & XHCI_BROKEN_STREAMS))
--		xhci->shared_hcd->can_do_streams = 1;
-+		usb3_hcd->can_do_streams = 1;
- 
--	ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
--	if (ret)
--		goto dealloc_usb2_hcd;
-+	if (xhci->shared_hcd) {
-+		ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
-+		if (ret)
-+			goto put_usb3_hcd;
-+	}
- 
- 	if (wakeup_irq > 0) {
- 		ret = dev_pm_set_dedicated_wake_irq_reverse(dev, wakeup_irq);
-@@ -641,13 +648,13 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	usb_remove_hcd(xhci->shared_hcd);
- 	xhci->shared_hcd = NULL;
- 
--dealloc_usb2_hcd:
--	usb_remove_hcd(hcd);
--
- put_usb3_hcd:
--	xhci_mtk_sch_exit(mtk);
- 	usb_put_hcd(xhci->shared_hcd);
- 
-+dealloc_usb2_hcd:
-+	xhci_mtk_sch_exit(mtk);
-+	usb_remove_hcd(hcd);
-+
- disable_device_wakeup:
- 	device_init_wakeup(dev, false);
- 
-@@ -679,10 +686,15 @@ static int xhci_mtk_remove(struct platform_device *pdev)
- 	dev_pm_clear_wake_irq(dev);
- 	device_init_wakeup(dev, false);
- 
--	usb_remove_hcd(shared_hcd);
--	xhci->shared_hcd = NULL;
-+	if (shared_hcd) {
-+		usb_remove_hcd(shared_hcd);
-+		xhci->shared_hcd = NULL;
-+	}
- 	usb_remove_hcd(hcd);
--	usb_put_hcd(shared_hcd);
-+
-+	if (shared_hcd)
-+		usb_put_hcd(shared_hcd);
-+
- 	usb_put_hcd(hcd);
- 	xhci_mtk_sch_exit(mtk);
- 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
-@@ -700,13 +712,16 @@ static int __maybe_unused xhci_mtk_suspend(struct device *dev)
- 	struct xhci_hcd_mtk *mtk = dev_get_drvdata(dev);
- 	struct usb_hcd *hcd = mtk->hcd;
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	struct usb_hcd *shared_hcd = xhci->shared_hcd;
- 	int ret;
- 
- 	xhci_dbg(xhci, "%s: stop port polling\n", __func__);
- 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
- 	del_timer_sync(&hcd->rh_timer);
--	clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
--	del_timer_sync(&xhci->shared_hcd->rh_timer);
-+	if (shared_hcd) {
-+		clear_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
-+		del_timer_sync(&shared_hcd->rh_timer);
-+	}
- 
- 	ret = xhci_mtk_host_disable(mtk);
- 	if (ret)
-@@ -718,8 +733,10 @@ static int __maybe_unused xhci_mtk_suspend(struct device *dev)
- 
- restart_poll_rh:
- 	xhci_dbg(xhci, "%s: restart port polling\n", __func__);
--	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
--	usb_hcd_poll_rh_status(xhci->shared_hcd);
-+	if (shared_hcd) {
-+		set_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
-+		usb_hcd_poll_rh_status(shared_hcd);
-+	}
- 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
- 	usb_hcd_poll_rh_status(hcd);
- 	return ret;
-@@ -730,6 +747,7 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
- 	struct xhci_hcd_mtk *mtk = dev_get_drvdata(dev);
- 	struct usb_hcd *hcd = mtk->hcd;
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	struct usb_hcd *shared_hcd = xhci->shared_hcd;
- 	int ret;
- 
- 	usb_wakeup_set(mtk, false);
-@@ -742,8 +760,10 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
- 		goto disable_clks;
- 
- 	xhci_dbg(xhci, "%s: restart port polling\n", __func__);
--	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
--	usb_hcd_poll_rh_status(xhci->shared_hcd);
-+	if (shared_hcd) {
-+		set_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
-+		usb_hcd_poll_rh_status(shared_hcd);
-+	}
- 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
- 	usb_hcd_poll_rh_status(hcd);
- 	return 0;
--- 
-2.18.0
+Any review and comments are still appreciate. We could always
+take it back if some critical problems are discovered and
+can't be solved easily.
 
+Best Regards,
+Petr
