@@ -2,55 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0484562FEA9
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 21:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8853C62FEBF
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 21:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiKRUVF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 15:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
+        id S230124AbiKRUYa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 15:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbiKRUVE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 15:21:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EA74E42B;
-        Fri, 18 Nov 2022 12:21:03 -0800 (PST)
+        with ESMTP id S230494AbiKRUYS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 15:24:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2901C2B609
+        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 12:24:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FA762766;
-        Fri, 18 Nov 2022 20:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E2C54C433C1;
-        Fri, 18 Nov 2022 20:21:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2D02B82522
+        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 20:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DC66C433C1
+        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 20:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668802862;
-        bh=tPITZP9r2HSAf9nzdYm/AciEbhtIHaSXV+4RrX0QkqU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=rIpT0idQnN8kNpwoyZI+Rjm5Ng0h7muzUkzu3YrVeYIGjnfXM1c6Yve7vKsLuXF0S
-         Md0Ox55kqu/3E2w9uJMwSz1nSPehsTDS7h7+q+tGYY8b36n1AaRFz3PFE4m2p9Da9u
-         SNkLns7zI7z5/PzfbrLFJrGrbSUOPKsy493x9TVStQ1BMgQ2q+AYvacuJu3yh4gg+3
-         dPgcmu+AgbvlfSbEq7B0SAJHch7pPq1kh27t/N58NoinoebLtrfFkRZRUlyZ+dG/Zn
-         +H4ZQ4s816vG1Lq3XIVzNo8fMlvN2gGZHcgWQ/kFuuklc5t47pzhzvfLUUN05EfZr9
-         Zg8pIvMDsgjYw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D16C1C395F3;
-        Fri, 18 Nov 2022 20:21:02 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 6.1-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y3fKrfyixnq55Poc@kroah.com>
-References: <Y3fKrfyixnq55Poc@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y3fKrfyixnq55Poc@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc6
-X-PR-Tracked-Commit-Id: 59a51183be1a6aaaf6f8483aec82e2fbf2c74ab9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 950a9f564aeade8f7b263bb8e9646c4c13ffd424
-Message-Id: <166880286285.9331.16807198057290603656.pr-tracker-bot@kernel.org>
-Date:   Fri, 18 Nov 2022 20:21:02 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        s=k20201202; t=1668803054;
+        bh=++47GUKYJv35bc5RDRACk4fH/3/jdjXbClAysrgwhWQ=;
+        h=From:To:Subject:Date:From;
+        b=U5oWreHOKgzUP5zR6+7WdWabnmytXRlUxElO/68j2NfAC/BAuMFADSLBzhTCKWJzg
+         /qnfPFtnToshZHitb+KYnN/RHjp/z9d06bZQTvx90Hj0tMBiqyAz73TevPNuAAubtU
+         R+ls4ZmqwIXNnU1QMu0RMIdJw/khhv3/ME/byTEJHWBwxlk9csvplmoBxllRnVBqRD
+         7j6DOX53xZ7hlRc3YF893tJzt4uL5Neu547tVFvpW7hcOcATzQntrixe8BVybFYY4F
+         UPnvHV1Vglut+EF5GjEJqLBrs6dcypk3FsS08+sIN/w+KhGMRK+IqskfqXnrFVBIzt
+         2Y55bg0dXwc0Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 642F1C433E4; Fri, 18 Nov 2022 20:24:14 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216706] New: USBC resume callback takes far too long, between
+ 650ms and 1200ms
+Date:   Fri, 18 Nov 2022 20:24:14 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: todd.e.brandt@intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter blocked cf_regression
+ attachments.created
+Message-ID: <bug-216706-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,15 +71,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Fri, 18 Nov 2022 19:10:53 +0100:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216706
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc6
+            Bug ID: 216706
+           Summary: USBC resume callback takes far too long, between 650ms
+                    and 1200ms
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 6.1.0-rc2
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: todd.e.brandt@intel.com
+            Blocks: 178231
+        Regression: No
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/950a9f564aeade8f7b263bb8e9646c4c13ffd424
+Created attachment 303218
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303218&action=3Dedit
+lenb-Dell-XPS-13-9310_freeze.html
 
-Thank you!
+The new USBC resume callback is taking far too long in the resume phase. I
+bisected the behavior to this commit:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+[10402] 4e3a50293c2b21961f02e1afa2f17d3a1a90c7c8 is the first bad commit
+[10402] commit 4e3a50293c2b21961f02e1afa2f17d3a1a90c7c8
+[10402] Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+[10402] Date:   Fri Oct 7 13:09:51 2022 +0300
+[10402]
+[10402] usb: typec: ucsi: acpi: Implement resume callback
+[10402]
+[10402] The ACPI driver needs to resume the interface by calling
+[10402] ucsi_resume(). Otherwise we may fail to detect connections
+[10402] and disconnections that happen while the system is
+[10402] suspended.
+[10402]
+[10402] Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+[10402] Fixes: a94ecde41f7e ("usb: typec: ucsi: ccg: enable runtime pm
+support")
+[10402] Cc: <stable@vger.kernel.org>
+[10402] Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+[10402] Link:
+https://lore.kernel.org/r/20221007100951.43798-3-heikki.krogerus@linux.inte=
+l.com
+[10402] Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+I have timelines from 7 separate machines that are now affected but this
+behavior. We have a guidline that neither suspend or resume should take lon=
+ger
+than a second, and this is causing us problems.
+
+
+Referenced Bugs:
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D178231
+[Bug 178231] Meta-bug: Linux suspend-to-mem and freeze performance optimiza=
+tion
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
