@@ -2,64 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8266962FCFB
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 19:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8357C62FD95
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 20:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241802AbiKRSu7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 13:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S242887AbiKRTCY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 14:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235421AbiKRSu6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 13:50:58 -0500
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6766A684;
-        Fri, 18 Nov 2022 10:50:53 -0800 (PST)
-Received: by mail-ot1-f44.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so3602119otl.10;
-        Fri, 18 Nov 2022 10:50:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JOLYMjkXXvB/weWZsQxyRISw40hXb3p7LqGqtWVTDyk=;
-        b=sTF/mHtX5e0RWJM4kWUnBNqThzunWU5J/qo9/hkGcTQFwClaO9VetXNd8tg5XNR+Bm
-         d5FxSP9Uq3e3SqnBJPBBVBiJGk9P9YmYmEsZneg1rjBFTl8T3HxswfnkmZrHf0hSifWI
-         auhVf/39Nb9clnemKYo46dttBw75Y3yS7xLU0EljSg9EwwS1CdqmlucNVb4sjFcEB263
-         JlI4Waj6sFrHtkELi0sYN9VRV+pZwAYapXVRrIDLeHpieQgACbltPobQ4i+FedlMh2pV
-         uJm5afTPURkRkc25zszPjvN9GLXk2yQ8a+aUCuzSIgGQnZS+LtUpRPmHJTF8UBHveu46
-         0cMQ==
-X-Gm-Message-State: ANoB5pkpChfOo+TPhkgojzaK20crAZceZ6NrLlpbBqo5Y1qyEmnTlXyz
-        njUpllYXDsCm7EG3HtnnyA==
-X-Google-Smtp-Source: AA0mqf7tBcu9Tt0wpRksmHNxtPfG9uapvJ93nee4Ye90gw6t5D9ERUX1LfIp81dsHVG05A5sBN7PqQ==
-X-Received: by 2002:a9d:7e9a:0:b0:66c:6096:1878 with SMTP id m26-20020a9d7e9a000000b0066c60961878mr4549610otp.203.1668797452969;
-        Fri, 18 Nov 2022 10:50:52 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r25-20020a056830135900b00661c0747545sm1889218otq.44.2022.11.18.10.50.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 10:50:52 -0800 (PST)
-Received: (nullmailer pid 856954 invoked by uid 1000);
-        Fri, 18 Nov 2022 18:50:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S242753AbiKRTBw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 14:01:52 -0500
+Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4108631F90;
+        Fri, 18 Nov 2022 11:01:38 -0800 (PST)
+Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
+        by mxout1.routing.net (Postfix) with ESMTP id 1B946400E3;
+        Fri, 18 Nov 2022 19:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1668798096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tIrruqxgGUKR45e8ULgdGbdEj9XfIBvvNexGoXFlZDI=;
+        b=WYQyKBQoonzUkxFQmgY+Sn5nCFRUz1ruinJbU+uYHqnmcYeMlz9KJqL6lVAo4pZ1JAIKIN
+        Up8k7qnjLuprSa8icZXDNxAzm3CFs687jbAauINQwbMZMqd5uIMrh19PvWoeE0Bpf5gUrD
+        VDdSaqmIpKMtwWNkOWE/rpVpfmH+7zc=
+Received: from frank-G5.. (fttx-pool-80.245.77.125.bambit.de [80.245.77.125])
+        by mxbulk.masterlogin.de (Postfix) with ESMTPSA id B5A5C1226BC;
+        Fri, 18 Nov 2022 19:01:35 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH v6 00/11] Add BananaPi R3
+Date:   Fri, 18 Nov 2022 20:01:15 +0100
+Message-Id: <20221118190126.100895-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, linux-tegra@vger.kernel.org,
-        treding@nvidia.com, linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        waynec@nvidia.com, Mathias Nyman <mathias.nyman@intel.com>,
-        vkoul@kernel.org, gregkh@linuxfoundation.org
-In-Reply-To: <20221118154006.173082-2-jonathanh@nvidia.com>
-References: <20221118154006.173082-1-jonathanh@nvidia.com>
- <20221118154006.173082-2-jonathanh@nvidia.com>
-Message-Id: <166879727106.849035.12126185559088998329.robh@kernel.org>
-Subject: Re: [PATCH V4 1/6] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
- controller binding
-Date:   Fri, 18 Nov 2022 12:50:54 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,50 +63,98 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Frank Wunderlich <frank-w@public-files.de>
 
-On Fri, 18 Nov 2022 15:40:01 +0000, Jon Hunter wrote:
-> From: Wayne Chang <waynec@nvidia.com>
-> 
-> Add device-tree binding documentation for the XUSB host controller present
-> on Tegra234 SoC. This controller supports the USB 3.1 specification.
-> 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
-> V3 -> V4: minor update to the power-domain description
-> V2 -> V3: nothing has changed
-> V1 -> V2: address the issue on phy-names property
-> 
->  .../bindings/usb/nvidia,tegra234-xusb.yaml    | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
-> 
+This Series adds some Nodes to mt7986 devicetree and the BananaPi R3
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This version is rebased on Matthias' DTS64 next Branch from 2022/11/11.
 
-yamllint warnings/errors:
+i included sams series for mt7986 DTS with small changes
+https://patchwork.kernel.org/project/linux-mediatek/cover/20220427124741.18245->
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.29-30 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1492: dt_binding_check] Error 2
+6.2 will support dtso extension for dt overlays:
 
-doc reference errors (make refcheckdocs):
+"kbuild: Allow DTB overlays to built from .dtso named source files"
+https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=363547d2191cbc32ca954ba75d72908712398ff2
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221118154006.173082-2-jonathanh@nvidia.com
+There is some discussion about inclusion of dt-overlays and if it is
+better to support mmc also by these:
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+https://patchwork.kernel.org/comment/25092116/
+https://patchwork.kernel.org/comment/25085681/
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+i had run full dtbs-check but i end up with some strange warnings in
+ethernet-node that should not come up as phy-handle and sfp/managed
+properties are already defined.
 
-pip3 install dtschema --upgrade
+phy-handle made optional
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/mediatek,net.yaml#n265
 
-Please check and re-submit after running the above command.
+property sfp/managed (which is included for mac subnode in yaml above):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml#n137
+
+changes:
+v6:
+- dropped regulators from usb-patch as suggested by chunfeng yun
+- moved 3v3 regulator to mmc-patch as it is needed for emmc to work
+  rfbs were tested by sam shih, r3 by me
+- dropped RB from AngeloGioacchino from mmc-patch due to this change
+- fixed links in coverletter which were broken in v5
+- i hope this series is sent without errors now (my mailprovider limited
+  mails last 2 times while sending part 10)
+
+v5:
+- changed usb ranges/reg/unit-adress
+- added reviewd-by's except usb-part due to changes
+
+v4:
+- dropped RFC prefix
+- rebase on matthias' mtk dts-next (for 6.2) branch
+- added author information to overlays
+- fixed sfp binding error
+- added fix for moving wed_pcie node
+- readded missing compatible patches
+
+v3:
+- changed mmc pull-ups
+- added patch for board binding (sent separately before)
+- added pcie node in mt7986 (not yet again in r3)
+- added dt overlays
+
+Frank Wunderlich (7):
+  arm64: dts: mt7986: move wed_pcie node
+  dt-bindings: phy: mediatek,tphy: add support for mt7986
+  dt-bindings: usb: mtk-xhci: add support for mt7986
+  dt-bindings: PCI: mediatek-gen3: add SoC based clock config
+  dt-bindings: PCI: mediatek-gen3: add support for mt7986
+  arm64: dts: mt7986: add Bananapi R3
+  arm64: dts: mt7986: add BPI-R3 nand/nor overlays
+
+Sam Shih (4):
+  arm64: dts: mt7986: add spi related device nodes
+  arm64: dts: mt7986: add usb related device nodes
+  arm64: dts: mt7986: add mmc related device nodes
+  arm64: dts: mt7986: add pcie related device nodes
+
+ .../bindings/pci/mediatek-pcie-gen3.yaml      |  64 ++-
+ .../bindings/phy/mediatek,tphy.yaml           |   1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   4 +
+ .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  31 ++
+ .../mediatek/mt7986a-bananapi-bpi-r3-nand.dts |  55 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-nor.dts  |  69 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  25 +
+ .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 446 ++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts  | 155 ++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 162 ++++++-
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts  |  43 ++
+ 12 files changed, 1038 insertions(+), 18 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+
+-- 
+2.34.1
 
