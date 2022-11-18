@@ -2,176 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FCA62EF5E
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 09:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F1362F034
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 09:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241445AbiKRI3I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 03:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S241210AbiKRIzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 03:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241459AbiKRI2g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 03:28:36 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF12EF23
-        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 00:28:32 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u2so5904244ljl.3
-        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 00:28:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DZabo7ibEwOOw8J7VwUfivpQWJQQOqpTQOP6qmrwcFs=;
-        b=c0DwlSGGZnpMt70g7cvHCqqLtClo+HqnYC/KDMQT/2C4Kgme2ED6Ajko4OIXpmbeXS
-         m5SIke4QdtVszOu65Cv1AnF200xxc1a/iy1cj+W/4WPUi1idnzCq3jL3rOCyXQ/Sy7Xo
-         FhxYYZmL7CP0ofdSTlNio6J4qvL4Gb4QE7SbMbyvGwdcz0q2lnaiEphLSDGuz3cWY979
-         gQT9VdBtzdRs59dL/dUgCq5BV84WRT+Q7ok8jIBAq5G8XWvjz6kIifP/efd7/+/UMkZu
-         +qzJPaRvsSeqy/GGhmsAycmFzituYnYzJUATh2BkazIz98eeuD3Eq9fkv2cSDtBNQpLB
-         eqpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZabo7ibEwOOw8J7VwUfivpQWJQQOqpTQOP6qmrwcFs=;
-        b=6kAB0F71Ortpf5jhWVsFTCOEtDQ+7lrS7QwPoA2aVJP5k0/kcr+i8x+EYqgshaKaPz
-         aLRVzpi8DgWbuElPa1FaKIIy7iip2+zK8T5tI8jS9slC/0ZYDfuue+DA96nRuCP5ud3R
-         h8YqJmPThKhNVuvzksOMhcD25pkwP2CQJnhf0hEcoM9QR7B9PCnAVgi4bD09PAjjdSQg
-         m7UEaXFNjXGuUjo12MsRaPyB9rZ6YYCi5NbGKoUA+s+95GrasNcAuvCHUTDbYhkYcRy+
-         VWoSAuUeHJdEsjgilJvnFIm5vOShYQa89sjn6yn621a6InTxezR6LVASE0jh2vEIHNaQ
-         XVOQ==
-X-Gm-Message-State: ANoB5plSY3IzHABjFa7Mrd+145gaknPEqg3anXlRpfCWQ0DxmnjLV8Qa
-        GxQqkxNA68L9OswJAAPK6njFKQ==
-X-Google-Smtp-Source: AA0mqf5FUU/an0yPckwGnu0iJ8FLtTfHewcyaiyp5w+c6ymGf8LMkNj5Lkw1yXdUuHVX3l3x9IvIFA==
-X-Received: by 2002:a2e:a5c7:0:b0:277:8d48:27dd with SMTP id n7-20020a2ea5c7000000b002778d4827ddmr2207144ljp.192.1668760111721;
-        Fri, 18 Nov 2022 00:28:31 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056512369800b0049b8c0571e5sm564273lfs.113.2022.11.18.00.28.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 00:28:31 -0800 (PST)
-Message-ID: <578b686e-8461-a959-86c5-83a8be1dc981@linaro.org>
-Date:   Fri, 18 Nov 2022 09:28:29 +0100
+        with ESMTP id S241108AbiKRIzC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 03:55:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBD40905;
+        Fri, 18 Nov 2022 00:54:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C7B623A2;
+        Fri, 18 Nov 2022 08:54:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F7CC433D6;
+        Fri, 18 Nov 2022 08:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668761698;
+        bh=Yt61zdf3aCar3pN9dGLzspIWr117IUEcCCJbjox3RFM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HnYoHUpXHYCrF0WshAMxfauq4ZWdWgzfghC7PsYDiDpshZTeNMfQDMd+sGJt2KQPi
+         uimNDN+Ca6GW8EkYdebmZKIR8ae0b+EuVRi5Ph4zKY9Pndxrhpl1QzEdf4PMkoDiCD
+         jwdf87/lW8rJkZKExqtmUWdZRsQKRnneWS4gEyxpOT3J8M8DQ3ykUtnvF1bPtuAovm
+         d6a/9m1/PgZ9Hi0rFwedoubJJIPlGB7NHyRth9VaLMgMYjof6W+NFhEePoIXscprrn
+         BaiQLNTwAI/sB0O5so6Gyb6gwLXDpWYHuwx5iPNgKwI+jWFXP/aVNwkNM6AUOmd5PO
+         MzSYqMUrOoHjA==
+Date:   Fri, 18 Nov 2022 08:54:53 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, balbi@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3dIXUmjTfJLpPe7@google.com>
+References: <20221117120813.1257583-1-lee@kernel.org>
+ <Y3YuL8rSE9pNfIZN@kroah.com>
+ <Y3Y7MlwV0UFcA3w8@google.com>
+ <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
- <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
- <20221117220756.7a1bf734@xps-13>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117220756.7a1bf734@xps-13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17/11/2022 22:07, Miquel Raynal wrote:
-> Hi Krzysztof,
-> 
-> krzysztof.kozlowski@linaro.org wrote on Thu, 17 Nov 2022 13:38:42 +0100:
-> 
->> The Devicetree bindings document does not have to say in the title that
->> it is a "binding", but instead just describe the hardware.  For shared
->> (re-usable) schemas, name them all as "common properties".
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/clock/qcom,gcc.yaml         | 2 +-
->>  Documentation/devicetree/bindings/dma/dma-common.yaml         | 2 +-
->>  Documentation/devicetree/bindings/dma/dma-controller.yaml     | 4 ++--
->>  Documentation/devicetree/bindings/dma/dma-router.yaml         | 4 ++--
->>  Documentation/devicetree/bindings/iio/adc/adc.yaml            | 2 +-
->>  .../devicetree/bindings/media/video-interface-devices.yaml    | 2 +-
->>  Documentation/devicetree/bindings/media/video-interfaces.yaml | 2 +-
->>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml     | 2 +-
->>  Documentation/devicetree/bindings/mtd/nand-chip.yaml          | 2 +-
->>  Documentation/devicetree/bindings/mtd/nand-controller.yaml    | 2 +-
->>  .../bindings/net/bluetooth/bluetooth-controller.yaml          | 2 +-
->>  Documentation/devicetree/bindings/net/can/can-controller.yaml | 2 +-
->>  .../devicetree/bindings/net/ethernet-controller.yaml          | 2 +-
->>  Documentation/devicetree/bindings/net/ethernet-phy.yaml       | 2 +-
->>  Documentation/devicetree/bindings/net/mdio.yaml               | 2 +-
->>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml        | 2 +-
->>  .../devicetree/bindings/power/reset/restart-handler.yaml      | 2 +-
->>  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
->>  .../devicetree/bindings/soundwire/soundwire-controller.yaml   | 2 +-
->>  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
->>  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 2 +-
->>  21 files changed, 23 insertions(+), 23 deletions(-)
->>
-> 
-> [...]
-> 
->> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> index 97ac3a3fbb52..20b195ef9b70 100644
->> --- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> @@ -4,7 +4,7 @@
->>  $id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
->>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  
->> -title: NAND Chip and NAND Controller Generic Binding
->> +title: NAND Chip and NAND Controller common properties
-> 
-> I only see this now but the title should be
-> 
-> 	"NAND chip common properties"
-> 
->>  
->>  maintainers:
->>    - Miquel Raynal <miquel.raynal@bootlin.com>
->> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> index 359a015d4e5a..a004efc42842 100644
->> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> @@ -4,7 +4,7 @@
->>  $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
->>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  
->> -title: NAND Chip and NAND Controller Generic Binding
->> +title: NAND Chip and NAND Controller common properties
-> 
-> And here just "NAND controller..."
-> 
-> Of course the original purpose of your series is more to clean those
-> titles rather than fixing them and if you disagree I am fine doing it
-> myself aside, but if you could at the same time make the title more
-> accurate that would be perfect.
-> 
-> Either ways:
-> 
-> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+On Thu, 17 Nov 2022, Alan Stern wrote:
 
-Thanks, I update these manually, so I can correct the names to ones you
-mentioned. Thanks.
+> On Thu, Nov 17, 2022 at 01:46:26PM +0000, Lee Jones wrote:
+> > On Thu, 17 Nov 2022, Greg KH wrote:
+> > 
+> > > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
+> > > > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
+> > > > +{
+> > > > +	return !!kref_read(&hidg->cdev.kobj.kref);
+> > > > +}
+> > > 
+> > > Ick, sorry, no, that's not going to work and is not allowed at all.
+> > > That's some major layering violations there, AND it can change after you
+> > > get the value as well.
+> > 
+> > This cdev belongs solely to this driver.  Hence the *.*.* and not
+> > *->*->*.  What is preventing us from reading our own data?  If we
+> > cannot do this directly, can I create an API to do it 'officially'?
+> > 
+> > I do, however, appreciate that a little locking wouldn't go amiss.
+> > 
+> > If this solution is not acceptable either, then we're left up the
+> > creak without a paddle.  The rules you've communicated are not
+> > compatible with each other.
+> > 
+> > Rule 1: Only one item in a data structure can reference count.
+> > 
+> > Due to the embedded cdev struct, this rules out my first solution of
+> > giving f_hidg its own kref so that it can conduct its own life-time
+> > management.
+> > 
+> > A potential option to satisfy this rule would be to remove the cdev
+> > attribute and create its data dynamically instead.  However, the
+> > staticness of cdev is used to obtain f_hidg (with container_of()) in
+> > the character device handling component, so it cannot be removed.
+> 
+> You have not understood this rule correctly.  Only one item in a data 
+> structure can hold a reference count _for that structure_.  But several 
+> items in a structure can hold reference counts for themselves.
 
-Best regards,
-Krzysztof
+Here was the review comment I was working to on this patch [0]:
 
+ "While at first glance, it seems that f_hidg is not reference
+  counted, it really is, with the embedded "struct cdev" a few lines
+  above this.
+
+  That is the reference count that should control the lifecycle of
+  this object, not another reference here in the "outer layer"
+  structure."
+
+> So for example, you could put a kref in f_hidg which would hold the 
+> reference count for the f_hidg structure, while at the same time 
+> including an embedded cdev with its own reference counter.  The point is 
+> that the refcount in the embedded cdev refers to the lifetime of the 
+> cdev, not the lifetime of the f_hidg.
+
+This was the approach in the original submission [1], which during
+review I was told was unacceptable for the aforementioned reason.
+
+[0] https://lore.kernel.org/all/Y1PnoMvDmZMqXScw@kroah.com/
+[1] https://lore.kernel.org/all/20221017112737.230772-1-lee@kernel.org/
+
+> To make this work properly, you have to do two additional things:
+> 
+> 	When the cdev's refcount is initialized, increment the kref
+> 	in f_hidg.
+> 
+> 	When the cdev's refcount drops to 0, decrement the kref (and
+> 	release f_hidg if the kref hits 0).
+
+More than happy to revisit the first solution with Greg's blessing.
+
+-- 
+Lee Jones [李琼斯]
