@@ -2,132 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F1362F034
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 09:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FBC62F055
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 10:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241210AbiKRIzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 03:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S241438AbiKRJAH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 04:00:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241108AbiKRIzC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 03:55:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBD40905;
-        Fri, 18 Nov 2022 00:54:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S241736AbiKRI7t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 03:59:49 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105A46E56D;
+        Fri, 18 Nov 2022 00:59:49 -0800 (PST)
+Received: from [192.168.15.130] (unknown [194.152.46.21])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C7B623A2;
-        Fri, 18 Nov 2022 08:54:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F7CC433D6;
-        Fri, 18 Nov 2022 08:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668761698;
-        bh=Yt61zdf3aCar3pN9dGLzspIWr117IUEcCCJbjox3RFM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HnYoHUpXHYCrF0WshAMxfauq4ZWdWgzfghC7PsYDiDpshZTeNMfQDMd+sGJt2KQPi
-         uimNDN+Ca6GW8EkYdebmZKIR8ae0b+EuVRi5Ph4zKY9Pndxrhpl1QzEdf4PMkoDiCD
-         jwdf87/lW8rJkZKExqtmUWdZRsQKRnneWS4gEyxpOT3J8M8DQ3ykUtnvF1bPtuAovm
-         d6a/9m1/PgZ9Hi0rFwedoubJJIPlGB7NHyRth9VaLMgMYjof6W+NFhEePoIXscprrn
-         BaiQLNTwAI/sB0O5so6Gyb6gwLXDpWYHuwx5iPNgKwI+jWFXP/aVNwkNM6AUOmd5PO
-         MzSYqMUrOoHjA==
-Date:   Fri, 18 Nov 2022 08:54:53 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, balbi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3dIXUmjTfJLpPe7@google.com>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3YuL8rSE9pNfIZN@kroah.com>
- <Y3Y7MlwV0UFcA3w8@google.com>
- <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ABFFF660298A;
+        Fri, 18 Nov 2022 08:59:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668761987;
+        bh=pY5wDQwXBh4roXwwEbALMewclj3NF2pmv2R4/dvJQKQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OtF8pf0D/EQVlnl0YibM/uIgUa9WjgDm3SVux70mv6cEgUCYohCsXXCcvWrZYV1R8
+         Ns66Dj+kH85x1w2f7RB+KB+diKVbUaencKpshPz/04ibtqqSv7VS0GHoWtyyKBjH1w
+         dUgwfUI8QyuhsyDhbjVTQQXBUyRkWy+9gf/7xZqsIMx9rZIFeEix5cXp61f8TgGt1F
+         e9uHC6ezjSA6ZMrXVgQBdz59vIW4bLAvgcZy/m1d+i62871JOJSTh3wh6zwtVaEcfg
+         OiZ9QtJXZH35fZxcVZ7SlIu/gwm6MeV9SosdoR5oGKKOmC/fiHLAqHdTqJh5tv1KRR
+         Ijer6C/nuaxwg==
+Message-ID: <71ced60f-d43b-003a-843d-c2a8364dbf79@collabora.com>
+Date:   Fri, 18 Nov 2022 09:59:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 1/3] usb: Add USB repeater generic framework
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20221116123019.2753230-1-abel.vesa@linaro.org>
+ <20221116123019.2753230-2-abel.vesa@linaro.org>
+Content-Language: en-US
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20221116123019.2753230-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 17 Nov 2022, Alan Stern wrote:
+Hi Abel,
 
-> On Thu, Nov 17, 2022 at 01:46:26PM +0000, Lee Jones wrote:
-> > On Thu, 17 Nov 2022, Greg KH wrote:
-> > 
-> > > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
-> > > > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
-> > > > +{
-> > > > +	return !!kref_read(&hidg->cdev.kobj.kref);
-> > > > +}
-> > > 
-> > > Ick, sorry, no, that's not going to work and is not allowed at all.
-> > > That's some major layering violations there, AND it can change after you
-> > > get the value as well.
-> > 
-> > This cdev belongs solely to this driver.  Hence the *.*.* and not
-> > *->*->*.  What is preventing us from reading our own data?  If we
-> > cannot do this directly, can I create an API to do it 'officially'?
-> > 
-> > I do, however, appreciate that a little locking wouldn't go amiss.
-> > 
-> > If this solution is not acceptable either, then we're left up the
-> > creak without a paddle.  The rules you've communicated are not
-> > compatible with each other.
-> > 
-> > Rule 1: Only one item in a data structure can reference count.
-> > 
-> > Due to the embedded cdev struct, this rules out my first solution of
-> > giving f_hidg its own kref so that it can conduct its own life-time
-> > management.
-> > 
-> > A potential option to satisfy this rule would be to remove the cdev
-> > attribute and create its data dynamically instead.  However, the
-> > staticness of cdev is used to obtain f_hidg (with container_of()) in
-> > the character device handling component, so it cannot be removed.
+W dniu 16.11.2022 o 13:30, Abel Vesa pisze:
+> With more SoCs moving towards eUSB2, 
+
+Can you name a few?
+
+such platforms will have to use
+> a USB 2.0 compliance repeater. This repeater HW-wise usually deals with
+> level shifting, but depending on the implementation it can do much more.
+> So add a ganeric USB framework that would allow either a generic PHY or
+> some USB host controller to control and get a repeater from a devicetree
+> phandle. This framework will further be used by platform specific
+> drivers to register the repeater and implement platform specific ops.
 > 
-> You have not understood this rule correctly.  Only one item in a data 
-> structure can hold a reference count _for that structure_.  But several 
-> items in a structure can hold reference counts for themselves.
-
-Here was the review comment I was working to on this patch [0]:
-
- "While at first glance, it seems that f_hidg is not reference
-  counted, it really is, with the embedded "struct cdev" a few lines
-  above this.
-
-  That is the reference count that should control the lifecycle of
-  this object, not another reference here in the "outer layer"
-  structure."
-
-> So for example, you could put a kref in f_hidg which would hold the 
-> reference count for the f_hidg structure, while at the same time 
-> including an embedded cdev with its own reference counter.  The point is 
-> that the refcount in the embedded cdev refers to the lifetime of the 
-> cdev, not the lifetime of the f_hidg.
-
-This was the approach in the original submission [1], which during
-review I was told was unacceptable for the aforementioned reason.
-
-[0] https://lore.kernel.org/all/Y1PnoMvDmZMqXScw@kroah.com/
-[1] https://lore.kernel.org/all/20221017112737.230772-1-lee@kernel.org/
-
-> To make this work properly, you have to do two additional things:
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>   drivers/usb/Kconfig             |   2 +
+>   drivers/usb/Makefile            |   2 +
+>   drivers/usb/repeater/Kconfig    |   9 ++
+>   drivers/usb/repeater/Makefile   |   6 +
+>   drivers/usb/repeater/repeater.c | 198 ++++++++++++++++++++++++++++++++
+>   include/linux/usb/repeater.h    |  78 +++++++++++++
+>   6 files changed, 295 insertions(+)
+>   create mode 100644 drivers/usb/repeater/Kconfig
+>   create mode 100644 drivers/usb/repeater/Makefile
+>   create mode 100644 drivers/usb/repeater/repeater.c
+>   create mode 100644 include/linux/usb/repeater.h
 > 
-> 	When the cdev's refcount is initialized, increment the kref
-> 	in f_hidg.
-> 
-> 	When the cdev's refcount drops to 0, decrement the kref (and
-> 	release f_hidg if the kref hits 0).
 
-More than happy to revisit the first solution with Greg's blessing.
+<snip>
 
--- 
-Lee Jones [李琼斯]
+> diff --git a/include/linux/usb/repeater.h b/include/linux/usb/repeater.h
+> new file mode 100644
+> index 000000000000..e68e0936f1e5
+> --- /dev/null
+> +++ b/include/linux/usb/repeater.h
+> @@ -0,0 +1,78 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * USB Repeater defines
+> + */
+> +
+> +#ifndef __LINUX_USB_REPEATER_H
+> +#define __LINUX_USB_REPEATER_H
+> +
+> +struct usb_repeater {
+> +	struct device		*dev;
+> +	const char		*label;
+> +	unsigned int		 flags;
+> +
+> +	struct list_head	head;
+
+This member serves the purpose of a list _entry_, no?
+The _head_ is static LIST_HEAD(usb_repeater_list);
+Maybe call it "entry"?
+
+> +	int	(*reset)(struct usb_repeater *rptr, bool assert);
+> +	int	(*init)(struct usb_repeater *rptr);
+> +	int	(*power_on)(struct usb_repeater *rptr);
+> +	int	(*power_off)(struct usb_repeater *rptr);
+
+Would you document these ops somehow? Potential driver writers need to
+understand when they are called and what they are supposed to do.
+In particular, how do these relate to what's in "Embedded USB2 (eUSB2)
+Physical Layer Supplement to the USB Revision 2.0 Specification"?
+
+Regards,
+
+Andrzej
