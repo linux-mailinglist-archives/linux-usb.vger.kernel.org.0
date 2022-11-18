@@ -2,155 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F9862EEFA
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 09:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C1D62EF0B
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 09:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235073AbiKRIML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 03:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
+        id S241223AbiKRIQh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 03:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiKRIMJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 03:12:09 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50DB88C081;
-        Fri, 18 Nov 2022 00:12:08 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id D0FE4807E;
-        Fri, 18 Nov 2022 08:02:01 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 10:12:05 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Sicelo <absicsz@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        maemo-leste@lists.dyne.org, Felipe Balbi <balbi@kernel.org>,
-        phone-devel@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Rob Herring <robh@kernel.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: Re: [maemo-leste] USB PHY Initialization Fails on Nokia N900 Since
- 5.19
-Message-ID: <Y3c+VSLcH+c2sLGr@atomide.com>
-References: <Y0PhEOl+MwlQ8HAD@tp440p.steeds.sam>
- <Y0UBindrJa1ptyR0@atomide.com>
- <Y0VI+/XJs8nsazwE@tp440p.steeds.sam>
- <Y24JkS3tykIZRH+A@tp440p.steeds.sam>
+        with ESMTP id S241234AbiKRIQg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 03:16:36 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1146992B5E
+        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 00:16:35 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ND8kL5KmrzRpNr;
+        Fri, 18 Nov 2022 16:16:10 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 16:16:33 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 18 Nov
+ 2022 16:16:32 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
+        <jun.li@nxp.com>, <gregkh@linuxfoundation.org>,
+        <yangyingliang@huawei.com>
+Subject: [PATCH] usb: typec: tcpci: fix of node refcount leak in tcpci_register_port()
+Date:   Fri, 18 Nov 2022 16:14:54 +0800
+Message-ID: <20221118081454.4003502-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y24JkS3tykIZRH+A@tp440p.steeds.sam>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Sicelo <absicsz@gmail.com> [221111 08:26]:
-> Just for further testing, I added the very ugly patch below. Applied on
-> vanilla 6.1-rc3 (i.e. containing 239071064732), USB works normally on
-> the N900.
-> 
-> I copied the irq numbers from omap3xxx.dtsi. Does this give us any hints
-> regarding the cause and resolution of this issue?
+I got the the following report:
 
-OK thanks that helps, I think it's because the platform IRQ resources are
-no longer being automatically populated from devicetree because of the
-issues with deferred probe.
+  OF: ERROR: memory leak, expected refcount 1 instead of 2,
+  of_node_get()/of_node_put() unbalanced - destroy cset entry:
+  attach overlay node /i2c/pmic@34/tcpc/connector
 
-Maybe give the following patch a try and see if it helps?
+The 'fwnode' set in tcpci_parse_config(), its node refcount is
+increased in device_get_named_child_node(). It needs be put while
+exiting, so call fwnode_handle_put() in the error path of
+tcpci_register_port() and in tcpci_remove() to avoid leak.
 
-Then assuming this works as a fix I'll post further changes to make also
-omap2430 glue layer to probe with ti-sysc interconnect target module
-driver in call cases.
+Fixes: 5e85a04c8c0d ("usb: typec: add fwnode to tcpc")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/typec/tcpm/tcpci.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Regards,
-
-Tony
-
-8< -------------------
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -15,6 +15,7 @@
- #include <linux/list.h>
- #include <linux/io.h>
- #include <linux/of.h>
-+#include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/dma-mapping.h>
- #include <linux/pm_runtime.h>
-@@ -310,6 +311,7 @@ static int omap2430_probe(struct platform_device *pdev)
- 	struct device_node		*control_node;
- 	struct platform_device		*control_pdev;
- 	int				ret = -ENOMEM, val;
-+	bool				populate_irqs = false;
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index b2bfcebe218f..ade0a53b40ef 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -794,8 +794,10 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
+ 		return ERR_PTR(err);
  
- 	if (!np)
- 		return -ENODEV;
-@@ -328,6 +330,18 @@ static int omap2430_probe(struct platform_device *pdev)
- 	musb->dev.dma_mask		= &omap2430_dmamask;
- 	musb->dev.coherent_dma_mask	= omap2430_dmamask;
- 
-+	/*
-+	 * Legacy SoCs using omap_device get confused if node is moved
-+	 * because of interconnect properties mixed into the node.
-+	 */
-+	if (of_get_property(np, "ti,hwmods", NULL)) {
-+		dev_warn(&pdev->dev, "please update to probe with ti-sysc\n");
-+		populate_irqs = true;
-+	} else {
-+		device_set_of_node_from_dev(&musb->dev, &pdev->dev);
+ 	tcpci->port = tcpm_register_port(tcpci->dev, &tcpci->tcpc);
+-	if (IS_ERR(tcpci->port))
++	if (IS_ERR(tcpci->port)) {
++		fwnode_handle_put(tcpci->tcpc.fwnode);
+ 		return ERR_CAST(tcpci->port);
 +	}
-+	of_node_put(np);
-+
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
- 	glue->status			= MUSB_UNKNOWN;
-@@ -389,6 +403,46 @@ static int omap2430_probe(struct platform_device *pdev)
- 		goto err2;
- 	}
  
-+	if (populate_irqs) {
-+		struct resource musb_res[3];
-+		struct resource *res;
-+		int i = 0;
-+
-+		memset(musb_res, 0, sizeof(*musb_res) * ARRAY_SIZE(musb_res));
-+
-+		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+		if (!res)
-+			goto err2;
-+
-+		musb_res[i].start = res->start;
-+		musb_res[i].end = res->end;
-+		musb_res[i].flags = res->flags;
-+		musb_res[i].name = res->name;
-+		i++;
-+
-+		ret = of_irq_get_byname(np, "mc");
-+		if (ret > 0) {
-+			musb_res[i].start = ret;
-+			musb_res[i].flags = IORESOURCE_IRQ;
-+			musb_res[i].name = "mc";
-+			i++;
-+		}
-+
-+		ret = of_irq_get_byname(np, "dma");
-+		if (ret > 0) {
-+			musb_res[i].start = ret;
-+			musb_res[i].flags = IORESOURCE_IRQ;
-+			musb_res[i].name = "dma";
-+			i++;
-+		}
-+
-+		ret = platform_device_add_resources(musb, musb_res, i);
-+		if (ret) {
-+			dev_err(&pdev->dev, "failed to add IRQ resources\n");
-+			goto err2;
-+		}
-+	}
-+
- 	ret = platform_device_add_data(musb, pdata, sizeof(*pdata));
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to add platform_data\n");
+ 	return tcpci;
+ }
+@@ -857,6 +859,7 @@ static void tcpci_remove(struct i2c_client *client)
+ 		dev_warn(&client->dev, "Failed to disable irqs (%pe)\n", ERR_PTR(err));
+ 
+ 	tcpci_unregister_port(chip->tcpci);
++	fwnode_handle_put(chip->tcpci->tcpc.fwnode);
+ }
+ 
+ static const struct i2c_device_id tcpci_id[] = {
 -- 
-2.38.1
+2.25.1
+
