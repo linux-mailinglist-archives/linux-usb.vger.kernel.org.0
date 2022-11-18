@@ -2,68 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6273062FF24
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 22:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FF062FF70
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 22:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiKRVH3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 16:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S229948AbiKRVkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 16:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiKRVH0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 16:07:26 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A422798253
-        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 13:07:25 -0800 (PST)
-Received: (qmail 50645 invoked by uid 1000); 18 Nov 2022 16:07:24 -0500
-Date:   Fri, 18 Nov 2022 16:07:24 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     John Keeping <john@metanate.com>
-Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-        balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3YuL8rSE9pNfIZN@kroah.com>
- <Y3Y7MlwV0UFcA3w8@google.com>
- <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
- <Y3dIXUmjTfJLpPe7@google.com>
- <Y3er7nenAhbmBdBy@rowland.harvard.edu>
- <Y3e0zAa7+HiNVrKN@donbot>
+        with ESMTP id S229700AbiKRVkH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 16:40:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189685E9FE;
+        Fri, 18 Nov 2022 13:40:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7DF5625DC;
+        Fri, 18 Nov 2022 21:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15EDCC43140;
+        Fri, 18 Nov 2022 21:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668807603;
+        bh=YKUHTSPq5IDGNDGLjf/sjbiqE0AZozBsTwTI13qMcZU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KDveWRKNOZyZVU+/76UW6M5Q/08kv/yJiaBcxH6kTaAvK0EC/0oB/lPwlzQXRfmt6
+         Zm/6M8sSh3ksyjPfsLmQgNXmslxy66uL5hS1qxIj6follviijaqOxF2Ylk8xrW33Tq
+         tROHgNpz9156QXsea3C6WmNgnCpvTK33f5e0Kl8qKFQujqsYAELF2CIoRERiHLZSQS
+         RWX1QktikpkEd0k51tItGSYnnudBdJPC0ZiXCrXF9/tj55S2jo8fCS6mpcV6k2X5mq
+         2BxJRJFcUCadrZkCMXM/Y8JSeEMHRoKa07VJ9fAMRabmA+AXFrZYTMVzJX+sgyxq1O
+         erfDoFG1bweNQ==
+Received: by mail-lf1-f42.google.com with SMTP id a29so10243073lfj.9;
+        Fri, 18 Nov 2022 13:40:02 -0800 (PST)
+X-Gm-Message-State: ANoB5pm9vecbdu77tVVB6cesyfMA80EX0F1B3J1ariFKWxfLoDbWQB6m
+        qmHvwP+KNdTOQAdgNCzWeeS7nL0el4YY0cx/zw==
+X-Google-Smtp-Source: AA0mqf4W7viCQPe0UTFofFT1SvVUt8YX11fzG82T1MZfAN+7A17E35zovc3VtyGLwVD/L6iRCqAuOeEDvppeVb0p8zA=
+X-Received: by 2002:a05:6512:b97:b0:4a4:6ee3:f57b with SMTP id
+ b23-20020a0565120b9700b004a46ee3f57bmr2843395lfv.17.1668807600996; Fri, 18
+ Nov 2022 13:40:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3e0zAa7+HiNVrKN@donbot>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221118190126.100895-1-linux@fw-web.de> <20221118190126.100895-12-linux@fw-web.de>
+In-Reply-To: <20221118190126.100895-12-linux@fw-web.de>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 18 Nov 2022 15:39:52 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKiRzRToSzk3q+csWR5DEZjZpQWChqZ3mH8MLruvfe=Dw@mail.gmail.com>
+Message-ID: <CAL_JsqKiRzRToSzk3q+csWR5DEZjZpQWChqZ3mH8MLruvfe=Dw@mail.gmail.com>
+Subject: Re: [PATCH v6 11/11] arm64: dts: mt7986: add BPI-R3 nand/nor overlays
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 04:37:32PM +0000, John Keeping wrote:
-> I don't think it's at all simple to fix this - I posted a series
-> addressing the lifetime issues here a few years ago but didn't chase it
-> up and there was no feedback:
-> 
-> 	https://lore.kernel.org/linux-usb/20191028114228.3679219-1-john@metanate.com/
-> 
-> That includes a patch to remove the embedded struct cdev and manage its
-> lifetime separately, which I think is needed as there are two different
-> struct device objects here and we cannot tie their lifetimes together.
+On Fri, Nov 18, 2022 at 1:01 PM Frank Wunderlich <linux@fw-web.de> wrote:
+>
+> From: Frank Wunderlich <frank-w@public-files.de>
+>
+> Add devicetree overlays for using nand and nor on BPI-R3.
 
-I still don't have a clear picture of what the real problem is.  Lee's 
-original patch description just said "external references are presently 
-not tracked", with no details about what those external references are. 
-Why not add just proper cdev_get() and cdev_put() calls to whatever code 
-handles those external references, so that they _are_ tracked?
+Can you not tell at runtime which one you booted from? If not, how
+does one choose which overlay to apply? If you can, why not populate
+both nodes and enable the right one? IMO, if all h/w is present, it
+should all be in the DT. Selecting what h/w to use is a separate
+problem and overlays aren't a great solution for that.
 
-What are the two different struct device objects?  Why do their 
-lifetimes need to be tied together?  If you do need to tie their 
-lifetimes somehow, why not simply make one of them (the one which is 
-logically allowed to be shorter-lived) hold a reference to the other?
 
-Alan Stern
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> maybe rename to dtso?
+>
+> "kbuild: Allow DTB overlays to built from .dtso named source files"
+> https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=363547d2191cbc32ca954ba75d72908712398ff2
+>
+> more comments about the dt overlay-support:
+>
+> https://patchwork.kernel.org/comment/25092116/
+> https://patchwork.kernel.org/comment/25085681/
+> ---
+> v4:
+> - drop compile-comment from overlays
+> - add author-information to dt-overlays
+> ---
+>  arch/arm64/boot/dts/mediatek/Makefile         |  2 +
+>  .../mediatek/mt7986a-bananapi-bpi-r3-nand.dts | 55 +++++++++++++++
+>  .../mediatek/mt7986a-bananapi-bpi-r3-nor.dts  | 69 +++++++++++++++++++
+>  3 files changed, 126 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+> index e8902f2cc58f..d42208c4090d 100644
+> --- a/arch/arm64/boot/dts/mediatek/Makefile
+> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> @@ -8,6 +8,8 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-emmc.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-nand.dtbo
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-nor.dtbo
+
+These need rules to apply them to the base dtb(s). You just need:
+
+full.dtb := base.dtb overlay.dtb
+dtb-y += full.dtb
+
+Rob
