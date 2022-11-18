@@ -2,128 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5FF62FA6C
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 17:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9189862FC1B
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Nov 2022 18:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241969AbiKRQh7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Nov 2022 11:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S242154AbiKRR6G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Nov 2022 12:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242129AbiKRQho (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 11:37:44 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD7F94A4A;
-        Fri, 18 Nov 2022 08:37:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=FiWlnseYeDmvYf6ekVLuoQu6zvB2WYQgiPGiJyyGB7U=; b=3olHQ
-        pwcdzstTqdGOogS4c7XYEkB/GBP5GjnjYxK8e00xx3J2AnZVWeRgJUhniaXd/H5xCpdrlA82VZ5qa
-        xANx4QLa2aQTMozg/E4pjlDIczrfQ/wGTlxh0AasS5Na3ZIICG+TCnfZR/Z7OCkIwG7TwUuV0yllS
-        Mn7Lw1MFwjL/tQ6G3b2gEaNG+JptHhgeJCkrifzq8q6JFgnqMV9kUt5A0i9FOBYCowEFuwA99ZlyB
-        9sse3H3qV6Z1V6cBrv/i5f76ec32Q2zmGSOaxvU/vZYqgD4pdDGhrNBrBzBNf9vIIxnB2dUrtfRTe
-        trUroe17qeBhKzTVtcyKVJlw475Qw==;
-Received: from 188-39-28-98.static.enta.net ([188.39.28.98] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1ow4Mu-00049L-SR;
-        Fri, 18 Nov 2022 16:37:33 +0000
-Date:   Fri, 18 Nov 2022 16:37:32 +0000
-From:   John Keeping <john@metanate.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-        balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3e0zAa7+HiNVrKN@donbot>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3YuL8rSE9pNfIZN@kroah.com>
- <Y3Y7MlwV0UFcA3w8@google.com>
- <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
- <Y3dIXUmjTfJLpPe7@google.com>
- <Y3er7nenAhbmBdBy@rowland.harvard.edu>
+        with ESMTP id S242261AbiKRR6E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Nov 2022 12:58:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056F1720B3
+        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 09:57:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C7B0626B8
+        for <linux-usb@vger.kernel.org>; Fri, 18 Nov 2022 17:57:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E9FC433C1;
+        Fri, 18 Nov 2022 17:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668794277;
+        bh=u6YGyx6uho1amF69HanW4pVRDwmLEGA2TJFHFqgXoLA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vuujVRAjn4AzcyHQAA8B2N2oEb8gSUcTjGivk1xkL2axZpuonUKL2IddwhK+Ay42K
+         310Kb/tAiPW9BGuSgwW/ClmuzPCNzl8Ba3gGvFo6eqQf7oQsYtbCSQj8D6tfJmvllp
+         66SDZk/qwqSv8UtSjrfnyeU7s6KhVatKs75VsnEY=
+Date:   Fri, 18 Nov 2022 18:57:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: roles: fix of node refcount leak in
+ usb_role_switch_is_parent()
+Message-ID: <Y3fHom6pvHT+dD5k@kroah.com>
+References: <20221118141850.806564-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3er7nenAhbmBdBy@rowland.harvard.edu>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221118141850.806564-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 10:59:42AM -0500, Alan Stern wrote:
-> On Fri, Nov 18, 2022 at 08:54:53AM +0000, Lee Jones wrote:
-> > On Thu, 17 Nov 2022, Alan Stern wrote:
-> > 
-> > > On Thu, Nov 17, 2022 at 01:46:26PM +0000, Lee Jones wrote:
-> > > > On Thu, 17 Nov 2022, Greg KH wrote:
-> > > > 
-> > > > > On Thu, Nov 17, 2022 at 12:08:13PM +0000, Lee Jones wrote:
-> > > > > > +static inline bool f_hidg_is_open(struct f_hidg *hidg)
-> > > > > > +{
-> > > > > > +	return !!kref_read(&hidg->cdev.kobj.kref);
-> > > > > > +}
-> > > > > 
-> > > > > Ick, sorry, no, that's not going to work and is not allowed at all.
-> > > > > That's some major layering violations there, AND it can change after you
-> > > > > get the value as well.
-> > > > 
-> > > > This cdev belongs solely to this driver.  Hence the *.*.* and not
-> > > > *->*->*.  What is preventing us from reading our own data?  If we
-> > > > cannot do this directly, can I create an API to do it 'officially'?
-> > > > 
-> > > > I do, however, appreciate that a little locking wouldn't go amiss.
-> > > > 
-> > > > If this solution is not acceptable either, then we're left up the
-> > > > creak without a paddle.  The rules you've communicated are not
-> > > > compatible with each other.
-> > > > 
-> > > > Rule 1: Only one item in a data structure can reference count.
-> > > > 
-> > > > Due to the embedded cdev struct, this rules out my first solution of
-> > > > giving f_hidg its own kref so that it can conduct its own life-time
-> > > > management.
-> > > > 
-> > > > A potential option to satisfy this rule would be to remove the cdev
-> > > > attribute and create its data dynamically instead.  However, the
-> > > > staticness of cdev is used to obtain f_hidg (with container_of()) in
-> > > > the character device handling component, so it cannot be removed.
-> > > 
-> > > You have not understood this rule correctly.  Only one item in a data 
-> > > structure can hold a reference count _for that structure_.  But several 
-> > > items in a structure can hold reference counts for themselves.
-> > 
-> > Here was the review comment I was working to on this patch [0]:
-> > 
-> >  "While at first glance, it seems that f_hidg is not reference
-> >   counted, it really is, with the embedded "struct cdev" a few lines
-> >   above this.
-> > 
-> >   That is the reference count that should control the lifecycle of
-> >   this object, not another reference here in the "outer layer"
-> >   structure."
+On Fri, Nov 18, 2022 at 10:18:50PM +0800, Yang Yingliang wrote:
+> I got the following report:
 > 
-> It's worth noting that the review comment goes on to say:
-> 
->  "But, the cdev api is tricky and messy and not really set up to control
->   the lifecycle of objects it is embedded in."
-> 
-> This is a good indication that a separate reference counter really is 
-> needed (in fact it almost contradicts what was written above).
+>   OF: ERROR: memory leak, expected refcount 1 instead of 2,
+>   of_node_get()/of_node_put() unbalanced - destroy cset entry:
+>   attach overlay node /i2c/pmic@34
 
-I don't think it's at all simple to fix this - I posted a series
-addressing the lifetime issues here a few years ago but didn't chase it
-up and there was no feedback:
+report from what?  What generates this?
 
-	https://lore.kernel.org/linux-usb/20191028114228.3679219-1-john@metanate.com/
-
-That includes a patch to remove the embedded struct cdev and manage its
-lifetime separately, which I think is needed as there are two different
-struct device objects here and we cannot tie their lifetimes together.
