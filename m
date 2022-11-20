@@ -2,54 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDFA631570
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Nov 2022 18:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611E3631591
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Nov 2022 18:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKTRWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Nov 2022 12:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S229701AbiKTRph (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Nov 2022 12:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKTRWh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Nov 2022 12:22:37 -0500
+        with ESMTP id S229698AbiKTRpe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Nov 2022 12:45:34 -0500
 Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A908AC3D;
-        Sun, 20 Nov 2022 09:22:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067601D0D4
+        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 09:45:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
         Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=3H6R74lTbSItE6Gc5khx7ihDy53GURcybs0KsLnI7b8=; b=tFf5z
-        nE75nP1AA7tfuU2i7zjgDT5x36O+sfvloDYuR9FPRuUkvYkJ6g+cKFX3icJLkJPV/HeXb8sRRk37a
-        fuqFZQEji/+k5BJDAOUFV95s4xlOzGp1bPC9iLzj3ongcQI9I/ePQCvTSpq1xCqLXQUgr8ktgoZSO
-        KiOLJJX6D1/71qq5hIkGbdqXoCgDlNjEKDjymjCGznoWRDCFFaJHQDMj+CrNwFEqjlleeB+BBdanW
-        3VcbQzZXLd8VOFcDDQfT4Uth1dps9Ymp2vd3g467c0mEUjtPwwChpB0eDetetaQmxWFKKkutaxGcJ
-        0Qz09lrmef9gQJMZ0U1Yiyhf7NZZg==;
+        Content-Description; bh=8MeMD0gXIv7orGdbETVPdr70c4/LSaDFMPrFgViohPo=; b=KWycc
+        2QaE6JS4zVT5xe7ZMplLxnbHvhXKlWbtTowvLT8DminTmYqH02/Ye1y04rIgTQX8dx7PVz343r4kc
+        CrFlTrqUvmNhiGVY6M9zsRWO6Tnjhhkjkrvt7Li1C/uCW94LJjnrktpShV44kZIdXsV1W/5akDmab
+        +cvc0flGE/1rhtcOaulpjI6kXHCawr7SVRnVMb6imB6pZ3dney0CcL/4I7+4Vr/mbPhHgapWWCnK+
+        9yTY34+tzmryMYeHrXJwsr/gb4IX6/Dd2bTK2yJNxe9wTC8YJyNT11UOIN1mCjQgz6dW+ysAaFNBu
+        QLmSFdCUnbiJN4Ahh9jRF0gNcdRBw==;
 Received: from [81.174.171.191] (helo=donbot)
         by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <john@metanate.com>)
-        id 1owo1L-00027Y-TI;
-        Sun, 20 Nov 2022 17:22:20 +0000
-Date:   Sun, 20 Nov 2022 17:22:19 +0000
+        id 1owoNl-0002Vn-05;
+        Sun, 20 Nov 2022 17:45:29 +0000
+Date:   Sun, 20 Nov 2022 17:45:28 +0000
 From:   John Keeping <john@metanate.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-        balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3piS43drwSoipD9@donbot>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3YuL8rSE9pNfIZN@kroah.com>
- <Y3Y7MlwV0UFcA3w8@google.com>
- <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
- <Y3dIXUmjTfJLpPe7@google.com>
- <Y3er7nenAhbmBdBy@rowland.harvard.edu>
- <Y3e0zAa7+HiNVrKN@donbot>
- <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Jack Pham <quic_jackp@quicinc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH] usb: gadget: configfs: Prevent double delete from
+ purge_configs_funcs
+Message-ID: <Y3pnuBfdNKtuDFqs@donbot>
+References: <20221117053548.28158-1-quic_ugoswami@quicinc.com>
+ <Y3e0ANWtax4SVONK@donbot>
+ <cea921b8-a0d1-fb71-0a6c-fc93ff369f0d@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
+In-Reply-To: <cea921b8-a0d1-fb71-0a6c-fc93ff369f0d@quicinc.com>
 X-Authenticated: YES
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
@@ -60,93 +58,86 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 04:07:24PM -0500, Alan Stern wrote:
-> On Fri, Nov 18, 2022 at 04:37:32PM +0000, John Keeping wrote:
-> > I don't think it's at all simple to fix this - I posted a series
-> > addressing the lifetime issues here a few years ago but didn't chase it
-> > up and there was no feedback:
+On Sun, Nov 20, 2022 at 12:40:54PM +0530, Udipto Goswami wrote:
+> On 11/18/22 10:04 PM, John Keeping wrote:
+> > On Thu, Nov 17, 2022 at 11:05:48AM +0530, Udipto Goswami wrote:
+> > > Currently the function purge_configs_funcs isn't protected by any lock
+> > > So there is a potential race possible there id udc called composite_unbind
+> > > and say at the same time the configfs_composite_bind also got executed.
+> > > If bind fails and follows the error path, driver will end up calling the
+> > > purge_configfs_funcs again, resulting in double free from func_list.
+> > > 
+> > > Fix this by introducing mutex gi->lock to make sure serial execution
+> > > can be maintained. Also, usage of list_for_each_entry_safe is risky
+> > > here since the tmp variable is still valid for the next iteration, in
+> > > order to ensure list traversal is clean, use list_last_entry.
 > > 
-> > 	https://lore.kernel.org/linux-usb/20191028114228.3679219-1-john@metanate.com/
+> > I don't understand how this can happen.
 > > 
-> > That includes a patch to remove the embedded struct cdev and manage its
-> > lifetime separately, which I think is needed as there are two different
-> > struct device objects here and we cannot tie their lifetimes together.
+> > purge_configs_funcs() is called from the .bind and .unbind
+> > usb_gadget_driver hooks, and those should not be able to run at the same
+> > time - if bind has not succeeded, how does unbinding make sense?
 > 
-> I still don't have a clear picture of what the real problem is.  Lee's 
-> original patch description just said "external references are presently 
-> not tracked", with no details about what those external references are. 
-> Why not add just proper cdev_get() and cdev_put() calls to whatever code 
-> handles those external references, so that they _are_ tracked?
+> Consider this,
+> we are going out of the composition i.e unbinding it,
+> lets say we have 7 functions and we were only at removing the 2 one where in
+> the meantime the bind process got called, the udc driver doesn't make sure
+> of this, depends on the controller when they call the usb_add_gadget
+> probably.
 > 
-> What are the two different struct device objects?  Why do their 
-> lifetimes need to be tied together?  If you do need to tie their 
-> lifetimes somehow, why not simply make one of them (the one which is 
-> logically allowed to be shorter-lived) hold a reference to the other?
+> For dwc3 controller specifically, the mode will still be device  so from
+> core.c will end up calling gadget_init() which in turn will call
+> usb_add_gadget which further does to check_pending_gadget_drivers,
+> eventually calling bind.
 
-The problem is that we have a struct cdev embedded in f_hidg but the
-lifetime of f_hidg is not tied to any kobject so we can't solve this in
-the right way by setting the parent kobject of the cdev.
+I can't find functions called gadget_init() or
+check_pending_gadget_drivers() in the kernel.
 
-While refcounting struct f_hidg is necessary, it's not sufficient
-because the only way to keep it alive long enough for the final
-kobject_put() on the embedded cdev is to tie the lifetime to a kobject
-of its own and there is no suitable object as this is not the model
-followed by gadget function instances.
+> So, i don't see any serializing mechanism here which would stop the
+> execution of make the controller wait until the unbind is completed right.
+> Please correct me if i'm wrong.
 
-To show the problem (using libusbgx's example commands for conciseness,
-but obviously this can be done via configfs directly):
+The comments in configfs_composite_bind() and
+configfs_composite_unbind() indicate that gi->lock is held by the caller
+for both these functions.
 
-	$ gadget-hid
-	$ exec 3<> /dev/hidg0
-	$ gadget-vid-pid-remove
-	$ exec 3<&-
+I checked that this is the case for configfs gadgets, so it's possible
+that one of the legacy paths has a bug where it is not holding this
+lock, but adding the extra lock calls in the patch below will deadlock
+with configfs.
 
-	==================================================================
-	BUG: KASAN: use-after-free in kobject_put+0x24/0x250
-	Read of size 1 at addr c61784a0 by task sh/264
-
-	CPU: 1 PID: 264 Comm: sh Tainted: G        W          6.0.5 #1
-	Hardware name: Rockchip (Device Tree)
-	 unwind_backtrace from show_stack+0x10/0x14
-	 show_stack from dump_stack_lvl+0x58/0x70
-	 dump_stack_lvl from print_report+0x58/0x4dc
-	 print_report from kasan_report+0x88/0xa8
-	 kasan_report from kobject_put+0x24/0x250
-	 kobject_put from __fput+0x1e4/0x358
-	 __fput from task_work_run+0xb4/0xc4
-	 task_work_run from do_work_pending+0x4d4/0x524
-	 do_work_pending from slow_work_pending+0xc/0x20
-	Exception stack(0xf284bfb0 to 0xf284bff8)
-	bfa0:                                     00000000 00000003 02292190 00000000
-	bfc0: 02293fc8 aed4e1d0 00000001 00000006 022925a0 00000000 022925a0 022923f4
-	bfe0: 00532f38 b6864840 0049c218 aec57e38 60000010 0000000b
-
-	Allocated by task 341:
-	 kasan_set_track+0x20/0x28
-	 ____kasan_kmalloc+0x80/0x88
-	 hidg_alloc+0x24/0x1f0
-	 usb_get_function+0x28/0x48
-	 config_usb_cfg_link+0x90/0x114
-	 configfs_symlink+0x24c/0x5d8
-	 vfs_symlink+0x58/0x74
-	 do_symlinkat+0xdc/0x16c
-	 ret_fast_syscall+0x0/0x1c
-
-	Freed by task 352:
-	 kasan_set_track+0x20/0x28
-	 kasan_set_free_info+0x28/0x34
-	 ____kasan_slab_free+0xf8/0x108
-	 __kasan_slab_free+0x10/0x18
-	 slab_free_freelist_hook+0x9c/0xfc
-	 kfree+0x118/0x258
-	 hidg_free+0x44/0x6c
-	 config_usb_cfg_unlink+0xd4/0xf4
-	 configfs_unlink+0x118/0x15c
-	 vfs_unlink+0xd8/0x1c4
-	 do_unlinkat+0x180/0x28c
-	 ret_fast_syscall+0x0/0x1c
-
-	The buggy address belongs to the object at c6178400
-	 which belongs to the cache kmalloc-512 of size 512
-	The buggy address is located 160 bytes inside of
-	 512-byte region [c6178400, c6178600)
+> > 
+> > > Fixes: 6cd0fe913879 ("usb: gadget: configfs: Preserve function ordering after bind failure")
+> > > Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> > > ---
+> > >   drivers/usb/gadget/configfs.c | 9 +++++----
+> > >   1 file changed, 5 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> > > index 3a6b4926193e..f1ac87906897 100644
+> > > --- a/drivers/usb/gadget/configfs.c
+> > > +++ b/drivers/usb/gadget/configfs.c
+> > > @@ -1246,14 +1246,14 @@ static void purge_configs_funcs(struct gadget_info *gi)
+> > >   {
+> > >   	struct usb_configuration	*c;
+> > > +	mutex_lock(&gi->lock);
+> > >   	list_for_each_entry(c, &gi->cdev.configs, list) {
+> > > -		struct usb_function *f, *tmp;
+> > > +		struct usb_function *f;
+> > >   		struct config_usb_cfg *cfg;
+> > >   		cfg = container_of(c, struct config_usb_cfg, c);
+> > > -
+> > > -		list_for_each_entry_safe_reverse(f, tmp, &c->functions, list) {
+> > > -
+> > > +		while (!list_empty(&c->functions)) {
+> > > +			f = list_last_entry(&c->functions, struct usb_function, list);
+> > >   			list_move(&f->list, &cfg->func_list);
+> > >   			if (f->unbind) {
+> > >   				dev_dbg(&gi->cdev.gadget->dev,
+> > > @@ -1269,6 +1269,7 @@ static void purge_configs_funcs(struct gadget_info *gi)
+> > >   		c->highspeed = 0;
+> > >   		c->fullspeed = 0;
+> > >   	}
+> > > +	mutex_unlock(&gi->lock);
+> > >   }
+> > >   static int configfs_composite_bind(struct usb_gadget *gadget,
