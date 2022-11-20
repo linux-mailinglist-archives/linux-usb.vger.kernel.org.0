@@ -2,53 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9D06314A0
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Nov 2022 15:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4506314ED
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Nov 2022 16:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiKTOPS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Nov 2022 09:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
+        id S229702AbiKTPhW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Nov 2022 10:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKTOPR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Nov 2022 09:15:17 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C471FCC2
-        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 06:15:16 -0800 (PST)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id BBD0A852EF;
-        Sun, 20 Nov 2022 15:15:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1668953715;
-        bh=JbRVYfBBk8gWdOQc5gYmWy8OSwkvFmvB+0K8k3ytj3s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=W54mT2qSaF1Qw8gNq4g6bnB9i6srReXM91b+59IAnNBc3rlpNhrYU3e1kiYOXO+XV
-         1UAYYzaaqmB+12da4Po+4FsJs31hHwTtRCtURvJ0kIbrOuerMzWtWk4GS9I2//5tQl
-         9e1zoz7E2gpgr+Hx5GOsj80X19wOdJGqxDR7O8euB67n+hh/tVhsOyiN9gDSGZ45UL
-         TwVXCSyUJYVUTLW6kl/DNcsdCQ/rWnCWInGHsU/5xZvlf3UrSzcfCONVF6Zle6ryG3
-         +MaBrvoUqWoj9AIeAGsAavBC94iRjyiy0/omJgz60KDWlsFrJyEG771G7rsa3GOItz
-         x2SWtdD4AWKRQ==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-usb@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH] extcon: usbc-tusb320: Update state on probe even if no IRQ pending
-Date:   Sun, 20 Nov 2022 15:15:09 +0100
-Message-Id: <20221120141509.81012-1-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229489AbiKTPhV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Nov 2022 10:37:21 -0500
+Received: from mailfilter06-out40.webhostingserver.nl (mailfilter06-out40.webhostingserver.nl [195.211.73.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF852CE03
+        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 07:37:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=MM7EtFn1cUFdBCfhl2e3SLpNu+xSuBzEMD0Psa1R+7g=;
+        b=qDcl7VdbBdW+XYWsdOyziONQ4gdJtEJnf/yU6Hl/tR2mZQyCGzh7Yrl/7Wp9P7eNnXxUhBTCD5XVr
+         QnT6iz5vq+IgO+ARsPJBQ8I0x9d1kS8nw6mOA9lK3zb3hw2VkqPsxnIgiIBqOhZNaBz1mZGvT6HMQr
+         m/z82xsNQ/K3liup4qwdiOdKe2f109DIVbnE5EasI1Jlfwveae3/chDaQJpLiSNXHnV8Qp0dKfWAfw
+         g+vK2ahaLoh8v5AOtOA+SikCVmzYeX5v7XCuawQyZBeJMckY6tFpIVu8edQqy/muFxfhmorrYr6ZR9
+         SUHDocO2Ad+sPN1o6WUY5Di40jqt8og==
+X-Halon-ID: 34f9f756-68e9-11ed-837b-001a4a4cb958
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter06.webhostingserver.nl (Halon) with ESMTPSA
+        id 34f9f756-68e9-11ed-837b-001a4a4cb958;
+        Sun, 20 Nov 2022 16:37:14 +0100 (CET)
+Received: from 2a02-a466-68ed-1-a813-1b80-f6b2-b786.fixed6.kpn.net ([2a02:a466:68ed:1:a813:1b80:f6b2:b786] helo=delfion.fritz.box)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1owmNe-004Y9S-0O;
+        Sun, 20 Nov 2022 16:37:14 +0100
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ferry Toth <ftoth@exalondelft.nl>
+Subject: [PATCH v4 0/2] usb: dwc3: core: defer probe on ulpi_read_id timeout
+Date:   Sun, 20 Nov 2022 16:37:02 +0100
+Message-Id: <20221120153704.9090-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,96 +61,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently this driver triggers extcon and typec state update in its
-probe function, to read out current state reported by the chip and
-report the correct state to upper layers. This synchronization is
-performed correctly, but only in case the chip indicates a pending
-interrupt in reg09 register.
+v4:
+- Sent in correct version (Andy, Thinh)
+- Add details on reproducing on Intel Merrifield (Thinh)
 
-This fails to cover the situation where all interrupts reported by
-the chip were already handled by Linux before reboot, then the system
-rebooted, and then Linux starts again. In this case, the TUSB320 no
-longer reports any interrupts in reg09, and the state update does not
-perform any update as it depends on that interrupt indication.
+v3:
+- Correct commit message (Greg)
+- Add Fixes: and Cc: stable (Greg)
 
-Fix this by turning tusb320_irq_handler() into a thin wrapper around
-tusb320_state_update_handler(), where the later now contains the bulk
-of the code of tusb320_irq_handler(), but adds new function parameter
-"force_update". The "force_update" parameter can be used by the probe
-function to assure that the state synchronization is always performed,
-independent of the interrupt indicated in reg09. The interrupt handler
-tusb320_irq_handler() callback uses force_update=false to avoid state
-updates on potential spurious interrupts and retain current behavior.
+v2:
+- Split into separate commits (Thinh)
+- Only defer probe on -ETIMEDOUT (Thinh)
+- Loose curly brackets (Heikki)
 
-Fixes: 06bc4ca115cdd ("extcon: Add driver for TI TUSB320")
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alvin Šipraga <alsi@bang-olufsen.dk>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc: Yassine Oudjana <y.oudjana@protonmail.com>
----
- drivers/extcon/extcon-usbc-tusb320.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+Ferry Toth (2):
+  usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+  usb: dwc3: core: defer probe on ulpi_read_id timeout
 
-diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-index 2a120d8d3c272..9dfa545427ca1 100644
---- a/drivers/extcon/extcon-usbc-tusb320.c
-+++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -313,9 +313,9 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
- 		typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
- }
- 
--static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
-+static irqreturn_t tusb320_state_update_handler(struct tusb320_priv *priv,
-+						bool force_update)
- {
--	struct tusb320_priv *priv = dev_id;
- 	unsigned int reg;
- 
- 	if (regmap_read(priv->regmap, TUSB320_REG9, &reg)) {
-@@ -323,7 +323,7 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
- 		return IRQ_NONE;
- 	}
- 
--	if (!(reg & TUSB320_REG9_INTERRUPT_STATUS))
-+	if (!force_update && !(reg & TUSB320_REG9_INTERRUPT_STATUS))
- 		return IRQ_NONE;
- 
- 	tusb320_extcon_irq_handler(priv, reg);
-@@ -340,6 +340,13 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
-+{
-+	struct tusb320_priv *priv = dev_id;
-+
-+	return tusb320_state_update_handler(priv, false);
-+}
-+
- static const struct regmap_config tusb320_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -466,7 +473,7 @@ static int tusb320_probe(struct i2c_client *client,
- 		return ret;
- 
- 	/* update initial state */
--	tusb320_irq_handler(client->irq, priv);
-+	tusb320_state_update_handler(priv, true);
- 
- 	/* Reset chip to its default state */
- 	ret = tusb320_reset(priv);
-@@ -477,7 +484,7 @@ static int tusb320_probe(struct i2c_client *client,
- 		 * State and polarity might change after a reset, so update
- 		 * them again and make sure the interrupt status bit is cleared.
- 		 */
--		tusb320_irq_handler(client->irq, priv);
-+		tusb320_state_update_handler(priv, true);
- 
- 	ret = devm_request_threaded_irq(priv->dev, client->irq, NULL,
- 					tusb320_irq_handler,
+ drivers/usb/common/ulpi.c | 2 +-
+ drivers/usb/dwc3/core.c   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
 -- 
-2.35.1
+2.37.2
 
