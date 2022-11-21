@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760CE631CC8
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32611631CCA
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiKUJZl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 04:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S230179AbiKUJZm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 04:25:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiKUJZj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:25:39 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E8127DE4
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 01:25:37 -0800 (PST)
+        with ESMTP id S230124AbiKUJZl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:25:41 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D10527DCF
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 01:25:41 -0800 (PST)
 Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 80C07987;
-        Mon, 21 Nov 2022 10:25:35 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 24702E61;
+        Mon, 21 Nov 2022 10:25:36 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1669022736;
-        bh=rYX2BsTP1C9FVK95o7ogWkuh4e8MasArZJA9fce+88U=;
+        bh=kP37ODIPxKzC6npoFrbinG945sO2Q0cQ6Wmkj6XcDxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KMkMoBjLJnhnv/oI45VYi3EEI216MFqTRj7r9z28IVnjpcLd3NS9Ua23kFBI+OYll
-         lV/CrxPxTGf2ICYrelClstYenfCXZXW+wRbsKwQGgCW1ZUdQIdOskF5zxq1Yh0VEBO
-         YzhdDOi/v8i3Tjt2+nlIQ8/962dUWjmdKpy/oZ8M=
+        b=RR9737Zb+hecxVDjAEPB0zS/2YWNDAqs9rwI97UTApU/tiZeOXDx+LtmxQwxntocX
+         f9rgiDK+uP6AgGt0s1MSmmudNg+9r2uogAwbWAqaADe4edKseR/yUheCPkETHRVuPa
+         VL0tn1SNkXrzGdo+RVrzOgiSNhoT9fbE9fIfxPjU=
 From:   Daniel Scally <dan.scally@ideasonboard.com>
 To:     linux-usb@vger.kernel.org
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
         laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
         torleiv@huddly.com, mgr@pengutronix.de,
         Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2 1/9] usb: gadget: uvc: Make bSourceID read/write
-Date:   Mon, 21 Nov 2022 09:25:09 +0000
-Message-Id: <20221121092517.225242-2-dan.scally@ideasonboard.com>
+Subject: [PATCH v2 2/9] usb: gadget: uvc: Generalise helper functions for reuse
+Date:   Mon, 21 Nov 2022 09:25:10 +0000
+Message-Id: <20221121092517.225242-3-dan.scally@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221121092517.225242-1-dan.scally@ideasonboard.com>
 References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
@@ -47,106 +47,162 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-At the moment, the UVC function graph is hardcoded IT -> PU -> OT.
-To add XU support we need the ability to insert the XU descriptors
-into the chain. To facilitate that, make the output terminal's
-bSourceID attribute writeable so that we can configure its source.
+the __uvcg_*frm_intrv() helper functions can be helpful when adding
+support for similar attributes. Generalise the function names and
+move them higher in the file for better coverage. We also need copies
+of the functions for different sized targets, so refactor them to
+a macro with configurable bit size.
 
 Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
 Changes in v2:
 
-	- Updated the ABI Documentation to reflect the change.
+	- none
 
- .../ABI/testing/configfs-usb-gadget-uvc       |  2 +-
- drivers/usb/gadget/function/uvc_configfs.c    | 57 ++++++++++++++++++-
- 2 files changed, 57 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/uvc_configfs.c | 109 +++++++++++----------
+ 1 file changed, 56 insertions(+), 53 deletions(-)
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index 611b23e6488d..feb3f2cc0c16 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -52,7 +52,7 @@ Date:		Dec 2014
- KernelVersion:	4.0
- Description:	Default output terminal descriptors
- 
--		All attributes read only:
-+		All attributes read only except bSourceID:
- 
- 		==============	=============================================
- 		iTerminal	index of string descriptor
 diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 4303a3283ba0..af4258120f9a 100644
+index af4258120f9a..d542dd251633 100644
 --- a/drivers/usb/gadget/function/uvc_configfs.c
 +++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -483,11 +483,66 @@ UVC_ATTR_RO(uvcg_default_output_, cname, aname)
- UVCG_DEFAULT_OUTPUT_ATTR(b_terminal_id, bTerminalID, 8);
- UVCG_DEFAULT_OUTPUT_ATTR(w_terminal_type, wTerminalType, 16);
- UVCG_DEFAULT_OUTPUT_ATTR(b_assoc_terminal, bAssocTerminal, 8);
--UVCG_DEFAULT_OUTPUT_ATTR(b_source_id, bSourceID, 8);
- UVCG_DEFAULT_OUTPUT_ATTR(i_terminal, iTerminal, 8);
+@@ -594,6 +594,60 @@ static const struct uvcg_config_group_type uvcg_terminal_grp_type = {
+ 	},
+ };
  
- #undef UVCG_DEFAULT_OUTPUT_ATTR
- 
-+static ssize_t uvcg_default_output_b_source_id_show(struct config_item *item,
-+						    char *page)
++static inline int __uvcg_count_item_entries(char *buf, void *priv)
 +{
-+	struct config_group *group = to_config_group(item);
-+	struct f_uvc_opts *opts;
-+	struct config_item *opts_item;
-+	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-+	struct uvc_output_terminal_descriptor *cd;
-+	int result;
-+
-+	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-+
-+	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent->ci_parent;
-+	opts = to_f_uvc_opts(opts_item);
-+	cd = &opts->uvc_output_terminal;
-+
-+	mutex_lock(&opts->lock);
-+	result = sprintf(page, "%u\n", le8_to_cpu(cd->bSourceID));
-+	mutex_unlock(&opts->lock);
-+
-+	mutex_unlock(su_mutex);
-+
-+	return result;
++	++*((int *)priv);
++	return 0;
 +}
 +
-+static ssize_t uvcg_default_output_b_source_id_store(struct config_item *item,
-+						     const char *page, size_t len)
-+{
-+	struct config_group *group = to_config_group(item);
-+	struct f_uvc_opts *opts;
-+	struct config_item *opts_item;
-+	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-+	struct uvc_output_terminal_descriptor *cd;
-+	int result;
-+	u8 num;
-+
-+	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-+
-+	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent->ci_parent;
-+	opts = to_f_uvc_opts(opts_item);
-+	cd = &opts->uvc_output_terminal;
-+
-+	result = kstrtou8(page, 0, &num);
-+	if (result)
-+		return result;
-+
-+	mutex_lock(&opts->lock);
-+	cd->bSourceID = num;
-+	mutex_unlock(&opts->lock);
-+
-+	mutex_unlock(su_mutex);
-+
-+	return len;
++#define UVCG_ITEM_ENTRY_FUNCS(bits)					\
++static inline int __uvcg_fill_item_entries_u##bits(char *buf, void *priv)\
++{									\
++	u##bits num, **interv;						\
++	int ret;							\
++									\
++	ret = kstrtou##bits(buf, 0, &num);				\
++	if (ret)							\
++		return ret;						\
++									\
++	interv = priv;							\
++	**interv = num;							\
++	++*interv;							\
++									\
++	return 0;							\
++}									\
++									\
++static int __uvcg_iter_item_entries_u##bits(const char *page, size_t len,\
++				 int (*fun)(char *, void *), void *priv)\
++{									\
++	/* sign, base 2 representation, newline, terminator */		\
++	char buf[1 + sizeof(u##bits) * 8 + 1 + 1];			\
++	const char *pg = page;						\
++	int i, ret;							\
++									\
++	if (!fun)							\
++		return -EINVAL;						\
++									\
++	while (pg - page < len) {					\
++		i = 0;							\
++		while (i < sizeof(buf) && (pg - page < len) &&		\
++				*pg != '\0' && *pg != '\n')		\
++			buf[i++] = *pg++;				\
++		if (i == sizeof(buf))					\
++			return -EINVAL;					\
++		while ((pg - page < len) && (*pg == '\0' || *pg == '\n'))\
++			++pg;						\
++		buf[i] = '\0';						\
++		ret = fun(buf, priv);					\
++		if (ret)						\
++			return ret;					\
++	}								\
++									\
++	return 0;							\
 +}
-+UVC_ATTR(uvcg_default_output_, b_source_id, bSourceID);
 +
- static struct configfs_attribute *uvcg_default_output_attrs[] = {
- 	&uvcg_default_output_attr_b_terminal_id,
- 	&uvcg_default_output_attr_w_terminal_type,
++UVCG_ITEM_ENTRY_FUNCS(32)
++
+ /* -----------------------------------------------------------------------------
+  * control/class/{fs|ss}
+  */
+@@ -1186,57 +1240,6 @@ static ssize_t uvcg_frame_dw_frame_interval_show(struct config_item *item,
+ 	return result;
+ }
+ 
+-static inline int __uvcg_count_frm_intrv(char *buf, void *priv)
+-{
+-	++*((int *)priv);
+-	return 0;
+-}
+-
+-static inline int __uvcg_fill_frm_intrv(char *buf, void *priv)
+-{
+-	u32 num, **interv;
+-	int ret;
+-
+-	ret = kstrtou32(buf, 0, &num);
+-	if (ret)
+-		return ret;
+-
+-	interv = priv;
+-	**interv = num;
+-	++*interv;
+-
+-	return 0;
+-}
+-
+-static int __uvcg_iter_frm_intrv(const char *page, size_t len,
+-				 int (*fun)(char *, void *), void *priv)
+-{
+-	/* sign, base 2 representation, newline, terminator */
+-	char buf[1 + sizeof(u32) * 8 + 1 + 1];
+-	const char *pg = page;
+-	int i, ret;
+-
+-	if (!fun)
+-		return -EINVAL;
+-
+-	while (pg - page < len) {
+-		i = 0;
+-		while (i < sizeof(buf) && (pg - page < len) &&
+-				*pg != '\0' && *pg != '\n')
+-			buf[i++] = *pg++;
+-		if (i == sizeof(buf))
+-			return -EINVAL;
+-		while ((pg - page < len) && (*pg == '\0' || *pg == '\n'))
+-			++pg;
+-		buf[i] = '\0';
+-		ret = fun(buf, priv);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	return 0;
+-}
+-
+ static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
+ 						  const char *page, size_t len)
+ {
+@@ -1260,7 +1263,7 @@ static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
+ 		goto end;
+ 	}
+ 
+-	ret = __uvcg_iter_frm_intrv(page, len, __uvcg_count_frm_intrv, &n);
++	ret = __uvcg_iter_item_entries_u32(page, len, __uvcg_count_item_entries, &n);
+ 	if (ret)
+ 		goto end;
+ 
+@@ -1270,7 +1273,7 @@ static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
+ 		goto end;
+ 	}
+ 
+-	ret = __uvcg_iter_frm_intrv(page, len, __uvcg_fill_frm_intrv, &tmp);
++	ret = __uvcg_iter_item_entries_u32(page, len, __uvcg_fill_item_entries_u32, &tmp);
+ 	if (ret) {
+ 		kfree(frm_intrv);
+ 		goto end;
 -- 
 2.34.1
 
