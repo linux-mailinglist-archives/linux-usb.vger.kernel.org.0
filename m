@@ -2,206 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8820B6319BC
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 07:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816026319C3
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 07:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiKUGdU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 01:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S229727AbiKUGfn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 01:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKUGdS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 01:33:18 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C827930F73
-        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 22:33:14 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso9908716pjt.0
-        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 22:33:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=theori.io; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rldQbVzv5ebudT94dGZh2jVY/qkQgmXwBXggpzupv6g=;
-        b=FUXLpBXC985sjZvdr2/n7L886E22UrSSCgeTmKY/YRtMKh3+UNmA3BhhLhBQI+34Mn
-         IJDgN5xFyBg/ALxwNwmIWJ4YZG6zrE/QOk1p2ERomztODtaBfJnQkpDTiDFj+3sdIhVc
-         ZvHBg7n7Plw7Lml7AVVCzOAvHaeWN1hag9A2U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rldQbVzv5ebudT94dGZh2jVY/qkQgmXwBXggpzupv6g=;
-        b=TpqWlPdJagOPHPbvHgdC1MsliWDGaAM7AhB93/kSs/0WFXahI/8hBwfy7AhzPRlY3w
-         Ojah4r/njA5OgYvrjhXzSdJgTdJi7yLj0yU8arMOAYuJs3habw2TWP8RBW1mpesmaTKo
-         gA3Zwgt7HcoHXEgA72G+b+Q3TixGokTRMAMm4nPaUZwIwC3R8HAQmBiJe8s41gIpiC0o
-         BBU+jDaY99VmXar3OR8uas4E+IyZuSob4gzajKhFIXPDeRibYMgty30shkoeU0awWhYO
-         sN7j9+a5quqg7mj7W+mRuvKU8nNWBYOYdzX10paMwOey0CJbgioaxP9qNj/rRyKIEc7b
-         OsJw==
-X-Gm-Message-State: ANoB5pnpXTzh0Gkq4v4ScC+w48ndAwEmGKveUrCTyiuBvlfeyo1ggW9X
-        6DxPHc72n4KsPqX0K6MB18FfBQ==
-X-Google-Smtp-Source: AA0mqf66VffZbM1/0KybknJnOwPt5S0b1hE4ZfrN6xpKk4e8OzGYFNFZuL8Zo7e57awlk6ixqCTZ2A==
-X-Received: by 2002:a17:90a:4886:b0:211:42a9:d132 with SMTP id b6-20020a17090a488600b0021142a9d132mr19262919pjh.8.1669012394383;
-        Sun, 20 Nov 2022 22:33:14 -0800 (PST)
-Received: from ubuntu ([121.133.63.188])
-        by smtp.gmail.com with ESMTPSA id 143-20020a621495000000b00565b259a52asm7854502pfu.1.2022.11.20.22.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 22:33:13 -0800 (PST)
-Date:   Sun, 20 Nov 2022 22:33:08 -0800
-From:   Hyunwoo Kim <v4bel@theori.io>
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        tiwai@suse.de, v4bel@theori.io
-Subject: [PATCH] media: dvb-core: Fix use-after-free due to race condition
- occurring in dvb_ca_en50221
-Message-ID: <20221121063308.GA33821@ubuntu>
+        with ESMTP id S229680AbiKUGfl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 01:35:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691E231347;
+        Sun, 20 Nov 2022 22:35:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16B91B80C8B;
+        Mon, 21 Nov 2022 06:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 566AEC433C1;
+        Mon, 21 Nov 2022 06:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669012536;
+        bh=7CYs8BBS+Jsc6TV659IdrBe1it3eg5ejFxeuLhuykqs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fTe+qp9151qJnBdXHiBQ4c5KYz3rxfymOdaO0T/mInww2BFb8qiVSoAXLzE5iCPfg
+         cWI1T7EZtTvH3s5kCeRyt4OLu6oMgasStG2eyRjdHJ+SA/5KUjZeMF3mC8IAtiZDl/
+         LCX8qZSPG85grDCOFDitpDEj4bvjY25G/MCheuTc=
+Date:   Mon, 21 Nov 2022 07:35:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>
+Subject: Re: [PATCH] usb: typec: pd: Add symlink to linked device
+Message-ID: <Y3scND+8DVe8SGeD@kroah.com>
+References: <20221121062106.2569297-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221121062106.2569297-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the device node of dvb_ca_en50221 is open() and the
-device is disconnected, a UAF may occur when calling
-close() on the device node.
+On Mon, Nov 21, 2022 at 06:20:39AM +0000, Prashant Malani wrote:
+> There exists a symlink from a device to its USB Power Delivery object,
+> but not the other way around. Add a symlink from the USB PD object to
+> the device which it's associated with, and call it "device".
+> 
+> This is helpful to identify said device (a Type-C peripheral for
+> example) during uevents, since during USB PD object
+> creation/destruction, a uevent is generated for the PD object,
+> but not the device linked to it.
+> 
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Benson Leung <bleung@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>  .../ABI/testing/sysfs-class-usb_power_delivery       |  6 ++++++
+>  drivers/usb/typec/pd.c                               | 12 ++++++++++--
+>  2 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+> index ce2b1b563cb3..e7d19193875f 100644
+> --- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+> +++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+> @@ -4,6 +4,12 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>  Description:
+>  		Directory for USB Power Delivery devices.
+>  
+> +What:		/sys/class/usb_power_delivery/.../device
+> +Date:		November 2022
+> +Contact:	Prashant Malani <pmalani@chromium.org>
+> +Description:
+> +		Symbolic link to the directory of the device to which the USB PD object is linked.
 
-The root cause is that wake_up() and wait_event() for
-dvbdev->wait_queue are not implemented.
+Line is way too long.
 
-So implement wait_event() function in dvb_ca_en50221_release()
-and add 'remove_mutex' which prevents race condition
-for 'ca->exit'.
+But wait, a "device" has a specific meaning in a sysfs file, and that is
+not what is happening here.
 
-Signed-off-by: Hyunwoo Kim <v4bel@theori.io>
----
- drivers/media/dvb-core/dvb_ca_en50221.c | 36 ++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+Please don't make fake "device" symlinks when these are not really using
+a device here.  Either fix it up to properly use the device structures
+in the code, or call this something else.
 
-diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index 15a08d8c69ef..60133a315701 100644
---- a/drivers/media/dvb-core/dvb_ca_en50221.c
-+++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-@@ -151,6 +151,12 @@ struct dvb_ca_private {
- 
- 	/* mutex serializing ioctls */
- 	struct mutex ioctl_mutex;
-+
-+	/* A mutex used when a device is disconnected */
-+	struct mutex remove_mutex;
-+
-+	/* Whether the device is disconnected */
-+	int exit;
- };
- 
- static void dvb_ca_private_free(struct dvb_ca_private *ca)
-@@ -1709,12 +1715,22 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
--	if (!try_module_get(ca->pub->owner))
-+	mutex_lock(&ca->remove_mutex);
-+
-+	if (ca->exit) {
-+		mutex_unlock(&ca->remove_mutex);
-+		return -ENODEV;
-+	}
-+
-+	if (!try_module_get(ca->pub->owner)) {
-+		mutex_unlock(&ca->remove_mutex);
- 		return -EIO;
-+	}
- 
- 	err = dvb_generic_open(inode, file);
- 	if (err < 0) {
- 		module_put(ca->pub->owner);
-+		mutex_unlock(&ca->remove_mutex);
- 		return err;
- 	}
- 
-@@ -1739,6 +1755,7 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
- 
- 	dvb_ca_private_get(ca);
- 
-+	mutex_unlock(&ca->remove_mutex);
- 	return 0;
- }
- 
-@@ -1758,6 +1775,8 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+
- 	/* mark the CA device as closed */
- 	ca->open = 0;
- 	dvb_ca_en50221_thread_update_delay(ca);
-@@ -1768,6 +1787,12 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
- 
- 	dvb_ca_private_put(ca);
- 
-+	if (dvbdev->users == 1 && ca->exit == 1) {
-+		mutex_unlock(&ca->remove_mutex);
-+		wake_up(&dvbdev->wait_queue);
-+	} else
-+		mutex_unlock(&ca->remove_mutex);
-+
- 	return err;
- }
- 
-@@ -1891,6 +1916,7 @@ int dvb_ca_en50221_init(struct dvb_adapter *dvb_adapter,
- 	}
- 
- 	mutex_init(&ca->ioctl_mutex);
-+	mutex_init(&ca->remove_mutex);
- 
- 	if (signal_pending(current)) {
- 		ret = -EINTR;
-@@ -1933,6 +1959,14 @@ void dvb_ca_en50221_release(struct dvb_ca_en50221 *pubca)
- 
- 	dprintk("%s\n", __func__);
- 
-+	mutex_lock(&ca->remove_mutex);
-+	ca->exit = 1;
-+	mutex_unlock(&ca->remove_mutex);
-+
-+	if (ca->dvbdev->users < 1)
-+		wait_event(ca->dvbdev->wait_queue,
-+				ca->dvbdev->users == 1);
-+
- 	/* shutdown the thread if there was one */
- 	kthread_stop(ca->thread);
- 
--- 
-2.25.1
+What in userspace wants to see this symlink?
 
+thanks,
 
-Dear,
-
-A UAF can occur in a flow like the one below:
-```
-                cpu0                                                cpu1
-                                                             1. dvb_usbv2_probe()
-                                                                d->priv = kzalloc(d->props->size_of_priv, GFP_KERNEL);
-                                                                ...
-                                                                dvb_usbv2_init()
-                                                                anysee_init()
-                                                                anysee_ci_init()
-                                                                dvb_ca_en50221_init()
-                                                                ca->pub = pubca;    // pubca : &state->ci, state : d->priv
-       2. open()
-          dvb_device_open()
-          dvb_ca_en50221_io_open()
-                                                             3. dvb_usbv2_disconnect()
-                                                                kfree(d->priv);
-       4. close()
-          dvb_ca_en50221_io_release()
-          module_put(ca->pub->owner);    // UAF
-```
-
-
-Regards,
-Hyunwoo Kim
+greg k-h
