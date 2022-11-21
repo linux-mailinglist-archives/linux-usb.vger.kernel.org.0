@@ -2,258 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CFB632AD8
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 18:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B52632BCD
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 19:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbiKURVV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 12:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
+        id S231226AbiKUSNy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 13:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiKURVA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 12:21:00 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85CDCFB98;
-        Mon, 21 Nov 2022 09:20:10 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id t1so8953614wmi.4;
-        Mon, 21 Nov 2022 09:20:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xMcN9cuI8kd/EBAZ74WJbV4knfpudOgQHBZHEvjiUeg=;
-        b=CdG/Jsfw1WTtgaq07815E+5iiz2BxCttLVutSSsFDeJFpdjNTgCM7mczngh0Mw0gQz
-         SnTnYE2NuBXGHWFYumksr7JptJia+L+A9Py3dN8WPTyvvc9GgnpNljN4pEl0euji5eE1
-         eyC8cYmYM+bHAe88l8/ZMLMlpikoW4T6vKWbn1n/jk48V1E2Dw4Y61p9lNjkiZxY3k5Y
-         eopvdLuyLCetDs8o1UMQQd1ayN+JEoDZr37YZm1qdCe1sGBeqsPyXWYDnouy4B1/K2IM
-         NYCYuCeeYrJTx/Cp+fZ3+lAaZ4ij8zzFbQKPGliDB5otsq7HURxo8kzaKU+ve9GHoDCw
-         2vBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xMcN9cuI8kd/EBAZ74WJbV4knfpudOgQHBZHEvjiUeg=;
-        b=EiI1JU1Twh5tQLsldOJElWjx8UB5PSnYdOOZUC3wZdzJhDxYoEBSovqHyAozppnGbP
-         lFOLU4HB7k5sCk1+dwAgfiOBRxCIFKAEC1FhJjuzF+6etxy51eKX3ncB7da/TjwnJphq
-         ILmDvVNSdSZ89X0O29Gec38EurhIjTdbTU21O2UgyoyooZU0iEvr3FzrK/R5qXJ87ZY7
-         k+OvPCNe/Cm5fOZqm0fG8mse9yVFp5tgTxUoecX5ND6ZDkWKjp46XVI42nY07vUAXQMk
-         TMOEnnD7hHIDxlunjB7QZGK3FfaO05cvmSIkz6K9g1eIu6AG9WkeK1u9T69EtGtT/QBr
-         h5yA==
-X-Gm-Message-State: ANoB5pl70EMGHEGLEMNca9H1JwPCsWAmDIzZPFF+O7KkzWDfXX03auWm
-        re9YIfrvS0di9XVxwLtsaQM=
-X-Google-Smtp-Source: AA0mqf5NIforkcTyJS8N4lSRmBCwg/nq8MPBei0Dm1KYtcSUjGsnHEVqkWMPQgn0njhjv49oLeM4WQ==
-X-Received: by 2002:a05:600c:4f93:b0:3cf:a616:ccc0 with SMTP id n19-20020a05600c4f9300b003cfa616ccc0mr17500223wmq.73.1669051208958;
-        Mon, 21 Nov 2022 09:20:08 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id c12-20020adffb4c000000b0022a3a887ceasm11736948wrs.49.2022.11.21.09.20.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 09:20:07 -0800 (PST)
-Message-ID: <7902124b-fb5e-6eb4-1f57-f3fd49146e24@gmail.com>
-Date:   Mon, 21 Nov 2022 18:20:05 +0100
+        with ESMTP id S229866AbiKUSNx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 13:13:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C766BC604E;
+        Mon, 21 Nov 2022 10:13:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56CF4B80D34;
+        Mon, 21 Nov 2022 18:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04FBC433D6;
+        Mon, 21 Nov 2022 18:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669054430;
+        bh=ZGb8HekwplHq8sWE2KIE4g+xtcd+XU+9iwrQzi0Zfhs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uf4bYPv0IACt/u+/Qnm+G/wsfB/h2eNJf/2nroJ4RoeXxPB8+A0jRaAoxljRsNnQg
+         6qLACc7NK4ygtA9LkgvTjdkKPhDL+W37pA2IHaKkw6ujw84QgKGAmCrS7OHJLFovdR
+         wvYaqaMo7sOpkgbXnUJKIxDblbyxVp4MBtTVyQHI=
+Date:   Mon, 21 Nov 2022 19:13:46 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Santiago Ruano =?iso-8859-1?Q?Rinc=F3n?= 
+        <santiago.ruano-rincon@imt-atlantique.fr>
+Cc:     Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] net/cdc_ncm: Fix multicast RX support for CDC NCM
+ devices with ZLP
+Message-ID: <Y3u/2gDlJFi9HB/x@kroah.com>
+References: <Y3uXBr2U4pWGU3mW@kroah.com>
+ <20221121154513.51957-1-santiago.ruano-rincon@imt-atlantique.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 06/11] arm64: dts: mt7986: add spi related device nodes
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        Sam Shih <sam.shih@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20221118190126.100895-1-linux@fw-web.de>
- <20221118190126.100895-7-linux@fw-web.de>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221118190126.100895-7-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221121154513.51957-1-santiago.ruano-rincon@imt-atlantique.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 18/11/2022 20:01, Frank Wunderlich wrote:
-> From: Sam Shih <sam.shih@mediatek.com>
+On Mon, Nov 21, 2022 at 04:45:13PM +0100, Santiago Ruano Rincón wrote:
+> ZLP for DisplayLink ethernet devices was enabled in 6.0:
+> 266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet devices").
+> The related driver_info should be the "same as cdc_ncm_info, but with
+> FLAG_SEND_ZLP". However, set_rx_mode that enables handling multicast
+> traffic was missing in the new cdc_ncm_zlp_info.
 > 
-> This patch adds spi support for MT7986.
+> usbnet_cdc_update_filter rx mode was introduced in linux 5.9 with:
+> e10dcb1b6ba7 ("net: cdc_ncm: hook into set_rx_mode to admit multicast
+> traffic")
 > 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied, thanks!
-
+> Without this hook, multicast, and then IPv6 SLAAC, is broken.
+> 
+> Fixes: 266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet devices")
+> Signed-off-by: Santiago Ruano Rincón <santiago.ruano-rincon@imt-atlantique.fr>
 > ---
->   arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 35 ++++++++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 28 ++++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 35 ++++++++++++++++++++
->   3 files changed, 98 insertions(+)
+>  drivers/net/usb/cdc_ncm.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> index 2f48cc3d3ddb..006878e3f2b2 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> @@ -59,6 +59,20 @@ switch: switch@0 {
->   };
->   
->   &pio {
-> +	spi_flash_pins: spi-flash-pins {
-> +		mux {
-> +			function = "spi";
-> +			groups = "spi0", "spi0_wp_hold";
-> +		};
-> +	};
-> +
-> +	spic_pins: spic-pins {
-> +		mux {
-> +			function = "spi";
-> +			groups = "spi1_2";
-> +		};
-> +	};
-> +
->   	uart1_pins: uart1-pins {
->   		mux {
->   			function = "uart";
-> @@ -105,6 +119,27 @@ conf {
->   	};
->   };
->   
-> +&spi0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi_flash_pins>;
-> +	cs-gpios = <0>, <0>;
-> +	status = "okay";
-> +	spi_nand: spi_nand@0 {
-> +		compatible = "spi-nand";
-> +		reg = <0>;
-> +		spi-max-frequency = <10000000>;
-> +		spi-tx-buswidth = <4>;
-> +		spi-rx-buswidth = <4>;
-> +	};
-> +};
-> +
-> +&spi1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spic_pins>;
-> +	cs-gpios = <0>, <0>;
-> +	status = "okay";
-> +};
-> +
->   &switch {
->   	ports {
->   		#address-cells = <1>;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> index afc01abfa99c..29da9b8ed753 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> @@ -253,6 +253,34 @@ i2c0: i2c@11008000 {
->   			status = "disabled";
->   		};
->   
-> +		spi0: spi@1100a000 {
-> +			compatible = "mediatek,mt7986-spi-ipm", "mediatek,spi-ipm";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0 0x1100a000 0 0x100>;
-> +			interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&topckgen CLK_TOP_MPLL_D2>,
-> +				 <&topckgen CLK_TOP_SPI_SEL>,
-> +				 <&infracfg CLK_INFRA_SPI0_CK>,
-> +				 <&infracfg CLK_INFRA_SPI0_HCK_CK>;
-> +			clock-names = "parent-clk", "sel-clk", "spi-clk", "hclk";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi1: spi@1100b000 {
-> +			compatible = "mediatek,mt7986-spi-ipm", "mediatek,spi-ipm";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0 0x1100b000 0 0x100>;
-> +			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&topckgen CLK_TOP_MPLL_D2>,
-> +				 <&topckgen CLK_TOP_SPIM_MST_SEL>,
-> +				 <&infracfg CLK_INFRA_SPI1_CK>,
-> +				 <&infracfg CLK_INFRA_SPI1_HCK_CK>;
-> +			clock-names = "parent-clk", "sel-clk", "spi-clk", "hclk";
-> +			status = "disabled";
-> +		};
-> +
->   		ethsys: syscon@15000000 {
->   			 #address-cells = <1>;
->   			 #size-cells = <1>;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> index 79c5c78f7a14..2c7f1d4fb352 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> @@ -100,6 +100,20 @@ fixed-link {
->   };
->   
->   &pio {
-> +	spi_flash_pins: spi-flash-pins {
-> +		mux {
-> +			function = "spi";
-> +			groups = "spi0", "spi0_wp_hold";
-> +		};
-> +	};
-> +
-> +	spic_pins: spic-pins {
-> +		mux {
-> +			function = "spi";
-> +			groups = "spi1_2";
-> +		};
-> +	};
-> +
->   	wf_2g_5g_pins: wf-2g-5g-pins {
->   		mux {
->   			function = "wifi";
-> @@ -132,6 +146,27 @@ conf {
->   	};
->   };
->   
-> +&spi0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi_flash_pins>;
-> +	cs-gpios = <0>, <0>;
-> +	status = "okay";
-> +	spi_nand: spi_nand@0 {
-> +		compatible = "spi-nand";
-> +		reg = <0>;
-> +		spi-max-frequency = <10000000>;
-> +		spi-tx-buswidth = <4>;
-> +		spi-rx-buswidth = <4>;
-> +	};
-> +};
-> +
-> +&spi1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spic_pins>;
-> +	cs-gpios = <0>, <0>;
-> +	status = "okay";
-> +};
-> +
->   &uart0 {
->   	status = "okay";
->   };
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index 8d5cbda33f66..0897fdb6254b 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -1915,6 +1915,7 @@ static const struct driver_info cdc_ncm_zlp_info = {
+>  	.status = cdc_ncm_status,
+>  	.rx_fixup = cdc_ncm_rx_fixup,
+>  	.tx_fixup = cdc_ncm_tx_fixup,
+> +	.set_rx_mode = usbnet_cdc_update_filter,
+>  };
+>  
+>  /* Same as cdc_ncm_info, but with FLAG_WWAN */
+> -- 
+> 2.38.1
+> 
+
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
