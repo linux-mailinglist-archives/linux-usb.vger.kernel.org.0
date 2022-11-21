@@ -2,61 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DDE632DB4
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 21:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0AE632DB6
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 21:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbiKUUNx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 15:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S231880AbiKUUOA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 15:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiKUUNv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 15:13:51 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92D14FF8C
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 12:13:50 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id c203so12325675pfc.11
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 12:13:50 -0800 (PST)
+        with ESMTP id S231858AbiKUUN7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 15:13:59 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FC151C1A
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 12:13:57 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so10063279pjh.2
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 12:13:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rq8a2hBX27gcIVHpejpVIZL+hRyBNLYkb+s20L9WV6w=;
-        b=SqLgfLqLWXgmjXhNGZIU6mAMHlKkjWNnbCRUg8OpME4ixk3GEFZq7BLXUUt/sx7273
-         Nyn6a1zF1thpfbom4ap6EMprRGQurZhAatGX3dXHNO7toAEL3nX138lfDoG5XWZeQdSb
-         HvfdpU8SAyxIFn8FvQ/ZGAFJM1tWhTDOEZ2SA=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Louc5ADJT348/nCzYaDBybvP94Rx6fwNzSnISAStWy0=;
+        b=TGHF/B4CquhA/lZbHuol0RLDFg6PJB0gRf2Aun3KZ/xka1JqEdr0e61iQx2sOJ+ULu
+         WJYlkRxiP50J7ZlY+iRtqu+ZjJ+FhQMnr4fq8/jeQ++Cwde9vs15gjihEdXE8D6wD9uD
+         q9h7qRmg41GUQQ7THip2b3tHYH6V7rGLhgl+U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rq8a2hBX27gcIVHpejpVIZL+hRyBNLYkb+s20L9WV6w=;
-        b=l+NYo1qnXl242OnD9ES4lVCoTJ39jJCd9kRUGQnfzoKk5wqJLG7vxmHPVbjVz3Qfun
-         ER5oXSWzmpKcuOT0iIjou9hf0GeVXQ/SVRg/3lUFVQR5Mi0zMtMdDKTTq4dkQGttH+3C
-         P2c7Eg43h6D5HFpFI2JtrL25NY/++bNjneDXLZUxmpyj06pXXqzaiExEl02gi5detPIu
-         qT+Mbvsktvjotb6p6dOSSjWqSRAWeccBv3h7r8BAE5inKzJvQxIfkF9jlTZkMVcSIbFo
-         Z7dQ2n+CIm/wyERc9X2+3UnzEqBMV8ApZsQRlJiyKFqrJczzgjttDd+uydGZf4B4wDDG
-         /E4w==
-X-Gm-Message-State: ANoB5pkUK8CpF/IA04vSSH/wd6yGxLzq2yqtcXFF+OObbnbFAFmqIF9y
-        UBxQxGCL/4QgOOkyOCgktz9mKQ==
-X-Google-Smtp-Source: AA0mqf6bUyCGH1kkSoR2meAE+laA0AOnlYeMweAaTvvR9s2UP4evcKNKPPO3M1hYW+8vc2rBOaC90A==
-X-Received: by 2002:aa7:9057:0:b0:573:1d31:2b78 with SMTP id n23-20020aa79057000000b005731d312b78mr2662956pfo.61.1669061630232;
-        Mon, 21 Nov 2022 12:13:50 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Louc5ADJT348/nCzYaDBybvP94Rx6fwNzSnISAStWy0=;
+        b=uxQQAlYO+9CEEw96udJdNKYs8dZDSD/1TxyHNmTUx56+RHG5BrXOy5essxW4ZGmIUP
+         m0YSlkeW1offHng6emGy54p1IR4JeA/iVfRRuLPig4a4X+rpBbogzP9AdaW96AvEBaxb
+         LULalFwoaCKb5RrhF99dgZKhYb/k7vHkJP7I0FV7BiNXBf+7/oPaFij0GDuBuC6idBNp
+         4g0a7T6qaqqYDTvNQXciqL9eJF1dz0GCfGtbHNc2dYi5RShb43eW+uxq+5ulKcjK5Hyy
+         VE6kT/jQbPBGNJYk7vpvNxqTOcWrXebp+GsCuonMshirYFCaNrSm9g7iRAe0b0asRHbY
+         f2VA==
+X-Gm-Message-State: ANoB5pmfzDuStdyTXzGEoifROJTq+K5TZsFfuIaFD7NZNKHOnXX2RlEX
+        o86S2/IAgHo8jmde6Y7hF4s7CQ==
+X-Google-Smtp-Source: AA0mqf5BBgF1qALgJYt0DK5mjq1LPUTO6oL6myxfNUYDOB0e/UcQ/yi/iReVRzYVAr0RKrrr95gNAw==
+X-Received: by 2002:a17:903:1311:b0:189:1e5:8422 with SMTP id iy17-20020a170903131100b0018901e58422mr461190plb.17.1669061636874;
+        Mon, 21 Nov 2022 12:13:56 -0800 (PST)
 Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id h8-20020a170902f70800b001822121c45asm10178507plo.28.2022.11.21.12.13.49
+        by smtp.gmail.com with ESMTPSA id h8-20020a170902f70800b001822121c45asm10178507plo.28.2022.11.21.12.13.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 12:13:49 -0800 (PST)
+        Mon, 21 Nov 2022 12:13:56 -0800 (PST)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         chrome-platform@lists.linux.dev
 Cc:     Prashant Malani <pmalani@chromium.org>,
         Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [PATCH 0/2] platform/chrome: cros_ec_typec: Link PD object to partner
-Date:   Mon, 21 Nov 2022 20:13:34 +0000
-Message-Id: <20221121201337.2772216-1-pmalani@chromium.org>
+        Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH 1/2] usb: typec: Add helper to get partner device struct
+Date:   Mon, 21 Nov 2022 20:13:35 +0000
+Message-Id: <20221121201337.2772216-2-pmalani@chromium.org>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+In-Reply-To: <20221121201337.2772216-1-pmalani@chromium.org>
+References: <20221121201337.2772216-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,35 +71,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a short series to link a registered USB PD object to its associated
-partner device. This is helpful for userspace services (the ChromeOS Type-C
-daemon, for example), to identify which Type-C peripheral a PD object belongs to,
-when a uevent for the PD object arrives.
+Some port drivers may want to set a Type-C partner as a parent for a
+USB Power Delivery object, but the Type-C partner struct isn't exposed
+outside of the Type-C class driver. Add a helper which returns a pointer
+to the Type-C partner's device struct, so that it can be supplied as the
+parent to the PD object.
 
-The first patch adds a helper to the Type-C class code to access the device struct
-for a partner. The second patch uses that helper to set the parent for the USB PD object
-in the port driver code.
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+ drivers/usb/typec/class.c | 13 +++++++++++++
+ include/linux/usb/typec.h |  2 ++
+ 2 files changed, 15 insertions(+)
 
-There was an earlier patch[1] to solve this issue, but it's been jettisoned (on advice from
-GregKH) in favor of the current approach.
-
-[1] https://lore.kernel.org/linux-usb/Y3vNZEuNI3CWzZ0L@chromium.org/T/#m7521020f64d878313d7dd79903ec0e9421aa8737
-
-Series submission suggestions (if the approach is OK):
-- Patch 1 goes throug the USB tree and Patch 2 goes in the next release cycle
-  through the chrome-platform tree.
-- Patch 1 and 2 both go through the USB tree.
-
-
-Prashant Malani (2):
-  usb: typec: Add helper to get partner device struct
-  platform/chrome: cros_ec_typec: Set parent of partner PD object
-
- drivers/platform/chrome/cros_ec_typec.c |  2 +-
- drivers/usb/typec/class.c               | 13 +++++++++++++
- include/linux/usb/typec.h               |  2 ++
- 3 files changed, 16 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index bd5e5dd70431..154c70630432 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -821,6 +821,19 @@ void typec_partner_set_svdm_version(struct typec_partner *partner,
+ }
+ EXPORT_SYMBOL_GPL(typec_partner_set_svdm_version);
+ 
++
++/**
++ * typec_partner_to_dev - Get the device struct of a USB Type-C partner.
++ * @partner: USB Type-C Partner
++ *
++ * Returns a pointer to the device struct or NULL.
++ */
++struct device *typec_partner_to_dev(struct typec_partner *partner)
++{
++	return partner ? &partner->dev : NULL;
++}
++EXPORT_SYMBOL_GPL(typec_partner_to_dev);
++
+ /**
+  * typec_register_partner - Register a USB Type-C Partner
+  * @port: The USB Type-C Port the partner is connected to
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index 7751bedcae5d..085be3e94ff8 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -327,6 +327,8 @@ void typec_partner_set_svdm_version(struct typec_partner *partner,
+ 				    enum usb_pd_svdm_ver svdm_version);
+ int typec_get_negotiated_svdm_version(struct typec_port *port);
+ 
++struct device *typec_partner_to_dev(struct typec_partner *partner);
++
+ int typec_port_set_usb_power_delivery(struct typec_port *port, struct usb_power_delivery *pd);
+ int typec_partner_set_usb_power_delivery(struct typec_partner *partner,
+ 					 struct usb_power_delivery *pd);
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
