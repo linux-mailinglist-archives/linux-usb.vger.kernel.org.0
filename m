@@ -2,73 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB11D631C89
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48845631CA6
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiKUJKW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 04:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S230137AbiKUJRO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 04:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiKUJJ5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:09:57 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C41A8DA5D;
-        Mon, 21 Nov 2022 01:09:57 -0800 (PST)
+        with ESMTP id S229733AbiKUJRM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:17:12 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AFC87A6E
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 01:17:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669021797; x=1700557797;
+  t=1669022230; x=1700558230;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=YK1fJnwYjE6pEUlQTwqHgFrvyAFXsLhLRFs9q3IFLwA=;
-  b=VPqJBqz+oqplmUPzu2q7pq7XThTBKojIo8jlrRXcoQHVpvGQ98kNWf/G
-   gEHNcsBG6U0VdzNV2qOPiZw2dM+ri0UVhaWyf+9OVUDKr5+vKUzeinHVT
-   FXTRnA9nv6+qqOPlerOxlZo/FXWPwTiZchWb8mTcpHCsR/rX2eC7Wlviz
-   sOfS2fBRDtneqpeibT02FmVbeecfVxe6D1/vCItvJjgT8Qp4k4mcOW+8S
-   1S2O0d+SdHL6bpiO9GOniJhoZpysDd0LTLl+Axpw4uu8BYNLKsWZ41pEq
-   2yPRWGXdb0AmJHi4Ta0Hq8GWNpDJYEcLXM8RGiF5wTH7GB8+UcAaY6DFv
+  bh=D1RvxjkA9C7JZzMXqFryDJUaJuX5hf+ZD3Os0J1T+4g=;
+  b=cSH8mT+FfidSPBklc9I+BijVxSXt5E6sqqK4Xvq/w+UMP8tNFNPC8mwl
+   NhDLSD/c8tCxrMpQWHPFKaK1Vz33gu7QKS0fSmfemtOIG3BsxEMaB2p5m
+   JyevMRBbDl1ZfjR5HT/31V1FsMvZbwT3DIT9GpgPOsCg00hLZl1tNX6ug
+   ZMOtJqgxVclLfzaM/mDQ+oJpz7GobTaJ3wL49kWTbfyhXtD3EnJ+Hq+iC
+   GZ00y9WGTBmntDjItMcoWsNp7hvlQhOWJAT41Gk9BLEsnqL5Znavuk9/O
+   Ba0Uy0jy35bNNhlIDbDfeEodAm6cP3QRnkvUf8Lbfmy16tpZpjtBVfzNQ
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="293221035"
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="315334531"
 X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="293221035"
+   d="scan'208";a="315334531"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 01:09:57 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 01:17:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="783378100"
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="783380777"
 X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="783378100"
+   d="scan'208";a="783380777"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2022 01:09:51 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Nov 2022 11:09:51 +0200
-Date:   Mon, 21 Nov 2022 11:09:51 +0200
+  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2022 01:17:07 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Nov 2022 11:17:06 +0200
+Date:   Mon, 21 Nov 2022 11:17:06 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 584/606] usb: typec: ucsi: stm32g0: Convert to i2c's
- .probe_new()
-Message-ID: <Y3tAX8I3EWoIlraR@kuha.fi.intel.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-585-uwe@kleine-koenig.org>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-usb@vger.kernel.org,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: Re: [PATCH] extcon: usbc-tusb320: Update state on probe even if no
+ IRQ pending
+Message-ID: <Y3tCEvyueYpwh5BH@kuha.fi.intel.com>
+References: <20221120141509.81012-1-marex@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-585-uwe@kleine-koenig.org>
+In-Reply-To: <20221120141509.81012-1-marex@denx.de>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,42 +65,100 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:45:18PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Sun, Nov 20, 2022 at 03:15:09PM +0100, Marek Vasut wrote:
+> Currently this driver triggers extcon and typec state update in its
+> probe function, to read out current state reported by the chip and
+> report the correct state to upper layers. This synchronization is
+> performed correctly, but only in case the chip indicates a pending
+> interrupt in reg09 register.
 > 
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
+> This fails to cover the situation where all interrupts reported by
+> the chip were already handled by Linux before reboot, then the system
+> rebooted, and then Linux starts again. In this case, the TUSB320 no
+> longer reports any interrupts in reg09, and the state update does not
+> perform any update as it depends on that interrupt indication.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Fix this by turning tusb320_irq_handler() into a thin wrapper around
+> tusb320_state_update_handler(), where the later now contains the bulk
+> of the code of tusb320_irq_handler(), but adds new function parameter
+> "force_update". The "force_update" parameter can be used by the probe
+> function to assure that the state synchronization is always performed,
+> independent of the interrupt indicated in reg09. The interrupt handler
+> tusb320_irq_handler() callback uses force_update=false to avoid state
+> updates on potential spurious interrupts and retain current behavior.
+> 
+> Fixes: 06bc4ca115cdd ("extcon: Add driver for TI TUSB320")
+> Signed-off-by: Marek Vasut <marex@denx.de>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi_stm32g0.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Cc: Alvin Å ipraga <alsi@bang-olufsen.dk>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  drivers/extcon/extcon-usbc-tusb320.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> index 7b92f0c8de70..93fead0096b7 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> @@ -626,7 +626,7 @@ static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
->  	return 0;
+> diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+> index 2a120d8d3c272..9dfa545427ca1 100644
+> --- a/drivers/extcon/extcon-usbc-tusb320.c
+> +++ b/drivers/extcon/extcon-usbc-tusb320.c
+> @@ -313,9 +313,9 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+>  		typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
 >  }
 >  
-> -static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +static int ucsi_stm32g0_probe(struct i2c_client *client)
+> -static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+> +static irqreturn_t tusb320_state_update_handler(struct tusb320_priv *priv,
+> +						bool force_update)
 >  {
->  	struct device *dev = &client->dev;
->  	struct ucsi_stm32g0 *g0;
-> @@ -763,7 +763,7 @@ static struct i2c_driver ucsi_stm32g0_i2c_driver = {
->  		.of_match_table = of_match_ptr(ucsi_stm32g0_typec_of_match),
->  		.pm = pm_sleep_ptr(&ucsi_stm32g0_pm_ops),
->  	},
-> -	.probe = ucsi_stm32g0_probe,
-> +	.probe_new = ucsi_stm32g0_probe,
->  	.remove = ucsi_stm32g0_remove,
->  	.id_table = ucsi_stm32g0_typec_i2c_devid
->  };
+> -	struct tusb320_priv *priv = dev_id;
+>  	unsigned int reg;
+>  
+>  	if (regmap_read(priv->regmap, TUSB320_REG9, &reg)) {
+> @@ -323,7 +323,7 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+>  		return IRQ_NONE;
+>  	}
+>  
+> -	if (!(reg & TUSB320_REG9_INTERRUPT_STATUS))
+> +	if (!force_update && !(reg & TUSB320_REG9_INTERRUPT_STATUS))
+>  		return IRQ_NONE;
+>  
+>  	tusb320_extcon_irq_handler(priv, reg);
+> @@ -340,6 +340,13 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct tusb320_priv *priv = dev_id;
+> +
+> +	return tusb320_state_update_handler(priv, false);
+> +}
+> +
+>  static const struct regmap_config tusb320_regmap_config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 8,
+> @@ -466,7 +473,7 @@ static int tusb320_probe(struct i2c_client *client,
+>  		return ret;
+>  
+>  	/* update initial state */
+> -	tusb320_irq_handler(client->irq, priv);
+> +	tusb320_state_update_handler(priv, true);
+>  
+>  	/* Reset chip to its default state */
+>  	ret = tusb320_reset(priv);
+> @@ -477,7 +484,7 @@ static int tusb320_probe(struct i2c_client *client,
+>  		 * State and polarity might change after a reset, so update
+>  		 * them again and make sure the interrupt status bit is cleared.
+>  		 */
+> -		tusb320_irq_handler(client->irq, priv);
+> +		tusb320_state_update_handler(priv, true);
+>  
+>  	ret = devm_request_threaded_irq(priv->dev, client->irq, NULL,
+>  					tusb320_irq_handler,
 
 thanks,
 
