@@ -2,78 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819356327C1
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 16:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FE56327CB
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 16:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbiKUPVi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 10:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S230148AbiKUPXQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 10:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232305AbiKUPVQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 10:21:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D423418B2F;
-        Mon, 21 Nov 2022 07:19:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F16CB810BD;
-        Mon, 21 Nov 2022 15:19:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE4C9C433C1;
-        Mon, 21 Nov 2022 15:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669043978;
-        bh=eVspgM7NdzFFPBjzEyUawslGXT3iBvw7V1jq6j3k2e4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z1f2rKbs/QkoGO9uROiVipZDVD8s2OV2/kDoHYVzNtiz5wTzxNAw+62yTifpHyg29
-         EIndvzMV6dVtKuYtSSdGIH5N0ph4FxioVWNUlWkUP+szK5vC0tmIhCFOMIvKDZRwh8
-         Xv0Kc4wq6YWMGXN2Tefr47sUSR8SEOYeZs1liNjc=
-Date:   Mon, 21 Nov 2022 16:19:34 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Santiago Ruano =?iso-8859-1?Q?Rinc=F3n?= 
-        <santiago.ruano-rincon@imt-atlantique.fr>
-Cc:     Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] net/cdc_ncm: Fix multicast RX support for CDC NCM
- devices with ZLP
-Message-ID: <Y3uXBr2U4pWGU3mW@kroah.com>
-References: <20221121131336.21494-1-santiago.ruano-rincon@imt-atlantique.fr>
+        with ESMTP id S230110AbiKUPWw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 10:22:52 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8A3D95
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 07:22:26 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:4821:1ba5:2638:5c3a])
+        by baptiste.telenet-ops.be with bizsmtp
+        id n3NP2800R5WXlCv013NP3Q; Mon, 21 Nov 2022 16:22:24 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ox8cp-0019CK-PT; Mon, 21 Nov 2022 16:22:23 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ox8co-00BPxI-VQ; Mon, 21 Nov 2022 16:22:22 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] usb: USB_FOTG210 should depend on ARCH_GEMINI
+Date:   Mon, 21 Nov 2022 16:22:19 +0100
+Message-Id: <a989b3b798ecaf3b45f35160e30e605636d66a77.1669044086.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221121131336.21494-1-santiago.ruano-rincon@imt-atlantique.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 02:13:37PM +0100, Santiago Ruano Rincón wrote:
-> ZLP for DisplayLink ethernet devices was enabled in 6.0:
-> 266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet devices").
-> The related driver_info should be the "same as cdc_ncm_info, but with
-> FLAG_SEND_ZLP". However, set_rx_mode that enables handling multicast
-> traffic was missing in the new cdc_ncm_zlp_info.
-> 
-> usbnet_cdc_update_filter rx mode was introduced in linux 5.9 with:
-> e10dcb1b6ba7 ("net: cdc_ncm: hook into set_rx_mode to admit multicast
-> traffic")
-> 
-> Without this hook, multicast, and then IPv6 SLAAC, is broken.
-> 
-> Fixes: 266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet
-> devices")
+The Faraday Technology FOTG210 USB2 Dual Role Controller is only present
+on Cortina Systems Gemini SoCs.  Hence add a dependency on ARCH_GEMINI,
+to prevent asking the user about its drivers when configuring a kernel
+without Cortina Systems Gemini SoC support.
 
-This needs to all be on one line.
+Fixes: 1dd33a9f1b95ab59 ("usb: fotg210: Collect pieces of dual mode controller")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/usb/fotg210/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
+diff --git a/drivers/usb/fotg210/Kconfig b/drivers/usb/fotg210/Kconfig
+index 534206ee0d1db74f..dad1b088aba59217 100644
+--- a/drivers/usb/fotg210/Kconfig
++++ b/drivers/usb/fotg210/Kconfig
+@@ -4,6 +4,7 @@ config USB_FOTG210
+ 	tristate "Faraday FOTG210 USB2 Dual Role controller"
+ 	depends on USB || USB_GADGET
+ 	depends on HAS_DMA && HAS_IOMEM
++	depends on ARCH_GEMINI || COMPILE_TEST
+ 	default ARCH_GEMINI
+ 	select MFD_SYSCON
+ 	help
+-- 
+2.25.1
 
-With no blank line here.
-
-thanks,
-
-greg k-h
