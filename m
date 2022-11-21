@@ -2,125 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF36D63184E
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 02:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 509A063192B
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 05:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiKUBtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Nov 2022 20:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
+        id S229527AbiKUEW6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Nov 2022 23:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKUBtv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Nov 2022 20:49:51 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2286017425
-        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 17:49:49 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NFr0c5bGFzRpF7;
-        Mon, 21 Nov 2022 09:49:20 +0800 (CST)
-Received: from [10.67.110.176] (10.67.110.176) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 09:49:46 +0800
-Subject: Re: [PATCH] usb: gadget: fusb300_udc: free irq on the error path in
- fusb300_probe()
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <yhchen@faraday-tech.com>,
-        <linux-usb@vger.kernel.org>
-References: <20221120061242.261839-1-cuigaosheng1@huawei.com>
- <CAD-N9QWDG=CyM9CWHcko5uUSkWf+OKSc8-HCBvXKbfAveONfPA@mail.gmail.com>
-From:   cuigaosheng <cuigaosheng1@huawei.com>
-Message-ID: <4efbe4dc-5c0f-3a92-23a5-05f3c9e0ed2f@huawei.com>
-Date:   Mon, 21 Nov 2022 09:49:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        with ESMTP id S229502AbiKUEWz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Nov 2022 23:22:55 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF5A11C07
+        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 20:22:53 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL3gKb2020754;
+        Mon, 21 Nov 2022 04:22:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Qg+AfcenaEkUw5C4sEMhCmpAeQ//tg3g3ank+6xCruo=;
+ b=B5faLXsvPGQQQfFPfiPD0qUySfsKk1MdYvpF4USTcej8F4ke5Il+Fmb7ParW0lrcDw6O
+ zdq3WSefx3BDTYBqmIxI8J2/KntIfNMAvSDd+nk0yxej0bWMY+/Lk+aNpwwPM2U4Qt6e
+ 40sQUGNcxODLrCsh8/Lf7o6aTKphpQAeOiaqeluGFoA+JwtxZzefUqYonB9UAIldqwo0
+ p7ddV7CFC8wnBSPvHx6FA/Jsgsax8gOdJNIKbqdqd3zFgNGK2Bor3BbQOr8Fb8NNuYPk
+ 77lCJCQFbGIWevZJCdFFsFHMtyV81x3Bl547LuZbQDKybNxg2rVqRQTtasBzl5lPhUZj 8g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrfbucw7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 04:22:49 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AL4MmNw028527
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 04:22:48 GMT
+Received: from [10.206.25.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 20 Nov
+ 2022 20:22:46 -0800
+Message-ID: <3eb52cdb-fc32-8b06-97a5-d5196d4794da@quicinc.com>
+Date:   Mon, 21 Nov 2022 09:52:43 +0530
 MIME-Version: 1.0
-In-Reply-To: <CAD-N9QWDG=CyM9CWHcko5uUSkWf+OKSc8-HCBvXKbfAveONfPA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [v2] usb: gadget: f_fs: Prevent race between functionfs_unbind &
+ ffs_ep0_queue_wait
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
+        "Pratham Pratap" <quic_ppratap@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+References: <20221116111955.21057-1-quic_ugoswami@quicinc.com>
+ <Y3ewqxYSbb2W1Hfq@donbot> <00b2c24d-a663-f16c-deb1-9beb40d424a2@quicinc.com>
+ <Y3poWpdn05ZEuaF2@donbot>
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <Y3poWpdn05ZEuaF2@donbot>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.176]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5LwF4GbY57-25ZBQG3eRQ9Ya6Fp6YKBU
+X-Proofpoint-ORIG-GUID: 5LwF4GbY57-25ZBQG3eRQ9Ya6Fp6YKBU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_03,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 impostorscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211210032
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> it seems you need to add the same free_irq in the .remove function.
-> Refer to the following patch,
->
-> --- a/drivers/usb/gadget/udc/fusb300_udc.c
-> +++ b/drivers/usb/gadget/udc/fusb300_udc.c
-> @@ -1347,6 +1347,7 @@ static int fusb300_remove(struct platform_device *pdev)
->          usb_del_gadget_udc(&fusb300->gadget);
->          iounmap(fusb300->reg);
->          free_irq(platform_get_irq(pdev, 0), fusb300);
-> +       free_irq(platform_get_irq(pdev, 1), fusb300);
->
->          fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
->          for (i = 0; i < FUSB300_MAX_NUM_EP; i++)
+Hi John
 
-Thanks for taking time to review this patch, I have made a patch v2 and submit it.
+On 11/20/22 11:18 PM, John Keeping wrote:
+> On Sun, Nov 20, 2022 at 12:23:50PM +0530, Udipto Goswami wrote:
+>> On 11/18/22 9:49 PM, John Keeping wrote:
+>>> On Wed, Nov 16, 2022 at 04:49:55PM +0530, Udipto Goswami wrote:
+>>>> While performing fast composition switch, there is a possibility that the
+>>>> process of ffs_ep0_write/ffs_ep0_read get into a race condition
+>>>> due to ep0req being freed up from functionfs_unbind.
+>>>>
+>>>> Consider the scenario that the ffs_ep0_write calls the ffs_ep0_queue_wait
+>>>> by taking a lock &ffs->ev.waitq.lock. However, the functionfs_unbind isn't
+>>>> bounded so it can go ahead and mark the ep0req to NULL, and since there
+>>>> is no NULL check in ffs_ep0_queue_wait we will end up in use-after-free.
+>>>>
+>>>> Fix this by making a serialized execution between the two functions using
+>>>> a mutex_lock(ffs->mutex). Also, dequeue the ep0req to ensure that no
+>>>> other function can use it after the free operation.
+>>>>
+>>>> Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+>>>> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+>>>> ---
+>>>> v2: Replaces spinlock with mutex & added dequeue operation in unbind.
+>>>>
+>>>>    drivers/usb/gadget/function/f_fs.c | 7 +++++++
+>>>>    1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>>>> index 73dc10a77cde..1439449df39a 100644
+>>>> --- a/drivers/usb/gadget/function/f_fs.c
+>>>> +++ b/drivers/usb/gadget/function/f_fs.c
+>>>> @@ -279,6 +279,9 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
+>>>>    	struct usb_request *req = ffs->ep0req;
+>>>>    	int ret;
+>>>> +	if (!req)
+>>>> +		return -EINVAL;
+>>>> +
+>>>>    	req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
+>>>>    	spin_unlock_irq(&ffs->ev.waitq.lock);
+>>>> @@ -1892,10 +1895,14 @@ static void functionfs_unbind(struct ffs_data *ffs)
+>>>>    	ENTER();
+>>>>    	if (!WARN_ON(!ffs->gadget)) {
+>>>> +		mutex_lock(&ffs->mutex);
+>>>> +		/* dequeue before freeing ep0req */
+>>>> +		usb_ep_dequeue(ffs->gadget->ep0, ffs->ep0req);
+>>>>    		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
+>>>>    		ffs->ep0req = NULL;
+>>>>    		ffs->gadget = NULL;
+>>>>    		clear_bit(FFS_FL_BOUND, &ffs->flags);
+>>>> +		mutex_unlock(&ffs->mutex);
+>>>
+>>> There's now a deadlock here if some other thread is waiting in
+>>> __ffs_ep0_queue_wait() on ep0req_completion.
+>>>
+>>> You need to dequeue before taking the lock.
+>> That's a control request right, will it be async?
+>>
+>> Anyway I see only 2 possible threads ep0_read/ep0_write who calls
+>> ep0_queue_wait and waits for the completion of ep0req and both
+>> ep0_read/write are prptected by the mutex lock so i guess execution won't
+>> reach there right ?
+>> Say functionfs_unbind ran first then ep0_read/write had to wait will the
+>> functionfs_unbind is completed so ep_dequeue will ran, will get completed,
+>> further free the request, mark in NULL. now ep0_read/write will have ep0req
+>> as NULL so bail out.
+>>
+>> Is reverse then functionfs_unbind will wait will the ep0_read/write is
+>> completed.
+> 
+> What guarantee is there that the transfer completes?
+> 
+> If there is such a guarantee, then the request will not be queued, so
+> why is usb_ep_dequeue() necessary?
 
-On 2022/11/20 19:01, Dongliang Mu wrote:
-> On Sun, Nov 20, 2022 at 2:25 PM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
->> When request_irq(ires1->start) failed in w5300_hw_probe(), irq ires->start
->> has not been freed, and on the clean_up3 error path, we need to free
->> ires1->start irq, too. Fix it.
->>
->> Fixes: 0fe6f1d1f612 ("usb: udc: add Faraday fusb300 driver")
->> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
->> ---
->>   drivers/usb/gadget/udc/fusb300_udc.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/udc/fusb300_udc.c
->> index 9af8b415f303..c66a59c15003 100644
->> --- a/drivers/usb/gadget/udc/fusb300_udc.c
->> +++ b/drivers/usb/gadget/udc/fusb300_udc.c
->> @@ -1432,7 +1432,7 @@ static int fusb300_probe(struct platform_device *pdev)
->>                          IRQF_SHARED, udc_name, fusb300);
->>          if (ret < 0) {
->>                  pr_err("request_irq1 error (%d)\n", ret);
->> -               goto clean_up;
->> +               goto clean_up2;
->>          }
->>
->>          INIT_LIST_HEAD(&fusb300->gadget.ep_list);
->> @@ -1487,8 +1487,9 @@ static int fusb300_probe(struct platform_device *pdev)
->>          fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
->>
->>   clean_up3:
->> +       free_irq(ires1->start, fusb300);
-> Hi Gaosheng,
->
-> it seems you need to add the same free_irq in the .remove function.
-> Refer to the following patch,
->
-> --- a/drivers/usb/gadget/udc/fusb300_udc.c
-> +++ b/drivers/usb/gadget/udc/fusb300_udc.c
-> @@ -1347,6 +1347,7 @@ static int fusb300_remove(struct platform_device *pdev)
->          usb_del_gadget_udc(&fusb300->gadget);
->          iounmap(fusb300->reg);
->          free_irq(platform_get_irq(pdev, 0), fusb300);
-> +       free_irq(platform_get_irq(pdev, 1), fusb300);
->
->          fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
->          for (i = 0; i < FUSB300_MAX_NUM_EP; i++)
->
-> Fix me if I make any mistakes.
->
->> +clean_up2:
->>          free_irq(ires->start, fusb300);
->> -
->>   clean_up:
->>          if (fusb300) {
->>                  if (fusb300->ep0_req)
->> --
->> 2.25.1
->>
-> .
+I Agree that we cannot say that for sure, but we see that 
+wait_for_completion in the ep0_queue_wait is also inside mutex which was 
+acquired in ep0_read/write right?
+I Though of maintaining the uniformity for the approaches.
+
+Thanks,
+-Udipto
