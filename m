@@ -2,103 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02171632852
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 16:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F01E63289D
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 16:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiKUPeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 10:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S231216AbiKUPtA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 10:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232466AbiKUPd4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 10:33:56 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B69CE09;
-        Mon, 21 Nov 2022 07:32:57 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 051D56600014;
-        Mon, 21 Nov 2022 15:32:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669044776;
-        bh=17GTCflbo8BWuklmQRQq055N9cwYV+wqCUtsgqHsCUE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kMSUAJ6v8fcm0zAT+WLjt58eGUcbzHhfd/EYc4KD3ei3LV0v/vWCY+jvhyzukPSRM
-         /SJxfePWrb1CMEtYoapMj1qYbXwSqdSNgywCgHkMtbM3Cf2UjQCKRt4yIOIen/kt9Y
-         7UlkQthESX6CvfgdITxK6JQV4aB43utiPJhstXhWhw5GfIceiGo0U3ofWIsJCUK0Rm
-         6WoV/5PKJ4VJsSNVi9iZYuwQxT4gOe/vihHdiR89mlbJylwjTLx+nAvRbdwV2OTswC
-         1SsBW0obzh+ABomBWyRGWnsEMwpoWAYYPv/AtE3Ndwbp2VDyhpPMWg7O9gX3YNdl2S
-         eOD7pajJcfw3A==
-Message-ID: <b7dcf498-51ea-3aaf-211f-09fa59c38768@collabora.com>
-Date:   Mon, 21 Nov 2022 16:32:52 +0100
+        with ESMTP id S231145AbiKUPs3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 10:48:29 -0500
+X-Greylist: delayed 8820 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 07:47:51 PST
+Received: from zproxy130.enst.fr (zproxy130.enst.fr [137.194.2.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E99429B5;
+        Mon, 21 Nov 2022 07:47:48 -0800 (PST)
+Received: from localhost (localhost [IPv6:::1])
+        by zproxy130.enst.fr (Postfix) with ESMTP id 5E79212083E;
+        Mon, 21 Nov 2022 16:47:46 +0100 (CET)
+Received: from zproxy130.enst.fr ([IPv6:::1])
+        by localhost (zproxy130.enst.fr [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id YGP8A0YKAm36; Mon, 21 Nov 2022 16:47:46 +0100 (CET)
+Received: from localhost (localhost [IPv6:::1])
+        by zproxy130.enst.fr (Postfix) with ESMTP id DF7D0120609;
+        Mon, 21 Nov 2022 16:47:45 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zproxy130.enst.fr DF7D0120609
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imt-atlantique.fr;
+        s=50EA75E8-DE22-11E6-A6DE-0662BA474D24; t=1669045665;
+        bh=Tqs1+cs0AOwEZhOXLbiiLyDvETkiOUKalj5NKyrAEGg=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=hw5xN82AUfjl2uPmGT8a4iJbDp3mSWokZ1iJk/N4vBq9fz6f+5lieHaYdOCw0VK8a
+         hWp/xMsOm2wa1xVDPn2US4KFdObhLC6zMbx+IkZFXbfhSPMji0xnckzR/CtmOrgZM3
+         sbpoZ0c49nCx0i3EkKDHtkmpv8IxPhbk99RORxuY=
+X-Virus-Scanned: amavisd-new at zproxy130.enst.fr
+Received: from zproxy130.enst.fr ([IPv6:::1])
+        by localhost (zproxy130.enst.fr [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id oxF_0DmFg-UQ; Mon, 21 Nov 2022 16:47:45 +0100 (CET)
+Received: from localhost (unknown [10.29.225.100])
+        by zproxy130.enst.fr (Postfix) with ESMTPSA id A5A2012063B;
+        Mon, 21 Nov 2022 16:47:45 +0100 (CET)
+From:   =?UTF-8?q?Santiago=20Ruano=20Rinc=C3=B3n?= 
+        <santiago.ruano-rincon@imt-atlantique.fr>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org,
+        =?UTF-8?q?Santiago=20Ruano=20Rinc=C3=B3n?= 
+        <santiago.ruano-rincon@imt-atlantique.fr>
+Subject: [PATCH] net/cdc_ncm: Fix multicast RX support for CDC NCM devices with ZLP
+Date:   Mon, 21 Nov 2022 16:45:13 +0100
+Message-Id: <20221121154513.51957-1-santiago.ruano-rincon@imt-atlantique.fr>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <Y3uXBr2U4pWGU3mW@kroah.com>
+References: <Y3uXBr2U4pWGU3mW@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] usb: gadget: function: use after free in printer_close()
-To:     Dan Carpenter <error27@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Albert Briscoe <albertsbriscoe@gmail.com>,
-        Zqiang <qiang.zhang@windriver.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <Y3uOxcvowFq75Tzv@kili>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <Y3uOxcvowFq75Tzv@kili>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
+ZLP for DisplayLink ethernet devices was enabled in 6.0:
+266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet devices")=
+.
+The related driver_info should be the "same as cdc_ncm_info, but with
+FLAG_SEND_ZLP". However, set_rx_mode that enables handling multicast
+traffic was missing in the new cdc_ncm_zlp_info.
 
-I'm fine with either symmetrically removing the DBG() from "printer_open()"
-or with this version of the patch.
+usbnet_cdc_update_filter rx mode was introduced in linux 5.9 with:
+e10dcb1b6ba7 ("net: cdc_ncm: hook into set_rx_mode to admit multicast
+traffic")
 
-It seems to me that this version better fits "fixing UAF", though.
-Whether the driver is too verbose is another matter, and if it is,
-it deserves its own patch because DBG() invocations are sprinkled
-here and there.
+Without this hook, multicast, and then IPv6 SLAAC, is broken.
 
-W dniu 21.11.2022 o 15:44, Dan Carpenter pisze:
-> The printer_dev_free() function frees "dev" but then it is dereferenced
-> by the debug code on the next line.  Flip the order to avoid the use after
-> free.
-> 
-> Fixes: e8d5f92b8d30 ("usb: gadget: function: printer: fix use-after-free in __lock_acquire")
-> Signed-off-by: Dan Carpenter <error27@gmail.com>
+Fixes: 266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet de=
+vices")
+Signed-off-by: Santiago Ruano Rinc=C3=B3n <santiago.ruano-rincon@imt-atla=
+ntique.fr>
+---
+ drivers/net/usb/cdc_ncm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Acked-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-
-
-> ---
-> v2: In the v1, I just deleted the printk but Andrzej thought it was
-> worth preserving.
-> 
->   drivers/usb/gadget/function/f_printer.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-> index a881c69b1f2b..01e842e1ba2f 100644
-> --- a/drivers/usb/gadget/function/f_printer.c
-> +++ b/drivers/usb/gadget/function/f_printer.c
-> @@ -381,8 +381,8 @@ printer_close(struct inode *inode, struct file *fd)
->   	dev->printer_status &= ~PRINTER_SELECTED;
->   	spin_unlock_irqrestore(&dev->lock, flags);
->   
-> -	kref_put(&dev->kref, printer_dev_free);
->   	DBG(dev, "printer_close\n");
-> +	kref_put(&dev->kref, printer_dev_free);
->   
->   	return 0;
->   }
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 8d5cbda33f66..0897fdb6254b 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -1915,6 +1915,7 @@ static const struct driver_info cdc_ncm_zlp_info =3D=
+ {
+ 	.status =3D cdc_ncm_status,
+ 	.rx_fixup =3D cdc_ncm_rx_fixup,
+ 	.tx_fixup =3D cdc_ncm_tx_fixup,
++	.set_rx_mode =3D usbnet_cdc_update_filter,
+ };
+=20
+ /* Same as cdc_ncm_info, but with FLAG_WWAN */
+--=20
+2.38.1
 
