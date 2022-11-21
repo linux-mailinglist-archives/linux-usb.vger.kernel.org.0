@@ -2,104 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E246319B5
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 07:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8820B6319BC
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 07:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiKUG0C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 01:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        id S229705AbiKUGdU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 01:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiKUG0B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 01:26:01 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC0926571
-        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 22:26:00 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NFy3K0YnvzqSYl;
-        Mon, 21 Nov 2022 14:22:05 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 14:25:58 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
- 2022 14:25:57 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <jun.li@nxp.com>, <gregkh@linuxfoundation.org>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH v3] usb: typec: tcpci: fix of node refcount leak in tcpci_register_port()
-Date:   Mon, 21 Nov 2022 14:24:16 +0800
-Message-ID: <20221121062416.1026192-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229489AbiKUGdS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 01:33:18 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C827930F73
+        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 22:33:14 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso9908716pjt.0
+        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 22:33:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=theori.io; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rldQbVzv5ebudT94dGZh2jVY/qkQgmXwBXggpzupv6g=;
+        b=FUXLpBXC985sjZvdr2/n7L886E22UrSSCgeTmKY/YRtMKh3+UNmA3BhhLhBQI+34Mn
+         IJDgN5xFyBg/ALxwNwmIWJ4YZG6zrE/QOk1p2ERomztODtaBfJnQkpDTiDFj+3sdIhVc
+         ZvHBg7n7Plw7Lml7AVVCzOAvHaeWN1hag9A2U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rldQbVzv5ebudT94dGZh2jVY/qkQgmXwBXggpzupv6g=;
+        b=TpqWlPdJagOPHPbvHgdC1MsliWDGaAM7AhB93/kSs/0WFXahI/8hBwfy7AhzPRlY3w
+         Ojah4r/njA5OgYvrjhXzSdJgTdJi7yLj0yU8arMOAYuJs3habw2TWP8RBW1mpesmaTKo
+         gA3Zwgt7HcoHXEgA72G+b+Q3TixGokTRMAMm4nPaUZwIwC3R8HAQmBiJe8s41gIpiC0o
+         BBU+jDaY99VmXar3OR8uas4E+IyZuSob4gzajKhFIXPDeRibYMgty30shkoeU0awWhYO
+         sN7j9+a5quqg7mj7W+mRuvKU8nNWBYOYdzX10paMwOey0CJbgioaxP9qNj/rRyKIEc7b
+         OsJw==
+X-Gm-Message-State: ANoB5pnpXTzh0Gkq4v4ScC+w48ndAwEmGKveUrCTyiuBvlfeyo1ggW9X
+        6DxPHc72n4KsPqX0K6MB18FfBQ==
+X-Google-Smtp-Source: AA0mqf66VffZbM1/0KybknJnOwPt5S0b1hE4ZfrN6xpKk4e8OzGYFNFZuL8Zo7e57awlk6ixqCTZ2A==
+X-Received: by 2002:a17:90a:4886:b0:211:42a9:d132 with SMTP id b6-20020a17090a488600b0021142a9d132mr19262919pjh.8.1669012394383;
+        Sun, 20 Nov 2022 22:33:14 -0800 (PST)
+Received: from ubuntu ([121.133.63.188])
+        by smtp.gmail.com with ESMTPSA id 143-20020a621495000000b00565b259a52asm7854502pfu.1.2022.11.20.22.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 22:33:13 -0800 (PST)
+Date:   Sun, 20 Nov 2022 22:33:08 -0800
+From:   Hyunwoo Kim <v4bel@theori.io>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        tiwai@suse.de, v4bel@theori.io
+Subject: [PATCH] media: dvb-core: Fix use-after-free due to race condition
+ occurring in dvb_ca_en50221
+Message-ID: <20221121063308.GA33821@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I got the following report while doing device(mt6370-tcpc) load
-test with CONFIG_OF_UNITTEST and CONFIG_OF_DYNAMIC enabled:
+If the device node of dvb_ca_en50221 is open() and the
+device is disconnected, a UAF may occur when calling
+close() on the device node.
 
-  OF: ERROR: memory leak, expected refcount 1 instead of 2,
-  of_node_get()/of_node_put() unbalanced - destroy cset entry:
-  attach overlay node /i2c/pmic@34/tcpc/connector
+The root cause is that wake_up() and wait_event() for
+dvbdev->wait_queue are not implemented.
 
-The 'fwnode' set in tcpci_parse_config() which is called
-in tcpci_register_port(), its node refcount is increased
-in device_get_named_child_node(). It needs be put while
-exiting, so call fwnode_handle_put() in the error path of
-tcpci_register_port() and in tcpci_unregister_port() to
-avoid leak.
+So implement wait_event() function in dvb_ca_en50221_release()
+and add 'remove_mutex' which prevents race condition
+for 'ca->exit'.
 
-Fixes: 5e85a04c8c0d ("usb: typec: add fwnode to tcpc")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Hyunwoo Kim <v4bel@theori.io>
 ---
-v2 -> v3:
-  Move fwnode_handle_put() into tcpci_unregister_port().
+ drivers/media/dvb-core/dvb_ca_en50221.c | 36 ++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
 
-v1 -> v2:
-  Add description to how is the report generated and
-  the review tag from Guenter.
----
- drivers/usb/typec/tcpm/tcpci.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index b2bfcebe218f..72f8d1e87600 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -794,8 +794,10 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- 		return ERR_PTR(err);
+diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
+index 15a08d8c69ef..60133a315701 100644
+--- a/drivers/media/dvb-core/dvb_ca_en50221.c
++++ b/drivers/media/dvb-core/dvb_ca_en50221.c
+@@ -151,6 +151,12 @@ struct dvb_ca_private {
  
- 	tcpci->port = tcpm_register_port(tcpci->dev, &tcpci->tcpc);
--	if (IS_ERR(tcpci->port))
-+	if (IS_ERR(tcpci->port)) {
-+		fwnode_handle_put(tcpci->tcpc.fwnode);
- 		return ERR_CAST(tcpci->port);
+ 	/* mutex serializing ioctls */
+ 	struct mutex ioctl_mutex;
++
++	/* A mutex used when a device is disconnected */
++	struct mutex remove_mutex;
++
++	/* Whether the device is disconnected */
++	int exit;
+ };
+ 
+ static void dvb_ca_private_free(struct dvb_ca_private *ca)
+@@ -1709,12 +1715,22 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
+ 
+ 	dprintk("%s\n", __func__);
+ 
+-	if (!try_module_get(ca->pub->owner))
++	mutex_lock(&ca->remove_mutex);
++
++	if (ca->exit) {
++		mutex_unlock(&ca->remove_mutex);
++		return -ENODEV;
++	}
++
++	if (!try_module_get(ca->pub->owner)) {
++		mutex_unlock(&ca->remove_mutex);
+ 		return -EIO;
 +	}
  
- 	return tcpci;
+ 	err = dvb_generic_open(inode, file);
+ 	if (err < 0) {
+ 		module_put(ca->pub->owner);
++		mutex_unlock(&ca->remove_mutex);
+ 		return err;
+ 	}
+ 
+@@ -1739,6 +1755,7 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
+ 
+ 	dvb_ca_private_get(ca);
+ 
++	mutex_unlock(&ca->remove_mutex);
+ 	return 0;
  }
-@@ -804,6 +806,7 @@ EXPORT_SYMBOL_GPL(tcpci_register_port);
- void tcpci_unregister_port(struct tcpci *tcpci)
- {
- 	tcpm_unregister_port(tcpci->port);
-+	fwnode_handle_put(tcpci->tcpc.fwnode);
+ 
+@@ -1758,6 +1775,8 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
+ 
+ 	dprintk("%s\n", __func__);
+ 
++	mutex_lock(&ca->remove_mutex);
++
+ 	/* mark the CA device as closed */
+ 	ca->open = 0;
+ 	dvb_ca_en50221_thread_update_delay(ca);
+@@ -1768,6 +1787,12 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
+ 
+ 	dvb_ca_private_put(ca);
+ 
++	if (dvbdev->users == 1 && ca->exit == 1) {
++		mutex_unlock(&ca->remove_mutex);
++		wake_up(&dvbdev->wait_queue);
++	} else
++		mutex_unlock(&ca->remove_mutex);
++
+ 	return err;
  }
- EXPORT_SYMBOL_GPL(tcpci_unregister_port);
+ 
+@@ -1891,6 +1916,7 @@ int dvb_ca_en50221_init(struct dvb_adapter *dvb_adapter,
+ 	}
+ 
+ 	mutex_init(&ca->ioctl_mutex);
++	mutex_init(&ca->remove_mutex);
+ 
+ 	if (signal_pending(current)) {
+ 		ret = -EINTR;
+@@ -1933,6 +1959,14 @@ void dvb_ca_en50221_release(struct dvb_ca_en50221 *pubca)
+ 
+ 	dprintk("%s\n", __func__);
+ 
++	mutex_lock(&ca->remove_mutex);
++	ca->exit = 1;
++	mutex_unlock(&ca->remove_mutex);
++
++	if (ca->dvbdev->users < 1)
++		wait_event(ca->dvbdev->wait_queue,
++				ca->dvbdev->users == 1);
++
+ 	/* shutdown the thread if there was one */
+ 	kthread_stop(ca->thread);
  
 -- 
 2.25.1
 
+
+Dear,
+
+A UAF can occur in a flow like the one below:
+```
+                cpu0                                                cpu1
+                                                             1. dvb_usbv2_probe()
+                                                                d->priv = kzalloc(d->props->size_of_priv, GFP_KERNEL);
+                                                                ...
+                                                                dvb_usbv2_init()
+                                                                anysee_init()
+                                                                anysee_ci_init()
+                                                                dvb_ca_en50221_init()
+                                                                ca->pub = pubca;    // pubca : &state->ci, state : d->priv
+       2. open()
+          dvb_device_open()
+          dvb_ca_en50221_io_open()
+                                                             3. dvb_usbv2_disconnect()
+                                                                kfree(d->priv);
+       4. close()
+          dvb_ca_en50221_io_release()
+          module_put(ca->pub->owner);    // UAF
+```
+
+
+Regards,
+Hyunwoo Kim
