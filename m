@@ -2,125 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCD6632CDB
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 20:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DDE632DB4
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 21:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiKUTSn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 14:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S231828AbiKUUNx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 15:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiKUTSX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 14:18:23 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0ADF9DA4E7
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 11:17:58 -0800 (PST)
-Received: (qmail 128144 invoked by uid 1000); 21 Nov 2022 14:17:56 -0500
-Date:   Mon, 21 Nov 2022 14:17:56 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     John Keeping <john@metanate.com>
-Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-        balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3vO5OwUzsn08Avz@rowland.harvard.edu>
-References: <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
- <Y3dIXUmjTfJLpPe7@google.com>
- <Y3er7nenAhbmBdBy@rowland.harvard.edu>
- <Y3e0zAa7+HiNVrKN@donbot>
- <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
- <Y3piS43drwSoipD9@donbot>
- <Y3qSImZkZwCG1kA1@rowland.harvard.edu>
- <Y3txTcASyvTWqFlc@donbot>
- <Y3uk2kwYsZ3j67+l@rowland.harvard.edu>
- <Y3vJfwtH3fniy5ep@donbot>
+        with ESMTP id S231289AbiKUUNv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 15:13:51 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92D14FF8C
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 12:13:50 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id c203so12325675pfc.11
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 12:13:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rq8a2hBX27gcIVHpejpVIZL+hRyBNLYkb+s20L9WV6w=;
+        b=SqLgfLqLWXgmjXhNGZIU6mAMHlKkjWNnbCRUg8OpME4ixk3GEFZq7BLXUUt/sx7273
+         Nyn6a1zF1thpfbom4ap6EMprRGQurZhAatGX3dXHNO7toAEL3nX138lfDoG5XWZeQdSb
+         HvfdpU8SAyxIFn8FvQ/ZGAFJM1tWhTDOEZ2SA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rq8a2hBX27gcIVHpejpVIZL+hRyBNLYkb+s20L9WV6w=;
+        b=l+NYo1qnXl242OnD9ES4lVCoTJ39jJCd9kRUGQnfzoKk5wqJLG7vxmHPVbjVz3Qfun
+         ER5oXSWzmpKcuOT0iIjou9hf0GeVXQ/SVRg/3lUFVQR5Mi0zMtMdDKTTq4dkQGttH+3C
+         P2c7Eg43h6D5HFpFI2JtrL25NY/++bNjneDXLZUxmpyj06pXXqzaiExEl02gi5detPIu
+         qT+Mbvsktvjotb6p6dOSSjWqSRAWeccBv3h7r8BAE5inKzJvQxIfkF9jlTZkMVcSIbFo
+         Z7dQ2n+CIm/wyERc9X2+3UnzEqBMV8ApZsQRlJiyKFqrJczzgjttDd+uydGZf4B4wDDG
+         /E4w==
+X-Gm-Message-State: ANoB5pkUK8CpF/IA04vSSH/wd6yGxLzq2yqtcXFF+OObbnbFAFmqIF9y
+        UBxQxGCL/4QgOOkyOCgktz9mKQ==
+X-Google-Smtp-Source: AA0mqf6bUyCGH1kkSoR2meAE+laA0AOnlYeMweAaTvvR9s2UP4evcKNKPPO3M1hYW+8vc2rBOaC90A==
+X-Received: by 2002:aa7:9057:0:b0:573:1d31:2b78 with SMTP id n23-20020aa79057000000b005731d312b78mr2662956pfo.61.1669061630232;
+        Mon, 21 Nov 2022 12:13:50 -0800 (PST)
+Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id h8-20020a170902f70800b001822121c45asm10178507plo.28.2022.11.21.12.13.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 12:13:49 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [PATCH 0/2] platform/chrome: cros_ec_typec: Link PD object to partner
+Date:   Mon, 21 Nov 2022 20:13:34 +0000
+Message-Id: <20221121201337.2772216-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3vJfwtH3fniy5ep@donbot>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 06:54:55PM +0000, John Keeping wrote:
-> It turns out there's already a device being created here, just not
-> associated with the structure.  Your suggestions around
-> cdev_device_add() made me spot what's going on with that so the actual
-> fix is to pull its lifetime up to match struct f_hidg.
+This is a short series to link a registered USB PD object to its associated
+partner device. This is helpful for userspace services (the ChromeOS Type-C
+daemon, for example), to identify which Type-C peripheral a PD object belongs to,
+when a uevent for the PD object arrives.
 
-It's not obvious from the patch what device was already being created, 
-but never mind...
+The first patch adds a helper to the Type-C class code to access the device struct
+for a partner. The second patch uses that helper to set the parent for the USB PD object
+in the port driver code.
 
-> -- >8 --
-> Subject: [PATCH] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-> 
-> The embedded struct cdev does not have its lifetime correctly tied to
-> the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
-> is held open while the gadget is deleted.
-> 
-> This can readily be replicated with libusbgx's example programs (for
-> conciseness - operating directly via configfs is equivalent):
-> 
-> 	gadget-hid
-> 	exec 3<> /dev/hidg0
-> 	gadget-vid-pid-remove
-> 	exec 3<&-
-> 
-> Pull the existing device up in to struct f_hidg and make use of the
-> cdev_device_{add,del}() helpers.  This changes the lifetime of the
-> device object to match struct f_hidg, but note that it is still added
-> and deleted at the same time.
-> 
-> [Also fix refcount leak on an error path.]
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  drivers/usb/gadget/function/f_hid.c | 50 ++++++++++++++++-------------
->  1 file changed, 28 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> index ca0a7d9eaa34..0b94668a3812 100644
-> --- a/drivers/usb/gadget/function/f_hid.c
-> +++ b/drivers/usb/gadget/function/f_hid.c
+There was an earlier patch[1] to solve this issue, but it's been jettisoned (on advice from
+GregKH) in favor of the current approach.
 
-> @@ -999,21 +1005,12 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
->  
->  	/* create char device */
->  	cdev_init(&hidg->cdev, &f_hidg_fops);
-> -	dev = MKDEV(major, hidg->minor);
-> -	status = cdev_add(&hidg->cdev, dev, 1);
-> +	cdev_set_parent(&hidg->cdev, &hidg->dev.kobj);
+[1] https://lore.kernel.org/linux-usb/Y3vNZEuNI3CWzZ0L@chromium.org/T/#m7521020f64d878313d7dd79903ec0e9421aa8737
 
-This line isn't needed; cdev_device_add() does it for you because 
-hidg->dev.devt has been set.
+Series submission suggestions (if the approach is OK):
+- Patch 1 goes throug the USB tree and Patch 2 goes in the next release cycle
+  through the chrome-platform tree.
+- Patch 1 and 2 both go through the USB tree.
 
-> +	status = cdev_device_add(&hidg->cdev, &hidg->dev);
->  	if (status)
->  		goto fail_free_descs;
 
-> @@ -1277,17 +1272,28 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
->  	mutex_lock(&opts->lock);
->  	++opts->refcnt;
->  
-> -	hidg->minor = opts->minor;
-> +	device_initialize(&hidg->dev);
-> +	hidg->dev.release = hidg_release;
-> +	hidg->dev.class = hidg_class;
-> +	hidg->dev.devt = MKDEV(major, opts->minor);
-> +	ret = dev_set_name(&hidg->dev, "hidg%d", opts->minor);
-> +	if (ret) {
-> +		--opts->refcnt;
-> +		mutex_unlock(&opts->lock);
-> +		return ERR_PTR(ret);
-> +	}
-> +
+Prashant Malani (2):
+  usb: typec: Add helper to get partner device struct
+  platform/chrome: cros_ec_typec: Set parent of partner PD object
 
-Otherwise this looks okay (although I don't know any of the details of 
-how fhidg works, so you shouldn't take my word for it).
+ drivers/platform/chrome/cros_ec_typec.c |  2 +-
+ drivers/usb/typec/class.c               | 13 +++++++++++++
+ include/linux/usb/typec.h               |  2 ++
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
-Alan Stern
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
