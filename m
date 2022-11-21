@@ -2,172 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105D463257E
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 15:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7865B632616
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 15:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiKUOVZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 09:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S231185AbiKUOhR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 09:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiKUOVX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 09:21:23 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832251110
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 06:21:22 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id x5so16015767wrt.7
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 06:21:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=S7hedYyJck7S40GQNVuxUMsekgFy29NM0N0jYTBt/lM=;
-        b=zVbmQbnSPh5H16h9TA+WCKAe67FLRAfwB9SbjuJQLmRhMZaY40M8NXjD+ynDdOD8uk
-         V5PW8gdBQ8Q1hd9uS4z93YsdifIGHkCi0omA1OXvJVXWubhplJ/fLlAbmBYuxYPvO8pz
-         Ngm8bcTs6xSz0J6d/Z5xF/EV+aorG92Di1O/s8NZo0OdtfHVN3CIrFODdxjLQybQjPr7
-         hRiTamLmvlurx6D9VCjOQT5gQK90widvYMt19a+54pAn++DIFAF+wLysL3nx62VeRXO+
-         Nx1fAT0J1ThVr2OuJfetqWr308CkfQH9lJVQefPLbgWAA1QS6JMhHfMGk6tglZ1YVR/2
-         wapg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S7hedYyJck7S40GQNVuxUMsekgFy29NM0N0jYTBt/lM=;
-        b=j5coyW177nqhnFMz87g1Oel+ac949oWosm1JnChRs3+sP2yvZWCyORPfOkkiPiazhE
-         40VWqekqwKAVamFUo6eQ3rDTxFdu1QIo8UjnLQOnep4FsccPlOOoh2lD0Wuf0jjJ8oFG
-         +9GZGoBYMq0+XJlI8DItp8VkjWf2qMyW4gqYu7Yrmli4f+SDIMp7Qlz84zTwBteZ1gMM
-         UOya9RyA/vI9d8FQkKJVF70d0dSQD0tlx+LY91FqQdHbnem1iaT1M+jLFmsM7622isDF
-         c5OEIxo7e9B73DjDFdV9w36cZAYbS/QBGa9jkcJ7PxR00MvJnXUDYUxbpMHEUlv6H3qY
-         0i+A==
-X-Gm-Message-State: ANoB5pm018Zxi6x9csf6s8ePOmxXhr1P8o4U1QAh5z9obq9Knc931pUr
-        zliiMSab7f5QNOH0UufYtDR6Hw==
-X-Google-Smtp-Source: AA0mqf7HNcjZmmNjuyl+rVD7pAZOe6rCi3/Rl+yaLwB8vV0U4AYPVEHQAjEy9ewuMpTgoErqo0YOCg==
-X-Received: by 2002:a5d:538b:0:b0:241:c3c2:24cf with SMTP id d11-20020a5d538b000000b00241c3c224cfmr2708312wrv.587.1669040481041;
-        Mon, 21 Nov 2022 06:21:21 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id c20-20020a7bc854000000b003b476cabf1csm13880142wml.26.2022.11.21.06.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 06:21:19 -0800 (PST)
-Date:   Mon, 21 Nov 2022 16:21:18 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S231178AbiKUOgu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 09:36:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20860A8C0E
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 06:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669041303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=181ZHweS4wHRSdLySvK3fpfT7WMJLPwn/rNHBgW8rAk=;
+        b=FRBRYMuD6hZhCYCxVRwZRgJ8ck3pHEBHmbmFxJ0T19hA5C3adeOKBQLUVS8O/+8axWjap6
+        vGGrN6UfeJSag0OV+Csxdo/4B1dXSsFFDK4GH4h++n0e7SUJ2bpSok3ZujHeHyKziqtkCA
+        vLnTMwEOuAgklcJM8Xlm+welG63feW8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-220-cKpJPG72PVO5ijDDtOCqbA-1; Mon, 21 Nov 2022 09:34:58 -0500
+X-MC-Unique: cKpJPG72PVO5ijDDtOCqbA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1521B811E7A;
+        Mon, 21 Nov 2022 14:34:56 +0000 (UTC)
+Received: from [172.16.176.1] (unknown [10.22.50.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 61D8E492B06;
+        Mon, 21 Nov 2022 14:34:47 +0000 (UTC)
+From:   Benjamin Coddington <bcodding@redhat.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        =?utf-8?q?Christoph_B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] usb: Add USB repeater generic framework
-Message-ID: <Y3uJXlz0EOSyBzts@linaro.org>
-References: <20221116123019.2753230-1-abel.vesa@linaro.org>
- <20221116123019.2753230-2-abel.vesa@linaro.org>
- <71ced60f-d43b-003a-843d-c2a8364dbf79@collabora.com>
+        Marc Dionne <marc.dionne@auristor.com>,
+        Steve French <sfrench@samba.org>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
+        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
+Date:   Mon, 21 Nov 2022 09:34:43 -0500
+Message-ID: <51B5418D-34FB-4E87-B87A-6C3FCDF8B21C@redhat.com>
+In-Reply-To: <382872.1669039019@warthog.procyon.org.uk>
+References: <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
+ <cover.1669036433.git.bcodding@redhat.com>
+ <382872.1669039019@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <71ced60f-d43b-003a-843d-c2a8364dbf79@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-11-18 09:59:43, Andrzej Pietrasiewicz wrote:
-> Hi Abel,
-> 
-> W dniu 16.11.2022 o 13:30, Abel Vesa pisze:
-> > With more SoCs moving towards eUSB2,
-> 
-> Can you name a few?
+On 21 Nov 2022, at 8:56, David Howells wrote:
 
-Right now, for SoCs, I can only name the SM8550 from Qualcomm. But I
-would think there will be more from now on, not just from Qualcomm.
+> Benjamin Coddington <bcodding@redhat.com> wrote:
+>
+>> Since moving to memalloc_nofs_save/restore, SUNRPC has stopped setting the
+>> GFP_NOIO flag on sk_allocation which the networking system uses to decide
+>> when it is safe to use current->task_frag.
+>
+> Um, what's task_frag?
 
-But I found a couple of more repeaters already existent. Like TUSB2E11
-or TUSB2E22 from TI or PTN3222 from NXP. I'm not sure if they are used
-already alongside any specific SoC though (yet).
+Its a per-task page_frag used to coalesce small writes for networking -- see:
 
-Anyway, I can rephrase that.
+5640f7685831 net: use a per task frag allocator
 
-> 
-> such platforms will have to use
-> > a USB 2.0 compliance repeater. This repeater HW-wise usually deals with
-> > level shifting, but depending on the implementation it can do much more.
-> > So add a ganeric USB framework that would allow either a generic PHY or
-> > some USB host controller to control and get a repeater from a devicetree
-> > phandle. This framework will further be used by platform specific
-> > drivers to register the repeater and implement platform specific ops.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >   drivers/usb/Kconfig             |   2 +
-> >   drivers/usb/Makefile            |   2 +
-> >   drivers/usb/repeater/Kconfig    |   9 ++
-> >   drivers/usb/repeater/Makefile   |   6 +
-> >   drivers/usb/repeater/repeater.c | 198 ++++++++++++++++++++++++++++++++
-> >   include/linux/usb/repeater.h    |  78 +++++++++++++
-> >   6 files changed, 295 insertions(+)
-> >   create mode 100644 drivers/usb/repeater/Kconfig
-> >   create mode 100644 drivers/usb/repeater/Makefile
-> >   create mode 100644 drivers/usb/repeater/repeater.c
-> >   create mode 100644 include/linux/usb/repeater.h
-> > 
-> 
-> <snip>
-> 
-> > diff --git a/include/linux/usb/repeater.h b/include/linux/usb/repeater.h
-> > new file mode 100644
-> > index 000000000000..e68e0936f1e5
-> > --- /dev/null
-> > +++ b/include/linux/usb/repeater.h
-> > @@ -0,0 +1,78 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * USB Repeater defines
-> > + */
-> > +
-> > +#ifndef __LINUX_USB_REPEATER_H
-> > +#define __LINUX_USB_REPEATER_H
-> > +
-> > +struct usb_repeater {
-> > +	struct device		*dev;
-> > +	const char		*label;
-> > +	unsigned int		 flags;
-> > +
-> > +	struct list_head	head;
-> 
-> This member serves the purpose of a list _entry_, no?
-> The _head_ is static LIST_HEAD(usb_repeater_list);
-> Maybe call it "entry"?
-
-Sure thing. Will do.
-
-> 
-> > +	int	(*reset)(struct usb_repeater *rptr, bool assert);
-> > +	int	(*init)(struct usb_repeater *rptr);
-> > +	int	(*power_on)(struct usb_repeater *rptr);
-> > +	int	(*power_off)(struct usb_repeater *rptr);
-> 
-> Would you document these ops somehow? Potential driver writers need to
-> understand when they are called and what they are supposed to do.
-> In particular, how do these relate to what's in "Embedded USB2 (eUSB2)
-> Physical Layer Supplement to the USB Revision 2.0 Specification"?
-
-Yes. Will document them appropriately.
-
-> 
-> Regards,
-> 
-> Andrzej
-
-Thanks,
-Abel
+Ben
 
