@@ -2,79 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509A063192B
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 05:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2416319B1
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 07:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiKUEW6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Nov 2022 23:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S229707AbiKUGVQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 01:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKUEWz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Nov 2022 23:22:55 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF5A11C07
-        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 20:22:53 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL3gKb2020754;
-        Mon, 21 Nov 2022 04:22:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Qg+AfcenaEkUw5C4sEMhCmpAeQ//tg3g3ank+6xCruo=;
- b=B5faLXsvPGQQQfFPfiPD0qUySfsKk1MdYvpF4USTcej8F4ke5Il+Fmb7ParW0lrcDw6O
- zdq3WSefx3BDTYBqmIxI8J2/KntIfNMAvSDd+nk0yxej0bWMY+/Lk+aNpwwPM2U4Qt6e
- 40sQUGNcxODLrCsh8/Lf7o6aTKphpQAeOiaqeluGFoA+JwtxZzefUqYonB9UAIldqwo0
- p7ddV7CFC8wnBSPvHx6FA/Jsgsax8gOdJNIKbqdqd3zFgNGK2Bor3BbQOr8Fb8NNuYPk
- 77lCJCQFbGIWevZJCdFFsFHMtyV81x3Bl547LuZbQDKybNxg2rVqRQTtasBzl5lPhUZj 8g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrfbucw7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 04:22:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AL4MmNw028527
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 04:22:48 GMT
-Received: from [10.206.25.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 20 Nov
- 2022 20:22:46 -0800
-Message-ID: <3eb52cdb-fc32-8b06-97a5-d5196d4794da@quicinc.com>
-Date:   Mon, 21 Nov 2022 09:52:43 +0530
+        with ESMTP id S229558AbiKUGVP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 01:21:15 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4B329C9B
+        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 22:21:14 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id b11so9568467pjp.2
+        for <linux-usb@vger.kernel.org>; Sun, 20 Nov 2022 22:21:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L7+eqek/E/WnqdTO067PuTCEyXCliseIp9lN/F5T2O4=;
+        b=ZKk0StmpbeGK016qCI8yukcq0kjSwsVRgEDhsd3qv/+fSh5pCk+JobvB0b3YXjtCVl
+         awhHREbDL+19v+bGncU+okf+vipgkMWoxkFaMAH8xgRpXQ2XDk3fo0AAFZI9WEsOS6ZO
+         rOIMdMWmO7sYarTeLF7+IhqjMe3EMj4H4bzuA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L7+eqek/E/WnqdTO067PuTCEyXCliseIp9lN/F5T2O4=;
+        b=Np/8Ft3pg7provFcLZni/flOaFUnxd1vxhV10ILIE0tFWqMTvuB6mnITCGOM0ipGa9
+         Pnnp9Q66GfZMbHG23DtOFCxss6KO2twJvAQpzPr6aV6+gVYb2VM04YEw6T6GTCSa6+nI
+         kbDgnbzkK3+Zxis9pm1J4p+v60DNlNE/KqBckkeT0PgXUM6Rgw+7IU3NpYZj6UTqhejm
+         Vb8wtBeZnBxx2utFNXf6LFuvtQbMp1+iYNOcAJR56L8SJSH7pWDbNv3b7NpYZafK13gL
+         yiaoV2MrnYLXeyj9Ms8ukSebMAIPLQIqHHTOoDWQDcmbuuo7nGxCufYcrc9F4YsM5+9g
+         41DA==
+X-Gm-Message-State: ANoB5pnAbX9DHHz04LX8Rz6F1PypfrKLJ0q1CPaOiYy6iGIUwLujCeRa
+        7yMzA5oBZ54fxsHwstflowblGoFzIzGkBQ==
+X-Google-Smtp-Source: AA0mqf41wGsKF+KvurHLgTWrzpNLuSkLYdFgJLDTYAoZT6VdvaoReQISDx5+eq3DZYIJB+B09WRmDA==
+X-Received: by 2002:a17:90a:7004:b0:218:8757:8f2b with SMTP id f4-20020a17090a700400b0021887578f2bmr13906217pjk.221.1669011673897;
+        Sun, 20 Nov 2022 22:21:13 -0800 (PST)
+Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id p188-20020a625bc5000000b0056e32a2b88esm7672980pfb.219.2022.11.20.22.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 22:21:13 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: typec: pd: Add symlink to linked device
+Date:   Mon, 21 Nov 2022 06:20:39 +0000
+Message-Id: <20221121062106.2569297-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [v2] usb: gadget: f_fs: Prevent race between functionfs_unbind &
- ffs_ep0_queue_wait
-Content-Language: en-US
-To:     John Keeping <john@metanate.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        "Pratham Pratap" <quic_ppratap@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-References: <20221116111955.21057-1-quic_ugoswami@quicinc.com>
- <Y3ewqxYSbb2W1Hfq@donbot> <00b2c24d-a663-f16c-deb1-9beb40d424a2@quicinc.com>
- <Y3poWpdn05ZEuaF2@donbot>
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <Y3poWpdn05ZEuaF2@donbot>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5LwF4GbY57-25ZBQG3eRQ9Ya6Fp6YKBU
-X-Proofpoint-ORIG-GUID: 5LwF4GbY57-25ZBQG3eRQ9Ya6Fp6YKBU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_03,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
- phishscore=0 priorityscore=1501 clxscore=1015 impostorscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210032
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,84 +66,83 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi John
+There exists a symlink from a device to its USB Power Delivery object,
+but not the other way around. Add a symlink from the USB PD object to
+the device which it's associated with, and call it "device".
 
-On 11/20/22 11:18 PM, John Keeping wrote:
-> On Sun, Nov 20, 2022 at 12:23:50PM +0530, Udipto Goswami wrote:
->> On 11/18/22 9:49 PM, John Keeping wrote:
->>> On Wed, Nov 16, 2022 at 04:49:55PM +0530, Udipto Goswami wrote:
->>>> While performing fast composition switch, there is a possibility that the
->>>> process of ffs_ep0_write/ffs_ep0_read get into a race condition
->>>> due to ep0req being freed up from functionfs_unbind.
->>>>
->>>> Consider the scenario that the ffs_ep0_write calls the ffs_ep0_queue_wait
->>>> by taking a lock &ffs->ev.waitq.lock. However, the functionfs_unbind isn't
->>>> bounded so it can go ahead and mark the ep0req to NULL, and since there
->>>> is no NULL check in ffs_ep0_queue_wait we will end up in use-after-free.
->>>>
->>>> Fix this by making a serialized execution between the two functions using
->>>> a mutex_lock(ffs->mutex). Also, dequeue the ep0req to ensure that no
->>>> other function can use it after the free operation.
->>>>
->>>> Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
->>>> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->>>> ---
->>>> v2: Replaces spinlock with mutex & added dequeue operation in unbind.
->>>>
->>>>    drivers/usb/gadget/function/f_fs.c | 7 +++++++
->>>>    1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
->>>> index 73dc10a77cde..1439449df39a 100644
->>>> --- a/drivers/usb/gadget/function/f_fs.c
->>>> +++ b/drivers/usb/gadget/function/f_fs.c
->>>> @@ -279,6 +279,9 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
->>>>    	struct usb_request *req = ffs->ep0req;
->>>>    	int ret;
->>>> +	if (!req)
->>>> +		return -EINVAL;
->>>> +
->>>>    	req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
->>>>    	spin_unlock_irq(&ffs->ev.waitq.lock);
->>>> @@ -1892,10 +1895,14 @@ static void functionfs_unbind(struct ffs_data *ffs)
->>>>    	ENTER();
->>>>    	if (!WARN_ON(!ffs->gadget)) {
->>>> +		mutex_lock(&ffs->mutex);
->>>> +		/* dequeue before freeing ep0req */
->>>> +		usb_ep_dequeue(ffs->gadget->ep0, ffs->ep0req);
->>>>    		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
->>>>    		ffs->ep0req = NULL;
->>>>    		ffs->gadget = NULL;
->>>>    		clear_bit(FFS_FL_BOUND, &ffs->flags);
->>>> +		mutex_unlock(&ffs->mutex);
->>>
->>> There's now a deadlock here if some other thread is waiting in
->>> __ffs_ep0_queue_wait() on ep0req_completion.
->>>
->>> You need to dequeue before taking the lock.
->> That's a control request right, will it be async?
->>
->> Anyway I see only 2 possible threads ep0_read/ep0_write who calls
->> ep0_queue_wait and waits for the completion of ep0req and both
->> ep0_read/write are prptected by the mutex lock so i guess execution won't
->> reach there right ?
->> Say functionfs_unbind ran first then ep0_read/write had to wait will the
->> functionfs_unbind is completed so ep_dequeue will ran, will get completed,
->> further free the request, mark in NULL. now ep0_read/write will have ep0req
->> as NULL so bail out.
->>
->> Is reverse then functionfs_unbind will wait will the ep0_read/write is
->> completed.
-> 
-> What guarantee is there that the transfer completes?
-> 
-> If there is such a guarantee, then the request will not be queued, so
-> why is usb_ep_dequeue() necessary?
+This is helpful to identify said device (a Type-C peripheral for
+example) during uevents, since during USB PD object
+creation/destruction, a uevent is generated for the PD object,
+but not the device linked to it.
 
-I Agree that we cannot say that for sure, but we see that 
-wait_for_completion in the ep0_queue_wait is also inside mutex which was 
-acquired in ep0_read/write right?
-I Though of maintaining the uniformity for the approaches.
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Benson Leung <bleung@chromium.org>
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+ .../ABI/testing/sysfs-class-usb_power_delivery       |  6 ++++++
+ drivers/usb/typec/pd.c                               | 12 ++++++++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-Thanks,
--Udipto
+diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+index ce2b1b563cb3..e7d19193875f 100644
+--- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
++++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+@@ -4,6 +4,12 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+ 		Directory for USB Power Delivery devices.
+ 
++What:		/sys/class/usb_power_delivery/.../device
++Date:		November 2022
++Contact:	Prashant Malani <pmalani@chromium.org>
++Description:
++		Symbolic link to the directory of the device to which the USB PD object is linked.
++
+ What:		/sys/class/usb_power_delivery/.../revision
+ Date:		May 2022
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+index dc72005d68db..ed073d922655 100644
+--- a/drivers/usb/typec/pd.c
++++ b/drivers/usb/typec/pd.c
+@@ -656,7 +656,8 @@ EXPORT_SYMBOL_GPL(usb_power_delivery_unregister);
+  * @dev: The device.
+  *
+  * This function can be used to create a symlink named "usb_power_delivery" for
+- * @dev that points to @pd.
++ * @dev that points to @pd. It also creates another symlink named "device" which
++ * points from @pd to @dev.
+  */
+ int usb_power_delivery_link_device(struct usb_power_delivery *pd, struct device *dev)
+ {
+@@ -669,6 +670,12 @@ int usb_power_delivery_link_device(struct usb_power_delivery *pd, struct device
+ 	if (ret)
+ 		return ret;
+ 
++	ret = sysfs_create_link(&pd->dev.kobj, &dev->kobj, "device");
++	if (ret) {
++		sysfs_remove_link(&dev->kobj, "usb_power_delivery");
++		return ret;
++	}
++
+ 	get_device(&pd->dev);
+ 	get_device(dev);
+ 
+@@ -681,13 +688,14 @@ EXPORT_SYMBOL_GPL(usb_power_delivery_link_device);
+  * @pd: The USB PD instance.
+  * @dev: The device.
+  *
+- * Remove the symlink that was previously created with pd_link_device().
++ * Remove the symlinks that were previously created with pd_link_device().
+  */
+ void usb_power_delivery_unlink_device(struct usb_power_delivery *pd, struct device *dev)
+ {
+ 	if (IS_ERR_OR_NULL(pd) || !dev)
+ 		return;
+ 
++	sysfs_remove_link(&pd->dev.kobj, "device");
+ 	sysfs_remove_link(&dev->kobj, "usb_power_delivery");
+ 	put_device(&pd->dev);
+ 	put_device(dev);
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
