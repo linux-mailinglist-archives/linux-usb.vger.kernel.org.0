@@ -2,45 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAE763271D
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 15:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 819356327C1
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 16:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiKUO5t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 09:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
+        id S232334AbiKUPVi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 10:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiKUO5H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 09:57:07 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E703EC560B
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 06:48:20 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NG9Cj07krzFqPg;
-        Mon, 21 Nov 2022 22:45:05 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 22:48:19 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
- 2022 22:48:18 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <chunfeng.yun@mediatek.com>,
-        <heikki.krogerus@linux.intel.com>
-CC:     <linux-usb@vger.kernel.org>, <yangyingliang@huawei.com>
-Subject: [PATCH v3] usb: roles: fix of node refcount leak in usb_role_switch_is_parent()
-Date:   Mon, 21 Nov 2022 22:46:20 +0800
-Message-ID: <20221121144620.4059019-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232305AbiKUPVQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 10:21:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D423418B2F;
+        Mon, 21 Nov 2022 07:19:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F16CB810BD;
+        Mon, 21 Nov 2022 15:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE4C9C433C1;
+        Mon, 21 Nov 2022 15:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669043978;
+        bh=eVspgM7NdzFFPBjzEyUawslGXT3iBvw7V1jq6j3k2e4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z1f2rKbs/QkoGO9uROiVipZDVD8s2OV2/kDoHYVzNtiz5wTzxNAw+62yTifpHyg29
+         EIndvzMV6dVtKuYtSSdGIH5N0ph4FxioVWNUlWkUP+szK5vC0tmIhCFOMIvKDZRwh8
+         Xv0Kc4wq6YWMGXN2Tefr47sUSR8SEOYeZs1liNjc=
+Date:   Mon, 21 Nov 2022 16:19:34 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Santiago Ruano =?iso-8859-1?Q?Rinc=F3n?= 
+        <santiago.ruano-rincon@imt-atlantique.fr>
+Cc:     Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] net/cdc_ncm: Fix multicast RX support for CDC NCM
+ devices with ZLP
+Message-ID: <Y3uXBr2U4pWGU3mW@kroah.com>
+References: <20221121131336.21494-1-santiago.ruano-rincon@imt-atlantique.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221121131336.21494-1-santiago.ruano-rincon@imt-atlantique.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,48 +52,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I got the following report while doing device(mt6370-tcpc) load
-test with CONFIG_OF_UNITTEST and CONFIG_OF_DYNAMIC enabled:
+On Mon, Nov 21, 2022 at 02:13:37PM +0100, Santiago Ruano Rincón wrote:
+> ZLP for DisplayLink ethernet devices was enabled in 6.0:
+> 266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet devices").
+> The related driver_info should be the "same as cdc_ncm_info, but with
+> FLAG_SEND_ZLP". However, set_rx_mode that enables handling multicast
+> traffic was missing in the new cdc_ncm_zlp_info.
+> 
+> usbnet_cdc_update_filter rx mode was introduced in linux 5.9 with:
+> e10dcb1b6ba7 ("net: cdc_ncm: hook into set_rx_mode to admit multicast
+> traffic")
+> 
+> Without this hook, multicast, and then IPv6 SLAAC, is broken.
+> 
+> Fixes: 266c0190aee3 ("net/cdc_ncm: Enable ZLP for DisplayLink ethernet
+> devices")
 
-  OF: ERROR: memory leak, expected refcount 1 instead of 2,
-  of_node_get()/of_node_put() unbalanced - destroy cset entry:
-  attach overlay node /i2c/pmic@34
+This needs to all be on one line.
 
-The 'parent' returned by fwnode_get_parent() with refcount incremented.
-it needs be put after using.
+> 
 
-Fixes: 6fadd72943b8 ("usb: roles: get usb-role-switch from parent")
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v2 -> v3:
-  Remove not needed null pointer check.
+With no blank line here.
 
-v1 -> v2:
-  Add description to how is the report generated.
----
- drivers/usb/roles/class.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index dfaed7eee94f..0650295f261c 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -106,10 +106,13 @@ usb_role_switch_is_parent(struct fwnode_handle *fwnode)
- 	struct fwnode_handle *parent = fwnode_get_parent(fwnode);
- 	struct device *dev;
- 
--	if (!parent || !fwnode_property_present(parent, "usb-role-switch"))
-+	if (!parent || !fwnode_property_present(parent, "usb-role-switch")) {
-+		fwnode_handle_put(parent);
- 		return NULL;
-+	}
- 
- 	dev = class_find_device_by_fwnode(role_class, parent);
-+	fwnode_handle_put(parent);
- 	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
- }
- 
--- 
-2.25.1
-
+greg k-h
