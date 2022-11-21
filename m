@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4584E631CD0
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7694C631CD1
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiKUJZv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 04:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
+        id S230205AbiKUJZz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 04:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiKUJZt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:25:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D76B29359
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 01:25:48 -0800 (PST)
+        with ESMTP id S230222AbiKUJZx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:25:53 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C4629375
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 01:25:50 -0800 (PST)
 Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 063292D9;
-        Mon, 21 Nov 2022 10:25:39 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A0294987;
+        Mon, 21 Nov 2022 10:25:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669022740;
-        bh=8gN8M4WanXpSSG/9fB+2p0usCZzFfitjbtVpmKrLjFM=;
+        s=mail; t=1669022741;
+        bh=I9+HvzKpiTZp4KSPl/FkgoMqAqvRpV91iNhWp7eoreA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yb87Gdxg5T1l1+mlZpStoa3auYQ+k4V6NJTwSO2lHn/ygsXkKs4eM+jWPjrmx+i+i
-         GCqjVaqYv+/zpT6MwrzgHpTAvEDJ3grM23sl7dYZe2VMCBF097t0GSOjjOTMIRjVwS
-         LJ785JFR9KoHBI3OvFXFnvKRKIOwvqW9GVdbDiwo=
+        b=hnH0PkRrDwAx96qoLjmt8kra4Er17VTRvHz0gjX+PPIhGTgwFjCpjzC4j/9bAQxqc
+         uBbGQsRRW03GwrShIAsZ9Nu5LWdV0MElpJL1W7HpLE8dSg8gmSDCDj5GceVndwYr1p
+         Rjz/GNh9xlFNnC6nu9RvQTcaFQy+hN1+kwoZSBkk=
 From:   Daniel Scally <dan.scally@ideasonboard.com>
 To:     linux-usb@vger.kernel.org
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
         laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
         torleiv@huddly.com, mgr@pengutronix.de,
         Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2 8/9] usb: gadget: uvc: Allow linking function to string descs
-Date:   Mon, 21 Nov 2022 09:25:16 +0000
-Message-Id: <20221121092517.225242-9-dan.scally@ideasonboard.com>
+Subject: [PATCH v2 9/9] usb: gadget: uvc: Use custom strings if available
+Date:   Mon, 21 Nov 2022 09:25:17 +0000
+Message-Id: <20221121092517.225242-10-dan.scally@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221121092517.225242-1-dan.scally@ideasonboard.com>
 References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
@@ -47,11 +47,11 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the string descriptors for the IAD, VideoControl Interface
-and VideoStreaming Interfaces are hardcoded into f_uvc. Now that we
-can create arbitrary string descriptors, add a mechanism to define
-string descriptors for the IAD, VC and VS interfaces by linking to
-the appropriate directory at function level.
+If the user has defined a custom string descriptor for the IAD or the
+VideoControl or VideoStreaming interfaces then set their index field
+to point to the custom descriptor instead of the hardcoded defaults.
+If no custom descriptors have been linked to, then use the default
+ones.
 
 Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
@@ -59,101 +59,45 @@ Changes in v2:
 
 	- New patch
 
- drivers/usb/gadget/function/u_uvc.h        |  8 +++
- drivers/usb/gadget/function/uvc_configfs.c | 59 ++++++++++++++++++++++
- 2 files changed, 67 insertions(+)
+ drivers/usb/gadget/function/f_uvc.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
-index c1c9ea5931d3..331cdf5ba9c8 100644
---- a/drivers/usb/gadget/function/u_uvc.h
-+++ b/drivers/usb/gadget/function/u_uvc.h
-@@ -88,6 +88,14 @@ struct f_uvc_opts {
- 	struct list_head				languages;
- 	unsigned int					nlangs;
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 7821fe8f9120..ac6df8458cab 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -784,6 +784,10 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 	list_for_each_entry(xu, &opts->extension_units, list)
+ 		xu->desc.iExtension = cus[xu->string_descriptor_index].id;
  
 +	/*
-+	 * Indexes into the function's string descriptors allowing users to set
-+	 * custom descriptions rather than the hard-coded defaults.
++	 * We attach the hard-coded defaults incase the user does not provide
++	 * any more appropriate strings through configfs.
 +	 */
-+	u8						iad_index;
-+	u8						vs0_index;
-+	u8						vs1_index;
+ 	uvc_en_us_strings[UVC_STRING_CONTROL_IDX].s = opts->function_name;
+ 	us = usb_gstrings_attach(cdev, uvc_function_strings,
+ 				 ARRAY_SIZE(uvc_en_us_strings));
+@@ -791,11 +795,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 		ret = PTR_ERR(us);
+ 		goto error;
+ 	}
+-	uvc_iad.iFunction = us[UVC_STRING_CONTROL_IDX].id;
+-	uvc_control_intf.iInterface = us[UVC_STRING_CONTROL_IDX].id;
+-	ret = us[UVC_STRING_STREAMING_IDX].id;
+-	uvc_streaming_intf_alt0.iInterface = ret;
+-	uvc_streaming_intf_alt1.iInterface = ret;
 +
- 	/*
- 	 * Read/write access to configfs attributes is handled by configfs.
- 	 *
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 5c51862150c4..e8faa31998fa 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -3197,8 +3197,67 @@ static void uvc_func_item_release(struct config_item *item)
- 	usb_put_function_instance(&opts->func_inst);
- }
++	uvc_iad.iFunction = opts->iad_index ? cus[opts->iad_index].id :
++			    us[UVC_STRING_CONTROL_IDX].id;
++	uvc_control_intf.iInterface = opts->iad_index ? cus[opts->iad_index].id :
++				      us[UVC_STRING_CONTROL_IDX].id;
++	uvc_streaming_intf_alt0.iInterface = opts->vs0_index ? cus[opts->vs0_index].id :
++					     us[UVC_STRING_STREAMING_IDX].id;
++	uvc_streaming_intf_alt1.iInterface = opts->vs1_index ? cus[opts->vs1_index].id :
++					     us[UVC_STRING_STREAMING_IDX].id;
  
-+static int uvc_func_allow_link(struct config_item *src, struct config_item *tgt)
-+{
-+	struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
-+	struct config_item *strings;
-+	struct uvcg_string *string;
-+	struct f_uvc_opts *opts;
-+	int ret = 0;
-+
-+	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-+
-+	/* Validate that the target is an entry in strings/<langid> */
-+	strings = config_group_find_item(to_config_group(src), "strings");
-+	if (!strings || tgt->ci_parent->ci_parent != strings) {
-+		ret = -EINVAL;
-+		goto put_strings;
-+	}
-+
-+	string = to_uvcg_string(tgt);
-+
-+	opts = to_f_uvc_opts(src);
-+	mutex_lock(&opts->lock);
-+
-+	if (!strcmp(tgt->ci_name, "iad_desc"))
-+		opts->iad_index = string->usb_string.id;
-+	else if (!strcmp(tgt->ci_name, "vs0_desc"))
-+		opts->vs0_index = string->usb_string.id;
-+	else if (!strcmp(tgt->ci_name, "vs1_desc"))
-+		opts->vs1_index = string->usb_string.id;
-+	else
-+		ret = -EINVAL;
-+
-+	mutex_unlock(&opts->lock);
-+
-+put_strings:
-+	config_item_put(strings);
-+	mutex_unlock(su_mutex);
-+
-+	return ret;
-+}
-+
-+static void uvc_func_drop_link(struct config_item *src, struct config_item *tgt)
-+{
-+	struct f_uvc_opts *opts;
-+
-+	opts = to_f_uvc_opts(src);
-+	mutex_lock(&opts->lock);
-+
-+	if (!strcmp(tgt->ci_name, "iad_desc"))
-+		opts->iad_index = 0;
-+	else if (!strcmp(tgt->ci_name, "vs0_desc"))
-+		opts->vs0_index = 0;
-+	else if (!strcmp(tgt->ci_name, "vs1_desc"))
-+		opts->vs1_index = 0;
-+
-+	mutex_unlock(&opts->lock);
-+}
-+
- static struct configfs_item_operations uvc_func_item_ops = {
- 	.release	= uvc_func_item_release,
-+	.allow_link	= uvc_func_allow_link,
-+	.drop_link	= uvc_func_drop_link,
- };
- 
- #define UVCG_OPTS_ATTR(cname, aname, limit)				\
+ 	/* Allocate interface IDs. */
+ 	if ((ret = usb_interface_id(c, f)) < 0)
 -- 
 2.34.1
 
