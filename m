@@ -2,169 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7361631D57
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F3F631D79
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Nov 2022 10:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiKUJwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Nov 2022 04:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S231248AbiKUJyN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Nov 2022 04:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiKUJwC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:52:02 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154FD17410
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 01:51:38 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C5F7674C;
-        Mon, 21 Nov 2022 10:51:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669024296;
-        bh=6kgL2dVSNymd04Mm216gOga6Rvb/jMPnk+F1EzLQS5U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AUc9jSUcojlm0zi/1hUwszrnafTm4QnLxE+U/gnsw+TC19aq21iKnRYIawESR/PaP
-         DCf4f2X/2E9bUEybufMgPHDtVWTxYzJXBTXcxaLA7Ya+e6Sf87SBm+pk7ER0csJt1o
-         q3bNSgwkRvSlPdnfu+gpWumT30NUcffnQ7dM9ByM=
-Message-ID: <090c49e0-3f6c-52f4-d614-0d095eb78c1c@ideasonboard.com>
-Date:   Mon, 21 Nov 2022 09:51:32 +0000
+        with ESMTP id S230493AbiKUJxj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Nov 2022 04:53:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E226FA1B4;
+        Mon, 21 Nov 2022 01:53:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44AFD60F9B;
+        Mon, 21 Nov 2022 09:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F83C433C1;
+        Mon, 21 Nov 2022 09:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669024397;
+        bh=m9yZHwnTEqGasYZNomMe1mRJHVzf8B7M3LDSNHYcXeA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Opj/itLbJtFE0syJxd+qkemdvm+GfbfZ1pccF1SGR++3DJnkeyD3YQtGhN+blIjub
+         US8fX8iushvScwunkPr7LKirCchaNKKAU/twl0oVnqHEwdHsHxi0M0d/wgtlpEZqG7
+         k4ovt/Znm0DICj47Y+N6I+Yw47E1MyyiN0e/92S2h9qHrb149jszKe3FalK/2rVJQ+
+         ZppAyMp4v8rjq+XBX9JSBl1ysXWpcIvX0EVYeK13kfbg9IEzo070nVbf9UiCPP9DpS
+         bXABnzNPLB0lPKqHS3KQR0EQyUsQW7BynY23b8Z2+QTbLFxJQgHRN0fjhkCpVJB9+z
+         k93zjyweI0uEQ==
+Date:   Mon, 21 Nov 2022 09:53:05 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-actions@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net
+Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Message-ID: <Y3tKgXPJP7S48i3j@google.com>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 4/9] usb: gadget: uvc: Copy XU descriptors during
- .bind()
-Content-Language: en-US
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        torleiv@huddly.com, mgr@pengutronix.de
-References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
- <20221121092517.225242-5-dan.scally@ideasonboard.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <20221121092517.225242-5-dan.scally@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all
+On Fri, 18 Nov 2022, Uwe Kleine-König wrote:
 
-On 21/11/2022 09:25, Daniel Scally wrote:
-> Now that extension unit support is available through configfs we need
-> to copy the descriptors for the XUs during uvc_function_bind() so that
-> they're exposed to the usb subsystem.
->
-> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> ---
-> Changes in v2:
->
-> 	- none
->
->   drivers/usb/gadget/function/f_uvc.c | 35 +++++++++++++++++++++++++++++
->   drivers/usb/gadget/function/uvc.h   |  1 +
->   2 files changed, 36 insertions(+)
->
-> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> index eca5f36dfa74..e0a308f1355c 100644
-> --- a/drivers/usb/gadget/function/f_uvc.c
-> +++ b/drivers/usb/gadget/function/f_uvc.c
-> @@ -464,6 +464,25 @@ uvc_register_video(struct uvc_device *uvc)
->   		} \
->   	} while (0)
->   
-> +#define UVC_COPY_XU_DESCRIPTOR(mem, dst, desc)					\
-> +	do {									\
-> +		*(dst)++ = mem;							\
-> +		memcpy(mem, desc, 22); /* bLength to bNrInPins */		\
-> +		mem += 22;							\
-> +										\
-> +		memcpy(mem, desc->baSourceID, desc->bNrInPins);			\
-> +		mem += desc->bNrInPins;						\
-> +										\
-> +		memcpy(mem, &desc->bControlSize, 1);				\
-> +		mem++;								\
-> +										\
-> +		memcpy(mem, desc->bmControls, desc->bControlSize);		\
-> +		mem += desc->bControlSize;					\
-> +										\
-> +		memcpy(mem, &desc->iExtension, 1);				\
-> +		mem++;								\
-> +	} while (0)
-> +
+> Hello,
+> 
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
 
+Oh yeah, this!  Thanks for picking this up Uwe, I guess I've been
+distracted for the past 6 years or so. :)
 
-|I don't especially like UVC_COPY_XU_DESCRIPTOR(), but the need to vary 
-the array size for baSourceID and bmControls plus the requirement for 
-the struct to be copied to consecutive bytes of memory constrained it a 
-bit. An alternative might be to replace baSourceID, bControlSize, 
-bmControls and iExtension in struct uvcg_extension_unit_descriptor with 
-a single flexible array member (called data[] or something). That would 
-allow the copy to be a much more straight forward memcpy(mem, desc, 
-desc->bLength); - but the cost would be reallocating the entire struct 
-each time the baSourceID or bmControls attributes was changed. That 
-might be a better method, but I thought I'd stick with this for this 
-submission at least on the grounds that it's less confusing.|
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch that
+> you can pull into your tree to get it:
+> 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_device_id_helper-immutable
+> 
+> I don't think it's feasable to apply this series in one go, so I ask the
+> maintainers of the changed files to apply via their tree. I guess it
+> will take a few kernel release iterations until all patch are in, but I
+> think a single tree creates too much conflicts.
+> 
+> The last patch changes i2c_driver::probe, all non-converted drivers will
+> fail to compile then. So I hope the build bots will tell me about any
+> driver I missed to convert. This patch is obviously not for application
+> now.
+> 
+> I dropped most individuals from the recipents of this mail to not
+> challenge the mail servers and mailing list filters too much. Sorry if
+> you had extra efforts to find this mail.
 
->   static struct usb_descriptor_header **
->   uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
->   {
-> @@ -475,6 +494,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
->   	const struct usb_descriptor_header * const *src;
->   	struct usb_descriptor_header **dst;
->   	struct usb_descriptor_header **hdr;
-> +	struct uvcg_extension *xu;
->   	unsigned int control_size;
->   	unsigned int streaming_size;
->   	unsigned int n_desc;
-> @@ -539,6 +559,13 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
->   		bytes += (*src)->bLength;
->   		n_desc++;
->   	}
-> +
-> +	list_for_each_entry(xu, uvc->desc.extension_units, list) {
-> +		control_size += xu->desc.bLength;
-> +		bytes += xu->desc.bLength;
-> +		n_desc++;
-> +	}
-> +
->   	for (src = (const struct usb_descriptor_header **)uvc_streaming_cls;
->   	     *src; ++src) {
->   		streaming_size += (*src)->bLength;
-> @@ -565,6 +592,13 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
->   	uvc_control_header = mem;
->   	UVC_COPY_DESCRIPTORS(mem, dst,
->   		(const struct usb_descriptor_header **)uvc_control_desc);
-> +
-> +	list_for_each_entry(xu, uvc->desc.extension_units, list) {
-> +		struct uvcg_extension_unit_descriptor *desc = &xu->desc;
-> +
-> +		UVC_COPY_XU_DESCRIPTOR(mem, dst, desc);
-> +	}
-> +
->   	uvc_control_header->wTotalLength = cpu_to_le16(control_size);
->   	uvc_control_header->bInCollection = 1;
->   	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
-> @@ -988,6 +1022,7 @@ static struct usb_function *uvc_alloc(struct usb_function_instance *fi)
->   	uvc->desc.fs_streaming = opts->fs_streaming;
->   	uvc->desc.hs_streaming = opts->hs_streaming;
->   	uvc->desc.ss_streaming = opts->ss_streaming;
-> +	uvc->desc.extension_units = &opts->extension_units;
->   
->   	streaming = config_group_find_item(&opts->func_inst.group, "streaming");
->   	if (!streaming)
-> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> index 40226b1f7e14..f1a016d20bb6 100644
-> --- a/drivers/usb/gadget/function/uvc.h
-> +++ b/drivers/usb/gadget/function/uvc.h
-> @@ -143,6 +143,7 @@ struct uvc_device {
->   		const struct uvc_descriptor_header * const *fs_streaming;
->   		const struct uvc_descriptor_header * const *hs_streaming;
->   		const struct uvc_descriptor_header * const *ss_streaming;
-> +		struct list_head *extension_units;
->   	} desc;
->   
->   	unsigned int control_intf;
+[...]
+
+>  drivers/mfd/88pm800.c                            |  5 ++---
+>  drivers/mfd/88pm805.c                            |  5 ++---
+>  drivers/mfd/aat2870-core.c                       |  5 ++---
+>  drivers/mfd/act8945a.c                           |  5 ++---
+>  drivers/mfd/adp5520.c                            |  6 +++---
+>  drivers/mfd/arizona-i2c.c                        |  6 +++---
+>  drivers/mfd/as3711.c                             |  5 ++---
+>  drivers/mfd/as3722.c                             |  5 ++---
+>  drivers/mfd/atc260x-i2c.c                        |  5 ++---
+>  drivers/mfd/axp20x-i2c.c                         |  5 ++---
+>  drivers/mfd/bcm590xx.c                           |  5 ++---
+>  drivers/mfd/bd9571mwv.c                          |  5 ++---
+>  drivers/mfd/da903x.c                             |  6 +++---
+>  drivers/mfd/da9052-i2c.c                         |  6 +++---
+>  drivers/mfd/da9055-i2c.c                         |  5 ++---
+>  drivers/mfd/da9062-core.c                        |  6 +++---
+>  drivers/mfd/da9063-i2c.c                         |  6 +++---
+>  drivers/mfd/da9150-core.c                        |  5 ++---
+>  drivers/mfd/khadas-mcu.c                         |  5 ++---
+>  drivers/mfd/lm3533-core.c                        |  5 ++---
+>  drivers/mfd/lp3943.c                             |  4 ++--
+>  drivers/mfd/lp873x.c                             |  5 ++---
+>  drivers/mfd/lp87565.c                            |  5 ++---
+>  drivers/mfd/lp8788.c                             |  4 ++--
+>  drivers/mfd/madera-i2c.c                         |  6 +++---
+>  drivers/mfd/max14577.c                           |  6 +++---
+>  drivers/mfd/max77620.c                           |  6 +++---
+>  drivers/mfd/max77693.c                           |  6 +++---
+>  drivers/mfd/max77843.c                           |  6 +++---
+>  drivers/mfd/max8907.c                            |  5 ++---
+>  drivers/mfd/max8925-i2c.c                        |  5 ++---
+>  drivers/mfd/max8997.c                            |  6 +++---
+>  drivers/mfd/max8998.c                            |  6 +++---
+>  drivers/mfd/mc13xxx-i2c.c                        |  6 +++---
+>  drivers/mfd/menelaus.c                           |  5 ++---
+>  drivers/mfd/menf21bmc.c                          |  4 ++--
+>  drivers/mfd/palmas.c                             |  5 ++---
+>  drivers/mfd/pcf50633-core.c                      |  5 ++---
+>  drivers/mfd/rc5t583.c                            |  5 ++---
+>  drivers/mfd/retu-mfd.c                           |  4 ++--
+>  drivers/mfd/rk808.c                              |  5 ++---
+>  drivers/mfd/rohm-bd718x7.c                       |  5 ++---
+>  drivers/mfd/rsmu_i2c.c                           |  6 +++---
+>  drivers/mfd/rt5033.c                             |  5 ++---
+>  drivers/mfd/sec-core.c                           |  5 ++---
+>  drivers/mfd/si476x-i2c.c                         |  6 +++---
+>  drivers/mfd/sky81452.c                           |  5 ++---
+>  drivers/mfd/stmfx.c                              |  5 ++---
+>  drivers/mfd/stmpe-i2c.c                          |  5 +++--
+>  drivers/mfd/stpmic1.c                            |  5 ++---
+>  drivers/mfd/stw481x.c                            |  5 ++---
+>  drivers/mfd/tc3589x.c                            |  6 +++---
+>  drivers/mfd/ti-lmu.c                             |  5 +++--
+>  drivers/mfd/tps6105x.c                           |  5 ++---
+>  drivers/mfd/tps65010.c                           |  6 +++---
+>  drivers/mfd/tps6507x.c                           |  5 ++---
+>  drivers/mfd/tps65086.c                           |  5 ++---
+>  drivers/mfd/tps65090.c                           |  5 ++---
+>  drivers/mfd/tps65218.c                           |  5 ++---
+>  drivers/mfd/tps6586x.c                           |  5 ++---
+>  drivers/mfd/tps65910.c                           |  6 +++---
+>  drivers/mfd/tps65912-i2c.c                       |  5 ++---
+>  drivers/mfd/twl-core.c                           |  5 +++--
+>  drivers/mfd/twl6040.c                            |  5 ++---
+>  drivers/mfd/wl1273-core.c                        |  5 ++---
+>  drivers/mfd/wm831x-i2c.c                         |  6 +++---
+>  drivers/mfd/wm8350-i2c.c                         |  5 ++---
+>  drivers/mfd/wm8400-core.c                        |  5 ++---
+>  drivers/mfd/wm8994-core.c                        |  6 +++---
+
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+
+>  drivers/video/backlight/adp8860_bl.c             |  6 +++---
+>  drivers/video/backlight/adp8870_bl.c             |  6 +++---
+>  drivers/video/backlight/arcxcnn_bl.c             |  4 ++--
+>  drivers/video/backlight/bd6107.c                 |  5 ++---
+>  drivers/video/backlight/lm3630a_bl.c             |  5 ++---
+>  drivers/video/backlight/lm3639_bl.c              |  5 ++---
+>  drivers/video/backlight/lp855x_bl.c              |  5 +++--
+>  drivers/video/backlight/lv5207lp.c               |  5 ++---
+>  drivers/video/backlight/tosa_bl.c                |  5 ++---
+>  drivers/video/fbdev/matrox/matroxfb_maven.c      |  5 ++---
+
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-Backlight-by: Lee Jones <lee@kernel.org>
+
+-- 
+Lee Jones [李琼斯]
