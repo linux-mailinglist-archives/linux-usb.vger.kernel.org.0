@@ -2,124 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DD2633739
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 09:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173D963375B
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 09:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiKVIdm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 03:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        id S232933AbiKVInD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 03:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbiKVIdl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 03:33:41 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CCA3120F
-        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 00:33:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669106020; x=1700642020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cYPAGb5oKJW8nbZSQ3cbPAiJ81KgHSrX09eWiow0/c0=;
-  b=W4JGlT6GDZNeiHJx8FvWVLUMRyfx7cSl86JAai7d3zAtLgKfDU6k29ov
-   I4qjrM/9s7vOSKrM0CCx9SkCK64Sj+iKCC+Knb+Q0BgE+IdDtEfoZben1
-   Ik8WzaeUaCWZGtbvOe6aUptjvTwfe60xoEkGG+pbRj/bwIPHLLS8Kgo4F
-   8FVN47NGr3Z/o4Axbhninc7JJ27hgrfgAEyDP729y2Q1Hgp5fHzwtWuXh
-   wOsOVkLy4fyOi/6PVmjaEF50ZEaFqoLduPpYDQZTgNBZzPPKGp42CZ5qF
-   YU02+QxAWTnoUY9K/5MF6Y9uC+ycv1d2LaOT96GNmVeP2BkR/qksq+DBI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="314914128"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="314914128"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 00:33:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="783768508"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="783768508"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Nov 2022 00:33:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 22 Nov 2022 10:33:37 +0200
-Date:   Tue, 22 Nov 2022 10:33:37 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     gregkh@linuxfoundation.org, chunfeng.yun@mediatek.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] usb: roles: fix of node refcount leak in
- usb_role_switch_is_parent()
-Message-ID: <Y3yJYXBKgwD1fmCg@kuha.fi.intel.com>
-References: <20221121144620.4059019-1-yangyingliang@huawei.com>
+        with ESMTP id S232966AbiKVImx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 03:42:53 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10D0A1AB
+        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 00:42:51 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id l8so17131207ljh.13
+        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 00:42:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U7NY7k+Aa5N9DlhIquG0NmiQoRxU6GJ+N37ltBBWUU4=;
+        b=Py0vsaEjCa1ebI9VbLXGCjZoKNk0awz8348fV82HhXMTl+0Up/DS1w2fXqTJo1Fu5h
+         7tlGWkQh/CldNpiEJXVVjJCywZCfY8CEhWuQ/rAlwxP3cxTvX8J7pCTaMCMWCkt284N6
+         pONkTaqGA1O2GdydkHB1NwZZpjO7wh8aCobZmOrCNSaNe09u+MiYuVk8mH7C+nXNol0T
+         pwhslqdw7WYV9l7rEtfcjJ7hXMrc7RG1dauk24VmPBmt+ei9za3s17jwmUWIVAcGiv6X
+         KEDDuQYof+4vrTWEX+NtDmwVyxRjLQfgG4y/cB/nNvjpu/nABfehARzgDuPI/qA/f1RO
+         6OCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U7NY7k+Aa5N9DlhIquG0NmiQoRxU6GJ+N37ltBBWUU4=;
+        b=GQqUNhdnHokFXF3dWcR9JSe2ZUDj6aGZY0ghDjeripMBo/P2xqLlPqd2nHZ9SlHcDD
+         YLNtircybOuAMPopdsnIMFXeADHDGTQ0LrxgeKpmh4C24A5PSU/kfQyzusI+li6VRQbw
+         NT22Qa/UV8g7+n+3G1dmqpZ+13lNMwVwKUnBQE/60qCCd5OPF7VUdwirDTVgiiMSIbyS
+         pGlEBxGhxYxwF33VbQ9qez9/qSYrKHVvWOX5y0XgvuTOqEHKQ9cL3qlJ7HWso5Hj9cZ3
+         3ommTQyHO/+umLt+5L1U3f7NCCtif/6qDq63yyavcA0HeRVxDBNZKNgrwVlYmx6YDNYC
+         K4xQ==
+X-Gm-Message-State: ANoB5pkPGhikOpN+SH4XYbZW5/FoCAVIHDBDswTLvrTYUgLO0mbt0O88
+        iCZvfqJ0gG0RehNaZB/XILPDmA==
+X-Google-Smtp-Source: AA0mqf7/UsftI+kuXWw2ZObJffeMs3x/d131N5RP0pQBBjM51jfoAwn6fUl61SAYf6wBK0vyMPAUow==
+X-Received: by 2002:a2e:aa9f:0:b0:277:710f:f973 with SMTP id bj31-20020a2eaa9f000000b00277710ff973mr7123921ljb.74.1669106570016;
+        Tue, 22 Nov 2022 00:42:50 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id t3-20020a2e8e63000000b0026fbac7468bsm1703702ljk.103.2022.11.22.00.42.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 00:42:49 -0800 (PST)
+Message-ID: <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
+Date:   Tue, 22 Nov 2022 09:42:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121144620.4059019-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com>
+ <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+ <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+ <20221115150417.513955a7@bootlin.com> <20221118112349.7f09eefb@bootlin.com>
+ <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+ <20221121165921.559d6538@bootlin.com>
+ <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+ <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+ <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
+ <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
+ <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
+ <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Mon, Nov 21, 2022 at 10:46:20PM +0800, Yang Yingliang wrote:
-> I got the following report while doing device(mt6370-tcpc) load
-> test with CONFIG_OF_UNITTEST and CONFIG_OF_DYNAMIC enabled:
+On 22/11/2022 09:25, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
 > 
->   OF: ERROR: memory leak, expected refcount 1 instead of 2,
->   of_node_get()/of_node_put() unbalanced - destroy cset entry:
->   attach overlay node /i2c/pmic@34
+> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 21/11/2022 21:46, Geert Uytterhoeven wrote:
+>>>> This does not change anything. Herve wrote:
+>>>>
+>>>>> probe some devices (USB host and probably others)
+>>>>
+>>>> Why some can be probed earlier and some not, if there are no
+>>>> dependencies? If there are dependencies, it's the same case with sysctrl
+>>>> touching the register bit and the USB controller touching it (as well
+>>>> via syscon, but that's obvious, I assume).
+>>>>
+>>>> Where is the synchronization problem?
+>>>
+>>> The h2mode bit (and probably a few other controls we haven't figured out
+>>> yet) in the sysctrl must be set before any of the USB devices is active.
+>>> Hence it's safest for the sysctrl to do this before any of the USB drivers
+>>> probes.
+>>
+>> Again, this does not differ from many, many of other devices. All of
+>> them must set something in system controller block, before they start
+>> operating (or at specific time). It's exactly the same everywhere.
 > 
-> The 'parent' returned by fwnode_get_parent() with refcount incremented.
-> it needs be put after using.
+> The issue here is that there are two _different drivers_ (USB host
+> and device). When both are modular, and the driver that depends on the
+> sysctrl setting is loaded second, you have a problem: the sysctrl change
+> must not be done when the first driver is already using the hardware.
 > 
-> Fixes: 6fadd72943b8 ("usb: roles: get usb-role-switch from parent")
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Hence the sysctrl driver should take care of it itself during early
+> initialization (it's the main clock controller, so it's a dependency
+> for all other I/O device drivers).
 
-That's not the appropriate tag in this case. I have not suggested
-this patch.
+I assumed you have there bit for the first device (which can switch
+between USB host and USB device) to choose appropriate mode. The
+bindings also expressed this - "the USBs are". Never said anything about
+dependency between these USBs.
 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2 -> v3:
->   Remove not needed null pointer check.
-> 
-> v1 -> v2:
->   Add description to how is the report generated.
-> ---
->  drivers/usb/roles/class.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> index dfaed7eee94f..0650295f261c 100644
-> --- a/drivers/usb/roles/class.c
-> +++ b/drivers/usb/roles/class.c
-> @@ -106,10 +106,13 @@ usb_role_switch_is_parent(struct fwnode_handle *fwnode)
->  	struct fwnode_handle *parent = fwnode_get_parent(fwnode);
->  	struct device *dev;
->  
-> -	if (!parent || !fwnode_property_present(parent, "usb-role-switch"))
-> +	if (!parent || !fwnode_property_present(parent, "usb-role-switch")) {
+Are you saying that the mode for first device cannot be changed once the
+second device (which is only host) is started? IOW, the mode setup must
+happen before any of these devices are started?
 
-Please change that as well like I proposed earlier:
+Anyway with sysctrl approach you will have dependency and you cannot
+rely on clock provider-consumer relationship to order that dependency.
+What if you make all clocks on and do not take any clocks in USB device?
+Broken dependency. What if you want to use this in a different SoC,
+where the sysctrl does not provide clocks? Broken dependency.
 
-	if (!fwnode_property_present(parent, "usb-role-switch")) {
+You have here in such case parent-child dependency, not
+provider-consumer. Just like for all serial-protocol engines (I2C/UART/SPI).
 
-You don't need to check the parent separately.
+Best regards,
+Krzysztof
 
-> +		fwnode_handle_put(parent);
->  		return NULL;
-> +	}
->  
->  	dev = class_find_device_by_fwnode(role_class, parent);
-> +	fwnode_handle_put(parent);
->  	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
->  }
->  
-
-thanks,
-
--- 
-heikki
