@@ -2,246 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D821B633BE4
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 12:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53735633C6F
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 13:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbiKVLzt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 06:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S233749AbiKVM1K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 07:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiKVLzo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 06:55:44 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9690327929;
-        Tue, 22 Nov 2022 03:55:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=aTtIsYmSgjNJMwYngbptj8dWJgxtfDsvSXVDb4j71Ik=; b=yrMxl
-        e2p3K14JvAJf0dt208JO3KloDsF2pWnjIKfWaOQ2b93xP9BUJUZ6bSsY+SxRNl/5HMW4JZotetuVg
-        vXpyRWkQiIKI9MsDaIjrNxzx8UYwiYQlwz61Kl5yKLe3rfzPZ6tR/2QU+v+P75v6u/tpJvanpi99B
-        W/rCV8NalOfF8PdAheVNOAb5zpAvQbR4EJPk43ap8+t9qlgxK70aKeVIkGu4ZuOwtRTd7q8XP/po4
-        dOYTUyf1MGsgUAhgF6nRgGt7fRDeiS6x/7EANKBeMXlkx/z1BRrh7lDdZmIKTtozCLQgRtqfFtB4Y
-        LoW/f+Sdjd4M3UdkdFNExNkvVqIQA==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1oxRsK-0002rD-97;
-        Tue, 22 Nov 2022 11:55:40 +0000
-Date:   Tue, 22 Nov 2022 11:55:39 +0000
-From:   John Keeping <john@metanate.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>, balbi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3y4u21VaBgBdP9V@donbot>
-References: <Y3dIXUmjTfJLpPe7@google.com>
- <Y3er7nenAhbmBdBy@rowland.harvard.edu>
- <Y3e0zAa7+HiNVrKN@donbot>
- <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
- <Y3piS43drwSoipD9@donbot>
- <Y3qSImZkZwCG1kA1@rowland.harvard.edu>
- <Y3txTcASyvTWqFlc@donbot>
- <Y3uk2kwYsZ3j67+l@rowland.harvard.edu>
- <Y3vJfwtH3fniy5ep@donbot>
- <Y3yIzO7i0YRYapFg@google.com>
+        with ESMTP id S233765AbiKVM1I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 07:27:08 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D53554B25
+        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 04:27:07 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AMAO1jM017107;
+        Tue, 22 Nov 2022 12:27:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dzdvJEfNaoXOO1JD8/tMrjFrqacrFqCgMvD3S2xhVzs=;
+ b=gTqD8F752KsPqSTFAd2p5wKf6LuOOr92uTXqvKIGixAiFhmTjq7GPp2bExWKA89KT7zq
+ bHqkJkgsIJTPHNChmCbf71KeSn+mNtoeTHYP8+ia1KOVS1Um2stT+X+dZztsOF8E3iY1
+ vEgbdDVMJal/bayMWBa4rFcgR03PoKldSs0t9Dko6QN4yjAqFfy+bb+jjt0AzvZ/4pfp
+ pXWMMYxYR/VqYZe48ucHUndY1Lkkip9rCJSoRIqqWfZ9m1VjRTxpU+puR64s8zMU3LWt
+ EosZjgdlQgBTxKOunOQR5pIpMlvx4eC4L5kULCGhZX+3NC+NHqb/f25a4my5FmLEvd1F /w== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m0vmw07bh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 12:27:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AMCR1C8027884
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 12:27:01 GMT
+Received: from [10.206.25.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 22 Nov
+ 2022 04:26:59 -0800
+Message-ID: <a485330a-489b-7f0d-5291-1931ba2a749a@quicinc.com>
+Date:   Tue, 22 Nov 2022 17:56:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3yIzO7i0YRYapFg@google.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [v2] usb: gadget: f_fs: Prevent race between functionfs_unbind &
+ ffs_ep0_queue_wait
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
+        "Pratham Pratap" <quic_ppratap@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+References: <20221116111955.21057-1-quic_ugoswami@quicinc.com>
+ <Y3ewqxYSbb2W1Hfq@donbot> <00b2c24d-a663-f16c-deb1-9beb40d424a2@quicinc.com>
+ <Y3poWpdn05ZEuaF2@donbot> <3eb52cdb-fc32-8b06-97a5-d5196d4794da@quicinc.com>
+ <Y3y21CAt7HBr7NRL@donbot>
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <Y3y21CAt7HBr7NRL@donbot>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2-RXl2IAmpzezWQVwEMXZaYWQH5jo8nW
+X-Proofpoint-GUID: 2-RXl2IAmpzezWQVwEMXZaYWQH5jo8nW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-22_06,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1015
+ suspectscore=0 phishscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211220091
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 08:31:08AM +0000, Lee Jones wrote:
-> On Mon, 21 Nov 2022, John Keeping wrote:
-> > Subject: [PATCH] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-> > 
-> > The embedded struct cdev does not have its lifetime correctly tied to
-> > the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
-> > is held open while the gadget is deleted.
-> > 
-> > This can readily be replicated with libusbgx's example programs (for
-> > conciseness - operating directly via configfs is equivalent):
-> > 
-> > 	gadget-hid
-> > 	exec 3<> /dev/hidg0
-> > 	gadget-vid-pid-remove
-> > 	exec 3<&-
-> > 
-> > Pull the existing device up in to struct f_hidg and make use of the
-> > cdev_device_{add,del}() helpers.  This changes the lifetime of the
-> > device object to match struct f_hidg, but note that it is still added
-> > and deleted at the same time.
-> 
-> This is much better, thanks for re-spinning.
-> 
-> > [Also fix refcount leak on an error path.]
-> > 
-> > Signed-off-by: John Keeping <john@metanate.com>
-> > ---
-> >  drivers/usb/gadget/function/f_hid.c | 50 ++++++++++++++++-------------
-> >  1 file changed, 28 insertions(+), 22 deletions(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> > index ca0a7d9eaa34..0b94668a3812 100644
-> > --- a/drivers/usb/gadget/function/f_hid.c
-> > +++ b/drivers/usb/gadget/function/f_hid.c
-> > @@ -71,7 +71,7 @@ struct f_hidg {
-> >  	wait_queue_head_t		write_queue;
-> >  	struct usb_request		*req;
-> >  
-> > -	int				minor;
-> > +	struct device			dev;
-> >  	struct cdev			cdev;
-> >  	struct usb_function		func;
-> >  
-> > @@ -84,6 +84,14 @@ static inline struct f_hidg *func_to_hidg(struct usb_function *f)
-> >  	return container_of(f, struct f_hidg, func);
-> >  }
-> >  
-> > +static void hidg_release(struct device *dev)
-> > +{
-> > +	struct f_hidg *hidg = container_of(dev, struct f_hidg, dev);
-> 
-> Could we store/fetch this with dev_{set,get}_drvdata(), and make
-> hidg->dev a pointer reducing the size of the struct f_hidg.
+Hi John,
 
-That will reduce the size of struct f_hidg, but we'll have an extra
-allocation for the device object, so I don't think that's a real
-benefit.
-
-It seems simpler to keep a single allocation and embed the device.
-
-> > +	kfree(hidg->set_report_buf);
-> > +	kfree(hidg);
-> > +}
-> > +
-> >  /*-------------------------------------------------------------------------*/
-> >  /*                           Static descriptors                            */
-> >  
-> > @@ -904,9 +912,7 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
-> >  	struct usb_ep		*ep;
-> >  	struct f_hidg		*hidg = func_to_hidg(f);
-> >  	struct usb_string	*us;
-> > -	struct device		*device;
-> >  	int			status;
-> > -	dev_t			dev;
-> >  
-> >  	/* maybe allocate device-global string IDs, and patch descriptors */
-> >  	us = usb_gstrings_attach(c->cdev, ct_func_strings,
-> > @@ -999,21 +1005,12 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
-> >  
-> >  	/* create char device */
-> >  	cdev_init(&hidg->cdev, &f_hidg_fops);
-> > -	dev = MKDEV(major, hidg->minor);
-> > -	status = cdev_add(&hidg->cdev, dev, 1);
-> > +	cdev_set_parent(&hidg->cdev, &hidg->dev.kobj);
+On 11/22/22 5:17 PM, John Keeping wrote:
+> On Mon, Nov 21, 2022 at 09:52:43AM +0530, Udipto Goswami wrote:
+>> Hi John
+>>
+>> On 11/20/22 11:18 PM, John Keeping wrote:
+>>> On Sun, Nov 20, 2022 at 12:23:50PM +0530, Udipto Goswami wrote:
+>>>> On 11/18/22 9:49 PM, John Keeping wrote:
+>>>>> On Wed, Nov 16, 2022 at 04:49:55PM +0530, Udipto Goswami wrote:
+>>>>>> While performing fast composition switch, there is a possibility that the
+>>>>>> process of ffs_ep0_write/ffs_ep0_read get into a race condition
+>>>>>> due to ep0req being freed up from functionfs_unbind.
+>>>>>>
+>>>>>> Consider the scenario that the ffs_ep0_write calls the ffs_ep0_queue_wait
+>>>>>> by taking a lock &ffs->ev.waitq.lock. However, the functionfs_unbind isn't
+>>>>>> bounded so it can go ahead and mark the ep0req to NULL, and since there
+>>>>>> is no NULL check in ffs_ep0_queue_wait we will end up in use-after-free.
+>>>>>>
+>>>>>> Fix this by making a serialized execution between the two functions using
+>>>>>> a mutex_lock(ffs->mutex). Also, dequeue the ep0req to ensure that no
+>>>>>> other function can use it after the free operation.
+>>>>>>
+>>>>>> Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+>>>>>> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+>>>>>> ---
+>>>>>> v2: Replaces spinlock with mutex & added dequeue operation in unbind.
+>>>>>>
+>>>>>>     drivers/usb/gadget/function/f_fs.c | 7 +++++++
+>>>>>>     1 file changed, 7 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>>>>>> index 73dc10a77cde..1439449df39a 100644
+>>>>>> --- a/drivers/usb/gadget/function/f_fs.c
+>>>>>> +++ b/drivers/usb/gadget/function/f_fs.c
+>>>>>> @@ -279,6 +279,9 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
+>>>>>>     	struct usb_request *req = ffs->ep0req;
+>>>>>>     	int ret;
+>>>>>> +	if (!req)
+>>>>>> +		return -EINVAL;
+>>>>>> +
+>>>>>>     	req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
+>>>>>>     	spin_unlock_irq(&ffs->ev.waitq.lock);
+>>>>>> @@ -1892,10 +1895,14 @@ static void functionfs_unbind(struct ffs_data *ffs)
+>>>>>>     	ENTER();
+>>>>>>     	if (!WARN_ON(!ffs->gadget)) {
+>>>>>> +		mutex_lock(&ffs->mutex);
+>>>>>> +		/* dequeue before freeing ep0req */
+>>>>>> +		usb_ep_dequeue(ffs->gadget->ep0, ffs->ep0req);
+>>>>>>     		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
+>>>>>>     		ffs->ep0req = NULL;
+>>>>>>     		ffs->gadget = NULL;
+>>>>>>     		clear_bit(FFS_FL_BOUND, &ffs->flags);
+>>>>>> +		mutex_unlock(&ffs->mutex);
+>>>>>
+>>>>> There's now a deadlock here if some other thread is waiting in
+>>>>> __ffs_ep0_queue_wait() on ep0req_completion.
+>>>>>
+>>>>> You need to dequeue before taking the lock.
+>>>> That's a control request right, will it be async?
+>>>>
+>>>> Anyway I see only 2 possible threads ep0_read/ep0_write who calls
+>>>> ep0_queue_wait and waits for the completion of ep0req and both
+>>>> ep0_read/write are prptected by the mutex lock so i guess execution won't
+>>>> reach there right ?
+>>>> Say functionfs_unbind ran first then ep0_read/write had to wait will the
+>>>> functionfs_unbind is completed so ep_dequeue will ran, will get completed,
+>>>> further free the request, mark in NULL. now ep0_read/write will have ep0req
+>>>> as NULL so bail out.
+>>>>
+>>>> Is reverse then functionfs_unbind will wait will the ep0_read/write is
+>>>> completed.
+>>>
+>>> What guarantee is there that the transfer completes?
+>>>
+>>> If there is such a guarantee, then the request will not be queued, so
+>>> why is usb_ep_dequeue() necessary?
+>>
+>> I Agree that we cannot say that for sure, but we see that
+>> wait_for_completion in the ep0_queue_wait is also inside mutex which was
+>> acquired in ep0_read/write right?
 > 
-> cdev_device_add() should take care of this, so long as:
+> Correct.
 > 
->     if (dev->devt)
->         dev_set_parent(cdev, &dev->kobj);
+>> I Though of maintaining the uniformity for the approaches.
+> 
+> What uniformity?  If one process is blocked waiting for completion and
+> another process wants to cancel the operation, then the cancel
+> (usb_eq_dequeue()) must run concurrently with the wait, otherwise the
+> blocked process will never wake up.
 
-Thanks, I'll change this.
+I get that, we want to rely on the dequeue to get us unblocked.
+But this is also true right that doing dequeue outside might cause this?
 
-> > +	status = cdev_device_add(&hidg->cdev, &hidg->dev);
-> >  	if (status)
-> >  		goto fail_free_descs;
-> >  
-> > -	device = device_create(hidg_class, NULL, dev, NULL,
-> > -			       "%s%d", "hidg", hidg->minor);
-> > -	if (IS_ERR(device)) {
-> > -		status = PTR_ERR(device);
-> > -		goto del;
-> > -	}
-> > -
-> >  	return 0;
-> > -del:
-> > -	cdev_del(&hidg->cdev);
-> >  fail_free_descs:
-> >  	usb_free_all_descriptors(f);
-> >  fail:
-> > @@ -1244,9 +1241,7 @@ static void hidg_free(struct usb_function *f)
-> >  
-> >  	hidg = func_to_hidg(f);
-> >  	opts = container_of(f->fi, struct f_hid_opts, func_inst);
-> > -	kfree(hidg->report_desc);
-> > -	kfree(hidg->set_report_buf);
-> > -	kfree(hidg);
-> > +	put_device(&hidg->dev);
-> >  	mutex_lock(&opts->lock);
-> >  	--opts->refcnt;
-> >  	mutex_unlock(&opts->lock);
-> > @@ -1256,8 +1251,7 @@ static void hidg_unbind(struct usb_configuration *c, struct usb_function *f)
-> >  {
-> >  	struct f_hidg *hidg = func_to_hidg(f);
-> >  
-> > -	device_destroy(hidg_class, MKDEV(major, hidg->minor));
-> > -	cdev_del(&hidg->cdev);
-> > +	cdev_device_del(&hidg->cdev);
-> >  
-> >  	usb_free_all_descriptors(f);
-> >  }
-> > @@ -1266,6 +1260,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
-> >  {
-> >  	struct f_hidg *hidg;
-> >  	struct f_hid_opts *opts;
-> > +	int ret;
-> >  
-> >  	/* allocate and initialize one new instance */
-> >  	hidg = kzalloc(sizeof(*hidg), GFP_KERNEL);
-> > @@ -1277,17 +1272,28 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
-> >  	mutex_lock(&opts->lock);
-> >  	++opts->refcnt;
-> >  
-> > -	hidg->minor = opts->minor;
-> > +	device_initialize(&hidg->dev);
-> > +	hidg->dev.release = hidg_release;
-> > +	hidg->dev.class = hidg_class;
-> > +	hidg->dev.devt = MKDEV(major, opts->minor);
-> > +	ret = dev_set_name(&hidg->dev, "hidg%d", opts->minor);
-> > +	if (ret) {
-> > +		--opts->refcnt;
-> 
-> Since we're holding the opts lock at this point, is there anything
-> preventing us from incrementing the refcnt at the end, just before
-> giving up the lock, thus saving 2 decrements in the error paths?
+functionfs_unbind
+ep0_dequeue
+			ffs_ep0_read
+			mutex_lock()
+giveback		ep0_queue
+			map request buffer
+unmap buffer
 
-This makes sense.  I'll respin this as a series and include a patch
-tidying up the error handling as a final step.
+This can affect the controller's list i.e the pending_list for ep0 or 
+might also result on controller accessing a stale memory address isn't it ?
 
-> > +		mutex_unlock(&opts->lock);
-> > +		return ERR_PTR(ret);
-> > +	}
-> > +
-> >  	hidg->bInterfaceSubClass = opts->subclass;
-> >  	hidg->bInterfaceProtocol = opts->protocol;
-> >  	hidg->report_length = opts->report_length;
-> >  	hidg->report_desc_length = opts->report_desc_length;
-> >  	if (opts->report_desc) {
-> > -		hidg->report_desc = kmemdup(opts->report_desc,
-> > +		hidg->report_desc = devm_kmemdup(&hidg->dev, opts->report_desc,
-> 
-> Nice.
-> 
-> >  					    opts->report_desc_length,
-> >  					    GFP_KERNEL);
-> >  		if (!hidg->report_desc) {
-> > -			kfree(hidg);
-> > +			put_device(&hidg->dev);
-> > +			--opts->refcnt;
-> >  			mutex_unlock(&opts->lock);
-> >  			return ERR_PTR(-ENOMEM);
-> >  		}
-> 
-> Thanks for doing this John, your work is appreciated.
+Or does the mutex would let the ep0_read execute in atomic context? No 
+right. Will it not be able to execute parallely? If not then yah we can 
+do dequeue outside mutex for sure.
+
+Thanks,
+-Udipto
