@@ -2,197 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BF26334BD
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 06:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040FC633596
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 08:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiKVFjD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 00:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S232251AbiKVHAj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 02:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiKVFjB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 00:39:01 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F8B21274
-        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 21:38:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669095540; x=1700631540;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5hRvZhGSyfGW+L2fCVWVzsm4LkwkozSiYCd9oqOz5hY=;
-  b=TVGk2lwjRQD4h0TB5SKQg0ZL2TIMVXIHh0TVgipMktBjgRMrC/ruxClG
-   KpR96YWpZDBVgOytQUcwlRGkQGSIQtmgo33AS3NOt4Ez6bHveoQKYZZUX
-   6e0LQe7wN6r+SQrP3tumEQiCRdevN93vyseT10fKnWLaxAuQXgPIVw9BI
-   qznFhKuTRlgzTgTD7KyKwRaVQ2Cf66cteAqqqPugWjDGYvl+0w7MtoNkY
-   Gh9AC1Aiy8zZa9dxiZVNjR/7h9EQk/K2YDEHiJtTCV4Ii2FajkPYsuYF0
-   pMG4ESh9HdbnJquz55bErSbDmGqcVl4QaL0CqvaekFR291eOBzkLxfOr8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="377995701"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="377995701"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 21:38:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="641293304"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="641293304"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Nov 2022 21:38:58 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oxLzl-00017L-1J;
-        Tue, 22 Nov 2022 05:38:57 +0000
-Date:   Tue, 22 Nov 2022 13:38:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- d9c3b34d3b3af22d548007d5d36e83ad12140ee7
-Message-ID: <637c6064.b6XqxtFN9J1r4tlF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229750AbiKVHAi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 02:00:38 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721E423BF0;
+        Mon, 21 Nov 2022 23:00:37 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id i10so33592491ejg.6;
+        Mon, 21 Nov 2022 23:00:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RukMbpM7DzNOaOS5LbwSgZ9se9n27VN51Vl7EeaDcBA=;
+        b=HzOnesO0M/oRRindlCn3A72Afi0XaJBZNYvkRzoKZ6hbxCqgUBOH0AGml+hOeCrv3O
+         9WnxOwK9z2ixayRMIBC2EHqOyPxS3CwdVR4cpQh9YuNObRNkKiFu7YHt/U1VcGumhBwu
+         Fs8bxkMj4fzV/T0AwDeVqJSWLyxsAcNTSuH6TXtYN597l3zQHKKTM1eRybG4OkxkpdO5
+         Typt0DKAptdPi/w0ySvR4tMwGgJw1uXbMeApl6CGgDszL/NbN0kgV5cJPI5ChB5eIYLg
+         pJtdyyMgiByu99QkkW4NGCU4I2NiZqZy+rLIqRBlt3FZop9J6Ir2wHfoycEI6YdAIQXk
+         OlvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RukMbpM7DzNOaOS5LbwSgZ9se9n27VN51Vl7EeaDcBA=;
+        b=SaZ7Eka5vLUtOr2GQ8S9sELmKqHIYR2aokKcUfBih5uvv/bI4fHPV0yY1YIbNOifer
+         oTpTy6JupShUcbZ+cUesm6wmZikP7wCYhN8s1gXHmP2YorEYWqJGaQEmMyZKrjOGOR+p
+         NUvdr3gUgxKdO8e1+LpQtCJT68RFUrr/cWTBpc4sJTU2nuO/CuC6ww9tOgaCutBTOXYh
+         lXEqrd0KylIGti8WNkz3R1e1CE7SIjmJQQ32Xz9c3epyOFiOD+ogG8ImJ29/lGVf+mHn
+         PbUuPZ9jcibdjv4SjhlNJrXQeSt7tQtGR8rNKFvByvSwQQ4oncLH4i8nJzZGuRYmiam4
+         vcRA==
+X-Gm-Message-State: ANoB5pllxgLHYOhAPak/dOKl2tzmhcxgAud6i5psbkX2pwbPUJkFQBkC
+        UviTtjf3/joK+GlNvcZn2Uz1x89/X2A=
+X-Google-Smtp-Source: AA0mqf5W5oeCVQeqq7On7gkKyBkHSppUXtAuOvnts6S6W4doH8Zy8I9BdIeCzt9MfzdP/it1VmLNAw==
+X-Received: by 2002:a17:906:77d0:b0:7ae:1826:b27b with SMTP id m16-20020a17090677d000b007ae1826b27bmr10025031ejn.692.1669100435918;
+        Mon, 21 Nov 2022 23:00:35 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id qk14-20020a170906d9ce00b00772061034dbsm5664650ejb.182.2022.11.21.23.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 23:00:35 -0800 (PST)
+Date:   Tue, 22 Nov 2022 10:00:27 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Albert Briscoe <albertsbriscoe@gmail.com>,
+        Zqiang <qiang.zhang@windriver.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: function: use after free in printer_close()
+Message-ID: <Y3xzi389jS0PmEBA@kadam>
+References: <Y3uOxcvowFq75Tzv@kili>
+ <b7dcf498-51ea-3aaf-211f-09fa59c38768@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b7dcf498-51ea-3aaf-211f-09fa59c38768@collabora.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: d9c3b34d3b3af22d548007d5d36e83ad12140ee7  Merge 6.1-rc6 into usb-next
+On Mon, Nov 21, 2022 at 04:32:52PM +0100, Andrzej Pietrasiewicz wrote:
+> Hi Dan,
+> 
+> I'm fine with either symmetrically removing the DBG() from "printer_open()"
+> or with this version of the patch.
+> 
+> It seems to me that this version better fits "fixing UAF", though.
+> Whether the driver is too verbose is another matter, and if it is,
+> it deserves its own patch because DBG() invocations are sprinkled
+> here and there.
 
-elapsed time: 1171m
+It is too verbose, but I'm trying to cut my kernel work to an hour a day
+and then all day Friday so I don't have time to clean to do clean up
+work.  A UAF is sort of high value but clean up is endless.
 
-configs tested: 116
-configs skipped: 4
+I obviously considered this as v1 but thought deleting was better.  I
+still do.  :)  But it's not worth spending time on.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> 
+> W dniu 21.11.2022 o 15:44, Dan Carpenter pisze:
+> > The printer_dev_free() function frees "dev" but then it is dereferenced
+> > by the debug code on the next line.  Flip the order to avoid the use after
+> > free.
+> > 
+> > Fixes: e8d5f92b8d30 ("usb: gadget: function: printer: fix use-after-free in __lock_acquire")
+> > Signed-off-by: Dan Carpenter <error27@gmail.com>
+> 
+> Acked-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                            allnoconfig
-s390                 randconfig-r044-20221121
-riscv                randconfig-r042-20221121
-arc                  randconfig-r043-20221121
-arc                                 defconfig
-sh                        sh7763rdp_defconfig
-m68k                            q40_defconfig
-powerpc                 mpc85xx_cds_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                      footbridge_defconfig
-powerpc                       eiger_defconfig
-alpha                               defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-s390                             allmodconfig
-ia64                             allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-s390                                defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-arm                                 defconfig
-x86_64               randconfig-a011-20221121
-x86_64               randconfig-a014-20221121
-x86_64               randconfig-a012-20221121
-x86_64               randconfig-a013-20221121
-x86_64               randconfig-a016-20221121
-x86_64               randconfig-a015-20221121
-s390                             allyesconfig
-m68k                          hp300_defconfig
-arm                        realview_defconfig
-powerpc                    sam440ep_defconfig
-sh                         ap325rxa_defconfig
-i386                 randconfig-a014-20221121
-i386                 randconfig-a011-20221121
-i386                 randconfig-a013-20221121
-i386                 randconfig-a016-20221121
-i386                 randconfig-a012-20221121
-i386                 randconfig-a015-20221121
-i386                          randconfig-c001
-arm                            hisi_defconfig
-sh                          sdk7786_defconfig
-sparc                       sparc64_defconfig
-sh                          rsk7264_defconfig
-sh                           se7712_defconfig
-arc                              allyesconfig
-m68k                        m5272c3_defconfig
-arm                         nhk8815_defconfig
-mips                           jazz_defconfig
-powerpc                      ep88xc_defconfig
-m68k                       m5249evb_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                           sama5_defconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                           tb10x_defconfig
-mips                          rb532_defconfig
-powerpc                      bamboo_defconfig
-sh                               alldefconfig
-m68k                        m5307c3_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                               defconfig
-csky                                defconfig
-x86_64                                  kexec
-arc                  randconfig-r043-20221120
-powerpc                     tqm8541_defconfig
-powerpc                     asp8347_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-arm64                            allyesconfig
-arm                              allyesconfig
+Thanks!
 
-clang tested configs:
-x86_64               randconfig-a002-20221121
-x86_64               randconfig-a001-20221121
-x86_64               randconfig-a004-20221121
-x86_64               randconfig-a006-20221121
-x86_64               randconfig-a005-20221121
-x86_64               randconfig-a003-20221121
-powerpc                    mvme5100_defconfig
-arm                         bcm2835_defconfig
-arm                         lpc32xx_defconfig
-i386                 randconfig-a001-20221121
-i386                 randconfig-a005-20221121
-i386                 randconfig-a006-20221121
-i386                 randconfig-a004-20221121
-i386                 randconfig-a003-20221121
-i386                 randconfig-a002-20221121
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-powerpc                    gamecube_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                        neponset_defconfig
-powerpc                     ksi8560_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
+regards,
+dan carpenter
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
