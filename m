@@ -2,233 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAD4633787
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 09:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D9A6337CC
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 10:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiKVIw2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 03:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S232964AbiKVJCK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 04:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiKVIwZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 03:52:25 -0500
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749473F046;
-        Tue, 22 Nov 2022 00:52:23 -0800 (PST)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AM8N202007667;
-        Tue, 22 Nov 2022 00:52:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=proofpoint;
- bh=wubufJjS6S6wxKFmEQPWgUzNepLb279a7lUhgILPVhQ=;
- b=W9u9/XE3q6cmeYS0ETqSMibX66KFYQ120m6ntuHx3kZ+oGADFZx+P2GPltZboW3PLzB3
- fidSoFaBZpKZzCzYClqNqmOFkzDlWxjTWuSvfNymJ31BQr4HI6R4LpbWneXRi3s0MOqx
- oixfjgbuntX0Qw55GtsTl+Ygl5T3C3LC6YBA4o5zWCkUUvLbdBC+rYTMa63jULGoaHGJ
- FDiGzt4Ph3GhPdNECwlbEaod5l5aB8aX8jCndCXoIp9BF29AKTtUllspr5MVRAZ0W1fb
- GqAGvAxnXYQDopExrChT1NGPTeigzJEoZAL4gyrjdXfUd3pPe98JGOT3drZETPdGe8H+ bQ== 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2044.outbound.protection.outlook.com [104.47.74.44])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3kxum3svvu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 00:52:13 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PMAnJ752480kgpm/WZ9DXXGalzsnj1L4AwpvcmHIE1wN8gWml0v9h+0huXJfjOi+FIausVlJDv0quUHGsrDS1kcFHh8ReXwd43X0IaGiGBJDPr6+cd4Wg5vhzFvAO3XpRj0ZBa+lkgfhhigYmKj/Yo6qZ21FiiUr3G2iXQKwwnNCt3sFzBM4C7n9gi+qBtUXyaBPYVnrWyzGMMIZJF8rqVdmBacJNMIuzvMUfIFwB4aeI2UolPj2iZ2dF1N+4UO08uAlRGFSMoGdiQ7FzudP/Sc7OsHAKsHARUWBLuHaYPD6bUq+MR9yCvMyUXNHQKY2paj5kn8X7YQKjTmDEjKa5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wubufJjS6S6wxKFmEQPWgUzNepLb279a7lUhgILPVhQ=;
- b=hIPFmdZhdajxzN446INCn9+/9EUVqLgvideI7+jAjI2uW7NcneI224+XESEUM+AyX9Wu6Z/bwzb3GM2UgO4nn0fpRkH5+9zxldpWjX0iE1BfthCr9g/b3eND3AjSFT43ZPTCh5wgwwOJVCAipz7m4kBR0tlkILMNXMxQ7nqh8vUyL2odvdE1LuQ98MrEM6uSrCFE5pAk1tAC20ROKfjnXZw9h2q+gLTXDw5MtP2lqfTvnIdmP/n5nRP8a1KTHVXbaA+yhe43yVTZhWD4a8FeGqPCxfnTzzI/yoKKc75R2sDfuTx5TLFr4T2dCuz81nYL/IUp1jVpHbJbeZnU/ZPZHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.147) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=cadence.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=cadence.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wubufJjS6S6wxKFmEQPWgUzNepLb279a7lUhgILPVhQ=;
- b=H87WeITPRHTIODVyt/jwsI8pIzIxooQc1i2j358EaFX3bsy5S8YJh9MoPf/VzhugI0bmgMWH1tek/bJHfDBEmyeHLgt3b8UYjNkRHgMaE7r7P9BghQ60CWJ70jO4MEJtH/NRWsBC625/bGi21MIZ9YCddAjp0DqRxyk9aqjIJXw=
-Received: from MW4PR04CA0210.namprd04.prod.outlook.com (2603:10b6:303:86::35)
- by PH7PR07MB9467.namprd07.prod.outlook.com (2603:10b6:510:1ee::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 08:52:10 +0000
-Received: from MW2NAM12FT016.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:86:cafe::e7) by MW4PR04CA0210.outlook.office365.com
- (2603:10b6:303:86::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15 via Frontend
- Transport; Tue, 22 Nov 2022 08:52:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
-Received: from sjmaillnx1.cadence.com (158.140.1.147) by
- MW2NAM12FT016.mail.protection.outlook.com (10.13.180.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5857.7 via Frontend Transport; Tue, 22 Nov 2022 08:52:10 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 2AM8q8cg017029
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Nov 2022 00:52:09 -0800
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu4.global.cadence.com (10.160.110.201) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Tue, 22 Nov 2022 09:51:54 +0100
-Received: from eu-cn02.cadence.com (10.160.89.185) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7
- via Frontend Transport; Tue, 22 Nov 2022 09:51:54 +0100
-Received: from eu-cn02.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn02.cadence.com (8.14.7/8.14.7) with ESMTP id 2AM8psi0332636;
-        Tue, 22 Nov 2022 03:51:54 -0500
-Received: (from pawell@localhost)
-        by eu-cn02.cadence.com (8.14.7/8.14.7/Submit) id 2AM8prVU332628;
-        Tue, 22 Nov 2022 03:51:53 -0500
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdnsp: fix lack of ZLP for ep0
-Date:   Tue, 22 Nov 2022 03:51:38 -0500
-Message-ID: <20221122085138.332434-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+        with ESMTP id S232416AbiKVJCI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 04:02:08 -0500
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72139A456;
+        Tue, 22 Nov 2022 01:02:07 -0800 (PST)
+Received: by mail-qk1-f177.google.com with SMTP id x21so9821944qkj.0;
+        Tue, 22 Nov 2022 01:02:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w7GGsdQ+7EVwz1XvGhev+Xy4/In4783cOO3O+rmimJY=;
+        b=MdaAMO5X4rrnfLSxECbaK5/Tz4R6kQtgy96f17JCBj32vru0LwpjuyLSPKXLJLNZoD
+         IlUbFKKo6SNagxau6QOrEKNnTzf26DFzUawil/83nvC7xyqQ3HjURYoXOttihQMhozBq
+         eKLH/OqyUj4yKbzFhnsAbr2Dy2hHJvr6KmMdP2aHqZVqrzj+sTO7geEiKa2+cFr5BgZz
+         UhBWeoRIz6qDl+yJOvaRGZfpNxhkyif3MFCp/eGx31XYmS4Ic4MzsW52OFHcfLKLQ70E
+         px7h8eplLERYqmE+gcM83G5YdWiTTTDvH3VMIv5TvRFbSDCn8aGlnKqfNtymB6etw4cs
+         frJQ==
+X-Gm-Message-State: ANoB5pmII+up+yl+3haixLt9mTZUCG8Mh5Kiek1QV6eeHmIHEGqt8ExI
+        EpVYGmJgwlf2AnYUXkuMYxv+qZyJM0XW3g==
+X-Google-Smtp-Source: AA0mqf7L1HLxqA963pOAohBg2SwZaM9hIID72zALosQYZMOMfmzyVh8vyrlrQwJhWIl/4yQODi+CgQ==
+X-Received: by 2002:a05:620a:14a4:b0:6fa:2f16:88d1 with SMTP id x4-20020a05620a14a400b006fa2f1688d1mr3671549qkj.462.1669107726314;
+        Tue, 22 Nov 2022 01:02:06 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id q46-20020a05620a2a6e00b006fbcab95d70sm9279160qkp.101.2022.11.22.01.02.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 01:02:05 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id v184so1202815ybv.6;
+        Tue, 22 Nov 2022 01:02:05 -0800 (PST)
+X-Received: by 2002:a25:9e84:0:b0:6de:6183:c5c3 with SMTP id
+ p4-20020a259e84000000b006de6183c5c3mr3143112ybq.89.1669107725187; Tue, 22 Nov
+ 2022 01:02:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2NAM12FT016:EE_|PH7PR07MB9467:EE_
-X-MS-Office365-Filtering-Correlation-Id: e1018370-e503-4152-b07b-08dacc66d79f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iW95AH8A/hAYSFSUyz4Cm2c3Sx2oyrdaHtW3y1+z97zafGssyuZlFr54o0I9dqUsVxgcJGaLKg5SLhT2axnvRQ5dPQiT/Hr+i8IP8GLelh2dZ4Ly10ckGk/Qq8TaWsL/oh2sJ3kCe0vZuyw7CW6CJyOuHg/KBiYHJ9gQ/cwHkwZm1EH+B68TzoiPsA6DAPHlhax8Th3gPNI8oby9vYbfWDsHdEjfxdJ+fqSO37KNuYl4Td9u4XIr+QVwFyGzRJ0Oek+G2lG1KoYFe3pkOJfN2Cmglmj64/N1XWrvc6ae9M/+l+ZudTy/MHTYOYAUdoca26LmVYcTW/IJ7oOjjM5Y3pci/5EStgFty1zc8S5jBTmGhW71iDCXXgMX3vpUYFXJX0QLpP5DGmOFPU+RB4QYeIrxmJ/Tf3/JV3ms115985aXlRG/y/ui2KaVU3uGpBBSNpVWDxHKQq8jg6JSrANfddx59I4POaohY29spkrz5E/hunjrMupbX3K4TSeEsvIEosFEg+d79eDeqLm54xqNJwJGTeZVq3eYxstWGo/H015zlv9RNRybun2Sp1WNkUxU9tNJsva1mhceEc4/BSqWSZ6DKsIf1J+cBTJIkBy/bTF0uB2GAaOpCphzuvynvaFjMmN/XGR2/6FrEpGQzzo1cNnyvm09SiywRWyYNYqpBXoKtJDO9TqEjAL3TqB/A7s3h5chRAEHG2/43lyKWLz1nw==
-X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(376002)(346002)(36092001)(451199015)(40470700004)(36840700001)(46966006)(82740400003)(2906002)(41300700001)(4326008)(8676002)(316002)(70586007)(6916009)(70206006)(82310400005)(42186006)(54906003)(36756003)(40480700001)(356005)(478600001)(6666004)(36860700001)(86362001)(5660300002)(8936002)(336012)(1076003)(186003)(426003)(47076005)(40460700003)(26005)(2616005)(7636003)(83380400001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 08:52:10.2175
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1018370-e503-4152-b07b-08dacc66d79f
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT016.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR07MB9467
-X-Proofpoint-ORIG-GUID: 0ii-VdUL8mZXvw2RVDcwxBeI_K_gYdyS
-X-Proofpoint-GUID: 0ii-VdUL8mZXvw2RVDcwxBeI_K_gYdyS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-22_04,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 impostorscore=0
- adultscore=0 suspectscore=0 mlxlogscore=456 mlxscore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211220065
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com> <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+ <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org> <20221115150417.513955a7@bootlin.com>
+ <20221118112349.7f09eefb@bootlin.com> <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+ <20221121165921.559d6538@bootlin.com> <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+ <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+ <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org> <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
+ <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org> <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
+ <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
+In-Reply-To: <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Nov 2022 10:01:53 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV1Y4Ldq2Hu5X8awTOWYTHq4DPYWCMkyg-9TQY=DaxREg@mail.gmail.com>
+Message-ID: <CAMuHMdV1Y4Ldq2Hu5X8awTOWYTHq4DPYWCMkyg-9TQY=DaxREg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Patch implements the handling of ZLP for control transfer.
-To send the ZLP driver must prepare the extra TRB in TD with
-length set to zero and TRB type to TRB_NORMAL.
-The first TRB must have set TRB_CHAIN flag, TD_SIZE = 1
-and TRB type to TRB_DATA.
+Hi Krzysztof,
 
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdnsp-ring.c | 42 ++++++++++++++++++++++++++--------
- 1 file changed, 32 insertions(+), 10 deletions(-)
+On Tue, Nov 22, 2022 at 9:42 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 22/11/2022 09:25, Geert Uytterhoeven wrote:
+> > On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >> On 21/11/2022 21:46, Geert Uytterhoeven wrote:
+> >>>> This does not change anything. Herve wrote:
+> >>>>
+> >>>>> probe some devices (USB host and probably others)
+> >>>>
+> >>>> Why some can be probed earlier and some not, if there are no
+> >>>> dependencies? If there are dependencies, it's the same case with sysctrl
+> >>>> touching the register bit and the USB controller touching it (as well
+> >>>> via syscon, but that's obvious, I assume).
+> >>>>
+> >>>> Where is the synchronization problem?
+> >>>
+> >>> The h2mode bit (and probably a few other controls we haven't figured out
+> >>> yet) in the sysctrl must be set before any of the USB devices is active.
+> >>> Hence it's safest for the sysctrl to do this before any of the USB drivers
+> >>> probes.
+> >>
+> >> Again, this does not differ from many, many of other devices. All of
+> >> them must set something in system controller block, before they start
+> >> operating (or at specific time). It's exactly the same everywhere.
+> >
+> > The issue here is that there are two _different drivers_ (USB host
+> > and device). When both are modular, and the driver that depends on the
+> > sysctrl setting is loaded second, you have a problem: the sysctrl change
+> > must not be done when the first driver is already using the hardware.
+> >
+> > Hence the sysctrl driver should take care of it itself during early
+> > initialization (it's the main clock controller, so it's a dependency
+> > for all other I/O device drivers).
+>
+> I assumed you have there bit for the first device (which can switch
+> between USB host and USB device) to choose appropriate mode. The
+> bindings also expressed this - "the USBs are". Never said anything about
+> dependency between these USBs.
+>
+> Are you saying that the mode for first device cannot be changed once the
+> second device (which is only host) is started? IOW, the mode setup must
+> happen before any of these devices are started?
 
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 86e1141e150f..fa1fa9b2ff38 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -2006,10 +2006,11 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
- 
- int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
- {
--	u32 field, length_field, remainder;
-+	u32 field, length_field, zlp = 0;
- 	struct cdnsp_ep *pep = preq->pep;
- 	struct cdnsp_ring *ep_ring;
- 	int num_trbs;
-+	u32 maxp;
- 	int ret;
- 
- 	ep_ring = cdnsp_request_to_transfer_ring(pdev, preq);
-@@ -2019,26 +2020,33 @@ int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
- 	/* 1 TRB for data, 1 for status */
- 	num_trbs = (pdev->three_stage_setup) ? 2 : 1;
- 
-+	maxp = usb_endpoint_maxp(pep->endpoint.desc);
-+
-+	if (preq->request.zero && preq->request.length &&
-+	    (preq->request.length % maxp == 0)) {
-+		num_trbs++;
-+		zlp = 1;
-+	}
-+
- 	ret = cdnsp_prepare_transfer(pdev, preq, num_trbs);
- 	if (ret)
- 		return ret;
- 
- 	/* If there's data, queue data TRBs */
--	if (pdev->ep0_expect_in)
--		field = TRB_TYPE(TRB_DATA) | TRB_IOC;
--	else
--		field = TRB_ISP | TRB_TYPE(TRB_DATA) | TRB_IOC;
--
- 	if (preq->request.length > 0) {
--		remainder = cdnsp_td_remainder(pdev, 0, preq->request.length,
--					       preq->request.length, preq, 1, 0);
-+		field = TRB_TYPE(TRB_DATA);
- 
--		length_field = TRB_LEN(preq->request.length) |
--				TRB_TD_SIZE(remainder) | TRB_INTR_TARGET(0);
-+		if (zlp)
-+			field |= TRB_CHAIN;
-+		else
-+			field |= TRB_IOC | (pdev->ep0_expect_in ? 0 : TRB_ISP);
- 
- 		if (pdev->ep0_expect_in)
- 			field |= TRB_DIR_IN;
- 
-+		length_field = TRB_LEN(preq->request.length) |
-+			       TRB_TD_SIZE(zlp) | TRB_INTR_TARGET(0);
-+
- 		cdnsp_queue_trb(pdev, ep_ring, true,
- 				lower_32_bits(preq->request.dma),
- 				upper_32_bits(preq->request.dma), length_field,
-@@ -2046,6 +2054,20 @@ int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
- 				TRB_SETUPID(pdev->setup_id) |
- 				pdev->setup_speed);
- 
-+		if (zlp) {
-+			field = TRB_TYPE(TRB_NORMAL) | TRB_IOC;
-+
-+			if (!pdev->ep0_expect_in)
-+				field = TRB_ISP;
-+
-+			cdnsp_queue_trb(pdev, ep_ring, true,
-+					lower_32_bits(preq->request.dma),
-+					upper_32_bits(preq->request.dma), 0,
-+					field | ep_ring->cycle_state |
-+					TRB_SETUPID(pdev->setup_id) |
-+					pdev->setup_speed);
-+		}
-+
- 		pdev->ep0_stage = CDNSP_DATA_STAGE;
- 	}
- 
--- 
-2.25.1
+Exactly.
 
+> Anyway with sysctrl approach you will have dependency and you cannot
+> rely on clock provider-consumer relationship to order that dependency.
+> What if you make all clocks on and do not take any clocks in USB device?
+
+Enabling the clocks does not have anything to do with this ordering.
+Clock consumers that are part of the clock domain are probed after
+clock providers.  If the clock is missing, that would be an incorrect
+description in DTS.
+
+> Broken dependency. What if you want to use this in a different SoC,
+> where the sysctrl does not provide clocks? Broken dependency.
+
+This is the "renesas,r9a06g032-sysctrl" DT bindings document.
+It talks about this SoC implementation specifically.
+This is not a random synthesizable IP Core that can appear anywhere.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
