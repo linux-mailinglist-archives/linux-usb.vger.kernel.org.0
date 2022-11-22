@@ -2,111 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040FC633596
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 08:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DFF63361E
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 08:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbiKVHAj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 02:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S232538AbiKVHpo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 02:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKVHAi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 02:00:38 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721E423BF0;
-        Mon, 21 Nov 2022 23:00:37 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id i10so33592491ejg.6;
-        Mon, 21 Nov 2022 23:00:37 -0800 (PST)
+        with ESMTP id S232550AbiKVHpY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 02:45:24 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B3631DDD
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 23:45:23 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id s8so22338424lfc.8
+        for <linux-usb@vger.kernel.org>; Mon, 21 Nov 2022 23:45:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RukMbpM7DzNOaOS5LbwSgZ9se9n27VN51Vl7EeaDcBA=;
-        b=HzOnesO0M/oRRindlCn3A72Afi0XaJBZNYvkRzoKZ6hbxCqgUBOH0AGml+hOeCrv3O
-         9WnxOwK9z2ixayRMIBC2EHqOyPxS3CwdVR4cpQh9YuNObRNkKiFu7YHt/U1VcGumhBwu
-         Fs8bxkMj4fzV/T0AwDeVqJSWLyxsAcNTSuH6TXtYN597l3zQHKKTM1eRybG4OkxkpdO5
-         Typt0DKAptdPi/w0ySvR4tMwGgJw1uXbMeApl6CGgDszL/NbN0kgV5cJPI5ChB5eIYLg
-         pJtdyyMgiByu99QkkW4NGCU4I2NiZqZy+rLIqRBlt3FZop9J6Ir2wHfoycEI6YdAIQXk
-         OlvQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q4rrJuYa2IECxYwiMtNKNlK59Iea73AY9K3iEfBn864=;
+        b=qI9mYP9YrNMrTKAOvaJOh4GRWwwM/3IgTKmSqgVcJmA7D6iSjNZhRAolaPzQoRu+Wp
+         lbnrAX7sa8i8vvP5uJ3eI76jX6DYCxXUgSf9nwNTjbokm2DNtvEFBdM6Nb2f/ZBmSqp/
+         s/tHvdYJjyyucQGCdSA+MNhfozef7sylRmt16DDk9bsap0MCo0oG1sWZuutDo5oU4jII
+         Ttrms9agzxXacQehSTNOaMzT7NdQgybNevGco8tRCfEl8eFfSP7csmS/sBC3ZrO4dmvE
+         vu1wuC+2dhgtXJtmgu0NoxtDTk44FG5O5OavksNE8A+D3GF3Xr+rV1wvjYwIXbI+S0K2
+         iRVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RukMbpM7DzNOaOS5LbwSgZ9se9n27VN51Vl7EeaDcBA=;
-        b=SaZ7Eka5vLUtOr2GQ8S9sELmKqHIYR2aokKcUfBih5uvv/bI4fHPV0yY1YIbNOifer
-         oTpTy6JupShUcbZ+cUesm6wmZikP7wCYhN8s1gXHmP2YorEYWqJGaQEmMyZKrjOGOR+p
-         NUvdr3gUgxKdO8e1+LpQtCJT68RFUrr/cWTBpc4sJTU2nuO/CuC6ww9tOgaCutBTOXYh
-         lXEqrd0KylIGti8WNkz3R1e1CE7SIjmJQQ32Xz9c3epyOFiOD+ogG8ImJ29/lGVf+mHn
-         PbUuPZ9jcibdjv4SjhlNJrXQeSt7tQtGR8rNKFvByvSwQQ4oncLH4i8nJzZGuRYmiam4
-         vcRA==
-X-Gm-Message-State: ANoB5pllxgLHYOhAPak/dOKl2tzmhcxgAud6i5psbkX2pwbPUJkFQBkC
-        UviTtjf3/joK+GlNvcZn2Uz1x89/X2A=
-X-Google-Smtp-Source: AA0mqf5W5oeCVQeqq7On7gkKyBkHSppUXtAuOvnts6S6W4doH8Zy8I9BdIeCzt9MfzdP/it1VmLNAw==
-X-Received: by 2002:a17:906:77d0:b0:7ae:1826:b27b with SMTP id m16-20020a17090677d000b007ae1826b27bmr10025031ejn.692.1669100435918;
-        Mon, 21 Nov 2022 23:00:35 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id qk14-20020a170906d9ce00b00772061034dbsm5664650ejb.182.2022.11.21.23.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 23:00:35 -0800 (PST)
-Date:   Tue, 22 Nov 2022 10:00:27 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Albert Briscoe <albertsbriscoe@gmail.com>,
-        Zqiang <qiang.zhang@windriver.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: function: use after free in printer_close()
-Message-ID: <Y3xzi389jS0PmEBA@kadam>
-References: <Y3uOxcvowFq75Tzv@kili>
- <b7dcf498-51ea-3aaf-211f-09fa59c38768@collabora.com>
+        bh=Q4rrJuYa2IECxYwiMtNKNlK59Iea73AY9K3iEfBn864=;
+        b=XGLTumvra/Xe6uM4CgDaa99nMcw6aSrXFn9Rla+1XO9kx/b9sPzifkH6t6hAsH/LPs
+         vjKpbEx2v5QVB83DSiJGHod/XRqDAY+2avRwPpOwr1lBl+bI/NzaUFalRB58GUafEpRQ
+         DsaLjc0LGRDWLlAVTZNl44GLLYRsvvGR1U2suD30xzmc1UspOjDPflN4h7THfnAZShCK
+         sfLPJ3lP/qGrmPmLqtXmJj0BTacswdpDmgSK+tvM0RMJak/aY2QA3Q72Msh/401tHGDr
+         YCtU1sIQ0GfzTukfbWXhxmo9q2KUo71ofjbterr0QWoIWPotgEfuDDddAHyQEIhjljpy
+         qW0Q==
+X-Gm-Message-State: ANoB5pnPIz6W85T/3nQQCprC4+JoGCVgxuvyfCd8L27rGQwxQopV/PLC
+        YVWCUQcF+x0B8+ejybaxIeIVLA==
+X-Google-Smtp-Source: AA0mqf7QDPXGNntVFgiI4Zonhd/+zfJ/KN6RfygStEreI1d2N6+3gTxCPRXsuOKpXmIESg3lrt+hUQ==
+X-Received: by 2002:a19:4f46:0:b0:49f:5ddb:f8af with SMTP id a6-20020a194f46000000b0049f5ddbf8afmr7239230lfk.184.1669103121908;
+        Mon, 21 Nov 2022 23:45:21 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056512214100b004a45ed1ae21sm2344717lfr.224.2022.11.21.23.45.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 23:45:21 -0800 (PST)
+Message-ID: <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
+Date:   Tue, 22 Nov 2022 08:45:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b7dcf498-51ea-3aaf-211f-09fa59c38768@collabora.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com>
+ <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+ <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+ <20221115150417.513955a7@bootlin.com> <20221118112349.7f09eefb@bootlin.com>
+ <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+ <20221121165921.559d6538@bootlin.com>
+ <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+ <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+ <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
+ <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 04:32:52PM +0100, Andrzej Pietrasiewicz wrote:
-> Hi Dan,
+On 21/11/2022 21:46, Geert Uytterhoeven wrote:
+>> This does not change anything. Herve wrote:
+>>
+>>> probe some devices (USB host and probably others)
+>>
+>> Why some can be probed earlier and some not, if there are no
+>> dependencies? If there are dependencies, it's the same case with sysctrl
+>> touching the register bit and the USB controller touching it (as well
+>> via syscon, but that's obvious, I assume).
+>>
+>> Where is the synchronization problem?
 > 
-> I'm fine with either symmetrically removing the DBG() from "printer_open()"
-> or with this version of the patch.
-> 
-> It seems to me that this version better fits "fixing UAF", though.
-> Whether the driver is too verbose is another matter, and if it is,
-> it deserves its own patch because DBG() invocations are sprinkled
-> here and there.
+> The h2mode bit (and probably a few other controls we haven't figured out
+> yet) in the sysctrl must be set before any of the USB devices is active.
+> Hence it's safest for the sysctrl to do this before any of the USB drivers
+> probes.
 
-It is too verbose, but I'm trying to cut my kernel work to an hour a day
-and then all day Friday so I don't have time to clean to do clean up
-work.  A UAF is sort of high value but clean up is endless.
+Again, this does not differ from many, many of other devices. All of
+them must set something in system controller block, before they start
+operating (or at specific time). It's exactly the same everywhere.
 
-I obviously considered this as v1 but thought deleting was better.  I
-still do.  :)  But it's not worth spending time on.
-
-> 
-> W dniu 21.11.2022 o 15:44, Dan Carpenter pisze:
-> > The printer_dev_free() function frees "dev" but then it is dereferenced
-> > by the debug code on the next line.  Flip the order to avoid the use after
-> > free.
-> > 
-> > Fixes: e8d5f92b8d30 ("usb: gadget: function: printer: fix use-after-free in __lock_acquire")
-> > Signed-off-by: Dan Carpenter <error27@gmail.com>
-> 
-> Acked-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-
-Thanks!
-
-regards,
-dan carpenter
+Best regards,
+Krzysztof
 
