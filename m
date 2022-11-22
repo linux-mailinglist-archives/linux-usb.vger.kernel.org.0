@@ -2,155 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173D963375B
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 09:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5740463375D
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 09:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbiKVInD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 03:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S230242AbiKVIpQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 03:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiKVImx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 03:42:53 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10D0A1AB
-        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 00:42:51 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id l8so17131207ljh.13
-        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 00:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U7NY7k+Aa5N9DlhIquG0NmiQoRxU6GJ+N37ltBBWUU4=;
-        b=Py0vsaEjCa1ebI9VbLXGCjZoKNk0awz8348fV82HhXMTl+0Up/DS1w2fXqTJo1Fu5h
-         7tlGWkQh/CldNpiEJXVVjJCywZCfY8CEhWuQ/rAlwxP3cxTvX8J7pCTaMCMWCkt284N6
-         pONkTaqGA1O2GdydkHB1NwZZpjO7wh8aCobZmOrCNSaNe09u+MiYuVk8mH7C+nXNol0T
-         pwhslqdw7WYV9l7rEtfcjJ7hXMrc7RG1dauk24VmPBmt+ei9za3s17jwmUWIVAcGiv6X
-         KEDDuQYof+4vrTWEX+NtDmwVyxRjLQfgG4y/cB/nNvjpu/nABfehARzgDuPI/qA/f1RO
-         6OCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U7NY7k+Aa5N9DlhIquG0NmiQoRxU6GJ+N37ltBBWUU4=;
-        b=GQqUNhdnHokFXF3dWcR9JSe2ZUDj6aGZY0ghDjeripMBo/P2xqLlPqd2nHZ9SlHcDD
-         YLNtircybOuAMPopdsnIMFXeADHDGTQ0LrxgeKpmh4C24A5PSU/kfQyzusI+li6VRQbw
-         NT22Qa/UV8g7+n+3G1dmqpZ+13lNMwVwKUnBQE/60qCCd5OPF7VUdwirDTVgiiMSIbyS
-         pGlEBxGhxYxwF33VbQ9qez9/qSYrKHVvWOX5y0XgvuTOqEHKQ9cL3qlJ7HWso5Hj9cZ3
-         3ommTQyHO/+umLt+5L1U3f7NCCtif/6qDq63yyavcA0HeRVxDBNZKNgrwVlYmx6YDNYC
-         K4xQ==
-X-Gm-Message-State: ANoB5pkPGhikOpN+SH4XYbZW5/FoCAVIHDBDswTLvrTYUgLO0mbt0O88
-        iCZvfqJ0gG0RehNaZB/XILPDmA==
-X-Google-Smtp-Source: AA0mqf7/UsftI+kuXWw2ZObJffeMs3x/d131N5RP0pQBBjM51jfoAwn6fUl61SAYf6wBK0vyMPAUow==
-X-Received: by 2002:a2e:aa9f:0:b0:277:710f:f973 with SMTP id bj31-20020a2eaa9f000000b00277710ff973mr7123921ljb.74.1669106570016;
-        Tue, 22 Nov 2022 00:42:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t3-20020a2e8e63000000b0026fbac7468bsm1703702ljk.103.2022.11.22.00.42.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 00:42:49 -0800 (PST)
-Message-ID: <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
-Date:   Tue, 22 Nov 2022 09:42:48 +0100
+        with ESMTP id S229585AbiKVIpP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 03:45:15 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F4F15A20
+        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 00:45:13 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 50D58240006;
+        Tue, 22 Nov 2022 08:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669106712;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8KTZNpqsSlSOm0TQNFE89faSSTTRrpkzJZJeA8w6c+U=;
+        b=m+3+48CGJowCG0cD8VhWsszCfX/ICaBYzq0kBit8pcYf051G/utj3+pRxKJ/T4W6HUBoj5
+        lP+dcCdxM+C+iM1QuwKnf++IcyzX6DWhRxyICuEYmpSOLLEBMHYQe+pvb45Mtkshcb1bje
+        1SwdOOTiGA3q1UuNznZPw/SSTrJlHWq7atz33sHerKHNsw2pnWwhhk7/j5QwhWrDi6r/Sr
+        J/Cz5AQfvfP2D/e81yBh7TUdN1KLOoA45faOdeoL4+AOxr00wqOmUX1FTRheQDgHnX7TlD
+        H4eT51ry+CeHx6RYhIBAcdO4R4MEya+HaaJVIBL88Pm1b2Rh9shOB5EOOSl43Q==
+Date:   Tue, 22 Nov 2022 09:45:09 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: RK3308: ACM serial over USB sporadically not started
+Message-ID: <20221122094509.37f99121@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
- h2mode property
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Herve Codina <herve.codina@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
- <20221114111513.1436165-3-herve.codina@bootlin.com>
- <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
- <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
- <20221115150417.513955a7@bootlin.com> <20221118112349.7f09eefb@bootlin.com>
- <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
- <20221121165921.559d6538@bootlin.com>
- <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
- <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
- <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
- <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
- <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
- <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22/11/2022 09:25, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> On 21/11/2022 21:46, Geert Uytterhoeven wrote:
->>>> This does not change anything. Herve wrote:
->>>>
->>>>> probe some devices (USB host and probably others)
->>>>
->>>> Why some can be probed earlier and some not, if there are no
->>>> dependencies? If there are dependencies, it's the same case with sysctrl
->>>> touching the register bit and the USB controller touching it (as well
->>>> via syscon, but that's obvious, I assume).
->>>>
->>>> Where is the synchronization problem?
->>>
->>> The h2mode bit (and probably a few other controls we haven't figured out
->>> yet) in the sysctrl must be set before any of the USB devices is active.
->>> Hence it's safest for the sysctrl to do this before any of the USB drivers
->>> probes.
->>
->> Again, this does not differ from many, many of other devices. All of
->> them must set something in system controller block, before they start
->> operating (or at specific time). It's exactly the same everywhere.
-> 
-> The issue here is that there are two _different drivers_ (USB host
-> and device). When both are modular, and the driver that depends on the
-> sysctrl setting is loaded second, you have a problem: the sysctrl change
-> must not be done when the first driver is already using the hardware.
-> 
-> Hence the sysctrl driver should take care of it itself during early
-> initialization (it's the main clock controller, so it's a dependency
-> for all other I/O device drivers).
+Hello,
 
-I assumed you have there bit for the first device (which can switch
-between USB host and USB device) to choose appropriate mode. The
-bindings also expressed this - "the USBs are". Never said anything about
-dependency between these USBs.
+I have set up Serial over USB gadget (ACM CDC) on a RK3308, which works
+fine most times but sporadically (10~20% of the times) does not work,
+failing to set up ttyACM0 on the host side.
 
-Are you saying that the mode for first device cannot be changed once the
-second device (which is only host) is started? IOW, the mode setup must
-happen before any of these devices are started?
+Target hardware: Rock Pi S (RK3308).
+Software used on target: Linux v6.1-rc6 (eb7081409f94a9a8608).
+Device tree: rk3308-rock-pi-s.dtb from mainline, unmodified.
 
-Anyway with sysctrl approach you will have dependency and you cannot
-rely on clock provider-consumer relationship to order that dependency.
-What if you make all clocks on and do not take any clocks in USB device?
-Broken dependency. What if you want to use this in a different SoC,
-where the sysctrl does not provide clocks? Broken dependency.
+Relevant Kconfig options:
 
-You have here in such case parent-child dependency, not
-provider-consumer. Just like for all serial-protocol engines (I2C/UART/SPI).
+CONFIG_USB=y
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_EHCI_HCD_PLATFORM=y
+CONFIG_USB_OHCI_HCD=y
+CONFIG_USB_OHCI_HCD_PLATFORM=y
+CONFIG_USB_DWC2=y
+CONFIG_USB_DWC2_PERIPHERAL=y
+CONFIG_USB_DWC2_DEBUG=y
+CONFIG_USB_DWC2_TRACK_MISSED_SOFS=y
+CONFIG_USB_GADGET=y
+CONFIG_USB_GADGET_DEBUG=y
+CONFIG_USB_GADGET_DEBUG_FILES=y
+CONFIG_USB_GADGET_DEBUG_FS=y
+CONFIG_USB_G_SERIAL=y
 
-Best regards,
-Krzysztof
+CONFIG_USB_LIBCOMPOSITE=y
+CONFIG_USB_F_ACM=y
+CONFIG_USB_U_SERIAL=y
+CONFIG_USB_F_SERIAL=y
+CONFIG_USB_F_OBEX=y
+# CONFIG_USB_CONFIGFS is not set
 
+CONFIG_EXTCON=y
+CONFIG_PHY_ROCKCHIP_INNO_USB2=y
+CONFIG_PHY_ROCKCHIP_USB=y
+
+Connections:
+- USB-C to USB-C cable connecting PC and target for both USB
+  gadget and target power
+- Ethernet cable
+- UART TX pin (GND not connected, adds booting troubles)
+
+Symptoms
+---------
+
+Here is a snippet of a boot log taken on the target during a boot where
+the ttyACM0 did not appear on the host side:
+
+[    0.582781] udc ff400000.usb: binding gadget driver [g_serial]
+[    0.583497] g_serial gadget.0: adding 'acm'/(____ptrval____) to config 'CDC ACM config'/(____ptrval____)
+[    0.583576] g_serial gadget.0: acm ttyGS0: dual speed IN/ep1in OUT/ep2out NOTIFY/ep3in
+[    0.583632] g_serial gadget.0: Gadget Serial v2.4
+[    0.584086] g_serial gadget.0: g_serial ready
+[    0.588785] dwc2 ff400000.usb: bound driver g_serial
+[    0.589295] dwc2 ff400000.usb: dwc2_hsotg_pullup: is_on: 1 op_state: 3
+[    0.589333] dwc2 ff400000.usb: HS UTMI+ PHY selected
+[    0.589361] dwc2 ff400000.usb: FIFOs reset, timeout at 100
+[    0.589389] dwc2 ff400000.usb: EP0: DIEPCTL0=0x00008000, DOEPCTL0=0x00008000
+[    0.589414] dwc2 ff400000.usb: gsintmsk now 0xd88c3cc4
+[    0.589452] dwc2 ff400000.usb: DCTL=0x00000002
+[    0.589477] dwc2 ff400000.usb: GLPMCFG=0x10601483
+[    0.592499] dwc2 ff400000.usb: dwc2_hsotg_enqueue_setup: queueing setup request
+[    0.592523] dwc2 ff400000.usb: ep0: req (____ptrval____): 8@(____ptrval____), noi=0, zero=0, snok=0
+[    0.592565] dwc2 ff400000.usb: dwc2_hsotg_start_req: DxEPCTL=0x80008000, ep 0, dir out
+[    0.592593] dwc2 ff400000.usb: ureq->length:8 ureq->actual:0
+[    0.592618] dwc2 ff400000.usb: dwc2_hsotg_start_req: 1@8/8, 0x00080008 => 0x00000b10
+[    0.592656] dwc2 ff400000.usb: dwc2_hsotg_start_req: 02101000 pad => 0x00000b14
+[    0.592682] dwc2 ff400000.usb: ep0 state:0
+[    0.592704] dwc2 ff400000.usb: dwc2_hsotg_start_req: DxEPCTL=0x80008000
+[    0.592728] dwc2 ff400000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80008000
+[    0.592752] dwc2 ff400000.usb: EP0: DIEPCTL0=0x00008000, DOEPCTL0=0x80008000
+...
+[    0.595866] dwc2 ff400000.usb: dwc2_hsotg_irq: 04008420 00000400 (d88c3cc4) retry 8
+[    0.595895] dwc2 ff400000.usb: GINTSTS_ErlySusp
+[    0.598921] dwc2 ff400000.usb: gintsts=04008820  gintmsk=d88c3cc4
+[    0.601050] dwc2 ff400000.usb: dwc2_handle_usb_suspend_intr: DSTS=0x400003
+[    0.602415] dwc2 ff400000.usb: DSTS.Suspend Status=1 HWCFG4.Power Optimize=1 HWCFG4.Hibernation=0
+[    0.602431] dwc2 ff400000.usb: ignore suspend request before enumeration
+[    0.602445] dwc2 ff400000.usb: dwc2_hsotg_irq: 04008020 00000000 (d88c3cc4) retry 8
+
+...lots of other messages from dwc2 ff400000.usb...
+
+...I also have 4 lines like this one:
+[    7.287006] dwc2 ff400000.usb: dwc2_hsotg_enqueue_setup already queued???
+
+[    7.383932] g_serial gadget.0: suspend
+[    7.383950] dwc2 ff400000.usb: dwc2_hsotg_irq: 04048428 00040400 (d88c3cc4) retry 8
+[    7.383968] dwc2 ff400000.usb: dwc2_hsotg_irq: daint=00000009
+[    7.383986] dwc2 ff400000.usb: dwc2_hsotg_epint: ep0(in) DxEPINT=0x00000001
+[    7.384001] dwc2 ff400000.usb: dwc2_hsotg_epint: XferCompl: DxEPCTL=0x00008000, DXEPTSIZ=0018004b
+[    7.384017] dwc2 ff400000.usb: zlp packet sent
+[    7.384031] dwc2 ff400000.usb: complete: ep (____ptrval____) ep0, req (____ptrval____), 0 => (____ptrval____)
+[    7.384055] dwc2 ff400000.usb: dwc2_hsotg_enqueue_setup: queueing setup request
+[    7.384072] dwc2 ff400000.usb: ep0: req (____ptrval____): 8@(____ptrval____), noi=0, zero=0, snok=0
+[    7.384090] dwc2 ff400000.usb: dwc2_hsotg_ep_queue: submit request only in active state
+[    7.384104] dwc2 ff400000.usb: dwc2_hsotg_enqueue_setup: failed queue (-11)
+[    7.384735] dwc2 ff400000.usb: dwc2_hsotg_enqueue_setup: queueing setup request
+[    7.384752] dwc2 ff400000.usb: ep0: req (____ptrval____): 8@(____ptrval____), noi=0, zero=0, snok=0
+[    7.384771] dwc2 ff400000.usb: dwc2_hsotg_ep_queue: submit request only in active state
+[    7.384782] dwc2 ff400000.usb: dwc2_hsotg_enqueue_setup: failed queue (-11)
+[    7.385410] dwc2 ff400000.usb: dwc2_hsotg_epint: ep3(in) DxEPINT=0x00000001
+[    7.385431] dwc2 ff400000.usb: dwc2_hsotg_epint: XferCompl: DxEPCTL=0x018c800a, DXEPTSIZ=0007fff6
+[    7.385450] dwc2 ff400000.usb: dwc2_hsotg_complete_in: adjusting size done 0 => 10
+[    7.385464] dwc2 ff400000.usb: req->length:10 req->actual:10 req->zero:0
+[    7.385480] dwc2 ff400000.usb: complete: ep (____ptrval____) ep3in, req (____ptrval____), 0 => (____ptrval____)
+[    7.385502] dwc2 ff400000.usb: GINTSTS_ErlySusp
+
+After the "failed queue (-11)" message, a comment in the code [0] says
+"Don't think there's much we can do other than watch the driver fail.".
+
+On the host side (Ubuntu 22.04) these are the relevant dmesg lines:
+
+[49258.596766] usb 3-2: new high-speed USB device number 18 using xhci_hcd
+[49263.948940] usb 3-2: unable to read config index 0 descriptor/start: -110
+[49263.948960] usb 3-2: can't read configurations, error -110
+[49264.560806] usb 3-2: new high-speed USB device number 19 using xhci_hcd
+[49264.714301] usb 3-2: New USB device found, idVendor=0525, idProduct=a4a7, bcdDevice= 6.01
+[49264.714320] usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[49264.714327] usb 3-2: Product: Gadget Serial v2.4
+[49264.714332] usb 3-2: Manufacturer: Linux 6.1.0-rc6 with ff400000.usb
+[49269.837931] usb 3-2: can't set config #2, error -110
+
+I suspect a concurrency issue during initialization, but I don't know
+where to investigate further.
+
+Any clues or hints on how this could be addressed would be very
+appreciated.
+
+I am of course available to provide more info and full logs if that's
+helpful.
+
+[0]
+https://elixir.bootlin.com/linux/v6.1-rc6/source/drivers/usb/dwc2/gadget.c#L2059
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
