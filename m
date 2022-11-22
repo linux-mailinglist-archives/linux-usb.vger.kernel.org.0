@@ -2,118 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CAA633EA6
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 15:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106AF633EDC
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 15:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232744AbiKVOQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 09:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
+        id S233254AbiKVOYn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 09:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiKVOQN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 09:16:13 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273DA4732E
-        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 06:16:12 -0800 (PST)
-Received: from localhost.localdomain (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S232498AbiKVOYl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 09:24:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2AEEE00
+        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 06:23:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669127026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=geVsTAOXAFmfC1p8NU5oUZW9hh2dqn+X7qlWo6CR96Y=;
+        b=QD9HNhfwpjcZAyrcVDtGcyvcJC1Jt05Njs2nDDlxTHOvhswfgrgNAdHBiLEZ9+1+paIjfS
+        xvMFD3qCbJf6A6xMlIn0VpgRM8BByfNqUyTTD/aKI8613kGDOh1+aFjPHhlm3ubdqQY76a
+        4fjNNftK21PKnaEPXhuRK9+8oDaXYTo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-clNrV_glOTiRpOT7AptSQA-1; Tue, 22 Nov 2022 09:23:45 -0500
+X-MC-Unique: clNrV_glOTiRpOT7AptSQA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 73D1B6602AD3;
-        Tue, 22 Nov 2022 14:16:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669126570;
-        bh=KwzzNqheU18qO1hBNDRHPtgb3wjFODi4vNaMVJTHk5M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eRGlt35gpDjqIiXk1zn8Yvi7xJSwT7/NRgdgQG9nYK9LL6CeaRB4eePaWjdjua3ot
-         yTIsN57uQQd9OXrYL6CdVDHOFQpiKNg8L7Ctl/pls4sjosHWb6K99hLkpGuf8BkG28
-         DyenqjWtM6xrATJOofCVpxGvxOofrinmMiQY/1DT6DP2VUlWXskO8QYH7phvP2gumu
-         XCc3jr80kDctY5yrLT0MQg0dTLvtQql3Tm3Y+JZvJnNbpsxRFDCLE7LUyPmG1bFukD
-         kUXUaZVREgOV7Sc7U8ojxP0BcjbA7JemEMOVhEK5HLqt26NhqrFCmeOZjS6tZPfSKJ
-         E1fiKCkowx2EA==
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com
-Subject: [PATCH] usb: gadget: function: Simplify error messaging in printer open/close
-Date:   Tue, 22 Nov 2022 15:16:03 +0100
-Message-Id: <20221122141603.70242-1-andrzej.p@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1894a272-4816-c44c-61d5-bfcfe478d7e5@collabora.com>
-References: <1894a272-4816-c44c-61d5-bfcfe478d7e5@collabora.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5F22101A52A;
+        Tue, 22 Nov 2022 14:23:42 +0000 (UTC)
+Received: from [172.16.176.1] (unknown [10.22.50.6])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E09D61121325;
+        Tue, 22 Nov 2022 14:23:33 +0000 (UTC)
+From:   Benjamin Coddington <bcodding@redhat.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        =?utf-8?q?Christoph_B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Steve French <sfrench@samba.org>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
+        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
+Date:   Tue, 22 Nov 2022 09:23:29 -0500
+Message-ID: <C3E8B434-BAEE-42A8-85AF-3B676C65B2A6@redhat.com>
+In-Reply-To: <96114bec-1df7-0dcb-ec99-4f907587658d@linuxfoundation.org>
+References: <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
+ <cover.1669036433.git.bcodding@redhat.com>
+ <382872.1669039019@warthog.procyon.org.uk>
+ <51B5418D-34FB-4E87-B87A-6C3FCDF8B21C@redhat.com>
+ <4585e331-03ad-959f-e715-29af15f63712@linuxfoundation.org>
+ <26d98c8f-372b-b9c8-c29f-096cddaff149@linuxfoundation.org>
+ <A860595D-5BAB-461B-B449-8975C0424311@redhat.com>
+ <96114bec-1df7-0dcb-ec99-4f907587658d@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Don't issue any messages if printer_open() is successful.
-Also don't issue them if unsuccessful - the error code is propagated
-to the calling layers and should be acted on appropriately there. Just as
-it is with the -ENODEV case.
+On 21 Nov 2022, at 17:32, Shuah Khan wrote:
 
-For those who really want this message leave an option to compile-in
-with composite framework's VDBG() by uncommenting #define VERBOSE_DEBUG.
+> On 11/21/22 15:01, Benjamin Coddington wrote:
+>> On 21 Nov 2022, at 16:43, Shuah Khan wrote:
+>>
+>>> On 11/21/22 14:40, Shuah Khan wrote:
+>>>> On 11/21/22 07:34, Benjamin Coddington wrote:
+>>>>> On 21 Nov 2022, at 8:56, David Howells wrote:
+>>>>>
+>>>>>> Benjamin Coddington <bcodding@redhat.com> wrote:
+>>>>>>
+>>>>>>> Since moving to memalloc_nofs_save/restore, SUNRPC has stopped se=
+tting the
+>>>>>>> GFP_NOIO flag on sk_allocation which the networking system uses t=
+o decide
+>>>>>>> when it is safe to use current->task_frag.
+>>>>>>
+>>>>>> Um, what's task_frag?
+>>>>>
+>>>>> Its a per-task page_frag used to coalesce small writes for networki=
+ng -- see:
+>>>>>
+>>>>> 5640f7685831 net: use a per task frag allocator
+>>>>>
+>>>>> Ben
+>>>>>
+>>>>>
+>>>>
+>>>> I am not seeing this in the mainline. Where can find this commit?
+>>>>
+>>>
+>>> Okay. I see this commit in the mainline. However, I don't see the
+>>> sk_use_task_frag in mainline.
+>>
+>> sk_use_task_frag is in patch 1/3 in this posting.
+>>
+>> https://lore.kernel.org/netdev/26d98c8f-372b-b9c8-c29f-096cddaff149@li=
+nuxfoundation.org/T/#m3271959c4cf8dcff1c0c6ba023b2b3821d9e7e99
+>>
+>
+> Aha. I don't have 1/3 in my Inbox - I think it would make
+> sense to cc people on the first patch so we can understand
+> the premise for the change.
 
-While at it, visually detach the "return ret;" statement.
+Yeah, I can do that if it goes to another version, I was just trying to b=
+e
+considerate of all the noise this sort of posting generates.
 
-Use __func__ instead of explicitly hardcoding the function name. This, in
-turn makes checkpatch issue this for the message in printer_close():
-
-WARNING: Unnecessary ftrace-like logging - prefer using ftrace
-54: FILE: drivers/usb/gadget/function/f_printer.c:387:
-+	VDBG(dev, "%s\n", __func__);
-
-which lets us eliminate the debug message from printer_close() altogether.
-
-Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
----
-Attention
-
-This patch depends on a recent patch from Dan Carpenter:
-
-usb: gadget: function: use after free in printer_close()
-
- drivers/usb/gadget/function/f_printer.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 01e842e1ba2f..d686c7be4fb5 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -11,6 +11,8 @@
-  * Copyright (C) 2006 Craig W. Nadler
-  */
- 
-+/* #define VERBOSE_DEBUG */
-+
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/delay.h>
-@@ -364,7 +366,8 @@ printer_open(struct inode *inode, struct file *fd)
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
- 	kref_get(&dev->kref);
--	DBG(dev, "printer_open returned %x\n", ret);
-+	VDBG(dev, "%s returned %x\n", __func__, ret);
-+
- 	return ret;
- }
- 
-@@ -381,7 +384,6 @@ printer_close(struct inode *inode, struct file *fd)
- 	dev->printer_status &= ~PRINTER_SELECTED;
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
--	DBG(dev, "printer_close\n");
- 	kref_put(&dev->kref, printer_dev_free);
- 
- 	return 0;
--- 
-2.25.1
+Ben
 
