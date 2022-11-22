@@ -2,128 +2,280 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12931633701
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 09:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48F663372E
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Nov 2022 09:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbiKVI0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 03:26:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S232685AbiKVIbs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 03:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbiKVIZw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 03:25:52 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AE64047B;
-        Tue, 22 Nov 2022 00:25:50 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id jr19so8833934qtb.7;
-        Tue, 22 Nov 2022 00:25:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+a9AQHe77TpOi1nNEBNs7a4bTR4w2mw5oUVGtsuLCj8=;
-        b=LCkYXeCBi5miYV1qs8WXYwAxOvVQgl3OpcFXqgrvDOMoDjeNEEYOC8K+SxAeMjGidu
-         PEnTce3Zmpu1FjuTgHzMCmJmgED0oyg8T+Q9jXmgr685rsOyP9cADveIeAA/e0HX9SQP
-         5Dx5qtmAHX6ButOzq5q+8ukasM/r8wj0QaQISnSZXiAHtPkr3kxCWn++zMHOxedfaA/U
-         5jpXC4KJzbXdiyfIG6HvckZJkN4A/4JTAZ4qCP73KpusGbsT7XsM8a6BOx+6WXy+x9pa
-         MwmCPtyxk+V4hLpcOoFKFw6QC+nygEUzTa75zLRedXl6PWNMA6VPOTMvZNpkCPcoeT7v
-         MQbg==
-X-Gm-Message-State: ANoB5pkK+XaKoj5qn313qdhd4TfFW21VSnRL+rVLw2iNY8s3JIKH0WZ4
-        sP3DQqmodyB1mstmmh+JYUcemltHG2VwjA==
-X-Google-Smtp-Source: AA0mqf5QmpJU/yJ68T8miverIZ6IoUt66s8gW8cXuA5LzFzLjsr8dIWOUgLZCHg8UKP7Ag3NeeVQkQ==
-X-Received: by 2002:a05:622a:4d4e:b0:39a:78d4:57e with SMTP id fe14-20020a05622a4d4e00b0039a78d4057emr5838777qtb.118.1669105549313;
-        Tue, 22 Nov 2022 00:25:49 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05620a244900b006fbdeecad51sm7310306qkn.48.2022.11.22.00.25.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 00:25:48 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id b131so16482694yba.11;
-        Tue, 22 Nov 2022 00:25:48 -0800 (PST)
-X-Received: by 2002:a25:8249:0:b0:6dd:b521:a8f2 with SMTP id
- d9-20020a258249000000b006ddb521a8f2mr2342411ybn.380.1669105548029; Tue, 22
- Nov 2022 00:25:48 -0800 (PST)
+        with ESMTP id S232832AbiKVIb1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 03:31:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D8D41985;
+        Tue, 22 Nov 2022 00:31:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C31D6B81996;
+        Tue, 22 Nov 2022 08:31:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD105C433D6;
+        Tue, 22 Nov 2022 08:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669105873;
+        bh=KPfpgCAVBAOI9F3VyJHgax+PYj0BGioPyG8VBUuht0M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n/nCgTiAXk86OKr9MAB2hk/9KzxTI6KWkNa3pLPoK7bIk09eTneFkErvCzQj4uVxa
+         qs83YMN/iKkmKVpg3kjTyPYF6KF1tLL8ewue+FDbOhVpWFYOONWiGPCoSdCxjTo5zk
+         WqJukdWkz/2fwEWsu3AQQPyucsUPFInzdegJd9qXwyNymb/OdF8j/JtmGL80cdKdhW
+         60+iYXu1tDyiWfVbrAsfYTuDiAbOUaMA8BQHNaVtLt3xi8wHRecmjYcaQq463/VB3Y
+         v6bDEBea4xJQRntMsNxTDAyUD4/iOgPqY3A+o+DkgxSGnu18iIlqWd9zUKBg5egDg4
+         05yYcE4EULAog==
+Date:   Tue, 22 Nov 2022 08:31:08 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     John Keeping <john@metanate.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg KH <gregkh@linuxfoundation.org>, balbi@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3yIzO7i0YRYapFg@google.com>
+References: <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
+ <Y3dIXUmjTfJLpPe7@google.com>
+ <Y3er7nenAhbmBdBy@rowland.harvard.edu>
+ <Y3e0zAa7+HiNVrKN@donbot>
+ <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
+ <Y3piS43drwSoipD9@donbot>
+ <Y3qSImZkZwCG1kA1@rowland.harvard.edu>
+ <Y3txTcASyvTWqFlc@donbot>
+ <Y3uk2kwYsZ3j67+l@rowland.harvard.edu>
+ <Y3vJfwtH3fniy5ep@donbot>
 MIME-Version: 1.0
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
- <20221114111513.1436165-3-herve.codina@bootlin.com> <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
- <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org> <20221115150417.513955a7@bootlin.com>
- <20221118112349.7f09eefb@bootlin.com> <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
- <20221121165921.559d6538@bootlin.com> <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
- <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
- <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org> <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
- <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
-In-Reply-To: <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Nov 2022 09:25:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
-Message-ID: <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
- h2mode property
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Herve Codina <herve.codina@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3vJfwtH3fniy5ep@donbot>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+On Mon, 21 Nov 2022, John Keeping wrote:
+65;6999;1c
+> On Mon, Nov 21, 2022 at 11:18:34AM -0500, Alan Stern wrote:
+> > On Mon, Nov 21, 2022 at 12:38:37PM +0000, John Keeping wrote:
+> > > On Sun, Nov 20, 2022 at 03:46:26PM -0500, Alan Stern wrote:
+> > > > I see.  The solution is simple: Embed a struct device in struct f_hidg, 
+> > > > and call cdev_device_add() to add the device and the cdev.  This will 
+> > > > automatically make the device the parent of the cdev, so the device's 
+> > > > refcount won't go to 0 until the cdev's refcount does.  Then you can tie 
+> > > > the f_hidg's lifetime to the device's, so the device's release routine 
+> > > > can safely deallocate the entire f_hidg structure.
+> > > > 
+> > > > The parent of the new struct device should be set to &gadget->dev.  If 
+> > > > you can't think of a better name for the device, you could simply append 
+> > > > ":I" to the parent's name, where I is the interface number, or even 
+> > > > append ":C.I" where C is the config number (like we do on the host 
+> > > > side).
+> > > 
+> > > There is no gadget->dev at the time struct f_hidg is allocated.
+> > > 
+> > > AFAICT the device is the UDC, which is only associated with the gadget
+> > > when it is bound.  The functions are allocated earlier than this and I
+> > > can't see any device associated with struct usb_function_instance.
+> > 
+> > Ah, that's a shame.  All right, so be it.
+> > 
+> > > The patch below does fix the issue, but I'm wondering if there's a
+> > > deeper problem here that can only be properly solved by adding some
+> > > device/kobject hierarchy to the config side of things.
+> > 
+> > I don't believe there's any deeper problem.  If someone wants to have an 
+> > fhidg device as a child of the gadget, I think it could be added and 
+> > removed in the ->set_alt() and ->disable() callbacks.  Or maybe the 
+> > ->bind() and ->unbind() callbacks (I've never had to work with configfs 
+> > so I'm not clear on the details).
+> 
+> It turns out there's already a device being created here, just not
+> associated with the structure.  Your suggestions around
+> cdev_device_add() made me spot what's going on with that so the actual
+> fix is to pull its lifetime up to match struct f_hidg.
+> 
+> -- >8 --
+> Subject: [PATCH] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+> 
+> The embedded struct cdev does not have its lifetime correctly tied to
+> the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
+> is held open while the gadget is deleted.
+> 
+> This can readily be replicated with libusbgx's example programs (for
+> conciseness - operating directly via configfs is equivalent):
+> 
+> 	gadget-hid
+> 	exec 3<> /dev/hidg0
+> 	gadget-vid-pid-remove
+> 	exec 3<&-
+> 
+> Pull the existing device up in to struct f_hidg and make use of the
+> cdev_device_{add,del}() helpers.  This changes the lifetime of the
+> device object to match struct f_hidg, but note that it is still added
+> and deleted at the same time.
 
-On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 21/11/2022 21:46, Geert Uytterhoeven wrote:
-> >> This does not change anything. Herve wrote:
-> >>
-> >>> probe some devices (USB host and probably others)
-> >>
-> >> Why some can be probed earlier and some not, if there are no
-> >> dependencies? If there are dependencies, it's the same case with sysctrl
-> >> touching the register bit and the USB controller touching it (as well
-> >> via syscon, but that's obvious, I assume).
-> >>
-> >> Where is the synchronization problem?
-> >
-> > The h2mode bit (and probably a few other controls we haven't figured out
-> > yet) in the sysctrl must be set before any of the USB devices is active.
-> > Hence it's safest for the sysctrl to do this before any of the USB drivers
-> > probes.
->
-> Again, this does not differ from many, many of other devices. All of
-> them must set something in system controller block, before they start
-> operating (or at specific time). It's exactly the same everywhere.
+This is much better, thanks for re-spinning.
 
-The issue here is that there are two _different drivers_ (USB host
-and device). When both are modular, and the driver that depends on the
-sysctrl setting is loaded second, you have a problem: the sysctrl change
-must not be done when the first driver is already using the hardware.
+> [Also fix refcount leak on an error path.]
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>  drivers/usb/gadget/function/f_hid.c | 50 ++++++++++++++++-------------
+>  1 file changed, 28 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index ca0a7d9eaa34..0b94668a3812 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -71,7 +71,7 @@ struct f_hidg {
+>  	wait_queue_head_t		write_queue;
+>  	struct usb_request		*req;
+>  
+> -	int				minor;
+> +	struct device			dev;
+>  	struct cdev			cdev;
+>  	struct usb_function		func;
+>  
+> @@ -84,6 +84,14 @@ static inline struct f_hidg *func_to_hidg(struct usb_function *f)
+>  	return container_of(f, struct f_hidg, func);
+>  }
+>  
+> +static void hidg_release(struct device *dev)
+> +{
+> +	struct f_hidg *hidg = container_of(dev, struct f_hidg, dev);
 
-Hence the sysctrl driver should take care of it itself during early
-initialization (it's the main clock controller, so it's a dependency
-for all other I/O device drivers).
+Could we store/fetch this with dev_{set,get}_drvdata(), and make
+hidg->dev a pointer reducing the size of the struct f_hidg.
 
-Gr{oetje,eeting}s,
+> +	kfree(hidg->set_report_buf);
+> +	kfree(hidg);
+> +}
+> +
+>  /*-------------------------------------------------------------------------*/
+>  /*                           Static descriptors                            */
+>  
+> @@ -904,9 +912,7 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>  	struct usb_ep		*ep;
+>  	struct f_hidg		*hidg = func_to_hidg(f);
+>  	struct usb_string	*us;
+> -	struct device		*device;
+>  	int			status;
+> -	dev_t			dev;
+>  
+>  	/* maybe allocate device-global string IDs, and patch descriptors */
+>  	us = usb_gstrings_attach(c->cdev, ct_func_strings,
+> @@ -999,21 +1005,12 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>  
+>  	/* create char device */
+>  	cdev_init(&hidg->cdev, &f_hidg_fops);
+> -	dev = MKDEV(major, hidg->minor);
+> -	status = cdev_add(&hidg->cdev, dev, 1);
+> +	cdev_set_parent(&hidg->cdev, &hidg->dev.kobj);
 
-                        Geert
+cdev_device_add() should take care of this, so long as:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+    if (dev->devt)
+        dev_set_parent(cdev, &dev->kobj);
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +	status = cdev_device_add(&hidg->cdev, &hidg->dev);
+>  	if (status)
+>  		goto fail_free_descs;
+>  
+> -	device = device_create(hidg_class, NULL, dev, NULL,
+> -			       "%s%d", "hidg", hidg->minor);
+> -	if (IS_ERR(device)) {
+> -		status = PTR_ERR(device);
+> -		goto del;
+> -	}
+> -
+>  	return 0;
+> -del:
+> -	cdev_del(&hidg->cdev);
+>  fail_free_descs:
+>  	usb_free_all_descriptors(f);
+>  fail:
+> @@ -1244,9 +1241,7 @@ static void hidg_free(struct usb_function *f)
+>  
+>  	hidg = func_to_hidg(f);
+>  	opts = container_of(f->fi, struct f_hid_opts, func_inst);
+> -	kfree(hidg->report_desc);
+> -	kfree(hidg->set_report_buf);
+> -	kfree(hidg);
+> +	put_device(&hidg->dev);
+>  	mutex_lock(&opts->lock);
+>  	--opts->refcnt;
+>  	mutex_unlock(&opts->lock);
+> @@ -1256,8 +1251,7 @@ static void hidg_unbind(struct usb_configuration *c, struct usb_function *f)
+>  {
+>  	struct f_hidg *hidg = func_to_hidg(f);
+>  
+> -	device_destroy(hidg_class, MKDEV(major, hidg->minor));
+> -	cdev_del(&hidg->cdev);
+> +	cdev_device_del(&hidg->cdev);
+>  
+>  	usb_free_all_descriptors(f);
+>  }
+> @@ -1266,6 +1260,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>  {
+>  	struct f_hidg *hidg;
+>  	struct f_hid_opts *opts;
+> +	int ret;
+>  
+>  	/* allocate and initialize one new instance */
+>  	hidg = kzalloc(sizeof(*hidg), GFP_KERNEL);
+> @@ -1277,17 +1272,28 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>  	mutex_lock(&opts->lock);
+>  	++opts->refcnt;
+>  
+> -	hidg->minor = opts->minor;
+> +	device_initialize(&hidg->dev);
+> +	hidg->dev.release = hidg_release;
+> +	hidg->dev.class = hidg_class;
+> +	hidg->dev.devt = MKDEV(major, opts->minor);
+> +	ret = dev_set_name(&hidg->dev, "hidg%d", opts->minor);
+> +	if (ret) {
+> +		--opts->refcnt;
+
+Since we're holding the opts lock at this point, is there anything
+preventing us from incrementing the refcnt at the end, just before
+giving up the lock, thus saving 2 decrements in the error paths?
+
+> +		mutex_unlock(&opts->lock);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+>  	hidg->bInterfaceSubClass = opts->subclass;
+>  	hidg->bInterfaceProtocol = opts->protocol;
+>  	hidg->report_length = opts->report_length;
+>  	hidg->report_desc_length = opts->report_desc_length;
+>  	if (opts->report_desc) {
+> -		hidg->report_desc = kmemdup(opts->report_desc,
+> +		hidg->report_desc = devm_kmemdup(&hidg->dev, opts->report_desc,
+
+Nice.
+
+>  					    opts->report_desc_length,
+>  					    GFP_KERNEL);
+>  		if (!hidg->report_desc) {
+> -			kfree(hidg);
+> +			put_device(&hidg->dev);
+> +			--opts->refcnt;
+>  			mutex_unlock(&opts->lock);
+>  			return ERR_PTR(-ENOMEM);
+>  		}
+
+Thanks for doing this John, your work is appreciated.
+
+-- 
+Lee Jones [李琼斯]
