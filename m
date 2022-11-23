@@ -2,40 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832A0634DAA
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 03:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79542634F08
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 05:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbiKWCPP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 21:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S235817AbiKWEjF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 23:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234984AbiKWCPF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 21:15:05 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F85EB9B99;
-        Tue, 22 Nov 2022 18:15:04 -0800 (PST)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NH4Sn5S6jzRpNh;
-        Wed, 23 Nov 2022 10:14:33 +0800 (CST)
-Received: from huawei.com (10.67.175.85) by kwepemi500009.china.huawei.com
- (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
- 2022 10:15:02 +0800
-From:   Xia Fukun <xiafukun@huawei.com>
-To:     <linus.walleij@linaro.org>, <gregkh@linuxfoundation.org>
-CC:     <renzhijie2@huawei.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xiafukun@huawei.com>
-Subject: [PATCH -next] usb: fotg210: Fix build error when CONFIG_USB_FOTG210_UDC=y && CONFIG_USB_GADGET=m
-Date:   Wed, 23 Nov 2022 10:11:53 +0800
-Message-ID: <20221123021153.205291-1-xiafukun@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S235109AbiKWEiy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 23:38:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8989A262;
+        Tue, 22 Nov 2022 20:38:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFD8D61A3D;
+        Wed, 23 Nov 2022 04:38:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41DBDC433C1;
+        Wed, 23 Nov 2022 04:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669178332;
+        bh=QqrDbDLRcAQr4MUv+oZ9PutfTqVkNXwAFQlJXbN9odk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e//Q0Igg0hWRrSaEgwdgmlRQd6QUnoz7COLqfkBnj6LOQdy+G730Ld4a0mtbj4mXF
+         2Ns0fWlqq5UDuwlf9gZi0p759DWrC6wlC8ge0bN3ZHQX7ihQg5stNciFtDWoi+LjF+
+         jWzWEBluurxmktSYXewY3T9nYOayIZyWy4v5xTekb99HPZYHOBbHZT0xSp18BLpDTb
+         NaAioF2pMRU0zHtAQ3RqHqTT9WvlSrvbvq0f834SNj6byw1vq/7zTaiB7b45SOLdS0
+         ZrrsM+AKFkbmsFDsQ5lzS4sSEz1POrgSXaqhxXHOGYxGm3acH0ikOnG+UML9Urblga
+         OhyWc3tcT/vgQ==
+Date:   Wed, 23 Nov 2022 10:08:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <Y32j1+T3bBVTEDxO@matsya>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+ <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.85]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500009.china.huawei.com (7.221.188.199)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,49 +79,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The combination of CONFIG_USB_FOTG210_UDC=y and
-CONFIG_USB_GADGET=m results in the following error:
+On 21-11-22, 12:06, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Guenter Roeck <linux@roeck-us.net> # watchdog
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # IIO
+> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/dma/dma-common.yaml           | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-controller.yaml       | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-router.yaml           | 2 +-
 
-drivers/usb/fotg210/fotg210-udc.o: In function `fotg210_done':
-fotg210-udc.c:(.text+0x75b): undefined reference to
-`usb_gadget_giveback_request'
-drivers/usb/fotg210/fotg210-udc.o: In function `fotg210_irq':
-fotg210-udc.c:(.text+0x1586): undefined reference to `usb_gadget_udc_reset'
-drivers/usb/fotg210/fotg210-udc.o: In function `fotg210_udc_remove':
-fotg210-udc.c:(.text+0x179a): undefined reference to `usb_del_gadget_udc'
-drivers/usb/fotg210/fotg210-udc.o: In function `fotg210_udc_probe':
-fotg210-udc.c:(.text+0x19ed): undefined reference to
-`usb_ep_set_maxpacket_limit'
-fotg210-udc.c:(.text+0x1a11): undefined reference to
-`usb_ep_set_maxpacket_limit'
-fotg210-udc.c:(.text+0x1ace): undefined reference to `usb_add_gadget_udc'
-fotg210-udc.c:(.text+0x1b74): undefined reference to
-`usb_ep_set_maxpacket_limit'
-make[1]: *** [vmlinux] Error 1
-make: *** [vmlinux] Error 2
-make: *** Waiting for unfinished jobs....
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-Make USB_FOTG210_UDC depends on USB_GADGET=y to fix this.
-
-Fixes: 1dd33a9f1b95 ("usb: fotg210: Collect pieces of dual mode controller")
-Signed-off-by: Xia Fukun <xiafukun@huawei.com>
----
- drivers/usb/fotg210/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/fotg210/Kconfig b/drivers/usb/fotg210/Kconfig
-index 534206ee0d1d..bc07c7fc8998 100644
---- a/drivers/usb/fotg210/Kconfig
-+++ b/drivers/usb/fotg210/Kconfig
-@@ -24,7 +24,7 @@ config USB_FOTG210_HCD
- 	  module will be called fotg210-hcd.
- 
- config USB_FOTG210_UDC
--	depends on USB_GADGET
-+	depends on USB_GADGET = y
- 	bool "Faraday FOTG210 USB Peripheral Controller support"
- 	help
- 	   Faraday USB2.0 OTG controller which can be configured as
 -- 
-2.17.1
-
+~Vinod
