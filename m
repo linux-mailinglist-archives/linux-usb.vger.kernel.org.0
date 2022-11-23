@@ -2,157 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036C7635B22
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 12:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F46635C26
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 12:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237159AbiKWLKS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 06:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S236656AbiKWLwh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 06:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236678AbiKWLIj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 06:08:39 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D62D226;
-        Wed, 23 Nov 2022 03:08:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669201714; x=1700737714;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=nEqvAW5e5WrGa/oW+eUTBhZKa268bM9z28Wl13BAzN8=;
-  b=WwFZ6zV8Het8yLzqrVEiyXemznlKs/UJ8Y1gFUsZBMJhNhLlppO3L/pI
-   1j3IoHRhzh2ZH+Eu9MUCG5w5GPdDLSrHUvhP9UdojETOFzi7efYR4KrQJ
-   nF/q2FNeEvEKOYQTpp0k4DTzP7/F3uOuvVmP37d1iIzIXgqEEmhLqkVeE
-   fQQjWv35LCgZnQTTszqKk/Vb/WdaSFsJh4lVNmQW857Z0G82qUHgdZrjv
-   bRpQ4qO4gRuC9e85IdxgaTJiIzZamfzR7FBcI0oPoPkpA/cnzLOgCf3f5
-   qOE2z5CBGLD8ewgHZk6TmX4w0cLGFTxZhvlJz5A3vYMBW6gldvwV7HV9Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="340920168"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="340920168"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 03:08:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="766683403"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="766683403"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 23 Nov 2022 03:08:30 -0800
-Message-ID: <a384d15d-c1df-160c-030b-fddd5d965996@linux.intel.com>
-Date:   Wed, 23 Nov 2022 13:10:08 +0200
+        with ESMTP id S236639AbiKWLwf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 06:52:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F193BEF;
+        Wed, 23 Nov 2022 03:52:29 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 325A06601811;
+        Wed, 23 Nov 2022 11:52:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669204347;
+        bh=vHLUEr5mi2DQo1JQp7BT2vNEGAAKgbXba77RAgXm5nI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=npnJxbcx5J4yegITXEb4t6FujJUuWFOBZytJDEgbOT7vyDUmap+7kOprGeckJ4W22
+         zo2soh0rpg5V0xz7Zc6FxE/gC0X1Ip9UagQso9Pb1hL+YfZcKbClq/UTFpruEq+xah
+         wGdMKKV5L+Yrrf1IUyIKdN4clirxiSBSB/bMJE/HYLC8CaBAGM03COrXjPyCtxHE4U
+         K9pmO6iPooRDDdA/QjTURmUzumOQxM+YTDMVfoRjUkTmCJKcDFZPBGZqob9GqyXQiG
+         7y7bHHwRclb7xDgsWGizzheGSP46FoWLp4Ud7mDdtb8NmtEc41Uk8Sn+AJeIlyC6Ab
+         5TIK7QEa+Uzag==
+Message-ID: <723bd024-121d-dd89-7c39-315e93e49c44@collabora.com>
+Date:   Wed, 23 Nov 2022 12:52:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>
-References: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/3] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+To:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org
+Cc:     Fabien Chouteau <fabien.chouteau@barco.com>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+References: <20221122123523.3068034-1-john@metanate.com>
+ <20221122123523.3068034-2-john@metanate.com>
 Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub
- has no ports
-In-Reply-To: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20221122123523.3068034-2-john@metanate.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18.11.2022 13.01, Chunfeng Yun wrote:
-> There is error log when add a usb3 root hub without ports:
-> "hub 4-0:1.0: config failed, hub doesn't have any ports! (err -19)"
+Hi John,
+
+W dniu 22.11.2022 o 13:35, John Keeping pisze:
+> The embedded struct cdev does not have its lifetime correctly tied to
+> the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
+> is held open while the gadget is deleted.
 > 
-> so omit the shared hcd if either of the root hubs has no ports, but
-> usually there is no usb3 port.
+> This can readily be replicated with libusbgx's example programs (for
+> conciseness - operating directly via configfs is equivalent):
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> 	gadget-hid
+> 	exec 3<> /dev/hidg0
+> 	gadget-vid-pid-remove
+> 	exec 3<&-
+> 
+> Pull the existing device up in to struct f_hidg and make use of the
+> cdev_device_{add,del}() helpers.  This changes the lifetime of the
+> device object to match struct f_hidg, but note that it is still added
+> and deleted at the same time.
+> 
+> Fixes: 71adf1189469 ("USB: gadget: add HID gadget driver")
+> Signed-off-by: John Keeping <john@metanate.com>
 > ---
->   drivers/usb/host/xhci-mtk.c | 72 +++++++++++++++++++++++--------------
->   1 file changed, 46 insertions(+), 26 deletions(-)
+>   drivers/usb/gadget/function/f_hid.c | 52 ++++++++++++++++-------------
+>   1 file changed, 28 insertions(+), 24 deletions(-)
 > 
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> index 01705e559c42..cff3c4aea036 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -485,6 +485,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
->   	const struct hc_driver *driver;
->   	struct xhci_hcd *xhci;
->   	struct resource *res;
-> +	struct usb_hcd *usb3_hcd;
->   	struct usb_hcd *hcd;
->   	int ret = -ENODEV;
->   	int wakeup_irq;
-> @@ -593,6 +594,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index ca0a7d9eaa34..8b8bbeaa27cb 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -71,7 +71,7 @@ struct f_hidg {
+>   	wait_queue_head_t		write_queue;
+>   	struct usb_request		*req;
 >   
->   	xhci = hcd_to_xhci(hcd);
->   	xhci->main_hcd = hcd;
-> +	xhci->allow_single_roothub = 1;
+> -	int				minor;
+> +	struct device			dev;
+>   	struct cdev			cdev;
+>   	struct usb_function		func;
 >   
->   	/*
->   	 * imod_interval is the interrupt moderation value in nanoseconds.
-> @@ -602,24 +604,29 @@ static int xhci_mtk_probe(struct platform_device *pdev)
->   	xhci->imod_interval = 5000;
->   	device_property_read_u32(dev, "imod-interval-ns", &xhci->imod_interval);
+> @@ -84,6 +84,14 @@ static inline struct f_hidg *func_to_hidg(struct usb_function *f)
+>   	return container_of(f, struct f_hidg, func);
+>   }
 >   
-> -	xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
-> -			dev_name(dev), hcd);
-> -	if (!xhci->shared_hcd) {
-> -		ret = -ENOMEM;
-> -		goto disable_device_wakeup;
+> +static void hidg_release(struct device *dev)
+> +{
+> +	struct f_hidg *hidg = container_of(dev, struct f_hidg, dev);
+> +
+> +	kfree(hidg->set_report_buf);
+> +	kfree(hidg);
+> +}
+> +
+
+I assume the above is supposed to free the hidg memory as a result of
+put_device() and you free two things here ...
+
+>   /*-------------------------------------------------------------------------*/
+>   /*                           Static descriptors                            */
+>   
+> @@ -904,9 +912,7 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>   	struct usb_ep		*ep;
+>   	struct f_hidg		*hidg = func_to_hidg(f);
+>   	struct usb_string	*us;
+> -	struct device		*device;
+>   	int			status;
+> -	dev_t			dev;
+>   
+>   	/* maybe allocate device-global string IDs, and patch descriptors */
+>   	us = usb_gstrings_attach(c->cdev, ct_func_strings,
+> @@ -999,21 +1005,11 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>   
+>   	/* create char device */
+>   	cdev_init(&hidg->cdev, &f_hidg_fops);
+> -	dev = MKDEV(major, hidg->minor);
+> -	status = cdev_add(&hidg->cdev, dev, 1);
+> +	status = cdev_device_add(&hidg->cdev, &hidg->dev);
+>   	if (status)
+>   		goto fail_free_descs;
+>   
+> -	device = device_create(hidg_class, NULL, dev, NULL,
+> -			       "%s%d", "hidg", hidg->minor);
+> -	if (IS_ERR(device)) {
+> -		status = PTR_ERR(device);
+> -		goto del;
 > -	}
 > -
->   	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
->   	if (ret)
-> -		goto put_usb3_hcd;
-> +		goto disable_device_wakeup;
+>   	return 0;
+> -del:
+> -	cdev_del(&hidg->cdev);
+>   fail_free_descs:
+>   	usb_free_all_descriptors(f);
+>   fail:
+> @@ -1244,9 +1240,7 @@ static void hidg_free(struct usb_function *f)
 >   
-> -	if (HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
-> +	if (!xhci_has_one_roothub(xhci)) {
-> +		xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
-> +							 dev_name(dev), hcd);
-> +		if (!xhci->shared_hcd) {
-> +			ret = -ENOMEM;
-> +			goto dealloc_usb2_hcd;
-> +		}
-> +	}
-> +
-> +	usb3_hcd = xhci_get_usb3_hcd(xhci);
-> +	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
->   	    !(xhci->quirks & XHCI_BROKEN_STREAMS))
-> -		xhci->shared_hcd->can_do_streams = 1;
-> +		usb3_hcd->can_do_streams = 1;
->   
-> -	ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
-> -	if (ret)
-> -		goto dealloc_usb2_hcd;
-> +	if (xhci->shared_hcd) {
-> +		ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
-> +		if (ret)
-> +			goto put_usb3_hcd;
-> +	}
->   
->   	if (wakeup_irq > 0) {
->   		ret = dev_pm_set_dedicated_wake_irq_reverse(dev, wakeup_irq);
-	
-dev_pm_set_dedicated_wake_irq_reverse() can be called with just one hcd, if it fails
-it will goto dealloc_usb3_hcd:
+>   	hidg = func_to_hidg(f);
+>   	opts = container_of(f->fi, struct f_hid_opts, func_inst);
+> -	kfree(hidg->report_desc);
+> -	kfree(hidg->set_report_buf);
+> -	kfree(hidg);
 
-dealloc_usb3_hcd:
-	usb_remove_hcd(xhci->shared_hcd);   // xhci->shared_hcd may be null
-	xhci->shared_hcd = NULL; // causes usb_put_hcd() issues if shared_hcd exists
+... while here 3 things used to be freed. What happens to hidg->report_desc?
 
-put_usb3_hcd:
-         usb_put_hcd(xhci->shared_hcd); // shared_hcd may be set NULL above
+Regards,
 
--Mathias
-  
+Andrzej
