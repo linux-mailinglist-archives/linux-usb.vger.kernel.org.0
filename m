@@ -2,95 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC7D63642E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 16:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AFD63644A
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 16:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238791AbiKWPls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 10:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
+        id S238799AbiKWPoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 10:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238621AbiKWPlY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 10:41:24 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC14970AA;
-        Wed, 23 Nov 2022 07:41:22 -0800 (PST)
-Received: from [192.168.0.203] ([151.127.53.97]) by mrelayeu.kundenserver.de
- (mreue011 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1MVe5c-1oWOrt2qF2-00RWCH; Wed, 23 Nov 2022 16:40:57 +0100
-Message-ID: <04ea37cc-d97a-3e00-8a99-135ab38860f2@green-communications.fr>
-Date:   Wed, 23 Nov 2022 16:40:33 +0100
+        with ESMTP id S237959AbiKWPn7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 10:43:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A9B32B8E;
+        Wed, 23 Nov 2022 07:43:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4589061DBF;
+        Wed, 23 Nov 2022 15:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA89C433D6;
+        Wed, 23 Nov 2022 15:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669218237;
+        bh=StrD+dB5u8Vcvhdu1J0yzbIhWxVUSSaCEXA8q6qXH6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EAcsGtHkQu0j8o/AsR1zQOSAMoHzYiGZzCNI192tK8toJkZFTEA0nHjzpVwOAki5W
+         56d4OXjCoFbrdSL8iyRal3OFHPP6pg859dn4/blZFzsZ6+n1KVl5o3AsCJIWfZV2WB
+         0UuOOMxX8k4XhCC8Uzw9P+V2Yzdj1gNie77riZ9riRgrYBVXGr9A0EDSKOaaprmppk
+         7BLFa/SUfGSrFTlEPOo0uHvvkIwmA3T0OE15sUzNsZ61/FJlN7P0k3CAIVwEsbYToo
+         H8WF/ULVWxmqPNEXqVK7PgU/gneXdXSopvxoaSudnfnHrqh31pfiNuZrpyXxqLhuXI
+         dfGICcT33p5AQ==
+Date:   Wed, 23 Nov 2022 15:43:46 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v2 6/9] dt-bindings: drop redundant part of title (end,
+ part three)
+Message-ID: <Y34/sh0TQqyNOrZi@sirena.org.uk>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+ <20221121110615.97962-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Content-Language: fr, en-US
-From:   Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:pYmZKIjhwEar5+zrSn8EoxJrueGNr0TSCBf+WtXkAd8BvNef9B/
- OHCKLrJsAjusLNEWTW5K3zYIvPXLKkK3ysJLxZ4ZsTdcy8zcz5be09kjSZM5EkCIPDAiLiR
- YqrAqAbJftFEh4Pobn9RNqTAc9U49IAHZIiDhnI1i4EHK8Z5b9cF6vUn+Hkjp2JG9cvgMoC
- 4kNZJnJZN07XQVk8+aYiQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1iTK9Mme8R0=:x5r7JV6cEEzk0QklHUaWhl
- U2yVwM1TcjlTm4kedfmfCqsnflLKj7JhV/9Xv/ERlfLEDD9ez6gcX27nQI91ZWxm9HXHwh9ou
- frnQS2fY4MsLsXkK6LPYyzNo8BILMGz2WUpAgZcMH8NEcVpI762/xjdSSA+YhmR6q5j6zGd80
- q8+a2h23HCYuPIUODbk0b8aUnOzLU6gLEN+OCrOAycztx3h73Ky7pmvr0ayhUG8I1H5OJrQ6q
- cVfo2mTNnmQ64VKesrsDldFetT9Tk2HBEgp76d92frvqsXUcbopg3XpVR43xYHG6CiFUNNA7y
- tD65EEG+Re1AB7jCiAuAP7GEUZ0jYIHSIXNtdKrdvptkb3mkVDL8eDpwb9jySLKGwLmFxP40I
- 6VIBp6cY4DlqdtEeWRApYlwss8QIeUw40EBl4Tzkb//oMJvggojRV+B2cgDt/aFyYyZD32P1e
- tj+VZp/8LLEo7dgAqesx0fPjPSw8MG2Fw1eYYLn6+7zyJosQFAig1A+XaZSSRy4YRzs5Q1oWn
- ZIU+XSo1i1gmOYocclwsk6DjBSXLSXSp4tlqjHOfDoUYsFibEpirK7VQ8EFtTuZ4ULv0vhhrx
- j0AKcYhK0hCDdbWDtidBKtZsACHtBRKxtgYJhuINhYpXrtMRLInoDsczyZVRDrBpaDfZ9EuDv
- WWrwr5J08QFmJfWR89P+QRFUMfIRTtgEzXy+3GEXvPQZiCisTqhslH08ZR0+lIiZdT3yO46+v
- Z+CgcsU0dZAM1IItB4lrzrnVVZyMie6gB00bUhZHC/gZiQ0IHn7Sxk/KOOzGWObxwXq1tWRTI
- r4xR253irs4i81AzdKp0l8+h8JEP+rmrlJR7uZyVtW7wMCUCJo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="M0yaUN06E1HOYGuo"
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-7-krzysztof.kozlowski@linaro.org>
+X-Cookie: I'm rated PG-34!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23/11/2022 13:46, Greg Kroah-Hartman wrote:
-> The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
-> any system that uses it with untrusted hosts or devices.  Because the
-> protocol is impossible to make secure, just disable all rndis drivers to
-> prevent anyone from using them again.
-> 
-> Windows only needed this for XP and newer systems, Windows systems older
-> than that can use the normal USB class protocols instead, which do not
-> have these problems.
-> 
-> Android has had this disabled for many years so there should not be any
-> real systems that still need this.
 
-I kind of disagree here. I have seen plenty of android devices that only 
-support rndis for connection sharing, including my android 11 phone 
-released in Q3 2020. I suspect the qualcomm's BSP still enable it by 
-default.
+--M0yaUN06E1HOYGuo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There are also probably cellular dongles that uses rndis by default. 
-Maybe ask the ModemManager people ?
+On Mon, Nov 21, 2022 at 12:06:12PM +0100, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.
 
-I'm also curious if reimplementing it in userspace would solve the 
-security problem.
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--M0yaUN06E1HOYGuo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+P7IACgkQJNaLcl1U
+h9BvLwf+MbWgPhuuE/RNAOPtXpIBFmNsCUxYdu0csUjyJgNENFj+zdwqH6yI3/v5
+sVYRJF6Ze/c9y1Pokpk0G+MobI3H0JfEA6zRId+Uxnf65RT46OZWAqStaZipWhR+
+MqQJeau+/Wkq9EliMzXIY+Z1abRsNxFpOmxQfU6Kr85gGzubG6jqMBBQHSKS9a/3
+Deso3bTySefdyuzX9lZss2JUAvomH8WP1F3J7w/FFiBXs4r+04kkd5sboUbL40Xk
+9faUc2iAuQOUXtZ1O9P/qbpUmy+LhEMICPgGMN6SeU8G1af87tErxqa0p9c34Y35
+t/bDc74sRhfEPZZhpmCN+J7XV65OAQ==
+=yi41
+-----END PGP SIGNATURE-----
+
+--M0yaUN06E1HOYGuo--
