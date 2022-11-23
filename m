@@ -2,39 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C0A635C57
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 13:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58832635C9E
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 13:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236857AbiKWMEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 07:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S236756AbiKWMTt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 07:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiKWMEh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 07:04:37 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506E062F6;
-        Wed, 23 Nov 2022 04:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-ID:Content-Description;
-        bh=5JMIrXWfVVUBawjQhTsB12rkc3V2fqv2OGN2cVRUBRs=; b=TN91uAo4CNv5C7fEtaNVdRScjZ
-        r8YBSVaWiMa+2ppar+coZcihrgglWDIJfTsLSaQwpUhf1rVEmcd9kLzW+lXPH6AYxvX3dyTwXxv1x
-        RbvYqzICSadoDgk2up5jwHMyZl4vSrPKOgTmiSFPFOkXKFD/VNmT3ZkuxETK/dTX6VQu+2OBedXun
-        QfvLoZZ9UCnkzlfqSe9uGPcdnsDWWR2c0vhOxejyjs2JoSjgn1QZ1qHA91tVW3WTM0hplyFJRx2WI
-        MKkNKP5+0FMvgjSWMD7G4Y7GKMU8RBa/Buf+T5sUGCT0+61+MnakBdfUCQRcyNmQ3VKs/gwLHOril
-        B1CvOObg==;
-Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1oxoUU-0007F2-2m;
-        Wed, 23 Nov 2022 12:04:34 +0000
-Date:   Wed, 23 Nov 2022 12:04:33 +0000
-From:   John Keeping <john@metanate.com>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     linux-usb@vger.kernel.org,
-        Fabien Chouteau <fabien.chouteau@barco.com>,
+        with ESMTP id S236921AbiKWMTo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 07:19:44 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8703F3FBA4;
+        Wed, 23 Nov 2022 04:19:40 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D2606602939;
+        Wed, 23 Nov 2022 12:19:38 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669205978;
+        bh=mrGhW5OIb3wNDjsqgtt3UhHf3lyuEyBc7ZlUZoa0V/E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hOGs0judkTiQNgmSIP/tKBIX65+2KtWJz97LVEOHGE8FSYvQHu0FmmzLA1PL/0Ayb
+         LOSFGWG5XTtskBH3uvvDMuhgoJ+W5sCCrOKlnVVhRVmQr3Fngnwa/RTZOrYGYUhcxA
+         jsS06jCGM53wrBUj/Dwyxh8oXZOsDgXmmxGxyDP2qJpkYu2aZF0d5p0UNbqbQ0EbD3
+         W4xivFtsG7t4v313HS9mqOXGGMtVggoQ/G2A1qQTouLZye9S3hVtonIEgiO9RZDLUQ
+         2HcSKxQgE3es+AYnHLwuIZNxpSt4aNgDflUmr+XorTqQfzcAuD6ukreLh4TrMVc+AP
+         Vwlj3iojEUegA==
+Message-ID: <aa34a68e-454d-a146-31db-848385960b84@collabora.com>
+Date:   Wed, 23 Nov 2022 13:19:35 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/3] usb: gadget: f_hid: tidy error handling in hidg_alloc
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org
+Cc:     Fabien Chouteau <fabien.chouteau@barco.com>,
         Peter Korsgaard <peter.korsgaard@barco.com>,
         Felipe Balbi <balbi@ti.com>,
         Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
@@ -42,56 +47,91 @@ Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lee Jones <lee@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 2/3] usb: gadget: f_hid: fix refcount leak on error path
-Message-ID: <Y34MUUyOSgwLWQA+@donbot>
 References: <20221122123523.3068034-1-john@metanate.com>
- <20221122123523.3068034-3-john@metanate.com>
- <dcd180f6-7769-3bc5-403f-8960e922bb50@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <20221122123523.3068034-4-john@metanate.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20221122123523.3068034-4-john@metanate.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dcd180f6-7769-3bc5-403f-8960e922bb50@collabora.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 12:55:14PM +0100, Andrzej Pietrasiewicz wrote:
-> W dniu 22.11.2022 o 13:35, John Keeping pisze:
-> > When failing to allocate report_desc, opts->refcnt has already been
-> > incremented so it needs to be decremented to avoid leaving the options
-> > structure permanently locked.
-> > 
-> > Fixes: 21a9476a7ba8 ("usb: gadget: hid: add configfs support")
-> > Signed-off-by: John Keeping <john@metanate.com>
+W dniu 22.11.2022 oÂ 13:35, John Keeping pisze:
+> Unify error handling at the end of the function, reducing the risk of
+> missing something on one of the error paths.
 > 
-> I'd personally place the bugfix before patches 1 and 3, but anyway
+> Moving the increment of opts->refcnt later means there is no need to
+> decrement it on the error path and is safe as this is guarded by
+> opts->lock which is held for this entire section.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
 
-Patch 1 is also a bugfix, I ordered 1 & 2 based on the order of the
-commits in the Fixes: tags.
+Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> ---
+>   drivers/usb/gadget/function/f_hid.c | 21 +++++++++++----------
+>   1 file changed, 11 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index 6be6009f911e..a8da3b4a2855 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -1269,18 +1269,14 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>   	opts = container_of(fi, struct f_hid_opts, func_inst);
+>   
+>   	mutex_lock(&opts->lock);
+> -	++opts->refcnt;
+>   
+>   	device_initialize(&hidg->dev);
+>   	hidg->dev.release = hidg_release;
+>   	hidg->dev.class = hidg_class;
+>   	hidg->dev.devt = MKDEV(major, opts->minor);
+>   	ret = dev_set_name(&hidg->dev, "hidg%d", opts->minor);
+> -	if (ret) {
+> -		--opts->refcnt;
+> -		mutex_unlock(&opts->lock);
+> -		return ERR_PTR(ret);
+> -	}
+> +	if (ret)
+> +		goto err_unlock;
+>   
+>   	hidg->bInterfaceSubClass = opts->subclass;
+>   	hidg->bInterfaceProtocol = opts->protocol;
+> @@ -1291,14 +1287,13 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>   						 opts->report_desc_length,
+>   						 GFP_KERNEL);
+>   		if (!hidg->report_desc) {
+> -			put_device(&hidg->dev);
+> -			--opts->refcnt;
+> -			mutex_unlock(&opts->lock);
+> -			return ERR_PTR(-ENOMEM);
+> +			ret = -ENOMEM;
+> +			goto err_put_device;
+>   		}
+>   	}
+>   	hidg->use_out_ep = !opts->no_out_endpoint;
+>   
+> +	++opts->refcnt;
+>   	mutex_unlock(&opts->lock);
+>   
+>   	hidg->func.name    = "hid";
+> @@ -1313,6 +1308,12 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>   	hidg->qlen	   = 4;
+>   
+>   	return &hidg->func;
+> +
+> +err_put_device:
+> +	put_device(&hidg->dev);
+> +err_unlock:
+> +	mutex_unlock(&opts->lock);
+> +	return ERR_PTR(ret);
+>   }
+>   
+>   DECLARE_USB_FUNCTION_INIT(hid, hidg_alloc_inst, hidg_alloc);
 
-> Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> 
-> > ---
-> >   drivers/usb/gadget/function/f_hid.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> > index 8b8bbeaa27cb..6be6009f911e 100644
-> > --- a/drivers/usb/gadget/function/f_hid.c
-> > +++ b/drivers/usb/gadget/function/f_hid.c
-> > @@ -1292,6 +1292,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
-> >   						 GFP_KERNEL);
-> >   		if (!hidg->report_desc) {
-> >   			put_device(&hidg->dev);
-> > +			--opts->refcnt;
-> >   			mutex_unlock(&opts->lock);
-> >   			return ERR_PTR(-ENOMEM);
-> >   		}
-> 
