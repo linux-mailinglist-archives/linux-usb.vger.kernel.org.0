@@ -2,273 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8B5636B23
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 21:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B53636C38
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 22:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239160AbiKWUcJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 15:32:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S236846AbiKWVS6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 16:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239635AbiKWUbO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 15:31:14 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485622AC65
-        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 12:27:50 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id c2so282888ils.12
-        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 12:27:50 -0800 (PST)
+        with ESMTP id S235397AbiKWVS5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 16:18:57 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878585DBAD
+        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 13:18:56 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3a4c2c83300so90767977b3.13
+        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 13:18:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zjgLfIgymxMMYmWuqWPWGKjG2YLyiLx1k/rybg/+Fog=;
-        b=emU5TDI2MbojzF3Rj6h9/mvm8hyJXNIpA51tkz1gHiTfQayAEsPBQ8c57EjdSVqccs
-         Xpq979Mpem08d0+/EvxAUPsR+Td15FmnKynt9RhYPWjx0E7slJCcosYZi9ctJgx1ibhP
-         +fMSCtofTjP2GUS0UXEl/zFIlGfM9kvYGhVlAgeRCcT6GbRqa94SKJY+IVClsHzo+JQk
-         KcKif6hEWTbot7A42BaIG/7YCGRlXEulSixW6AIArWBoMfkUCAVTT2s0WHP6oYcLE1co
-         Sx7qud7gmKaHb/Yo7syu7hcKZAeY1zbeghQZqWoP5OT3X6K7Y/N1m0yKn6JPrWrLUWe+
-         M9Cg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W6C7qv1eJ7qa2Du5dHzN1Fjf/Nj8aikV4ptLqLHX0vs=;
+        b=Ck9gI6yZlGyNjFrQKSsTz1XybUaSp6mnps+4dlur+2Ge1WRrjHBgQGdfMVGILUwCt5
+         lccQDd/tjiIbWGqQvK0E+wj5himEckU1/ffz3I3AbA0419bn4d+4MLtEwu05w0IVxeHj
+         g/gWdjlT05oXa7w4RcyxWbPMCxutdUnsVMUfzahL8CQJm3UM8QBW2AM1e2d1zWNkvxXQ
+         FtcxotEbWPV5Vd70GQ/fr1ZJKa/ji5YbwoXjBVT7BubWgRn4awEgHJq+N3tcInF0smx+
+         Sw8DA+f209tt9deFkXQT7P4hyQ0FlRyea5PjZgktdPmdzrqkZ8QA+feBKktSCddGUQXd
+         TUCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zjgLfIgymxMMYmWuqWPWGKjG2YLyiLx1k/rybg/+Fog=;
-        b=4Yhq28E6N2gznOKeKy20PkNDC1amPK7zTAcwBm4Y9ZrbTcjaaYllU1vuazbAc0OJWy
-         QKWzLoAcDnsLN0sHlR0CAR8v9tTWyQhqOuedmHxfKfe3kA4fN9kdRDgOcamqgY2+CKLs
-         aQ81pkbejzkJ9sAE6YbLyrxXOTmq+0HjI/N+wgd807KEYs76nF31DoPCqIVynCzLcqxa
-         TH7bUPk68N0ZBxU5g7hVqijJg1vSra2S/G7yiQQASBF9fn87uDJgBw7fNtO8fdB9p/zL
-         YE+9zo+m3ln2LFfOygX0jfQW98rWCUpG2FRlIZg0xYc2Ju/D60wE37cy8Cjr4ag8tl3o
-         jefQ==
-X-Gm-Message-State: ANoB5pmI/GSpypOumdh43q4OmC1BvWJDiYSiOYr/L9d8N3bN5Pp9oIwE
-        hMA/nlea3s0G9xBHyOAwPeDl09RdM9J4uMwT25SaKg==
-X-Google-Smtp-Source: AA0mqf59ynR8eDMr2FuXqeoM+2l8U8kyRTbLAClnQcYWMsZbsIH+WSZbh22svAe6rVnxi/kOupIIjWA5LwI+w3yB+ts=
-X-Received: by 2002:a92:6e07:0:b0:300:1f82:73e5 with SMTP id
- j7-20020a926e07000000b003001f8273e5mr4494601ilc.85.1669235269478; Wed, 23 Nov
- 2022 12:27:49 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W6C7qv1eJ7qa2Du5dHzN1Fjf/Nj8aikV4ptLqLHX0vs=;
+        b=UekOVYZQhsdBDXJryv8Lr2M6M23LJLnr3O2MJmPr7DwJyjdEyce8ks2uSt6RL1kHj/
+         0yVDpcUptQ/6w8SYeNwJQrHdCfrETo8WgiOXTGvD2P3W/1djPqdNz9bIo6jTNzAZZTjy
+         F+vajaE4g5Ts5nKUGdFYq/3GXWUqFkfWGFU1Ms130Zzwds0U09CoL4stHKKLEvxkt/DI
+         y/PNMh8NsrHNlXL+LhSbwbxhE+eIyLgVoEKaR0ivs0JSQCsHZlF9NRgnYG58lPqVHETt
+         4fz+vVIOlIqA1+3IMACkhyC3z5bwvyj0mzRpOvJPVUOuT9H7M7wsf3ERsmiZCQVh+l3y
+         DpVQ==
+X-Gm-Message-State: ANoB5pmwNiPz77f4oHTXpU6MLS+ZOuiuEyxrhbNoU3byINhmti3TkqmH
+        b9RtqVsPie8fYbkqpth+Mnrzfn1NPG71L17GN+YF9A==
+X-Google-Smtp-Source: AA0mqf6HLM/A8CnHB2XzssV+QH1/rTnpGGlMB12IexeRgd8CAXHREUFMoF1QrLKlBUTNB3FoMOcXuVMAR5UqMZGRXPw=
+X-Received: by 2002:a81:5748:0:b0:3b1:eee3:32a with SMTP id
+ l69-20020a815748000000b003b1eee3032amr2969067ywb.325.1669238335822; Wed, 23
+ Nov 2022 13:18:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Wed, 23 Nov 2022 12:27:37 -0800
-Message-ID: <CANP3RGcno+UOsNTzqQ7XXjeOEQM+wseFramNNQyZ6U3bzc1yww@mail.gmail.com>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
+References: <20221123021153.205291-1-xiafukun@huawei.com>
+In-Reply-To: <20221123021153.205291-1-xiafukun@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 23 Nov 2022 22:18:44 +0100
+Message-ID: <CACRpkdayR=02Q_su3Vq=K1tgY64EE+Q1411-fM2gxMSX=WC0Sw@mail.gmail.com>
+Subject: Re: [PATCH -next] usb: fotg210: Fix build error when
+ CONFIG_USB_FOTG210_UDC=y && CONFIG_USB_GADGET=m
+To:     Xia Fukun <xiafukun@huawei.com>
+Cc:     gregkh@linuxfoundation.org, renzhijie2@huawei.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 4:46 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Hi Xia,
+
+thanks for your patch!
+
+On Wed, Nov 23, 2022 at 3:15 AM Xia Fukun <xiafukun@huawei.com> wrote:
+
+> The combination of CONFIG_USB_FOTG210_UDC=y and
+> CONFIG_USB_GADGET=m results in the following error:
+(...)
+> Make USB_FOTG210_UDC depends on USB_GADGET=y to fix this.
 >
-> The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
-> any system that uses it with untrusted hosts or devices.  Because the
-> protocol is impossible to make secure, just disable all rndis drivers to
-> prevent anyone from using them again.
->
-> Windows only needed this for XP and newer systems, Windows systems older
-> than that can use the normal USB class protocols instead, which do not
-> have these problems.
->
-> Android has had this disabled for many years so there should not be any
-> real systems that still need this.
->
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Oleksij Rempel <linux@rempel-privat.de>
-> Cc: "Maciej =C5=BBenczykowski" <maze@google.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
-> Cc: Jacopo Mondi <jacopo@jmondi.org>
-> Cc: "=C5=81ukasz Stelmach" <l.stelmach@samsung.com>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Reported-by: Ilja Van Sprundel <ivansprundel@ioactive.com>
-> Reported-by: Joseph Tartaro <joseph.tartaro@ioactive.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Note, I'll submit patches removing the individual drivers for later, but
-> that is more complex as unwinding the interaction between the CDC
-> networking and RNDIS drivers is tricky.  For now, let's just disable all
-> of this code as it is not secure.
->
-> I can take this through the USB tree if the networking maintainers have
-> no objection.  I thought I had done this months ago, when the last round
-> of "there are bugs in the protocol!" reports happened at the end of
-> 2021, but forgot to do so, my fault.
->
->  drivers/net/usb/Kconfig           | 1 +
->  drivers/net/wireless/Kconfig      | 1 +
->  drivers/usb/gadget/Kconfig        | 4 +---
->  drivers/usb/gadget/legacy/Kconfig | 3 +++
->  4 files changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-> index 4402eedb3d1a..83f9c0632642 100644
-> --- a/drivers/net/usb/Kconfig
-> +++ b/drivers/net/usb/Kconfig
-> @@ -401,6 +401,7 @@ config USB_NET_MCS7830
->  config USB_NET_RNDIS_HOST
->         tristate "Host for RNDIS and ActiveSync devices"
->         depends on USB_USBNET
-> +       depends on BROKEN
->         select USB_NET_CDCETHER
->         help
->           This option enables hosting "Remote NDIS" USB networking links,
+> Fixes: 1dd33a9f1b95 ("usb: fotg210: Collect pieces of dual mode controller")
+> Signed-off-by: Xia Fukun <xiafukun@huawei.com>
 
-NACK.
+Isn't this patch that Greg already merged fixing this issue
+more thoroughly?
+https://lore.kernel.org/linux-usb/20221111144821.113665-1-linus.walleij@linaro.org/
 
-I'm perfectly okay with disabling the gadget (guest/client/device)
-side rndis drivers.
-New devices (ie. phones) moving to newer kernels should simply be
-switching to the NCM gadget drivers.
-Especially since AFAICT this won't land until 6.2 and thus will
-presumably not be in the 6.1 LTS and thus won't even end up in next
-year's Android 14/U,
-and instead will only be present on the absolutely freshest Android
-15/V devices launching near the end of 2024 (or really in early 2025).
-Additionally the gadget side upstream RNDIS implementation simply
-isn't used by some chipset vendors - like Qualcomm (which AFAIK uses
-an out of tree driver to provide rndis gadget with IPA hardware
-offload acceleration).
+Please have a look & test!
 
-However, AFAICT this patch is also disabling *HOST* side RNDIS driver suppo=
-rt.
-
-ie. the RNDIS driver you'd use on a Linux laptop to usb tether off of
-an Android phone.
-
-AFAICT this will break usb tethering off of the *vast* majority of
-Android phones - likely including most of those currently being
-manufactured and sold.
-
-The only Android phones I'm actually aware of that have switched to
-NCM instead of RNDIS for usb tethering are Google Pixel 6+ (ie.
-6/6pro/6a/7/7pro).
-Though it's possible there might be some relatively new hardware from
-other phone vendors that also uses NCM - I don't track this that
-closely...
-I do know Android 13/T doesn't require phones to use NCM for
-tethering, and I've not heard of any plans to change that with Android
-14/U either...
-
-Note that NCM isn't natively supported by Windows <10 and it required
-a fair bit of 'guts' on our side to drop support for usb tethering
-Windows 8.1 devices prior to Win 8.1 EOL (which is only this coming
-January).
-
-Yes, AFAICT, this patch as currently written will break usb tethering
-off of a Google Pixel ../3/4/5,
-and I'd assume any and all qualcomm chipset derived devices, etc...
-
-ie. most likely the first of these two and possibly the second are required=
-:
-CONFIG_USB_NET_RNDIS_HOST=3Dm
-CONFIG_USB_NET_RNDIS_WLAN=3Dm
-
-(AFAIK the rndis host side driver is also used by various cell dongles
-and portable cell hotspots)
-
-[I also don't understand the commit description where it talks about
-Windows XP - how is XP relevant? AFAIK the issue is with Win<10 not
-WinXP]
-
-> diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
-> index cb1c15012dd0..f162b25123d7 100644
-> --- a/drivers/net/wireless/Kconfig
-> +++ b/drivers/net/wireless/Kconfig
-> @@ -81,6 +81,7 @@ config USB_NET_RNDIS_WLAN
->         tristate "Wireless RNDIS USB support"
->         depends on USB
->         depends on CFG80211
-> +       depends on BROKEN
->         select USB_NET_DRIVERS
->         select USB_USBNET
->         select USB_NET_CDCETHER
-> diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
-> index 4fa2ddf322b4..2c99d4313064 100644
-> --- a/drivers/usb/gadget/Kconfig
-> +++ b/drivers/usb/gadget/Kconfig
-> @@ -183,9 +183,6 @@ config USB_F_EEM
->  config USB_F_SUBSET
->         tristate
->
-> -config USB_F_RNDIS
-> -       tristate
-> -
->  config USB_F_MASS_STORAGE
->         tristate
->
-> @@ -297,6 +294,7 @@ config USB_CONFIGFS_RNDIS
->         bool "RNDIS"
->         depends on USB_CONFIGFS
->         depends on NET
-> +       depends on BROKEN
->         select USB_U_ETHER
->         select USB_F_RNDIS
->         help
-> diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legac=
-y/Kconfig
-> index 0a7b382fbe27..03d6da63edf7 100644
-> --- a/drivers/usb/gadget/legacy/Kconfig
-> +++ b/drivers/usb/gadget/legacy/Kconfig
-> @@ -153,6 +153,7 @@ config USB_ETH
->  config USB_ETH_RNDIS
->         bool "RNDIS support"
->         depends on USB_ETH
-> +       depends on BROKEN
->         select USB_LIBCOMPOSITE
->         select USB_F_RNDIS
->         default y
-> @@ -247,6 +248,7 @@ config USB_FUNCTIONFS_ETH
->  config USB_FUNCTIONFS_RNDIS
->         bool "Include configuration with RNDIS (Ethernet)"
->         depends on USB_FUNCTIONFS && NET
-> +       depends on BROKEN
->         select USB_U_ETHER
->         select USB_F_RNDIS
->         help
-> @@ -427,6 +429,7 @@ config USB_G_MULTI
->  config USB_G_MULTI_RNDIS
->         bool "RNDIS + CDC Serial + Storage configuration"
->         depends on USB_G_MULTI
-> +       depends on BROKEN
->         select USB_F_RNDIS
->         default y
->         help
-> --
-> 2.38.1
->
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+Yours,
+Linus Walleij
