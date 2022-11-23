@@ -2,219 +2,273 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4506369D0
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 20:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8B5636B23
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 21:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238970AbiKWTXw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 14:23:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S239160AbiKWUcJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 15:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiKWTXv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 14:23:51 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F167F7819C;
-        Wed, 23 Nov 2022 11:23:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669231430; x=1700767430;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=sx8YtBflpJqHxht+zbSr4BVUjKTsGAYlQ5L1i9pwJQQ=;
-  b=LTCQVC+1aK65EyLll74YPoQEHQz8BBhxN57X/Yqqjk/05gL+o+S6jucJ
-   CtkKtRnHJ2ACWTx/hDX4HfKLRpGOwjg+vmCwN34rXu3d/a84zEd6lHrld
-   Tpo2haXRGv0V7s5LAjn7ryN0GXDF9dOZCeScOUI6hZxWx3eNG3B7Ecaek
-   xPALOnZsxWdjhD4mcKIiDXkrPso/X6s+y/OO98mLrZmhLp2LH8pIET1AM
-   6/9MGU6FV0vM1cxixlTDN6X8C/tAUXfO6DACQ1MBHmCGrR9vuR4NXNrYN
-   Pwsiqb4cRrEPzCIL4DbxmOsRYJolQa6yHkbk0axUe4WaiQVDyVsHmRFl4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="315296030"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="315296030"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 11:23:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="674831278"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="674831278"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga001.jf.intel.com with ESMTP; 23 Nov 2022 11:23:49 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 11:23:48 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 11:23:48 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 23 Nov 2022 11:23:48 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vtm23dCRI/IgRnn9c7FIcFOabOhBn5dFASjJmEt+Y+R4tSFpbapPYEgq5QMXdVbYcbWKTMyQCQF7jUk419ktSAEa85cic7VNg3/kNmkaC4g8IG408X9Q6K3F0Orb5q/YY9oCxryhYSLvBO6a9aXBmpXNhickRcU46CbE+INsM6UgVKY+sL12IZv/IChYTreVBKLYQYCOx5qzUw7cUI8DxNf9+vnCwG1XMhWW7LVxnkPZBVttc0bIBSrkyMWR9wQOcPNCEgGFtpjDLgVG/a7JfPdlSda4BcAYL5HvQByTgWYgv3MajxXXMsnqABPL3GQbD77jx9meGtSq+xCCvssw8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8dHNYdRBUWWz9Zt4vOv2geNY+yth0Cl4v8v8N63fv10=;
- b=kG1sFol1GcEFMqDXv6ElPMN8Czj0oXRsD0X3JTpBNiOpx42/XZUEHWgR25u20Sj63lfGxR8WB9n40al775PqOIRy3k8K5gWkamR3971wxmwLHLuyKxSaYPeodMAFV8wVs6q3BWpMZ4gfprU199AamSIYZqA1vBcFc+lGitvHRgcGxl7ePFGPuum6lMa4E8C4TXL4LbPPpcxvRbVmcRMujNxyruJqSCZo8BEhafocAjoZxtOcJOLxL7VHOBppQXsjObWf8gOgXvIm+U+HY1NCEOyXA0FXOz+w6MEuBtPliXgKhZu4uN1UQK7DIqc+nUu/TFjdWbUVEkXuaSjdqBz4Wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by SN7PR11MB6825.namprd11.prod.outlook.com
- (2603:10b6:806:2a0::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 19:23:41 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5857.017; Wed, 23 Nov 2022
- 19:23:41 +0000
-Date:   Wed, 23 Nov 2022 11:23:36 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Alistar Popple <alistair@popple.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Won Chung <wonchung@google.com>, <linux-block@vger.kernel.org>,
-        <linux-cxl@vger.kernel.org>, <linux-fsi@lists.ozlabs.org>,
-        <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 4/5] driver core: make struct device_type.devnode() take
- a const *
-Message-ID: <637e733838b5f_12cdff29466@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-4-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221123122523.1332370-4-gregkh@linuxfoundation.org>
-X-ClientProxiedBy: BYAPR07CA0026.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::39) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        with ESMTP id S239635AbiKWUbO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 15:31:14 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485622AC65
+        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 12:27:50 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id c2so282888ils.12
+        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 12:27:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zjgLfIgymxMMYmWuqWPWGKjG2YLyiLx1k/rybg/+Fog=;
+        b=emU5TDI2MbojzF3Rj6h9/mvm8hyJXNIpA51tkz1gHiTfQayAEsPBQ8c57EjdSVqccs
+         Xpq979Mpem08d0+/EvxAUPsR+Td15FmnKynt9RhYPWjx0E7slJCcosYZi9ctJgx1ibhP
+         +fMSCtofTjP2GUS0UXEl/zFIlGfM9kvYGhVlAgeRCcT6GbRqa94SKJY+IVClsHzo+JQk
+         KcKif6hEWTbot7A42BaIG/7YCGRlXEulSixW6AIArWBoMfkUCAVTT2s0WHP6oYcLE1co
+         Sx7qud7gmKaHb/Yo7syu7hcKZAeY1zbeghQZqWoP5OT3X6K7Y/N1m0yKn6JPrWrLUWe+
+         M9Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zjgLfIgymxMMYmWuqWPWGKjG2YLyiLx1k/rybg/+Fog=;
+        b=4Yhq28E6N2gznOKeKy20PkNDC1amPK7zTAcwBm4Y9ZrbTcjaaYllU1vuazbAc0OJWy
+         QKWzLoAcDnsLN0sHlR0CAR8v9tTWyQhqOuedmHxfKfe3kA4fN9kdRDgOcamqgY2+CKLs
+         aQ81pkbejzkJ9sAE6YbLyrxXOTmq+0HjI/N+wgd807KEYs76nF31DoPCqIVynCzLcqxa
+         TH7bUPk68N0ZBxU5g7hVqijJg1vSra2S/G7yiQQASBF9fn87uDJgBw7fNtO8fdB9p/zL
+         YE+9zo+m3ln2LFfOygX0jfQW98rWCUpG2FRlIZg0xYc2Ju/D60wE37cy8Cjr4ag8tl3o
+         jefQ==
+X-Gm-Message-State: ANoB5pmI/GSpypOumdh43q4OmC1BvWJDiYSiOYr/L9d8N3bN5Pp9oIwE
+        hMA/nlea3s0G9xBHyOAwPeDl09RdM9J4uMwT25SaKg==
+X-Google-Smtp-Source: AA0mqf59ynR8eDMr2FuXqeoM+2l8U8kyRTbLAClnQcYWMsZbsIH+WSZbh22svAe6rVnxi/kOupIIjWA5LwI+w3yB+ts=
+X-Received: by 2002:a92:6e07:0:b0:300:1f82:73e5 with SMTP id
+ j7-20020a926e07000000b003001f8273e5mr4494601ilc.85.1669235269478; Wed, 23 Nov
+ 2022 12:27:49 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|SN7PR11MB6825:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4b21d04-acc5-419f-78e5-08dacd8839d8
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DWKQFYMwJ5htuwszjkOEj2WKyd1ejsOkdb4gtn3/F9FTOvbVO/WtG6lWaw2lL565Xbu5bye9oUvVm78Bl52N4vnIxOsab8gAT5p77x/BsiX9b35qrkhr0VIQzxxjU1v0Pma8xOOjsOjV2VUjmgKR+Rhlle9uaxZ2bF6g4TWQ9MKcEvUEHsr7q5gz1k+UuKHxFaN3wq1M0KWVkI9ABlyBE9sNUNOIJ32LbNTpWAiHjLx6kNb4GagZgPM38WlM1p5eRH0tdpkibX58YvnImIdmtDHENFAgQNoDGzI/wL3lRWGsdQuRVdlWZzAhCGh5sl/fgn2nmbRwDnImIQf8MBGetJgz0exN3uwSBkCtlEg9fk5i6ZHJxrXfxp0FTezGBu8F84USwF0dWB/cIPjcfH+LTjm1YVEfH26TtiWnTUkventW6Me9UIM2Oual+OeVKaEV1H+fYX8pzmXqzYcD/GTKmt3rEix3IKq8YfXQ3hWuW+aUXk27v6Lct7+G94TWwrbSxcvolvg1+oBzRHnicVnK21pVxOMSWJ+CqJVhrFeK/NfodCm2rYaSkUWMTzW+/Y1jfuI/qP9FezhsuczOJZwNuodXfidw4XQeA3dcfSI7SmTCxsFOQPNTnAv/BS+wq+1JpnfRuulk1pkRoYLg/DXByA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199015)(4326008)(8676002)(66476007)(41300700001)(5660300002)(8936002)(66946007)(478600001)(6486002)(316002)(83380400001)(38100700002)(66556008)(86362001)(26005)(82960400001)(6506007)(6666004)(9686003)(6512007)(186003)(54906003)(2906002)(7416002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?prQzOnHJzwAe5tBwvvR1tLGDRr8KsFUTTA8YO6tAawe/UXsdBdyHsCR+L2ON?=
- =?us-ascii?Q?hmTOcfO24F6f0nzOddbK5k/uNkhe/0/fcoP8CHZg2NLDt3CzWGh5n2Yp8Plu?=
- =?us-ascii?Q?kJm9MrIZCDkhbde7NdnsCaWel8+fN7Nbybc7UQEaKgHBX65ZSXLPY2ZBdXJz?=
- =?us-ascii?Q?s4M1hLWVjgU2WZi5eFo0jndOiwhHrfq4tHBeY/lCm1k4olQizzr7RtZ5ZlZh?=
- =?us-ascii?Q?RmZvVhNIrK3cLWFtRoPy1xIGaKbstNzYNdqZLOE+fQyLnz5YOJ6kaPkwch4L?=
- =?us-ascii?Q?Q/7E8YHDYQBKs3AWAR9vqCQQXdakaQKIt1pu+rmWjmxsN9dTNoVjnc5u0Nq4?=
- =?us-ascii?Q?4nTS8Nb+w3wY+axKoepS+28scz1vgq5Hb5DJKJAdayX/w+hrmlx/abZoYY4l?=
- =?us-ascii?Q?bo45FVQyNJa9XcxtKsfoz4XUU8egIFGCB1DaVHHUep65TFhXmENW7Vyfk+6Q?=
- =?us-ascii?Q?20dIRVu++4L3KFQ5SRMyH18E9/Vybfz3+sxweVApB73r5kwLPMke+g+dLhVO?=
- =?us-ascii?Q?3AMmlwBRp5Bt2c4uv4lisqyvr0K+ajOV4sLahDpFgPOADo3Vf6UUOFz+TiaO?=
- =?us-ascii?Q?rg4Kawk5RQmGQMK3Knk6hvfbPvLGY84dOwZJSkc//oXSrdX0iimaLC6ycPU3?=
- =?us-ascii?Q?GCRMGMGE+csrd20sFMrHC2IZNfDimZ+KKZQgNcmLcMz6ZW2ULI+S66IVy3zj?=
- =?us-ascii?Q?zGVgLhKjjyz0l8PszXSq9PpC3BLRY18krxH1xWzqKTG3IsBrx3DjRVEUYTa1?=
- =?us-ascii?Q?6AUAKhgzP90IxTBK9qEfOg0YJozRzLfZE4bR39tqTc7xQ1WLB/VDOKTFJhMB?=
- =?us-ascii?Q?n2iEoZJJ31SsKoXU6vQgJJzFbbBFDRjJmiVu0KeHRnu2hLQW0OnYOniIBUdZ?=
- =?us-ascii?Q?3dicNpOFoPCL7GPR/OrDQXqWLZkFGqLg55fFfLJsc6HU7nYhPw7U2q8AEcAa?=
- =?us-ascii?Q?ELSSDdXd9rGpzq6ocmKGAzv6n25K2xmZOru1Iiw/hiLTjUGv3M27DJFiwdjJ?=
- =?us-ascii?Q?BvqzaB5/SK0wrqB00TKsrNUliD2PlJNsutBSpoLesOOkQl2nXq8Dc+YYzPc7?=
- =?us-ascii?Q?UwlE1vZoPUKTQzhi8U1FokHlXnebDOZTCpWqdqtH7McqK28OLW51ddLXvKBY?=
- =?us-ascii?Q?zfmawqq8+26qSUTJJJVUNxQoacCgo88hHQB/IvMmr5KQlBVLosaqGJlflg9F?=
- =?us-ascii?Q?tPrF7w/zi0+TpQphVHD2Z9USxDvte8GO0Eq/tnKbix6xdRNq/WiB+uFn8wS9?=
- =?us-ascii?Q?aDmYsAAYu5sVJFdC4N0WOTxX0EacXAOhJsBHX5vY7y14U6jrEPGrhy+XTMJ/?=
- =?us-ascii?Q?X616HK0TexGE3yyt7SnajT97dxKF7WI7I0FHIdp7CXcBDsXdcgi90WTVLjR6?=
- =?us-ascii?Q?g38cRslysS4SFt4BAQAOyXuipENHty7DhWROnKpww8abAGNSNQvDpNpKU1DB?=
- =?us-ascii?Q?5/OtPRdR9G6Rar7aTcp+vh+Dn2h1I+LZvgwU8Kmic5y7NcxmxxBIE5xIz/0J?=
- =?us-ascii?Q?4vekGDDC66muXYbDXzi+w40zTRjRi1KEva6nacaBrqON8byQYDOC3R68AIEK?=
- =?us-ascii?Q?Ip4X31rNjyCmyTjfa+k80ePhFuyiQFGKFGyGag17vCKx/Cs5toDo8ujbYWYX?=
- =?us-ascii?Q?bg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4b21d04-acc5-419f-78e5-08dacd8839d8
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 19:23:41.0454
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /d4Rb3gRAt+EF7IIe5+HPWTaOYwgx58FF7BVf1E9HkM/8W+b+RYYY7iGGrzbEjxEfMaUQnOhqfpd7R+79qrnLEWe3JwasVxsMD9e/W4BIlI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6825
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Wed, 23 Nov 2022 12:27:37 -0800
+Message-ID: <CANP3RGcno+UOsNTzqQ7XXjeOEQM+wseFramNNQyZ6U3bzc1yww@mail.gmail.com>
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg Kroah-Hartman wrote:
-> The devnode() callback in struct device_type should not be modifying the
-> device that is passed into it, so mark it as a const * and propagate the
-> function signature changes out into all relevant subsystems that use
-> this callback.
-> 
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Alison Schofield <alison.schofield@intel.com>
-> Cc: Vishal Verma <vishal.l.verma@intel.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Ben Widawsky <bwidawsk@kernel.org>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Jeremy Kerr <jk@ozlabs.org>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Alistar Popple <alistair@popple.id.au>
-> Cc: Eddie James <eajames@linux.ibm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> Cc: Won Chung <wonchung@google.com>
-> Cc: linux-block@vger.kernel.org
-> Cc: linux-cxl@vger.kernel.org
-> Cc: linux-fsi@lists.ozlabs.org
-> Cc: linux-kernel@vger.kernel.org
+On Wed, Nov 23, 2022 at 4:46 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
+> any system that uses it with untrusted hosts or devices.  Because the
+> protocol is impossible to make secure, just disable all rndis drivers to
+> prevent anyone from using them again.
+>
+> Windows only needed this for XP and newer systems, Windows systems older
+> than that can use the normal USB class protocols instead, which do not
+> have these problems.
+>
+> Android has had this disabled for many years so there should not be any
+> real systems that still need this.
+>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Oleksij Rempel <linux@rempel-privat.de>
+> Cc: "Maciej =C5=BBenczykowski" <maze@google.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+> Cc: Jacopo Mondi <jacopo@jmondi.org>
+> Cc: "=C5=81ukasz Stelmach" <l.stelmach@samsung.com>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > Cc: linux-usb@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Reported-by: Ilja Van Sprundel <ivansprundel@ioactive.com>
+> Reported-by: Joseph Tartaro <joseph.tartaro@ioactive.com>
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[..]
-> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-> index 20ce488a7754..6ae8d0bdc61b 100644
-> --- a/drivers/cxl/core/memdev.c
-> +++ b/drivers/cxl/core/memdev.c
-> @@ -27,7 +27,7 @@ static void cxl_memdev_release(struct device *dev)
->  	kfree(cxlmd);
->  }
->  
-> -static char *cxl_memdev_devnode(struct device *dev, umode_t *mode, kuid_t *uid,
-> +static char *cxl_memdev_devnode(const struct device *dev, umode_t *mode, kuid_t *uid,
->  				kgid_t *gid)
->  {
->  	return kasprintf(GFP_KERNEL, "cxl/%s", dev_name(dev));
+> ---
+> Note, I'll submit patches removing the individual drivers for later, but
+> that is more complex as unwinding the interaction between the CDC
+> networking and RNDIS drivers is tricky.  For now, let's just disable all
+> of this code as it is not secure.
+>
+> I can take this through the USB tree if the networking maintainers have
+> no objection.  I thought I had done this months ago, when the last round
+> of "there are bugs in the protocol!" reports happened at the end of
+> 2021, but forgot to do so, my fault.
+>
+>  drivers/net/usb/Kconfig           | 1 +
+>  drivers/net/wireless/Kconfig      | 1 +
+>  drivers/usb/gadget/Kconfig        | 4 +---
+>  drivers/usb/gadget/legacy/Kconfig | 3 +++
+>  4 files changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
+> index 4402eedb3d1a..83f9c0632642 100644
+> --- a/drivers/net/usb/Kconfig
+> +++ b/drivers/net/usb/Kconfig
+> @@ -401,6 +401,7 @@ config USB_NET_MCS7830
+>  config USB_NET_RNDIS_HOST
+>         tristate "Host for RNDIS and ActiveSync devices"
+>         depends on USB_USBNET
+> +       depends on BROKEN
+>         select USB_NET_CDCETHER
+>         help
+>           This option enables hosting "Remote NDIS" USB networking links,
 
-For the CXL bit:
+NACK.
 
-Acked-by: Dan Williams <dan.j.williams@intel.com>
+I'm perfectly okay with disabling the gadget (guest/client/device)
+side rndis drivers.
+New devices (ie. phones) moving to newer kernels should simply be
+switching to the NCM gadget drivers.
+Especially since AFAICT this won't land until 6.2 and thus will
+presumably not be in the 6.1 LTS and thus won't even end up in next
+year's Android 14/U,
+and instead will only be present on the absolutely freshest Android
+15/V devices launching near the end of 2024 (or really in early 2025).
+Additionally the gadget side upstream RNDIS implementation simply
+isn't used by some chipset vendors - like Qualcomm (which AFAIK uses
+an out of tree driver to provide rndis gadget with IPA hardware
+offload acceleration).
+
+However, AFAICT this patch is also disabling *HOST* side RNDIS driver suppo=
+rt.
+
+ie. the RNDIS driver you'd use on a Linux laptop to usb tether off of
+an Android phone.
+
+AFAICT this will break usb tethering off of the *vast* majority of
+Android phones - likely including most of those currently being
+manufactured and sold.
+
+The only Android phones I'm actually aware of that have switched to
+NCM instead of RNDIS for usb tethering are Google Pixel 6+ (ie.
+6/6pro/6a/7/7pro).
+Though it's possible there might be some relatively new hardware from
+other phone vendors that also uses NCM - I don't track this that
+closely...
+I do know Android 13/T doesn't require phones to use NCM for
+tethering, and I've not heard of any plans to change that with Android
+14/U either...
+
+Note that NCM isn't natively supported by Windows <10 and it required
+a fair bit of 'guts' on our side to drop support for usb tethering
+Windows 8.1 devices prior to Win 8.1 EOL (which is only this coming
+January).
+
+Yes, AFAICT, this patch as currently written will break usb tethering
+off of a Google Pixel ../3/4/5,
+and I'd assume any and all qualcomm chipset derived devices, etc...
+
+ie. most likely the first of these two and possibly the second are required=
+:
+CONFIG_USB_NET_RNDIS_HOST=3Dm
+CONFIG_USB_NET_RNDIS_WLAN=3Dm
+
+(AFAIK the rndis host side driver is also used by various cell dongles
+and portable cell hotspots)
+
+[I also don't understand the commit description where it talks about
+Windows XP - how is XP relevant? AFAIK the issue is with Win<10 not
+WinXP]
+
+> diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
+> index cb1c15012dd0..f162b25123d7 100644
+> --- a/drivers/net/wireless/Kconfig
+> +++ b/drivers/net/wireless/Kconfig
+> @@ -81,6 +81,7 @@ config USB_NET_RNDIS_WLAN
+>         tristate "Wireless RNDIS USB support"
+>         depends on USB
+>         depends on CFG80211
+> +       depends on BROKEN
+>         select USB_NET_DRIVERS
+>         select USB_USBNET
+>         select USB_NET_CDCETHER
+> diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
+> index 4fa2ddf322b4..2c99d4313064 100644
+> --- a/drivers/usb/gadget/Kconfig
+> +++ b/drivers/usb/gadget/Kconfig
+> @@ -183,9 +183,6 @@ config USB_F_EEM
+>  config USB_F_SUBSET
+>         tristate
+>
+> -config USB_F_RNDIS
+> -       tristate
+> -
+>  config USB_F_MASS_STORAGE
+>         tristate
+>
+> @@ -297,6 +294,7 @@ config USB_CONFIGFS_RNDIS
+>         bool "RNDIS"
+>         depends on USB_CONFIGFS
+>         depends on NET
+> +       depends on BROKEN
+>         select USB_U_ETHER
+>         select USB_F_RNDIS
+>         help
+> diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legac=
+y/Kconfig
+> index 0a7b382fbe27..03d6da63edf7 100644
+> --- a/drivers/usb/gadget/legacy/Kconfig
+> +++ b/drivers/usb/gadget/legacy/Kconfig
+> @@ -153,6 +153,7 @@ config USB_ETH
+>  config USB_ETH_RNDIS
+>         bool "RNDIS support"
+>         depends on USB_ETH
+> +       depends on BROKEN
+>         select USB_LIBCOMPOSITE
+>         select USB_F_RNDIS
+>         default y
+> @@ -247,6 +248,7 @@ config USB_FUNCTIONFS_ETH
+>  config USB_FUNCTIONFS_RNDIS
+>         bool "Include configuration with RNDIS (Ethernet)"
+>         depends on USB_FUNCTIONFS && NET
+> +       depends on BROKEN
+>         select USB_U_ETHER
+>         select USB_F_RNDIS
+>         help
+> @@ -427,6 +429,7 @@ config USB_G_MULTI
+>  config USB_G_MULTI_RNDIS
+>         bool "RNDIS + CDC Serial + Storage configuration"
+>         depends on USB_G_MULTI
+> +       depends on BROKEN
+>         select USB_F_RNDIS
+>         default y
+>         help
+> --
+> 2.38.1
+>
+Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
