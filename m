@@ -2,143 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A70663691E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 19:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AB7636981
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 20:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236582AbiKWSji (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 13:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S239632AbiKWTG0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 14:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238244AbiKWSje (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 13:39:34 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D6A6D49D
-        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 10:39:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669228774; x=1700764774;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LXqgcrraC9BMzvqnyIfE5+jtOn/H4k1U1B7zg7FTv+w=;
-  b=FNhfCUpvVu7s/Lt7G2yxjr3qfS2ZDQNuP6ZtqLsQnLM342fgOtjnJ/Kr
-   Skdn0rmrvlu7IxxH248HrL2kNEtMBcWlEgq0R8SsZQMWrc27QyFirIj/g
-   3Mlc+PzkyViPBzgyqyGAZg7emsh+uKlC5Gh6LrosShVVEvkl6BjPA20HH
-   ArPb8X45eCexGAR1yO+5l1pMgcWeuN22+DQdmE+aRbAorjnR73G0gUi5V
-   lbqtbLpytfuSNNKKh14DXeqozRO5qjLfXj9kthjUWsqRXka9+cT+udJtC
-   +zBIuzWbhHKU5EpC8/u0tBQI2e74uxFHpP7jYzYr6zpxKTHGulOPHLEhG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="301696574"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="301696574"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:39:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="672972981"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="672972981"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Nov 2022 10:39:32 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oxueh-000302-1U;
-        Wed, 23 Nov 2022 18:39:31 +0000
-Date:   Thu, 24 Nov 2022 02:39:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 907140462eb511f3d98aa89c0665da1b618d3545
-Message-ID: <637e68e1.VSPGSZ2AY8aiAD2f%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S236590AbiKWTGY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 14:06:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46F922D2;
+        Wed, 23 Nov 2022 11:06:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 586E161EBE;
+        Wed, 23 Nov 2022 19:06:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7968C433D6;
+        Wed, 23 Nov 2022 19:06:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669230382;
+        bh=imibZHjJL9cpBpAGiGFcUllw5xFRNIsDuHu6Y+fwag4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V2GZdWHPvr+u9NV42kW3apisS1jk4Cp6h19MZ6qfaWIUGIVJV5gV2ha39zpYgwqP7
+         WIt60wd9b8FvKniDUGYZZUiLCvZQFxPf+YdmrcSFnI46/b/EWX33zlFDz2TQxA125f
+         2aOS9p5Y/Iiz28acyMaujccSu8U/Ol2yQw6Symkw=
+Date:   Wed, 23 Nov 2022 20:06:20 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y35vLAWWfezPvGSm@kroah.com>
+References: <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org>
+ <Y34+V2bCDdqujBDk@kroah.com>
+ <Y35JfNJDppRp5bLX@ziepe.ca>
+ <Y35R+/eQJYI7VaDS@kroah.com>
+ <Y35YlI93UBuTfgYy@ziepe.ca>
+ <Y35dMIaNYSE0Cykd@casper.infradead.org>
+ <Y35iKfYf3ThdVvaR@kroah.com>
+ <Y35lt+0jXrOKynL5@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <Y35lt+0jXrOKynL5@ziepe.ca>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 907140462eb511f3d98aa89c0665da1b618d3545  usb: usb251xb: Convert to i2c's .probe_new()
+On Wed, Nov 23, 2022 at 02:25:59PM -0400, Jason Gunthorpe wrote:
+> On Wed, Nov 23, 2022 at 07:10:49PM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
+> > > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
+> > > > #define generic_container_of(in_type, in, out_type, out_member) \
+> > > > 	_Generic(in,                                        \
+> > > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
+> > > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
+> > > > 		  )
+> > > 
+> > > There's a neat trick I found in seqlock.h:
+> > > 
+> > > #define generic_container_of(in_t, in, out_t, m)			\
+> > > 	_Generic(*(in),							\
+> > > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
+> > > 		in_t: ((out_t *)container_of(in, out_type, m))	\
+> > > 	)
+> > > 
+> > > and now it fits in 80 columns ;-)
+> > 
+> > Nice trick!  Dropping the inline functions is a bit different, let me
+> > see if that still gives a sane error if we pass an incorrect type or
+> > mess with the const * the wrong way.  I'll run some tests tomorrow
+> > afternoon...
+> 
+> The errors in some cases are very verbose, but it is somewhat
+> understandable - the worst is when _Generic fails to match anything,
+> but also at least clang partially expanded container_of and it throws
+> other assertions too.
+> 
+> I also wonder if this could just be rolled into the normal
+> container_of.
 
-elapsed time: 1558m
+I think we might be able to now, my previous attempts with inline
+functions prevented that.  I'll beat on that tomorrow...
 
-configs tested: 61
-configs skipped: 2
+> in_type would have to be derived like:
+> 
+>   in_type = typeof((out_type *)NULL)->out_member)
+> 
+> But I don't know if you can use typeof in a generic type matching expression..
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Maybe that is what threw me before, I can't remember.  I do know we
+tried a number of different attempts, can't recall the failed ones...
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-powerpc                           allnoconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-s390                             allyesconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-ia64                             allmodconfig
-x86_64                              defconfig
-i386                 randconfig-a011-20221121
-i386                 randconfig-a013-20221121
-i386                 randconfig-a012-20221121
-i386                          randconfig-a001
-i386                 randconfig-a014-20221121
-i386                          randconfig-a003
-i386                 randconfig-a015-20221121
-i386                          randconfig-a005
-i386                 randconfig-a016-20221121
-x86_64                               rhel-8.3
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                           allyesconfig
-m68k                             allyesconfig
-x86_64               randconfig-a012-20221121
-x86_64               randconfig-a011-20221121
-x86_64               randconfig-a015-20221121
-x86_64               randconfig-a013-20221121
-x86_64               randconfig-a014-20221121
-x86_64               randconfig-a016-20221121
-arc                  randconfig-r043-20221120
-riscv                randconfig-r042-20221121
-arc                  randconfig-r043-20221121
-s390                 randconfig-r044-20221121
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                                defconfig
-i386                             allyesconfig
-arm                                 defconfig
+thanks,
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r041-20221120
-hexagon              randconfig-r041-20221121
-hexagon              randconfig-r045-20221120
-hexagon              randconfig-r045-20221121
-riscv                randconfig-r042-20221120
-s390                 randconfig-r044-20221120
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h
