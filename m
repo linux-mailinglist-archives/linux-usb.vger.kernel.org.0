@@ -2,133 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A4D63658E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 17:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED6F6365B6
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 17:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238759AbiKWQSm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 11:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
+        id S239066AbiKWQZv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 11:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238502AbiKWQSk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 11:18:40 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D391374AA8
-        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 08:18:39 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id n205so19536094oib.1
-        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 08:18:39 -0800 (PST)
+        with ESMTP id S239057AbiKWQZh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 11:25:37 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7D38FB12
+        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 08:25:34 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id c15so11538204qtw.8
+        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 08:25:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ziepe.ca; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FK7OzDutJXL4x3nOMwAL8QRV7ZrRIuLLqcVXNC+ZYvY=;
-        b=DhkCQTQjMrc619ra32spj3aSCLtTrU6wN5xGjnM1jbDVL3sk/gLE6+6wZRVasaf+nK
-         NnRDJ/MMVU4EgGmlLbgVIbfnPDtlWqwlFo1kK4ckCcAXLReXCzZyTbabHiTvUP4/auMG
-         04hTg/jy6+1Yvc/mggdD9Brs9LWJL2stywEOdTpa/MIVpj/srsuWeqm+kasBnY0aPE08
-         T0SRRSZW21hPEhXO6ZTvYxAvHxsYH9qSeQtCXH9916crnmCowSFy5TjXTKNwfkIkK24c
-         Jrxr4uo2GjxrSshl9Onf7r9gOdeywmdg+itinr2XzlDbPJBD8hEyJfQAF1QkEY1VzEaF
-         VHFA==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PhJSJnLVsP1vBula4KCFSx5kBTht7CuZrspFHU0N884=;
+        b=ebGDyq+q12UGY7Qk5Tupc9qhDLGyIcTZVkm5UZYo/563kMYJJqyAeOt5CzUtM4J8DZ
+         3trFHny8FIDylUgXR9JjN8PS72NcWsvrDfr1Nd1Q7FDnTR43onbW+jw1+Ctw0cwtwrCd
+         T18F6CTTWbwHWY6WrhS9prZWxtXaTjwzs7IQnIsjaZTmFdCmKdzeecD0BbnuyMQqVQVg
+         z0s4POzfjTxMQ62r8mCHZM0rSmjmaRN4hzlYV7zdZbP1xMXxym5gxZ3SKz4kt6tgYYum
+         EfCUt6/g2D4WDco0MNWeSPD0NJ6lencxZ7NqZJCJlD8ikZ4WiUl7N0yJnMd2Q4wIPSG2
+         7pnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FK7OzDutJXL4x3nOMwAL8QRV7ZrRIuLLqcVXNC+ZYvY=;
-        b=70FS4HtcEdO8VurdEhPUP7ntRfwdgF6/tHmPFgfAmk0UbGPq+wHioLRzpxP5oslalJ
-         +ZYY+09Zv22Gtsnla3wPXN22XvhWqNCN+qySJ+90d/HvFO2VCGS0r52u8grw+xsZivZ8
-         QEpmfJ7J27cC7OroOniXtnJmbgvBTTD037y84FSyEkfdjQlnv4qI2L6sPA8EhSZdJX4/
-         4bGlE7Pr1APjcigWv/73A/LU9DGfbzPi9mOQPJ904tDhUnIidV6G6iSJ5nJU1qpL9ZDE
-         R6UPmAIVOxVOZVHGn7eWCTiifgzFu/OTCGAIx2+uxjeseupXWJGOVu9qIq5DR/+J3EnV
-         6I9A==
-X-Gm-Message-State: ANoB5pnebCg98qzXWKrlKrHQo0MIQ3+stgU33IGOU3gS6XydWPCLkoeE
-        r6N2Iuids1mmk9CAD0sLSf4=
-X-Google-Smtp-Source: AA0mqf7jGiOwcyuwXfJyic0muzMcQ4Ut/GVqWVlMsZ16HcXv3/BRqmRbXhD3LnPbbTcMwg/97U0uZQ==
-X-Received: by 2002:aca:a946:0:b0:350:e9a8:1583 with SMTP id s67-20020acaa946000000b00350e9a81583mr16923896oie.281.1669220319128;
-        Wed, 23 Nov 2022 08:18:39 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i10-20020a05683033ea00b00666a5b5d20fsm7408881otu.32.2022.11.23.08.18.37
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PhJSJnLVsP1vBula4KCFSx5kBTht7CuZrspFHU0N884=;
+        b=L4CtQjq2dkM4Xw4k5k72wR8/BXapFZxSh44n8OHPkbMJL8umspJj4d5kMKCaZrKkBq
+         MShSgnaX7jM3dkKVqyWdz8okW+K12MWoMI5CBG8iFBEUB+QnJqYUVoKfEhpStBiyiN0u
+         Qu/jo1pBQO0MUIXeC+SvrZf4FbEJy2IR9RUdWqYocjvdpkL6hWiwQXBqSfdp18oHsw+y
+         szKdCg8R/c312Chi69I95EyHw8UHQblGW5BP7lhz6CO8HYuCbDL3zvlzi7WiKBGIMX2b
+         1zsKRzGV22ysTFfdoGR66z1jZYmx/q+kZtktb4wDRHCtJnPxRkxYsfmUTmTgQ/+UwyPx
+         55hA==
+X-Gm-Message-State: ANoB5pmUTyVOBdiH4SAHhXmMkt2GLUPVWy25zjQzfgrURYqx283+mHQZ
+        YHfxj1npa9Y+/s7v4TMY9kwGSg==
+X-Google-Smtp-Source: AA0mqf7URgWK3LZKBiCOJvrYX2BcRTBThzd2VlaYXoILbXTQHzjAWJMWnGzlcI0wVuCFvjEWzX6GjA==
+X-Received: by 2002:ac8:60c:0:b0:3a6:37bd:ace5 with SMTP id d12-20020ac8060c000000b003a637bdace5mr14127789qth.426.1669220734011;
+        Wed, 23 Nov 2022 08:25:34 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id q7-20020a05620a0d8700b006f8665f483fsm12561497qkl.85.2022.11.23.08.25.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 08:18:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 23 Nov 2022 08:18:36 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        jun.li@nxp.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v3] usb: typec: tcpci: fix of node refcount leak in
- tcpci_register_port()
-Message-ID: <20221123161836.GA2374110@roeck-us.net>
-References: <20221121062416.1026192-1-yangyingliang@huawei.com>
+        Wed, 23 Nov 2022 08:25:33 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oxsZ2-00AOLL-MZ;
+        Wed, 23 Nov 2022 12:25:32 -0400
+Date:   Wed, 23 Nov 2022 12:25:32 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y35JfNJDppRp5bLX@ziepe.ca>
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
+ <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org>
+ <Y34+V2bCDdqujBDk@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221121062416.1026192-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y34+V2bCDdqujBDk@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 02:24:16PM +0800, Yang Yingliang wrote:
-> I got the following report while doing device(mt6370-tcpc) load
-> test with CONFIG_OF_UNITTEST and CONFIG_OF_DYNAMIC enabled:
+On Wed, Nov 23, 2022 at 04:37:59PM +0100, Greg Kroah-Hartman wrote:
+> static inline struct device *__kobj_to_dev(struct kobject *kobj)
+> {
+>         return container_of(kobj, struct device, kobj);
+> }
 > 
->   OF: ERROR: memory leak, expected refcount 1 instead of 2,
->   of_node_get()/of_node_put() unbalanced - destroy cset entry:
->   attach overlay node /i2c/pmic@34/tcpc/connector
+> static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
+> {
+>         return container_of(kobj, const struct device, kobj);
+> }
 > 
-> The 'fwnode' set in tcpci_parse_config() which is called
-> in tcpci_register_port(), its node refcount is increased
-> in device_get_named_child_node(). It needs be put while
-> exiting, so call fwnode_handle_put() in the error path of
-> tcpci_register_port() and in tcpci_unregister_port() to
-> avoid leak.
+> /*
+>  * container_of() will happily take a const * and spit back a non-const * as it
+>  * is just doing pointer math.  But we want to be a bit more careful in the
+>  * driver code, so manually force any const * of a kobject to also be a const *
+>  * to a device.
+>  */
+> #define kobj_to_dev(kobj)                                       \
+>         _Generic((kobj),                                        \
+>                  const struct kobject *: __kobj_to_dev_const,   \
+>                  struct kobject *: __kobj_to_dev)(kobj)
 > 
-> Fixes: 5e85a04c8c0d ("usb: typec: add fwnode to tcpc")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> 
+> Want me to do the same thing here as well?
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+It would be nice to have a shared macro code gen all of the above
+instead of copy and pasting it. Then maybe other cases beyond struct
+device could adopt const too..
 
-> ---
-> v2 -> v3:
->   Move fwnode_handle_put() into tcpci_unregister_port().
-> 
-> v1 -> v2:
->   Add description to how is the report generated and
->   the review tag from Guenter.
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index b2bfcebe218f..72f8d1e87600 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -794,8 +794,10 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
->  		return ERR_PTR(err);
->  
->  	tcpci->port = tcpm_register_port(tcpci->dev, &tcpci->tcpc);
-> -	if (IS_ERR(tcpci->port))
-> +	if (IS_ERR(tcpci->port)) {
-> +		fwnode_handle_put(tcpci->tcpc.fwnode);
->  		return ERR_CAST(tcpci->port);
-> +	}
->  
->  	return tcpci;
->  }
-> @@ -804,6 +806,7 @@ EXPORT_SYMBOL_GPL(tcpci_register_port);
->  void tcpci_unregister_port(struct tcpci *tcpci)
->  {
->  	tcpm_unregister_port(tcpci->port);
-> +	fwnode_handle_put(tcpci->tcpc.fwnode);
->  }
->  EXPORT_SYMBOL_GPL(tcpci_unregister_port);
->  
-> -- 
-> 2.25.1
-> 
+Jason
