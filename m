@@ -2,105 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3F4634D52
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 02:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A115E634D57
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 02:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235494AbiKWBhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Nov 2022 20:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S235119AbiKWBl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Nov 2022 20:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiKWBhY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 20:37:24 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709879824F;
-        Tue, 22 Nov 2022 17:37:23 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id n17so15530466pgh.9;
-        Tue, 22 Nov 2022 17:37:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=57QTDQNjua4bD17eBQRGR4QYAKmDZiaeZv3y3ThjHNA=;
-        b=AJd4p4Y1GJ2PPHHqMJkt2vAn6ERqJlfv48oiJrZolP8/Sh1CAzdLzBPA6Y9SygNMOB
-         ZL09xzKfYY7O9Doh92VB3jb6Ja8HBaQeBTEaB8nC72ZjmyawK/usRw5XgujG3BFx/tAa
-         YQzpVS/GviFMu850709iF5BIFlEAro2HnvijgpS0DgkaoVdPf+crlJ8hgf6xE8Hefq+w
-         79hHmd2FIBoMnyNG0wJ0UGHjyN8DYJcXF/xPRlPXnE/3S7V0L3QNV1H73/xPNO9zBSaj
-         Pg4w7ZIQmKiJxfxA9pfQlebDCPWdCV3XIz9WLiDa5A8wWXQqx8dPEJlxFOfUf9f5WHlm
-         xytw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=57QTDQNjua4bD17eBQRGR4QYAKmDZiaeZv3y3ThjHNA=;
-        b=Xp+xVKZiv7dMq3egI49uxxxbvYedqyTHuitrzxA6GyAq60sVbFtjCG2c9pZXqrKjCc
-         QB8BbTxH25GIuBQoQkh/uYV/OsJoh6g1ZgZ7HtuSt5tLXPIeu8wduJk1El4S4TO/ph5u
-         dsfB1siKCOyUh7fSNxpPWEnUva8PJPpHvEmCF+f9cagh5mFpSo/y4XDL2qUsi/PQ+3XV
-         SnpsELKi9fwYWASuLCDlAGTpNhP//pQFLr59VU/Wfu+RNpjYZFsO2sxjP8jNl7NoCG9C
-         HI/l9lAbg51TeW1lKP2aRR86wjGWnfejofeyGOf/l4niZDyvBOVe3dJiN8qct/30/Hpu
-         hSqQ==
-X-Gm-Message-State: ANoB5pkbuQpHHvRO7TmK28EVTEO7K1Y2EIuioOwe9RjrEmjKoDbQRsyV
-        WYdybXaTHipy/RRi5Bigbow=
-X-Google-Smtp-Source: AA0mqf547JrxZeSVmkQLdlrpalzLSYM74m3LOUHFPzZ3vcYEWkifg+t/S5X1eHUvslK9HNQURfIwrg==
-X-Received: by 2002:a63:de14:0:b0:477:4a61:eb99 with SMTP id f20-20020a63de14000000b004774a61eb99mr16322572pgg.48.1669167442801;
-        Tue, 22 Nov 2022 17:37:22 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:af8d:6047:29d5:446c])
-        by smtp.gmail.com with ESMTPSA id c4-20020a17090a674400b002189ab866bfsm204545pjm.5.2022.11.22.17.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 17:37:22 -0800 (PST)
-Date:   Tue, 22 Nov 2022 17:37:17 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 9/9] dt-bindings: drop redundant part of title (manual)
-Message-ID: <Y315Ta+ST067iVmh@google.com>
-References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
- <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229728AbiKWBl0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Nov 2022 20:41:26 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E3D1BE8D
+        for <linux-usb@vger.kernel.org>; Tue, 22 Nov 2022 17:41:24 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NH3jw3HkJz15Mq2;
+        Wed, 23 Nov 2022 09:40:52 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 09:41:22 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <cuigaosheng1@huawei.com>,
+        <yhchen@faraday-tech.com>, <mudongliangabcd@gmail.com>
+CC:     <linux-usb@vger.kernel.org>
+Subject: [PATCH v3] usb: gadget: fusb300_udc: free irq on the error path in fusb300_probe()
+Date:   Wed, 23 Nov 2022 09:41:21 +0800
+Message-ID: <20221123014121.1989721-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:06:15PM +0100, Krzysztof Kozlowski wrote:
->  Documentation/devicetree/bindings/input/fsl,scu-key.yaml        | 2 +-
->  Documentation/devicetree/bindings/input/matrix-keymap.yaml      | 2 +-
+When request_irq(ires1->start) failed in w5300_hw_probe(), irq
+ires->start has not been freed, and on the clean_up3 error path,
+we also need to free ires1->start irq, fix it.
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+In addition, We should add free_irq in fusb300_remove(), and give
+the lables a proper name so that they can be understood easily,
+so add free_irq in fusb300_remove(), and update clean_up3 to
+err_alloc_request.
 
+Fixes: 0fe6f1d1f612 ("usb: udc: add Faraday fusb300 driver")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+v3:
+- Give lables a proper name, clean_up2 -> err_request_irq1, clean_up3 -> err_alloc_request, thanks!
+v2:
+- Add free_irq in fusb300_remove(), thanks!
+ drivers/usb/gadget/udc/fusb300_udc.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/udc/fusb300_udc.c
+index 9af8b415f303..5e9e8e56e2d0 100644
+--- a/drivers/usb/gadget/udc/fusb300_udc.c
++++ b/drivers/usb/gadget/udc/fusb300_udc.c
+@@ -1347,6 +1347,7 @@ static int fusb300_remove(struct platform_device *pdev)
+ 	usb_del_gadget_udc(&fusb300->gadget);
+ 	iounmap(fusb300->reg);
+ 	free_irq(platform_get_irq(pdev, 0), fusb300);
++	free_irq(platform_get_irq(pdev, 1), fusb300);
+ 
+ 	fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
+ 	for (i = 0; i < FUSB300_MAX_NUM_EP; i++)
+@@ -1432,7 +1433,7 @@ static int fusb300_probe(struct platform_device *pdev)
+ 			IRQF_SHARED, udc_name, fusb300);
+ 	if (ret < 0) {
+ 		pr_err("request_irq1 error (%d)\n", ret);
+-		goto clean_up;
++		goto err_request_irq1;
+ 	}
+ 
+ 	INIT_LIST_HEAD(&fusb300->gadget.ep_list);
+@@ -1471,7 +1472,7 @@ static int fusb300_probe(struct platform_device *pdev)
+ 				GFP_KERNEL);
+ 	if (fusb300->ep0_req == NULL) {
+ 		ret = -ENOMEM;
+-		goto clean_up3;
++		goto err_alloc_request;
+ 	}
+ 
+ 	init_controller(fusb300);
+@@ -1486,7 +1487,10 @@ static int fusb300_probe(struct platform_device *pdev)
+ err_add_udc:
+ 	fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
+ 
+-clean_up3:
++err_alloc_request:
++	free_irq(ires1->start, fusb300);
++
++err_request_irq1:
+ 	free_irq(ires->start, fusb300);
+ 
+ clean_up:
 -- 
-Dmitry
+2.25.1
+
