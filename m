@@ -2,152 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED6F6365B6
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 17:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0066365CD
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Nov 2022 17:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239066AbiKWQZv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Nov 2022 11:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        id S239118AbiKWQ2O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Nov 2022 11:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239057AbiKWQZh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 11:25:37 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7D38FB12
-        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 08:25:34 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id c15so11538204qtw.8
-        for <linux-usb@vger.kernel.org>; Wed, 23 Nov 2022 08:25:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PhJSJnLVsP1vBula4KCFSx5kBTht7CuZrspFHU0N884=;
-        b=ebGDyq+q12UGY7Qk5Tupc9qhDLGyIcTZVkm5UZYo/563kMYJJqyAeOt5CzUtM4J8DZ
-         3trFHny8FIDylUgXR9JjN8PS72NcWsvrDfr1Nd1Q7FDnTR43onbW+jw1+Ctw0cwtwrCd
-         T18F6CTTWbwHWY6WrhS9prZWxtXaTjwzs7IQnIsjaZTmFdCmKdzeecD0BbnuyMQqVQVg
-         z0s4POzfjTxMQ62r8mCHZM0rSmjmaRN4hzlYV7zdZbP1xMXxym5gxZ3SKz4kt6tgYYum
-         EfCUt6/g2D4WDco0MNWeSPD0NJ6lencxZ7NqZJCJlD8ikZ4WiUl7N0yJnMd2Q4wIPSG2
-         7pnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PhJSJnLVsP1vBula4KCFSx5kBTht7CuZrspFHU0N884=;
-        b=L4CtQjq2dkM4Xw4k5k72wR8/BXapFZxSh44n8OHPkbMJL8umspJj4d5kMKCaZrKkBq
-         MShSgnaX7jM3dkKVqyWdz8okW+K12MWoMI5CBG8iFBEUB+QnJqYUVoKfEhpStBiyiN0u
-         Qu/jo1pBQO0MUIXeC+SvrZf4FbEJy2IR9RUdWqYocjvdpkL6hWiwQXBqSfdp18oHsw+y
-         szKdCg8R/c312Chi69I95EyHw8UHQblGW5BP7lhz6CO8HYuCbDL3zvlzi7WiKBGIMX2b
-         1zsKRzGV22ysTFfdoGR66z1jZYmx/q+kZtktb4wDRHCtJnPxRkxYsfmUTmTgQ/+UwyPx
-         55hA==
-X-Gm-Message-State: ANoB5pmUTyVOBdiH4SAHhXmMkt2GLUPVWy25zjQzfgrURYqx283+mHQZ
-        YHfxj1npa9Y+/s7v4TMY9kwGSg==
-X-Google-Smtp-Source: AA0mqf7URgWK3LZKBiCOJvrYX2BcRTBThzd2VlaYXoILbXTQHzjAWJMWnGzlcI0wVuCFvjEWzX6GjA==
-X-Received: by 2002:ac8:60c:0:b0:3a6:37bd:ace5 with SMTP id d12-20020ac8060c000000b003a637bdace5mr14127789qth.426.1669220734011;
-        Wed, 23 Nov 2022 08:25:34 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id q7-20020a05620a0d8700b006f8665f483fsm12561497qkl.85.2022.11.23.08.25.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 08:25:33 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1oxsZ2-00AOLL-MZ;
-        Wed, 23 Nov 2022 12:25:32 -0400
-Date:   Wed, 23 Nov 2022 12:25:32 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
+        with ESMTP id S239112AbiKWQ1r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Nov 2022 11:27:47 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2A319022;
+        Wed, 23 Nov 2022 08:27:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=aoAeMEdmL2MvS8jsSZitNEibkl3qtsPxiMd3aeqhHUA=;
+        t=1669220866; x=1670430466; b=s/OgaVQksgPM11mqnSsPiDaP/NHFjYR7vVz5JDzgEBnWuA7
+        Hp44u74sLT+yntwaTD8CCxLn+EZTANA5GdKOcye2SxWUbq4U5b6Rh1bzt73N7q4ni8gSfDVQogkVL
+        L1pYiIpeL5Qe0u+g3RJD1Cv0Zg3s+ryE82iNpqd8TYcOtPdPg/dTM1sjTzlmsn21oT33L/WEkf8pn
+        TUC88MYM+pg548J0DDcYfyV/2mB8iBHrUElcnFWJo43dndQATe9LNBFOitONGNla9llEz8SFbIhdO
+        Slkry0S1Wb8g28ZmEnhTdIhidJ+OA7QayG+EWpeAk4uqOWmRr7xAtmrBkUQ0gjPQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1oxsay-007Fjd-0F;
+        Wed, 23 Nov 2022 17:27:32 +0100
+Message-ID: <d397e09df8bfd1286ed3e652fbba37ec7fe02f32.camel@sipsolutions.net>
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+From:   Johannes Berg <johannes@sipsolutions.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y35JfNJDppRp5bLX@ziepe.ca>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
- <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
- <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org>
- <Y34+V2bCDdqujBDk@kroah.com>
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+Date:   Wed, 23 Nov 2022 17:27:30 +0100
+In-Reply-To: <Y342oUJu9CFHNmlW@kroah.com>
+References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
+         <9b78783297db1ebb1a7cd922be7eef0bf33b75b9.camel@sipsolutions.net>
+         <Y342oUJu9CFHNmlW@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y34+V2bCDdqujBDk@kroah.com>
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 04:37:59PM +0100, Greg Kroah-Hartman wrote:
-> static inline struct device *__kobj_to_dev(struct kobject *kobj)
-> {
->         return container_of(kobj, struct device, kobj);
-> }
-> 
-> static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
-> {
->         return container_of(kobj, const struct device, kobj);
-> }
-> 
-> /*
->  * container_of() will happily take a const * and spit back a non-const * as it
->  * is just doing pointer math.  But we want to be a bit more careful in the
->  * driver code, so manually force any const * of a kobject to also be a const *
->  * to a device.
->  */
-> #define kobj_to_dev(kobj)                                       \
->         _Generic((kobj),                                        \
->                  const struct kobject *: __kobj_to_dev_const,   \
->                  struct kobject *: __kobj_to_dev)(kobj)
-> 
-> 
-> Want me to do the same thing here as well?
+On Wed, 2022-11-23 at 16:05 +0100, Greg Kroah-Hartman wrote:
+> On Wed, Nov 23, 2022 at 03:20:36PM +0100, Johannes Berg wrote:
+> > On Wed, 2022-11-23 at 13:46 +0100, Greg Kroah-Hartman wrote:
+> > > The Microsoft RNDIS protocol is, as designed, insecure and vulnerable=
+ on
+> > > any system that uses it with untrusted hosts or devices.  Because the
+> > > protocol is impossible to make secure, just disable all rndis drivers=
+ to
+> > > prevent anyone from using them again.
+> > >=20
+> >=20
+> > Not that I mind disabling these, but is there any more detail available
+> > on this pretty broad claim? :)
+>=20
+> I don't want to get into specifics in public any more than the above.
 
-It would be nice to have a shared macro code gen all of the above
-instead of copy and pasting it. Then maybe other cases beyond struct
-device could adopt const too..
+Fair.
 
-Jason
+> The protocol was never designed to be used with untrusted devices.  It
+> was created, and we implemented support for it, when we trusted USB
+> devices that we plugged into our systems, AND we trusted the systems we
+> plugged our USB devices into.  So at the time, it kind of made sense to
+> create this, and the USB protocol class support that replaced it had not
+> yet been released.
+>=20
+> As designed, it really can not work at all if you do not trust either
+> the host or the device, due to the way the protocol works.  And I can't
+> see how it could be fixed if you wish to remain compliant with the
+> protocol (i.e. still work with Windows XP systems.)
+
+I guess I just don't see how a USB-based protocol can be fundamentally
+insecure (to the host), when the host is always in control over messages
+and parses their content etc.?
+
+I can see this with e.g. firewire which must allow DMA access, and now
+with Thunderbolt we have the same and ended up with boltd, but USB?
+
+> Today, with untrusted hosts and devices, it's time to just retire this
+> protcol.  As I mentioned in the patch comments, Android disabled this
+> many years ago in their devices, with no loss of functionality.
+
+I'm not sure Android counts that much, FWIW, at least for WiFi there
+really is no good reason to plug in a USB WiFi dongle into an Android
+phone, and quick googling shows that e.g. Android TV may - depending on
+build - support/permit RNDIS Ethernet?
+
+Anyway, there was probably exactly one RNDIS WiFi dongle from Broadcom
+(for some kind of console IIRC), so it's not a huge loss. Just having
+issues with the blanket statement that a USB protocol can be designed as
+inscure :)
+
+johannes
