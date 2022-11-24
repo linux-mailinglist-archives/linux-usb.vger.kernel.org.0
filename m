@@ -2,65 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17568637FA6
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 20:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69C76380D5
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 23:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiKXTao (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Nov 2022 14:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S229526AbiKXWOu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 24 Nov 2022 17:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKXTam (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 14:30:42 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E103F078;
-        Thu, 24 Nov 2022 11:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669318241; x=1700854241;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bHTOzMzFXVcaodmnHlYzawapV3y1nvrCEByICL6XbKc=;
-  b=Mo7lZHMC5pFaB+43Fodrx1MtsRovm33M6+ls1+iS1DNFcjKFwXGfrt5U
-   u+wTDryQHOdpbWN7rfaoHVfmwkCxbGPWHEbkKeFf5ewQhbTfTum9lEYne
-   FUey/XeI0qHpKY2S3xHgg0IKtL1Fq98pPJ9VD+iKW5M0fEVHwRWWVZJvE
-   1BATSyF1gpKrKAx8ymdhsS02/c9RVM0I3DLp6/DF+xsJh4F2klAXlTTEz
-   D3oWIwm07OgEY6JgsPsHRZVc/dbUNEcHQw+UdUj6VdTNFTgOKu8MCVe0L
-   tn0fyeRQ1y3vLf9JJ/P/zL2BXPiGvy1FXhl2l9uaXbT+2sZUnvZG98QHg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="294741242"
-X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
-   d="scan'208";a="294741242"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 11:30:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="748339411"
-X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
-   d="scan'208";a="748339411"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Nov 2022 11:30:33 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oyHvd-0004BZ-03;
-        Thu, 24 Nov 2022 19:30:33 +0000
-Date:   Fri, 25 Nov 2022 03:29:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     nouveau@lists.freedesktop.org, netfilter-devel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-mm@kvack.org, linux-iio@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, coreteam@netfilter.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- c35bd4e428856ed8c1fae7f7dfa08a9141c153d1
-Message-ID: <637fc623.F26g8M0ZuGkeOPM2%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229450AbiKXWOt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 17:14:49 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30B927DED6;
+        Thu, 24 Nov 2022 14:14:48 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00D4F23A;
+        Thu, 24 Nov 2022 14:14:53 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54B603F73B;
+        Thu, 24 Nov 2022 14:14:45 -0800 (PST)
+Date:   Thu, 24 Nov 2022 22:13:13 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Icenowy Zheng <uwu@icenowy.me>, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on
+ F1C100s SoC
+Message-ID: <20221124221313.14b36324@slackpad.lan>
+In-Reply-To: <Y3+uqtNe/tafRwp2@matsya>
+References: <20221106154826.6687-1-andre.przywara@arm.com>
+        <20221106154826.6687-4-andre.przywara@arm.com>
+        <Y2ypy0CM8rJGu2g4@matsya>
+        <4438485.LvFx2qVVIh@jernej-laptop>
+        <52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
+        <20221115104426.20728ba5@donnerap.cambridge.arm.com>
+        <4516dcfb-b928-d454-18a6-bd725f39cc24@linaro.org>
+        <20221115161917.328ec91a@donnerap.cambridge.arm.com>
+        <e861e62f-4148-b867-0155-e71b1cee0b81@linaro.org>
+        <20221115175708.3e69dcd8@donnerap.cambridge.arm.com>
+        <Y3+uqtNe/tafRwp2@matsya>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,170 +62,119 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: c35bd4e428856ed8c1fae7f7dfa08a9141c153d1  Add linux-next specific files for 20221124
+On Thu, 24 Nov 2022 23:19:30 +0530
+Vinod Koul <vkoul@kernel.org> wrote:
 
-Error/Warning reports:
+> On 15-11-22, 17:57, Andre Przywara wrote:
+> > On Tue, 15 Nov 2022 17:29:09 +0100
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > 
+> > Hi,
+> >   
+> > > On 15/11/2022 17:19, Andre Przywara wrote:  
+> > > > On Tue, 15 Nov 2022 16:00:54 +0100
+> > > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > > > 
+> > > > Hi,
+> > > >     
+> > > >> On 15/11/2022 11:44, Andre Przywara wrote:    
+> > > >>> On Tue, 15 Nov 2022 11:03:24 +0100
+> > > >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > > >>>
+> > > >>> Hi,
+> > > >>>       
+> > > >>>> On 15/11/2022 07:01, Jernej Škrabec wrote:      
+> > > >>>>> Dne četrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul napisal(a):        
+> > > >>>>>> On 06-11-22, 15:48, Andre Przywara wrote:        
+> > > >>>>>>> From: Icenowy Zheng <uwu@icenowy.me>
+> > > >>>>>>>
+> > > >>>>>>> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
+> > > >>>>>>>
+> > > >>>>>>> Add support for its USB PHY.        
+> > > >>>>>>
+> > > >>>>>> This does not apply for me, please rebase and resend
+> > > >>>>>>
+> > > >>>>>> Also, consider splitting phy patches from this. I dont think there is
+> > > >>>>>> any dependency        
+> > > >>>>>
+> > > >>>>> DT patches in this series depend on functionality added here.
+> > > >>>>>         
+> > > >>>>
+> > > >>>> DTS always goes separately from driver changes because it is a hardware
+> > > >>>> description. Depending on driver means you have potential ABI break, so
+> > > >>>> it is already a warning sign.      
+> > > >>>
+> > > >>> We understand that ;-)
+> > > >>> What Jernej meant was that the DTS patches at the end depend on patch
+> > > >>> 01/10, which adds to the PHY binding doc. I am not sure if Vinod's
+> > > >>> suggestion was about splitting off 01/10, 03/10, and 10/10, or just the
+> > > >>> two latter which touch the driver.
+> > > >>>
+> > > >>> I can split off 03/10 and 10/10, rebased on top of linux-phy.git/next, and
+> > > >>> send that to Vinod.
+> > > >>> Then I would keep 01/10 in a respin of this series here, to satisfy the
+> > > >>> dependency of the later DTS patches, and Vinod can pick that one patch from
+> > > >>> there?      
+> > > >>
+> > > >> There is no hard dependency of DTS on bindings. You can split these (and
+> > > >> some maintainers prefer that way) and in DTS patches just provide the
+> > > >> link to the bindings, saying it is in progress.    
+> > > > 
+> > > > But that breaks "make dtbs_check", doesn't it?    
+> > > 
+> > > The check will be broken anyway because binding goes via driver
+> > > subsystem and DTS goes via arm-soc.
+> > > 
+> > > If both make to the linux-next and next release, then it's not a problem.
+> > >   
+> > > > 
+> > > > I would think that the DT bits - bindings first, then DTS files using it -
+> > > > should be bundled. This is how I imagine the future(TM), where DTs and
+> > > > bindings live outside the kernel repo.    
+> > > 
+> > > Yes, that's preferred. Therefore in DTS patch you say the binding is not
+> > > merged and it is here - lore link.
+> > >   
+> > > >     
+> > > >> The bindings should be however kept with driver changes as it goes the
+> > > >> same way.    
+> > > > 
+> > > > I understand that the bindings describe the contract the driver acts on,
+> > > > but going forward I think driver changes would need to come later, then
+> > > > (since they will live in a separate repo at some day)?
+> > > > Maybe pointing to the binding changes in progress?    
+> > > 
+> > > Later as one commit later - yes. Later as other option - not really, why?
+> > >   
+> > > > So with a separate repo we would actually need to upstream just the
+> > > > bindings first, then could push driver changes and .dts files
+> > > > independently?    
+> > > 
+> > > There is no separate repo, so we talk about Linux case now.
+> > >   
+> > > > And for now it looks like we are stuck with putting everything in one
+> > > > series, to make both checkpatch and dtbs_check happy.    
+> > > 
+> > > You should rather make maintainers happy :) and here one asked to split.  
+> > 
+> > Well, he asked to split off the USB PHY patches from the rest of the
+> > series, since there is some conflict with the recently merged H616 USB PHY
+> > patches. It is still unclear to me whether this split includes the binding
+> > patch, or just the two patches touching the actual code.  
+> 
+> That mean split off USB phy and binding patches from rest and send for
+> review
 
-https://lore.kernel.org/oe-kbuild-all/202211090634.RyFKK0WS-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211241736.K6437e7j-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211242021.FDZRFNA8-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211242120.MzZVGULn-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211250227.grPjpxyN-lkp@intel.com
+Thanks, I figured, and that's what I did:
 
-Error/Warning: (recently discovered and may have been fixed)
+https://lore.kernel.org/linux-arm-kernel/20221116151603.819533-1-andre.przywara@arm.com/
 
-arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dma-s3c24xx.h: No such file or directory
-arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
-arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
-drivers/clk/clk.c:1022:5: error: redefinition of 'clk_prepare'
-drivers/clk/clk.c:1268:6: error: redefinition of 'clk_is_enabled_when_prepared'
-drivers/clk/clk.c:941:6: error: redefinition of 'clk_unprepare'
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4968: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5075:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn201/irq_service_dcn201.c:40:20: warning: no previous prototype for 'to_dal_irq_source_dcn201' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: warning: no previous prototype for 'gf100_fifo_nonstall_block' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: warning: no previous prototype for function 'gf100_fifo_nonstall_block' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c:34:1: warning: no previous prototype for 'nvkm_engn_cgrp_get' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c:34:1: warning: no previous prototype for function 'nvkm_engn_cgrp_get' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: no previous prototype for 'tu102_gr_load' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: no previous prototype for function 'tu102_gr_load' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: warning: no previous prototype for 'wpr_generic_header_dump' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: warning: no previous prototype for function 'wpr_generic_header_dump' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:21: warning: variable 'loc' set but not used [-Wunused-but-set-variable]
-drivers/iio/addac/ad74115.c:320:27: warning: 'ad74115_dac_slew_rate_hz_tbl' defined but not used [-Wunused-const-variable=]
-mm/vmscan.c:4090:30: error: implicit declaration of function 'pmd_young'; did you mean 'pte_young'? [-Werror=implicit-function-declaration]
-net/netfilter/nf_conntrack_netlink.c:2674:6: warning: unused variable 'mark' [-Wunused-variable]
-vmlinux.o: warning: objtool: __btrfs_map_block+0x1d77: unreachable instruction
+Hope that fits!
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+Cheers,
+Andre
 
-drivers/usb/fotg210/fotg210-udc.c:632:17: sparse: sparse: restricted __le16 degrades to integer
+> 
+> DTS or anything else should not be part of that
+> 
 
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- alpha-randconfig-r005-20221124
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- alpha-randconfig-r016-20221124
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arc-randconfig-r004-20221124
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arc-randconfig-r043-20221124
-|   `-- mm-vmscan.c:error:implicit-declaration-of-function-pmd_young
-|-- arm-allyesconfig
-|   |-- arch-arm-mach-s3c-devs.c:fatal-error:linux-platform_data-dma-s3c24xx.h:No-such-file-or-directory
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-clang_recent_errors
-|-- i386-randconfig-a013
-|   `-- net-netfilter-nf_conntrack_netlink.c:warning:unused-variable-mark
-`-- riscv-randconfig-r042-20221124
-    |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-function-gf100_fifo_nonstall_block
-    |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-function-nvkm_engn_cgrp_get
-    |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-function-tu102_gr_load
-    `-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-function-wpr_generic_header_dump
-
-elapsed time: 731m
-
-configs tested: 53
-configs skipped: 2
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-arc                                 defconfig
-s390                             allmodconfig
-arm                                 defconfig
-alpha                               defconfig
-arc                  randconfig-r043-20221124
-s390                                defconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-ia64                             allmodconfig
-x86_64                        randconfig-a002
-i386                          randconfig-a014
-s390                             allyesconfig
-arm                              allyesconfig
-i386                          randconfig-a001
-i386                                defconfig
-x86_64                          rhel-8.3-func
-i386                          randconfig-a003
-x86_64                    rhel-8.3-kselftests
-m68k                             allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-powerpc                          allmodconfig
-i386                          randconfig-a005
-arc                              allyesconfig
-i386                          randconfig-a012
-arm64                            allyesconfig
-x86_64                        randconfig-a004
-sh                               allmodconfig
-i386                          randconfig-a016
-alpha                            allyesconfig
-mips                             allyesconfig
-m68k                             allyesconfig
-i386                             allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20221124
-hexagon              randconfig-r045-20221124
-s390                 randconfig-r044-20221124
-i386                          randconfig-a013
-riscv                randconfig-r042-20221124
-x86_64                        randconfig-a001
-i386                          randconfig-a011
-i386                          randconfig-a002
-i386                          randconfig-a006
-x86_64                        randconfig-a003
-i386                          randconfig-a004
-x86_64                        randconfig-a005
-i386                          randconfig-a015
-x86_64                          rhel-8.3-rust
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
