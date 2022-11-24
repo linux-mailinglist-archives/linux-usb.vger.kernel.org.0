@@ -2,226 +2,410 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B48637699
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 11:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58536376B3
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 11:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKXKiK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Nov 2022 05:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
+        id S229798AbiKXKoU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Nov 2022 05:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXKiJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 05:38:09 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04801B7B4;
-        Thu, 24 Nov 2022 02:38:07 -0800 (PST)
-X-UUID: d8a029f41ffc422d889101d78d84bb0d-20221124
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=mrIAgvMXfWfHerH7mZc58m1HMzuY6JLLCqXhj582NUU=;
-        b=Z7SojgAJ1MFUdBbRSP9VFL2ArxW43jpGjIxP1dUtpocG7EUbyBgocXQ2HQjQCIAHaUlQDFQo/jU3Z9BZVlBvSYNa37zzce0TA0k+VGSVjVp3OQZzfrWiIr348xhO4vlUaEFxfdRUvrtT85/4845WxWCZeDRbxk9lwoNQ5+9e3eI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:44b0da7a-189a-4bdf-a166-8bf1fe58bed6,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:dcaaed0,CLOUDID:b3d8b82f-2938-482e-aafd-98d66723b8a9,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d8a029f41ffc422d889101d78d84bb0d-20221124
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 571373999; Thu, 24 Nov 2022 18:38:03 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 24 Nov 2022 18:38:02 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Thu, 24 Nov 2022 18:38:02 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GpIi7cDL86tEGQT8KSIklWo/Sz2O/muk+H8WMICFnKLqC7oEbf2jpAY1J/jZBuQhtuH7wbDIZJvmUQZ1MCOK36kOWtl6UcwQVi4CS4sOvAAvhpfRe30zCFyJtDvv2ZwKftzNU6DMdmuMLquQ/ZW9ttV477Hv4AqFJPt+Ah1UAlZi/awq4EkJey+sHzLkB2Z6mN495zybgqVyP58vCc8K9yLlwRQjuNEnZvzAIFE5VOPeT81KsZI4QQ1RimgZDrH+MXePqxXOb1EdyBsZzAxuWtxBc4y++5vVCeaDmWCcAfJc51nz5q9L2Bpt9DJ9iC2wrqtuQ4AiitPmw+Ojdq/DBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mrIAgvMXfWfHerH7mZc58m1HMzuY6JLLCqXhj582NUU=;
- b=JyAI9RKU84txGBARYQvT7iVVP+2G9kxWBqftNQrP1n/QwQD3LkXqTRQOhfp4AI4u/jubrcSIOXrVJrUIZ3PXk0Y6Hg5ql+08hleLylhrwrzKlVW1FCCXoQbhJ7NpOhs7pegf6wMGRKYarPy1gASucBKWee6WBysm/muGB5/NQTTHCLMOqz0M50NgjmjtQENCGceBeQXDM/Sk7kHhWYYMGGE4e9++zMeMnNbV7eRifpcSc6otiYRrJ+aU4DnRRMvU7eFoPpf6jN/3X3DP9oz9XF6izNcOLakWSiO64ePV/Gbw4MwFiz11Z4QzgBL6zTN5y8FIws7wWoFteo9f8CKrFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mrIAgvMXfWfHerH7mZc58m1HMzuY6JLLCqXhj582NUU=;
- b=rhZRi35lkK5U+u495DE/UOzDIwVlFIUYZfAW7Y4sAD4xsG2T5Ul0xgFP8/rRPO+4hdlU1cTkvpfdFrnTroZMVZ6jEBA8COyj5YUJZ6dSjI8TDX9LD+T0qT/VaBLU0ZNDbyhGv7i3QFceJTIp6HA0z+43i2fPBfBrUSWvc59luLw=
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com (2603:1096:820:1a::22)
- by SI2PR03MB5659.apcprd03.prod.outlook.com (2603:1096:4:15e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 10:38:00 +0000
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::9585:3a04:b796:b696]) by KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::9585:3a04:b796:b696%5]) with mapi id 15.20.5834.015; Thu, 24 Nov 2022
- 10:38:00 +0000
-From:   =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
-        <Chunfeng.Yun@mediatek.com>
-To:     "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= 
-        <Eddie.Hung@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub
- has no ports
-Thread-Topic: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub
- has no ports
-Thread-Index: AQHY+z0cVRMPp1EvGkKE/tItjF/i765MYdAAgAGJWoA=
-Date:   Thu, 24 Nov 2022 10:38:00 +0000
-Message-ID: <02552cc60b3aae16b2c2e9717b42c800180e3a87.camel@mediatek.com>
-References: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
-         <a384d15d-c1df-160c-030b-fddd5d965996@linux.intel.com>
-In-Reply-To: <a384d15d-c1df-160c-030b-fddd5d965996@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR03MB5062:EE_|SI2PR03MB5659:EE_
-x-ms-office365-filtering-correlation-id: 39d10701-acde-4d4d-ecad-08dace07f55e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9MNXNIS5OqUyecI9QUxOX4uZ30I6uXwnobiQ1ux5sbuaRwB7h2lfRdZt7x/uR6BGYT69zZzFOlmhy0DMrXc6riSiRP2D25b7ihwc2+TNzYzu2WNMVXl4kccqPqtF5Czhhi6CSCA5DJVJ1SlLs2Zy4mDi+2bWMT+7t/ih0nY/c6Pl/PAEY54QD1oWtXZ83HAvlGnh1OXkSBnV0U05SZp4efRYRPMFLIwN1mvbQ/ZYVqxAY0qrHjidflbY43tstr9VNxEF3odo5ptN5KewyNBs77alhWGn0I7+8eY+ctUubqFSPwZ2mxo4ieZsn0dBiaqCW1MuYrT5jbzwEOLpCUQeQJm/eStsFFneCs9KhNh8m0tiQzE1aniYJda19j8KhuAcufKZL60g1xHsVRyG8fmeRe4vK9/aCEDDbxyIZ8KaXO05jnSpowBzgR2Mstd4wDzBffN8MeN5XIpSBGGLOWH5uP8TmvjW3/CV/1pmC4xuV9kbcG83eDql01YqzYL9Ul463hd9H8oU+wrdu2UGJ24GIg/5TBnNjtFDAcNh2hofX9iRVmTDgQQ62ZYHhQ0kC0d0+kzDbssw/Uh7FiqwMda5PJSSrxIUH081RrnSPFZml7HlarRyGceX4fin2fjqbBBCNvFHuh5nyOC37DhA0JidE65/rcU46u1cHT6JF/2iHokQ7oM6Y8BW9lDfnhB2z7F7Wd/CEd3HfsIxmYZhAgxJBGygrnxacOOGAAY5d1BBCa8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5062.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(366004)(346002)(396003)(136003)(451199015)(86362001)(66946007)(38070700005)(38100700002)(110136005)(41300700001)(76116006)(4326008)(66556008)(8676002)(64756008)(66476007)(66446008)(91956017)(54906003)(316002)(83380400001)(5660300002)(8936002)(6486002)(4001150100001)(2906002)(122000001)(71200400001)(478600001)(6506007)(2616005)(186003)(26005)(6512007)(66899015)(85182001)(36756003)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RnhSaVd1bzl1VENESVNYN0ZaWXBCWW5HeExyU1dyVGZiNFF2MWxwU2EyYmtL?=
- =?utf-8?B?dm1rMGNrcmNrWFIzaXZ3Q2ZOcVM5M1E1NWFvZjR4ZC9WdjR5bTBMK3FFZUVQ?=
- =?utf-8?B?KzY2bFFjckl5YkdDQXkrWFo3aFh5MnF2UDFxVVd1RUljeVpWcTVGT0RpT0I3?=
- =?utf-8?B?dmFKYU9JczRiY2ZBYmJYeUxtRGphNTVmUzRJTllLWTlCQ2lpbnFqNmZCYWls?=
- =?utf-8?B?OWNod0xmSWxCRitnOEc5L3lLZjhuTUdMeVdwNVpnMUdmR2VYMVBRL3ZWTUhh?=
- =?utf-8?B?VXorbVdEeU8zWExMek1FK0hrU3NRaXI5dDRqQytydk9YS1Z3NG0xalM2c3Q4?=
- =?utf-8?B?elh4cGlFTE9EWk1CekorbVNZTnNuSTA4MnRvK3Z5UmNUNDBUVmt6N0Yvb0ho?=
- =?utf-8?B?bkNjRkRBTVpNaEFkTFRyMGlVSk0vVzdiQlg0cVNOaHM3dFNUSzFnR2xnaC9q?=
- =?utf-8?B?ZzExcm1zcHhnVHFRRHRNRjgyLzlEcWJIelJXbnRQOGV0aDI2VkJaYm9yaFZK?=
- =?utf-8?B?RHp3UjFUMHA2SWVvc0N1K2JxVDBqbVArUXpjYzZvQkk0TEVPS1diUmpkQkJi?=
- =?utf-8?B?N1YwOTlScnRFaVI4aVVqQnVmdEQzelpoYStlUm9Vcjc1UDl1bnovVFVNbFFB?=
- =?utf-8?B?RWFNbFdNaDdZK3dvV3RTalRId1lrTllQeG5VaVgxOE5MakNCN0NUbzB6c3ZT?=
- =?utf-8?B?dmx4TmZZaG1yNG8xbjVZZlBSRmZxNnJkSUorYjBxQStXNHhaYlRRQnlnNHZB?=
- =?utf-8?B?ZU5aWm16a1JaS1NWYnNNekhCUUdJUlVmZzNSbTE0eVVWK2kxck5hUzVWVEpy?=
- =?utf-8?B?dERjaHl2NzFsVkg4YnpaaXZTSjRQMEVpdEVSRDVNdmIyd2tkTWQ3d0c1WmNS?=
- =?utf-8?B?L29xZFdSL2FuVWd2eXYrOHBVbU5nNko0TjZLWEhKUnhoT1AxODFDQVBPTFNz?=
- =?utf-8?B?MHBYdjdEUUtuRjNxWnpDMkU4RC9lZFFyM1dvSUZwNGFTSXh2SklBQlNZcWl1?=
- =?utf-8?B?NzRBQ21oYWFYS0JtVnhWY2RrdENSZ0g0eC9FZDd6c0tZZW13VC9aZFVMSkpn?=
- =?utf-8?B?bStnQlBOSDF4VHR2V1pDT2RWNyt0ZHNySVBSVGRKUzZ1ZTlFUW51RXlVQ0Vt?=
- =?utf-8?B?NnVTK1lyT21hRVdNd1hWby9qbERwU3N3dEg2MXZUeHdjYlA3RjU5akNYVHE0?=
- =?utf-8?B?dlhPMXZRRzFDYXVJT0VsVC9OZHZYWUw4QlpxM0lqcVZpLzl3c2RacmFKNzNk?=
- =?utf-8?B?VTJWbE9vYzk0blhReENhZmFaZmpXaVNwbVJTaThKZXRqWFFpVWJuNUJGL2xW?=
- =?utf-8?B?Q1VTTm1xZHRKc3dBWnVLMEppSEZ1NkdycFBpcUg1SG9kaFVQa2VTYTRsdVhQ?=
- =?utf-8?B?RVM3QStkVWtBSDFoQnVxQW1QUzl1S3pnZHRsUVRGd3lQRUROT0Q3ZzhIV2F5?=
- =?utf-8?B?RVRiNG1rSzAwcHRzS2VyTGlReVpqaWhySTVZb0Y3MTQrZTJMbFR6TEpjOU9X?=
- =?utf-8?B?KzFaMWpkT0VPZ3luVkg0RFlrSjdGZnppQ0svQ0M5cFJ3MkxPK2oyOHJlM3lJ?=
- =?utf-8?B?RGZ4SlBDVkZFaERZZGNsTVAvK0g2dVdGUnQxV1NTRkpZZm5IbTJoM04rWXdN?=
- =?utf-8?B?b0xRQTZVMU9jTGlIeVBQelpoYzJQdGJvSGhQb2U3NzN5TkgzYytxekl0Tm5z?=
- =?utf-8?B?SmMrZEwyd1pyZzk2MXVXZktVVHd4Um9FUG1VdlF6b0gycElZcU5udzdMdzN2?=
- =?utf-8?B?b1NTaVhQWmtjUGFVSC9Qb3EwSHZkSGFReDYvUVBZNWR6aFRDc044SzduWDFx?=
- =?utf-8?B?ZVRjSVlsVkt5MUE5YTJOOXRaSDZEa0o0OU5TVmV6U09vTkZHT0ZkODdvQ1J2?=
- =?utf-8?B?RlBHZGp1R05wUnh1VFVTS3dJbnYyT3V0cmhad1Y1N1g0akczQ2d0SHUvOUxx?=
- =?utf-8?B?dXRZdjZHZk1JVnRYdGV0VDFtbFRrUnd1ekNPUDhrTEtxVC80TVkyVHd4VG1X?=
- =?utf-8?B?UW1abXdnZVFmTS9GeHZFRUkvRUNKcEozb3o5R1JMNnJkTlR5Wkt5OFZzYisx?=
- =?utf-8?B?TU5YWG1kTzY5T3NZRi8wVHNSVDZmVk5IYmQ4VFUwYythVGhTZWczQVFPUWRp?=
- =?utf-8?B?aHJHR210ejVPd2pvbHR5L0pvV0hneG5QOGpDcmVvM3ZZZ3E1ZllQYTRlTE52?=
- =?utf-8?B?QlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2520CF88A12D4945A678B104198E7409@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229648AbiKXKoU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 05:44:20 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA0414F53E;
+        Thu, 24 Nov 2022 02:44:17 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9B82F40007;
+        Thu, 24 Nov 2022 10:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669286655;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jAWWyykXty0Wgx9OT7J3calSn4zWgrBkGn5htWWJalM=;
+        b=MPydypr+YKO3XXsQo24DBMftQFnAHS97cjzCuA7S8jN/iDEW4NYTvIuNC935gMS8Rb+R9p
+        lWvcHj/u6cvuv3hqx9YTGibvYwL0TtmzKBQYhO9duwRZ7pC7PYr1TBaCIRZTICtJJNRB7B
+        mRcqZzYPk+t6P2NeymoJpNhUpD4tAClEbg65eo83CARRhoeuN3+0zeWhwvso8j1zfHBcot
+        M7VL/sIdRKCaC4MIKNXRlse3IK2LVq8TV6GbihNElfwu1PrqgjJ5SdHWV1JY8hG1HCT/ac
+        uF37rydM7zILlyg1QEvFnMDqVwRozIbJ9wC+y5er0dzDk7cxK4ye+BpoRMLPKg==
+Date:   Thu, 24 Nov 2022 11:44:12 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl:
+ Add h2mode property
+Message-ID: <20221124114412.49d89b5b@xps-13>
+In-Reply-To: <20221124112757.13f200c4@xps-13>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        <20221115150417.513955a7@bootlin.com>
+        <20221118112349.7f09eefb@bootlin.com>
+        <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+        <20221121165921.559d6538@bootlin.com>
+        <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+        <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+        <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
+        <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
+        <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
+        <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
+        <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
+        <20221122100706.739cec4d@bootlin.com>
+        <3856e2d8-1c16-a69f-4ac5-34b8e7f18c2b@linaro.org>
+        <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
+        <02db6a5d-ae9d-68b5-f5c5-bebb471e0f70@linaro.org>
+        <20221124103633.4fbf483f@xps-13>
+        <d203a6ce-7032-a423-5158-fa551922dea1@linaro.org>
+        <20221124112757.13f200c4@xps-13>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5062.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39d10701-acde-4d4d-ecad-08dace07f55e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Nov 2022 10:38:00.2453
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DGNtK9rSXZITvINvvjDhjDth6eZpCogg+tsiah2p7+F+03+IJSKvWVJ6glnJCiZ+VmHV2nBA1RJB1oMvJO679wj6q7BtePQOMBwr0k9lWys=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5659
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTExLTIzIGF0IDEzOjEwICswMjAwLCBNYXRoaWFzIE55bWFuIHdyb3RlOg0K
-PiBPbiAxOC4xMS4yMDIyIDEzLjAxLCBDaHVuZmVuZyBZdW4gd3JvdGU6DQo+ID4gVGhlcmUgaXMg
-ZXJyb3IgbG9nIHdoZW4gYWRkIGEgdXNiMyByb290IGh1YiB3aXRob3V0IHBvcnRzOg0KPiA+ICJo
-dWIgNC0wOjEuMDogY29uZmlnIGZhaWxlZCwgaHViIGRvZXNuJ3QgaGF2ZSBhbnkgcG9ydHMhIChl
-cnIgLTE5KSINCj4gPiANCj4gPiBzbyBvbWl0IHRoZSBzaGFyZWQgaGNkIGlmIGVpdGhlciBvZiB0
-aGUgcm9vdCBodWJzIGhhcyBubyBwb3J0cywgYnV0DQo+ID4gdXN1YWxseSB0aGVyZSBpcyBubyB1
-c2IzIHBvcnQuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVu
-Zy55dW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy91c2IvaG9zdC94aGNp
-LW10ay5jIHwgNzIgKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0NCj4gPiAtLS0tLQ0K
-PiA+ICAgMSBmaWxlIGNoYW5nZWQsIDQ2IGluc2VydGlvbnMoKyksIDI2IGRlbGV0aW9ucygtKQ0K
-PiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMgYi9kcml2
-ZXJzL3VzYi9ob3N0L3hoY2ktDQo+ID4gbXRrLmMNCj4gPiBpbmRleCAwMTcwNWU1NTljNDIuLmNm
-ZjNjNGFlYTAzNiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMN
-Cj4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMNCj4gPiBAQCAtNDg1LDYgKzQ4
-NSw3IEBAIHN0YXRpYyBpbnQgeGhjaV9tdGtfcHJvYmUoc3RydWN0DQo+ID4gcGxhdGZvcm1fZGV2
-aWNlICpwZGV2KQ0KPiA+ICAgCWNvbnN0IHN0cnVjdCBoY19kcml2ZXIgKmRyaXZlcjsNCj4gPiAg
-IAlzdHJ1Y3QgeGhjaV9oY2QgKnhoY2k7DQo+ID4gICAJc3RydWN0IHJlc291cmNlICpyZXM7DQo+
-ID4gKwlzdHJ1Y3QgdXNiX2hjZCAqdXNiM19oY2Q7DQo+ID4gICAJc3RydWN0IHVzYl9oY2QgKmhj
-ZDsNCj4gPiAgIAlpbnQgcmV0ID0gLUVOT0RFVjsNCj4gPiAgIAlpbnQgd2FrZXVwX2lycTsNCj4g
-PiBAQCAtNTkzLDYgKzU5NCw3IEBAIHN0YXRpYyBpbnQgeGhjaV9tdGtfcHJvYmUoc3RydWN0DQo+
-ID4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgDQo+ID4gICAJeGhjaSA9IGhjZF90b194
-aGNpKGhjZCk7DQo+ID4gICAJeGhjaS0+bWFpbl9oY2QgPSBoY2Q7DQo+ID4gKwl4aGNpLT5hbGxv
-d19zaW5nbGVfcm9vdGh1YiA9IDE7DQo+ID4gICANCj4gPiAgIAkvKg0KPiA+ICAgCSAqIGltb2Rf
-aW50ZXJ2YWwgaXMgdGhlIGludGVycnVwdCBtb2RlcmF0aW9uIHZhbHVlIGluDQo+ID4gbmFub3Nl
-Y29uZHMuDQo+ID4gQEAgLTYwMiwyNCArNjA0LDI5IEBAIHN0YXRpYyBpbnQgeGhjaV9tdGtfcHJv
-YmUoc3RydWN0DQo+ID4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgCXhoY2ktPmltb2Rf
-aW50ZXJ2YWwgPSA1MDAwOw0KPiA+ICAgCWRldmljZV9wcm9wZXJ0eV9yZWFkX3UzMihkZXYsICJp
-bW9kLWludGVydmFsLW5zIiwgJnhoY2ktDQo+ID4gPmltb2RfaW50ZXJ2YWwpOw0KPiA+ICAgDQo+
-ID4gLQl4aGNpLT5zaGFyZWRfaGNkID0gdXNiX2NyZWF0ZV9zaGFyZWRfaGNkKGRyaXZlciwgZGV2
-LA0KPiA+IC0JCQlkZXZfbmFtZShkZXYpLCBoY2QpOw0KPiA+IC0JaWYgKCF4aGNpLT5zaGFyZWRf
-aGNkKSB7DQo+ID4gLQkJcmV0ID0gLUVOT01FTTsNCj4gPiAtCQlnb3RvIGRpc2FibGVfZGV2aWNl
-X3dha2V1cDsNCj4gPiAtCX0NCj4gPiAtDQo+ID4gICAJcmV0ID0gdXNiX2FkZF9oY2QoaGNkLCBp
-cnEsIElSUUZfU0hBUkVEKTsNCj4gPiAgIAlpZiAocmV0KQ0KPiA+IC0JCWdvdG8gcHV0X3VzYjNf
-aGNkOw0KPiA+ICsJCWdvdG8gZGlzYWJsZV9kZXZpY2Vfd2FrZXVwOw0KPiA+ICAgDQo+ID4gLQlp
-ZiAoSENDX01BWF9QU0EoeGhjaS0+aGNjX3BhcmFtcykgPj0gNCAmJg0KPiA+ICsJaWYgKCF4aGNp
-X2hhc19vbmVfcm9vdGh1Yih4aGNpKSkgew0KPiA+ICsJCXhoY2ktPnNoYXJlZF9oY2QgPSB1c2Jf
-Y3JlYXRlX3NoYXJlZF9oY2QoZHJpdmVyLCBkZXYsDQo+ID4gKwkJCQkJCQkgZGV2X25hbWUoZGV2
-KSwNCj4gPiBoY2QpOw0KPiA+ICsJCWlmICgheGhjaS0+c2hhcmVkX2hjZCkgew0KPiA+ICsJCQly
-ZXQgPSAtRU5PTUVNOw0KPiA+ICsJCQlnb3RvIGRlYWxsb2NfdXNiMl9oY2Q7DQo+ID4gKwkJfQ0K
-PiA+ICsJfQ0KPiA+ICsNCj4gPiArCXVzYjNfaGNkID0geGhjaV9nZXRfdXNiM19oY2QoeGhjaSk7
-DQo+ID4gKwlpZiAodXNiM19oY2QgJiYgSENDX01BWF9QU0EoeGhjaS0+aGNjX3BhcmFtcykgPj0g
-NCAmJg0KPiA+ICAgCSAgICAhKHhoY2ktPnF1aXJrcyAmIFhIQ0lfQlJPS0VOX1NUUkVBTVMpKQ0K
-PiA+IC0JCXhoY2ktPnNoYXJlZF9oY2QtPmNhbl9kb19zdHJlYW1zID0gMTsNCj4gPiArCQl1c2Iz
-X2hjZC0+Y2FuX2RvX3N0cmVhbXMgPSAxOw0KPiA+ICAgDQo+ID4gLQlyZXQgPSB1c2JfYWRkX2hj
-ZCh4aGNpLT5zaGFyZWRfaGNkLCBpcnEsIElSUUZfU0hBUkVEKTsNCj4gPiAtCWlmIChyZXQpDQo+
-ID4gLQkJZ290byBkZWFsbG9jX3VzYjJfaGNkOw0KPiA+ICsJaWYgKHhoY2ktPnNoYXJlZF9oY2Qp
-IHsNCj4gPiArCQlyZXQgPSB1c2JfYWRkX2hjZCh4aGNpLT5zaGFyZWRfaGNkLCBpcnEsIElSUUZf
-U0hBUkVEKTsNCj4gPiArCQlpZiAocmV0KQ0KPiA+ICsJCQlnb3RvIHB1dF91c2IzX2hjZDsNCj4g
-PiArCX0NCj4gPiAgIA0KPiA+ICAgCWlmICh3YWtldXBfaXJxID4gMCkgew0KPiA+ICAgCQlyZXQg
-PSBkZXZfcG1fc2V0X2RlZGljYXRlZF93YWtlX2lycV9yZXZlcnNlKGRldiwNCj4gPiB3YWtldXBf
-aXJxKTsNCj4gDQo+IAkNCj4gZGV2X3BtX3NldF9kZWRpY2F0ZWRfd2FrZV9pcnFfcmV2ZXJzZSgp
-IGNhbiBiZSBjYWxsZWQgd2l0aCBqdXN0IG9uZQ0KPiBoY2QsIGlmIGl0IGZhaWxzDQo+IGl0IHdp
-bGwgZ290byBkZWFsbG9jX3VzYjNfaGNkOg0KPiANCj4gZGVhbGxvY191c2IzX2hjZDoNCj4gCXVz
-Yl9yZW1vdmVfaGNkKHhoY2ktPnNoYXJlZF9oY2QpOyAgIC8vIHhoY2ktPnNoYXJlZF9oY2QgbWF5
-IGJlIA0KPiBudWxsDQp1c2JfcmVtb3ZlX2hjZCgpIGhhcyBoYW5kbGVkIE5VTEwgYXJndW1lbnQs
-IG5vIG5lZWQgY2hlY2sgaXQgaGVyZQ0KDQo+IAl4aGNpLT5zaGFyZWRfaGNkID0gTlVMTDsgLy8g
-Y2F1c2VzIHVzYl9wdXRfaGNkKCkgaXNzdWVzIGlmDQo+IHNoYXJlZF9oY2QgZXhpc3RzDQpUaGlz
-IGxpbmUgc2hhbGwgYmUgcmVtb3ZlZCwgSSdsbCBwcmVwYXJlIGEgcGF0Y2guDQoNCj4gDQo+IHB1
-dF91c2IzX2hjZDoNCj4gICAgICAgICAgdXNiX3B1dF9oY2QoeGhjaS0+c2hhcmVkX2hjZCk7IC8v
-IHNoYXJlZF9oY2QgbWF5IGJlIHNldCBOVUxMDQo+IGFib3ZlDQp1c2JfcHV0X2hjZCgpIGhhcyBo
-YW5kbGVkIE5VTEwgYXJndW1lbnQsIG5vIG5lZWQgY2hlY2sgaXQgaGVyZQ0KDQpUaGFua3MgYSBs
-b3QNCg0KPiANCj4gLU1hdGhpYXMNCj4gICANCg==
+Hi Krzysztof,
+
+miquel.raynal@bootlin.com wrote on Thu, 24 Nov 2022 11:27:57 +0100:
+
+> Hi Krzysztof,
+>=20
+> krzysztof.kozlowski@linaro.org wrote on Thu, 24 Nov 2022 10:46:14 +0100:
+>=20
+> > On 24/11/2022 10:36, Miquel Raynal wrote:
+> > > Hi Krzysztof,
+> > >=20
+> > > krzysztof.kozlowski@linaro.org wrote on Wed, 23 Nov 2022 10:39:41 +01=
+00:
+> > >  =20
+> > >> On 22/11/2022 11:47, Geert Uytterhoeven wrote: =20
+> > >>> Hi Krzysztof,
+> > >>>
+> > >>> On Tue, Nov 22, 2022 at 11:30 AM Krzysztof Kozlowski
+> > >>> <krzysztof.kozlowski@linaro.org> wrote:   =20
+> > >>>> On 22/11/2022 10:07, Herve Codina wrote:   =20
+> > >>>>> On Tue, 22 Nov 2022 09:42:48 +0100
+> > >>>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > >>>>>   =20
+> > >>>>>> On 22/11/2022 09:25, Geert Uytterhoeven wrote:   =20
+> > >>>>>>> Hi Krzysztof,
+> > >>>>>>>
+> > >>>>>>> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
+> > >>>>>>> <krzysztof.kozlowski@linaro.org> wrote:   =20
+> > >>>>>>>> On 21/11/2022 21:46, Geert Uytterhoeven wrote:   =20
+> > >>>>>>>>>> This does not change anything. Herve wrote:
+> > >>>>>>>>>>   =20
+> > >>>>>>>>>>> probe some devices (USB host and probably others)   =20
+> > >>>>>>>>>>
+> > >>>>>>>>>> Why some can be probed earlier and some not, if there are no
+> > >>>>>>>>>> dependencies? If there are dependencies, it's the same case =
+with sysctrl
+> > >>>>>>>>>> touching the register bit and the USB controller touching it=
+ (as well
+> > >>>>>>>>>> via syscon, but that's obvious, I assume).
+> > >>>>>>>>>>
+> > >>>>>>>>>> Where is the synchronization problem?   =20
+> > >>>>>>>>>
+> > >>>>>>>>> The h2mode bit (and probably a few other controls we haven't =
+figured out
+> > >>>>>>>>> yet) in the sysctrl must be set before any of the USB devices=
+ is active.
+> > >>>>>>>>> Hence it's safest for the sysctrl to do this before any of th=
+e USB drivers
+> > >>>>>>>>> probes.   =20
+> > >>>>>>>>
+> > >>>>>>>> Again, this does not differ from many, many of other devices. =
+All of
+> > >>>>>>>> them must set something in system controller block, before the=
+y start
+> > >>>>>>>> operating (or at specific time). It's exactly the same everywh=
+ere.   =20
+> > >>>>>>>
+> > >>>>>>> The issue here is that there are two _different drivers_ (USB h=
+ost
+> > >>>>>>> and device). When both are modular, and the driver that depends=
+ on the
+> > >>>>>>> sysctrl setting is loaded second, you have a problem: the sysct=
+rl change
+> > >>>>>>> must not be done when the first driver is already using the har=
+dware.
+> > >>>>>>>
+> > >>>>>>> Hence the sysctrl driver should take care of it itself during e=
+arly
+> > >>>>>>> initialization (it's the main clock controller, so it's a depen=
+dency
+> > >>>>>>> for all other I/O device drivers).   =20
+> > >>>>>>
+> > >>>>>> I assumed you have there bit for the first device (which can swi=
+tch
+> > >>>>>> between USB host and USB device) to choose appropriate mode. The
+> > >>>>>> bindings also expressed this - "the USBs are". Never said anythi=
+ng about
+> > >>>>>> dependency between these USBs.
+> > >>>>>>
+> > >>>>>> Are you saying that the mode for first device cannot be changed =
+once the
+> > >>>>>> second device (which is only host) is started? IOW, the mode set=
+up must
+> > >>>>>> happen before any of these devices are started?
+> > >>>>>>
+> > >>>>>> Anyway with sysctrl approach you will have dependency and you ca=
+nnot
+> > >>>>>> rely on clock provider-consumer relationship to order that depen=
+dency.
+> > >>>>>> What if you make all clocks on and do not take any clocks in USB=
+ device?
+> > >>>>>> Broken dependency. What if you want to use this in a different S=
+oC,
+> > >>>>>> where the sysctrl does not provide clocks? Broken dependency.   =
+=20
+> > >>>>>
+> > >>>>> The issue is really related to the Renesas sysctrl itself and not=
+ related
+> > >>>>> to the USB drivers themselves.
+> > >>>>> From the drivers themselves, the issue is not seen (I mean the dr=
+iver
+> > >>>>> takes no specific action related to this issue).
+> > >>>>> If we change the SOC, the issue will probably not exist anymore. =
+  =20
+> > >>>>
+> > >>>> Yeah, and in the next SoC you will bring 10 of such properties to
+> > >>>> sysctrl arguing that if one was approved, 10 is also fine. Somehow
+> > >>>> people on the lists like to use that argument - I saw it somewhere=
+, so I
+> > >>>> am allowed to do here the same.   =20
+> > >>>
+> > >>> Like pin control properties? ;-)
+> > >>> This property represents a wiring on the board...
+> > >>> I.e. a system integration issue.
+> > >>>    =20
+> > >>>> I understand that the registers responsible for configuration are =
+in
+> > >>>> sysctrl block, but it does not mean that it should be described as=
+ part
+> > >>>> of sysctrl Devicetree node. If there was no synchronization proble=
+m,
+> > >>>> this would be regular example of register in syscon which is handl=
+ed
+> > >>>> (toggled) by the device (so USB device/host controller). Since the=
+re is
+> > >>>> synchronization problem, you argue that it is correct representati=
+on of
+> > >>>> hardware. No, it is not, because logically in DT you do not descri=
+be
+> > >>>> mode or existence of other devices in some other node and it still=
+ does
+> > >>>> not describe this ordering.   =20
+> > >>>
+> > >>> So we have to drop the property, and let the sysctrl block look
+> > >>> for <name>@<reg> nodes, and check which ones are enabled?
+> > >>>
+> > >>> Running out of ideas...   =20
+> > >=20
+> > > I'm stepping in, hopefully I won't just be bikeshedding on something
+> > > that has already been discussed but here is my grain of salt.
+> > >  =20
+> > >> One solution could be making USB nodes children of the sysctrl block=
+ which:
+> > >> 1. Gives proper ordering (children cannot start before parent)
+> > >> regardless of any other shared resources,
+> > >> 2. Allows to drop this mode property and instead check what type of
+> > >> children you have and configure mode depending on them.
+> > >>
+> > >> However this also might not be correct representation of hardware
+> > >> (dunno...), so I am also running out of ideas. =20
+> > >=20
+> > > I see what you mean here, but AFAICS that is clearly a wrong
+> > > representation of the hardware. Sorting nodes by bus seems the aim of
+> > > device tree because there is a physical relationship, that's why we
+> > > have (i2c as an example):
+> > >=20
+> > > 	ahb {
+> > > 		foo-controller@xxx {
+> > > 			reg =3D <xxx>;
+> > > 		};
+> > > 	};
+> > >=20
+> > > But what you are describing now is conceptually closer to:
+> > >=20
+> > > 	clk-controller {
+> > > 		foo-controller {
+> > > 			reg =3D ?
+> > > 		};
+> > > 	}; =20
+> >=20
+> > Which is not a problem. reg can be anything - offset from sysctrl node
+> > or absolute offset. We have it in many places already. What's the issue
+> > here?
+> >
+> > > Not mentioning that this only works once, because foo-controller might
+> > > also need other blocks to be ready before probing and those might
+> > > be different blocks (they are the same in the rzn1 case, but
+> > > more generally, they are not). =20
+> >=20
+> > But what is the problem of needing other blocks? All devices need
+> > something and we solve it...
+>=20
+> What I am saying is that parenting only works once. All the other
+> dependencies must be described by properties.
+>=20
+> The h2mode register, no matter its content, should be set early in the
+> boot process, at least before any of the concerned controllers, which
+> are totally independent hardware blocks, probe. If one of them has
+> started, a change to the h2mode property could just stall the system.
+> The USB controllers do not *need* this property nor want to change it
+> (see below).
+>=20
+> The fact that the USB controllers are totally independent hardware
+> blocks make me thing that they should *not* be children of the sysctrl.
+> In our case one of them even is a PCI device! Would you represent a PCI
+> device within the sysctrl node? The other is somehow memory mapped
+> behind a bridge. Again, this has to be described somewhere, and
+> parenting usually is the right fit for that.
+>=20
+> Hence, the only real thing that remains to be described, as you
+> rightly pointed out in your earlier reviews, is the probe order which
+> is nothing related to any kind of parenting in this case.
+>=20
+> > > So in the end I am not in favor of this
+> > > solution.
+> > >=20
+> > > If we compare the dependency between the USB device controller and the
+> > > sysctrl block which contains the h2mode register to existing
+> > > dependencies, they are all treated with properties. These properties,
+> > > eg:
+> > >=20
+> > > 	foo-controller {
+> > > 		clocks =3D <&provider [index]>;
+> > > 	};
+> > >=20
+> > > were initially used to just tell the consumer which resource it should
+> > > grab/enable. If the device was not yet ready, we would rely on the
+> > > probe deferral mechanism to try again later. Not optimal, but not
+> > > bad either as it made things work. Since v5.11 and the addition of
+> > > automatic device links, the probe order is explicitly ordered.
+> > > <provider> could always get probed before <foo-controller>. So, isn't
+> > > what we need here? What about the following:
+> > >=20
+> > > 	sysctrl {
+> > > 		h2mode =3D "something";
+> > > 	};
+> > >=20
+> > > 	usb-device {
+> > > 		h2mode-provider =3D <&sysctrl>;
+> > > 	}; =20
+> >=20
+> > No, because next time one will add 10 of such properties:
+> > sysctrl {
+> > 	h2mode =3D ""
+> > 	g2mode =3D ""
+> > 	i2mode =3D ""
+> > 	....
+> > }
+> >=20
+> > and keep arguing that because these registers are in sysctrl, so they
+> > should have their own property in sysctrl mode.
+> >=20
+> > That's not correct representation of hardware.
+>=20
+> Actually my main focus here was more on the "sysctrl-provider" logic.
+> We need a probe dependency so we have two choices:
+> - pointing
+> - parenting
+> For the reasons above, I bet the former is the most accurate approach.
+>=20
+> If the h2mode property bothers you, it's fine, we can just drop it. The
+> USB device controller can do without it:
+
+I'm partially wrong here. I forgot that we somehow need to know whether
+the second USB controller is host or device, and decide this before the
+USB controllers probe. It is still possible to do it without the
+property by looking up the tree against the USB controller
+compatible or node name. We would do this in the sysctrl probe and set
+the right mode depending on its presence.
+
+I would definitely go for a property instead, but if this is a no-go, I
+guess that's the last resort.
+
+> - either it just probes without knowing the mode, its bus will remain
+>   empty so the device is useless, but nothing will break.
+> - or (this is my favorite) we add another sysctrl helper that exposes
+>   the h2mode, very much like we've done with the dmamux [2] and we just
+>   avoid probing if the mode that we receive does not ask for a USB
+>   device controller. Speeds-up the boot process.
+>=20
+> [2] https://lore.kernel.org/all/20220427095653.91804-5-miquel.raynal@boot=
+lin.com/
+>=20
+> Either ways, we would still need the probe order to be enforced,
+> which might be achieved on Linux side with the below explanations.
+>=20
+> > > We can initially just make this work with some additional logic on bo=
+th
+> > > sides. The USB device controller would manually check whether sysctrl
+> > > has been probed or not (in practice, because of the clocks and power
+> > > domains being described this will always be a yes, but IIUC we want to
+> > > avoid relying on it) and otherwise, defer its probe. On the sysctrl s=
+ide
+> > > it is just a matter of checking (like we already do):
+> > >=20
+> > > 	if (!sysctrl_priv)
+> > > 		return -EPROBE_DEFER;
+> > >=20
+> > > To be honest I would love to see the device link mechanism extended to
+> > > "custom" phandle properties like that, it would avoid the burden of
+> > > checking for deferrals manually, aside with boot time improvements. If
+> > > we go this way, we shall decide whether we want to:
+> > > * extend the list of properties that will lead to a dependency creati=
+on [1]
+> > > * or maybe settle on a common suffix that could always be used,
+> > >   especially for specific cases like this one where there is an
+> > >   explicit provider-consumer dependency that must be fulfilled:
+> > >=20
+> > > 	DEFINE_SUFFIX_PROP(provider, "-provider", "#provider-cells")
+> > >=20
+> > > * or perhaps extend struct of_device_id to contain the name of the
+> > >   properties pointing to phandles that describe probe dependencies wi=
+th:
+> > >=20
+> > > 	char *provider_prop_name;
+> > > 	char *provider_cells_prop_name;
+> > >=20
+> > >   and use them from of/property.c to generate the links when relevant.
+> > >=20
+> > > [1] https://elixir.bootlin.com/linux/v6.0/source/drivers/of/property.=
+c#L1298
+> > >=20
+> > >=20
+> > > Thanks,
+> > > Miqu=C3=A8l =20
+> >=20
+> > Best regards,
+> > Krzysztof
+> >=20
+>=20
+> Thanks,
+> Miqu=C3=A8l
+
+
+Thanks,
+Miqu=C3=A8l
