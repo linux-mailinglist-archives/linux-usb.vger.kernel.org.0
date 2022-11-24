@@ -2,48 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016706374CC
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 10:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF876374FA
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 10:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKXJIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Nov 2022 04:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        id S230111AbiKXJTr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Nov 2022 04:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiKXJIG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 04:08:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFAA2F3B5;
-        Thu, 24 Nov 2022 01:08:04 -0800 (PST)
+        with ESMTP id S230054AbiKXJTo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 04:19:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EE6116AB5
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 01:19:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A78A61F33;
-        Thu, 24 Nov 2022 09:08:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BDFC433D6;
-        Thu, 24 Nov 2022 09:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669280883;
-        bh=2WnIY4IxIYwOJ87ZP/pew3yEAv4AkAoneo9ZJ8qUM+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ctr1iFw3IgRvtx/aaNV5Q+LEj9D1ZrOfmtmowfonhUyQX6yIYjC/GyTZmm5RcmQ9F
-         b2BAhbktTYDWN5jj0oMd73/uSarvbr+Hv/SMn4yiZWpw9v4vdHlllmpBA9e7FnXdWv
-         2LnAcCXuOnpECfQ0rvV8MGg9W0rV+HCq5Bat5/4Y=
-Date:   Thu, 24 Nov 2022 10:08:00 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Albert Wang <albertccwang@google.com>
-Cc:     mathias.nyman@intel.com, badhri@google.com, howardyen@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: host: add the xhci offload hooks
- implementations
-Message-ID: <Y380cMKIUJfP7Ya3@kroah.com>
-References: <20221110080006.3563429-1-albertccwang@google.com>
- <20221110080006.3563429-4-albertccwang@google.com>
- <Y2yzg2v2AL6MsKvy@kroah.com>
- <CANqn-rj++p_rSkZxa5rpRXQ-9or-_18VzaE_M1vjq4aVNsrAKg@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27B6262041
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 09:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88075C433C1
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 09:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669281582;
+        bh=BDotHWwIXGEuVTclwIexQbACizQYkXYKW9kDHu8CySw=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=EzFceZ+6bIK/Prfhvme1c1qWQXAFbJkduxXAOWTxWzNS052U86J6duubJwDTnv8nv
+         RqI0WaICQwSTXlxWYsc8y7Q7FV2RxE4Xnjxc8COQmjNbD8fwb+Sc+3R78+BCmWPRw0
+         Dni0vCMbGeMisZQFoT+XSjz6ZlQRremj53gQMD+fR9dIX8Nw6soB8mOeh/72BXdbgG
+         XJ3WKbBmDk2VylAg4ndWsGMdoH8Y6FSEJhV5HTXhXowhBz2oQUjuk9TwX25YyOXpy0
+         wjJCsC/bjRpEXe31p1Z7A6M1yp6GwmUon9mUnNePPnsjsax++WHIIFIj1nSaNW8nAI
+         hzZPB21ffQa9w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 6D394C433E4; Thu, 24 Nov 2022 09:19:42 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
+ CometLake platform
+Date:   Thu, 24 Nov 2022 09:19:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216728-208809-JEXF71gGJ5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
+References: <bug-216728-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANqn-rj++p_rSkZxa5rpRXQ-9or-_18VzaE_M1vjq4aVNsrAKg@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,74 +70,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 02:47:22PM +0800, Albert Wang wrote:
-> > > +/*
-> > > + * This is the driver call to co-processor for offload operations.
-> > > + */
-> > > +int offload_driver_call(enum usb_offload_msg msg, void *ptr)
-> > > +{
-> > > +     enum usb_offload_msg offload_msg;
-> > > +     void *argptr;
-> > > +
-> > > +     offload_msg = msg;
-> > > +     argptr = ptr;
-> >
-> > Don't just silence compiler warnings for no reason.
-> >
-> > Again, this does not actually do anything at all.  So how can we accept
-> > this code?
-> >
-> 
-> This is the driver call to our co-processor which is a specific
-> hardware, so I don't submit it
-> and make it silent here.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
-"specific hardware" is what Linux is all about!  Please submit your
-actual drivers for this hardware, otherwise there is no way we can even
-review properly this type of code, let alone accept it.
+Mika Westerberg (mika.westerberg@linux.intel.com) changed:
 
-You all know this in great detail, I've been saying this for many years
-now.  It is very frustrating on my end to constantly have to reject this
-type of change all the time.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mika.westerberg@linux.intel
+                   |                            |.com
 
-What would you do if you were on the reviewer's side?  Would you accept
-this type of submission after constantly saying "I will only accept this
-if you do X" and you get another patch that does NOT do "X"?
+--- Comment #3 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+Can you attach output of 'sudo lspci -vv' when this happens? This will show
+more details on the PCIe side.
 
-> We define and use those hook apis in the common xhci driver to offload
-> some memory
-> manipulation to a co-processor. So these apis will be executed to
-> allocate or free memory,
-> like dcbaa, transfer ring, in the co-processor memory space when
-> offlooffload_driver_callad enabled. The file,
-> xhci-offload-impl.c, shows how we use those xHCI hook apis for the
-> offload implementation.
-> 
-> Here is the flow diagram:
-> xHCI common driver        xHCI offload implement driver
-> co-processor driver
-> hooks
->                     offload_driver_call()
-> ----------------------------
-> ----------------------------------------
-> --------------------------------------------------------------
-> offload_init                         usb_audio_offload_init
-> offload_cleanup                 usb_audio_offload_cleanup
-> is_offload_enabled             is_offload_enabled
-> alloc_dcbaa                        alloc_dcbaa
->        offload_driver_call(SET_DCBAA_PTR, &dcbaa_ptr);
-> 
->                        offload_driver_call(SETUP_DONE, NULL);
-> free_dcbaa                         free_dcbaa
-> alloc_transfer_ring             alloc_transfer_ring
->    offload_driver_call(SET_ISOC_TR_INFO, &tr_info);
-> free_transfer_ring              free_transfer_ring
-> usb_offload_skip_urb        offload_skip_urb
+--=20
+You may reply to this email to add a comment.
 
-
-This does not make any sense, sorry.  Perhaps your lines got wrapped
-incorrectly?
-
-thanks,
-
-greg k-h
+You are receiving this mail because:
+You are watching the assignee of the bug.=
