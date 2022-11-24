@@ -2,99 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7F7637D28
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 16:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BC8637D6F
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 17:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiKXPku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Nov 2022 10:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S229481AbiKXQCO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Nov 2022 11:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiKXPkt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 10:40:49 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CEF6D49A
-        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 07:40:46 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 4so1784837pli.0
-        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 07:40:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zFD5mMWWe7gzGSOkSUP5psIFtNYGADF/IWjkNl9dMSI=;
-        b=jVfhWQqy3iK+WTAEwd8NJnhkrPH/zCI9Qd4GR0LhKMxuIoCwBUoa8jUYSBr0z1DmHo
-         BBgE3YHA/i3rCuEByJ9XL5n+5VIAOfTRRbGYsqZJwBt3cANI2jVEWtD36rffFai2zb1s
-         esG4tR2qdwRMXIQm632sTCYtEQOIHwR116CAjewiNmMrJ/1Xyi8+7yI2VaS5lbKn/dYK
-         mo/zy+olp2WhPymzv9Y2ECTGedGKkqse47C+L9l329wEU5b9HTbq1E7g3gR3s5wAF2we
-         M3wB3b3IhivoPR5Ckwu7guOW+lDyptiaow43RnTaDflueE5GehKUiIUOkI+0yp5QShEj
-         bVNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zFD5mMWWe7gzGSOkSUP5psIFtNYGADF/IWjkNl9dMSI=;
-        b=iW1uIFhVbMCu9qD+IYyGQNCNMIQ1unSrzW1M0JLPLOPoTp1zMG8K8k+EpLpXmXs3V1
-         M4X+BP17Gh6tDC6h9PhM2wV8lpJkCjYt+srYlyo9ekIdY+qbhf8FnE2dr7LD8rAQYNdl
-         tEM/wuOMV20/5cIAdHvR7Sdpy4zipeFKNDj8NSnvzn5WrikYvZjQzzJxodu4f3v2SJ0s
-         QUrIxxdrjnl1RWs5u3J+zV7M+rgsGr21hMKn9iiYpxNO1qnkgxm9j8MEJKLEblxUQ2fp
-         mLcimwc1F4gaxQSiGrq8hUTu4i3YYrGcmCRMW2+i9PaNTmKZr4AIhzSFXayE91cRnmJ5
-         MWOQ==
-X-Gm-Message-State: ANoB5plIN1ICWZuf/Pm7g3j+aguBCpBsYQIp5WUfpCluLKCYBdOnkjPU
-        bR1SiI7G3UJraLUCWLL47IjZmJp6+GVOBiFcCBr6DZU8V/8AkA==
-X-Google-Smtp-Source: AA0mqf58AfEdxOgBvWDR79FliQtH0DSzC6mWQuyQHGPTv9i1olfucUs/oSn5IxFS1AKtErOvkX7cxi7b+oEUHFsNj8o=
-X-Received: by 2002:a17:902:ca04:b0:175:105a:3087 with SMTP id
- w4-20020a170902ca0400b00175105a3087mr14699138pld.65.1669304445759; Thu, 24
- Nov 2022 07:40:45 -0800 (PST)
+        with ESMTP id S229476AbiKXQCN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 11:02:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0C5F2C34
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 08:02:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E847B82847
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 16:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74263C433D6;
+        Thu, 24 Nov 2022 16:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669305726;
+        bh=eRea0Cn7S+QUYSw7LH/aojpDF6KeQAx8saFM0itvWOc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aYW1TnaFVVy1/hjPox+0IxgfWPdXtcPQL1LlucJFqtyF0EFzfPnUbYnIwc3cPfKuG
+         6zxmPIpfUzVZNcGOhwq2S3ggVfuGfl3FqzwM57BD9NiTDsJyEq1xTKjkkiLj0jXP1E
+         N+UIar4uJs02k+X5pg1TvUbCr6ooSejiWDHPwka0=
+Date:   Thu, 24 Nov 2022 17:02:04 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [Question] How to check whether or not a device is an USB device?
+Message-ID: <Y3+VfNdt/K7UtRcw@kroah.com>
+References: <CAMZ6RqKB70YohOEeUmYWthbi8N3ADVLQUg-=j6enf5cDQC_eSg@mail.gmail.com>
 MIME-Version: 1.0
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Fri, 25 Nov 2022 00:40:34 +0900
-Message-ID: <CAMZ6RqKB70YohOEeUmYWthbi8N3ADVLQUg-=j6enf5cDQC_eSg@mail.gmail.com>
-Subject: [Question] How to check whether or not a device is an USB device?
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqKB70YohOEeUmYWthbi8N3ADVLQUg-=j6enf5cDQC_eSg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Nov 25, 2022 at 12:40:34AM +0900, Vincent Mailhol wrote:
+> Hello,
+> 
+> I am trying to have devlink report default information at the core
+> level. One of the attributes reported by devlink is the serial number
+> which is available in usb_device::serial (details: [1]).
+> 
+> This code would work:
+> 
+>         if (!strcmp(dev->parent->type->name, "usb_device")) {
+>                 /* is indeed an USB device */
+> 
+> but the string comparison looks odd.
+> 
+> There is a is_usb_device() which does the check:
+> 
+>   https://elixir.bootlin.com/linux/v6.1-rc1/source/drivers/usb/core/usb.h#L152
+> 
+> but this function is only visible at the USB core level.
+> 
+> Thus my questions:
+> 
+>   * what is the correct way (outside of USB core) to check if a device
+> is an USB device?
 
-I am trying to have devlink report default information at the core
-level. One of the attributes reported by devlink is the serial number
-which is available in usb_device::serial (details: [1]).
+There is none, you should never do this.  There is a reason the driver
+model does not have "types" for all devices that are allowed to be
+checked.
 
-This code would work:
+It is up to the driver that controls this device to know what type of
+device this is.
 
-        if (!strcmp(dev->parent->type->name, "usb_device")) {
-                /* is indeed an USB device */
+Where in the kernel are you trying to do this type of thing?
 
-but the string comparison looks odd.
+> Is the string comparaison OK or is there a smarter way?
 
-There is a is_usb_device() which does the check:
+This should not be done at all, you can not rely on it.
 
-  https://elixir.bootlin.com/linux/v6.1-rc1/source/drivers/usb/core/usb.h#L152
+>   * would it make sense to export the is_usb_device() function?
 
-but this function is only visible at the USB core level.
+Nope!
 
-Thus my questions:
+> [1] https://lore.kernel.org/netdev/20221122154934.13937-1-mailhol.vincent@wanadoo.fr/
 
-  * what is the correct way (outside of USB core) to check if a device
-is an USB device? Is the string comparaison OK or is there a smarter
-way?
+Have the netdev driver provide a way to get the serial number of a
+device.  Then in the driver, it can do the correct call as it "knows"
+that this device really is a USB device.
 
-  * would it make sense to export the is_usb_device() function?
+Don't let class code like this depend on random bus types, that's not
+the correct way to do things.
 
+hope this helps,
 
-[1] https://lore.kernel.org/netdev/20221122154934.13937-1-mailhol.vincent@wanadoo.fr/
-
-Thank you for your help,
-
-
-Yours sincerely,
-Vincent Mailhol
+greg k-h
