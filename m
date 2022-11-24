@@ -2,89 +2,405 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF876374FA
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 10:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9B3637546
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Nov 2022 10:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiKXJTr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Nov 2022 04:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S229734AbiKXJgc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Nov 2022 04:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiKXJTo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 04:19:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EE6116AB5
-        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 01:19:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27B6262041
-        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 09:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 88075C433C1
-        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 09:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669281582;
-        bh=BDotHWwIXGEuVTclwIexQbACizQYkXYKW9kDHu8CySw=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=EzFceZ+6bIK/Prfhvme1c1qWQXAFbJkduxXAOWTxWzNS052U86J6duubJwDTnv8nv
-         RqI0WaICQwSTXlxWYsc8y7Q7FV2RxE4Xnjxc8COQmjNbD8fwb+Sc+3R78+BCmWPRw0
-         Dni0vCMbGeMisZQFoT+XSjz6ZlQRremj53gQMD+fR9dIX8Nw6soB8mOeh/72BXdbgG
-         XJ3WKbBmDk2VylAg4ndWsGMdoH8Y6FSEJhV5HTXhXowhBz2oQUjuk9TwX25YyOXpy0
-         wjJCsC/bjRpEXe31p1Z7A6M1yp6GwmUon9mUnNePPnsjsax++WHIIFIj1nSaNW8nAI
-         hzZPB21ffQa9w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6D394C433E4; Thu, 24 Nov 2022 09:19:42 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
- CometLake platform
-Date:   Thu, 24 Nov 2022 09:19:42 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-216728-208809-JEXF71gGJ5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
-References: <bug-216728-208809@https.bugzilla.kernel.org/>
+        with ESMTP id S229632AbiKXJgb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 04:36:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65763C80FA
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 01:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669282533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3lD3X1Z3DwL6oHpIWZE9wQ9xBbUQb4Md6bY08DZINX4=;
+        b=e0eV8NRIO9AQ+hyf0CBPiEZ0nrBNmA0zTePbCkX/XI3ToVLFrhdBJxXwdC7VQLuU5WLBJd
+        JiVfSfFsuGXMYIPtvPNLxI15uOnuOVmZ5oeE/R8bqQh+m2+6U48+wE9BqwXRyXxNClyrRn
+        Hz8v/ijdwScFJ3ln8hjCZrKj/pHBaEA=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-445-l3mHBZ0pNuaj66aLjsBLFQ-1; Thu, 24 Nov 2022 04:35:30 -0500
+X-MC-Unique: l3mHBZ0pNuaj66aLjsBLFQ-1
+Received: by mail-qv1-f71.google.com with SMTP id nn2-20020a056214358200b004bb7bc3dfdcso936146qvb.23
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 01:35:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3lD3X1Z3DwL6oHpIWZE9wQ9xBbUQb4Md6bY08DZINX4=;
+        b=ddj7yBeB0NUgQ466VVWni5Z+92Lje0JXat8KWZeECS5cU6eLWvIG3WlgPPF30Z/kD2
+         DLYb9xkScJfBN/XC9/VLRnvSiRoauQyooogzBM36+xDR0oBU1NvyTHqA8WUwmxglDXWT
+         zlG7v5IdvvKPSPU/4VoRA201Y8YPml5TowWmNhHI+BSo66FWwDLZV76SEXI3wI02v60U
+         1eKrLJtbQ1V4tob3CmWG4AlGU9qHhVkoqZiS6Wt9P8cAMJAEC7tef6TNKfwqgIOlL0JB
+         5uVBH8rweiHnSGofM36mZNgzDvxHkFPlisEHSP3U/Y8HJOv8+A3OUTkpsXZ3+7l8voJc
+         sT0w==
+X-Gm-Message-State: ANoB5plOXe2ML52QHa6GSrnS/vyvFkCBt519MjMEh5osrhlxS97IlOTz
+        Nzo2b6qcqvVa0CIkfcp6hiEiLVjupMAq5VBACAi1r6EU2eOzsy+Ry8FAG52t903cgTD7ws3WUgT
+        o1DWCJ3UU7wU3z8+ljcYj
+X-Received: by 2002:a05:620a:1905:b0:6fa:6636:a7b0 with SMTP id bj5-20020a05620a190500b006fa6636a7b0mr11659587qkb.55.1669282529665;
+        Thu, 24 Nov 2022 01:35:29 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6UkOX2dmUYou/ibDwcHju3ZGcCFxTzlbvTEeEtb3pXW+tGL8BHSEyyBgVEQel0np7r58qmIw==
+X-Received: by 2002:a05:620a:1905:b0:6fa:6636:a7b0 with SMTP id bj5-20020a05620a190500b006fa6636a7b0mr11659581qkb.55.1669282529361;
+        Thu, 24 Nov 2022 01:35:29 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id s3-20020ae9de03000000b006ce1bfbd603sm543050qkf.124.2022.11.24.01.35.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 01:35:29 -0800 (PST)
+Message-ID: <59bcf09d5eabf36eda1f940b755e3bca218f9df0.camel@redhat.com>
+Subject: Re: [PATCH v2] net: usb: cdc_ether: add u-blox 0x1343 composition
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Davide Tronchin <davide.tronchin.94@gmail.com>, kuba@kernel.org
+Cc:     bjorn@mork.no, marco.demarco@posteo.net, netdev@vger.kernel.org,
+        Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org
+Date:   Thu, 24 Nov 2022 10:35:25 +0100
+In-Reply-To: <20221123084924.3369-1-davide.tronchin.94@gmail.com>
+References: <20221122204438.25442c0c@kernel.org>
+         <20221123084924.3369-1-davide.tronchin.94@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
+On Wed, 2022-11-23 at 09:49 +0100, Davide Tronchin wrote:
+> Add CDC-ECM support for LARA-L6.
+> 
+> LARA-L6 module can be configured (by AT interface) in three different
+> USB modes:
+> * Default mode (Vendor ID: 0x1546 Product ID: 0x1341) with 4 serial
+> interfaces
+> * RmNet mode (Vendor ID: 0x1546 Product ID: 0x1342) with 4 serial
+> interfaces and 1 RmNet virtual network interface
+> * CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1343) with 4 serial
+> interface and 1 CDC-ECM virtual network interface
+> 
+> In CDC-ECM mode LARA-L6 exposes the following interfaces:
+> If 0: Diagnostic
+> If 1: AT parser
+> If 2: AT parser
+> If 3: AT parset/alternative functions
+> If 4: CDC-ECM interface
+> 
+> Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+> ---
+> 
+> V1 -> V2 add missing Signed-off
+> 
+> lsusb verbose output:
+> 
+> $ lsusb -v -d 1546:1343
+> 
+> Bus 001 Device 045: ID 1546:1343 U-Blox AG u-blox Modem
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               2.00
+>   bDeviceClass          239 Miscellaneous Device
+>   bDeviceSubClass         2 
+>   bDeviceProtocol         1 Interface Association
+>   bMaxPacketSize0        64
+>   idVendor           0x1546 U-Blox AG
+>   idProduct          0x1343 
+>   bcdDevice            0.00
+>   iManufacturer           4 u-blox
+>   iProduct                3 u-blox Modem
+>   iSerial                 5 d6da37e3
+>   bNumConfigurations      1
+>   Configuration Descriptor:
+>     bLength                 9
+>     bDescriptorType         2
+>     wTotalLength       0x00c9
+>     bNumInterfaces          6
+>     bConfigurationValue     1
+>     iConfiguration          2 u-blox Configuration
+>     bmAttributes         0xc0
+>       Self Powered
+>     MaxPower              500mA
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        0
+>       bAlternateSetting       0
+>       bNumEndpoints           2
+>       bInterfaceClass       255 Vendor Specific Class
+>       bInterfaceSubClass    255 Vendor Specific Subclass
+>       bInterfaceProtocol     48 
+>       iInterface              0 
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x81  EP 1 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x01  EP 1 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        1
+>       bAlternateSetting       0
+>       bNumEndpoints           3
+>       bInterfaceClass       255 Vendor Specific Class
+>       bInterfaceSubClass    255 Vendor Specific Subclass
+>       bInterfaceProtocol    255 Vendor Specific Protocol
+>       iInterface              0 
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x82  EP 2 IN
+>         bmAttributes            3
+>           Transfer Type            Interrupt
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0040  1x 64 bytes
+>         bInterval               5
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x83  EP 3 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x02  EP 2 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        2
+>       bAlternateSetting       0
+>       bNumEndpoints           3
+>       bInterfaceClass       255 Vendor Specific Class
+>       bInterfaceSubClass    254 
+>       bInterfaceProtocol    255 
+>       iInterface              0 
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x84  EP 4 IN
+>         bmAttributes            3
+>           Transfer Type            Interrupt
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0040  1x 64 bytes
+>         bInterval               5
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x85  EP 5 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x03  EP 3 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        3
+>       bAlternateSetting       0
+>       bNumEndpoints           3
+>       bInterfaceClass       255 Vendor Specific Class
+>       bInterfaceSubClass    255 Vendor Specific Subclass
+>       bInterfaceProtocol    255 Vendor Specific Protocol
+>       iInterface              0 
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x86  EP 6 IN
+>         bmAttributes            3
+>           Transfer Type            Interrupt
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0040  1x 64 bytes
+>         bInterval               5
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x87  EP 7 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x04  EP 4 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>     Interface Association:
+>       bLength                 8
+>       bDescriptorType        11
+>       bFirstInterface         4
+>       bInterfaceCount         2
+>       bFunctionClass          2 Communications
+>       bFunctionSubClass       0 
+>       bFunctionProtocol       0 
+>       iFunction               0 
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        4
+>       bAlternateSetting       0
+>       bNumEndpoints           1
+>       bInterfaceClass         2 Communications
+>       bInterfaceSubClass      6 Ethernet Networking
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>       CDC Header:
+>         bcdCDC               1.10
+>       CDC Ethernet:
+>         iMacAddress                      1 00A0C6A37E30
+>         bmEthernetStatistics    0x00000000
+>         wMaxSegmentSize              16384
+>         wNumberMCFilters            0x0001
+>         bNumberPowerFilters              0
+>       CDC Union:
+>         bMasterInterface        4
+>         bSlaveInterface         5 
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x88  EP 8 IN
+>         bmAttributes            3
+>           Transfer Type            Interrupt
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0040  1x 64 bytes
+>         bInterval               5
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        5
+>       bAlternateSetting       0
+>       bNumEndpoints           0
+>       bInterfaceClass        10 CDC Data
+>       bInterfaceSubClass      0 
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        5
+>       bAlternateSetting       1
+>       bNumEndpoints           2
+>       bInterfaceClass        10 CDC Data
+>       bInterfaceSubClass      0 
+>       bInterfaceProtocol      0 
+>       iInterface              0 
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x89  EP 9 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x05  EP 5 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+> Device Qualifier (for other device speed):
+>   bLength                10
+>   bDescriptorType         6
+>   bcdUSB               2.00
+>   bDeviceClass          239 Miscellaneous Device
+>   bDeviceSubClass         2 
+>   bDeviceProtocol         1 Interface Association
+>   bMaxPacketSize0        64
+>   bNumConfigurations      1
+> Device Status:     0x0000
+>   (Bus Powered)
+> 
+> ---
+>  drivers/net/usb/cdc_ether.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+> index e11f70911acc..8911cd2ed534 100644
+> --- a/drivers/net/usb/cdc_ether.c
+> +++ b/drivers/net/usb/cdc_ether.c
+> @@ -989,6 +989,12 @@ static const struct usb_device_id	products[] = {
+>  				      USB_CDC_SUBCLASS_ETHERNET,
+>  				      USB_CDC_PROTO_NONE),
+>  	.driver_info = (unsigned long)&wwan_info,
+> +}, {
+> +	/* U-blox LARA-L6 */
+> +	USB_DEVICE_AND_INTERFACE_INFO(UBLOX_VENDOR_ID, 0x1343, USB_CLASS_COMM,
+> +				      USB_CDC_SUBCLASS_ETHERNET,
+> +				      USB_CDC_PROTO_NONE),
+> +	.driver_info = (unsigned long)&wwan_info,
+>  }, {
+>  	/* Cinterion PLS8 modem by GEMALTO */
+>  	USB_DEVICE_AND_INTERFACE_INFO(0x1e2d, 0x0061, USB_CLASS_COMM,
 
-Mika Westerberg (mika.westerberg@linux.intel.com) changed:
+CC: Oliver, linux-usb 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mika.westerberg@linux.intel
-                   |                            |.com
+@Davide: the patch LGTM, please include all the relevant recipients.
+This kind of patches should at least land on the usb ML, thanks!
 
---- Comment #3 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Can you attach output of 'sudo lspci -vv' when this happens? This will show
-more details on the PCIe side.
+Paolo
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
