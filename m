@@ -2,121 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB20A638E0B
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 17:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBA8638FA0
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 19:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiKYQEs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Nov 2022 11:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S230063AbiKYSWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Nov 2022 13:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiKYQEr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Nov 2022 11:04:47 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D9F4C258;
-        Fri, 25 Nov 2022 08:04:46 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6457521AE8;
-        Fri, 25 Nov 2022 16:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669392285; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=E1AvnYKtYn+8yPFjM7D+vldgE+4/Vf2jmsQdzXTBl9E=;
-        b=YH4sWQhvo3bUc46XnpcapEyvmEHVazGhnrtaoNqthyKYb6WcxFZ/r2vbqutAQ9p0t7MzMR
-        Qa23IcwODRjyX8JSftO9cTRtUKBDahWfAAyoBM01qBxdPiE/vR0EaUvJvrwGy5lxJmf3e0
-        84luV89ft2qZizlR/8Q7FezuRJdHPjc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669392285;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=E1AvnYKtYn+8yPFjM7D+vldgE+4/Vf2jmsQdzXTBl9E=;
-        b=4Bs+nm4bCab40+zSX3tganHTBUkvJ/m2m6bBnsOMy8YqdKRud8HwAfk7kG69T66GDHv94l
-        DDu6ou8hgfwmF4BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1CBD61361C;
-        Fri, 25 Nov 2022 16:04:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1TxMBZ3ngGOHHAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 25 Nov 2022 16:04:45 +0000
-Date:   Fri, 25 Nov 2022 17:04:44 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-usb@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: [PATCH] usb: gadget: udc: drop obsolete dependencies on
- COMPILE_TEST
-Message-ID: <20221125170444.36620123@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230034AbiKYSWq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Nov 2022 13:22:46 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432061144B;
+        Fri, 25 Nov 2022 10:22:45 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id v8so7420908edi.3;
+        Fri, 25 Nov 2022 10:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GIR0vPnh1tQj7f8dFTKnQiTbAWGUY2lBbRumCozbYgU=;
+        b=Vk06GqO1+ZPAbUMVJG7AOsu0LWIbr4GVdaL5DGro6FVX3tezXKv3UhoiOE5PYhgl0e
+         kizKuzZEof3hAxt4t5QNG/zd4caCXu+fAfXZBe922+TjfRFG+HyHaF+1W5siIeh5/9FG
+         V0by94J+nI9VzNg+yU1zooNBQcTgxWKXsNnpApwmVOJZe5+/NxMl04CDA9PrqtsUoUSX
+         Mp3XsuJIKzF1MyCrMYvyDUPjPH3tf6WAmyAXo9mQOcR+cId1NNbTLvle8f7+MIgFDV/T
+         Ob4a1YhB1rDFgcvrqHe/k8CaAw9dcp5BPMXsor8UPbqDxYt+OFxtQQrurW57bS9KqCH5
+         UcZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GIR0vPnh1tQj7f8dFTKnQiTbAWGUY2lBbRumCozbYgU=;
+        b=KMFoCd7ZvIXeXJHcCFElyf0FtkpG1vNaLrjrYCrEkMdzC+20ihJqFyHIGzwJ4Wu316
+         om0DiT1cDlovDsc2PD0Z/NWkDnx1RQu1m7f54FvM+LTaniTXEyWsKAK8H3YaN7XjyPPy
+         b6Z/PYlY5CSs2m+YDJVGyCY8C4QEP/9Xqbfl3LVRxFPR5gLrONl2f30AUMTK/0pPAPwk
+         tk4lAwCrSnQ/UUkSV/akooGziAVchzOwIle3NSYIRp9tglvqF7R8lwq2zmHfWSFKIoT8
+         /R+57m+DcTkusyq0mL9wVBzFOJK3eXCQvyMaZkO3o5Id8pOW8mLm+W1h220UfRDepCOf
+         EuhA==
+X-Gm-Message-State: ANoB5pn0ttZtq+w4xcARdlwudEcY6OIM+alQtnJ/DUkGYJl+KvXJEmdE
+        ikCa1txr2fOhYA5Z8lCOwe2XbykRuEc=
+X-Google-Smtp-Source: AA0mqf4wiC724gCey5671bcoS4vYj4Crxoycui2EQI2NhG5YHqJ5poRzip/JbAqmQqKGz4LvDoPTiw==
+X-Received: by 2002:a05:6402:3711:b0:461:b6a9:c5cb with SMTP id ek17-20020a056402371100b00461b6a9c5cbmr22028968edb.148.1669400563866;
+        Fri, 25 Nov 2022 10:22:43 -0800 (PST)
+Received: from localhost.localdomain ([46.249.74.23])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906200a00b00781dbdb292asm1811610ejo.155.2022.11.25.10.22.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Nov 2022 10:22:43 -0800 (PST)
+From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+To:     b-liu@ti.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony@atomide.com, Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+Subject: [PATCH v2] usb: musb: remove extra check in musb_gadget_vbus_draw
+Date:   Fri, 25 Nov 2022 20:21:15 +0200
+Message-Id: <1669400475-4762-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <Y33H+Pqf3QoN8/IM@atomide.com>
+References: <Y33H+Pqf3QoN8/IM@atomide.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+The checks for musb->xceiv and musb->xceiv->set_power duplicate those in
+usb_phy_set_power(), so there is no need of them. Moreover, not calling
+usb_phy_set_power() results in usb_phy_set_charger_current() not being
+called, so current USB config max current is not propagated through USB
+charger framework and charger drivers may try to draw more current than
+allowed or possible.
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+Fix that by removing those extra checks and calling usb_phy_set_power()
+directly.
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
+Tested on Motorola Droid4 and Nokia N900
+
+Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
+Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
 ---
- drivers/usb/gadget/udc/Kconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/musb/musb_gadget.c | 2 --
+ 1 file changed, 2 deletions(-)
 
---- linux-6.0.orig/drivers/usb/gadget/udc/Kconfig
-+++ linux-6.0/drivers/usb/gadget/udc/Kconfig
-@@ -33,7 +33,7 @@ menu "USB Peripheral Controller"
- config USB_AT91
- 	tristate "Atmel AT91 USB Device Port"
- 	depends on ARCH_AT91
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	   Many Atmel AT91 processors (such as the AT91RM2000) have a
- 	   full speed USB Device Port with support for five configurable
-@@ -430,7 +430,7 @@ config USB_EG20T
- config USB_GADGET_XILINX
- 	tristate "Xilinx USB Driver"
- 	depends on HAS_DMA
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  USB peripheral controller driver for Xilinx USB2 device.
- 	  Xilinx USB2 device is a soft IP which supports both full
-
-
+diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+index 6cb9514..31c4432 100644
+--- a/drivers/usb/musb/musb_gadget.c
++++ b/drivers/usb/musb/musb_gadget.c
+@@ -1630,8 +1630,6 @@ static int musb_gadget_vbus_draw(struct usb_gadget *gadget, unsigned mA)
+ {
+ 	struct musb	*musb = gadget_to_musb(gadget);
+ 
+-	if (!musb->xceiv || !musb->xceiv->set_power)
+-		return -EOPNOTSUPP;
+ 	return usb_phy_set_power(musb->xceiv, mA);
+ }
+ 
 -- 
-Jean Delvare
-SUSE L3 Support
+1.9.1
+
