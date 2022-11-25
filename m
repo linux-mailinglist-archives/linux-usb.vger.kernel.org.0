@@ -2,90 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05B363841D
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 07:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D45F63842E
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 07:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiKYGnN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Nov 2022 01:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        id S229589AbiKYG65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Nov 2022 01:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKYGnM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Nov 2022 01:43:12 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4191A2A733
-        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 22:43:11 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJQK75mt8zmWBD;
-        Fri, 25 Nov 2022 14:42:35 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 14:43:09 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 25 Nov
- 2022 14:43:09 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <arnd@arndb.de>,
-        <stern@rowland.harvard.edu>, <hch@lst.de>
-CC:     <linux-usb@vger.kernel.org>, <yangyingliang@huawei.com>
-Subject: [PATCH] usb: core: hcd: Fix return value check in usb_hcd_setup_local_mem()
-Date:   Fri, 25 Nov 2022 14:41:20 +0800
-Message-ID: <20221125064120.2842452-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229469AbiKYG64 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Nov 2022 01:58:56 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AD72C103;
+        Thu, 24 Nov 2022 22:58:51 -0800 (PST)
+X-UUID: d0004f24bf564171b745ae1e82239b96-20221125
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=v7todQfX6Ph8p4yEF3wKv+qG8KQC8f/WWrCxdxR5F/4=;
+        b=FaW3unWrBRFho0t5JnZP41cUHhltosUmWlaD7wPXItIJwzy7D3uTBFGAd4yF2VLjM//jsbfg3oJtD+axvBshthS21fkG0GUR649xT/L2QTSluY8NUJa4HgjbIBN/gvJBOPjVvKycUb68DC+LY4W55FInur0EpEnJSKxxBJB4dyk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:ee6fd5e3-6269-43a4-9f3a-5524d4f24c4f,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:d4afcd2f-2938-482e-aafd-98d66723b8a9,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d0004f24bf564171b745ae1e82239b96-20221125
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1828604238; Fri, 25 Nov 2022 14:58:46 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 25 Nov 2022 14:58:44 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 25 Nov 2022 14:58:44 +0800
+Message-ID: <2ca334b5-292c-bb31-f21e-a25579c6edd7@mediatek.com>
+Date:   Fri, 25 Nov 2022 14:58:42 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub
+ has no ports
+Content-Language: en-US
+To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>,
+        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= 
+        <Eddie.Hung@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ethan Hsieh <ethan.hsieh@canonical.com>,
+        Jason Yen <jason.yen@canonical.com>,
+        Bear Wang <bear.wang@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>
+References: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
+ <a384d15d-c1df-160c-030b-fddd5d965996@linux.intel.com>
+ <02552cc60b3aae16b2c2e9717b42c800180e3a87.camel@mediatek.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <02552cc60b3aae16b2c2e9717b42c800180e3a87.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        RDNS_NONE,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If dmam_alloc_attrs() fails, it returns NULL pointer and never
-return ERR_PTR(), so repleace IS_ERR() with IS_ERR_OR_NULL()
-and if it's NULL, returns -ENOMEM.
 
-Fixes: 9ba26f5cecd8 ("ARM: sa1100/assabet: move dmabounce hack to ohci driver")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/usb/core/hcd.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index faeaace0d197..8300baedafd2 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -3128,18 +3128,22 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- 	if (phys_addr)
- 		local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
- 					  size, MEMREMAP_WC);
- 	else
- 		local_mem = dmam_alloc_attrs(hcd->self.sysdev, size, &dma,
- 					     GFP_KERNEL,
- 					     DMA_ATTR_WRITE_COMBINE);
- 
--	if (IS_ERR(local_mem))
-+	if (IS_ERR_OR_NULL(local_mem)) {
-+		if (!local_mem)
-+			return -ENOMEM;
-+
- 		return PTR_ERR(local_mem);
-+	}
- 
- 	/*
- 	 * Here we pass a dma_addr_t but the arg type is a phys_addr_t.
- 	 * It's not backed by system memory and thus there's no kernel mapping
- 	 * for it.
- 	 */
- 	err = gen_pool_add_virt(hcd->localmem_pool, (unsigned long)local_mem,
- 				dma, size, dev_to_node(hcd->self.sysdev));
--- 
-2.25.1
+On 11/24/22 18:38, Chunfeng Yun (云春峰) wrote:
+> On Wed, 2022-11-23 at 13:10 +0200, Mathias Nyman wrote:
+>> On 18.11.2022 13.01, Chunfeng Yun wrote:
+>>> There is error log when add a usb3 root hub without ports:
+>>> "hub 4-0:1.0: config failed, hub doesn't have any ports! (err -19)"
+>>>
+>>> so omit the shared hcd if either of the root hubs has no ports, but
+>>> usually there is no usb3 port.
+>>>
+>>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+>>> ---
+>>>    drivers/usb/host/xhci-mtk.c | 72 +++++++++++++++++++++++---------
 
+[deleted...]
+
+Dear Chunfeng,
+
+Since this issue has been reported by Canonical as a ticket
+on launchpad (sorry, it has been reported as a private ticket...),
+could you please to check if add "Cc: stable@vger.kernel.org" and 
+"Fixes:" tags are valid?
+
+If it is possible, please help to list dependent patches to backport
+to stable tree also. Is it possible to include this patch in recent LTS 
+tree?
+
+Thanks
+Macpaul Lin
