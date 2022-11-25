@@ -2,124 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591DE638D86
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 16:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB20A638E0B
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 17:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiKYPfB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Nov 2022 10:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
+        id S229917AbiKYQEs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Nov 2022 11:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKYPe6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Nov 2022 10:34:58 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E392D1DD
-        for <linux-usb@vger.kernel.org>; Fri, 25 Nov 2022 07:34:57 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oyaj9-0005nu-KE; Fri, 25 Nov 2022 16:34:55 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oyaj8-000Frf-0X; Fri, 25 Nov 2022 16:34:54 +0100
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oyaj8-001Rde-5y; Fri, 25 Nov 2022 16:34:54 +0100
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+        with ESMTP id S229597AbiKYQEr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Nov 2022 11:04:47 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D9F4C258;
+        Fri, 25 Nov 2022 08:04:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6457521AE8;
+        Fri, 25 Nov 2022 16:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669392285; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=E1AvnYKtYn+8yPFjM7D+vldgE+4/Vf2jmsQdzXTBl9E=;
+        b=YH4sWQhvo3bUc46XnpcapEyvmEHVazGhnrtaoNqthyKYb6WcxFZ/r2vbqutAQ9p0t7MzMR
+        Qa23IcwODRjyX8JSftO9cTRtUKBDahWfAAyoBM01qBxdPiE/vR0EaUvJvrwGy5lxJmf3e0
+        84luV89ft2qZizlR/8Q7FezuRJdHPjc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669392285;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=E1AvnYKtYn+8yPFjM7D+vldgE+4/Vf2jmsQdzXTBl9E=;
+        b=4Bs+nm4bCab40+zSX3tganHTBUkvJ/m2m6bBnsOMy8YqdKRud8HwAfk7kG69T66GDHv94l
+        DDu6ou8hgfwmF4BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1CBD61361C;
+        Fri, 25 Nov 2022 16:04:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1TxMBZ3ngGOHHAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 25 Nov 2022 16:04:45 +0000
+Date:   Fri, 25 Nov 2022 17:04:44 +0100
+From:   Jean Delvare <jdelvare@suse.de>
 To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de, stable <stable@kernel.org>
-Subject: [PATCH v2 2/2] usb: gadget: uvc: limit isoc_sg to super speed gadgets
-Date:   Fri, 25 Nov 2022 16:34:50 +0100
-Message-Id: <20221125153450.344392-2-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
-References: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: [PATCH] usb: gadget: udc: drop obsolete dependencies on
+ COMPILE_TEST
+Message-ID: <20221125170444.36620123@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When calling uvc_video_encode_isoc_sg the function is preparing the sg payload
-by setting the sglist pointers of the videobuffer for the request. The usb
-gadget driver then is parsing the sg list and uses each sg entry to send in one
-urb to the host. Because of the unrelated buffer of the uvc header that buffer
-has to be send separately in an extra sg entry.
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-When it comes to transfers with an limited payload (e.g. the maximum of 3kB for
-high-speed) this extra payload handling is not justified. A simple memcpy of
-the header and payload is usually faster and does not come with that extra
-runtime overhead.
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-This patch is changing the uvc_video_encode_isoc_sg encode function only to be
-used for super speed gadgets.
-
-Cc: stable <stable@kernel.org>
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Michal Simek <michal.simek@xilinx.com>
 ---
-v1 -> v2: - left the sg assignment in uvc_buffer_sg under the test for use_sg
-          - rephrased the commit message
+ drivers/usb/gadget/udc/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/usb/gadget/function/uvc_queue.c | 3 +--
- drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+--- linux-6.0.orig/drivers/usb/gadget/udc/Kconfig
++++ linux-6.0/drivers/usb/gadget/udc/Kconfig
+@@ -33,7 +33,7 @@ menu "USB Peripheral Controller"
+ config USB_AT91
+ 	tristate "Atmel AT91 USB Device Port"
+ 	depends on ARCH_AT91
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	   Many Atmel AT91 processors (such as the AT91RM2000) have a
+ 	   full speed USB Device Port with support for five configurable
+@@ -430,7 +430,7 @@ config USB_EG20T
+ config USB_GADGET_XILINX
+ 	tristate "Xilinx USB Driver"
+ 	depends on HAS_DMA
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	  USB peripheral controller driver for Xilinx USB2 device.
+ 	  Xilinx USB2 device is a soft IP which supports both full
 
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index 0aa3d7e1f3cc32..0abb1763faf1b6 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -87,9 +87,8 @@ static int uvc_buffer_prepare(struct vb2_buffer *vb)
- 	if (queue->use_sg) {
- 		buf->sgt = vb2_dma_sg_plane_desc(vb, 0);
- 		buf->sg = buf->sgt->sgl;
--	} else {
--		buf->mem = vb2_plane_vaddr(vb, 0);
- 	}
-+	buf->mem = vb2_plane_vaddr(vb, 0);
- 	buf->length = vb2_plane_size(vb, 0);
- 	if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
- 		buf->bytesused = 0;
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index dd1c6b2ca7c6f3..b6ea600b011185 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -459,6 +459,9 @@ static void uvcg_video_pump(struct work_struct *work)
-  */
- int uvcg_video_enable(struct uvc_video *video, int enable)
- {
-+	struct uvc_device *uvc = video->uvc;
-+	struct usb_composite_dev *cdev = uvc->func.config->cdev;
-+	struct usb_gadget *gadget = cdev->gadget;
- 	unsigned int i;
- 	int ret;
- 
-@@ -490,9 +493,11 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- 	if (video->max_payload_size) {
- 		video->encode = uvc_video_encode_bulk;
- 		video->payload_size = 0;
--	} else
--		video->encode = video->queue.use_sg ?
-+	} else {
-+		video->encode = (video->queue.use_sg &&
-+				 !(gadget->speed <= USB_SPEED_HIGH)) ?
- 			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
-+	}
- 
- 	video->req_int_count = 0;
- 
+
 -- 
-2.30.2
-
+Jean Delvare
+SUSE L3 Support
