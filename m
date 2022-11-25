@@ -2,67 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B117638220
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 02:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B25B63824D
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Nov 2022 03:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKYBmu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Nov 2022 20:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S229518AbiKYCOO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Nov 2022 21:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiKYBmn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 20:42:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A38511C21
-        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 17:42:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCD50B82422
-        for <linux-usb@vger.kernel.org>; Fri, 25 Nov 2022 01:42:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 886E8C433D7
-        for <linux-usb@vger.kernel.org>; Fri, 25 Nov 2022 01:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669340557;
-        bh=HqXqfu2g7GAS2hXudw/KDaiXiXHdWPlm9mtxjHlBrAk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Uu5uOeQhcBeGlpkjwHogKNBdE86NacJzm2EaSaUNvp+oXkoNdj/kTY8e8nkYfSwIP
-         nyi/RWcLGftLjXV1tQ9G/Ljl+OB42H6F2B6Zt0nEBSrx81IccLP4ouObFDOfby9a5E
-         tIEq9u6/uJhVp00jQoIbfOUWWiJCbHm46bRv3Wyy5DJDf5b5tT0iNIixiI75NNAEAz
-         jneURd2Y5/A4aMH0N0nVA47gT3SkMQpoUpoUhyGExyMKbXK1yPrcVmqgf4eWRzLckk
-         N02pWLsu6AO7+XyTPoaFu7IAY9TMACM1UbQrE8N2ORv3RJPcfrAmoRRzofi3lL9r18
-         s3KYTMUfjvtDQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 75611C433E6; Fri, 25 Nov 2022 01:42:37 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
- CometLake platform
-Date:   Fri, 25 Nov 2022 01:42:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: chris.chiu@canonical.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-216728-208809-RLepuerloJ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
-References: <bug-216728-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229471AbiKYCON (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Nov 2022 21:14:13 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BCC23E84
+        for <linux-usb@vger.kernel.org>; Thu, 24 Nov 2022 18:14:11 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJJLm2GMyzmW8p;
+        Fri, 25 Nov 2022 10:13:36 +0800 (CST)
+Received: from huawei.com (10.175.100.227) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 25 Nov
+ 2022 10:14:09 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <vincent.sunplus@gmail.com>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-phy@lists.infradead.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH] phy: usb: sunplus: Fix potential null-ptr-deref in sp_usb_phy_probe()
+Date:   Fri, 25 Nov 2022 10:12:22 +0800
+Message-ID: <20221125021222.25687-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,17 +43,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
+sp_usb_phy_probe() will call platform_get_resource_byname() that may fail
+and return NULL. devm_ioremap() will use usbphy->moon4_res_mem->start as
+input, which may causes null-ptr-deref. Check the ret value of
+platform_get_resource_byname() to avoid the null-ptr-deref.
 
---- Comment #4 from Chris Chiu (chris.chiu@canonical.com) ---
-Created attachment 303289
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303289&action=3Dedit
-output of sudo lspci -vv
+Fixes: 99d9ccd97385 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
+Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+---
+ drivers/phy/sunplus/phy-sunplus-usb2.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Hi Mika, thanks for the prompt reply. Please refer to the attached.
+diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
+index b932087c55b2..6816b7d2318d 100644
+--- a/drivers/phy/sunplus/phy-sunplus-usb2.c
++++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
+@@ -254,6 +254,9 @@ static int sp_usb_phy_probe(struct platform_device *pdev)
+ 		return PTR_ERR(usbphy->phy_regs);
+ 
+ 	usbphy->moon4_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon4");
++	if (!usbphy->moon4_res_mem)
++		return -EINVAL;
++
+ 	usbphy->moon4_regs = devm_ioremap(&pdev->dev, usbphy->moon4_res_mem->start,
+ 					  resource_size(usbphy->moon4_res_mem));
+ 	if (IS_ERR(usbphy->moon4_regs))
+-- 
+2.17.1
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
