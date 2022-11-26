@@ -2,86 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E296394F0
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Nov 2022 10:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F4F6394E7
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Nov 2022 10:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiKZJnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Nov 2022 04:43:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S229453AbiKZJL2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Nov 2022 04:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKZJnN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Nov 2022 04:43:13 -0500
-X-Greylist: delayed 2580 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Nov 2022 01:43:08 PST
-Received: from sp13.canonet.ne.jp (sp13.canonet.ne.jp [210.134.168.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A219E13F22;
-        Sat, 26 Nov 2022 01:43:06 -0800 (PST)
-Received: from csp13.canonet.ne.jp (unknown [172.21.160.133])
-        by sp13.canonet.ne.jp (Postfix) with ESMTP id 099161E03D3;
-        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
-Received: from echeck13.canonet.ne.jp ([172.21.160.123])
-        by csp3 with ESMTP
-        id yqNVovGVhxJr5yqNVocUA4; Sat, 26 Nov 2022 17:17:37 +0900
-X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=S49nfKgP c=1 sm=1 tr=0
- ts=6381cba1 cx=g_jp:t_eml p=JJaDG7uySNsA:10 p=Ik1pXvdftEAPl7FGfynI:22
- a=c8wCX2VJ6RehaN9m5YqYzw==:117 a=yr9NA9NbXb0B05yJHQEWeQ==:17
- a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10 a=9xFQ1JgjjksA:10 a=x7bEGLp0ZPQA:10
- a=JQiPw2jszkcqZPIXoVMA:9 a=CjuIK1q_8ugA:10"
-X-CNT-CMCheck-Score: 100.00
-Received: from echeck13.canonet.ne.jp (localhost [127.0.0.1])
-        by esets.canonet.ne.jp (Postfix) with ESMTP id 9B11A1C0251;
-        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
-X-Virus-Scanner: This message was checked by ESET Mail Security
-        for Linux/BSD. For more information on ESET Mail Security,
-        please, visit our website: http://www.eset.com/.
-Received: from smtp13.canonet.ne.jp (unknown [172.21.160.103])
-        by echeck13.canonet.ne.jp (Postfix) with ESMTP id 6BA4E1C0263;
-        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
-Received: from eikohnet.co.jp (webmail.canonet.ne.jp [210.134.169.250])
-        by smtp13.canonet.ne.jp (Postfix) with ESMTPA id A506115F964;
-        Sat, 26 Nov 2022 17:17:36 +0900 (JST)
-MIME-Version: 1.0
-Message-ID: <20221126081736.00001C7B.0156@eikohnet.co.jp>
-Date:   Sat, 26 Nov 2022 17:17:36 +0900
-From:   "Mrs Zainab Abbas" <toda@eikohnet.co.jp>
-To:     <Inbox@eikohnet.co.jp>
-Reply-To: <mrs.zainababbas75@gmail.com>
-Subject: Hi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-ORGANIZATION: Mrs Zainab Abbas
-X-MAILER: Active! mail
-X-EsetResult: clean, %VIRUSNAME%
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1669450657;VERSION=7940;MC=3218539519;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
-X-I-ESET-AS: RN=0;RNP=
-X-ESET-Antispam: OK
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
-        SPF_HELO_NONE,SPF_PASS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrs.zainababbas75[at]gmail.com]
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  2.4 XPRIO_SHORT_SUBJ Has X Priority header + short subject
-X-Spam-Level: *******
+        with ESMTP id S229436AbiKZJL1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Nov 2022 04:11:27 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361AA1F62C
+        for <linux-usb@vger.kernel.org>; Sat, 26 Nov 2022 01:11:26 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id BFAC93200094;
+        Sat, 26 Nov 2022 04:11:22 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Sat, 26 Nov 2022 04:11:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1669453882; x=1669540282; bh=0SSFraBpauPKqV870t3MKzmlWuqxtBmfG3r
+        tp/BzUqU=; b=LXkrLMPD9+mYvY2tbZKULvv5VZ/gp6SY5SAZzBZrbswcS3LArY9
+        +AywWPj+nfdsCMC7irdKWALl7uDlVZrBNQi64bE9qaHpNe86Kawu7dag9c5XjWLO
+        hIoGHJ1T3e5NaYhQ1RClakVnT/OY2AE+Ueo2W+v3iNPz1NVhPMbjxPOjSckfJVth
+        osUnpuuONJM0kqT4EYyP0lb9MdaUzQjdSglhaV3aAXKNbcZH/qaQT+wqUXfpXfSj
+        W78kf5niCEauLboNeKmWIaORqC2LSPjLXVgHV2bYo59G+aYQtJ68aOBhVwFa4fhc
+        8CLthDUUsIfGc/f7KbGnpp7CEf5zWpfgYug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669453882; x=
+        1669540282; bh=0SSFraBpauPKqV870t3MKzmlWuqxtBmfG3rtp/BzUqU=; b=Z
+        /5T+wlcw6FjoCXBMTyTQDiZ+0FqaM7RDFMmZyTat9o+vdalUgAZ1NOTNrQKOoEwS
+        VknsiAh1/miz8G+58oUE3/8SkiHUvHtNx5RRjCTgrkqZyNgXGi74zEFXWsn0dOx5
+        OBCVQp3KIHZrpkVLmlgHcp6sL/dKmnmcwGYl8tz5kZ/83+XEkupXBq3tlwm+oQJK
+        pgjJnAjNW6UDgqEyXtnmS/Qa5h+XDSbTf229aLB1cNz1+E0BGBSWMbcvaJ0A7dlD
+        mHALV7bwl1Egc/tcShW+T7K9uSR4EE52wUwLcZc9EDeTfpwp52WbOmmV+5DHOq0Q
+        U5yk895zLBu2CfsxFovnQ==
+X-ME-Sender: <xms:OdiBYzwXGWBgPVogl2ND7kHib3vWhzAqBG2nG4Ml5z9nDrq1K7Jltw>
+    <xme:OdiBY7To1DBbLnnwCJtYTLjqCtWV3-cU7o7hajAlvl2r_6nA-tAfvIxB5soenVq0e
+    HBlxkIZt7MhWNfrVNg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieejgddtvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgvnhcu
+    rfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
+    gvrhhnpedtgfeggfehieeiledvgfffleefhfevfffgffffieffkeekfefgieduveeitdfh
+    keenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvh
+    gvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:OtiBY9UkCanjAvdt_IuW2PVsQ-zVXRRMS2xHho72JrCnrLDn33XPHw>
+    <xmx:OtiBY9h4Ox9-VTDg7_pfZfeh4V4ctS2osCzlV__8bv4zdWqspmhWHw>
+    <xmx:OtiBY1BISK6PJ8MzkT3rH-sQP7BaB7klDxhR3vvuPPK_hO4VBKe8_g>
+    <xmx:OtiBYy7HR7H4UlSMx_IcXt3CyU3WiMUgUrV61EhoEqzdBTgKvzrQCw>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D8A08A6007C; Sat, 26 Nov 2022 04:11:21 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <dad79707-a778-4868-8684-f1658a38b4d0@app.fastmail.com>
+Date:   Sat, 26 Nov 2022 10:10:48 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, asahi@lists.linux.dev
+Subject: dwc3_set_mode vs. __dwc3_set_mode race
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Thinh,
 
-Hello,
-Good day, I am still waiting for your reply to my previous email, hope you see the email?
+I've run into a race between dwc3_set_mode and __dwc3_set_mode accessing
+dwc->desired_dr_role: It's an incredibly tight race that's hard to hit since
+role switch events need to come in just after each other. It's reproducible
+with an Apple M1 connected to a device that very quickly switches
+roles when shutting down (which happens to be another M1). This sometimes
+triggers a device->host->device switch sequence which is fast enough to hit this
+race:
 
-Regards
-Mrs Zainab Abbas
+CPU A
+	dwc3_set_mode(DWC3_GCTL_PRTCAP_HOST) // first role switch event
+		spin_lock_irqsave(&dwc->lock, flags);
+		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_HOST
+		spin_unlock_irqrestore(&dwc->lock, flags);
+		queue_work(system_freezable_wq, &dwc->drd_work); // true, schedules __dwc3_set_mode
+
+CPU B
+	__dwc3_set_mode
+		// ....
+		spin_lock_irqsave(&dwc->lock, flags);
+		dwc3_set_prtcap(dwc, dwc->desired_dr_role); // DWC3_GCTL_PRTCAP_HOST
+		spin_unlock_irqrestore(&dwc->lock, flags);
+
+CPU A
+	dwc3_set_mode(DWC3_GCTL_PRTCAP_DEVICE) // second role switch event
+		spin_lock_irqsave(&dwc->lock, flags);
+		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_DEVICE
+		spin_unlock_irqrestore(&dwc->lock, flags);
+
+CPU B (continues running __dwc3_set_mode)
+	switch (dwc->desired_dr_role) { // DWC3_GCTL_PRTCAP_DEVICE
+	case DWC3_GCTL_PRTCAP_HOST:
+		// not executed since desired_dr_role is DWC3_GCTL_PRTCAP_DEVICE now
+		break;
+
+CPU A (continues running dwc3_set_mode)
+	queue_work(system_freezable_wq, &dwc->drd_work); // __dwc3_set_mode is still running
+
+CPU B (continues running __dwc3_set_mode)
+	case DWC3_GCTL_PRTCAP_DEVICE:
+		// ....
+		ret = dwc3_gadget_init(dwc);
 
 
+We then have DWC3_GCTL.DWC3_GCTL_PRTCAPDIR = DWC3_GCTL_PRTCAP_HOST and
+dwc->current_dr_role = DWC3_GCTL_PRTCAP_HOST but initialized the controller in
+device mode when calling dwc3_gadget_init. This obviously doesn't work and is
+not easy to recover from.
+
+Unfortunately we can't just lock dwc3->mutex since dwc3_set_mode may be called
+from an extcon interrupt in atomic context (which is probably the reason for
+deferring the mode switch to a workqueue).
+
+Otherwise I can only think of creating a single-threaded work queue and
+allocating a new work_struct together with desired_role inside dwc3_set_mode
+and putting that onto the queue, i.e. something like:
+
+struct dwc3_set_mode_work {
+	struct dwc3 *dwc;
+	u32 desired_dr_role;
+	struct work_struct work;
+};
+
+void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
+{
+	struct dwc3_set_mode_work *work = kzalloc(sizeof(*work), GFP_ATOMIC);
+
+	INIT_WORK(&work->work, __dwc3_set_mode);
+	work->dwc = dwc;
+	work->desired_dr_role = mode;
+	queue_work(dwc->drd_work_queue, &work->work);
+}
+
+That way all role switch events will be executed in order and we can't race
+desired_dr_role anymore.
+I'm not very happy with that solution but can't think of anything else.
+
+Any thoughts or ideas? I can otherwise prepare a patch.
+
+
+Thanks,
+
+
+Sven
