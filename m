@@ -2,95 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21C9639B36
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 15:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F2B639B74
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 15:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiK0OEQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 09:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S229595AbiK0Owh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Nov 2022 09:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiK0OEP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 09:04:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2F81004E;
-        Sun, 27 Nov 2022 06:04:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229608AbiK0Owe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 09:52:34 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A161089;
+        Sun, 27 Nov 2022 06:52:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66572B80ADD;
-        Sun, 27 Nov 2022 14:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E44C433C1;
-        Sun, 27 Nov 2022 14:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669557852;
-        bh=4bNVTJbFt80mnttNYrDImWd2gZShvy6+XtKhN9ZvMj4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vRmswTbkv1OQ45SGk7Bw7JE4FBQh0T2lGw4KzDLaxC450U4bGg0FTQ6ZFRxLnXOhD
-         OUpzhJkODJpmbfH7t+2ac/dUgNrXiTzRUITlPsfrCspBsWM0e5c7khVDXWaVrQv+VE
-         b7y0f27oNidgRB8zjLWFiBBb5OHceIOgB4SREFq8=
-Date:   Sun, 27 Nov 2022 15:01:58 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.1-rc7
-Message-ID: <Y4Nt1l1L+kuOTEfO@kroah.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5E83D21B2D;
+        Sun, 27 Nov 2022 14:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669560751; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uGCmWgHRCB1XEw4nEtRb3Itymxy+KuQ10BXGquguuj0=;
+        b=iu71He1gjh3KuhXknf6MZr57jbZpPyCd7AKGTl/YqXjoOb6Y42lOpxkfOSVdwJbuFG3POW
+        GCHj1XRVjk+R4eSMhIdklSxG1THciX/kgoSuUoSdWSb0DxcOur98i/EeU6rTFxnLf4XVfq
+        63FDaU+PmycaDDmtsZW1sdLq73s3xYQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669560751;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uGCmWgHRCB1XEw4nEtRb3Itymxy+KuQ10BXGquguuj0=;
+        b=ec8gXkjDlh1plvqoiV+rjr15h69FYpn9gNhiyF3pSTRsa3m4ovVrVJ0ZpwQgHPxPbWmP1D
+        vjsQGRcOXbQOoxAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3265A134CE;
+        Sun, 27 Nov 2022 14:52:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 91+2Cq95g2O5SQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Sun, 27 Nov 2022 14:52:31 +0000
+Date:   Sun, 27 Nov 2022 15:52:30 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-usb@vger.kernel.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: misc: onboard_usb_hub: Drop obsolete dependency on
+ COMPILE_TEST
+Message-ID: <20221127155230.144886b7@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-are available in the Git repository at:
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Matthias Kaehlcke <mka@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/misc/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc7
+--- linux-6.0.orig/drivers/usb/misc/Kconfig
++++ linux-6.0/drivers/usb/misc/Kconfig
+@@ -298,7 +298,7 @@ config BRCM_USB_PINMAP
+ 
+ config USB_ONBOARD_HUB
+ 	tristate "Onboard USB hub support"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	  Say Y here if you want to support discrete onboard USB hubs that
+ 	  don't require an additional control bus for initialization, but
 
-for you to fetch changes up to 7a21b27aafa3edead79ed97e6f22236be6b9f447:
 
-  usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1 (2022-11-22 16:52:05 +0100)
-
-----------------------------------------------------------------
-USB fixes for 6.1-rc7
-
-Here are some small USB fixes for 6.1-rc7 that resolve some reported
-problems:
-	- cdnsp driver fixes for reported problems
-	- dwc3 fixes for some small reported problems
-	- uvc gadget driver fix for reported regression due to changes
-	  in 6.1-rc1.
-
-All of these have been in linux-next with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Marek Szyprowski (1):
-      usb: dwc3: exynos: Fix remove() function
-
-Michael Grzeschik (1):
-      usb: gadget: uvc: also use try_format in set_format
-
-Pawel Laszczak (2):
-      usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
-      usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-
-Thinh Nguyen (2):
-      usb: dwc3: gadget: Disable GUSB2PHYCFG.SUSPHY for End Transfer
-      usb: dwc3: gadget: Clear ep descriptor last
-
- drivers/usb/cdns3/cdnsp-gadget.c       | 12 ++----
- drivers/usb/cdns3/cdnsp-ring.c         | 17 +++++---
- drivers/usb/dwc3/dwc3-exynos.c         | 11 +-----
- drivers/usb/dwc3/gadget.c              | 15 +++----
- drivers/usb/gadget/function/uvc_v4l2.c | 72 ++++++++++------------------------
- 5 files changed, 46 insertions(+), 81 deletions(-)
+-- 
+Jean Delvare
+SUSE L3 Support
