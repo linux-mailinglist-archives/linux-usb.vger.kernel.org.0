@@ -2,98 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C470C639BCA
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 17:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EB0639BE5
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 18:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiK0QiZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 11:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S229568AbiK0RLB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Nov 2022 12:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiK0QiY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 11:38:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC34064CF;
-        Sun, 27 Nov 2022 08:38:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D14CB80B0D;
-        Sun, 27 Nov 2022 16:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A7CC43470;
-        Sun, 27 Nov 2022 16:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669567101;
-        bh=aUiblZFngrd+gBIPDt/vCbIylr1oZa/GSw6AYX3RVbw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eTj7Ok9CQqWMTFD/7pssddZcKU+xUwEVXO90AkeNRBh2YP9D6PFP4dWDK0emyw6P5
-         /ozmFn6zxCUwlKKKkZd64evIDUv8tfqyfNH4DZujPGKnACs463ox8NDIhzDqtUt8Cr
-         61M6d1qLexZSdurJICOcXzYP0gG+hGtgOhoOpq1T0ctDJFNLnFAz4A+DCn4F5lVMZ2
-         IBai6wBlGMroTwZHLdfZZrNHFGAOTKxDSRERJCAKX9HiBlKpRfr9FlWAeq0O6ouLu4
-         phRlLxMKKpNbOpoO147gJkKgOJifjGKPgwTGHy7gBYFB1YDYbva7akvpZDQXOlle8y
-         XxfBzigo6l92w==
-Received: by mail-vs1-f46.google.com with SMTP id i2so8478288vsc.1;
-        Sun, 27 Nov 2022 08:38:21 -0800 (PST)
-X-Gm-Message-State: ANoB5pkic/SpT3oTCGWQOuEdRHrOHY2FyUqMJjTgFN6D4Rco/dmwwvjg
-        q624It66+aYbGPRJBh3UwlmM+SyE3wwGXB2kEA==
-X-Google-Smtp-Source: AA0mqf4MGoQj/+4GW+LQKzNWq6+l6Xft7suUyGnNAJc5TDGy9BVJhuB+l87sLN0REo0fDjjlMAI4J8sY/+GnK7H/Ip8=
-X-Received: by 2002:a05:6102:3003:b0:3aa:2ac7:5956 with SMTP id
- s3-20020a056102300300b003aa2ac75956mr18431419vsa.6.1669567099999; Sun, 27 Nov
- 2022 08:38:19 -0800 (PST)
+        with ESMTP id S229436AbiK0RLA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 12:11:00 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16819B1D6;
+        Sun, 27 Nov 2022 09:10:59 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z18so12568830edb.9;
+        Sun, 27 Nov 2022 09:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+3J2xzWHIw55DDcC/Xx1Keqro9xP3bkWfqBSr0xjIc8=;
+        b=OwTDbKi7orj8bjtZEIajGIWFwbXQOoaWTopvxPMNlIjAmEj15b1eBU09bL9l6Vkajf
+         S+okTlIAhtMICgzJqFDKern6feAuD1rGdivxv3p2Y7ghl8VXaGY93X40PC0aYSm/FqTl
+         lsOOhtMnZgK+ANelc+Mbx3mZY744MWhFqKk+4NtJ21IAp9NuQlEdZAIA33s74DH32/TW
+         +CcfcpEBWZjFSGO3hP9j21fx2SrKJ8IZ1IXem4ahfeEtCZbqSrFqZiLCd+hYLsty1a2x
+         HEWEiJC998EMCFFGfFSbumI+IalG3LYxuHmj21eInlXhk8lfX3ChXaujZuvaIYB+DSQn
+         +bpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+3J2xzWHIw55DDcC/Xx1Keqro9xP3bkWfqBSr0xjIc8=;
+        b=iDg/MDd1RcutkA4l3q14ZCceqBQ0n/o3UB/YNFSsRdP5pdO8oSz+lA/NpuiOWj7753
+         UOivvuf5cK4y5FQTKqbJXpR2hvhwAiFU6LpH27J0JGpD+13yZq5tnvXHzeQnd/7mDr4L
+         yyF24OrjHuNGzg21g9KVOrju+52+KKB/QfsOhcAiVcuOzE2nHsATCdt7ZyGjS56Cs3kR
+         81oQD2h3zTx1PgmpGYJR3AzHNLAVMTWmon74i9VNls4kF9SGGGw1uwN/gJJ2zVwhfGRo
+         v2xhmFXRlTH/7q1ExuJJxNXatY0YcFxL9C6KT7W0jJ6mSDvoJI+AnzrTHKeozGlyX2L8
+         1GFw==
+X-Gm-Message-State: ANoB5plDolei0G/H0N4kOeCeW5lX8jexwoeIEtrLcn+VriE1LkE5wVnT
+        GlLDVeLbEQF+qE1BsbpNpmJUd6aDaRKLSg==
+X-Google-Smtp-Source: AA0mqf6neuQ9EqC6RFsSYbHbOsIX04C4NAXbcV9uRns4K2+bDEGZjH7PYYPN3pNe7Q96AOddG2qVGg==
+X-Received: by 2002:a05:6402:1045:b0:461:68e1:ced5 with SMTP id e5-20020a056402104500b0046168e1ced5mr34948365edu.142.1669569057211;
+        Sun, 27 Nov 2022 09:10:57 -0800 (PST)
+Received: from xps13.. (77.241.128.90.mobile.3.dk. [77.241.128.90])
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906539600b007aee7ca1199sm3990394ejo.10.2022.11.27.09.10.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Nov 2022 09:10:56 -0800 (PST)
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+To:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Bruno Thomsen <bth@kamstrup.com>,
+        Bruno Thomsen <bruno.thomsen@gmail.com>
+Subject: [PATCH] USB: serial: cp210x: add Kamstrup RF sniffer PIDs
+Date:   Sun, 27 Nov 2022 18:08:11 +0100
+Message-Id: <20221127170811.7141-1-bruno.thomsen@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221103144200.1479640-1-thierry.reding@gmail.com>
- <Y4C4Cp1D+QEKWiaf@wendy> <Y4C8JvSQuNZiDmJb@wendy>
-In-Reply-To: <Y4C8JvSQuNZiDmJb@wendy>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Sun, 27 Nov 2022 10:38:12 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKFS5nKRihLL60zfqtNujrYGaxN7sp7SbYA_ajC4w2rpQ@mail.gmail.com>
-Message-ID: <CAL_JsqKFS5nKRihLL60zfqtNujrYGaxN7sp7SbYA_ajC4w2rpQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: usb: tegra-xusb: Convert to json-schema
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Wayne Chang <waynec@nvidia.com>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 6:59 AM Conor Dooley <conor.dooley@microchip.com> wrote:
->
-> On Fri, Nov 25, 2022 at 12:41:46PM +0000, Conor Dooley wrote:
-> > Hi Thierry,
-> >
-> > On Thu, Nov 03, 2022 at 03:42:00PM +0100, Thierry Reding wrote:
-> > > From: Thierry Reding <treding@nvidia.com>
-> > >
-> > > Convert the Tegra XUSB controller bindings from the free-form text
-> > > format to json-schema.
-> > >
-> > > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> >
-> > > +        phys = <&{/padctl@0,7009f000/pads/usb2/lanes/usb2-1}>, /* mini-PCIe USB */
-> > > +               <&{/padctl@0,7009f000/pads/usb2/lanes/usb2-2}>, /* USB A */
-> > > +               <&{/padctl@0,7009f000/pads/pcie/lanes/pcie-0}>; /* USB A */
-> >
-> > This seems to be breaking dt_binding_check in today's linux-next:
-> > FATAL ERROR: Can't generate fixup for reference to path &{/padctl@0,7009f000/pads/usb2/lanes/usb2-1}
-> >
-> > Am I missing something? My dt-schema is today's main.
->
-> Apologies for the noise, it appears to have broken several days ago and
-> is not caused by this patch.
->
-> I'll go bisect :)
+The RF sniffers are based on cp210x where the RF frontends
+are based on a different USB stack.
 
-Yes, the above unresolvable paths need to be fixed (to labels). The
-examples are built as overlays so that unresolved labels are allowed,
-but dtc now checks for unresolved paths.
+RF sniffers can analyze packets meta data including power level
+and perform packet injection.
 
-Rob
+Can be used to perform RF frontend self-test when connected to
+a concentrator, ex. arch/arm/boot/dts/imx7d-flex-concentrator.dts
+
+Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+---
+ drivers/usb/serial/cp210x.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index 3bcec419f463..f6fb23620e87 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -195,6 +195,8 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(0x16DC, 0x0015) }, /* W-IE-NE-R Plein & Baus GmbH CML Control, Monitoring and Data Logger */
+ 	{ USB_DEVICE(0x17A8, 0x0001) }, /* Kamstrup Optical Eye/3-wire */
+ 	{ USB_DEVICE(0x17A8, 0x0005) }, /* Kamstrup M-Bus Master MultiPort 250D */
++	{ USB_DEVICE(0x17A8, 0x0011) }, /* Kamstrup 444 MHz RF sniffer */
++	{ USB_DEVICE(0x17A8, 0x0013) }, /* Kamstrup 870 MHz RF sniffer */
+ 	{ USB_DEVICE(0x17A8, 0x0101) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Int Ant) */
+ 	{ USB_DEVICE(0x17A8, 0x0102) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Ext Ant) */
+ 	{ USB_DEVICE(0x17F4, 0xAAAA) }, /* Wavesense Jazz blood glucose meter */
+
+base-commit: faf68e3523c21d07c5f7fdabd0daf6301ff8db3f
+-- 
+2.38.1
+
