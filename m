@@ -2,106 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F2B639B74
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 15:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F45639B7C
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 16:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiK0Owh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 09:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S229569AbiK0PHy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Nov 2022 10:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiK0Owe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 09:52:34 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A161089;
-        Sun, 27 Nov 2022 06:52:32 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5E83D21B2D;
-        Sun, 27 Nov 2022 14:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669560751; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=uGCmWgHRCB1XEw4nEtRb3Itymxy+KuQ10BXGquguuj0=;
-        b=iu71He1gjh3KuhXknf6MZr57jbZpPyCd7AKGTl/YqXjoOb6Y42lOpxkfOSVdwJbuFG3POW
-        GCHj1XRVjk+R4eSMhIdklSxG1THciX/kgoSuUoSdWSb0DxcOur98i/EeU6rTFxnLf4XVfq
-        63FDaU+PmycaDDmtsZW1sdLq73s3xYQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669560751;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=uGCmWgHRCB1XEw4nEtRb3Itymxy+KuQ10BXGquguuj0=;
-        b=ec8gXkjDlh1plvqoiV+rjr15h69FYpn9gNhiyF3pSTRsa3m4ovVrVJ0ZpwQgHPxPbWmP1D
-        vjsQGRcOXbQOoxAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3265A134CE;
-        Sun, 27 Nov 2022 14:52:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 91+2Cq95g2O5SQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Sun, 27 Nov 2022 14:52:31 +0000
-Date:   Sun, 27 Nov 2022 15:52:30 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-usb@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] usb: misc: onboard_usb_hub: Drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20221127155230.144886b7@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        with ESMTP id S229495AbiK0PHx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 10:07:53 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899AFA193;
+        Sun, 27 Nov 2022 07:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=9NdXCH+5Yf+i6OJS1Ny95eYqibE3km5noeNhlOnIk7Q=; b=nKSi8xbJob0n0p+HFPFPoMHK0m
+        aZRJcUDQwwszF7J1P1Z1FnoblDx/lzqYiWcFRODSxWYHc47gdwKQo8bVjjh9YkPWpRPMJn1FlxLHN
+        WvzM6w8Qgjt9LNKmpbo2+NSJQu0F18DrjI7jsyPtlmepi26hMeIoQP1VAqSgiixx/qSw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ozJFQ-003ZU2-4c; Sun, 27 Nov 2022 16:07:12 +0100
+Date:   Sun, 27 Nov 2022 16:07:12 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
+ through devlink_ops::info_get()
+Message-ID: <Y4N9IAlQVsdyIJ9Q@lunn.ch>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
+ <Y4JJ8Dyz7urLz/IM@lunn.ch>
+ <CAMZ6Rq+K+6gbaZ35SOJcR9qQaTJ7KR0jW=XoDKFkobjhj8CHhw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+K+6gbaZ35SOJcR9qQaTJ7KR0jW=XoDKFkobjhj8CHhw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+> I checked, none of gcc and clang would trigger a warning even for a
+> 'make W=12'. More generally speaking, I made sure that my driver is
+> free of any W=12.
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+That is good enough for me.
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/misc/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> I do not care any more as long as it does not result in
+> undefined behaviour.
 
---- linux-6.0.orig/drivers/usb/misc/Kconfig
-+++ linux-6.0/drivers/usb/misc/Kconfig
-@@ -298,7 +298,7 @@ config BRCM_USB_PINMAP
- 
- config USB_ONBOARD_HUB
- 	tristate "Onboard USB hub support"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  Say Y here if you want to support discrete onboard USB hubs that
- 	  don't require an additional control bus for initialization, but
+Agreed. Hopefully sscanf cannot go completely wrong and go off the end
+of the buffer. That i would care about. Bit i guess the USB fuzzers
+would of hit such problems already.
 
-
--- 
-Jean Delvare
-SUSE L3 Support
+	Andrew
