@@ -2,172 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729AB63997B
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 07:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93246639989
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 08:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiK0Goa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 01:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S229541AbiK0HcO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Nov 2022 02:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiK0Go3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 01:44:29 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0521CDF79;
-        Sat, 26 Nov 2022 22:44:27 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id u9so3865817vkk.4;
-        Sat, 26 Nov 2022 22:44:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YAtr1f3rNJDTWizS2487hu89IqSvvQkFyG9LJcuC2s=;
-        b=ZzydsdnYFf/4lSPSjw25OYVJulSW0t61sJNgSlR9PtwT/D9ZXG93mCl9DOY8wyHwpO
-         Bwap5HFCHMs25M5ugFeczcNovjzUB2XKlXpqOi6HX6JwFbfF/QNadz0RV1njLEmgc+wW
-         iZNuzYc/vkpO3mt6+EBkZNPqHytFoin4z4diuG3nksxFAhnXWBbJHMynf5TTr5Ug17BJ
-         8BJqE1pkbI1OCW7Z6YCrDB5x++eOcrFC1PmATFqxja2qOZXACPw+7LNGSyQ7GMenBDNv
-         t6N7Kch4EJcaOxEwrCPFkbfkTzb0YNffk4yMM/vJYWAEeuhN+2a/UD+vFD2JzEkekQn1
-         qruw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9YAtr1f3rNJDTWizS2487hu89IqSvvQkFyG9LJcuC2s=;
-        b=e7edYeYchr7ovkGc9d51pPYnUbZ3hj6yQbXN4fZZN/Mb7EuIWzkWxmIhHdxGajvJZa
-         YXjFH25htB8GkDx4OjJiWcU+D2VNQzJnhp0ThF3okH3nM0qfcJI52YJwAQAEE/NIdc+H
-         yqFuuYAOW+RcvRVp6IYTmFktmppvLEAx8TaIpSJa3E7M1vclYFOdHv0vMPcYlZLpicHO
-         sJ6R00vgNyPKlHWa2AOvK0LUzrRmMnhrYgDbq5yB1fXk/PS9J5XueMhrs9VaWGw4MKYK
-         wAG21S379B2tEoJNH3ibFY/p3sS+/sWu7aP6QPEih9v7XFgzE8Wd2L58+8XcD0FAxhsq
-         7pWQ==
-X-Gm-Message-State: ANoB5pn5/5AImbsQDYCgalo14pJ0ZQzXfibo530wO33dgJ/mj4uW+5aT
-        vdFBhupx5UB35keiUMlWQugzvaGWht0tD+a5m2/nP66a
-X-Google-Smtp-Source: AA0mqf6ANzoWYoUxraYM/BDLBa02uJHpfX2DSQqRUvM/8oCxVyg5xVNrOJLONugRcmJJLFCIKZUNd8S/KvYD7B3q+oQ=
-X-Received: by 2002:a1f:2586:0:b0:3bc:99b5:21b with SMTP id
- l128-20020a1f2586000000b003bc99b5021bmr12050263vkl.24.1669531465858; Sat, 26
- Nov 2022 22:44:25 -0800 (PST)
+        with ESMTP id S229506AbiK0HcN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 02:32:13 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A19C13D28;
+        Sat, 26 Nov 2022 23:32:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669534318; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=AzJcgUosMCw8t54UOBDm/wmUHvVceZrl0dPnsFrwU5nOHbZsKfVS2zcf4mPQJZV2P9e+UybA4UyvMvxtnZOsCsB2f1Sqro44jxST5d2sEbq3daabRFCgWTqERsf/5g2P5tVmothEM3rUF4dtH8Xnq7JFWx+QwWWK5SruFMLA3z8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1669534318; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=10CBDSSMY+O5kxCW3DRK9JuPL0vp25NduovcNFvUa4c=; 
+        b=igfj7JiLBO80BMoVMSFCD1sxlAKhc4gpxo7vFY8LVv1Dyb4qkE2fNM1oxQ9rmO3mFu1Zl4Bgk6NiDga6K1HWkvzDsfR49aWt3Wa3HH0eGJLYUhZG2P1lzWXswxb83ZoPcURQPO9f+94EtS6pFpDWc3dGZGjIXEdIrm/4utjivo0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669534318;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=10CBDSSMY+O5kxCW3DRK9JuPL0vp25NduovcNFvUa4c=;
+        b=SwWfg9NayXpIsvXtxJ1XU1ELPGY2PSbPRCAFF834Mmk/zvF7R5sd7GWAYPYMm0iW
+        q3xyoKiqgfdcrKtMFc/bIqle6e9EaBJPPgd8vTKtTvSALAw4786ycdNpPij3nVDhu6K
+        AUwH3jUvCy+mCpJ7OrbdaJVTAoQg6Lxjw2eV5GZI=
+Received: from edelgard.fodlan.icenowy.me (112.94.100.108 [112.94.100.108]) by mx.zohomail.com
+        with SMTPS id 1669534316404229.14536648713965; Sat, 26 Nov 2022 23:31:56 -0800 (PST)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH 0/6] Rongpin RP-H6B support (and support for GL850G)
+Date:   Sun, 27 Nov 2022 15:31:34 +0800
+Message-Id: <20221127073140.2093897-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20221122085138.332434-1-pawell@cadence.com>
-In-Reply-To: <20221122085138.332434-1-pawell@cadence.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Sun, 27 Nov 2022 14:44:14 +0800
-Message-ID: <CAL411-remXzOE0JXy_j8ySOHYd=mk2hLXdr6d26yB9v6MFqYXA@mail.gmail.com>
-Subject: Re: [PATCH] usb: cdnsp: fix lack of ZLP for ep0
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 4:52 PM Pawel Laszczak <pawell@cadence.com> wrote:
->
-> Patch implements the handling of ZLP for control transfer.
-> To send the ZLP driver must prepare the extra TRB in TD with
-> length set to zero and TRB type to TRB_NORMAL.
-> The first TRB must have set TRB_CHAIN flag, TD_SIZE = 1
-> and TRB type to TRB_DATA.
->
-> cc: <stable@vger.kernel.org>
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+This patchset adds support for Rongpin RP-H6B, and as a dependency,
+power sequence support for its onboard USB hub, GL850G.
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
+The first 3 patches are for GL850G, adding a binding for it and adding
+its support to onboard_usb_hub driver.
 
-Peter
+The last 3 patches are for RP-H6B, also 2 for adding a binding and 1 for
+the real DT.
 
-> ---
->  drivers/usb/cdns3/cdnsp-ring.c | 42 ++++++++++++++++++++++++++--------
->  1 file changed, 32 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 86e1141e150f..fa1fa9b2ff38 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -2006,10 +2006,11 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->
->  int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->  {
-> -       u32 field, length_field, remainder;
-> +       u32 field, length_field, zlp = 0;
->         struct cdnsp_ep *pep = preq->pep;
->         struct cdnsp_ring *ep_ring;
->         int num_trbs;
-> +       u32 maxp;
->         int ret;
->
->         ep_ring = cdnsp_request_to_transfer_ring(pdev, preq);
-> @@ -2019,26 +2020,33 @@ int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->         /* 1 TRB for data, 1 for status */
->         num_trbs = (pdev->three_stage_setup) ? 2 : 1;
->
-> +       maxp = usb_endpoint_maxp(pep->endpoint.desc);
-> +
-> +       if (preq->request.zero && preq->request.length &&
-> +           (preq->request.length % maxp == 0)) {
-> +               num_trbs++;
-> +               zlp = 1;
-> +       }
-> +
->         ret = cdnsp_prepare_transfer(pdev, preq, num_trbs);
->         if (ret)
->                 return ret;
->
->         /* If there's data, queue data TRBs */
-> -       if (pdev->ep0_expect_in)
-> -               field = TRB_TYPE(TRB_DATA) | TRB_IOC;
-> -       else
-> -               field = TRB_ISP | TRB_TYPE(TRB_DATA) | TRB_IOC;
-> -
->         if (preq->request.length > 0) {
-> -               remainder = cdnsp_td_remainder(pdev, 0, preq->request.length,
-> -                                              preq->request.length, preq, 1, 0);
-> +               field = TRB_TYPE(TRB_DATA);
->
-> -               length_field = TRB_LEN(preq->request.length) |
-> -                               TRB_TD_SIZE(remainder) | TRB_INTR_TARGET(0);
-> +               if (zlp)
-> +                       field |= TRB_CHAIN;
-> +               else
-> +                       field |= TRB_IOC | (pdev->ep0_expect_in ? 0 : TRB_ISP);
->
->                 if (pdev->ep0_expect_in)
->                         field |= TRB_DIR_IN;
->
-> +               length_field = TRB_LEN(preq->request.length) |
-> +                              TRB_TD_SIZE(zlp) | TRB_INTR_TARGET(0);
-> +
->                 cdnsp_queue_trb(pdev, ep_ring, true,
->                                 lower_32_bits(preq->request.dma),
->                                 upper_32_bits(preq->request.dma), length_field,
-> @@ -2046,6 +2054,20 @@ int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
->                                 TRB_SETUPID(pdev->setup_id) |
->                                 pdev->setup_speed);
->
-> +               if (zlp) {
-> +                       field = TRB_TYPE(TRB_NORMAL) | TRB_IOC;
-> +
-> +                       if (!pdev->ep0_expect_in)
-> +                               field = TRB_ISP;
-> +
-> +                       cdnsp_queue_trb(pdev, ep_ring, true,
-> +                                       lower_32_bits(preq->request.dma),
-> +                                       upper_32_bits(preq->request.dma), 0,
-> +                                       field | ep_ring->cycle_state |
-> +                                       TRB_SETUPID(pdev->setup_id) |
-> +                                       pdev->setup_speed);
-> +               }
-> +
->                 pdev->ep0_stage = CDNSP_DATA_STAGE;
->         }
->
-> --
-> 2.25.1
->
+Icenowy Zheng (6):
+  dt-bindings: vendor-prefixes: add Genesys Logic
+  dt-bindings: usb: Add binding for Genesys Logic GL850G hub controller
+  usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+  vendor-prefixes: Add Shenzhen Rongpin Electronics Co., Ltd
+  dt-bindings: arm: sunxi: add Rongpin RP-H6B board
+  arm64: dts: allwinner: h6: add Rongpin RP-H6C SoM and RP-H6B board
+
+ .../devicetree/bindings/arm/sunxi.yaml        |   6 +
+ .../bindings/usb/genesys,gl850g.yaml          |  48 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+ arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+ .../boot/dts/allwinner/sun50i-h6-rp-h6b.dts   | 239 ++++++++++++++++++
+ .../boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi  | 180 +++++++++++++
+ drivers/usb/misc/onboard_usb_hub.c            |   2 +
+ drivers/usb/misc/onboard_usb_hub.h            |   5 +
+ 8 files changed, 485 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi
+
+-- 
+2.37.1
+
