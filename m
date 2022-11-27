@@ -2,32 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D38663976B
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Nov 2022 18:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03789639942
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 04:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiKZRQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Nov 2022 12:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S229581AbiK0Dmc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 26 Nov 2022 22:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKZRQh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Nov 2022 12:16:37 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E301B795;
-        Sat, 26 Nov 2022 09:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5Hw31AgKId+3OPnZUDNl0zoIziLgXdVSUBBYyPkaxJA=; b=OCNEu2IqIwoJjsrj84rge722+P
-        RCBQrmpgb9mdXI9VD8F20jmskv9EXiEWZ3OLgbZYVlvfihZ72zXFj7kP7fbl7nxFMxoE32dnB/PAz
-        UZBIVukz0RCsu8ib0W6SZacXCPcG89vQXQnM/l9dZ/rJC19xnv7kYY4Uh20Emz0SSUPk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oyyn2-003WW5-Gn; Sat, 26 Nov 2022 18:16:32 +0100
-Date:   Sat, 26 Nov 2022 18:16:32 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+        with ESMTP id S229480AbiK0Dmc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Nov 2022 22:42:32 -0500
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2400DF1;
+        Sat, 26 Nov 2022 19:42:29 -0800 (PST)
+Received: by mail-pf1-f170.google.com with SMTP id w79so7462371pfc.2;
+        Sat, 26 Nov 2022 19:42:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FucA3Sodw38qvlVLRVvNtzxLWzWTb944v88XDY3XbJY=;
+        b=KQsKXfxiaLtAsHNz+uuP5iUFaDUT4D85gZb2vVlOmRwlmwUO2hx54z3sVD7Z9ddyvV
+         Ueh/N3pU1ZtoriWKPkQU/eC+KZPnaPXYqL9k5S8y73jIGRhHe/Gdg8LVKizndL63Wr52
+         0IE54iuoo0/QDeVN3BVGDmw+A42y1ihGDOL+5joKsWXpNpTa1Krk9PQIoxFL1iSMwXuh
+         j1JoZds0Ukqe6c35Jvp++rnNmtZObgnN3O7OQpFXx/bdeLTsLHJ3kO2SrmJE8I/9EYZY
+         A7tUHkGbft+12D5rrI6lJDCTN1yu1qvbjWuxTjoZC/OfH8rdO6KC9zAODQQUk+TJ2TWC
+         XA9g==
+X-Gm-Message-State: ANoB5pklAwcItLyvz9tCj0XGGwVWe4kZmFC94EepQMv4K/oSJLARYV+F
+        GoLqxPbfazv9gXjV2hMxotyxbPI7N/7YmRNLZqM=
+X-Google-Smtp-Source: AA0mqf4pd0LS9qQTVN4KChy6A06YwOUnjFr7T249St3XDx3faAgp823CKEfuq8gJFBEKhemKCjH0hmTK280KuYTb4i0=
+X-Received: by 2002:a62:1a8b:0:b0:572:7c58:540 with SMTP id
+ a133-20020a621a8b000000b005727c580540mr27182789pfa.69.1669520549055; Sat, 26
+ Nov 2022 19:42:29 -0800 (PST)
+MIME-Version: 1.0
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
+ <Y4JJ8Dyz7urLz/IM@lunn.ch>
+In-Reply-To: <Y4JJ8Dyz7urLz/IM@lunn.ch>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 27 Nov 2022 12:42:17 +0900
+Message-ID: <CAMZ6Rq+K+6gbaZ35SOJcR9qQaTJ7KR0jW=XoDKFkobjhj8CHhw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
+ through devlink_ops::info_get()
+To:     Andrew Lunn <andrew@lunn.ch>
 Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,58 +52,113 @@ Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Saeed Mahameed <saeed@kernel.org>,
         Jiri Pirko <jiri@nvidia.com>,
         Lukas Magel <lukas.magel@posteo.net>
-Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
- through devlink_ops::info_get()
-Message-ID: <Y4JJ8Dyz7urLz/IM@lunn.ch>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> +struct es58x_sw_version {
-> +	u8 major;
-> +	u8 minor;
-> +	u8 revision;
-> +};
+Hi Andrew,
 
-> +static int es58x_devlink_info_get(struct devlink *devlink,
-> +				  struct devlink_info_req *req,
-> +				  struct netlink_ext_ack *extack)
-> +{
-> +	struct es58x_device *es58x_dev = devlink_priv(devlink);
-> +	struct es58x_sw_version *fw_ver = &es58x_dev->firmware_version;
-> +	struct es58x_sw_version *bl_ver = &es58x_dev->bootloader_version;
-> +	struct es58x_hw_revision *hw_rev = &es58x_dev->hardware_revision;
-> +	char buf[max(sizeof("xx.xx.xx"), sizeof("axxx/xxx"))];
-> +	int ret = 0;
-> +
-> +	if (es58x_sw_version_is_set(fw_ver)) {
-> +		snprintf(buf, sizeof(buf), "%02u.%02u.%02u",
-> +			 fw_ver->major, fw_ver->minor, fw_ver->revision);
+Thank you for the review and the interesting comments on the parsing.
 
-I see you have been very careful here, but i wonder if you might still
-get some compiler/static code analyser warnings here. As far as i
-remember %02u does not limit it to two characters. If the number is
-bigger than 99, it will take three characters. And your types are u8,
-so the compiler could consider these to be 3 characters each. So you
-end up truncating. Which you look to of done correctly, but i wonder
-if some over zealous checker will report it? Maybe consider
-"xxx.xxx.xxx"?
+On. 27 Nov. 2022 at 02:37, Andrew Lunn <andrew@lunn.ch> wrote:
+> > +struct es58x_sw_version {
+> > +     u8 major;
+> > +     u8 minor;
+> > +     u8 revision;
+> > +};
+>
+> > +static int es58x_devlink_info_get(struct devlink *devlink,
+> > +                               struct devlink_info_req *req,
+> > +                               struct netlink_ext_ack *extack)
+> > +{
+> > +     struct es58x_device *es58x_dev = devlink_priv(devlink);
+> > +     struct es58x_sw_version *fw_ver = &es58x_dev->firmware_version;
+> > +     struct es58x_sw_version *bl_ver = &es58x_dev->bootloader_version;
+> > +     struct es58x_hw_revision *hw_rev = &es58x_dev->hardware_revision;
+> > +     char buf[max(sizeof("xx.xx.xx"), sizeof("axxx/xxx"))];
+> > +     int ret = 0;
+> > +
+> > +     if (es58x_sw_version_is_set(fw_ver)) {
+> > +             snprintf(buf, sizeof(buf), "%02u.%02u.%02u",
+> > +                      fw_ver->major, fw_ver->minor, fw_ver->revision);
+>
+> I see you have been very careful here, but i wonder if you might still
+> get some compiler/static code analyser warnings here. As far as i
+> remember %02u does not limit it to two characters.
 
-Nice paranoid code by the way. I'm not the best at spotting potential
-buffer overflows, but this code looks good. The only question i had
-left was how well sscanf() deals with UTF-8.
+I checked, none of gcc and clang would trigger a warning even for a
+'make W=12'. More generally speaking, I made sure that my driver is
+free of any W=12.
+(except from the annoying spam from GENMASK_INPUT_CHECK for which my
+attempts to silence it were rejected:
+https://lore.kernel.org/all/20220426161658.437466-1-mailhol.vincent@wanadoo.fr/
+).
 
-     Andrew
+> If the number is
+> bigger than 99, it will take three characters. And your types are u8,
+> so the compiler could consider these to be 3 characters each. So you
+> end up truncating. Which you look to of done correctly, but i wonder
+> if some over zealous checker will report it?
 
+That zealous check is named -Wformat-truncation in gcc (I did not find
+it in clang). Even W=3 doesn't report it so I consider this to be
+fine.
+
+> Maybe consider "xxx.xxx.xxx"?
+
+If I do that, I also need to consider the maximum length of the
+hardware revision would be "a/xxxxx/xxxxx" because the numbers are
+u16. The declaration would become:
+
+        char buf[max(sizeof("xxx.xxx.xxx"), sizeof("axxxxx/xxxxx"))];
+
+Because no such warning exists in the kernel, I do not think the above
+line to be a good trade off. I would like to keep things as they are,
+it is easier to read. That said, I will add an extra check in
+es58x_parse_sw_version() and es58x_parse_hw_revision() to assert that
+the number are not bigger than 99 for the software version (and not
+bigger than 999 for the hardware revision). That way the code will
+guarantee that the truncation can never occur.
+
+> Nice paranoid code by the way. I'm not the best at spotting potential
+> buffer overflows, but this code looks good. The only question i had
+> left was how well sscanf() deals with UTF-8.
+
+It does not consider UTF-8. The %u is a _parse_integer_limit() in disguise.
+  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/vsprintf.c#L3637
+  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/vsprintf.c#L70
+
+_parse_integer_limit() just check for ASCII digits so the first UTF-8
+character would make the function return.
+  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/kstrtox.c#L65
+
+For example, this:
+  "ＦＷ:03.00.06"
+would fail parsing because sscanf() will not be able to match the
+first byte of the UTF-8 'Ｆ' with 'F'.
+
+Another example:
+  "FW:０３.００.０６"
+would also fail parsing because _parse_integer_limit() will not
+recognize the first byte of UTF-8 '０' as a valid ASCII digit and
+return early.
+
+To finish, a very edge case:
+  "FW:03.00.0６"
+would incorrectly succeed. It will parse "FW:03.00.0" successfully and
+will return when encountering the UTF-8 '６'. But I am not willing to
+cover that edge case. If the device goes into this level of
+perversion, I do not care any more as long as it does not result in
+undefined behaviour.
+
+
+Yours sincerely,
+Vincent Mailhol
