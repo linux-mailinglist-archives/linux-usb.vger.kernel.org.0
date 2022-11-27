@@ -2,93 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE098639A02
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 12:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D60639A2C
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 12:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiK0LEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 06:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S229677AbiK0LmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Nov 2022 06:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiK0LEV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 06:04:21 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF0811829;
-        Sun, 27 Nov 2022 03:04:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1669547051; bh=j5x/YM8Ee+FDaAMjtTqVMDmvqJNc8X54OUCWd4hc4cA=;
-        h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
-        b=ds7yHmw5KYLe6cXeDK5wyFgfOEiXvRPItGqPvv4U/HmvxUw5QvUyKAlk95RTLfML6
-         PZC+nr9LXZpz6fddvIROX6HCN5NIQfA9ykypM7joBrD3qAQmxGIENa/mYckzpp2fGD
-         0iPVZsZGlHUpwrxg4Fd/taX/1zBdAV7k70B2TvFrygztMVkZ5mDk5Nddtd1Hx4WbYl
-         t4BvWgUsf/0EaOADsllN2RxseWkEHszLz1blCMG/5Iq4+6+355ZdpvN8pub1ZbNMCE
-         QOMtGJbcOk9DetGjvuXtjtySszrbR7EWjnuSzHyXXGJ6HGKxitkrd/eXRnasqnuocK
-         TLXYjsSdd0Fjg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from 9300 ([93.221.18.29]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJVDW-1pIzGE3OSu-00JpuS; Sun, 27
- Nov 2022 12:04:10 +0100
-Date:   Sun, 27 Nov 2022 12:04:09 +0100 (CET)
-From:   Andreas Bergmeier <abergmeier@gmx.net>
-To:     Andreas Bergmeier <abergmeier@gmx.net>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jiri Kosina <jikos@kernel.org>, linux-leds@vger.kernel.org,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: Litra Glow on Linux
-In-Reply-To: <e6cb795-e8c4-4570-7a7b-3bbd133b98cb@9300>
-Message-ID: <5ea1b921-d4b3-403c-64cd-58939571c638@9300>
-References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu> <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com> <CAO-hwJJ7cF-4kd8Mi6bb5n-k5LuMrWbpdMqFs82y7iQOscr-7g@mail.gmail.com> <CABfF9mNfU=swmpVXfVr7pYWs72jrd-HDY8+_NXyBDAKa4CWG5Q@mail.gmail.com>
- <CAO-hwJ+i3zd=CyU0T+Nb1vGfZfenMBH16ern_ncTTKEpyGAuBA@mail.gmail.com> <CABfF9mNrMx2BzU5tbBeapY15M4Ls_5xYBGfVB=Up5TJu=eWCcg@mail.gmail.com> <CAO-hwJJGAWkhZgGeLBruqCoskY5PBP-STs4kh-P6fBvpuSgpUw@mail.gmail.com> <CABfF9mO3SQZvkQGOC09H5s7EEd2UGhpE=GYB46g_zF3aEOVn=Q@mail.gmail.com>
- <CABfF9mNbpTdAnChkZNKFed6C7n=Hyq-69rMUeDENE8ptLjJMSw@mail.gmail.com> <CAO-hwJ+PysPKFG=a9+L8vwhiw4uY3F3DZmg4FwgPWGZ7LPt4EA@mail.gmail.com> <2a20d7d1-55df-4861-5cf1-dee19536ed5@9300> <CAO-hwJJDE-8TL2MbTX2xX3RfKEeh8H5h24UkcZJJhH5ptdpRaQ@mail.gmail.com>
- <e6cb795-e8c4-4570-7a7b-3bbd133b98cb@9300>
+        with ESMTP id S229569AbiK0Ll6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 06:41:58 -0500
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F8B85D;
+        Sun, 27 Nov 2022 03:41:56 -0800 (PST)
+Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
+        by mxout3.routing.net (Postfix) with ESMTP id 5FD2C6049F;
+        Sun, 27 Nov 2022 11:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1669549313;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=k349OVoE48gwODCSz008WxiHQQGH0IaZlGYvTDJxc5E=;
+        b=RZy6qm4+4DH3SDLcK8KXNxCGuU2HeGprztTqRY5gnNFCoC+NR1HiQB8e9mNFbfIKS+EKdl
+        c2cihu7sJIYT1zEWLapvwtP9mLxHoovLiV2xdFoDVKyyGvLqQZpQu3mjg4UmgNsFvklL8k
+        UjLeJA55dnqVlpUbBv4bK4Vo5wCoxTY=
+Received: from frank-G5.. (fttx-pool-217.61.157.144.bambit.de [217.61.157.144])
+        by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 0DE951226D4;
+        Sun, 27 Nov 2022 11:41:53 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [next v7 0/8] Add BananaPi R3
+Date:   Sun, 27 Nov 2022 12:41:34 +0100
+Message-Id: <20221127114142.156573-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:rVo0zLsnEub5jUisHHE/8DViIpvORT2yKsvPAPj9cpu4Rt2qWzi
- 0h3zwJJ3Z9y0BM0BZN0/Ji3Dz2d1d656QUKSjIOOx+ayKqNai3xua1TqqH6OIHxK4yZTB6w
- eDlnT8TeTWdgWbxlXqmUzcMYsp8tXjb+Q7GwCXw0Hya+XRQdfE0aXELditY+k/ceB+UCfD8
- FkSQMHaGRPF5SnW8UboHA==
-UI-OutboundReport: notjunk:1;M01:P0:tcliyAm9XJk=;vtYs//Q6vNXaqYFGze1HXLlM+eN
- e8oVYTjtC4J9nA7AfwvWeXGac9ktzw+yyG9ABkilVsuVgiX65xZrJyD9ssBQdux8MWIZtGSwl
- sosigBqQQwTuSyJenklGIK+XGaXDdBat7UzkiJlD2J0UvR+CCVZ8tFs/2SM+k6DtG7pJmVJJD
- kYmZ0MxV/QBxFITMNC/uhizXYWRwW/QdJyFdJ/ZyAqbQJbams8bxaxpsmzzgtOw/qcheMXxs2
- 8/KaBhM9ol8SgkA8gk2E44saIWfszE7O1tebI7cAysiRLw6qQKrfGSScGRBqAMgd9/+nvO+pW
- Lsn+EBsbelGGgzk2KEKDT+W2TkQuixt/YA2kDwJTQYEfWdo4RYkx8R4ZzAxJvAJOnAcpbmEpW
- DyCqgRQlp+U82phYuCZLipy8+Xe6cinc/zfT8PeNZqBstTqZYMdnHrhAPWBciuuQnyXad6WHT
- qwuOxvSGGoT/+dFt4Mrh3Lqh3W6XRy/syyrB65ROqkHYABe0dNinI+J1zcaLIYlCEVQKBTR8A
- 8ODuw3V0H/13osPGIU6woDotVOlqkXVsAN7zU+abIHXHuyfoQuO9LKtngIHzk9L4D0NmdHmrW
- T+aViIWFMh7G/2QbPV7e9ZgNOXhJKxlkZFZQho1er2+8Lf1LQDdPD9QOlZ+xUJOnYQLbSOf7r
- odjVdvlTRxTy7Jv9kxzXSrECsJtW+w6fqeVRcFlpzlH7TEuyJOUeVMxaWCrxNEiEARRdxyaKO
- TIAnDvNL7qEADkrYxbagmgdLL542SfarPPif6dYEGbaUEwWwziI2iT510WVZvIC0DL7AOaSqJ
- TXo5YoISaZWOzkqFkC2dvnknoS2YipYA42TNfUg4wGi0FzM0QE/XvJ+SMTaZTjZzY44Y9+3Oe
- fwBYDLH7A4TgXfx8ZOM6QCunaziaBPA/5ouQVdpraQMegt7U86SsgoCIhNz0BGjQy70mXTwvK
- YjYFRQ==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Frank Wunderlich <frank-w@public-files.de>
 
-On Sat, 19 Nov 2022, Andreas Bergmeier wrote:
+This Series adds some Nodes to mt7986 devicetree and the BananaPi R3
 
-> So after some tinkering I have code now that succeeds in retrieving stat=
-e
-> via sending reports once. After that all following sends time out.
-> I am at a loss what I am doing wrong, tbh. RFC below.
-I noticed that by default hidraw, hiddev and hid-input are loaded for
-Glow. Probably because it exposes a Consumer Control page in Reports.
-Is it possible that hid-input interferes with hid-logitech-hidpp?
-I was trying to disable hid-input using
-- HIDPP_QUIRK_NO_HIDINPUT
-- hid_ignore_list
+This version is rebased on linux next from 2022/11/27.
 
-For the former it still seems to load hid-input.
-For the latter it doesn't seem to load hid-logitech-hidpp.
-I couldn't yet untangle all the hid driver indirections and loading.
+i included sams series for mt7986 DTS with small changes
+https://patchwork.kernel.org/project/linux-mediatek/cover/20220427124741.18245->
+
+i had run full dtbs-check but i end up with some strange warnings in
+ethernet-node that should not come up as phy-handle and sfp/managed
+properties are already defined. These errors also came up for mt7986a-rfb.
+
+phy-handle made optional
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/mediatek,net.yaml#n265
+
+property sfp/managed (which is included for mac subnode in yaml above):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml#n137
+
+changes:
+v7:
+- rebase on next so dropped already applied patches
+- squashed overlay-patch into the bpi-r3 base support
+- moved regulators from mmc-dts to common dtsi
+- changed dtsi to dts (as board base dtb) and mmc-dts to overlays
+- renamed overlays to dtso
+- removed angelos RB because of changes in bpi-r3 patch
+
+v6:
+- dropped regulators from usb-patch as suggested by chunfeng yun
+- moved 3v3 regulator to mmc-patch as it is needed for emmc to work
+  rfbs were tested by sam shih, r3 by me
+- dropped RB from AngeloGioacchino from mmc-patch due to this change
+- fixed links in coverletter which were broken in v5
+- i hope this series is sent without errors now (my mailprovider limited
+  mails last 2 times while sending part 10)
+
+v5:
+- changed usb ranges/reg/unit-adress
+- added reviewd-by's except usb-part due to changes
+
+v4:
+- dropped RFC prefix
+- rebase on matthias' mtk dts-next (for 6.2) branch
+- added author information to overlays
+- fixed sfp binding error
+- added fix for moving wed_pcie node
+- readded missing compatible patches
+
+v3:
+- changed mmc pull-ups
+- added patch for board binding (sent separately before)
+- added pcie node in mt7986 (not yet again in r3)
+- added dt overlays
+
+Frank Wunderlich (5):
+  dt-bindings: phy: mediatek,tphy: add support for mt7986
+  dt-bindings: usb: mtk-xhci: add support for mt7986
+  dt-bindings: PCI: mediatek-gen3: add SoC based clock config
+  dt-bindings: PCI: mediatek-gen3: add support for mt7986
+  arm64: dts: mt7986: add Bananapi R3
+
+Sam Shih (3):
+  arm64: dts: mt7986: add usb related device nodes
+  arm64: dts: mt7986: add mmc related device nodes
+  arm64: dts: mt7986: add pcie related device nodes
+
+ .../bindings/pci/mediatek-pcie-gen3.yaml      |  64 ++-
+ .../bindings/phy/mediatek,tphy.yaml           |   1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   5 +
+ .../mt7986a-bananapi-bpi-r3-emmc.dtso         |  30 ++
+ .../mt7986a-bananapi-bpi-r3-nand.dtso         |  55 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-nor.dtso |  68 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-sd.dtso  |  24 +
+ .../dts/mediatek/mt7986a-bananapi-bpi-r3.dts  | 448 ++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts  | 120 +++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 122 +++++
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts  |   8 +
+ 12 files changed, 934 insertions(+), 12 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dtso
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dtso
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+
+-- 
+2.34.1
+
