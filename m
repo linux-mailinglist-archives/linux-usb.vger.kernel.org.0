@@ -2,73 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44847639CF9
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 21:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E30639E33
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 00:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiK0Ut6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 15:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S229581AbiK0XTr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Nov 2022 18:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiK0Ut4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 15:49:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF842DF00;
-        Sun, 27 Nov 2022 12:49:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AC7E60ED3;
-        Sun, 27 Nov 2022 20:49:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58E55C433D7;
-        Sun, 27 Nov 2022 20:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669582194;
-        bh=SPR1g3ZeM87H6b5isjxQU5Zu+/pxdZHzEY9PCb4biQA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HbJU9QV+UWZxIX64pUxALhRf2v2QlV0CqKjWvuZzY9HKQwFlIKvqpkb31CscVQUW1
-         Yn++w+CvQhcVidJbmRarmmUsoCe6BRP4aeWGGJEUu0VuNksKO+RKKq6DuEvrEtBe6G
-         GDysBpgTrOLvMxI6KgARW6bPabe2wkDoOlUcTOj++Wf/dAYMMwNvYkphJZv0xby1sV
-         kXvhqDhc2z8HUuEDKmRwHTfJjki2pzX0V4BpwgebBFYQeJ7Qe6vYccs53GWQMdDNur
-         Ju+0ZCWy4/rQMjwW4GBd5gT13s170QW/jsfbaO76DFYH1TYhd1sI5eEyOWwakCBgZK
-         NyX3nz/V54odA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4402DE5250B;
-        Sun, 27 Nov 2022 20:49:54 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 6.1-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y4Nt1l1L+kuOTEfO@kroah.com>
-References: <Y4Nt1l1L+kuOTEfO@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y4Nt1l1L+kuOTEfO@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc7
-X-PR-Tracked-Commit-Id: 7a21b27aafa3edead79ed97e6f22236be6b9f447
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9066e1518645a6c754709e44c3f58dc6a76a6d21
-Message-Id: <166958219427.7005.15371594447992401253.pr-tracker-bot@kernel.org>
-Date:   Sun, 27 Nov 2022 20:49:54 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229510AbiK0XTq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 18:19:46 -0500
+X-Greylist: delayed 457 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Nov 2022 15:19:45 PST
+Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59412FAEC
+        for <linux-usb@vger.kernel.org>; Sun, 27 Nov 2022 15:19:45 -0800 (PST)
+Received: by soltyk.jannau.net (Postfix, from userid 1000)
+        id EE62B26F404; Mon, 28 Nov 2022 00:12:06 +0100 (CET)
+Date:   Mon, 28 Nov 2022 00:12:06 +0100
+From:   Janne Grunau <j@jannau.net>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: dwc3_set_mode vs. __dwc3_set_mode race
+Message-ID: <20221127231206.GA5547@jannau.net>
+References: <dad79707-a778-4868-8684-f1658a38b4d0@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dad79707-a778-4868-8684-f1658a38b4d0@app.fastmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sun, 27 Nov 2022 15:01:58 +0100:
+Hej,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc7
+On 2022-11-26 10:10:48 +0100, Sven Peter wrote:
+> Hi Thinh,
+> 
+> I've run into a race between dwc3_set_mode and __dwc3_set_mode accessing
+> dwc->desired_dr_role: It's an incredibly tight race that's hard to hit since
+> role switch events need to come in just after each other. It's reproducible
+> with an Apple M1 connected to a device that very quickly switches
+> roles when shutting down (which happens to be another M1). This sometimes
+> triggers a device->host->device switch sequence which is fast enough to hit this
+> race:
+> 
+> CPU A
+> 	dwc3_set_mode(DWC3_GCTL_PRTCAP_HOST) // first role switch event
+> 		spin_lock_irqsave(&dwc->lock, flags);
+> 		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_HOST
+> 		spin_unlock_irqrestore(&dwc->lock, flags);
+> 		queue_work(system_freezable_wq, &dwc->drd_work); // true, schedules __dwc3_set_mode
+> 
+> CPU B
+> 	__dwc3_set_mode
+> 		// ....
+> 		spin_lock_irqsave(&dwc->lock, flags);
+> 		dwc3_set_prtcap(dwc, dwc->desired_dr_role); // DWC3_GCTL_PRTCAP_HOST
+> 		spin_unlock_irqrestore(&dwc->lock, flags);
+> 
+> CPU A
+> 	dwc3_set_mode(DWC3_GCTL_PRTCAP_DEVICE) // second role switch event
+> 		spin_lock_irqsave(&dwc->lock, flags);
+> 		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_DEVICE
+> 		spin_unlock_irqrestore(&dwc->lock, flags);
+> 
+> CPU B (continues running __dwc3_set_mode)
+> 	switch (dwc->desired_dr_role) { // DWC3_GCTL_PRTCAP_DEVICE
+> 	case DWC3_GCTL_PRTCAP_HOST:
+> 		// not executed since desired_dr_role is DWC3_GCTL_PRTCAP_DEVICE now
+> 		break;
+> 
+> CPU A (continues running dwc3_set_mode)
+> 	queue_work(system_freezable_wq, &dwc->drd_work); // __dwc3_set_mode is still running
+> 
+> CPU B (continues running __dwc3_set_mode)
+> 	case DWC3_GCTL_PRTCAP_DEVICE:
+> 		// ....
+> 		ret = dwc3_gadget_init(dwc);
+> 
+> 
+> We then have DWC3_GCTL.DWC3_GCTL_PRTCAPDIR = DWC3_GCTL_PRTCAP_HOST and
+> dwc->current_dr_role = DWC3_GCTL_PRTCAP_HOST but initialized the controller in
+> device mode when calling dwc3_gadget_init. This obviously doesn't work and is
+> not easy to recover from.
+> 
+> Unfortunately we can't just lock dwc3->mutex since dwc3_set_mode may be called
+> from an extcon interrupt in atomic context (which is probably the reason for
+> deferring the mode switch to a workqueue).
+> 
+> Otherwise I can only think of creating a single-threaded work queue and
+> allocating a new work_struct together with desired_role inside dwc3_set_mode
+> and putting that onto the queue, i.e. something like:
+> 
+> struct dwc3_set_mode_work {
+> 	struct dwc3 *dwc;
+> 	u32 desired_dr_role;
+> 	struct work_struct work;
+> };
+> 
+> void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
+> {
+> 	struct dwc3_set_mode_work *work = kzalloc(sizeof(*work), GFP_ATOMIC);
+> 
+> 	INIT_WORK(&work->work, __dwc3_set_mode);
+> 	work->dwc = dwc;
+> 	work->desired_dr_role = mode;
+> 	queue_work(dwc->drd_work_queue, &work->work);
+> }
+> 
+> That way all role switch events will be executed in order and we can't race
+> desired_dr_role anymore.
+> I'm not very happy with that solution but can't think of anything else.
+> 
+> Any thoughts or ideas? I can otherwise prepare a patch.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9066e1518645a6c754709e44c3f58dc6a76a6d21
+your alternate solution to operate on a stack copy of 
+dwc->desired_dr_role in __dwc3_set_mode() avoids this race and seems to 
+work fine. Tested with 2 Apple silicon devices. Trivial patch left to 
+the sender since I did just the trivial typing and testing.
 
-Thank you!
+thanks
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Janne
