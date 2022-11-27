@@ -2,158 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804A163995D
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 06:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729AB63997B
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Nov 2022 07:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiK0FKr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 00:10:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S229546AbiK0Goa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Nov 2022 01:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiK0FKp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 00:10:45 -0500
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C9613F6F;
-        Sat, 26 Nov 2022 21:10:44 -0800 (PST)
-Received: by mail-pf1-f181.google.com with SMTP id a9so4092121pfr.0;
-        Sat, 26 Nov 2022 21:10:44 -0800 (PST)
+        with ESMTP id S229493AbiK0Go3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 01:44:29 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0521CDF79;
+        Sat, 26 Nov 2022 22:44:27 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id u9so3865817vkk.4;
+        Sat, 26 Nov 2022 22:44:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9YAtr1f3rNJDTWizS2487hu89IqSvvQkFyG9LJcuC2s=;
+        b=ZzydsdnYFf/4lSPSjw25OYVJulSW0t61sJNgSlR9PtwT/D9ZXG93mCl9DOY8wyHwpO
+         Bwap5HFCHMs25M5ugFeczcNovjzUB2XKlXpqOi6HX6JwFbfF/QNadz0RV1njLEmgc+wW
+         iZNuzYc/vkpO3mt6+EBkZNPqHytFoin4z4diuG3nksxFAhnXWBbJHMynf5TTr5Ug17BJ
+         8BJqE1pkbI1OCW7Z6YCrDB5x++eOcrFC1PmATFqxja2qOZXACPw+7LNGSyQ7GMenBDNv
+         t6N7Kch4EJcaOxEwrCPFkbfkTzb0YNffk4yMM/vJYWAEeuhN+2a/UD+vFD2JzEkekQn1
+         qruw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jX4FlIDKRZ6HtC7tR+0qLxHARsOw0Qkz+IpKaPjHkjU=;
-        b=mNalp5d0XlgnowPUC0RWR8s3zax7wmDc3l9ttGYSVLZbbh7f1px7/vU4mY9XlWwx0t
-         l6QkvMnEL+/X1btFNvQCztsXWE5pCWQrA79frkG7qUO0nOFIbU2ybCkcCGmgMkXpnUDo
-         P/CKdre7nA0CS16+ESFGlqKSctZ3C3DyOTrnyht7j8fB8Q4gapjyEmFPSVV/1YvGEBP9
-         cz55DOQtSHOIriVhXQrsQxrHNpoab/1nIeTSKCeEQtAq6zfCongG+DF8+LcMkrQET1FU
-         STAWD7K4y9BJI3egnoRuxmZvH/5uW9keq55FPRwZFGmUKhrgUO78QCymqhVrVi67C/ZL
-         XUeA==
-X-Gm-Message-State: ANoB5pniHarzF5ogHzG7HV6SyOpj8EMgyYw3RHA+nsB7DHT7pCjzNnsv
-        2vbRGMq8CKtKRuAAETCLYatXd1X4xkJAvdSewLp+gFJ66R9PuA==
-X-Google-Smtp-Source: AA0mqf5KnMk1Qz/tCRijWthIIOCkvgh2jkfVvEXCtwLeke3lQqeSJPhiqSzMfqsRQPHHkUJbdcbVdv4tRT8lvEocB+Q=
-X-Received: by 2002:a05:6a00:194a:b0:56b:a795:e99c with SMTP id
- s10-20020a056a00194a00b0056ba795e99cmr35289001pfk.14.1669525843741; Sat, 26
- Nov 2022 21:10:43 -0800 (PST)
+        bh=9YAtr1f3rNJDTWizS2487hu89IqSvvQkFyG9LJcuC2s=;
+        b=e7edYeYchr7ovkGc9d51pPYnUbZ3hj6yQbXN4fZZN/Mb7EuIWzkWxmIhHdxGajvJZa
+         YXjFH25htB8GkDx4OjJiWcU+D2VNQzJnhp0ThF3okH3nM0qfcJI52YJwAQAEE/NIdc+H
+         yqFuuYAOW+RcvRVp6IYTmFktmppvLEAx8TaIpSJa3E7M1vclYFOdHv0vMPcYlZLpicHO
+         sJ6R00vgNyPKlHWa2AOvK0LUzrRmMnhrYgDbq5yB1fXk/PS9J5XueMhrs9VaWGw4MKYK
+         wAG21S379B2tEoJNH3ibFY/p3sS+/sWu7aP6QPEih9v7XFgzE8Wd2L58+8XcD0FAxhsq
+         7pWQ==
+X-Gm-Message-State: ANoB5pn5/5AImbsQDYCgalo14pJ0ZQzXfibo530wO33dgJ/mj4uW+5aT
+        vdFBhupx5UB35keiUMlWQugzvaGWht0tD+a5m2/nP66a
+X-Google-Smtp-Source: AA0mqf6ANzoWYoUxraYM/BDLBa02uJHpfX2DSQqRUvM/8oCxVyg5xVNrOJLONugRcmJJLFCIKZUNd8S/KvYD7B3q+oQ=
+X-Received: by 2002:a1f:2586:0:b0:3bc:99b5:21b with SMTP id
+ l128-20020a1f2586000000b003bc99b5021bmr12050263vkl.24.1669531465858; Sat, 26
+ Nov 2022 22:44:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
- <Y4JEGYMtIWX9clxo@lunn.ch>
-In-Reply-To: <Y4JEGYMtIWX9clxo@lunn.ch>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 27 Nov 2022 14:10:32 +0900
-Message-ID: <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
+References: <20221122085138.332434-1-pawell@cadence.com>
+In-Reply-To: <20221122085138.332434-1-pawell@cadence.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Sun, 27 Nov 2022 14:44:14 +0800
+Message-ID: <CAL411-remXzOE0JXy_j8ySOHYd=mk2hLXdr6d26yB9v6MFqYXA@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdnsp: fix lack of ZLP for ep0
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue. 27 Nov. 2022 at 01:51, Andrew Lunn <andrew@lunn.ch> wrote:
-> > @@ -2196,11 +2198,12 @@ static struct es58x_device *es58x_init_es58x_dev(struct usb_interface *intf,
-> >               ops = &es581_4_ops;
-> >       }
-> >
-> > -     es58x_dev = devm_kzalloc(dev, es58x_sizeof_es58x_device(param),
-> > -                              GFP_KERNEL);
-> > -     if (!es58x_dev)
-> > +     devlink = devlink_alloc(&es58x_dl_ops, es58x_sizeof_es58x_device(param),
-> > +                             dev);
-> > +     if (!devlink)
-> >               return ERR_PTR(-ENOMEM);
-> >
-> > +     es58x_dev = devlink_priv(devlink);
+On Tue, Nov 22, 2022 at 4:52 PM Pawel Laszczak <pawell@cadence.com> wrote:
 >
-> That is 'interesting'.
-
-Another interesting thing I found is:
-https://elixir.bootlin.com/linux/v6.1-rc6/source/drivers/net/ethernet/intel/ice/ice_devlink.c#L866
-
-Because devlink does not have an equivalent to devm_kzalloc(), that
-driver uses devm_add_action_or_reset() instead. But any other drivers
-will call devlink_free() in their disconnect function. So here, I just
-followed the trend.
-
-> Makes me wonder about lifetimes of different
-> objects. Previously your es58x_dev structure would disappear when the
-> driver is released, or an explicit call to devm_kfree(). Now it
-> disappears when devlink_free() is called.
-
-Even before that, this driver used to release es58x_dev in its
-disconnect() function. I changed it to use devm_kzalloc() last year
-after discovering its existence.
-  https://git.kernel.org/torvalds/linux/c/6bde4c7fd845
-
->Any danger of use after free here?
-
-devlink_alloc() allocates one continuous block for both the devlink
-and the device priv (struct es58x_dev here):
-  https://elixir.bootlin.com/linux/v6.1-rc6/source/net/core/devlink.c#L9629
-
-So calling devlink_free() also releases struct es58x_dev.
-
-> USB devices always make me wonder about life times rules since they
-> are probably the mode dynamic sort of device the kernel has the
-> handle, them just abruptly disappearing.
+> Patch implements the handling of ZLP for control transfer.
+> To send the ZLP driver must prepare the extra TRB in TD with
+> length set to zero and TRB type to TRB_NORMAL.
+> The first TRB must have set TRB_CHAIN flag, TD_SIZE = 1
+> and TRB type to TRB_DATA.
 >
-> >       es58x_dev->param = param;
-> >       es58x_dev->ops = ops;
-> >       es58x_dev->dev = dev;
-> > @@ -2247,6 +2250,8 @@ static int es58x_probe(struct usb_interface *intf,
-> >       if (ret)
-> >               return ret;
-> >
-> > +     devlink_register(priv_to_devlink(es58x_dev));
-> > +
-> >       for (ch_idx = 0; ch_idx < es58x_dev->num_can_ch; ch_idx++) {
-> >               ret = es58x_init_netdev(es58x_dev, ch_idx);
-> >               if (ret) {
-> > @@ -2272,8 +2277,10 @@ static void es58x_disconnect(struct usb_interface *intf)
-> >       dev_info(&intf->dev, "Disconnecting %s %s\n",
-> >                es58x_dev->udev->manufacturer, es58x_dev->udev->product);
-> >
-> > +     devlink_unregister(priv_to_devlink(es58x_dev));
-> >       es58x_free_netdevs(es58x_dev);
-> >       es58x_free_urbs(es58x_dev);
-> > +     devlink_free(priv_to_devlink(es58x_dev));
-> >       usb_set_intfdata(intf, NULL);
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+
+Peter
+
+> ---
+>  drivers/usb/cdns3/cdnsp-ring.c | 42 ++++++++++++++++++++++++++--------
+>  1 file changed, 32 insertions(+), 10 deletions(-)
 >
-> Should devlink_free() be after usb_set_inftdata()?
-
-A look at
-  $ git grep -W "usb_set_intfdata(.*NULL)"
-
-shows that the two patterns (freeing before or after
-usb_set_intfdata()) coexist.
-
-You are raising an important question here. usb_set_intfdata() does
-not have documentation that freeing before it is risky. And the
-documentation of usb_driver::disconnect says that:
-  "@disconnect: Called when the interface is no longer accessible,
-   usually because its device has been (or is being) disconnected
-   or the driver module is being unloaded."
-  Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
-
-So the interface no longer being accessible makes me assume that the
-order does not matter. If it indeed matters, then this is a foot gun
-and there is some clean-up work waiting for us on many drivers.
-
-@Greg, any thoughts on whether or not the order of usb_set_intfdata()
-and resource freeing matters or not?
-
-
-Yours sincerely,
-Vincent Mailhol
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index 86e1141e150f..fa1fa9b2ff38 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -2006,10 +2006,11 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+>
+>  int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+>  {
+> -       u32 field, length_field, remainder;
+> +       u32 field, length_field, zlp = 0;
+>         struct cdnsp_ep *pep = preq->pep;
+>         struct cdnsp_ring *ep_ring;
+>         int num_trbs;
+> +       u32 maxp;
+>         int ret;
+>
+>         ep_ring = cdnsp_request_to_transfer_ring(pdev, preq);
+> @@ -2019,26 +2020,33 @@ int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+>         /* 1 TRB for data, 1 for status */
+>         num_trbs = (pdev->three_stage_setup) ? 2 : 1;
+>
+> +       maxp = usb_endpoint_maxp(pep->endpoint.desc);
+> +
+> +       if (preq->request.zero && preq->request.length &&
+> +           (preq->request.length % maxp == 0)) {
+> +               num_trbs++;
+> +               zlp = 1;
+> +       }
+> +
+>         ret = cdnsp_prepare_transfer(pdev, preq, num_trbs);
+>         if (ret)
+>                 return ret;
+>
+>         /* If there's data, queue data TRBs */
+> -       if (pdev->ep0_expect_in)
+> -               field = TRB_TYPE(TRB_DATA) | TRB_IOC;
+> -       else
+> -               field = TRB_ISP | TRB_TYPE(TRB_DATA) | TRB_IOC;
+> -
+>         if (preq->request.length > 0) {
+> -               remainder = cdnsp_td_remainder(pdev, 0, preq->request.length,
+> -                                              preq->request.length, preq, 1, 0);
+> +               field = TRB_TYPE(TRB_DATA);
+>
+> -               length_field = TRB_LEN(preq->request.length) |
+> -                               TRB_TD_SIZE(remainder) | TRB_INTR_TARGET(0);
+> +               if (zlp)
+> +                       field |= TRB_CHAIN;
+> +               else
+> +                       field |= TRB_IOC | (pdev->ep0_expect_in ? 0 : TRB_ISP);
+>
+>                 if (pdev->ep0_expect_in)
+>                         field |= TRB_DIR_IN;
+>
+> +               length_field = TRB_LEN(preq->request.length) |
+> +                              TRB_TD_SIZE(zlp) | TRB_INTR_TARGET(0);
+> +
+>                 cdnsp_queue_trb(pdev, ep_ring, true,
+>                                 lower_32_bits(preq->request.dma),
+>                                 upper_32_bits(preq->request.dma), length_field,
+> @@ -2046,6 +2054,20 @@ int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+>                                 TRB_SETUPID(pdev->setup_id) |
+>                                 pdev->setup_speed);
+>
+> +               if (zlp) {
+> +                       field = TRB_TYPE(TRB_NORMAL) | TRB_IOC;
+> +
+> +                       if (!pdev->ep0_expect_in)
+> +                               field = TRB_ISP;
+> +
+> +                       cdnsp_queue_trb(pdev, ep_ring, true,
+> +                                       lower_32_bits(preq->request.dma),
+> +                                       upper_32_bits(preq->request.dma), 0,
+> +                                       field | ep_ring->cycle_state |
+> +                                       TRB_SETUPID(pdev->setup_id) |
+> +                                       pdev->setup_speed);
+> +               }
+> +
+>                 pdev->ep0_stage = CDNSP_DATA_STAGE;
+>         }
+>
+> --
+> 2.25.1
+>
