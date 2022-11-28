@@ -2,149 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A03E639F81
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 03:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBCC63A0C7
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 06:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiK1Cir (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Nov 2022 21:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S229659AbiK1Fcj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 00:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiK1Cip (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Nov 2022 21:38:45 -0500
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68C3A1B1;
-        Sun, 27 Nov 2022 18:38:44 -0800 (PST)
-Received: by mail-pg1-f181.google.com with SMTP id s196so8734766pgs.3;
-        Sun, 27 Nov 2022 18:38:44 -0800 (PST)
+        with ESMTP id S229586AbiK1Fci (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 00:32:38 -0500
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B899BEA;
+        Sun, 27 Nov 2022 21:32:35 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id w79so9429023pfc.2;
+        Sun, 27 Nov 2022 21:32:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1kG9z2qzxuFG+VRjNYAaaunJxmRkVIHKxHuUo9QjcyE=;
-        b=xpq/ddy9z30TTL8jOYYx+QH71jompOnAITlXG+/Q1SiCODz5cYlaf0vjWFE3f52vzr
-         GNw2vsAdcRB1jcqVSY4MynR3K4RQC/qab86MHxqkjpf3O+MEi5RwS2oeepxt2mh8z1ks
-         fdqFtgnoMBOu/QS+Ns8Ubtev3NmPGrlAklOmb/1Vr4lIT2UgGvYY3UFeIoIBuZ5gnug2
-         VWDAEZn/tPz+Anpr5vpw82wIqmBk7fYCidUVF1iMPh+Kmgmfr+Edx8IKulMIqborvP29
-         sFKWqMP3EYOcj5T+vQ4Vzx/KLwGzSL6O/qihDYlmy1obapyz6JY9h00JJHczDJ3ZLwWb
-         jxvg==
-X-Gm-Message-State: ANoB5pkdOvMNP2ETKz5fRr4ZM1ZIuWMlFE/Vh+llRsp5BAReHGwXftCV
-        iMqCyh/pUNi8vV9n5bbxd7o=
-X-Google-Smtp-Source: AA0mqf5vmCbco6ZHPjAXXxhwtD8PwFo1rRkGl5sk/L6YEIBylIo5gFL0rkxaBBXNXZfCI6rD4vcBjA==
-X-Received: by 2002:a63:388:0:b0:477:c828:dd2d with SMTP id 130-20020a630388000000b00477c828dd2dmr18012978pgd.105.1669603124285;
-        Sun, 27 Nov 2022 18:38:44 -0800 (PST)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id j8-20020a170902da8800b00176ea6ce0efsm7507123plx.109.2022.11.27.18.38.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 18:38:43 -0800 (PST)
-Message-ID: <5b14cdea-1bbe-1900-0004-a218ba97bbcb@acm.org>
-Date:   Sun, 27 Nov 2022 18:38:39 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Aa6IZglYvctadBEzqWZe9EXgU7WiR6HNZzFHtL5DNo=;
+        b=n3LbE2po45L7UEA/e4z8Dn0mvYkvs0+qS7CNVLew7hNwlobQvNu60t2fH8EEsjnxnK
+         Mxu4DhwaYd9+T6tHBoC7O2B5Fd25zBO3HsaXd6ssdjpW8j6QFkPf8NYeEwof6vk713W9
+         V9SrwoixJzFpiOAxl9DRFErzIycIatZR5H9aQNfAVKJz2IwVjzZf+rjKDw7fVCZyGe3n
+         /TUe23dZ42envD/Gvb7kQpySEMyQLOf4/SMBR5MjC4pBLChOeWb7XekNeljNUe4EUS9n
+         eCEjQyq+VXTLiHS11mL7a6pz3lzRVWY0VQKD49Qk/QYIE6U9sjYIxvCB1pjwsAGt8PrW
+         vjIA==
+X-Gm-Message-State: ANoB5pl6fr2M/gUTETuhxrZqQigxE+WgGHCJouz9ilnk2Tm8NTIEL//N
+        hNvs1yT+Rmg4NJAqiwRNqchLR7wC0ekj2ZHVyEs=
+X-Google-Smtp-Source: AA0mqf4DsMKAlgvZVcNPpcG6bvgBwfljvVj8E/qqpGfmBCUsqDrL33BR5G5S4PYVxNZ8B7TexHAsaA0JeMi81NOV8sY=
+X-Received: by 2002:a63:1803:0:b0:477:6e5d:4e25 with SMTP id
+ y3-20020a631803000000b004776e5d4e25mr31802247pgl.70.1669613554816; Sun, 27
+ Nov 2022 21:32:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/5] driver core: make struct class.dev_uevent() take a
- const *
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Johan Hovold <johan@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Raed Salem <raeds@nvidia.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Avihai Horon <avihaih@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Wang Yufen <wangyufen@huawei.com>, linux-block@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <d448b944-708a-32d4-37d7-0be16ee5f73c@acm.org> <Y4NqAJW5V0tAP8ax@kroah.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <Y4NqAJW5V0tAP8ax@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
+ <Y4JEGYMtIWX9clxo@lunn.ch> <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
+ <Y4OD70GD4KnoRk0k@rowland.harvard.edu> <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 28 Nov 2022 14:32:23 +0900
+Message-ID: <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/27/22 05:45, Greg Kroah-Hartman wrote:
-> On Fri, Nov 25, 2022 at 03:51:11PM -0800, Bart Van Assche wrote:
->> On 11/23/22 04:25, Greg Kroah-Hartman wrote:
->>> diff --git a/include/linux/mISDNif.h b/include/linux/mISDNif.h
->>> index 7dd1f01ec4f9..7aab4a769736 100644
->>> --- a/include/linux/mISDNif.h
->>> +++ b/include/linux/mISDNif.h
->>> @@ -586,7 +586,7 @@ extern struct mISDNclock *mISDN_register_clock(char *, int, clockctl_func_t *,
->>>    						void *);
->>>    extern void	mISDN_unregister_clock(struct mISDNclock *);
->>> -static inline struct mISDNdevice *dev_to_mISDN(struct device *dev)
->>> +static inline struct mISDNdevice *dev_to_mISDN(const struct device *dev)
->>>    {
->>>    	if (dev)
->>>    		return dev_get_drvdata(dev);
->>
->> Why does the dev_to_mISDN() function drop constness? I haven't found an
->> explanation for this in the cover letter.
-> 
-> I agree, this is going to be fixed up, see the thread starting here:
-> 	https://lore.kernel.org/r/Y34+V2bCDdqujBDk@kroah.com
-> 
-> I'll work on making a const / non const version for these so that we
-> don't loose the marking.
-> 
-> Oh wait, no, this function is fine, it's not modifying the device
-> structure at all, and only returning the pointer in the private data
-> stored in the device.  There is no loss of const-ness here.
+On Mon. 28 Nov. 2022 at 10:34, Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> On Mon. 28 Nov. 2022 at 00:41, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > On Sun, Nov 27, 2022 at 02:10:32PM +0900, Vincent MAILHOL wrote:
+> > > > Should devlink_free() be after usb_set_inftdata()?
+> > >
+> > > A look at
+> > >   $ git grep -W "usb_set_intfdata(.*NULL)"
+> > >
+> > > shows that the two patterns (freeing before or after
+> > > usb_set_intfdata()) coexist.
+> > >
+> > > You are raising an important question here. usb_set_intfdata() does
+> > > not have documentation that freeing before it is risky. And the
+> > > documentation of usb_driver::disconnect says that:
+> > >   "@disconnect: Called when the interface is no longer accessible,
+> > >    usually because its device has been (or is being) disconnected
+> > >    or the driver module is being unloaded."
+> > >   Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
+> > >
+> > > So the interface no longer being accessible makes me assume that the
+> > > order does not matter. If it indeed matters, then this is a foot gun
+> > > and there is some clean-up work waiting for us on many drivers.
+> > >
+> > > @Greg, any thoughts on whether or not the order of usb_set_intfdata()
+> > > and resource freeing matters or not?
+> >
+> > In fact, drivers don't have to call usb_set_intfdata(NULL) at all; the
+> > USB core does it for them after the ->disconnect() callback returns.
+>
+> Interesting. This fact is widely unknown, cf:
+>   $ git grep "usb_set_intfdata(.*NULL)" | wc -l
+>   215
+>
+> I will do some clean-up later on, at least for the CAN USB drivers.
+>
+> > But if a driver does make the call, it should be careful to ensure that
+> > the call happens _after_ the driver is finished using the interface-data
+> > pointer.  For example, after all outstanding URBs have completed, if the
+> > completion handlers will need to call usb_get_intfdata().
+>
+> ACK. I understand that it should be called *after* the completion of
+> any ongoing task.
+>
+> My question was more on:
+>
+>         devlink_free(priv_to_devlink(es58x_dev));
+>         usb_set_intfdata(intf, NULL);
+>
+> VS.
+>
+>         usb_set_intfdata(intf, NULL);
+>         devlink_free(priv_to_devlink(es58x_dev));
+>
+> From your comments, I understand that both are fine.
 
-Hi Greg,
+Do we agree that the usb-skeleton is doing it wrong?
+  https://elixir.bootlin.com/linux/latest/source/drivers/usb/usb-skeleton.c#L567
+usb_set_intfdata(interface, NULL) is called before deregistering the
+interface and terminating the outstanding URBs!
 
-This is what I found in include/linux/mISDNif.h:
-
-struct mISDNdevice {
-	struct mISDNchannel	D;
-	u_int			id;
-	u_int			Dprotocols;
-	u_int			Bprotocols;
-	u_int			nrbchan;
-	u_char			channelmap[MISDN_CHMAP_SIZE];
-	struct list_head	bchannels;
-	struct mISDNchannel	*teimgr;
-	struct device		dev;
-};
-
-As one can see 'dev' is a member of struct mISDNdevice. I still think 
-that dev_to_mISDN() drops constness. Did I perhaps overlook something?
-
-Bart.
+> > Remember, the interface-data pointer is owned by the driver.  Nothing
+> > else in the kernel uses it.  So the driver merely has to be careful not
+> > to clear the pointer while it is still using it.
+>
+> Thanks for your comments!
+>
+>
+> Yours sincerely,
+> Vincent Mailhol
