@@ -2,155 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34C763ACF9
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 16:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C96063AD78
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 17:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232292AbiK1Pum (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 10:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S232396AbiK1QQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 11:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiK1Pul (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 10:50:41 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4A9AC5FA5
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 07:50:39 -0800 (PST)
-Received: (qmail 327280 invoked by uid 1000); 28 Nov 2022 10:50:38 -0500
-Date:   Mon, 28 Nov 2022 10:50:38 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
-Message-ID: <Y4TYzgOczlegG7OK@rowland.harvard.edu>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
- <Y4JEGYMtIWX9clxo@lunn.ch>
- <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
- <Y4OD70GD4KnoRk0k@rowland.harvard.edu>
- <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
- <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
+        with ESMTP id S232761AbiK1QQL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 11:16:11 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C3EBC1A;
+        Mon, 28 Nov 2022 08:15:38 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 628973200942;
+        Mon, 28 Nov 2022 11:15:35 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 28 Nov 2022 11:15:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1669652134; x=1669738534; bh=wg7FaKo805
+        eO+vNPgQ7ztZjMcWXQHDAz6Wy4cpdl6SA=; b=LS5uLeJVdBZuZTtUjOOHkxZRYW
+        Zxzxid+7EuBWTBo86rf+TL/N2F5x6eoDGBDASrMR/VYCSE+XtimVIPI82vmjBCI3
+        5g3Q7P2nXT+NmLRYfdtSwKyblGaQse+ZIRQ7GHYLYO3do1Fv7Iv2TBSvkfEGCfIW
+        ilCT7xeHvJtg0b62aMsit5Qloni3E130q1VA9l+62hmEdvMhhfKVY0eCrc+jk7Hg
+        OwrX+g9ZaqUlh2ERcVSyvWBWUcnStVqSvPX2Zu36H5lR4YHcfJyoO+F0aGlNd2CP
+        ddwZ8SIxgVUlYPT8SNqZ2Cw1m3ACKn+iC3P4tzkkmusHVMqwARwx5CyH1wuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1669652134; x=1669738534; bh=wg7FaKo805eO+vNPgQ7ztZjMcWXQHDAz6Wy
+        4cpdl6SA=; b=b65YMzkTrWpIYtQmR9odiHJDJ7BfHUZN/uWL+F8Aw10cJWGMCxU
+        xBAqjmgl8mAcWdiFba2sRkJGSmdUMkcKdVWRF5kWpOckwD6qFDH5rlA3jbBaYYFO
+        FiKGUCaCm3ofJkuhi2YYtjiNvN4MB4AQDk2vwJOlrdGfxbQG+JjaIuXA0WNhZ/Yq
+        HktPQNh9FVkKdVbh5SQ8EPmPRfIRCy8LUGVBYBu18HHX41Cbomplu81ST0RUKwPl
+        rQLcwwlfpTUJvPh1w/WW09Aw4YJZXzq17QdZayczeFrGhw/LrzqYGR70BW+l67ZF
+        JCuQvyLKbXgRMxfIDtcAFGhSxWr26phVRTg==
+X-ME-Sender: <xms:pt6EYxW7yUkjCUvoLNYZZiR9SHvzbKYGrAd4UC5VAKAGTpVFXSbfUg>
+    <xme:pt6EYxmiS56cx2Epe9GZhtUvBSi9gONyR5A4fHB2BXGwla4ISjpXhmNnAdOASYzQ1
+    5_iJtCPNca0Dm_xjEU>
+X-ME-Received: <xmr:pt6EY9bSQm59bwu0jpCLZ5VDta7NuH8-AGbJAA_TCkIzwqzi9MYS0HJmxCUADvGE0K32tpZ8ZrvBOvPFo8swzNBSZpyV51Ebz7oa7sIWTXZso_kksHsWvg8WQZHLtA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdekkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:pt6EY0V1CzL83rp1lD1q4jkxlyvN4xsk4rUO4UN_gJgJ2b11jLIReA>
+    <xmx:pt6EY7mwHMh8h64OC4Dz_Vc-P2FaX3r0-qtrtyccWVfn_tthUN68jw>
+    <xmx:pt6EYxcRcNRmEpEZq_XjqPh1VxRDxSLuh4CC4yA8gxadmvdvVL27kA>
+    <xmx:pt6EY5YPoKCElaKrgbqTYrS5NmvURkk1nttm-AfXTWVsCCZAJlqo8g>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Nov 2022 11:15:32 -0500 (EST)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Janne Grunau <j@jannau.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+Subject: [PATCH] usb: dwc3: Fix race between dwc3_set_mode and __dwc3_set_mode
+Date:   Mon, 28 Nov 2022 17:15:26 +0100
+Message-Id: <20221128161526.79730-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 02:32:23PM +0900, Vincent MAILHOL wrote:
-> On Mon. 28 Nov. 2022 at 10:34, Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> > On Mon. 28 Nov. 2022 at 00:41, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > On Sun, Nov 27, 2022 at 02:10:32PM +0900, Vincent MAILHOL wrote:
-> > > > > Should devlink_free() be after usb_set_inftdata()?
-> > > >
-> > > > A look at
-> > > >   $ git grep -W "usb_set_intfdata(.*NULL)"
-> > > >
-> > > > shows that the two patterns (freeing before or after
-> > > > usb_set_intfdata()) coexist.
-> > > >
-> > > > You are raising an important question here. usb_set_intfdata() does
-> > > > not have documentation that freeing before it is risky. And the
-> > > > documentation of usb_driver::disconnect says that:
-> > > >   "@disconnect: Called when the interface is no longer accessible,
-> > > >    usually because its device has been (or is being) disconnected
-> > > >    or the driver module is being unloaded."
-> > > >   Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
-> > > >
-> > > > So the interface no longer being accessible makes me assume that the
-> > > > order does not matter. If it indeed matters, then this is a foot gun
-> > > > and there is some clean-up work waiting for us on many drivers.
-> > > >
-> > > > @Greg, any thoughts on whether or not the order of usb_set_intfdata()
-> > > > and resource freeing matters or not?
-> > >
-> > > In fact, drivers don't have to call usb_set_intfdata(NULL) at all; the
-> > > USB core does it for them after the ->disconnect() callback returns.
-> >
-> > Interesting. This fact is widely unknown, cf:
-> >   $ git grep "usb_set_intfdata(.*NULL)" | wc -l
-> >   215
-> >
-> > I will do some clean-up later on, at least for the CAN USB drivers.
-> >
-> > > But if a driver does make the call, it should be careful to ensure that
-> > > the call happens _after_ the driver is finished using the interface-data
-> > > pointer.  For example, after all outstanding URBs have completed, if the
-> > > completion handlers will need to call usb_get_intfdata().
-> >
-> > ACK. I understand that it should be called *after* the completion of
-> > any ongoing task.
-> >
-> > My question was more on:
-> >
-> >         devlink_free(priv_to_devlink(es58x_dev));
-> >         usb_set_intfdata(intf, NULL);
-> >
-> > VS.
-> >
-> >         usb_set_intfdata(intf, NULL);
-> >         devlink_free(priv_to_devlink(es58x_dev));
-> >
-> > From your comments, I understand that both are fine.
-> 
-> Do we agree that the usb-skeleton is doing it wrong?
->   https://elixir.bootlin.com/linux/latest/source/drivers/usb/usb-skeleton.c#L567
-> usb_set_intfdata(interface, NULL) is called before deregistering the
-> interface and terminating the outstanding URBs!
+dwc->desired_dr_role is changed by dwc3_set_mode inside a spinlock but
+then read by __dwc3_set_mode outside of that lock. This can lead to a
+race condition when very quick successive role switch events happen:
 
-Going through the usb-skeleton.c source code, you will find that 
-usb_get_intfdata() is called from only a few routines:
+CPU A
+	dwc3_set_mode(DWC3_GCTL_PRTCAP_HOST) // first role switch event
+		spin_lock_irqsave(&dwc->lock, flags);
+		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_HOST
+		spin_unlock_irqrestore(&dwc->lock, flags);
+		queue_work(system_freezable_wq, &dwc->drd_work);
 
-	skel_open()
-	skel_disconnect()
-	skel_suspend()
-	skel_pre_reset()
-	skel_post_reset()
+CPU B
+	__dwc3_set_mode
+		// ....
+		spin_lock_irqsave(&dwc->lock, flags);
+		// desired_dr_role is DWC3_GCTL_PRTCAP_HOST
+		dwc3_set_prtcap(dwc, dwc->desired_dr_role);
+		spin_unlock_irqrestore(&dwc->lock, flags);
 
-Of those, all but the first are called only by the USB core and they are 
-mutually exclusive with disconnect processing (except for 
-skel_disconnect() itself, of course).  So they don't matter.
+CPU A
+	dwc3_set_mode(DWC3_GCTL_PRTCAP_DEVICE) // second event
+		spin_lock_irqsave(&dwc->lock, flags);
+		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_DEVICE
+		spin_unlock_irqrestore(&dwc->lock, flags);
 
-The first, skel_open(), can be called as a result of actions by the 
-user, so the driver needs to ensure that this can't happen after it 
-clears the interface-data pointer.  The user can open the device file at 
-any time before the minor number is given back, so it is not proper to 
-call usb_set_intfdata(interface, NULL) before usb_deregister_dev() -- 
-but the driver does exactly this!
+CPU B (continues running __dwc3_set_mode)
+	switch (dwc->desired_dr_role) { // DWC3_GCTL_PRTCAP_DEVICE
+	// ....
+	case DWC3_GCTL_PRTCAP_DEVICE:
+		// ....
+		ret = dwc3_gadget_init(dwc);
 
-(Well, it's not quite that bad.  skel_open() does check whether the 
-interface-data pointer value it gets from usb_get_intfdata() is NULL.  
-But it's still a race.)
+We then have DWC3_GCTL.DWC3_GCTL_PRTCAPDIR = DWC3_GCTL_PRTCAP_HOST and
+dwc->current_dr_role = DWC3_GCTL_PRTCAP_HOST but initialized the
+controller in device mode. It's also possible to get into a state
+where both host and device are intialized at the same time.
+Fix this race by creating a local copy of desired_dr_role inside
+__dwc3_set_mode while holding dwc->lock.
 
-So yes, the current code is wrong.  And in fact, it will still be wrong 
-even after the usb_set_intfdata(interface, NULL) line is removed, 
-because there is no synchronization between skel_open() and 
-skel_disconnect().  It is possible for skel_disconnect() to run to 
-completion and the USB core to clear the interface-data pointer all 
-while skel_open() is running.  The driver needs a static private mutex 
-to synchronize opens with unregistrations.  (This is a general 
-phenomenon, true of all drivers that have a user interface such as a 
-device file.)
+Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+ drivers/usb/dwc3/core.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-The driver _does_ have a per-instance mutex, dev->io_mutex, to 
-synchronize I/O with disconnects.  But that's separate from 
-synchronizing opens with unregistrations, because at open time the 
-driver doesn't yet know the address of the private data structure or 
-even if the structure is still allocated.  So obviously it can't use a 
-mutex that is embedded within the private data structure for this 
-purpose.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 1f348bc867c2..fc38a8b13efa 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -122,21 +122,25 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 	unsigned long flags;
+ 	int ret;
+ 	u32 reg;
++	u32 desired_dr_role;
+ 
+ 	mutex_lock(&dwc->mutex);
++	spin_lock_irqsave(&dwc->lock, flags);
++	desired_dr_role = dwc->desired_dr_role;
++	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	pm_runtime_get_sync(dwc->dev);
+ 
+ 	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_OTG)
+ 		dwc3_otg_update(dwc, 0);
+ 
+-	if (!dwc->desired_dr_role)
++	if (!desired_dr_role)
+ 		goto out;
+ 
+-	if (dwc->desired_dr_role == dwc->current_dr_role)
++	if (desired_dr_role == dwc->current_dr_role)
+ 		goto out;
+ 
+-	if (dwc->desired_dr_role == DWC3_GCTL_PRTCAP_OTG && dwc->edev)
++	if (desired_dr_role == DWC3_GCTL_PRTCAP_OTG && dwc->edev)
+ 		goto out;
+ 
+ 	switch (dwc->current_dr_role) {
+@@ -164,7 +168,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 	 */
+ 	if (dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
+ 			DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
+-			dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
++			desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
+ 		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+ 		reg |= DWC3_GCTL_CORESOFTRESET;
+ 		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+@@ -184,11 +188,11 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 
+-	dwc3_set_prtcap(dwc, dwc->desired_dr_role);
++	dwc3_set_prtcap(dwc, desired_dr_role);
+ 
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+-	switch (dwc->desired_dr_role) {
++	switch (desired_dr_role) {
+ 	case DWC3_GCTL_PRTCAP_HOST:
+ 		ret = dwc3_host_init(dwc);
+ 		if (ret) {
+-- 
+2.25.1
 
-Alan Stern
