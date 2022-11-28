@@ -2,136 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A667863A615
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 11:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8951E63A620
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 11:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiK1KaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 05:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S230262AbiK1KdA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 05:33:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiK1KaG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 05:30:06 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A994C2652;
-        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 9so9996957pfx.11;
-        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=5WzP7R2JeezWg+hdV7Tba+xSsA1ik5Dm+MRW5DkF9e0=;
-        b=oo6qzQAScY8kGVYAXKK32Is/cCaVa66uXHZDaSQmZr/Hhd/EJkvBIw+I6TTKnFPD4g
-         rpAxJ70A3QLcsQgRjI/Ae0OpewommAkpkFRRT0/wMTwUwQBJmBx9SgOJ5MqTnF05Bp1q
-         lF2t7G8KbJELoHEncLL0XRY1b0Noj9Q7tkpmes4QLi5Q/YJmJ9zSe0ML/CdlzeiYIFNS
-         M6DnCCBQMTxsDUwv2vNpX+3yDnWkIdE2C8jjVlps8giI1f621NbsIokmqgW4rflA2div
-         ++iI6URjCndHsPV6QwW68yxDtBJlk1lZkHW3zg7eiioJevvhlLjA8btnKeZAGSLYNgg+
-         BCKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5WzP7R2JeezWg+hdV7Tba+xSsA1ik5Dm+MRW5DkF9e0=;
-        b=RqJyOr694jN8zALa1JwMlmIuHENyKlZwwYiNrvBxj64L2emz/Wvd+Ny0YQ/lEPFqj/
-         HWm7oZ1CZJoLqjcc4eVGi6cGrPNG1Y1++LAsS26dQmbPQmmtGBAZ5hB4CiF8yKfaH1ir
-         OUCOQv3oLBdypSWIpLP0XW0Q0YgGS8HF9iE8IRKjVIRXfbP5QfBC4bJp+cRJ2NdrwLLN
-         xVnmqoUZaQEmd9BVmc7oJ9uNRHf5rsWWoF767/j3PojeW5MLTi7GF3vI8icNP30xT8MN
-         ukB8xuWtAp58x1C5w1Wfr9FHsBHaAYH6C2U7NkJ4VRpO6GVOQxz6cZw+gPzDqZxFHMJz
-         aaJw==
-X-Gm-Message-State: ANoB5pl+gx4lmRcASSEJml2UDD2m55gJTLqhB8ggh2uUuj89v+9nn40U
-        rjZjlJuHKIYHGLBgZQGS6kk=
-X-Google-Smtp-Source: AA0mqf7FESvloU60JlBI3tZKvkhKNAlGtFZmq/3ukpDw+KhHUdJBWFh/014hM6rAO7cBKe8PCTysuw==
-X-Received: by 2002:a05:6a00:a88:b0:574:2c5e:b18c with SMTP id b8-20020a056a000a8800b005742c5eb18cmr27847828pfl.10.1669631405115;
-        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
-Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
-        by smtp.gmail.com with ESMTPSA id iw14-20020a170903044e00b001869f2120a4sm8519954plb.94.2022.11.28.02.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 02:30:04 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] usb: add usb_set_intfdata() documentation
-Date:   Mon, 28 Nov 2022 19:29:54 +0900
-Message-Id: <20221128102954.3615579-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230211AbiK1Kc6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 05:32:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1313060F9
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 02:32:56 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ozbRW-0007E1-Cd; Mon, 28 Nov 2022 11:32:54 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ozbRU-000nVN-Tw; Mon, 28 Nov 2022 11:32:53 +0100
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ozbRU-004BTe-V1; Mon, 28 Nov 2022 11:32:52 +0100
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: [PATCH v7] usb: gadget: uvc: add validate and fix function for uvc response
+Date:   Mon, 28 Nov 2022 11:31:25 +0100
+Message-Id: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB drivers do not need to call usb_set_intfdata(intf, NULL) in their
-usb_driver::disconnect callback because the core already does it in [1].
+When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
+UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
+needs to be validated. Since the kernel also knows the limits for valid
+cases, it can fixup the values in case the userspace is setting invalid
+data.
 
-However, this fact is widely unknown, c.f.:
+Fixes: e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-  $ git grep "usb_set_intfdata(.*NULL)" | wc -l
-  215
-
-Especially, setting the interface to NULL before all action completed
-can result in a NULL pointer dereference. Not calling
-usb_set_intfdata() at all in disconnect() is the safest method.
-
-Add documentation to usb_set_intfdata() to clarify this point.
-
-Also remove the call in usb-skeletion's disconnect() not to confuse
-the new comers.
-
-[1] function usb_unbind_interface() from drivers/usb/core/driver.c
-Link: https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L497
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/usb/usb-skeleton.c |  1 -
- include/linux/usb.h        | 12 ++++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+v1: -> v4:
+- new patch
+v4: -> v5:
+- changed uvcg_info to uvcg_dbg for fixups, updated info strings
+v5: -> v6:
+- no changes
+v6 -> v7:
+- reworked to not need 'd182bf156c4c ("usb: gadget: uvc: default the ctrl request interface offsets")'
 
-diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
-index d87deee3e26e..900a64ad25e4 100644
---- a/drivers/usb/usb-skeleton.c
-+++ b/drivers/usb/usb-skeleton.c
-@@ -564,7 +564,6 @@ static void skel_disconnect(struct usb_interface *interface)
- 	int minor = interface->minor;
+This will apply to v6.1-rc6.
+
+ drivers/usb/gadget/function/f_uvc.c    |  4 ++
+ drivers/usb/gadget/function/uvc.h      |  1 +
+ drivers/usb/gadget/function/uvc_v4l2.c | 76 ++++++++++++++++++++++++++
+ 3 files changed, 81 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e196e06181ecf..89f0100dae60f4 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -248,6 +248,10 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 	memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 	v4l2_event.type = UVC_EVENT_SETUP;
+ 	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
++
++	if (interface == uvc->streaming_intf)
++		uvc->streaming_request = ctrl->bRequest;
++
+ 	v4l2_event_queue(&uvc->vdev, &v4l2_event);
  
- 	dev = usb_get_intfdata(interface);
--	usb_set_intfdata(interface, NULL);
+ 	return 0;
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 40226b1f7e148a..1be4d5f24b46bf 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -151,6 +151,7 @@ struct uvc_device {
+ 	void *control_buf;
  
- 	/* give back our minor */
- 	usb_deregister_dev(interface, &skel_class);
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 9ff1ad4dfad1..d4afeeec1e1a 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -265,6 +265,18 @@ static inline void *usb_get_intfdata(struct usb_interface *intf)
- 	return dev_get_drvdata(&intf->dev);
+ 	unsigned int streaming_intf;
++	unsigned char streaming_request;
+ 
+ 	/* Events */
+ 	unsigned int event_length;
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index a189b08bba800d..a12475d289167a 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -178,6 +178,67 @@ static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
+  * Requests handling
+  */
+ 
++/* validate and fixup streaming ctrl request response data if possible */
++static void
++uvc_validate_streaming_ctrl(struct uvc_device *uvc,
++			    struct uvc_streaming_control *ctrl)
++{
++	struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
++	unsigned int iformat, iframe;
++	struct uvcg_format *uformat;
++	struct uvcg_frame *uframe;
++	bool ival_found = false;
++	int i;
++
++	iformat = ctrl->bFormatIndex;
++	iframe = ctrl->bFrameIndex;
++
++	/* Restrict the iformat, iframe and dwFrameInterval to valid values.
++	 * Negative values for iformat and iframe will result in the maximum
++	 * valid value being selected
++	 */
++	iformat = clamp((unsigned int)iformat, 1U,
++			(unsigned int)uvc->header->num_fmt);
++	if (iformat != ctrl->bFormatIndex) {
++		uvcg_dbg(&uvc->func,
++			  "userspace set invalid format index - fixup\n");
++		ctrl->bFormatIndex = iformat;
++	}
++	uformat = find_format_by_index(uvc, iformat);
++
++	iframe = clamp((unsigned int)iframe, 1U,
++		       (unsigned int)uformat->num_frames);
++	if (iframe != ctrl->bFrameIndex) {
++		uvcg_dbg(&uvc->func,
++			  "userspace set invalid frame index - fixup\n");
++		ctrl->bFrameIndex = iframe;
++	}
++	uframe = find_frame_by_index(uvc, uformat, iframe);
++
++	if (ctrl->dwFrameInterval) {
++		for (i = 0; i < uframe->frame.b_frame_interval_type; i++) {
++			if (ctrl->dwFrameInterval ==
++				 uframe->dw_frame_interval[i])
++				ival_found = true;
++		}
++	}
++	if (!ival_found) {
++		uvcg_dbg(&uvc->func,
++			  "userspace set invalid frame interval - fixup\n");
++		ctrl->dwFrameInterval = uframe->frame.dw_default_frame_interval;
++	}
++
++	if (!ctrl->dwMaxPayloadTransferSize ||
++			ctrl->dwMaxPayloadTransferSize >
++				opts->streaming_maxpacket)
++		ctrl->dwMaxPayloadTransferSize = opts->streaming_maxpacket;
++
++	if (!ctrl->dwMaxVideoFrameSize ||
++			ctrl->dwMaxVideoFrameSize >
++				uframe->frame.dw_max_video_frame_buffer_size)
++		ctrl->dwMaxVideoFrameSize = uvc_get_frame_size(uformat, uframe);
++}
++
+ static int
+ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
+ {
+@@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
+ 
+ 	memcpy(req->buf, data->data, req->length);
+ 
++	/* validate the ctrl content and fixup */
++	if (!uvc->event_setup_out) {
++		struct uvc_streaming_control *ctrl = req->buf;
++
++		switch (uvc->streaming_request) {
++		case UVC_GET_CUR:
++		case UVC_GET_MIN:
++		case UVC_GET_MAX:
++		case UVC_GET_DEF:
++			uvc_validate_streaming_ctrl(uvc, ctrl);
++		default:
++			break;
++		}
++	}
++
+ 	return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
  }
  
-+/**
-+ * usb_set_intfdata() - associate driver-specific data with the interface
-+ * @intf: the usb interface
-+ * @data: pointer to the device priv structure or %NULL
-+ *
-+ * Drivers should use this function in their probe() to associate their
-+ * driver-specific data with the usb interface.
-+ *
-+ * When disconnecting, the core will take care of setting @intf back to %NULL,
-+ * so no actions are needed on the driver side. The interface should not be set
-+ * to %NULL before all actions completed (e.g. no outsanding URB remaining).
-+ */
- static inline void usb_set_intfdata(struct usb_interface *intf, void *data)
- {
- 	dev_set_drvdata(&intf->dev, data);
 -- 
-2.25.1
+2.30.2
 
