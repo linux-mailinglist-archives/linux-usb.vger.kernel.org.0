@@ -2,54 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4202163B06B
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 18:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4CF63B0A3
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 19:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbiK1RvJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 12:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
+        id S234075AbiK1SA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 13:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiK1RtN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 12:49:13 -0500
+        with ESMTP id S234070AbiK1SAd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 13:00:33 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D912ED4C;
-        Mon, 28 Nov 2022 09:43:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589B8E0EA;
+        Mon, 28 Nov 2022 09:47:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D7E612ED;
-        Mon, 28 Nov 2022 17:43:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50AFDC433B5;
-        Mon, 28 Nov 2022 17:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669657403;
-        bh=PRKdFnmpU+XR40rumZNN2itbimYUsoHXd9bKcM5jFi0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XI4m3h1uFS6V+0y2iKNQuu9/+Ufmh01ypVrG6WwsboD+ebkOdeFgskNy3m48OCdT+
-         LQO+mk8RaID62tX1pN6pJwYWnxQwYOp32ADn3gFoMtPcDmEZ1CCL88rzWaX5dZimuz
-         YAIgbIt7c1kB0ZPiVRxPqJfyFDoz1rU3xWIQomGdXvC7LafF3zJVXPsJMdc9En0F7B
-         BD5LKNzf79c5NOmSeIept/2znPPO6AggvHvvwRKXuRM/0xrWZgf5/AiUJvV7dTYTgp
-         qkyyd1tvyjZSIH3EuIPSryvtjLisvHvanJpvvBI+pQV8n6uVjSUVC0S/nQgEmnMWtV
-         SfvnDCmAzr0bA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Davide Tronchin <davide.tronchin.94@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 9/9] net: usb: qmi_wwan: add u-blox 0x1342 composition
-Date:   Mon, 28 Nov 2022 12:43:02 -0500
-Message-Id: <20221128174303.1443008-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128174303.1443008-1-sashal@kernel.org>
-References: <20221128174303.1443008-1-sashal@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2503612F3;
+        Mon, 28 Nov 2022 17:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA333C433D6;
+        Mon, 28 Nov 2022 17:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669657639;
+        bh=1hkTev7NIENSu1g5GObZnRI6QKX9coXsgHP50hCr9cA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WnJjcW7cY1CYaWkk1lz8Z4Y2RREZBjwBremYGYBLCtbaj1en7CtPhYqJSd35I7djj
+         Py0yDG4AV6uoBsYD4MVTAZcsPf7scv/XJrW4/GuVZmbvh2La5vP/60LH3K2e/gAFAw
+         qB0vVpwzzuiS301QMo46lIr+RpzhkTxJHKxR8moY=
+Date:   Mon, 28 Nov 2022 18:47:16 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org,
+        Fabien Chouteau <fabien.chouteau@barco.com>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH 0/3] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+Message-ID: <Y4T0JMU93gr+MklZ@kroah.com>
+References: <20221122123523.3068034-1-john@metanate.com>
+ <Y30SWm+bhv8srJC2@google.com>
+ <Y4S/3T7jzXzTHNSc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4S/3T7jzXzTHNSc@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,48 +56,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Davide Tronchin <davide.tronchin.94@gmail.com>
+On Mon, Nov 28, 2022 at 02:04:13PM +0000, Lee Jones wrote:
+> On Tue, 22 Nov 2022, Lee Jones wrote:
+> 
+> > On Tue, 22 Nov 2022, John Keeping wrote:
+> > 
+> > > This series arises from the recent thread [1] on lifetime issues.
+> > > 
+> > > The main point is the first patch, with the second being an unrelated
+> > > fix for an issue spotted while working on this.  Both of these have
+> > > Fixes: tags for backporting to stable.
+> > > 
+> > > The final patch tidies up some error handling to hopefully avoid patch 2
+> > > issues in the future.
+> > > 
+> > > [1] https://lore.kernel.org/r/20221117120813.1257583-1-lee@kernel.org
+> > > 
+> > > John Keeping (3):
+> > >   usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+> > >   usb: gadget: f_hid: fix refcount leak on error path
+> > >   usb: gadget: f_hid: tidy error handling in hidg_alloc
+> > > 
+> > >  drivers/usb/gadget/function/f_hid.c | 60 ++++++++++++++++-------------
+> > >  1 file changed, 33 insertions(+), 27 deletions(-)
+> > 
+> > For the set:
+> > 
+> > Reviewed-by: Lee Jones <lee@kernel.org>
+> > Tested-by: Lee Jones <lee@kernel.org>
+> 
+> Greg, is this still on your radar?
 
-[ Upstream commit a487069e11b6527373f7c6f435d8998051d0b5d9 ]
-
-Add RmNet support for LARA-L6.
-
-LARA-L6 module can be configured (by AT interface) in three different
-USB modes:
-* Default mode (Vendor ID: 0x1546 Product ID: 0x1341) with 4 serial
-interfaces
-* RmNet mode (Vendor ID: 0x1546 Product ID: 0x1342) with 4 serial
-interfaces and 1 RmNet virtual network interface
-* CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1343) with 4 serial
-interface and 1 CDC-ECM virtual network interface
-
-In RmNet mode LARA-L6 exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parset/alternative functions
-If 4: RMNET interface
-
-Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 66c6b7111a3a..643aef6f206a 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1365,6 +1365,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
- 	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM support*/
- 	{QMI_FIXED_INTF(0x2692, 0x9025, 4)},    /* Cellient MPL200 (rebranded Qualcomm 05c6:9025) */
-+	{QMI_QUIRK_SET_DTR(0x1546, 0x1342, 4)},	/* u-blox LARA-L6 */
- 
- 	/* 4. Gobi 1000 devices */
- 	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
--- 
-2.35.1
-
+Yes, let me catch up on pending patches...
