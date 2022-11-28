@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E410563A367
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 09:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE5463A383
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 09:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiK1Is1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 03:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S230215AbiK1Iu4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 03:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiK1IsZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 03:48:25 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835D7EA0
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 00:48:24 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id r8so12306759ljn.8
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 00:48:24 -0800 (PST)
+        with ESMTP id S230156AbiK1Iuz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 03:50:55 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B47113D1D
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 00:50:52 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id s8so16258203lfc.8
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 00:50:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DyUL1Og+jo/ZDOoPr1xJAw3+yzTWwfhyA3J40qaa04Q=;
-        b=dr+YzF1C/E9DNwFAV4PvvIjJxwtxMPOZ6crnVboKYsr67l1ag6YTekN1wmi5vfztZd
-         SfAt7DZLkzNlycNIzmURTmrED9EUMQ7BHBDOJT3ToK5KRJJyitHn8e/dqEizbz1JYgk5
-         wDHmyCOIqGC5xPYaG/H5oBbns2FWIat46Xp0IQSLDQwAkecQ47Wh11gTfhCP+KJTs54n
-         HatiPP6UXkG0Vekho88t3Sm+YogWgFkwVvgLvYVvx7QVJohTv4KsMGM0XTzYPKC8P9lh
-         6F8zCM77yxVV4lRlljET+W80ArkhgPNhXKSlx0fiGzP39zxvD9bnycHiSyw1JmPEnZbN
-         6lXA==
+        bh=1kpQGMfVGoPeQZNI7dVUnjJVF7AFJ93d+rQmt9jIBdI=;
+        b=rkEtvtvDaP7YXr1CBY1UeS2yGFeI1Arj0SRRoRE2diWG6dbDk4I1ArDrL6A8cou+/3
+         t4VL8HPIaJ3kmKplR3hRjkWdRV92L6fh8Pt+qgyuYRlinG8qmJALv2DNJGhDuW9LEAjC
+         wEh9m/d6L7ULSWdDuQC+UcyEprUag+5L6dEfgT5ZsEgURgj+Tq78urXTh8xz+PEQ3Ezq
+         XlxDnAAHQ3Bdban/BfcKQhzzvc79315ri6ItPtPy0cWvDd2JFHScJZykJzUyPSlYNsY1
+         OJB2ydikxcePuOip/PsPmVAQjngn+u7+Z32MwshV2TRITrCVMmq+82DLSCE2dWkXFbnE
+         rTOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DyUL1Og+jo/ZDOoPr1xJAw3+yzTWwfhyA3J40qaa04Q=;
-        b=Yuyum30ufxmbLVxjQSFHKtoUVsrSTenx3Angd6BIub06GcTuJrXI+nZJUzoHNb5/Tt
-         WfH7sArrkyC19aZmWMDK4oeocmgIcR3LPYqZDsDZB9zjcYFqoWilwedBHVsJwBe5n3Cs
-         MMb6PVKJlcjn9vV6RUdXclQpwyxeutf4eE8pCsT4dHtgvcC9DT8AQ5rSNftpJFnHKu+M
-         kySNLJAhahFB4UCY6VeFcHxgKXMqtRhvltlldwE713HX8Sh37OEZQACk4aA5PWXaLnFl
-         XLJrm/10GBPj0QmmoVOlX4qEJHn5xOUvScdfZyCSniKkwAh5q+HqQB97MrRrc/qQsGIq
-         J3Yw==
-X-Gm-Message-State: ANoB5pmpHH3WUPGPaGxNqoy8+aH3J9A75OgnurEYSGA5WPMNzbGlpxZb
-        dgwt6C7BlQjHYQgp4n5MJdNdwg==
-X-Google-Smtp-Source: AA0mqf6Emtt2xBvkwqUH0D6tAfeP1i9Zs/1xVxKY56Q42DNsjCvlHvNu8pLcBLZD7SKHBjNDZ9j+bQ==
-X-Received: by 2002:a2e:8619:0:b0:279:88ce:468f with SMTP id a25-20020a2e8619000000b0027988ce468fmr6244869lji.312.1669625302909;
-        Mon, 28 Nov 2022 00:48:22 -0800 (PST)
+        bh=1kpQGMfVGoPeQZNI7dVUnjJVF7AFJ93d+rQmt9jIBdI=;
+        b=saT49kTR0WERcaUX9OWeEWWM7WYm5Af5OFCvFDvK6UHE2XSz+nE/NAyj164hZ3/k45
+         tTiNiKsz814xnXAFJvMRZxTyfAK3EFGDw6H3YZwaBqg9ZbHVccdSVnNKKNn02ltbRad7
+         2CJV6qe1THmYmFReYV6nzsywjQDy+wdraA93edkMl9p+nay4v2ZiHPiLR5FGjLv9Tgu9
+         DV45tV+ygq/eah9KwJTLtmRhHwDfa1U850bRnuYmLrB2I/7s+JCM+MxwwLlHJZUyM2ZV
+         NHqshhAt1lvphQ4dIRpZcvG/IIC/wzU6ZkK8vjmLK4Kw1KfYlxFhZDRMANCcDXCEq5cK
+         U7Tw==
+X-Gm-Message-State: ANoB5pkXPU3ihB634hMsiWu1sxCaMFN7xoRxQnavudlL5xUGS6j2Tm5b
+        At8AKmOEGOLHSl2BSFjHV2/cmg==
+X-Google-Smtp-Source: AA0mqf4LOP8NWo6Zcm5fPRD5c/BGIhg5V932tLt82ATAra9se1Hh+RnzbwfW2/e0/4Nb5v7JstbB7Q==
+X-Received: by 2002:a05:6512:281d:b0:4ab:a159:3478 with SMTP id cf29-20020a056512281d00b004aba1593478mr9975937lfb.655.1669625451305;
+        Mon, 28 Nov 2022 00:50:51 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v3-20020a2e9243000000b002770eafaafbsm1161654ljg.99.2022.11.28.00.48.21
+        by smtp.gmail.com with ESMTPSA id d13-20020ac244cd000000b004b48e0f619asm1649133lfm.48.2022.11.28.00.50.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 00:48:22 -0800 (PST)
-Message-ID: <0e07745c-7bf8-ef1b-5ac9-6fc40031d7b6@linaro.org>
-Date:   Mon, 28 Nov 2022 09:48:21 +0100
+        Mon, 28 Nov 2022 00:50:50 -0800 (PST)
+Message-ID: <d52273d7-0c0c-7a4b-95d2-ffc4b70f2cbe@linaro.org>
+Date:   Mon, 28 Nov 2022 09:50:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 5/6] dt-bindings: arm: sunxi: add Rongpin RP-H6B board
+Subject: Re: [PATCH 6/6] arm64: dts: allwinner: h6: add Rongpin RP-H6C SoM and
+ RP-H6B board
 Content-Language: en-US
 To:     Icenowy Zheng <uwu@icenowy.me>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -68,9 +69,9 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
 References: <20221127073140.2093897-1-uwu@icenowy.me>
- <20221127073140.2093897-6-uwu@icenowy.me>
+ <20221127073140.2093897-7-uwu@icenowy.me>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221127073140.2093897-6-uwu@icenowy.me>
+In-Reply-To: <20221127073140.2093897-7-uwu@icenowy.me>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,15 +85,329 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 27/11/2022 08:31, Icenowy Zheng wrote:
-> Rongpin RP-H6B is a development board with RP-H6C SoM, which uses an
-> Allwinner H6 SoC.
+> Rongpin RP-H6C is an Allwinner H6 SoM by Rongpin, with Allwinner H6 SoC,
+> AXP805 PMIC, LPDDR3 memory and eMMC storage on it.
 > 
-> Add compatible strings for it, including the board-specific compatible
-> and the SoM compatible.
+> RP-H6B is their official evaluation board of RP-H6C, with an onboard
+> GL850G USB hub, Ampak AP6212 Wi-Fi module and some circuits about LVDS
+> display. It also exports the OTG USB port, the USB 3.0 port, PCIe bus
+> (as mPCIe slot), internal Ethernet PHY, analog audio/video and HDMI
+> port.
 > 
+> Add a DTSI file for the SoM and a DTS for the full board.
+> 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
+>  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+>  .../boot/dts/allwinner/sun50i-h6-rp-h6b.dts   | 239 ++++++++++++++++++
+>  .../boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi  | 180 +++++++++++++
+>  3 files changed, 420 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
+> index 6a96494a2e0a..e289fedcac29 100644
+> --- a/arch/arm64/boot/dts/allwinner/Makefile
+> +++ b/arch/arm64/boot/dts/allwinner/Makefile
+> @@ -36,6 +36,7 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-orangepi-lite2.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-orangepi-one-plus.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
+> +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-rp-h6b.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts
+> new file mode 100644
+> index 000000000000..9fa40c365e63
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts
+> @@ -0,0 +1,239 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2022 Icenowy Zheng <icenowy@aosc.io>
+> + */
+> +/dts-v1/;
+> +
+> +#include "sun50i-h6-rp-h6c.dtsi"
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +/ {
+> +	model = "Rongpin RP-H6B baseboard";
+> +	compatible = "rongpin,rp-h6b", "rongpin,rp-h6c",
+> +		     "allwinner,sun50i-h6";
+> +
+> +	aliases {
+> +		ethernet0 = &emac;
+> +		serial0 = &uart0;
+> +		/*
+> +		 * Prioritize the external RTC because it's powered
+> +		 * by a cell battery.
+> +		 */
+> +		rtc0 = &hym8563;
+> +		rtc1 = &rtc;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	hdmi_connector: connector {
+> +		compatible = "hdmi-connector";
+> +		type = "a";
+> +
+> +		port {
+> +			hdmi_con_in: endpoint {
+> +				remote-endpoint = <&hdmi_out_con>;
+> +			};
+> +		};
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led {
+> +			label = "rongpin:red:link";
+> +			gpios = <&r_pio 0 3 GPIO_ACTIVE_LOW>; /* PL3 */
+> +			/*
+> +			 * On the schematics this LED is marked as "lit when
+> +			 * powering on and blinking when running".
+> +			 */
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +	};
+> +
+> +	/*
+> +	 * The VDD_5V power rail is connected to the internal regulator
+> +	 * of GL850G, to power up the 3.3V core of it.
+> +	 */
+> +	reg_v33_hub: v33-hub {
 
+Node names should be generic, so at least generic "regulator" prefix or
+suffix.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The same in further places.
+
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "v33-hub";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&reg_vdd_5v>;
+> +	};
+> +
+> +	/*
+> +	 * This board inputs 5V to AP6212 via a SS34 diode. Use this
+> +	 * regulator as the model of the internal regulator of AP6212.
+> +	 */
+> +	reg_vcc3v3_ap6212: vcc3v3-ap6212 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc3v3-ap6212";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&reg_ps>;
+> +	};
+> +
+> +	reg_vdd_5v: vdd-5v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd-5v";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		startup-delay-us = <100000>;
+> +		gpio = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +		vin-supply = <&reg_ps>;
+> +	};
+> +
+> +	/* For mPCIe slot WWAN modules / PCIe cards */
+> +	reg_vdd_3g: vdd-3g {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd-3g";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		startup-delay-us = <100000>;
+> +		gpio = <&r_pio 0 7 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +		vin-supply = <&reg_ps>;
+> +		/*
+> +		 * As a hack for lacking of control of a hub downstream
+> +		 * port's Vbus.
+> +		 */
+> +		regulator-always-on;
+> +	};
+> +
+> +	wifi_pwrseq: wifi_pwrseq {
+
+No underscores in node names.
+
+> +		compatible = "mmc-pwrseq-simple";
+> +		reset-gpios = <&r_pio 1 3 GPIO_ACTIVE_LOW>; /* PM3 */
+> +		post-power-on-delay-ms = <200>;
+> +	};
+> +};
+> +
+> +&de {
+> +	status = "okay";
+> +};
+> +
+> +&ehci0 {
+> +	status = "okay";
+> +};
+> +
+> +&ehci3 {
+> +	status = "okay";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +
+> +	hub@1 {
+> +		/* Genesys Logic GL850G usb hub */
+> +		compatible = "usb5e3,608";
+> +		reg = <1>;
+> +		vdd-supply = <&reg_v33_hub>;
+> +		reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
+> +	};
+> +};
+> +
+> +&hdmi {
+> +	status = "okay";
+> +};
+> +
+> +&hdmi_out {
+> +	hdmi_out_con: endpoint {
+> +		remote-endpoint = <&hdmi_con_in>;
+> +	};
+> +};
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +
+> +	hym8563: rtc@51 {
+> +		compatible = "haoyu,hym8563";
+> +		reg = <0x51>;
+> +		#clock-cells = <0>;
+> +	};
+> +};
+> +
+> +&mmc0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mmc0_pins>;
+> +	vmmc-supply = <&reg_cldo1>;
+> +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
+> +	bus-width = <4>;
+> +	status = "okay";
+> +};
+> +
+> +&mmc1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mmc1_pins>;
+> +	vmmc-supply = <&reg_vcc3v3_ap6212>;
+> +	vqmmc-supply = <&reg_bldo3>;
+> +	mmc-pwrseq = <&wifi_pwrseq>;
+> +	non-removable;
+> +	bus-width = <4>;
+> +	status = "okay";
+> +
+> +	brcmf: wifi@1 {
+> +		reg = <1>;
+> +		compatible = "brcm,bcm4329-fmac";
+> +		interrupt-parent = <&r_pio>;
+> +		interrupts = <1 0 IRQ_TYPE_LEVEL_LOW>; /* PM0 */
+> +		interrupt-names = "host-wake";
+> +	};
+> +};
+> +
+> +&ohci0 {
+> +	status = "okay";
+> +};
+> +
+> +/* Converted from 12v with a fixed DC-DC on the baseboard */
+> +&reg_ps {
+> +	regulator-min-microvolt = <5000000>;
+> +	regulator-max-microvolt = <5000000>;
+> +};
+> +
+> +&uart0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&uart0_ph_pins>;
+> +	status = "okay";
+> +};
+> +
+> +/* Bluetooth */
+> +&uart1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&uart1_pins>, <&uart1_rts_cts_pins>;
+> +	uart-has-rtscts;
+> +	status = "okay";
+> +
+> +	bluetooth {
+> +		compatible = "brcm,bcm43438-bt";
+> +		max-speed = <1500000>;
+> +		clocks = <&rtc CLK_OSC32K_FANOUT>;
+> +		clock-names = "lpo";
+> +		vbat-supply = <&reg_ps>;
+> +		vddio-supply = <&reg_bldo3>;
+> +		device-wakeup-gpios = <&r_pio 1 2 GPIO_ACTIVE_HIGH>; /* PM2 */
+> +		shutdown-gpios = <&r_pio 1 4 GPIO_ACTIVE_HIGH>; /* PM4 */
+> +		interrupt-parent = <&r_pio>;
+> +		interrupts = <1 1 IRQ_TYPE_EDGE_FALLING>; /* PM1 */
+> +		interrupt-names = "host-wakeup";
+> +	};
+> +};
+> +
+> +&uart1_pins {
+> +	bias-pull-up;
+> +};
+> +
+> +&uart1_rts_cts_pins {
+> +	bias-pull-up;
+> +};
+> +
+> +&usb2otg {
+> +	dr_mode = "host";
+> +	status = "okay";
+> +};
+> +
+> +&usb2phy {
+> +	usb0_vbus-supply = <&reg_vdd_5v>;
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi
+> new file mode 100644
+> index 000000000000..53822718e2d7
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2019-2022 Icenowy Zheng <icenowy@aosc.io>
+> + */
+> +
+> +#include "sun50i-h6.dtsi"
+> +#include "sun50i-h6-cpu-opp.dtsi"
+> +#include "sun50i-h6-gpu-opp.dtsi"
+> +
+> +/ {
+> +	ext_osc32k: ext_osc32k_clk {
+
+No underscores in node names.
+
+> +		#clock-cells = <0>;
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <32768>;
+> +		clock-output-names = "ext_osc32k";
+> +	};
+> +
+> +	/* Marked 3.4v~5.5v on SoM schematics */
+> +	reg_ps: ps {
+
+regulator prefix/suffix/etc
+
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "ps";
+> +	};
+> +};
+> +
 
 Best regards,
 Krzysztof
