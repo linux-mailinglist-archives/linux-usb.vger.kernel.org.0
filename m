@@ -2,89 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4CF63B0A3
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 19:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D04A63B0F7
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 19:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234075AbiK1SA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 13:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S234211AbiK1SS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 13:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiK1SAd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 13:00:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589B8E0EA;
-        Mon, 28 Nov 2022 09:47:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2503612F3;
-        Mon, 28 Nov 2022 17:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA333C433D6;
-        Mon, 28 Nov 2022 17:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669657639;
-        bh=1hkTev7NIENSu1g5GObZnRI6QKX9coXsgHP50hCr9cA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WnJjcW7cY1CYaWkk1lz8Z4Y2RREZBjwBremYGYBLCtbaj1en7CtPhYqJSd35I7djj
-         Py0yDG4AV6uoBsYD4MVTAZcsPf7scv/XJrW4/GuVZmbvh2La5vP/60LH3K2e/gAFAw
-         qB0vVpwzzuiS301QMo46lIr+RpzhkTxJHKxR8moY=
-Date:   Mon, 28 Nov 2022 18:47:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org,
-        Fabien Chouteau <fabien.chouteau@barco.com>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 0/3] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-Message-ID: <Y4T0JMU93gr+MklZ@kroah.com>
-References: <20221122123523.3068034-1-john@metanate.com>
- <Y30SWm+bhv8srJC2@google.com>
- <Y4S/3T7jzXzTHNSc@google.com>
+        with ESMTP id S233202AbiK1SSP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 13:18:15 -0500
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA7D2E9C1
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 10:01:54 -0800 (PST)
+Received: by mail-il1-f171.google.com with SMTP id m15so5406758ilq.2
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 10:01:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xmy4KXaQFNlqj17WY1ADV6bqsA77u7z6qE1PaxwlJXo=;
+        b=MbGJBcLe96fslA+EJpYMc/mYx126a8+O5nK5/8QNwAxTEBM1wD2EQuFwvTnNEWJuPG
+         rD9qHvLz7/dAZOAG/fPavWeOOkDThpvh+8cbTJesOmDh5E5wGyqla5MpuYBzFycHMa/G
+         TVfJHboUsvT84WE9TcllT7j2oNUboJqAK+dYqLPJapwWzzb/xKZV4pAnKiKVvdYvSbT+
+         C8G4Fevn/JfhMJcPPXYtovdy7MngaFPq3CMOIX4rfRVfvwNrWkE6JEY63mOnQs4hYbOj
+         6ox4Ia3hB1K+Y4otCa6lVtNAYDgT4AKplSyTtAfqZXa8PLcVwtRd7l4aHlN2nIKOEL8S
+         WTOg==
+X-Gm-Message-State: ANoB5pkFZFGc3ONhJcK9HCvZ+Nf1cnDNVWbM94oGMoQnmVxta+yuJN/e
+        pTAKjXUIxhYRDHrircqsyXAZCw==
+X-Google-Smtp-Source: AA0mqf70pG2zhhWmQ9tBm9b/zMsiZnG4JD+s+a0G/ChoykXinRgJm8GCPsBwkj7EV/Ro3wduiUVaCA==
+X-Received: by 2002:a05:6e02:c65:b0:302:f4f5:8691 with SMTP id f5-20020a056e020c6500b00302f4f58691mr9364754ilj.206.1669658513537;
+        Mon, 28 Nov 2022 10:01:53 -0800 (PST)
+Received: from google.com (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with ESMTPSA id o3-20020a02a1c3000000b0037477c3d04asm4326772jah.130.2022.11.28.10.01.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 10:01:52 -0800 (PST)
+Date:   Mon, 28 Nov 2022 18:01:50 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/6] usb: misc: onboard_usb_hub: add Genesys Logic GL850G
+ hub support
+Message-ID: <Y4T3ju7FTb6994HT@google.com>
+References: <20221127073140.2093897-1-uwu@icenowy.me>
+ <20221127073140.2093897-4-uwu@icenowy.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y4S/3T7jzXzTHNSc@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221127073140.2093897-4-uwu@icenowy.me>
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 02:04:13PM +0000, Lee Jones wrote:
-> On Tue, 22 Nov 2022, Lee Jones wrote:
-> 
-> > On Tue, 22 Nov 2022, John Keeping wrote:
-> > 
-> > > This series arises from the recent thread [1] on lifetime issues.
-> > > 
-> > > The main point is the first patch, with the second being an unrelated
-> > > fix for an issue spotted while working on this.  Both of these have
-> > > Fixes: tags for backporting to stable.
-> > > 
-> > > The final patch tidies up some error handling to hopefully avoid patch 2
-> > > issues in the future.
-> > > 
-> > > [1] https://lore.kernel.org/r/20221117120813.1257583-1-lee@kernel.org
-> > > 
-> > > John Keeping (3):
-> > >   usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-> > >   usb: gadget: f_hid: fix refcount leak on error path
-> > >   usb: gadget: f_hid: tidy error handling in hidg_alloc
-> > > 
-> > >  drivers/usb/gadget/function/f_hid.c | 60 ++++++++++++++++-------------
-> > >  1 file changed, 33 insertions(+), 27 deletions(-)
-> > 
-> > For the set:
-> > 
-> > Reviewed-by: Lee Jones <lee@kernel.org>
-> > Tested-by: Lee Jones <lee@kernel.org>
-> 
-> Greg, is this still on your radar?
+On Sun, Nov 27, 2022 at 03:31:37PM +0800, Icenowy Zheng wrote:
+> This is a 4-port USB 2.0 STT hub.
 
-Yes, let me catch up on pending patches...
+The commit message is supposed the describe the change, which
+is almost certainly not a 4-port USB 2.0 STT hub :)
+
+It could be something like "Add support for the Genesys Logic
+GL850G, which is a 4-port USB 2.0 STT hub."
+
+> 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
+>  drivers/usb/misc/onboard_usb_hub.c | 2 ++
+>  drivers/usb/misc/onboard_usb_hub.h | 5 +++++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index d63c63942af1..f5c71d724be6 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -334,6 +334,7 @@ static struct platform_driver onboard_hub_driver = {
+>  #define VENDOR_ID_MICROCHIP	0x0424
+>  #define VENDOR_ID_REALTEK	0x0bda
+>  #define VENDOR_ID_TI		0x0451
+> +#define VENDOR_ID_GENESYS	0x05e3
+
+Please insert the new entry in alphabetical order, i.e. before
+VENDOR_ID_MICROCHIP.
+
+>  
+>  /*
+>   * Returns the onboard_hub platform device that is associated with the USB
+> @@ -414,6 +415,7 @@ static const struct usb_device_id onboard_hub_id_table[] = {
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
+>  	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
+>  	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
+> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+
+Same here, the table is ordered alphabetically
+
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
+> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> index 34beab8bce3d..1ca188713b1f 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.h
+> +++ b/drivers/usb/misc/onboard_usb_hub.h
+> @@ -22,6 +22,10 @@ static const struct onboard_hub_pdata ti_tusb8041_data = {
+>  	.reset_us = 3000,
+>  };
+>  
+> +static const struct onboard_hub_pdata genesys_gl850g_data = {
+> +	.reset_us = 3,
+> +};
+> +
+>  static const struct of_device_id onboard_hub_match[] = {
+>  	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
+>  	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+> @@ -30,6 +34,7 @@ static const struct of_device_id onboard_hub_match[] = {
+>  	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,5414", .data = &realtek_rts5411_data, },
+> +	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
+
+These table is ordered by compatible string, the new entry should be
+inserted after "usb451,8142".
+
+Thanks
+
+m.
