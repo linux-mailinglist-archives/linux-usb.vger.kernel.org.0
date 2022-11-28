@@ -2,83 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6722163AB22
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 15:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0ED463AB56
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 15:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiK1OhE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 09:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S231367AbiK1Oma (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 09:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbiK1Og5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 09:36:57 -0500
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5978A1E3C9;
-        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
-Received: by mail-pl1-f174.google.com with SMTP id y17so2430988plp.3;
-        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2tfGJ688yw66/5+c/tC+iEpvYaVIiyqra5EJQGq6yW0=;
-        b=THpMDmRnWZdTY5f6irzQmpEPD4/tR78MeeDpj6DaraTF9WmnyroYnsN4AcWMnxfp/5
-         USigBlCRaoG9FmiL6IOXP8u88gUMl+lg8EmE5MAD4WN+VED72B7XOo1nDo2hPtsKZr0V
-         4Qdj9kSXKbXHeOrQKEINVSbX6mcnUIqrW1QLA2RWqh4d0gMDDOVx0AS3UZNG7r9GEVXB
-         RQ3qkFGq3vi9G1PZ2d5U3pBfqVvfjbTWyArW4RfzFPJtg1x8T6jMAqj9lZspyu4hWhou
-         kl656nLBoCeB+vyNOetbyI2Lm51sSPj65Xn0F6GkDEcBAzACH8LF+WUllN2vKK0TG5ou
-         h4Pw==
-X-Gm-Message-State: ANoB5pnUEaO30OYoLT7+vkHFJsMOdSWIx1QTLJ7iNmAz0KFDyNYvpjqD
-        Rp3cHX5crWUkBBT9lrltMlvfC96B12xuKETaR7TZ4ah01oLO7Q==
-X-Google-Smtp-Source: AA0mqf71NiCmueKGbVL7eIHIYR822P/A0exOdsRXjEcjJAEpb2yA2syOqwKfhDRGpYN4qf3CBZi4D5hSrudyEHiFHAg=
-X-Received: by 2002:a17:90a:77cc:b0:219:1747:f19c with SMTP id
- e12-20020a17090a77cc00b002191747f19cmr13715759pjs.222.1669646216859; Mon, 28
- Nov 2022 06:36:56 -0800 (PST)
+        with ESMTP id S232596AbiK1OmF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 09:42:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B2E1D315
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 06:42:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21E7CB80DD5
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 14:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0170C433D6;
+        Mon, 28 Nov 2022 14:42:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669646521;
+        bh=xXnaLuTbxng0ikkatNtCB+VkUXgBO+30UtpvovV6cZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GNjFZxYCz+G0FN/ZpF+HEs7JAhFhN40i2JucvGCyHIZIWtGEl4hCq6TCfLvGzEJEh
+         qvcy5ISCMI8wgglTpbi80MG6Hci/q2pMoFj9hXwRfa3EiLTKtTrzgOGVvvd54utTCz
+         WwchLxdewtuI4/bIbreZ0LT9lpA353PbKUHftdyJ93Mc6BWUw2/BjrAAgz9aWKM330
+         tNC5Hu+wzT9Vkn0pmhVEMQc2dfzMZvVCFqZ+vNJhmXq5c4afW63FUZxeHLqR1YLce4
+         ZH03fSLB9mBNujunLkzo9q7ivO8SBp/RymyeMRd+mNthTDf08s74Ti6sEayI6oZXq3
+         zCyNHatjIcVkg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ozfKZ-0002Fs-CR; Mon, 28 Nov 2022 15:41:59 +0100
+Date:   Mon, 28 Nov 2022 15:41:59 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Alex Henrie <alexh@vpitech.com>
+Cc:     linux-usb@vger.kernel.org, johanna.abrahamsson@afconsult.com,
+        alexhenrie24@gmail.com
+Subject: Re: [PATCH] USB: serial: cp210x: map B0 to B9600
+Message-ID: <Y4TItxxwSNy7OnMA@hovoldconsulting.com>
+References: <20221126035825.6991-1-alexh@vpitech.com>
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-5-mailhol.vincent@wanadoo.fr>
- <Y4S7LB0ThF4jZ0Bj@lunn.ch>
-In-Reply-To: <Y4S7LB0ThF4jZ0Bj@lunn.ch>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 28 Nov 2022 23:36:45 +0900
-Message-ID: <CAMZ6RqJjq795FyvSSuro1y+x2z+K6o6aasPTgajxKC1b4ECOLg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/6] can: etas_es58x: remove es58x_get_product_info()
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221126035825.6991-1-alexh@vpitech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon. 28 Nov. 2022 at 22:47, Andrew Lunn <andrew@lunn.ch> wrote:
-> On Sun, Nov 27, 2022 at 01:22:09AM +0900, Vincent Mailhol wrote:
-> > Now that the product information is available under devlink, no more
-> > need to print them in the kernel log. Remove es58x_get_product_info().
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
-> There is a slim chance this will break something paring the kernel
-> log, but you are not really supposed to do that.
+On Fri, Nov 25, 2022 at 08:58:25PM -0700, Alex Henrie wrote:
+> When a baud rate of 0 is requested, both the 8250 driver and the FTDI
+> driver reset the baud rate to the default of 9600 (see the comment above
+> the uart_get_baud_rate function). Some old versions of the NXP blhost
+> utility depend on this behavior. 
 
-Greg made it clear that this should disappear:
-  https://lore.kernel.org/linux-can/Y2YdH4dd8u%2FeUEXg@kroah.com/
-and I agree.
+What exactly do you mean by "depend on" here? Setting B0 is supposed to
+hang up a modem connection by deasserting the modem control lines, but
+there's nothing mandating any particular line speed to be set in
+hardware. Why would that even matter?
 
-I do not recognize the kernel log as being a stable interface to the
-userland that we should not break.
+If the user space tool is thrown off by the fact that B0 isn't
+implemented, perhaps that's what should be addressed.
 
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-Thank you!
+Johan
