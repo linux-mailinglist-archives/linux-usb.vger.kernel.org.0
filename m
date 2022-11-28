@@ -2,135 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBCC63A0C7
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 06:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A429563A140
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 07:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiK1Fcj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 00:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S229842AbiK1GcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 01:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiK1Fci (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 00:32:38 -0500
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B899BEA;
-        Sun, 27 Nov 2022 21:32:35 -0800 (PST)
-Received: by mail-pf1-f179.google.com with SMTP id w79so9429023pfc.2;
-        Sun, 27 Nov 2022 21:32:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Aa6IZglYvctadBEzqWZe9EXgU7WiR6HNZzFHtL5DNo=;
-        b=n3LbE2po45L7UEA/e4z8Dn0mvYkvs0+qS7CNVLew7hNwlobQvNu60t2fH8EEsjnxnK
-         Mxu4DhwaYd9+T6tHBoC7O2B5Fd25zBO3HsaXd6ssdjpW8j6QFkPf8NYeEwof6vk713W9
-         V9SrwoixJzFpiOAxl9DRFErzIycIatZR5H9aQNfAVKJz2IwVjzZf+rjKDw7fVCZyGe3n
-         /TUe23dZ42envD/Gvb7kQpySEMyQLOf4/SMBR5MjC4pBLChOeWb7XekNeljNUe4EUS9n
-         eCEjQyq+VXTLiHS11mL7a6pz3lzRVWY0VQKD49Qk/QYIE6U9sjYIxvCB1pjwsAGt8PrW
-         vjIA==
-X-Gm-Message-State: ANoB5pl6fr2M/gUTETuhxrZqQigxE+WgGHCJouz9ilnk2Tm8NTIEL//N
-        hNvs1yT+Rmg4NJAqiwRNqchLR7wC0ekj2ZHVyEs=
-X-Google-Smtp-Source: AA0mqf4DsMKAlgvZVcNPpcG6bvgBwfljvVj8E/qqpGfmBCUsqDrL33BR5G5S4PYVxNZ8B7TexHAsaA0JeMi81NOV8sY=
-X-Received: by 2002:a63:1803:0:b0:477:6e5d:4e25 with SMTP id
- y3-20020a631803000000b004776e5d4e25mr31802247pgl.70.1669613554816; Sun, 27
- Nov 2022 21:32:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
- <Y4JEGYMtIWX9clxo@lunn.ch> <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
- <Y4OD70GD4KnoRk0k@rowland.harvard.edu> <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 28 Nov 2022 14:32:23 +0900
-Message-ID: <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229621AbiK1GcW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 01:32:22 -0500
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBA8512D35;
+        Sun, 27 Nov 2022 22:32:20 -0800 (PST)
+Received: from ubuntu.localdomain (unknown [10.162.98.155])
+        by mail-app4 (Coremail) with SMTP id cS_KCgDHPk7oVYRjHpqaCA--.63765S2;
+        Mon, 28 Nov 2022 14:32:15 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
+        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] usb: mtu3: fix sleep-in-atomic-context bug caused by usleep_range()
+Date:   Mon, 28 Nov 2022 14:32:07 +0800
+Message-Id: <20221128063207.100596-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgDHPk7oVYRjHpqaCA--.63765S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1ftF4rWF48KrW3JF43Wrg_yoW8Jw1rpa
+        1UArW8Ar4jgrZIyFsrAF1vgw45CanrXay8KFW2q3yDuas5twn09F1kAFWYkF4UXF18Ar4Y
+        gF1UGw1Fka1DuFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
+        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYIAVZdtcnh2gAasb
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon. 28 Nov. 2022 at 10:34, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Mon. 28 Nov. 2022 at 00:41, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > On Sun, Nov 27, 2022 at 02:10:32PM +0900, Vincent MAILHOL wrote:
-> > > > Should devlink_free() be after usb_set_inftdata()?
-> > >
-> > > A look at
-> > >   $ git grep -W "usb_set_intfdata(.*NULL)"
-> > >
-> > > shows that the two patterns (freeing before or after
-> > > usb_set_intfdata()) coexist.
-> > >
-> > > You are raising an important question here. usb_set_intfdata() does
-> > > not have documentation that freeing before it is risky. And the
-> > > documentation of usb_driver::disconnect says that:
-> > >   "@disconnect: Called when the interface is no longer accessible,
-> > >    usually because its device has been (or is being) disconnected
-> > >    or the driver module is being unloaded."
-> > >   Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
-> > >
-> > > So the interface no longer being accessible makes me assume that the
-> > > order does not matter. If it indeed matters, then this is a foot gun
-> > > and there is some clean-up work waiting for us on many drivers.
-> > >
-> > > @Greg, any thoughts on whether or not the order of usb_set_intfdata()
-> > > and resource freeing matters or not?
-> >
-> > In fact, drivers don't have to call usb_set_intfdata(NULL) at all; the
-> > USB core does it for them after the ->disconnect() callback returns.
->
-> Interesting. This fact is widely unknown, cf:
->   $ git grep "usb_set_intfdata(.*NULL)" | wc -l
->   215
->
-> I will do some clean-up later on, at least for the CAN USB drivers.
->
-> > But if a driver does make the call, it should be careful to ensure that
-> > the call happens _after_ the driver is finished using the interface-data
-> > pointer.  For example, after all outstanding URBs have completed, if the
-> > completion handlers will need to call usb_get_intfdata().
->
-> ACK. I understand that it should be called *after* the completion of
-> any ongoing task.
->
-> My question was more on:
->
->         devlink_free(priv_to_devlink(es58x_dev));
->         usb_set_intfdata(intf, NULL);
->
-> VS.
->
->         usb_set_intfdata(intf, NULL);
->         devlink_free(priv_to_devlink(es58x_dev));
->
-> From your comments, I understand that both are fine.
+The function zero_autoresume() is a timer handler that runs in
+atomic context. It is used to wake up the host connected to the
+gadget. when used by usb mtu3, the zero_autoresume() calls
+usleep_range() that can sleep. As a result, the sleep-in-atomic-
+context bug will happen. The process is shown below.
 
-Do we agree that the usb-skeleton is doing it wrong?
-  https://elixir.bootlin.com/linux/latest/source/drivers/usb/usb-skeleton.c#L567
-usb_set_intfdata(interface, NULL) is called before deregistering the
-interface and terminating the outstanding URBs!
+    (atomic context)
+zero_autoresume()
+  usb_gadget_wakeup()
+    mtu3_gadget_wakeup()
+      usleep_range() //sleep
 
-> > Remember, the interface-data pointer is owned by the driver.  Nothing
-> > else in the kernel uses it.  So the driver merely has to be careful not
-> > to clear the pointer while it is still using it.
->
-> Thanks for your comments!
->
->
-> Yours sincerely,
-> Vincent Mailhol
+This patch changes usleep_range(10000, 11000) to mdelay(10)
+in order to mitigate the bug.
+
+Fixes: df2069acb005 ("usb: Add MediaTek USB3 DRD driver")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/usb/mtu3/mtu3_gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+index 80236e7b089..e366c4a97d7 100644
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -468,7 +468,7 @@ static int mtu3_gadget_wakeup(struct usb_gadget *gadget)
+ 	} else {
+ 		mtu3_setbits(mtu->mac_base, U3D_POWER_MANAGEMENT, RESUME);
+ 		spin_unlock_irqrestore(&mtu->lock, flags);
+-		usleep_range(10000, 11000);
++		mdelay(10);
+ 		spin_lock_irqsave(&mtu->lock, flags);
+ 		mtu3_clrbits(mtu->mac_base, U3D_POWER_MANAGEMENT, RESUME);
+ 	}
+-- 
+2.17.1
+
