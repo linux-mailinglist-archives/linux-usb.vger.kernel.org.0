@@ -2,97 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A7863A652
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 11:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A317463A682
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 11:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiK1KrU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 05:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S230437AbiK1K7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 05:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiK1KrT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 05:47:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB47017583
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 02:47:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47C146108A
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 10:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A2B03C433D7
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 10:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669632437;
-        bh=1/NxSMmyYljBKMbfb85Q9TnezpE2BlPPyFUj+NrsFzk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=oeSoR6rFluXxw4xypCv7m5SmfaSAbKsApw8XjfjUgvRXGtbxKr/erHBXNLZqJEAeB
-         wC+vq0WrHIzEyAkaM8N+c8eOEu5syprDwwRfhPYkyqst8v15w//LZ91TyET1Y7m6I4
-         St30iJHPtMkoseVIhftLCNX38rSNx7OdYhADq52wRrTf24cu1QuAZRxhdw65Hinsiu
-         ZgFJQQeCrPoeNmzBqPOu56rvR+DWJMkFOkmvGhvJ4GlBkgKGuVdGuSl9ZHzNNMt/4z
-         ZWxnp7lishiGBXYAOh9HQRVHsAdzFi3r1JQ6Hq9lE6dsA4NhIKxyu6gt5u7ps+XjgR
-         B+AdcX60k7/oQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 856CAC433E7; Mon, 28 Nov 2022 10:47:17 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
- CometLake platform
-Date:   Mon, 28 Nov 2022 10:47:17 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-216728-208809-mcpKAhJn8Z@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
-References: <bug-216728-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230143AbiK1K7Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 05:59:24 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB2812AEC;
+        Mon, 28 Nov 2022 02:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669633163; x=1701169163;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nG8vAVvrG6D6LC8ebeOkxEt0G/Epw+RgSwZ++d7qqoA=;
+  b=x0QOeJ3CLIX+OUnAiTAV7/3qs+PUshpIZPuDPLaSbNv98OAPu47Ogn/T
+   n/xoTCeL8kkdMQx2lM6f97J/zgNuE1KK/HwFxAzKfrdoZTuUOuHiXg6xg
+   nkokMOawHQDLEensa+v7bw80uo0KX516nVvsTuL+mLR2LUd1YIuIMDXC3
+   3aTi5TqhzSugA3wnHSzIZYmcX26Gt0PcRF8G8JK/RrcjYwGjM3dx6g9is
+   I8D8JY5m6yZiqCHWGjrE23h8ZrdLFpztoJwpvyBht3EjlEY1dVRJCWoYE
+   YzY5Hy6lM+9JYSohs5+MZdEZow3MuKyZKlCfNtCaLNnHb+sqPMpASJvIz
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="201651230"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Nov 2022 03:59:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 28 Nov 2022 03:59:23 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Mon, 28 Nov 2022 03:59:21 -0700
+Message-ID: <717e921f-af8f-f235-e2f8-e2fae2b31e9a@microchip.com>
+Date:   Mon, 28 Nov 2022 11:59:14 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: gadget: udc: drop obsolete dependencies on
+ COMPILE_TEST
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>, <linux-usb@vger.kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>
+References: <20221125170444.36620123@endymion.delvare>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20221125170444.36620123@endymion.delvare>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
+On 25/11/2022 at 17:04, Jean Delvare wrote:
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> is possible to test-build any driver which depends on OF on any
+> architecture by explicitly selecting OF. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
+> 
+> It is actually better to always build such drivers with OF enabled,
+> so that the test builds are closer to how each driver will actually be
+> built on its intended target. Building them without OF may not test
+> much as the compiler will optimize out potentially large parts of the
+> code. In the worst case, this could even pop false positive warnings.
+> Dropping COMPILE_TEST here improves the quality of our testing and
+> avoids wasting time on non-existent issues.
+> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Mathias Nyman (mathias.nyman@linux.intel.com) changed:
+Fine with me:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+Thanks Jean. Best regards,
+   Nicolas
 
---- Comment #7 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-dmesg is from a 5.15.0-52-generic kernel.
-There are some changes in pci code in this area since then.
-Does a 6.0 or 6.1-rc kernel behave the same?
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> ---
+>   drivers/usb/gadget/udc/Kconfig |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- linux-6.0.orig/drivers/usb/gadget/udc/Kconfig
+> +++ linux-6.0/drivers/usb/gadget/udc/Kconfig
+> @@ -33,7 +33,7 @@ menu "USB Peripheral Controller"
+>   config USB_AT91
+>          tristate "Atmel AT91 USB Device Port"
+>          depends on ARCH_AT91
+> -       depends on OF || COMPILE_TEST
+> +       depends on OF
+>          help
+>             Many Atmel AT91 processors (such as the AT91RM2000) have a
+>             full speed USB Device Port with support for five configurable
+> @@ -430,7 +430,7 @@ config USB_EG20T
+>   config USB_GADGET_XILINX
+>          tristate "Xilinx USB Driver"
+>          depends on HAS_DMA
+> -       depends on OF || COMPILE_TEST
+> +       depends on OF
+>          help
+>            USB peripheral controller driver for Xilinx USB2 device.
+>            Xilinx USB2 device is a soft IP which supports both full
+> 
+> 
+> --
+> Jean Delvare
+> SUSE L3 Support
 
-The "HC died; cleaning up" message is expected when xhci driver
-can't read a mmio xHC registers (gets 0xffffffff).
-This is normally the case when PCI device is removed, or as in this
-case not yet powered (still in D3)
+-- 
+Nicolas Ferre
 
-No idea why PCI link fails to go to D0
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
