@@ -2,94 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E07E63AA60
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 15:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F7963AAEA
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 15:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiK1OEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 09:04:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
+        id S232542AbiK1O3h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 09:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiK1OEW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 09:04:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA6FD12C;
-        Mon, 28 Nov 2022 06:04:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A917B80DDA;
-        Mon, 28 Nov 2022 14:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49DDC433D7;
-        Mon, 28 Nov 2022 14:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669644259;
-        bh=hJGjJg60sjMbrCzlwGn3rya6L16V299vyXbEqb4YAR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bGlQHwLR8hxljgzrgVHHC9LZOQfx9gKF+fQ1o5nVnR3iIyt98G1ob49nUHqdwuWKL
-         sbqABdmC0J29f+uqMO09G/htURJnWsQevMZqn5ctWeH/DS0VIqmDf4O4H0ABDSwKqI
-         tt2h3ljwB5yOAra2d6NUD4Pk+s0QuO0q9Qx/oqvChA3FAOMULv30J3GR4VFvN3fHXP
-         NXxMAzl5symBF+2sGLx848HwjtoldJG1Hjr2ymuYPrWJ+Prwu8pDCA3j2a4cRbAK7z
-         UyA7+gEfkG1dLHsYKVioRBfxcrlP3J8hY6sggXIFfI4v7rc8C+cPYbNP43zEWNVyFY
-         NKq+DzkKzC/ww==
-Date:   Mon, 28 Nov 2022 14:04:13 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     John Keeping <john@metanate.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Fabien Chouteau <fabien.chouteau@barco.com>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
+        with ESMTP id S232502AbiK1O30 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 09:29:26 -0500
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C393A1F63A;
+        Mon, 28 Nov 2022 06:29:24 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id t17so9635280pjo.3;
+        Mon, 28 Nov 2022 06:29:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=shIIJU9mUgqVvo7u+uZBJemwke0hUUcMwXAy+fLCBZg=;
+        b=clea3xd9sSvB/Y917+W1DUpsu9JjgVpy74IadlgPmJ0L7feaeCpnaAumZyWPQUCDRi
+         vZ+o962LTHEkI1v65HsiVehDuYRpJDwsMOMASMxKAnRtHpWTnOESc76JbMYSlnMuk6O1
+         zr3evS7eVU3s8pBkWorauXy2/qIiIupIaVbAXkKpS7kCH2E/s0c1nkZr/TkWMrnJpoQK
+         nKNhAkkvT94Jqgalagt63BMEeBjed4M0IammBsCOREMAEMkSe5uPv5MPUo1FJhGnperN
+         GKY6KBw/+/uDjAQYQ3cSl1CAPa+6o/L/gzHEstZOW4qjY5pPE6LZLnL/99XU1aSeK/NA
+         ZlGg==
+X-Gm-Message-State: ANoB5plN00SkYar7LGIWYgyybhhzTzAAxq2Nxc+yczHwRKPKsvvAV5H/
+        49JLZH1BHuC50Tl6xXrfzfrmIyThMfURVsndoYY=
+X-Google-Smtp-Source: AA0mqf62r3HiorKL8UciX0wkuqNuN1kQtduso5//lD7W9O9LDyvNYuzbBuZDf4H4qWMJ/+nYMt1mvnM06PCZFcZjotU=
+X-Received: by 2002:a17:902:b608:b0:189:7a8b:537d with SMTP id
+ b8-20020a170902b60800b001897a8b537dmr10252626pls.95.1669645763894; Mon, 28
+ Nov 2022 06:29:23 -0800 (PST)
+MIME-Version: 1.0
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
+ <Y4JEGYMtIWX9clxo@lunn.ch> <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
+ <Y4OD70GD4KnoRk0k@rowland.harvard.edu> <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
+ <Y4S6wnM33Vs56vr5@lunn.ch>
+In-Reply-To: <Y4S6wnM33Vs56vr5@lunn.ch>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 28 Nov 2022 23:29:12 +0900
+Message-ID: <CAMZ6RqLnfg=UG_Pisa9M0zYkWEvScZmGbytWmAQPVXLeacRffw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 0/3] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-Message-ID: <Y4S/3T7jzXzTHNSc@google.com>
-References: <20221122123523.3068034-1-john@metanate.com>
- <Y30SWm+bhv8srJC2@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y30SWm+bhv8srJC2@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 22 Nov 2022, Lee Jones wrote:
+On Mon. 28 Nov. 2022 at 22:45, Andrew Lunn <andrew@lunn.ch> wrote:
+> > > But if a driver does make the call, it should be careful to ensure that
+> > > the call happens _after_ the driver is finished using the interface-data
+> > > pointer.  For example, after all outstanding URBs have completed, if the
+> > > completion handlers will need to call usb_get_intfdata().
+> >
+> > ACK. I understand that it should be called *after* the completion of
+> > any ongoing task.
+>
+> What sometimes gets people is /sys, /proc. etc. A process can have
+> such a file open when the device is unplugged. If the read needs to
+> make use of your private data structure, you need to guarantee it
+> still exists.  Ideally the core needs to wait and not call the
+> disconnect until all such files are closed. Probably the USB core
+> does, it is such an obvious issue, but i have no knowledge of USB.
 
-> On Tue, 22 Nov 2022, John Keeping wrote:
-> 
-> > This series arises from the recent thread [1] on lifetime issues.
-> > 
-> > The main point is the first patch, with the second being an unrelated
-> > fix for an issue spotted while working on this.  Both of these have
-> > Fixes: tags for backporting to stable.
-> > 
-> > The final patch tidies up some error handling to hopefully avoid patch 2
-> > issues in the future.
-> > 
-> > [1] https://lore.kernel.org/r/20221117120813.1257583-1-lee@kernel.org
-> > 
-> > John Keeping (3):
-> >   usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-> >   usb: gadget: f_hid: fix refcount leak on error path
-> >   usb: gadget: f_hid: tidy error handling in hidg_alloc
-> > 
-> >  drivers/usb/gadget/function/f_hid.c | 60 ++++++++++++++++-------------
-> >  1 file changed, 33 insertions(+), 27 deletions(-)
-> 
-> For the set:
-> 
-> Reviewed-by: Lee Jones <lee@kernel.org>
-> Tested-by: Lee Jones <lee@kernel.org>
+For USB drivers, the parallel of what you are describing are the URBs
+(USB request Buffers). The URB are sent asynchronously to the device.
+Each URB has a completion handler:
+  https://elixir.bootlin.com/linux/v6.0/source/include/linux/usb.h#L1443
+It is important to wait for all outstanding URB to complete before
+releasing your resources. But once you are able to guarantee that any
+ongoing actions were completed, the order in which you kfree() or
+usb_set_intfdata() to NULL matters less.
 
-Greg, is this still on your radar?
-
--- 
-Lee Jones [李琼斯]
+Of course, the USB drivers could also have some /sys/ or /proc/ files
+opened, but this is not the case of the etas_es58x. By the way, the
+handling of outstanding URBs is done by es58x_free_urbs():
+  https://elixir.bootlin.com/linux/v6.0/source/drivers/net/can/usb/etas_es58x/es58x_core.c#L1745
+which is called just before the devlink_free() and the usb_set_intfdata().
