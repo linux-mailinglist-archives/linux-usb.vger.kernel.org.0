@@ -2,50 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C96063AD78
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 17:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF4C63AD9E
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 17:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbiK1QQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 11:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S232784AbiK1QX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 11:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbiK1QQL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 11:16:11 -0500
+        with ESMTP id S232754AbiK1QXK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 11:23:10 -0500
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C3EBC1A;
-        Mon, 28 Nov 2022 08:15:38 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 628973200942;
-        Mon, 28 Nov 2022 11:15:35 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 28 Nov 2022 11:15:36 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127B3C7D;
+        Mon, 28 Nov 2022 08:23:10 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 1E60B320094D;
+        Mon, 28 Nov 2022 11:23:09 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 28 Nov 2022 11:23:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669652134; x=1669738534; bh=wg7FaKo805
-        eO+vNPgQ7ztZjMcWXQHDAz6Wy4cpdl6SA=; b=LS5uLeJVdBZuZTtUjOOHkxZRYW
-        Zxzxid+7EuBWTBo86rf+TL/N2F5x6eoDGBDASrMR/VYCSE+XtimVIPI82vmjBCI3
-        5g3Q7P2nXT+NmLRYfdtSwKyblGaQse+ZIRQ7GHYLYO3do1Fv7Iv2TBSvkfEGCfIW
-        ilCT7xeHvJtg0b62aMsit5Qloni3E130q1VA9l+62hmEdvMhhfKVY0eCrc+jk7Hg
-        OwrX+g9ZaqUlh2ERcVSyvWBWUcnStVqSvPX2Zu36H5lR4YHcfJyoO+F0aGlNd2CP
-        ddwZ8SIxgVUlYPT8SNqZ2Cw1m3ACKn+iC3P4tzkkmusHVMqwARwx5CyH1wuw==
+        :subject:to:to; s=fm1; t=1669652588; x=1669738988; bh=uWr9BsF5eX
+        VkjF1lihfNadM8eLlnHm/DZvhOmYHJ7fM=; b=jZXbponIVf1yUF32HALm/So70R
+        rISSObGj4jgPDy93wzxCditX9XRRVQZtVB3EVKT5RPH3Z+pnzAus5cQUXx4pq5fy
+        XE0Q9OBAtCuUu6DbmRXKjaNpK5CUc72qVzONqOn6Mg6KzJxb/RR152lgEnt1Wb+d
+        BueJQoEY/eSBXT2WDs2V039y/2qOgGF/qFDrneUKK5OCGz48nneRE60uc07rSK8V
+        qtX67wg4iySsqDzFdpxp3eu22c/7ew97uJ7inYPMcnTfqjZ247wrQYWxWc5Qa9Bh
+        ffVIomW0sHzpX/O+WyFznLTLhbTwHhWzkYAKSYlwu1XD/nf3zpTdkoJqhI3Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:message-id
         :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1669652134; x=1669738534; bh=wg7FaKo805eO+vNPgQ7ztZjMcWXQHDAz6Wy
-        4cpdl6SA=; b=b65YMzkTrWpIYtQmR9odiHJDJ7BfHUZN/uWL+F8Aw10cJWGMCxU
-        xBAqjmgl8mAcWdiFba2sRkJGSmdUMkcKdVWRF5kWpOckwD6qFDH5rlA3jbBaYYFO
-        FiKGUCaCm3ofJkuhi2YYtjiNvN4MB4AQDk2vwJOlrdGfxbQG+JjaIuXA0WNhZ/Yq
-        HktPQNh9FVkKdVbh5SQ8EPmPRfIRCy8LUGVBYBu18HHX41Cbomplu81ST0RUKwPl
-        rQLcwwlfpTUJvPh1w/WW09Aw4YJZXzq17QdZayczeFrGhw/LrzqYGR70BW+l67ZF
-        JCuQvyLKbXgRMxfIDtcAFGhSxWr26phVRTg==
-X-ME-Sender: <xms:pt6EYxW7yUkjCUvoLNYZZiR9SHvzbKYGrAd4UC5VAKAGTpVFXSbfUg>
-    <xme:pt6EYxmiS56cx2Epe9GZhtUvBSi9gONyR5A4fHB2BXGwla4ISjpXhmNnAdOASYzQ1
-    5_iJtCPNca0Dm_xjEU>
-X-ME-Received: <xmr:pt6EY9bSQm59bwu0jpCLZ5VDta7NuH8-AGbJAA_TCkIzwqzi9MYS0HJmxCUADvGE0K32tpZ8ZrvBOvPFo8swzNBSZpyV51Ebz7oa7sIWTXZso_kksHsWvg8WQZHLtA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdekkecutefuodetggdotefrodftvf
+        1669652588; x=1669738988; bh=uWr9BsF5eXVkjF1lihfNadM8eLlnHm/DZvh
+        OmYHJ7fM=; b=Pc6gXiIq7s46GiP1ajhamIfDFABRpEHXlxrOwQtSjWz/eedlisc
+        1EE8EGB83NBQPcmzLBzqfxuEML1GEiH8fwGyEsCKavPbkpGfEy5P0r/Z2B7p0t/f
+        IrGnWXZk3RMZJgnGuJWm00S5iMpaIY6dNw+6WAmaV0aeuRAefDnohpi1JuJ9pOuS
+        pqucN5NDMXRsavqBXRoKeELtYbbRKdNBETYhCVVWckb5pTb1nf56tCY6gZgsPRIL
+        VsWVyuVhB0nYY6sB3TC3ZmQJcPYUGgVS6IQ05gSsT2CEb+MedjSRrzGkc0UmSkKr
+        7zXN2k8vTlE7LYfYxyL1U0COJSNevxbJ0qg==
+X-ME-Sender: <xms:bOCEY0Ot0qe90YmkMMzSDie__c-KFCmea3WFWpLbwrwGe1FnhEKJrA>
+    <xme:bOCEY68TGNjBHcnG0j52GiRnXaaXpwYermf-jlRRxIH1sG17DIryAoWM7ue_r_UdE
+    Z2ou5g5lDPQ9lGbnPs>
+X-ME-Received: <xmr:bOCEY7Tzo4IXxrUrWy4Mn-XLV6LquT0I4tHh-X5EIibNSce9wwbNizIiUFOk8e92jTRU5nEXD7TcYFfBufLk1sYTcytwQjup0uxWwDasgSJc54bKu4AWiurYlWLlfw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdeklecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
@@ -53,23 +53,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdekkecutefuodetggdote
     epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
     vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
     hsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:pt6EY0V1CzL83rp1lD1q4jkxlyvN4xsk4rUO4UN_gJgJ2b11jLIReA>
-    <xmx:pt6EY7mwHMh8h64OC4Dz_Vc-P2FaX3r0-qtrtyccWVfn_tthUN68jw>
-    <xmx:pt6EYxcRcNRmEpEZq_XjqPh1VxRDxSLuh4CC4yA8gxadmvdvVL27kA>
-    <xmx:pt6EY5YPoKCElaKrgbqTYrS5NmvURkk1nttm-AfXTWVsCCZAJlqo8g>
+X-ME-Proxy: <xmx:bOCEY8vnlfP7q15aBzAG3tPfYSJEEB8xBIVhKh9D8RykcYJin_9-PQ>
+    <xmx:bOCEY8fXe1r7cJou_5Mo6XFV-703e9HvS9c2PliUlR9210DAQmmr7Q>
+    <xmx:bOCEYw1G8sgFmw1xBCKPDoBQNDoxcVPLIWv2ydraQs_Q4uHLvrsmsg>
+    <xmx:bOCEY75Uxr71Z49l8B9OTzCf58C_E5ZfEUI3T3guOYusScrchmL75A>
 Feedback-ID: i51094778:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Nov 2022 11:15:32 -0500 (EST)
+ 28 Nov 2022 11:23:07 -0500 (EST)
 From:   Sven Peter <sven@svenpeter.dev>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Janne Grunau <j@jannau.net>, linux-usb@vger.kernel.org,
+Cc:     Sven Peter <sven@svenpeter.dev>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-Subject: [PATCH] usb: dwc3: Fix race between dwc3_set_mode and __dwc3_set_mode
-Date:   Mon, 28 Nov 2022 17:15:26 +0100
-Message-Id: <20221128161526.79730-1-sven@svenpeter.dev>
+Subject: [PATCH] usb: typec: tipd: Set mode of operation for USB Type-C connector
+Date:   Mon, 28 Nov 2022 17:23:04 +0100
+Message-Id: <20221128162304.80125-1-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -82,107 +80,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-dwc->desired_dr_role is changed by dwc3_set_mode inside a spinlock but
-then read by __dwc3_set_mode outside of that lock. This can lead to a
-race condition when very quick successive role switch events happen:
+Forward the mode of operation to the typec subsystem such that it can
+configure the mux correctly.
 
-CPU A
-	dwc3_set_mode(DWC3_GCTL_PRTCAP_HOST) // first role switch event
-		spin_lock_irqsave(&dwc->lock, flags);
-		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_HOST
-		spin_unlock_irqrestore(&dwc->lock, flags);
-		queue_work(system_freezable_wq, &dwc->drd_work);
-
-CPU B
-	__dwc3_set_mode
-		// ....
-		spin_lock_irqsave(&dwc->lock, flags);
-		// desired_dr_role is DWC3_GCTL_PRTCAP_HOST
-		dwc3_set_prtcap(dwc, dwc->desired_dr_role);
-		spin_unlock_irqrestore(&dwc->lock, flags);
-
-CPU A
-	dwc3_set_mode(DWC3_GCTL_PRTCAP_DEVICE) // second event
-		spin_lock_irqsave(&dwc->lock, flags);
-		dwc->desired_dr_role = mode; // DWC3_GCTL_PRTCAP_DEVICE
-		spin_unlock_irqrestore(&dwc->lock, flags);
-
-CPU B (continues running __dwc3_set_mode)
-	switch (dwc->desired_dr_role) { // DWC3_GCTL_PRTCAP_DEVICE
-	// ....
-	case DWC3_GCTL_PRTCAP_DEVICE:
-		// ....
-		ret = dwc3_gadget_init(dwc);
-
-We then have DWC3_GCTL.DWC3_GCTL_PRTCAPDIR = DWC3_GCTL_PRTCAP_HOST and
-dwc->current_dr_role = DWC3_GCTL_PRTCAP_HOST but initialized the
-controller in device mode. It's also possible to get into a state
-where both host and device are intialized at the same time.
-Fix this race by creating a local copy of desired_dr_role inside
-__dwc3_set_mode while holding dwc->lock.
-
-Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/usb/dwc3/core.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/usb/typec/tipd/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 1f348bc867c2..fc38a8b13efa 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -122,21 +122,25 @@ static void __dwc3_set_mode(struct work_struct *work)
- 	unsigned long flags;
- 	int ret;
- 	u32 reg;
-+	u32 desired_dr_role;
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 982bd2cad931..46a4d8b128f0 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -14,6 +14,7 @@
+ #include <linux/regmap.h>
+ #include <linux/interrupt.h>
+ #include <linux/usb/typec.h>
++#include <linux/usb/typec_altmode.h>
+ #include <linux/usb/role.h>
  
- 	mutex_lock(&dwc->mutex);
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	desired_dr_role = dwc->desired_dr_role;
-+	spin_unlock_irqrestore(&dwc->lock, flags);
+ #include "tps6598x.h"
+@@ -257,6 +258,7 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
+ 		typec_set_orientation(tps->port, TYPEC_ORIENTATION_REVERSE);
+ 	else
+ 		typec_set_orientation(tps->port, TYPEC_ORIENTATION_NORMAL);
++	typec_set_mode(tps->port, TYPEC_STATE_USB);
+ 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), true);
  
- 	pm_runtime_get_sync(dwc->dev);
+ 	tps->partner = typec_register_partner(tps->port, &desc);
+@@ -280,6 +282,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
+ 	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
+ 	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
+ 	typec_set_orientation(tps->port, TYPEC_ORIENTATION_NONE);
++	typec_set_mode(tps->port, TYPEC_STATE_SAFE);
+ 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), false);
  
- 	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_OTG)
- 		dwc3_otg_update(dwc, 0);
- 
--	if (!dwc->desired_dr_role)
-+	if (!desired_dr_role)
- 		goto out;
- 
--	if (dwc->desired_dr_role == dwc->current_dr_role)
-+	if (desired_dr_role == dwc->current_dr_role)
- 		goto out;
- 
--	if (dwc->desired_dr_role == DWC3_GCTL_PRTCAP_OTG && dwc->edev)
-+	if (desired_dr_role == DWC3_GCTL_PRTCAP_OTG && dwc->edev)
- 		goto out;
- 
- 	switch (dwc->current_dr_role) {
-@@ -164,7 +168,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- 	 */
- 	if (dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
- 			DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
--			dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
-+			desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
- 		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
- 		reg |= DWC3_GCTL_CORESOFTRESET;
- 		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-@@ -184,11 +188,11 @@ static void __dwc3_set_mode(struct work_struct *work)
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 
--	dwc3_set_prtcap(dwc, dwc->desired_dr_role);
-+	dwc3_set_prtcap(dwc, desired_dr_role);
- 
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
--	switch (dwc->desired_dr_role) {
-+	switch (desired_dr_role) {
- 	case DWC3_GCTL_PRTCAP_HOST:
- 		ret = dwc3_host_init(dwc);
- 		if (ret) {
+ 	power_supply_changed(tps->psy);
 -- 
 2.25.1
 
