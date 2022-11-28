@@ -2,108 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBD363B115
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 19:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A9F63B124
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 19:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiK1SU2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 13:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S232770AbiK1SVu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 13:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233058AbiK1STn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 13:19:43 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE8A2E9E6
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 10:06:42 -0800 (PST)
+        with ESMTP id S234212AbiK1SVQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 13:21:16 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2053.outbound.protection.outlook.com [40.107.95.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6315E252BF
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 10:08:30 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dqztqvebiq3iB2ZenHV0FfnwiVGDSGHeRdMYtFyFDZ9xIAzl+PTkzlJGss7KHz1JVcNlrT+JJPaDkgRwyXw1q70lHDMQk3ksA6fINIvJeHpNlHhEALcXxyHvi7hTkXGp/dMgShZC51anTk0SC5oO1GCHBIiuagBpNDnbGnoXJm0/TfEYuHXFQlu+SU5cSYLhIvPsgBQnf6NW/sb04N33NrgOR846id8/bR3UDiJ7Kpg3OoxB+ahx5x1Tld9gxw2Z42exaziAde9YDFApqyEuslWkeYvl9CRh/X/yJrYJvP4ujJzfIeLm8wNmMY60k1NZ643bHCiiFWFlZhLOpYSHRA==
+ b=GdOTI72xjSLlaZ2VB/Hjc4UvNgwBKyNMjdQibMqBK1bRbQ+W5oeE+gfx+qX/xLCrlmNJPaOI4PkxrU3pi4OghLSjrr6vu1CFFcJK3MR5JrBjFTtwPYFIbkFyWY9COjKDyYYyILJnG6hVsuS+/9OlPeQiLyTbZi796UxrkbC74cAsrNUtppBeuaCUd9uGPoqaHWY2RKmwrPmm4xtMVE1PJk4H5goYpdznbd5lbKqsydgP2YljnHhNMo0SQwU9HmqaaOW1ZU8L+qUFLcC/6WabDQ/iB1CSm6gfeghxMNQvH9TRuCtK1o23IF+JyXekOM3h1ihswMofdfSUOMj8JBLBGA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xsudx7kJ9qswhzZ3A4gXPxzvkb0rvCINmCW2JOtqrPY=;
- b=ezF9aTmrQEvec4Zwvtk6feuSWi2VREarju/JmNHFV7Hwj4eICvyxigGrDyqkawen8wT7Pd3/3mDb01/WNqR86l/xqhxMtePFzov8r20aPtOnWekYPEOwqIAUxwsXT3InukapW0T5HIuqsdCpwh8jQTyeOF34biILH5jpHQL2vwDnhS90WiW0RClasd1SH2jZkZgP13FODvlYLkZmW5z8JKpaqN8z+5V+YY47+f1s9mOSmDZw5lLvKTxA/FTBxnWn/hZvbSMxA8k55IXMgbwcNKEnp29wx5IRr+Ratk5XvF+eD8BUVSWUI6MQ3rUf02FccYHHwPi9hJSHB01JbFJ0NQ==
+ bh=+T5f+49XI373SkzYYArL0OPt0Ie1j/Dd45DsD2CAt6U=;
+ b=MymM8hGxxK8+8e3DqBPwr+3pcYCHcOEpZHDx93O4j6tp45A974dnJGZdZ5VtnJUhEITuFFryhXcbOFZeOHDv+u6aA3PG3pqG5Fu5LbQdVz/Us2SKBefMHcbWf/3Rcsfg/gXsYVS5Lvw1ZeEJwebAD6oxetfSiLoQN16jOKObIOteTZbqHcg1KOspThDN5MOZR3k1mxvOctGyensQOQHGO10E0MtyWzj+xauaQ1CJXqqyKPhZJz2B2HrfS3iWhIWDzjTIJ3asP94YThdrNmqc3yzfg2i8lN4b/uOL0VQoopAafiYI8+QT7CqHeWChBKWMn+wQQmLiZwbpmqUz86jiYw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
  dkim=pass header.d=vpitech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xsudx7kJ9qswhzZ3A4gXPxzvkb0rvCINmCW2JOtqrPY=;
- b=MpBTidgh9ypHSf8QmxGLwWt/7CMWaRXGUSlU9RT3Rc01E8VEPZ1Mku4IXwYoJzSjOrfaN2mJm/cfnRSfy4W8+djrFQc06EJVqfysYutUSTyz2O6CGwGpqavksLn68sweU8+JoU18LB2921hU8J5izfmPp7nMy2D0dROSY0VVas4=
+ bh=+T5f+49XI373SkzYYArL0OPt0Ie1j/Dd45DsD2CAt6U=;
+ b=XRT+kSRbQASrlXoN1XtQGrXwr3BIuQOz9Shx8XPeYWX+C5KsKsVLcbiSQx8RSepcqyJLVokNHrm1HzXpTs3YSzq/vLADWFRr38fHERWy4CIH4Sv07rnD0Wjyp2SIbk/qhcfDaKlgh6oUeqjK/MUYY6sVByhvAsVtGp9y0vlIaio=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vpitech.com;
 Received: from SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:1ff::7)
- by SA1P222MB0037.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:1e4::15) with
+ by SA1P222MB0167.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:1fa::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
- 2022 18:06:40 +0000
+ 2022 18:08:27 +0000
 Received: from SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
  ([fe80::1ac3:14ac:b83:b2fa]) by SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
  ([fe80::1ac3:14ac:b83:b2fa%9]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
- 18:06:40 +0000
+ 18:08:27 +0000
 From:   Alex Henrie <alexh@vpitech.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
+To:     Johan Hovold <johan@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     linux-usb@vger.kernel.org, alexhenrie24@gmail.com,
         Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-usb@vger.kernel.org, johan@kernel.org,
-        johanna.abrahamsson@afconsult.com, alexhenrie24@gmail.com
 Subject: Re: [PATCH] USB: serial: cp210x: map B0 to B9600
-Date:   Mon, 28 Nov 2022 11:06:33 -0700
-Message-ID: <7632128.EvYhyI6sBW@demeter>
-In-Reply-To: <Y4G7z0fa7W/qseqw@kroah.com>
-References: <20221126035825.6991-1-alexh@vpitech.com> <Y4G7z0fa7W/qseqw@kroah.com>
+Date:   Mon, 28 Nov 2022 11:08:25 -0700
+Message-ID: <3642317.iIbC2pHGDl@demeter>
+In-Reply-To: <Y4TItxxwSNy7OnMA@hovoldconsulting.com>
+References: <20221126035825.6991-1-alexh@vpitech.com> <Y4TItxxwSNy7OnMA@hovoldconsulting.com>
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-X-ClientProxiedBy: CY5PR03CA0033.namprd03.prod.outlook.com
- (2603:10b6:930:8::15) To SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
+X-ClientProxiedBy: CY8PR10CA0013.namprd10.prod.outlook.com
+ (2603:10b6:930:4f::11) To SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
  (2603:10b6:806:1ff::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1P222MB0296:EE_|SA1P222MB0037:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2cc3c7fa-fab5-43c2-d3a9-08dad16b4c44
+X-MS-TrafficTypeDiagnostic: SA1P222MB0296:EE_|SA1P222MB0167:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2057c834-e6b9-47d0-0e44-08dad16b8c30
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JuYtwN8IkFjayCCefoyJCbRPLFyHRa8JMHqj5sq3h16QPbDKhZuo8qABVr4xdbyUBew8ZQKbdxtLSxCZZq3a6pRz50NODM9lghGTnSpGSV2scmvxktjmxd8lJxW2fvwELzn7gv/PruQmm3iPL6oMj/w+askc8xbo10o+5cwlvNfhGsn5AEYcdI6cVBn4u7EfzlLDIGTAi6SooqxIEZASIX3sV4B0e4tIRSJD4mFEjxCweWpNzlDShb5zWtEKgSskQAlJb9kzGwzDY1eLtf/9HRk1jrIJ/X6cK5EbwcGwfS4xxlU5UyNxFBS1mnGZA5KjX1VogR22MIN8npeQnLpEcs/VyUo3v5aXodMr51riltazHH6U3L595OHvDxlC3rkKYEuZHBkL1nex19JxCJQM9spAMzIqHbbARFGxBM+VB9l4ArMS5on4X2sIBEWuddJOfvDOjsyUkL/0SqsVYo7+WryjKJI+UV+xgcf/c93qG1mHp2z1N7IkfNQHK4jVHgBsRRQ+WZMsl55/BRe2ozynssncpZbVl8cW2KZAuogA9rraY3I+zYPgZMjTMxgn3N4njeJZPo++xt/ZLobdesMrIfXpdeAjjIlKYG+H+AVG6E5/pEUn1dor6T7yZVwJzLHAMkEmy8gKLjXtHKMSpM2aRJpIXRSRQlu0bECWgZEIsZnEsUKvEmJ0fdRl1rBO3WEu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39830400003)(396003)(376002)(346002)(366004)(136003)(451199015)(86362001)(6666004)(6506007)(9686003)(110136005)(6486002)(6512007)(38100700002)(186003)(33716001)(4744005)(8936002)(5660300002)(52116002)(53546011)(8676002)(478600001)(41300700001)(66946007)(66476007)(316002)(4326008)(2906002)(66556008)(39026012);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: WjTguGBhcjiNRCBCzvX9pjH2l8kyNPrZQWSU3nDB+f5LMxol89QtEBdWZTUsrbu91IPH6p9cWBwb8gQF8kKMj8ewT4u4MyYptQkcs8M6ggKWtNdSm/QJBsb+5bdkxZ2/kNAAkXMJS7O6aJ2UqeNJ0h1yyDIn1lisyh9qYWgHmM2fpOJIlHa1wbyoYfrx1z02EKKJPdS+W5KU0Z+fPZ1ELAMyWHrhknhkFlXrK1D5/IMd5rDdm6BrtAUmMkKYP0WWZpRfjF6b5ZnwtH6Tjryw6Da24dUG1m7t70vaZEWg0Yd8IWyOYZ73kBJrZNDOqjLvmgjE1k5zJV38usXkZ57Pm2E/z4BxtnXNGhr0Eb8Sw17qcrlel+LtgOXgc/OqZv8jsbgXJdvYnVtjE5/fz6hbccCAt4S7IKlEO+dZQtVYz7tf03D/DMJ5AE4diHtkIKTWz6VBCRxXbw10KtJGJ0cXXiQpKxwZoNMaWvCJkaDugAR/Aht81JKaAyOuyPl5Ik88XoVJGzO2vVO2e03i+bY/PcSREgIxaH20I6GuyDxzfFNYXyjbnnuIylntWfVJWofuRGPWCnYJnCLngmOCzZ0w4TMx8GLiSwjc1+W8hQcov+5RTUDHl7E37Z33JgvRyc8dnnqdY08oCg7JGLa5ZSPIh5MV9ynyv7tkwwaAb4EJUskf0v4cuh9t50G4+ZkChq2t
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(136003)(39830400003)(396003)(376002)(346002)(451199015)(6486002)(6506007)(83380400001)(86362001)(478600001)(52116002)(53546011)(9686003)(6512007)(110136005)(316002)(41300700001)(5660300002)(33716001)(38100700002)(2906002)(8936002)(8676002)(186003)(66556008)(66476007)(4326008)(66946007)(39026012);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/7EH4cH8TVChFCLEISi6ttgQLGb3cf6+PsnKZYjveR3V/KpKIkSoOZYeZdRe?=
- =?us-ascii?Q?h6vUK/P6Ne0fvE2xsBoIEQhOKdZMvMEYG2DCTTZ3ZbqfPwO3INVB4Mp7qND0?=
- =?us-ascii?Q?DIAvyAngl8bpiC9B8BxO0MwIu1cafvWcc5nWZ6A7RyLWKr6suPlkYMnFsm6r?=
- =?us-ascii?Q?qaF+zV1AfqOPlFsneI3B15LfV9il9t3jwDwXCc5wsFyJv0y/I0DDDddKIMQ4?=
- =?us-ascii?Q?Xpsj3jB001OSEa9Qii3xrUdON4C5OF3+gI2wLUa1XrVFDeLQgB1idXdQ0+rI?=
- =?us-ascii?Q?QCcIxY6p0lJBlb0XgR8DIwAmh0inT6OupMhhAO5y20FFGxrmV08Mef0koGr2?=
- =?us-ascii?Q?cKRo6e3YvFoBrv48m7KMil3YLge+ZgQy59uL4BTunxgYkwuomiQDO7A2v63U?=
- =?us-ascii?Q?fzT9p5oZCItamWeuUd8n3fTq43V9IsMIcsb7AI3AkqqCEFIYRRo4AU0A5HUq?=
- =?us-ascii?Q?+4QkqwabNPHKzBfRptMoxKLJQiUlQS7fD3P4UjCUHkMajQPFi9eBgDSVsz94?=
- =?us-ascii?Q?uS4BqtVhUtpCI219hAuxy02n2MUMlO8uOD0vPlCF9B4wy6mBZ6KIzsbD7IUe?=
- =?us-ascii?Q?0+9YuxharWEMdE/UbBzuiJ/yNh7pE74peBmNWON7D12SDTKHC8+1AEY52mFq?=
- =?us-ascii?Q?PjnGp7XozlXRy+7KfLQem6FVZloEbMGcUQ7SV5eIL+qpikq9Qq3mTPRRGrZu?=
- =?us-ascii?Q?VXujIkzLaB0VS1bQfPSr0vuA9gGVtxSf0zXc9sCCltFPd1i0GxoIq1ySNKMX?=
- =?us-ascii?Q?+IYLQd3iY60kYdp7Sq3TGQbdK0B4lek+4EopY86+qI9mMwtAycf/X2QQm4f1?=
- =?us-ascii?Q?tsJ4Ndht3TpHLBHCP93UH0nCXBJjCqJI3VzRXJEp/eoOqhAM7ZnnplZ/2O9i?=
- =?us-ascii?Q?m1rOJletgCJ8yeKY8paC2TbxAsNUJGR+2VE1KPd0UE1G7b2jFXkXJtn0IqUn?=
- =?us-ascii?Q?aZdYO7XRYOpC7EA3rZw4wDgmZRP6Mo9cpmH0k1uwSaYNn5IFdVAOXvtnpLZa?=
- =?us-ascii?Q?YHylPx0CVI11qV10wsLR7zgErkcFvYy8Z3Ad6y7OdVGEISCgEdSI2B+F1arn?=
- =?us-ascii?Q?6LpTPA2KMX0z28xL1k95A+m+n5nQ8lpMQNAErDAdESl9CVH5wZogbAPoZ4fS?=
- =?us-ascii?Q?MWz8t2OHYTP6DoYzy5G7n9Nxj2r7d3f4oj3kHp6U9NnC1JfqMMFD/QJYv4N/?=
- =?us-ascii?Q?7orf+R1jGHeC7cu05kkrkBWAbHMr07Gw6J7KXa4xaMXwXwYUY3dXb4NmRH+u?=
- =?us-ascii?Q?emcpHhyW+OIS+hEx7tqPOuq6nTBi5P+2gcUnAJOhI6+0DU0ggLDC3W0WGyUT?=
- =?us-ascii?Q?fJLgmzSOWnj7wBMJv+J38aY2zu2Z9MkmegAWii+daZ4MAiVYbZkRwqfncsQK?=
- =?us-ascii?Q?d1Ic6m4ysBmKvHlDRuTP+/M2jjZcAzo8y5iblY0G+tGn3ltsyJO50npVrFIx?=
- =?us-ascii?Q?zBkwtd6tGlaskLX9zR68HkijVPhwm98xLDgCMUaW2WaICKaJYdTq/gHoKwHh?=
- =?us-ascii?Q?+eRmLubFQJfsVdbbpqGLYcvBJfMbfI6F/fwOE0Ml++I3fSfYqb7GFTcE6OWf?=
- =?us-ascii?Q?DZVOkoW205ywTji2TFyt3/2/47MdNFzQL+49nXZnLukM83mgkS3Pwfq+PFS1?=
- =?us-ascii?Q?56nAKsMkf4M8/MKygGlWzy0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wZzBgC5TxxmG4Lr5DXktCRkafkJLUOBwJoUmDAa6GszX0oM2l3v1bNSwCP7T?=
+ =?us-ascii?Q?XwosVO+EBtT3OZ09lDxp1kVf9pLbdbg7+g8w2PuNwSkLcIqshiMTUJ0p54H0?=
+ =?us-ascii?Q?jy6A3+7DxUbJeyyq+FmL/5/blehUPdkwhHQQgQ7XYsx/88JNDmkzEA6Ot0US?=
+ =?us-ascii?Q?1VJ+2f415FGbPsRS0yxRPwk2dfjdYyoTGn4ripPPYigZexwXV8pt4hGd0haR?=
+ =?us-ascii?Q?EebPJDfdk5eABcwAtkFV2TY0S9Igi2jU9+3puq88avYHMMBCoEQIXW2H3v0B?=
+ =?us-ascii?Q?HqP2f+BlOQ91qk5xEtiWC+wcRockj9J5vlIeTwnSz59K89sEhy4Bn5UlYYc2?=
+ =?us-ascii?Q?1P5XDTnE9Fii6crQP3lmZ6Fh+x1mD77bDFOALT/H26tpN3oxUvKS3s7amYqd?=
+ =?us-ascii?Q?3WGsBh6B9VaF7ISlX7pdKx5UGRWiUyjJvSeTFZQNYPLy6v5Chsf/Vk+wwrSk?=
+ =?us-ascii?Q?7cBvImwTFKVVAdqBBdhvKB8SBYNN6SQxLb+AqhdhRixQZ5PZSDlNqUq2oWPu?=
+ =?us-ascii?Q?/GXUmw0wZCqz5oiIgzdZyyIHReL2RUkFxpGNO8VTJAS3G6wr2Z58WksiSSNm?=
+ =?us-ascii?Q?FlsPEuZtXbiqqruVBqt4ePdi+jGdkuIdPJWdhibKmVdzrihugEnBvOGw47ju?=
+ =?us-ascii?Q?HCAeEZBdSFAHOsrF9E3MHReRLFttuAbGPOy25e4I5G8v9AptZRhVU0VMhkXX?=
+ =?us-ascii?Q?Gb7J8PwZ2mRKSysnV4xPLwXAWfXVeEgUnjcTtG9FAgsqMv5n3jm5zVU8GfdE?=
+ =?us-ascii?Q?zr7/IJL+HI3tIa8DR8sVDUYDs6Sp2q4uHbBV+V0WR5OHMQniOh6oF0A8N3hc?=
+ =?us-ascii?Q?giEl127JmlDwUlvjtdOtvgtCCheuZHzxKIPp/Rwxf7sgxO/2dgacRDjt9ndK?=
+ =?us-ascii?Q?rMHoKAzLFUPOgNV3QtRB9vRLJS8GsZKkv+SpG8Caf6M2B2rEIim21vmdMlv1?=
+ =?us-ascii?Q?8qcYgtYPvn+WoCW+ZK23cO4x6iafjyo7NbbRA4pstJWr/3Ou1fRHUJjV06zA?=
+ =?us-ascii?Q?dsx3BwABqUY+7EVv/QD7mjRrQqtyMmW7ONK93hHA5ES9bgt3IbUjxuPcKYqt?=
+ =?us-ascii?Q?45tC7HsMZ6Ruq2eYmjPxufgUZtJRVhGncBwG+7ORMCFMCLfDuYSG4mtdYkcp?=
+ =?us-ascii?Q?Z0VuipCQK2AstD0oHa4DYYWT/jc+ZJ1gD/5Ymzeaknf3Lt5zw+Wk2WTUcgYR?=
+ =?us-ascii?Q?qy/zeGzOMEjZdp4xEfNehBNU9IqLd16PO6ESHXkWR0iXj2Hk7deuhyMXeeRP?=
+ =?us-ascii?Q?8mBWeucK8+v1gt4ZAzIkOzW2v335162IdTyTh4qDXIutp0NxAkMuYYvTW4iq?=
+ =?us-ascii?Q?2QCCIa4ZRGeyuMS8IdvJKOTC7ZO0XCWnVAasuzE7Z+k9CrCV7z5Z3T+CFULq?=
+ =?us-ascii?Q?59Ww1XuMikdFKsl+T6jLrNgu+RgZC3LkQi+XZaMU+yXmjg5wnIvjJCnTlRZi?=
+ =?us-ascii?Q?HEsi9QOc2LL99niLhfmVk1hrXZu1oCUkjsO3SPTntPv9gcxtg3IqzLh2IiPb?=
+ =?us-ascii?Q?wysEAFEhxtHuyRdhkWMLHWmQlZn9hitBFzGUfp1MC5eEwQ/fcXmye6gvtVFb?=
+ =?us-ascii?Q?8vEEBGsVbxD7hYvxQUyh1sAMLdg3kwkEKWOClw53tH5JcvuiRJMKyOiW2Skq?=
+ =?us-ascii?Q?e6bBv6uNeI/zpdbIDeCXvs8=3D?=
 X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cc3c7fa-fab5-43c2-d3a9-08dad16b4c44
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2057c834-e6b9-47d0-0e44-08dad16b8c30
 X-MS-Exchange-CrossTenant-AuthSource: SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 18:06:39.9518
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 18:08:27.2199
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hO1uxD2iwgPcNFQk06QQb2AeposM77hOAT8abKCUhmJXpvzE3+hUJrfJVr/m3Kfo2WAYBbuE+9Q6x6mnLKYxOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P222MB0037
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7DwKciYBkPnsUFyaQcRy9IQ/nOmduyN0sUdi+gPurIoFk76YKIA5zDVgxUi+xVvhDrar+BiKvEBnF2fq+Sk4AQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P222MB0167
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -113,15 +113,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Saturday, November 26, 2022 12:10:07 AM MST Greg KH wrote:
-> No need for { } here (checkpatch.pl should have warned about this.)
+On Monday, November 28, 2022 7:41:59 AM MST Johan Hovold wrote:
+> On Fri, Nov 25, 2022 at 08:58:25PM -0700, Alex Henrie wrote:
+> > When a baud rate of 0 is requested, both the 8250 driver and the FTDI
+> > driver reset the baud rate to the default of 9600 (see the comment above
+> > the uart_get_baud_rate function). Some old versions of the NXP blhost
+> > utility depend on this behavior.
+> 
+> What exactly do you mean by "depend on" here? Setting B0 is supposed to
+> hang up a modem connection by deasserting the modem control lines, but
+> there's nothing mandating any particular line speed to be set in
+> hardware. Why would that even matter?
+> 
+> If the user space tool is thrown off by the fact that B0 isn't
+> implemented, perhaps that's what should be addressed.
 
-On Saturday, November 26, 2022 3:34:57 AM MST Sergey Shtylyov wrote:
->    {} not needed at all...
+Oh, it's definitely a bug in blhost. The program sets the baud rate to 0, then 
+tries to communicate over the UART assuming that the baud rate is 9600. It's 
+been fixed in the latest version of blhost, but I'm stuck on an old version and 
+there's nothing I can do about that.
 
-Thanks for the feedback. I will send a new version after running 
-checkpatch.pl, and in the future I'll try to remember to run checkpatch.pl 
-over my patches before sending them.
+I don't know why the 8250 and FTDI drivers map B0 to B9600, however it's very 
+old behavior that must have had a purpose. Maybe Russell knows? Alternatively, 
+leaving the baud rate unchanged seems like reasonable behavior and would also 
+work with the old blhost. But mapping B0 to B300 makes even less sense than 
+mapping it to B9600.
 
 -Alex
 
