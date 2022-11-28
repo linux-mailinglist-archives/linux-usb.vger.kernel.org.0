@@ -2,116 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D421D63ABF7
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 16:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34C763ACF9
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Nov 2022 16:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiK1PKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Nov 2022 10:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S232292AbiK1Pum (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Nov 2022 10:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiK1PKM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 10:10:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827991F9F9
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 07:10:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19F5D6120B
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 15:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D4CC433D6;
-        Mon, 28 Nov 2022 15:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669648210;
-        bh=wmE4sjEsTAqWgOwzwwmZxoinoddJV8/5M7QZzwsUSgA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qnrq6/Uo48yK0w+hiWpnVsF1agX03Wmui5zBuWiYpGaS+EyDCdRuyPnIeEzUk8kYE
-         DqiA5O+igxG3QFo9ZB7Y0WzVVt//9yrrthSsdK6oNZwavulmz65npEEi0xZOpz710+
-         JUfTGgIf7QrBq5uBpy8GLvpIDu4BaaS5s6ebDM7iAi7dk07J825ClOPQferKFl/fle
-         GiRf/6OcAcIxT2HUEqYopWOUvqrvtjxEYbTyzxLXEnYetD1ILvzJZovm7TMlwRMimC
-         dqzr3wjhHWjLYmQrN03mRXxBvTXQyKfj6lBsbE4BU2pql3iiDSYlbun+6M2zg9qkKv
-         8D9ZmejQnReGQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ozflo-0002ZZ-Cy; Mon, 28 Nov 2022 16:10:08 +0100
-Date:   Mon, 28 Nov 2022 16:10:08 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 3/7] USB: serial: ftdi_sio: Extract SIO divisor code
- to function
-Message-ID: <Y4TPUIYeclH+KCfl@hovoldconsulting.com>
-References: <20220924102718.2984-1-pali@kernel.org>
- <20220924102718.2984-4-pali@kernel.org>
+        with ESMTP id S232136AbiK1Pul (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Nov 2022 10:50:41 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4A9AC5FA5
+        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 07:50:39 -0800 (PST)
+Received: (qmail 327280 invoked by uid 1000); 28 Nov 2022 10:50:38 -0500
+Date:   Mon, 28 Nov 2022 10:50:38 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
+Message-ID: <Y4TYzgOczlegG7OK@rowland.harvard.edu>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
+ <Y4JEGYMtIWX9clxo@lunn.ch>
+ <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
+ <Y4OD70GD4KnoRk0k@rowland.harvard.edu>
+ <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
+ <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220924102718.2984-4-pali@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 12:27:14PM +0200, Pali Rohár wrote:
-> In preparation for following changes, extract divisor code for SIO chip
-> into new function ftdi_sio_baud_to_divisor(), as is done for other
-> chips.
-
-Please spell out what you mean by "following changes".
-
-You're also now using the new helper to set the fallback rate, which
-should at least be mentioned as it looks like a separate and unnecessary
-change currently.
-
-> No functional change.
+On Mon, Nov 28, 2022 at 02:32:23PM +0900, Vincent MAILHOL wrote:
+> On Mon. 28 Nov. 2022 at 10:34, Vincent MAILHOL
+> <mailhol.vincent@wanadoo.fr> wrote:
+> > On Mon. 28 Nov. 2022 at 00:41, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > On Sun, Nov 27, 2022 at 02:10:32PM +0900, Vincent MAILHOL wrote:
+> > > > > Should devlink_free() be after usb_set_inftdata()?
+> > > >
+> > > > A look at
+> > > >   $ git grep -W "usb_set_intfdata(.*NULL)"
+> > > >
+> > > > shows that the two patterns (freeing before or after
+> > > > usb_set_intfdata()) coexist.
+> > > >
+> > > > You are raising an important question here. usb_set_intfdata() does
+> > > > not have documentation that freeing before it is risky. And the
+> > > > documentation of usb_driver::disconnect says that:
+> > > >   "@disconnect: Called when the interface is no longer accessible,
+> > > >    usually because its device has been (or is being) disconnected
+> > > >    or the driver module is being unloaded."
+> > > >   Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
+> > > >
+> > > > So the interface no longer being accessible makes me assume that the
+> > > > order does not matter. If it indeed matters, then this is a foot gun
+> > > > and there is some clean-up work waiting for us on many drivers.
+> > > >
+> > > > @Greg, any thoughts on whether or not the order of usb_set_intfdata()
+> > > > and resource freeing matters or not?
+> > >
+> > > In fact, drivers don't have to call usb_set_intfdata(NULL) at all; the
+> > > USB core does it for them after the ->disconnect() callback returns.
+> >
+> > Interesting. This fact is widely unknown, cf:
+> >   $ git grep "usb_set_intfdata(.*NULL)" | wc -l
+> >   215
+> >
+> > I will do some clean-up later on, at least for the CAN USB drivers.
+> >
+> > > But if a driver does make the call, it should be careful to ensure that
+> > > the call happens _after_ the driver is finished using the interface-data
+> > > pointer.  For example, after all outstanding URBs have completed, if the
+> > > completion handlers will need to call usb_get_intfdata().
+> >
+> > ACK. I understand that it should be called *after* the completion of
+> > any ongoing task.
+> >
+> > My question was more on:
+> >
+> >         devlink_free(priv_to_devlink(es58x_dev));
+> >         usb_set_intfdata(intf, NULL);
+> >
+> > VS.
+> >
+> >         usb_set_intfdata(intf, NULL);
+> >         devlink_free(priv_to_devlink(es58x_dev));
+> >
+> > From your comments, I understand that both are fine.
 > 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Tested-by: Marek Behún <kabel@kernel.org>
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> ---
->  drivers/usb/serial/ftdi_sio.c | 45 ++++++++++++++++++++++++-----------
->  1 file changed, 31 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-> index bfa601fc14fe..fe8a7c5fa0e9 100644
-> --- a/drivers/usb/serial/ftdi_sio.c
-> +++ b/drivers/usb/serial/ftdi_sio.c
+> Do we agree that the usb-skeleton is doing it wrong?
+>   https://elixir.bootlin.com/linux/latest/source/drivers/usb/usb-skeleton.c#L567
+> usb_set_intfdata(interface, NULL) is called before deregistering the
+> interface and terminating the outstanding URBs!
 
-> @@ -1314,23 +1342,12 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
->  		baud = 9600;
->  	switch (priv->chip_type) {
->  	case SIO: /* SIO chip */
-> -		switch (baud) {
-> -		case 300: div_value = ftdi_sio_b300; break;
-> -		case 600: div_value = ftdi_sio_b600; break;
-> -		case 1200: div_value = ftdi_sio_b1200; break;
-> -		case 2400: div_value = ftdi_sio_b2400; break;
-> -		case 4800: div_value = ftdi_sio_b4800; break;
-> -		case 9600: div_value = ftdi_sio_b9600; break;
-> -		case 19200: div_value = ftdi_sio_b19200; break;
-> -		case 38400: div_value = ftdi_sio_b38400; break;
-> -		case 57600: div_value = ftdi_sio_b57600;  break;
-> -		case 115200: div_value = ftdi_sio_b115200; break;
-> -		} /* baud */
-> -		if (div_value == 0) {
-> +		div_value = ftdi_sio_baud_to_divisor(baud);
-> +		if (div_value == (u32)-1) {
->  			dev_dbg(dev, "%s - Baudrate (%d) requested is not supported\n",
->  				__func__,  baud);
-> -			div_value = ftdi_sio_b9600;
->  			baud = 9600;
-> +			div_value = ftdi_sio_baud_to_divisor(baud);
->  			div_okay = 0;
->  		}
->  		break;
+Going through the usb-skeleton.c source code, you will find that 
+usb_get_intfdata() is called from only a few routines:
 
-This one too needs to be rebased, but you'll notice that.
+	skel_open()
+	skel_disconnect()
+	skel_suspend()
+	skel_pre_reset()
+	skel_post_reset()
 
-Johan
+Of those, all but the first are called only by the USB core and they are 
+mutually exclusive with disconnect processing (except for 
+skel_disconnect() itself, of course).  So they don't matter.
+
+The first, skel_open(), can be called as a result of actions by the 
+user, so the driver needs to ensure that this can't happen after it 
+clears the interface-data pointer.  The user can open the device file at 
+any time before the minor number is given back, so it is not proper to 
+call usb_set_intfdata(interface, NULL) before usb_deregister_dev() -- 
+but the driver does exactly this!
+
+(Well, it's not quite that bad.  skel_open() does check whether the 
+interface-data pointer value it gets from usb_get_intfdata() is NULL.  
+But it's still a race.)
+
+So yes, the current code is wrong.  And in fact, it will still be wrong 
+even after the usb_set_intfdata(interface, NULL) line is removed, 
+because there is no synchronization between skel_open() and 
+skel_disconnect().  It is possible for skel_disconnect() to run to 
+completion and the USB core to clear the interface-data pointer all 
+while skel_open() is running.  The driver needs a static private mutex 
+to synchronize opens with unregistrations.  (This is a general 
+phenomenon, true of all drivers that have a user interface such as a 
+device file.)
+
+The driver _does_ have a per-instance mutex, dev->io_mutex, to 
+synchronize I/O with disconnects.  But that's separate from 
+synchronizing opens with unregistrations, because at open time the 
+driver doesn't yet know the address of the private data structure or 
+even if the structure is still allocated.  So obviously it can't use a 
+mutex that is embedded within the private data structure for this 
+purpose.
+
+Alan Stern
