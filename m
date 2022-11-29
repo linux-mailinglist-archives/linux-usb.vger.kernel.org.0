@@ -2,120 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F09F63BEB2
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 12:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5131A63BEBC
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 12:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiK2LPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 06:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        id S231432AbiK2LRi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 06:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiK2LPP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 06:15:15 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F054FFB3;
-        Tue, 29 Nov 2022 03:15:14 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ABA124DA;
-        Tue, 29 Nov 2022 12:15:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669720512;
-        bh=6ymnuxC73Bi+XxxsJo1TuShFF+5Hw8ToW16HXWGnwvk=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=krzFuGlb2VAKdyjutf31+7QPQuRviHxuekQRTjsBX1xALDM1d+PveC54rSO5Kz3ae
-         7yTEAWj1teiHDYYVBSZNGVSZn+Xwl0L70mkDT5A6YvrPeOPTYLLKCS1bphU+/RDPM+
-         0yqtcl5EAL6v9ocum7GV8cMx2bQmYeQhtWpHL7pY=
-Message-ID: <2e28fbab-2367-5d00-6e46-37879fd046e5@ideasonboard.com>
-Date:   Tue, 29 Nov 2022 11:15:08 +0000
+        with ESMTP id S229923AbiK2LRh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 06:17:37 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6921CD5A
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 03:17:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669720654; x=1701256654;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5RNYYfgh67sAEQwFVMxIQmi4OdkXcQUFdMlishDvrks=;
+  b=E0U0HsYVn0GUoZT0APxVU0XKyWg7L3leCrooe5alA+aJwAiJfcD2Im7m
+   F9By5shd0NW8a71ff70Ql6vwjhrcxfI2mYHRcsggXO9FCjzdc76dNzkQH
+   bEYzrz9xJY+sIW/FVYEL9Ku+cwBj4AxBFq7kSbrczWKNOpaxkP46P8QU4
+   G5vSdrP12LuyftDS4WkO41uulMyL3ZjNEGTF2gNS4ZxKD80YrNBgV8Y9z
+   V9Aeg7IcqIKEURzsehLToiyu0+eOGq2QANo2Zj1UrU4+oSY49IwUZlJRc
+   dmtp+/o5Ovt+Qbw2AiSOjc65IqrWVltDWDZaLdq9/FaD80t83hQFUXLDA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="315115298"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="315115298"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 03:17:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="972636327"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="972636327"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Nov 2022 03:17:32 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 9387C184; Tue, 29 Nov 2022 13:17:58 +0200 (EET)
+Date:   Tue, 29 Nov 2022 13:17:58 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 changes for v6.2 merge window
+Message-ID: <Y4XqZpTx1iC/tShY@black.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Michael Grzeschik <mgr@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        gregkh@linuxfoundation.org, balbi@kernel.org, kernel@pengutronix.de
-References: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
- <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
- <20221129102308.GO18924@pengutronix.de>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v7] usb: gadget: uvc: add validate and fix function for
- uvc response
-In-Reply-To: <20221129102308.GO18924@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Greg,
 
-On 29/11/2022 10:23, Michael Grzeschik wrote:
-> On Tue, Nov 29, 2022 at 05:10:24AM +0200, Laurent Pinchart wrote:
->> Hi Michael,
->>
->> (CC'ing Dan)
->>
->> Thank you for the patch.
->>
->> On Mon, Nov 28, 2022 at 11:31:25AM +0100, Michael Grzeschik wrote:
->>> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
->>> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
->>> needs to be validated. Since the kernel also knows the limits for valid
->>> cases, it can fixup the values in case the userspace is setting invalid
->>> data.
->>
->> Why is this a good idea ?
->
-> Why is it not? We don't want the userspace to communicate other things
-> to the host than what is configured in the configfs. If you only object
-> the explanation, then I will improve the commit message and send an
-> fixed v8. If you have more objections please share your doubts, thanks.
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-I'm also not really sure of the benefit; wouldn't this result in 
-userspace streaming data that's configured differently to what the host 
-is expecting?
+are available in the Git repository at:
 
->>>  static int
->>>  uvc_send_response(struct uvc_device *uvc, struct uvc_request_data 
->>> *data)
->>>  {
->>> @@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, 
->>> struct uvc_request_data *data)
->>>
->>>      memcpy(req->buf, data->data, req->length);
->>>
->>> +    /* validate the ctrl content and fixup */
->>> +    if (!uvc->event_setup_out) {
->>> +        struct uvc_streaming_control *ctrl = req->buf;
->>> +
->>> +        switch (uvc->streaming_request) {
->>> +        case UVC_GET_CUR:
->>> +        case UVC_GET_MIN:
->>> +        case UVC_GET_MAX:
->>> +        case UVC_GET_DEF:
->>> +            uvc_validate_streaming_ctrl(uvc, ctrl);
->>> +        default:
->>> +            break;
->>> +        }
->>> +    }
->>> +
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.2-rc1
 
+for you to fetch changes up to a5cfc9d65879c0d377f732531a2e80ee3a9eebbc:
 
-What about read requests for controls that aren't for the streaming 
-interface?
+  thunderbolt: Add wake on connect/disconnect on USB4 ports (2022-11-07 14:36:47 +0200)
 
->>>      return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
->>>  }
->>>
->>
->> -- 
->> Regards,
->>
->> Laurent Pinchart
->>
->
+----------------------------------------------------------------
+thunderbolt: Changes for v6.2 merge window
+
+This includes following Thunderbolt/USB4 changes for the v6.2 merge
+window:
+
+  - Add wake on connect/disconnect for USB4 ports
+  - A couple of minor cleanups
+
+All these have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      thunderbolt: Use str_enabled_disabled() helper
+
+Colin Ian King (1):
+      thunderbolt: Remove redundant assignment to variable len
+
+Heikki Krogerus (1):
+      thunderbolt: ACPI: Use the helper fwnode_find_reference()
+
+Rajat Khandelwal (1):
+      thunderbolt: Add wake on connect/disconnect on USB4 ports
+
+ drivers/thunderbolt/acpi.c      | 12 ++++--------
+ drivers/thunderbolt/switch.c    |  5 +++--
+ drivers/thunderbolt/tb_regs.h   |  2 ++
+ drivers/thunderbolt/usb4.c      | 33 +++++++++++++++++++++++++--------
+ drivers/thunderbolt/usb4_port.c |  3 +++
+ drivers/thunderbolt/xdomain.c   |  4 ++--
+ 6 files changed, 39 insertions(+), 20 deletions(-)
