@@ -2,72 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5624D63BB23
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 08:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B896663BC2B
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 09:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiK2H7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 02:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S231689AbiK2Ixv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 03:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiK2H7K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 02:59:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F81D32C
-        for <linux-usb@vger.kernel.org>; Mon, 28 Nov 2022 23:59:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80D9EB8117D
-        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 07:59:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE6D5C433D6;
-        Tue, 29 Nov 2022 07:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669708747;
-        bh=Mn8xvQUyCAnhQRZMonN1pi3wdqAgZ0TaKRbFvau8Bn4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R6Ckchnpj7j+gD5U09nTfDzlLD21iBuanBK8SVp/87TcLSR5hzWUm9XmnnuMxTLjS
-         SPMIVJt1y7S0eKNzjzkzSnPtbMsVnvxtqHABvkfLRHbIg9f4oCL6fzRQxq2t1ZEdlW
-         6JOrv4+4J5REPEYOapwlHPfM85049K62U1cdTyZ0=
-Date:   Tue, 29 Nov 2022 08:59:04 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 2/23]
- drivers/usb/gadget/function/uvc_v4l2.c:266:3: warning: unannotated
- fall-through between switch labels
-Message-ID: <Y4W7yKbiKzK4yKoV@kroah.com>
-References: <202211290734.P9mHcjpl-lkp@intel.com>
- <Y4W6/0Ql3dI+ePXF@kroah.com>
- <Y4W7Xw6OA9GLzXmH@kroah.com>
+        with ESMTP id S229737AbiK2Ixd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 03:53:33 -0500
+X-Greylist: delayed 472 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Nov 2022 00:53:04 PST
+Received: from mail.lucidfour.pl (mail.lucidfour.pl [217.61.97.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1255B878
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 00:53:04 -0800 (PST)
+Received: by mail.lucidfour.pl (Postfix, from userid 1001)
+        id C9C0C81976; Tue, 29 Nov 2022 08:45:19 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucidfour.pl; s=mail;
+        t=1669711519; bh=CSKXLMgcdpWkXuTgJn5+jsCVobtU9JEF4vCnS5z6McM=;
+        h=Date:From:To:Subject:From;
+        b=xCC4us95PS5QZuc5gTcZkG+VEELr5iX/wRNcbQkshlN/wpWitHc/Mq4rqw/c1c7PQ
+         omKxVukfDadEP9Rc0hQC/UpafgZaN6VBWbl+Ax1MvXuDlJ5wz4RaZCG/r+TG2Tiuo3
+         VrneigILuSWXMRX9VGXwAnBGYGJQv/gCtcPEDbsHvrgomKWQQ40JL3aC4zIhJs/tXc
+         tIxaYIXI4EOt7Qq3O5sIC0GVPLqxmmbgJjlRKPAm3/oTcW+YUtNr2BAl3rSmReF1yJ
+         3HfM7HiMRKyMSAO2n++ibEXf0++tJlclaNWq8oWE5teng389s2QB/c6QIyyMshVtG2
+         VVw026JF+50wg==
+Received: by mail.lucidfour.pl for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 08:45:06 GMT
+Message-ID: <20221129074501-0.1.e.1faq.0.rqzro9q3ee@lucidfour.pl>
+Date:   Tue, 29 Nov 2022 08:45:06 GMT
+From:   "Wiktor Nurek" <wiktor.nurek@lucidfour.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.lucidfour.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4W7Xw6OA9GLzXmH@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 08:57:19AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Nov 29, 2022 at 08:55:43AM +0100, Greg Kroah-Hartman wrote:
-> > On Tue, Nov 29, 2022 at 07:22:43AM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > > head:   465d4dd073f72a6348577ed0f7aa4aa00c9264bc
-> > > commit: a6f523ee41bfe7ef71110d4ae556339d0520efdd [2/23] usb: gadget: uvc: add validate and fix function for uvc response
-> > 
-> > Michael, I'll drop this commit from my tree now, please fix up and
-> > resend.
-> 
-> Nevermind, I fixed it up myself, it was trivial.
+Dzie=C5=84 dobry,
 
-And now ignore this, I've dropped it again based on Laurent's review.
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-thanks,
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-greg k-h
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+
+
+Pozdrawiam serdecznie,
+Wiktor Nurek
