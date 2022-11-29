@@ -2,118 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5054663C5B7
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 17:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E57AB63C636
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 18:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236428AbiK2Qyd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 11:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S236505AbiK2RMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 12:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236424AbiK2QyG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 11:54:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AE174627
-        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 08:48:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669740481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e0muEHBDbnLFxSz/8uKrynkgUxzkHQQXyf0Q/GGNCDo=;
-        b=K/nE77BgifFtolvBtF+r3nZ8JC4AAZd/wKlA6TAZyl+hEG+CqKfJr8KIYQj+YIWV56d0N8
-        2aKHysieru32Ob0iV5QrILnbqT0sxNnCTP1tYAHvZ43GddS29yHVHFPa/nrOuPSNM5uV1h
-        ehDIHjhwUIIOS3OK5Ak5Aw70fySuWLk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-97-NLEV3qqHMjm2VIHjZofz1g-1; Tue, 29 Nov 2022 11:47:58 -0500
-X-MC-Unique: NLEV3qqHMjm2VIHjZofz1g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA346101E155;
-        Tue, 29 Nov 2022 16:47:53 +0000 (UTC)
-Received: from [10.22.16.202] (unknown [10.22.16.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 417A52166B2D;
-        Tue, 29 Nov 2022 16:47:51 +0000 (UTC)
-From:   Benjamin Coddington <bcodding@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        =?utf-8?q?Christoph_B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Steve French <sfrench@samba.org>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
-        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
-Date:   Tue, 29 Nov 2022 11:47:47 -0500
-Message-ID: <794DBAB0-EDAF-4DA2-A837-C1F99916BC8E@redhat.com>
-In-Reply-To: <20221129140242.GA15747@lst.de>
-References: <cover.1669036433.git.bcodding@redhat.com>
- <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
- <20221129140242.GA15747@lst.de>
+        with ESMTP id S236436AbiK2RMl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 12:12:41 -0500
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1425E63;
+        Tue, 29 Nov 2022 09:12:39 -0800 (PST)
+Received: by mail-pf1-f173.google.com with SMTP id 130so14286907pfu.8;
+        Tue, 29 Nov 2022 09:12:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gbYAVcz0mxyKN98GkPCLeSplQYrU3jgnryNfmo+3ZmU=;
+        b=lmnpM6zjwdGHRXrMK5UGRKe/D4cxVsMT4HHK4LpYMDWF3cycxhSUjxOkbNeEWjG0Hz
+         H8PhAPuh9q7vosa4YMk2aDKLPHZFtsAp1kRSsKus88lUk7/amQ/5hImGm2zY5FJFNddz
+         FOSmmfYy5lqTbOT7lWG2i+lYHXsQ7z9mQkJg/jgpd4E1OMt2eZhlLYeoj5juGXKFZL7B
+         jqDJnMK4tks+1H1DsEGr+Zm4Vr3qqDtfGTsHMh+BQtqLlU493I6uf5DOsQQrEoAmOYdA
+         ijiTR+TPrbF8kL+E2SbbBUrurOC7F1D0J4a251MCdDofxuhHPvBl8vnADvThYUvldEq7
+         YpqQ==
+X-Gm-Message-State: ANoB5pm0eWQ1n0hWE024JZd0Ei2f7KB/sM9L14zNh8N8qy22HazA5jIi
+        DVGdehaAq0dKolTr5e++GRC79F8p4odEX8R4vJU=
+X-Google-Smtp-Source: AA0mqf6sW7S2q6k6Z8gOVKR3pcqvyOJk+4ckrNujXKrxJEyqNqlvRF1cQCMKGIY1aqBauXhDHWejhFnCFo30vjjc/UQ=
+X-Received: by 2002:a62:1a8b:0:b0:572:7c58:540 with SMTP id
+ a133-20020a621a8b000000b005727c580540mr39438867pfa.69.1669741959106; Tue, 29
+ Nov 2022 09:12:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-6-mailhol.vincent@wanadoo.fr>
+ <20221128142857.07cb5d88@kicinski-fedora-PC1C0HJN>
+In-Reply-To: <20221128142857.07cb5d88@kicinski-fedora-PC1C0HJN>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 30 Nov 2022 02:12:27 +0900
+Message-ID: <CAMZ6RqJU5hm=HniJ59aGvHyaWboa7ZHv+9nSbzGxoY-cCfxMag@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] can: etas_es58x: report the firmware version
+ through ethtool
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29 Nov 2022, at 9:02, Christoph Hellwig wrote:
+On Tue. 29 Nov. 2022 at 07:29, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Sun, 27 Nov 2022 01:22:10 +0900 Vincent Mailhol wrote:
+> > Implement ethtool_ops::get_drvinfo() in order to report the firmware
+> > version.
+> >
+> > Firmware version 0.0.0 has a special meaning and just means that we
+> > could not parse the product information string. In such case, do
+> > nothing (i.e. leave the .fw_version string empty).
+>
+> devlink_compat_running_version() does not work?
 
-> Hmm.  Having to set a flag to not accidentally corrupt per-task
-> state seems a bit fragile.  Wouldn't it make sense to find a way to opt
-> into the feature only for sockets created from the syscall layer?
+I was not aware of this one. Thank you for pointing this out.
+If I correctly understand, devlink_compat_running_version() is
+supposed to allow ethtool to retrieve the firmware version from
+devlink, right?
 
-It's totally fragile, and that's why it's currently broken in production.
-The fragile ship sailed when networking decided to depend on users setting
-the socket's GFP_ flags correctly to avoid corruption.
+Currently it does not work. I guess it is because I am not using
+SET_NETDEV_DEVLINK_PORT()? I initially thought that this was optional.
+I will continue to investigate and see if it is possible to completely
+remove the .get_drvinfo() callback.
 
-Meantime, this problem needs fixing in a way that makes everyone happy.
-This fix doesn't make it less fragile, but it may (hopefully) address the
-previous criticisms enough that something gets done to fix it.
 
-Ben
-
+Yours sincerely,
+Vincent Mailhol
