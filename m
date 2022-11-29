@@ -2,45 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E70463C255
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 15:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFE263C25B
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 15:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbiK2OU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 09:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S235314AbiK2OVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 09:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235383AbiK2OUl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 09:20:41 -0500
+        with ESMTP id S235717AbiK2OVL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 09:21:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7C268694;
-        Tue, 29 Nov 2022 06:18:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF3369332;
+        Tue, 29 Nov 2022 06:19:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB1E46176F;
-        Tue, 29 Nov 2022 14:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 304C1C433C1;
-        Tue, 29 Nov 2022 14:18:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 029916173B;
+        Tue, 29 Nov 2022 14:19:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B01BC433C1;
+        Tue, 29 Nov 2022 14:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669731511;
-        bh=ksilrIsLtIQNg+osJth3VSYezKbX/p5M2jGxv4Rz5jI=;
+        s=k20201202; t=1669731550;
+        bh=uJPiwdwJsKJrj0aLRgLDAxov3eoorN/oySmxEBKYv6k=;
         h=From:To:Cc:Subject:Date:From;
-        b=qtIhwVsxalVdPYtedK9PL8Z/2RUeeu1MHWuY51ZuO07+r9MJfE/xPnDTXCD+uwNTY
-         vdh4fl9WRfdeLj0G47t5BIjwvzmV/lz8206QMFl6mriKYXf8H1hyCJS3SsGpaRTVEV
-         P28suXZ1DoUMavy4TXzpSHsYKnW8eO9oNcogDO0eI7IUo/TytKzdY7RB9Wf6qXkxi+
-         psobVmV510vaDkOt60TKlkNYYoVu/uStMui1Mkl5vABgHO8Q8EU+8LmSje1+mOrqk3
-         4f9H53m045TlFIgxMSzpdX4ODNpdZqaH9Y6Gyzq+eGz4scM3L0rFeXA6MypRnNzG2l
-         VdebTS6tG4IYA==
+        b=YcE+psTZizF5AHGsTKbo/hA6EpqzvwNtcJVybbEINiDl+FLTWPgEuQG+FppYEu5cS
+         3r9pI+4xMBtpFaOI8yukvvfLwuHBgbsvwD6Ngel0bkOoCnnvwZ/L6uZ1nSzQmMAWhp
+         kAYDMF3HND5ZuPCUTPyTDg88NDptTRzi/n+HBO7htn/KvfeQcq+sxFItvmim1qagMp
+         OKluhNDWgOB6PK5vqMoBFuDF+YZugQJ0mt6x86WhQuHTtKWq4pSdVlVNq6d1BGXRzR
+         YS9fZq3eyJVSdz9bTsKIZK0SgobFduPPOYBF8BWj6SqzHzPMrkPdByQByvGqR5NMKz
+         PXNDLYav1oESw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1p01RP-0003z9-RF; Tue, 29 Nov 2022 15:18:31 +0100
+        id 1p01S2-000402-Tq; Tue, 29 Nov 2022 15:19:10 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Ji-Ze Hong <hpeter@gmail.com>
-Subject: [PATCH] USB: serial: f81534: fix division by zero on line-speed change
-Date:   Tue, 29 Nov 2022 15:18:19 +0100
-Message-Id: <20221129141819.15310-1-johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: serial: xr: avoid requesting zero DTE rate
+Date:   Tue, 29 Nov 2022 15:18:57 +0100
+Message-Id: <20221129141857.15363-1-johan@kernel.org>
 X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,49 +52,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver leaves the line speed unchanged in case a requested speed is
-not supported. Make sure to handle the case where the current speed is
-B0 (hangup) without dividing by zero when determining the clock source.
+When the requested line speed is B0 (hangup) there is no need to use the
+current speed in the line-coding request. This specifically avoids
+requesting a zero DTE rate when the current speed is B0, which could
+potentially confuse buggy firmware.
 
-Fixes: 3aacac02f385 ("USB: serial: f81534: add high baud rate support")
-Cc: stable@vger.kernel.org      # 4.16
-Cc: Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/serial/f81534.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/usb/serial/xr_serial.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/usb/serial/f81534.c b/drivers/usb/serial/f81534.c
-index ddfcd72eb0ae..4083ae961be4 100644
---- a/drivers/usb/serial/f81534.c
-+++ b/drivers/usb/serial/f81534.c
-@@ -536,9 +536,6 @@ static int f81534_submit_writer(struct usb_serial_port *port, gfp_t mem_flags)
+diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
+index f3811e060a44..fdb0aae546c3 100644
+--- a/drivers/usb/serial/xr_serial.c
++++ b/drivers/usb/serial/xr_serial.c
+@@ -749,8 +749,6 @@ static void xr_cdc_set_line_coding(struct tty_struct *tty,
  
- static u32 f81534_calc_baud_divisor(u32 baudrate, u32 clockrate)
- {
--	if (!baudrate)
--		return 0;
--
- 	/* Round to nearest divisor */
- 	return DIV_ROUND_CLOSEST(clockrate, baudrate);
- }
-@@ -568,9 +565,14 @@ static int f81534_set_port_config(struct usb_serial_port *port,
- 	u32 baud_list[] = {baudrate, old_baudrate, F81534_DEFAULT_BAUD_RATE};
+ 	if (tty->termios.c_ospeed)
+ 		lc->dwDTERate = cpu_to_le32(tty->termios.c_ospeed);
+-	else if (old_termios)
+-		lc->dwDTERate = cpu_to_le32(old_termios->c_ospeed);
+ 	else
+ 		lc->dwDTERate = cpu_to_le32(9600);
  
- 	for (i = 0; i < ARRAY_SIZE(baud_list); ++i) {
--		idx = f81534_find_clk(baud_list[i]);
-+		baudrate = baud_list[i];
-+		if (baudrate == 0) {
-+			tty_encode_baud_rate(tty, 0, 0);
-+			return 0;
-+		}
-+
-+		idx = f81534_find_clk(baudrate);
- 		if (idx >= 0) {
--			baudrate = baud_list[i];
- 			tty_encode_baud_rate(tty, baudrate, baudrate);
- 			break;
- 		}
 -- 
 2.37.4
 
