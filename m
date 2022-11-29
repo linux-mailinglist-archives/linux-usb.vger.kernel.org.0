@@ -2,221 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F06763BFA5
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 13:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0F163BFC6
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 13:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbiK2MDH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 07:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
+        id S233491AbiK2MKS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 07:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbiK2MCV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 07:02:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3E519C0C;
-        Tue, 29 Nov 2022 04:02:19 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2BA024E6;
-        Tue, 29 Nov 2022 13:02:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669723338;
-        bh=aVCxIaq5g63Utk4jLPnARlDptvgQlV3Yk95tr7DoDWY=;
+        with ESMTP id S232360AbiK2MKL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 07:10:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172522AA
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 04:10:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C65F4B81235
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 12:10:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97FBC433D7;
+        Tue, 29 Nov 2022 12:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669723807;
+        bh=mtnawcMuSzHzZ2UbQGo6aEgto2AHflhvObJh3ex0GDM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tetWnmjBJA2YwM0Mj+BZHv5CU8O5q0dzWJOgziLSS2xVfUoVouOvzvdODMfcCmEDV
-         Od4n3qs4xySWdw7T+0scoQMHKJuoPlEdPIeg0eM92phOoxbrzZH6EBgKRDxiwtqbht
-         j9hSotKfdEhqPyHwWAoLMlyeEyP2zEdoTk80O1NU=
-Date:   Tue, 29 Nov 2022 14:02:02 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        b=fwFjcrkJBs5NFqnXqn6st5NREIXm0i0OWjrMc0w1uQYOq/AzuksuttLVFPYfOq9RA
+         wRbuPXu4mCZD3iLu/nmcypMkwxoDOlHVUIi85GDqnxx9y8Uq3jZ30k5Fz3OF60DEoZ
+         ZGZXHu+kCLDRlYADxB6HpKbBa0JxIjK3YVBPv9cI=
+Date:   Tue, 29 Nov 2022 13:10:04 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        gregkh@linuxfoundation.org, balbi@kernel.org,
-        kernel@pengutronix.de, Daniel Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v7] usb: gadget: uvc: add validate and fix function for
- uvc response
-Message-ID: <Y4X0unPRK7iAnfaH@pendragon.ideasonboard.com>
-References: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
- <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
- <20221129102308.GO18924@pengutronix.de>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org
+Subject: Re: [usb:usb-testing 2/23]
+ drivers/usb/gadget/function/uvc_v4l2.c:266:3: warning: unannotated
+ fall-through between switch labels
+Message-ID: <Y4X2nGH+LJDM6dDV@kroah.com>
+References: <202211290734.P9mHcjpl-lkp@intel.com>
+ <Y4W6/0Ql3dI+ePXF@kroah.com>
+ <Y4W7Xw6OA9GLzXmH@kroah.com>
+ <Y4W7yKbiKzK4yKoV@kroah.com>
+ <20221129101904.GM18924@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129102308.GO18924@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221129101904.GM18924@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
-
-On Tue, Nov 29, 2022 at 11:23:08AM +0100, Michael Grzeschik wrote:
-> On Tue, Nov 29, 2022 at 05:10:24AM +0200, Laurent Pinchart wrote:
-> > On Mon, Nov 28, 2022 at 11:31:25AM +0100, Michael Grzeschik wrote:
-> >> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
-> >> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
-> >> needs to be validated. Since the kernel also knows the limits for valid
-> >> cases, it can fixup the values in case the userspace is setting invalid
-> >> data.
-> >
-> > Why is this a good idea ?
+On Tue, Nov 29, 2022 at 11:19:04AM +0100, Michael Grzeschik wrote:
+> On Tue, Nov 29, 2022 at 08:59:04AM +0100, Greg Kroah-Hartman wrote:
+> > On Tue, Nov 29, 2022 at 08:57:19AM +0100, Greg Kroah-Hartman wrote:
+> > > On Tue, Nov 29, 2022 at 08:55:43AM +0100, Greg Kroah-Hartman wrote:
+> > > > On Tue, Nov 29, 2022 at 07:22:43AM +0800, kernel test robot wrote:
+> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> > > > > head:   465d4dd073f72a6348577ed0f7aa4aa00c9264bc
+> > > > > commit: a6f523ee41bfe7ef71110d4ae556339d0520efdd [2/23] usb: gadget: uvc: add validate and fix function for uvc response
+> > > >
+> > > > Michael, I'll drop this commit from my tree now, please fix up and
+> > > > resend.
+> > > 
+> > > Nevermind, I fixed it up myself, it was trivial.
+> > 
+> > And now ignore this, I've dropped it again based on Laurent's review.
+> > 
 > 
-> Why is it not? We don't want the userspace to communicate other things
-> to the host than what is configured in the configfs. If you only object
-> the explanation, then I will improve the commit message and send an
-> fixed v8. If you have more objections please share your doubts, thanks.
+> Did you drop it because of the question why this is a good idea?
 
-What bothers me is that this patch silently clamps invalid value, trying
-to hide the gadget userspace error from the host. It may allow the host
-to proceed one step further, but if the gadget userspace got it wrong in
-the first place, there's a very high chance it won't do the right thing
-in the next step anyway. This will make debugging more complicated,
-while at the same time not bringing much value.
+Yes.
 
-> >> Fixes: e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
-> >> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> >>
-> >> ---
-> >> v1: -> v4:
-> >> - new patch
-> >> v4: -> v5:
-> >> - changed uvcg_info to uvcg_dbg for fixups, updated info strings
-> >> v5: -> v6:
-> >> - no changes
-> >> v6 -> v7:
-> >> - reworked to not need 'd182bf156c4c ("usb: gadget: uvc: default the ctrl request interface offsets")'
-> >>
-> >> This will apply to v6.1-rc6.
-> >>
-> >>  drivers/usb/gadget/function/f_uvc.c    |  4 ++
-> >>  drivers/usb/gadget/function/uvc.h      |  1 +
-> >>  drivers/usb/gadget/function/uvc_v4l2.c | 76 ++++++++++++++++++++++++++
-> >>  3 files changed, 81 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> >> index 6e196e06181ecf..89f0100dae60f4 100644
-> >> --- a/drivers/usb/gadget/function/f_uvc.c
-> >> +++ b/drivers/usb/gadget/function/f_uvc.c
-> >> @@ -248,6 +248,10 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
-> >>  	memset(&v4l2_event, 0, sizeof(v4l2_event));
-> >>  	v4l2_event.type = UVC_EVENT_SETUP;
-> >>  	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
-> >> +
-> >> +	if (interface == uvc->streaming_intf)
-> >> +		uvc->streaming_request = ctrl->bRequest;
-> >> +
-> >>  	v4l2_event_queue(&uvc->vdev, &v4l2_event);
-> >>
-> >>  	return 0;
-> >> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> >> index 40226b1f7e148a..1be4d5f24b46bf 100644
-> >> --- a/drivers/usb/gadget/function/uvc.h
-> >> +++ b/drivers/usb/gadget/function/uvc.h
-> >> @@ -151,6 +151,7 @@ struct uvc_device {
-> >>  	void *control_buf;
-> >>
-> >>  	unsigned int streaming_intf;
-> >> +	unsigned char streaming_request;
-> >>
-> >>  	/* Events */
-> >>  	unsigned int event_length;
-> >> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> >> index a189b08bba800d..a12475d289167a 100644
-> >> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> >> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> >> @@ -178,6 +178,67 @@ static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
-> >>   * Requests handling
-> >>   */
-> >>
-> >> +/* validate and fixup streaming ctrl request response data if possible */
-> >> +static void
-> >> +uvc_validate_streaming_ctrl(struct uvc_device *uvc,
-> >> +			    struct uvc_streaming_control *ctrl)
-> >> +{
-> >> +	struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
-> >> +	unsigned int iformat, iframe;
-> >> +	struct uvcg_format *uformat;
-> >> +	struct uvcg_frame *uframe;
-> >> +	bool ival_found = false;
-> >> +	int i;
-> >> +
-> >> +	iformat = ctrl->bFormatIndex;
-> >> +	iframe = ctrl->bFrameIndex;
-> >> +
-> >> +	/* Restrict the iformat, iframe and dwFrameInterval to valid values.
-> >> +	 * Negative values for iformat and iframe will result in the maximum
-> >> +	 * valid value being selected
-> >> +	 */
-> >> +	iformat = clamp((unsigned int)iformat, 1U,
-> >> +			(unsigned int)uvc->header->num_fmt);
-> >> +	if (iformat != ctrl->bFormatIndex) {
-> >> +		uvcg_dbg(&uvc->func,
-> >> +			  "userspace set invalid format index - fixup\n");
-> >> +		ctrl->bFormatIndex = iformat;
-> >> +	}
-> >> +	uformat = find_format_by_index(uvc, iformat);
-> >> +
-> >> +	iframe = clamp((unsigned int)iframe, 1U,
-> >> +		       (unsigned int)uformat->num_frames);
-> >> +	if (iframe != ctrl->bFrameIndex) {
-> >> +		uvcg_dbg(&uvc->func,
-> >> +			  "userspace set invalid frame index - fixup\n");
-> >> +		ctrl->bFrameIndex = iframe;
-> >> +	}
-> >> +	uframe = find_frame_by_index(uvc, uformat, iframe);
-> >> +
-> >> +	if (ctrl->dwFrameInterval) {
-> >> +		for (i = 0; i < uframe->frame.b_frame_interval_type; i++) {
-> >> +			if (ctrl->dwFrameInterval ==
-> >> +				 uframe->dw_frame_interval[i])
-> >> +				ival_found = true;
-> >> +		}
-> >> +	}
-> >> +	if (!ival_found) {
-> >> +		uvcg_dbg(&uvc->func,
-> >> +			  "userspace set invalid frame interval - fixup\n");
-> >> +		ctrl->dwFrameInterval = uframe->frame.dw_default_frame_interval;
-> >> +	}
-> >> +
-> >> +	if (!ctrl->dwMaxPayloadTransferSize ||
-> >> +			ctrl->dwMaxPayloadTransferSize >
-> >> +				opts->streaming_maxpacket)
-> >> +		ctrl->dwMaxPayloadTransferSize = opts->streaming_maxpacket;
-> >> +
-> >> +	if (!ctrl->dwMaxVideoFrameSize ||
-> >> +			ctrl->dwMaxVideoFrameSize >
-> >> +				uframe->frame.dw_max_video_frame_buffer_size)
-> >> +		ctrl->dwMaxVideoFrameSize = uvc_get_frame_size(uformat, uframe);
-> >> +}
-> >> +
-> >>  static int
-> >>  uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
-> >>  {
-> >> @@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
-> >>
-> >>  	memcpy(req->buf, data->data, req->length);
-> >>
-> >> +	/* validate the ctrl content and fixup */
-> >> +	if (!uvc->event_setup_out) {
-> >> +		struct uvc_streaming_control *ctrl = req->buf;
-> >> +
-> >> +		switch (uvc->streaming_request) {
-> >> +		case UVC_GET_CUR:
-> >> +		case UVC_GET_MIN:
-> >> +		case UVC_GET_MAX:
-> >> +		case UVC_GET_DEF:
-> >> +			uvc_validate_streaming_ctrl(uvc, ctrl);
-> >> +		default:
-> >> +			break;
-> >> +		}
-> >> +	}
-> >> +
-> >>  	return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
-> >>  }
-> >>
+> If so I will improve the commit message. IMHO it totally makes sense to
+> have some sort of validation in the uvc gadget.
+> 
+> The version v7 he commented on was not the one you took on the
+> usb-testing tree.
 
--- 
-Regards,
+Ok, submit a new one so that everyone can agree please.
 
-Laurent Pinchart
+thanks,
+
+greg k-h
