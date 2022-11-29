@@ -2,44 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBED963BDCD
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 11:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A9663BDE8
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 11:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiK2KTS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 05:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S230490AbiK2KXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 05:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiK2KTQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 05:19:16 -0500
+        with ESMTP id S232549AbiK2KX3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 05:23:29 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9788D4E41C
-        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 02:19:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6A5532F7
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 02:23:10 -0800 (PST)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1ozxhi-0000g8-OK; Tue, 29 Nov 2022 11:19:06 +0100
+        id 1ozxlc-0001ON-Ei; Tue, 29 Nov 2022 11:23:08 +0100
 Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1ozxhg-0004Wa-Fa; Tue, 29 Nov 2022 11:19:04 +0100
-Date:   Tue, 29 Nov 2022 11:19:04 +0100
+        id 1ozxlc-0004hK-1l; Tue, 29 Nov 2022 11:23:08 +0100
+Date:   Tue, 29 Nov 2022 11:23:08 +0100
 From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 2/23]
- drivers/usb/gadget/function/uvc_v4l2.c:266:3: warning: unannotated
- fall-through between switch labels
-Message-ID: <20221129101904.GM18924@pengutronix.de>
-References: <202211290734.P9mHcjpl-lkp@intel.com>
- <Y4W6/0Ql3dI+ePXF@kroah.com>
- <Y4W7Xw6OA9GLzXmH@kroah.com>
- <Y4W7yKbiKzK4yKoV@kroah.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        gregkh@linuxfoundation.org, balbi@kernel.org,
+        kernel@pengutronix.de, Daniel Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH v7] usb: gadget: uvc: add validate and fix function for
+ uvc response
+Message-ID: <20221129102308.GO18924@pengutronix.de>
+References: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
+ <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RNRUMt0ZF5Yaq/Aq"
+        protocol="application/pgp-signature"; boundary="xexMVKTdXPhpRiVT"
 Content-Disposition: inline
-In-Reply-To: <Y4W7yKbiKzK4yKoV@kroah.com>
+In-Reply-To: <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -58,38 +56,189 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---RNRUMt0ZF5Yaq/Aq
+--xexMVKTdXPhpRiVT
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 29, 2022 at 08:59:04AM +0100, Greg Kroah-Hartman wrote:
->On Tue, Nov 29, 2022 at 08:57:19AM +0100, Greg Kroah-Hartman wrote:
->> On Tue, Nov 29, 2022 at 08:55:43AM +0100, Greg Kroah-Hartman wrote:
->> > On Tue, Nov 29, 2022 at 07:22:43AM +0800, kernel test robot wrote:
->> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.g=
-it usb-testing
->> > > head:   465d4dd073f72a6348577ed0f7aa4aa00c9264bc
->> > > commit: a6f523ee41bfe7ef71110d4ae556339d0520efdd [2/23] usb: gadget:=
- uvc: add validate and fix function for uvc response
->> >
->> > Michael, I'll drop this commit from my tree now, please fix up and
->> > resend.
->>
->> Nevermind, I fixed it up myself, it was trivial.
+On Tue, Nov 29, 2022 at 05:10:24AM +0200, Laurent Pinchart wrote:
+>Hi Michael,
 >
->And now ignore this, I've dropped it again based on Laurent's review.
+>(CC'ing Dan)
 >
+>Thank you for the patch.
+>
+>On Mon, Nov 28, 2022 at 11:31:25AM +0100, Michael Grzeschik wrote:
+>> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
+>> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
+>> needs to be validated. Since the kernel also knows the limits for valid
+>> cases, it can fixup the values in case the userspace is setting invalid
+>> data.
+>
+>Why is this a good idea ?
 
-Did you drop it because of the question why this is a good idea?
-
-If so I will improve the commit message. IMHO it totally makes sense to
-have some sort of validation in the uvc gadget.
-
-The version v7 he commented on was not the one you took on the
-usb-testing tree.
+Why is it not? We don't want the userspace to communicate other things
+to the host than what is configured in the configfs. If you only object
+the explanation, then I will improve the commit message and send an
+fixed v8. If you have more objections please share your doubts, thanks.
 
 Michael
+
+>> Fixes: e219a712bc06 ("usb: gadget: uvc: add v4l2 try_format api call")
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>
+>> ---
+>> v1: -> v4:
+>> - new patch
+>> v4: -> v5:
+>> - changed uvcg_info to uvcg_dbg for fixups, updated info strings
+>> v5: -> v6:
+>> - no changes
+>> v6 -> v7:
+>> - reworked to not need 'd182bf156c4c ("usb: gadget: uvc: default the ctr=
+l request interface offsets")'
+>>
+>> This will apply to v6.1-rc6.
+>>
+>>  drivers/usb/gadget/function/f_uvc.c    |  4 ++
+>>  drivers/usb/gadget/function/uvc.h      |  1 +
+>>  drivers/usb/gadget/function/uvc_v4l2.c | 76 ++++++++++++++++++++++++++
+>>  3 files changed, 81 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/fu=
+nction/f_uvc.c
+>> index 6e196e06181ecf..89f0100dae60f4 100644
+>> --- a/drivers/usb/gadget/function/f_uvc.c
+>> +++ b/drivers/usb/gadget/function/f_uvc.c
+>> @@ -248,6 +248,10 @@ uvc_function_setup(struct usb_function *f, const st=
+ruct usb_ctrlrequest *ctrl)
+>>  	memset(&v4l2_event, 0, sizeof(v4l2_event));
+>>  	v4l2_event.type =3D UVC_EVENT_SETUP;
+>>  	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
+>> +
+>> +	if (interface =3D=3D uvc->streaming_intf)
+>> +		uvc->streaming_request =3D ctrl->bRequest;
+>> +
+>>  	v4l2_event_queue(&uvc->vdev, &v4l2_event);
+>>
+>>  	return 0;
+>> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/func=
+tion/uvc.h
+>> index 40226b1f7e148a..1be4d5f24b46bf 100644
+>> --- a/drivers/usb/gadget/function/uvc.h
+>> +++ b/drivers/usb/gadget/function/uvc.h
+>> @@ -151,6 +151,7 @@ struct uvc_device {
+>>  	void *control_buf;
+>>
+>>  	unsigned int streaming_intf;
+>> +	unsigned char streaming_request;
+>>
+>>  	/* Events */
+>>  	unsigned int event_length;
+>> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
+/function/uvc_v4l2.c
+>> index a189b08bba800d..a12475d289167a 100644
+>> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+>> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+>> @@ -178,6 +178,67 @@ static struct uvcg_frame *find_closest_frame_by_siz=
+e(struct uvc_device *uvc,
+>>   * Requests handling
+>>   */
+>>
+>> +/* validate and fixup streaming ctrl request response data if possible =
+*/
+>> +static void
+>> +uvc_validate_streaming_ctrl(struct uvc_device *uvc,
+>> +			    struct uvc_streaming_control *ctrl)
+>> +{
+>> +	struct f_uvc_opts *opts =3D fi_to_f_uvc_opts(uvc->func.fi);
+>> +	unsigned int iformat, iframe;
+>> +	struct uvcg_format *uformat;
+>> +	struct uvcg_frame *uframe;
+>> +	bool ival_found =3D false;
+>> +	int i;
+>> +
+>> +	iformat =3D ctrl->bFormatIndex;
+>> +	iframe =3D ctrl->bFrameIndex;
+>> +
+>> +	/* Restrict the iformat, iframe and dwFrameInterval to valid values.
+>> +	 * Negative values for iformat and iframe will result in the maximum
+>> +	 * valid value being selected
+>> +	 */
+>> +	iformat =3D clamp((unsigned int)iformat, 1U,
+>> +			(unsigned int)uvc->header->num_fmt);
+>> +	if (iformat !=3D ctrl->bFormatIndex) {
+>> +		uvcg_dbg(&uvc->func,
+>> +			  "userspace set invalid format index - fixup\n");
+>> +		ctrl->bFormatIndex =3D iformat;
+>> +	}
+>> +	uformat =3D find_format_by_index(uvc, iformat);
+>> +
+>> +	iframe =3D clamp((unsigned int)iframe, 1U,
+>> +		       (unsigned int)uformat->num_frames);
+>> +	if (iframe !=3D ctrl->bFrameIndex) {
+>> +		uvcg_dbg(&uvc->func,
+>> +			  "userspace set invalid frame index - fixup\n");
+>> +		ctrl->bFrameIndex =3D iframe;
+>> +	}
+>> +	uframe =3D find_frame_by_index(uvc, uformat, iframe);
+>> +
+>> +	if (ctrl->dwFrameInterval) {
+>> +		for (i =3D 0; i < uframe->frame.b_frame_interval_type; i++) {
+>> +			if (ctrl->dwFrameInterval =3D=3D
+>> +				 uframe->dw_frame_interval[i])
+>> +				ival_found =3D true;
+>> +		}
+>> +	}
+>> +	if (!ival_found) {
+>> +		uvcg_dbg(&uvc->func,
+>> +			  "userspace set invalid frame interval - fixup\n");
+>> +		ctrl->dwFrameInterval =3D uframe->frame.dw_default_frame_interval;
+>> +	}
+>> +
+>> +	if (!ctrl->dwMaxPayloadTransferSize ||
+>> +			ctrl->dwMaxPayloadTransferSize >
+>> +				opts->streaming_maxpacket)
+>> +		ctrl->dwMaxPayloadTransferSize =3D opts->streaming_maxpacket;
+>> +
+>> +	if (!ctrl->dwMaxVideoFrameSize ||
+>> +			ctrl->dwMaxVideoFrameSize >
+>> +				uframe->frame.dw_max_video_frame_buffer_size)
+>> +		ctrl->dwMaxVideoFrameSize =3D uvc_get_frame_size(uformat, uframe);
+>> +}
+>> +
+>>  static int
+>>  uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
+>>  {
+>> @@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, struct uv=
+c_request_data *data)
+>>
+>>  	memcpy(req->buf, data->data, req->length);
+>>
+>> +	/* validate the ctrl content and fixup */
+>> +	if (!uvc->event_setup_out) {
+>> +		struct uvc_streaming_control *ctrl =3D req->buf;
+>> +
+>> +		switch (uvc->streaming_request) {
+>> +		case UVC_GET_CUR:
+>> +		case UVC_GET_MIN:
+>> +		case UVC_GET_MAX:
+>> +		case UVC_GET_DEF:
+>> +			uvc_validate_streaming_ctrl(uvc, ctrl);
+>> +		default:
+>> +			break;
+>> +		}
+>> +	}
+>> +
+>>  	return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
+>>  }
+>>
+>
+>--=20
+>Regards,
+>
+>Laurent Pinchart
+>
 
 --=20
 Pengutronix e.K.                           |                             |
@@ -97,24 +246,24 @@ Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
 Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---RNRUMt0ZF5Yaq/Aq
+--xexMVKTdXPhpRiVT
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmOF3JgACgkQC+njFXoe
-LGSQlBAAqMIsMoLkAxkdCfnbkxn0lrFU7XXvsc0TK+EzfP5SyRm9jZMe/O3OFR6G
-LrcT5KVth0gCI58tEFjY8Y9FtfWkSkPQwx7flWs1y7+qFhiiklXZlj3BFLSmLnZk
-xpuqxFUavNLVgAx6QI2AnhQVfLTx4ScYt7V5vKOnRbtLJeV14TpKTKwLlEHGpB39
-iD8EWiqWtlmDc1SItJ4IEBy1mUf+Kl+b2zII35EwVbn7LbXPQAaIbg9JJwYB3cjx
-OUyGqNyS041XB+rU4KegWwwvl7N5Dzptq1a++ipWZLT+I9vCxH+MlRpONK2AZt0d
-ZK/jmz1uI0tbXSoHynojRTXCYBUW0pijXg1E8EGV0HIQYFlwr9nEk05YSB/2ALO1
-oXm4WbBk/1bF8NGAXvcnNDuLcWt4Yk7uag9JBLqh+QhJk8aj/IvHDqXDJpja/7bC
-ymONiW1x2yOiGwnia9aheJRRlE0TbKRepVyGNCmd+3YfrLUJead7H7k0EBg8ff26
-H53xnUTT6LXin0Ql1K7lBonVvYS2GKyNED3MfIor9wwh+dx6go32YqoBNw2Qh8m8
-OUxlX8wu4b8g8oJtPwB9OQPSyEWu0yfvnWlHdYjpRD7kw26XSMg8v79MLHE2Kfin
-HwiPZGBZuI3Ue61DW0bPFKS6vFCm05e0DG6Ybcg7Cbt0s90ZVg8=
-=BT1P
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmOF3YsACgkQC+njFXoe
+LGR55BAAjCqzXYvmTY4qInfCI1CXZDEjcEyhRfYzg6Hq8SplWvhM0gULqq/xFofa
+tcePG8xxgaWFQ829zkKeuWC7eRzJgCMUgB7xXITI/UyFx2kbuAgCziUlcPQ3TdeR
+sH8ALoauRsFcQIKFjCIjb4qN8hveGsFS7jqqUbY56VgJ33co5jE21HWVQ4zw/lcC
+AaAuV5Uel4Kkb0iqtE2JlZLZ1mxAwogIwPcUKFIpD9hv6Yx5Ag5E0U7ovIlj23Uy
+AyxHOyiVOrKlTa3y17VcAyhFzWNJX9aPEKuj83YGS+NyLd8zhjh2uFLVeuAGT/je
+yPMD5qDzVwzabUbFh39ubeOmeqzyd0l2WO8XS42Zje9u3Vnjkg4nv8Zyf8m5bpxg
+zy/OoCjr1gBq91A0sd/HQahaOb9XiPZxirLBkGZtwzA19dvXsQ9EtMRYhVtPGQeN
+4IQ2WcRIdXcgUyDEnMdlHgkxYJAX3Y07+NkzsocWGtqvB/P2Lty1nVrDJX8FkXiA
+LuvGjDCEbRPijXs9tNFdbzPDoYh+4l6wkdnH8m6V/oAd3j2+bzc4+amdPG7tIoov
+iDVp/AFGZW1XfhRbSwlDZEzDYBoHtCtpMZyFNElo+mpKKl3+giY4LSe9Qyz7CnSj
+L8ICVwNsIvGnBa1y9xaD1HGMrWKTfacjeNqZKXdD1cDuqMLknUw=
+=1jbP
 -----END PGP SIGNATURE-----
 
---RNRUMt0ZF5Yaq/Aq--
+--xexMVKTdXPhpRiVT--
