@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1BA63B9C0
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 07:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 520B063B9C2
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 07:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235627AbiK2GVy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 01:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S235667AbiK2GXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 01:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235397AbiK2GVx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 01:21:53 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5C22FC02;
-        Mon, 28 Nov 2022 22:21:52 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NLsbS0mYJzJp0j;
-        Tue, 29 Nov 2022 14:18:28 +0800 (CST)
+        with ESMTP id S235214AbiK2GXu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 01:23:50 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946214875D;
+        Mon, 28 Nov 2022 22:23:49 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NLshr4ksMzmW4d;
+        Tue, 29 Nov 2022 14:23:08 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.70) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 14:21:50 +0800
+ 15.1.2375.31; Tue, 29 Nov 2022 14:23:47 +0800
 From:   Wang Yufen <wangyufen@huawei.com>
 To:     <gregkh@linuxfoundation.org>, <linus.walleij@linaro.org>,
         <mailhol.vincent@wanadoo.fr>
 CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <wangyufen@huawei.com>
-Subject: [PATCH v2] USB: FHCI: fix error return code in of_fhci_probe()
-Date:   Tue, 29 Nov 2022 14:41:55 +0800
-Message-ID: <1669704115-40011-1-git-send-email-wangyufen@huawei.com>
+Subject: [PATCH v3] USB: FHCI: fix error return code in of_fhci_probe()
+Date:   Tue, 29 Nov 2022 14:43:52 +0800
+Message-ID: <1669704232-40228-1-git-send-email-wangyufen@huawei.com>
 X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -54,7 +54,7 @@ Signed-off-by: Wang Yufen <wangyufen@huawei.com>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
-index 95a4446..ca4b311 100644
+index 95a4446..c8a1b98 100644
 --- a/drivers/usb/host/fhci-hcd.c
 +++ b/drivers/usb/host/fhci-hcd.c
 @@ -639,8 +639,9 @@ static int of_fhci_probe(struct platform_device *ofdev)
@@ -63,7 +63,7 @@ index 95a4446..ca4b311 100644
  		if (IS_ERR(fhci->gpiods[i])) {
 -			dev_err(dev, "incorrect GPIO%d: %ld\n",
 -				i, PTR_ERR(fhci->gpiods[i]));
-+			ret = PTR_ERR(fhci->gpiods[i])
++			ret = PTR_ERR(fhci->gpiods[i]);
 +			dev_err(dev, "incorrect GPIO%d: %d\n",
 +				i, ret);
  			goto err_gpios;
