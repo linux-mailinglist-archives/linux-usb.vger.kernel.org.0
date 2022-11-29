@@ -2,115 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C69E63C6BA
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 18:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528FA63CABA
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 22:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236213AbiK2Rsf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 12:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S236621AbiK2V46 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 16:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236226AbiK2Rsd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 12:48:33 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2079.outbound.protection.outlook.com [40.107.96.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0701360E93;
-        Tue, 29 Nov 2022 09:48:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aiKOPwCOfSooVww+AbmrnglbV6LCISlTpCGse1lE8nTSxRVJIWxJwWCiWIrh7AiDIpcxDDkI+0GMPs8DBcUERMi54PXY8xIGaNF5DE0/80O/H3odmq5tOvPiP6hQr54fOBXRthZEAWdPhc6OoHI1q3y5CyjtaDn96sSPeQBUzV8TK5+T6JT2t14tqeY6b5Ek9HzYFkfvjRRgJAgEYEyyUUN29DODS5W376nNxySEyKpj33L3FOed8WK9HNIY0bsEZE71Jl5rCNQuGjRr2+/TDEKF1Sqp7kEYW7j5e76n3/pGDnWV0iNgSFtXiGuayUUWHuy63X6ik6Yillbgtu7VTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7JmtI2nKLzNuQ7yDS0jbfn60HyCMDXC8c8pDb/CDbec=;
- b=lkuxsr3/5BpXvg1tvpOyAjanQFVozkyjwBfDSGyBjmMqDX6h50o1nuvqTgCbKu9Q1IDzC1o6RA1LZo5QPgpjIsgioRBK5GP4pfD9iQU01ChrBrBTLhg957tO5a11W0THBJLWImmYxeRcGpmc29QNRQ6/7T3bSR/44cKhlXSa4MSEuvVWy1BRgLE7RPJsMieudVrnfM4RyKsyw4HXccxmoWvvDY9kycELKDRlH2q9lHgdc+iVEqbT2FdW+mWF+HJks/zRM5NzIQGGYUQ2Bml+Ik+3FpUjAMdJL0FICab96/g/d91fD+yNJUvTaEWXBLnSOH39VRSkgBJz+5jRcOXOYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
- dkim=pass header.d=vpitech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7JmtI2nKLzNuQ7yDS0jbfn60HyCMDXC8c8pDb/CDbec=;
- b=LiauTfGyvi7VAnC9oAbUGSaSdfEum9cVrbLNqNNn/wYuPOqIKQClC4RahXKzrUbRfZyfOxbIFD5ZzRXFvPXl6Ap8CNYd72f6TVRDbMG8XZmwA9E680/8H0IVPMgu67Y/dG4IXaSxFVwKoXG7sFn3SwZdbqnvDVe+ZGxAYZwimjY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vpitech.com;
-Received: from SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:1ff::7)
- by SA1P222MB0214.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:1f9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 17:48:29 +0000
-Received: from SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
- ([fe80::1ac3:14ac:b83:b2fa]) by SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
- ([fe80::1ac3:14ac:b83:b2fa%9]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 17:48:29 +0000
-From:   Alex Henrie <alexh@vpitech.com>
-To:     Johan Hovold <johan@kernel.org>, Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexhenrie24@gmail.com
-Subject: Re: [PATCH] USB: serial: cp210x: add support for B0 hangup
-Date:   Tue, 29 Nov 2022 10:48:26 -0700
-Message-ID: <4760090.GXAFRqVoOG@demeter>
-In-Reply-To: <20221129141539.15176-1-johan@kernel.org>
-References: <20221129141539.15176-1-johan@kernel.org>
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-ClientProxiedBy: BYAPR01CA0060.prod.exchangelabs.com (2603:10b6:a03:94::37)
- To SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:1ff::7)
+        with ESMTP id S236775AbiK2V4w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 16:56:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAA26D951
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 13:56:50 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1p08av-0000nh-6E; Tue, 29 Nov 2022 22:56:49 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1p08au-0006Hi-PH; Tue, 29 Nov 2022 22:56:48 +0100
+Date:   Tue, 29 Nov 2022 22:56:48 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        gregkh@linuxfoundation.org, balbi@kernel.org,
+        kernel@pengutronix.de, Daniel Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH v7] usb: gadget: uvc: add validate and fix function for
+ uvc response
+Message-ID: <20221129215648.GR18924@pengutronix.de>
+References: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
+ <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
+ <20221129102308.GO18924@pengutronix.de>
+ <Y4X0unPRK7iAnfaH@pendragon.ideasonboard.com>
+ <20221129152259.GQ18924@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1P222MB0296:EE_|SA1P222MB0214:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c5800bf-3706-4e24-73d4-08dad231ec78
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g81SJ71FCri4qCf2P9rfP7casjUTpMa/lWr2cUOvcuO+d0C0bhRIVLxki4R7nNWlirUIPaqSur5NvyspyhkWAIj19+6BDKvakVIoprvA3glhc+gWxRy9KLbXOnH/habU0Gz7olvUpseSxCthkNZt5nDkKf16orroOXdzWIvxQOiWfUVUBHFdmUdIDKGpxRNjPaUonQap/MafzAuS7vAK0dv21ECNktiJeCLf8JzcGTgRwsaLLnxjJLxNFhU3B8AALnaLSIhXq2NOdsPOWf/Ad6cmuaLEO4LfE+CxfC8HPzxVv82Q2D+zarLJac0XZI8PLc2mAk2dNTMa06T8qNJuaudRWGqwunT6lKE3XkwccFqHvtwNc2KP5R7HoBJDTfdMi2Sfh1CE+wSLgG38FovIdmBCH7JYo8+mpnIhUsZ9C11hL4VtVkwBVA3CJda2yq4U3ZV7FaYqONt/osqZvTnEtlLpKF8T7l4NECjXMKqFX0fYyL8Vo0qtzJqqj91yL++WOrepGEcfM8lSqHL+dQhCPuwWaHaSkLMHDrXP71wDA7sJVVtQu+77XLunhDA5+InVuj3ugEKBXNPMus9R4lfLrzKqafWCgPYY1uwZwtMufJQtcAlWtBrOliTQYFTSypxHE6siWC9u2lB++10fL92TSw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39840400004)(376002)(396003)(136003)(346002)(366004)(451199015)(2906002)(4270600006)(6666004)(6506007)(38100700002)(478600001)(6512007)(6486002)(8676002)(41300700001)(66946007)(66476007)(66556008)(52116002)(19618925003)(9686003)(33716001)(8936002)(5660300002)(558084003)(186003)(4326008)(86362001)(110136005)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jl3klHKSsixQtTbrS3FgamgAecCrNcKetqFfKAWyHSp51Z/b7ac/aeq0LiJB?=
- =?us-ascii?Q?dEez5tSqcG9H06WHIlWw0/Mp8RS0JtKpGGK99WjEM5VIIenQ1JLAkUvObI91?=
- =?us-ascii?Q?vJnBNsU5Mzu/wn5cEVcU5lGmDz0L0czUTfO6XXN4+hkj0T8Jk6HjOHLIxmLN?=
- =?us-ascii?Q?lFSMoQNozwMhEgnxrXpNy5vH9h2nHvtD+JV9e5VJ1oBDHoQVXONEdvx7S3Sp?=
- =?us-ascii?Q?02F+gziacUVt1EKBFHynpRU9HQGJwW6YymJRWa4E3gHRMIc52rTlV6MPHg3e?=
- =?us-ascii?Q?DqsBrJFUW81beLWRJHbaRJt990hycpaTp92I6HAwfvWuuRuLY8zW8tRKnbRH?=
- =?us-ascii?Q?6e3WDSHMiRa+bViV87z8i4t4C+7cg1MpnWtrxYeKlzNHNh421Ksx3bfz9wby?=
- =?us-ascii?Q?pvBET+Ca1jbwXxs0dWuORhcxNRObEjvR3nmrYj7zVbwItY1FGmCe8Mxt6gNA?=
- =?us-ascii?Q?ABeCvfFf40If0sjz5uWHnY4RpVrfm6U53oBSMSHtE2kgKQibrkdbtMp4SRog?=
- =?us-ascii?Q?dGVjKbP0Lch2Hhf7bh/lzpRyt9Q0Vcji62fBTYknwIk9onhEGFd9O2xSwzDz?=
- =?us-ascii?Q?OCgJQZ+hLkquUyDh2nDBWwzzp8qudjU/OAGN2SLqBva1KlWoR2OKUWnpTEt4?=
- =?us-ascii?Q?IJ5HJJ70xE3F0wnAmWAnfAouMeDPLLeXmv6xRkGl/ciOAAxgq5iaomZAtINo?=
- =?us-ascii?Q?HDuqJlwF5Fi1UMJcPUcDe8TjBXwK3WswsctO0XubbZu4Avblwx09SCL3nHok?=
- =?us-ascii?Q?lRpsonK27AtPobeaXufrrvf4VkVATN3/V1TfawdtMaDCQ9iolAeooH9uMuXW?=
- =?us-ascii?Q?lSMkLVGqN5eWQM+yv/ab/DuWzrJLtmGRhtL8QsvG1Ke186SF0RTTWmDY3+MV?=
- =?us-ascii?Q?rr46AdzSO5FZXFQiZ6yT4/7rYgPbNYpqIaEWK+zhdGSQmJtnzZnT8hqTvFsA?=
- =?us-ascii?Q?er3C5yZTzpdengXtY9omDM73d8WdvGwZq2MTK0Zy4K21myc6ZnndpRw2UHHj?=
- =?us-ascii?Q?ta9oj+s4nNHOC1ATVBJskl5Ef3daejtxvxztvLDAMlVKiE+CpS6LoxB51htq?=
- =?us-ascii?Q?mJ2WMoH6dFdL5zAxzLu3Dh8WDnEMuU45Qwut8HGYxRpgSDeuNgZV/PqEL4pS?=
- =?us-ascii?Q?spVj/SMxQH5FKNcAM58sY3rV9utmy0FLlpMdYRut826WpmbfUcuP63+E7YbA?=
- =?us-ascii?Q?zGS+o+MyGJEUCvBiGQQXv/iutPpYD/m2Bei5LB+2JmtgRTb9cwE/Di0gSreS?=
- =?us-ascii?Q?OyZBPM0SUGy6AbFJ067JuJVTGaJF6FxOsIGlTLeD3h6e8pDsuCxJqIUsibd2?=
- =?us-ascii?Q?4TKBP2TYogLptKbVv9UiIlNp3zrp6P56lA5MvHHNHjPKZ63rQjZMbNGet3c6?=
- =?us-ascii?Q?Z4Rn/oXoK18RYfd2srQt9mjy63otVLQOPsDEazjDwxY00t28UP9h75lfK+mF?=
- =?us-ascii?Q?b+l8NfomM9xSUn+Lgj0vXJhXari76OP5NbNbKHrdUZ7B0ZH0oRgMS/Wt2Wmb?=
- =?us-ascii?Q?4vA2PhUg3D7xhmtdEr8u+Z8r1USZlAaUV823DY5v81oSFbJvI7BVEnVRvR2d?=
- =?us-ascii?Q?HB3effHHA44UciV0oAX/CizAT1McmPKiCI/KyseKIBtqUuijiD4yjxAZ/gKA?=
- =?us-ascii?Q?S8drUdTnnBQfSUttGX1LqPE=3D?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c5800bf-3706-4e24-73d4-08dad231ec78
-X-MS-Exchange-CrossTenant-AuthSource: SA1P222MB0296.NAMP222.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 17:48:29.0456
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6/Dh0J/T1eC6EK+gh8/U4GFxkItzWFhxiXop573MvHlJkC53SR/MUYO58a0GMyJ+p/Kko25L9OPO76/hzdZdvg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P222MB0214
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JB7KW7Ey7eB5HOHs"
+Content-Disposition: inline
+In-Reply-To: <20221129152259.GQ18924@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reviewed-by: Alex Henrie <alexh@vpitech.com>
+
+--JB7KW7Ey7eB5HOHs
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Nov 29, 2022 at 04:22:59PM +0100, Michael Grzeschik wrote:
+>On Tue, Nov 29, 2022 at 02:02:02PM +0200, Laurent Pinchart wrote:
+>>On Tue, Nov 29, 2022 at 11:23:08AM +0100, Michael Grzeschik wrote:
+>>>On Tue, Nov 29, 2022 at 05:10:24AM +0200, Laurent Pinchart wrote:
+>>>> On Mon, Nov 28, 2022 at 11:31:25AM +0100, Michael Grzeschik wrote:
+>>>>> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MI=
+N,
+>>>>> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
+>>>>> needs to be validated. Since the kernel also knows the limits for val=
+id
+>>>>> cases, it can fixup the values in case the userspace is setting inval=
+id
+>>>>> data.
+>>>>
+>>>> Why is this a good idea ?
+>>>
+>>>Why is it not? We don't want the userspace to communicate other things
+>>>to the host than what is configured in the configfs. If you only object
+>>>the explanation, then I will improve the commit message and send an
+>>>fixed v8. If you have more objections please share your doubts, thanks.
+>>
+>>What bothers me is that this patch silently clamps invalid value, trying
+>>to hide the gadget userspace error from the host. It may allow the host
+>>to proceed one step further, but if the gadget userspace got it wrong in
+>>the first place, there's a very high chance it won't do the right thing
+>>in the next step anyway. This will make debugging more complicated,
+>>while at the same time not bringing much value.
+>
+>I discussed this and we came up with a better approach. When the
+>userspace will send UVCIOC_SEND_RESPONSE we can return with a negativ
+>return value. Like EAGAIN if the validation was seeeing some trouble
+>with the userspaces uvc_streaming_control feedback to the host.
+>
+>The validation code will then still fixup the data, but instead of
+>transfering this manipulated answer to the host, it will return the
+>changes to the application with EAGAIN. So now the userspace can
+>react to it and it should even point out misconfigurations between
+>kernel and userspace and so will simplify the debugging.
+>
+>How about that?
+
+While implementing this I came across the problem that the
+UVCIOC_SEND_RESPONSE is handled in the vidioc_default handler.
+But for this handler we can not set flag INFO_FL_ALWAYS_COPY like
+for common v4l2_ioctls. :(
+
+I think this is still worth a path to go, but I am currently out
+of ideas how to achieve it. Help for this is much appreciated.
+
+Thanks,
+Michael
 
 
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--JB7KW7Ey7eB5HOHs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmOGgB4ACgkQC+njFXoe
+LGSe/xAAo/NslPqLmcUVcAU/QdQif5RKL4YG9F8M4CRkSd+JnhaUZQu/YmxvFmAC
+CmZKtSCu5XkL3FrDUEq+djF339I8pNup5L/9FkFq+MplbWjhEiaTcz1EmMFiFjMM
+iO3suWDbZBKo755KPgN/KhDe3GLjvkljK1omv0n93yLUH7lG8yML9bBrgsaSSSOt
+1VvNOQXbOe7b70RpZ6oxbq6Y9EUEHlG59XpYl2Jc6YMRoL5x03d+JeCTYSw21Fps
+0ulqZcmSQyXDBhu1oeCBrxFvL+ufD0Y3uewWO3AtqLyCcOBOAwpcmwunpSamoEow
+DP3Qd065U7iLyhg+LMo9lTftMJr/BbW+l0Wo8MHFaRnDBWcJHaHJt+gCpuRiW4OU
+prUi8m18q95WrFrkwDq+oTsZsjPqEd/hH/TCf1buxuOFjO6eoTf8ETF7a32bWGD+
+BvfnHhGqSUi581ZVm/7n/ohZ4laWsirW9zD6qpzvVfBpcP/aipeQFUUOKaDY/W/T
+H13gGzLu0MLZ62JcL0mEdsH7jPKKDDsVzuIpu9xnjvohdUynVZot0w6kWrgxxy/1
+l8+dbRg1uBOgAJiGa/W4bjl+dOVLRmPyoIgc0422rtLSwe6fbcKKmKwkZYKkrdSG
+fgEXsDFo19IB2hyYFXXUAnnD6YaMp7pBuhprkfBQvpkzS7bPkxc=
+=9nNw
+-----END PGP SIGNATURE-----
+
+--JB7KW7Ey7eB5HOHs--
