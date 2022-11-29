@@ -2,139 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B4063BDF8
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 11:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F09F63BEB2
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 12:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiK2K3s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 05:29:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
+        id S230021AbiK2LPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 06:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiK2K3q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 05:29:46 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8266643841
-        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 02:29:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669717783; x=1701253783;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/5dWgMdSI7RQDhXhehcp3QkOWiw7+6Dos7Oc6jRN9IA=;
-  b=F7HAsLO1kt47SZeQYp2gp6YS5o3GzRUs67DkfJq1EgBUmksxHCpyZg2H
-   mZV5UbCdrhvk8cu/8wVEAeBjSwug7SxzkKVsSHU/ZP30N5zw9hn1jnH2X
-   6naehdvKyPnG52VgLYojOCemo8eYpEFsqC1AKkIk/qXtnmeie+ZtVO6ee
-   qHczzV7JxwOZa9ZcdyDrHoCMMmyrXE7WsGsXTEk0yZPpioCjIENkIwxUf
-   5F++o1LS1mixdrFNnYW2ejJDB4CGQpBYyQYq2MvzWNKWK2YcIT6JWTBT7
-   dTVCD4basoVxk/hHW1qRN4ACL0EecDhzbWL/uPVA56X9bwRqL3Dzj0/sx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="316911293"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="316911293"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 02:29:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="643733643"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="643733643"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 29 Nov 2022 02:29:41 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ozxrx-0008vO-0W;
-        Tue, 29 Nov 2022 10:29:41 +0000
-Date:   Tue, 29 Nov 2022 18:28:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 9d1566e1f36b5167731372d2dfea97dbb4c43edf
-Message-ID: <6385dedd.M3Cr1F5qzwpo7Ojc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229777AbiK2LPP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 06:15:15 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F054FFB3;
+        Tue, 29 Nov 2022 03:15:14 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ABA124DA;
+        Tue, 29 Nov 2022 12:15:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669720512;
+        bh=6ymnuxC73Bi+XxxsJo1TuShFF+5Hw8ToW16HXWGnwvk=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=krzFuGlb2VAKdyjutf31+7QPQuRviHxuekQRTjsBX1xALDM1d+PveC54rSO5Kz3ae
+         7yTEAWj1teiHDYYVBSZNGVSZn+Xwl0L70mkDT5A6YvrPeOPTYLLKCS1bphU+/RDPM+
+         0yqtcl5EAL6v9ocum7GV8cMx2bQmYeQhtWpHL7pY=
+Message-ID: <2e28fbab-2367-5d00-6e46-37879fd046e5@ideasonboard.com>
+Date:   Tue, 29 Nov 2022 11:15:08 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Michael Grzeschik <mgr@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        gregkh@linuxfoundation.org, balbi@kernel.org, kernel@pengutronix.de
+References: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
+ <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
+ <20221129102308.GO18924@pengutronix.de>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH v7] usb: gadget: uvc: add validate and fix function for
+ uvc response
+In-Reply-To: <20221129102308.GO18924@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 9d1566e1f36b5167731372d2dfea97dbb4c43edf  Merge 6.1-rc7 into usb-next
 
-elapsed time: 1021m
+On 29/11/2022 10:23, Michael Grzeschik wrote:
+> On Tue, Nov 29, 2022 at 05:10:24AM +0200, Laurent Pinchart wrote:
+>> Hi Michael,
+>>
+>> (CC'ing Dan)
+>>
+>> Thank you for the patch.
+>>
+>> On Mon, Nov 28, 2022 at 11:31:25AM +0100, Michael Grzeschik wrote:
+>>> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
+>>> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
+>>> needs to be validated. Since the kernel also knows the limits for valid
+>>> cases, it can fixup the values in case the userspace is setting invalid
+>>> data.
+>>
+>> Why is this a good idea ?
+>
+> Why is it not? We don't want the userspace to communicate other things
+> to the host than what is configured in the configfs. If you only object
+> the explanation, then I will improve the commit message and send an
+> fixed v8. If you have more objections please share your doubts, thanks.
 
-configs tested: 58
-configs skipped: 2
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I'm also not really sure of the benefit; wouldn't this result in 
+userspace streaming data that's configured differently to what the host 
+is expecting?
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a002-20221128
-i386                 randconfig-a003-20221128
-alpha                            allyesconfig
-x86_64                           rhel-8.3-syz
-arc                  randconfig-r043-20221128
-m68k                             allmodconfig
-i386                 randconfig-a001-20221128
-x86_64                              defconfig
-i386                 randconfig-a004-20221128
-arc                              allyesconfig
-sh                               allmodconfig
-i386                 randconfig-a005-20221128
-i386                 randconfig-a006-20221128
-mips                             allyesconfig
-x86_64                               rhel-8.3
-powerpc                          allmodconfig
-x86_64                           allyesconfig
-m68k                             allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a001-20221128
-i386                                defconfig
-ia64                             allmodconfig
-x86_64               randconfig-a003-20221128
-x86_64               randconfig-a004-20221128
-x86_64               randconfig-a002-20221128
-x86_64               randconfig-a006-20221128
-x86_64               randconfig-a005-20221128
-i386                             allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
+>>>  static int
+>>>  uvc_send_response(struct uvc_device *uvc, struct uvc_request_data 
+>>> *data)
+>>>  {
+>>> @@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, 
+>>> struct uvc_request_data *data)
+>>>
+>>>      memcpy(req->buf, data->data, req->length);
+>>>
+>>> +    /* validate the ctrl content and fixup */
+>>> +    if (!uvc->event_setup_out) {
+>>> +        struct uvc_streaming_control *ctrl = req->buf;
+>>> +
+>>> +        switch (uvc->streaming_request) {
+>>> +        case UVC_GET_CUR:
+>>> +        case UVC_GET_MIN:
+>>> +        case UVC_GET_MAX:
+>>> +        case UVC_GET_DEF:
+>>> +            uvc_validate_streaming_ctrl(uvc, ctrl);
+>>> +        default:
+>>> +            break;
+>>> +        }
+>>> +    }
+>>> +
 
-clang tested configs:
-hexagon              randconfig-r045-20221128
-riscv                randconfig-r042-20221128
-s390                 randconfig-r044-20221128
-hexagon              randconfig-r041-20221128
-i386                 randconfig-a012-20221128
-i386                 randconfig-a011-20221128
-i386                 randconfig-a013-20221128
-i386                 randconfig-a014-20221128
-i386                 randconfig-a015-20221128
-i386                 randconfig-a016-20221128
-x86_64               randconfig-a011-20221128
-x86_64               randconfig-a014-20221128
-x86_64               randconfig-a016-20221128
-x86_64               randconfig-a015-20221128
-x86_64               randconfig-a013-20221128
-x86_64               randconfig-a012-20221128
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+What about read requests for controls that aren't for the streaming 
+interface?
+
+>>>      return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
+>>>  }
+>>>
+>>
+>> -- 
+>> Regards,
+>>
+>> Laurent Pinchart
+>>
+>
