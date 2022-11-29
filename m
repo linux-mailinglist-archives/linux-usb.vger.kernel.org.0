@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B8E63BF0A
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 12:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D2363BF1C
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 12:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiK2LcG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 06:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S233157AbiK2LeA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 06:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiK2Lbl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 06:31:41 -0500
+        with ESMTP id S232478AbiK2Ldf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 06:33:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A4845A2F
-        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 03:31:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D901B9F8
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 03:33:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9469F616C3
-        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 11:31:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 03B77C433C1
-        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 11:31:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 362D7616CB
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 11:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9DFF1C433D6
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 11:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669721500;
-        bh=ZKiEXuZOQhUHQZlO2/Lw5Y2Bm9AExQ70aoym3F4vKvs=;
+        s=k20201202; t=1669721612;
+        bh=112CjQvfpJbA01ue7iZJIusG+4l/1MmF1P+5Q8TKjOc=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=KRjICDYIOG/kX6SWebdGoYk1yExxIonr1sYDKrCaL+/D8R3HFEXk9aSE9iw7NkmDS
-         dPMuzceKXDVe6cHQrP0gosAwmfOYByW75DJ8cRpjAoT8WA+NsAJGUN1lpBEqgLRldX
-         ZfxpFZc8jPO+pGfCMMCvwOIl4F+V/SBB/rJ/sgmIAJZwE++5gcNf4HnLvIIbewDzGV
-         enI9x/TaMyFPPk9iN0UKcaNcfQA9XFghpWlDILESqLDcDzuaj9TTrHohniPf0FqiNL
-         SQJkSGcEOOFBcPMIZ28r65QFK3EhwXye6EqooGjfJtTcKLHH9x7H/YztD2iB9zH5B0
-         xefJ3Pb/mjbsQ==
+        b=Bx3wC2AKVu5LhoU0NF7PhTckSUVKNgEdNvmuOomRdZ5A/XvfQqmoghxRaNQNx8IkM
+         LqYgmi2Z6S0VvZAw7FeZmu/2wSlgrrpBQqQRjaVaGSLekiXSfUK7jPqHHiXSThxGWZ
+         Icbp3NHdUomzCzcY4vJnovIYcKuPLQ4zzUjH2rk8TWftmW5sHjtaGeDKc1VL00/azy
+         vMIU+vgstk6mzrx98I3xc4kRji1ui7q2iq5cg/8q4bWRflwX3hGxNOQL9cJlkLxnif
+         a3Iu6PZdw3+7ZCRiTQVyk2rE7qgz9TT+VQFFIpFkPtVS09DzAY3JPUZpe9gUHN1BSH
+         gvJ5vR8Lx5Q6g==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id E1F6BC433E4; Tue, 29 Nov 2022 11:31:39 +0000 (UTC)
+        id 78529C433E6; Tue, 29 Nov 2022 11:33:32 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
  CometLake platform
-Date:   Tue, 29 Nov 2022 11:31:39 +0000
+Date:   Tue, 29 Nov 2022 11:33:32 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216728-208809-P9SuFB8POk@https.bugzilla.kernel.org/>
+Message-ID: <bug-216728-208809-lLMPLOB04F@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
 References: <bug-216728-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,11 +72,8 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
---- Comment #12 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Can you add more delay to the
-drivers/pci/pci.c::pci_bridge_wait_for_secondary_bus(). Something like 500m=
-s or
-more and see if that changes anything?
+--- Comment #13 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+Also if possible try to disable ASPM.
 
 --=20
 You may reply to this email to add a comment.
