@@ -2,44 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71A563BACA
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 08:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248AD63BAD8
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Nov 2022 08:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiK2Heo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 02:34:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
+        id S229878AbiK2Hkd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 02:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiK2Hem (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 02:34:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631274AF16;
-        Mon, 28 Nov 2022 23:34:40 -0800 (PST)
+        with ESMTP id S229869AbiK2Hkb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 02:40:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F13D4F18D;
+        Mon, 28 Nov 2022 23:40:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 089C3615B7;
-        Tue, 29 Nov 2022 07:34:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F934C433C1;
-        Tue, 29 Nov 2022 07:34:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E17FBB811BE;
+        Tue, 29 Nov 2022 07:40:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F2CC433D6;
+        Tue, 29 Nov 2022 07:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669707279;
-        bh=tECsQ2ZfxkV3bC+b6iryBrVJE0Vaq25uaQkwxanlCRQ=;
+        s=korg; t=1669707626;
+        bh=DFIRxNoKK3C4L1irbRKR6Cf5B1fgSB7jWKY7+ag9vJY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1/5RPRoVUoYxJuBAFwxOgZgr2PerUlLxDFto8NeSYjubJ/m2raYQ7Yi/yv4/FeN67
-         NTD72Pq4gG9HAkXqECN94NAlvAXzNMVfDFT8jFP3I9Juw7aAVlt927QoIJDZ/dEhs7
-         b4lJLfHDNq2U55xdEHQ9jzGzsGmSpj6RITbGG6eE=
-Date:   Tue, 29 Nov 2022 08:34:37 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wang Yufen <wangyufen@huawei.com>
-Cc:     linus.walleij@linaro.org, mailhol.vincent@wanadoo.fr,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] USB: FHCI: fix error return code in of_fhci_probe()
-Message-ID: <Y4W2DQGsZp2w2NpR@kroah.com>
-References: <1669707158-43984-1-git-send-email-wangyufen@huawei.com>
+        b=v3yM3BdZf1qdcErGQn8RLzdWbqppDVO699NRf9pAQWKZFYv0N/jGpP96R7dcNWLJT
+         vmH/WSchwXTddJdzRDmggUOm44lI+qXFQzXz6lUb+zD7gn4YV8ukH2sSESmU2yil1/
+         nHLs2/UM5DpWJy/W4+7NLbTvZO/jS6cfgvnbItzs=
+Date:   Tue, 29 Nov 2022 08:40:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
+Message-ID: <Y4W3aLL/ECOq7u5U@kroah.com>
+References: <20221111152852.2837363-1-allenwebb@google.com>
+ <20221128201332.3482092-1-allenwebb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1669707158-43984-1-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <20221128201332.3482092-1-allenwebb@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -49,35 +54,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 03:32:38PM +0800, Wang Yufen wrote:
-> Fix to return a negative error code of PTR_ERR(fhci->gpiods[i])
-> instead of 0.
+On Mon, Nov 28, 2022 at 02:13:32PM -0600, Allen Webb wrote:
+> USB devices support the authorized attribute which can be used by
+> user-space to implement trust-based systems for enabling USB devices. It
+> would be helpful when building these systems to be able to know in
+> advance which kernel drivers (or modules) are reachable from a
+> particular USB device.
 > 
-> Fixes: a4efdb8a423b ("USB: FHCI: Switch to GPIO descriptors")
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> This information is readily available for external modules in
+> modules.alias. However, builtin kernel modules are not covered. This
+> patch adds a sys-fs attribute to both builtin and loaded modules
+> exposing the matching rules in the modalias format for integration
+> with tools like USBGuard.
+> 
+> Signed-off-by: Allen Webb <allenwebb@google.com>
 > ---
->  drivers/usb/host/fhci-hcd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
-> index 95a4446..f84f1c8 100644
-> --- a/drivers/usb/host/fhci-hcd.c
-> +++ b/drivers/usb/host/fhci-hcd.c
-> @@ -639,8 +639,8 @@ static int of_fhci_probe(struct platform_device *ofdev)
->  					NULL, i, GPIOD_OUT_LOW);
->  
->  		if (IS_ERR(fhci->gpiods[i])) {
-> -			dev_err(dev, "incorrect GPIO%d: %ld\n",
-> -				i, PTR_ERR(fhci->gpiods[i]));
-> +			ret = PTR_ERR(fhci->gpiods[i]);
-> +			dev_err(dev, "incorrect GPIO%d: %d\n", i, ret);
->  			goto err_gpios;
->  		}
->  		if (!fhci->gpiods[i]) {
-> -- 
-> 1.8.3.1
-> 
+>  drivers/base/Makefile          |   2 +-
+>  drivers/base/base.h            |   8 ++
+>  drivers/base/bus.c             |  42 ++++++
+>  drivers/base/mod_devicetable.c | 247 +++++++++++++++++++++++++++++++++
+>  drivers/usb/core/driver.c      |   2 +
+>  include/linux/device/bus.h     |   8 ++
+>  include/linux/module.h         |   1 +
+>  kernel/module/internal.h       |   2 +
+>  kernel/module/sysfs.c          | 100 +++++++++++++
+>  kernel/params.c                |   2 +
+>  10 files changed, 413 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/base/mod_devicetable.c
 
 Hi,
 
