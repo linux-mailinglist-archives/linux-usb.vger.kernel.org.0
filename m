@@ -2,50 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC2C63D19A
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 10:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0401163D19B
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 10:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiK3JSb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Nov 2022 04:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S232809AbiK3JSd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Nov 2022 04:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiK3JSX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 04:18:23 -0500
+        with ESMTP id S232606AbiK3JSZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 04:18:25 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF8F56D40;
-        Wed, 30 Nov 2022 01:18:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5213A45A17
+        for <linux-usb@vger.kernel.org>; Wed, 30 Nov 2022 01:18:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669799902; x=1701335902;
+  t=1669799904; x=1701335904;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=iedjmQIOCc41+OwF/Rn/1aQX09s7hqd3FiY8I7GR+Zw=;
-  b=bZvtR0ofmZKsiKBAHGDp1+pJpx5w2j1Ck4Qjyw2WU2OJBc9tzLCmqE+U
-   272/fJIBBaVDuXUYSZzThA0CSX1MY2VsvMT0BHU/6WOU7xPvJSHaUWMx/
-   hQkJcC6Uz6vKc41jkPxLZL4DZ2AUraL5/SXIzDMPd49KzzJhU7igyrOmj
-   aV1wgAxwcqRxX67M/pYprlR5n9wxx9PR0+y6Ar5fynhH5QlcZV3N7KWGn
-   z2Ttd996sy7Rey+UEc0YGqu8Z2W8A8XxFZJFu7UION9Sg9OFfenzQoNyQ
-   sa4dGwDJfaVwYN8HiarPW9CsWcz1750vCIaNoqZ1/I8dPsQVlNB8R8n1b
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295711294"
+  bh=f+olfHVWLYLSBmpEuHjX0mkPJmfiix4o9GVabHZAKZI=;
+  b=HFbXf/BkC0uC9mGI6ylBy8rL4RZD+l2pqK67oeE/F7i+STRNFCl8RO1q
+   c4c2c84kxbTKdJysbf971/ZA1KJ24zS5G4KmHCb0cW8vpf8LgYrF8GyTY
+   GZPisMTGY+KfWQGyJozOgcIbfCXzOzQUYQtWa7nWXIZ702nFArR6I6FBC
+   KX08rOeXGoAINzXFJOyInk96qVxgE3UF4/j4XFzveP/r9bN5Y2jDEsFA1
+   FHZdFXo0kI2e1Y3/cbI3ZnBdPsCQYkjgfxSvSLFFGwrSjLkFfu9dCHrDl
+   rFQvuedFNnICdRe0yxqIDHcZ4bqbPEnR+mqDb6fERp2p3gdMRyCirilI/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295711304"
 X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="295711294"
+   d="scan'208";a="295711304"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:18:22 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:18:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="674962718"
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="674962729"
 X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="674962718"
+   d="scan'208";a="674962729"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2022 01:18:20 -0800
+  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2022 01:18:22 -0800
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 5/6] xhci: Prevent infinite loop in transaction errors recovery for streams
-Date:   Wed, 30 Nov 2022 11:19:43 +0200
-Message-Id: <20221130091944.2171610-6-mathias.nyman@linux.intel.com>
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 6/6] xhci: remove unused stream_id parameter from xhci_handle_halted_endpoint()
+Date:   Wed, 30 Nov 2022 11:19:44 +0200
+Message-Id: <20221130091944.2171610-7-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221130091944.2171610-1-mathias.nyman@linux.intel.com>
 References: <20221130091944.2171610-1-mathias.nyman@linux.intel.com>
@@ -60,82 +59,103 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make sure to also limit the amount of soft reset retries for transaction
-errors on streams in cases where the transaction error event doesn't point
-to any specific TRB.
+The stream_id parameter is no longer used when handling halted endpoints.
+Remove it
 
-In these cases we don't know the TRB or stream ring, but we do know which
-endpoint had the error.
-
-To keep error counting simple and functional, move the current err_count
-from ring structure to endpoint structure.
-
-Cc: stable@vger.kernel.org
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 14 ++++++++++----
- drivers/usb/host/xhci.h      |  2 +-
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/usb/host/xhci-ring.c | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index f6af479188e8..039ec9734fcd 100644
+index 039ec9734fcd..ddc30037f9ce 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -2458,7 +2458,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+@@ -896,7 +896,7 @@ static int xhci_reset_halted_ep(struct xhci_hcd *xhci, unsigned int slot_id,
+ }
  
- 	switch (trb_comp_code) {
- 	case COMP_SUCCESS:
--		ep_ring->err_count = 0;
-+		ep->err_count = 0;
- 		/* handle success with untransferred data as short packet */
- 		if (ep_trb != td->last_trb || remaining) {
- 			xhci_warn(xhci, "WARN Successful completion on short TX\n");
-@@ -2484,7 +2484,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		break;
- 	case COMP_USB_TRANSACTION_ERROR:
- 		if (xhci->quirks & XHCI_NO_SOFT_RETRY ||
--		    (ep_ring->err_count++ > MAX_SOFT_RETRY) ||
-+		    (ep->err_count++ > MAX_SOFT_RETRY) ||
- 		    le32_to_cpu(slot_ctx->tt_info) & TT_SLOT)
- 			break;
+ static int xhci_handle_halted_endpoint(struct xhci_hcd *xhci,
+-				struct xhci_virt_ep *ep, unsigned int stream_id,
++				struct xhci_virt_ep *ep,
+ 				struct xhci_td *td,
+ 				enum xhci_ep_reset_type reset_type)
+ {
+@@ -1110,8 +1110,7 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 					td->status = -EPROTO;
+ 			}
+ 			/* reset ep, reset handler cleans up cancelled tds */
+-			err = xhci_handle_halted_endpoint(xhci, ep, 0, td,
+-							  reset_type);
++			err = xhci_handle_halted_endpoint(xhci, ep, td, reset_type);
+ 			if (err)
+ 				break;
+ 			ep->ep_state &= ~EP_STOP_CMD_PENDING;
+@@ -2183,8 +2182,7 @@ static int finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		}
+ 		/* Almost same procedure as for STALL_ERROR below */
+ 		xhci_clear_hub_tt_buffer(xhci, td, ep);
+-		xhci_handle_halted_endpoint(xhci, ep, ep_ring->stream_id, td,
+-					    EP_HARD_RESET);
++		xhci_handle_halted_endpoint(xhci, ep, td, EP_HARD_RESET);
+ 		return 0;
+ 	case COMP_STALL_ERROR:
+ 		/*
+@@ -2200,8 +2198,7 @@ static int finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		if (ep->ep_index != 0)
+ 			xhci_clear_hub_tt_buffer(xhci, td, ep);
  
-@@ -2565,8 +2565,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 		case COMP_USB_TRANSACTION_ERROR:
- 		case COMP_INVALID_STREAM_TYPE_ERROR:
- 		case COMP_INVALID_STREAM_ID_ERROR:
--			xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
--						    EP_SOFT_RESET);
-+			xhci_dbg(xhci, "Stream transaction error ep %u no id\n",
-+				 ep_index);
-+			if (ep->err_count++ > MAX_SOFT_RETRY)
-+				xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
-+							    EP_HARD_RESET);
-+			else
-+				xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
-+							    EP_SOFT_RESET);
+-		xhci_handle_halted_endpoint(xhci, ep, ep_ring->stream_id, td,
+-					    EP_HARD_RESET);
++		xhci_handle_halted_endpoint(xhci, ep, td, EP_HARD_RESET);
+ 
+ 		return 0; /* xhci_handle_halted_endpoint marked td cancelled */
+ 	default:
+@@ -2490,8 +2487,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 
+ 		td->status = 0;
+ 
+-		xhci_handle_halted_endpoint(xhci, ep, ep_ring->stream_id, td,
+-					    EP_SOFT_RESET);
++		xhci_handle_halted_endpoint(xhci, ep, td, EP_SOFT_RESET);
+ 		return 0;
+ 	default:
+ 		/* do nothing */
+@@ -2568,10 +2564,10 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 			xhci_dbg(xhci, "Stream transaction error ep %u no id\n",
+ 				 ep_index);
+ 			if (ep->err_count++ > MAX_SOFT_RETRY)
+-				xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
++				xhci_handle_halted_endpoint(xhci, ep, NULL,
+ 							    EP_HARD_RESET);
+ 			else
+-				xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
++				xhci_handle_halted_endpoint(xhci, ep, NULL,
+ 							    EP_SOFT_RESET);
  			goto cleanup;
  		case COMP_RING_UNDERRUN:
- 		case COMP_RING_OVERRUN:
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index cc084d9505cd..c9f06c5e4e9d 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -933,6 +933,7 @@ struct xhci_virt_ep {
- 	 * have to restore the device state to the previous state
- 	 */
- 	struct xhci_ring		*new_ring;
-+	unsigned int			err_count;
- 	unsigned int			ep_state;
- #define SET_DEQ_PENDING		(1 << 0)
- #define EP_HALTED		(1 << 1)	/* For stall handling */
-@@ -1627,7 +1628,6 @@ struct xhci_ring {
- 	 * if we own the TRB (if we are the consumer).  See section 4.9.1.
- 	 */
- 	u32			cycle_state;
--	unsigned int            err_count;
- 	unsigned int		stream_id;
- 	unsigned int		num_segs;
- 	unsigned int		num_trbs_free;
+@@ -2755,9 +2751,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 			if (trb_comp_code == COMP_STALL_ERROR ||
+ 			    xhci_requires_manual_halt_cleanup(xhci, ep_ctx,
+ 							      trb_comp_code)) {
+-				xhci_handle_halted_endpoint(xhci, ep,
+-							    ep_ring->stream_id,
+-							    NULL,
++				xhci_handle_halted_endpoint(xhci, ep, NULL,
+ 							    EP_HARD_RESET);
+ 			}
+ 			goto cleanup;
+@@ -2850,9 +2844,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 			if (trb_comp_code == COMP_STALL_ERROR ||
+ 			    xhci_requires_manual_halt_cleanup(xhci, ep_ctx,
+ 							      trb_comp_code))
+-				xhci_handle_halted_endpoint(xhci, ep,
+-							    ep_ring->stream_id,
+-							    td, EP_HARD_RESET);
++				xhci_handle_halted_endpoint(xhci, ep, td,
++							    EP_HARD_RESET);
+ 			goto cleanup;
+ 		}
+ 
 -- 
 2.25.1
 
