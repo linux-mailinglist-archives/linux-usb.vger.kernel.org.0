@@ -2,91 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D68463DADB
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 17:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07CF63DBA2
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 18:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiK3QkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Nov 2022 11:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S229759AbiK3RMS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Nov 2022 12:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiK3QkI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 11:40:08 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B235B877;
-        Wed, 30 Nov 2022 08:40:07 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id c15so11500892qtw.8;
-        Wed, 30 Nov 2022 08:40:06 -0800 (PST)
+        with ESMTP id S231153AbiK3RLy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 12:11:54 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BA070630;
+        Wed, 30 Nov 2022 09:07:12 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id 94-20020a9d0067000000b0066c8d13a33dso11601554ota.12;
+        Wed, 30 Nov 2022 09:07:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/B0jwa+xciuz/rLM/D5quDyC7IZMyW67SHNi9nPK74M=;
-        b=Cu8/lQXM5BafGjQC2+VpnM7sM9V1EIXtttHTOPJ+xvJh6qtIYhZ0b0+k7VtLhyKYY7
-         FjuNiEsHejuInuOWYDpBEqQ+/H/2qyFjZSwxftmRbSN8Oxr5RJBQSrJ+pct1Efi4HPxA
-         +XGkGMkPaxuSXN82aTnnRHlbe02ysGWSJpaS2Wxafr08f0REhvqog4NXVxHvIfDABSM5
-         cf70ZaLc8wnnLSQr6dKtq6ObUO2109BnmgL4J2Nqsoqy64wW5gIGGzeIPlS2HJmXmBZ+
-         GY8Dh1OjMgukGHHEYOta7S00xhU8ZJmSXKQxKohaq6qXHeCdt9iyQvn1M0LNbCxt9In6
-         4esg==
-X-Gm-Message-State: ANoB5plDAl2poNyZa0a1WRYxdC+gGLxdU2LeT0w8UCNF/h4Zn0WXT0La
-        Nl/6qOv/eP55fdqk6pUdT6NhPMTDeuq3xg==
-X-Google-Smtp-Source: AA0mqf4jY4D82AaAHWHVEQ1PIKo9kqpMofAtaWr2mcB+MX9CeIe5RbnNWd7AJzP5hMOHxpHyNG4WmA==
-X-Received: by 2002:a05:622a:5808:b0:3a5:9170:458e with SMTP id fg8-20020a05622a580800b003a59170458emr58546044qtb.509.1669826405728;
-        Wed, 30 Nov 2022 08:40:05 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id de4-20020a05620a370400b006fae7e6204bsm1511278qkb.108.2022.11.30.08.40.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 08:40:05 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id y83so22265767yby.12;
-        Wed, 30 Nov 2022 08:40:05 -0800 (PST)
-X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
- n4-20020a257204000000b006f09ff51151mr33350652ybc.543.1669826404935; Wed, 30
- Nov 2022 08:40:04 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+yCvE4xL7PcYhApAjLTDVKWvyzIVUevfInfC0cACAe0=;
+        b=pvOxLDA+xUMpuZOGXe9n8s6Kn+p9I4guT8SNR8rccoRuh/L5DRxsdfRglDGfq9DWY1
+         RdupRJaxGbUEmFmo/nOpc+XsyOrgHITFphwu+lfTH7qEIt5U+wP7Y0GAV4dKWYFfQxyV
+         d8KAha8LvOP+rYFRo7I9Gz3+bzb3txyjcmliAn/nict91hwpnB3UCIJZ6YZWRIRJ4k1b
+         RRq7Qz1jgEXttfr2WqlSzVHCdfIMRLCEbg+ddLkjdJDLZI5nMEnL9cERmVLoOeRRtmlk
+         G8Rw/JdoZ6UTXP096GgqZLkWEVMIXQiXiJ3gWfg55/X8YTH4/lP8KAeGkhgSoCH/7TnE
+         fYJQ==
+X-Gm-Message-State: ANoB5plN+Gw8CMuWyw2EYxcYtPaXiK8Jm4GfRLDpaqRp4VT30N0GNYuF
+        /s0lIKUCinMOFcGGtQsPik10XCMvSA==
+X-Google-Smtp-Source: AA0mqf5G3ILqf43J74PC7Uy/K6RqK5iaFw5vp7nG4FRXL6eWEQbc8SiS1NqktAkhS98cdBFbxbK0GQ==
+X-Received: by 2002:a05:6830:412a:b0:66e:69f8:93ba with SMTP id w42-20020a056830412a00b0066e69f893bamr1651849ott.334.1669828031398;
+        Wed, 30 Nov 2022 09:07:11 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h17-20020a056870171100b00136c20b1c59sm1393711oae.43.2022.11.30.09.07.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 09:07:10 -0800 (PST)
+Received: (nullmailer pid 2456583 invoked by uid 1000);
+        Wed, 30 Nov 2022 17:07:09 -0000
+Date:   Wed, 30 Nov 2022 11:07:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, treding@nvidia.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org, waynec@nvidia.com
+Subject: Re: [PATCH V4 6/6] dt-bindings: phy: tegra-xusb: Add support for
+ Tegra234
+Message-ID: <20221130170709.GA2454510-robh@kernel.org>
+References: <20221118154006.173082-1-jonathanh@nvidia.com>
+ <20221118154006.173082-7-jonathanh@nvidia.com>
 MIME-Version: 1.0
-References: <20221130154111.1655603-1-thierry.reding@gmail.com>
-In-Reply-To: <20221130154111.1655603-1-thierry.reding@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Nov 2022 17:39:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV9qom7TmhmNkpAqYLGfqT0pRkndAMzn-EisZkcw9pVBA@mail.gmail.com>
-Message-ID: <CAMuHMdV9qom7TmhmNkpAqYLGfqT0pRkndAMzn-EisZkcw9pVBA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: tegra-xusb: Remove path references
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118154006.173082-7-jonathanh@nvidia.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 4:52 PM Thierry Reding <thierry.reding@gmail.com> wrote:
-> From: Thierry Reding <treding@nvidia.com>
->
-> Unresolved path references are now flagged as errors when checking the
-> device tree binding examples, so convert them into label references.
->
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Suggested-by: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+On Fri, Nov 18, 2022 at 03:40:06PM +0000, Jon Hunter wrote:
+> Add the compatible string for the Tegra234 XUSB PHY.
+> 
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+> This is a new patch in this version of the series. This patch is
+> dependent upon the following patch.
+> 
+> https://lore.kernel.org/linux-tegra/20221118144015.3650774-1-thierry.reding@gmail.com/
+> 
+>  .../devicetree/bindings/phy/nvidia,tegra194-xusb-padctl.yaml  | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/nvidia,tegra194-xusb-padctl.yaml b/Documentation/devicetree/bindings/phy/nvidia,tegra194-xusb-padctl.yaml
+> index 1c570ff65eb4..5302fdb0949c 100644
+> --- a/Documentation/devicetree/bindings/phy/nvidia,tegra194-xusb-padctl.yaml
+> +++ b/Documentation/devicetree/bindings/phy/nvidia,tegra194-xusb-padctl.yaml
+> @@ -42,7 +42,9 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    const: nvidia,tegra194-xusb-padctl
+> +    enum:
+> +      - nvidia,tegra194-xusb-padctl
+> +      - nvidia,tegra194-xusb-padctl
 
-This fixes "make dt_binding_check" for me, so
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Did you test this because I'm pretty sure you would get an error. The 
+bot didn't test because of the dependency.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Rob
