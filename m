@@ -2,148 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C3A63DC6D
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 18:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E914C63E24E
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 21:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiK3Rse (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Nov 2022 12:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S229724AbiK3UsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Nov 2022 15:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiK3RsI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 12:48:08 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C359DF8;
-        Wed, 30 Nov 2022 09:47:32 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id r18so16736778pgr.12;
-        Wed, 30 Nov 2022 09:47:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cBWVgR+RLUqkJ8KuTZNticMrWH5FaJ887K/c4/dMWdA=;
-        b=WsjXgGWo66TTf4k4CxDjO+Yxift66oL1FoKPNxBbihKtuoOA6A11uvbDG1PwudCgXQ
-         w2Ti5aXY8NPBiYPRx1hyWUXPmCkOESo3MEfV2IflpG7PcWR5dtjp0WF24VSI2s/8jqEl
-         u0Zs46TlIevVudlrikGM7pRi4OV7QB008WyTpDuAw4c5SX+SWGbr7y10DFDAgzZ+CEnd
-         +07OmOj6ViR0TZqXMuxH+nduGu3vUSf9+2P3pSXh/Z8SIDh1Zyl8nMfCKI49nfag8N7p
-         x6YY/OHtrnAAu/wR7sapVecrlvjsHAfYrOtnVtWdTb2qLKrbft82Y93QZwMsWIzWv9tf
-         kTCg==
+        with ESMTP id S229625AbiK3UsO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 15:48:14 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2221127901;
+        Wed, 30 Nov 2022 12:48:14 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id s9-20020a05683004c900b0066e7414466bso164951otd.12;
+        Wed, 30 Nov 2022 12:48:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cBWVgR+RLUqkJ8KuTZNticMrWH5FaJ887K/c4/dMWdA=;
-        b=fW70i49ADstA59XQ8pgtgeVJfjFfOKyuYCcEUi3VkErUxEBOE45uRiM9PeeZ2iPutT
-         NihDMKpVYvRELdg2xw8opexIiKvI5CwuR4ekkBZgLY/V/+B3/0XUGJos/IIY1607+p5d
-         Mx2Srcr3MGMTMSGEnO6FE60a/QfyldRhI8LG/vjfzZ0K48O6gvYy55B8NlEnnYCjmpPs
-         vbN2PV2yCGOeVq4Q/x/jbmfS4WdbQNnmWYaT5DfkRIpwdbg9Bzrc6LGrkCti5RZdh14h
-         161Gl2fbbFCG99+rA3DLYzlSjGcDjSBbu06xzvGZF3EGd/RZLbXTMMz7gwevlv5PhtDN
-         09Gg==
-X-Gm-Message-State: ANoB5plzxDzBqMAmOlEPSUJ4PM1X9VYrTGq5bvZgwAJ6sjQ+Sr6/B0xi
-        1lnh+YMYnZB2L6PZ7TzLwFDuKF+tjikdew==
-X-Google-Smtp-Source: AA0mqf6+iAYcgK40TW/F0ayXJMs5DDcd7U+Q10WoXb0OwWhIMHR8WWRiUQOxMJTsUAUBjvY3o6NNAQ==
-X-Received: by 2002:a63:1345:0:b0:476:f92f:69f0 with SMTP id 5-20020a631345000000b00476f92f69f0mr55727855pgt.463.1669830451644;
-        Wed, 30 Nov 2022 09:47:31 -0800 (PST)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id p3-20020aa79e83000000b00574cdb63f03sm1714505pfq.144.2022.11.30.09.47.29
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+10mQQnKL+RpcNRHyz4kOrwroAQV9Weo7s9+KyGrg3k=;
+        b=7odvETaaIZ7AqIMzmGuafhu1mctt3Ok2bjptRkXMzBbXaGqnzbTrFTgA7ZvDb3vhFQ
+         0MNMaPAGCXSNaLuVQ9Iq3xBQrVR6pnDEWGNfkv/zwi2uEgh4/AIUvUdLAf7+U1R8lRB3
+         GwgSMqdv7FU/52SqOizv/IXI2Bw8KlhpnDhiL1sdD7PFoClkk7SGzX1NeOeI8nlLhMvM
+         7xduO+BEA3+49ufzA9TvBW94ZuOstPCz867+H3PTOWlMlXTuC2Dgr43GdUIQjJpe8/qB
+         FWwEHw43r40SG6A4x5iOdjmvwAWMsMNp88+uzst99JpHkqrqEGP4PBYntnIEc8Bk/tUr
+         +mPA==
+X-Gm-Message-State: ANoB5plRaolTgxfe2rvgHtzCri+I6+Xjr93BxlZTrE50fWd6yGeRd0fk
+        Uejjg0zkBLXf0Mfsen2nUDXM9FJYPA==
+X-Google-Smtp-Source: AA0mqf79JfTWhTiipndMzsy0NFp6T1qtjxfyE04byDZPhAlC0Jp6nd53snsnlNnQhCY0V5QrUy0EYg==
+X-Received: by 2002:a9d:4812:0:b0:66d:1e19:684b with SMTP id c18-20020a9d4812000000b0066d1e19684bmr32141795otf.44.1669841293372;
+        Wed, 30 Nov 2022 12:48:13 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u9-20020a056870f28900b0011bde9f5745sm1734558oap.23.2022.11.30.12.48.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 09:47:31 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v5 7/7] Documentation: devlink: add devlink documentation for the etas_es58x driver
-Date:   Thu,  1 Dec 2022 02:46:58 +0900
-Message-Id: <20221130174658.29282-8-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221130174658.29282-1-mailhol.vincent@wanadoo.fr>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221130174658.29282-1-mailhol.vincent@wanadoo.fr>
+        Wed, 30 Nov 2022 12:48:12 -0800 (PST)
+Received: (nullmailer pid 2900413 invoked by uid 1000);
+        Wed, 30 Nov 2022 20:48:12 -0000
+Date:   Wed, 30 Nov 2022 14:48:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH] dt-bindings: usb: tegra-xusb: Remove path references
+Message-ID: <20221130204812.GA2899835-robh@kernel.org>
+References: <20221130154111.1655603-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130154111.1655603-1-thierry.reding@gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-List all the version information reported by the etas_es58x driver
-through devlink. Also, update MAINTAINERS with the newly created file.
+On Wed, Nov 30, 2022 at 04:41:11PM +0100, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> Unresolved path references are now flagged as errors when checking the
+> device tree binding examples, so convert them into label references.
+> 
+> Reported-by: Conor Dooley <conor.dooley@microchip.com>
+> Suggested-by: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../devicetree/bindings/usb/nvidia,tegra124-xusb.yaml     | 4 +---
+>  .../devicetree/bindings/usb/nvidia,tegra186-xusb.yaml     | 4 +---
+>  .../devicetree/bindings/usb/nvidia,tegra194-xusb.yaml     | 8 ++------
+>  .../devicetree/bindings/usb/nvidia,tegra210-xusb.yaml     | 8 ++------
+>  4 files changed, 6 insertions(+), 18 deletions(-)
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- .../networking/devlink/etas_es58x.rst         | 36 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 37 insertions(+)
- create mode 100644 Documentation/networking/devlink/etas_es58x.rst
-
-diff --git a/Documentation/networking/devlink/etas_es58x.rst b/Documentation/networking/devlink/etas_es58x.rst
-new file mode 100644
-index 000000000000..9893e57b625a
---- /dev/null
-+++ b/Documentation/networking/devlink/etas_es58x.rst
-@@ -0,0 +1,36 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========================
-+etas_es58x devlink support
-+==========================
-+
-+This document describes the devlink features implemented by the
-+``etas_es58x`` device driver.
-+
-+Info versions
-+=============
-+
-+The ``etas_es58x`` driver reports the following versions
-+
-+.. list-table:: devlink info versions implemented
-+   :widths: 5 5 90
-+
-+   * - Name
-+     - Type
-+     - Description
-+   * - ``fw``
-+     - running
-+     - Version of the firmware running on the device. Also available
-+       through ``ethtool -i`` as the first member of the
-+       ``firmware-version``.
-+   * - ``bl``
-+     - running
-+     - Version of the bootloader running on the device. Also available
-+       through ``ethtool -i`` as the second member of the
-+       ``firmware-version``.
-+   * - ``board.rev``
-+     - fixed
-+     - The hardware revision of the device.
-+   * - ``serial_number``
-+     - fixed
-+     - The USB serial number. Also available through ``lsusb -v``.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 955c1be1efb2..71f4f8776779 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7682,6 +7682,7 @@ ETAS ES58X CAN/USB DRIVER
- M:	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
- L:	linux-can@vger.kernel.org
- S:	Maintained
-+F:	Documentation/networking/devlink/etas_es58x.rst
- F:	drivers/net/can/usb/etas_es58x/
- 
- ETHERNET BRIDGE
--- 
-2.37.4
-
+Acked-by: Rob Herring <robh@kernel.org>
