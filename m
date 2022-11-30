@@ -2,146 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D269063D53D
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 13:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A4A63D556
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 13:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234252AbiK3MI6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Nov 2022 07:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S234359AbiK3MQk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Nov 2022 07:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbiK3MIm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 07:08:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2EB766C
-        for <linux-usb@vger.kernel.org>; Wed, 30 Nov 2022 04:07:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669810058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jnVdlteFV26Z76cEF4gxE55CdPW4P3QACX8nQF2ZXTo=;
-        b=W/dSB4qs5hwMfYN4TjxxFnqFD4auu9K07/woj4RDIZunyWcd9qT2g9XoFZvOSjAqfTe4Ga
-        sPDuA5GKhAnz1PJtE0E805fwucXHtgi6wF0TyYucotzcJnBT4lkI2YNflsI6f5EEvixFEq
-        5X6WL3hpHvkVlHRo2bXgnkAdSZ4Yo+A=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-417-I50XliGoMQ-fGwqnEaVTnw-1; Wed, 30 Nov 2022 07:07:37 -0500
-X-MC-Unique: I50XliGoMQ-fGwqnEaVTnw-1
-Received: by mail-wm1-f70.google.com with SMTP id ay19-20020a05600c1e1300b003cf758f1617so905837wmb.5
-        for <linux-usb@vger.kernel.org>; Wed, 30 Nov 2022 04:07:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jnVdlteFV26Z76cEF4gxE55CdPW4P3QACX8nQF2ZXTo=;
-        b=IsTFOK86CP5DRYHQCDUNS/Cah04qK/Q4/TSARhTQDCGG46z5AXvDoTj0V46EniVXjp
-         vqC6dbV7bR4sDT4pF6K4+A50UxUrdnr04q8gVUx/16ORv1s34i1OyhiHq7Urf7V0uHce
-         PRHebWz1tmuHPmsKLeqtwq7a5dF0dpR2rpmkBq1DX90yGFHVAHLuUHy0gHDFndPNXhz0
-         PveJoT4Nz4bzW6ublZ0Hrv/T0s1dRPNgPibPUN1xTrPIeddfWxGbe58b0Uq4gYqwRhxF
-         9VgtpGU+vwqFaau/1OxfivGCgBM69HVy3BmM7/RQTlnmMLayeVnJ09vnUOQi79w26XRQ
-         1HGw==
-X-Gm-Message-State: ANoB5pmhXA5uvoXD46pWqjkGlpPYuGGZqd5ReWRqgeveg0ncWAk4tndE
-        7D4YbcsBBgRojL2O6i8HTkofL2sunLY+yn8hJ7aoGHf2S6pNtCFzBLmcsl8IdLfoDZRyETNiHOa
-        Yqfl2da8Sj0NSBhH8mALS
-X-Received: by 2002:a05:600c:3c8e:b0:3d0:69f4:d3d0 with SMTP id bg14-20020a05600c3c8e00b003d069f4d3d0mr4598115wmb.93.1669810056157;
-        Wed, 30 Nov 2022 04:07:36 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4PpVsPubG71ps8rgagttNzK50w8zECDxzJfF2enqQnAPQgsvcgKe3HBaErdsIeSxrgevrHjQ==
-X-Received: by 2002:a05:600c:3c8e:b0:3d0:69f4:d3d0 with SMTP id bg14-20020a05600c3c8e00b003d069f4d3d0mr4598054wmb.93.1669810055886;
-        Wed, 30 Nov 2022 04:07:35 -0800 (PST)
-Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id j3-20020adfd203000000b002366c3eefccsm1368822wrh.109.2022.11.30.04.07.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 04:07:35 -0800 (PST)
-Date:   Wed, 30 Nov 2022 13:07:32 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Benjamin Coddington <bcodding@redhat.com>
-Cc:     Christoph Hellwig <hch@lst.de>, netdev@vger.kernel.org,
+        with ESMTP id S229468AbiK3MQj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 07:16:39 -0500
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AC62B600;
+        Wed, 30 Nov 2022 04:16:38 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id B84EDF5D85;
+        Wed, 30 Nov 2022 04:16:07 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Nl2cF25mKZO5; Wed, 30 Nov 2022 04:16:06 -0800 (PST)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1669810566; bh=XfQt2gqNGwqTBmezWa2hrCNNLvlXxzmo4l3Y1L8uyqY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HZu8T6F6Wbj9H8NlWoGXQ2Znl+AA/k3uR+zDLGnWC4pwM9k15ignOq3mfPUoZh2f7
+         Z1AnTIp09I203/ELknoEAAjrBGDLKjavWU9J8ED0pbKow44NklS8xwQuSd8w30fmWa
+         mhUZgyRJi7R7YJAEJflIEYzsLP7of46CM8eOJXs4NFKulJJEYvmm1rnExI92Av/WTt
+         XhCp1nZrHLAv6R6iC5leDKw/KxAYdUi44n5R6MJz0mC/xRV2NKL6Z+kig2Y3iRfM2x
+         flENVdK4aQnzAx+FXGZayZPVJzXacRzYDt/CJv4NEkZ5LyZur2kVNq0F6bo+yNf/K/
+         cPyveGWxpy3TA==
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Steve French <sfrench@samba.org>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
-        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
-Message-ID: <20221130120732.GB29316@pc-4.home>
-References: <cover.1669036433.git.bcodding@redhat.com>
- <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
- <20221129140242.GA15747@lst.de>
- <794DBAB0-EDAF-4DA2-A837-C1F99916BC8E@redhat.com>
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [RFC v1] hack: suspend: usb: option: add reset_resume callback
+Date:   Wed, 30 Nov 2022 13:15:52 +0100
+Message-Id: <20221130121552.1560379-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <794DBAB0-EDAF-4DA2-A837-C1F99916BC8E@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:47:47AM -0500, Benjamin Coddington wrote:
-> On 29 Nov 2022, at 9:02, Christoph Hellwig wrote:
-> 
-> > Hmm.  Having to set a flag to not accidentally corrupt per-task
-> > state seems a bit fragile.  Wouldn't it make sense to find a way to opt
-> > into the feature only for sockets created from the syscall layer?
-> 
-> It's totally fragile, and that's why it's currently broken in production.
-> The fragile ship sailed when networking decided to depend on users setting
-> the socket's GFP_ flags correctly to avoid corruption.
-> 
-> Meantime, this problem needs fixing in a way that makes everyone happy.
-> This fix doesn't make it less fragile, but it may (hopefully) address the
-> previous criticisms enough that something gets done to fix it.
+Currently to be the same as resume(). This will just avoid re-enumeration
+of the modem device on every system resume.
 
-Also, let's remember that while we're discussing how the kernel sould
-work in an ideal world, the reality is that production NFS systems
-crash randomly upon memory reclaim since commit a1231fda7e94 ("SUNRPC:
-Set memalloc_nofs_save() on all rpciod/xprtiod jobs"). Fixing that is
-just a matter of re-introducing GFP_NOFS on SUNRPC sockets (which has
-been proposed several times already). Then we'll have plenty of time
-to argue about how networking should use the per-task page_frag and
-how to remove GFP_NOFS in the long term.
+This exists only because the usb core will re-enumerate *any* device
+whos' driver doesn't have reset_resume() implemented. A call trace:
+
+Jun 23 11:15:43 pureos kernel:  usb_serial_disconnect+0x58/0x180 [usbserial]
+Jun 23 11:15:43 pureos kernel:  usb_unbind_interface+0x84/0x290 [usbcore]
+Jun 23 11:15:43 pureos kernel:  device_remove+0x78/0x90
+Jun 23 11:15:43 pureos kernel:  device_release_driver_internal+0x1e4/0x250
+Jun 23 11:15:43 pureos kernel:  device_release_driver+0x24/0x30
+Jun 23 11:15:43 pureos kernel:  usb_forced_unbind_intf+0xac/0xd4 [usbcore]
+Jun 23 11:15:43 pureos kernel:  unbind_marked_interfaces.isra.0+0x5c/0x80 [usbcore]
+Jun 23 11:15:43 pureos kernel:  usb_resume+0x78/0x8c [usbcore]
+Jun 23 11:15:43 pureos kernel:  usb_dev_resume+0x20/0x30 [usbcore]
+Jun 23 11:15:43 pureos kernel:  dpm_run_callback+0x60/0x1f0
+Jun 23 11:15:43 pureos kernel:  device_resume+0x9c/0x1f4
+
+where usb_resume_inteface() sets needs_binding here
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/driver.c#L1353
+because of no reset_resume() implementation.
+
+This hack is even suggested in some modems' application notes as can
+be found in discussion here
+https://invent.kde.org/teams/plasma-mobile/issues/-/issues/3#note_218386
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
+ drivers/usb/serial/option.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index dee79c7d82d5..58526bf8684d 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -46,6 +46,7 @@ static int  option_probe(struct usb_serial *serial,
+ static int option_attach(struct usb_serial *serial);
+ static void option_release(struct usb_serial *serial);
+ static void option_instat_callback(struct urb *urb);
++static int option_reset_resume(struct usb_serial *serial);
+ 
+ /* Vendor and product IDs */
+ #define OPTION_VENDOR_ID			0x0AF0
+@@ -2227,6 +2228,7 @@ static struct usb_serial_driver option_1port_device = {
+ #ifdef CONFIG_PM
+ 	.suspend           = usb_wwan_suspend,
+ 	.resume            = usb_wwan_resume,
++	.reset_resume      = option_reset_resume,
+ #endif
+ };
+ 
+@@ -2373,6 +2375,18 @@ static void option_instat_callback(struct urb *urb)
+ 	}
+ }
+ 
++static int option_reset_resume(struct usb_serial *serial)
++{
++	/*
++	 * We simply call resume() because this implementation only
++	 * exists because the USB core will un- and rebind any driver
++	 * during system resume that does *not* have a reset_resume()
++	 * implementation; see usb_resume_interface() in core/driver.c
++	 * We want to avoid that unconditional removal/addition.
++	 */
++	return usb_wwan_resume(serial);
++}
++
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+ MODULE_DESCRIPTION(DRIVER_DESC);
+ MODULE_LICENSE("GPL v2");
+-- 
+2.30.2
 
