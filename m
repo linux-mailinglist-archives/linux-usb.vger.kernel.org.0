@@ -2,57 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014E563CD66
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 03:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D6163CD83
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 03:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiK3CbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Nov 2022 21:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
+        id S232429AbiK3Cup (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Nov 2022 21:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiK3CbF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 21:31:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D366B386;
-        Tue, 29 Nov 2022 18:31:04 -0800 (PST)
+        with ESMTP id S231938AbiK3Cun (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Nov 2022 21:50:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF52D6CA15
+        for <linux-usb@vger.kernel.org>; Tue, 29 Nov 2022 18:50:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29AA7619B3;
-        Wed, 30 Nov 2022 02:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7AE5C433D6;
-        Wed, 30 Nov 2022 02:31:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F344B819F7
+        for <linux-usb@vger.kernel.org>; Wed, 30 Nov 2022 02:50:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0BDDCC433D7
+        for <linux-usb@vger.kernel.org>; Wed, 30 Nov 2022 02:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669775463;
-        bh=b+3JXoB1sxTN6Zr6Yv7abFfG2xs7x/MsL6RvCM34yZ4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iOgQ5dplzUw0VChcokj9bxcv5DA1H603KU7c2CSIw/pg+C2WOBI11b6Grimhwickf
-         a2X4+fTq0qYV2DTJPD+ByQzpfVLgOJ+tIZa9o6DDEkOHPvZCwgTtZVnGu/ijIX2rSN
-         Q4Z9vePuAcv7ek5UrIzLD1n/xrOlfb7tagNhK1ZY/LaBwXTXpUKu6ydNZTA0JUGxpE
-         bM42EpzsvEmBCwAc5UnwYUIA6PhA3EfjlwlGEzZcklEcbOJtmCkI5uDw5jR/V/Bv5b
-         ONBts1oXFO2LT+TiTm8/yXIRCWjo5EM+zlwAguRLQrWpk1Te622NzHRDB3DvLCxucn
-         dK8SuSogszNow==
-Date:   Tue, 29 Nov 2022 18:31:02 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Subject: Re: [PATCH v4 5/6] can: etas_es58x: report the firmware version
- through ethtool
-Message-ID: <20221129183102.1983375c@kernel.org>
-In-Reply-To: <CAMZ6RqJU5hm=HniJ59aGvHyaWboa7ZHv+9nSbzGxoY-cCfxMag@mail.gmail.com>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
-        <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
-        <20221126162211.93322-6-mailhol.vincent@wanadoo.fr>
-        <20221128142857.07cb5d88@kicinski-fedora-PC1C0HJN>
-        <CAMZ6RqJU5hm=HniJ59aGvHyaWboa7ZHv+9nSbzGxoY-cCfxMag@mail.gmail.com>
+        s=k20201202; t=1669776640;
+        bh=KvERSsKI+Mm2UhZMEeNhZ5SOGpv/hamPMyJMgzCe4ww=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=lOaTHnS8PzyClAnbHoQ2/Knqyi46ZE66KKqzg4dfDIhn6h4GTaXvmZvVzNDtxZXPj
+         YmnbqXNfAQGCfM14BaeGB0tyNHYz350hkrc9lBWG24qjXQ+EO+7nHfNi1htsvceTJa
+         c8ImQXCh2X+CDqyOWRDxjEN4cuBzqESpVKyEVhn/hlYDiCuYYzoOtdp9YBK1x5gEzv
+         8meITGP6/RhVBdqm/FqMhm5FqNwJU0HOaw7nhWxWF9jVJGrTyb0voTNdy3mX/SQY6C
+         gZ3qulqDIYgzqESHNiab2+PYgGLC5OfYVwEmujmFFETKOWEpJq3/JwOUFcPQWEDAP/
+         AmeOH6qxgnZQQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id E595CC433E7; Wed, 30 Nov 2022 02:50:39 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
+ CometLake platform
+Date:   Wed, 30 Nov 2022 02:50:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: chris.chiu@canonical.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-216728-208809-th662an97d@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
+References: <bug-216728-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,19 +70,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 30 Nov 2022 02:12:27 +0900 Vincent MAILHOL wrote:
-> I was not aware of this one. Thank you for pointing this out.
-> If I correctly understand, devlink_compat_running_version() is
-> supposed to allow ethtool to retrieve the firmware version from
-> devlink, right?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
-Yes.
+--- Comment #14 from Chris Chiu (chris.chiu@canonical.com) ---
+Created attachment 303328
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303328&action=3Dedit
+dmesg for add d3dcold delay
 
-> Currently it does not work. I guess it is because I am not using
-> SET_NETDEV_DEVLINK_PORT()? I initially thought that this was optional.
+Add delay seems no help. Please refer to the log if you're interested.
 
-It's optional but breaks the linking hence the fallback can't kick in.
-I guess "optional-ity" is a spectrum :)
+--=20
+You may reply to this email to add a comment.
 
-> I will continue to investigate and see if it is possible to completely
-> remove the .get_drvinfo() callback.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
