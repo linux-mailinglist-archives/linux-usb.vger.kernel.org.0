@@ -2,49 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7997563D198
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 10:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC2C63D19A
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 10:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbiK3JS3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Nov 2022 04:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S232592AbiK3JSb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Nov 2022 04:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbiK3JSV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 04:18:21 -0500
+        with ESMTP id S232847AbiK3JSX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 04:18:23 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90BE4B77C
-        for <linux-usb@vger.kernel.org>; Wed, 30 Nov 2022 01:18:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF8F56D40;
+        Wed, 30 Nov 2022 01:18:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669799900; x=1701335900;
+  t=1669799902; x=1701335902;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=frSVE+iACOC1RfYR2rDUnAzSLdjVBe63L+IPgPZaCm4=;
-  b=knJTRRCxCpweyqU73ibx7EBMQjkiELY5aEXG4h9iKugbtXS5FwoD4NWp
-   J4Y03I1TFBXtz6jsST26FsiAoM9pf9QnKPoxP/gJmKAgC1diRSCJGTuX7
-   KSVnM3qqL6LyyR+wWPtF4eBFV+aExtIQJn9Zoha9gSzzKCYXFxU/bIuB6
-   +r60kKC99hXOJnxB48lN4jNQtdUYegpXaTU2t+bOu4S32c0anGnZinbgO
-   0MpmGeuTOOs44gV5Sbj+jQR4fdfvB6XIuV0IVXR0ODoq0rHDkiBNeQjh1
-   AgRAoE66vyINZjWlLrWTqSc4o4hzme871YtCSiY/OvBnC48YvODn9/6Ht
+  bh=iedjmQIOCc41+OwF/Rn/1aQX09s7hqd3FiY8I7GR+Zw=;
+  b=bZvtR0ofmZKsiKBAHGDp1+pJpx5w2j1Ck4Qjyw2WU2OJBc9tzLCmqE+U
+   272/fJIBBaVDuXUYSZzThA0CSX1MY2VsvMT0BHU/6WOU7xPvJSHaUWMx/
+   hQkJcC6Uz6vKc41jkPxLZL4DZ2AUraL5/SXIzDMPd49KzzJhU7igyrOmj
+   aV1wgAxwcqRxX67M/pYprlR5n9wxx9PR0+y6Ar5fynhH5QlcZV3N7KWGn
+   z2Ttd996sy7Rey+UEc0YGqu8Z2W8A8XxFZJFu7UION9Sg9OFfenzQoNyQ
+   sa4dGwDJfaVwYN8HiarPW9CsWcz1750vCIaNoqZ1/I8dPsQVlNB8R8n1b
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295711289"
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295711294"
 X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="295711289"
+   d="scan'208";a="295711294"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:18:20 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:18:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="674962711"
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="674962718"
 X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="674962711"
+   d="scan'208";a="674962718"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2022 01:18:19 -0800
+  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2022 01:18:20 -0800
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4/6] xhci: disable U3 suspended ports in S4 hibernate poweroff_late stage
-Date:   Wed, 30 Nov 2022 11:19:42 +0200
-Message-Id: <20221130091944.2171610-5-mathias.nyman@linux.intel.com>
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 5/6] xhci: Prevent infinite loop in transaction errors recovery for streams
+Date:   Wed, 30 Nov 2022 11:19:43 +0200
+Message-Id: <20221130091944.2171610-6-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221130091944.2171610-1-mathias.nyman@linux.intel.com>
 References: <20221130091944.2171610-1-mathias.nyman@linux.intel.com>
@@ -59,147 +60,82 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Disable U3 suspended ports in hibernate S4 poweroff_late for systems
-with XHCI_RESET_TO_DEFAULT quirk, if wakeup is not enabled.
+Make sure to also limit the amount of soft reset retries for transaction
+errors on streams in cases where the transaction error event doesn't point
+to any specific TRB.
 
-This reduces the number of self-powered usb devices from surviving in
-U3 suspended state into next reboot.
+In these cases we don't know the TRB or stream ring, but we do know which
+endpoint had the error.
 
-Bootloader/firmware on these systems can't handle usb ports in U3, and
-will timeout, causing extra delay during reboot/restore from S4.
+To keep error counting simple and functional, move the current err_count
+from ring structure to endpoint structure.
 
-Add pci_poweroff_late() callback to struct usb_hcd to get this done at
-the correct stage in hibernate.
-
+Cc: stable@vger.kernel.org
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/core/hcd-pci.c  | 13 ++++++++++
- drivers/usb/host/xhci-pci.c | 52 +++++++++++++++++++++++++++++++++++++
- include/linux/usb/hcd.h     |  3 +++
- 3 files changed, 68 insertions(+)
+ drivers/usb/host/xhci-ring.c | 14 ++++++++++----
+ drivers/usb/host/xhci.h      |  2 +-
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 9b77f49b3560..ab2f3737764e 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -558,6 +558,17 @@ static int hcd_pci_suspend_noirq(struct device *dev)
- 	return retval;
- }
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index f6af479188e8..039ec9734fcd 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2458,7 +2458,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
  
-+static int hcd_pci_poweroff_late(struct device *dev)
-+{
-+	struct pci_dev		*pci_dev = to_pci_dev(dev);
-+	struct usb_hcd		*hcd = pci_get_drvdata(pci_dev);
-+
-+	if (hcd->driver->pci_poweroff_late && !HCD_DEAD(hcd))
-+		return hcd->driver->pci_poweroff_late(hcd, device_may_wakeup(dev));
-+
-+	return 0;
-+}
-+
- static int hcd_pci_resume_noirq(struct device *dev)
- {
- 	powermac_set_asic(to_pci_dev(dev), 1);
-@@ -578,6 +589,7 @@ static int hcd_pci_restore(struct device *dev)
+ 	switch (trb_comp_code) {
+ 	case COMP_SUCCESS:
+-		ep_ring->err_count = 0;
++		ep->err_count = 0;
+ 		/* handle success with untransferred data as short packet */
+ 		if (ep_trb != td->last_trb || remaining) {
+ 			xhci_warn(xhci, "WARN Successful completion on short TX\n");
+@@ -2484,7 +2484,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		break;
+ 	case COMP_USB_TRANSACTION_ERROR:
+ 		if (xhci->quirks & XHCI_NO_SOFT_RETRY ||
+-		    (ep_ring->err_count++ > MAX_SOFT_RETRY) ||
++		    (ep->err_count++ > MAX_SOFT_RETRY) ||
+ 		    le32_to_cpu(slot_ctx->tt_info) & TT_SLOT)
+ 			break;
  
- #define hcd_pci_suspend		NULL
- #define hcd_pci_suspend_noirq	NULL
-+#define hcd_pci_poweroff_late	NULL
- #define hcd_pci_resume_noirq	NULL
- #define hcd_pci_resume		NULL
- #define hcd_pci_restore		NULL
-@@ -615,6 +627,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
- 	.thaw_noirq	= NULL,
- 	.thaw		= hcd_pci_resume,
- 	.poweroff	= hcd_pci_suspend,
-+	.poweroff_late	= hcd_pci_poweroff_late,
- 	.poweroff_noirq	= hcd_pci_suspend_noirq,
- 	.restore_noirq	= hcd_pci_resume_noirq,
- 	.restore	= hcd_pci_restore,
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index f98cf30a3c1a..7548b26510da 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -622,6 +622,57 @@ static int xhci_pci_resume(struct usb_hcd *hcd, bool hibernated)
- 	return retval;
- }
- 
-+static int xhci_pci_poweroff_late(struct usb_hcd *hcd, bool do_wakeup)
-+{
-+	struct xhci_hcd		*xhci = hcd_to_xhci(hcd);
-+	struct xhci_port	*port;
-+	struct usb_device	*udev;
-+	unsigned int		slot_id;
-+	u32			portsc;
-+	int			i;
-+
-+	/*
-+	 * Systems with XHCI_RESET_TO_DEFAULT quirk have boot firmware that
-+	 * cause significant boot delay if usb ports are in suspended U3 state
-+	 * during boot. Some USB devices survive in U3 state over S4 hibernate
-+	 *
-+	 * Disable ports that are in U3 if remote wake is not enabled for either
-+	 * host controller or connected device
-+	 */
-+
-+	if (!(xhci->quirks & XHCI_RESET_TO_DEFAULT))
-+		return 0;
-+
-+	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
-+		port = &xhci->hw_ports[i];
-+		portsc = readl(port->addr);
-+
-+		if ((portsc & PORT_PLS_MASK) != XDEV_U3)
-+			continue;
-+
-+		slot_id = xhci_find_slot_id_by_port(port->rhub->hcd, xhci,
-+						    port->hcd_portnum + 1);
-+		if (!slot_id || !xhci->devs[slot_id]) {
-+			xhci_err(xhci, "No dev for slot_id %d for port %d-%d in U3\n",
-+				 slot_id, port->rhub->hcd->self.busnum, port->hcd_portnum + 1);
-+			continue;
-+		}
-+
-+		udev = xhci->devs[slot_id]->udev;
-+
-+		/* if wakeup is enabled then don't disable the port */
-+		if (udev->do_remote_wakeup && do_wakeup)
-+			continue;
-+
-+		xhci_dbg(xhci, "port %d-%d in U3 without wakeup, disable it\n",
-+			 port->rhub->hcd->self.busnum, port->hcd_portnum + 1);
-+		portsc = xhci_port_state_to_neutral(portsc);
-+		writel(portsc | PORT_PE, port->addr);
-+	}
-+
-+	return 0;
-+}
-+
- static void xhci_pci_shutdown(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd		*xhci = hcd_to_xhci(hcd);
-@@ -688,6 +739,7 @@ static int __init xhci_pci_init(void)
- #ifdef CONFIG_PM
- 	xhci_pci_hc_driver.pci_suspend = xhci_pci_suspend;
- 	xhci_pci_hc_driver.pci_resume = xhci_pci_resume;
-+	xhci_pci_hc_driver.pci_poweroff_late = xhci_pci_poweroff_late;
- 	xhci_pci_hc_driver.shutdown = xhci_pci_shutdown;
- #endif
- 	return pci_register_driver(&xhci_pci_driver);
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 78cd566ee238..b51c07111729 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -269,6 +269,9 @@ struct hc_driver {
- 	/* called after entering D0 (etc), before resuming the hub */
- 	int	(*pci_resume)(struct usb_hcd *hcd, bool hibernated);
- 
-+	/* called just before hibernate final D3 state, allows host to poweroff parts */
-+	int	(*pci_poweroff_late)(struct usb_hcd *hcd, bool do_wakeup);
-+
- 	/* cleanly make HCD stop writing memory and doing I/O */
- 	void	(*stop) (struct usb_hcd *hcd);
- 
+@@ -2565,8 +2565,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		case COMP_USB_TRANSACTION_ERROR:
+ 		case COMP_INVALID_STREAM_TYPE_ERROR:
+ 		case COMP_INVALID_STREAM_ID_ERROR:
+-			xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
+-						    EP_SOFT_RESET);
++			xhci_dbg(xhci, "Stream transaction error ep %u no id\n",
++				 ep_index);
++			if (ep->err_count++ > MAX_SOFT_RETRY)
++				xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
++							    EP_HARD_RESET);
++			else
++				xhci_handle_halted_endpoint(xhci, ep, 0, NULL,
++							    EP_SOFT_RESET);
+ 			goto cleanup;
+ 		case COMP_RING_UNDERRUN:
+ 		case COMP_RING_OVERRUN:
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index cc084d9505cd..c9f06c5e4e9d 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -933,6 +933,7 @@ struct xhci_virt_ep {
+ 	 * have to restore the device state to the previous state
+ 	 */
+ 	struct xhci_ring		*new_ring;
++	unsigned int			err_count;
+ 	unsigned int			ep_state;
+ #define SET_DEQ_PENDING		(1 << 0)
+ #define EP_HALTED		(1 << 1)	/* For stall handling */
+@@ -1627,7 +1628,6 @@ struct xhci_ring {
+ 	 * if we own the TRB (if we are the consumer).  See section 4.9.1.
+ 	 */
+ 	u32			cycle_state;
+-	unsigned int            err_count;
+ 	unsigned int		stream_id;
+ 	unsigned int		num_segs;
+ 	unsigned int		num_trbs_free;
 -- 
 2.25.1
 
