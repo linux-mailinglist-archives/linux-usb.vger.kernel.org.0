@@ -2,44 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C9763D2F8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 11:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EA563D3FC
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Nov 2022 12:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiK3KQA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Nov 2022 05:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S232599AbiK3LJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Nov 2022 06:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiK3KP7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 05:15:59 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A61BF61;
-        Wed, 30 Nov 2022 02:15:57 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NMZpC0DgPzmVxP;
-        Wed, 30 Nov 2022 18:15:15 +0800 (CST)
-Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 18:15:55 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.28) by
- kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 18:15:55 +0800
-From:   Yi Yang <yiyang13@huawei.com>
-To:     <linus.walleij@linaro.org>, <gregkh@linuxfoundation.org>,
-        <yiyang13@huawei.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: fotg210-udc: fix potential memory leak in fotg210_udc_probe()
-Date:   Wed, 30 Nov 2022 18:12:51 +0800
-Message-ID: <20221130101251.245399-1-yiyang13@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229604AbiK3LJe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Nov 2022 06:09:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661071EAE8;
+        Wed, 30 Nov 2022 03:09:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 016B461AEA;
+        Wed, 30 Nov 2022 11:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A672C433D6;
+        Wed, 30 Nov 2022 11:09:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669806572;
+        bh=LyiWbFZONQrHnA1Hcw6g+friiSnfJKrN9MK3zQKS4jU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mWt8qMGUMDA+J1lynnUse4i+I0OEsjUbfiVnvWeHawGYbCDQsksC1USroebcr0Xiu
+         ZZKU3vV+5vdNcfoEN6mrmge4Gg3tas+Jd5Xd7uuU/9i+3HAA3z7gaJfY/XER36zytJ
+         q0t7XXh9VGNosPMtJuj7c9rfKfyK7V0jjzmg7g/8=
+Date:   Wed, 30 Nov 2022 12:09:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Ji-Ze Hong <hpeter@gmail.com>
+Subject: Re: [PATCH] USB: serial: f81534: fix division by zero on line-speed
+ change
+Message-ID: <Y4c56VLgznt3Xo7C@kroah.com>
+References: <20221129141819.15310-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.28]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600014.china.huawei.com (7.193.23.54)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129141819.15310-1-johan@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,39 +50,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In fotg210_udc_probe(), if devm_clk_get() or clk_prepare_enable()
-fails, 'fotg210' will not be freed, which will lead to a memory leak.
-Fix it by moving kfree() to a proper location.
+On Tue, Nov 29, 2022 at 03:18:19PM +0100, Johan Hovold wrote:
+> The driver leaves the line speed unchanged in case a requested speed is
+> not supported. Make sure to handle the case where the current speed is
+> B0 (hangup) without dividing by zero when determining the clock source.
+> 
+> Fixes: 3aacac02f385 ("USB: serial: f81534: add high baud rate support")
+> Cc: stable@vger.kernel.org      # 4.16
+> Cc: Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-Fixes: 718a38d092ec ("fotg210-udc: Handle PCLK")
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
----
- drivers/usb/fotg210/fotg210-udc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index b9ea6c6d931c..a366d69c1818 100644
---- a/drivers/usb/fotg210/fotg210-udc.c
-+++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -1178,7 +1178,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
- 		ret = clk_prepare_enable(fotg210->pclk);
- 		if (ret) {
- 			dev_err(dev, "failed to enable PCLK\n");
--			return ret;
-+			goto err;
- 		}
- 	} else if (PTR_ERR(fotg210->pclk) == -EPROBE_DEFER) {
- 		/*
-@@ -1302,8 +1302,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
- 	if (!IS_ERR(fotg210->pclk))
- 		clk_disable_unprepare(fotg210->pclk);
- 
--	kfree(fotg210);
--
- err:
-+	kfree(fotg210);
- 	return ret;
- }
--- 
-2.17.1
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
