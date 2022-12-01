@@ -2,84 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F099B63F0F3
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 13:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F8963F200
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 14:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiLAM5h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Dec 2022 07:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S231180AbiLANtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Dec 2022 08:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiLAM5f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 07:57:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DE3A4
-        for <linux-usb@vger.kernel.org>; Thu,  1 Dec 2022 04:57:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDFC9B81F39
-        for <linux-usb@vger.kernel.org>; Thu,  1 Dec 2022 12:57:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A26DDC433C1
-        for <linux-usb@vger.kernel.org>; Thu,  1 Dec 2022 12:57:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669899449;
-        bh=izpOOgRT9ZJUe0UFYEFuI/iXcqUKlfd3EaHuZ6Dj0eA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=A6ElyOq3l2+08qSon55j+XvwBxUnBsdFbhcUe0w0T+u0DDyrFwXq+ACEds8THbB71
-         2/Xqasb0CozkCEVLFstdy0w0PYqWHb2eU6s1487h3YymV1e01FKpnOgGx4I/za7WGC
-         JNuQ/HDFIJtx09ivMODK6T5zk+v/SoFboA/tPSHSmd7QMtnlLVc6et9M3AOjmdIm9Y
-         ZjWMgcLc5xR8euxMku6fs0M4Q4G61syKFnJddglzeoOA6Drd6z+QrFIVz8Ty/prZ8L
-         7ymfOt6wP3WYjWhzk3LvLD4AYHypes9cMU2VjRwwti3D2AUryFlAFjpt5bggLnljW6
-         1x58k4Lq0+Mzg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 7FA53C433E7; Thu,  1 Dec 2022 12:57:29 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216697] Resume from suspend stopped working
-Date:   Thu, 01 Dec 2022 12:57:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: heikki.krogerus@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216697-208809-uhPoaPo1CQ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216697-208809@https.bugzilla.kernel.org/>
-References: <bug-216697-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231374AbiLANtp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 08:49:45 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3812FC32;
+        Thu,  1 Dec 2022 05:49:43 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 203842D9;
+        Thu,  1 Dec 2022 14:49:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669902581;
+        bh=3sSiumN32WfXS7NyHhwNkd03q4CT2IYhavfVxB+W+Aw=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=UuYL6Df+a1aTs6G/6I6g4k4VUjHpGkc5HiwpLqflFRPA9Ot//hnN8AUAGABxTa4yh
+         ymILLQZFvLEgxbauR6NwJ3m27zhdf8oVoqNstRgUh4kDtjo3ReGBszkfWGYJyDqO8D
+         CIEiyJMNdgEsRk9d8++NEYjjhXVHNOrpmSxqkV/s=
+Message-ID: <780379d9-2331-cd7a-126d-cdaa8aec023d@ideasonboard.com>
+Date:   Thu, 1 Dec 2022 13:49:38 +0000
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>,
+        laurent.pinchart@ideasonboard.com
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221201122141.8739-1-szymon.heidrich@gmail.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH] Prevent buffer overflow in UVC Gadget setup handler
+In-Reply-To: <20221201122141.8739-1-szymon.heidrich@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216697
+Hello - thanks for the patch
 
---- Comment #6 from Heikki Krogerus (heikki.krogerus@linux.intel.com) ---
-There is a fix for bug 216706, but it hasn't made it into the mainline nor =
-the
-stable kernels yet. Can somebody test that fix separately, if it helps with
-this bug as well?
-https://bugzilla.kernel.org/attachment.cgi?id=3D303247
+On 01/12/2022 12:21, Szymon Heidrich wrote:
+> Setup function uvc_function_setup
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+You've written uvc_function_setup here, but the code changes 
+uvc_function_ep0_complete.
+
+>   permits control transfer
+> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
+> data stage handler for OUT transfer uses memcpy to copy req->actual
+> bytes to uvc_event->data.data array of size 60. This may result
+> in an overflow of 4 bytes.
+>
+> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+
+
+Good catch
+
+> ---
+>   drivers/usb/gadget/function/f_uvc.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 6e196e061..69c5eb3a3 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+>   
+>   		memset(&v4l2_event, 0, sizeof(v4l2_event));
+>   		v4l2_event.type = UVC_EVENT_DATA;
+> -		uvc_event->data.length = req->actual;
+> -		memcpy(&uvc_event->data.data, req->buf, req->actual);
+> +		uvc_event->data.length = (req->actual > sizeof(uvc_event->data.data) ?
+> +			sizeof(uvc_event->data.data) : req->actual);
+
+
+There's a clamp() macro in f_uvc.c, can we use that?
+
+> +		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
+>   		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+>   	}
+>   }
