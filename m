@@ -2,42 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0A463F6EE
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 18:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6531863F7AA
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 19:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiLARzj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Dec 2022 12:55:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S230332AbiLASn1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Dec 2022 13:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiLARz3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 12:55:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12B21DA65
-        for <linux-usb@vger.kernel.org>; Thu,  1 Dec 2022 09:55:28 -0800 (PST)
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1p0nmQ-0001ds-Lc; Thu, 01 Dec 2022 18:55:26 +0100
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        patchwork-lst@pengutronix.de
-Subject: [PATCH 2/2] net: asix: Avoid looping when the device is diconnected
-Date:   Thu,  1 Dec 2022 18:55:25 +0100
-Message-Id: <20221201175525.2733125-2-l.stach@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221201175525.2733125-1-l.stach@pengutronix.de>
-References: <20221201175525.2733125-1-l.stach@pengutronix.de>
+        with ESMTP id S230103AbiLASnZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 13:43:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293C9934C2;
+        Thu,  1 Dec 2022 10:43:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC797620B3;
+        Thu,  1 Dec 2022 18:43:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208F8C433D6;
+        Thu,  1 Dec 2022 18:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669920204;
+        bh=p4GYPrcLemfL1H4zQdK4YSafqKxYl8uzcCcsuNR5Mug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a2BoPen065qBe8Og5canw6L1zfhJNTp7AhJG9KCJ6kiqz0PbaFOGVhFTqYEHLQC/3
+         txrNOo/kDMMWMmzGqvPwfOzgrz6vwm2Q1DicWoYbq+xwADN5A7BOVkCSHc8BU+fkbm
+         ahiTJmpUWGq4d9z7eAd6F7xiHvrsPEH9AaFENflI=
+Date:   Thu, 1 Dec 2022 19:43:20 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y4j1yPD4Ypze7jx5@kroah.com>
+References: <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org>
+ <Y34+V2bCDdqujBDk@kroah.com>
+ <Y35JfNJDppRp5bLX@ziepe.ca>
+ <Y35R+/eQJYI7VaDS@kroah.com>
+ <Y35YlI93UBuTfgYy@ziepe.ca>
+ <Y35dMIaNYSE0Cykd@casper.infradead.org>
+ <Y35enjI+dhhqiG3B@ziepe.ca>
+ <Y35ftyYlE8FX8xQO@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y35ftyYlE8FX8xQO@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,29 +99,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We've seen device access fail with -EPROTO when the device has been
-recently disconnected and before the USB core had a chance to handle
-the disconnect hub event. It doesn't make sense to continue on trying
-to enable host access when the adapter is gone.
+On Wed, Nov 23, 2022 at 06:00:23PM +0000, Matthew Wilcox wrote:
+> On Wed, Nov 23, 2022 at 01:55:42PM -0400, Jason Gunthorpe wrote:
+> > On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
+> > > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
+> > > > #define generic_container_of(in_type, in, out_type, out_member) \
+> > > > 	_Generic(in,                                        \
+> > > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
+> > > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
+> > > > 		  )
+> > > 
+> > > There's a neat trick I found in seqlock.h:
+> > > 
+> > > #define generic_container_of(in_t, in, out_t, m)			\
+> > > 	_Generic(*(in),							\
+> > > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
+> > > 		in_t: ((out_t *)container_of(in, out_type, m))	\
+> > > 	)
+> > >
+> > > and now it fits in 80 columns ;-)
+> > 
+> > Aside from less letters, is their another benifit to using *(in) ?
+> 
+> I don't think so.  It just looks nicer to me than putting the star in
+> each case.  If I'd thought of it, I would have done it to page_folio(),
+> but I won't change it now.
 
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
----
- drivers/net/usb/asix_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ah, but your trick will not work, that blows up and will not build.  The
+original one from Jason here does work.  _Generic is tricky...
 
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index be1e103b7a95..28b31e4da020 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -96,7 +96,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
- 
- 	for (i = 0; i < AX_HOST_EN_RETRIES; ++i) {
- 		ret = asix_set_sw_mii(dev, in_pm);
--		if (ret == -ENODEV || ret == -ETIMEDOUT)
-+		if (ret == -ENODEV || ret == -ETIMEDOUT || ret == -EPROTO)
- 			break;
- 		usleep_range(1000, 1100);
- 		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
--- 
-2.30.2
+thanks,
 
+greg k-h
