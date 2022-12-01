@@ -2,69 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B11463F7F7
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 20:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3092363F9B1
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 22:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiLATMb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Dec 2022 14:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S230292AbiLAVQ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Dec 2022 16:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiLATMa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 14:12:30 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF88FC5E10;
-        Thu,  1 Dec 2022 11:12:28 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id p8so3948515lfu.11;
-        Thu, 01 Dec 2022 11:12:28 -0800 (PST)
+        with ESMTP id S229777AbiLAVQy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 16:16:54 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B178A2660
+        for <linux-usb@vger.kernel.org>; Thu,  1 Dec 2022 13:16:52 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 80-20020a250b53000000b006eacc13c38eso2261932ybl.0
+        for <linux-usb@vger.kernel.org>; Thu, 01 Dec 2022 13:16:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pm/wKN9Xbr6T4OtsXw6Ao3XmpX+dPEJDVEZw2H20Ro4=;
-        b=YL6SvZQbGf4LBFrQ09+q9R7WMak+EbBf03VBVZ4cXUREQb9nfTzr05Qv1JqYH5uBBt
-         zF8TxVpLLFithWhXWnFTNCb/ZkcqmBvVtO+W0SwKLLdKxHBzW7/CTRKWuvEoAXZabNzI
-         UnrRFeJ9kWZRnlLOKoi7H0/rWOOCciKpFFzUwPhdjrRu30afcMDvurYQIemowkGqqHvl
-         YiRRcT7daT4bOBEqAYg/8AuSKFLhFlOg2tJgz8ad1GudaquYVZOFq6D3uvyu28giXhXc
-         o0vTQ5bqbS0ig4BOtQ5HbnMXYWO6lFTmVR7zQeRYni385yu3DLvZH7THXC0thzbFmGCz
-         n0zg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bhnFA6WLviCf2MgPqr3VNvtnWHosamMdhsn/Vjioo18=;
+        b=U6O2sBNI7GOntiRxdhtgYDdq9ffKNX9sZIY3UbF+C7CIiWWFI2+8yGqyNtA56GA5LN
+         XDMkoG1bIcnHqzyJq7AuFLmZT18vHzCkRsvERGiazYHTCZmZJK/uJsbc6rq3eYrY83Xf
+         K23JIteMcT5RrxWHTRgB6mc2LAWvat5KqKlyTU73/xDYunDfBLdDOA9c1vmGeaV7OmcX
+         TOwmhngQ2yktpHOLkMlfLRjbjXQ/E3Osn81sYWwqf1fR44wXUHkmGNs0gN8Ol1ozEqOV
+         XWsty3uQ2I3gqWhQodd+YlrFw+Xi/YLTkScywFf3o54yBVgcZdWx/DUq80+pa2VDjaTb
+         B74g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pm/wKN9Xbr6T4OtsXw6Ao3XmpX+dPEJDVEZw2H20Ro4=;
-        b=3AJgI51A6+z5prH3Hq2CY38SgpU0b+Y44ZfX2wQkg3Od0U7tpuvDKj70FN/nyCc2D6
-         YAVijUn0QzIJfu6GB1LDFJ4vlKhCzDh+2IC9uvjHDLBH2k+m7oOSKCIdFQBMyI7ia6X6
-         JTTD9lw5jl871BEhMd/eC0Mkpe/UelltQEgrm7oTKHZFXlHwZujZS1xoPCDB4qBE4RYw
-         nk0ANsy9JpQMQBk8WX/cgW+OdBaJlyJ4lsrmD9b0DpYj9+XH9ZOdV0Eq9ShFxhVdLSJi
-         coxefUAKoBMVuszcKNIKm1d8Ya1pet0KQeYvMjsul15LvtQvsVL8ZivPp0g6j7s0gvf9
-         Myrg==
-X-Gm-Message-State: ANoB5pn0dF9+/mnB9H703s5PR5xX+tG+4bD8IDCoycnHdn+C0Roxo00+
-        6k4FJGclrwQ51pWGPLBpTZM=
-X-Google-Smtp-Source: AA0mqf6AGLESDX30+/NBov+MLFO8wi5Kqkw847g8Eb9eUSyv/oR2nAexVyZVh7zECCEfvaT7Xdci5Q==
-X-Received: by 2002:a05:6512:749:b0:4ae:d0fc:1bce with SMTP id c9-20020a056512074900b004aed0fc1bcemr21543853lfs.107.1669921947266;
-        Thu, 01 Dec 2022 11:12:27 -0800 (PST)
-Received: from localhost.localdomain (077222238151.warszawa.vectranet.pl. [77.222.238.151])
-        by smtp.googlemail.com with ESMTPSA id h1-20020a056512220100b004b4e67c3c00sm737940lfu.53.2022.12.01.11.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:12:26 -0800 (PST)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
-Cc:     szymon.heidrich@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bhnFA6WLviCf2MgPqr3VNvtnWHosamMdhsn/Vjioo18=;
+        b=asSdyGWQV3L7gdXMssmGaHkZ/MheZn+I1rjB4G8FW8M9s6Jo2bL8Ln5KVCs8Xx8Nir
+         JV9i5H6Y8SAY0ty8s3IoepSMl5UGYZky9LyD/rtXk6kgyYGgeIZ0UCqehTiMBoo6BhQB
+         WEYcUj68lPjeYejWPU+BYLJQMTq4EXsuH7sLVwTsC/eerLlzPex67Yk85oW0UcGQ6Gxs
+         IGzCZj5CfdTbW6UJzbTChdfIf87c5a2i+qDyiTaIkPfpKysby+NiBwfOCsVHWRHc4wjO
+         hN3dYfKC3DjqH0zX34xO2Xa9vDjeL4BySV393PXx382ckJnV2pUqhwF7HkPrfH+lKRca
+         WcsA==
+X-Gm-Message-State: ANoB5pn3oH3d0AfUG5m4j5OVChMIHB1Gc/JTcuTF0Y8xG/x/s9nMdZzN
+        is1sbbnk7YA9VrSP7UMg77wgMxmklhTFPZw=
+X-Google-Smtp-Source: AA0mqf4bfPKq2L91x9ALU+AxEGRWwsH8EZ8Fl2YAaz59EfBZytRv//UH+8V9tEymBQn6gBa3/7ebVmWwq17g8+Q=
+X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
+ (user=allenwebb job=sendgmr) by 2002:a0d:d491:0:b0:3cc:5892:fd07 with SMTP id
+ w139-20020a0dd491000000b003cc5892fd07mr17957983ywd.420.1669929412028; Thu, 01
+ Dec 2022 13:16:52 -0800 (PST)
+Date:   Thu,  1 Dec 2022 15:16:29 -0600
+In-Reply-To: <CAJzde07w6U83U_63eaF0-6zaq0cOkaymuLb3CBZ++JQi+Y9JdA@mail.gmail.com>
+Mime-Version: 1.0
+References: <CAJzde07w6U83U_63eaF0-6zaq0cOkaymuLb3CBZ++JQi+Y9JdA@mail.gmail.com>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221201211630.101541-1-allenwebb@google.com>
+Subject: [PATCH v5 0/1] Fix CONFIG_USB=y && CONFIG_MODULES not set
+From:   Allen Webb <allenwebb@google.com>
+To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: uvc: Prevent buffer overflow in setup handler
-Date:   Thu,  1 Dec 2022 20:11:34 +0100
-Message-Id: <20221201191134.12404-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <Y4jqVZfEj+/VdfnH@kroah.com>
-References: <Y4jqVZfEj+/VdfnH@kroah.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Allen Webb <allenwebb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,35 +71,264 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Setup function uvc_function_setup permits control transfer
-requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
-data stage handler for OUT transfer uses memcpy to copy req->actual
-bytes to uvc_event->data.data array of size 60. This may result
-in an overflow of 4 bytes.
+# Patch Review Discussion
 
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
-V1 -> V2: Corrected commit message and changed ?: in favor of min_t
+Luis Chamberlain <mcgrof@kernel.org> would prefer something generic and
+mentioned kmod already has builtin.alias.bin.
 
- drivers/usb/gadget/function/f_uvc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Something generic would be preferable, but I don't see a path to a
+generic solution without handling the nuances of each subsystem. The
+problem I am trying to solve is to expose the match id's for builtin
+kernel modules. The aliases associated with match ids are not included
+in builtin.alias.bin, so work would be needed to handle them (ideally
+files2alias.c would be used since it already handles each subsystem).
+I have an experimental patch (https://crrev.com/c/3840672) that
+generates buildin.alias at kernel build time which I could upload
+separately if that is preferred. Note that approach would involve
+adding a new file to the kernel packaging requirements.
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 6e196e061..4419b7972 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
- 
- 		memset(&v4l2_event, 0, sizeof(v4l2_event));
- 		v4l2_event.type = UVC_EVENT_DATA;
--		uvc_event->data.length = req->actual;
--		memcpy(&uvc_event->data.data, req->buf, req->actual);
-+		uvc_event->data.length = min_t(unsigned int, req->actual,
-+			sizeof(uvc_event->data.data));
-+		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
- 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 	}
+I have some concern that builtin.alias.bin might be used in cases where
+the match-id-based aliases are not desired. There are much more
+match-id-based aliases than regular aliases.
+
+One advantage of the sysfs approach is there wouldn't be a reliance on
+the buildin.alias file being in sync with the running kernel. The
+output of sysfs would reflect the match ids for the currently running
+kernel and modules.
+
+# Patch change history
+
+I have included incremental diffs to make the between patch-version
+changes clear.
+
+## Changes made in v5 - this version
+
+* Fix a build issue when CONFIG_MODULES is not set, but CONFIG_USB=y.
+* Add this cover letter
+
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index beaa252c04388..fec56271104fa 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -173,7 +173,7 @@ static inline void module_add_driver(struct module *mod,
+ static inline void module_remove_driver(struct device_driver *drv) { }
+ #endif
+
+-#if defined(CONFIG_SYSFS)
++#if defined(CONFIG_SYSFS) && defined(CONFIG_MODULES)
+ ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
+ 			    size_t count);
+ #else
+
+
+## Changes made in v4
+
+* Fix some issues reported by checkpatch.pl
+* Add an explanitory comment for the ADD macro
+* Fix a build issue when CONFIG_MODULES is not set.
+
+diff --git a/drivers/base/mod_devicetable.c b/drivers/base/mod_devicetable.c
+index f1d3de9f111c4..d7f198aad430f 100644
+--- a/drivers/base/mod_devicetable.c
++++ b/drivers/base/mod_devicetable.c
+@@ -12,24 +12,33 @@
+ #include "base.h"
+ #include "../usb/core/usb.h"
+
++/* Helper macro to add a modalias field to the string buffer associated with
++ * a match id.
++ *
++ * Note that:
++ *   + len should be a ssize_t and is modified in the macro
++ *   + sep should be a string literal and is concatenated as part of a format
++ *     string
++ *   + field is the struct field of the match id
++ */
+ #define ADD(buf, count, len, sep, cond, field)				\
+-do {									\
++do {				                                        \
++	char *buf_ = buf;						\
++	size_t count_ = count;                                          \
+ 	if (cond)							\
+-		(len) += scnprintf(&(buf)[len],				\
+-			(count) - (len),				\
++		(len) += scnprintf(&buf_[len],				\
++			count_ - (len),					\
+ 			sizeof(field) == 1 ? (sep "%02X") :		\
+ 			sizeof(field) == 2 ? (sep "%04X") :		\
+ 			sizeof(field) == 4 ? (sep "%08X") : "",		\
+ 			(field));					\
+ 	else								\
+-		(len) += scnprintf(&(buf)[len], (count) - (len), (sep "*")); \
++		(len) += scnprintf(&buf_[len], count_ - (len), (sep "*")); \
+ } while (0)
+
+ #ifdef CONFIG_USB
+ /* USB related modaliases can be split because of device number matching, so
+  * this function handles individual modaliases for one segment of the range.
+- *
+- *
+  */
+ static ssize_t usb_id_to_modalias(const struct usb_device_id *id,
+ 				  unsigned int bcdDevice_initial,
+@@ -134,8 +143,7 @@ static unsigned int incbcd(unsigned int *bcd,
+ 	return init;
  }
+
+-/* Print the modaliases for the specified struct usb_device_id.
+- */
++/* Print the modaliases for the specified struct usb_device_id. */
+ static ssize_t usb_id_to_modalias_multi(const struct usb_device_id *id,
+ 					const char *mod_name, char *buf,
+ 					size_t count)
+diff --git a/kernel/params.c b/kernel/params.c
+index 111024196361a..b7fd5313a3118 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -13,7 +13,12 @@
+ #include <linux/slab.h>
+ #include <linux/ctype.h>
+ #include <linux/security.h>
++
++#ifdef CONFIG_MODULES
+ #include "module/internal.h"
++#else
++static inline void add_modalias_attr(struct module_kobject *mk) {}
++#endif /* !CONFIG_MODULES */
+
+ #ifdef CONFIG_SYSFS
+ /* Protects all built-in parameters, modules use their own param_lock */
+
+
+## Changes made in v3
+
+* Fixed more build errors found by the Intel bot
+  * uint64_t division isn't always available so use `do_div` instead.
+* Removed extra print statements that are not needed in the modalias
+  output.
+
+diff --git a/drivers/base/mod_devicetable.c b/drivers/base/mod_devicetable.c
+index b04442207668c..f1d3de9f111c4 100644
+--- a/drivers/base/mod_devicetable.c
++++ b/drivers/base/mod_devicetable.c
+@@ -101,7 +101,7 @@ static unsigned int incbcd(unsigned int *bcd,
+ 			   size_t chars)
+ {
+ 	unsigned int init = *bcd, i, j;
+-	unsigned long long c, dec = 0;
++	unsigned long long c, dec = 0, div;
+
+ 	/* If bcd is not in BCD format, just increment */
+ 	if (max > 0x9) {
+@@ -126,7 +126,9 @@ static unsigned int incbcd(unsigned int *bcd,
+ 	for (i = 0 ; i < chars ; i++) {
+ 		for (c = 1, j = 0 ; j < i ; j++)
+ 			c = c * 10;
+-		c = (dec / c) % 10;
++		div = dec;
++		(void)do_div(div, c); /* div = div / c */
++		c = do_div(div, 10); /* c = div % 10; div = div / 10 */
+ 		*bcd += c << (i << 2);
+ 	}
+ 	return init;
+diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+index e80bfa4639765..651c677c4ab96 100644
+--- a/kernel/module/sysfs.c
++++ b/kernel/module/sysfs.c
+@@ -272,9 +272,6 @@ static int print_modalias_for_drv(struct device_driver *drv, void *p)
+ 			return len;
+ 		s->len += len;
+ 	}
+-
+-	s->len += scnprintf(&s->buf[s->len], s->count - s->len, "driver %s\n",
+-			    drv->name);
+ 	return 0;
+ }
+
+@@ -299,15 +296,6 @@ static ssize_t module_modalias_read(struct file *filp, struct kobject *kobj,
+ 	if (error)
+ 		return error;
+
+-	if (mk->mod)
+-		state.len += scnprintf(&buf[state.len], count - state.len,
+-				       "modalias %s %s\n", kobject_name(kobj),
+-				       mk->mod->name);
+-	else
+-		state.len += scnprintf(&buf[state.len], count - state.len,
+-				       "modalias %s NULL\n",
+-				       kobject_name(kobj));
+-
+ 	/*
+ 	 * The caller checked the pos and count against our size.
+ 	 */
+
+
+## Changes made in v2
+
+Fixed build errors found by the Intel bot.
+* `ENOSUP` is not always available so use `EINVAL` instead
+* Include the header that declares `usb_drv_to_modalias` where it is defined
+* Only implement `usb_drv_to_modalias` for `CONFIG_USB=y`
+
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index b3dec55fc6e87..beaa252c04388 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -178,7 +178,7 @@ ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
+ 			    size_t count);
+ #else
+ static inline ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
+-					  size_t count) { return -ENOSUP; }
++					  size_t count) { return -EINVAL; }
+ #endif
+
+ #ifdef CONFIG_DEVTMPFS
+diff --git a/drivers/base/mod_devicetable.c b/drivers/base/mod_devicetable.c
+index da8d524cdf57a..b04442207668c 100644
+--- a/drivers/base/mod_devicetable.c
++++ b/drivers/base/mod_devicetable.c
+@@ -9,6 +9,7 @@
+ #include <linux/device.h>
+ #include <linux/usb.h>
+
++#include "base.h"
+ #include "../usb/core/usb.h"
+
+ #define ADD(buf, count, len, sep, cond, field)				\
+@@ -24,6 +25,7 @@ do {									\
+ 		(len) += scnprintf(&(buf)[len], (count) - (len), (sep "*")); \
+ } while (0)
+
++#ifdef CONFIG_USB
+ /* USB related modaliases can be split because of device number matching, so
+  * this function handles individual modaliases for one segment of the range.
+  *
+@@ -239,3 +241,7 @@ ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
+ 	}
+ 	return len;
+ }
++#else
++inline ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
++				   size_t count){ return 0; }
++#endif
+
+
+Allen Webb (1):
+  modules: add modalias file to sysfs for modules.
+
+ drivers/base/Makefile          |   2 +-
+ drivers/base/base.h            |   8 +
+ drivers/base/bus.c             |  42 ++++++
+ drivers/base/mod_devicetable.c | 257 +++++++++++++++++++++++++++++++++
+ drivers/usb/core/driver.c      |   2 +
+ include/linux/device/bus.h     |   8 +
+ include/linux/module.h         |   1 +
+ kernel/module/internal.h       |   2 +
+ kernel/module/sysfs.c          |  88 +++++++++++
+ kernel/params.c                |   7 +
+ 10 files changed, 416 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/base/mod_devicetable.c
+
 -- 
-2.38.1
+2.37.3
 
