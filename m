@@ -2,132 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6531863F7AA
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 19:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B11463F7F7
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 20:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiLASn1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Dec 2022 13:43:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
+        id S230218AbiLATMb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Dec 2022 14:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiLASnZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 13:43:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293C9934C2;
-        Thu,  1 Dec 2022 10:43:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC797620B3;
-        Thu,  1 Dec 2022 18:43:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208F8C433D6;
-        Thu,  1 Dec 2022 18:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669920204;
-        bh=p4GYPrcLemfL1H4zQdK4YSafqKxYl8uzcCcsuNR5Mug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a2BoPen065qBe8Og5canw6L1zfhJNTp7AhJG9KCJ6kiqz0PbaFOGVhFTqYEHLQC/3
-         txrNOo/kDMMWMmzGqvPwfOzgrz6vwm2Q1DicWoYbq+xwADN5A7BOVkCSHc8BU+fkbm
-         ahiTJmpUWGq4d9z7eAd6F7xiHvrsPEH9AaFENflI=
-Date:   Thu, 1 Dec 2022 19:43:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y4j1yPD4Ypze7jx5@kroah.com>
-References: <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org>
- <Y34+V2bCDdqujBDk@kroah.com>
- <Y35JfNJDppRp5bLX@ziepe.ca>
- <Y35R+/eQJYI7VaDS@kroah.com>
- <Y35YlI93UBuTfgYy@ziepe.ca>
- <Y35dMIaNYSE0Cykd@casper.infradead.org>
- <Y35enjI+dhhqiG3B@ziepe.ca>
- <Y35ftyYlE8FX8xQO@casper.infradead.org>
+        with ESMTP id S229962AbiLATMa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 14:12:30 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF88FC5E10;
+        Thu,  1 Dec 2022 11:12:28 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p8so3948515lfu.11;
+        Thu, 01 Dec 2022 11:12:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pm/wKN9Xbr6T4OtsXw6Ao3XmpX+dPEJDVEZw2H20Ro4=;
+        b=YL6SvZQbGf4LBFrQ09+q9R7WMak+EbBf03VBVZ4cXUREQb9nfTzr05Qv1JqYH5uBBt
+         zF8TxVpLLFithWhXWnFTNCb/ZkcqmBvVtO+W0SwKLLdKxHBzW7/CTRKWuvEoAXZabNzI
+         UnrRFeJ9kWZRnlLOKoi7H0/rWOOCciKpFFzUwPhdjrRu30afcMDvurYQIemowkGqqHvl
+         YiRRcT7daT4bOBEqAYg/8AuSKFLhFlOg2tJgz8ad1GudaquYVZOFq6D3uvyu28giXhXc
+         o0vTQ5bqbS0ig4BOtQ5HbnMXYWO6lFTmVR7zQeRYni385yu3DLvZH7THXC0thzbFmGCz
+         n0zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pm/wKN9Xbr6T4OtsXw6Ao3XmpX+dPEJDVEZw2H20Ro4=;
+        b=3AJgI51A6+z5prH3Hq2CY38SgpU0b+Y44ZfX2wQkg3Od0U7tpuvDKj70FN/nyCc2D6
+         YAVijUn0QzIJfu6GB1LDFJ4vlKhCzDh+2IC9uvjHDLBH2k+m7oOSKCIdFQBMyI7ia6X6
+         JTTD9lw5jl871BEhMd/eC0Mkpe/UelltQEgrm7oTKHZFXlHwZujZS1xoPCDB4qBE4RYw
+         nk0ANsy9JpQMQBk8WX/cgW+OdBaJlyJ4lsrmD9b0DpYj9+XH9ZOdV0Eq9ShFxhVdLSJi
+         coxefUAKoBMVuszcKNIKm1d8Ya1pet0KQeYvMjsul15LvtQvsVL8ZivPp0g6j7s0gvf9
+         Myrg==
+X-Gm-Message-State: ANoB5pn0dF9+/mnB9H703s5PR5xX+tG+4bD8IDCoycnHdn+C0Roxo00+
+        6k4FJGclrwQ51pWGPLBpTZM=
+X-Google-Smtp-Source: AA0mqf6AGLESDX30+/NBov+MLFO8wi5Kqkw847g8Eb9eUSyv/oR2nAexVyZVh7zECCEfvaT7Xdci5Q==
+X-Received: by 2002:a05:6512:749:b0:4ae:d0fc:1bce with SMTP id c9-20020a056512074900b004aed0fc1bcemr21543853lfs.107.1669921947266;
+        Thu, 01 Dec 2022 11:12:27 -0800 (PST)
+Received: from localhost.localdomain (077222238151.warszawa.vectranet.pl. [77.222.238.151])
+        by smtp.googlemail.com with ESMTPSA id h1-20020a056512220100b004b4e67c3c00sm737940lfu.53.2022.12.01.11.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 11:12:26 -0800 (PST)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
+Cc:     szymon.heidrich@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: uvc: Prevent buffer overflow in setup handler
+Date:   Thu,  1 Dec 2022 20:11:34 +0100
+Message-Id: <20221201191134.12404-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <Y4jqVZfEj+/VdfnH@kroah.com>
+References: <Y4jqVZfEj+/VdfnH@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y35ftyYlE8FX8xQO@casper.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 06:00:23PM +0000, Matthew Wilcox wrote:
-> On Wed, Nov 23, 2022 at 01:55:42PM -0400, Jason Gunthorpe wrote:
-> > On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
-> > > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
-> > > > #define generic_container_of(in_type, in, out_type, out_member) \
-> > > > 	_Generic(in,                                        \
-> > > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
-> > > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
-> > > > 		  )
-> > > 
-> > > There's a neat trick I found in seqlock.h:
-> > > 
-> > > #define generic_container_of(in_t, in, out_t, m)			\
-> > > 	_Generic(*(in),							\
-> > > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
-> > > 		in_t: ((out_t *)container_of(in, out_type, m))	\
-> > > 	)
-> > >
-> > > and now it fits in 80 columns ;-)
-> > 
-> > Aside from less letters, is their another benifit to using *(in) ?
-> 
-> I don't think so.  It just looks nicer to me than putting the star in
-> each case.  If I'd thought of it, I would have done it to page_folio(),
-> but I won't change it now.
+Setup function uvc_function_setup permits control transfer
+requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
+data stage handler for OUT transfer uses memcpy to copy req->actual
+bytes to uvc_event->data.data array of size 60. This may result
+in an overflow of 4 bytes.
 
-Ah, but your trick will not work, that blows up and will not build.  The
-original one from Jason here does work.  _Generic is tricky...
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+V1 -> V2: Corrected commit message and changed ?: in favor of min_t
 
-thanks,
+ drivers/usb/gadget/function/f_uvc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e196e061..4419b7972 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+ 
+ 		memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 		v4l2_event.type = UVC_EVENT_DATA;
+-		uvc_event->data.length = req->actual;
+-		memcpy(&uvc_event->data.data, req->buf, req->actual);
++		uvc_event->data.length = min_t(unsigned int, req->actual,
++			sizeof(uvc_event->data.data));
++		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+ 	}
+ }
+-- 
+2.38.1
+
