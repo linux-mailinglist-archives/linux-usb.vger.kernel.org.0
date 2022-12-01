@@ -2,160 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF70563EF75
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 12:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E6963F05C
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Dec 2022 13:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiLAL2c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Dec 2022 06:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S231253AbiLAMWs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Dec 2022 07:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiLAL20 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 06:28:26 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D3A56570
-        for <linux-usb@vger.kernel.org>; Thu,  1 Dec 2022 03:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669894105; x=1701430105;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tGbH4aBNhYJBoutC+L9DQp3CaXhhSZEZk0VPrYJEiEc=;
-  b=MqKd7qn44NdGkiwh1MTlxM+gj+AjaoXskFHUowgFuMe4MTSZ7HvwGDPh
-   jYYL5Xa9lcV5/KgJFrQQCa8VAniqzMFfThyc/NNjn+1WWoa/tyiUcU6xN
-   bQIgNpJ1jHUUOIYS0BoyMH5Xz2N3X4b8TacZ085KnvSeCijR6sWz0z8t8
-   jzc6zz3F8h3LCuAatmAsSgcUSHbzIAFG/LVIIuBK+WJ9r6uwcTVZ4vrZW
-   BIBPFbqo/x7AzsE/SRU5f2IFDeBMYbmuFe0yvl2MPpGtz2ll1DkzNwelJ
-   fLg7Cm3CCrKSXWoN4dB6HUKkS9ohpZAE1DwBb7puueAWjZxIzLiw03OmW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="317523116"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="317523116"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 03:28:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="750766598"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="750766598"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Dec 2022 03:28:23 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p0hjq-000CVW-2g;
-        Thu, 01 Dec 2022 11:28:22 +0000
-Date:   Thu, 01 Dec 2022 19:27:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 51daa42d6b86efa366320b99e7bbe29a490ed348
-Message-ID: <63888fa8.JfdhnkNxhrXOdDYE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230281AbiLAMWq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Dec 2022 07:22:46 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECD06244;
+        Thu,  1 Dec 2022 04:22:43 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id r8so1675776ljn.8;
+        Thu, 01 Dec 2022 04:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NOExxS2IjahwCF/S/WjAjF0c/H0u99gptUVy0XMPdbc=;
+        b=JF2WeLbwMFKR38u4Giaiah8fZew5H5mwyzSwBzBjrGud/hQUaiEQO6fzZXlrFbyuWK
+         MGRZK2VTqN1UHQBr07fG8P0L5mVPcccKclxvy9Cqr7MZlRGCVZDN9JlJMDYe1vM1iuOH
+         NhjhlEmgKsKrF0HOEnaNJDyMVsAS+/AQgJXDrzauhkieKSr5jrQNWChhMVLwaj1k8q14
+         tr7qgXxmI7RTt5gaAZFs0PQKmq4V3Vm7fCu+dbmR/Td7xbJej4rglj3vWqtqcFrqJlrf
+         QAfZqRYpmVNJRqNyy9xCkDhg3A3pyy5uXEbXdwvwtnAHJZZmhpMwx9piLBdd1bjtIdxv
+         h9ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NOExxS2IjahwCF/S/WjAjF0c/H0u99gptUVy0XMPdbc=;
+        b=Zwo3y27M+/ZnpdOUCYZBvkO5EeCBwH0+8sh5Lk7+/nS7jgI+AlOCJw/U4ktts9qFjM
+         AV7WENjfiie05u5lQQ37ZY+M4Eq+SHOQPZICBdQAjrE4d3M7v2OzuxFfCQwTkaw16G+A
+         9s8XIOqTZzB5c/+jq6CI6kkC91PsP4as4FxrVZxbWSzR10oqromQKyKfAPXGkGSXbYg1
+         Sws8y+UJ8a4NLRoj0E+PHQc5xXYHtv3PAcdVqzDQbk9jxGsvV0nKgXpQLeBl/oOGTI2Q
+         WYo5SeZQjJe7WQuTVSnlrS3NYj0vJ2yHQ4cs1qqTe8aWeiRjEhRLOcyBpPVZGSdqJVvU
+         Jn5g==
+X-Gm-Message-State: ANoB5pkYF8iPkIGuBnTAju4xhbdtftXgkuqeNix+gS4Q9fsAA9ty4sHB
+        E1IRxzzv+sFHszFajb0VcVs=
+X-Google-Smtp-Source: AA0mqf7wEdj4ql8TNl/pKZ5ROwZ8e68q5E8vY/MPsgX1mM0BAnCMcq4QDDHqm8eydKtYZGdTvb1KSg==
+X-Received: by 2002:a05:651c:c8b:b0:277:f8b:bb4f with SMTP id bz11-20020a05651c0c8b00b002770f8bbb4fmr16556345ljb.161.1669897362141;
+        Thu, 01 Dec 2022 04:22:42 -0800 (PST)
+Received: from localhost.localdomain (077222238151.warszawa.vectranet.pl. [77.222.238.151])
+        by smtp.googlemail.com with ESMTPSA id 11-20020ac25f4b000000b00492dbf809e8sm627184lfz.118.2022.12.01.04.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 04:22:41 -0800 (PST)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     szymon.heidrich@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Prevent buffer overflow in UVC Gadget setup handler
+Date:   Thu,  1 Dec 2022 13:21:41 +0100
+Message-Id: <20221201122141.8739-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 51daa42d6b86efa366320b99e7bbe29a490ed348  Revert "i915: Move list_count() to list.h for broader use"
+Setup function uvc_function_setup permits control transfer
+requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
+data stage handler for OUT transfer uses memcpy to copy req->actual
+bytes to uvc_event->data.data array of size 60. This may result
+in an overflow of 4 bytes.
 
-elapsed time: 1432m
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+ drivers/usb/gadget/function/f_uvc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-configs tested: 79
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-um                           x86_64_defconfig
-x86_64                    rhel-8.3-kselftests
-sh                               allmodconfig
-m68k                             allyesconfig
-mips                             allyesconfig
-m68k                             allmodconfig
-powerpc                          allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                              defconfig
-ia64                             allmodconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           allyesconfig
-i386                 randconfig-a002-20221128
-i386                 randconfig-a003-20221128
-arc                  randconfig-r043-20221128
-i386                 randconfig-a001-20221128
-i386                 randconfig-a004-20221128
-x86_64               randconfig-a002-20221128
-i386                 randconfig-a005-20221128
-x86_64               randconfig-a001-20221128
-x86_64               randconfig-a003-20221128
-i386                 randconfig-a006-20221128
-x86_64               randconfig-a004-20221128
-x86_64               randconfig-a005-20221128
-x86_64               randconfig-a006-20221128
-i386                          randconfig-a014
-i386                                defconfig
-i386                          randconfig-a012
-i386                             allyesconfig
-i386                          randconfig-a016
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-arc                  randconfig-r043-20221201
-riscv                randconfig-r042-20221201
-s390                 randconfig-r044-20221201
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20221128
-riscv                randconfig-r042-20221128
-hexagon              randconfig-r041-20221128
-s390                 randconfig-r044-20221128
-x86_64               randconfig-a013-20221128
-x86_64               randconfig-a012-20221128
-x86_64               randconfig-a014-20221128
-x86_64               randconfig-a011-20221128
-x86_64               randconfig-a015-20221128
-x86_64               randconfig-a016-20221128
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                 randconfig-a014-20221128
-i386                 randconfig-a011-20221128
-i386                 randconfig-a013-20221128
-i386                 randconfig-a016-20221128
-i386                 randconfig-a012-20221128
-i386                 randconfig-a015-20221128
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e196e061..69c5eb3a3 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+ 
+ 		memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 		v4l2_event.type = UVC_EVENT_DATA;
+-		uvc_event->data.length = req->actual;
+-		memcpy(&uvc_event->data.data, req->buf, req->actual);
++		uvc_event->data.length = (req->actual > sizeof(uvc_event->data.data) ?
++			sizeof(uvc_event->data.data) : req->actual);
++		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+ 	}
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.38.1
+
