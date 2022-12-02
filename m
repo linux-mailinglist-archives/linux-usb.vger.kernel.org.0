@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3670E6410CD
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 23:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F736410D2
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 23:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiLBWqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Dec 2022 17:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S234770AbiLBWsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Dec 2022 17:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbiLBWqB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 17:46:01 -0500
-Received: from mail-oo1-xc49.google.com (mail-oo1-xc49.google.com [IPv6:2607:f8b0:4864:20::c49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D005FD01
-        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 14:46:00 -0800 (PST)
-Received: by mail-oo1-xc49.google.com with SMTP id g1-20020a4a9241000000b0049fd16671b4so2109144ooh.14
-        for <linux-usb@vger.kernel.org>; Fri, 02 Dec 2022 14:46:00 -0800 (PST)
+        with ESMTP id S233308AbiLBWsB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 17:48:01 -0500
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6005F7BC01
+        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 14:47:59 -0800 (PST)
+Received: by mail-io1-xd49.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso5672835ioj.4
+        for <linux-usb@vger.kernel.org>; Fri, 02 Dec 2022 14:47:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H9rB8T4wsLk/XiKnyLn1ChOtKZ9sbnSqHD/TUK5IA5c=;
-        b=FKtnIANVOWz7QVSEbLOapzApcnKHXWL+sDMMTlpRER0DmPvpwDNQWejH44T8rhZ/g/
-         4zLMVodKI7oWSvAxUHMUSwSA8Ob4O5iuspJ19UyRqD7f94yzb3qI5m9VqJP73JyxJL20
-         CjKTY5D1NaTgiiStb1FlHHaLFYXq25aundNcK3gFpDvos/EyOCIQlCv9uS4edmtHEVBE
-         DA/bkR7BAm2HKc1BnJyuLuMSqbrU4NCyTQm1l6jnlp6Vhmq7JH63ZDWOSFo90KwkAOJr
-         9piAmZPcWCBs3Xya4n+Mts4aeoDe5LvQrCUyUwEy5H4//pYF0Ch0cxiu/mlHTEOdYbUj
-         uL6g==
+        bh=kr2FFYjrlmKQpl0FW9cRYWBpZCQQ4WxEePYVPH7PqT0=;
+        b=aig6Am3XKh1f74fIoP78XmyYoMV06xOmH0SRrk9TCuJ30vcxCB6RIZVxlkWc4IW82q
+         2uIqiG3js6ixvzMtrv2w3qAX1gMUNHU9Jpd+qiPXSNFHKbehWNF7Yhw2hnsYzBVHiz+U
+         /xJtJBId/qyG3lUq5Gebw3wMCtj97OgR8Iuh+NX2oUJTao+RSD97NbqgA6jJbdPMvs0d
+         v0DCQHtlp3kq5Ddfnf3WHfDLXQoDLyzfX18K4SfCv7rdPhWhlGu0YOEWfi4OkK0rmIKe
+         Vz8L0l0NKQWQ8QpriqE46JttBua6QTtUfOf6j36qUTSKJGD76Wfrp8mqX71XIjDSw2Ur
+         J52w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H9rB8T4wsLk/XiKnyLn1ChOtKZ9sbnSqHD/TUK5IA5c=;
-        b=ceaFaAWoRUv1p9X+lXAlvIpWZFYW+f9m6aPqHsyPUA8Wj7zUCMCzDcREqWnmXYSZzi
-         1lkdgriJOHG5BrsSL58N2Q64+U/W5NYH7ZgpdRCQU7sc8mNUrvacpfs9lNAB9ZkR2JHl
-         pag8eMJl9Y8Uf08rJara4J+Owtlh6ckNhiQEzYK8kn58o5Ozgma5u2/KRiiCfLaGsbm8
-         A+uQBHGjCFeheIvAPxg1ySSx5E63OiDgcV9vXrfylmbHqahVvlconhNjZP+GEaglnKL+
-         2nQOD25bZAzkZLRgKRftZSm57AAw3PY8zHvoqEK+/+ULCSei7dsaYalbeNWH2arD5145
-         lA1w==
-X-Gm-Message-State: ANoB5pnTc/6naIG75Qh6PS6bX6WXPnmYD0/ybxz8krnVka/z6++4nCzt
-        0VVcR43riZPLgFz/wFmBsRobH0pioQSE6Ow=
-X-Google-Smtp-Source: AA0mqf7wvdGylDyAivlm1FKQpi+Pr3pcLL+c4xJlI61PFCspz/oPv3dAy7P0b8RMerI1ZTHykp7/Yqsj3TbC3T4=
+        bh=kr2FFYjrlmKQpl0FW9cRYWBpZCQQ4WxEePYVPH7PqT0=;
+        b=FkEKQ/0Jvcg3fuD97sgnG+s1HGhwjS3pCe2r0d0YLXJ+QXVRAzAbbvbMxIIvQZiwlM
+         egG/Za9VXunblTaj8/jcf3spnSTpYos4je4zsD9thNh0HiffmREbul5AU6/XH1dqkSs7
+         q50/4EU5df2PA+XX8hDn3a5hSA9sStRaEUaUfuJk5tH1AJUMKByEnFVRS9wTJbpUdSan
+         WOh089TnykW3gG9M0S9Nv9/B0QYj0mOJuC+DW3wnBbxqf6KDLTivAjXgY4BSLJ+CHHEJ
+         IRZccZYwqNqHGJ9Onb57vSLvOuVuBWFPxyCiuvMJLvy1LW6uKwinb3S+q7/3Q58Mu6ht
+         NSig==
+X-Gm-Message-State: ANoB5pmQHvHMaysTpe28whRTv9hKb6mzPho8JLv1crY4OiO4Pq/t2yAC
+        5pYaC7vQH8E2dzYi6h0+ThHXJLdnOMAp7+w=
+X-Google-Smtp-Source: AA0mqf6Pfb/78vXpVbkKCzqWVQv6p/o5CGfleflTWNDSxkmzuLudt9k+BC1QXoNkn4IL0y9f0t/YX3baNUddM3A=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a05:6808:1701:b0:35b:722a:9eac with SMTP
- id bc1-20020a056808170100b0035b722a9eacmr24273459oib.268.1670021159815; Fri,
- 02 Dec 2022 14:45:59 -0800 (PST)
-Date:   Fri,  2 Dec 2022 16:45:40 -0600
-In-Reply-To: <Y4n0RWqSwDHVT+HA@kroah.com>
+ (user=allenwebb job=sendgmr) by 2002:a6b:fb13:0:b0:6de:383e:4146 with SMTP id
+ h19-20020a6bfb13000000b006de383e4146mr27314176iog.48.1670021278767; Fri, 02
+ Dec 2022 14:47:58 -0800 (PST)
+Date:   Fri,  2 Dec 2022 16:47:40 -0600
+In-Reply-To: <20221202224540.1446952-1-allenwebb@google.com>
 Mime-Version: 1.0
-References: <Y4n0RWqSwDHVT+HA@kroah.com>
+References: <20221202224540.1446952-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221202224540.1446952-1-allenwebb@google.com>
-Subject: [PATCH v6 0/5] Add sysfs match-id modalias attribute for USB modules
+Message-ID: <20221202224744.1447448-1-allenwebb@google.com>
+Subject: [PATCH v6 1/5] module: Add empty modalias sysfs attribute
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -71,107 +71,130 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add sysfs match-id modalias attribute for USB modules
+This adds the modalias sysfs attribute in preparation for its
+implementation.
 
-This patch series (v6) exposes the driver matching values from the
-modalias to inform policy decisions in userspace for devices with the
-authorized attribute in sysfs. In other words with this patch tools
-like USBGuard could leverage not only modules.aliases, but also the
-aliases for the builtin modules to associate devices with modules that
-may be bound before deciding to authorize a device or not. This is
-particularly useful in cases when new devices shouldn't be allowed part
-of the time like for lock screens.
+Signed-off-by: Allen Webb <allenwebb@google.com>
+---
+ include/linux/module.h   |  1 +
+ kernel/module/internal.h |  2 ++
+ kernel/module/sysfs.c    | 33 +++++++++++++++++++++++++++++++++
+ kernel/params.c          |  7 +++++++
+ 4 files changed, 43 insertions(+)
 
-Note that at this point the series only implements USB, but Thunderbolt
-and other subsystems could be added.
-
-CONFIG_SYSFS and CONFIG_MODULES (adds /sys/module/) are both required
-for the /sys/module/*/modalias attributes to be present.
-
---
-
-# Module sysfs modalias attribute for match ids
-
-Note that previous versions of this patch series were flattened into
-a single patch, and a cover letter was first added in v5 with diffs
-between each previous version of the patch series.
-
-Also this version adds a `Documentation/ABI` entry for
-`/sys/module/*/modalias`.
-
-  RFC (broken patch): https://lore.kernel.org/lkml/CAJzde042-M4UbpNYKw0eDVg4JqYmwmPYSsmgK+kCMTqsi+-2Yw@mail.gmail.com/
-  v1 (missing v1 label): https://lore.kernel.org/lkml/20221111152852.2837363-1-allenwebb@google.com/
-  v2 (missing v2 label): https://lore.kernel.org/lkml/20221128201332.3482092-1-allenwebb@google.com/
-  v3: https://lore.kernel.org/lkml/20221129224313.455862-1-allenwebb@google.com/
-  v4: https://lore.kernel.org/lkml/20221130221447.1202206-1-allenwebb@google.com/
-  v5: https://lore.kernel.org/lkml/20221201211630.101541-1-allenwebb@google.com/
-  v6: This version
-
-## Patch series status
-
-This series is still going through revisions in response to comments.
-USB is the only implemented subsystem, but PCI or other subsystems
-with the authorized attribute could be added.
-
-There is still an open question as to whether using kmod would be a
-better approach to solve the problem. One big hurdle with that approach
-is match-id-based aliases are not currently exposed through kmod and
-changing that behavior might have unintended consequences. The
-particular concerns I have are:
-
-  - Are we OK with significantly growing the number of aliases handled
-    by kmod by including the match-id-based aliases?
-
-  - Are other tools that use kmod prepared to handle the addition of
-    match-id-based aliases?
-
-  - Additional work would be needed for kmod to be able to handle
-    match-id-based aliases and it would likely require subsystem
-    specific elements unless it leveraged files2alias.
-
-Also, `mod_devicetable.c` is very similar to files2alias, so there
-might be some possiblity of having common logic between the two. The
-big difficulty lies in support both use cases which need to work both
-at build time and at runtime.
-
-Additionally before this is ready, there should be implementations for
-the other subsystems whose devices have the `authorized` sysfs
-attribute (Thunderbolt).
-
-## Acknowledgements
-
-Thanks to Greg Kroah-Hartman and the Linux maintainers for being
-patient with me as I have worked through learning the kernel
-workflow to get this series into a more presentable state.
-
-Thanks to Luis Chamberlain for raising the alternative of
-using kmod to address the primary motivation of the patch series.
-
-Also, thanks to Intel's kernel test robot <lkp@intel.com> for catching
-issues that showed up on different kernel configurations.
-
-
-Allen Webb (5):
-  module: Add empty modalias sysfs attribute
-  drivers: Add bus_for_each for iterating over the subsystems
-  Implement modalias sysfs attribute for modules
-  docs: Add entry for /sys/module/*/modalias
-  drivers: Implement module modaliases for USB
-
- Documentation/ABI/testing/sysfs-module |  12 ++
- drivers/base/Makefile                  |   2 +-
- drivers/base/base.h                    |   8 +
- drivers/base/bus.c                     |  42 ++++
- drivers/base/mod_devicetable.c         | 257 +++++++++++++++++++++++++
- drivers/usb/core/driver.c              |   2 +
- include/linux/device/bus.h             |   8 +
- include/linux/module.h                 |   1 +
- kernel/module/internal.h               |   2 +
- kernel/module/sysfs.c                  |  88 +++++++++
- kernel/params.c                        |   7 +
- 11 files changed, 428 insertions(+), 1 deletion(-)
- create mode 100644 drivers/base/mod_devicetable.c
-
+diff --git a/include/linux/module.h b/include/linux/module.h
+index ec61fb53979a9..0bfa859a21566 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -47,6 +47,7 @@ struct module_kobject {
+ 	struct kobject *drivers_dir;
+ 	struct module_param_attrs *mp;
+ 	struct completion *kobj_completion;
++	struct bin_attribute modalias_attr;
+ } __randomize_layout;
+ 
+ struct module_attribute {
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 2e2bf236f5582..8d7ae37584868 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -259,11 +259,13 @@ static inline void add_kallsyms(struct module *mod, const struct load_info *info
+ #endif /* CONFIG_KALLSYMS */
+ 
+ #ifdef CONFIG_SYSFS
++void add_modalias_attr(struct module_kobject *mk);
+ int mod_sysfs_setup(struct module *mod, const struct load_info *info,
+ 		    struct kernel_param *kparam, unsigned int num_params);
+ void mod_sysfs_teardown(struct module *mod);
+ void init_param_lock(struct module *mod);
+ #else /* !CONFIG_SYSFS */
++static inline void add_modalias_attr(struct module_kobject *mk) {}
+ static inline int mod_sysfs_setup(struct module *mod,
+ 			   	  const struct load_info *info,
+ 			   	  struct kernel_param *kparam,
+diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+index ce68f821dcd12..8dafec7455fbe 100644
+--- a/kernel/module/sysfs.c
++++ b/kernel/module/sysfs.c
+@@ -240,6 +240,37 @@ static inline void add_notes_attrs(struct module *mod, const struct load_info *i
+ static inline void remove_notes_attrs(struct module *mod) { }
+ #endif /* CONFIG_KALLSYMS */
+ 
++static ssize_t module_modalias_read(struct file *filp, struct kobject *kobj,
++				    struct bin_attribute *bin_attr,
++				    char *buf, loff_t pos, size_t count)
++{
++	return 0;
++}
++
++/* Used in kernel/params.c for builtin modules.
++ *
++ * `struct module_kobject` is used instead of `struct module` because for
++ * builtin modules, the `struct module` is not available when this is called.
++ */
++void add_modalias_attr(struct module_kobject *mk)
++{
++	sysfs_bin_attr_init(&mk->modalias_attr);
++	mk->modalias_attr.attr.name = "modalias";
++	mk->modalias_attr.attr.mode = 0444;
++	mk->modalias_attr.read = module_modalias_read;
++	if (sysfs_create_bin_file(&mk->kobj, &mk->modalias_attr)) {
++		/* We shouldn't ignore the return type, but there is nothing to
++		 * do.
++		 */
++		return;
++	}
++}
++
++static void remove_modalias_attr(struct module_kobject *mk)
++{
++	sysfs_remove_bin_file(&mk->kobj, &mk->modalias_attr);
++}
++
+ static void del_usage_links(struct module *mod)
+ {
+ #ifdef CONFIG_MODULE_UNLOAD
+@@ -398,6 +429,7 @@ int mod_sysfs_setup(struct module *mod,
+ 
+ 	add_sect_attrs(mod, info);
+ 	add_notes_attrs(mod, info);
++	add_modalias_attr(&mod->mkobj);
+ 
+ 	return 0;
+ 
+@@ -415,6 +447,7 @@ int mod_sysfs_setup(struct module *mod,
+ 
+ static void mod_sysfs_fini(struct module *mod)
+ {
++	remove_modalias_attr(&mod->mkobj);
+ 	remove_notes_attrs(mod);
+ 	remove_sect_attrs(mod);
+ 	mod_kobject_put(mod);
+diff --git a/kernel/params.c b/kernel/params.c
+index 5b92310425c50..b7fd5313a3118 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -14,6 +14,12 @@
+ #include <linux/ctype.h>
+ #include <linux/security.h>
+ 
++#ifdef CONFIG_MODULES
++#include "module/internal.h"
++#else
++static inline void add_modalias_attr(struct module_kobject *mk) {}
++#endif /* !CONFIG_MODULES */
++
+ #ifdef CONFIG_SYSFS
+ /* Protects all built-in parameters, modules use their own param_lock */
+ static DEFINE_MUTEX(param_lock);
+@@ -815,6 +821,7 @@ static void __init kernel_add_sysfs_param(const char *name,
+ 	BUG_ON(err);
+ 	kobject_uevent(&mk->kobj, KOBJ_ADD);
+ 	kobject_put(&mk->kobj);
++	add_modalias_attr(mk);
+ }
+ 
+ /*
 -- 
 2.37.3
 
