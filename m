@@ -2,140 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FD3640B42
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 17:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468AF640B51
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 17:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233511AbiLBQxC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Dec 2022 11:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S234156AbiLBQzB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Dec 2022 11:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiLBQxB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 11:53:01 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFBF54370
-        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 08:52:58 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id h17so2305129ila.6
-        for <linux-usb@vger.kernel.org>; Fri, 02 Dec 2022 08:52:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pt4n+Bc+eDdCru9ZY4GLZ4Q8PtpiBAtoUiS2Dufe20M=;
-        b=RDLXegfhfNzZVOEiLG3Xs6+uYe8OAYXU1MhaAQWOrsBarzTzN/dPBkKdAMqADWe2BN
-         LwZgOtZEsPva5jY9b0sxLN3yFrNv9HZT5LaXky9DGBme+/+K7aU705E2+llHmX0iIhAj
-         Jn7EY8sIHWNTUGBvJ2wA2W0dzkUc+D8PHjYQw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pt4n+Bc+eDdCru9ZY4GLZ4Q8PtpiBAtoUiS2Dufe20M=;
-        b=3Z/9ktAqhG5Teftqq4EKC4VpuWyU9dU9mLKfz4ojxR1BoRBn+XkzXcEwGELw7PdbJb
-         Lb726+iyyyMkGTca55g1CqHDSRMKnmI/h3QFTKTYxxoVqs66Ux3Acz2kf1imKq7RwLQP
-         VZMqhefTOPHWsn0MJ8mEdMBoQNx44ZAJC3RODHfrO6u36QXJ5LNaopFQI7bMRKDF4rG8
-         gABiNpxmfQT749F+l+S2JfBFYqQqRkgOQ7UDarlZzGLvudNey+owtWM+yH/nGp8gV3Fu
-         5ycVywKosrQE0mt9CFJYsHZ7vQMJgXadA+KldUqFlEr/+jJIjyio/HmxJOKLm8cU23mM
-         G8GQ==
-X-Gm-Message-State: ANoB5pmZDlfaDEEMrLIrye3YkOxp2gSFssN9fxoUUwsAatO+DrkBwLub
-        TgnQ4oarhWeZyoL+fVmlpmN5ng==
-X-Google-Smtp-Source: AA0mqf5258QR3nGa5TuixpgHlPAodopMppWne3AWeZO4Dc+3ajcjKPVWFgo23JOBLlXdud+lP5NhhA==
-X-Received: by 2002:a92:504:0:b0:303:634:b07d with SMTP id q4-20020a920504000000b003030634b07dmr13958276ile.25.1669999977388;
-        Fri, 02 Dec 2022 08:52:57 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id f3-20020a05660215c300b006dfd3599b60sm2326297iow.26.2022.12.02.08.52.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 08:52:56 -0800 (PST)
-Date:   Fri, 2 Dec 2022 16:52:56 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S234106AbiLBQzA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 11:55:00 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EA7D159C;
+        Fri,  2 Dec 2022 08:54:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670000066; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=nDjyPFgEloDmM8T/sBNrO/VlMDxo8r7LRbTRDALSR/0ucLLwORJlzGZ29coIGPEro/biYP4tUkD9b7WN88J5YnkXrdZodCcH7RMSsKc5SvD/SMuEM8dLlvNPdRG58BXEND8Rk0XSCO1yCKRhkxgiMfpM1tKnm4v+cPVl4Blw46c=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670000066; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=e1xazqjcXwEUoLesqlU4Blrrp+KuPG+K4ku0ElP/cxA=; 
+        b=D5ZY3Ijf/zhMeYAD+yEGsHTHlmHyHqzGyaK9JqmmTNIPVvLhmK/flzm7eystCGyPP5VXUWSQLJomdjcCvvNxUnmHszFC8DQjRXtRefUo6SxSHmf11V+bEg9cRDzyRgqQCsddBZjwpYohed7C4FWuZoBeOxMIpveh5lr+yKpxUbE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670000066;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=e1xazqjcXwEUoLesqlU4Blrrp+KuPG+K4ku0ElP/cxA=;
+        b=VvQi8dcBCDb3e9NAUXLCWJRxiVEr3dtPpqx+r3MtjZ5NBmYOLpbOjY6CJH5wFFbT
+        p3nDacOTxUyjdfgJejiwitZdzMInxBiPij6tHtl9PBkHWOvrtAE7Jeom0rZoAH5DnKC
+        Er5IzWqt76AhOKRqwNisKFxVYOFFU+iIvI+5cPcs=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
+        with SMTPS id 1670000064421431.1187913489915; Fri, 2 Dec 2022 08:54:24 -0800 (PST)
+Message-ID: <2f0f31551d361cf23abdd2c4117f2feb84e2b1a8.camel@icenowy.me>
+Subject: Re: [PATCH v2 2/6] dt-bindings: usb: Add binding for Genesys Logic
+ GL850G hub controller
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] usb: misc: onboard_usb_hub: add Genesys Logic
- GL850G hub support
-Message-ID: <Y4otaPmwWfJ24I7k@google.com>
+Date:   Sat, 03 Dec 2022 00:54:18 +0800
+In-Reply-To: <b4ddf139-5604-bd04-e309-d7bc15e9d23b@linaro.org>
 References: <20221202081647.3183870-1-uwu@icenowy.me>
- <20221202081647.3183870-4-uwu@icenowy.me>
+         <20221202081647.3183870-3-uwu@icenowy.me>
+         <b4ddf139-5604-bd04-e309-d7bc15e9d23b@linaro.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221202081647.3183870-4-uwu@icenowy.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:16:44PM +0800, Icenowy Zheng wrote:
-> Genesys Logic GL850G is a 4-port USB 2.0 STT hub that has a reset pin to
-> toggle and a 3.3V core supply exported (although an integrated LDO is
-> available for powering it with 5V).
-> 
-> Add the support for this hub, for controlling the reset pin and the core
-> power supply.
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+=E5=9C=A8 2022-12-02=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 10:02 +0100=EF=BC=
+=8CKrzysztof Kozlowski=E5=86=99=E9=81=93=EF=BC=9A
+> On 02/12/2022 09:16, Icenowy Zheng wrote:
+> > The Genesys Logic GL850G is a USB 2.0 Single TT hub controller that
+> > features 4 downstream ports, an internal 5V-to-3.3V LDO regulator
+> > (can
+> > be bypassed) and an external reset pin.
+> >=20
+> > Add a device tree binding for its USB protocol part. The internal
+> > LDO is
+> > not covered by this and can just be modelled as a fixed regulator.
+> >=20
+> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> > ---
+> > Changes in v2:
+> > - Misc fixes suggested by Krzysztof, including property
+> > descriptions,
+> > =C2=A0 single-item "items" and fixing the example's gpio property.
+> > - Fixed $id.
+> >=20
+> (...)
+>=20
+> > +
+> > +examples:
+> > +=C2=A0 - |
+> > +=C2=A0=C2=A0=C2=A0 usb {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dr_mode =3D "host";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hub: hub@1 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 com=
+patible =3D "usb5e3,608";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg=
+ =3D <1>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 res=
+et-gpios =3D <&pio 7 2>;
+>=20
+> Use GPIO flags. What did you fix in the example?
 
-Acked-by: Matthias Kaehlcke <mka@chromium.org>
+It used to be here, but using it needs another include, which I don't
+think it necessary here.
 
-> ---
-> Changes in v2:
-> - Sort things, by names or vendor IDs.
-> 
->  drivers/usb/misc/onboard_usb_hub.c | 2 ++
->  drivers/usb/misc/onboard_usb_hub.h | 5 +++++
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> index d63c63942af1..94e7966e199d 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.c
-> +++ b/drivers/usb/misc/onboard_usb_hub.c
-> @@ -331,6 +331,7 @@ static struct platform_driver onboard_hub_driver = {
->  
->  /************************** USB driver **************************/
->  
-> +#define VENDOR_ID_GENESYS	0x05e3
->  #define VENDOR_ID_MICROCHIP	0x0424
->  #define VENDOR_ID_REALTEK	0x0bda
->  #define VENDOR_ID_TI		0x0451
-> @@ -407,6 +408,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
->  }
->  
->  static const struct usb_device_id onboard_hub_id_table[] = {
-> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
->  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
->  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
->  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
-> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-> index 34beab8bce3d..62129a6a1ba5 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.h
-> +++ b/drivers/usb/misc/onboard_usb_hub.h
-> @@ -22,10 +22,15 @@ static const struct onboard_hub_pdata ti_tusb8041_data = {
->  	.reset_us = 3000,
->  };
->  
-> +static const struct onboard_hub_pdata genesys_gl850g_data = {
-> +	.reset_us = 3,
-> +};
-> +
->  static const struct of_device_id onboard_hub_match[] = {
->  	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
->  	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
->  	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
-> +	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
->  	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
->  	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
->  	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
-> -- 
-> 2.38.1
-> 
+Maybe I should just drop this line in the example?
+
+>=20
+>=20
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
