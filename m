@@ -2,118 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5229A64072A
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 13:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A98B164078E
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 14:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiLBMvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Dec 2022 07:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S233476AbiLBNPi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Dec 2022 08:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiLBMvM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 07:51:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C72CA7A0;
-        Fri,  2 Dec 2022 04:51:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C853EB82162;
-        Fri,  2 Dec 2022 12:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0E5C433D6;
-        Fri,  2 Dec 2022 12:51:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669985468;
-        bh=N8iaXOkKMk2SIfbdKoOvU4dUqWAClTiQ1M1kpcY5fRQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JGINdKTPKXiGv6UTf0X8Qw+ztPj3cqJDc7ewQSCHgZN+TpOy/EsAsvFnTdcex3S4F
-         L1YLM39fspk34rrak5QgmWiM2LPzi2rfMveQw/CoNRQAbLqMnUC8SRldMmdikyNFGU
-         jT4x0NFBnRvLsvIvxOSXJjeNDGMCwAWBUTx5yG78=
-Date:   Fri, 2 Dec 2022 13:51:04 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daehwan Jung <dh10.jung@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Artur Bujdoso <artur.bujdoso@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
-        eomji.oh@samsung.com
-Subject: Re: [RFC PATCH v1 2/2] usb: host: add xhci-exynos to support Exynos
- SOCs
-Message-ID: <Y4n0uNqTUmGpdS6P@kroah.com>
-References: <1669860811-171746-1-git-send-email-dh10.jung@samsung.com>
- <CGME20221201021942epcas2p2429ed37e1f6146b6e1a5bef23141b3f7@epcas2p2.samsung.com>
- <1669860811-171746-3-git-send-email-dh10.jung@samsung.com>
- <Y4hgnxGMEuizJumr@kroah.com>
- <c524cba6-4438-461a-ab05-9325fe09f832@app.fastmail.com>
- <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
- <f633b0f3-9fdb-8beb-7edf-7967c7c0c3d5@linaro.org>
+        with ESMTP id S232011AbiLBNPh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 08:15:37 -0500
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D01C2D34;
+        Fri,  2 Dec 2022 05:15:36 -0800 (PST)
+Received: by mail-pj1-f51.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so5157836pjb.0;
+        Fri, 02 Dec 2022 05:15:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CXax7MzLMmcpUbR7j4j5Z+A0zH0BPeP/1NeIQzWumhA=;
+        b=8MVgukWp4/TCO8U8xhF3HBlRuihurmBl5EToj1A0UGgweTuDnjoxXmT+M2sIOwfcPH
+         0vno5/8eCo5vWKUUD+7uuo6bRQtXOq6M6qjQyXeINf3xTCbPBLU3EKTDVycAMifWQ/XM
+         Zkd++EPIfNFF89kcB+BYNzRC4SV+ww8iDfnGOhgwKifu+lQ9F25SGEtXavCJSD8/vdJh
+         tNABwC9jLgePVYozT1OGRHeoNb3NjCusPogPVQiwZjct+X/acYLsO3B6YR+F1FxTOsYl
+         WytuycO3//mF44NxzQGtihEQ5/V5/dRZlcc731MLnVTOlrlmZ2Zt1PNz7d1gIssvPhg3
+         /9Cw==
+X-Gm-Message-State: ANoB5pniOyt/e3F6X5wntgjntgmFIJJm1bbiqI6WC1yAr18aemlykh5y
+        hnRvCaW0kgyd8U7ntsrJBHYUaj7ylpxnVyOkmo0MBvmO
+X-Google-Smtp-Source: AA0mqf7rou+HDTGrB7duYcNJqBj1ifeMeXSb9YluHr/oNmFkiW6kdUvNrTQ1CO5rfw2zo45qNcQto+7cIbG4RE18Brw=
+X-Received: by 2002:a17:90a:a60c:b0:213:2e97:5ea4 with SMTP id
+ c12-20020a17090aa60c00b002132e975ea4mr81737675pjq.92.1669986934229; Fri, 02
+ Dec 2022 05:15:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f633b0f3-9fdb-8beb-7edf-7967c7c0c3d5@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130174658.29282-1-mailhol.vincent@wanadoo.fr>
+ <20221130174658.29282-8-mailhol.vincent@wanadoo.fr> <20221202122702.rlxvatn2m6dx7zyp@pengutronix.de>
+In-Reply-To: <20221202122702.rlxvatn2m6dx7zyp@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 2 Dec 2022 22:15:23 +0900
+Message-ID: <CAMZ6Rq+f9wMG7H0k-c4T5Jo+64gk8+0b=tP8Vz26-cx0odG34Q@mail.gmail.com>
+Subject: Re: [PATCH v5 7/7] Documentation: devlink: add devlink documentation
+ for the etas_es58x driver
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 01:23:56PM +0100, Krzysztof Kozlowski wrote:
-> On 02/12/2022 13:22, Mathias Nyman wrote:
-> > On 1.12.2022 11.01, Arnd Bergmann wrote:
-> >> On Thu, Dec 1, 2022, at 09:06, Greg Kroah-Hartman wrote:
-> >>> On Thu, Dec 01, 2022 at 11:13:31AM +0900, Daehwan Jung wrote:
-> >>>> This driver works with xhci platform driver. It needs to override
-> >>>> functions of xhci_plat_hc_driver. Wakelocks are used for sleep/wakeup
-> >>>> scenario of system.
-> >>>
-> >>> So this means that no other platform xhci driver can be supported in the
-> >>> same system at the same time.
-> >>>
-> >>> Which kind of makes sense as that's not anything a normal system would
-> >>> have, BUT it feels very odd.  This whole idea of "override the platform
-> >>> driver" feels fragile, why not make these just real platform drivers and
-> >>> have the xhci platform code be a library that the other ones can use?
-> >>> That way you have more control overall, right?
-> > 
-> > Agree that overriding the generic platform driver xhci_hc_platform_driver
-> > from this exynos driver is odd.
-> > 
-> > But I don't understand how this works.
-> > Where are the hcds created and added when this xhci-exonys driver binds to
-> > the device? all this driver does in probe is the overriding?
-> > 
-> > Am I missing something here?
-> 
-> Because it is not a driver for Exynos... it's a driver for wakelocks for
-> their specific Android use-cases which the manufacturer ships for their
-> Android devices. Due to Google GKI, they try to squeeze into upstream.
+On Fri 2 Dec. 2022 at 21:49, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 01.12.2022 02:46:58, Vincent Mailhol wrote:
+> > List all the version information reported by the etas_es58x driver
+> > through devlink. Also, update MAINTAINERS with the newly created file.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  .../networking/devlink/etas_es58x.rst         | 36 +++++++++++++++++++
+> >  MAINTAINERS                                   |  1 +
+> >  2 files changed, 37 insertions(+)
+> >  create mode 100644 Documentation/networking/devlink/etas_es58x.rst
+> >
+> > diff --git a/Documentation/networking/devlink/etas_es58x.rst b/Documentation/networking/devlink/etas_es58x.rst
+> > new file mode 100644
+> > index 000000000000..9893e57b625a
+> > --- /dev/null
+> > +++ b/Documentation/networking/devlink/etas_es58x.rst
+> > @@ -0,0 +1,36 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +==========================
+> > +etas_es58x devlink support
+> > +==========================
+> > +
+> > +This document describes the devlink features implemented by the
+> > +``etas_es58x`` device driver.
+> > +
+> > +Info versions
+> > +=============
+> > +
+> > +The ``etas_es58x`` driver reports the following versions
+> > +
+> > +.. list-table:: devlink info versions implemented
+> > +   :widths: 5 5 90
+> > +
+> > +   * - Name
+> > +     - Type
+> > +     - Description
+> > +   * - ``fw``
+> > +     - running
+> > +     - Version of the firmware running on the device. Also available
+> > +       through ``ethtool -i`` as the first member of the
+> > +       ``firmware-version``.
+> > +   * - ``bl``
+>             ^^
+>             fw.bootloader?
+>
+> Fixed that up while applying.
 
-GKI has nothing to do with this, this is Samsung not understanding how
-to properly submit code upstream.  Odd that it comes down to them only
-as this same driver is used by _many_ OEMs who have good teams that know
-how to upstream code properly.  All the blame shouldn't be on Samsung
-right now (see Google's last attempt at getting USB hooks accepted for
-this same hardware IP block...)
+Thanks for catching this. "fw" was the name in v4. "fw.bootloader" is
+indeed correct.
 
-thanks,
 
-greg k-h
+Yours sincerely,
+Vincent Mailhol
