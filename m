@@ -2,84 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825D9640FCA
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 22:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3670E6410CD
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 23:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiLBVJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Dec 2022 16:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S234694AbiLBWqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Dec 2022 17:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbiLBVJM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 16:09:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28F2DF02
-        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 13:09:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5326362118
-        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 21:09:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AAA57C433D6
-        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 21:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670015350;
-        bh=KWa9GTUor/EbaTUCzEWAPMRU/gztiZv0hl9i0ic/DBg=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ninCJYTY62+U57c2tcfTfDPwduzxFLSlSEqKhA7Sk8bn/SdfOpL9KWQgDMuUcBk4Z
-         utuKgVxYv8ZmBn92JCv3Z8GtxAFM/uey5OyfgGv/paqgc6S3xO4CwO5fufiTYLa8Tn
-         //2VLJzrx+gMFLvbUaNwhUX75Z6PQmxRyXGJB3BCgVUcR5z5QpsTp1/pjsd8YWIjBZ
-         SAzcij3S3Y45y6JiYSdN5lHNPa3TrjkBk/fZEl5af1ra9f51JVl+vy8CgkCOY66gQT
-         hn7V1huew6rwJmrROs1OfXZAyl4OQSMYgdPK5PZ4D7kc9BeuqRj625mN4jtNS45b/L
-         pYgF139c4O44w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 892DAC433E6; Fri,  2 Dec 2022 21:09:10 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216766] USB enumeration lockup
-Date:   Fri, 02 Dec 2022 21:09:10 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jan.burgmeier@gmx.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-216766-208809-Dr8GmG7Wld@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216766-208809@https.bugzilla.kernel.org/>
-References: <bug-216766-208809@https.bugzilla.kernel.org/>
+        with ESMTP id S234481AbiLBWqB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 17:46:01 -0500
+Received: from mail-oo1-xc49.google.com (mail-oo1-xc49.google.com [IPv6:2607:f8b0:4864:20::c49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D005FD01
+        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 14:46:00 -0800 (PST)
+Received: by mail-oo1-xc49.google.com with SMTP id g1-20020a4a9241000000b0049fd16671b4so2109144ooh.14
+        for <linux-usb@vger.kernel.org>; Fri, 02 Dec 2022 14:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9rB8T4wsLk/XiKnyLn1ChOtKZ9sbnSqHD/TUK5IA5c=;
+        b=FKtnIANVOWz7QVSEbLOapzApcnKHXWL+sDMMTlpRER0DmPvpwDNQWejH44T8rhZ/g/
+         4zLMVodKI7oWSvAxUHMUSwSA8Ob4O5iuspJ19UyRqD7f94yzb3qI5m9VqJP73JyxJL20
+         CjKTY5D1NaTgiiStb1FlHHaLFYXq25aundNcK3gFpDvos/EyOCIQlCv9uS4edmtHEVBE
+         DA/bkR7BAm2HKc1BnJyuLuMSqbrU4NCyTQm1l6jnlp6Vhmq7JH63ZDWOSFo90KwkAOJr
+         9piAmZPcWCBs3Xya4n+Mts4aeoDe5LvQrCUyUwEy5H4//pYF0Ch0cxiu/mlHTEOdYbUj
+         uL6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9rB8T4wsLk/XiKnyLn1ChOtKZ9sbnSqHD/TUK5IA5c=;
+        b=ceaFaAWoRUv1p9X+lXAlvIpWZFYW+f9m6aPqHsyPUA8Wj7zUCMCzDcREqWnmXYSZzi
+         1lkdgriJOHG5BrsSL58N2Q64+U/W5NYH7ZgpdRCQU7sc8mNUrvacpfs9lNAB9ZkR2JHl
+         pag8eMJl9Y8Uf08rJara4J+Owtlh6ckNhiQEzYK8kn58o5Ozgma5u2/KRiiCfLaGsbm8
+         A+uQBHGjCFeheIvAPxg1ySSx5E63OiDgcV9vXrfylmbHqahVvlconhNjZP+GEaglnKL+
+         2nQOD25bZAzkZLRgKRftZSm57AAw3PY8zHvoqEK+/+ULCSei7dsaYalbeNWH2arD5145
+         lA1w==
+X-Gm-Message-State: ANoB5pnTc/6naIG75Qh6PS6bX6WXPnmYD0/ybxz8krnVka/z6++4nCzt
+        0VVcR43riZPLgFz/wFmBsRobH0pioQSE6Ow=
+X-Google-Smtp-Source: AA0mqf7wvdGylDyAivlm1FKQpi+Pr3pcLL+c4xJlI61PFCspz/oPv3dAy7P0b8RMerI1ZTHykp7/Yqsj3TbC3T4=
+X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
+ (user=allenwebb job=sendgmr) by 2002:a05:6808:1701:b0:35b:722a:9eac with SMTP
+ id bc1-20020a056808170100b0035b722a9eacmr24273459oib.268.1670021159815; Fri,
+ 02 Dec 2022 14:45:59 -0800 (PST)
+Date:   Fri,  2 Dec 2022 16:45:40 -0600
+In-Reply-To: <Y4n0RWqSwDHVT+HA@kroah.com>
+Mime-Version: 1.0
+References: <Y4n0RWqSwDHVT+HA@kroah.com>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221202224540.1446952-1-allenwebb@google.com>
+Subject: [PATCH v6 0/5] Add sysfs match-id modalias attribute for USB modules
+From:   Allen Webb <allenwebb@google.com>
+To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Allen Webb <allenwebb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216766
+Add sysfs match-id modalias attribute for USB modules
 
---- Comment #2 from Jan Burgmeier (jan.burgmeier@gmx.de) ---
-Created attachment 303343
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303343&action=3Dedit
-dmesg output after hang
+This patch series (v6) exposes the driver matching values from the
+modalias to inform policy decisions in userspace for devices with the
+authorized attribute in sysfs. In other words with this patch tools
+like USBGuard could leverage not only modules.aliases, but also the
+aliases for the builtin modules to associate devices with modules that
+may be bound before deciding to authorize a device or not. This is
+particularly useful in cases when new devices shouldn't be allowed part
+of the time like for lock screens.
 
-Attached dmesg output
+Note that at this point the series only implements USB, but Thunderbolt
+and other subsystems could be added.
 
---=20
-You may reply to this email to add a comment.
+CONFIG_SYSFS and CONFIG_MODULES (adds /sys/module/) are both required
+for the /sys/module/*/modalias attributes to be present.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+--
+
+# Module sysfs modalias attribute for match ids
+
+Note that previous versions of this patch series were flattened into
+a single patch, and a cover letter was first added in v5 with diffs
+between each previous version of the patch series.
+
+Also this version adds a `Documentation/ABI` entry for
+`/sys/module/*/modalias`.
+
+  RFC (broken patch): https://lore.kernel.org/lkml/CAJzde042-M4UbpNYKw0eDVg4JqYmwmPYSsmgK+kCMTqsi+-2Yw@mail.gmail.com/
+  v1 (missing v1 label): https://lore.kernel.org/lkml/20221111152852.2837363-1-allenwebb@google.com/
+  v2 (missing v2 label): https://lore.kernel.org/lkml/20221128201332.3482092-1-allenwebb@google.com/
+  v3: https://lore.kernel.org/lkml/20221129224313.455862-1-allenwebb@google.com/
+  v4: https://lore.kernel.org/lkml/20221130221447.1202206-1-allenwebb@google.com/
+  v5: https://lore.kernel.org/lkml/20221201211630.101541-1-allenwebb@google.com/
+  v6: This version
+
+## Patch series status
+
+This series is still going through revisions in response to comments.
+USB is the only implemented subsystem, but PCI or other subsystems
+with the authorized attribute could be added.
+
+There is still an open question as to whether using kmod would be a
+better approach to solve the problem. One big hurdle with that approach
+is match-id-based aliases are not currently exposed through kmod and
+changing that behavior might have unintended consequences. The
+particular concerns I have are:
+
+  - Are we OK with significantly growing the number of aliases handled
+    by kmod by including the match-id-based aliases?
+
+  - Are other tools that use kmod prepared to handle the addition of
+    match-id-based aliases?
+
+  - Additional work would be needed for kmod to be able to handle
+    match-id-based aliases and it would likely require subsystem
+    specific elements unless it leveraged files2alias.
+
+Also, `mod_devicetable.c` is very similar to files2alias, so there
+might be some possiblity of having common logic between the two. The
+big difficulty lies in support both use cases which need to work both
+at build time and at runtime.
+
+Additionally before this is ready, there should be implementations for
+the other subsystems whose devices have the `authorized` sysfs
+attribute (Thunderbolt).
+
+## Acknowledgements
+
+Thanks to Greg Kroah-Hartman and the Linux maintainers for being
+patient with me as I have worked through learning the kernel
+workflow to get this series into a more presentable state.
+
+Thanks to Luis Chamberlain for raising the alternative of
+using kmod to address the primary motivation of the patch series.
+
+Also, thanks to Intel's kernel test robot <lkp@intel.com> for catching
+issues that showed up on different kernel configurations.
+
+
+Allen Webb (5):
+  module: Add empty modalias sysfs attribute
+  drivers: Add bus_for_each for iterating over the subsystems
+  Implement modalias sysfs attribute for modules
+  docs: Add entry for /sys/module/*/modalias
+  drivers: Implement module modaliases for USB
+
+ Documentation/ABI/testing/sysfs-module |  12 ++
+ drivers/base/Makefile                  |   2 +-
+ drivers/base/base.h                    |   8 +
+ drivers/base/bus.c                     |  42 ++++
+ drivers/base/mod_devicetable.c         | 257 +++++++++++++++++++++++++
+ drivers/usb/core/driver.c              |   2 +
+ include/linux/device/bus.h             |   8 +
+ include/linux/module.h                 |   1 +
+ kernel/module/internal.h               |   2 +
+ kernel/module/sysfs.c                  |  88 +++++++++
+ kernel/params.c                        |   7 +
+ 11 files changed, 428 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/base/mod_devicetable.c
+
+-- 
+2.37.3
+
