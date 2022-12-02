@@ -2,48 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C886406AB
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 13:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 190DB6406BC
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 13:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbiLBMVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Dec 2022 07:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S233468AbiLBMYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Dec 2022 07:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiLBMVf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 07:21:35 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2321865A5;
-        Fri,  2 Dec 2022 04:21:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669983694; x=1701519694;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=RCNCqkazhFBYrQaykaK4k78oh0l+6rQ5XaKkf5iBXLo=;
-  b=St31RbfvJnvwS2xlikxiTbRCnTxYavzCnp3NNhpeiK0axAoTkv9Ggtyf
-   7napnRMgATF0F8XOUBkPvBPcEylPTAEwMeSPSyFG3wODhFiRkz+ES2nDy
-   fAPNTVLtfGUtMcWBgl8LQHp5LYhjBnaBJ4Rx4L6yVeIwdypZCjVgwX4A7
-   FGDEgHNVSF29eA3nYpHt6yDLNe2O5+SlLMJHr00VANQ1SlJTRgWPe68Eo
-   ix1x9ql9IdycSf/iD6/lLiqFjqHa+cPcR6iOvfJOl1bda0che50Im4sI+
-   ZSh4eIuDhylx/5E0GWQ1BzkndBOJ/IPgdGAiTi5Zu/P+3shpoymC3v9ko
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="317091090"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="317091090"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 04:21:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="645012213"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="645012213"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2022 04:21:23 -0800
-Message-ID: <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
-Date:   Fri, 2 Dec 2022 14:22:39 +0200
+        with ESMTP id S233368AbiLBMYC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 07:24:02 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE36CBA6B
+        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 04:24:00 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id q7so5212430ljp.9
+        for <linux-usb@vger.kernel.org>; Fri, 02 Dec 2022 04:24:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B1IE4PC6erRK/A01N47UIMsmxLEl+S0fBRDo4ibGO5I=;
+        b=dn1rHkT/ZUpHyXQkzsJGPlvGVowx9j7sNI5P/+sOF6lJyJwhCYBWbkJwSr3gHcJJPT
+         Q9r6ceBkL275DvXfUzbEqklBMKatqISFq5ByqpfiH77IxA+aqi1nsdx8UqE8aFKOCUve
+         JVl4GDzVLUSZQmwVNuJ/GSOdKxu2UouZMWjkJfJHNeUZLbvWJMeGu6G7EkkctXoe+qmv
+         rbHyfjT0CrCz0n2I7qy7bNGvfhYgxstTUXa3No67EHRP1GiAkgEqGl7/PYlbjat6XoMe
+         Pa6uhNEly0HAYIIlDUmSuXuZXiB1sz/6HXkgNwufU+VG60kgLAEtS1ancfJo+5o2GS09
+         PVFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B1IE4PC6erRK/A01N47UIMsmxLEl+S0fBRDo4ibGO5I=;
+        b=fGLWYikBNpdEZ8TOWASjLw6WcahxHq5GMBbmvpsTJgOIh84E0Hm/UAkP3Zl7CkwMSM
+         UlqcgvqafBCr9Jl8OKef4xZwP3WwUKPZyPP34fGFChW8eYnqBxSRXEZg5iW8rVYMi/Sd
+         0sYJsE1T6hd26MPdR+z7hV/foY2DGLkn6T+o3rdfA2pxeaMV2w3m4Bn3ffeRNeIDTKkn
+         oClkTBTSJ6SQfrU4YnyM4wCN7gl2gKHbfcHzGwZb4pqNf9wx57cwOWSFe5vg1e/4tLsM
+         JJADyCgsXXpqffXjupGKm6Ao57AsMmmWhBqMSjikMGWuXG6RhVAZ2Bw9fytJdt/nJ38S
+         clOg==
+X-Gm-Message-State: ANoB5plDFQJxT+Sl2Eu8U3jMtymZs8f+svu/23vuq0bzWFtupvpUqoLW
+        YxLeGe+vhkcEMEWwiZGeSKZaRA==
+X-Google-Smtp-Source: AA0mqf5wOgdF/ULr5YJPk+SAVqYWOsw8ngbLK8kRKQAy9jLV7eusYZ85qij8jL5qnFKYUl2GvVdx6Q==
+X-Received: by 2002:a2e:b894:0:b0:277:1c8f:7e8c with SMTP id r20-20020a2eb894000000b002771c8f7e8cmr18986171ljp.296.1669983838529;
+        Fri, 02 Dec 2022 04:23:58 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c24-20020a056512075800b004a01105eea2sm997019lfs.150.2022.12.02.04.23.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 04:23:58 -0800 (PST)
+Message-ID: <f633b0f3-9fdb-8beb-7edf-7967c7c0c3d5@linaro.org>
+Date:   Fri, 2 Dec 2022 13:23:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-To:     Arnd Bergmann <arnd@arndb.de>,
+ Thunderbird/102.5.0
+Subject: Re: [RFC PATCH v1 2/2] usb: host: add xhci-exynos to support Exynos
+ SOCs
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daehwan Jung <dh10.jung@samsung.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -70,65 +85,54 @@ References: <1669860811-171746-1-git-send-email-dh10.jung@samsung.com>
  <1669860811-171746-3-git-send-email-dh10.jung@samsung.com>
  <Y4hgnxGMEuizJumr@kroah.com>
  <c524cba6-4438-461a-ab05-9325fe09f832@app.fastmail.com>
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH v1 2/2] usb: host: add xhci-exynos to support Exynos
- SOCs
-In-Reply-To: <c524cba6-4438-461a-ab05-9325fe09f832@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1.12.2022 11.01, Arnd Bergmann wrote:
-> On Thu, Dec 1, 2022, at 09:06, Greg Kroah-Hartman wrote:
->> On Thu, Dec 01, 2022 at 11:13:31AM +0900, Daehwan Jung wrote:
->>> This driver works with xhci platform driver. It needs to override
->>> functions of xhci_plat_hc_driver. Wakelocks are used for sleep/wakeup
->>> scenario of system.
->>
->> So this means that no other platform xhci driver can be supported in the
->> same system at the same time.
->>
->> Which kind of makes sense as that's not anything a normal system would
->> have, BUT it feels very odd.  This whole idea of "override the platform
->> driver" feels fragile, why not make these just real platform drivers and
->> have the xhci platform code be a library that the other ones can use?
->> That way you have more control overall, right?
-
-Agree that overriding the generic platform driver xhci_hc_platform_driver
-from this exynos driver is odd.
-
-But I don't understand how this works.
-Where are the hcds created and added when this xhci-exonys driver binds to
-the device? all this driver does in probe is the overriding?
-
-Am I missing something here?
-
+On 02/12/2022 13:22, Mathias Nyman wrote:
+> On 1.12.2022 11.01, Arnd Bergmann wrote:
+>> On Thu, Dec 1, 2022, at 09:06, Greg Kroah-Hartman wrote:
+>>> On Thu, Dec 01, 2022 at 11:13:31AM +0900, Daehwan Jung wrote:
+>>>> This driver works with xhci platform driver. It needs to override
+>>>> functions of xhci_plat_hc_driver. Wakelocks are used for sleep/wakeup
+>>>> scenario of system.
+>>>
+>>> So this means that no other platform xhci driver can be supported in the
+>>> same system at the same time.
+>>>
+>>> Which kind of makes sense as that's not anything a normal system would
+>>> have, BUT it feels very odd.  This whole idea of "override the platform
+>>> driver" feels fragile, why not make these just real platform drivers and
+>>> have the xhci platform code be a library that the other ones can use?
+>>> That way you have more control overall, right?
 > 
-> Agreed, having another layer here (hcd -> xhci -> xhcd_platform ->
-> xhcd_exynos) would fit perfectly well into how other SoC specific
-> drivers are abstracted. This could potentially also help reduce
-> the amount of code duplication between other soc specific variants
-> (mtk, tegra, mvebu, ...) that are all platform drivers but don't
-> share code with xhci-plat.c.
+> Agree that overriding the generic platform driver xhci_hc_platform_driver
+> from this exynos driver is odd.
 > 
-> Alternatively, it seems that all of the xhci-exynos support could
-> just be part of the generic xhci-platform driver: as far as I can
-> tell, none of the added code is exynos specific at all, instead it
-> is a generic xhci that is using the wakeup_source framework.
+> But I don't understand how this works.
+> Where are the hcds created and added when this xhci-exonys driver binds to
+> the device? all this driver does in probe is the overriding?
+> 
+> Am I missing something here?
 
-Sounds reasonable as well, and if some exynos specific code is needed
-then just create a xhci_plat_priv struct for exynos and pass it in
-of_device_id data like other vendors that use the generic
-xhci-platform driver do.
+Because it is not a driver for Exynos... it's a driver for wakelocks for
+their specific Android use-cases which the manufacturer ships for their
+Android devices. Due to Google GKI, they try to squeeze into upstream.
+But this is huge misconception what should go to upstream and Samsung
+does not want to keep discussing. They just send random patches and
+disappear...
 
--Mathias
+Best regards,
+Krzysztof
 
