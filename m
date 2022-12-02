@@ -2,118 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98B164078E
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 14:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FD3640B42
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 17:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiLBNPi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Dec 2022 08:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S233511AbiLBQxC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Dec 2022 11:53:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiLBNPh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 08:15:37 -0500
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D01C2D34;
-        Fri,  2 Dec 2022 05:15:36 -0800 (PST)
-Received: by mail-pj1-f51.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so5157836pjb.0;
-        Fri, 02 Dec 2022 05:15:35 -0800 (PST)
+        with ESMTP id S233403AbiLBQxB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 11:53:01 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFBF54370
+        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 08:52:58 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id h17so2305129ila.6
+        for <linux-usb@vger.kernel.org>; Fri, 02 Dec 2022 08:52:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pt4n+Bc+eDdCru9ZY4GLZ4Q8PtpiBAtoUiS2Dufe20M=;
+        b=RDLXegfhfNzZVOEiLG3Xs6+uYe8OAYXU1MhaAQWOrsBarzTzN/dPBkKdAMqADWe2BN
+         LwZgOtZEsPva5jY9b0sxLN3yFrNv9HZT5LaXky9DGBme+/+K7aU705E2+llHmX0iIhAj
+         Jn7EY8sIHWNTUGBvJ2wA2W0dzkUc+D8PHjYQw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CXax7MzLMmcpUbR7j4j5Z+A0zH0BPeP/1NeIQzWumhA=;
-        b=8MVgukWp4/TCO8U8xhF3HBlRuihurmBl5EToj1A0UGgweTuDnjoxXmT+M2sIOwfcPH
-         0vno5/8eCo5vWKUUD+7uuo6bRQtXOq6M6qjQyXeINf3xTCbPBLU3EKTDVycAMifWQ/XM
-         Zkd++EPIfNFF89kcB+BYNzRC4SV+ww8iDfnGOhgwKifu+lQ9F25SGEtXavCJSD8/vdJh
-         tNABwC9jLgePVYozT1OGRHeoNb3NjCusPogPVQiwZjct+X/acYLsO3B6YR+F1FxTOsYl
-         WytuycO3//mF44NxzQGtihEQ5/V5/dRZlcc731MLnVTOlrlmZ2Zt1PNz7d1gIssvPhg3
-         /9Cw==
-X-Gm-Message-State: ANoB5pniOyt/e3F6X5wntgjntgmFIJJm1bbiqI6WC1yAr18aemlykh5y
-        hnRvCaW0kgyd8U7ntsrJBHYUaj7ylpxnVyOkmo0MBvmO
-X-Google-Smtp-Source: AA0mqf7rou+HDTGrB7duYcNJqBj1ifeMeXSb9YluHr/oNmFkiW6kdUvNrTQ1CO5rfw2zo45qNcQto+7cIbG4RE18Brw=
-X-Received: by 2002:a17:90a:a60c:b0:213:2e97:5ea4 with SMTP id
- c12-20020a17090aa60c00b002132e975ea4mr81737675pjq.92.1669986934229; Fri, 02
- Dec 2022 05:15:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20221130174658.29282-1-mailhol.vincent@wanadoo.fr>
- <20221130174658.29282-8-mailhol.vincent@wanadoo.fr> <20221202122702.rlxvatn2m6dx7zyp@pengutronix.de>
-In-Reply-To: <20221202122702.rlxvatn2m6dx7zyp@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 2 Dec 2022 22:15:23 +0900
-Message-ID: <CAMZ6Rq+f9wMG7H0k-c4T5Jo+64gk8+0b=tP8Vz26-cx0odG34Q@mail.gmail.com>
-Subject: Re: [PATCH v5 7/7] Documentation: devlink: add devlink documentation
- for the etas_es58x driver
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pt4n+Bc+eDdCru9ZY4GLZ4Q8PtpiBAtoUiS2Dufe20M=;
+        b=3Z/9ktAqhG5Teftqq4EKC4VpuWyU9dU9mLKfz4ojxR1BoRBn+XkzXcEwGELw7PdbJb
+         Lb726+iyyyMkGTca55g1CqHDSRMKnmI/h3QFTKTYxxoVqs66Ux3Acz2kf1imKq7RwLQP
+         VZMqhefTOPHWsn0MJ8mEdMBoQNx44ZAJC3RODHfrO6u36QXJ5LNaopFQI7bMRKDF4rG8
+         gABiNpxmfQT749F+l+S2JfBFYqQqRkgOQ7UDarlZzGLvudNey+owtWM+yH/nGp8gV3Fu
+         5ycVywKosrQE0mt9CFJYsHZ7vQMJgXadA+KldUqFlEr/+jJIjyio/HmxJOKLm8cU23mM
+         G8GQ==
+X-Gm-Message-State: ANoB5pmZDlfaDEEMrLIrye3YkOxp2gSFssN9fxoUUwsAatO+DrkBwLub
+        TgnQ4oarhWeZyoL+fVmlpmN5ng==
+X-Google-Smtp-Source: AA0mqf5258QR3nGa5TuixpgHlPAodopMppWne3AWeZO4Dc+3ajcjKPVWFgo23JOBLlXdud+lP5NhhA==
+X-Received: by 2002:a92:504:0:b0:303:634:b07d with SMTP id q4-20020a920504000000b003030634b07dmr13958276ile.25.1669999977388;
+        Fri, 02 Dec 2022 08:52:57 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id f3-20020a05660215c300b006dfd3599b60sm2326297iow.26.2022.12.02.08.52.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 08:52:56 -0800 (PST)
+Date:   Fri, 2 Dec 2022 16:52:56 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Andre Przywara <andre.przywara@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] usb: misc: onboard_usb_hub: add Genesys Logic
+ GL850G hub support
+Message-ID: <Y4otaPmwWfJ24I7k@google.com>
+References: <20221202081647.3183870-1-uwu@icenowy.me>
+ <20221202081647.3183870-4-uwu@icenowy.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221202081647.3183870-4-uwu@icenowy.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 2 Dec. 2022 at 21:49, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 01.12.2022 02:46:58, Vincent Mailhol wrote:
-> > List all the version information reported by the etas_es58x driver
-> > through devlink. Also, update MAINTAINERS with the newly created file.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  .../networking/devlink/etas_es58x.rst         | 36 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  2 files changed, 37 insertions(+)
-> >  create mode 100644 Documentation/networking/devlink/etas_es58x.rst
-> >
-> > diff --git a/Documentation/networking/devlink/etas_es58x.rst b/Documentation/networking/devlink/etas_es58x.rst
-> > new file mode 100644
-> > index 000000000000..9893e57b625a
-> > --- /dev/null
-> > +++ b/Documentation/networking/devlink/etas_es58x.rst
-> > @@ -0,0 +1,36 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +==========================
-> > +etas_es58x devlink support
-> > +==========================
-> > +
-> > +This document describes the devlink features implemented by the
-> > +``etas_es58x`` device driver.
-> > +
-> > +Info versions
-> > +=============
-> > +
-> > +The ``etas_es58x`` driver reports the following versions
-> > +
-> > +.. list-table:: devlink info versions implemented
-> > +   :widths: 5 5 90
-> > +
-> > +   * - Name
-> > +     - Type
-> > +     - Description
-> > +   * - ``fw``
-> > +     - running
-> > +     - Version of the firmware running on the device. Also available
-> > +       through ``ethtool -i`` as the first member of the
-> > +       ``firmware-version``.
-> > +   * - ``bl``
->             ^^
->             fw.bootloader?
->
-> Fixed that up while applying.
+On Fri, Dec 02, 2022 at 04:16:44PM +0800, Icenowy Zheng wrote:
+> Genesys Logic GL850G is a 4-port USB 2.0 STT hub that has a reset pin to
+> toggle and a 3.3V core supply exported (although an integrated LDO is
+> available for powering it with 5V).
+> 
+> Add the support for this hub, for controlling the reset pin and the core
+> power supply.
+> 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
 
-Thanks for catching this. "fw" was the name in v4. "fw.bootloader" is
-indeed correct.
+Acked-by: Matthias Kaehlcke <mka@chromium.org>
 
-
-Yours sincerely,
-Vincent Mailhol
+> ---
+> Changes in v2:
+> - Sort things, by names or vendor IDs.
+> 
+>  drivers/usb/misc/onboard_usb_hub.c | 2 ++
+>  drivers/usb/misc/onboard_usb_hub.h | 5 +++++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index d63c63942af1..94e7966e199d 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -331,6 +331,7 @@ static struct platform_driver onboard_hub_driver = {
+>  
+>  /************************** USB driver **************************/
+>  
+> +#define VENDOR_ID_GENESYS	0x05e3
+>  #define VENDOR_ID_MICROCHIP	0x0424
+>  #define VENDOR_ID_REALTEK	0x0bda
+>  #define VENDOR_ID_TI		0x0451
+> @@ -407,6 +408,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+>  }
+>  
+>  static const struct usb_device_id onboard_hub_id_table[] = {
+> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> index 34beab8bce3d..62129a6a1ba5 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.h
+> +++ b/drivers/usb/misc/onboard_usb_hub.h
+> @@ -22,10 +22,15 @@ static const struct onboard_hub_pdata ti_tusb8041_data = {
+>  	.reset_us = 3000,
+>  };
+>  
+> +static const struct onboard_hub_pdata genesys_gl850g_data = {
+> +	.reset_us = 3,
+> +};
+> +
+>  static const struct of_device_id onboard_hub_match[] = {
+>  	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
+>  	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+>  	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
+> +	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
+>  	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
+> -- 
+> 2.38.1
+> 
