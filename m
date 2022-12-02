@@ -2,96 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190DB6406BC
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 13:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 920576406CC
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Dec 2022 13:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiLBMYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Dec 2022 07:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S233492AbiLBM1c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Dec 2022 07:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbiLBMYC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 07:24:02 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE36CBA6B
-        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 04:24:00 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id q7so5212430ljp.9
-        for <linux-usb@vger.kernel.org>; Fri, 02 Dec 2022 04:24:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B1IE4PC6erRK/A01N47UIMsmxLEl+S0fBRDo4ibGO5I=;
-        b=dn1rHkT/ZUpHyXQkzsJGPlvGVowx9j7sNI5P/+sOF6lJyJwhCYBWbkJwSr3gHcJJPT
-         Q9r6ceBkL275DvXfUzbEqklBMKatqISFq5ByqpfiH77IxA+aqi1nsdx8UqE8aFKOCUve
-         JVl4GDzVLUSZQmwVNuJ/GSOdKxu2UouZMWjkJfJHNeUZLbvWJMeGu6G7EkkctXoe+qmv
-         rbHyfjT0CrCz0n2I7qy7bNGvfhYgxstTUXa3No67EHRP1GiAkgEqGl7/PYlbjat6XoMe
-         Pa6uhNEly0HAYIIlDUmSuXuZXiB1sz/6HXkgNwufU+VG60kgLAEtS1ancfJo+5o2GS09
-         PVFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B1IE4PC6erRK/A01N47UIMsmxLEl+S0fBRDo4ibGO5I=;
-        b=fGLWYikBNpdEZ8TOWASjLw6WcahxHq5GMBbmvpsTJgOIh84E0Hm/UAkP3Zl7CkwMSM
-         UlqcgvqafBCr9Jl8OKef4xZwP3WwUKPZyPP34fGFChW8eYnqBxSRXEZg5iW8rVYMi/Sd
-         0sYJsE1T6hd26MPdR+z7hV/foY2DGLkn6T+o3rdfA2pxeaMV2w3m4Bn3ffeRNeIDTKkn
-         oClkTBTSJ6SQfrU4YnyM4wCN7gl2gKHbfcHzGwZb4pqNf9wx57cwOWSFe5vg1e/4tLsM
-         JJADyCgsXXpqffXjupGKm6Ao57AsMmmWhBqMSjikMGWuXG6RhVAZ2Bw9fytJdt/nJ38S
-         clOg==
-X-Gm-Message-State: ANoB5plDFQJxT+Sl2Eu8U3jMtymZs8f+svu/23vuq0bzWFtupvpUqoLW
-        YxLeGe+vhkcEMEWwiZGeSKZaRA==
-X-Google-Smtp-Source: AA0mqf5wOgdF/ULr5YJPk+SAVqYWOsw8ngbLK8kRKQAy9jLV7eusYZ85qij8jL5qnFKYUl2GvVdx6Q==
-X-Received: by 2002:a2e:b894:0:b0:277:1c8f:7e8c with SMTP id r20-20020a2eb894000000b002771c8f7e8cmr18986171ljp.296.1669983838529;
-        Fri, 02 Dec 2022 04:23:58 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c24-20020a056512075800b004a01105eea2sm997019lfs.150.2022.12.02.04.23.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 04:23:58 -0800 (PST)
-Message-ID: <f633b0f3-9fdb-8beb-7edf-7967c7c0c3d5@linaro.org>
-Date:   Fri, 2 Dec 2022 13:23:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH v1 2/2] usb: host: add xhci-exynos to support Exynos
- SOCs
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S233477AbiLBM10 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Dec 2022 07:27:26 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6173DCC670
+        for <linux-usb@vger.kernel.org>; Fri,  2 Dec 2022 04:27:25 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p158K-0001lB-Qk; Fri, 02 Dec 2022 13:27:12 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5BC4D1315BB;
+        Fri,  2 Dec 2022 12:27:10 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 13:27:02 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Artur Bujdoso <artur.bujdoso@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
-        eomji.oh@samsung.com
-References: <1669860811-171746-1-git-send-email-dh10.jung@samsung.com>
- <CGME20221201021942epcas2p2429ed37e1f6146b6e1a5bef23141b3f7@epcas2p2.samsung.com>
- <1669860811-171746-3-git-send-email-dh10.jung@samsung.com>
- <Y4hgnxGMEuizJumr@kroah.com>
- <c524cba6-4438-461a-ab05-9325fe09f832@app.fastmail.com>
- <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH v5 7/7] Documentation: devlink: add devlink documentation
+ for the etas_es58x driver
+Message-ID: <20221202122702.rlxvatn2m6dx7zyp@pengutronix.de>
+References: <20221130174658.29282-1-mailhol.vincent@wanadoo.fr>
+ <20221130174658.29282-8-mailhol.vincent@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qhumjgptn36xoee2"
+Content-Disposition: inline
+In-Reply-To: <20221130174658.29282-8-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,39 +59,84 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/12/2022 13:22, Mathias Nyman wrote:
-> On 1.12.2022 11.01, Arnd Bergmann wrote:
->> On Thu, Dec 1, 2022, at 09:06, Greg Kroah-Hartman wrote:
->>> On Thu, Dec 01, 2022 at 11:13:31AM +0900, Daehwan Jung wrote:
->>>> This driver works with xhci platform driver. It needs to override
->>>> functions of xhci_plat_hc_driver. Wakelocks are used for sleep/wakeup
->>>> scenario of system.
->>>
->>> So this means that no other platform xhci driver can be supported in the
->>> same system at the same time.
->>>
->>> Which kind of makes sense as that's not anything a normal system would
->>> have, BUT it feels very odd.  This whole idea of "override the platform
->>> driver" feels fragile, why not make these just real platform drivers and
->>> have the xhci platform code be a library that the other ones can use?
->>> That way you have more control overall, right?
-> 
-> Agree that overriding the generic platform driver xhci_hc_platform_driver
-> from this exynos driver is odd.
-> 
-> But I don't understand how this works.
-> Where are the hcds created and added when this xhci-exonys driver binds to
-> the device? all this driver does in probe is the overriding?
-> 
-> Am I missing something here?
 
-Because it is not a driver for Exynos... it's a driver for wakelocks for
-their specific Android use-cases which the manufacturer ships for their
-Android devices. Due to Google GKI, they try to squeeze into upstream.
-But this is huge misconception what should go to upstream and Samsung
-does not want to keep discussing. They just send random patches and
-disappear...
+--qhumjgptn36xoee2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On 01.12.2022 02:46:58, Vincent Mailhol wrote:
+> List all the version information reported by the etas_es58x driver
+> through devlink. Also, update MAINTAINERS with the newly created file.
+>=20
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  .../networking/devlink/etas_es58x.rst         | 36 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 37 insertions(+)
+>  create mode 100644 Documentation/networking/devlink/etas_es58x.rst
+>=20
+> diff --git a/Documentation/networking/devlink/etas_es58x.rst b/Documentat=
+ion/networking/devlink/etas_es58x.rst
+> new file mode 100644
+> index 000000000000..9893e57b625a
+> --- /dev/null
+> +++ b/Documentation/networking/devlink/etas_es58x.rst
+> @@ -0,0 +1,36 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +etas_es58x devlink support
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +
+> +This document describes the devlink features implemented by the
+> +``etas_es58x`` device driver.
+> +
+> +Info versions
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The ``etas_es58x`` driver reports the following versions
+> +
+> +.. list-table:: devlink info versions implemented
+> +   :widths: 5 5 90
+> +
+> +   * - Name
+> +     - Type
+> +     - Description
+> +   * - ``fw``
+> +     - running
+> +     - Version of the firmware running on the device. Also available
+> +       through ``ethtool -i`` as the first member of the
+> +       ``firmware-version``.
+> +   * - ``bl``
+            ^^
+            fw.bootloader?
 
+Fixed that up while applying.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--qhumjgptn36xoee2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOJ7xMACgkQrX5LkNig
+013Y7AgAnssEQg25CUvEzFSLY+/dbRF2c8RrwDCd03ktRpkfI+k4Aty3/c9XqPIE
+WxqLNMKeLi1qSSw/faRTh2LXz8D8/zGkJBSXG6VDSKyp/5ZCLVW8CfBkvjFi8RWt
+BAKCVg57fhJK6+0aCYs4K4Y1IHcMfSwaOGOVFEYkllVTJm+bCPEzqBEwNnh3Es3i
+9XQx2lauRndXeI+bMLpi50cDOfb1AGwZLnNIgRLrOGxMtdzEn3ricDbgpNAZbZkD
+I4zBb8b/JGXHaIowQf9GxqljLRredRNQOkqjWMiAE9PJlp+JjyYZwD24FMChpg5C
+G21cpJnOrx0EN4ZtcCgcMYvBxQg9Ug==
+=EdDV
+-----END PGP SIGNATURE-----
+
+--qhumjgptn36xoee2--
