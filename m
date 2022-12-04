@@ -2,89 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F95641CC1
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Dec 2022 12:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3A1641CD0
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Dec 2022 13:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiLDLsW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Dec 2022 06:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
+        id S230024AbiLDMKp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Dec 2022 07:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiLDLsV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Dec 2022 06:48:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE51DE91;
-        Sun,  4 Dec 2022 03:48:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86C00B80921;
-        Sun,  4 Dec 2022 11:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98782C433C1;
-        Sun,  4 Dec 2022 11:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670154497;
-        bh=xXdpfa9NBAzhsXeP373CriSbG2R7fBgHZOhdJePlMak=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n2nJwwblzUoZSrfMPK6nxZNFkQrJsygezztuTSAUMonwzsnk8WyPaW8dUOcY5Hwxx
-         Hmwk6C4v14U1RrFGX+rNOdxcY8Zsu8pWbdGZIWxHVVLr9Wq6bNhLrF4trMboRIcjWY
-         fnZXqFKPy1aGQY1aERZOKTjz4/QP/17OPIWwSgyTJNfefZauzKfKB6Q4OmVn9Nd7LW
-         qrOUk9a6ai5XGA5Mby3ugZ3hpyMbaNRY9HIgn0IwldYib+rdnDKqhNDb2i6XCQaYXc
-         T44lEHZgIyk4+FZCFKmsjhDtNXD+fUt+AjHERhmGk2MorbR3Snq7Q8FsJ65qRPwWJh
-         1cBzvmZp+b0Xg==
-Date:   Sun, 4 Dec 2022 13:48:07 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        patchwork-lst@pengutronix.de
-Subject: Re: [PATCH 2/2] net: asix: Avoid looping when the device is
- diconnected
-Message-ID: <Y4yI95L+LYhp5ESL@unreal>
-References: <20221201175525.2733125-1-l.stach@pengutronix.de>
- <20221201175525.2733125-2-l.stach@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221201175525.2733125-2-l.stach@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229753AbiLDMKn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Dec 2022 07:10:43 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EAF17AB8;
+        Sun,  4 Dec 2022 04:10:42 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 284E55C00FF;
+        Sun,  4 Dec 2022 07:10:40 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sun, 04 Dec 2022 07:10:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670155840; x=1670242240; bh=CoGojBldvp
+        8vts1WXDufl3QTeeG6RrXZWoBhB7qP5HI=; b=Bt3t+pCvXTostL74alusXgNN2I
+        oLhoOcA34WlUK1HpM8zYrIq09NT6vJeDNBj/QdZnjHPCSY+ZUy+12uImKcNpjSPM
+        o0Qr+CIcrehvro9ebDcKpmBO8KNVO0BSLyVsZqv9jkmom0XPxGpvLeiycBhyso/8
+        pWUyCCDG5sY1PPjQhiPvm7NU5068KCV9X/PWB2P1GHq+0C96bygXAKrn+V5Ukhl7
+        s7lNWObcsg2gwh4/61eV3/1UOs8rIoQb6FB3dYEy/Ck7h0skHoTgrMXUYD92caiH
+        LVymfXQoewwpqSKzAiqVC6quJzrOTZYuY02ME7g19RNKqeqgpVhO3za9ITpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1670155840; x=1670242240; bh=CoGojBldvp8vts1WXDufl3QTeeG6
+        RrXZWoBhB7qP5HI=; b=DxeCgNBVAAMM2gNNTDGahzTQIA8E/3lkh9laTq8iI5JI
+        oocBov/dRgohjG7gGHMhodEsrIvcUGfX70TlrC5hErvHwlfTVVTfGqKcTDhS329l
+        rD+FaM0sMNpM3jsx9euuXm8KFkx502Dwdn3v5snXh5/yrmCGjVUmHg4VFsC3IQOm
+        rLgVcc1ZcgdX7GJ2QRCaCaXSBBv1eAIhu8iM2xjO6xiG+7n3ECRMdG0oJq9aKmiI
+        6SG12snIId67D0+6rJud3wzLSmPtuY+EFsHc/yywdYZFUwR088jM6Mk0ITGUNKvn
+        qf3WI/ip6fDNv+zXdoNPQCXdP6unHlzazkw2UySLnA==
+X-ME-Sender: <xms:P46MYzvkUIE9aAbyhKZ5xYdb6E_zNjnLgcSXVed3u_JPDYFlalAFUA>
+    <xme:P46MY0dL2JSgQQQFPD_QnBCs9YwuQ0hZCxxxWbYhrsT-7PbvOO3waNCDVA8UBJ5Jd
+    sc6wTVP5DdQ_oSIErY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgdefkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:P46MY2wvjqIL0WULSDsDjK2-iWTcNk577njI8u8urdyWK-INhkIjdw>
+    <xmx:P46MYyOlmJlUGLbTFFm1o1B00hIvptlHzyHb1bGuRvSjePi_cyJwKw>
+    <xmx:P46MYz-G41yzfBtB2Sie70DPf6o0D0uviTpg1dU4jIB6f2uxc1rpew>
+    <xmx:QI6MY_TKF5dWc-RYdd4P32M5mWDH0VGUvz1FAOLC-6R8Be_t2ivPsQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 623A3B60086; Sun,  4 Dec 2022 07:10:39 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <81a7715b-559f-4c5c-bdb6-1aa00d409155@app.fastmail.com>
+In-Reply-To: <Y4wnGgMLOr04RwvU@google.com>
+References: <Y4wnGgMLOr04RwvU@google.com>
+Date:   Sun, 04 Dec 2022 13:10:19 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, soc@kernel.org
+Cc:     "Li Yang" <leoyang.li@nxp.com>, "Qiang Zhao" <qiang.zhao@nxp.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 06:55:25PM +0100, Lucas Stach wrote:
-> We've seen device access fail with -EPROTO when the device has been
-> recently disconnected and before the USB core had a chance to handle
-> the disconnect hub event. It doesn't make sense to continue on trying
-> to enable host access when the adapter is gone.
-> 
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> ---
->  drivers/net/usb/asix_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> index be1e103b7a95..28b31e4da020 100644
-> --- a/drivers/net/usb/asix_common.c
-> +++ b/drivers/net/usb/asix_common.c
-> @@ -96,7 +96,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
->  
->  	for (i = 0; i < AX_HOST_EN_RETRIES; ++i) {
->  		ret = asix_set_sw_mii(dev, in_pm);
-> -		if (ret == -ENODEV || ret == -ETIMEDOUT)
-> +		if (ret == -ENODEV || ret == -ETIMEDOUT || ret == -EPROTO)
+On Sun, Dec 4, 2022, at 05:50, Dmitry Torokhov wrote:
+>
+> SoC team, the problematic patch has been in next for a while and it
+> would be great to get the fix in to make sure the driver is not broken
+> in 6.2. Thanks!
 
-It looks like you can put if (ret < 0) here,
+I have no problem taking thsi patch, but I get a merge conflict that
+I'm not sure how to resolve:
 
->  			break;
->  		usleep_range(1000, 1100);
->  		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
-> -- 
-> 2.30.2
-> 
+
+@@@ -186,23 -182,27 +180,43 @@@ struct qe_pin *qe_pin_request(struct de
+        if (WARN_ON(!gc)) {
+                err = -ENODEV;
+                goto err0;
+++<<<<<<< HEAD
+ +      }
+ +      qe_pin->gpiod = gpiod;
+ +      qe_pin->controller = gpiochip_get_data(gc);
+ +      /*
+ +       * FIXME: this gets the local offset on the gpio_chip so that the driver
+ +       * can manipulate pin control settings through its custom API. The real
+ +       * solution is to create a real pin control driver for this.
+ +       */
+ +      qe_pin->num = gpio_chip_hwgpio(gpiod);
+ +
+ +      if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
+ +              pr_debug("%s: tried to get a non-qe pin\n", __func__);
+ +              gpiod_put(gpiod);
+++=======
++       } else if (!fwnode_device_is_compatible(gc->fwnode,
++                                               "fsl,mpc8323-qe-pario-bank")) {
++               dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
+++>>>>>>> soc: fsl: qe: request pins non-exclusively
+                err = -EINVAL;
+-               goto err0;
++       } else {
++               qe_pin->controller = gpiochip_get_data(gc);
++               /*
++                * FIXME: this gets the local offset on the gpio_chip so that
++                * the driver can manipulate pin control settings through its
++                * custom API. The real solution is to create a real pin control
++                * driver for this.
++                */
++               qe_pin->num = desc_to_gpio(gpiod) - gc->base;
+        }
+
+Could you rebase the patch on top of the soc/driver branch in the
+soc tree and send the updated version?
+
+       Arnd
