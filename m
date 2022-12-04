@@ -2,77 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3368F641B91
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Dec 2022 09:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554F6641BAC
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Dec 2022 09:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiLDI33 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Dec 2022 03:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S229997AbiLDIrR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Dec 2022 03:47:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiLDI3Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Dec 2022 03:29:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B711788B;
-        Sun,  4 Dec 2022 00:29:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6229FCE09FA;
-        Sun,  4 Dec 2022 08:29:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B2CC433D6;
-        Sun,  4 Dec 2022 08:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670142560;
-        bh=+a58Xlrk1zPi1XTGswW/fpzCd8HEgPcXN9oAM3qng3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ItYEw8VOEtKMLq/2r6U0ly/j4C2Lidu+tiBqhbnzk+g0Ddmvp36fGOJfNkuA/TbRm
-         bBgciIxRm+ztkjq6ZhkvPIQzB3p2isKI04kyrY+BRWxVNsIi1glQC08jHNazN+Snfp
-         i2aOPaXSsmzOCTj8Yj/tUPcQXMXqVxdLwhjRs6r8=
-Date:   Sun, 4 Dec 2022 09:29:16 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
- implement v4l2 enum api calls
-Message-ID: <Y4xaXHLoiPupWM6V@kroah.com>
-References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
- <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
+        with ESMTP id S229994AbiLDIrQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Dec 2022 03:47:16 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A58186F9
+        for <linux-usb@vger.kernel.org>; Sun,  4 Dec 2022 00:47:16 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id f9so7940772pgf.7
+        for <linux-usb@vger.kernel.org>; Sun, 04 Dec 2022 00:47:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QutOAL+nMDB4Cb3AtDiIQ2iv82OlmswSDdCAvRLXxpo=;
+        b=jEUgJbFkejprgcotd3OgshHJzjqLYMr1//21XcDrGTPmwsKzQs67SalriJk5yogCZD
+         naMHk25OwpidKgNZsfrNIfa+8KIHp+Fed3d1ByUN8hbyMCMKMsCsW/xCpWzbn22gYWdX
+         gcktV1BGgq9UA1HLNUsUqCB3LAlewBtqotoqkhBdreR0e6SusnF/Y15UoSeGNjAAtcsU
+         gQ0PXxwqX9Vfq0U48pbgEl04VdmQB3jvH4XBD10Ms61v25i7z2Jd2LNKLSIaHIFJws6O
+         uKyOiJRhKT5mzT+GA22MIVTOPd5gU5+wXdjlmyotkLAE2HNhkykDA0OjmWt+VAHOYiFF
+         oynw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QutOAL+nMDB4Cb3AtDiIQ2iv82OlmswSDdCAvRLXxpo=;
+        b=E9bR23JR1AQ9fYZX1sJyLDA+G/SC7MvNlyVjq16Yjw5TJ6HzjPWG1C/MGyX7ndxJTK
+         3KrNZ/N6G+ksOo2LmzTP/rBialLkmX19xvjFKog0bWbWTtmV5QOw4zunnuTjahN+c0pE
+         hyJaqwme8XnxgaLw3JgwVKi2o9ps1OAZbr+TB4A3fhiKKdqkUDj/KifNHo+kbjbJqGRu
+         lGwVv+fphqI3LGeN6RTtLfYV3qVNLqoOix0iCQS9TsGP29Urcl+pFAKCLY/2j0mbKOiT
+         oYPI3I0+UxtgaD5bnvKlFISOM5HRpOJG6cQXa5HVqbIh/O2d3MiVL2wYMb7fEiXusXII
+         5RjQ==
+X-Gm-Message-State: ANoB5pkgdQ3djPYANaiQTdwWlQR2MtznVdviIfiifMxvjms3L+q1BprG
+        xUn4b8Hmc2DGM43DoWZSSsf0P41s5wFGnZ/pHS7eyw==
+X-Google-Smtp-Source: AA0mqf6R+Tp4dvP/ZzQ9B2oqndBCvDq8NSf+W9/couiaPGS+SwR5sgWtCCN8VoBu0aTxsUBc4fXXJx7mHHcJ94WiuWQ=
+X-Received: by 2002:a63:eb01:0:b0:477:5a8f:8037 with SMTP id
+ t1-20020a63eb01000000b004775a8f8037mr51393130pgh.227.1670143635576; Sun, 04
+ Dec 2022 00:47:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220831001555.285081-1-badhri@google.com> <Yw90JmdIxg/YdUYH@kuha.fi.intel.com>
+ <7bf33aaa-11d3-2ff2-8c32-70e11340a3a9@roeck-us.net>
+In-Reply-To: <7bf33aaa-11d3-2ff2-8c32-70e11340a3a9@roeck-us.net>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Sun, 4 Dec 2022 00:46:38 -0800
+Message-ID: <CAPTae5JmtEGyDV0ZUn3x_yOmRu8bWE6zuZ5vqSFqGFJOdHHzoA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] usb: typec: tcpm: Add callbacks to mitigate
+ wakeups due to contaminant
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
-> Hi Michael,
-> 
-> On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
-> > This series improves the uvc video gadget by parsing the configfs
-> > entries. With the configfs data, the userspace now is able to use simple
-> > v4l2 api calls like enum and try_format to check for valid configurations
-> > initially set by configfs.
-> 
-> I've realized that this whole series got merged, despite my multiple
-> attempts to explain why I think it's not a good idea. The UVC gadget
-> requires userspace support, and there's no point in trying to move all
-> these things to the kernel side. It only bloats the kernel, makes the
-> code more complex, more difficult to maintain, and will make UVC 1.5
-> support more difficult.
+Thanks for taking the time out to review !
+Circling back to address  the feedback here in Version 3 of the patchset.
 
-I can easily revert them, but I did not see any objections to them
-originally and so I merged them as is the normal method :)
+I was able to move the logic around  disconnect_while_debounce to the
+lower level maxim tcpc driver.
+However, I couldn't incorporate a callback as generic as run_state_machine.
+Instead I have added a callback, is_potential_contaminant, which calls
+the lower tcpc driver for every state transition in the TCPM state
+machine.
+This is somewhat similar to what Heikki had suggested but instead of
+calling it at the end, had to call the is_potential_contaminant at the
+beginning.
+is_potential_contaminant would allow the lower level tcpc driver to
+determine presence of potential contaminant.
+The CHECK_CONTAMINANT state in TCPM had to be retained as TCPM should
+not be reacting to changes in the system while the lower level tcpc
+driver is waiting for the port to be clean.
 
-thanks,
+Sending out the Version 3 of the patchset.
 
-greg k-h
+Thanks,
+Badhri
+
+
+On Wed, Aug 31, 2022 at 10:51 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 8/31/22 07:45, Heikki Krogerus wrote:
+> > Hi Badhri,
+> >
+> > On Tue, Aug 30, 2022 at 05:15:53PM -0700, Badhri Jagan Sridharan wrote:
+> >> On some of the TCPC implementations, when the Type-C port is exposed
+> >> to contaminants, such as water, TCPC stops toggling while reporting OPEN
+> >> either by the time TCPM reads CC pin status or during CC debounce
+> >> window. This causes TCPM to be stuck in TOGGLING state. If TCPM is made
+> >> to restart toggling, the behavior recurs causing redundant CPU wakeups
+> >> till the USB-C port is free of contaminant.
+> >>
+> >> [206199.287817] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> >> [206199.640337] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> >> [206199.985789] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> >> ...
+> >>
+> >> To mitigate redundant TCPM wakeups, TCPCs which do have the needed hardware
+> >> can implement the check_contaminant callback which is invoked by TCPM
+> >> to evaluate for presence of contaminant. Lower level TCPC driver can
+> >> restart toggling through TCPM_PORT_CLEAN event when the driver detects
+> >> that USB-C port is free of contaminant. check_contaminant callback also passes
+> >> the disconnect_while_debounce flag which when true denotes that the CC pins
+> >> transitioned to OPEN state during the CC debounce window.
+> >
+> > I'm a little bit concerned about the size of the state machine. I
+> > think this is a special case that at least in the beginning only the
+> > Maxim port controller can support, but it's still mixed into the
+> > "generic" state machine.
+> >
+> > How about if we just add "run_state_machine" callback for the port
+> > controller drivers so they can handle this kind of special cases on
+> > their own - they can then also add custom states?
+> >
+>
+> Same concern here. I would very much prefer an approach as suggested below,
+> especially since the changes around the added disconnect_while_debounce flag
+> are extensive and difficult to verify.
+>
+> Thanks,
+> Guenter
+>
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 904c7b4ce2f0c..91c22945ba258 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -4858,9 +4858,11 @@ static void run_state_machine(struct tcpm_port *port)
+> >                  tcpm_set_state(port, port->pwr_role == TYPEC_SOURCE ? SRC_READY : SNK_READY, 0);
+> >                  break;
+> >          default:
+> > -               WARN(1, "Unexpected port state %d\n", port->state);
+> >                  break;
+> >          }
+> > +
+> > +       if (port->tcpc->run_state_machine)
+> > +               port->tcpc->run_state_machine(port->tcpc);
+> >   }
+> >
+> >   static void tcpm_state_machine_work(struct kthread_work *work)
+> >
+> > thanks,
+> >
+>
