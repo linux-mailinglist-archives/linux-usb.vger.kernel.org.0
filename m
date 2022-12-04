@@ -2,149 +2,272 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC8D641948
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Dec 2022 22:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C363641AB4
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Dec 2022 05:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiLCVq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Dec 2022 16:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S229925AbiLDEul (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Dec 2022 23:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiLCVq2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Dec 2022 16:46:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5AE1C907
-        for <linux-usb@vger.kernel.org>; Sat,  3 Dec 2022 13:46:26 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1p1aL2-0006sD-GU; Sat, 03 Dec 2022 22:46:24 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1p1aL0-0002T4-Np; Sat, 03 Dec 2022 22:46:22 +0100
-Date:   Sat, 3 Dec 2022 22:46:22 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
- implement v4l2 enum api calls
-Message-ID: <20221203214622.GA15222@pengutronix.de>
-References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
- <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
+        with ESMTP id S229579AbiLDEuk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Dec 2022 23:50:40 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF42140E9;
+        Sat,  3 Dec 2022 20:50:38 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id b11so8394969pjp.2;
+        Sat, 03 Dec 2022 20:50:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G5RXZPYNU+MGBPjRAeU3aYtU4jqo7I+GsemvhOJe/IQ=;
+        b=HZ3Jzy08bo6BR6ef6vSMmFg8qNnkSsmht0/NEpeDT2monTU4soJcvmDXBT/2uL+Ms6
+         pMDOvTtn8Cy+vUunaoSxxsr6Q6CQWtskPwC0EN/1D30EgSz0Xr2y02Yze/9W0QZs4KR2
+         1Qz2XJqQs7+fQ21Q3litDCICMKO6HF+Hs919/l9J/KIvhhP4QmFhiJvk8VbXGUZuf2BB
+         jBs91beu7NBUSDIzfOiO31Gwh5vkQxU04Mt5ch0qx1YnXU5yymfiJ769rsvFEJg77qqp
+         XtzpgW4vWao/iYKQp+aLUF3kjvQq5OPg6G3cUGHsDxwWTtePDXCmJaWY9tBCPH4f/mAo
+         Nsbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5RXZPYNU+MGBPjRAeU3aYtU4jqo7I+GsemvhOJe/IQ=;
+        b=ZInkTyZlyRt0zyMJgKg2LbnMsqiTGYFFVL6gru0+ZLeiEBZSJaOP9oDOD/ABhwZOvP
+         TM1AOYlJZjV+QVNWUB2WS4jEc8wkFcHyKesRA9Okq8dyA5gNNkXn6nfRQgVNW28JEUOk
+         jZp31+4IrzgpZAooM0D0jr/PmJbGK5ZKkMM0ojZ+sxr5s9IZudfsVEByxQcQeEwDXkmr
+         rny57ZNVw3gPkjMiX/Cv+u+zB2mh0BsV/DsVoHGEjbPotP4EoICV3ofi2dMwM0lBfzZx
+         auUlTqZHAjc+ww9Yk68Wvoy4+/3U4eziR38OuHXDGPNUjaXaBZ/acTIifzbqFhjfmt1E
+         LVrA==
+X-Gm-Message-State: ANoB5plX/261OMDwOlZQSDEFzkOTlVZlULj8r45yO6jtaNbsE+nd5/gh
+        UhzDk2/ELT0+2pcKNxJXFwQ=
+X-Google-Smtp-Source: AA0mqf7wyNuhKRXDWggFHjgJr0OniHRf0fRJqFY/fRXX3I4DTnRHj/XYZ0YfuFTr9qK8qWVZ1wXsfw==
+X-Received: by 2002:a17:90a:9c5:b0:219:89c3:23a9 with SMTP id 63-20020a17090a09c500b0021989c323a9mr11145029pjo.212.1670129438001;
+        Sat, 03 Dec 2022 20:50:38 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:50bf:ab09:e932:bfd2])
+        by smtp.gmail.com with ESMTPSA id i10-20020a170902e48a00b00189bf5dc96dsm3575476ple.230.2022.12.03.20.50.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Dec 2022 20:50:37 -0800 (PST)
+Date:   Sat, 3 Dec 2022 20:50:34 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
+Cc:     Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
+Message-ID: <Y4wnGgMLOr04RwvU@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Kj7319i9nmIyA2yE"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Commit 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()") changed
+qe_pin_request() to request and hold GPIO corresponding to a given pin.
+Unfortunately this does not work, as fhci-hcd requests these GPIOs
+first, before calling qe_pin_request() (see
+drivers/usb/host/fhci-hcd.c::of_fhci_probe()).
+To fix it change qe_pin_request() to request GPIOs non-exclusively, and
+free them once the code determines GPIO controller and offset for each
+GPIO/pin.
 
---Kj7319i9nmIyA2yE
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Also reaching deep into gpiolib implementation is not the best idea. We
+should either export gpio_chip_hwgpio() or keep converting to the global
+gpio numbers space until we fix the driver to implement proper pin
+control.
 
-Hi Laurent,
+Fixes: 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
 
-On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
->On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
->> This series improves the uvc video gadget by parsing the configfs
->> entries. With the configfs data, the userspace now is able to use simple
->> v4l2 api calls like enum and try_format to check for valid configurations
->> initially set by configfs.
->
->I've realized that this whole series got merged, despite my multiple
->attempts to explain why I think it's not a good idea. The UVC gadget
->requires userspace support, and there's no point in trying to move all
->these things to the kernel side. It only bloats the kernel, makes the
->code more complex, more difficult to maintain, and will make UVC 1.5
->support more difficult.
+SoC team, the problematic patch has been in next for a while and it
+would be great to get the fix in to make sure the driver is not broken
+in 6.2. Thanks!
 
-Those patches that got merged are already a compromise. And I think a
-better one. Since the last rounds I realized that many steps that I
-thought would be needed in the kernel, can indeed be made in userspace.
-So beside thise code that only adds the typical vidioc functions to
-parse what is configured in configfs. There is nothing that changed the
-working function of the gadget. That said, it is up to you to use the
-vidiocs or your application sticks with own parsing of the configfs.
+ drivers/soc/fsl/qe/gpio.c   | 71 ++++++++++++++++++-------------------
+ drivers/usb/host/fhci-hcd.c |  2 +-
+ include/soc/fsl/qe/qe.h     |  5 +--
+ 3 files changed, 38 insertions(+), 40 deletions(-)
 
-So, with that said, I am unsure what you are exactly unhappy about.
-Beside the points you mentioned in the previous mail.
+diff --git a/drivers/soc/fsl/qe/gpio.c b/drivers/soc/fsl/qe/gpio.c
+index 0ee887f89deb..5bb71a2b5b7a 100644
+--- a/drivers/soc/fsl/qe/gpio.c
++++ b/drivers/soc/fsl/qe/gpio.c
+@@ -13,7 +13,7 @@
+ #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+-#include <linux/of_gpio.h>
++#include <linux/of_gpio.h>	/* for of_mm_gpio_chip */
+ #include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/slab.h>
+@@ -21,13 +21,6 @@
+ #include <linux/property.h>
+ 
+ #include <soc/fsl/qe/qe.h>
+-/*
+- * FIXME: this is legacy code that is accessing gpiolib internals in order
+- * to implement a custom pin controller. The proper solution is to create
+- * a real combined pin control and GPIO driver in drivers/pinctrl. However
+- * this hack is here for legacy code reasons.
+- */
+-#include "../../../gpio/gpiolib.h"
+ 
+ struct qe_gpio_chip {
+ 	struct of_mm_gpio_chip mm_gc;
+@@ -149,20 +142,19 @@ struct qe_pin {
+ 	 * something like qe_pio_controller. Someday.
+ 	 */
+ 	struct qe_gpio_chip *controller;
+-	struct gpio_desc *gpiod;
+ 	int num;
+ };
+ 
+ /**
+  * qe_pin_request - Request a QE pin
+- * @np:		device node to get a pin from
+- * @index:	index of a pin in the device tree
++ * @dev:	device to get the pin from
++ * @index:	index of the pin in the device tree
+  * Context:	non-atomic
+  *
+  * This function return qe_pin so that you could use it with the rest of
+  * the QE Pin Multiplexing API.
+  */
+-struct qe_pin *qe_pin_request(struct device_node *np, int index)
++struct qe_pin *qe_pin_request(struct device *dev, int index)
+ {
+ 	struct qe_pin *qe_pin;
+ 	struct gpio_chip *gc;
+@@ -171,40 +163,46 @@ struct qe_pin *qe_pin_request(struct device_node *np, int index)
+ 
+ 	qe_pin = kzalloc(sizeof(*qe_pin), GFP_KERNEL);
+ 	if (!qe_pin) {
+-		pr_debug("%s: can't allocate memory\n", __func__);
++		dev_dbg(dev, "%s: can't allocate memory\n", __func__);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+-	gpiod = fwnode_gpiod_get_index(of_fwnode_handle(np), NULL, index, GPIOD_ASIS, "qe");
+-	if (IS_ERR(gpiod)) {
+-		err = PTR_ERR(gpiod);
+-		goto err0;
+-	}
+-	if (!gpiod) {
+-		err = -EINVAL;
++	/*
++	 * Request gpio as nonexclusive as it was likely was reserved by
++	 * the caller, and we are not planning on controlling it, we only
++	 * need the descriptor to the to the gpio chip structure.
++	 */
++	gpiod = gpiod_get_index(dev, NULL, index,
++			        GPIOD_ASIS | GPIOD_FLAGS_BIT_NONEXCLUSIVE);
++	err = PTR_ERR_OR_ZERO(gpiod);
++	if (err)
+ 		goto err0;
+-	}
++
+ 	gc = gpiod_to_chip(gpiod);
+ 	if (WARN_ON(!gc)) {
+ 		err = -ENODEV;
+ 		goto err0;
+-	}
+-	qe_pin->gpiod = gpiod;
+-	qe_pin->controller = gpiochip_get_data(gc);
+-	/*
+-	 * FIXME: this gets the local offset on the gpio_chip so that the driver
+-	 * can manipulate pin control settings through its custom API. The real
+-	 * solution is to create a real pin control driver for this.
+-	 */
+-	qe_pin->num = gpio_chip_hwgpio(gpiod);
+-
+-	if (!fwnode_device_is_compatible(gc->fwnode, "fsl,mpc8323-qe-pario-bank")) {
+-		pr_debug("%s: tried to get a non-qe pin\n", __func__);
+-		gpiod_put(gpiod);
++	} else if (!fwnode_device_is_compatible(gc->fwnode,
++						"fsl,mpc8323-qe-pario-bank")) {
++		dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
+ 		err = -EINVAL;
+-		goto err0;
++	} else {
++		qe_pin->controller = gpiochip_get_data(gc);
++		/*
++		 * FIXME: this gets the local offset on the gpio_chip so that
++		 * the driver can manipulate pin control settings through its
++		 * custom API. The real solution is to create a real pin control
++		 * driver for this.
++		 */
++		qe_pin->num = desc_to_gpio(gpiod) - gc->base;
+ 	}
+-	return qe_pin;
++
++	/* We no longer need this descriptor */
++	gpiod_put(gpiod);
++
++	if (!err)
++		return qe_pin;
++
+ err0:
+ 	kfree(qe_pin);
+ 	pr_debug("%s failed with status %d\n", __func__, err);
+@@ -222,7 +220,6 @@ EXPORT_SYMBOL(qe_pin_request);
+  */
+ void qe_pin_free(struct qe_pin *qe_pin)
+ {
+-	gpiod_put(qe_pin->gpiod);
+ 	kfree(qe_pin);
+ }
+ EXPORT_SYMBOL(qe_pin_free);
+diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+index 64a64140c2fd..92794ffc25c8 100644
+--- a/drivers/usb/host/fhci-hcd.c
++++ b/drivers/usb/host/fhci-hcd.c
+@@ -651,7 +651,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
+ 	}
+ 
+ 	for (j = 0; j < NUM_PINS; j++) {
+-		fhci->pins[j] = qe_pin_request(node, j);
++		fhci->pins[j] = qe_pin_request(dev, j);
+ 		if (IS_ERR(fhci->pins[j])) {
+ 			ret = PTR_ERR(fhci->pins[j]);
+ 			dev_err(dev, "can't get pin %d: %d\n", j, ret);
+diff --git a/include/soc/fsl/qe/qe.h b/include/soc/fsl/qe/qe.h
+index b02e9fe69146..eb5079904cc8 100644
+--- a/include/soc/fsl/qe/qe.h
++++ b/include/soc/fsl/qe/qe.h
+@@ -172,14 +172,15 @@ static inline int par_io_data_set(u8 port, u8 pin, u8 val) { return -ENOSYS; }
+ /*
+  * Pin multiplexing functions.
+  */
++struct device;
+ struct qe_pin;
+ #ifdef CONFIG_QE_GPIO
+-extern struct qe_pin *qe_pin_request(struct device_node *np, int index);
++extern struct qe_pin *qe_pin_request(struct device *dev, int index);
+ extern void qe_pin_free(struct qe_pin *qe_pin);
+ extern void qe_pin_set_gpio(struct qe_pin *qe_pin);
+ extern void qe_pin_set_dedicated(struct qe_pin *pin);
+ #else
+-static inline struct qe_pin *qe_pin_request(struct device_node *np, int index)
++static inline struct qe_pin *qe_pin_request(struct device *dev, int index)
+ {
+ 	return ERR_PTR(-ENOSYS);
+ }
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
 
->I'm fairly unhappy with this, it will lower my trust towards your
->patches.
 
-If you don't trust my patches, than review them or at least nack them
-with a comment so we have an object of disscussion.
-
->> Michael Grzeschik (4):
->>   media: v4l: move helper functions for fractions from uvc to
->>     v4l2-common
->>   media: uvcvideo: move uvc_format_desc to common header
->>   usb: gadget: uvc: add v4l2 enumeration api calls
->>   usb: gadget: uvc: add v4l2 try_format api call
->>
->>  drivers/media/usb/uvc/uvc_ctrl.c       |   1 +
->>  drivers/media/usb/uvc/uvc_driver.c     | 290 +-------------------
->>  drivers/media/usb/uvc/uvc_v4l2.c       |  14 +-
->>  drivers/media/usb/uvc/uvcvideo.h       | 147 ----------
->>  drivers/media/v4l2-core/v4l2-common.c  |  86 ++++++
->>  drivers/usb/gadget/function/f_uvc.c    |  30 +++
->>  drivers/usb/gadget/function/uvc.h      |   2 +
->>  drivers/usb/gadget/function/uvc_v4l2.c | 286 ++++++++++++++++++++
->>  include/media/v4l2-common.h            |   4 +
->>  include/media/v4l2-uvc.h               | 359 +++++++++++++++++++++++++
->>  10 files changed, 776 insertions(+), 443 deletions(-)
->>  create mode 100644 include/media/v4l2-uvc.h
->
->--=20
->Regards,
->
->Laurent Pinchart
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---Kj7319i9nmIyA2yE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmOLw6wACgkQC+njFXoe
-LGQldw//c6UC+KvrXTrTZDT2PoaJswrVPxxLfHR/WJrqNgylF6CKQBu1K2WqJY6e
-XCe4zixGTyt10aVNg7GIePII7CPHfH2TbUEC+tQZGUq1tcZuUfy7gnpdxmMeZzJk
-ggL9OeqeXz7NO+ChXbhmPp1a8m44LekE5UeNsJVtHBG5boosJj03fzZRZR2Hru7h
-RjBkptdsEtFipbsUwOZR4+pYN9V5bwyWzRQtQbLWmPp3b5aFJuUuGgwmpf07KGvd
-IK3MtJi2xcyaZzYOqJB1jviK+ZcDPfYtjafSKOlkY8FwQCLTFbAbVbaW3bf/cTk/
-by53a8wd4e9YucoWWtEtCgkRXP8Z8f4EWZLnxzunTulkdfoDnmXIvCGMgci5lnhE
-BmLtL82GylmNrh7O6gVIOwkDS3lLu+EAtSW1CYnlGZXJf3x+imVBJkw0AUzDQXeA
-hAuOy9GmsmIUqpw360L1d5ko6c6BG0jjxMhX/8Pb56DaYBx2Pb/2Ck7HzWZ1SrPU
-tR+HgNC2FjAjmPoHr6DurKIzy3vFRyi0qyuVVsQIj45DART4ju1CtBEVnbG1vHvw
-iBCXm8SXwqxMw4JOosaJbll8+mCK1qozgm/goHcFp9akEC17gNb7J58rSX9De06i
-abzgVfcLku9sUut2Uc7KOvBykScEpnIVKYOCO3jfZtuwMe9Ir20=
-=7jfI
------END PGP SIGNATURE-----
-
---Kj7319i9nmIyA2yE--
+-- 
+Dmitry
