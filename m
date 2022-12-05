@@ -2,134 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA44964365F
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 22:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0106436A8
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 22:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiLEVF1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 16:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S232762AbiLEVRZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 16:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiLEVEs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 16:04:48 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173CB10F;
-        Mon,  5 Dec 2022 13:04:21 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id c13so5505490pfp.5;
-        Mon, 05 Dec 2022 13:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TpZoCNuVtqWmqXfOBYxoJCLHU/tCYzYlfr7fdZ1HLBU=;
-        b=PC0oDyi/tmGrc1uhDSRSEHyMY+H+R9uB+dmHF3Y35EYWmpVS2VY+Xrv+sssREll6lq
-         KttFq0viN82AH9/OKk8DWaa5QQK5ITu/FGFnPaWo9T5LoNcWu4JgQ/t7xCCmrcFH/YqH
-         ga0N38vcc6CnlDsoxLkPblh8QNaxgUeBdq48dpKPheV6rGGoymBeHbxEYLJykrEqyvnx
-         taVNEOLElceyej6h+5pnu+EXV1mO/UBcm0nW7pzjXmi15UfUryXUkLjuufdfbShiAjYf
-         L++8MxBQTBq4c7EwPMxFF0V1lCVC19SK/3ArAuunrKXHJhV1ub+9rk8sTm/wuR9MxKUV
-         hiMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TpZoCNuVtqWmqXfOBYxoJCLHU/tCYzYlfr7fdZ1HLBU=;
-        b=V7MrBsWYPCjhQRkotbS3yDL4rOl1zi4xbIcnf+bVupPNVrvq8i+RPzkmvUXdziyyQU
-         gtXsPuYmnZLw1mi32NPo0AqRpK7jFDPTCQ/LfX5HywOmclwqsDsxPv8fRUryPyjO5aQO
-         UJ/50/LHd/+hDw8FbDn/drycsB+U0mgefWOdYbth6XpXGMnnx1EB8M1FbdNPrht40Fnw
-         Pfl0tEi9RxDMf/yvvtYszg0IA6PR7b2Dh4tGjz9ymBvSALiMjWW5Pp+b41m/HY2+KOn5
-         PfM+DFnZMg8dqNJZMwDSJYBDYmTaV8NOCVTsY+m3J3glwov/XJm7w6wY+ykuJSVE/RFT
-         UobQ==
-X-Gm-Message-State: ANoB5pkpbsOxs55nzua0L2xwpA3PUtFIMoGTUu1IK+/RygB7ADYQJrkI
-        LitVxDpUXgKz3DHmVnl/TvEi+OLBKjM=
-X-Google-Smtp-Source: AA0mqf7BOcx8t21C04DWALOygV4H7r6nlIrgg9PhDxbAEYd1rUS67q8msfI3NTisCzD6lpfLLjlSNQ==
-X-Received: by 2002:a63:ea17:0:b0:477:9a46:f57b with SMTP id c23-20020a63ea17000000b004779a46f57bmr58686536pgi.319.1670274260086;
-        Mon, 05 Dec 2022 13:04:20 -0800 (PST)
-Received: from charizard.lan (c-67-183-167-205.hsd1.wa.comcast.net. [67.183.167.205])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170903228d00b0017ec1b1bf9fsm3209863plh.217.2022.12.05.13.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 13:04:19 -0800 (PST)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     linux-input@vger.kernel.org
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        David Rheinsberg <david.rheinsberg@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [RFC PATCH 2/2] HID: usbhid: Don't include report ID zero into returned data
-Date:   Mon,  5 Dec 2022 13:03:54 -0800
-Message-Id: <20221205210354.11846-3-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221205210354.11846-1-andrew.smirnov@gmail.com>
-References: <20221205210354.11846-1-andrew.smirnov@gmail.com>
+        with ESMTP id S232444AbiLEVRY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 16:17:24 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5901B2B61D;
+        Mon,  5 Dec 2022 13:17:20 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D4F34589;
+        Mon,  5 Dec 2022 22:17:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670275038;
+        bh=Y+OyTcoDSOHtxwOSNvGnkzOmsXXtUzLgi8zJ7E0AovM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bNuX5ngDIZaq3U3co1zuJbfeXWEBonPVm2Cb8O5o9/WIMOTo8qnbf0//mmvidpGaQ
+         R5883zwhZDP0jzgOM1aDF4MAc9G4/uddNRaUADw40iEcA9Q+Ima9TCCik155MTc/SO
+         6DuL+pX7t41xQI2lG0hni2/VSGGG/6DUJC+JQZ0s=
+Date:   Mon, 5 Dec 2022 23:17:15 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, paul.elder@ideasonboard.com,
+        kernel@pengutronix.de, nicolas@ndufresne.ca,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
+ implement v4l2 enum api calls
+Message-ID: <Y45f272a3aa7KXly@pendragon.ideasonboard.com>
+References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
+ <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
+ <Y4xaXHLoiPupWM6V@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y4xaXHLoiPupWM6V@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Report ID of zero is a special case for ID-less reports, which by
-definition do not have report ID as a part of their payload. Not
-returning an extra zero also matches hidraw documentation,
-specifically:
+On Sun, Dec 04, 2022 at 09:29:16AM +0100, Greg KH wrote:
+> On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
+> > Hi Michael,
+> > 
+> > On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
+> > > This series improves the uvc video gadget by parsing the configfs
+> > > entries. With the configfs data, the userspace now is able to use simple
+> > > v4l2 api calls like enum and try_format to check for valid configurations
+> > > initially set by configfs.
+> > 
+> > I've realized that this whole series got merged, despite my multiple
+> > attempts to explain why I think it's not a good idea. The UVC gadget
+> > requires userspace support, and there's no point in trying to move all
+> > these things to the kernel side. It only bloats the kernel, makes the
+> > code more complex, more difficult to maintain, and will make UVC 1.5
+> > support more difficult.
+> 
+> I can easily revert them, but I did not see any objections to them
+> originally and so I merged them as is the normal method :)
 
-      For devices which do not use numbered reports, set the first
-      byte to 0.  The returned report buffer will contain the report
-      number in the first byte, followed by the report data read from
-      the device.  For devices which do not use numbered reports, the
-      report data will begin at the first byte of the returned buffer.
+I don't think a revert is needed. The issue I pointed out regarding the
+duplication of static const data can be solved on top. The API additions
+from this series are, in my opinion, not a good idea for the reasons I
+explained, but they don't hurt so much that we need to go nuclear on
+this.
 
-Cc: David Rheinsberg <david.rheinsberg@gmail.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: linux-input@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- drivers/hid/usbhid/hid-core.c | 14 --------------
- 1 file changed, 14 deletions(-)
+Michael, will you be addressing the static const data issue ?
 
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index be4c731aaa65..575f09003602 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -874,18 +874,8 @@ static int usbhid_get_raw_report(struct hid_device *hid,
- 	struct usb_device *dev = hid_to_usb_dev(hid);
- 	struct usb_interface *intf = usbhid->intf;
- 	struct usb_host_interface *interface = intf->cur_altsetting;
--	int skipped_report_id = 0;
- 	int ret;
- 
--	/* Byte 0 is the report number. Report data starts at byte 1.*/
--	buf[0] = report_number;
--	if (report_number == 0x0) {
--		/* Offset the return buffer by 1, so that the report ID
--		   will remain in byte 0. */
--		buf++;
--		count--;
--		skipped_report_id = 1;
--	}
- 	ret = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
- 		HID_REQ_GET_REPORT,
- 		USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
-@@ -893,10 +883,6 @@ static int usbhid_get_raw_report(struct hid_device *hid,
- 		interface->desc.bInterfaceNumber, buf, count,
- 		USB_CTRL_SET_TIMEOUT);
- 
--	/* count also the report id */
--	if (ret > 0 && skipped_report_id)
--		ret++;
--
- 	return ret;
- }
- 
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
