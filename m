@@ -2,178 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882E46422C9
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 06:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D95E64239C
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 08:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbiLEFgh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 00:36:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S231615AbiLEHb4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 02:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiLEFgf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 00:36:35 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE3513F9F
-        for <linux-usb@vger.kernel.org>; Sun,  4 Dec 2022 21:36:35 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B546g7L012180;
-        Mon, 5 Dec 2022 05:36:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+mcgHs9A/LCmCXSmjloO6UXcMBH3okV6HK4zFbzgwiU=;
- b=C4ZiAgFXua0cwQwSBRP9w2WYQ92XDuoM1cvTJh5Ntrz6laEaUN1TG7UOmOJTppl28SUw
- P+LvZKHfn/RZUPif8ARuSnOo5t4UDvmNLby6LVFxintwsAeGRVHJtmL+eC7vHuuGTmm2
- ravRPYQTznPDC+JtZxQNN0br+XZxVctjhkK2GybEAxH8DR1UKcJ1xNiQ3SEK4GGaNkxW
- lhmhp3xFAu/a8UGktTLIMOFvqdE6uYr1UCRz0KnAJmsRdtzCk29KhkmUMCzKe+/i6E8K
- gJlCOkuXn9CALzOIfnzegxawxMH+h5yFQ1dwAfzlQIeugB7DWbUJDbVjUcM9x3cnWBMh Zg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7wdxuar2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 05:36:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B55aWMp029809
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Dec 2022 05:36:32 GMT
-Received: from [10.252.214.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 4 Dec 2022
- 21:36:29 -0800
-Message-ID: <22404205-bde7-fd5c-716e-9eead0168c88@quicinc.com>
-Date:   Mon, 5 Dec 2022 11:06:26 +0530
+        with ESMTP id S231540AbiLEHbv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 02:31:51 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01F31277E
+        for <linux-usb@vger.kernel.org>; Sun,  4 Dec 2022 23:31:49 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id z4so12523751ljq.6
+        for <linux-usb@vger.kernel.org>; Sun, 04 Dec 2022 23:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a64rVG9Ar18ZQniQlMUt+8pfp4eItxEV9w2eYv/pKNY=;
+        b=NMAXZbjHwIbXkRNbg6BrJIBwvsV6jrLt7CDPT075W1TEEoNSVbA04pL3R/u2BeeBMg
+         L+oM2LahFuGws4kT5G+DWaz4N57J9hUSu0YfHCRr0S9Vf2KZmOJ8VJWZFxDxDeUK9XKe
+         bCwIQeLCHITtSEZDVqo7KXns+H/Zh373Exvp6+fKUunKH1Z4aO6d8g1dZMkkzwjHex7m
+         03DNVJA3NozFKwSimo1AxF8Qsda7FsdOD5zT2tYHf6Ck7pWG/QDfJn0sssIF9qcjFFaJ
+         3ap7iGSLvGjJ1DVZinCNVPrJODfYSCvAHUJgIAANwdkbNmdAcDgBcpajiwAgrrOdBx4r
+         9qMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a64rVG9Ar18ZQniQlMUt+8pfp4eItxEV9w2eYv/pKNY=;
+        b=7dKFrQ/bTDbYvJNRpraRRzXXpf3lU5TWn+oVW0o6yFYrLyCbwgI2nx8vyPDZLSYRhs
+         mq5uWqUL9KLN8y9freYwdoxwn587gZ/8hSBDroFJnjXDu/l5GHLvpWdT0Esl/Ew2HiyY
+         VHaFWNlym7+AOm2UJTHq8IVWcXm9HIc2QXOy+xTop+YQM3KmsTHLu4xMlEdZEvGtU/fv
+         YKNvP/E7O1/GxMVjurIqFbDJC0F9oQyKXf16igpkDIyB+Fm72o+ybfD3sk43LZwr0pDj
+         2ELuALCSY3vATsibqyQZt6CLiD1G2xORPzwfIb+5/7ze3rnyentc++tyBWD7VyvdI0su
+         gPyw==
+X-Gm-Message-State: ANoB5pmAMFsYrqebc+EMIvkBCuCtDP6oXUTbucjtFBwloExucY1rXWCF
+        Vpc6tfotTk6VPSOmu4z+2yodyQ==
+X-Google-Smtp-Source: AA0mqf61RwmMr3Y0QNaJx5XXdo1MjWnCyAQRndhzxJQdgVe9ziURWBuFDT3vMwcHECqWUYRbgIGdPA==
+X-Received: by 2002:a2e:c52:0:b0:277:9bf:9411 with SMTP id o18-20020a2e0c52000000b0027709bf9411mr18528188ljd.504.1670225508159;
+        Sun, 04 Dec 2022 23:31:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id k8-20020a05651210c800b004acff58a951sm2022349lfg.133.2022.12.04.23.31.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Dec 2022 23:31:47 -0800 (PST)
+Message-ID: <380178d3-7248-4200-d9db-2fd8584eb386@linaro.org>
+Date:   Mon, 5 Dec 2022 08:31:46 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] usb: dwc3: ep0: Add implementation of ep0_dequeue
- separately
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH v1 1/2] dt-bindings: usb: samsung,exynos-xhci: support
+ Samsung Exynos xHCI Controller
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        "Wesley Cheng" <quic_wcheng@quicinc.com>
-References: <20221117054917.30104-1-quic_ugoswami@quicinc.com>
- <20221118020141.fjngcaovttbzkbvv@synopsys.com>
- <93e1a840-6d9f-9a6a-d848-d006f1333d18@quicinc.com>
- <20221122013033.if667zpm2p47he6r@synopsys.com>
- <21de2d7a-1955-c9ea-3d6c-02932d16a379@quicinc.com>
- <20221123020638.bicszpyxdyq37avd@synopsys.com>
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <20221123020638.bicszpyxdyq37avd@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Artur Bujdoso <artur.bujdoso@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
+        eomji.oh@samsung.com
+References: <1669860811-171746-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20221201021941epcas2p4a536a9eb029a990fcb9f27f2b4668d07@epcas2p4.samsung.com>
+ <1669860811-171746-2-git-send-email-dh10.jung@samsung.com>
+ <e140fdfd-4d8b-7214-d264-0503e6fcc498@linaro.org>
+ <20221205020634.GA54922@ubuntu>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221205020634.GA54922@ubuntu>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7SjlcQ0z2c8IkIQwJ-lV32FYR38MsGTP
-X-Proofpoint-ORIG-GUID: 7SjlcQ0z2c8IkIQwJ-lV32FYR38MsGTP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- clxscore=1015 adultscore=0 mlxscore=0 phishscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212050026
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
-
-On 11/23/22 7:36 AM, Thinh Nguyen wrote:
-> On Tue, Nov 22, 2022, Udipto Goswami wrote:
->> Hi Thinh,
->>
->>
->> On 11/22/22 7:00 AM, Thinh Nguyen wrote:
->>> Hi Udipto,
+On 05/12/2022 03:06, Jung Daehwan wrote:
+> On Thu, Dec 01, 2022 at 09:59:06AM +0100, Krzysztof Kozlowski wrote:
+>> On 01/12/2022 03:13, Daehwan Jung wrote:
+>>> Add the Samsung Exynos xHCI Controller bindings with DT schema format.
 >>>
->>> On Fri, Nov 18, 2022, Udipto Goswami wrote:
->>>> Hi Thinh
->>>>
->>>> On 11/18/22 7:31 AM, Thinh Nguyen wrote:
->>>>> On Thu, Nov 17, 2022, Udipto Goswami wrote:
->>>>>> A dequeue for ep0 need to adjust the handling based on the
->>>>>> data stage and status stage. Currently if ep0 is in data/status
->>>>>> stage the handling isn't that different, driver will try giveback
->>>>>> as part of dequeue process which might potentially lead to the
->>>>>> controller accessing invalid trbs.
->>>>>>
->>>>>> Also for ep0 the requests aren't moved into the started_list,
->>>>>> which might potentially lead to the un-mapping of the request
->>>>>> buffers without sending endxfer.
->>>>>
->>>>> Maybe we need to track started_list for control endpoint? If the request
->>>>> isn't prepared yet or that the transfer had completed, then there's no
->>>>> need to issue End Tranfer command.
->>>>>
->>>>> But I believe sending End Transfer for inactive endpoint should be fine
->>>>> also. Then we maybe able to get away without checking the started list.
->>>>> If you're planning to do that, please test and note it somewhere.
->>>>>
->>>>>>
->>>> thanks for the suggestion, sure i'll do some more experiments and confirm
->>>> it.
->>>>
+>>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+>>> ---
+>>>  .../bindings/usb/samsung,exynos-xhci.yaml     | 25 +++++++++++++++++++
+>>>  1 file changed, 25 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/usb/samsung,exynos-xhci.yaml
 >>>
->>> Just curious, how do you hit/test this scenario?
->>>
->>> For other endpoint types, I can see possible scenarios where a dequeue
->>> may be needed, but I don't see one for control transfer.
->>>
->>> The host can cancel the control transfer, and the controller will see
->>> "setup_packet_pending" and handle accordingly. If there's a disconnect,
->>> that's also handled separately by the controller driver also. So, where
->>> does ep0_dequeue come into play here?
->>>
->> adding the reference to other thread [1]
+>>> diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-xhci.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-xhci.yaml
+>>> new file mode 100644
+>>> index 000000000000..c5dde53b6491
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/samsung,exynos-xhci.yaml
+>>> @@ -0,0 +1,25 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: https://protect2.fireeye.com/v1/url?k=7899b46f-19e45c17-78983f20-74fe485fffb1-728a1b33a5d009dd&q=1&e=bdc50247-e986-43da-a15e-03ac6c3a25e8&u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fusb%2Fsamsung%2Cexynos-xhci.yaml%23
+>>> +$schema: https://protect2.fireeye.com/v1/url?k=ea1282f0-8b6f6a88-ea1309bf-74fe485fffb1-536f21757c62f28b&q=1&e=bdc50247-e986-43da-a15e-03ac6c3a25e8&u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
+>>> +
+>>> +title: Samsung Exynos xHCI
+>>> +
+>>> +maintainers:
+>>> +  - Daehwan Jung <dh10.jung@samsung.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: samsung,exynos-xhci
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +
+>>> +additionalProperties: false
+>>> +
 >>
->> [1]: https://urldefense.com/v3/__https://www.spinics.net/lists/linux-usb/msg233862.html__;!!A4F2R9G_pg!Z6hsArtLfeqmaf08IqxTov5VyXdvLJuncb8wIXYHC5PW7Zk7WO6u_r8Ap1gR-TlrmzwmQEQ-cJElQ2ED_0deM8t49emcjw$
+>> These do not look like complete bindings... What type of device has no
+>> resources at all, just compatible?
 >>
->> was trying to address a race condition in the ffs driver where ep_dequeue
->> was suggested, before freeing the request dequeue it.
+>> Best regards,
+>> Krzysztof
 >>
->> as per the current code, since ep0 req isn't moved to started list
->> therefore it will exit from this in ep_dequeue:
->>
->> list_for_each_entry(r, &dep->pending_list, list) {
->>                     if (r == req) {
->>                             dwc3_gadget_giveback(dep, req, -ECONNRESET);
->>                              goto out;
->>                      }
->>              }
->>
->> but if the ep0 is in data/status phase technically it is still active.
->> We will unmap the buffer and giveback then the ep0 is in data/status stage.
->>
->> This could potentially happen right?
->>
->> The intent of a separate dequeue was to address that scenario when the
->> data/status phase isn't completed.
->> Hope this give some clarity.
 >>
 > 
-> I'm still unclear how it can lead to this condition. Can you list the
-> sequence of events that can lead to this scenario.
-> 
-> For functionfs_unbind() to occur, shouldn't there be a disconnect call,
-> triggering soft-disconnect? When that happens, there are checks in dwc3
-> to ensure that any pending control transfer will be STALLed and given
-> back. Any new control request will not be queued, and no active control
-> transfer should happen at this point.
+> It gets resources from dwc->xhci_resources as you can see
+> dwc3_host_init(usb/dwc3/host.c). I think it doesn't need to get another resource.
 
-Thanks for pointing this out. Yah i see the soft_disconnect already 
-addresses what we are trying to do with a separate ep0_dequeue. I 
-believe we don't need this change separately.
+You refer to driver, but we talk about hardware. Not driver. Your
+hardware has no resources, so this does not look like complete binding.
 
-Thanks again for a clarifications.
--Udipto
+Best regards,
+Krzysztof
 
