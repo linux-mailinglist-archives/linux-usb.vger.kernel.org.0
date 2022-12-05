@@ -2,197 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F476424AE
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 09:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960E96425A3
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 10:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbiLEIf5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 03:35:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S230475AbiLEJT7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 04:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbiLEIfz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 03:35:55 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2086.outbound.protection.outlook.com [40.107.21.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC96F5A7;
-        Mon,  5 Dec 2022 00:35:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aNllKreQhGKyBQ0XXMrm5fuPsQExp1k2Pc7ZVLwvmLEkvapoSEoP0DiLZ0G/R15GU0xevWu5Mta4idwejRpbsPzbp1YP/VBIFc13k6YgS3ulQu9bOgG0INPeQS9VIDyF7jdlyo6EOEGn9Rl8z07dGOmFemI9/2sk7Z9NVPVPCP8ZaYdz8j03xmKDJ5tW67vVnFkYRU1Vo5UKf3XrpJbO/iyXCc+ceWkN9srG5i7Vh6cIo0oMH94nDLWYGEfUMeCq3QleBe/IgYB/7xvrygvYgcY3l5aklH/3gklLW11W/E70A//qcrdkd3lDusUxMB05E5HuY+q85lxW4PfY95/u5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vfJziV/CttUi/YAdzQ+bN5x/ybvCV4/v3hPh+6atuxk=;
- b=AtoV4pRJ6CtERgw0Xm+ZSxJknNHPCop5n0IH+32gcKA6Dmt0NRshqqUHjBDQN4CUBvnqPmuwzBjY6ZqFucXpqKp+kp5tjqNtVZrkm/K0rk3U/h0qHK5ye+nrikGizkfl1TUkRSv2VBHbUIJ+SL0R1NmH9vCv+mQwNyjEx+PQUOeueOlOxpDftQskblqUXN6D252PY+zKQSKHRBm5mHPvnXUkFck2hEX4LGWBk65GVdtTpL8h0AgeQ+nNv1BHv2h5EJ7QDL5uD4gBDL7L0i2rVZUQFw8EszE+vV9+/fTOFTV07qga5kP7fhlNILBV1amTZfOdwf4uVp5Z4J14dHlnVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vfJziV/CttUi/YAdzQ+bN5x/ybvCV4/v3hPh+6atuxk=;
- b=Jkdyk7lThGushMCAkndMrb5LqIpCjskFYl7xrU1F3xiOo4m7Pf5lqCvPtVcOrTUJxwNvU5jDUv/PHJY2JZFEjC+HDa42mhLpClsFR2McAiHfkFMNUypcB422vsMI1nTjypXg9xwDLHsX6Vp/IXPsCdQJB4cguF+BThrii5SlcwPCYbLTzNUjavxw/UPDYdjHe06FHxOJp7H8ERfKgP6dLf/+XMTqSYt2nIxHXWsrrYpXBwJqi72q5loUMmMVx+b6X2KVLicmbrmXrdfaR5j/y4MrWcc238Zc8bb6l9K9r3WPK3AacoJGP+RjtBM0gG3sk6F8LYqxspH8QYF3Gk6H4A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by PAXPR04MB9424.eurprd04.prod.outlook.com (2603:10a6:102:2b2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
- 2022 08:35:51 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::ae59:a542:9cbc:5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::ae59:a542:9cbc:5b3%9]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
- 08:35:51 +0000
-Message-ID: <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
-Date:   Mon, 5 Dec 2022 09:35:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
- drivers' disconnect()
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Peter Fink <pfink@christ-es.de>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        =?UTF-8?Q?Christoph_M=c3=b6hring?= <cmoehring@christ-es.de>,
-        John Whittington <git@jbrengineering.co.uk>,
-        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Maximilian Schneider <max@schneidersoft.net>,
-        Daniel Berglund <db@kvaser.com>,
-        Olivier Sobrie <olivier@sobrie.be>,
-        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
-        <remigiusz.kollataj@mobica.com>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
-        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0202.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a5::6) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S230489AbiLEJTl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 04:19:41 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4729712AA6
+        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 01:19:39 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so4755753ilt.9
+        for <linux-usb@vger.kernel.org>; Mon, 05 Dec 2022 01:19:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p+3UyaPir9nm9ZFzBR9VLd7x63HnrUGtAaSPQspoqLw=;
+        b=f55JjIsz3SP8XYjmj+urA9FqlEeMMgupQhL8U73hNGmBhqRMjtEi0LAdjQG4PAhHmn
+         RCrJog2WOl2ZnNlDtkO4BO+i43KpFYRhtpU8+zN9a+P35QIKzhqR/Pmn12uSfCTSJ73j
+         8myAlwa27DaNqUDGsx5XmkjBGKZIHu9y2FqpXDGyr05/TdeBf6gbjQW777smIMcAKgHu
+         tgy1tX2wBoaRVRMZWUQP23/MtG6iC5P//8qLGokPdiOYcMTef1GdyVmkpq2a0zxFkliT
+         +gb1x2POnvQqA1JGO2bA9VdljVHX5TxnMgW7e0mjhqYFRUJCQqncGOia2btmN0ETvuRT
+         A44w==
+X-Gm-Message-State: ANoB5pmPpunxZJfoDMcjYwSw67bBkfOtEOLobaIQ4U4sjKLBnoQXGK8o
+        EYT6F2d/QOngDmJUHHmvj4cq3jxqmI0t5ue0YVTJph3ScMPy
+X-Google-Smtp-Source: AA0mqf5Sr3Q/Xf/U4BK31WWtve8bzpdg+WVVBxZcVFNiGusSu3QrmaAsfCdtDXDpgE9xS6w/U/PrxrR0X9kGNvPedG465NeHBQIZ
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PAXPR04MB9424:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7bbfcb66-9785-4b53-9072-08dad69bb728
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H+Uf3ScZHxIsPk5HcMZzHMyebU2xdSm/G60I+XiPGmQ7LPI5f6ueoHHTUsCxD1sk8klsV0pUDRQjYQZz6GdujvekqdAkuUWqL9Ia0aK9BfxnQLmE2Izp/0a9Wuh/BV3R/Ow0jTRKX4UY3Yuqhj7mITNITheCH0XV1AN6u/3Qk9C0E29TG3cpv7p5Wa7W20avQLuxOUoywuCUCdBRU3JPX9nfItomm1H32nmbSTTV/WUD6gXhkSNp2Vww58J9rU0OURJtMbMaTNc6/BLyG4+rgsZ0ddaEdeAykh6e2LZqOpKsABYkSJFOFdq1WGX7nqZAUaX6JeQljuVityUJUSEuGu9HD8cFqVWpGldVrQgrCe70w2S9LaXNMtT4XSor9UQ/AmZw/6vXpW/flDziyhEX/LvTkEliFlPzv4fgQT7i8JebjjYFkFYMUbItuy6P2EjuY1V6GaHdjyB8ec1u3912vKTWmhH1wKwHn4mD3ksbKiio0WI1QNVUpW/pAPsXskrFzAZOnabPXpVOMT4xXtQKQsmcjGOHztevTKE3RV0vdS/gKVTc2yz8PpmlhiX5Nd9e36KMmD93OtqGXxCzPSP6vz14ruWOoHBqGlFHFnmtbnUDZ3XcEDdJt3ArmHnyRUZw9hguHmdZCS3ZpJFrWsmMQBLumdEzkHeG2jIdIr77wTfMs63BAl7rA3exKie6rIvhuttB4YA6MSK3RGijeOwVbxARjEPJifLOUmvxKh2EFss=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199015)(2906002)(7416002)(7406005)(8936002)(38100700002)(31686004)(66946007)(66476007)(66556008)(83380400001)(8676002)(4326008)(36756003)(86362001)(186003)(2616005)(41300700001)(5660300002)(316002)(110136005)(53546011)(54906003)(6666004)(6512007)(6506007)(31696002)(6486002)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkMzOW9vN1BXZFk2WXRzeTJEQ0JpZkNrbFoxU0NGYlRPRTJpc0RQdkpKdWpQ?=
- =?utf-8?B?YytWRHc0a0Q2aCtaa2NzcEFueld0NHFvdUNueEQ3anlxS0lqckh1MnZ2MGov?=
- =?utf-8?B?SGEvYS8xdmVDUjhyU0R2VVNDSGMwMlpZWmE0cWxuSDgyOWNTc3NlZktqaUd6?=
- =?utf-8?B?dkUya09GVndSRWNlT0UyclBQa0ZkV0JRUm9qK2hIZ3RSbnBza3I5eDBta1I3?=
- =?utf-8?B?VElEUU9OemxYL1pJYzV6NTFrOGlmTnQzNitaMFcwZVdDdlJrb1A0VjRNWnNi?=
- =?utf-8?B?aWpJL2sxR2pRTXJsVFNMNzdxbWZhbThBR2Z3V1lCVmIwWnhZUFZvOXFPUWJN?=
- =?utf-8?B?dzRhOUVEK0FIbG1PUDlNaHRnWTduVE9JRk1FUDcxQ3hYMjduZlcrTkxwKy96?=
- =?utf-8?B?L0lYNVlZbjgyZEZxNWVPYnU0SFlBS3pGWERlL01HVlM0eHZXdmlKMGhLaTdE?=
- =?utf-8?B?NTlzTXNEZWRFd3RDWng4bXdxaElXUjB0TU1lckNMTU84bEhIcmVmSUt1YWlv?=
- =?utf-8?B?RU1BeDFndGZ0Y1o1Yngrb0NWTzFyckROZ1dzNXhKaThnSkJ2dmNBUzRuRUoy?=
- =?utf-8?B?YmVydjVVbzMrSDBnSU5QalVndGx6SldNQU1oM3pkK2NUUGFHSk9LTnRNSG9J?=
- =?utf-8?B?RzdxY0V3dmdxQlRQelVvTDdXQWgyY0l4YWs0Qm96MVJwUjdyNTdDc3haU3BG?=
- =?utf-8?B?bEk0REgrUkxUQ1VzZFRaTUM1QVN4WTlCNU56NnRNUWxQMmVnalVOVjRJTDFB?=
- =?utf-8?B?R2swYlBhRzgwR1AyU3oyZ2VVZFVvUVAzUm5BTW9DVm5WdUJ1bk5NZkFFVWs0?=
- =?utf-8?B?WmhoelNQUk9KMWRlNm9EVU1oUGhjK0NCMGZUczNKY2QzK2JRd3RvQ3BhQXlZ?=
- =?utf-8?B?R2VSamhvREFDa2VlSzc4U3hlRVExeU5hZlltSk05MDlCaVZkZXNXd2VXbi95?=
- =?utf-8?B?N1NQWDFDVVU1d2RXNWlGblVUbkNvdFYvMEF5UzhKc09HTGFUTGZRQkdKUFcy?=
- =?utf-8?B?NThwVlZLYXJzdm1oeGNVWTBZMnlMbDFKRGlXb1RZdUVGOTNBWElKUkVqTDht?=
- =?utf-8?B?OFR2RFBqNGdMQzhTTklhQnovallmTHlXN3gzWW1EdVRuN2REL2dEOXZJb0g5?=
- =?utf-8?B?NE5zRUtGcFVQYmRpRkh5Vjh4bzMyNW9adEpxVE5SMi9NbithL1JtTkRTU1RF?=
- =?utf-8?B?REt3Mk9KcVRtMmhEQlpYRU1EcXlTZlRzUnVod0ZnTVpzaUVhU3dRWkhaQ3lK?=
- =?utf-8?B?bytsckR3aysybDFPMGs4WFRZTXF4N1QzayszS28wZlg4YktZdmh1ejBwU2pq?=
- =?utf-8?B?OHFRRklya0JmOWVQLzhWOWhEaEZkZEZtM1hvWHd1RC9OMUw2YWh3TjY4aHZP?=
- =?utf-8?B?eGhWTUlQQVByLzVYdXhKWkhRZVd1ZGxOM3QwMUc2YXJsQm81aXl4RFFrRFVv?=
- =?utf-8?B?SEtOa2d4djdPa1ptcUZGNjgrYlZiTzZvN1RiQWQwRHQ5dklrcG54U1ZqWFl4?=
- =?utf-8?B?ZEtzZnlIMWVyMDdmaUdSby9BRDFTT2NGZ2h0RlBjUmltRjdHOUpncmFKVGpq?=
- =?utf-8?B?aXZXekRxUXBDRzJQbTVFdndNdjlOSW9RZXVUcHdPRS9qZ0FHeWRHMGl6ck9h?=
- =?utf-8?B?YjNlMmxBei9rcTZtR2d3Y1Ewb1lLaHpwL1RXbVNOdjZYMGYrYXl5VldoVFZS?=
- =?utf-8?B?NFpwUEtVcVorb1dzMnMxSjY1bGxlUEJkL0doV0IxOEsvTWNEN3ZNVEo4QnJ3?=
- =?utf-8?B?SUZybUExQ0p2VFhiTi91TXYxSVNlOUZmUHBLc3hVWjZHSXhhZG9VZ1QwTHlp?=
- =?utf-8?B?aHNNSTBKSEZoeUlVV3BxbjgrdlRzWWVFOFBMTmxBdS9GRTREYUMxNyt5OWdz?=
- =?utf-8?B?Z29OVWhkWjk5RXJjcVJaZ2FIc1VNM0kwNUpycEhNT1NuVDM3QjFnT0FyK0ov?=
- =?utf-8?B?cU52Yi9hYlhTS01KWDJqejQ4Y0xxVGl6MmZSWUpOWW5iZXNLcGtlTWNSa2NP?=
- =?utf-8?B?OXU4Z09IUHpBeE9IMlgySHZVRzFxQ1FRWklHKzlqV1BRem9MV3BtaTdleFQr?=
- =?utf-8?B?a0ptVFd0VjdqSVl1eCtIWEJHSmVRdW5SMUwzbkZqaFF5WnU2a2Z3NU5pdkVC?=
- =?utf-8?B?cjFqQWppSEtZcS9CaU9ITDNpOFRDYTNuVWM5VWdCcEs0QlRnendlSXUxSEpk?=
- =?utf-8?Q?meLg2OdDZ35uc8IW2qnFLqPgJf88ZHibOFCDzQe/+LVR?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bbfcb66-9785-4b53-9072-08dad69bb728
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 08:35:51.1103
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wHM7VEvw4EC09GKV2TJb6hZj2EIxIKgGNrhPFO4tv1ZGlsr/w2EohwKOpUgZ/g0t4tGw/IVNUE2kOGrLMzdq1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9424
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c844:0:b0:302:f785:c9a1 with SMTP id
+ b4-20020a92c844000000b00302f785c9a1mr22534702ilq.165.1670231978600; Mon, 05
+ Dec 2022 01:19:38 -0800 (PST)
+Date:   Mon, 05 Dec 2022 01:19:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c6f44205ef112f5a@google.com>
+Subject: [syzbot] KASAN: invalid-free in gadgetfs_kill_sb
+From:   syzbot <syzbot+73a8d1eac3883b38173b@syzkaller.appspotmail.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, hbh25y@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mingo@kernel.org, rdunlap@infradead.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=146ed1d5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
+dashboard link: https://syzkaller.appspot.com/bug?extid=73a8d1eac3883b38173b
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+73a8d1eac3883b38173b@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: double-free or invalid-free in slab_free mm/slub.c:3509 [inline]
+BUG: KASAN: double-free or invalid-free in kfree+0xe0/0x3e4 mm/slub.c:4562
+
+CPU: 0 PID: 3915 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+Hardware name: riscv-virtio,qemu (DT)
+Call Trace:
+[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
+[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
+[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
+[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
+[<ffffffff8047479e>] print_address_description.constprop.0+0x2a/0x330 mm/kasan/report.c:255
+[<ffffffff80474b98>] kasan_report_invalid_free+0x62/0x92 mm/kasan/report.c:381
+[<ffffffff80473a82>] ____kasan_slab_free+0x170/0x180 mm/kasan/common.c:346
+[<ffffffff80473fde>] __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
+[<ffffffff80469750>] kasan_slab_free include/linux/kasan.h:236 [inline]
+[<ffffffff80469750>] slab_free_hook mm/slub.c:1728 [inline]
+[<ffffffff80469750>] slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
+[<ffffffff8046d302>] slab_free mm/slub.c:3509 [inline]
+[<ffffffff8046d302>] kfree+0xe0/0x3e4 mm/slub.c:4562
+[<ffffffff81df6dae>] gadgetfs_kill_sb+0x56/0x68 drivers/usb/gadget/legacy/inode.c:2088
+[<ffffffff804ce138>] deactivate_locked_super+0x9a/0x11a fs/super.c:332
+[<ffffffff804cf982>] vfs_get_super fs/super.c:1160 [inline]
+[<ffffffff804cf982>] get_tree_single+0x11e/0x12e fs/super.c:1177
+[<ffffffff81df60f4>] gadgetfs_get_tree+0x26/0x30 drivers/usb/gadget/legacy/inode.c:2067
+[<ffffffff804cc844>] vfs_get_tree+0x4a/0x19c fs/super.c:1497
+[<ffffffff80522e36>] do_new_mount fs/namespace.c:2994 [inline]
+[<ffffffff80522e36>] path_mount+0xe9c/0x14dc fs/namespace.c:3324
+[<ffffffff80524014>] do_mount fs/namespace.c:3337 [inline]
+[<ffffffff80524014>] __do_sys_mount fs/namespace.c:3545 [inline]
+[<ffffffff80524014>] sys_mount+0x360/0x3ee fs/namespace.c:3522
+[<ffffffff80005716>] ret_from_syscall+0x0/0x2
+
+Allocated by task 2066:
+ stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+ kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0x80/0xb2 mm/kasan/common.c:524
+ kasan_kmalloc include/linux/kasan.h:270 [inline]
+ kmem_cache_alloc_trace+0x178/0x2e0 mm/slub.c:3257
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:715 [inline]
+ apparmor_sk_alloc_security+0x70/0xca security/apparmor/lsm.c:792
+ security_sk_alloc+0x48/0x90 security/security.c:2255
+ sk_prot_alloc+0xb6/0x20e net/core/sock.c:1926
+ sk_alloc+0x34/0x602 net/core/sock.c:1976
+ inet_create net/ipv4/af_inet.c:319 [inline]
+ inet_create+0x28c/0x964 net/ipv4/af_inet.c:245
+ __sock_create+0x322/0x646 net/socket.c:1468
+ sock_create net/socket.c:1519 [inline]
+ __sys_socket+0xe4/0x1e0 net/socket.c:1561
+ __do_sys_socket net/socket.c:1570 [inline]
+ sys_socket+0x2c/0x3a net/socket.c:1568
+ ret_from_syscall+0x0/0x2
+
+Freed by task 3916:
+ stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+ kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+ kasan_set_track+0x1a/0x26 mm/kasan/common.c:45
+ kasan_set_free_info+0x1e/0x3a mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x15e/0x180 mm/kasan/common.c:328
+ __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
+ slab_free mm/slub.c:3509 [inline]
+ kfree+0xe0/0x3e4 mm/slub.c:4562
+ gadgetfs_kill_sb+0x56/0x68 drivers/usb/gadget/legacy/inode.c:2088
+ deactivate_locked_super+0x9a/0x11a fs/super.c:332
+ deactivate_super fs/super.c:363 [inline]
+ deactivate_super+0x80/0x94 fs/super.c:359
+ cleanup_mnt+0x220/0x2c0 fs/namespace.c:1143
+ __cleanup_mnt+0x1c/0x26 fs/namespace.c:1150
+ task_work_run+0xdc/0x154 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ do_notify_resume+0x894/0xa56 arch/riscv/kernel/signal.c:320
+ ret_from_exception+0x0/0x10
+
+Last potentially related work creation:
+ stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+ kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0xc4/0xdc mm/kasan/generic.c:348
+ kasan_record_aux_stack_noalloc+0xe/0x16 mm/kasan/generic.c:358
+ kvfree_call_rcu+0x8e/0x440 kernel/rcu/tree.c:3591
+ memcg_update_list_lru_node mm/list_lru.c:411 [inline]
+ memcg_update_list_lru mm/list_lru.c:467 [inline]
+ memcg_update_all_list_lrus+0x2d0/0x5c6 mm/list_lru.c:501
+ memcg_alloc_cache_id mm/memcontrol.c:2964 [inline]
+ memcg_online_kmem mm/memcontrol.c:3635 [inline]
+ mem_cgroup_css_alloc+0xa86/0xc60 mm/memcontrol.c:5225
+ css_create kernel/cgroup/cgroup.c:5299 [inline]
+ cgroup_apply_control_enable+0x2c0/0x654 kernel/cgroup/cgroup.c:3124
+ cgroup_mkdir+0x388/0x9e6 kernel/cgroup/cgroup.c:5517
+ kernfs_iop_mkdir+0xc8/0xfa fs/kernfs/dir.c:1169
+ vfs_mkdir+0x110/0x202 fs/namei.c:3933
+ do_mkdirat+0x22e/0x262 fs/namei.c:3959
+ __do_sys_mkdirat fs/namei.c:3974 [inline]
+ sys_mkdirat+0x88/0xb2 fs/namei.c:3972
+ ret_from_syscall+0x0/0x2
+
+The buggy address belongs to the object at ffffaf80072eb0e0
+ which belongs to the cache kmalloc-16 of size 16
+The buggy address is located 0 bytes inside of
+ 16-byte region [ffffaf80072eb0e0, ffffaf80072eb0f0)
+The buggy address belongs to the page:
+page:ffffaf807a84e218 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x874eb
+flags: 0x8000000200(slab|section=16|node=0|zone=0)
+raw: 0000008000000200 0000000000000100 0000000000000122 ffffaf80072013c0
+raw: 0000000000000000 0000000080800080 00000001ffffffff 0000000000000000
+raw: 00000000000007ff
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x0(), pid 1, ts 1244986300, free_ts 0
+ stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+ create_dummy_stack mm/page_owner.c:59 [inline]
+ register_early_stack+0x8a/0xcc mm/page_owner.c:75
+ init_page_owner+0x8a/0x5cc mm/page_owner.c:87
+ invoke_init_callbacks mm/page_ext.c:112 [inline]
+ page_ext_init+0x4e6/0x50c mm/page_ext.c:419
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffffaf80072eaf80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffffaf80072eb000: 00 00 fc fc 00 00 fc fc 00 00 fc fc 00 01 fc fc
+>ffffaf80072eb080: 00 07 fc fc 00 00 fc fc fa fb fc fc fa fb fc fc
+                                                       ^
+ ffffaf80072eb100: fb fb fc fc fb fb fc fc 00 00 fc fc 00 00 fc fc
+ ffffaf80072eb180: 00 04 fc fc 00 01 fc fc fa fb fc fc fb fb fc fc
+==================================================================
 
 
-On 03.12.22 14:31, Vincent Mailhol wrote:
-> The core sets the usb_interface to NULL in [1]. Also setting it to
-> NULL in usb_driver::disconnects() is at best useless, at worse risky.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Hi,
-
-I am afraid there is a major issue with your series of patches.
-The drivers you are removing this from often have a subsequent check
-for the data they got from usb_get_intfdata() being NULL.
-
-That pattern is taken from drivers like btusb or CDC-ACM, which
-claim secondary interfaces disconnect() will be called a second time
-for.
-In addition, a driver can use setting intfdata to NULL as a flag
-for disconnect() having proceeded to a point where certain things
-can no longer be safely done. You need to check for that in every driver
-you remove this code from and if you decide that it can safely be removed,
-which is likely, then please also remove checks like this:
-
-  	struct ems_usb *dev = usb_get_intfdata(intf);
-  
-	usb_set_intfdata(intf, NULL);
-
-  	if (dev) {
-  		unregister_netdev(dev->netdev);
-
-Either it can be called a second time, then you need to leave it
-as is, or the check for NULL is superfluous. But only removing setting
-the pointer to NULL never makes sense.
-
-	Regards
-		Oliver
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
