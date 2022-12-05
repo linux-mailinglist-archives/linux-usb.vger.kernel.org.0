@@ -2,60 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1697864356C
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 21:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C7064357D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 21:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233119AbiLEUQB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 15:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S233119AbiLEUUe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 15:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbiLEUP5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 15:15:57 -0500
-Received: from mailfilter02-out40.webhostingserver.nl (mailfilter02-out40.webhostingserver.nl [195.211.72.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B960B286EA
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 12:15:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-         subject:cc:to:from:from;
-        bh=AL68zLQaEqSRdRgznjgITv4ps8SL1cEIOEoowj++pC0=;
-        b=LdS12PfvgO5v8km82BezuW5J7/N+8R0QJmVHg5WCv4c2rBVONAILw2o5N2+KXgYO91Zy0658TRUPf
-         o8lpPyIMVCTlQe5ipASaefd3/OsYLGbhrvKQ8g3e+xtusdTdgrwBZilus7V2RkwbgPLhNF1V1Tlc0Z
-         VS/3AT8MmDjNPk9ZfG4vyVS9VCF2K6futTKdwrkRfeXN/WpzXr55i6yaKmaMfgMrOiNOyfN2vkpaQ0
-         wNtEah/xcTLXS0v28pHx1ZATXIeYXDSsFjdKg40jkO7SmBKqpbMC3HIPbbN/hGl8pW9xyB/r0wqcMW
-         CVGeBWDep4K/pm9cCKIIhUumeLXMMmw==
-X-Halon-ID: 9e8bd91a-74d9-11ed-aeca-001a4a4cb922
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
-        id 9e8bd91a-74d9-11ed-aeca-001a4a4cb922;
-        Mon, 05 Dec 2022 21:15:53 +0100 (CET)
-Received: from 2a02-a466-68ed-1-f633-1bb8-92a6-ba5d.fixed6.kpn.net ([2a02:a466:68ed:1:f633:1bb8:92a6:ba5d] helo=delfion.fritz.box)
-        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
-        (envelope-from <ftoth@exalondelft.nl>)
-        id 1p2HsX-001b54-0z;
-        Mon, 05 Dec 2022 21:15:53 +0100
-From:   Ferry Toth <ftoth@exalondelft.nl>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ferry Toth <ftoth@exalondelft.nl>, stable@vger.kernel.org
-Subject: [PATCH v5 2/2] usb: dwc3: core: defer probe on ulpi_read_id timeout
-Date:   Mon,  5 Dec 2022 21:15:27 +0100
-Message-Id: <20221205201527.13525-3-ftoth@exalondelft.nl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221205201527.13525-1-ftoth@exalondelft.nl>
-References: <20221205201527.13525-1-ftoth@exalondelft.nl>
+        with ESMTP id S230228AbiLEUUd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 15:20:33 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1044724BFD
+        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 12:20:32 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88343589;
+        Mon,  5 Dec 2022 21:20:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670271629;
+        bh=iSP+2rDHGpQBGKye/R5g7M3Xo8ozyNXCDY5nD2esdYM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RRvdo/Rn+HIm44YVnb4Lpaa8XvAvFFCB0aO95dKUjWzScWLnECt7lTufVA2zclLhD
+         aimfumSUleAd5D7cjAikvCT4iHcZ8ZkNkNOqRucfsDbNL0q+dsm9mwRzkRgqwiVr08
+         +sc+Mw3h8tdlMzSHbfhyVepX+WOFARWzaqaqTrjM=
+Message-ID: <926df743-9c43-9471-3c67-3df9f4e18204@ideasonboard.com>
+Date:   Mon, 5 Dec 2022 20:20:25 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [usb:usb-testing 2/2] drivers/usb/gadget/legacy/webcam.c:174:3:
+ error: field designator 'bmInterfaceFlags' does not refer to any field in
+ type 'const struct uvc_format_uncompressed'; did you mean 'bmInterlaceFlags'?
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <202212060347.MaTRoCo0-lkp@intel.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+In-Reply-To: <202212060347.MaTRoCo0-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,54 +51,128 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
-if extcon is present"), Dual Role support on Intel Merrifield platform
-broke due to rearranging the call to dwc3_get_extcon().
+Oops, forgot all about the legacy version. Sorry Greg - let me send a v2.
 
-It appears to be caused by ulpi_read_id() masking the timeout on the first
-test write. In the past dwc3 probe continued by calling dwc3_core_soft_reset()
-followed by dwc3_get_extcon() which happend to return -EPROBE_DEFER.
-On deferred probe ulpi_read_id() finally succeeded. Due to above mentioned
-rearranging -EPROBE_DEFER is not returned and probe completes without phy.
-
-On Intel Merrifield the timeout on the first test write issue is reproducible
-but it is difficult to find the root cause. Using a mainline kernel and
-rootfs with buildroot ulpi_read_id() succeeds. As soon as adding
-ftrace / bootconfig to find out why, ulpi_read_id() fails and we can't
-analyze the flow. Using another rootfs ulpi_read_id() fails even without
-adding ftrace. We suspect the issue is some kind of timing / race, but
-merely retrying ulpi_read_id() does not resolve the issue.
-
-As we now changed ulpi_read_id() to return -ETIMEDOUT in this case, we
-need to handle the error by calling dwc3_core_soft_reset() and request
--EPROBE_DEFER. On deferred probe ulpi_read_id() is retried and succeeds.
-
-Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
----
- drivers/usb/dwc3/core.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 648f1c570021..2779f17bffaf 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1106,8 +1106,13 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 
- 	if (!dwc->ulpi_ready) {
- 		ret = dwc3_core_ulpi_init(dwc);
--		if (ret)
-+		if (ret) {
-+			if (ret == -ETIMEDOUT) {
-+				dwc3_core_soft_reset(dwc);
-+				ret = -EPROBE_DEFER;
-+			}
- 			goto err0;
-+		}
- 		dwc->ulpi_ready = true;
- 	}
- 
--- 
-2.37.2
-
+On 05/12/2022 19:33, kernel test robot wrote:
+> Hi Daniel,
+>
+> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> head:   751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
+> commit: 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c [2/2] usb: gadget: uvc: Rename bmInterfaceFlags -> bmInterlaceFlags
+> config: arm-randconfig-r012-20221205
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install arm cross compiling tool for clang build
+>          # apt-get install binutils-arm-linux-gnueabi
+>          # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
+>          git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+>          git fetch --no-tags usb usb-testing
+>          git checkout 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/gadget/legacy/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>>> drivers/usb/gadget/legacy/webcam.c:174:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_uncompressed'; did you mean 'bmInterlaceFlags'?
+>             .bmInterfaceFlags       = 0,
+>              ^~~~~~~~~~~~~~~~
+>              bmInterlaceFlags
+>     include/uapi/linux/usb/video.h:469:8: note: 'bmInterlaceFlags' declared here
+>             __u8  bmInterlaceFlags;
+>                   ^
+>>> drivers/usb/gadget/legacy/webcam.c:225:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_mjpeg'; did you mean 'bmInterlaceFlags'?
+>             .bmInterfaceFlags       = 0,
+>              ^~~~~~~~~~~~~~~~
+>              bmInterlaceFlags
+>     include/uapi/linux/usb/video.h:525:8: note: 'bmInterlaceFlags' declared here
+>             __u8  bmInterlaceFlags;
+>                   ^
+>     2 errors generated.
+>
+>
+> vim +174 drivers/usb/gadget/legacy/webcam.c
+>
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  160
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  161  static const struct uvc_format_uncompressed uvc_format_yuv = {
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  162  	.bLength		= UVC_DT_FORMAT_UNCOMPRESSED_SIZE,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  163  	.bDescriptorType	= USB_DT_CS_INTERFACE,
+> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  164  	.bDescriptorSubType	= UVC_VS_FORMAT_UNCOMPRESSED,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  165  	.bFormatIndex		= 1,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  166  	.bNumFrameDescriptors	= 2,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  167  	.guidFormat		=
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  168  		{ 'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  169  		 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  170  	.bBitsPerPixel		= 16,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  171  	.bDefaultFrameIndex	= 1,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  172  	.bAspectRatioX		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  173  	.bAspectRatioY		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02 @174  	.bmInterfaceFlags	= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  175  	.bCopyProtect		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  176  };
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  177
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  178  DECLARE_UVC_FRAME_UNCOMPRESSED(1);
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  179  DECLARE_UVC_FRAME_UNCOMPRESSED(3);
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  180
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  181  static const struct UVC_FRAME_UNCOMPRESSED(3) uvc_frame_yuv_360p = {
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  182  	.bLength		= UVC_DT_FRAME_UNCOMPRESSED_SIZE(3),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  183  	.bDescriptorType	= USB_DT_CS_INTERFACE,
+> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  184  	.bDescriptorSubType	= UVC_VS_FRAME_UNCOMPRESSED,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  185  	.bFrameIndex		= 1,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  186  	.bmCapabilities		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  187  	.wWidth			= cpu_to_le16(640),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  188  	.wHeight		= cpu_to_le16(360),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  189  	.dwMinBitRate		= cpu_to_le32(18432000),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  190  	.dwMaxBitRate		= cpu_to_le32(55296000),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  191  	.dwMaxVideoFrameBufferSize	= cpu_to_le32(460800),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  192  	.dwDefaultFrameInterval	= cpu_to_le32(666666),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  193  	.bFrameIntervalType	= 3,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  194  	.dwFrameInterval[0]	= cpu_to_le32(666666),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  195  	.dwFrameInterval[1]	= cpu_to_le32(1000000),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  196  	.dwFrameInterval[2]	= cpu_to_le32(5000000),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  197  };
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  198
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  199  static const struct UVC_FRAME_UNCOMPRESSED(1) uvc_frame_yuv_720p = {
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  200  	.bLength		= UVC_DT_FRAME_UNCOMPRESSED_SIZE(1),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  201  	.bDescriptorType	= USB_DT_CS_INTERFACE,
+> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  202  	.bDescriptorSubType	= UVC_VS_FRAME_UNCOMPRESSED,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  203  	.bFrameIndex		= 2,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  204  	.bmCapabilities		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  205  	.wWidth			= cpu_to_le16(1280),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  206  	.wHeight		= cpu_to_le16(720),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  207  	.dwMinBitRate		= cpu_to_le32(29491200),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  208  	.dwMaxBitRate		= cpu_to_le32(29491200),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  209  	.dwMaxVideoFrameBufferSize	= cpu_to_le32(1843200),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  210  	.dwDefaultFrameInterval	= cpu_to_le32(5000000),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  211  	.bFrameIntervalType	= 1,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  212  	.dwFrameInterval[0]	= cpu_to_le32(5000000),
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  213  };
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  214
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  215  static const struct uvc_format_mjpeg uvc_format_mjpg = {
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  216  	.bLength		= UVC_DT_FORMAT_MJPEG_SIZE,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  217  	.bDescriptorType	= USB_DT_CS_INTERFACE,
+> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  218  	.bDescriptorSubType	= UVC_VS_FORMAT_MJPEG,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  219  	.bFormatIndex		= 2,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  220  	.bNumFrameDescriptors	= 2,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  221  	.bmFlags		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  222  	.bDefaultFrameIndex	= 1,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  223  	.bAspectRatioX		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  224  	.bAspectRatioY		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02 @225  	.bmInterfaceFlags	= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  226  	.bCopyProtect		= 0,
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  227  };
+> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  228
+>
+> :::::: The code at line 174 was first introduced by commit
+> :::::: a9914127e834acf648a96c72b4e271dc0c1c7c74 USB gadget: Webcam device
+>
+> :::::: TO: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> :::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
+>
