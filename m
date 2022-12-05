@@ -2,90 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE3A642C7D
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 17:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62DB642D6C
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 17:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbiLEQG0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 11:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S233254AbiLEQqJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 11:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiLEQGZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 11:06:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7BA13FA4
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 08:06:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 719CDB8111D
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 16:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FB7EC433C1
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 16:06:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670256382;
-        bh=/RLC1kpY+Taxubve1f0h1WNrNQkDsXe0LYNvkWI/rQc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=PYSBgjsHPyZFqy4D4fVkjLFUqdxgrdxiJ0emqHRvSBzOvKS24zwfYBivB3IeEdbvy
-         E3yPmU24IttPsZhZHGz2ajx4sSCvwuFsgKHuTZTIjj+qB1qW+TFUqEkEcwa8vpQCCC
-         a2mFZpVOpJ61rgcAN8uGDbOcaEToFLATwbl/RXhvwaxRoZmxSSZK2nLM0q4edAcDJZ
-         t4Doni/lq7q28KQJWK32fG1gfqmzRSZR9rbHgkukYgmb8GYbgNb+D1GlJprLRaPt7s
-         F3YGQYWDR7WKwbFghEFIzNfHfVD+hPYX2eH+/kmT88iLKMQ4AvMuAdz6TZTdebikjC
-         fwh2jf66jFTOQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id F28FBC433E4; Mon,  5 Dec 2022 16:06:21 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216766] USB enumeration lockup
-Date:   Mon, 05 Dec 2022 16:06:21 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216766-208809-oOsQ04wpC6@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216766-208809@https.bugzilla.kernel.org/>
-References: <bug-216766-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S232020AbiLEQp2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 11:45:28 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 15C1720985
+        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 08:44:19 -0800 (PST)
+Received: (qmail 622662 invoked by uid 1000); 5 Dec 2022 11:44:18 -0500
+Date:   Mon, 5 Dec 2022 11:44:18 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+73a8d1eac3883b38173b@syzkaller.appspotmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, hbh25y@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mingo@kernel.org, rdunlap@infradead.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: invalid-free in gadgetfs_kill_sb
+Message-ID: <Y44f4hGqxUVIn/fk@rowland.harvard.edu>
+References: <000000000000c6f44205ef112f5a@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000c6f44205ef112f5a@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216766
+On Mon, Dec 05, 2022 at 01:19:38AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> console output: https://syzkaller.appspot.com/x/log.txt?x=146ed1d5880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
+> dashboard link: https://syzkaller.appspot.com/bug?extid=73a8d1eac3883b38173b
+> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: riscv64
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+73a8d1eac3883b38173b@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: double-free or invalid-free in slab_free mm/slub.c:3509 [inline]
+> BUG: KASAN: double-free or invalid-free in kfree+0xe0/0x3e4 mm/slub.c:4562
+> 
+> CPU: 0 PID: 3915 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+> Hardware name: riscv-virtio,qemu (DT)
+> Call Trace:
+...
+> [<ffffffff8046d302>] kfree+0xe0/0x3e4 mm/slub.c:4562
+> [<ffffffff81df6dae>] gadgetfs_kill_sb+0x56/0x68 drivers/usb/gadget/legacy/inode.c:2088
+> [<ffffffff804ce138>] deactivate_locked_super+0x9a/0x11a fs/super.c:332
+> [<ffffffff804cf982>] vfs_get_super fs/super.c:1160 [inline]
+> [<ffffffff804cf982>] get_tree_single+0x11e/0x12e fs/super.c:1177
+> [<ffffffff81df60f4>] gadgetfs_get_tree+0x26/0x30 drivers/usb/gadget/legacy/inode.c:2067
+> [<ffffffff804cc844>] vfs_get_tree+0x4a/0x19c fs/super.c:1497
+> [<ffffffff80522e36>] do_new_mount fs/namespace.c:2994 [inline]
+> [<ffffffff80522e36>] path_mount+0xe9c/0x14dc fs/namespace.c:3324
+> [<ffffffff80524014>] do_mount fs/namespace.c:3337 [inline]
+> [<ffffffff80524014>] __do_sys_mount fs/namespace.c:3545 [inline]
+> [<ffffffff80524014>] sys_mount+0x360/0x3ee fs/namespace.c:3522
+> [<ffffffff80005716>] ret_from_syscall+0x0/0x2
+...
 
---- Comment #6 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-But reading usbfs shouldn't block forever either, so there's something else
-wrong as well.
-Maybe we fails to give back an URB, or retry reading all the disconnected
-devices forever.
+So task 3915 is trying to mount a superblock that probably is 
+concurrently being unmounted.  Why does that cause the filesystem code 
+to deactivate it before it has been fully activated?
 
-Adding xhci and usb core dynamic debug could show more info about this.
-before suspeding could you as root add:
+> Freed by task 3916:
+...
+>  kfree+0xe0/0x3e4 mm/slub.c:4562
+>  gadgetfs_kill_sb+0x56/0x68 drivers/usb/gadget/legacy/inode.c:2088
+>  deactivate_locked_super+0x9a/0x11a fs/super.c:332
+>  deactivate_super fs/super.c:363 [inline]
+>  deactivate_super+0x80/0x94 fs/super.c:359
+>  cleanup_mnt+0x220/0x2c0 fs/namespace.c:1143
+>  __cleanup_mnt+0x1c/0x26 fs/namespace.c:1150
+>  task_work_run+0xdc/0x154 kernel/task_work.c:164
+>  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+>  do_notify_resume+0x894/0xa56 arch/riscv/kernel/signal.c:320
+>  ret_from_exception+0x0/0x10
 
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =3Dp' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =3Dp' >/sys/kernel/debug/dynamic_debug/control
+Presumably this trace comes from the first unmount.
 
---=20
-You may reply to this email to add a comment.
+It certainly looks like inode.c is getting confused because its 
+->kill_sb() callback is invoked a second time before the second 
+->get_tree() callback has completed.  Which suggests that the problem 
+may lie in the filesystem code rather than the USB code.  Maybe it 
+doesn't handle this race between mount and unmount.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Al, can you suggest anything?
+
+Alan Stern
