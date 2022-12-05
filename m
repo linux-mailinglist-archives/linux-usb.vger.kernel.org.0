@@ -2,142 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B22642847
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 13:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAAC642858
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 13:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiLEMU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 07:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S230480AbiLEMWx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 07:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiLEMU4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 07:20:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A423F024
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 04:20:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE4F2B80F6F
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 12:20:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24703C433D6;
-        Mon,  5 Dec 2022 12:20:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670242852;
-        bh=ezEbp6KTu6st4/cilRZDmpaDk7JqKdb22EviAQL4g7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q9Py5LfYUOL7fiHq0o3H+YB4x9J34SAjZMbMcOD2Wm3wnIZHIHVxh6OFObKxZveui
-         iMXHAXl+aWtTa9wPgSB9pk9Lsk8IlO8mqKse2yXZI74TqVWxc9m2nJ1Lu0Dco/Ld/g
-         HQZSGWnG6EnVksYaTB1sxh0pNx4R1LqN3Jrv3J+Y=
-Date:   Mon, 5 Dec 2022 13:20:49 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [RFC] Unify messaging in gadget functions
-Message-ID: <Y43iISitEERfteOt@kroah.com>
-References: <266f2df3-75cf-5dcf-1e59-8a8da5dd001e@collabora.com>
+        with ESMTP id S231810AbiLEMWr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 07:22:47 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB13B11802;
+        Mon,  5 Dec 2022 04:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670242965; x=1701778965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lcxVp1A+yBTRM/AOTd0nAsYWpVQXLhD464zMr8HvkrY=;
+  b=GQ9d+0A+edlCGuTZ6Rn7v1w7z8+iZ/qGF7pvoT1Q5L5+RMr5n1CWZfUT
+   WvtvUCRqaTWqkXoLXyW6XyBfBaZ34c0Du4IT4oYVnRGjoG4wpqZ7V5wI2
+   q8WuLVlCXz6uaz/r0wmhjFHkwx5bydrz9LigJpcwr4V68pyGfI0mPq+qM
+   yLJbkDGDHJMJkdubcRpU7ZD4BrzUeC0UIC+C98mvu4zEKUnmOCxi6rdXn
+   2/umY2BTMtVJuLT0J2oW02le3DgZCcVbFBnQ4IXPSNQgfGe+U4/LirYVn
+   ZKtbuqS9GYdqjaPIc+7twW1sjttuunoCuhoQyBtLtBeczBRk6FoMEYT+y
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="343327236"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="343327236"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 04:22:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="639465380"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="639465380"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 05 Dec 2022 04:22:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p2AUZ-004rjI-3D;
+        Mon, 05 Dec 2022 14:22:40 +0200
+Date:   Mon, 5 Dec 2022 14:22:39 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+        Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
+Message-ID: <Y43ij5rwNLOaztch@smile.fi.intel.com>
+References: <Y4wnGgMLOr04RwvU@google.com>
+ <81a7715b-559f-4c5c-bdb6-1aa00d409155@app.fastmail.com>
+ <Y40zZ8fkE9d1zbbV@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <266f2df3-75cf-5dcf-1e59-8a8da5dd001e@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y40zZ8fkE9d1zbbV@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 01:14:21PM +0100, Andrzej Pietrasiewicz wrote:
-> Hi All,
+On Sun, Dec 04, 2022 at 03:55:19PM -0800, Dmitry Torokhov wrote:
+> On Sun, Dec 04, 2022 at 01:10:19PM +0100, Arnd Bergmann wrote:
+> > On Sun, Dec 4, 2022, at 05:50, Dmitry Torokhov wrote:
+> > >
+> > > SoC team, the problematic patch has been in next for a while and it
+> > > would be great to get the fix in to make sure the driver is not broken
+> > > in 6.2. Thanks!
+> > 
+> > I have no problem taking thsi patch, but I get a merge conflict that
+> > I'm not sure how to resolve:
+> > 
+> > 
+> > @@@ -186,23 -182,27 +180,43 @@@ struct qe_pin *qe_pin_request(struct de
+> >         if (WARN_ON(!gc)) {
+> >                 err = -ENODEV;
+> >                 goto err0;
+> > ++<<<<<<< HEAD
+> >  +      }
+> >  +      qe_pin->gpiod = gpiod;
+> >  +      qe_pin->controller = gpiochip_get_data(gc);
+> >  +      /*
+> >  +       * FIXME: this gets the local offset on the gpio_chip so that the driver
+> >  +       * can manipulate pin control settings through its custom API. The real
+> >  +       * solution is to create a real pin control driver for this.
+> >  +       */
+> >  +      qe_pin->num = gpio_chip_hwgpio(gpiod);
+> >  +
+> >  +      if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
+> >  +              pr_debug("%s: tried to get a non-qe pin\n", __func__);
+> >  +              gpiod_put(gpiod);
+> > ++=======
+> > +       } else if (!fwnode_device_is_compatible(gc->fwnode,
+> > +                                               "fsl,mpc8323-qe-pario-bank")) {
+> > +               dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
+> > ++>>>>>>> soc: fsl: qe: request pins non-exclusively
+> >                 err = -EINVAL;
+> > -               goto err0;
+> > +       } else {
+> > +               qe_pin->controller = gpiochip_get_data(gc);
+> > +               /*
+> > +                * FIXME: this gets the local offset on the gpio_chip so that
+> > +                * the driver can manipulate pin control settings through its
+> > +                * custom API. The real solution is to create a real pin control
+> > +                * driver for this.
+> > +                */
+> > +               qe_pin->num = desc_to_gpio(gpiod) - gc->base;
+> >         }
+> > 
+> > Could you rebase the patch on top of the soc/driver branch in the
+> > soc tree and send the updated version?
 > 
-> include/linux/usb/composite.h contains:
+> I see, it conflicts with:
 > 
-> /* messaging utils */
-> #define DBG(d, fmt, args...) \
-> 	dev_dbg(&(d)->gadget->dev , fmt , ## args)
-> #define VDBG(d, fmt, args...) \
-> 	dev_vdbg(&(d)->gadget->dev , fmt , ## args)
-> #define ERROR(d, fmt, args...) \
-> 	dev_err(&(d)->gadget->dev , fmt , ## args)
-> #define WARNING(d, fmt, args...) \
-> 	dev_warn(&(d)->gadget->dev , fmt , ## args)
-> #define INFO(d, fmt, args...) \
-> 	dev_info(&(d)->gadget->dev , fmt , ## args)
+> 	c9eb6e546a23 soc: fsl: qe: Switch to use fwnode instead of of_node
 > 
-> Gadget functions do use these, but not consistently:
-> 
-> => DBG() vs dev_dbg():
-> $ git grep DBG\( drivers/usb/gadget/function | grep -v VDBG | grep -v LDBG | wc
->     138     871   11619
-> 
-> $ git grep dev_dbg\( drivers/usb/gadget/function | grep -v "##args" | wc
->      33     151    2831
-> 
-> => VDBG() vs dev_vdbg():
->  git grep VDBG\( drivers/usb/gadget/function | grep -v "#define" | wc
->      49     269    3954
-> 
-> $ git grep dev_vdbg\( drivers/usb/gadget/function | wc
->       2       4     135
-> 
-> => ERROR() vs dev_err():
-> $ git grep ERROR\( drivers/usb/gadget/function | grep -v LERROR | wc
->      72     508    6560
-> 
-> $ git grep dev_err\( drivers/usb/gadget/function | grep -v "##args" | wc
->      65     309    5527
-> 
-> => WARNING() vs dev_warn():
-> $ git grep WARNING\( drivers/usb/gadget/function | wc
->       4      28     383
-> 
-> $ git grep dev_warn\( drivers/usb/gadget/function | grep -v "##args" | wc
->       3       6     169
-> 
-> => INFO() vs dev_info():
-> $ git grep INFO\( drivers/usb/gadget/function  | grep -v LINFO | grep -v
-> u_ether | wc
->      14      64    1167
-> 
-> $ git grep dev_info\( drivers/usb/gadget/function | grep -v "##args" | wc
->       0       0       0
+> that is in next but not in soc/driver tree/branch.
 
-Drivers that work properly should be quiet, so no INFO() usage should
-probably be needed anyway.
+That's due to no reaction on the patch [1] from Freescale maintainers (*).
+Either soc subsystem can pull this [2] or your patch can go via
+pin control subsystem.
 
-> 
-> Questions:
-> 
-> 1) Should we make them use the messaging utils consitently?
+*) Note, there is not Arnd's name nor soc mailing list in the MAINTAINERS
+   regarding those files, so I had had no idea about the correct route of
+   the change.
 
-Yes, converting to use the dev_*() calls is good to do.
+[1]: https://lore.kernel.org/lkml/20221005152947.71696-1-andriy.shevchenko@linux.intel.com/
+[2]: https://lore.kernel.org/linux-gpio/Y3YY%2Fm0F%2FRh0jUc7@black.fi.intel.com/
 
-> 2) How consistent should we become, given that some functions in the relevant
-> files, for example u_audio_start_capture(), sometimes (but not always) have:
-> 
-> 	struct usb_gadget *gadget = audio_dev->gadget;
-> 	struct device *dev = &gadget->dev;
-> 
-> and then they use dev_dbg(dev, ....);
+-- 
+With Best Regards,
+Andy Shevchenko
 
-dev_dbg() is fine, what's worng with that?
 
-> If we were to use DBG(audio_dev, ....); instead, then we effectively get
-> dev_dbg(&audio_dev->gadget->dev, ....); after macro expansion, which means two
-> pointer dereferences and taking an address of the result (I'm wondering how
-> smart the compiler can get if such a pattern repeats several times in a
-> function).
-
-The compiler can get very smart, but this isn't really an issue overall
-as USB drivers are very slow due to slow hardware.
-
-> 3) Maybe the amount of various messages is too large in the first place
-> and should be reduced before any unifications?
-
-Possibly, many might be able to be removed, look and see!
-
-thanks,
-
-greg k-h
