@@ -2,215 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960E96425A3
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 10:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54410642830
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 13:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiLEJT7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 04:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S231713AbiLEMO1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 07:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiLEJTl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 04:19:41 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4729712AA6
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 01:19:39 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so4755753ilt.9
-        for <linux-usb@vger.kernel.org>; Mon, 05 Dec 2022 01:19:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p+3UyaPir9nm9ZFzBR9VLd7x63HnrUGtAaSPQspoqLw=;
-        b=f55JjIsz3SP8XYjmj+urA9FqlEeMMgupQhL8U73hNGmBhqRMjtEi0LAdjQG4PAhHmn
-         RCrJog2WOl2ZnNlDtkO4BO+i43KpFYRhtpU8+zN9a+P35QIKzhqR/Pmn12uSfCTSJ73j
-         8myAlwa27DaNqUDGsx5XmkjBGKZIHu9y2FqpXDGyr05/TdeBf6gbjQW777smIMcAKgHu
-         tgy1tX2wBoaRVRMZWUQP23/MtG6iC5P//8qLGokPdiOYcMTef1GdyVmkpq2a0zxFkliT
-         +gb1x2POnvQqA1JGO2bA9VdljVHX5TxnMgW7e0mjhqYFRUJCQqncGOia2btmN0ETvuRT
-         A44w==
-X-Gm-Message-State: ANoB5pmPpunxZJfoDMcjYwSw67bBkfOtEOLobaIQ4U4sjKLBnoQXGK8o
-        EYT6F2d/QOngDmJUHHmvj4cq3jxqmI0t5ue0YVTJph3ScMPy
-X-Google-Smtp-Source: AA0mqf5Sr3Q/Xf/U4BK31WWtve8bzpdg+WVVBxZcVFNiGusSu3QrmaAsfCdtDXDpgE9xS6w/U/PrxrR0X9kGNvPedG465NeHBQIZ
+        with ESMTP id S231327AbiLEMO0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 07:14:26 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A394FAA
+        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 04:14:25 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B219660035C
+        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 12:14:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670242464;
+        bh=WBSqsP2fQFp/E2vmRZi+0kI2XABSo2phA0mSl5rW4f8=;
+        h=Date:To:From:Subject:From;
+        b=Hfl7dj6lOZwntJeSGJRy8fegsvtXGAAZ9tziqlYd7VDWQlJi+WNzP47JaNMbgH9NK
+         +CA5aGOQrbJadGJIJ/PT7zA+2VsAWQaBp8uBVwJYQCRVoWHBID1GN1ILCS0U/kSrbH
+         T3DMaZNF7GvUeMVEn8YScwBdK68h6mUw6+gwBSW+/7kTisUouZaekwnt286ehe9WI8
+         mKFBj+x1g2iKdmRogjabi3SH+z7mBibBWx487/j6UjOytfDhlaXOrGXwcaYkgbzdn6
+         cW6L9SfnMYCmA1vhXFLip67yd9bxUziNhebSbx+GiCOall0CqBN7owDgeDxvAgX+L5
+         bgpdHCAO9x+mA==
+Message-ID: <266f2df3-75cf-5dcf-1e59-8a8da5dd001e@collabora.com>
+Date:   Mon, 5 Dec 2022 13:14:21 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:c844:0:b0:302:f785:c9a1 with SMTP id
- b4-20020a92c844000000b00302f785c9a1mr22534702ilq.165.1670231978600; Mon, 05
- Dec 2022 01:19:38 -0800 (PST)
-Date:   Mon, 05 Dec 2022 01:19:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c6f44205ef112f5a@google.com>
-Subject: [syzbot] KASAN: invalid-free in gadgetfs_kill_sb
-From:   syzbot <syzbot+73a8d1eac3883b38173b@syzkaller.appspotmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, hbh25y@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mingo@kernel.org, rdunlap@infradead.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: [RFC] Unify messaging in gadget functions
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi All,
 
-syzbot found the following issue on:
+include/linux/usb/composite.h contains:
 
-HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=146ed1d5880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
-dashboard link: https://syzkaller.appspot.com/bug?extid=73a8d1eac3883b38173b
-compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: riscv64
+/* messaging utils */
+#define DBG(d, fmt, args...) \
+	dev_dbg(&(d)->gadget->dev , fmt , ## args)
+#define VDBG(d, fmt, args...) \
+	dev_vdbg(&(d)->gadget->dev , fmt , ## args)
+#define ERROR(d, fmt, args...) \
+	dev_err(&(d)->gadget->dev , fmt , ## args)
+#define WARNING(d, fmt, args...) \
+	dev_warn(&(d)->gadget->dev , fmt , ## args)
+#define INFO(d, fmt, args...) \
+	dev_info(&(d)->gadget->dev , fmt , ## args)
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Gadget functions do use these, but not consistently:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+73a8d1eac3883b38173b@syzkaller.appspotmail.com
+=> DBG() vs dev_dbg():
+$ git grep DBG\( drivers/usb/gadget/function | grep -v VDBG | grep -v LDBG | wc
+     138     871   11619
 
-==================================================================
-BUG: KASAN: double-free or invalid-free in slab_free mm/slub.c:3509 [inline]
-BUG: KASAN: double-free or invalid-free in kfree+0xe0/0x3e4 mm/slub.c:4562
+$ git grep dev_dbg\( drivers/usb/gadget/function | grep -v "##args" | wc
+      33     151    2831
 
-CPU: 0 PID: 3915 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff8047479e>] print_address_description.constprop.0+0x2a/0x330 mm/kasan/report.c:255
-[<ffffffff80474b98>] kasan_report_invalid_free+0x62/0x92 mm/kasan/report.c:381
-[<ffffffff80473a82>] ____kasan_slab_free+0x170/0x180 mm/kasan/common.c:346
-[<ffffffff80473fde>] __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
-[<ffffffff80469750>] kasan_slab_free include/linux/kasan.h:236 [inline]
-[<ffffffff80469750>] slab_free_hook mm/slub.c:1728 [inline]
-[<ffffffff80469750>] slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
-[<ffffffff8046d302>] slab_free mm/slub.c:3509 [inline]
-[<ffffffff8046d302>] kfree+0xe0/0x3e4 mm/slub.c:4562
-[<ffffffff81df6dae>] gadgetfs_kill_sb+0x56/0x68 drivers/usb/gadget/legacy/inode.c:2088
-[<ffffffff804ce138>] deactivate_locked_super+0x9a/0x11a fs/super.c:332
-[<ffffffff804cf982>] vfs_get_super fs/super.c:1160 [inline]
-[<ffffffff804cf982>] get_tree_single+0x11e/0x12e fs/super.c:1177
-[<ffffffff81df60f4>] gadgetfs_get_tree+0x26/0x30 drivers/usb/gadget/legacy/inode.c:2067
-[<ffffffff804cc844>] vfs_get_tree+0x4a/0x19c fs/super.c:1497
-[<ffffffff80522e36>] do_new_mount fs/namespace.c:2994 [inline]
-[<ffffffff80522e36>] path_mount+0xe9c/0x14dc fs/namespace.c:3324
-[<ffffffff80524014>] do_mount fs/namespace.c:3337 [inline]
-[<ffffffff80524014>] __do_sys_mount fs/namespace.c:3545 [inline]
-[<ffffffff80524014>] sys_mount+0x360/0x3ee fs/namespace.c:3522
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
+=> VDBG() vs dev_vdbg():
+  git grep VDBG\( drivers/usb/gadget/function | grep -v "#define" | wc
+      49     269    3954
 
-Allocated by task 2066:
- stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
- kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0x80/0xb2 mm/kasan/common.c:524
- kasan_kmalloc include/linux/kasan.h:270 [inline]
- kmem_cache_alloc_trace+0x178/0x2e0 mm/slub.c:3257
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:715 [inline]
- apparmor_sk_alloc_security+0x70/0xca security/apparmor/lsm.c:792
- security_sk_alloc+0x48/0x90 security/security.c:2255
- sk_prot_alloc+0xb6/0x20e net/core/sock.c:1926
- sk_alloc+0x34/0x602 net/core/sock.c:1976
- inet_create net/ipv4/af_inet.c:319 [inline]
- inet_create+0x28c/0x964 net/ipv4/af_inet.c:245
- __sock_create+0x322/0x646 net/socket.c:1468
- sock_create net/socket.c:1519 [inline]
- __sys_socket+0xe4/0x1e0 net/socket.c:1561
- __do_sys_socket net/socket.c:1570 [inline]
- sys_socket+0x2c/0x3a net/socket.c:1568
- ret_from_syscall+0x0/0x2
+$ git grep dev_vdbg\( drivers/usb/gadget/function | wc
+       2       4     135
 
-Freed by task 3916:
- stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
- kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
- kasan_set_track+0x1a/0x26 mm/kasan/common.c:45
- kasan_set_free_info+0x1e/0x3a mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x15e/0x180 mm/kasan/common.c:328
- __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
- kasan_slab_free include/linux/kasan.h:236 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
- slab_free mm/slub.c:3509 [inline]
- kfree+0xe0/0x3e4 mm/slub.c:4562
- gadgetfs_kill_sb+0x56/0x68 drivers/usb/gadget/legacy/inode.c:2088
- deactivate_locked_super+0x9a/0x11a fs/super.c:332
- deactivate_super fs/super.c:363 [inline]
- deactivate_super+0x80/0x94 fs/super.c:359
- cleanup_mnt+0x220/0x2c0 fs/namespace.c:1143
- __cleanup_mnt+0x1c/0x26 fs/namespace.c:1150
- task_work_run+0xdc/0x154 kernel/task_work.c:164
- tracehook_notify_resume include/linux/tracehook.h:188 [inline]
- do_notify_resume+0x894/0xa56 arch/riscv/kernel/signal.c:320
- ret_from_exception+0x0/0x10
+=> ERROR() vs dev_err():
+$ git grep ERROR\( drivers/usb/gadget/function | grep -v LERROR | wc
+      72     508    6560
 
-Last potentially related work creation:
- stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
- kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
- __kasan_record_aux_stack+0xc4/0xdc mm/kasan/generic.c:348
- kasan_record_aux_stack_noalloc+0xe/0x16 mm/kasan/generic.c:358
- kvfree_call_rcu+0x8e/0x440 kernel/rcu/tree.c:3591
- memcg_update_list_lru_node mm/list_lru.c:411 [inline]
- memcg_update_list_lru mm/list_lru.c:467 [inline]
- memcg_update_all_list_lrus+0x2d0/0x5c6 mm/list_lru.c:501
- memcg_alloc_cache_id mm/memcontrol.c:2964 [inline]
- memcg_online_kmem mm/memcontrol.c:3635 [inline]
- mem_cgroup_css_alloc+0xa86/0xc60 mm/memcontrol.c:5225
- css_create kernel/cgroup/cgroup.c:5299 [inline]
- cgroup_apply_control_enable+0x2c0/0x654 kernel/cgroup/cgroup.c:3124
- cgroup_mkdir+0x388/0x9e6 kernel/cgroup/cgroup.c:5517
- kernfs_iop_mkdir+0xc8/0xfa fs/kernfs/dir.c:1169
- vfs_mkdir+0x110/0x202 fs/namei.c:3933
- do_mkdirat+0x22e/0x262 fs/namei.c:3959
- __do_sys_mkdirat fs/namei.c:3974 [inline]
- sys_mkdirat+0x88/0xb2 fs/namei.c:3972
- ret_from_syscall+0x0/0x2
+$ git grep dev_err\( drivers/usb/gadget/function | grep -v "##args" | wc
+      65     309    5527
 
-The buggy address belongs to the object at ffffaf80072eb0e0
- which belongs to the cache kmalloc-16 of size 16
-The buggy address is located 0 bytes inside of
- 16-byte region [ffffaf80072eb0e0, ffffaf80072eb0f0)
-The buggy address belongs to the page:
-page:ffffaf807a84e218 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x874eb
-flags: 0x8000000200(slab|section=16|node=0|zone=0)
-raw: 0000008000000200 0000000000000100 0000000000000122 ffffaf80072013c0
-raw: 0000000000000000 0000000080800080 00000001ffffffff 0000000000000000
-raw: 00000000000007ff
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x0(), pid 1, ts 1244986300, free_ts 0
- stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
- create_dummy_stack mm/page_owner.c:59 [inline]
- register_early_stack+0x8a/0xcc mm/page_owner.c:75
- init_page_owner+0x8a/0x5cc mm/page_owner.c:87
- invoke_init_callbacks mm/page_ext.c:112 [inline]
- page_ext_init+0x4e6/0x50c mm/page_ext.c:419
-page_owner free stack trace missing
+=> WARNING() vs dev_warn():
+$ git grep WARNING\( drivers/usb/gadget/function | wc
+       4      28     383
 
-Memory state around the buggy address:
- ffffaf80072eaf80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffffaf80072eb000: 00 00 fc fc 00 00 fc fc 00 00 fc fc 00 01 fc fc
->ffffaf80072eb080: 00 07 fc fc 00 00 fc fc fa fb fc fc fa fb fc fc
-                                                       ^
- ffffaf80072eb100: fb fb fc fc fb fb fc fc 00 00 fc fc 00 00 fc fc
- ffffaf80072eb180: 00 04 fc fc 00 01 fc fc fa fb fc fc fb fb fc fc
-==================================================================
+$ git grep dev_warn\( drivers/usb/gadget/function | grep -v "##args" | wc
+       3       6     169
 
+=> INFO() vs dev_info():
+$ git grep INFO\( drivers/usb/gadget/function  | grep -v LINFO | grep -v u_ether 
+| wc
+      14      64    1167
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+$ git grep dev_info\( drivers/usb/gadget/function | grep -v "##args" | wc
+       0       0       0
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Questions:
+
+1) Should we make them use the messaging utils consitently?
+
+2) How consistent should we become, given that some functions in the relevant
+files, for example u_audio_start_capture(), sometimes (but not always) have:
+
+	struct usb_gadget *gadget = audio_dev->gadget;
+	struct device *dev = &gadget->dev;
+
+and then they use dev_dbg(dev, ....);
+
+If we were to use DBG(audio_dev, ....); instead, then we effectively get
+dev_dbg(&audio_dev->gadget->dev, ....); after macro expansion, which means two
+pointer dereferences and taking an address of the result (I'm wondering how
+smart the compiler can get if such a pattern repeats several times in a
+function).
+
+3) Maybe the amount of various messages is too large in the first place
+and should be reduced before any unifications?
+
+Regards,
+
+Andrzej
