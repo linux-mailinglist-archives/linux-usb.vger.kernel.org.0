@@ -2,177 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C7064357D
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 21:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA606435A9
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Dec 2022 21:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233119AbiLEUUe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 15:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S233311AbiLEU3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Dec 2022 15:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiLEUUd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 15:20:33 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1044724BFD
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 12:20:32 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88343589;
-        Mon,  5 Dec 2022 21:20:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670271629;
-        bh=iSP+2rDHGpQBGKye/R5g7M3Xo8ozyNXCDY5nD2esdYM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RRvdo/Rn+HIm44YVnb4Lpaa8XvAvFFCB0aO95dKUjWzScWLnECt7lTufVA2zclLhD
-         aimfumSUleAd5D7cjAikvCT4iHcZ8ZkNkNOqRucfsDbNL0q+dsm9mwRzkRgqwiVr08
-         +sc+Mw3h8tdlMzSHbfhyVepX+WOFARWzaqaqTrjM=
-Message-ID: <926df743-9c43-9471-3c67-3df9f4e18204@ideasonboard.com>
-Date:   Mon, 5 Dec 2022 20:20:25 +0000
+        with ESMTP id S230459AbiLEU3c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 15:29:32 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE892A25A;
+        Mon,  5 Dec 2022 12:29:31 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id vp12so1278296ejc.8;
+        Mon, 05 Dec 2022 12:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:from:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iF8+b4oOLJzfCMJAyK34nfIu5+WDu75TlYxOjfJ4OOw=;
+        b=lJlS2gST7Fd/dDSeFwi1xRtVoo19ol6NMhB/uPMdYM+JQasi25cOxfUiX4a1h7i3XR
+         gebaHTDuVuHRz1NWePyu6ccKXDTxl9O59zBlWUykaQbBcHEPdYdmEUkTWoFWgr2+A/r3
+         spYYr5+JjveEkW7P9JSZS001vD40Myl2qUrERo1unhEHH8f6ptj6Wb9ePMgF2OX1nvCs
+         2DUADnqt0n8X1ZcHVY8+Bp/e4jrLgh3F6tYt7U4jgkg2Sq6Wq38XlLODXWQ8lIQDaJMi
+         IMzKaA3n3rbIaJn8Glf5bLzgrcojlbYrmAwv5MNXF2nwExEfC8OmrRZUYS27H006hMZ2
+         Awtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:from:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iF8+b4oOLJzfCMJAyK34nfIu5+WDu75TlYxOjfJ4OOw=;
+        b=EIOVFGox12vC5G3LAH5mp88tMQuGDlkuqZrETNeGloF1fLNPRdVweLUbWuMUmGiGEc
+         2Y0I/UF6oAe15iIjU6O8j6X38TI4LmrVwJZE59w2ING8g0RmzSvH0IspTztsbBc1meq8
+         Gg1+hoCaYXAKrgHpHz5PWVxI58QdwaV9pYAfm+3VvvK1/Jy7DVnI2YTxA9HFL/zh6Sh7
+         BnW7ZEnqvTlBA4aellOBgNW4/Pm385InnclqxhOKO7o0PasdlTqyDpcNmAg40i/6YAQE
+         aT9Al5fAEbBxXOe0oPGr6piiML2fUIPUbMaCo6Zyx+4kFpgY1iPGgRBrf8FjNxyMWtuc
+         Cy6Q==
+X-Gm-Message-State: ANoB5pnD2kKevzBsTjwNaGFjJNaFIPMbx/AXY+kQ7yPW23aLXd7I4NYv
+        6C/dhqytsX91DuVQ83C+GmU=
+X-Google-Smtp-Source: AA0mqf5xGXWBdK2CtWvcPyPy+O0GCKJmvoVnT18A8LprlMrZPX6+a0B5znG1yBwpo7gVgZaSgECDUQ==
+X-Received: by 2002:a17:906:d78d:b0:7c0:fa81:ac42 with SMTP id pj13-20020a170906d78d00b007c0fa81ac42mr4059147ejb.526.1670272170168;
+        Mon, 05 Dec 2022 12:29:30 -0800 (PST)
+Received: from [192.168.1.10] ([46.249.74.23])
+        by smtp.googlemail.com with ESMTPSA id dy25-20020a05640231f900b004643f1524f3sm193986edb.44.2022.12.05.12.29.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Dec 2022 12:29:29 -0800 (PST)
+Subject: Re: [PATCH] usb: phy: add dedicated notifier for charger events
+From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>, felipe.balbi@linux.intel.com
+Cc:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-usb@vger.kernel.org, tony@atomide.com,
+        Pavel Machek <pavel@ucw.cz>
+References: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <Y3JpfDU7T2Ks/H4m@kroah.com> <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
+ <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
+Message-ID: <af63dc7c-6641-13a3-067f-c58923ee510e@gmail.com>
+Date:   Mon, 5 Dec 2022 22:29:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 Thunderbird/60.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [usb:usb-testing 2/2] drivers/usb/gadget/legacy/webcam.c:174:3:
- error: field designator 'bmInterfaceFlags' does not refer to any field in
- type 'const struct uvc_format_uncompressed'; did you mean 'bmInterlaceFlags'?
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <202212060347.MaTRoCo0-lkp@intel.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <202212060347.MaTRoCo0-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Oops, forgot all about the legacy version. Sorry Greg - let me send a v2.
+ping
 
-On 05/12/2022 19:33, kernel test robot wrote:
-> Hi Daniel,
->
-> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> head:   751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
-> commit: 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c [2/2] usb: gadget: uvc: Rename bmInterfaceFlags -> bmInterlaceFlags
-> config: arm-randconfig-r012-20221205
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install arm cross compiling tool for clang build
->          # apt-get install binutils-arm-linux-gnueabi
->          # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
->          git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
->          git fetch --no-tags usb usb-testing
->          git checkout 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/gadget/legacy/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->>> drivers/usb/gadget/legacy/webcam.c:174:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_uncompressed'; did you mean 'bmInterlaceFlags'?
->             .bmInterfaceFlags       = 0,
->              ^~~~~~~~~~~~~~~~
->              bmInterlaceFlags
->     include/uapi/linux/usb/video.h:469:8: note: 'bmInterlaceFlags' declared here
->             __u8  bmInterlaceFlags;
->                   ^
->>> drivers/usb/gadget/legacy/webcam.c:225:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_mjpeg'; did you mean 'bmInterlaceFlags'?
->             .bmInterfaceFlags       = 0,
->              ^~~~~~~~~~~~~~~~
->              bmInterlaceFlags
->     include/uapi/linux/usb/video.h:525:8: note: 'bmInterlaceFlags' declared here
->             __u8  bmInterlaceFlags;
->                   ^
->     2 errors generated.
->
->
-> vim +174 drivers/usb/gadget/legacy/webcam.c
->
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  160
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  161  static const struct uvc_format_uncompressed uvc_format_yuv = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  162  	.bLength		= UVC_DT_FORMAT_UNCOMPRESSED_SIZE,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  163  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  164  	.bDescriptorSubType	= UVC_VS_FORMAT_UNCOMPRESSED,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  165  	.bFormatIndex		= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  166  	.bNumFrameDescriptors	= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  167  	.guidFormat		=
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  168  		{ 'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  169  		 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  170  	.bBitsPerPixel		= 16,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  171  	.bDefaultFrameIndex	= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  172  	.bAspectRatioX		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  173  	.bAspectRatioY		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02 @174  	.bmInterfaceFlags	= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  175  	.bCopyProtect		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  176  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  177
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  178  DECLARE_UVC_FRAME_UNCOMPRESSED(1);
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  179  DECLARE_UVC_FRAME_UNCOMPRESSED(3);
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  180
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  181  static const struct UVC_FRAME_UNCOMPRESSED(3) uvc_frame_yuv_360p = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  182  	.bLength		= UVC_DT_FRAME_UNCOMPRESSED_SIZE(3),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  183  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  184  	.bDescriptorSubType	= UVC_VS_FRAME_UNCOMPRESSED,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  185  	.bFrameIndex		= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  186  	.bmCapabilities		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  187  	.wWidth			= cpu_to_le16(640),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  188  	.wHeight		= cpu_to_le16(360),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  189  	.dwMinBitRate		= cpu_to_le32(18432000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  190  	.dwMaxBitRate		= cpu_to_le32(55296000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  191  	.dwMaxVideoFrameBufferSize	= cpu_to_le32(460800),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  192  	.dwDefaultFrameInterval	= cpu_to_le32(666666),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  193  	.bFrameIntervalType	= 3,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  194  	.dwFrameInterval[0]	= cpu_to_le32(666666),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  195  	.dwFrameInterval[1]	= cpu_to_le32(1000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  196  	.dwFrameInterval[2]	= cpu_to_le32(5000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  197  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  198
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  199  static const struct UVC_FRAME_UNCOMPRESSED(1) uvc_frame_yuv_720p = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  200  	.bLength		= UVC_DT_FRAME_UNCOMPRESSED_SIZE(1),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  201  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  202  	.bDescriptorSubType	= UVC_VS_FRAME_UNCOMPRESSED,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  203  	.bFrameIndex		= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  204  	.bmCapabilities		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  205  	.wWidth			= cpu_to_le16(1280),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  206  	.wHeight		= cpu_to_le16(720),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  207  	.dwMinBitRate		= cpu_to_le32(29491200),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  208  	.dwMaxBitRate		= cpu_to_le32(29491200),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  209  	.dwMaxVideoFrameBufferSize	= cpu_to_le32(1843200),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  210  	.dwDefaultFrameInterval	= cpu_to_le32(5000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  211  	.bFrameIntervalType	= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  212  	.dwFrameInterval[0]	= cpu_to_le32(5000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  213  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  214
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  215  static const struct uvc_format_mjpeg uvc_format_mjpg = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  216  	.bLength		= UVC_DT_FORMAT_MJPEG_SIZE,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  217  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  218  	.bDescriptorSubType	= UVC_VS_FORMAT_MJPEG,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  219  	.bFormatIndex		= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  220  	.bNumFrameDescriptors	= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  221  	.bmFlags		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  222  	.bDefaultFrameIndex	= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  223  	.bAspectRatioX		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  224  	.bAspectRatioY		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02 @225  	.bmInterfaceFlags	= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  226  	.bCopyProtect		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  227  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  228
->
-> :::::: The code at line 174 was first introduced by commit
-> :::::: a9914127e834acf648a96c72b4e271dc0c1c7c74 USB gadget: Webcam device
->
-> :::::: TO: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> :::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
->
+On 16.11.22 г. 9:11 ч., Ivaylo Dimitrov wrote:
+> 
+> 
+> On 14.11.22 г. 18:46 ч., Ivaylo Dimitrov wrote:
+>> Hi,
+>>
+>> On 14.11.22 г. 18:14 ч., Greg KH wrote:
+>>> On Mon, Nov 14, 2022 at 02:56:02PM +0200, Ivaylo Dimitrov wrote:
+>>>> usb_phy::notifier is already used by various PHY drivers (including
+>>>> phy_generic) to report VBUS status changes and its usage conflicts with
+>>>> charger current limit changes reporting.
+>>>
+>>> How exactly does it conflict?
+>>>
+>>
+>> see below
+>>
+>>>> Fix that by introducing a second notifier that is dedicated to usb 
+>>>> charger
+>>>> notifications. Add usb_charger_XXX_notifier functions. Fix charger 
+>>>> drivers
+>>>> that currently (ab)use usb_XXX_notifier() to use the new API.
+>>>
+>>> Why not just set the notifier type to be a new one instead of adding a
+>>> whole new notifier list?  Or use a real callback?  notifier lists are
+>>> really horrid and should be avoided whenever possible.
+>>>
+>>
+>> Not sure what you mean by "notifier type', but if that is that val 
+>> parameter of atomic_notifier_call_chain(), the way it is used by usb 
+>> charger FW:
+>>
+>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy.c#L132
+>>
+>> is not compatible with:
+>>
+>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy-generic.c#L185 
+>>
+>>
+>> for example, IIUC.
+>>
+>> The former wants to send max current as val, while latter sends event 
+>> type as val. Sure, I may create some kind of hack, like using the MSB 
+>> to denote charger events, but that doesn't feel right.
+>>
+>> Or, shall I do something else and fix the usage all over the place? 
+>> Please elaborate.
+>>
+> 
+> Digging further into that, it seems phy-ab8500-usb.c is also using 
+> usb_phy::notifier in non-standard way, it sends events from 
+> ux500_musb_vbus_id_status instead of usb_phy_events. I don't know the 
+> history behind, but right now we have at least 3 incompatible usages of 
+> usb_phy::notifier:
+> 
+> 1. Most of the phy and charger drivers use usb_phy_events as notifier type
+> 
+> 2. phy-ab8500-usb.c uses ux500_musb_vbus_id_status as notifier type, I 
+> am not the only one to hit that it seems 
+> https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/power/supply/ab8500_charger.c#L3191 
+> 
+> 
+> 3. USB charger framework uses max charging current as notifier type.
+> 
+> Moreover, a charger driver in a system that has gadget drivers support 
+> and phy that has extcon charger cable detection support and registers to 
+> phy notifier, will inevitably receive (1) and (3) types of 
+> notifications, without any way to distinguish I was able to find.
+> 
+> I don't really see how those can be merged to use one notifier only, 
+> without fixing most of USB phy and gadget drivers and half of charger 
+> drivers. Not that I like adding the second notifier, I just don;t see 
+> other way.
+> 
+> Regards,
+> Ivo
+> 
+>> In regards to callback - I didn't want to come-up with a whole new 
+>> API, but just fix the current one. Also, a single callback will not be 
+>> enough - imagine a case with 2 batteries that have to be charged by a 
+>> single USB port, so 2 separate charger devices, most-probably. We will 
+>> have to keep a list of callback functions somehow. I admit my lack of 
+>> knowledge, but, do we already have such API to use?
+>>
+>>>> Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
+>>>>
+>>>> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+>>>
+>>> You can't have a blank line between there, checkpatch.pl should have
+>>> complained.
+>>>
+>>
+>> it didn't:
+>>
+>> ./scripts/checkpatch.pl 
+>> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch
+>> total: 0 errors, 0 warnings, 90 lines checked
+>>
+>> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch has no 
+>> obvious style problems and is ready for submission.
+>>
+>> Will fix, if I am to send v2
+>>
+>> Thanks,
+>> Ivo
+>>
+>>> thanks,
+>>>
+>>> greg k-h
+>>>
