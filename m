@@ -2,41 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C345644DD8
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 22:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D761644DE1
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 22:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiLFVSZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Dec 2022 16:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S229583AbiLFVVy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Dec 2022 16:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiLFVSX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 16:18:23 -0500
+        with ESMTP id S229452AbiLFVVx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 16:21:53 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C37C47331
-        for <linux-usb@vger.kernel.org>; Tue,  6 Dec 2022 13:18:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BAB47325;
+        Tue,  6 Dec 2022 13:21:52 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8DE8E3D7;
-        Tue,  6 Dec 2022 22:18:20 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E1933D7;
+        Tue,  6 Dec 2022 22:21:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670361500;
-        bh=4a0F7+O8MPj5cMraRBVpGFL9G4kVSKPSASSfByUKs+c=;
+        s=mail; t=1670361711;
+        bh=OrJsCJNo27Qlp3rbIbQPFuVvMQMYEBOzgkHtwGy1OdQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r3IQaedS6bvyu0Cbk0FSv1eg+1xHQ4Lph9ykzumoiwxUp60rO0sBwcHJDSf+Z676w
-         fkY7bPifXPjNsEF0u/E19nTUkw+lNs/6vMDVgOwwMuUHhDDlZoPrev6RmhO3gyKRs3
-         a4pLM6OLcCNKXl4BbPQB4JMpgnaqwH5iHpZwYZ7k=
-Date:   Tue, 6 Dec 2022 23:18:18 +0200
+        b=FwiImNRf7ALJLdu5YaC8qgkXWb8AnAiJDZIVuV9VEhI6Odi/lmjE10LQ8JHi3ru+V
+         4M5VR3lKZO+3vXLGdDoP6c4Hbr/GiVqDzZvox4qcbnQld9WxuvZy85p2mS1s8LfhYR
+         x2qMpgVuMRxMzjpCvdkCd8mwF4Y4Bqn4EW5LLHTA=
+Date:   Tue, 6 Dec 2022 23:21:48 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        mgr@pengutronix.de, kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2] usb: gadget: uvc: Rename bmInterfaceFlags ->
- bmInterlaceFlags
-Message-ID: <Y4+xmpzrFjSNC/Ip@pendragon.ideasonboard.com>
-References: <20221206161203.1562827-1-dan.scally@ideasonboard.com>
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc:     dan.scally@ideasonboard.com, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: uvc: Prevent buffer overflow in setup
+ handler
+Message-ID: <Y4+ybPL2uUO4SCJJ@pendragon.ideasonboard.com>
+References: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
+ <20221206141301.51305-1-szymon.heidrich@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221206161203.1562827-1-dan.scally@ideasonboard.com>
+In-Reply-To: <20221206141301.51305-1-szymon.heidrich@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -46,162 +48,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
+Hi Szymon,
 
 Thank you for the patch.
 
-On Tue, Dec 06, 2022 at 04:12:03PM +0000, Daniel Scally wrote:
-> In the specification documents for the Uncompressed and MJPEG USB
-> Video Payloads, the field name is bmInterlaceFlags - it has been
-> misnamed within the kernel.
-> 
-> Although renaming the field does break the kernel's interface to
-> userspace it should be low-risk in this instance. The field is read
-> only and hardcoded to 0, so there was never any value in anyone
-> reading it. A search of the uvc-gadget application and all the
-> forks that I could find for it did not reveal any users either.
+On Tue, Dec 06, 2022 at 03:13:01PM +0100, Szymon Heidrich wrote:
+> Setup function uvc_function_setup permits control transfer
+> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
+> data stage handler for OUT transfer uses memcpy to copy req->actual
+> bytes to uvc_event->data.data array of size 60. This may result
+> in an overflow of 4 bytes.
 > 
 > Fixes: cdda479f15cd ("USB gadget: video class function driver")
-> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+
+Good catch.
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 > ---
-> Changes in v2:
+> V1 -> V2: Corrected commit message and changed ?: in favor of min_t
+> V2 -> V3: Added fixes tag
 > 
-> 	- Updated the legacy driver too
-> 	- Updated the ABI docs...which I also forgot last time (my bad)
+>  drivers/usb/gadget/function/f_uvc.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
->  Documentation/ABI/testing/configfs-usb-gadget-uvc |  4 ++--
->  drivers/usb/gadget/function/uvc_configfs.c        | 12 ++++++------
->  drivers/usb/gadget/legacy/webcam.c                |  4 ++--
->  include/uapi/linux/usb/video.h                    |  4 ++--
->  4 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> index 611b23e6488d..f00cff6d8c5c 100644
-> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> @@ -197,7 +197,7 @@ Description:	Specific MJPEG format descriptors
->  					read-only
->  		bmaControls		this format's data for bmaControls in
->  					the streaming header
-> -		bmInterfaceFlags	specifies interlace information,
-> +		bmInterlaceFlags	specifies interlace information,
->  					read-only
->  		bAspectRatioY		the X dimension of the picture aspect
->  					ratio, read-only
-> @@ -253,7 +253,7 @@ Description:	Specific uncompressed format descriptors
->  					read-only
->  		bmaControls		this format's data for bmaControls in
->  					the streaming header
-> -		bmInterfaceFlags	specifies interlace information,
-> +		bmInterlaceFlags	specifies interlace information,
->  					read-only
->  		bAspectRatioY		the X dimension of the picture aspect
->  					ratio, read-only
-> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-> index 4303a3283ba0..76cb60d13049 100644
-> --- a/drivers/usb/gadget/function/uvc_configfs.c
-> +++ b/drivers/usb/gadget/function/uvc_configfs.c
-> @@ -1512,7 +1512,7 @@ UVCG_UNCOMPRESSED_ATTR(b_bits_per_pixel, bBitsPerPixel, 8);
->  UVCG_UNCOMPRESSED_ATTR(b_default_frame_index, bDefaultFrameIndex, 8);
->  UVCG_UNCOMPRESSED_ATTR_RO(b_aspect_ratio_x, bAspectRatioX, 8);
->  UVCG_UNCOMPRESSED_ATTR_RO(b_aspect_ratio_y, bAspectRatioY, 8);
-> -UVCG_UNCOMPRESSED_ATTR_RO(bm_interface_flags, bmInterfaceFlags, 8);
-> +UVCG_UNCOMPRESSED_ATTR_RO(bm_interlace_flags, bmInterlaceFlags, 8);
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 6e196e061..4419b7972 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
 >  
->  #undef UVCG_UNCOMPRESSED_ATTR
->  #undef UVCG_UNCOMPRESSED_ATTR_RO
-> @@ -1541,7 +1541,7 @@ static struct configfs_attribute *uvcg_uncompressed_attrs[] = {
->  	&uvcg_uncompressed_attr_b_default_frame_index,
->  	&uvcg_uncompressed_attr_b_aspect_ratio_x,
->  	&uvcg_uncompressed_attr_b_aspect_ratio_y,
-> -	&uvcg_uncompressed_attr_bm_interface_flags,
-> +	&uvcg_uncompressed_attr_bm_interlace_flags,
->  	&uvcg_uncompressed_attr_bma_controls,
->  	NULL,
->  };
-> @@ -1574,7 +1574,7 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
->  	h->desc.bDefaultFrameIndex	= 1;
->  	h->desc.bAspectRatioX		= 0;
->  	h->desc.bAspectRatioY		= 0;
-> -	h->desc.bmInterfaceFlags	= 0;
-> +	h->desc.bmInterlaceFlags	= 0;
->  	h->desc.bCopyProtect		= 0;
->  
->  	INIT_LIST_HEAD(&h->fmt.frames);
-> @@ -1700,7 +1700,7 @@ UVCG_MJPEG_ATTR(b_default_frame_index, bDefaultFrameIndex, 8);
->  UVCG_MJPEG_ATTR_RO(bm_flags, bmFlags, 8);
->  UVCG_MJPEG_ATTR_RO(b_aspect_ratio_x, bAspectRatioX, 8);
->  UVCG_MJPEG_ATTR_RO(b_aspect_ratio_y, bAspectRatioY, 8);
-> -UVCG_MJPEG_ATTR_RO(bm_interface_flags, bmInterfaceFlags, 8);
-> +UVCG_MJPEG_ATTR_RO(bm_interlace_flags, bmInterlaceFlags, 8);
->  
->  #undef UVCG_MJPEG_ATTR
->  #undef UVCG_MJPEG_ATTR_RO
-> @@ -1728,7 +1728,7 @@ static struct configfs_attribute *uvcg_mjpeg_attrs[] = {
->  	&uvcg_mjpeg_attr_bm_flags,
->  	&uvcg_mjpeg_attr_b_aspect_ratio_x,
->  	&uvcg_mjpeg_attr_b_aspect_ratio_y,
-> -	&uvcg_mjpeg_attr_bm_interface_flags,
-> +	&uvcg_mjpeg_attr_bm_interlace_flags,
->  	&uvcg_mjpeg_attr_bma_controls,
->  	NULL,
->  };
-> @@ -1755,7 +1755,7 @@ static struct config_group *uvcg_mjpeg_make(struct config_group *group,
->  	h->desc.bDefaultFrameIndex	= 1;
->  	h->desc.bAspectRatioX		= 0;
->  	h->desc.bAspectRatioY		= 0;
-> -	h->desc.bmInterfaceFlags	= 0;
-> +	h->desc.bmInterlaceFlags	= 0;
->  	h->desc.bCopyProtect		= 0;
->  
->  	INIT_LIST_HEAD(&h->fmt.frames);
-> diff --git a/drivers/usb/gadget/legacy/webcam.c b/drivers/usb/gadget/legacy/webcam.c
-> index 94e22867da1d..53e38f87472b 100644
-> --- a/drivers/usb/gadget/legacy/webcam.c
-> +++ b/drivers/usb/gadget/legacy/webcam.c
-> @@ -171,7 +171,7 @@ static const struct uvc_format_uncompressed uvc_format_yuv = {
->  	.bDefaultFrameIndex	= 1,
->  	.bAspectRatioX		= 0,
->  	.bAspectRatioY		= 0,
-> -	.bmInterfaceFlags	= 0,
-> +	.bmInterlaceFlags	= 0,
->  	.bCopyProtect		= 0,
->  };
->  
-> @@ -222,7 +222,7 @@ static const struct uvc_format_mjpeg uvc_format_mjpg = {
->  	.bDefaultFrameIndex	= 1,
->  	.bAspectRatioX		= 0,
->  	.bAspectRatioY		= 0,
-> -	.bmInterfaceFlags	= 0,
-> +	.bmInterlaceFlags	= 0,
->  	.bCopyProtect		= 0,
->  };
->  
-> diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
-> index bfdae12cdacf..6e8e572c2980 100644
-> --- a/include/uapi/linux/usb/video.h
-> +++ b/include/uapi/linux/usb/video.h
-> @@ -466,7 +466,7 @@ struct uvc_format_uncompressed {
->  	__u8  bDefaultFrameIndex;
->  	__u8  bAspectRatioX;
->  	__u8  bAspectRatioY;
-> -	__u8  bmInterfaceFlags;
-> +	__u8  bmInterlaceFlags;
->  	__u8  bCopyProtect;
->  } __attribute__((__packed__));
->  
-> @@ -522,7 +522,7 @@ struct uvc_format_mjpeg {
->  	__u8  bDefaultFrameIndex;
->  	__u8  bAspectRatioX;
->  	__u8  bAspectRatioY;
-> -	__u8  bmInterfaceFlags;
-> +	__u8  bmInterlaceFlags;
->  	__u8  bCopyProtect;
->  } __attribute__((__packed__));
->  
+>  		memset(&v4l2_event, 0, sizeof(v4l2_event));
+>  		v4l2_event.type = UVC_EVENT_DATA;
+> -		uvc_event->data.length = req->actual;
+> -		memcpy(&uvc_event->data.data, req->buf, req->actual);
+> +		uvc_event->data.length = min_t(unsigned int, req->actual,
+> +			sizeof(uvc_event->data.data));
+> +		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
+>  		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+>  	}
+>  }
 
 -- 
 Regards,
