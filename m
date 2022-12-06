@@ -2,163 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB66C643C84
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 05:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2034643CFA
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 07:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiLFE5w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Dec 2022 23:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S232399AbiLFGIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Dec 2022 01:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLFE5s (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Dec 2022 23:57:48 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EBA64F4
-        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 20:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670302666; x=1701838666;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9yjT1L7bUuQZkvU0er/xEnojjxnBBtNqSLaY3Js9tQk=;
-  b=WH9YmaWAO2vVO93uSPFRTLLhP5NgSQ+OWU7wO1AfSPaDcZJzQMJhmc+2
-   8ODLb5vWG6yl6M8w64gTBXml+deC9T6J/bEQgv3pfzxqTVMlYmOlNyUNB
-   BEsoKZlW72pPKNNj+lycodBLN+zP2TDmk8tu7KnPlTxt16CuVRqEcW6y7
-   5rBAohDFawL9eef2OD7j7D4JI95viVDeTut5WOPcfE3G5JdKMkCnKN99I
-   cQAtZV+z7meNCoNaj92pJJBIiI5UAZqBImBxqwecigAcSG1bdVojP9olc
-   qSEnLpa/mukW6G7piMpQ1WcnV5NUHNR8MnAoPBAM1z6C3Ukd3YPMHJxoy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="378697981"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="378697981"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 20:57:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="820449226"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="820449226"
-Received: from lkp-server01.sh.intel.com (HELO b3c45e08cbc1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 05 Dec 2022 20:57:44 -0800
-Received: from kbuild by b3c45e08cbc1 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p2Q1Y-0000bJ-0d;
-        Tue, 06 Dec 2022 04:57:44 +0000
-Date:   Tue, 06 Dec 2022 12:57:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD REGRESSION
- 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
-Message-ID: <638ecbae.00l1IxaR/IdwC+xQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229591AbiLFGIF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 01:08:05 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A467AE03F
+        for <linux-usb@vger.kernel.org>; Mon,  5 Dec 2022 22:08:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670305961; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=eHUppgzpTBO7P6Lj0flr8iHol2Iqh9Me9093vkjxkY7bYpE4dYj6W2hhEh6Qs7Olr4LaPC4UpbhFzvoGmRpZSiAS7VbzXTE6Htd43EC/8DcE7A16aIwdd5d8DSkZ+gS724befRKx5giFe75il62MSksZeZNoQTgZR2viyNO3z8A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670305961; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=8OQhkFZBuQ+Ya1Ot1lELUxMRAjlXTh0qx4g/rKP2seQ=; 
+        b=jASkVWIbn4+tmFLqv1K6zWfEojjyZfEToxajyAyMXXN4d7rGLb/Dl5TuoyO+Fjhso/QNaDbHDr7TR6fX+FYMeHThWUHdSfSyClAdmdjlg9KdqqsVR1TFAQexIxZrriBNEBEinFjT1YARnW8kR7tSlR10JnNZZ5TXwBWvgoznynM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670305961;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=8OQhkFZBuQ+Ya1Ot1lELUxMRAjlXTh0qx4g/rKP2seQ=;
+        b=hNNjZcXFn4B4I5MWpTIt2KTE5gPT+OZWRvKLpeL812ku817GSwZoSdmEefZ8DGBH
+        JAQK1bC9D+dgQOR5Gcz5qcLWZgo2lesxeew/DL1Wu7JTwa9FqdNrdwYuP4yebqnzC/4
+        oJMj+UzakYc3vyGAeejAAkjX3iZ8TJA58TgnSZF4=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
+        with SMTPS id 1670305959289556.1373358007419; Mon, 5 Dec 2022 21:52:39 -0800 (PST)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH v3 0/6] Rongpin RP-H6B support (and support for GL850G)
+Date:   Tue,  6 Dec 2022 13:52:22 +0800
+Message-Id: <20221206055228.306074-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c  usb: gadget: uvc: Rename bmInterfaceFlags -> bmInterlaceFlags
+This patchset adds support for Rongpin RP-H6B, and as a dependency,
+power sequence support for its onboard USB hub, GL850G.
 
-Error/Warning reports:
+The first 3 patches are for GL850G, adding a binding for it and adding
+its support to onboard_usb_hub driver.
 
-https://lore.kernel.org/oe-kbuild-all/202212060347.MaTRoCo0-lkp@intel.com
+The last 3 patches are for RP-H6B, also 2 for adding a binding and 1 for
+the real DT.
 
-Error/Warning: (recently discovered and may have been fixed)
+Icenowy Zheng (6):
+  dt-bindings: vendor-prefixes: add Genesys Logic
+  dt-bindings: usb: Add binding for Genesys Logic GL850G hub controller
+  usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+  vendor-prefixes: Add Shenzhen Rongpin Electronics Co., Ltd
+  dt-bindings: arm: sunxi: add Rongpin RP-H6B board
+  arm64: dts: allwinner: h6: add Rongpin RP-H6C SoM and RP-H6B board
 
-drivers/usb/gadget/legacy/webcam.c:174:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_uncompressed'; did you mean 'bmInterlaceFlags'?
-drivers/usb/gadget/legacy/webcam.c:225:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_mjpeg'; did you mean 'bmInterlaceFlags'?
-
-Error/Warning ids grouped by kconfigs:
-
-clang_recent_errors
-|-- arm-randconfig-r012-20221205
-|   |-- drivers-usb-gadget-legacy-webcam.c:error:field-designator-bmInterfaceFlags-does-not-refer-to-any-field-in-type-const-struct-uvc_format_mjpeg
-|   `-- drivers-usb-gadget-legacy-webcam.c:error:field-designator-bmInterfaceFlags-does-not-refer-to-any-field-in-type-const-struct-uvc_format_uncompressed
-|-- arm64-randconfig-r032-20221205
-|   |-- drivers-usb-gadget-legacy-webcam.c:error:field-designator-bmInterfaceFlags-does-not-refer-to-any-field-in-type-const-struct-uvc_format_mjpeg
-|   `-- drivers-usb-gadget-legacy-webcam.c:error:field-designator-bmInterfaceFlags-does-not-refer-to-any-field-in-type-const-struct-uvc_format_uncompressed
-`-- powerpc-randconfig-r014-20221204
-    |-- drivers-usb-gadget-legacy-webcam.c:error:field-designator-bmInterfaceFlags-does-not-refer-to-any-field-in-type-const-struct-uvc_format_mjpeg
-    `-- drivers-usb-gadget-legacy-webcam.c:error:field-designator-bmInterfaceFlags-does-not-refer-to-any-field-in-type-const-struct-uvc_format_uncompressed
-
-elapsed time: 727m
-
-configs tested: 63
-configs skipped: 3
-
-gcc tested configs:
-um                             i386_defconfig
-i386                                defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-i386                             allyesconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-sh                               allmodconfig
-s390                             allmodconfig
-s390                                defconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-ia64                             allmodconfig
-s390                             allyesconfig
-m68k                             allyesconfig
-x86_64                              defconfig
-arc                  randconfig-r043-20221205
-s390                 randconfig-r044-20221205
-riscv                randconfig-r042-20221205
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64               randconfig-a011-20221205
-x86_64               randconfig-a012-20221205
-arm                                 defconfig
-x86_64               randconfig-a014-20221205
-i386                 randconfig-a013-20221205
-x86_64               randconfig-a013-20221205
-i386                 randconfig-a012-20221205
-i386                 randconfig-a011-20221205
-i386                 randconfig-a014-20221205
-x86_64               randconfig-a015-20221205
-i386                 randconfig-a015-20221205
-i386                 randconfig-a016-20221205
-x86_64               randconfig-a016-20221205
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20221205
-arm                  randconfig-r046-20221205
-hexagon              randconfig-r041-20221205
-x86_64               randconfig-a003-20221205
-x86_64               randconfig-a004-20221205
-x86_64               randconfig-a001-20221205
-x86_64               randconfig-a002-20221205
-x86_64               randconfig-a005-20221205
-x86_64               randconfig-a006-20221205
-i386                 randconfig-a001-20221205
-i386                 randconfig-a002-20221205
-i386                 randconfig-a004-20221205
-i386                 randconfig-a005-20221205
-i386                 randconfig-a006-20221205
-i386                 randconfig-a003-20221205
-hexagon              randconfig-r041-20221204
-riscv                randconfig-r042-20221204
-hexagon              randconfig-r045-20221204
-s390                 randconfig-r044-20221204
+ .../devicetree/bindings/arm/sunxi.yaml        |   6 +
+ .../bindings/usb/genesys,gl850g.yaml          |  48 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+ arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+ .../boot/dts/allwinner/sun50i-h6-rp-h6b.dts   | 241 ++++++++++++++++++
+ .../boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi  | 179 +++++++++++++
+ drivers/usb/misc/onboard_usb_hub.c            |   2 +
+ drivers/usb/misc/onboard_usb_hub.h            |   5 +
+ 8 files changed, 486 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.38.1
+
