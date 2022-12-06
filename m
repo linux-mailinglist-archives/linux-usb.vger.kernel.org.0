@@ -2,69 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D67644495
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 14:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452FA6444EA
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 14:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiLFNcG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Dec 2022 08:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S234506AbiLFNtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Dec 2022 08:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbiLFNb5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 08:31:57 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BCA23BC5
-        for <linux-usb@vger.kernel.org>; Tue,  6 Dec 2022 05:31:53 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3e45d25de97so95466197b3.6
-        for <linux-usb@vger.kernel.org>; Tue, 06 Dec 2022 05:31:53 -0800 (PST)
+        with ESMTP id S233466AbiLFNtw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 08:49:52 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF112A942
+        for <linux-usb@vger.kernel.org>; Tue,  6 Dec 2022 05:49:51 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id c140so18583139ybf.11
+        for <linux-usb@vger.kernel.org>; Tue, 06 Dec 2022 05:49:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=OeyCMsHYScRvVh8RXebzMnb6pRDfFrPhGFM5Oo/oZrwyoa5Qe6A4MFoFU3Mp0QEA1i
-         SYxbR4sBY6B2f4vL1OEJybUifemEqA8IjQX2J09dxjCQRODPxlkwi9ZEZSAu9TEhort/
-         rwllpgNt60odz5Nl0j8spOK2S4UH94zHMFD6KX6br/bHNI2fZHIzqWvZlcUTMKyD9vqw
-         pbBkxrH6eRDakHg6i3SDW/XG3pxdEfflEK99JxjqsHbJ7YAIkEj/5S6ueT5UYlPSmqQ/
-         Hub6z0zknduscVyttBCDKyxn8xzrz/kgtfd7lHkiDU9nHicul2vZth5Aja6oh/8jcMGO
-         G90g==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+SBgDf21nE7Fz3DEe+AUeblmVxcRq4JLFAaeQh0074k=;
+        b=HMspc9TmlnuApAZpE9HFknz/zaPGdRa8yhRZdQUd9Jb5lztXIxnwpk5yTzg8JKIJke
+         Ahe5W1KJ23WU42G6eaEQIfMVl8ED8nI4z4NuK9lUAwCKIVv5ox6guQy/uer6p2WjRIws
+         Sn4Di8RN9kjKsGxKNxMD+mzo4XcasifOzDAQFEqR5b5qCe7iWbMn21cjexSk+tsJMEfD
+         fOFzJ5SKSF33RR2oz5AqZDQ8DZ0IJVNY+XsQhPmauE64K9UGwCWSGYEsFbwVKdmOLxNT
+         D1qrOqYQ5mZCkOQQq8TGB5Dwxrro858u2maQg5Bt4faJ1upH8fqgROBI5ayZsoDzytci
+         l02A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=gK5SvYdvVcekPhDf33NQJBqhVBj5hNGbGrP1x8OElkkmDTr3IFxukzQJ8NU2v/VnKX
-         F0htqp0itpm1GF+ncS0icCJLFr7kAjcF9KBqvOAOHY6IcP0ZBFFVVYFs1Hj5HiDM9gMg
-         7s/uW1boSnyqLHnoHQ8674xRZPoVLO+FNeYjiScJtnOXslKJut1UsU9r1q9RWyZdyvlu
-         flaasw1ZD5fsyZ/lKDiUD1b49CiLHqedXQC6HUW4J5H01wwGTDQMLliuWN3mlw9n5klE
-         q6C+0VXowjL/tLt7KUHBMaH5aoYt80tLtImWrsm6tYpL+GspHM1YIvRxfuz+DumSQjIn
-         UMHw==
-X-Gm-Message-State: ANoB5plT8+MMvP+y56f0xPWdqdT+3gG+sStJNuo9er7mDhUJDhRYBbXn
-        xkRobDYPKkPkxGzOMcWWGptXbRZAtFmKoyGRsac=
-X-Google-Smtp-Source: AA0mqf7Z2Y5k3chtNt8kbVNLNOAPCXtgRbw0oMU6LK5Q/RiR2Ia6QNch2ZuKx5+xFv9D2teTY/76/SaSp4zD3zNfpik=
-X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
- g64-20020a815243000000b003d22098c5fbmr31214777ywb.121.1670333513086; Tue, 06
- Dec 2022 05:31:53 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+SBgDf21nE7Fz3DEe+AUeblmVxcRq4JLFAaeQh0074k=;
+        b=iXSZSA+xr0aSVUDM5JPauFb6rJyV2vD4K+KaOanpT7U4+nReim2iBNnp96sk5FoLQ+
+         3nKLrGp9RiGAdU6A6uokNdDC5k5N614ewYaxvNi3Tlg+d0cJpkfRF3ztIAFAJ6OayYX8
+         ibuwEYSycmzjFnWyK2ObGvLybIZUNR/H1lw27OrvyZJmaG2ys41UKlMMfzJAiZP1Hwkf
+         PFb4DJHSqohnXIBke0KqsfU/eoEkkMexBdFpm6nAcFoPd3yxZL1Hj8OwnHKQn1Vne2Tk
+         PmNhlpCQewFLrtZ8SRxkxYTEegXHjZpT+hoqaCalICdtq6bR8IhrVJ3D0eSLweoexMxr
+         9tjw==
+X-Gm-Message-State: ANoB5pnaCtkKUyvXf9Xn55t7Jpy7tINjldtATWLwmJnxVIwxxVJACt3s
+        1TWLNlouQfe1zlRRnch58mfpy+FKUE200Hgv9zz5zg==
+X-Google-Smtp-Source: AA0mqf6PPhad0dT7AQIq72om4eiZw0XHpyFWIjc/NSq9ASGSg9Iv/RYo/rQ1EvHP5JLLxgvc3vGDT/5EA2EgEcJas3A=
+X-Received: by 2002:a25:d8d4:0:b0:6f0:36e2:5fc2 with SMTP id
+ p203-20020a25d8d4000000b006f036e25fc2mr58067021ybg.52.1670334590231; Tue, 06
+ Dec 2022 05:49:50 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:a205:b0:314:d2a3:70a with HTTP; Tue, 6 Dec 2022
- 05:31:52 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <mrkojofofone01@gmail.com>
-Date:   Tue, 6 Dec 2022 13:31:52 +0000
-Message-ID: <CACJtp8vgE8Nrmo+zWDrnXRqoM_o=MmruUY09Qi=4vFfLMPDrtA@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
+References: <a989b3b798ecaf3b45f35160e30e605636d66a77.1669044086.git.geert+renesas@glider.be>
+ <CACRpkdZPhKT=wjToSiY+iyXk2_WdBZ1hEvmNvQQLJPZGN==-xQ@mail.gmail.com> <CAMuHMdVDYsCPko9NJfa+JLk_MRFAR1dgSF3GahtTeABysDFyBA@mail.gmail.com>
+In-Reply-To: <CAMuHMdVDYsCPko9NJfa+JLk_MRFAR1dgSF3GahtTeABysDFyBA@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 6 Dec 2022 14:49:38 +0100
+Message-ID: <CACRpkdb+eXGwdDgMP6VXnObfz-_k=xQ=Er8b4=cvhmYEzt5j9w@mail.gmail.com>
+Subject: Re: [PATCH] usb: USB_FOTG210 should depend on ARCH_GEMINI
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Fabian Vogt <fabian@ritter-vogt.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On Tue, Dec 6, 2022 at 9:01 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Mon, Dec 5, 2022 at 11:24 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Mon, Nov 21, 2022 at 4:22 PM Geert Uytterhoeven
+> > <geert+renesas@glider.be> wrote:
+> > > The Faraday Technology FOTG210 USB2 Dual Role Controller is only present
+> > > on Cortina Systems Gemini SoCs.
+> >
+> > As it turns out, this is not true. The TI nSpire uses this too, I should have
+> > noted since the nSpire maintainer was patching the driver...
+> > https://lore.kernel.org/linux-usb/20210324141115.9384-1-fabian@ritter-vogt.de/
+> >
+> > Shall we revert it or just add another clause for the nSpire?
+>
+> Oh, but the integration is not (yet) upstream, as I didn't find any
+> "faraday,fotg210" outside gemini.dtsi.
+
+Ah it is still brewing, sorry.
+
+> I guess another clause would be the most-userfriendly solution.
+
+Yeah we can just add it when adding nSpire II.
+
+Yours,
+Linus Walleij
