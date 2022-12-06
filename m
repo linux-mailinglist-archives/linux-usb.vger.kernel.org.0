@@ -2,69 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED14644563
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 15:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8782D644825
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 16:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbiLFOPc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Dec 2022 09:15:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S234085AbiLFPiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Dec 2022 10:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbiLFOP1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 09:15:27 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B31428E2C;
-        Tue,  6 Dec 2022 06:15:25 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p36so19520242lfa.12;
-        Tue, 06 Dec 2022 06:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=024XHQZhW04SgcQC2KqdmXN3Ig7UIvwFGK8yLeCveCs=;
-        b=IC3YI7L2zP6PdFVpmcjT+PF0EsABV8BOzNiKm/KFRUGbc+XiEGRafMBc4sodAdmN9Q
-         DHlP1Kv5xHjtpJnjDCxK2fEjFTM7AIpUFFGkNBvlrW6AHdVunRqaMBqq0bCnH4YbidIe
-         h0GVwtTZ/DGK03GfaaNclSc1LISn2HN9xXt7z8xYAEueQQoHn924hyMhVF/V01RLx3OM
-         hB9a3ltancOn8YWmnC6Qt3HG7EUxqsdeqk3G1L1bA5XYFp+0c/bi67IGaW4f2ttMTV3R
-         UXmZQN9FgvpprTpmbeH7yT4LhejC5hKasx8kwUueWl6gHXdkCydaomOttFPd/lIc4+1q
-         uf0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=024XHQZhW04SgcQC2KqdmXN3Ig7UIvwFGK8yLeCveCs=;
-        b=atxy7YrD4OYXGyAZDamwGnEHycRlcYzxUjVnHv97sezhwAJFbEAhah9NjctrsM6Tei
-         +76F+itoVY9KDxOt6IRpKjYocfVZ8NxNOAgQTGlgNYdkHjGQtpzDZ0c+TKfEuTVZ3CwQ
-         4JsVc6o0fh2EecsLH8wu6KWLPsdSgBIZBnha710JgTINKeO0b2FZi0ImeJIqbvjA5IST
-         zWYsu+wfljb2mLaEa6irmcqgB0OAWR8SPo3borpr8VfS7d3hmAcK1AfsxA0BhhshbQhA
-         ChgGsvMGa9JTEybDpYVMNsZrbtTv2D+/wYJLhDkp87abKOfa4w9V/dK65RyekVkI2bFF
-         OctA==
-X-Gm-Message-State: ANoB5pli/64ioSPqD7SjyvorfMCptx3PmvvCdhXBW9osMziQr1nTnowX
-        O4g2kqkyv635oYrrLmXuHw4=
-X-Google-Smtp-Source: AA0mqf5DworZ3E/hFyVGhjVfIkQ143dy228hODZvZLbyLz3AbosJTf5D8xNSB1TPK8zuzJT5OvZ2dw==
-X-Received: by 2002:ac2:5548:0:b0:4b5:7924:758a with SMTP id l8-20020ac25548000000b004b57924758amr2406444lfk.171.1670336123818;
-        Tue, 06 Dec 2022 06:15:23 -0800 (PST)
-Received: from localhost.localdomain (077222238151.warszawa.vectranet.pl. [77.222.238.151])
-        by smtp.googlemail.com with ESMTPSA id e1-20020a195001000000b0048aee825e2esm2495299lfb.282.2022.12.06.06.15.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 06:15:22 -0800 (PST)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
-Cc:     szymon.heidrich@gmail.com, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: gadget: uvc: Prevent buffer overflow in setup handler
-Date:   Tue,  6 Dec 2022 15:13:01 +0100
-Message-Id: <20221206141301.51305-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
-References: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
+        with ESMTP id S232604AbiLFPiG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 10:38:06 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 467C5639F
+        for <linux-usb@vger.kernel.org>; Tue,  6 Dec 2022 07:38:05 -0800 (PST)
+Received: (qmail 656488 invoked by uid 1000); 6 Dec 2022 10:38:04 -0500
+Date:   Tue, 6 Dec 2022 10:38:04 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>,
+        syzbot <syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com>
+Cc:     WeitaoWang-oc@zhaoxin.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, khalid.masum.92@gmail.com,
+        kishon@ti.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in __usb_hcd_giveback_urb (2)
+Message-ID: <Y49h3MX8iXEO/na+@rowland.harvard.edu>
+References: <0000000000002fc8dc05ef267a9f@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000002fc8dc05ef267a9f@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +39,131 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Setup function uvc_function_setup permits control transfer
-requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
-data stage handler for OUT transfer uses memcpy to copy req->actual
-bytes to uvc_event->data.data array of size 60. This may result
-in an overflow of 4 bytes.
+Oliver:
 
-Fixes: cdda479f15cd ("USB gadget: video class function driver")
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
-V1 -> V2: Corrected commit message and changed ?: in favor of min_t
-V2 -> V3: Added fixes tag
+This looks like a bug in the anchor API.
 
- drivers/usb/gadget/function/f_uvc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Tue, Dec 06, 2022 at 02:43:41AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    ef4d3ea40565 afs: Fix server->active leak in afs_put_server
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=100b244d880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8e7e79f8a1e34200
+> dashboard link: https://syzkaller.appspot.com/bug?extid=712fd0e60dda3ba34642
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/ef790e7777cd/disk-ef4d3ea4.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/2ed3c6bc9230/vmlinux-ef4d3ea4.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/f1dbd004fa88/bzImage-ef4d3ea4.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com
+> 
+> xpad 3-1:179.65: xpad_irq_in - usb_submit_urb failed with result -19
+> xpad 3-1:179.65: xpad_irq_out - usb_submit_urb failed with result -19
+> ==================================================================
+> BUG: KASAN: use-after-free in register_lock_class+0x8d2/0x9b0 kernel/locking/lockdep.c:1338
+> Read of size 1 at addr ffff88807a58b091 by task kworker/u4:3/46
+> 
+> CPU: 0 PID: 46 Comm: kworker/u4:3 Not tainted 6.1.0-rc7-syzkaller-00103-gef4d3ea40565 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> Workqueue: bat_events batadv_nc_worker
+> Call Trace:
+>  <IRQ>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+>  print_address_description+0x74/0x340 mm/kasan/report.c:284
+>  print_report+0x107/0x220 mm/kasan/report.c:395
+>  kasan_report+0x139/0x170 mm/kasan/report.c:495
+>  register_lock_class+0x8d2/0x9b0 kernel/locking/lockdep.c:1338
+>  __lock_acquire+0xe4/0x1f60 kernel/locking/lockdep.c:4934
+>  lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
+>  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+>  _raw_spin_lock_irqsave+0xd1/0x120 kernel/locking/spinlock.c:162
+>  __wake_up_common_lock kernel/sched/wait.c:136 [inline]
+>  __wake_up+0xf8/0x1c0 kernel/sched/wait.c:156
+>  __usb_hcd_giveback_urb+0x3a0/0x530 drivers/usb/core/hcd.c:1674
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 6e196e061..4419b7972 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
- 
- 		memset(&v4l2_event, 0, sizeof(v4l2_event));
- 		v4l2_event.type = UVC_EVENT_DATA;
--		uvc_event->data.length = req->actual;
--		memcpy(&uvc_event->data.data, req->buf, req->actual);
-+		uvc_event->data.length = min_t(unsigned int, req->actual,
-+			sizeof(uvc_event->data.data));
-+		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
- 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 	}
- }
--- 
-2.38.1
+This is the call to usb_anchor_resume_wakeups().  The call is made after 
+the completion handler callback.  Evidently the xpad driver deallocated 
+the anchor during that time window.  This can happen if the driver is 
+just waiting for its last URB to complete before freeing all its memory.
 
+I don't know what the best solution is.  It may be necessary to refcount 
+anchors somehow.
+
+Alan Stern
+
+> Allocated by task 3741:
+>  kasan_save_stack mm/kasan/common.c:45 [inline]
+>  kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+>  ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+>  __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
+>  kmalloc include/linux/slab.h:553 [inline]
+>  kzalloc include/linux/slab.h:689 [inline]
+>  xpad_probe+0x3de/0x1b70 drivers/input/joystick/xpad.c:1954
+>  usb_probe_interface+0x66e/0xb60 drivers/usb/core/driver.c:396
+>  call_driver_probe+0x96/0x250
+>  really_probe+0x24c/0x9f0 drivers/base/dd.c:639
+>  __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:778
+>  driver_probe_device+0x50/0x240 drivers/base/dd.c:808
+>  __device_attach_driver+0x272/0x3c0 drivers/base/dd.c:936
+>  bus_for_each_drv+0x18a/0x210 drivers/base/bus.c:427
+>  __device_attach+0x372/0x5a0 drivers/base/dd.c:1008
+>  bus_probe_device+0xb8/0x1f0 drivers/base/bus.c:487
+>  device_add+0xb20/0xf90 drivers/base/core.c:3517
+>  usb_set_configuration+0x1a5f/0x20e0 drivers/usb/core/message.c:2170
+>  usb_generic_driver_probe+0x83/0x140 drivers/usb/core/generic.c:238
+>  usb_probe_device+0x131/0x260 drivers/usb/core/driver.c:293
+>  call_driver_probe+0x96/0x250
+>  really_probe+0x24c/0x9f0 drivers/base/dd.c:639
+>  __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:778
+>  driver_probe_device+0x50/0x240 drivers/base/dd.c:808
+>  __device_attach_driver+0x272/0x3c0 drivers/base/dd.c:936
+>  bus_for_each_drv+0x18a/0x210 drivers/base/bus.c:427
+>  __device_attach+0x372/0x5a0 drivers/base/dd.c:1008
+>  bus_probe_device+0xb8/0x1f0 drivers/base/bus.c:487
+>  device_add+0xb20/0xf90 drivers/base/core.c:3517
+>  usb_new_device+0xbc2/0x18b0 drivers/usb/core/hub.c:2573
+>  hub_port_connect+0x103b/0x2910 drivers/usb/core/hub.c:5353
+>  hub_port_connect_change+0x619/0xbe0 drivers/usb/core/hub.c:5497
+>  port_event+0xec6/0x13b0 drivers/usb/core/hub.c:5653
+>  hub_event+0x5c1/0xd80 drivers/usb/core/hub.c:5735
+>  process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+>  worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+>  kthread+0x266/0x300 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> 
+> Freed by task 3709:
+>  kasan_save_stack mm/kasan/common.c:45 [inline]
+>  kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+>  kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:511
+>  ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+>  kasan_slab_free include/linux/kasan.h:177 [inline]
+>  slab_free_hook mm/slub.c:1724 [inline]
+>  slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1750
+>  slab_free mm/slub.c:3661 [inline]
+>  __kmem_cache_free+0x71/0x110 mm/slub.c:3674
+>  xpad_disconnect+0x332/0x450 drivers/input/joystick/xpad.c:2135
+>  usb_unbind_interface+0x1f2/0x860 drivers/usb/core/driver.c:458
+>  device_remove drivers/base/dd.c:550 [inline]
+>  __device_release_driver drivers/base/dd.c:1249 [inline]
+>  device_release_driver_internal+0x5bc/0x8a0 drivers/base/dd.c:1275
+>  bus_remove_device+0x2fd/0x410 drivers/base/bus.c:529
+>  device_del+0x6ec/0xbe0 drivers/base/core.c:3704
+>  usb_disable_device+0x3dd/0x820 drivers/usb/core/message.c:1419
+>  usb_disconnect+0x346/0x890 drivers/usb/core/hub.c:2235
+>  hub_port_connect+0x296/0x2910 drivers/usb/core/hub.c:5197
+>  hub_port_connect_change+0x619/0xbe0 drivers/usb/core/hub.c:5497
+>  port_event+0xec6/0x13b0 drivers/usb/core/hub.c:5653
+>  hub_event+0x5c1/0xd80 drivers/usb/core/hub.c:5735
+>  process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+>  worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+>  kthread+0x266/0x300 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
