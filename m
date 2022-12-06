@@ -2,43 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D761644DE1
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 22:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FAE644DFD
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 22:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiLFVVy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Dec 2022 16:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S229700AbiLFVa5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Dec 2022 16:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiLFVVx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 16:21:53 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BAB47325;
-        Tue,  6 Dec 2022 13:21:52 -0800 (PST)
+        with ESMTP id S229575AbiLFVaz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 16:30:55 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCD63E080;
+        Tue,  6 Dec 2022 13:30:53 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E1933D7;
-        Tue,  6 Dec 2022 22:21:51 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 43C303D7;
+        Tue,  6 Dec 2022 22:30:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670361711;
-        bh=OrJsCJNo27Qlp3rbIbQPFuVvMQMYEBOzgkHtwGy1OdQ=;
+        s=mail; t=1670362251;
+        bh=tBs83M2QsBCN9NOTFveDIruLwYdE0mCD5qEcCwI9UXQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FwiImNRf7ALJLdu5YaC8qgkXWb8AnAiJDZIVuV9VEhI6Odi/lmjE10LQ8JHi3ru+V
-         4M5VR3lKZO+3vXLGdDoP6c4Hbr/GiVqDzZvox4qcbnQld9WxuvZy85p2mS1s8LfhYR
-         x2qMpgVuMRxMzjpCvdkCd8mwF4Y4Bqn4EW5LLHTA=
-Date:   Tue, 6 Dec 2022 23:21:48 +0200
+        b=ZfuPoBwH/eycgqpIiHEImgFsXQw9ZPWNbxUZL370cEaQI27RLI/GzdyMFVqQCkWDz
+         FlBeXnKzNz+E8RDLnJrqKbECPHUPK6sYTelcb0uF1NFnCbCpzyizSMoLYV0W66rzQ4
+         49fAiSlkNr89t4kIAXyBYzq5Sh6XHkk8nMnC6qYM=
+Date:   Tue, 6 Dec 2022 23:30:48 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     dan.scally@ideasonboard.com, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: uvc: Prevent buffer overflow in setup
- handler
-Message-ID: <Y4+ybPL2uUO4SCJJ@pendragon.ideasonboard.com>
-References: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
- <20221206141301.51305-1-szymon.heidrich@gmail.com>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
+ implement v4l2 enum api calls
+Message-ID: <Y4+0iK460LL0dKPE@pendragon.ideasonboard.com>
+References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
+ <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
+ <Y4xaXHLoiPupWM6V@kroah.com>
+ <Y45f272a3aa7KXly@pendragon.ideasonboard.com>
+ <20221206170721.GB15222@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221206141301.51305-1-szymon.heidrich@gmail.com>
+In-Reply-To: <20221206170721.GB15222@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -48,47 +52,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Szymon,
+Hi Michael,
 
-Thank you for the patch.
-
-On Tue, Dec 06, 2022 at 03:13:01PM +0100, Szymon Heidrich wrote:
-> Setup function uvc_function_setup permits control transfer
-> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
-> data stage handler for OUT transfer uses memcpy to copy req->actual
-> bytes to uvc_event->data.data array of size 60. This may result
-> in an overflow of 4 bytes.
+On Tue, Dec 06, 2022 at 06:07:21PM +0100, Michael Grzeschik wrote:
+> On Mon, Dec 05, 2022 at 11:17:15PM +0200, Laurent Pinchart wrote:
+> >On Sun, Dec 04, 2022 at 09:29:16AM +0100, Greg KH wrote:
+> >> On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
+> >> > On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
+> >> > > This series improves the uvc video gadget by parsing the configfs
+> >> > > entries. With the configfs data, the userspace now is able to use simple
+> >> > > v4l2 api calls like enum and try_format to check for valid configurations
+> >> > > initially set by configfs.
+> >> >
+> >> > I've realized that this whole series got merged, despite my multiple
+> >> > attempts to explain why I think it's not a good idea. The UVC gadget
+> >> > requires userspace support, and there's no point in trying to move all
+> >> > these things to the kernel side. It only bloats the kernel, makes the
+> >> > code more complex, more difficult to maintain, and will make UVC 1.5
+> >> > support more difficult.
+> >>
+> >> I can easily revert them, but I did not see any objections to them
+> >> originally and so I merged them as is the normal method :)
+> >
+> > I don't think a revert is needed. The issue I pointed out regarding the
+> > duplication of static const data can be solved on top. The API additions
+> > from this series are, in my opinion, not a good idea for the reasons I
+> > explained, but they don't hurt so much that we need to go nuclear on
+> > this.
+> >
+> > Michael, will you be addressing the static const data issue ?
 > 
-> Fixes: cdda479f15cd ("USB gadget: video class function driver")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+> Yes. I will also move the uvc_fmts[] array and uvc_format_by_guid to its
+> own compile unit.
 
-Good catch.
+Thank you.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
-> V1 -> V2: Corrected commit message and changed ?: in favor of min_t
-> V2 -> V3: Added fixes tag
+> I will go with drivers/media/usb/uvc.c
 > 
->  drivers/usb/gadget/function/f_uvc.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> index 6e196e061..4419b7972 100644
-> --- a/drivers/usb/gadget/function/f_uvc.c
-> +++ b/drivers/usb/gadget/function/f_uvc.c
-> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
->  
->  		memset(&v4l2_event, 0, sizeof(v4l2_event));
->  		v4l2_event.type = UVC_EVENT_DATA;
-> -		uvc_event->data.length = req->actual;
-> -		memcpy(&uvc_event->data.data, req->buf, req->actual);
-> +		uvc_event->data.length = min_t(unsigned int, req->actual,
-> +			sizeof(uvc_event->data.data));
-> +		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
->  		v4l2_event_queue(&uvc->vdev, &v4l2_event);
->  	}
->  }
+> While at it the headerfile will better also be moved from
+> include/media/v4l2-uvc.h to linux/usb/uvc.h.
+
+Works for me, especially for the GUIDs. For the structure and function
+prototype, I don't mind using include/media/, up to you.
 
 -- 
 Regards,
