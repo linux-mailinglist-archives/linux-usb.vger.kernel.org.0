@@ -2,196 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C529644900
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 17:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D3D6449EE
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 18:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiLFQRS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Dec 2022 11:17:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S234435AbiLFRHi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Dec 2022 12:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234686AbiLFQQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 11:16:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCDFFD2F
-        for <linux-usb@vger.kernel.org>; Tue,  6 Dec 2022 08:12:14 -0800 (PST)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B65F23D7;
-        Tue,  6 Dec 2022 17:12:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670343133;
-        bh=UQutVRs56hFaVL238k+wfGQFYe23Qqs9B3gF3b4hWm0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UJRBAwciBIvN2lPfrf1zX5zhkgz2nuDxLq7ulm6UTnQTvxKzSW2S74ayWQnsLqyF5
-         FnCogxHybpYy0NzvM/48QXC7192E6MGalLhGMlZv5xW7yuXTWcen+O66GPqNxpa1or
-         8HSzqyFZcmRTLbbbOqC7l6WijHE4X8NAkFsfTR+E=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     linux-usb@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        mgr@pengutronix.de, kieran.bingham@ideasonboard.com,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2] usb: gadget: uvc: Rename bmInterfaceFlags -> bmInterlaceFlags
-Date:   Tue,  6 Dec 2022 16:12:03 +0000
-Message-Id: <20221206161203.1562827-1-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S234420AbiLFRHZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 12:07:25 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562AA1134
+        for <linux-usb@vger.kernel.org>; Tue,  6 Dec 2022 09:07:24 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1p2bPe-0000Vf-LY; Tue, 06 Dec 2022 18:07:22 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1p2bPe-0000fP-0F; Tue, 06 Dec 2022 18:07:22 +0100
+Date:   Tue, 6 Dec 2022 18:07:21 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
+ implement v4l2 enum api calls
+Message-ID: <20221206170721.GB15222@pengutronix.de>
+References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
+ <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
+ <Y4xaXHLoiPupWM6V@kroah.com>
+ <Y45f272a3aa7KXly@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ADZbWkCsHQ7r3kzd"
+Content-Disposition: inline
+In-Reply-To: <Y45f272a3aa7KXly@pendragon.ideasonboard.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the specification documents for the Uncompressed and MJPEG USB
-Video Payloads, the field name is bmInterlaceFlags - it has been
-misnamed within the kernel.
 
-Although renaming the field does break the kernel's interface to
-userspace it should be low-risk in this instance. The field is read
-only and hardcoded to 0, so there was never any value in anyone
-reading it. A search of the uvc-gadget application and all the
-forks that I could find for it did not reveal any users either.
+--ADZbWkCsHQ7r3kzd
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: cdda479f15cd ("USB gadget: video class function driver")
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
-Changes in v2:
+On Mon, Dec 05, 2022 at 11:17:15PM +0200, Laurent Pinchart wrote:
+>On Sun, Dec 04, 2022 at 09:29:16AM +0100, Greg KH wrote:
+>> On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
+>> > Hi Michael,
+>> >
+>> > On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
+>> > > This series improves the uvc video gadget by parsing the configfs
+>> > > entries. With the configfs data, the userspace now is able to use si=
+mple
+>> > > v4l2 api calls like enum and try_format to check for valid configura=
+tions
+>> > > initially set by configfs.
+>> >
+>> > I've realized that this whole series got merged, despite my multiple
+>> > attempts to explain why I think it's not a good idea. The UVC gadget
+>> > requires userspace support, and there's no point in trying to move all
+>> > these things to the kernel side. It only bloats the kernel, makes the
+>> > code more complex, more difficult to maintain, and will make UVC 1.5
+>> > support more difficult.
+>>
+>> I can easily revert them, but I did not see any objections to them
+>> originally and so I merged them as is the normal method :)
+>
+>I don't think a revert is needed. The issue I pointed out regarding the
+>duplication of static const data can be solved on top. The API additions
+>from this series are, in my opinion, not a good idea for the reasons I
+>explained, but they don't hurt so much that we need to go nuclear on
+>this.
+>
+>Michael, will you be addressing the static const data issue ?
 
-	- Updated the legacy driver too
-	- Updated the ABI docs...which I also forgot last time (my bad)
+Yes. I will also move the uvc_fmts[] array and uvc_format_by_guid to its
+own compile unit.
 
- Documentation/ABI/testing/configfs-usb-gadget-uvc |  4 ++--
- drivers/usb/gadget/function/uvc_configfs.c        | 12 ++++++------
- drivers/usb/gadget/legacy/webcam.c                |  4 ++--
- include/uapi/linux/usb/video.h                    |  4 ++--
- 4 files changed, 12 insertions(+), 12 deletions(-)
+I will go with drivers/media/usb/uvc.c
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index 611b23e6488d..f00cff6d8c5c 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -197,7 +197,7 @@ Description:	Specific MJPEG format descriptors
- 					read-only
- 		bmaControls		this format's data for bmaControls in
- 					the streaming header
--		bmInterfaceFlags	specifies interlace information,
-+		bmInterlaceFlags	specifies interlace information,
- 					read-only
- 		bAspectRatioY		the X dimension of the picture aspect
- 					ratio, read-only
-@@ -253,7 +253,7 @@ Description:	Specific uncompressed format descriptors
- 					read-only
- 		bmaControls		this format's data for bmaControls in
- 					the streaming header
--		bmInterfaceFlags	specifies interlace information,
-+		bmInterlaceFlags	specifies interlace information,
- 					read-only
- 		bAspectRatioY		the X dimension of the picture aspect
- 					ratio, read-only
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 4303a3283ba0..76cb60d13049 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -1512,7 +1512,7 @@ UVCG_UNCOMPRESSED_ATTR(b_bits_per_pixel, bBitsPerPixel, 8);
- UVCG_UNCOMPRESSED_ATTR(b_default_frame_index, bDefaultFrameIndex, 8);
- UVCG_UNCOMPRESSED_ATTR_RO(b_aspect_ratio_x, bAspectRatioX, 8);
- UVCG_UNCOMPRESSED_ATTR_RO(b_aspect_ratio_y, bAspectRatioY, 8);
--UVCG_UNCOMPRESSED_ATTR_RO(bm_interface_flags, bmInterfaceFlags, 8);
-+UVCG_UNCOMPRESSED_ATTR_RO(bm_interlace_flags, bmInterlaceFlags, 8);
- 
- #undef UVCG_UNCOMPRESSED_ATTR
- #undef UVCG_UNCOMPRESSED_ATTR_RO
-@@ -1541,7 +1541,7 @@ static struct configfs_attribute *uvcg_uncompressed_attrs[] = {
- 	&uvcg_uncompressed_attr_b_default_frame_index,
- 	&uvcg_uncompressed_attr_b_aspect_ratio_x,
- 	&uvcg_uncompressed_attr_b_aspect_ratio_y,
--	&uvcg_uncompressed_attr_bm_interface_flags,
-+	&uvcg_uncompressed_attr_bm_interlace_flags,
- 	&uvcg_uncompressed_attr_bma_controls,
- 	NULL,
- };
-@@ -1574,7 +1574,7 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
- 	h->desc.bDefaultFrameIndex	= 1;
- 	h->desc.bAspectRatioX		= 0;
- 	h->desc.bAspectRatioY		= 0;
--	h->desc.bmInterfaceFlags	= 0;
-+	h->desc.bmInterlaceFlags	= 0;
- 	h->desc.bCopyProtect		= 0;
- 
- 	INIT_LIST_HEAD(&h->fmt.frames);
-@@ -1700,7 +1700,7 @@ UVCG_MJPEG_ATTR(b_default_frame_index, bDefaultFrameIndex, 8);
- UVCG_MJPEG_ATTR_RO(bm_flags, bmFlags, 8);
- UVCG_MJPEG_ATTR_RO(b_aspect_ratio_x, bAspectRatioX, 8);
- UVCG_MJPEG_ATTR_RO(b_aspect_ratio_y, bAspectRatioY, 8);
--UVCG_MJPEG_ATTR_RO(bm_interface_flags, bmInterfaceFlags, 8);
-+UVCG_MJPEG_ATTR_RO(bm_interlace_flags, bmInterlaceFlags, 8);
- 
- #undef UVCG_MJPEG_ATTR
- #undef UVCG_MJPEG_ATTR_RO
-@@ -1728,7 +1728,7 @@ static struct configfs_attribute *uvcg_mjpeg_attrs[] = {
- 	&uvcg_mjpeg_attr_bm_flags,
- 	&uvcg_mjpeg_attr_b_aspect_ratio_x,
- 	&uvcg_mjpeg_attr_b_aspect_ratio_y,
--	&uvcg_mjpeg_attr_bm_interface_flags,
-+	&uvcg_mjpeg_attr_bm_interlace_flags,
- 	&uvcg_mjpeg_attr_bma_controls,
- 	NULL,
- };
-@@ -1755,7 +1755,7 @@ static struct config_group *uvcg_mjpeg_make(struct config_group *group,
- 	h->desc.bDefaultFrameIndex	= 1;
- 	h->desc.bAspectRatioX		= 0;
- 	h->desc.bAspectRatioY		= 0;
--	h->desc.bmInterfaceFlags	= 0;
-+	h->desc.bmInterlaceFlags	= 0;
- 	h->desc.bCopyProtect		= 0;
- 
- 	INIT_LIST_HEAD(&h->fmt.frames);
-diff --git a/drivers/usb/gadget/legacy/webcam.c b/drivers/usb/gadget/legacy/webcam.c
-index 94e22867da1d..53e38f87472b 100644
---- a/drivers/usb/gadget/legacy/webcam.c
-+++ b/drivers/usb/gadget/legacy/webcam.c
-@@ -171,7 +171,7 @@ static const struct uvc_format_uncompressed uvc_format_yuv = {
- 	.bDefaultFrameIndex	= 1,
- 	.bAspectRatioX		= 0,
- 	.bAspectRatioY		= 0,
--	.bmInterfaceFlags	= 0,
-+	.bmInterlaceFlags	= 0,
- 	.bCopyProtect		= 0,
- };
- 
-@@ -222,7 +222,7 @@ static const struct uvc_format_mjpeg uvc_format_mjpg = {
- 	.bDefaultFrameIndex	= 1,
- 	.bAspectRatioX		= 0,
- 	.bAspectRatioY		= 0,
--	.bmInterfaceFlags	= 0,
-+	.bmInterlaceFlags	= 0,
- 	.bCopyProtect		= 0,
- };
- 
-diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
-index bfdae12cdacf..6e8e572c2980 100644
---- a/include/uapi/linux/usb/video.h
-+++ b/include/uapi/linux/usb/video.h
-@@ -466,7 +466,7 @@ struct uvc_format_uncompressed {
- 	__u8  bDefaultFrameIndex;
- 	__u8  bAspectRatioX;
- 	__u8  bAspectRatioY;
--	__u8  bmInterfaceFlags;
-+	__u8  bmInterlaceFlags;
- 	__u8  bCopyProtect;
- } __attribute__((__packed__));
- 
-@@ -522,7 +522,7 @@ struct uvc_format_mjpeg {
- 	__u8  bDefaultFrameIndex;
- 	__u8  bAspectRatioX;
- 	__u8  bAspectRatioY;
--	__u8  bmInterfaceFlags;
-+	__u8  bmInterlaceFlags;
- 	__u8  bCopyProtect;
- } __attribute__((__packed__));
- 
--- 
-2.34.1
+While at it the headerfile will better also be moved from
+include/media/v4l2-uvc.h to linux/usb/uvc.h.
 
+Thanks,
+Michael
+
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--ADZbWkCsHQ7r3kzd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmOPdscACgkQC+njFXoe
+LGSQpRAA0TDhxTBhQP31uBl1apiJQ0ww75RZnj6V+8o/lJKBMpEE3nYNXJnV4SoY
+s0Ta3077KDxSXTQ3euOmBxTXp8kWW85oqtLTMDgF8XNwqNMk8US8K9MqtodajgmM
+Dl0Wffvo/ap1QPLSLUm091f6CLgZfA5BSM6+bXLoS/AjA0xCYkpqYqrtIJ5f2sl6
+yYF+PZ7aZc8r6/tZFQSVEJwjjmBDvY4MvdvEku4PypEgFQLgZyM9/hyWayc3Nmru
+3d3D6ZHNsz85SQZEd2OKf1m75uoijxESQJ/pbJzLLMJ1xOvTx/bARRNscv8vnlI1
+NnnLfkulPK+iLzauIND5e3vrDT5qtsgXTwJYZ7Nl6W8f1hCPAy92v8GtwujTwQhD
+O/baonwjcZMRwoiF1fXQ4sXyHnvTlpqaSHdJA+qLhm/kOb4KVE0ITKSY47s+bEds
+d7vzhLaaFFv6DvlmNld8oqnMOzEeOdTZ7AllF6M0SG0AEv17NHppevwlLrhiR3u5
+ugb1ADgoVNo1+d0n5+ChAUC4YqM/FpXuU00//ht3bHFO1yn51Zy3+4l5qE/Rl44g
+6V+pDie1PDCE0rlghz3shZxoFmufGLULHGSDHGFlNXXkLXAOO+vah3XYLTuCvt+k
+a2+7qmZnC80xPAM7XxZ2iueUk4EXaaEs3AlGN3nI8NSrBxyDK3E=
+=X6hF
+-----END PGP SIGNATURE-----
+
+--ADZbWkCsHQ7r3kzd--
