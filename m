@@ -2,92 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452FA6444EA
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 14:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED14644563
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Dec 2022 15:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234506AbiLFNtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Dec 2022 08:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S234810AbiLFOPc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Dec 2022 09:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbiLFNtw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 08:49:52 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF112A942
-        for <linux-usb@vger.kernel.org>; Tue,  6 Dec 2022 05:49:51 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id c140so18583139ybf.11
-        for <linux-usb@vger.kernel.org>; Tue, 06 Dec 2022 05:49:51 -0800 (PST)
+        with ESMTP id S233613AbiLFOP1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Dec 2022 09:15:27 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B31428E2C;
+        Tue,  6 Dec 2022 06:15:25 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id p36so19520242lfa.12;
+        Tue, 06 Dec 2022 06:15:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+SBgDf21nE7Fz3DEe+AUeblmVxcRq4JLFAaeQh0074k=;
-        b=HMspc9TmlnuApAZpE9HFknz/zaPGdRa8yhRZdQUd9Jb5lztXIxnwpk5yTzg8JKIJke
-         Ahe5W1KJ23WU42G6eaEQIfMVl8ED8nI4z4NuK9lUAwCKIVv5ox6guQy/uer6p2WjRIws
-         Sn4Di8RN9kjKsGxKNxMD+mzo4XcasifOzDAQFEqR5b5qCe7iWbMn21cjexSk+tsJMEfD
-         fOFzJ5SKSF33RR2oz5AqZDQ8DZ0IJVNY+XsQhPmauE64K9UGwCWSGYEsFbwVKdmOLxNT
-         D1qrOqYQ5mZCkOQQq8TGB5Dwxrro858u2maQg5Bt4faJ1upH8fqgROBI5ayZsoDzytci
-         l02A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=024XHQZhW04SgcQC2KqdmXN3Ig7UIvwFGK8yLeCveCs=;
+        b=IC3YI7L2zP6PdFVpmcjT+PF0EsABV8BOzNiKm/KFRUGbc+XiEGRafMBc4sodAdmN9Q
+         DHlP1Kv5xHjtpJnjDCxK2fEjFTM7AIpUFFGkNBvlrW6AHdVunRqaMBqq0bCnH4YbidIe
+         h0GVwtTZ/DGK03GfaaNclSc1LISn2HN9xXt7z8xYAEueQQoHn924hyMhVF/V01RLx3OM
+         hB9a3ltancOn8YWmnC6Qt3HG7EUxqsdeqk3G1L1bA5XYFp+0c/bi67IGaW4f2ttMTV3R
+         UXmZQN9FgvpprTpmbeH7yT4LhejC5hKasx8kwUueWl6gHXdkCydaomOttFPd/lIc4+1q
+         uf0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+SBgDf21nE7Fz3DEe+AUeblmVxcRq4JLFAaeQh0074k=;
-        b=iXSZSA+xr0aSVUDM5JPauFb6rJyV2vD4K+KaOanpT7U4+nReim2iBNnp96sk5FoLQ+
-         3nKLrGp9RiGAdU6A6uokNdDC5k5N614ewYaxvNi3Tlg+d0cJpkfRF3ztIAFAJ6OayYX8
-         ibuwEYSycmzjFnWyK2ObGvLybIZUNR/H1lw27OrvyZJmaG2ys41UKlMMfzJAiZP1Hwkf
-         PFb4DJHSqohnXIBke0KqsfU/eoEkkMexBdFpm6nAcFoPd3yxZL1Hj8OwnHKQn1Vne2Tk
-         PmNhlpCQewFLrtZ8SRxkxYTEegXHjZpT+hoqaCalICdtq6bR8IhrVJ3D0eSLweoexMxr
-         9tjw==
-X-Gm-Message-State: ANoB5pnaCtkKUyvXf9Xn55t7Jpy7tINjldtATWLwmJnxVIwxxVJACt3s
-        1TWLNlouQfe1zlRRnch58mfpy+FKUE200Hgv9zz5zg==
-X-Google-Smtp-Source: AA0mqf6PPhad0dT7AQIq72om4eiZw0XHpyFWIjc/NSq9ASGSg9Iv/RYo/rQ1EvHP5JLLxgvc3vGDT/5EA2EgEcJas3A=
-X-Received: by 2002:a25:d8d4:0:b0:6f0:36e2:5fc2 with SMTP id
- p203-20020a25d8d4000000b006f036e25fc2mr58067021ybg.52.1670334590231; Tue, 06
- Dec 2022 05:49:50 -0800 (PST)
-MIME-Version: 1.0
-References: <a989b3b798ecaf3b45f35160e30e605636d66a77.1669044086.git.geert+renesas@glider.be>
- <CACRpkdZPhKT=wjToSiY+iyXk2_WdBZ1hEvmNvQQLJPZGN==-xQ@mail.gmail.com> <CAMuHMdVDYsCPko9NJfa+JLk_MRFAR1dgSF3GahtTeABysDFyBA@mail.gmail.com>
-In-Reply-To: <CAMuHMdVDYsCPko9NJfa+JLk_MRFAR1dgSF3GahtTeABysDFyBA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 6 Dec 2022 14:49:38 +0100
-Message-ID: <CACRpkdb+eXGwdDgMP6VXnObfz-_k=xQ=Er8b4=cvhmYEzt5j9w@mail.gmail.com>
-Subject: Re: [PATCH] usb: USB_FOTG210 should depend on ARCH_GEMINI
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Fabian Vogt <fabian@ritter-vogt.de>,
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=024XHQZhW04SgcQC2KqdmXN3Ig7UIvwFGK8yLeCveCs=;
+        b=atxy7YrD4OYXGyAZDamwGnEHycRlcYzxUjVnHv97sezhwAJFbEAhah9NjctrsM6Tei
+         +76F+itoVY9KDxOt6IRpKjYocfVZ8NxNOAgQTGlgNYdkHjGQtpzDZ0c+TKfEuTVZ3CwQ
+         4JsVc6o0fh2EecsLH8wu6KWLPsdSgBIZBnha710JgTINKeO0b2FZi0ImeJIqbvjA5IST
+         zWYsu+wfljb2mLaEa6irmcqgB0OAWR8SPo3borpr8VfS7d3hmAcK1AfsxA0BhhshbQhA
+         ChgGsvMGa9JTEybDpYVMNsZrbtTv2D+/wYJLhDkp87abKOfa4w9V/dK65RyekVkI2bFF
+         OctA==
+X-Gm-Message-State: ANoB5pli/64ioSPqD7SjyvorfMCptx3PmvvCdhXBW9osMziQr1nTnowX
+        O4g2kqkyv635oYrrLmXuHw4=
+X-Google-Smtp-Source: AA0mqf5DworZ3E/hFyVGhjVfIkQ143dy228hODZvZLbyLz3AbosJTf5D8xNSB1TPK8zuzJT5OvZ2dw==
+X-Received: by 2002:ac2:5548:0:b0:4b5:7924:758a with SMTP id l8-20020ac25548000000b004b57924758amr2406444lfk.171.1670336123818;
+        Tue, 06 Dec 2022 06:15:23 -0800 (PST)
+Received: from localhost.localdomain (077222238151.warszawa.vectranet.pl. [77.222.238.151])
+        by smtp.googlemail.com with ESMTPSA id e1-20020a195001000000b0048aee825e2esm2495299lfb.282.2022.12.06.06.15.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 06:15:22 -0800 (PST)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
+Cc:     szymon.heidrich@gmail.com, Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v3] usb: gadget: uvc: Prevent buffer overflow in setup handler
+Date:   Tue,  6 Dec 2022 15:13:01 +0100
+Message-Id: <20221206141301.51305-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
+References: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 9:01 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Mon, Dec 5, 2022 at 11:24 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> > On Mon, Nov 21, 2022 at 4:22 PM Geert Uytterhoeven
-> > <geert+renesas@glider.be> wrote:
-> > > The Faraday Technology FOTG210 USB2 Dual Role Controller is only present
-> > > on Cortina Systems Gemini SoCs.
-> >
-> > As it turns out, this is not true. The TI nSpire uses this too, I should have
-> > noted since the nSpire maintainer was patching the driver...
-> > https://lore.kernel.org/linux-usb/20210324141115.9384-1-fabian@ritter-vogt.de/
-> >
-> > Shall we revert it or just add another clause for the nSpire?
->
-> Oh, but the integration is not (yet) upstream, as I didn't find any
-> "faraday,fotg210" outside gemini.dtsi.
+Setup function uvc_function_setup permits control transfer
+requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
+data stage handler for OUT transfer uses memcpy to copy req->actual
+bytes to uvc_event->data.data array of size 60. This may result
+in an overflow of 4 bytes.
 
-Ah it is still brewing, sorry.
+Fixes: cdda479f15cd ("USB gadget: video class function driver")
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+V1 -> V2: Corrected commit message and changed ?: in favor of min_t
+V2 -> V3: Added fixes tag
 
-> I guess another clause would be the most-userfriendly solution.
+ drivers/usb/gadget/function/f_uvc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Yeah we can just add it when adding nSpire II.
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e196e061..4419b7972 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+ 
+ 		memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 		v4l2_event.type = UVC_EVENT_DATA;
+-		uvc_event->data.length = req->actual;
+-		memcpy(&uvc_event->data.data, req->buf, req->actual);
++		uvc_event->data.length = min_t(unsigned int, req->actual,
++			sizeof(uvc_event->data.data));
++		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+ 	}
+ }
+-- 
+2.38.1
 
-Yours,
-Linus Walleij
