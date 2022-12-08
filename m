@@ -2,116 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AC1647509
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 18:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FDC647774
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 21:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiLHRkU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 12:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S229750AbiLHUot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 15:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiLHRkT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 12:40:19 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DC80D7DA75
-        for <linux-usb@vger.kernel.org>; Thu,  8 Dec 2022 09:40:17 -0800 (PST)
-Received: (qmail 734591 invoked by uid 1000); 8 Dec 2022 12:40:17 -0500
-Date:   Thu, 8 Dec 2022 12:40:17 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com>,
-        WeitaoWang-oc@zhaoxin.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, khalid.masum.92@gmail.com,
-        kishon@ti.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in __usb_hcd_giveback_urb (2)
-Message-ID: <Y5IhgenNzQXzbWqT@rowland.harvard.edu>
-References: <0000000000002fc8dc05ef267a9f@google.com>
- <Y49h3MX8iXEO/na+@rowland.harvard.edu>
- <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
+        with ESMTP id S229479AbiLHUor (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 15:44:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01701AF33;
+        Thu,  8 Dec 2022 12:44:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61DB8B825E5;
+        Thu,  8 Dec 2022 20:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CBE2C43398;
+        Thu,  8 Dec 2022 20:44:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670532284;
+        bh=Op3UYf+6olBgWrruca2+4Cw44tWd/dJqwafFuHi8BuQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TzZk98Sm7iHP5ggszXg7OSQVOGQWmechaPq8sdWf6iN8A8VkpGD4NQDM06bssaYaN
+         lgWc9vcIcmS6g+dsTZ/1ykRw3u6RG+Fg9/2sFyQhj2ilkoUszIPR7GUwMfYbHGofAm
+         j17lqnYNJok5WR1ys0ih3OZlds6Dy28ib/oZubk70FfQWd02vSqrFQlxmcl1MIdJZj
+         GmiUrnYKWGJjellgBWsKNJpZltUqi4nlu09jAQVueDNlfoaGhzcRIaeZ+lV6LMtmBW
+         hajdN19eK7yyFNHS/V16wBGnRt3VSGa+q5PONKJViCXbo20GWmxcEv2RwLEgNoNAZz
+         9qoWk3T7xXZ/g==
+Received: by mail-ua1-f50.google.com with SMTP id m5so772987uah.3;
+        Thu, 08 Dec 2022 12:44:44 -0800 (PST)
+X-Gm-Message-State: ANoB5pk3s4dy/5FRocmvte06X+ULIi0ycfzRFK6pffIsoS3/8pGfZNbS
+        ozDYP1ODQo/dWFNkHQrh1Agqy6zvL07c01jr2w==
+X-Google-Smtp-Source: AA0mqf4ma8F1BT0uBQEYiHxBjiJL0Ol47jNJrTLDn/AAI8VlbTaGwaiuMSNkRkY2hh2jshSQyk61IDhlm1kZOsxD1n0=
+X-Received: by 2002:a9f:22c7:0:b0:3d6:45ee:7efc with SMTP id
+ 65-20020a9f22c7000000b003d645ee7efcmr44640221uan.86.1670532282914; Thu, 08
+ Dec 2022 12:44:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221207162435.1001782-1-herve.codina@bootlin.com>
+ <CAL_JsqJiZU=sHVPc92nDNoqUjm7FUb=u0izGYa+irkUW1XmA_w@mail.gmail.com> <20221208092439.6170cf5e@bootlin.com>
+In-Reply-To: <20221208092439.6170cf5e@bootlin.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 8 Dec 2022 14:44:31 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLjD=DbKJRrmn2GmbAwmVyE=gVcz-fZfNJ_xAup6GReSA@mail.gmail.com>
+Message-ID: <CAL_JsqLjD=DbKJRrmn2GmbAwmVyE=gVcz-fZfNJ_xAup6GReSA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] Add the Renesas USBF controller support
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 03:36:45PM +0100, Oliver Neukum wrote:
-> On 06.12.22 16:38, Alan Stern wrote:
-> 
-> Hi,
-> 
-> > Oliver:
-> > 
-> > This looks like a bug in the anchor API.
-> 
-> Yes, it does.
-> > On Tue, Dec 06, 2022 at 02:43:41AM -0800, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    ef4d3ea40565 afs: Fix server->active leak in afs_put_server
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=100b244d880000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=8e7e79f8a1e34200
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=712fd0e60dda3ba34642
-> > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > 
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > 
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/ef790e7777cd/disk-ef4d3ea4.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/2ed3c6bc9230/vmlinux-ef4d3ea4.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/f1dbd004fa88/bzImage-ef4d3ea4.xz
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com
-> > > 
-> > > xpad 3-1:179.65: xpad_irq_in - usb_submit_urb failed with result -19
-> > > xpad 3-1:179.65: xpad_irq_out - usb_submit_urb failed with result -19
-> > > ==================================================================
-> > > BUG: KASAN: use-after-free in register_lock_class+0x8d2/0x9b0 kernel/locking/lockdep.c:1338
+On Thu, Dec 8, 2022 at 2:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
+>
+> Hi Rob,
+>
+> On Wed, 7 Dec 2022 16:19:42 -0600
+> Rob Herring <robh+dt@kernel.org> wrote:
+>
+> > On Wed, Dec 7, 2022 at 10:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > This series add support for the Renesas USBF controller (USB Device
+> > > Controller) available in the Renesas RZ/N1 SoC.
+> > >
+> > > Based on previous review:
+> > >   https://lore.kernel.org/all/20221114111513.1436165-3-herve.codina@bootlin.com/
+> > >
+> > > A new strategy is proposed to handle the H2MODE bit from CFG_USB
+> > > register compared to the previous versions on the series. As a
+> > > reminder, H2MODE bit allows to configure the internal USB Port
+> > > interface for two hosts or one host and one device.
+> >
+> > Is this case any different from all the phandle properties we have in
+> > bindings that point to some misc registers somewhere else you need to
+> > poke? If so, I'm not really a fan of duplicating the information.
+>
+> Our case is that there is a bit in a register that affect several
+> devices. This bit must be set before the devices are started.
+> If this bit is changed while affected devices are running, system
+> hangs can occurs (datasheet).
+>
+> So, in order to do that we need the device in charge to set
+> this bit (sysctrl) to set this bit before other devices (USBF
+> and PCI bridge) were started.
 
-> > >   __wake_up+0xf8/0x1c0 kernel/sched/wait.c:156
-> > >   __usb_hcd_giveback_urb+0x3a0/0x530 drivers/usb/core/hcd.c:1674
-> 
-> 
-> > This is the call to usb_anchor_resume_wakeups().  The call is made after
-> > the completion handler callback.  Evidently the xpad driver deallocated
-> > the anchor during that time window.  This can happen if the driver is
-> > just waiting for its last URB to complete before freeing all its memory.
-> 
-> Yes, complete() had run.
-> > 
-> > I don't know what the best solution is.  It may be necessary to refcount
-> > anchors somehow.
-> 
-> Then we cannot embed them anymore. Many drivers would need a lot of changes.
-> xpad included.
+That sounds like you just need some platform level initialization and
+you are working around the desire to not have platform level
+initialization.
 
-It's hard to tell what's really going on.  Looking at 
-xpad_stop_output(), you see that it doesn't do anything if xpad->type is 
-XTYPE_UNKNOWN.  Is that what happened here?
+Why doesn't/can't the bootloader initialize this? Seems like it might
+want to use PCI or USB too.
 
-I can't figure out where the underlying race is.  Maybe it's not 
-directly connected with anchors after all.
+> At sysctrl level, the bit is set during the probe() call.
+> The property 'depends-on' aim is to ensure the probe() calls
+> order between provider (sysctrl) and consumers (USBF and PCI
+> bridge).
+>
+> regmap and syscon are used to export registers from one device
+> to an other and the probe() calls order is not ensured by the
+> core or regmap infrastructure. Indeed, the regmap provider
+> probe() will not be called if the regmap provider was not probed
+> before the consumer ask for the regmap.
+>   https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L152
+>   https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L43
+> No specific action synchronisation are done with regmap/syscon
+> other than the regmap creation itself.
 
-> As far as I can tell the order we decrease use_count is correct. But:
-> 
-> 6ec4147e7bdbd (Hans de Goede             2013-10-09 17:01:41 +0200 1674)        usb_anchor_resume_wakeups(anchor);
-> 94dfd7edfd5c9 (Ming Lei                  2013-07-03 22:53:07 +0800 1675)        atomic_dec(&urb->use_count);
-> 
-> Do we need to guarantee memory ordering here?
+Oh right. That's in place of course to avoid probe ordering issues...
 
-I don't think we need to do anything more.  usb_kill_urb() is careful to 
-wait for completion handlers to finish, and we already have 
-smp_mb__after_atomic() barriers in the appropriate places to ensure 
-proper memory ordering.
+> I don't think the regmap/syscon will help in our case.
+>
+> >
+> > We also have cases of of_find_compatible_node(NULL, NULL,
+> > "foo-bar-syscon") which is a dependency expressed in the driver, but
+> > not DT. In either case, adding 'depends-on' would be an ABI break as
+> > you are requiring a DT change.
+>
+> In order to avoid the DT change, I can keep the 'depends-on'
+> optional in the PCI bridge binding.
+> This will be functionnal as sysctrl is already used in this node
+> (power-domain = <&sysctrl>). The relationship is already present
+> with this power-domain link.
+>
+> If ok, I will do this change in v4 series.
 
-Alan Stern
+I agree with Geert that this shouldn't be needed.
+
+Rob
