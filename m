@@ -2,103 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AE2646A77
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 09:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0A7646B40
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 10:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiLHI0s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 03:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S229930AbiLHJBB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 04:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiLHI0q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 03:26:46 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99A15E3E2
-        for <linux-usb@vger.kernel.org>; Thu,  8 Dec 2022 00:26:44 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id f20so775590lja.4
-        for <linux-usb@vger.kernel.org>; Thu, 08 Dec 2022 00:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I6ClY8Qn5PhU88a7o7iHI8P//YfoghPFJcCo7zTwnx8=;
-        b=xI/MBzy1SAK+zJrVSmYY0x+h/gh0oAVfK1JHbYnRpeJh1Z7iY1kY1TW6Ixp3W2Kabj
-         p41PCFYiUJT6aaQGicyGHO/I0aqlLmHYk1XJ+/N4uWQfESbMN4uxPgj9X3BxlCtX69jg
-         jEUaXE1820E6AMvDr69hJG/x2hqILM5PWE3VdJUJb1T6wk6kh6RVkLkS8uGaTpC9k+Fj
-         5kcDAKeiaq6GqovSIz07BBory0mJSNMGGGDlkWuFeX4YkGUF2SlPgqrdvLDgBdm/ZZyJ
-         KIDmXdeY1/hDwNj2jfFc9n5fZA9puhsqbABk9w7KpihVi2si54vMF+4znQrOQI++QMKp
-         a2hw==
+        with ESMTP id S229514AbiLHJA6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 04:00:58 -0500
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141134874C;
+        Thu,  8 Dec 2022 01:00:58 -0800 (PST)
+Received: by mail-pj1-f47.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso4020636pjt.0;
+        Thu, 08 Dec 2022 01:00:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6ClY8Qn5PhU88a7o7iHI8P//YfoghPFJcCo7zTwnx8=;
-        b=U1+plltfksaMOwsYzbTBgflsBua2+94awE9fQN9HOHUQde2eC7fWZQknoB8c1OjqGs
-         WYCWYNh/5w/1e4873ouxKh8CvwzfxtToDVXJKgbTPjMMnFIm/CTo1j/olLaDskK+itNH
-         IJjlDoPdEiKRyBh6ag3BvOQZZeOyjX0eZYo/SqDwfUZn4xxNoisu+yV/j7cjDQP+9OGh
-         f65/OOj4tRKqBSYnSvJZ9qH3xkIoMQIHHGSGIYV+mW5Xrs0hneL3GflE0r+lKr2tVJ42
-         RI47+KP8eyGgmYiDDYrTmdWoYIMW1FayC0+ErTjrlUwtP6+LxjFwfiHJE9pcMqso9wsD
-         Ba+w==
-X-Gm-Message-State: ANoB5pmVQXrCh409YZTIvTr2cnaqatKOSYeisBPvuHFC4ciAnp4M4I3Q
-        vrjeHmwmfmOs1Q/UQHesGVjcdg==
-X-Google-Smtp-Source: AA0mqf6epq8Tk3LPsvkLyf6+nNpqKEYyRgrRwB6VG90m/K7IlmsjsseL+xDK/7lLb1TyxhdT7bvecA==
-X-Received: by 2002:a05:651c:1108:b0:277:e8c:a5a4 with SMTP id e8-20020a05651c110800b002770e8ca5a4mr25863815ljo.311.1670488003075;
-        Thu, 08 Dec 2022 00:26:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t15-20020a05651c204f00b0026bf43a4d72sm2114512ljo.115.2022.12.08.00.26.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 00:26:42 -0800 (PST)
-Message-ID: <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
-Date:   Thu, 8 Dec 2022 09:26:41 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gnfeenGHSX8pxGcDHDGsgu5jtWy1vtL2VR1fK04qMGU=;
+        b=0+3NAgORvJfV2qMO3lsVn+H3Lqjdoqrb7AmM3DiJFy0jS58oKrf/zhFiC7/uc03CGI
+         xOeY5msMsMNqGSx8gVsg5SvpQtVbCetLzkae8X3t7L2Uxa3FKuBrBapLmglCSbF8rlrI
+         Rrh2v30VjcGLAdspYJLhKZ6A3ND0O5d1ODWut35u9qAFtqXbJeXT4qCBY5Q4Nr+ZYmZ/
+         4sdrte7qg5W7/SL2wjLbJGWI1y5t6m/MpM0uUhpkFy5q/k0VqLaO6eMHQerB++ybv+dp
+         HJkNevC6AVrIlAbtdPonQbAmaPaAhZxOFMDjhjV+EdU1fuwdWF2A2BcxuoSxq0hOZXA/
+         1tOQ==
+X-Gm-Message-State: ANoB5pn98sgA59AO+uIwrrWojjlYBwc8y551g0piXsOFHAVo90tQZHUF
+        zEpjjrssnLtppy+FMc/HGSXkYAULG5HVumNakKY=
+X-Google-Smtp-Source: AA0mqf659+OdeqLrf+FQ+LZZtgdCdNVN8yytNzkVh+PKns/Z4xwYuquj032CQR+ovzq7ynBjBRLwhOyGjC4yQm2+kIg=
+X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
+ iw18-20020a170903045200b0018965747ac2mr64198640plb.65.1670490057258; Thu, 08
+ Dec 2022 01:00:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 3/9] dt-bindings: PCI: renesas,pci-rcar-gen2:
- 'depends-on' is no more optional
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221207162435.1001782-1-herve.codina@bootlin.com>
- <20221207162435.1001782-4-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207162435.1001782-4-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr> <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+In-Reply-To: <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 8 Dec 2022 18:00:46 +0900
+Message-ID: <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
+Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
+ drivers' disconnect()
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        =?UTF-8?Q?Christoph_M=C3=B6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/12/2022 17:24, Herve Codina wrote:
-> The 'depends-on' property is set in involved DTS.
-> 
-> Move it to a required property.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml | 1 +
+On Mon. 5 Dec. 2022 at 17:39, Oliver Neukum <oneukum@suse.com> wrote:
+> On 03.12.22 14:31, Vincent Mailhol wrote:
+> > The core sets the usb_interface to NULL in [1]. Also setting it to
+> > NULL in usb_driver::disconnects() is at best useless, at worse risky.
+>
+> Hi,
+>
+> I am afraid there is a major issue with your series of patches.
+> The drivers you are removing this from often have a subsequent check
+> for the data they got from usb_get_intfdata() being NULL.
 
-This should be squashed with previous patch. There is no point to add
-property and immediately in the next patch make it required. Remember
-that bindings are separate from DTS.
+ACK, but I do not see the connection.
 
-Best regards,
-Krzysztof
+> That pattern is taken from drivers like btusb or CDC-ACM
 
+Where does CDC-ACM set *his* interface to NULL? Looking at:
+
+  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/class/cdc-acm.c#L1531
+
+I can see that cdc-acm sets acm->control and acm->data to NULL in his
+disconnect(), but it doesn't set its own usb_interface to NULL.
+
+> which claim secondary interfaces disconnect() will be called a second time
+> for.
+
+Are you saying that the disconnect() of those CAN USB drivers is being
+called twice? I do not see this in the source code. The only caller of
+usb_driver::disconnect() I can see is:
+
+  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L458
+
+> In addition, a driver can use setting intfdata to NULL as a flag
+> for disconnect() having proceeded to a point where certain things
+> can no longer be safely done.
+
+Any reference that a driver can do that? This pattern seems racy.
+
+By the way, I did check all the drivers:
+
+  * ems_usb: intf is only used in ems_usb_probe() and
+ems_usb_disconnect() functions.
+
+  * esd_usb: intf is only used in the esd_usb_probe(),
+    esd_usb_probe_one_net() (which is part of probing),
+    esd_usb_disconnect() and a couple of sysfs functions (which only
+    use intf to get a pointer to struct esd_usb).
+
+  * gs_usb: intf is used several time but only to retrive struct
+    usb_device. This seems useless, I will sent this patch to remove
+    it:
+    https://lore.kernel.org/linux-can/20221208081142.16936-3-mailhol.vincent@wanadoo.fr/
+    Aside of that, intf is only used in gs_usb_probe(),
+    gs_make_candev() (which is part of probing) and
+    gs_usb_disconnect() functions.
+
+  * kvaser_usb: intf is only used in kvaser_usb_probe() and
+    kvaser_usb_disconnect() functions.
+
+  * mcba_usb: intf is only used in mcba_usb_probe() and
+    mcba_usb_disconnect() functions.
+
+  * ucan: intf is only used in ucan_probe() and
+    ucan_disconnect(). struct ucan_priv also has a pointer to intf but
+    it is never used. I sent this patch to remove it:
+    https://lore.kernel.org/linux-can/20221208081142.16936-2-mailhol.vincent@wanadoo.fr/
+
+  * usb_8dev: intf is only used in usb_8dev_probe() and
+    usb_8dev_disconnect().
+
+With no significant use of intf outside of the probe() and
+disconnect(), there is definitely no such "use intf as a flag" in any
+of these drivers.
+
+> You need to check for that in every driver
+> you remove this code from and if you decide that it can safely be removed,
+
+What makes you assume that I didn't check this in the first place? Or
+do you see something I missed?
+
+> which is likely, then please also remove checks like this:
+>
+>         struct ems_usb *dev = usb_get_intfdata(intf);
+>
+>         usb_set_intfdata(intf, NULL);
+>
+>         if (dev) {
+>                 unregister_netdev(dev->netdev);
+
+How is the if (dev) check related? There is no correlation between
+setting intf to NULL and dev not being NULL.
+
+I think dev is never NULL, but I did not assess that dev could not be NULL.
+
+> Either it can be called a second time, then you need to leave it
+> as is,
+
+Really?! The first thing disconnect() does is calling
+usb_get_intfdata(intf) which dereferences intf without checking if it
+is NULL, c.f.:
+
+  https://elixir.bootlin.com/linux/v6.0/source/include/linux/usb.h#L265
+
+Then it sets intf to NULL.
+
+The second time you call disconnect(), the usb_get_intfdata(intf)
+would be a NULL pointer dereference.
+
+> or the check for NULL is superfluous. But only removing setting
+> the pointer to NULL never makes sense.
+
+
+Yours sincerely,
+Vincent Mailhol
