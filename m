@@ -2,150 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FDC647774
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 21:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3465647798
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 21:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiLHUot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 15:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S229538AbiLHU7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 15:59:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHUor (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 15:44:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01701AF33;
-        Thu,  8 Dec 2022 12:44:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61DB8B825E5;
-        Thu,  8 Dec 2022 20:44:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CBE2C43398;
-        Thu,  8 Dec 2022 20:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670532284;
-        bh=Op3UYf+6olBgWrruca2+4Cw44tWd/dJqwafFuHi8BuQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TzZk98Sm7iHP5ggszXg7OSQVOGQWmechaPq8sdWf6iN8A8VkpGD4NQDM06bssaYaN
-         lgWc9vcIcmS6g+dsTZ/1ykRw3u6RG+Fg9/2sFyQhj2ilkoUszIPR7GUwMfYbHGofAm
-         j17lqnYNJok5WR1ys0ih3OZlds6Dy28ib/oZubk70FfQWd02vSqrFQlxmcl1MIdJZj
-         GmiUrnYKWGJjellgBWsKNJpZltUqi4nlu09jAQVueDNlfoaGhzcRIaeZ+lV6LMtmBW
-         hajdN19eK7yyFNHS/V16wBGnRt3VSGa+q5PONKJViCXbo20GWmxcEv2RwLEgNoNAZz
-         9qoWk3T7xXZ/g==
-Received: by mail-ua1-f50.google.com with SMTP id m5so772987uah.3;
-        Thu, 08 Dec 2022 12:44:44 -0800 (PST)
-X-Gm-Message-State: ANoB5pk3s4dy/5FRocmvte06X+ULIi0ycfzRFK6pffIsoS3/8pGfZNbS
-        ozDYP1ODQo/dWFNkHQrh1Agqy6zvL07c01jr2w==
-X-Google-Smtp-Source: AA0mqf4ma8F1BT0uBQEYiHxBjiJL0Ol47jNJrTLDn/AAI8VlbTaGwaiuMSNkRkY2hh2jshSQyk61IDhlm1kZOsxD1n0=
-X-Received: by 2002:a9f:22c7:0:b0:3d6:45ee:7efc with SMTP id
- 65-20020a9f22c7000000b003d645ee7efcmr44640221uan.86.1670532282914; Thu, 08
- Dec 2022 12:44:42 -0800 (PST)
+        with ESMTP id S229649AbiLHU7H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 15:59:07 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9887726FC;
+        Thu,  8 Dec 2022 12:59:06 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id n21so6870515ejb.9;
+        Thu, 08 Dec 2022 12:59:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2uWthW/PoKfC02t1PaCjD6R5HbN1AuXQTJXkZCHE+YY=;
+        b=MmnxtYapb1tWKOt5UnNiQ50t6JfjSaObmvZa9LHlnCnsyJLPhgzfbg0O+ARqNk1b2T
+         Iibz2OIB+1N9V+0Ptw1fa+ywzBwARGYBCNCLZOyGv3BEba2lXVw+SgGgL8Qz3twBv+uO
+         5inxZ7C3lgG64UliXO9ETDOP1UzM4HzoCGeMR3Bb7XbrIJYLuaymbfIFcdl3+uuWddAD
+         dnBDfQ6CcbGyc2Wo9j5Aib2LW5kIDOCsDGbadJga9MRYFgJfUWX0LFNeg+J6LqlmsSg0
+         oKmSSBKI5aBbm/tHxZlPGCVNcJeGVUEuq+cpoRdczZnCXGHlKoT/mIw5Q+emTMhHjgCD
+         SUBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2uWthW/PoKfC02t1PaCjD6R5HbN1AuXQTJXkZCHE+YY=;
+        b=Ua+B6R4KP9TrudNGzHTdYUqUy2j3UhHuJyXRfdKfBNnJKhc8gxhKWcecx4u6+Zg+rK
+         7KP5vjL7jXwYrmOKpl89F5959zbjfV0deMoCSW//44YCB/G2RtUGLF1svurrH/+tAVH1
+         YYF+KOar4t7ZsOLMJeitJyHpec+vVYCGrSClqq7dJWmMVTo+C7jP+mUOJZStJRCJzGCX
+         8AJlxsGNq5vr8hbJMrtFZKIn6LBZhQTtdQglqjhT0Sl9CCCYC9ZMDuzHE8meGDvZgFmh
+         Hobmq7DIOufrenDCNDn1KrvyAOCWzodM6LHsVRQrXZjJzy7B+cGwYQYYmzO8mB8CI9hj
+         Q3Zg==
+X-Gm-Message-State: ANoB5plRa5vthy94yoMV0slCGXCI6gUWveuAJSWepgK5VNwFoShEKKk8
+        V909OoF3xI68CTCD/LOGN+ZKVCdKq8gwc4EbjdQ=
+X-Google-Smtp-Source: AA0mqf4TZbKeyFx4CKL8mJSNkg1i0m8ENpo9jfVK5zMkFq9D/i/Tbc9xNhHkPb/J8xrS0UtiJUz5Ipmfcj/xQEyAwC0=
+X-Received: by 2002:a17:906:a083:b0:7b2:b15e:322f with SMTP id
+ q3-20020a170906a08300b007b2b15e322fmr76404842ejy.75.1670533144943; Thu, 08
+ Dec 2022 12:59:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207162435.1001782-1-herve.codina@bootlin.com>
- <CAL_JsqJiZU=sHVPc92nDNoqUjm7FUb=u0izGYa+irkUW1XmA_w@mail.gmail.com> <20221208092439.6170cf5e@bootlin.com>
-In-Reply-To: <20221208092439.6170cf5e@bootlin.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 8 Dec 2022 14:44:31 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLjD=DbKJRrmn2GmbAwmVyE=gVcz-fZfNJ_xAup6GReSA@mail.gmail.com>
-Message-ID: <CAL_JsqLjD=DbKJRrmn2GmbAwmVyE=gVcz-fZfNJ_xAup6GReSA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] Add the Renesas USBF controller support
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221205210354.11846-1-andrew.smirnov@gmail.com> <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com>
+In-Reply-To: <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Thu, 8 Dec 2022 12:58:53 -0800
+Message-ID: <CAHQ1cqGaL5v4PARTZU6_0tfSCz3=9b1THz-D-Bg1G64hBV+_Wg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] Handling of non-numbered feature reports by hidraw
+To:     David Rheinsberg <david.rheinsberg@gmail.com>
+Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 2:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
+On Thu, Dec 8, 2022 at 7:46 AM David Rheinsberg
+<david.rheinsberg@gmail.com> wrote:
 >
-> Hi Rob,
+> Hi
 >
-> On Wed, 7 Dec 2022 16:19:42 -0600
-> Rob Herring <robh+dt@kernel.org> wrote:
->
-> > On Wed, Dec 7, 2022 at 10:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > This series add support for the Renesas USBF controller (USB Device
-> > > Controller) available in the Renesas RZ/N1 SoC.
-> > >
-> > > Based on previous review:
-> > >   https://lore.kernel.org/all/20221114111513.1436165-3-herve.codina@bootlin.com/
-> > >
-> > > A new strategy is proposed to handle the H2MODE bit from CFG_USB
-> > > register compared to the previous versions on the series. As a
-> > > reminder, H2MODE bit allows to configure the internal USB Port
-> > > interface for two hosts or one host and one device.
+> On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+> > I'm working on a firmware of a device that exposes a HID interface via
+> > USB and/or BLE and uses, among other things, non-numbered feature
+> > reports. Included in this series are two paches I had to create in
+> > order for hidraw devices created for aforementioned subsystems to
+> > behave in the same way when exerciesd by the same test tool.
 > >
-> > Is this case any different from all the phandle properties we have in
-> > bindings that point to some misc registers somewhere else you need to
-> > poke? If so, I'm not really a fan of duplicating the information.
+> > I don't know if the patches are acceptable as-is WRT to not breaking
+> > existing userspace, hence the RFC tag.
 >
-> Our case is that there is a bit in a register that affect several
-> devices. This bit must be set before the devices are started.
-> If this bit is changed while affected devices are running, system
-> hangs can occurs (datasheet).
+> Can you elaborate why you remove the special handling from USBHID but
+> add it to UHID? They both operate logically on the same level, so
+> shouldn't we simply adjust uhid to include the report-id in buf[0]?
 >
-> So, in order to do that we need the device in charge to set
-> this bit (sysctrl) to set this bit before other devices (USBF
-> and PCI bridge) were started.
-
-That sounds like you just need some platform level initialization and
-you are working around the desire to not have platform level
-initialization.
-
-Why doesn't/can't the bootloader initialize this? Seems like it might
-want to use PCI or USB too.
-
-> At sysctrl level, the bit is set during the probe() call.
-> The property 'depends-on' aim is to ensure the probe() calls
-> order between provider (sysctrl) and consumers (USBF and PCI
-> bridge).
+> Also, you override buf[0] in UHID, so I wonder what UHID currently
+> returns there?
 >
-> regmap and syscon are used to export registers from one device
-> to an other and the probe() calls order is not ensured by the
-> core or regmap infrastructure. Indeed, the regmap provider
-> probe() will not be called if the regmap provider was not probed
-> before the consumer ask for the regmap.
->   https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L152
->   https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L43
-> No specific action synchronisation are done with regmap/syscon
-> other than the regmap creation itself.
-
-Oh right. That's in place of course to avoid probe ordering issues...
-
-> I don't think the regmap/syscon will help in our case.
+> IOW, can you elaborate a bit what the current behavior of each of the
+> involved modules is, and what behavior you would expect? This would
+> allow to better understand what you are trying to achieve. The more
+> context you can give, the easier it is to understand what happens
+> there.
 >
-> >
-> > We also have cases of of_find_compatible_node(NULL, NULL,
-> > "foo-bar-syscon") which is a dependency expressed in the driver, but
-> > not DT. In either case, adding 'depends-on' would be an ABI break as
-> > you are requiring a DT change.
->
-> In order to avoid the DT change, I can keep the 'depends-on'
-> optional in the PCI bridge binding.
-> This will be functionnal as sysctrl is already used in this node
-> (power-domain = <&sysctrl>). The relationship is already present
-> with this power-domain link.
->
-> If ok, I will do this change in v4 series.
 
-I agree with Geert that this shouldn't be needed.
+Sorry it's not very clear, so the difference between the cases is that
+in the case of UHID the report ID ends up being included as a part of
+"SET_FEATURE", so BlueZ checks UHID_DEV_NUMBERED_FEATURE_REPORTS,
+which is not set (correctly) and tries to send the whole payload. This
+ends up as a maxlen + 1 (extra byte) write to a property that is
+maxlen long, which gets rejected by device's BLE stack.
 
-Rob
+In the case of USBHID the problem happens in "GET_FEATURE" path. When
+userspace reads the expected data back it gets an extra 0 prepended to
+the payload, so all of the actual payload has an offset of 1. This
+doesn't happen with UHID, which I think is the correct behavior here.
+
+Hopefully that explains the difference, let me know if something is unclear
