@@ -2,104 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3397B647395
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 16:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51985647448
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 17:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiLHPx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 10:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S229739AbiLHQ2y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 11:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiLHPx0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 10:53:26 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FFB63D7D;
-        Thu,  8 Dec 2022 07:53:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670514805; x=1702050805;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Oetrozn7hREZ1+E90eIuWjD6cJMvrafRb9KTJQ6cvAQ=;
-  b=izHi7omGR7sl6P2DFIQcvDv4dNUSBrp8NPXl1hw2KhIAEQ9P3DrI3vDG
-   lDJrbkX3xfYCKfpxhPzVo0a+jrF4IuFeohvyAodqr1vGZpogZLUupglnh
-   uvmSRxqEzzRFM6GKlMxGnjTVni2VORk0xDbtey0GtGDZvNrhv+NsbsY/w
-   lz7Uh4pcnYjO3fnaVYkeuOjTFU0qG5S6RXWrAfJVK26ezXi7zpl466kMi
-   2TrkDBelijSTWJPtiDSy4QCvhLG5lJriQwjMKIvz1oW4BgoEVClBQSBvu
-   41Y8HG6WK8Hkv9mfbXWhhVtZfoeT5Q3gZFBld3hxrQka2DfJrhVE+Yj8b
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="314850717"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="314850717"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 07:53:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="735852344"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="735852344"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Dec 2022 07:53:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p3JD3-006QZD-2Z;
-        Thu, 08 Dec 2022 17:53:17 +0200
-Date:   Thu, 8 Dec 2022 17:53:17 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: Re: [PATCH v5 1/4] i915: Move list_count() to list.h as
- list_count_nodes() for broader use
-Message-ID: <Y5IIbTtF4dHxRn/W@smile.fi.intel.com>
-References: <20221130134838.23805-1-andriy.shevchenko@linux.intel.com>
- <Y5HelZhkxnPf6hIs@smile.fi.intel.com>
- <Y5HjTpzmgZWft+nF@kroah.com>
+        with ESMTP id S230206AbiLHQ23 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 11:28:29 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 71533175AC
+        for <linux-usb@vger.kernel.org>; Thu,  8 Dec 2022 08:28:28 -0800 (PST)
+Received: (qmail 731998 invoked by uid 1000); 8 Dec 2022 11:28:24 -0500
+Date:   Thu, 8 Dec 2022 11:28:24 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Christoph =?iso-8859-1?Q?M=F6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        Remigiusz =?utf-8?B?S2/FgsWCxIV0YWo=?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
+ drivers' disconnect()
+Message-ID: <Y5IQqExJN9C9xQbF@rowland.harvard.edu>
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
+ <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+ <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
+ <b5df2262-7a4f-0dcf-6460-793dad02401d@suse.com>
+ <CAMZ6RqL9eKco+fAMZoQ6X9PNE7dDK3KnFZoMCXrjgvx_ZU8=Ew@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5HjTpzmgZWft+nF@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZ6RqL9eKco+fAMZoQ6X9PNE7dDK3KnFZoMCXrjgvx_ZU8=Ew@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 02:14:54PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Dec 08, 2022 at 02:54:45PM +0200, Andy Shevchenko wrote:
-> > On Wed, Nov 30, 2022 at 03:48:35PM +0200, Andy Shevchenko wrote:
-> > > Some of the existing users, and definitely will be new ones, want to
-> > > count existing nodes in the list. Provide a generic API for that by
-> > > moving code from i915 to list.h.
-> > 
-> > Greg, I believe this one is ready to be taken. Or please tell me what I need
-> > to do.
+On Fri, Dec 09, 2022 at 12:44:51AM +0900, Vincent MAILHOL wrote:
+> On Thu. 8 Dec. 2022 at 20:04, Oliver Neukum <oneukum@suse.com> wrote:
+
+> > >> which is likely, then please also remove checks like this:
+> > >>
+> > >>          struct ems_usb *dev = usb_get_intfdata(intf);
+> > >>
+> > >>          usb_set_intfdata(intf, NULL);
+> > >>
+> > >>          if (dev) {
+> >
+> > Here. If you have a driver that uses usb_claim_interface().
+> > You need this check or you unregister an already unregistered
+> > netdev.
 > 
-> Wait for me to get through the current backlog of patches that I have in
-> my review queue.  Odds are, it will have to wait until after 6.2-rc1 is
-> out based on when 6.1 is going to be released.
+> Sorry, but with all my best intentions, I still do not get it. During
+> the second iteration, inft is NULL and:
 
-It's fine, no hurry and take your time!
+No, intf is never NULL.  Rather, the driver-specific pointer stored in 
+intfdata may be NULL.
 
-> Don't worry, it's not lost.
+You seem to be confusing intf with intfdata(intf).
 
-Thank you, got it!
+>         /* equivalent to dev = intf->dev.data. Because intf is NULL,
+>          * this is a NULL pointer dereference */
+>         struct ems_usb *dev = usb_get_intfdata(intf);
 
--- 
-With Best Regards,
-Andy Shevchenko
+So here dev will be NULL when the second interface's disconnect routine 
+runs, because the first time through the routine sets the intfdata to 
+NULL for both interfaces:
 
+	USB core calls ->disconnect(intf1)
 
+		disconnect routine sets intfdata(intf1) and 
+		intfdata(intf2) both to NULL and handles the
+		disconnection
+
+	USB core calls ->disconnect(intf2)
+
+		disconnect routine sees that intfdata(intf2) is
+		already NULL, so it knows that it doesn't need
+		to do anything more.
+
+As you can see in this scenario, neither intf1 nor intf2 is ever NULL.
+
+>         /* OK, intf is already NULL */
+>         usb_set_intfdata(intf, NULL);
+> 
+>         /* follows a NULL pointer dereference so this is undefined
+>          * behaviour */
+>        if (dev) {
+> 
+> How is this a valid check that you entered the function for the second
+> time? If intf is the flag, you should check intf, not dev? Something
+> like this:
+
+intf is not a flag; it is the argument to the function and is never 
+NULL.  The flag is the intfdata.
+
+>         struct ems_usb *dev;
+> 
+>         if (!intf)
+>                 return;
+> 
+>         dev = usb_get_intfdata(intf);
+>         /* ... */
+> 
+> I just can not see the connection between intf being NULL and the if
+> (dev) check. All I see is some undefined behaviour, sorry.
+
+Once you get it straightened out in your head, you will understand.
+
+Alan Stern
