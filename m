@@ -2,95 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497E4647370
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 16:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED486647384
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 16:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLHPqV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 10:46:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
+        id S229977AbiLHPvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 10:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiLHPqS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 10:46:18 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F3D442E6;
-        Thu,  8 Dec 2022 07:46:17 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id vv4so5032336ejc.2;
-        Thu, 08 Dec 2022 07:46:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hx136BtekxTmwLZD7bGGNVUmasUyrecFxbV6zXvxhlw=;
-        b=VsLhZdFkHAAdY6gwdApujYzePoiaYntbpwi0+Kpqh2ZMQTXk4rFn3/ssggKjWUiTmR
-         wNeYEiBX09HLYGcVur473K7hngdnLnLLzKxSsZ0NiMqN51CBpYhd4xEuarsx2H0GOkPT
-         v79U47ce3Vkm75isoZKkb2bVz0O6H9x4lGWFgsX+tvAlyR6MAOSfIj+OeJuRjtOpgLRx
-         rTluIfO19Ef2Ygr5RZOHHppeza48PZwAdnRI7LnAz2eastqvD2ZSsMac1l+FuGppfhCw
-         jEmMP2CZZbTagifxtKUNQl4lMGMjrc8lXSLQDAGE3JMU6TTIHagnS2iQB5ppTWgQPFHL
-         7vGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hx136BtekxTmwLZD7bGGNVUmasUyrecFxbV6zXvxhlw=;
-        b=jI+XKzYfomLxAoKF029hyCWPYWdKzPYFYyelAv0XB2pdodQVE9/mukOAxjx2NxWRWT
-         PE07Pbq03sM/hhP0hGJr7L8zj0hUfpLQIDt7KzwFJXMio27c2S59rXP5A0rZVBK7PHJV
-         /rhwbZ1MrSQCh/rwfIiG2Tz10KI8X11M/0gYg/QB7rCkDmqINNZm7xEGtFtS8PC8Pvop
-         YquYsis79xBLXsh9dr5mqaM5wP+7SRp+zd2qbNC/wgNQKIH13abYPV+I8V5xhZnW2F+v
-         xI6o4MGxuca4pPEUfdQ44JHQ1tLceK4h4PAOKnXChvHHiMKAVS6JR5lFLamYCXpfCjSq
-         BC8g==
-X-Gm-Message-State: ANoB5plAGDT66h+IkNVvn+nFGoP7K55aV0OEBCMwEq7ItWXnSG5z6wL0
-        AtVyjWUBf87s2v19fnT6oWvrg7COFQ2CQDULalo=
-X-Google-Smtp-Source: AA0mqf7hgGmmHaoKTJH7Ov6Q2Esx/9X+AVoDk7pjmrQlT+a1dcKvC5wjZUe63LaiZ+oN7xMTcf9/hyZZYTPFEu8qByo=
-X-Received: by 2002:a17:906:4bc4:b0:78d:6325:356 with SMTP id
- x4-20020a1709064bc400b0078d63250356mr78824050ejv.6.1670514375534; Thu, 08 Dec
- 2022 07:46:15 -0800 (PST)
+        with ESMTP id S229610AbiLHPvK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 10:51:10 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE59E26553;
+        Thu,  8 Dec 2022 07:51:06 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7DD6E240012;
+        Thu,  8 Dec 2022 15:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670514665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g5n3JsbbZaE7ybECVhrvextoT7PBeRSsX4KeV8+PcM0=;
+        b=UyngXYx9Vcm9JGJ1b3z7b8NO21EvHn5BIi7f4ns15NUnU/N1IIK5CNH2c7ecEyW/V8uFgY
+        Ni34Ojo008tCgLgY/9IESNlGr6CUyt+e2amEEV/NVXQlZNEbjyEuE6WPO32o5bJy0+SIKu
+        hpswvin9x1zQfcqy+oNxdyMLN9LUKC6fQMp5TsXaK0mjpluyLENZmqfR3k/V32Vo9fLxhr
+        B1QimGkMWjtcPbHfhtckx3QwyHpnLSBq/R1W0lbTAbX1wxQeBoa/qzgQAIkeSCVo4+XNak
+        VB6f1fmQjxSE2kwN4nE9YC63UcpmCHxly4fMv8fEngeppnb8GVyZOfTNl6iSAg==
+Date:   Thu, 8 Dec 2022 16:51:01 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v3 3/9] dt-bindings: PCI: renesas,pci-rcar-gen2:
+ 'depends-on' is no more optional
+Message-ID: <20221208165101.584e4b92@bootlin.com>
+In-Reply-To: <8dfb5b8a-766a-14ec-16d4-74fdd9f7d622@linaro.org>
+References: <20221207162435.1001782-1-herve.codina@bootlin.com>
+        <20221207162435.1001782-4-herve.codina@bootlin.com>
+        <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
+        <20221208100530.137fa8b7@bootlin.com>
+        <8dfb5b8a-766a-14ec-16d4-74fdd9f7d622@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20221205210354.11846-1-andrew.smirnov@gmail.com>
-In-Reply-To: <20221205210354.11846-1-andrew.smirnov@gmail.com>
-From:   David Rheinsberg <david.rheinsberg@gmail.com>
-Date:   Thu, 8 Dec 2022 16:46:04 +0100
-Message-ID: <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] Handling of non-numbered feature reports by hidraw
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+Hi Krzysztof,
 
-On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> I'm working on a firmware of a device that exposes a HID interface via
-> USB and/or BLE and uses, among other things, non-numbered feature
-> reports. Included in this series are two paches I had to create in
-> order for hidraw devices created for aforementioned subsystems to
-> behave in the same way when exerciesd by the same test tool.
->
-> I don't know if the patches are acceptable as-is WRT to not breaking
-> existing userspace, hence the RFC tag.
+On Thu, 8 Dec 2022 10:46:32 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Can you elaborate why you remove the special handling from USBHID but
-add it to UHID? They both operate logically on the same level, so
-shouldn't we simply adjust uhid to include the report-id in buf[0]?
+> On 08/12/2022 10:05, Herve Codina wrote:
+> > Hi Krzysztof,
+> >=20
+> > On Thu, 8 Dec 2022 09:26:41 +0100
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >  =20
+> >> On 07/12/2022 17:24, Herve Codina wrote: =20
+> >>> The 'depends-on' property is set in involved DTS.
+> >>>
+> >>> Move it to a required property.
+> >>>
+> >>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> >>> ---
+> >>>  Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml | 1=
+ +   =20
+> >>
+> >> This should be squashed with previous patch. There is no point to add
+> >> property and immediately in the next patch make it required. Remember
+> >> that bindings are separate from DTS.
+> >>
+> >> Best regards,
+> >> Krzysztof
+> >> =20
+> >=20
+> > I though about make dtbs_check in case of git bisect. =20
+>=20
+> And what would this commit change? In Git you will have
+> 1. dt-bindings: PCI: renesas,pci-rcar-gen2: Add depends-on for RZ/N1 SoC
+> family
+> 2. dt-bindings: PCI: renesas,pci-rcar-gen2: 'depends-on' is no more optio=
+nal
+>=20
+> so what is the difference for git bisect?
 
-Also, you override buf[0] in UHID, so I wonder what UHID currently
-returns there?
+Well, today, I have:
+1. dt-bindings: Add depends-on
+2. dts: Add depends-on
+3. dt-bindings: Move depends-on to mandatory
 
-IOW, can you elaborate a bit what the current behavior of each of the
-involved modules is, and what behavior you would expect? This would
-allow to better understand what you are trying to achieve. The more
-context you can give, the easier it is to understand what happens
-there.
+If I squash dt-bindings commits, I am going to have:
+  1. dt-bindings: Add mandatory depends-on
+  2. dts: Add depends-on
+or
+  1. dts: Add depends-on
+  2. dt-bindings: Add mandatory depends-on
 
-Thanks!
-David
+I have not tested but if I used only the first commit in each
+case (git bisect):
+In the first case, dtbs_check is probably going to signal the
+missing 'depends-on' property on dts.
+In the second case, dtbs_check is probably going to signal the
+not described 'depends-on' property present in dts.
+
+>=20
+> >=20
+> > But, ok I will squash or perhaps remove completely this commit.
+> > It introduces a DT compatibility break adding a new mandatory
+> > property (raised by Rob on cover letter review).
+> > Is this compatibility break can be acceptable ? =20
+>=20
+> Requiring property in bindings as a fix for something which was broken
+> is ok. But this is independent of Linux drivers, which should not stop
+> working.
+
+Ok, thanks.
+
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
+Regards,
+Herv=C3=A9
