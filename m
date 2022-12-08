@@ -2,138 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313A5647350
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 16:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B46647354
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 16:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiLHPjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 10:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S229756AbiLHPkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 10:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLHPjl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 10:39:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA36CDA;
-        Thu,  8 Dec 2022 07:39:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81A87B82441;
-        Thu,  8 Dec 2022 15:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A3CDC433D7;
-        Thu,  8 Dec 2022 15:39:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670513978;
-        bh=nzRDvvl+MmQVatyQphm0CIllrR/QIod7Bmtfz2logaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OLSeNd3rPcIwmQI3KjKuRxTDTz9KHPVt1OgPgYcGSRLrqm6LPiHaU+hmsveVb3O4o
-         63Vjd/0kPt2VyfE2c3Uv+9Gd/QwrYNXR0TYbt2Ico/cN/q1x5mwjJa0AYKdZvuEEVi
-         SnDIZyrLdZCsecjDtPRYdhzUX0E5hKYduBPWmO5o=
-Date:   Thu, 8 Dec 2022 16:39:35 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Cc:     felipe.balbi@linux.intel.com, sre@kernel.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        tony@atomide.com
-Subject: Re: [PATCH] usb: phy: add dedicated notifier for charger events
-Message-ID: <Y5IFN9haCK71EMjI@kroah.com>
-References: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <Y3JpfDU7T2Ks/H4m@kroah.com>
- <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
- <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
+        with ESMTP id S229783AbiLHPkF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 10:40:05 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4D917A91
+        for <linux-usb@vger.kernel.org>; Thu,  8 Dec 2022 07:39:56 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 31FA325B;
+        Thu,  8 Dec 2022 16:39:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670513994;
+        bh=tHdQN75SzbyFxI2DjodcvZ38FkaCOOjeFuQH0u7hYDQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=i5NRp+YhjpnETf45Hf3Sol/AEV1wwgDcS7QaOglqBC5+Zq3rY2vZV3J4YBqTKNMUj
+         ImsasQvijLnxNfh/ZyELuhCRJTyy1OCDh2jM7ebb6Ht3kZ5nCONOfbGdfcrcdgf6m1
+         iyhFAEpgamVf60Wa7TVA8l9WpdSnADPevcu+Ipds=
+Message-ID: <33adbf7d-e6e2-3a11-418b-ccf55197fc96@ideasonboard.com>
+Date:   Thu, 8 Dec 2022 15:39:51 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/3] usb: gadget: uvc: Rename uvc_control_ep
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        mgr@pengutronix.de, kieran.bingham@ideasonboard.com
+References: <20221205143758.1096914-1-dan.scally@ideasonboard.com>
+ <20221205143758.1096914-2-dan.scally@ideasonboard.com>
+ <Y5IDyPevtLR5qDCb@kroah.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+In-Reply-To: <Y5IDyPevtLR5qDCb@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 09:11:58AM +0200, Ivaylo Dimitrov wrote:
-> 
-> 
-> On 14.11.22 г. 18:46 ч., Ivaylo Dimitrov wrote:
-> > Hi,
-> > 
-> > On 14.11.22 г. 18:14 ч., Greg KH wrote:
-> > > On Mon, Nov 14, 2022 at 02:56:02PM +0200, Ivaylo Dimitrov wrote:
-> > > > usb_phy::notifier is already used by various PHY drivers (including
-> > > > phy_generic) to report VBUS status changes and its usage conflicts with
-> > > > charger current limit changes reporting.
-> > > 
-> > > How exactly does it conflict?
-> > > 
-> > 
-> > see below
-> > 
-> > > > Fix that by introducing a second notifier that is dedicated to
-> > > > usb charger
-> > > > notifications. Add usb_charger_XXX_notifier functions. Fix
-> > > > charger drivers
-> > > > that currently (ab)use usb_XXX_notifier() to use the new API.
-> > > 
-> > > Why not just set the notifier type to be a new one instead of adding a
-> > > whole new notifier list?  Or use a real callback?  notifier lists are
-> > > really horrid and should be avoided whenever possible.
-> > > 
-> > 
-> > Not sure what you mean by "notifier type', but if that is that val
-> > parameter of atomic_notifier_call_chain(), the way it is used by usb
-> > charger FW:
-> > 
-> > https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy.c#L132
-> > 
-> > is not compatible with:
-> > 
-> > https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy-generic.c#L185
-> > 
-> > 
-> > for example, IIUC.
-> > 
-> > The former wants to send max current as val, while latter sends event
-> > type as val. Sure, I may create some kind of hack, like using the MSB to
-> > denote charger events, but that doesn't feel right.
-> > 
-> > Or, shall I do something else and fix the usage all over the place?
-> > Please elaborate.
-> > 
-> 
-> Digging further into that, it seems phy-ab8500-usb.c is also using
-> usb_phy::notifier in non-standard way, it sends events from
-> ux500_musb_vbus_id_status instead of usb_phy_events. I don't know the
-> history behind, but right now we have at least 3 incompatible usages of
-> usb_phy::notifier:
-> 
-> 1. Most of the phy and charger drivers use usb_phy_events as notifier type
-> 
-> 2. phy-ab8500-usb.c uses ux500_musb_vbus_id_status as notifier type, I am
-> not the only one to hit that it seems https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/power/supply/ab8500_charger.c#L3191
-> 
-> 3. USB charger framework uses max charging current as notifier type.
-> 
-> Moreover, a charger driver in a system that has gadget drivers support and
-> phy that has extcon charger cable detection support and registers to phy
-> notifier, will inevitably receive (1) and (3) types of notifications,
-> without any way to distinguish I was able to find.
+Hi Greg
 
-Can't they properly detect this based on the type of the notification
-sent to them?  Why not just set that correctly?
+On 08/12/2022 15:33, Greg KH wrote:
+> On Mon, Dec 05, 2022 at 02:37:56PM +0000, Daniel Scally wrote:
+>> The f_uvc code defines an endpoint named "uvc_control_ep" but it
+>> is configured with a non-zero endpoint address and has its
+>> bmAttributes flagged as USB_ENDPOINT_XFER_INT - this cannot be the
+>> VideoControl interface's control endpoint, as the default endpoint
+>> 0 is used for that purpose. This is instead the optional interrupt
+>> endpoint that can be contained by a VideoControl interface.
+>>
+>> Rename the variables to make that clear.
+> Does userspace documentation also need to be updated to reflect this
+> change?
 
-> I don't really see how those can be merged to use one notifier only, without
-> fixing most of USB phy and gadget drivers and half of charger drivers. Not
-> that I like adding the second notifier, I just don;t see other way.
 
-Fixing them all so that we don't have this mess and require
-yet-another-notifier would be very good.  I know it's not your mess, but
-I think it's the best long-term solution to it, don't you?
+Not for this one I don't think; the data sent to userspace was already 
+correct and isn't changing, it's just the internal variable name that 
+is...but for #2/3 absolutely; I'll update the documentation in a v2.
 
-thanks,
-
-greg k-h
+> thanks,
+>
+> greg k-h
