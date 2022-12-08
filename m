@@ -2,169 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436596467AE
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 04:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547E86468EB
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 07:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiLHD2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Dec 2022 22:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S229546AbiLHGLg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 01:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLHD2C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Dec 2022 22:28:02 -0500
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2055.outbound.protection.outlook.com [40.107.249.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695B031353
-        for <linux-usb@vger.kernel.org>; Wed,  7 Dec 2022 19:28:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rdypr/Wg+NG/BJZk+bK+WEwv/oOzPTfigUU/p/Bycs9sWmmjMX6B68h5ymLoR7/kcVOT743NyQVq1tPEGNJrMQgSlg45I+jLQMvX+g0D/9LGw1bJsTioXSsb9GGa7BgHio1eEDY9rCACWv9FSfx1V66kpelR4dzBIWkjiXccCtxS5Q+fV2Jy3XCP11XAm1xaNU6K9raLSGlvDKpnx4PvRtq0LJH91NXmSmzBFF+q+nQU5Zhpd5Q3+VQhnCz+3I63PH6dO7bLSyF/J6ZtrgH9NGJh5aOmOlWtoDI73k2N+/HZCiL7smrsrdZ1oGqzI/J4+DaFARl/fZvJr7uWUqfUJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1XrK+USbz2XKQlK04T8cn8S1My/SfwxIoXr1SOlhkvA=;
- b=gZYpDStfZ0ggGumr0TDhWsc/0yts28zdwB1XkCiHFdVUw52m2KtO+vqfJuXRw3CfKycqu9lb9Oc6WPbVgTs8uhnQQzWYi2f2JvonjYm4h/8ZyD4m5K+8jrkX3sqMVyi9kweXVPDoMJXJnmc2sTIRksuQ6cK/+ouGMxql+KrpcyBMAM7R2+Ru9xnEeesJVjk11wJ1OLuOHekhL8UtGCkuFubrLbzzAQZKQvaaz5Z4wd8TLs0GXPEM8Aef2kztAICpwQeo63U7mEVELznaYmgLwcj9OcNA7rS+DLwtFCzU4o5yrsx5zdlN37HfwZvSRiPrDGiNzMLgnK7b9Qgecw5bNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1XrK+USbz2XKQlK04T8cn8S1My/SfwxIoXr1SOlhkvA=;
- b=Ji5aOMToNHl0QqnqQ9AbNAcchs8uSfbrRucItXHVe5HX1nXuIpmhAEMvmfUjU+Y2hE4C4Cfl1DkL03JrTlj3wzZxwt/3zuQr7+bXrVtxEWdC1cG2U3jiJAc4zhAK8JM4xgFWpGGkGT00io1UJRKdI3rcelXDxE7gZ6pEsAIU2Fo=
-Received: from PA4PR04MB9591.eurprd04.prod.outlook.com (2603:10a6:102:270::18)
- by DB9PR04MB8219.eurprd04.prod.outlook.com (2603:10a6:10:24d::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Thu, 8 Dec
- 2022 03:27:59 +0000
-Received: from PA4PR04MB9591.eurprd04.prod.outlook.com
- ([fe80::8184:d5e2:3c61:b493]) by PA4PR04MB9591.eurprd04.prod.outlook.com
- ([fe80::8184:d5e2:3c61:b493%6]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
- 03:27:59 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     "peter.chen@kernel.org" <peter.chen@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH] usb: chipidea: otg: handle vbus change for udc iff it's
- in device mode
-Thread-Topic: [PATCH] usb: chipidea: otg: handle vbus change for udc iff it's
- in device mode
-Thread-Index: AQHZCeoA/4OFgtdyQUW9P16vuLC1dq5jVQ4g
-Date:   Thu, 8 Dec 2022 03:27:58 +0000
-Message-ID: <PA4PR04MB9591D7729CE2F0F7134A09B28C1D9@PA4PR04MB9591.eurprd04.prod.outlook.com>
-References: <20221207031448.336080-1-xu.yang_2@nxp.com>
-In-Reply-To: <20221207031448.336080-1-xu.yang_2@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PA4PR04MB9591:EE_|DB9PR04MB8219:EE_
-x-ms-office365-filtering-correlation-id: 4bb9b122-6943-49e6-faa8-08dad8cc3460
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pZFP6FaEjlpm7nSTCuLtF4KAlb+qIJxqZwCvx+vRADdpCzFacOnpSu8S+Ror/sT2FTPcp7xLpCBtE5RP4MEXEMiZT9lFO0EZRCw+1v0AiOBk2pPi6ZxpffjEvzoIKO/D02H69E1UEgr3VAVxzfGwaTEG7UtViK6/fhI9CW1bvq2Kc6sXF2umGh4G/9HQTUFr29IXTcn5Ar2Vq+T+/sUr0dXAnwxceeOXQKwMnxnAsyu0JsbJqYWdFtj/1n0Xwi0Tpl4F9QbrtBtxEKZjzubH58p14mGuQMfPblSfJt69z212q08NN/6mUHxs4DQpJboQoGHF1NT2htYTusjvwr06A+RkLisNSDHCTwsaUgDCTTKSr2U9w6PFaTrkku1etgh3k+J3Nh+wnqmN510N8iFjVROm/cN3D5eaWdmJ47sbe0fkcmMckiNV+0qMVJfwyZuF3TpAVm9J0RKiniHejh2lxVj38aGcWmKsJvUqno3rwfvttPb4Q2sm3DrFiXCLGrGTHroZjDTAG321pB7DVb8WUQE+9u7uP0rYKv0ibZMLUN3ZF06tFwJFVMZryLUyvZUj4XtwCSOye64HNVOqs/m7YTLEQY8+9D4syLdQUn/CiZy6Vt27UAbuN40rOIkO7+fjpJF6ULHiDiatHCvEVprtII6bIIj0oQyM++lhpCQTk7TmD5DTb/oGKrrPPLUcGFZT
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9591.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(136003)(346002)(396003)(39860400002)(451199015)(7696005)(186003)(83380400001)(52536014)(2906002)(41300700001)(122000001)(55016003)(33656002)(86362001)(5660300002)(8936002)(38070700005)(316002)(6506007)(26005)(9686003)(38100700002)(53546011)(478600001)(54906003)(64756008)(6916009)(8676002)(66446008)(4326008)(66476007)(66556008)(71200400001)(66946007)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KmWt9iNUzj6jE3hFJTjweUCzNEJMxkXw4jsiAZv/t/WCOEvwpVZSPodaQ4Qp?=
- =?us-ascii?Q?yb2aOv+YVGdyXH0qnzySAUmWux9JETCipwYoh2iaIJQNr4ectpaKFx4FaNQ3?=
- =?us-ascii?Q?5sjrC+/aLIs3JFlcN1ClYTpHpqOJ7X57qhJ+KmPTb8RW9xMInEpqN/Fc0KgY?=
- =?us-ascii?Q?7uZgU4KgyOTGFUasHe7Y4CTjwoNQcDF5VQXeWEVlUrNp17BBAZ1an6VTs1sP?=
- =?us-ascii?Q?Qwgxs+LiwXIiv7OyWgo3nGyuIRQOSyAcnNtf9hWRt8+pTDurCh1ja0bfqxrL?=
- =?us-ascii?Q?ARjLL2jAQxvPJuQnej8LBMmi58LWVewaXWAHpRap2+CoH/GnPmzGmZfvUElu?=
- =?us-ascii?Q?zUQqUMekDbqfWooZxolABlSQ/Nq4mWa5mpmO54XuDtu3Uzy7aPFRT2VW3wcy?=
- =?us-ascii?Q?o0m4vhOZcB17IM3GdcKuiFAlkWvACQsJI2dhCFxFcSexr9EBxxdjm898wha1?=
- =?us-ascii?Q?H7gNuP4pdCfDOhIILZSJxHj3gThHwXzp3BbjL2RB/1kgcEKOSlPCMImInfZ/?=
- =?us-ascii?Q?BpIzSQC5FG0dhZ2g4ZxTYqOxzUyk5VTUFZzBojRgthnEEunfHyNaBT4xqHVz?=
- =?us-ascii?Q?lQ1KvxI0d9vJg1LzHGp68d5vR1g9mJ2EEeeQvQg8acyNYgX5advCJsGifTtF?=
- =?us-ascii?Q?p+Mo9sY67GbIYg5L9z7dMJ/I/16+r7vegDAYt5eZnEhqgVqhDanKjGp7n8IH?=
- =?us-ascii?Q?/VskQfKoHcT6+N4aQmBeMSNSdjTAZWO2XLut8ihQ6xdal/03LCxUeHAVemoV?=
- =?us-ascii?Q?uHUw+NPTTWCgVN4dQ+gtUBhs8edspmWAE6KCBBEVIXAuZ/lHbM6GHa2gAZOn?=
- =?us-ascii?Q?mDnJb0cD+fNoJSHwMCkKTK9Cy6QuEqJ3qNGXEI5vn+6sLRVxzKhyuEztCSRh?=
- =?us-ascii?Q?Hfv4vDXL4q2s5wy83cGPm/cMi1W4a7qh8RNjE1gv7COJSZomM7AZDYH4A4Qi?=
- =?us-ascii?Q?O7cv6fDYRub1t2WpYK6wabdQ4simU47BS7WW2HGxhy6sGHkLgidclDw5wfx4?=
- =?us-ascii?Q?2czbOlKz3PPGDgQc1K0cQPT4OJJFeXDk2SU9lJto9C6zyGypu1e/Q1e1vtrj?=
- =?us-ascii?Q?8gRzx/xOiw6i2Yj0GOg7jYUlkLrZDirCmLfwJgfxByza0U0exNEeTyfe1JOJ?=
- =?us-ascii?Q?NoutKM2E+PcX7LA14F20LW+m3BgVyS0oihQjLOhFOvw9x97iDypkEJVA+vOJ?=
- =?us-ascii?Q?TGfUd6Ibpms0QjCIIqMJMMZPkQ/cbZ2QUrLUeetUdkBt2MIH6qTnSs4l7PLc?=
- =?us-ascii?Q?KD92gvyC5QqXThIn96LISg1Jt/C6igbsJzhHFh7lWZQOocKRZo4i8tl582if?=
- =?us-ascii?Q?Kd5p14DLCKKwdKjSs/L6XSXHTFXzDZ0dtnRWbiisvV8Xx0HOP/Av39eg2bAS?=
- =?us-ascii?Q?7PxSkubERv2b4iTw5iv4SypiYMKKqwWfG+QtPlU8kaXjbGbh24vYZo5aCa6y?=
- =?us-ascii?Q?N6JyLH34WgW3eefDQQc8ximvFN0GM862cSqzwofo+JcuJm39GbaohIXudpfE?=
- =?us-ascii?Q?Y6azL02afE+3YKkBsvuRaBE03Rkbgy9Jpr9fkltkXwdy90aGX6e3gUV7TuVx?=
- =?us-ascii?Q?uLZ2ISAOPLysbjOoXp4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229521AbiLHGLd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 01:11:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEEA950D7
+        for <linux-usb@vger.kernel.org>; Wed,  7 Dec 2022 22:11:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CD9AB82235
+        for <linux-usb@vger.kernel.org>; Thu,  8 Dec 2022 06:11:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED58C433C1;
+        Thu,  8 Dec 2022 06:11:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670479889;
+        bh=1eVQo4a00p3DthTwZMPMqcjI91cjHdoWid/yu7ZUu9E=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gM25xh7003oGRWjVDl6BjTDf/kdsYOQoJhT+OBdfcGKaed0j3k09KC3T0/8OQ1VQv
+         m0fa2f9HYxvkDt/55LiVgYBJ1IQcHpbayqVIhTtBNf4myNr1cmybgm2392L7Ra7zVJ
+         PsWyt45a/V37hJbERCVjglvHGyp+SiVLHXElJww7hjARXc4Kc3Lgy0A/7VPamEBYN6
+         A0yqpN0/QogUOY5ejK+2IHb9r2BBUs2A2k//jBpn5LDLXZ/m6CMMMWe+JcseAtGMdx
+         53WjFO5r4IPMq1TtMY2vpWXSnnSYPzkSl4kKw1PlJy3Xj/k29faTI3SEFKZFBtviG2
+         zCg4VAVEzGSrw==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Dan Scally <dan.scally@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-usb@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: dwc3 38100000.usb: No resource for ep1in
+In-Reply-To: <1c187708-be86-0391-6cbd-3466cf0478fe@ideasonboard.com>
+References: <1c187708-be86-0391-6cbd-3466cf0478fe@ideasonboard.com>
+Date:   Thu, 08 Dec 2022 08:11:07 +0200
+Message-ID: <87a63ymnlw.fsf@balbi.sh>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9591.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4bb9b122-6943-49e6-faa8-08dad8cc3460
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2022 03:27:58.9576
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MQUDMMriWSToofca+eoOwXbkVZ5+Xmm6EeY9LnF+2a1fX+xPa32EJqCxz0DQ7y0bFs671QYsQbZXxU6qIOFJuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8219
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
 Hi,
 
-After double check for this issue, the logic seems wrong.
-Please ignore this patch and sorry for inconvenience in advance.
+Dan Scally <dan.scally@ideasonboard.com> writes:
+> I'm having an issue with DWC3 which I'm hoping you might be able to shed=
+=20
+> light on. I'm using the UVC gadget function to stream video from an=20
+> imx8mp platform, which works just fine. Once I have stopped streaming=20
+> however and after some time has passed (the exact duration seems to vary=
+=20
+> quite a lot from 1-2 minutes to 15+ mins) I get a kernel warning like so:
 
-Best Regard,
-Xu Yang
+As Greg mentioned, please add Thinh, the new maintainer, to the loop.
 
-> -----Original Message-----
-> From: Xu Yang
-> Sent: Wednesday, December 7, 2022 11:14 AM
-> To: peter.chen@kernel.org
-> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; dl-linux-imx <=
-linux-imx@nxp.com>; Jun Li <jun.li@nxp.com>;
-> Xu Yang <xu.yang_2@nxp.com>
-> Subject: [PATCH] usb: chipidea: otg: handle vbus change for udc iff it's =
-in device mode
->=20
-> When in device mode at first (BSVIE is set),  OTGSC will assert both
-> BSVIS and IDIS bit if changed to host mode. ID event will be handled
-> in the first interrupt. Depends on whether BSVIE is cleared when call
-> ci_role_stop() for udc, the 2rd interrupt may be asserted after a
-> specific interrupt period (BSVIE and BSVIS is still 1). If it is, the
-> driver will continue to handle VBUS change for udc. We should avoid
-> this manner since the controller is not in device mode and the worser
-> is gadget related code may be executed if a gadget driver is attached.
->=20
-> Fixes: a107f8c505cd ("usb: chipidea: add vbus interrupt handler")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  drivers/usb/chipidea/otg.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
-> index f5490f2a5b6b..31c38a3ab990 100644
-> --- a/drivers/usb/chipidea/otg.c
-> +++ b/drivers/usb/chipidea/otg.c
-> @@ -133,6 +133,9 @@ void ci_handle_vbus_change(struct ci_hdrc *ci)
->  	if (!ci->is_otg)
->  		return;
->=20
-> +	if (ci_otg_role(ci) !=3D CI_ROLE_GADGET)
-> +		return;
-> +
->  	if (hw_read_otgsc(ci, OTGSC_BSV) && !ci->vbus_active)
->  		usb_gadget_vbus_connect(&ci->gadget);
->  	else if (!hw_read_otgsc(ci, OTGSC_BSV) && ci->vbus_active)
-> --
-> 2.34.1
+> [ =C2=A0737.996842] configfs-gadget gadget.0: uvc: uvc_function_disable()
+> [ =C2=A0738.519582] configfs-gadget gadget.0: uvc: uvc_function_set_alt(0=
+, 0)
+> [ =C2=A0738.526060] configfs-gadget gadget.0: uvc: reset UVC interrupt en=
+dpoint
+> [ =C2=A0738.532713] ------------[ cut here ]------------
+> [ =C2=A0738.537683] dwc3 38100000.usb: No resource for ep1in
+> [ =C2=A0738.542712] WARNING: CPU: 0 PID: 645 at drivers/usb/dwc3/gadget.c=
+:384=20
+> dwc3_send_gadget_ep_cmd+0x478/0x580
+> [ =C2=A0738.552314] Modules linked in:
+> [ =C2=A0738.555402] CPU: 0 PID: 645 Comm: irq/208-dwc3 Not tainted=20
+> 5.19.0-00034-gf017ce943b32 #82
+> [ =C2=A0738.563601] Hardware name: Polyhex Debix Model A i.MX8MPlus board=
+ (DT)
+> [ =C2=A0738.570145] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS=
+=20
+> BTYPE=3D--)
+> [ =C2=A0738.577128] pc : dwc3_send_gadget_ep_cmd+0x478/0x580
+> [ =C2=A0738.582116] lr : dwc3_send_gadget_ep_cmd+0x478/0x580
+> [ =C2=A0738.587102] sp : ffffffc00c3c39e0
+> [ =C2=A0738.590433] x29: ffffffc00c3c39e0 x28: 0000000000031006 x27:=20
+> 00000000ffffffea
+> [ =C2=A0738.597618] x26: 0000000000000006 x25: ffffff8004f32880 x24:=20
+> ffffffc00c3c3abc
+> [ =C2=A0738.604801] x23: 0000000000000406 x22: ffffffffffff3f00 x21:=20
+> ffffffffffff3f0c
+> [ =C2=A0738.611984] x20: ffffff8003872600 x19: 0000000000000001 x18:=20
+> ffffffffffffffff
+> [ =C2=A0738.619166] x17: 000000000000001c x16: 00000000c99c42a5 x15:=20
+> ffffffc08c3c36b7
+> [ =C2=A0738.626347] x14: 0000000000000000 x13: 6e6931706520726f x12:=20
+> 6620656372756f73
+> [ =C2=A0738.633528] x11: 00000000000c02a7 x10: ffffffc009af1ac0 x9 :=20
+> ffffffc0080c42bc
+> [ =C2=A0738.640710] x8 : 00000000ffffefff x7 : ffffffc009af1ac0 x6 :=20
+> 0000000000000000
+> [ =C2=A0738.647891] x5 : ffffff807fb2eb08 x4 : 0000000000000000 x3 :=20
+> 0000000000000027
+> [ =C2=A0738.655072] x2 : 0000000000000000 x1 : 0000000000000000 x0 :=20
+> ffffff80158a8000
+> [ =C2=A0738.662255] Call trace:
+> [ =C2=A0738.664721] =C2=A0dwc3_send_gadget_ep_cmd+0x478/0x580
+> [ =C2=A0738.669362] =C2=A0__dwc3_gadget_ep_enable+0x4f4/0x714
+> [ =C2=A0738.674004] =C2=A0dwc3_gadget_ep_enable+0x6c/0x15c
+> [ =C2=A0738.678382] =C2=A0usb_ep_enable+0x4c/0x1bc
+> [ =C2=A0738.682067] =C2=A0uvc_function_set_alt+0xcc/0x264
+> [ =C2=A0738.686362] =C2=A0composite_setup+0x7ec/0x195c
+> [ =C2=A0738.690395] =C2=A0configfs_composite_setup+0x90/0xc0
+> [ =C2=A0738.694950] =C2=A0dwc3_ep0_interrupt+0x834/0x9e0
+> [ =C2=A0738.699156] =C2=A0dwc3_thread_interrupt+0x994/0xd70
+> [ =C2=A0738.703624] =C2=A0irq_thread_fn+0x38/0xa4
+> [ =C2=A0738.707221] =C2=A0irq_thread+0x184/0x230
+> [ =C2=A0738.710733] =C2=A0kthread+0x118/0x120
+> [ =C2=A0738.713981] =C2=A0ret_from_fork+0x10/0x20
+> [ =C2=A0738.717582] irq event stamp: 41021
+> [ =C2=A0738.720998] hardirqs last =C2=A0enabled at (41019): [<ffffffc0080=
+82858>]=20
+> finish_task_switch.isra.0+0xe8/0x264
+> [ =C2=A0738.730501] hardirqs last disabled at (41021): [<ffffffc008f15058=
+>]=20
+> _raw_spin_lock_irqsave+0xc4/0x170
+> [ =C2=A0738.739747] softirqs last =C2=A0enabled at (41014): [<ffffffc008a=
+25b90>]=20
+> dwc3_thread_interrupt+0x1c0/0xd70
+> [ =C2=A0738.748988] softirqs last disabled at (41020): [<ffffffc008a259dc=
+>]=20
+> dwc3_thread_interrupt+0xc/0xd70
+>
+>
+> ep1in in this instance refers to a Status Interrupt Endpoint under the=20
+> UVC specification, which is being "reset" by uvc_function_set_alt()=20
+> against the VideoControl interface (meaning a call to usb_ep_disable()=20
+> followed by usb_ep_enable(), see [1]). The isochronous endpoint that=20
+> data is streamed across is treated similarly in the same function (when=20
+> called for the VideoStreaming interface) and never seems to show the=20
+> same warning and as far as I can tell the operation ought to be safe, so=
+=20
+> I'm struggling to see anything in the f_uvc code that's misbehaving to=20
+> cause the problem. I wondered if you might be able to take a look at the=
+=20
+> trace and regdump of the dwc3 (which was taken immediately after the=20
+> warning is thrown) and see if that sheds any light on what might be=20
+> going on?
 
+Best way forward is to collect dwc3 trace points, so we can see what the
+HW is doing. For details, see [1].
+
+[1] https://kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-b=
+ugs
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmORf/sRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQho6y4DXKpERl8hAApDNyfZWbJGLPJBOTUGy3HHD/Z+PWUxaW
+c33/Fn13OEKnHcMpiiI/EHGSTme0d/f1R91rBjngEiW7sXbGaZxe0d+C2YuLt5fZ
+U2UcvF3YHqZ9fzrRNSWKWKtjRxZs4DGjPv2B4WuLNN7Uv/fi/3BqXEFevvzFt4TW
+OM1qyvsCheBxEOpUG6rkXVMuyOxTeNPuvzFpWQdBOrixW+WrIgstCZRyTNedsJ+I
+Kt10KZedVILn3L7LucAZQjvYYp95MytVWgf05l9N3+YDBB8VfQ7xVozEPaZrlmOV
+OTZdZJR8+bYKQJN8+4haA2sRj/1ueELiHkjaqurgtnPgrSRWaDab7FkZhwvb2kKv
+KxKgSlWytGvtP4omaKRH/SPq6vjM3ISTky0kOmbmXOcwtvRX6ZUpAx9kpREN7TJi
+bPOZaWmtCqQ6JMmikBoVa9o9IHD+QiogWSmS8gbYIqZ3VqSQOORpFl8ZxjV1PPiy
+Q35IkP/VnECFCQ8y54XLGK+HSHWb5oSif4VV8G9KxD9pOaX4hDdrazO/YWw/8OxH
+sl8iwptOIWOSlWg8fXPQj5jrhISQo4IeqmmqoMAVlj8tq/cVC2hZ+C6ssqBgOSvr
+Rdnlg3W+G2y2tLibH9Qdfm62dyswQQ63+5IYJd3IkcXwAqia/4njX2xhltb3V8mP
+dZRrScYhI3I=
+=HKyd
+-----END PGP SIGNATURE-----
+--=-=-=--
