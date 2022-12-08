@@ -2,394 +2,248 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37964646C9D
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 11:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F808646DB8
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Dec 2022 12:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiLHKUm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 05:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
+        id S229677AbiLHLAf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Dec 2022 06:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiLHKUk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 05:20:40 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5F062E85
-        for <linux-usb@vger.kernel.org>; Thu,  8 Dec 2022 02:20:38 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id h11-20020a6b7a0b000000b006e0004fc167so471629iom.5
-        for <linux-usb@vger.kernel.org>; Thu, 08 Dec 2022 02:20:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mZgyOJFt4a/hq7dvcwj5dQss66jbQNMqBg0yyyfms1E=;
-        b=YOyMsVnWvY+zmlxsnwK4MBcAAoZwx5HdksXpoI9YuA0AlA1B12omEAWFuKUBF4iWcj
-         YzC1Vw85NfBmEq9S5Bo3LCR/40TOVkY0YFHKEY1xjEZvjyyeUrlobir2Gtt5VEis3yMH
-         dFNiqCwN+/5khdHH/fWUHiZdG/ZdtucniyCRjFcCYLYuSX20MMrP0PzQANajdKIxd51p
-         CRj453l9kkWQpWq8d3ipYTRBulAABNmW8mp3lRjlfW1s2GMhc9wMRAr20L712XoD+Im9
-         dnqKog4uRQl5Kc184Hgnr9tO3bI+hHF5NT1MHMHFslo8r70hMH3hicLAlD/m//LZHLAQ
-         GhIQ==
-X-Gm-Message-State: ANoB5plsGqoOj7jLYDmpFOc4MQf2zK99iqoPFdo5wd+MP1I9N+cRh4KM
-        js/beajg918pzlmpyw3R7iwR/tM6El5f9/axpxEsiN+XKVPF
-X-Google-Smtp-Source: AA0mqf49PdXRfW/3ZSkffkZcQhKMnWM7crWhxzWMxw2EHi+YdFAfnx3mSmd34XUlnCPGvRy3Lt0Y+hF2BSzMvQp85HxIBpndt0j3
+        with ESMTP id S229898AbiLHLAI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 06:00:08 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2057.outbound.protection.outlook.com [40.107.20.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721871FC;
+        Thu,  8 Dec 2022 02:55:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iQWHK5F0iB/1ye0CdVdc1Sux5yiZ/adpXtQ4flw44J1SzLeGUk4DXWTJrROlNkgs+vfNWuAGuFNQZ3zxjMEk4dMu6tnXL7dWcL1SfYgtlAAPQwZ1oip1piRUQ0S3BNK9/D0WsUtwA/RJNwJHWILL/JfNXpDGrFvYgqTv7pK912mV3r9QNDRivRv0rQJ6vwhLREFcrtRqFgwnTi/UGT9HAWiJFZJLuF/gmn0P+C3bLluyZ4VrGXowzJq0tvhfwFLR8P29pbNYLaSgHCP+L9XPaZa6E2jjXU7on+xk5vFHUlhnSIEmUe64Zjw5XFY4Gj6hIj/p2cNwnqIN56Rhjw6juA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d/mv4IaMXr6dQkXmBIbeJ5m8c1reEsbl81rCdHwCeW4=;
+ b=Nn3dCOY1CS6KifHnU1XGm6OcLmQHpR5E6kyiWVYw/rWNK0LbMFu/3nZX7HXLpw7BocHoMTTeOFCjzdAjMArTZ1aFoVECU7Nal4gBrlJyN6ZofbaX3j3wd1I/5wtX/BgbnjJXCJgQa1dwWe3UBWHDov/2XWNFYxvA7di5ZDgi71wawMpy1qs4GcgxppTcq+dVsyeMfm1haqGpJ1Y3kjdRbXqgNkgP5mJo1yaqXvJuP2qOV+BNINPxxCt/X/2HvPT6MBgPM7xe81T+uh8gIn7QcOuGWOAbv5sqW9+z8G7GHuNj0cGUfkdzqfojJ8gJLRQY5Zl5yzPWAkrzVMuS7T+ETw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d/mv4IaMXr6dQkXmBIbeJ5m8c1reEsbl81rCdHwCeW4=;
+ b=4i2N6tqDhWWg7HZ/2WkoRiafn3XbCDibojzKXxunJiAJ7kDgNbo7dKJyZwhZREGHYB7f24++hJ6Um5C8PtGier+ch/BlIlvLW76Kbpkn7FT4/rdiXPPirtTH9pcxMcaEPzKBQTT46bR7Saj1mdYgni47kZYRieZhG39xSqx1eMGKYGJeDPB6ezJi6OmsExbUB8uCnZzwAmg6NN279eIUg7TFIw1/r3Y8W0OavQl00oA9KmTHqgBgyuyswYyJVyKKyiTFqtrYp6SZ6IJffjUhpg0/wbhTNXOSconB/SPabAakkJVrnEgT2KQ1pUY1+AQAn1ucTOTsWGmkUt69fh93yg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by DU0PR04MB9694.eurprd04.prod.outlook.com (2603:10a6:10:312::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
+ 2022 10:55:10 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae59:a542:9cbc:5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae59:a542:9cbc:5b3%9]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
+ 10:55:10 +0000
+Message-ID: <b5df2262-7a4f-0dcf-6460-793dad02401d@suse.com>
+Date:   Thu, 8 Dec 2022 11:55:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
+ drivers' disconnect()
+Content-Language: en-US
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        =?UTF-8?Q?Christoph_M=c3=b6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
+ <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+ <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0056.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:93::7) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-X-Received: by 2002:a02:a696:0:b0:363:3937:d400 with SMTP id
- j22-20020a02a696000000b003633937d400mr45350921jam.309.1670494838061; Thu, 08
- Dec 2022 02:20:38 -0800 (PST)
-Date:   Thu, 08 Dec 2022 02:20:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006c070d05ef4e6390@google.com>
-Subject: [syzbot] BUG: soft lockup in raw_release
-From:   syzbot <syzbot+a423b9f133129c59074f@syzkaller.appspotmail.com>
-To:     ben-linux@fluff.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mingo@redhat.com, pbonzini@redhat.com,
-        rdunlap@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        suravee.suthikulpanit@amd.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, tony.luck@intel.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DU0PR04MB9694:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4f6b313-4130-4abf-f85e-08dad90aacce
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q7hAgTgauZqEMSxceVNp+wQSCvy1CEPs1mQjw4n3HLi6nnavemjOPsHd4N/hqJc4OoXOPThwbC5Cd3ju2Vxxh9+bNMpvNhDRmv6MfVhQS5ZSfX05JdXrgc+o6zDN0SAXv/EkNOeymgtf64+t19tolcjQhOcI0n0AWVMDZqsh10wwqfwEzW0wfoOM5LVjJ9u5oOretHQOQr4WV4ylFQ0hNLueTmuC+6WY+j0NBfgccFv/I9HxbIWNe9vfbXOwCtfmTmz8Py4MVfnP6bSLJnlLxEkEmi7vrBuWv8f+mJkw4s8EVlNg1DL7/ZAIyDLIwBVT54N45hLIjV5syvPQaCTh7lrFvK8qydYhZ1WgJVzUIyJL95usoCUBQ0uGU4fnTNr02XIh1m9pVH4tsiUUshhQQiaFg/ckinrdHq/ipifYGoFNeRxNPYvuM/JCvjS0qg34gHhVYdUQwp7ipW0OvoLNoSQOJCkg/a0o4AwwfHlhAwHSgC+Fa7Z4ud8WSxFF6+vN/WfKBk/a2FfAgzVDTdKp1a5SF9eXEuQGccKVqDVHUZfVQtfa8+7OroPi06kYrirMFPF1F4tZ8gtFDhCRKOvMUF77Lm23Q3tfRBl3cbMR7ol5wwJtuU/qv9TYJ6nJRb0gmhFeHIKznzzvvKyVTXmctU6/a4I0RiTfNoEKuOJPfIYT2LVYz4cJBnspzeQJCwW+pPVRhuRov7aGKMTx9Zt11soP2hdV8geNSQ4jmXknB+gvHDjwWhSP7loNb4x3x4Qz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199015)(6512007)(8676002)(478600001)(2906002)(38100700002)(36756003)(2616005)(66946007)(6486002)(53546011)(6666004)(66556008)(66476007)(966005)(5660300002)(6506007)(110136005)(4326008)(31686004)(54906003)(83380400001)(41300700001)(8936002)(31696002)(7416002)(186003)(86362001)(316002)(7406005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aUtOQ2hnNUNEakM3NzNLb1ZHaTI1ai80U3g1aGpyTlpjbHBZdG55VGJuK3hw?=
+ =?utf-8?B?Z3hPYkNTR0hwYUdTQnBIS2FkRG5mRHNRNDZNMmFRWDI3ZXpOTkxvaGwvNWRW?=
+ =?utf-8?B?SlJJN0F4WWg3UWo5VU1uY1BYMW83d1pZY2M2cTJ0MW9taTUrVk1VTHY2RXpF?=
+ =?utf-8?B?WTY0dmtSVGNaWnNLMUxwUkh5MHZnNDc0WGZDMVkxRkI0azhmTkNGRjh1bXdB?=
+ =?utf-8?B?ZTFqenlFaWgzYmNXRDFLNzh5N09aMTRhTFRldHZTVG0zUEVLV2N3ME1vMDlG?=
+ =?utf-8?B?bTh2M3lTWW11NDNmajZvR2ZnZ3A4QVhYejlBeFdvWjBRYnZqdlNEcGxvOUZw?=
+ =?utf-8?B?V2s1NGpCZTVDcW9qQWtnM1hsN1RCN1BYbEtjU2QySDh1SU5SNUE2MCt5WTJY?=
+ =?utf-8?B?OE5NVjF5V253Rk13STk3V2duZ1V3V2Ercit2WUJCbEp0OXZDQ2hscHhRbERy?=
+ =?utf-8?B?RU1JdjFPY2NKaXNNMmZ4QVdmV1hDZlR0NW9rNkVhL09hZWhFc3N0WHhEbnE2?=
+ =?utf-8?B?TTdwL1p1VVNobXhqTCt0MXhSNTNXaFhFNDNlM01qOG0raEN3Wnk0bjZJU3di?=
+ =?utf-8?B?NVNJY00xMTd5c2xpZHcycG8rUmRNT3BFUHlUbjNzUHNSd2ExSDRmSlJTQURq?=
+ =?utf-8?B?MlhRWWZ4S3NJN2g1NEN5SUhaUU10L1FtSVlmbjI3L0JmSm1YaEFkUGsraVR1?=
+ =?utf-8?B?S2lsaE9haGtKRllQT0NPZ3lsUzJzaU1kNGtWN3psdGdtUkllK3dxUExBNmVO?=
+ =?utf-8?B?TkhZQ3pHMGxKMTRuSVpBeVVsOU9CSUdrYVNRbW9Wbmk4OVc3N1ppNUFuc1Rp?=
+ =?utf-8?B?YnBJUVp6bUcyUzFSdEl0K2luQ3c3MUE1eFVScHFrM0Z0WEo4YnJ3QXpNeTdP?=
+ =?utf-8?B?MldYaDZ3aWJZYndHSGZPamFOQ2NrS3gxTDFJRVEwNWdBazVWVk95NE41ODFQ?=
+ =?utf-8?B?Rkk1ZzZOYllSMmg0ZjBVRGlQL2pjRWViNnlvYzVnU3g1NklIWW01Z1FMWk1P?=
+ =?utf-8?B?anozMWIyL1k0clFHcTRqblcrV2pFYnhmVytHM0orb3cwY2x4azVjRktpMkxr?=
+ =?utf-8?B?TzFDT2pLVWM2aG5EU3JpbFZLRnVzRTZWdTVDalREOTc1RkxqMmRJUkErUURL?=
+ =?utf-8?B?Mng0NWU4WWFodWZ2NlVGZVRTQ3lCT0FVcTBvS08vZitITU9HcWY5L0xra01v?=
+ =?utf-8?B?bkNuQ1JraEdKZjZxdTNlQVJVQm5WQnVLMjVGSzdCOUVQUEpkNGVJc2x0enE5?=
+ =?utf-8?B?OVBWa1kwcXA2L2xJSFRVQlhoRjNuVWIzRC9FaDBvZGRBRlgwOEVpMHlTaDUx?=
+ =?utf-8?B?WWlEWVBaZmt4NjhROFVvUTNiMkdqMk1OUXBkdjdpazBlaEt0UzhqcGgwWnVV?=
+ =?utf-8?B?VWlFZi81K0lQb3hQVE1wMmdseTZkT0tSbURHc0tJS0hZZlU5MnFqRU95LzRU?=
+ =?utf-8?B?aW9aVXIzT0tYY2ZoSVVmU3ZDOFo5bWdsYjlUbTAxUkt4anY2djBrbkZESVNy?=
+ =?utf-8?B?djAzaHRQdmxvOW56YSswVlk0SlNQakpZUHpuZGZQZzZtTm9YRDRJTW1jSFV5?=
+ =?utf-8?B?WXNlbU01U2JhRE5IQ01DNEVCZndiM25OM1puYzJKOVBDUU5qa3FBb2tTNEpQ?=
+ =?utf-8?B?bDdXVkxqTVluRjZuMHB0OXZHbkNwUG1mL1A4dG16eVpOSVVkQnp3TFZTaHM1?=
+ =?utf-8?B?QlZINHR2MDZWOHZxNUJLUW8wWVRnRUJkUjRoaHhhV0dTUkMwUTNTOUVXNHpG?=
+ =?utf-8?B?VkhuVUFjY09HZzlWZFlRM2lFSGZuZTlwU2lLYktndUM1Sk53YkxORUkzS3F2?=
+ =?utf-8?B?bmpNZU5IVmhRMkNzYitJbEZFVjErY0cxQ29LK1Q3WXlUMjlsSnRnaU43MTlZ?=
+ =?utf-8?B?cllzZEEvMnVUcEdyYUNaZXNmaFdIRFh0MytNQ0E2TnZ2emFnWmI4UmJRanEr?=
+ =?utf-8?B?d0VoZkFHYzZnd25OeWt3MGhHa3FxOHVCc2lRdjU3OXp2QnNZQUJKMnB4elE3?=
+ =?utf-8?B?WGhsTkxPcVhFMGNkS2NRWTQzRWt0dkV6RUhHK3ZHcS9uSVk1Wm9XOWFrUHFD?=
+ =?utf-8?B?cHBPRVlBdUUrYmhvczBlSmNpNXdlYStFeXE1NU5NQ3FtUS82OTBlOGxXaHlI?=
+ =?utf-8?B?b3J0MEpIWGQ2Y0VLQU5obVVaZW9DWEhDMGYzUkRSY0Npcng2UW0zZ1V1WXZQ?=
+ =?utf-8?Q?Fut/kTmJchrtbBe8Yo2dQVvKKDcj4BGpdFP4+IUekMpb?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4f6b313-4130-4abf-f85e-08dad90aacce
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 10:55:10.1303
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7Zlk22MJJjS69b2U5rY9YTA8jGvHMyvdm8bWk4tsxgTSD+z599ZgVP8SKixzqcAt2wlkk08mi3uOGDJNycPT4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9694
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    00988f70a076 Merge tag 'usb-serial-6.0-rc8' of https://git..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1481f4c8880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=84e30614d9e005c5
-dashboard link: https://syzkaller.appspot.com/bug?extid=a423b9f133129c59074f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c72c6e0f8f46/disk-00988f70.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1055dd064236/vmlinux-00988f70.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a423b9f133129c59074f@syzkaller.appspotmail.com
-
-watchdog: BUG: soft lockup - CPU#1 stuck for 143s! [syz-executor.1:6679]
-Modules linked in:
-irq event stamp: 77514
-hardirqs last  enabled at (77513): [<ffffffff811134bd>] kvm_wait arch/x86/kernel/kvm.c:1066 [inline]
-hardirqs last  enabled at (77513): [<ffffffff811134bd>] kvm_wait+0x8d/0x100 arch/x86/kernel/kvm.c:1048
-hardirqs last disabled at (77514): [<ffffffff85f4269b>] sysvec_apic_timer_interrupt+0xb/0xc0 arch/x86/kernel/apic/apic.c:1106
-softirqs last  enabled at (69722): [<ffffffff8116a4f3>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last  enabled at (69722): [<ffffffff8116a4f3>] __irq_exit_rcu+0x113/0x170 kernel/softirq.c:650
-softirqs last disabled at (69601): [<ffffffff8116a4f3>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last disabled at (69601): [<ffffffff8116a4f3>] __irq_exit_rcu+0x113/0x170 kernel/softirq.c:650
-CPU: 1 PID: 6679 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:kvm_wait+0x98/0x100 arch/x86/kernel/kvm.c:1070
-Code: fa 83 e2 07 38 d0 7f 04 84 c0 75 63 0f b6 07 40 38 c6 74 35 48 83 c4 10 c3 c3 e8 03 44 3b 00 66 90 0f 00 2d ba 52 34 05 fb f4 <48> 83 c4 10 c3 89 74 24 0c 48 89 3c 24 e8 d6 42 3b 00 8b 74 24 0c
-RSP: 0018:ffffc9000f23fa50 EFLAGS: 00000246
-
-RAX: 0000000000012ec9 RBX: 0000000000000000 RCX: 1ffffffff16100de
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffffffff87c05ca0 R08: 0000000000000001 R09: ffffffff8b07b6cf
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: fffffbfff0f80b94 R14: 0000000000000001 R15: ffff8881f6938880
-FS:  00007fc597af7700(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc5984a50b0 CR3: 000000010ca08000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- pv_wait arch/x86/include/asm/paravirt.h:603 [inline]
- pv_wait_head_or_lock kernel/locking/qspinlock_paravirt.h:470 [inline]
- __pv_queued_spin_lock_slowpath+0x8c7/0xb50 kernel/locking/qspinlock.c:511
- pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
- queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
- queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
- do_raw_spin_lock+0x200/0x2a0 kernel/locking/spinlock_debug.c:115
- spin_lock include/linux/spinlock.h:349 [inline]
- kernfs_put.part.0+0x269/0x540 fs/kernfs/dir.c:544
- kernfs_put+0x42/0x50 fs/kernfs/dir.c:521
- __kernfs_remove+0x7a6/0xb50 fs/kernfs/dir.c:1407
- kernfs_remove_by_name_ns+0xa8/0x110 fs/kernfs/dir.c:1589
- sysfs_remove_file include/linux/sysfs.h:629 [inline]
- driver_remove_file drivers/base/driver.c:198 [inline]
- driver_remove_file+0x46/0x60 drivers/base/driver.c:194
- remove_bind_files drivers/base/bus.c:548 [inline]
- bus_remove_driver+0x22a/0x300 drivers/base/bus.c:672
- driver_unregister+0x73/0xb0 drivers/base/driver.c:274
- usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1592
- raw_release+0x18b/0x290 drivers/usb/gadget/legacy/raw_gadget.c:413
- __fput+0x277/0x9d0 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x1f7/0x200 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc59833437b
-
-================================
-WARNING: inconsistent lock state
-6.0.0-rc7-syzkaller #0 Not tainted
---------------------------------
-inconsistent {HARDIRQ-ON-W} -> {IN-HARDIRQ-W} usage.
-syz-executor.1/6679 [HC1[1]:SC0[0]:HE0:SE1] takes:
-ffffffff87b85858 (
-vmap_area_lock){?.+.}-{2:2}
-, at: spin_lock include/linux/spinlock.h:349 [inline]
-, at: find_vmap_area+0x1c/0x130 mm/vmalloc.c:1836
-{HARDIRQ-ON-W} state was registered at:
-  lock_acquire kernel/locking/lockdep.c:5666 [inline]
-  lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
-  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-  _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
-  spin_lock include/linux/spinlock.h:349 [inline]
-  alloc_vmap_area+0xa0b/0x1d50 mm/vmalloc.c:1617
-  __get_vm_area_node+0x142/0x3f0 mm/vmalloc.c:2484
-  get_vm_area_caller+0x43/0x50 mm/vmalloc.c:2537
-  __ioremap_caller.constprop.0+0x292/0x600 arch/x86/mm/ioremap.c:280
-  acpi_os_ioremap include/acpi/acpi_io.h:13 [inline]
-  acpi_map drivers/acpi/osl.c:296 [inline]
-  acpi_os_map_iomem+0x463/0x550 drivers/acpi/osl.c:355
-  acpi_tb_acquire_table+0xd8/0x209 drivers/acpi/acpica/tbdata.c:142
-  acpi_tb_validate_table drivers/acpi/acpica/tbdata.c:317 [inline]
-  acpi_tb_validate_table+0x50/0x8c drivers/acpi/acpica/tbdata.c:308
-  acpi_tb_verify_temp_table+0x84/0x674 drivers/acpi/acpica/tbdata.c:504
-  acpi_reallocate_root_table+0x374/0x3e0 drivers/acpi/acpica/tbxface.c:180
-  acpi_early_init+0x13a/0x438 drivers/acpi/bus.c:1214
-  start_kernel+0x3cf/0x48f init/main.c:1099
-  secondary_startup_64_no_verify+0xce/0xdb
-irq event stamp: 77514
-hardirqs last  enabled at (77513): [<ffffffff811134bd>] kvm_wait arch/x86/kernel/kvm.c:1066 [inline]
-hardirqs last  enabled at (77513): [<ffffffff811134bd>] kvm_wait+0x8d/0x100 arch/x86/kernel/kvm.c:1048
-hardirqs last disabled at (77514): [<ffffffff85f4269b>] sysvec_apic_timer_interrupt+0xb/0xc0 arch/x86/kernel/apic/apic.c:1106
-softirqs last  enabled at (69722): [<ffffffff8116a4f3>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last  enabled at (69722): [<ffffffff8116a4f3>] __irq_exit_rcu+0x113/0x170 kernel/softirq.c:650
-softirqs last disabled at (69601): [<ffffffff8116a4f3>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last disabled at (69601): [<ffffffff8116a4f3>] __irq_exit_rcu+0x113/0x170 kernel/softirq.c:650
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(vmap_area_lock
-);
-  <Interrupt>
-    lock(
-vmap_area_lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor.1/6679:
- #0: ffff888100067948
- (&root->kernfs_rwsem
-){++++}-{3:3}
-, at: kernfs_drain fs/kernfs/dir.c:494 [inline]
-, at: __kernfs_remove+0x5ff/0xb50 fs/kernfs/dir.c:1386
- #1: ffffffff87c05cb8
- (kernfs_idr_lock
-){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
-){+.+.}-{2:2}, at: kernfs_put.part.0+0x269/0x540 fs/kernfs/dir.c:544
-
-stack backtrace:
-CPU: 1 PID: 6679 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_usage_bug kernel/locking/lockdep.c:3961 [inline]
- valid_state kernel/locking/lockdep.c:3973 [inline]
- mark_lock_irq kernel/locking/lockdep.c:4176 [inline]
- mark_lock.part.0.cold+0x18/0xd8 kernel/locking/lockdep.c:4632
- mark_lock kernel/locking/lockdep.c:4596 [inline]
- mark_usage kernel/locking/lockdep.c:4524 [inline]
- __lock_acquire+0x14a2/0x56d0 kernel/locking/lockdep.c:5007
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- find_vmap_area+0x1c/0x130 mm/vmalloc.c:1836
- check_heap_object mm/usercopy.c:176 [inline]
- __check_object_size mm/usercopy.c:250 [inline]
- __check_object_size+0x1f8/0x700 mm/usercopy.c:212
- check_object_size include/linux/thread_info.h:199 [inline]
- __copy_from_user_inatomic include/linux/uaccess.h:62 [inline]
- copy_from_user_nmi arch/x86/lib/usercopy.c:47 [inline]
- copy_from_user_nmi+0xcb/0x130 arch/x86/lib/usercopy.c:31
- copy_code arch/x86/kernel/dumpstack.c:91 [inline]
- show_opcodes+0x59/0xb0 arch/x86/kernel/dumpstack.c:121
- show_iret_regs+0xd/0x33 arch/x86/kernel/dumpstack.c:149
- __show_regs+0x1e/0x60 arch/x86/kernel/process_64.c:74
- show_trace_log_lvl+0x25b/0x2ba arch/x86/kernel/dumpstack.c:292
- watchdog_timer_fn+0x464/0x5c0 kernel/watchdog.c:433
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x1c0/0xe40 kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1095 [inline]
- __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1112
- sysvec_apic_timer_interrupt+0x89/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
-RIP: 0010:kvm_wait+0x98/0x100 arch/x86/kernel/kvm.c:1070
-Code: fa 83 e2 07 38 d0 7f 04 84 c0 75 63 0f b6 07 40 38 c6 74 35 48 83 c4 10 c3 c3 e8 03 44 3b 00 66 90 0f 00 2d ba 52 34 05 fb f4 <48> 83 c4 10 c3 89 74 24 0c 48 89 3c 24 e8 d6 42 3b 00 8b 74 24 0c
-RSP: 0018:ffffc9000f23fa50 EFLAGS: 00000246
-
-RAX: 0000000000012ec9 RBX: 0000000000000000 RCX: 1ffffffff16100de
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffffffff87c05ca0 R08: 0000000000000001 R09: ffffffff8b07b6cf
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: fffffbfff0f80b94 R14: 0000000000000001 R15: ffff8881f6938880
- pv_wait arch/x86/include/asm/paravirt.h:603 [inline]
- pv_wait_head_or_lock kernel/locking/qspinlock_paravirt.h:470 [inline]
- __pv_queued_spin_lock_slowpath+0x8c7/0xb50 kernel/locking/qspinlock.c:511
- pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
- queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
- queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
- do_raw_spin_lock+0x200/0x2a0 kernel/locking/spinlock_debug.c:115
- spin_lock include/linux/spinlock.h:349 [inline]
- kernfs_put.part.0+0x269/0x540 fs/kernfs/dir.c:544
- kernfs_put+0x42/0x50 fs/kernfs/dir.c:521
- __kernfs_remove+0x7a6/0xb50 fs/kernfs/dir.c:1407
- kernfs_remove_by_name_ns+0xa8/0x110 fs/kernfs/dir.c:1589
- sysfs_remove_file include/linux/sysfs.h:629 [inline]
- driver_remove_file drivers/base/driver.c:198 [inline]
- driver_remove_file+0x46/0x60 drivers/base/driver.c:194
- remove_bind_files drivers/base/bus.c:548 [inline]
- bus_remove_driver+0x22a/0x300 drivers/base/bus.c:672
- driver_unregister+0x73/0xb0 drivers/base/driver.c:274
- usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1592
- raw_release+0x18b/0x290 drivers/usb/gadget/legacy/raw_gadget.c:413
- __fput+0x277/0x9d0 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x1f7/0x200 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc59833437b
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007fc597af7120 EFLAGS: 00000293
- ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007fc5984a3f80 RCX: 00007fc59833437b
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fc5983dd580 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000003 R11: 0000000000000293 R12: 0000000000000000
-R13: 00007ffe89b0622f R14: 00007fc597af7300 R15: 0000000000022000
- </TASK>
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007fc597af7120 EFLAGS: 00000293
- ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007fc5984a3f80 RCX: 00007fc59833437b
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fc5983dd580 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000003 R11: 0000000000000293 R12: 0000000000000000
-R13: 00007ffe89b0622f R14: 00007fc597af7300 R15: 0000000000022000
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-igorplugusb 2-1:0.0: Error: urb status = -32
-NMI backtrace for cpu 0
-CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.0.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:put_dec_trunc8+0x3e/0x370 lib/vsprintf.c:229
-Code: 00 00 00 e8 f4 fc 1e ff 83 fb 63 0f 86 d8 01 00 00 e8 26 00 1f ff 41 89 dc 4d 69 e4 29 5c 8f 02 49 c1 ec 20 41 6b c4 64 29 c3 <48> 83 fb 63 0f 87 cb 02 00 00 48 8d bc 1b e0 85 64 86 48 b8 00 00
-RSP: 0018:ffffc90000006fb0 EFLAGS: 00000002
-RAX: 0000000000000190 RBX: 0000000000000015 RCX: ffffc90000c01000
-RDX: 0000000000040000 RSI: ffffffff82270baa RDI: 0000000000000005
-RBP: ffffc90000007070 R08: 0000000000000005 R09: 0000000000000063
-R10: 00000000000001a5 R11: 0000000000000001 R12: 0000000000000004
-R13: 0000000000000000 R14: ffffc900800073d7 R15: ffffc900000073d9
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f04d16f5fc0 CR3: 000000013871d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- number+0x9e4/0xae0 lib/vsprintf.c:508
- vsnprintf+0xf07/0x14f0 lib/vsprintf.c:2848
- sprintf+0xc0/0x100 lib/vsprintf.c:2986
- print_time kernel/printk/printk.c:1277 [inline]
- info_print_prefix+0x248/0x340 kernel/printk/printk.c:1303
- record_print_text+0x14d/0x3e0 kernel/printk/printk.c:1352
- console_emit_next_record.constprop.0+0x6bf/0x840 kernel/printk/printk.c:2715
- console_flush_all kernel/printk/printk.c:2794 [inline]
- console_unlock+0x37a/0x5a0 kernel/printk/printk.c:2861
- vprintk_emit+0x1b9/0x5f0 kernel/printk/printk.c:2271
- dev_vprintk_emit+0x36e/0x3b2 drivers/base/core.c:4736
- dev_printk_emit+0xba/0xf1 drivers/base/core.c:4747
- __dev_printk+0xcf/0xf5 drivers/base/core.c:4759
- _dev_warn+0xd7/0x109 drivers/base/core.c:4803
- igorplugusb_callback.cold+0x3c/0x2af drivers/media/rc/igorplugusb.c:115
- __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1671
- usb_hcd_giveback_urb+0x380/0x430 drivers/usb/core/hcd.c:1754
- dummy_timer+0x11ff/0x32c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
- call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
- __run_timers kernel/time/timer.c:1768 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
- __do_softirq+0x1c0/0x9a9 kernel/softirq.c:571
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x113/0x170 kernel/softirq.c:650
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
-RIP: 0010:idr_alloc_u32+0x2/0x2d0 lib/idr.c:35
-Code: c4 e8 72 cf 20 ff e9 0a ff ff ff e8 68 cf 20 ff e9 13 ff ff ff e8 5e f1 ce 03 cc cc cc cc cc cc cc cc cc cc cc cc cc cc 41 57 <41> 56 45 89 c6 41 55 49 bd 00 00 00 00 00 fc ff df 41 54 55 48 89
-RSP: 0018:ffffc9000007f470 EFLAGS: 00000246
-RAX: 0000000000040000 RBX: ffff888100067810 RCX: 000000007fffffff
-RDX: ffffc9000007f4b8 RSI: ffff888138a10488 RDI: ffff888100067810
-RBP: ffffc9000007f4b8 R08: 0000000000000a20 R09: 0000000000011040
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff888100067864 R14: 0000000000011040 R15: 000000007fffffff
- idr_alloc_cyclic+0x102/0x230 lib/idr.c:125
- __kernfs_new_node+0x117/0x8b0 fs/kernfs/dir.c:599
- kernfs_new_node+0x93/0x120 fs/kernfs/dir.c:655
- __kernfs_create_file+0x51/0x350 fs/kernfs/file.c:1050
- sysfs_add_file_mode_ns+0x20f/0x3f0 fs/sysfs/file.c:294
- create_files fs/sysfs/group.c:64 [inline]
- internal_create_group+0x322/0xb10 fs/sysfs/group.c:148
- internal_create_groups.part.0+0x90/0x140 fs/sysfs/group.c:188
- internal_create_groups fs/sysfs/group.c:184 [inline]
- sysfs_create_groups+0x25/0x50 fs/sysfs/group.c:214
- device_add_groups drivers/base/core.c:2572 [inline]
- device_add_attrs drivers/base/core.c:2731 [inline]
- device_add+0x83e/0x1e90 drivers/base/core.c:3468
- usb_create_ep_devs+0x15c/0x2a0 drivers/usb/core/endpoint.c:169
- usb_new_device.cold+0xc9b/0x10ad drivers/usb/core/hub.c:2601
- hub_port_connect drivers/usb/core/hub.c:5353 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x26c7/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- process_scheduled_works kernel/workqueue.c:2352 [inline]
- worker_thread+0x854/0x1080 kernel/workqueue.c:2438
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 08.12.22 10:00, Vincent MAILHOL wrote:
+> On Mon. 5 Dec. 2022 at 17:39, Oliver Neukum <oneukum@suse.com> wrote:
+>> On 03.12.22 14:31, Vincent Mailhol wrote:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Good Morning!
+
+> ACK, but I do not see the connection.
+Well, useless checks are bad. In particular, we should always
+make it clear whether a pointer may or may not be NULL.
+That is, I have no problem with what you were trying to do
+with your patch set. It is a good idea and possibly slightly
+overdue. The problem is the method.
+
+> I can see that cdc-acm sets acm->control and acm->data to NULL in his
+> disconnect(), but it doesn't set its own usb_interface to NULL.
+
+You don't have to, but you can. I was explaining the two patterns for doing so.
+
+>> which claim secondary interfaces disconnect() will be called a second time
+>> for.
+> 
+> Are you saying that the disconnect() of those CAN USB drivers is being
+> called twice? I do not see this in the source code. The only caller of
+> usb_driver::disconnect() I can see is:
+> 
+>    https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L458
+
+If they use usb_claim_interface(), yes it is called twice. Once per
+interface. That is in the case of ACM once for the originally probed
+interface and a second time for the claimed interface.
+But not necessarily in that order, as you can be kicked off an interface
+via sysfs. Yet you need to cease operations as soon as you are disconnected
+from any interface. That is annoying because it means you cannot use a
+refcount. From that stems the widespread use of intfdata as a flag.
+
+>> In addition, a driver can use setting intfdata to NULL as a flag
+>> for disconnect() having proceeded to a point where certain things
+>> can no longer be safely done.
+> 
+> Any reference that a driver can do that? This pattern seems racy.
+
+Technically that is exactly what drivers that use usb_claim_interface()
+do. You free everything at the first call and use intfdata as a flag
+to prevent a double free.
+The race is prevented by usbcore locking, which guarantees that probe()
+and disconnect() have mutual exclusion.
+If you use intfdata in sysfs, yes additional locking is needed.
+
+> What makes you assume that I didn't check this in the first place? Or
+> do you see something I missed?
+
+That you did not put it into the changelogs.
+That reads like the drivers are doing something obsolete or stupid.
+They do not. They copied something that is necessary only under
+some circumstances.
+
+And that you did not remove the checks.
+
+>> which is likely, then please also remove checks like this:
+>>
+>>          struct ems_usb *dev = usb_get_intfdata(intf);
+>>
+>>          usb_set_intfdata(intf, NULL);
+>>
+>>          if (dev) {
+
+Here. If you have a driver that uses usb_claim_interface().
+You need this check or you unregister an already unregistered
+netdev.
+
+The way this disconnect() method is coded is extremely defensive.
+Most drivers do not need this check. But it is never
+wrong in the strict sense.
+
+Hence doing a mass removal with a change log that does
+not say that this driver is using only a single interface
+hence the check can be dropped to reduce code size
+is not good.
+
+	Regards
+		Oliver
