@@ -2,117 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2B464823C
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 13:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072D9648275
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 13:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiLIMOF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Dec 2022 07:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S229938AbiLIMjE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Dec 2022 07:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLIMOC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 07:14:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744F51743C;
-        Fri,  9 Dec 2022 04:14:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F272962245;
-        Fri,  9 Dec 2022 12:14:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF02C433EF;
-        Fri,  9 Dec 2022 12:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670588040;
-        bh=qzpMtoWZNpsZQI9YGO/jGLlQ5OXpCbZNeUK0GWywa5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2pob/fUs86fazeBu6/pQnGCZkTQHedRqlm4MFJqhrvLuKUQHRxBlxjZaXJ0z7fIBm
-         2z9ZPQDYzSoU+qKyKgXWPdvtKhELbnCjNuZM9d3ynI72MV/980V4y68c7OHbs6J4LV
-         yX6P+XfBVFv76qXblKMCMYeD5JzaC2fsJIH1eU3I=
-Date:   Fri, 9 Dec 2022 13:13:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Cc:     Quentin Schulz <foss+kernel@0leil.net>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        William Wu <william.wu@rock-chips.com>,
-        Bin Yang <yangbin@rock-chips.com>,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: Re: [PATCH 3/3] usb: dwc2: prevent core phy initialisation
-Message-ID: <Y5MmhEMMx2sy91LS@kroah.com>
-References: <20221206-dwc2-gadget-dual-role-v1-0-36515e1092cd@theobroma-systems.com>
- <20221206-dwc2-gadget-dual-role-v1-3-36515e1092cd@theobroma-systems.com>
- <Y5IIaeip81DIvEZ6@kroah.com>
- <69c0f9c0-5c89-e99e-c807-9963ca377093@theobroma-systems.com>
+        with ESMTP id S229815AbiLIMjD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 07:39:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDDE67225
+        for <linux-usb@vger.kernel.org>; Fri,  9 Dec 2022 04:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670589435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kKcc7XQPg0UZn1AHNfQ4N2d5zF9JzBW3g3hPGFAB4Kc=;
+        b=ZG3qqAatQhAgpOboJAhhAnXOsAls6GT3djKhXpAx8qhAmpWP+j5Ewoo4/diUxYxZxAhmAx
+        IsB4N7gRUZDNj5yOs+yBwaGHPcGpIAQwcjkCOeZuP6frx+KIOVT+ppWBotynfu9bGbnIWY
+        PFnFWXmmPhUxIB2B9Yq/ZGaPsueGibY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-12-TIhdadZDMQu027r2-jg1QQ-1; Fri, 09 Dec 2022 07:37:14 -0500
+X-MC-Unique: TIhdadZDMQu027r2-jg1QQ-1
+Received: by mail-wm1-f70.google.com with SMTP id v125-20020a1cac83000000b003cfa148576dso2351200wme.3
+        for <linux-usb@vger.kernel.org>; Fri, 09 Dec 2022 04:37:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kKcc7XQPg0UZn1AHNfQ4N2d5zF9JzBW3g3hPGFAB4Kc=;
+        b=GFuTZwYBwK0cLc+6Jc81uY1GQdYqgbpTKuYkj1WzB2Qm5cx68ImZsn7wAKQAxE8Bbm
+         d40DH7oHOEaH1oaVNzxfCIN88F1DUUihIV0fzXH+C83yb0wBZhLkoE2BchFAHWkIRU/m
+         ugmFNDAfZQUwZoHJtSLAxEvefvZU+zrMiq8kLr+f+HUR/NZhIdOkudTQg4K3AOTeuWOY
+         oWr4LrqKWpctH7xS/vL5M2RyDoNpAiLS8PAIiGHRUJfeJl4ZrYqvlL3X5SGX5RSKSfBU
+         ixlS/MK1grmLOClQdAOoRQUvKqOzD9aeyPD1wFH+tcDygTorcxBeZYJyy9uRfB+oZO7E
+         CNgQ==
+X-Gm-Message-State: ANoB5pklR5QrtsgE2NG55f62rR4H5G9tRgc3VNM8Gc+uMLi0GqMDk0n7
+        vNjFi13KInUN+sJVG6DDo/ZBn8JG52M7HtWq50glQG9v7adwg6teKq5qV2wJNzR+POYUqxYKNxZ
+        NK/EBMJNZkL2Tt7wuAMfh
+X-Received: by 2002:a05:600c:4fd0:b0:3d1:c0a1:4804 with SMTP id o16-20020a05600c4fd000b003d1c0a14804mr4752747wmq.17.1670589432840;
+        Fri, 09 Dec 2022 04:37:12 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5DyMiYpWNcqaQueb0cVh7tJ5lH4JY75MZjLcmrbwYgfM+x/au0sr5C4m2hvq8cZrZMVyWo5g==
+X-Received: by 2002:a05:600c:4fd0:b0:3d1:c0a1:4804 with SMTP id o16-20020a05600c4fd000b003d1c0a14804mr4752714wmq.17.1670589432518;
+        Fri, 09 Dec 2022 04:37:12 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-106-22.dyn.eolo.it. [146.241.106.22])
+        by smtp.gmail.com with ESMTPSA id j10-20020a05600c1c0a00b003b49bd61b19sm9284355wms.15.2022.12.09.04.37.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 04:37:11 -0800 (PST)
+Message-ID: <d220402a232e204676d9100d6fe4c2ae08f753ee.camel@redhat.com>
+Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Benjamin Coddington <bcodding@redhat.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Christoph =?ISO-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Steve French <sfrench@samba.org>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
+        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org
+Date:   Fri, 09 Dec 2022 13:37:08 +0100
+In-Reply-To: <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
+References: <cover.1669036433.git.bcodding@redhat.com>
+         <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69c0f9c0-5c89-e99e-c807-9963ca377093@theobroma-systems.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 12:15:34PM +0100, Quentin Schulz wrote:
-> Hi Greg,
+On Mon, 2022-11-21 at 08:35 -0500, Benjamin Coddington wrote:
+> Since moving to memalloc_nofs_save/restore, SUNRPC has stopped setting the
+> GFP_NOIO flag on sk_allocation which the networking system uses to decide
+> when it is safe to use current->task_frag.  The results of this are
+> unexpected corruption in task_frag when SUNRPC is involved in memory
+> reclaim.
 > 
-> On 12/8/22 16:53, Greg Kroah-Hartman wrote:
-> > On Wed, Dec 07, 2022 at 02:19:18PM +0100, Quentin Schulz wrote:
-> > > From: Bin Yang <yangbin@rock-chips.com>
-> > > 
-> > > The usb phys need to be controlled dynamically on some Rockchip SoCs.
-> > > So set the new HCD flag which prevents USB core from trying to manage
-> > > our phys.
-> > > 
-> > > Signed-off-by: Bin Yang <yangbin@rock-chips.com>
-> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> > > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > > ---
-> > >   drivers/usb/dwc2/hcd.c | 7 +++++++
-> > >   1 file changed, 7 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> > > index 657f1f659ffaf..757a66fa32fa8 100644
-> > > --- a/drivers/usb/dwc2/hcd.c
-> > > +++ b/drivers/usb/dwc2/hcd.c
-> > > @@ -5315,6 +5315,13 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
-> > >   	if (!IS_ERR_OR_NULL(hsotg->uphy))
-> > >   		otg_set_host(hsotg->uphy->otg, &hcd->self);
-> > > +	/*
-> > > +	 * do not manage the PHY state in the HCD core, instead let the driver
-> > > +	 * handle this (for example if the PHY can only be turned on after a
-> > > +	 * specific event)
-> > > +	 */
-> > > +	hcd->skip_phy_initialization = 1;
-> > 
-> > Wait, doesn't this mess with the phy logic for all other chips that use
-> > this IP block?  Have you tested this on other systems?
-> > 
+> The corruption can be seen in crashes, but the root cause is often
+> difficult to ascertain as a crashing machine's stack trace will have no
+> evidence of being near NFS or SUNRPC code.  I believe this problem to
+> be much more pervasive than reports to the community may indicate.
 > 
-> I have not. I asked this in the cover-letter but I guess I should have made
-> the patch series an RFC for this reason?
-
-Ah, should I drop the first 2 in this series that I already applied?
-
-> > I'd like some verification first before taking this change as it seems
-> > very specific-platform.
-> > 
+> Fix this by having kernel users of sockets that may corrupt task_frag due
+> to reclaim set sk_use_task_frag = false.  Preemptively correcting this
+> situation for users that still set sk_allocation allows them to convert to
+> memalloc_nofs_save/restore without the same unexpected corruptions that are
+> sure to follow, unlikely to show up in testing, and difficult to bisect.
 > 
-> There's already some platform-specific callbacks for the driver (see
-> dwc2_set_rk_params in drivers/usb/dwc2/params.c) but this gets called too
-> early, before hcd structure is actually allocated. So we either need to use
-> some "proxy"/shadow variable in dwc2_core_params and then update it right
-> after hcd gets allocated or have another platform-specific callback only for
-> hcd (post-)initialization.
+> CC: Philipp Reisner <philipp.reisner@linbit.com>
+> CC: Lars Ellenberg <lars.ellenberg@linbit.com>
+> CC: "Christoph Böhmwalder" <christoph.boehmwalder@linbit.com>
+> CC: Jens Axboe <axboe@kernel.dk>
+> CC: Josef Bacik <josef@toxicpanda.com>
+> CC: Keith Busch <kbusch@kernel.org>
+> CC: Christoph Hellwig <hch@lst.de>
+> CC: Sagi Grimberg <sagi@grimberg.me>
+> CC: Lee Duncan <lduncan@suse.com>
+> CC: Chris Leech <cleech@redhat.com>
+> CC: Mike Christie <michael.christie@oracle.com>
+> CC: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> CC: "Martin K. Petersen" <martin.petersen@oracle.com>
+> CC: Valentina Manea <valentina.manea.m@gmail.com>
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> CC: David Howells <dhowells@redhat.com>
+> CC: Marc Dionne <marc.dionne@auristor.com>
+> CC: Steve French <sfrench@samba.org>
+> CC: Christine Caulfield <ccaulfie@redhat.com>
+> CC: David Teigland <teigland@redhat.com>
+> CC: Mark Fasheh <mark@fasheh.com>
+> CC: Joel Becker <jlbec@evilplan.org>
+> CC: Joseph Qi <joseph.qi@linux.alibaba.com>
+> CC: Eric Van Hensbergen <ericvh@gmail.com>
+> CC: Latchesar Ionkov <lucho@ionkov.net>
+> CC: Dominique Martinet <asmadeus@codewreck.org>
+> CC: "David S. Miller" <davem@davemloft.net>
+> CC: Eric Dumazet <edumazet@google.com>
+> CC: Jakub Kicinski <kuba@kernel.org>
+> CC: Paolo Abeni <pabeni@redhat.com>
+> CC: Ilya Dryomov <idryomov@gmail.com>
+> CC: Xiubo Li <xiubli@redhat.com>
+> CC: Chuck Lever <chuck.lever@oracle.com>
+> CC: Jeff Layton <jlayton@kernel.org>
+> CC: Trond Myklebust <trond.myklebust@hammerspace.com>
+> CC: Anna Schumaker <anna@kernel.org>
+> CC: drbd-dev@lists.linbit.com
+> CC: linux-block@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> CC: nbd@other.debian.org
+> CC: linux-nvme@lists.infradead.org
+> CC: open-iscsi@googlegroups.com
+> CC: linux-scsi@vger.kernel.org
+> CC: linux-usb@vger.kernel.org
+> CC: linux-afs@lists.infradead.org
+> CC: linux-cifs@vger.kernel.org
+> CC: samba-technical@lists.samba.org
+> CC: cluster-devel@redhat.com
+> CC: ocfs2-devel@oss.oracle.com
+> CC: v9fs-developer@lists.sourceforge.net
+> CC: netdev@vger.kernel.org
+> CC: ceph-devel@vger.kernel.org
+> CC: linux-nfs@vger.kernel.org
 > 
-> Nothing too fancy so shouldn't take too long to implement. Any preference?
-> Something else?
+> Suggested-by: Guillaume Nault <gnault@redhat.com>
+> Signed-off-by: Benjamin Coddington <bcodding@redhat.com>
 
-Which ever you think would be simplest.
+I think this is the most feasible way out of the existing issue, and I
+think this patchset should go via the networking tree, targeting the
+Linux 6.2.
 
-thanks,
+If someone has disagreement with the above, please speak! 
 
-greg k-h
+Thanks,
+
+Paolo
+
