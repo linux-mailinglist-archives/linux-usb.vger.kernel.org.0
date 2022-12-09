@@ -2,135 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A45764879E
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 18:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 162836487BD
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 18:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiLIRTX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Dec 2022 12:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S230128AbiLIR3T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Dec 2022 12:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiLIRS6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 12:18:58 -0500
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B85C313E8D;
-        Fri,  9 Dec 2022 09:18:48 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.96,230,1665414000"; 
-   d="scan'208";a="145653356"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 10 Dec 2022 02:18:48 +0900
-Received: from localhost.localdomain (unknown [10.226.92.39])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id E066E4035BC1;
-        Sat, 10 Dec 2022 02:18:45 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 2/2] usb: typec: hd3ss3220: Add polling support
-Date:   Fri,  9 Dec 2022 17:18:36 +0000
-Message-Id: <20221209171836.71610-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221209171836.71610-1-biju.das.jz@bp.renesas.com>
-References: <20221209171836.71610-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S230182AbiLIR3I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 12:29:08 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CD46BC92
+        for <linux-usb@vger.kernel.org>; Fri,  9 Dec 2022 09:29:05 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id vv4so13126413ejc.2
+        for <linux-usb@vger.kernel.org>; Fri, 09 Dec 2022 09:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gzI0mSSXDiULYDkFXYMyFYk7pUZpjZLakH92fcemRT0=;
+        b=avPhojfyAtEzYWjUqmN97DwPnMdwkhaZuk94QT4MgXiwryXE8hb1g9miVLLHqUYFP1
+         jth0Q+Hoocw8uH3k5/I8Qm3zQlIWrg5JXJH6jVmmUwTxILt7dWi80KIxBkf+mKpLr7hq
+         1tgQNCwBcUP9LG7xucdpxUC6h6HLop9xqEvCQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gzI0mSSXDiULYDkFXYMyFYk7pUZpjZLakH92fcemRT0=;
+        b=zyOy+UknQcrfW1OIdFlRmvI1yK/eukFsgBrSMI+VrI8GrGkDRiy/BFMqt+ZHwWkxaq
+         5d84gkSVJtDbk2bRzfM4lzmomDealZVobJYFByXKSipzMIEQhIR041B2Pw67Ec2Iu4D8
+         LWFHNsIinNrRA4wU9E3oBYd6nQ9zpl1OtLKyykDN2dBUNdPRVsERf+5o2IFpxiUzpWpN
+         TtxQl/x0Xv45/v7GGPvaGdiQQu8awNi8Ynt1QTPIUq+nJiTXCtemngASayFsqze7L5bB
+         DO2lKBtlHAmI6BHwxMtaQuBuLQ8E9/wxV3ARuyo61Z8lKelWhUxzQeii/Ukz2L+vfVcf
+         cBmg==
+X-Gm-Message-State: ANoB5pkQcn+LUXdY7e4ZaozzInQZxbAxmMLrSD1hzZLCSE2PKME8jWoy
+        YMXzvXTbzNOPhU77iBZgbXqbiw==
+X-Google-Smtp-Source: AA0mqf5z7MfBtkUdBD3PRrX7l81o13oYiH7M+1xcBgip7ajZdifaWsn2o7It0BqoH+YLqdJaLHTt4g==
+X-Received: by 2002:a17:906:381:b0:78d:f455:c39b with SMTP id b1-20020a170906038100b0078df455c39bmr5747668eja.65.1670606944432;
+        Fri, 09 Dec 2022 09:29:04 -0800 (PST)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id pk14-20020a170906d7ae00b0077016f4c6d4sm161154ejb.55.2022.12.09.09.29.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 09:29:04 -0800 (PST)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: u_ether: remove obnoxious warning messages
+Date:   Fri,  9 Dec 2022 18:28:53 +0100
+Message-Id: <20221209172853.2138941-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some platforms(for eg: RZ/V2M EVK) does not have interrupt pin
-connected to HD3SS3220. Add polling support for role detection.
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v1->v2:
- * Dropped patch#3 for soring header files.
----
- drivers/usb/typec/hd3ss3220.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+There is really no need for the driver to unconditionally emit warnings
+like this on every usage:
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index c24bbccd14f9..a445c1bd0627 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/usb/typec.h>
- #include <linux/delay.h>
-+#include <linux/workqueue.h>
+[    6.967283] using random self ethernet address
+[    6.967294] using random host ethernet address
+
+Since this is normal behaviour, just remove the messages altogether.
+
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+ drivers/usb/gadget/function/u_ether.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index 8f12f3f8f6ee..3fdc913ef262 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -845,13 +845,11 @@ struct net_device *gether_setup_name_default(const char *netname)
+ 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
  
- #define HD3SS3220_REG_CN_STAT_CTRL	0x09
- #define HD3SS3220_REG_GEN_CTRL		0x0A
-@@ -37,6 +38,9 @@ struct hd3ss3220 {
- 	struct regmap *regmap;
- 	struct usb_role_switch	*role_sw;
- 	struct typec_port *port;
-+	struct delayed_work output_poll_work;
-+	enum usb_role role_state;
-+	bool poll;
- };
+ 	eth_random_addr(dev->dev_mac);
+-	pr_warn("using random %s ethernet address\n", "self");
  
- static int hd3ss3220_set_source_pref(struct hd3ss3220 *hd3ss3220, int src_pref)
-@@ -118,6 +122,22 @@ static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
- 	default:
- 		break;
- 	}
-+
-+	hd3ss3220->role_state = role_state;
-+}
-+
-+static void output_poll_execute(struct work_struct *work)
-+{
-+	struct delayed_work *delayed_work = to_delayed_work(work);
-+	struct hd3ss3220 *hd3ss3220 = container_of(delayed_work,
-+						   struct hd3ss3220,
-+						   output_poll_work);
-+	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
-+
-+	if (hd3ss3220->role_state != role_state)
-+		hd3ss3220_set_role(hd3ss3220);
-+
-+	schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
- }
+ 	/* by default we always have a random MAC address */
+ 	net->addr_assign_type = NET_ADDR_RANDOM;
  
- static irqreturn_t hd3ss3220_irq(struct hd3ss3220 *hd3ss3220)
-@@ -227,6 +247,9 @@ static int hd3ss3220_probe(struct i2c_client *client,
- 					"hd3ss3220", &client->dev);
- 		if (ret)
- 			goto err_unreg_port;
-+	} else {
-+		INIT_DELAYED_WORK(&hd3ss3220->output_poll_work, output_poll_execute);
-+		hd3ss3220->poll = true;
- 	}
+ 	eth_random_addr(dev->host_mac);
+-	pr_warn("using random %s ethernet address\n", "host");
  
- 	ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
-@@ -235,6 +258,9 @@ static int hd3ss3220_probe(struct i2c_client *client,
+ 	net->netdev_ops = &eth_netdev_ops;
  
- 	fwnode_handle_put(connector);
- 
-+	if (hd3ss3220->poll)
-+		schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
-+
- 	dev_info(&client->dev, "probed revision=0x%x\n", ret);
- 
- 	return 0;
-@@ -252,6 +278,9 @@ static void hd3ss3220_remove(struct i2c_client *client)
- {
- 	struct hd3ss3220 *hd3ss3220 = i2c_get_clientdata(client);
- 
-+	if (hd3ss3220->poll)
-+		cancel_delayed_work_sync(&hd3ss3220->output_poll_work);
-+
- 	typec_unregister_port(hd3ss3220->port);
- 	usb_role_switch_put(hd3ss3220->role_sw);
- }
 -- 
-2.25.1
+2.37.3
 
