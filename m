@@ -2,172 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A37F64820A
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 13:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2B464823C
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 13:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiLIMAs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Dec 2022 07:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
+        id S229830AbiLIMOF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Dec 2022 07:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLIMAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 07:00:43 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3BC303CA
-        for <linux-usb@vger.kernel.org>; Fri,  9 Dec 2022 04:00:38 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id b2so10950836eja.7
-        for <linux-usb@vger.kernel.org>; Fri, 09 Dec 2022 04:00:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=blV6eki9f/dE3yt8k9vQjmYbdmKqtjXhWL8aRDi0+PTy9DZ7PoASn6Hb4YDawt6/Pq
-         TOTWkNyJ1bQ0LXeAOKmZsgrohPEAxg4I9Vxq8Iql4MCfOpzd9bk59Kg8A1l2aCabzc1i
-         Pwb8zUD5pTagBDWz9wlqw8be8RXHOe4ntLhBEh7HXgPppKgizTPX68btz3fJ69iSfJef
-         zAFAyKFjvCY4s0mBfuw+77i/sj6ivMcyXsKkk5Q+7miuQY1uqqYMcxvazgbad3gQhSeN
-         osKwSC1CYREx2mikz7Rsbjiro/V/gVq1uBZVJYbtUMGcexuFEHFb/xJK0jJPCO1YVyoF
-         GpZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=ycdIfc0YomrjO9AaNOEpil67j/0VyZJZh2WeJGVADqoB2DpE68fPSUPVXxdC5iN8yZ
-         18qw9qcJnUbNwGws2lp2Mh8scpJHZ6DkNz+xEdkKBUSBtSz79Ym7PF6LbWNmMZNtT3+M
-         D3BEl5qulkOysjq7lxtMvtQZczeJ03lo1RHNy73jvUHx+/kzxEX7N3bwg6Gk3N2QNDYg
-         i8wyUl0AoFRnR3SPBS0XJt1RuX2DAt/hGcKjaWJIErkoSbERywgK95f+gCpTekKuq2Nu
-         dbSuG9FP7kgX+p9ApXfZVhuZbXRNbeIWhqNTOZjxKnZWtheq+aGFFr+/JFRPAdYjmDDy
-         JfwA==
-X-Gm-Message-State: ANoB5pl0JpKJHCjK+6Pfp03S/ym11nPcEV0UtB1SOd5CxSKS/KYgrYIc
-        5w6UthP88fwWPJZusZxuRsgL+A==
-X-Google-Smtp-Source: AA0mqf7P1uuFrcKToZQL1Qs7OSMRUELHntqUphTx86r+y9eGx8OMntNtg5Twtz4wxSVo6DNFFYUZgg==
-X-Received: by 2002:a17:906:4907:b0:7c0:d4fa:3151 with SMTP id b7-20020a170906490700b007c0d4fa3151mr4765674ejq.17.1670587236522;
-        Fri, 09 Dec 2022 04:00:36 -0800 (PST)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id o23-20020a170906861700b007c0a7286c0asm489597ejx.58.2022.12.09.04.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:00:35 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        Purism Kernel Team <kernel@puri.sm>,
-        linux-rpi-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
-        linux-actions@lists.infradead.org, netdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-staging@lists.linux.dev, chrome-platform@lists.linux.dev,
-        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Date:   Fri,  9 Dec 2022 13:00:14 +0100
-Message-Id: <167058708567.1651663.18170722235132459286.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        with ESMTP id S229568AbiLIMOC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 07:14:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744F51743C;
+        Fri,  9 Dec 2022 04:14:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F272962245;
+        Fri,  9 Dec 2022 12:14:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF02C433EF;
+        Fri,  9 Dec 2022 12:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670588040;
+        bh=qzpMtoWZNpsZQI9YGO/jGLlQ5OXpCbZNeUK0GWywa5c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2pob/fUs86fazeBu6/pQnGCZkTQHedRqlm4MFJqhrvLuKUQHRxBlxjZaXJ0z7fIBm
+         2z9ZPQDYzSoU+qKyKgXWPdvtKhELbnCjNuZM9d3ynI72MV/980V4y68c7OHbs6J4LV
+         yX6P+XfBVFv76qXblKMCMYeD5JzaC2fsJIH1eU3I=
+Date:   Fri, 9 Dec 2022 13:13:56 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Cc:     Quentin Schulz <foss+kernel@0leil.net>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        William Wu <william.wu@rock-chips.com>,
+        Bin Yang <yangbin@rock-chips.com>,
+        Frank Wang <frank.wang@rock-chips.com>
+Subject: Re: [PATCH 3/3] usb: dwc2: prevent core phy initialisation
+Message-ID: <Y5MmhEMMx2sy91LS@kroah.com>
+References: <20221206-dwc2-gadget-dual-role-v1-0-36515e1092cd@theobroma-systems.com>
+ <20221206-dwc2-gadget-dual-role-v1-3-36515e1092cd@theobroma-systems.com>
+ <Y5IIaeip81DIvEZ6@kroah.com>
+ <69c0f9c0-5c89-e99e-c807-9963ca377093@theobroma-systems.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69c0f9c0-5c89-e99e-c807-9963ca377093@theobroma-systems.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
+On Fri, Dec 09, 2022 at 12:15:34PM +0100, Quentin Schulz wrote:
+> Hi Greg,
 > 
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch that
-> you can pull into your tree to get it:
+> On 12/8/22 16:53, Greg Kroah-Hartman wrote:
+> > On Wed, Dec 07, 2022 at 02:19:18PM +0100, Quentin Schulz wrote:
+> > > From: Bin Yang <yangbin@rock-chips.com>
+> > > 
+> > > The usb phys need to be controlled dynamically on some Rockchip SoCs.
+> > > So set the new HCD flag which prevents USB core from trying to manage
+> > > our phys.
+> > > 
+> > > Signed-off-by: Bin Yang <yangbin@rock-chips.com>
+> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> > > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> > > ---
+> > >   drivers/usb/dwc2/hcd.c | 7 +++++++
+> > >   1 file changed, 7 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+> > > index 657f1f659ffaf..757a66fa32fa8 100644
+> > > --- a/drivers/usb/dwc2/hcd.c
+> > > +++ b/drivers/usb/dwc2/hcd.c
+> > > @@ -5315,6 +5315,13 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
+> > >   	if (!IS_ERR_OR_NULL(hsotg->uphy))
+> > >   		otg_set_host(hsotg->uphy->otg, &hcd->self);
+> > > +	/*
+> > > +	 * do not manage the PHY state in the HCD core, instead let the driver
+> > > +	 * handle this (for example if the PHY can only be turned on after a
+> > > +	 * specific event)
+> > > +	 */
+> > > +	hcd->skip_phy_initialization = 1;
+> > 
+> > Wait, doesn't this mess with the phy logic for all other chips that use
+> > this IP block?  Have you tested this on other systems?
+> > 
 > 
-> [...]
+> I have not. I asked this in the cover-letter but I guess I should have made
+> the patch series an RFC for this reason?
 
-Applied all patches that build.
+Ah, should I drop the first 2 in this series that I already applied?
 
-Patches excluded:
- - ps8622
- - ti-sn65dsi83
- - adv7511
+> > I'd like some verification first before taking this change as it seems
+> > very specific-platform.
+> > 
+> 
+> There's already some platform-specific callbacks for the driver (see
+> dwc2_set_rk_params in drivers/usb/dwc2/params.c) but this gets called too
+> early, before hcd structure is actually allocated. So we either need to use
+> some "proxy"/shadow variable in dwc2_core_params and then update it right
+> after hcd gets allocated or have another platform-specific callback only for
+> hcd (post-)initialization.
+> 
+> Nothing too fancy so shouldn't take too long to implement. Any preference?
+> Something else?
 
-Repo: https://cgit.freedesktop.org/drm/drm-misc/
+Which ever you think would be simplest.
 
+thanks,
 
-[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
-          (no commit info)
-[015/606] drm/bridge/analogix/anx6345: Convert to i2c's .probe_new()
-          (no commit info)
-[016/606] drm/bridge/analogix/anx78xx: Convert to i2c's .probe_new()
-          (no commit info)
-[017/606] drm/bridge: anx7625: Convert to i2c's .probe_new()
-          (no commit info)
-[018/606] drm/bridge: icn6211: Convert to i2c's .probe_new()
-          (no commit info)
-[019/606] drm/bridge: chrontel-ch7033: Convert to i2c's .probe_new()
-          commit: 8dc6de280f01c0f7b8d40435736f3c975368ad70
-[020/606] drm/bridge: it6505: Convert to i2c's .probe_new()
-          (no commit info)
-[021/606] drm/bridge: it66121: Convert to i2c's .probe_new()
-          (no commit info)
-[022/606] drm/bridge: lt8912b: Convert to i2c's .probe_new()
-          (no commit info)
-[023/606] drm/bridge: lt9211: Convert to i2c's .probe_new()
-          (no commit info)
-[024/606] drm/bridge: lt9611: Convert to i2c's .probe_new()
-          (no commit info)
-[025/606] drm/bridge: lt9611uxc: Convert to i2c's .probe_new()
-          (no commit info)
-[026/606] drm/bridge: megachips: Convert to i2c's .probe_new()
-          (no commit info)
-[027/606] drm/bridge: nxp-ptn3460: Convert to i2c's .probe_new()
-          (no commit info)
-[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
-          (no commit info)
-[029/606] drm/bridge: sii902x: Convert to i2c's .probe_new()
-          (no commit info)
-[030/606] drm/bridge: sii9234: Convert to i2c's .probe_new()
-          (no commit info)
-[031/606] drm/bridge: sii8620: Convert to i2c's .probe_new()
-          (no commit info)
-[032/606] drm/bridge: tc358767: Convert to i2c's .probe_new()
-          (no commit info)
-[033/606] drm/bridge: tc358768: Convert to i2c's .probe_new()
-          (no commit info)
-[034/606] drm/bridge/tc358775: Convert to i2c's .probe_new()
-          (no commit info)
-[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
-          (no commit info)
-[037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
-          (no commit info)
-
-
-
-rob
-
+greg k-h
