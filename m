@@ -2,133 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62066647D9E
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 07:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E4B647EEC
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 09:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiLIGOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Dec 2022 01:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S230057AbiLIIHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Dec 2022 03:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiLIGOU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 01:14:20 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DDE86F71;
-        Thu,  8 Dec 2022 22:14:03 -0800 (PST)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NT0xc0HGBzJpD8;
-        Fri,  9 Dec 2022 14:10:28 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 9 Dec 2022 14:14:00 +0800
-Subject: Re: [PATCH] xhci: print warning when HCE was set
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yisen.zhuang@huawei.com>
-References: <20220915011134.58400-1-liulongfang@huawei.com>
- <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
- <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
- <8271d551-4034-71fe-5be4-e08e28b6dd6b@linux.intel.com>
- <19ab61d6-c2a2-42be-2bb6-500636868703@huawei.com>
- <7163ea05-7ea5-998b-932a-25ffd36ed296@intel.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <28c934fa-ed31-ab50-9edc-60e03f42c2dd@huawei.com>
-Date:   Fri, 9 Dec 2022 14:13:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        with ESMTP id S230058AbiLIIHA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 03:07:00 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F6A5B87C
+        for <linux-usb@vger.kernel.org>; Fri,  9 Dec 2022 00:06:59 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id cf42so5874270lfb.1
+        for <linux-usb@vger.kernel.org>; Fri, 09 Dec 2022 00:06:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t3Vs+1WI1y3virfX5xKwzsGtAygi7nWt3LxEdPgxueY=;
+        b=DM5mZnd9ChTGZazpZvbX3e2l/bSIy8PL3KnAU66pl2Mfhb5SEXRPyiA10Yy551uzlb
+         EOeuefI7JelhJ8rQiCN7k4Tfit64IT+e0l4Ogz/6o7AAabwZYURpj47g+c9gnYl9I0Oe
+         vCN3ibG7BdaKeZjiaKw+H84K2YdS89F7JvDj8G0VUJCVusbvlGQ2lMYtOPjvoZIRlHcd
+         ZJc7GUf76vBS+oqzcwb9tLbcQvI+Y8b+5blVdAmO9hx1Hls4iAebc6zDqlKPIAf66rIT
+         afLcrMgZ9/SYJYQJmOV18QjU7k700yKlWfMuK9TPM/ZmtJWyoY9TbOUb+/LEVRpPifyS
+         8v/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3Vs+1WI1y3virfX5xKwzsGtAygi7nWt3LxEdPgxueY=;
+        b=aubRMiTiaRHXLbQP2xNn/FeyrirQZAp0pNrvXtHeQOJcznMzJE3GeVzPbxzO8MS5/h
+         m1nap5V3WiiHv0CaboAUKrYr7XlCvdu+8fSkK3k2lOfJpmR3Mnq5NEB0FOkzEBYRd/cu
+         KVHiKZPOOprpBjcg8KSTQheMSebdPsxmrNEIwoDUNKSEH7wS1gvZqw6lKb13DG6Abka+
+         TiSAKi7KZz+M+obTp9OZpC/g4c6sxTSBCPdmm2QDpWNOvQvKlC0fL2uJ10eOvlMyjkXL
+         YX2VoVHVZKHYCcKANjSxBGf1pzGl2Y1teXZCB+v30EZ2UAcYFIz2XQJuAcrFpfTrz3Yn
+         tAhQ==
+X-Gm-Message-State: ANoB5pn/9vu9LyHEjoPUwAlg9np25J1zcRK2gn829seEpDh2HpZ5ozi5
+        4yw0BEuV2z5c7aCbuzcl1/720A==
+X-Google-Smtp-Source: AA0mqf6UBTJgYTJ9mm2nM5Oa6/8gKG5B2r0fumHwhHHSaESXxoQhfvm9fGBSLzqAfFkdEtVurXaPzA==
+X-Received: by 2002:a05:6512:1508:b0:4a4:68b9:6094 with SMTP id bq8-20020a056512150800b004a468b96094mr1979487lfb.31.1670573217565;
+        Fri, 09 Dec 2022 00:06:57 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q25-20020ac25a19000000b00494978b0caesm152032lfn.276.2022.12.09.00.06.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 00:06:57 -0800 (PST)
+Message-ID: <15cb7a77-4308-15f0-4669-7a2673b4abcb@linaro.org>
+Date:   Fri, 9 Dec 2022 09:06:55 +0100
 MIME-Version: 1.0
-In-Reply-To: <7163ea05-7ea5-998b-932a-25ffd36ed296@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 3/9] dt-bindings: PCI: renesas,pci-rcar-gen2:
+ 'depends-on' is no more optional
+Content-Language: en-US
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221207162435.1001782-1-herve.codina@bootlin.com>
+ <20221207162435.1001782-4-herve.codina@bootlin.com>
+ <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
+ <20221208100530.137fa8b7@bootlin.com>
+ <8dfb5b8a-766a-14ec-16d4-74fdd9f7d622@linaro.org>
+ <20221208165101.584e4b92@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221208165101.584e4b92@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/10/14 15:56, Mathias Nyman Wrote:
-> On 14.10.2022 6.12, liulongfang wrote:
->> On 2022/9/26 15:58, Mathias Nyman wrote:
->>> On 24.9.2022 5.35, liulongfang wrote:
->>>> On 2022/9/22 21:01, Mathias Nyman Wrote:
->>>>> Hi
+On 08/12/2022 16:51, Herve Codina wrote:
+> Hi Krzysztof,
+> 
+> On Thu, 8 Dec 2022 10:46:32 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> On 08/12/2022 10:05, Herve Codina wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On Thu, 8 Dec 2022 09:26:41 +0100
+>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>>   
+>>>> On 07/12/2022 17:24, Herve Codina wrote:  
+>>>>> The 'depends-on' property is set in involved DTS.
 >>>>>
->>>>> On 15.9.2022 4.11, Longfang Liu wrote:
->>>>>> When HCE(Host Controller Error) is set, it means that the xhci hardware
->>>>>> controller has an error at this time, but the current xhci driver
->>>>>> software does not log this event.
->>>>>>
->>>>>> By adding an HCE event detection in the xhci interrupt processing
->>>>>> interface, a warning log is output to the system, which is convenient
->>>>>> for system device status tracking.
->>>>>>
+>>>>> Move it to a required property.
 >>>>>
->>>>> xHC should cease all activity when it sets HCE, and is probably not
->>>>> generating interrupts anymore.
->>>>>
->>>>> Would probably be more useful to check for HCE at timeouts than in the
->>>>> interrupt handler.
->>>>>
+>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>>>>> ---
+>>>>>  Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml | 1 +    
 >>>>
->>>> Which function of the driver code is this timeout in?
+>>>> This should be squashed with previous patch. There is no point to add
+>>>> property and immediately in the next patch make it required. Remember
+>>>> that bindings are separate from DTS.
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>>  
 >>>
->>> xhci_handle_command_timeout() will usually trigger at some point,
->>>
+>>> I though about make dtbs_check in case of git bisect.  
 >>
->> Because this HCE error is reported in the form of an interrupt signal, it is more
->> concise to put it in xhci_irq() than in xhci_handle_command_timeout().
+>> And what would this commit change? In Git you will have
+>> 1. dt-bindings: PCI: renesas,pci-rcar-gen2: Add depends-on for RZ/N1 SoC
+>> family
+>> 2. dt-bindings: PCI: renesas,pci-rcar-gen2: 'depends-on' is no more optional
 >>
+>> so what is the difference for git bisect?
 > 
-> Patch was added to queue after you reported your xHC hardware triggers interrupts when HCE is set.
-> I'll send it forward after 6.1-rc1
+> Well, today, I have:
+> 1. dt-bindings: Add depends-on
+> 2. dts: Add depends-on
+> 3. dt-bindings: Move depends-on to mandatory
+
+What does it mean "I have"? Patches on mailing list? But we talk about
+Git and I wrote you bindings are DTS are not going the same tree.
+
 > 
+> If I squash dt-bindings commits, I am going to have:
+>   1. dt-bindings: Add mandatory depends-on
+>   2. dts: Add depends-on
+> or
+>   1. dts: Add depends-on
+>   2. dt-bindings: Add mandatory depends-on
 
-In our test version, a test log is added to xhci_irq(). In the test case that triggers HCE,
-the HCE interrupt is reported and recorded through the log:
+And how does it matter? Anyway it goes separate trees.
 
-{53}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
-{53}[Hardware Error]: event severity: recoverable
-{53}[Hardware Error]:  Error 0, type: recoverable
-{53}[Hardware Error]:   section type: unknown, c8b328a8-9917-4af6-9a13-2e08ab2e7586
-{53}[Hardware Error]:   section length: 0x48
-{53}[Hardware Error]:   00000000: 0000186b 00000201 001a0001 00000000  k...............
-{53}[Hardware Error]:   00000010: 00000000 00000000 00000000 00000028  ............(...
-{53}[Hardware Error]:   00000020: 00000000 00000000 00000000 00000000  ................
-{53}[Hardware Error]:   00000030: 00000000 00000000 00000000 00000000  ................
-{53}[Hardware Error]:   00000040: 00000001 00000000                    ........
- xhci_hcd 0000:30:01.0: xHCI host not responding to stop endpoint command.
- xhci_hcd 0000:30:01.0: USBSTS: PCD HCE
- xhci_hcd 0000:30:01.0: xHCI host controller not responding, assume dead
- xhci_hcd 0000:30:01.0: HC died; cleaning up
- usb usb1-port1: couldn't allocate usb_device
-rmmod xhci-pci
- xhci_hcd 0000:30:01.0: remove, state 4
- usb usb2: USB disconnect, device number 1
- xhci_hcd 0000:30:01.0: USB bus 2 deregistered
- xhci_hcd 0000:30:01.0: remove, state 1
- usb usb1: USB disconnect, device number 1
- xhci_hcd 0000:30:01.0: USB bus 1 deregistered
-
-Thanks,
-Longfang.
-
-> xHCI specification still indicate HCE might not trigger interrupts:
->  
-> Section 4.24.1 -Internal Errors
-> ...
-> "Software should implement an algorithm for checking the HCE flag if the xHC is
-> not responding."
 > 
-> Thanks
-> -Mathias
-> .
-> 
+> I have not tested but if I used only the first commit in each
+> case (git bisect):
+
+It's not bisectable anyway, you cannot make it bisectable within one
+release.
+
+> In the first case, dtbs_check is probably going to signal the
+> missing 'depends-on' property on dts.
+> In the second case, dtbs_check is probably going to signal the
+> not described 'depends-on' property present in dts.
+
+And why is that even a problem?
+
+Best regards,
+Krzysztof
+
