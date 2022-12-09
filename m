@@ -2,141 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE085647CBF
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 05:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62066647D9E
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Dec 2022 07:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLIEFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Dec 2022 23:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S229795AbiLIGOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Dec 2022 01:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLIEFJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Dec 2022 23:05:09 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4BAB2EE0
-        for <linux-usb@vger.kernel.org>; Thu,  8 Dec 2022 20:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670558705; x=1702094705;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DdjVKQUmB0EDBnWwoxucjd+oYt7NT0Owb7VGI3sFqrw=;
-  b=eBWAZRanQBsR6cpVIu4szkLW3PIUAEHN/9pt4nJ/DeqNEG+aZxlHJSlL
-   mlSt+d/1KDNJAc8I3qLghipYNRc05uSLQzhnNvBKmqYyNJ2LcaBWejYgd
-   IUdOZOslLP85zv6g0J0tBbjPWqbYHfgN/oln8c/k204SaWFZz5/eydSRw
-   9M+7cMd6fOauwrXVKmt5Zy6MD831yPNs5VKqDaXidq2Ds3njjRsJ4FeA7
-   CLRmhJLxGsZo+HEqwYgEnUZbQt6c+BdLEoKX1bR+ttE/ghy1BFnnfKD0R
-   EbJNIhaOdjv6Kyfk0YiLPDA80CSz7U4xYW2sjFSstLQJOAv20O+vYLHLO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="300794722"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="300794722"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 20:05:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="649425294"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="649425294"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Dec 2022 20:05:02 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p3UdB-0001bR-2P;
-        Fri, 09 Dec 2022 04:05:01 +0000
-Date:   Fri, 09 Dec 2022 12:04:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 82710ecd0e5d401c36ad21f00d644672005233b9
-Message-ID: <6392b3e9.ZxyudBqZYYyqIaEE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229845AbiLIGOU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Dec 2022 01:14:20 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DDE86F71;
+        Thu,  8 Dec 2022 22:14:03 -0800 (PST)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NT0xc0HGBzJpD8;
+        Fri,  9 Dec 2022 14:10:28 +0800 (CST)
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 9 Dec 2022 14:14:00 +0800
+Subject: Re: [PATCH] xhci: print warning when HCE was set
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yisen.zhuang@huawei.com>
+References: <20220915011134.58400-1-liulongfang@huawei.com>
+ <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
+ <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
+ <8271d551-4034-71fe-5be4-e08e28b6dd6b@linux.intel.com>
+ <19ab61d6-c2a2-42be-2bb6-500636868703@huawei.com>
+ <7163ea05-7ea5-998b-932a-25ffd36ed296@intel.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <28c934fa-ed31-ab50-9edc-60e03f42c2dd@huawei.com>
+Date:   Fri, 9 Dec 2022 14:13:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7163ea05-7ea5-998b-932a-25ffd36ed296@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 82710ecd0e5d401c36ad21f00d644672005233b9  Merge tag 'usb-serial-6.2-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
+On 2022/10/14 15:56, Mathias Nyman Wrote:
+> On 14.10.2022 6.12, liulongfang wrote:
+>> On 2022/9/26 15:58, Mathias Nyman wrote:
+>>> On 24.9.2022 5.35, liulongfang wrote:
+>>>> On 2022/9/22 21:01, Mathias Nyman Wrote:
+>>>>> Hi
+>>>>>
+>>>>> On 15.9.2022 4.11, Longfang Liu wrote:
+>>>>>> When HCE(Host Controller Error) is set, it means that the xhci hardware
+>>>>>> controller has an error at this time, but the current xhci driver
+>>>>>> software does not log this event.
+>>>>>>
+>>>>>> By adding an HCE event detection in the xhci interrupt processing
+>>>>>> interface, a warning log is output to the system, which is convenient
+>>>>>> for system device status tracking.
+>>>>>>
+>>>>>
+>>>>> xHC should cease all activity when it sets HCE, and is probably not
+>>>>> generating interrupts anymore.
+>>>>>
+>>>>> Would probably be more useful to check for HCE at timeouts than in the
+>>>>> interrupt handler.
+>>>>>
+>>>>
+>>>> Which function of the driver code is this timeout in?
+>>>
+>>> xhci_handle_command_timeout() will usually trigger at some point,
+>>>
+>>
+>> Because this HCE error is reported in the form of an interrupt signal, it is more
+>> concise to put it in xhci_irq() than in xhci_handle_command_timeout().
+>>
+> 
+> Patch was added to queue after you reported your xHC hardware triggers interrupts when HCE is set.
+> I'll send it forward after 6.1-rc1
+> 
 
-elapsed time: 730m
+In our test version, a test log is added to xhci_irq(). In the test case that triggers HCE,
+the HCE interrupt is reported and recorded through the log:
 
-configs tested: 60
-configs skipped: 2
+{53}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
+{53}[Hardware Error]: event severity: recoverable
+{53}[Hardware Error]:  Error 0, type: recoverable
+{53}[Hardware Error]:   section type: unknown, c8b328a8-9917-4af6-9a13-2e08ab2e7586
+{53}[Hardware Error]:   section length: 0x48
+{53}[Hardware Error]:   00000000: 0000186b 00000201 001a0001 00000000  k...............
+{53}[Hardware Error]:   00000010: 00000000 00000000 00000000 00000028  ............(...
+{53}[Hardware Error]:   00000020: 00000000 00000000 00000000 00000000  ................
+{53}[Hardware Error]:   00000030: 00000000 00000000 00000000 00000000  ................
+{53}[Hardware Error]:   00000040: 00000001 00000000                    ........
+ xhci_hcd 0000:30:01.0: xHCI host not responding to stop endpoint command.
+ xhci_hcd 0000:30:01.0: USBSTS: PCD HCE
+ xhci_hcd 0000:30:01.0: xHCI host controller not responding, assume dead
+ xhci_hcd 0000:30:01.0: HC died; cleaning up
+ usb usb1-port1: couldn't allocate usb_device
+rmmod xhci-pci
+ xhci_hcd 0000:30:01.0: remove, state 4
+ usb usb2: USB disconnect, device number 1
+ xhci_hcd 0000:30:01.0: USB bus 2 deregistered
+ xhci_hcd 0000:30:01.0: remove, state 1
+ usb usb1: USB disconnect, device number 1
+ xhci_hcd 0000:30:01.0: USB bus 1 deregistered
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Longfang.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-m68k                             allyesconfig
-mips                             allyesconfig
-m68k                             allmodconfig
-powerpc                          allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arc                  randconfig-r043-20221207
-riscv                randconfig-r042-20221207
-s390                 randconfig-r044-20221207
-i386                                defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a014
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-arm                                 defconfig
-i386                             allyesconfig
-s390                                defconfig
-x86_64                          rhel-8.3-rust
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a001
-i386                          randconfig-a003
-ia64                             allmodconfig
-arm                              allyesconfig
-s390                             allyesconfig
-i386                          randconfig-a005
-arm64                            allyesconfig
-
-clang tested configs:
-arm                  randconfig-r046-20221207
-hexagon              randconfig-r041-20221207
-hexagon              randconfig-r045-20221207
-i386                          randconfig-a013
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> xHCI specification still indicate HCE might not trigger interrupts:
+>  
+> Section 4.24.1 -Internal Errors
+> ...
+> "Software should implement an algorithm for checking the HCE flag if the xHC is
+> not responding."
+> 
+> Thanks
+> -Mathias
+> .
+> 
