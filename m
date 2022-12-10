@@ -2,68 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BBA64903F
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Dec 2022 19:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE5E64904A
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Dec 2022 19:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiLJSvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Dec 2022 13:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S229815AbiLJS51 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Dec 2022 13:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiLJSvk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Dec 2022 13:51:40 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D6C13F08
-        for <linux-usb@vger.kernel.org>; Sat, 10 Dec 2022 10:51:39 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-41469b38117so7010907b3.14
-        for <linux-usb@vger.kernel.org>; Sat, 10 Dec 2022 10:51:38 -0800 (PST)
+        with ESMTP id S229759AbiLJS50 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Dec 2022 13:57:26 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F9D178B2
+        for <linux-usb@vger.kernel.org>; Sat, 10 Dec 2022 10:57:25 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id fa4-20020a17090af0c400b002198d1328a0so10679191pjb.0
+        for <linux-usb@vger.kernel.org>; Sat, 10 Dec 2022 10:57:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNjo/hNK8qLFlMwZ8ZegI0COjgzAEcJunWK0T+UEL6s=;
-        b=keAff4XPcCZAnFkN2NZKprGHdJcmSIVbhFQ5oG2BekTSPxcYRLT/1+xu/jpAKLTIqG
-         3wIZMR5uDF7eG7y+hLd9/95AVFf6yBDhUfcjdYWzay/yvQwYxNaTThDbsbViQnC4wwB8
-         tFh21SHEFBZP8NPL4cH6KaPZ94XGHRK3ceOMszHNDyp/Um3u1RhRpQjeFlZZeNCjvvNz
-         CTPUkT4dqadJqR/0H8sVCTmJowJa3cboLqKxVqx7xXxTo8uiPpcs2LeClI5uvL23m6dg
-         ItrQsVYYrvFZnji/RIAY0zNImU0Ck6yO8JTIGQenBORuymZugqqNF1mrrcrIDeQFt0fr
-         ahGw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4UKuanvtTc6pBLj1c77ibxcLn9BN426eXwMqHxuibjo=;
+        b=ML1M5s5VvtzDIyDfN8hlW/dV9W+VN3zq55D8NbPMCZvLDHYaE9eruPUoVovKhEX67w
+         U/7cfOxj4e5mm6JW/wTPFU7bDkV4DgN13BD7HoyPH/wDN8vhveOXxkiDBPDNghrRqIBx
+         7FqXmcJPPQaNFs4EEM55OerBTTB1pYhkoJ5fK0VG1j4JOXCb25YXZvWOd77VOmbEHk0N
+         LhTWAwEVXVmX+T+4GZUG1dPO3ZOwSsp5vkO4Z2ScwU2jnX0dxCpA8/ulQuyBN1o9vqQ/
+         fwl19hgltCr+s2FDEldowkc87qMYsRXnaT/sjKrHOiNSwfhltd3y7Ab/YNcDKalNFq8Y
+         i7mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNjo/hNK8qLFlMwZ8ZegI0COjgzAEcJunWK0T+UEL6s=;
-        b=uQdThIukfXMuCV7JzKtyCMIcfZyT3Az5e++4JuUdEi7NCz4HmFZZM7d6wbSApfGOkj
-         H1u+Q31KbTZQFSiapz9hdRDW/15ZQwy2OnnbKUDyI2iGzC+uVqkY1uweLU/HzzlDAglj
-         LKoMlM5C5LiYWWaROwPAvvVF2amYbFX+ZTGF/5UkChz7jIFV7UVnPOF9OfdlL5Og20kF
-         EROsgAIM1SMYbmv71Xpsx/vE7faQTHl/LNGq3vw9NUN9kOfJE3jQyvU6q14PGhACt95d
-         AeykuwkuKG15UfXKHIHCRaAHEqrpSNmoaNOYNiVDgAq5z3HqjV0SRm6uCJZerGtBRtqo
-         W5YA==
-X-Gm-Message-State: ANoB5plUJRzMf/4UBZ/R3aIWoc+R3K3qTdZLXEwrRQzuJTm0XFdOok/0
-        Ah4cDDFiBXTcQek3GfiHqwIRrjo5RPU=
-X-Google-Smtp-Source: AA0mqf48DuCNPHAEKIO4OOfhrNesh8qOVuFrFokpUt2S89yeIiHoxp4n5ZgmnhOjQ6BuAw5+/D8+5O6LRUE=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:bcc6:f018:88f8:a199])
- (user=badhri job=sendgmr) by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
- g64-20020a815243000000b003d22098c5fbmr40932506ywb.121.1670698298325; Sat, 10
- Dec 2022 10:51:38 -0800 (PST)
-Date:   Sat, 10 Dec 2022 10:51:29 -0800
-In-Reply-To: <20221210185129.1094531-1-badhri@google.com>
-Mime-Version: 1.0
-References: <20221210185129.1094531-1-badhri@google.com>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221210185129.1094531-3-badhri@google.com>
-Subject: [PATCH v10 3/3] usb: typec: maxim_contaminant: Implement
- check_contaminant callback
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4UKuanvtTc6pBLj1c77ibxcLn9BN426eXwMqHxuibjo=;
+        b=f6bmOUvxhp2Q8EaqPgg2V2il6xtEzs1wIvKVu+y2S0G2UAcZBQy7jRbHdZ/FvqlapX
+         kiJY3ffGHeQKInXfj6RtWvFuNMXGyjcVFCizzWEqSP2CEkCWed+PAxvS5D7i5kOS4Zwg
+         L6wYJHVA1J7a917rvMPfnLwDNEsmCDGPDnL/WvU52Hc+89JpxYjLikzvL2o1xa9gADq9
+         CXPyrneY7JirNY2ji8rIcgBa9V7tgN5We0GdJ6DWAIyoHMKYDAFd4/mMi5YL8lXiBLSp
+         aLAxVGIv6++8dLXBdq0MIeXF3pL14gP3HVMkhNaJrtjdRxt3r3hVQ1tiEMSCJDZZGHch
+         kSrw==
+X-Gm-Message-State: ANoB5pkIbNpwz5BVTOm8srg7LY+zN8sl/2CNzVMxgsB0JLiaZaruii+6
+        7rXnADCK530vuVp9zfjSD/XlLeHNd6fAtmRDBLvl2A==
+X-Google-Smtp-Source: AA0mqf6hO4sWp/7QbotW9HzI2iOoThlF77BPGyuN2XOTa5xcCAo9KsvSFj04C1EqjRoLU/FbZHGs+RCTQ95LfH4qFUI=
+X-Received: by 2002:a17:90a:df8f:b0:219:20ed:101e with SMTP id
+ p15-20020a17090adf8f00b0021920ed101emr60787165pjv.215.1670698644221; Sat, 10
+ Dec 2022 10:57:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20221210061626.948426-1-badhri@google.com> <0e516c19-31f9-c2a7-97da-7c61e5d1d3f0@roeck-us.net>
+In-Reply-To: <0e516c19-31f9-c2a7-97da-7c61e5d1d3f0@roeck-us.net>
 From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
+Date:   Sat, 10 Dec 2022 10:56:47 -0800
+Message-ID: <CAPTae5LVSsfVdyMyGSpDJJmf=VjKqUY2LMTj1qrPu=gTRZWpXw@mail.gmail.com>
+Subject: Re: [PATCH v9 1/3] usb: typec: tcpm: Add callbacks to mitigate
+ wakeups due to contaminant
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,614 +70,256 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Maxim TCPC has additional ADCs and low current(1ua) current source
-to measure the impedance of CC and SBU pins. When tcpm invokes
-the check_contaminant callback, Maxim TCPC measures the impedance
-of the CC & SBU pins and when the impedance measured is less than
-1MOhm, it is assumed that USB-C port is contaminated. CC comparators
-are also checked to differentiate between presence of sink and
-contaminant. Once USB-C is deemed to be contaminated, MAXIM TCPC
-has additional hardware to disable normal DRP toggling cycle and
-enable 1ua on CC pins once every 2.4secs/4.8secs. Maxim TCPC
-interrupts AP once the impedance on the CC pin is above the
-1MOhm threshold. The Maxim tcpc driver then signals TCPM_PORT_CLEAN
-to restart toggling.
+On Sat, Dec 10, 2022 at 1:58 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 12/9/22 22:16, Badhri Jagan Sridharan wrote:
+> > On some of the TCPC implementations, when the Type-C port is exposed
+> > to contaminants, such as water, TCPC stops toggling while reporting OPEN
+> > either by the time TCPM reads CC pin status or during CC debounce
+> > window. This causes TCPM to be stuck in TOGGLING state. If TCPM is made
+> > to restart toggling, the behavior recurs causing redundant CPU wakeups
+> > till the USB-C port is free of contaminant.
+> >
+> > [206199.287817] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [206199.640337] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [206199.985789] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> >
+> > (or)
+> >
+> > [ 7853.867577] Start toggling
+> > [ 7853.889921] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [ 7855.698765] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> > [ 7855.698790] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+> > [ 7855.698826] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+> > [ 7855.703559] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
+> > [ 7855.856555] CC1: 0 -> 0, CC2: 5 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
+> > [ 7855.856581] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+> > [ 7855.856613] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 170 ms [rev3 NONE_AMS]
+> > [ 7856.027744] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 170 ms]
+> > [ 7856.181949] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [ 7856.187896] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [ 7857.645630] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [ 7857.647291] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> > [ 7857.647298] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+> > [ 7857.647310] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+> > [ 7857.808106] CC1: 0 -> 0, CC2: 5 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
+> > [ 7857.808123] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+> > [ 7857.808150] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 170 ms [rev3 NONE_AMS]
+> > [ 7857.978727] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 170 ms]
+> >
+> > To mitigate redundant TCPM wakeups, TCPCs which do have the needed hardware
+> > can implement the check_contaminant callback which is invoked by TCPM
+> > to evaluate for presence of contaminant. Lower level TCPC driver can
+> > restart toggling through TCPM_PORT_CLEAN event when the driver detects
+> > that USB-C port is free of contaminant. check_contaminant callback also passes
+> > the disconnect_while_debounce flag which when true denotes that the CC pins
+> > transitioned to OPEN state during the CC debounce window.
+> >
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> > Changes since v7:
+> > * None. Skipped versions by mistake.
+> > Changes since v6:
+> > * folded the debounce logic into tcpm state machine and removed tcpm
+> > * state export.
+> > * Added a helper to determine whether the port is in toggling state.
+> > * Excluded CHECK_CONTAMINANT from tcpm_log.
+> > Changes since v5:
+> > * Updated commit message. Removed change id.
+> > Changes since v4:
+> > * None
+> > Changes since v3:
+> > * None
+> > Changes since V2:
+> > * Offloaded tcpm from maintaining disconnect_while_debouncing logic
+> > * to lower level maxim tcpc driver based on feedback.
+> > ---
+> >   drivers/usb/typec/tcpm/tcpm.c | 51 ++++++++++++++++++++++++++++++++++-
+> >   include/linux/usb/tcpm.h      |  8 ++++++
+> >   2 files changed, 58 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 904c7b4ce2f0..5f514e5e6e2a 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -36,6 +36,7 @@
+> >   #define FOREACH_STATE(S)                    \
+> >       S(INVALID_STATE),                       \
+> >       S(TOGGLING),                    \
+> > +     S(CHECK_CONTAMINANT),                   \
+> >       S(SRC_UNATTACHED),                      \
+> >       S(SRC_ATTACH_WAIT),                     \
+> >       S(SRC_ATTACHED),                        \
+> > @@ -249,6 +250,7 @@ enum frs_typec_current {
+> >   #define TCPM_RESET_EVENT    BIT(2)
+> >   #define TCPM_FRS_EVENT              BIT(3)
+> >   #define TCPM_SOURCING_VBUS  BIT(4)
+> > +#define TCPM_PORT_CLEAN              BIT(5)
+> >
+> >   #define LOG_BUFFER_ENTRIES  1024
+> >   #define LOG_BUFFER_ENTRY_SIZE       128
+> > @@ -483,6 +485,13 @@ struct tcpm_port {
+> >        * SNK_READY for non-pd link.
+> >        */
+> >       bool slow_charger_loop;
+> > +
+> > +     /*
+> > +      * When true indicates that the lower level drivers indicate potential presence
+> > +      * of contaminant in the connector pins based on the tcpm state machine
+> > +      * transitions.
+> > +      */
+> > +     bool potential_contaminant;
+> >   #ifdef CONFIG_DEBUG_FS
+> >       struct dentry *dentry;
+> >       struct mutex logbuffer_lock;    /* log buffer access lock */
+> > @@ -647,7 +656,7 @@ static void tcpm_log(struct tcpm_port *port, const char *fmt, ...)
+> >       /* Do not log while disconnected and unattached */
+> >       if (tcpm_port_is_disconnected(port) &&
+> >           (port->state == SRC_UNATTACHED || port->state == SNK_UNATTACHED ||
+> > -          port->state == TOGGLING))
+> > +          port->state == TOGGLING || port->state == CHECK_CONTAMINANT))
+> >               return;
+> >
+> >       va_start(args, fmt);
+> > @@ -3904,15 +3913,28 @@ static void run_state_machine(struct tcpm_port *port)
+> >       unsigned int msecs;
+> >       enum tcpm_state upcoming_state;
+> >
+> > +     if (port->tcpc->check_contaminant && port->state != CHECK_CONTAMINANT)
+> > +             port->potential_contaminant = ((port->enter_state == SRC_ATTACH_WAIT &&
+> > +                                             port->state == SRC_UNATTACHED) ||
+> > +                                            (port->enter_state == SNK_ATTACH_WAIT &&
+> > +                                             port->state == SNK_UNATTACHED));
+> > +
+> >       port->enter_state = port->state;
+> >       switch (port->state) {
+> >       case TOGGLING:
+> >               break;
+> > +     case CHECK_CONTAMINANT:
+> > +             port->tcpc->check_contaminant(port->tcpc);
+> > +             break;
+> >       /* SRC states */
+> >       case SRC_UNATTACHED:
+> >               if (!port->non_pd_role_swap)
+> >                       tcpm_swap_complete(port, -ENOTCONN);
+> >               tcpm_src_detach(port);
+> > +             if (port->potential_contaminant) {
+> > +                     tcpm_set_state(port, CHECK_CONTAMINANT, 0);
+> > +                     break;
+> > +             }
+> >               if (tcpm_start_toggling(port, tcpm_rp_cc(port))) {
+> >                       tcpm_set_state(port, TOGGLING, 0);
+> >                       break;
+> > @@ -4150,6 +4172,10 @@ static void run_state_machine(struct tcpm_port *port)
+> >                       tcpm_swap_complete(port, -ENOTCONN);
+> >               tcpm_pps_complete(port, -ENOTCONN);
+> >               tcpm_snk_detach(port);
+> > +             if (port->potential_contaminant) {
+> > +                     tcpm_set_state(port, CHECK_CONTAMINANT, 0);
+> > +                     break;
+> > +             }
+> >               if (tcpm_start_toggling(port, TYPEC_CC_RD)) {
+> >                       tcpm_set_state(port, TOGGLING, 0);
+> >                       break;
+> > @@ -4926,6 +4952,9 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+> >               else if (tcpm_port_is_sink(port))
+> >                       tcpm_set_state(port, SNK_ATTACH_WAIT, 0);
+> >               break;
+> > +     case CHECK_CONTAMINANT:
+> > +             /* Wait for Toggling to be resumed */
+> > +             break;
+> >       case SRC_UNATTACHED:
+> >       case ACC_UNATTACHED:
+> >               if (tcpm_port_is_debug(port) || tcpm_port_is_audio(port) ||
+> > @@ -5425,6 +5454,11 @@ static void tcpm_pd_event_handler(struct kthread_work *work)
+> >                       port->vbus_source = true;
+> >                       _tcpm_pd_vbus_on(port);
+> >               }
+> > +             if (events & TCPM_PORT_CLEAN) {
+> > +                     tcpm_log(port, "port clean");
+> > +                     if (port->state == CHECK_CONTAMINANT)
+> > +                             tcpm_set_state(port, TOGGLING, 0);
+> > +             }
+> >
+>
+> I just realized: This never calls tcpm_start_toggling(), meaning the
+> start_toggling() callback will never be called. Worse, if the callback
+> doesn't exist the state machine may be stuck. How does the state machine
+> ever really start toggling in this situation ?
 
-Renaming tcpci_maxim.c to tcpci_maxim_core.c and moving reg read/write
-helper functions to the tcpci_maxim.h header file.
+Good points ! Fixed both the problems in v10.
+a) Only if the lower level callback exists, TCPM will transition into
+CHECK_CONTAMINANT state.
+port->potential_contaminant only set when
+port->tcpc->check_contaminant is installed. I have fixed this in the
+tcpci.c driver as well in v10.
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-Changes since v9:
-* None.
-Changes since V7:
-* None. Skipped versions by mistake.
-Changes since v6:
-* Refactored logic for check_contaminant and removed
-* is_potential_contaminant.
-Changes since v5:
-* None
-Changes since v4:
-* Missed committing local changes to fix ktest robot warnings.
-  Updated the patch in v5.
-Changes since v3:
-* Renamed functions and removed the unecessary EXPORT.
-* Fixed ktest robot warning.
-Changes since v2:
-* Implemented is_potential_contaminant to offload
-* disconnect_while_debouncing
-Changes since v1:
-* Renamed tcpci_maxim.c to tcpci_maxim_core.c and compiling
-  tcpci_maxim_core.o with maxim_contaminant.o as a single module
-  as suggested by Guenter Roeck
-* Got rid of exporting symbols for reg read/write helper functions
-  and moved them to header as suggested by Heikki Krogerus
-* Sqashed the commit which exposed the max_tcpci_read helper functions
-  into this one.
----
- drivers/usb/typec/tcpm/Makefile               |   1 +
- drivers/usb/typec/tcpm/maxim_contaminant.c    | 337 ++++++++++++++++++
- drivers/usb/typec/tcpm/tcpci_maxim.h          |  89 +++++
- .../{tcpci_maxim.c => tcpci_maxim_core.c}     |  53 ++-
- 4 files changed, 448 insertions(+), 32 deletions(-)
- create mode 100644 drivers/usb/typec/tcpm/maxim_contaminant.c
- create mode 100644 drivers/usb/typec/tcpm/tcpci_maxim.h
- rename drivers/usb/typec/tcpm/{tcpci_maxim.c => tcpci_maxim_core.c} (93%)
+b) tcpm now invokes tcpm_start_toggling() before transitioning into
+TOGGLING from CHECK_CONTAMINANT state
 
-diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
-index 906d9dced8e7..08e57bb499cb 100644
---- a/drivers/usb/typec/tcpm/Makefile
-+++ b/drivers/usb/typec/tcpm/Makefile
-@@ -8,3 +8,4 @@ obj-$(CONFIG_TYPEC_RT1711H)		+= tcpci_rt1711h.o
- obj-$(CONFIG_TYPEC_MT6360)		+= tcpci_mt6360.o
- obj-$(CONFIG_TYPEC_TCPCI_MT6370)	+= tcpci_mt6370.o
- obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o
-+tcpci_maxim-y				+= tcpci_maxim_core.o maxim_contaminant.o
-diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/typec/tcpm/maxim_contaminant.c
-new file mode 100644
-index 000000000000..23b5ed65cba8
---- /dev/null
-+++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
-@@ -0,0 +1,337 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2022 Google, Inc
-+ *
-+ * USB-C module to reduce wakeups due to contaminants.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/irqreturn.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/usb/tcpci.h>
-+#include <linux/usb/tcpm.h>
-+#include <linux/usb/typec.h>
-+
-+#include "tcpci_maxim.h"
-+
-+enum fladc_select {
-+	CC1_SCALE1 = 1,
-+	CC1_SCALE2,
-+	CC2_SCALE1,
-+	CC2_SCALE2,
-+	SBU1,
-+	SBU2,
-+};
-+
-+#define FLADC_1uA_LSB_MV		25
-+/* High range CC */
-+#define FLADC_CC_HIGH_RANGE_LSB_MV	208
-+/* Low range CC */
-+#define FLADC_CC_LOW_RANGE_LSB_MV      126
-+
-+/* 1uA current source */
-+#define FLADC_CC_SCALE1			1
-+/* 5 uA current source */
-+#define FLADC_CC_SCALE2			5
-+
-+#define FLADC_1uA_CC_OFFSET_MV		300
-+#define FLADC_CC_HIGH_RANGE_OFFSET_MV	624
-+#define FLADC_CC_LOW_RANGE_OFFSET_MV	378
-+
-+#define CONTAMINANT_THRESHOLD_SBU_K	1000
-+#define	CONTAMINANT_THRESHOLD_CC_K	1000
-+
-+#define READ1_SLEEP_MS			10
-+#define READ2_SLEEP_MS			5
-+
-+#define STATUS_CHECK(reg, mask, val)	(((reg) & (mask)) == (val))
-+
-+#define IS_CC_OPEN(cc_status) \
-+	(STATUS_CHECK((cc_status), TCPC_CC_STATUS_CC1_MASK << TCPC_CC_STATUS_CC1_SHIFT,  \
-+		      TCPC_CC_STATE_SRC_OPEN) && STATUS_CHECK((cc_status),               \
-+							      TCPC_CC_STATUS_CC2_MASK << \
-+							      TCPC_CC_STATUS_CC2_SHIFT,  \
-+							      TCPC_CC_STATE_SRC_OPEN))
-+
-+static int max_contaminant_adc_to_mv(struct max_tcpci_chip *chip, enum fladc_select channel,
-+				     bool ua_src, u8 fladc)
-+{
-+	/* SBU channels only have 1 scale with 1uA. */
-+	if ((ua_src && (channel == CC1_SCALE2 || channel == CC2_SCALE2 || channel == SBU1 ||
-+			channel == SBU2)))
-+		/* Mean of range */
-+		return FLADC_1uA_CC_OFFSET_MV + (fladc * FLADC_1uA_LSB_MV);
-+	else if (!ua_src && (channel == CC1_SCALE1 || channel == CC2_SCALE1))
-+		return FLADC_CC_HIGH_RANGE_OFFSET_MV + (fladc * FLADC_CC_HIGH_RANGE_LSB_MV);
-+	else if (!ua_src && (channel == CC1_SCALE2 || channel == CC2_SCALE2))
-+		return FLADC_CC_LOW_RANGE_OFFSET_MV + (fladc * FLADC_CC_LOW_RANGE_LSB_MV);
-+
-+	dev_err(chip->dev, "ADC ERROR: SCALE UNKNOWN");
-+
-+	return -EINVAL;
-+}
-+
-+static int max_contaminant_read_adc_mv(struct max_tcpci_chip *chip, enum fladc_select channel,
-+				       int sleep_msec, bool raw, bool ua_src)
-+{
-+	struct regmap *regmap = chip->data.regmap;
-+	u8 fladc;
-+	int ret;
-+
-+	/* Channel & scale select */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCINSEL_MASK,
-+				 channel << ADC_CHANNEL_OFFSET);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable ADC */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCEN, ADCEN);
-+	if (ret < 0)
-+		return ret;
-+
-+	usleep_range(sleep_msec * 1000, (sleep_msec + 1) * 1000);
-+	ret = max_tcpci_read8(chip, TCPC_VENDOR_FLADC_STATUS, &fladc);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Disable ADC */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCEN, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_ADC_CTRL1, ADCINSEL_MASK, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!raw)
-+		return max_contaminant_adc_to_mv(chip, channel, ua_src, fladc);
-+	else
-+		return fladc;
-+}
-+
-+static int max_contaminant_read_resistance_kohm(struct max_tcpci_chip *chip,
-+						enum fladc_select channel, int sleep_msec, bool raw)
-+{
-+	struct regmap *regmap = chip->data.regmap;
-+	int mv;
-+	int ret;
-+
-+	if (channel == CC1_SCALE1 || channel == CC2_SCALE1 || channel == CC1_SCALE2 ||
-+	    channel == CC2_SCALE2) {
-+		/* Enable 1uA current source */
-+		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCLPMODESEL_MASK,
-+					 ULTRA_LOW_POWER_MODE);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* Enable 1uA current source */
-+		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL_MASK, UA_1_SRC);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* OVP disable */
-+		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCOVPDIS, CCOVPDIS);
-+		if (ret < 0)
-+			return ret;
-+
-+		mv = max_contaminant_read_adc_mv(chip, channel, sleep_msec, raw, true);
-+		/* OVP enable */
-+		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCOVPDIS, 0);
-+		if (ret < 0)
-+			return ret;
-+		/* returns KOhm as 1uA source is used. */
-+		return mv;
-+	}
-+
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, SBUOVPDIS, SBUOVPDIS);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* SBU switches auto configure when channel is selected. */
-+	/* Enable 1ua current source */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, SBURPCTRL, SBURPCTRL);
-+	if (ret < 0)
-+		return ret;
-+
-+	mv = max_contaminant_read_adc_mv(chip, channel, sleep_msec, raw, true);
-+	/* Disable current source */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, SBURPCTRL, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* OVP disable */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, SBUOVPDIS, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	return mv;
-+}
-+
-+static void max_contaminant_read_comparators(struct max_tcpci_chip *chip, u8 *vendor_cc_status2_cc1,
-+					     u8 *vendor_cc_status2_cc2)
-+{
-+	struct regmap *regmap = chip->data.regmap;
-+	int ret;
-+
-+	/* Enable 80uA source */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL_MASK, UA_80_SRC);
-+	if (ret < 0)
-+		return;
-+
-+	/* Enable comparators */
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL1, CCCOMPEN, CCCOMPEN);
-+	if (ret < 0)
-+		return;
-+
-+	/* Sleep to allow comparators settle */
-+	usleep_range(5000, 6000);
-+	ret = regmap_update_bits(regmap, TCPC_TCPC_CTRL, TCPC_TCPC_CTRL_ORIENTATION, PLUG_ORNT_CC1);
-+	if (ret < 0)
-+		return;
-+
-+	usleep_range(5000, 6000);
-+	ret = max_tcpci_read8(chip, VENDOR_CC_STATUS2, vendor_cc_status2_cc1);
-+	if (ret < 0)
-+		return;
-+
-+	ret = regmap_update_bits(regmap, TCPC_TCPC_CTRL, TCPC_TCPC_CTRL_ORIENTATION, PLUG_ORNT_CC2);
-+	if (ret < 0)
-+		return;
-+
-+	usleep_range(5000, 6000);
-+	ret = max_tcpci_read8(chip, VENDOR_CC_STATUS2, vendor_cc_status2_cc2);
-+	if (ret < 0)
-+		return;
-+
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL1, CCCOMPEN, 0);
-+	if (ret < 0)
-+		return;
-+	regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCRPCTRL_MASK, 0);
-+}
-+
-+static int max_contaminant_detect_contaminant(struct max_tcpci_chip *chip)
-+{
-+	int cc1_k, cc2_k, sbu1_k, sbu2_k;
-+	u8 vendor_cc_status2_cc1 = 0xff, vendor_cc_status2_cc2 = 0xff;
-+	u8 role_ctrl = 0, role_ctrl_backup = 0;
-+	int inferred_state = NOT_DETECTED;
-+
-+	max_tcpci_read8(chip, TCPC_ROLE_CTRL, &role_ctrl);
-+	role_ctrl_backup = role_ctrl;
-+	role_ctrl = 0x0F;
-+	max_tcpci_write8(chip, TCPC_ROLE_CTRL, role_ctrl);
-+
-+	cc1_k = max_contaminant_read_resistance_kohm(chip, CC1_SCALE2, READ1_SLEEP_MS, false);
-+	cc2_k = max_contaminant_read_resistance_kohm(chip, CC2_SCALE2, READ2_SLEEP_MS, false);
-+
-+	sbu1_k = max_contaminant_read_resistance_kohm(chip, SBU1, READ1_SLEEP_MS, false);
-+	sbu2_k = max_contaminant_read_resistance_kohm(chip, SBU2, READ2_SLEEP_MS, false);
-+	max_contaminant_read_comparators(chip, &vendor_cc_status2_cc1, &vendor_cc_status2_cc2);
-+
-+	if ((!(CC1_VUFP_RD0P5 & vendor_cc_status2_cc1) ||
-+	     !(CC2_VUFP_RD0P5 & vendor_cc_status2_cc2)) &&
-+	    !(CC1_VUFP_RD0P5 & vendor_cc_status2_cc1 && CC2_VUFP_RD0P5 & vendor_cc_status2_cc2))
-+		inferred_state = SINK;
-+	else if ((cc1_k < CONTAMINANT_THRESHOLD_CC_K || cc2_k < CONTAMINANT_THRESHOLD_CC_K) &&
-+		 (sbu1_k < CONTAMINANT_THRESHOLD_SBU_K || sbu2_k < CONTAMINANT_THRESHOLD_SBU_K))
-+		inferred_state = DETECTED;
-+
-+	if (inferred_state == NOT_DETECTED)
-+		max_tcpci_write8(chip, TCPC_ROLE_CTRL, role_ctrl_backup);
-+	else
-+		max_tcpci_write8(chip, TCPC_ROLE_CTRL, (TCPC_ROLE_CTRL_DRP | 0xA));
-+
-+	return inferred_state;
-+}
-+
-+static int max_contaminant_enable_dry_detection(struct max_tcpci_chip *chip)
-+{
-+	struct regmap *regmap = chip->data.regmap;
-+	u8 temp;
-+	int ret;
-+
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL3, CCWTRDEB_MASK | CCWTRSEL_MASK
-+				    | WTRCYCLE_MASK, CCWTRDEB_1MS << CCWTRDEB_SHIFT |
-+				    CCWTRSEL_1V << CCWTRSEL_SHIFT | WTRCYCLE_4_8_S <<
-+				    WTRCYCLE_SHIFT);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(regmap, TCPC_ROLE_CTRL, TCPC_ROLE_CTRL_DRP, TCPC_ROLE_CTRL_DRP);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL1, CCCONNDRY, CCCONNDRY);
-+	if (ret < 0)
-+		return ret;
-+	ret = max_tcpci_read8(chip, TCPC_VENDOR_CC_CTRL1, &temp);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCLPMODESEL_MASK,
-+				 ULTRA_LOW_POWER_MODE);
-+	if (ret < 0)
-+		return ret;
-+	ret = max_tcpci_read8(chip, TCPC_VENDOR_CC_CTRL2, &temp);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable Look4Connection before sending the command */
-+	ret = regmap_update_bits(regmap, TCPC_TCPC_CTRL, TCPC_TCPC_CTRL_EN_LK4CONN_ALRT,
-+				 TCPC_TCPC_CTRL_EN_LK4CONN_ALRT);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = max_tcpci_write8(chip, TCPC_COMMAND, TCPC_CMD_LOOK4CONNECTION);
-+	if (ret < 0)
-+		return ret;
-+	return 0;
-+}
-+
-+bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect_while_debounce)
-+{
-+	u8 cc_status, pwr_cntl;
-+
-+	max_tcpci_read8(chip, TCPC_CC_STATUS, &cc_status);
-+	max_tcpci_read8(chip, TCPC_POWER_CTRL, &pwr_cntl);
-+
-+	if (chip->contaminant_state == NOT_DETECTED || chip->contaminant_state == SINK) {
-+		if (!disconnect_while_debounce)
-+			msleep(100);
-+
-+		max_tcpci_read8(chip, TCPC_CC_STATUS, &cc_status);
-+		if (IS_CC_OPEN(cc_status)) {
-+			u8 role_ctrl, role_ctrl_backup;
-+
-+			max_tcpci_read8(chip, TCPC_ROLE_CTRL, &role_ctrl);
-+			role_ctrl_backup = role_ctrl;
-+			role_ctrl |= 0x0F;
-+			role_ctrl &= ~(TCPC_ROLE_CTRL_DRP);
-+			max_tcpci_write8(chip, TCPC_ROLE_CTRL, role_ctrl);
-+
-+			chip->contaminant_state = max_contaminant_detect_contaminant(chip);
-+
-+			max_tcpci_write8(chip, TCPC_ROLE_CTRL, role_ctrl_backup);
-+			if (chip->contaminant_state == DETECTED) {
-+				max_contaminant_enable_dry_detection(chip);
-+				return true;
-+			}
-+		}
-+		return false;
-+	} else if (chip->contaminant_state == DETECTED) {
-+		if (STATUS_CHECK(cc_status, TCPC_CC_STATUS_TOGGLING, 0)) {
-+			chip->contaminant_state = max_contaminant_detect_contaminant(chip);
-+			if (chip->contaminant_state == DETECTED) {
-+				max_contaminant_enable_dry_detection(chip);
-+				return true;
-+			}
-+		}
-+	}
-+
-+	return false;
-+}
-+
-+MODULE_DESCRIPTION("MAXIM TCPC CONTAMINANT Module");
-+MODULE_AUTHOR("Badhri Jagan Sridharan <badhri@google.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-new file mode 100644
-index 000000000000..2c1c4d161b0d
---- /dev/null
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-@@ -0,0 +1,89 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright 2022 Google, Inc
-+ *
-+ * MAXIM TCPC header file.
-+ */
-+#ifndef TCPCI_MAXIM_H_
-+#define TCPCI_MAXIM_H_
-+
-+#define VENDOR_CC_STATUS2                       0x85
-+#define CC1_VUFP_RD0P5                          BIT(1)
-+#define CC2_VUFP_RD0P5                          BIT(5)
-+#define TCPC_VENDOR_FLADC_STATUS                0x89
-+
-+#define TCPC_VENDOR_CC_CTRL1                    0x8c
-+#define CCCONNDRY                               BIT(7)
-+#define CCCOMPEN                                BIT(5)
-+
-+#define TCPC_VENDOR_CC_CTRL2                    0x8d
-+#define SBUOVPDIS                               BIT(7)
-+#define CCOVPDIS                                BIT(6)
-+#define SBURPCTRL                               BIT(5)
-+#define CCLPMODESEL_MASK                        GENMASK(4, 3)
-+#define ULTRA_LOW_POWER_MODE                    BIT(3)
-+#define CCRPCTRL_MASK                           GENMASK(2, 0)
-+#define UA_1_SRC                                1
-+#define UA_80_SRC                               3
-+
-+#define TCPC_VENDOR_CC_CTRL3                    0x8e
-+#define CCWTRDEB_MASK                           GENMASK(7, 6)
-+#define CCWTRDEB_SHIFT                          6
-+#define CCWTRDEB_1MS                            1
-+#define CCWTRSEL_MASK                           GENMASK(5, 3)
-+#define CCWTRSEL_SHIFT                          3
-+#define CCWTRSEL_1V                             0x4
-+#define CCLADDERDIS                             BIT(2)
-+#define WTRCYCLE_MASK                           BIT(0)
-+#define WTRCYCLE_SHIFT                          0
-+#define WTRCYCLE_2_4_S                          0
-+#define WTRCYCLE_4_8_S                          1
-+
-+#define TCPC_VENDOR_ADC_CTRL1                   0x91
-+#define ADCINSEL_MASK                           GENMASK(7, 5)
-+#define ADC_CHANNEL_OFFSET                      5
-+#define ADCEN                                   BIT(0)
-+
-+enum contamiant_state {
-+	NOT_DETECTED,
-+	DETECTED,
-+	SINK,
-+};
-+
-+/*
-+ * @potential_contaminant:
-+ *		Last returned result to tcpm indicating whether the TCPM port
-+ *		has potential contaminant.
-+ */
-+struct max_tcpci_chip {
-+	struct tcpci_data data;
-+	struct tcpci *tcpci;
-+	struct device *dev;
-+	struct i2c_client *client;
-+	struct tcpm_port *port;
-+	enum contamiant_state contaminant_state;
-+};
-+
-+static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-+{
-+	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u16));
-+}
-+
-+static inline int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
-+{
-+	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u16));
-+}
-+
-+static inline int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
-+{
-+	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u8));
-+}
-+
-+static inline int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
-+{
-+	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8));
-+}
-+
-+bool max_contaminant_is_contaminant(struct max_tcpci_chip *chip, bool disconnect_while_debounce);
-+
-+#endif  // TCPCI_MAXIM_H_
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-similarity index 93%
-rename from drivers/usb/typec/tcpm/tcpci_maxim.c
-rename to drivers/usb/typec/tcpm/tcpci_maxim_core.c
-index 83e140ffcc3e..f32cda2a5e3a 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: GPL-2.0
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-- * Copyright (C) 2020, Google LLC
-+ * Copyright (C) 2020 - 2022, Google LLC
-  *
-  * MAXIM TCPCI based TCPC driver
-  */
-@@ -15,6 +15,8 @@
- #include <linux/usb/tcpm.h>
- #include <linux/usb/typec.h>
- 
-+#include "tcpci_maxim.h"
-+
- #define PD_ACTIVITY_TIMEOUT_MS				10000
- 
- #define TCPC_VENDOR_ALERT				0x80
-@@ -39,14 +41,6 @@
- #define MAX_BUCK_BOOST_SOURCE				0xa
- #define MAX_BUCK_BOOST_SINK				0x5
- 
--struct max_tcpci_chip {
--	struct tcpci_data data;
--	struct tcpci *tcpci;
--	struct device *dev;
--	struct i2c_client *client;
--	struct tcpm_port *port;
--};
--
- static const struct regmap_range max_tcpci_tcpci_range[] = {
- 	regmap_reg_range(0x00, 0x95)
- };
-@@ -68,26 +62,6 @@ static struct max_tcpci_chip *tdata_to_max_tcpci(struct tcpci_data *tdata)
- 	return container_of(tdata, struct max_tcpci_chip, data);
- }
- 
--static int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
--{
--	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u16));
--}
--
--static int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
--{
--	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u16));
--}
--
--static int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
--{
--	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u8));
--}
--
--static int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
--{
--	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8));
--}
--
- static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
- {
- 	u16 alert_mask = 0;
-@@ -348,8 +322,14 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
- 	if (status & TCPC_ALERT_VBUS_DISCNCT)
- 		tcpm_vbus_change(chip->port);
- 
--	if (status & TCPC_ALERT_CC_STATUS)
--		tcpm_cc_change(chip->port);
-+	if (status & TCPC_ALERT_CC_STATUS) {
-+		if (chip->contaminant_state == DETECTED || tcpm_port_is_toggling(chip->port)) {
-+			if (!max_contaminant_is_contaminant(chip, false))
-+				tcpm_port_clean(chip->port);
-+		} else {
-+			tcpm_cc_change(chip->port);
-+		}
-+	}
- 
- 	if (status & TCPC_ALERT_POWER_STATUS)
- 		process_power_status(chip);
-@@ -438,6 +418,14 @@ static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
- 	return -1;
- }
- 
-+static void max_tcpci_check_contaminant(struct tcpci *tcpci, struct tcpci_data *tdata)
-+{
-+	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
-+
-+	if (!max_contaminant_is_contaminant(chip, true))
-+		tcpm_port_clean(chip->port);
-+}
-+
- static int max_tcpci_probe(struct i2c_client *client)
- {
- 	int ret;
-@@ -471,6 +459,7 @@ static int max_tcpci_probe(struct i2c_client *client)
- 	chip->data.auto_discharge_disconnect = true;
- 	chip->data.vbus_vsafe0v = true;
- 	chip->data.set_partner_usb_comm_capable = max_tcpci_set_partner_usb_comm_capable;
-+	chip->data.check_contaminant = max_tcpci_check_contaminant;
- 
- 	max_tcpci_init_regs(chip);
- 	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
+Thanks,
+Badhri
 
+>
+> Thanks,
+> Guenter
+>
+> >               spin_lock(&port->pd_event_lock);
+> >       }
+> > @@ -5477,6 +5511,21 @@ void tcpm_sourcing_vbus(struct tcpm_port *port)
+> >   }
+> >   EXPORT_SYMBOL_GPL(tcpm_sourcing_vbus);
+> >
+> > +void tcpm_port_clean(struct tcpm_port *port)
+> > +{
+> > +     spin_lock(&port->pd_event_lock);
+> > +     port->pd_events |= TCPM_PORT_CLEAN;
+> > +     spin_unlock(&port->pd_event_lock);
+> > +     kthread_queue_work(port->wq, &port->event_work);
+> > +}
+> > +EXPORT_SYMBOL_GPL(tcpm_port_clean);
+> > +
+> > +bool tcpm_port_is_toggling(struct tcpm_port *port)
+> > +{
+> > +     return port->port_type == TYPEC_PORT_DRP && port->state == TOGGLING;
+> > +}
+> > +EXPORT_SYMBOL_GPL(tcpm_port_is_toggling);
+> > +
+> >   static void tcpm_enable_frs_work(struct kthread_work *work)
+> >   {
+> >       struct tcpm_port *port = container_of(work, struct tcpm_port, enable_frs);
+> > diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> > index bffc8d3e14ad..ab7ca872950b 100644
+> > --- a/include/linux/usb/tcpm.h
+> > +++ b/include/linux/usb/tcpm.h
+> > @@ -114,6 +114,11 @@ enum tcpm_transmit_type {
+> >    *              Optional; The USB Communications Capable bit indicates if port
+> >    *              partner is capable of communication over the USB data lines
+> >    *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
+> > + * @check_contaminant:
+> > + *           Optional; The callback is called when CC pins report open status
+> > + *           at the end of the deboumce period or when the port is still
+> > + *           toggling. Chip level drivers are expected to check for contaminant
+> > + *           and call tcpm_clean_port when the port is clean.
+> >    */
+> >   struct tcpc_dev {
+> >       struct fwnode_handle *fwnode;
+> > @@ -148,6 +153,7 @@ struct tcpc_dev {
+> >                                                bool pps_active, u32 requested_vbus_voltage);
+> >       bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+> >       void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
+> > +     void (*check_contaminant)(struct tcpc_dev *dev);
+> >   };
+> >
+> >   struct tcpm_port;
+> > @@ -165,5 +171,7 @@ void tcpm_pd_transmit_complete(struct tcpm_port *port,
+> >                              enum tcpm_transmit_status status);
+> >   void tcpm_pd_hard_reset(struct tcpm_port *port);
+> >   void tcpm_tcpc_reset(struct tcpm_port *port);
+> > +void tcpm_port_clean(struct tcpm_port *port);
+> > +bool tcpm_port_is_toggling(struct tcpm_port *port);
+> >
+> >   #endif /* __LINUX_USB_TCPM_H */
+> >
+> > base-commit: 1524ceb14dd5ebd6f724d993c5ec1a9a8d445d8e
+>
