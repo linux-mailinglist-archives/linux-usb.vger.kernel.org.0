@@ -2,143 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5331648E44
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Dec 2022 11:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4067E648FA0
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Dec 2022 17:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiLJK7h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Dec 2022 05:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S229743AbiLJQID (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Dec 2022 11:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLJK7g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Dec 2022 05:59:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B49DBCA4;
-        Sat, 10 Dec 2022 02:59:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F84460B2B;
-        Sat, 10 Dec 2022 10:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1BDC433EF;
-        Sat, 10 Dec 2022 10:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670669974;
-        bh=9Ba55FamUQD94n7+bqRFC7LNfipEY1H++sF1ApKOw4c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HldOCBwKAo1ZvYfSMLipFcFrb6nAK5WqavEa4FPhS3b0iQa5y3I7D0af7P5C3v3rd
-         /Zgk8XLopjlqjBaM2Dp9l84a/1a1+azpRSBry9EcMxLaKwjJSN/r4ilmjIaaxxwnVR
-         z0L0wFTLNiy8vwesv673SaCpBH6Zmc3kBVN2hx77Frw7J9lP2yXX3jbI+SSi0EM1rX
-         6CpIFoLkvRN9dQ79EEXnNjZyhR/N1HVxh7bPbwFdGdLdFEf0oq7I5cQpME+4v2042u
-         Hzxg+xNfJVc2Xss/kU6AwkvuVe0LvXW0oZ/wwhqtP/DlT+I+KKVODbszwNT3YbN60i
-         5zKJ03RmH3sdw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p3xaB-0005xq-OH; Sat, 10 Dec 2022 11:59:52 +0100
-Date:   Sat, 10 Dec 2022 11:59:51 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Peter Fink <pfink@christ-es.de>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Christoph =?utf-8?Q?M=C3=B6hring?= <cmoehring@christ-es.de>,
-        John Whittington <git@jbrengineering.co.uk>,
-        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Maximilian Schneider <max@schneidersoft.net>,
-        Daniel Berglund <db@kvaser.com>,
-        Olivier Sobrie <olivier@sobrie.be>,
-        Remigiusz =?utf-8?B?S2/FgsWCxIV0YWo=?= 
-        <remigiusz.kollataj@mobica.com>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] can: ems_usb: ems_usb_disconnect(): fix NULL
- pointer dereference
-Message-ID: <Y5Rmp66zvlwykRLq@hovoldconsulting.com>
-References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
- <20221210090157.793547-1-mailhol.vincent@wanadoo.fr>
- <20221210090157.793547-2-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S229538AbiLJQIC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Dec 2022 11:08:02 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB6B2715;
+        Sat, 10 Dec 2022 08:08:01 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1447c7aa004so3358293fac.11;
+        Sat, 10 Dec 2022 08:08:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=X90OAossxf96hzJz48GuBDU3cdz+acl5ootwmwc92vw=;
+        b=EHgs57gMzUu90cUfjVA3PB0/tuIxO++M6Haf1jYx+t+LDQhLIvZFW6+BTgz/p1z+Ho
+         LoqkJUAg3ZfNBMFemrlo/KqJmpYCEibrS8fVUlAwtjSqyhXGPb1uvOvCwp51mHHZD1Cb
+         palK4A9a3TgXmvd+sy5u3g4X3y4JFGnE7XryUptj0JMwhGxEBhkmfPryHRCZpDGKPOrS
+         /K8WS1nR246i6VQQcw5v/vgve3teTUso90HZDUkFmdbqEPvS97PooxSOHlilYPOGpLm5
+         cnuMICcr1ygrrN6+n7YIq62QtqvobYW5JR8nkBxMOKap2O7M2hZIZpWipA4f4IeEMAwe
+         Sraw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X90OAossxf96hzJz48GuBDU3cdz+acl5ootwmwc92vw=;
+        b=WYehI2BqLuUI1EGlYwseT4Gfxk/v494bI+p1dgbXH7amEtc5LNlz2GSf43omSpCQGJ
+         uhvVthRnlQrLacO4ZtAXcET6EcoNxbgmS+YrXL3vIVOnGoWrzge935AiqPhc2pdzofW9
+         cXZLKmzaAfhlvOELQx0juXS5hM5miNCpNeyU+K2bK0qq8sAHgTErlVxSo9MVjH6V2dIq
+         Chi60XQm89+g2ffbKh7L8+qxVDxT7/oc3qSprP7i5UhI5yChenxYij8ZxGh/ZoEg5JKA
+         uKIeKiZ2ShvjzqGml9JsUsZITaVs+2gXPHNYa4T++xsi9iZBHCAlx3Ld9HC5CeFwGhtA
+         FMiA==
+X-Gm-Message-State: ANoB5pnk3+v93XcxNkb0uonOHxcijHMzF/waTgoxhs/+2oVVT/tFohwK
+        LcL36mgXuj87IbXOsgjhHUzYqUNCE50=
+X-Google-Smtp-Source: AA0mqf4/enyviU4doy1gifL84yCFW3yO4ZaqSEPM08OXpTK0pkiokzUBnZUnLtcEDEIMPOIuFj+enA==
+X-Received: by 2002:a05:6870:88aa:b0:137:3ad9:acca with SMTP id m42-20020a05687088aa00b001373ad9accamr6714430oam.54.1670688480187;
+        Sat, 10 Dec 2022 08:08:00 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id kw32-20020a056870ac2000b0013b911d5960sm2432837oab.49.2022.12.10.08.07.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Dec 2022 08:07:59 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <52ed8d2f-813f-b9b6-238a-b7764f488924@roeck-us.net>
+Date:   Sat, 10 Dec 2022 08:07:58 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221210090157.793547-2-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 2/3] usb: typec: tcpci: Add callback for evaluating
+ contaminant presence
+Content-Language: en-US
+To:     Badhri Jagan Sridharan <badhri@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+References: <20221210061626.948426-1-badhri@google.com>
+ <20221210061626.948426-2-badhri@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221210061626.948426-2-badhri@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 10, 2022 at 06:01:49PM +0900, Vincent Mailhol wrote:
-> ems_usb sets the driver's priv data to NULL before waiting for the
-> completion of outsdanding urbs. This can results in NULL pointer
-> dereference, c.f. [1] and [2].
-
-Please stop making hand-wavy claims like this. There is no risk for a
-NULL-pointer deference here, and if you think otherwise you need to
-explain how that can happen in detail for each driver.
-
-> Remove the call to usb_set_intfdata(intf, NULL). The core will take
-> care of setting it to NULL after ems_usb_disconnect() at [3].
+On 12/9/22 22:16, Badhri Jagan Sridharan wrote:
+> This change adds callback to evaluate presence of contaminant in
+> the TCPCI layer.
 > 
-> [1] c/27ef17849779 ("usb: add usb_set_intfdata() documentation")
-> Link: https://git.kernel.org/gregkh/usb/c/27ef17849779
-
-The claim in this commit is not correct either.
-
-> [2] thread about usb_set_intfdata() on linux-usb mailing.
-> Link: https://lore.kernel.org/linux-usb/Y4OD70GD4KnoRk0k@rowland.harvard.edu/
-> 
-> [3] function usb_unbind_interface() from drivers/usb/core/driver.c
-> Link: https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L497
-> 
-> Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB interface")
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 > ---
->  drivers/net/can/usb/ems_usb.c | 2 --
->  1 file changed, 2 deletions(-)
+> Changes since v7:
+> * None. Skipped versions by mistake.
+> Changes since v6:
+> * Removed is_potential_contaminant callback
+> Changes since v5:
+> * None
+> Changes since v4:
+> * None
+> Changes since v3:
+> * None
+> Changes since v2:
+> * Added tcpci_is_potential_contaminant to offload
+> * disconnect_while_debounce logic
+> ---
+>   drivers/usb/typec/tcpm/tcpci.c | 9 +++++++++
+>   include/linux/usb/tcpci.h      | 7 +++++++
+>   2 files changed, 16 insertions(+)
 > 
-> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
-> index 050c0b49938a..c64cb40ac8de 100644
-> --- a/drivers/net/can/usb/ems_usb.c
-> +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -1062,8 +1062,6 @@ static void ems_usb_disconnect(struct usb_interface *intf)
->  {
->  	struct ems_usb *dev = usb_get_intfdata(intf);
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index fe781a38dc82..c8e78c13c9c4 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -403,6 +403,14 @@ static void tcpci_frs_sourcing_vbus(struct tcpc_dev *dev)
+>   		tcpci->data->frs_sourcing_vbus(tcpci, tcpci->data);
+>   }
+>   
+> +static void tcpci_check_contaminant(struct tcpc_dev *dev)
+> +{
+> +	struct tcpci *tcpci = tcpc_to_tcpci(dev);
+> +
+> +	if (tcpci->data->check_contaminant)
+> +		tcpci->data->check_contaminant(tcpci, tcpci->data);
+> +}
+> +
 
-The interface data pointer is only used in this function so there is no
-risk for any NULL pointer dereference here. I only checked one of the
-other drivers you patch, but I'm pretty sure all of your claims about
-fixing NULL-pointer dereferences in this series are equally bogus.
+With this callback to tcpm in place, how does tcpm ever leave the
+CHECK_CONTAMINANT state if the low level driver does not support
+the callback ?
 
->  
-> -	usb_set_intfdata(intf, NULL);
-> -
->  	if (dev) {
->  		unregister_netdev(dev->netdev);
+Thanks,
+Guenter
 
-Johan
+
+>   static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
+>   {
+>   	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+> @@ -777,6 +785,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
+>   	tcpci->tcpc.enable_frs = tcpci_enable_frs;
+>   	tcpci->tcpc.frs_sourcing_vbus = tcpci_frs_sourcing_vbus;
+>   	tcpci->tcpc.set_partner_usb_comm_capable = tcpci_set_partner_usb_comm_capable;
+> +	tcpci->tcpc.check_contaminant = tcpci_check_contaminant;
+>   
+>   	if (tcpci->data->auto_discharge_disconnect) {
+>   		tcpci->tcpc.enable_auto_vbus_discharge = tcpci_enable_auto_vbus_discharge;
+> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
+> index 17657451c762..85e95a3251d3 100644
+> --- a/include/linux/usb/tcpci.h
+> +++ b/include/linux/usb/tcpci.h
+> @@ -188,6 +188,12 @@ struct tcpci;
+>    *		Optional; The USB Communications Capable bit indicates if port
+>    *		partner is capable of communication over the USB data lines
+>    *		(e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
+> + * @check_contaminant:
+> + *		Optional; The callback is invoked when chiplevel drivers indicated
+> + *		that the USB port needs to be checked for contaminant presence.
+> + *		Chip level drivers are expected to check for contaminant and call
+> + *		tcpm_clean_port when the port is clean to put the port back into
+> + *		toggling state.
+>    */
+>   struct tcpci_data {
+>   	struct regmap *regmap;
+> @@ -204,6 +210,7 @@ struct tcpci_data {
+>   	void (*frs_sourcing_vbus)(struct tcpci *tcpci, struct tcpci_data *data);
+>   	void (*set_partner_usb_comm_capable)(struct tcpci *tcpci, struct tcpci_data *data,
+>   					     bool capable);
+> +	void (*check_contaminant)(struct tcpci *tcpci, struct tcpci_data *data);
+>   };
+>   
+>   struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+
