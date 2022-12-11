@@ -2,73 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B026494FD
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Dec 2022 16:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BA164960B
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Dec 2022 20:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiLKP4S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Dec 2022 10:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S230097AbiLKTiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Dec 2022 14:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiLKP4R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Dec 2022 10:56:17 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC43BC06
-        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 07:56:16 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so5751190fac.2
-        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 07:56:16 -0800 (PST)
+        with ESMTP id S229475AbiLKTiE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Dec 2022 14:38:04 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E8C65EC
+        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 11:38:03 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id l10-20020a170902f68a00b00189d1728848so8653461plg.2
+        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 11:38:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KM82x8OsRqrW9i4lpQl18e2A2KbF6ntkivK489goTq0=;
-        b=fTHYOMzGMhh+aeOhl04myUltqjG1RzFqBJHyyRB3iD1APIa63rRXmIqz4TfMhNC/vb
-         HyuS/C0jHsGRMp9bBZ1U2vSzeOBHBnke7KNmkvolxTd4lqmy5Lh6EEYW0nYCsma0A4Vq
-         EJkGZZPtYTy+LxkFcWKoP2YnJ33lvRbmIOQ4ruDj+9HUkQQxEhjjQl6JRsrJuz5EJjLc
-         pgO+3tdVL+aVswZkyLMR9YVjYQcjwcZFq0546274325QBmHMbS6gyJSsvMzX4nOLaXNA
-         rHzsfIgW5lnyxTgYeKNMaFl2DVIurFD9QIbxx33TMZvGM+pHTaLFuEAJF+sXh5loA/et
-         RIjA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RgALFf7PGAYeLm7qK7ef+qSJDgWYIBq1PtAWuUeE+QU=;
+        b=EIC/vFnXWam/5mn41nXwqZAMPXeKHbmC3C2uEEyQyGcNwdefXhyEjulzMVKpiE4JBO
+         b9K5G/e95BFG+rWcTR7SK/a4vRA4dfMQW7/TmYRzUxor5ncTOIqiNFciWY51BvuBOog+
+         FhYaueQUw+lGcpVI9ehSFAi6Njr4gGR8sPxWYQmqN9VjjFikWd1kmZlzSMYR7wEi4/N4
+         dimcNIXvd63jI7HJHQe+J5sGCZC7L6Bzirsf+QgUIYm+2drZA2Kr+MqFTn7oA/CiW5MX
+         G2B3TGkAYEsFXlhheiOdZIuufLD7Bwn+A+rhSnVvr3ruQS2OIt2ATvuYRmUK+k2bGuA+
+         5BIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KM82x8OsRqrW9i4lpQl18e2A2KbF6ntkivK489goTq0=;
-        b=RgnWByJmHbKYXowttyRiPxsuXXaGV04LtvFZK7ChLfIjvtGxqvUXl47jU4FgcbylKj
-         9N+7r0lNWAwwtlz7g4025F/LjO4EV3d7hsfU7kDV0axm2IB4sh1qDoHfjATJNdliKtoF
-         LgDx2A6Rgp8mgtWd80hw2PPHNEcRaXKQxWBEo/lB/IEeBIi7ugZZMZC6MzRDk368bA/Y
-         DkHSPO0tgqgAuY25upkaUL4xwj5Swntl0Z6QqFJ3jfWHe0ps2F6XuZbbHZyeF8CpjIlu
-         v1tLGoNZSGk/ZWs/SgO+Df97sX6zp8Nz9i0x7sClRM2dcf3qEOemCDuUVyjPTJ4vRo/l
-         gniA==
-X-Gm-Message-State: ANoB5pn40Cw2vf7PZueZmNoRQ4gEeO0Fu/d0E+0NvINP/+/5iI/zcZjE
-        /9MbBHzM3tWg27XeAn2Wr4c=
-X-Google-Smtp-Source: AA0mqf4ItwTmbV2wHKU91qKzdi4kh9SHfyCk+Cv5snxwgvu+fOsjr+uEMhvlCzkwwMWFnuytBrqM1w==
-X-Received: by 2002:a05:6870:5821:b0:143:dc4d:4fcb with SMTP id r33-20020a056870582100b00143dc4d4fcbmr6700537oap.43.1670774175524;
-        Sun, 11 Dec 2022 07:56:15 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cv39-20020a056870c6a700b0010c727a3c79sm3828428oab.26.2022.12.11.07.56.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Dec 2022 07:56:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <908adfb7-c5f5-b69c-1771-dc346ecbb0da@roeck-us.net>
-Date:   Sun, 11 Dec 2022 07:56:13 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-imx@nxp.com, jun.li@nxp.com
-References: <20221208071648.2379254-1-xu.yang_2@nxp.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] usb: typec: tcpci: Request IRQ with IRQF_SHARED
-In-Reply-To: <20221208071648.2379254-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RgALFf7PGAYeLm7qK7ef+qSJDgWYIBq1PtAWuUeE+QU=;
+        b=ZGdawFR6Tbx/UKfAvt0nYMibmDquadKw+sNGqY//5+KKuJRYeMctNz4yt2Qey34nC+
+         Z8BlQbdYJi3jIj3P+Uvach+H7FFpHHg8s6lz7z58YeoRhEfohzrx8snYfWC2cj7adS1m
+         G3O/OXrfLwdDFNT3enQeNfRofxqBNdzhBsZNBKuYaL6OtDxc9Fh1cfVZN5cEsoIsImRB
+         FspmBBQlsSlBLdPpkdsf3BH+cqgNNBfoY477D5+Sjmd+HF/CCQlYGguNb2s4IJQ20GdW
+         yzhWKKrlffhpPFhkj34SVxXe5kPSEoZEVSZVyjrI19ebbeYcEYVme8Sbf4Y0cVOWtHeJ
+         I8UA==
+X-Gm-Message-State: ANoB5pmSKK7K0Ra64RXCazwav+ijWSCwS3g9lJEbZRnLnMjFgomO/hwz
+        KSFJrt9ZJSkyO4nU87sFs67evysUDL4=
+X-Google-Smtp-Source: AA0mqf4rggOLQr7KxGq0jZGUdlpIIBy9rOW/7a4GzvFBOq9RfdaKAuggD+jnCOqt/zwOSp1p2pRMtdhPwAA=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:6e12:1d4:7ea0:48cd])
+ (user=badhri job=sendgmr) by 2002:a17:90a:2a88:b0:220:1f03:129b with SMTP id
+ j8-20020a17090a2a8800b002201f03129bmr149467pjd.0.1670787482696; Sun, 11 Dec
+ 2022 11:38:02 -0800 (PST)
+Date:   Sun, 11 Dec 2022 11:37:55 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221211193755.1392128-1-badhri@google.com>
+Subject: [PATCH v1] usb: typec: altmodes/displayport: Add hpd sysfs attribute
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        RD Babiera <rdbabiera@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +69,91 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/7/22 23:16, Xu Yang wrote:
-> Under resource constraints, this interrupt may use other interrupt line
-> or this interrupt line may be shared with other devices as long as they
-> meet the sharing requirements. Besides, This irq flag will not cause other
-> side effect if tcpci driver is the only user. So a kindly wish to add this
-> flag.
+Exporsing HotPlugDetect(HPD) helps userspace to infer HPD
+state as defined by VESA DisplayPort Alt Mode on USB Type-C Standard.
+This allows userspace to notify users for self help, for instance,
+to hint user that the display port cable is probably detached (or)
+the display port sink (viz., monitors ect.,) is un-powered.
+Also helps to debug issues reported from field.
 
-The last sentence is not appropriate for a commit description.
+This change adds an additional attribute "hpd" to the existing
+"displayport" attributes.
 
-> 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->   drivers/usb/typec/tcpm/tcpci.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index fe781a38dc82..223a1de4fb1d 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -838,7 +838,7 @@ static int tcpci_probe(struct i2c_client *client)
->   
->   	err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
->   					_tcpci_irq,
-> -					IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> +					IRQF_SHARED | IRQF_ONESHOT | IRQF_TRIGGER_LOW,
->   					dev_name(&client->dev), chip);
->   	if (err < 0) {
->   		tcpci_unregister_port(chip->tcpci);
+VESA DisplayPort Alt Mode on USB Type-C Standard defines how
+HotPlugDetect(HPD) shall be supported on the USB-C connector
+when operating in DisplayPort Alt Mode. This is a read only
+node which reflects the current state of HPD.
 
-I don't think this is sufficient. The interrupt handler always returns
-IRQ_HANDLED, even if the interrupt status was 0 and the handler did not do
-anything. It should return IRQ_NONE in that case.
+Valid values:
+ - 1 when HPD=E2=80=99s logical state is high (HPD_High)
+ - 0 when HPD=E2=80=99s logical state is low (HPD_Low)
 
-Guenter
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ .../ABI/testing/sysfs-driver-typec-displayport    | 15 +++++++++++++++
+ drivers/usb/typec/altmodes/displayport.c          | 10 ++++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-driver-typec-displayport b/Doc=
+umentation/ABI/testing/sysfs-driver-typec-displayport
+index 231471ad0d4b..256c87c5219a 100644
+--- a/Documentation/ABI/testing/sysfs-driver-typec-displayport
++++ b/Documentation/ABI/testing/sysfs-driver-typec-displayport
+@@ -47,3 +47,18 @@ Description:
+ 		USB SuperSpeed protocol. From user perspective pin assignments C
+ 		and E are equal, where all channels on the connector are used
+ 		for carrying DisplayPort protocol (allowing higher resolutions).
++
++What:		/sys/bus/typec/devices/.../displayport/hpd
++Date:		Dec 2022
++Contact:	Badhri Jagan Sridharan <badhri@google.com>
++Description:
++		VESA DisplayPort Alt Mode on USB Type-C Standard defines how
++		HotPlugDetect(HPD) shall be supported on the USB-C connector when
++		operating in DisplayPort Alt Mode. This is a read only node which
++		reflects the current state of HPD.
++
++		Valid values:
++			- 1: when HPD=E2=80=99s logical state is high (HPD_High) as defined
++			     by VESA DisplayPort Alt Mode on USB Type-C Standard.
++			- 0 when HPD=E2=80=99s logical state is low (HPD_Low) as defined by
++			     VESA DisplayPort Alt Mode on USB Type-C Standard.
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/a=
+ltmodes/displayport.c
+index de66a2949e33..06fb4732f8cd 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -146,6 +146,7 @@ static int dp_altmode_status_update(struct dp_altmode *=
+dp)
+ 		if (dp->hpd !=3D hpd) {
+ 			drm_connector_oob_hotplug_event(dp->connector_fwnode);
+ 			dp->hpd =3D hpd;
++			sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
+ 		}
+ 	}
+=20
+@@ -508,9 +509,18 @@ static ssize_t pin_assignment_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(pin_assignment);
+=20
++static ssize_t hpd_show(struct device *dev, struct device_attribute *attr,=
+ char *buf)
++{
++	struct dp_altmode *dp =3D dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", dp->hpd);
++}
++static DEVICE_ATTR_RO(hpd);
++
+ static struct attribute *dp_altmode_attrs[] =3D {
+ 	&dev_attr_configuration.attr,
+ 	&dev_attr_pin_assignment.attr,
++	&dev_attr_hpd.attr,
+ 	NULL
+ };
+=20
+
+base-commit: 81c25247a2a03a0f97e4805d7aff7541ccff6baa
+--=20
+2.39.0.rc1.256.g54fd8350bd-goog
 
