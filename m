@@ -2,49 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1521764941B
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Dec 2022 13:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 368356494EA
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Dec 2022 16:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiLKMHr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Dec 2022 07:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S230220AbiLKPgo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Dec 2022 10:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiLKMHp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Dec 2022 07:07:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C783116E;
-        Sun, 11 Dec 2022 04:07:43 -0800 (PST)
+        with ESMTP id S230214AbiLKPgn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Dec 2022 10:36:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8976AA1BE
+        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 07:36:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4DE1B80ABE;
-        Sun, 11 Dec 2022 12:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E15C433EF;
-        Sun, 11 Dec 2022 12:07:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 202EB60DF2
+        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 15:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2769C433EF;
+        Sun, 11 Dec 2022 15:36:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670760460;
-        bh=ZFMbhfh++FcQgRNIpSgAMTmbt1indpVhIyF9Qze3joQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GdZK9R79xhoWOV8Is+SkD4wpTxbU4XmK2kn0VLcl+wxn9oUcoUaucMX9X+0uXes0R
-         nvbkrGIHusn7Y43rVDuOIDlF+WdaxqPc61Vv91/aCSp6YB4uEA5u5w1UD7VC3/FR9C
-         ASG8PCIRTqbG5YMZL4UJGX0A/uciAIHHBGleXLEKOxY9e3lJZ2bSr9N9BFaMppKeZV
-         BBpnIAq2LK4f/65sICEkQXOmTJArHm6nU1zzOiFgVLccz0Nnl9YhGo1WRw0GTZUFDd
-         nwYOHQfznzZkloEf1DmkiIgbgm6uyQ45L4xE5zxDvOMECZ43TgJ9UAe1qfY8mNDuB0
-         iLFFnLJJh6qYQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p4L7i-0003Bd-5U; Sun, 11 Dec 2022 13:08:02 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Date:   Sun, 11 Dec 2022 13:06:26 +0100
-Message-Id: <20221211120626.12210-1-johan@kernel.org>
-X-Mailer: git-send-email 2.37.4
+        s=k20201202; t=1670773001;
+        bh=24f+2W3TfpcrMCwXwDsDQ9xYkjU05vbMAvTJ74MxWFo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=QRdMGtiIE7vZMwQh+s+tNIsO1r91hBv0GdMr94O3uIJUM1nC/62+IIoF6rMrnS7+s
+         Y+1PZkthkugk7f1onC99jpaWj2sW4iQIVCLzGTdgcAAjsJ6QoJGuj3qRE0TdqH+zpu
+         CnrawaRhShOKyCtC0LzJVBkJZ+LchBfvOk5FI6vJ997wqxssptKapxCMh03D5E7C1I
+         rUFq2K41JLzI5k2rLQv7q4TuwPEqdBwVuaLbhmjy8ENedRlOXPMhz1+MxB5x+g8te6
+         9gvO4JQQmLSDTj4bn8UOMU/MENp4xfKZ87zjtOSpMPDYgo2I4XqrmMQQSXcS3kgKMx
+         tORDzLEbtXUEQ==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Dan Scally <dan.scally@ideasonboard.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: dwc3 38100000.usb: No resource for ep1in
+In-Reply-To: <f7196abb-d92e-ab47-6c7e-bea686f402c4@ideasonboard.com>
+References: <1c187708-be86-0391-6cbd-3466cf0478fe@ideasonboard.com>
+ <87a63ymnlw.fsf@balbi.sh>
+ <f7196abb-d92e-ab47-6c7e-bea686f402c4@ideasonboard.com>
+Date:   Sun, 11 Dec 2022 17:36:36 +0200
+Message-ID: <87edt63qbf.fsf@balbi.sh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,64 +56,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The struct device driver-data pointer is used for any data that a driver
-may need in various callbacks while bound to the device. For
-convenience, subsystems typically provide wrappers such as
-usb_set_intfdata() of the generic accessor functions for use in bus
-callbacks.
 
-There is generally no longer any need for a driver to clear the pointer,
-but since commit 0998d0631001 ("device-core: Ensure drvdata = NULL when
-no driver is bound") the driver-data pointer is set to NULL by driver
-core post unbind anyway.
+Hi,
 
-For historical reasons, USB core also clears this pointer when an
-explicitly claimed interface is released.
+Dan Scally <dan.scally@ideasonboard.com> writes:
+> Good morning
+>
+> On 08/12/2022 06:11, Felipe Balbi wrote:
+>> Hi,
+>>
+>> Dan Scally <dan.scally@ideasonboard.com> writes:
+>>> I'm having an issue with DWC3 which I'm hoping you might be able to shed
+>>> light on. I'm using the UVC gadget function to stream video from an
+>>> imx8mp platform, which works just fine. Once I have stopped streaming
+>>> however and after some time has passed (the exact duration seems to vary
+>>> quite a lot from 1-2 minutes to 15+ mins) I get a kernel warning like so:
+>> As Greg mentioned, please add Thinh, the new maintainer, to the loop.
+>
+>
+> Apologies to both of you; for some reason I thought you had taken over 
+> from Thinh rather than the other way around. Thanks for the heads up Greg.
 
-Due to a misunderstanding, a redundant and misleading kernel doc comment
-for usb_set_intfdata() was recently added which claimed that the driver
-data pointer must not be cleared during disconnect before "all actions
-[are] completed", which is both imprecise and incorrect.
+no worries, it happens.
 
-Specifically, drivers like cdc-acm which claim additional interfaces use
-the driver-data pointer as a flag which is cleared when the first
-interface is unbound. As long as a driver does not do something odd like
-dereference the pointer in, for example, completion callbacks, this can
-be done at any time during disconnect. And in any case this is no
-different than for any other resource, like the driver data itself,
-which may be freed by the disconnect callback.
+>> [1] https://kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs
+>
+>
+> Both the trace and regdump should be in the attached .tar.gz
 
-Drop the incorrect and unnecessary comment.
+Can you confirm which kernel version you're using?
 
-Fixes: 27ef17849779 ("usb: add usb_set_intfdata() documentation")
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- include/linux/usb.h | 12 ------------
- 1 file changed, 12 deletions(-)
+It looks like there's a missing End Transfer on ep1in:
 
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index b47371d44d1b..010c681b8822 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -266,18 +266,6 @@ static inline void *usb_get_intfdata(struct usb_interface *intf)
- 	return dev_get_drvdata(&intf->dev);
- }
- 
--/**
-- * usb_set_intfdata() - associate driver-specific data with the interface
-- * @intf: the usb interface
-- * @data: pointer to the device priv structure or %NULL
-- *
-- * Drivers should use this function in their probe() to associate their
-- * driver-specific data with the usb interface.
-- *
-- * When disconnecting, the core will take care of setting @intf back to %NULL,
-- * so no actions are needed on the driver side. The interface should not be set
-- * to %NULL before all actions completed (e.g. no outsanding URB remaining).
-- */
- static inline void usb_set_intfdata(struct usb_interface *intf, void *data)
- {
- 	dev_set_drvdata(&intf->dev, data);
+>   uvc-gadget-696 [000] .....  2646.761444: dwc3_gadget_ep_cmd: ep1in: cmd 'Set Endpoint Transfer Resource' [402] params 00000001 00000000 00000000 --> status: Successful
+> irq/208-dwc3-689 [000] D..3.  2647.237436: dwc3_gadget_ep_cmd: ep1in: cmd 'Set Endpoint Configuration' [401] params 00020086 06070200 00000000 --> status: Successful
+> irq/208-dwc3-689 [000] D..3.  2647.237457: dwc3_gadget_ep_cmd: ep1in: cmd 'Start Transfer' [406] params 00000000 45751000 00000000 --> status: Successful
+> irq/208-dwc3-689 [000] D..3.  2647.237467: dwc3_gadget_ep_enable: ep1in: mps 16/1024 streams 16 burst 0 ring 0/0 flags E:swBp:<
+>   uvc-gadget-696 [003] d..1.  2648.484042: dwc3_gadget_ep_cmd: ep1in: cmd 'End Transfer' [30c08] params 00000000 00000000 00000000 --> status: Successful
+>   uvc-gadget-696 [003] d..3.  2648.490356: dwc3_gadget_ep_disable: ep1in: mps 16/1024 streams 16 burst 0 ring 0/0 flags E:swbp:<
+>   uvc-gadget-698 [001] .....  2650.645667: dwc3_gadget_ep_cmd: ep1in: cmd 'Set Endpoint Transfer Resource' [402] params 00000001 00000000 00000000 --> status: Successful
+> irq/208-dwc3-689 [000] D..3.  2651.141040: dwc3_gadget_ep_cmd: ep1in: cmd 'Set Endpoint Configuration' [401] params 00020086 06070200 00000000 --> status: Successful
+> irq/208-dwc3-689 [000] D..3.  2651.141061: dwc3_gadget_ep_cmd: ep1in: cmd 'Start Transfer' [406] params 00000000 45751000 00000000 --> status: Successful
+> irq/208-dwc3-689 [000] D..3.  2651.141070: dwc3_gadget_ep_enable: ep1in: mps 16/1024 streams 16 burst 0 ring 0/0 flags E:swBp:<
+> irq/208-dwc3-689 [000] D..3.  3201.415410: dwc3_gadget_ep_disable: ep1in: mps 16/1024 streams 16 burst 0 ring 0/0 flags E:swBp:<
+
+Right here we don't know if DWC3_EP_DELAY_STOP flag is set. In fact,
+there are many flags which are not decoded to the trace points, which
+makes this trace point "pointless" as it's not helping with debug
+activities anymore.
+
+In any case, I suspect DELAY_STOP is set at this point, which is causing
+dwc3_stop_active_transfer() to bail out without issuing the End Transfer
+command, see lines 3725 - 3728 in gadget.c (quoted below):
+
+	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
+	    (dep->flags & DWC3_EP_DELAY_STOP) ||
+	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+		return;
+
+This, in turn, will cause a subsequent ep_enable to fail with No
+Resource, as the resource is still occupied by the same endpoint due to
+lack of End Transfer.
+
+@Thinh, looks like something you should patch up. Also, you should
+probably go through the trace points and make sure all relevant
+information is being printed to trace points. We don't want to have to
+guess what's going on :-)
+
+> irq/208-dwc3-689 [000] D..3.  3201.584476: dwc3_gadget_ep_cmd: ep1in: cmd 'Set Endpoint Configuration' [401] params 00020086 06070200 00000000 --> status: Successful
+> irq/208-dwc3-689 [000] D..3.  3201.584506: dwc3_send_gadget_ep_cmd: No resource for ep1in
+> irq/208-dwc3-689 [000] D..3.  3201.814837: dwc3_gadget_ep_cmd: ep1in: cmd 'Start Transfer' [406] params 00000000 45751000 00000000 --> status: No Resource
+
 -- 
-2.37.4
-
+balbi
