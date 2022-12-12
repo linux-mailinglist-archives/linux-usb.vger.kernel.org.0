@@ -2,85 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD4264ADEC
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 03:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1F964AE40
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 04:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234301AbiLMCwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 21:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S234407AbiLMDcf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 12 Dec 2022 22:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiLMCwH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 21:52:07 -0500
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B4BF1DA48;
-        Mon, 12 Dec 2022 18:52:05 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowAAHDlqo6JdjLrnGBg--.55749S2;
-        Tue, 13 Dec 2022 10:51:21 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     neal_liu@aspeedtech.com, gregkh@linuxfoundation.org,
-        joel@jms.id.au, andrew@aj.id.au, sumit.semwal@linaro.org,
-        christian.koenig@amd.com
-Cc:     linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] usb: gadget: aspeed_udc: Add check for dma_alloc_coherent
-Date:   Tue, 13 Dec 2022 10:51:19 +0800
-Message-Id: <20221213025120.23149-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233752AbiLMDcM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 22:32:12 -0500
+X-Greylist: delayed 8567 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Dec 2022 19:31:50 PST
+Received: from mail.intechservis.com (mail.intechservis.com [82.151.113.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E221C417;
+        Mon, 12 Dec 2022 19:31:50 -0800 (PST)
+Received: from rostov.intechservis.com ([192.168.101.100])
+        by mail.intechservis.com (8.14.4/8.14.4/Debian-4.1ubuntu1.1) with ESMTP id 2BCLZruI013735
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 00:35:53 +0300
+Received: from [103.167.91.37] ([103.167.91.37])
+        (authenticated bits=0)
+        by rostov.intechservis.com (8.15.2/8.15.2/Debian-3) with ESMTPSA id 2BBAF1hf028777
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Tue, 13 Dec 2022 00:31:29 +0300
+Message-Id: <202212122131.2BBAF1hf028777@rostov.intechservis.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAHDlqo6JdjLrnGBg--.55749S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKw4fKF45Zw17AF4UCFyfZwb_yoWfGFcEkr
-        4UWF1rW343Z393Kr1UZ343CryY934ku34kWFn2kF13Aay5Ga47XryUJFWkJa13ZFWxCFn8
-        Cwn8KrW7ZrW8WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUHWlkUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Are You Interested??
+To:     Recipients <info@prismstandard.org>
+From:   "Steven Cheng" <info@prismstandard.org>
+Date:   Mon, 12 Dec 2022 13:30:09 -0800
+Reply-To: sc0341185@gmail.com
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PSBL,RCVD_IN_SBL,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?103.167.91.37>]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [103.167.91.37 listed in zen.spamhaus.org]
+        *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [82.151.113.198 listed in psbl.surriel.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [82.151.113.198 listed in wl.mailspike.net]
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [sc0341185[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the check for the return value of dma_alloc_coherent
-in order to avoid NULL pointer dereference.
+Hello
 
-Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/usb/gadget/udc/aspeed_udc.c | 2 ++
- 1 file changed, 2 insertions(+)
+I will like to use the liberty of this medium to inform you as a consultant,that my principal is interested in investing his bond/funds as a silent business partner in your company.Taking into proper
+consideration the Return on Investment(ROI) based on a ten (10) year strategic plan.
 
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-index 01968e2167f9..6cf46562bb25 100644
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -1516,6 +1516,8 @@ static int ast_udc_probe(struct platform_device *pdev)
- 					  AST_UDC_EP_DMA_SIZE *
- 					  AST_UDC_NUM_ENDPOINTS,
- 					  &udc->ep0_buf_dma, GFP_KERNEL);
-+	if (!udc->ep0_buf)
-+		return -ENOMEM;
- 
- 	udc->gadget.speed = USB_SPEED_UNKNOWN;
- 	udc->gadget.max_speed = USB_SPEED_HIGH;
--- 
-2.25.1
+I shall give you details when you reply.
 
+Regards,
+
+Steven Cheng
