@@ -2,41 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0629A64A41B
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 16:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592BA64A433
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 16:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbiLLPZ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 10:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
+        id S231952AbiLLPdS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 10:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbiLLPZ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 10:25:27 -0500
+        with ESMTP id S231503AbiLLPdQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 10:33:16 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 49D1BE01F
-        for <linux-usb@vger.kernel.org>; Mon, 12 Dec 2022 07:25:26 -0800 (PST)
-Received: (qmail 854837 invoked by uid 1000); 12 Dec 2022 10:25:25 -0500
-Date:   Mon, 12 Dec 2022 10:25:25 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6334EDF6E
+        for <linux-usb@vger.kernel.org>; Mon, 12 Dec 2022 07:33:14 -0800 (PST)
+Received: (qmail 855217 invoked by uid 1000); 12 Dec 2022 10:33:13 -0500
+Date:   Mon, 12 Dec 2022 10:33:13 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Johan Hovold <johan@kernel.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Message-ID: <Y5dH5RqY2yOK1bVj@rowland.harvard.edu>
-References: <20221211120626.12210-1-johan@kernel.org>
- <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
- <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
- <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
- <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
- <2a2935e6-ae3c-85d9-a2e9-f42fb4ca7d59@suse.com>
- <Y5cvPulXceujfZv6@hovoldconsulting.com>
- <b1a5874b-8028-db14-e2ac-ebe3967559a5@suse.com>
- <Y5c3WWKyohzkspnw@hovoldconsulting.com>
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: fix misleading usb_set_intfdata() kernel doc
+Message-ID: <Y5dJufR1NCzUMvEv@rowland.harvard.edu>
+References: <20221212152035.31806-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5c3WWKyohzkspnw@hovoldconsulting.com>
+In-Reply-To: <20221212152035.31806-1-johan@kernel.org>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -46,71 +38,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 03:14:49PM +0100, Johan Hovold wrote:
-> On Mon, Dec 12, 2022 at 03:04:50PM +0100, Oliver Neukum wrote:
-> > 
-> > 
-> > On 12.12.22 14:40, Johan Hovold wrote:
-> > > On Mon, Dec 12, 2022 at 02:27:46PM +0100, Oliver Neukum wrote:
-> > >> On 12.12.22 14:14, Johan Hovold wrote:
-> > >>> On Mon, Dec 12, 2022 at 12:13:54PM +0100, Oliver Neukum wrote:
-> > > 
-> > >>> And in this case there was also no kernel doc for usb_get_intfdata()
-> > >>> which is equally self documenting. Why add redundant docs for only one
-> > >>> of these functions?
-> > >>
-> > >> Because knowing that one of them exists makes the other much more
-> > >> obvious.
-> > > 
-> > > I doubt anyone finds out about this function by reading generated kernel
-> > > documentation. You look at a driver, grep the function and look at the
-> > > single-line implementation.
-> > 
-> > Look, we cannot solve the issue whether kerneldoc is a good idea
-> > in general here. If you want to open that can of worms on lkml,
-> > by all means. go for it.
-> > But failing that, silently eliminating it is just not nice.
+On Mon, Dec 12, 2022 at 04:20:35PM +0100, Johan Hovold wrote:
+> The struct device driver-data pointer is used for any data that a driver
+> may need in various callbacks while bound to the device. For
+> convenience, subsystems typically provide wrappers such as
+> usb_set_intfdata() of the generic accessor functions for use in bus
+> callbacks.
 > 
-> It was just added. It's mostly misleading and incorrect. Hence revert,
-> rather than put the burden of adding proper documentation on the person
-> calling out the misunderstanding (which has already led to a series of
-> bogus patches).
+> There is generally no longer any need for a driver to clear the pointer,
+> but since commit 0998d0631001 ("device-core: Ensure drvdata = NULL when
+> no driver is bound") the driver-data pointer is set to NULL by driver
+> core post unbind anyway.
 > 
-> > > But it was never perfectly good. It claims that a driver "should" use it,
-> > > when it may not need to (think simple driver using devres) and talks
-> > 
-> > If you are presented with an interface something needs to be done
-> > specific to that interface.
+> For historical reasons, USB core also clears this pointer when an
+> explicitly claimed interface is released.
 > 
-> I'm not sure what you're saying here.
+> Due to a misunderstanding, a misleading kernel doc comment for
+> usb_set_intfdata() was recently added which claimed that the driver data
+> pointer must not be cleared during disconnect before "all actions [are]
+> completed", which is both imprecise and incorrect.
 > 
-> > > about driver core resetting the pointer which is irrelevant.
-> > 
-> > But correct and topical. I am not arguing what people should or should
-> > mot know.
+> Specifically, drivers like cdc-acm which claim additional interfaces use
+> the driver-data pointer as a flag which is cleared when the first
+> interface is unbound. As long as a driver does not do something odd like
+> dereference the pointer in, for example, completion callbacks, this can
+> be done at any time during disconnect. And in any case this is no
+> different than for any other resource, like the driver data itself,
+> which may be freed by the disconnect callback.
 > 
-> The comment is also misleading as it signals that this is something you
-> need to care about.
+> Note that the comment actually also claimed that the interface itself
+> was somehow being set to NULL by driver core.
 > 
-> > If you just remove the last sentence, all will be well. And if you
-> > insist replace "should" with "can".
+> Fix the kernel doc by removing incorrect, overly specific and misleading
+> details and adding a comment about why some drivers do clear the
+> driver-data pointer.
 > 
-> Since you insist, I'll just rewrite the whole thing.
+> Fixes: 27ef17849779 ("usb: add usb_set_intfdata() documentation")
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+> 
+> Changes in v2
+>  - fix up rather than drop the comment
+> 
+> 
+>  include/linux/usb.h | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index b47371d44d1b..8a32e17f826e 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -267,16 +267,15 @@ static inline void *usb_get_intfdata(struct usb_interface *intf)
+>  }
+>  
+>  /**
+> - * usb_set_intfdata() - associate driver-specific data with the interface
+> - * @intf: the usb interface
+> - * @data: pointer to the device priv structure or %NULL
+> + * usb_set_intfdata() - associate driver-specific data with an interface
+> + * @intf: USB interface
+> + * @data: driver data
+>   *
+> - * Drivers should use this function in their probe() to associate their
+> - * driver-specific data with the usb interface.
+> + * Drivers can use this function in their probe() callbacks to associate
+> + * driver-specific data with an interface.
+>   *
+> - * When disconnecting, the core will take care of setting @intf back to %NULL,
+> - * so no actions are needed on the driver side. The interface should not be set
+> - * to %NULL before all actions completed (e.g. no outsanding URB remaining).
+> + * Note that there is generally no need to clear the driver-data pointer even
+> + * if some drivers do so for historical or implementation-specific reasons.
 
-You're both missing the main point, which is that the USB core clears 
-intfdata after a driver is unbound.  As a consequence, drivers don't 
-need to worry about clearing intfdata themselves -- a fact which is 
-_not_ easily apparent from the implementation.  This would be a useful 
-thing to mention in the kerneldoc, as it may help prevent lots of 
-drivers from making unnecessary function calls (like the ones that 
-Vincent recently removed).
+I would add (bikeshedding, I realize -- rephrase to suit yourself):
 
-Of course, this doesn't mean that drivers can't clear intfdata if they 
-want to, for example, if they use it as an internal flag.  But 
-developers shouldn't feel that they _need_ to clear it as a sort of 
-hygienic measure.
+	This is because the USB core always clears the pointer after 
+	unbinding a driver from the interface.
 
-IMO it's worthwhile keeping the kerneldoc (but correcting it) so that it 
-can get this point across.
+Apart from that:
 
-Alan Stern
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>   */
+>  static inline void usb_set_intfdata(struct usb_interface *intf, void *data)
+>  {
+> -- 
+> 2.37.4
+> 
