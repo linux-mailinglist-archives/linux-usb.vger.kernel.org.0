@@ -2,158 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BA164960B
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Dec 2022 20:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 800AB6499DE
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 09:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiLKTiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Dec 2022 14:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S231404AbiLLIH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 03:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKTiE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Dec 2022 14:38:04 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E8C65EC
-        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 11:38:03 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id l10-20020a170902f68a00b00189d1728848so8653461plg.2
-        for <linux-usb@vger.kernel.org>; Sun, 11 Dec 2022 11:38:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RgALFf7PGAYeLm7qK7ef+qSJDgWYIBq1PtAWuUeE+QU=;
-        b=EIC/vFnXWam/5mn41nXwqZAMPXeKHbmC3C2uEEyQyGcNwdefXhyEjulzMVKpiE4JBO
-         b9K5G/e95BFG+rWcTR7SK/a4vRA4dfMQW7/TmYRzUxor5ncTOIqiNFciWY51BvuBOog+
-         FhYaueQUw+lGcpVI9ehSFAi6Njr4gGR8sPxWYQmqN9VjjFikWd1kmZlzSMYR7wEi4/N4
-         dimcNIXvd63jI7HJHQe+J5sGCZC7L6Bzirsf+QgUIYm+2drZA2Kr+MqFTn7oA/CiW5MX
-         G2B3TGkAYEsFXlhheiOdZIuufLD7Bwn+A+rhSnVvr3ruQS2OIt2ATvuYRmUK+k2bGuA+
-         5BIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RgALFf7PGAYeLm7qK7ef+qSJDgWYIBq1PtAWuUeE+QU=;
-        b=ZGdawFR6Tbx/UKfAvt0nYMibmDquadKw+sNGqY//5+KKuJRYeMctNz4yt2Qey34nC+
-         Z8BlQbdYJi3jIj3P+Uvach+H7FFpHHg8s6lz7z58YeoRhEfohzrx8snYfWC2cj7adS1m
-         G3O/OXrfLwdDFNT3enQeNfRofxqBNdzhBsZNBKuYaL6OtDxc9Fh1cfVZN5cEsoIsImRB
-         FspmBBQlsSlBLdPpkdsf3BH+cqgNNBfoY477D5+Sjmd+HF/CCQlYGguNb2s4IJQ20GdW
-         yzhWKKrlffhpPFhkj34SVxXe5kPSEoZEVSZVyjrI19ebbeYcEYVme8Sbf4Y0cVOWtHeJ
-         I8UA==
-X-Gm-Message-State: ANoB5pmSKK7K0Ra64RXCazwav+ijWSCwS3g9lJEbZRnLnMjFgomO/hwz
-        KSFJrt9ZJSkyO4nU87sFs67evysUDL4=
-X-Google-Smtp-Source: AA0mqf4rggOLQr7KxGq0jZGUdlpIIBy9rOW/7a4GzvFBOq9RfdaKAuggD+jnCOqt/zwOSp1p2pRMtdhPwAA=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:6e12:1d4:7ea0:48cd])
- (user=badhri job=sendgmr) by 2002:a17:90a:2a88:b0:220:1f03:129b with SMTP id
- j8-20020a17090a2a8800b002201f03129bmr149467pjd.0.1670787482696; Sun, 11 Dec
- 2022 11:38:02 -0800 (PST)
-Date:   Sun, 11 Dec 2022 11:37:55 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221211193755.1392128-1-badhri@google.com>
-Subject: [PATCH v1] usb: typec: altmodes/displayport: Add hpd sysfs attribute
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S230441AbiLLIH0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 03:07:26 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A0CF64;
+        Mon, 12 Dec 2022 00:07:25 -0800 (PST)
+Received: from [192.168.15.130] (unknown [194.152.46.36])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 06F956602C04;
+        Mon, 12 Dec 2022 08:07:22 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670832443;
+        bh=7jZrcS12eovJk4yTr33qb2JRyO2HH5tfG3QVcOFRV8M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MblcTWhM2ljhtpIQ2hdDwhvcE80egkRIbneeI2QiqCW3LC5Rmhuz8Z96QcQtPvuS3
+         6nysNSWrcRL68COfkybBYadNgQpgNNwbNz9oCJU/DKF1BaUlecFT6AHsei/UclMNEQ
+         XqlcUodv7oSLBRz5rWT4CF2fQ6hX+kxH5hWN65QrV5ysk4/nJ3aNXZE6NVZXReO0fL
+         lDTAC7Lk3a2qi6JxhhVl5mdd+t7LOzqJbIvtqH//6sWEhIhMbr3d76ppsnnqhaTiOl
+         ZUifgC/pzyIY00oq4mt7sYNigpy4Lutq6c6dw73zFAWYV5UrEhA6SADHgsA17ir+oG
+         Z2RLykZPtt/RA==
+Message-ID: <91368ea6-5517-bd6c-3428-3871a9ad4d14@collabora.com>
+Date:   Mon, 12 Dec 2022 09:07:19 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: gadget: u_ether: remove obnoxious warning messages
+To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alvin@pqrs.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        RD Babiera <rdbabiera@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209172853.2138941-1-alvin@pqrs.dk>
+Content-Language: en-US
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20221209172853.2138941-1-alvin@pqrs.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Exporsing HotPlugDetect(HPD) helps userspace to infer HPD
-state as defined by VESA DisplayPort Alt Mode on USB Type-C Standard.
-This allows userspace to notify users for self help, for instance,
-to hint user that the display port cable is probably detached (or)
-the display port sink (viz., monitors ect.,) is un-powered.
-Also helps to debug issues reported from field.
+W dniu 9.12.2022 o 18:28, Alvin Šipraga pisze:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+> 
+> There is really no need for the driver to unconditionally emit warnings
+> like this on every usage:
+> 
+> [    6.967283] using random self ethernet address
+> [    6.967294] using random host ethernet address
+> 
+> Since this is normal behaviour, just remove the messages altogether.
+> > Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-This change adds an additional attribute "hpd" to the existing
-"displayport" attributes.
+Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-VESA DisplayPort Alt Mode on USB Type-C Standard defines how
-HotPlugDetect(HPD) shall be supported on the USB-C connector
-when operating in DisplayPort Alt Mode. This is a read only
-node which reflects the current state of HPD.
-
-Valid values:
- - 1 when HPD=E2=80=99s logical state is high (HPD_High)
- - 0 when HPD=E2=80=99s logical state is low (HPD_Low)
-
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- .../ABI/testing/sysfs-driver-typec-displayport    | 15 +++++++++++++++
- drivers/usb/typec/altmodes/displayport.c          | 10 ++++++++++
- 2 files changed, 25 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-driver-typec-displayport b/Doc=
-umentation/ABI/testing/sysfs-driver-typec-displayport
-index 231471ad0d4b..256c87c5219a 100644
---- a/Documentation/ABI/testing/sysfs-driver-typec-displayport
-+++ b/Documentation/ABI/testing/sysfs-driver-typec-displayport
-@@ -47,3 +47,18 @@ Description:
- 		USB SuperSpeed protocol. From user perspective pin assignments C
- 		and E are equal, where all channels on the connector are used
- 		for carrying DisplayPort protocol (allowing higher resolutions).
-+
-+What:		/sys/bus/typec/devices/.../displayport/hpd
-+Date:		Dec 2022
-+Contact:	Badhri Jagan Sridharan <badhri@google.com>
-+Description:
-+		VESA DisplayPort Alt Mode on USB Type-C Standard defines how
-+		HotPlugDetect(HPD) shall be supported on the USB-C connector when
-+		operating in DisplayPort Alt Mode. This is a read only node which
-+		reflects the current state of HPD.
-+
-+		Valid values:
-+			- 1: when HPD=E2=80=99s logical state is high (HPD_High) as defined
-+			     by VESA DisplayPort Alt Mode on USB Type-C Standard.
-+			- 0 when HPD=E2=80=99s logical state is low (HPD_Low) as defined by
-+			     VESA DisplayPort Alt Mode on USB Type-C Standard.
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/a=
-ltmodes/displayport.c
-index de66a2949e33..06fb4732f8cd 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -146,6 +146,7 @@ static int dp_altmode_status_update(struct dp_altmode *=
-dp)
- 		if (dp->hpd !=3D hpd) {
- 			drm_connector_oob_hotplug_event(dp->connector_fwnode);
- 			dp->hpd =3D hpd;
-+			sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
- 		}
- 	}
-=20
-@@ -508,9 +509,18 @@ static ssize_t pin_assignment_show(struct device *dev,
- }
- static DEVICE_ATTR_RW(pin_assignment);
-=20
-+static ssize_t hpd_show(struct device *dev, struct device_attribute *attr,=
- char *buf)
-+{
-+	struct dp_altmode *dp =3D dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", dp->hpd);
-+}
-+static DEVICE_ATTR_RO(hpd);
-+
- static struct attribute *dp_altmode_attrs[] =3D {
- 	&dev_attr_configuration.attr,
- 	&dev_attr_pin_assignment.attr,
-+	&dev_attr_hpd.attr,
- 	NULL
- };
-=20
-
-base-commit: 81c25247a2a03a0f97e4805d7aff7541ccff6baa
---=20
-2.39.0.rc1.256.g54fd8350bd-goog
+> ---
+>   drivers/usb/gadget/function/u_ether.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index 8f12f3f8f6ee..3fdc913ef262 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -845,13 +845,11 @@ struct net_device *gether_setup_name_default(const char *netname)
+>   	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
+>   
+>   	eth_random_addr(dev->dev_mac);
+> -	pr_warn("using random %s ethernet address\n", "self");
+>   
+>   	/* by default we always have a random MAC address */
+>   	net->addr_assign_type = NET_ADDR_RANDOM;
+>   
+>   	eth_random_addr(dev->host_mac);
+> -	pr_warn("using random %s ethernet address\n", "host");
+>   
+>   	net->netdev_ops = &eth_netdev_ops;
+>   
 
