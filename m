@@ -2,311 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C9B64A840
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 20:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE99564A96C
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 22:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbiLLTrx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 14:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S233593AbiLLVSu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 16:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbiLLTrt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 14:47:49 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A00512626
-        for <linux-usb@vger.kernel.org>; Mon, 12 Dec 2022 11:47:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1p4om7-00034m-NK; Mon, 12 Dec 2022 20:47:44 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1p4om6-0045Uw-1z; Mon, 12 Dec 2022 20:47:42 +0100
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1p4om5-00CZJJ-Nt; Mon, 12 Dec 2022 20:47:41 +0100
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     gregkh@linuxfoundation.org, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 5/5] usb: uvc: use v4l2_fill_fmtdesc instead of open coded format name
-Date:   Mon, 12 Dec 2022 20:47:16 +0100
-Message-Id: <20221212194716.2995569-6-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221212194716.2995569-1-m.grzeschik@pengutronix.de>
-References: <20221212194716.2995569-1-m.grzeschik@pengutronix.de>
-MIME-Version: 1.0
+        with ESMTP id S233574AbiLLVSV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 16:18:21 -0500
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4807E9596;
+        Mon, 12 Dec 2022 13:17:43 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id v82so12471874oib.4;
+        Mon, 12 Dec 2022 13:17:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5i3OUjIfqgpyWppxSNZ/0sQhPXWrsfvFFv33+eGTUl4=;
+        b=xkdIkh01XL3IPla8T1y5AODCOrMR0+Dpcl7jQceuBqsaMXjkfuckMiVz3dqY8V1zbf
+         yVXKWLJkmXVsitAz818K4m5p9XtuNt25dU97mjr0P7cSM2HJqdnbqP5YqvKJ04/3Lel3
+         oSbyoV/K44XF/63RLSh3H6HmMfOzuYCQnnv/Wn7cyFAQQ37gfxG8dB8H6IQYhTLCGaXq
+         o6x1nEb0BFkYscmY97kaFXLsYZlhzKzZNlPF2XUOfMbp+wQby4OVD/BFNkYdXDrp8fN2
+         2GZrZuFuGM2cYkhJt1+tyYh8ujOAmZqya3OuQ1LmWzykLmaTabpoO4Y/sbiJ22EDiACA
+         Hm1g==
+X-Gm-Message-State: ANoB5plMNEiqTi1YnUduD4pN+fMWPSOr11AsJ3iajMFoEM74FMP0zY6t
+        S52NyOn1fgv8xn1Y8aIeXg==
+X-Google-Smtp-Source: AA0mqf4+AKSiMJMkNJ6/wMjadMR4/AaXI94WHnBBeADPelFXDpvkXG1yHfFrwDbRA398jUaokJufjw==
+X-Received: by 2002:a05:6808:a9c:b0:35c:1301:3ec6 with SMTP id q28-20020a0568080a9c00b0035c13013ec6mr6822938oij.28.1670879862511;
+        Mon, 12 Dec 2022 13:17:42 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j11-20020a056808034b00b00354d8589a15sm3875940oie.45.2022.12.12.13.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 13:17:42 -0800 (PST)
+Received: (nullmailer pid 1545272 invoked by uid 1000);
+        Mon, 12 Dec 2022 21:17:41 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org
+In-Reply-To: <20221212172804.1277751-3-biju.das.jz@bp.renesas.com>
+References: <20221212172804.1277751-1-biju.das.jz@bp.renesas.com>
+ <20221212172804.1277751-3-biju.das.jz@bp.renesas.com>
+Message-Id: <167087981089.1543932.15032317950577945818.robh@kernel.org>
+Subject: Re: [PATCH 02/16] dt-bindings: usb: Add RZ/V2M USB3DRD binding
+Date:   Mon, 12 Dec 2022 15:17:41 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since we have the helper function v4l2_fill_fmtdesc, we can use this to
-get the corresponding descriptive string for the pixelformat and set the
-compressed flag. This patch is removing the redundant name field in
-uvc_format_desc and makes use of v4l2_fill_fmtdesc instead.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/media/common/uvc.c             | 37 --------------------------
- drivers/media/usb/uvc/uvc_driver.c     |  8 +++++-
- drivers/usb/gadget/function/uvc_v4l2.c |  6 +----
- include/linux/usb/uvc.h                |  1 -
- 4 files changed, 8 insertions(+), 44 deletions(-)
+On Mon, 12 Dec 2022 17:27:50 +0000, Biju Das wrote:
+> Add device tree bindings for the RZ/V2{M, MA} USB3DRD module.
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+>  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 123 ++++++++++++++++++
+>  1 file changed, 123 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+> 
 
-diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
-index a6787f1999becd..02de0dcad0f088 100644
---- a/drivers/media/common/uvc.c
-+++ b/drivers/media/common/uvc.c
-@@ -11,187 +11,150 @@
- 
- static const struct uvc_format_desc uvc_fmts[] = {
- 	{
--		.name		= "YUV 4:2:2 (YUYV)",
- 		.guid		= UVC_GUID_FORMAT_YUY2,
- 		.fcc		= V4L2_PIX_FMT_YUYV,
- 	},
- 	{
--		.name		= "YUV 4:2:2 (YUYV)",
- 		.guid		= UVC_GUID_FORMAT_YUY2_ISIGHT,
- 		.fcc		= V4L2_PIX_FMT_YUYV,
- 	},
- 	{
--		.name		= "YUV 4:2:0 (NV12)",
- 		.guid		= UVC_GUID_FORMAT_NV12,
- 		.fcc		= V4L2_PIX_FMT_NV12,
- 	},
- 	{
--		.name		= "MJPEG",
- 		.guid		= UVC_GUID_FORMAT_MJPEG,
- 		.fcc		= V4L2_PIX_FMT_MJPEG,
- 	},
- 	{
--		.name		= "YVU 4:2:0 (YV12)",
- 		.guid		= UVC_GUID_FORMAT_YV12,
- 		.fcc		= V4L2_PIX_FMT_YVU420,
- 	},
- 	{
--		.name		= "YUV 4:2:0 (I420)",
- 		.guid		= UVC_GUID_FORMAT_I420,
- 		.fcc		= V4L2_PIX_FMT_YUV420,
- 	},
- 	{
--		.name		= "YUV 4:2:0 (M420)",
- 		.guid		= UVC_GUID_FORMAT_M420,
- 		.fcc		= V4L2_PIX_FMT_M420,
- 	},
- 	{
--		.name		= "YUV 4:2:2 (UYVY)",
- 		.guid		= UVC_GUID_FORMAT_UYVY,
- 		.fcc		= V4L2_PIX_FMT_UYVY,
- 	},
- 	{
--		.name		= "Greyscale 8-bit (Y800)",
- 		.guid		= UVC_GUID_FORMAT_Y800,
- 		.fcc		= V4L2_PIX_FMT_GREY,
- 	},
- 	{
--		.name		= "Greyscale 8-bit (Y8  )",
- 		.guid		= UVC_GUID_FORMAT_Y8,
- 		.fcc		= V4L2_PIX_FMT_GREY,
- 	},
- 	{
--		.name		= "Greyscale 8-bit (D3DFMT_L8)",
- 		.guid		= UVC_GUID_FORMAT_D3DFMT_L8,
- 		.fcc		= V4L2_PIX_FMT_GREY,
- 	},
- 	{
--		.name		= "IR 8-bit (L8_IR)",
- 		.guid		= UVC_GUID_FORMAT_KSMEDIA_L8_IR,
- 		.fcc		= V4L2_PIX_FMT_GREY,
- 	},
- 	{
--		.name		= "Greyscale 10-bit (Y10 )",
- 		.guid		= UVC_GUID_FORMAT_Y10,
- 		.fcc		= V4L2_PIX_FMT_Y10,
- 	},
- 	{
--		.name		= "Greyscale 12-bit (Y12 )",
- 		.guid		= UVC_GUID_FORMAT_Y12,
- 		.fcc		= V4L2_PIX_FMT_Y12,
- 	},
- 	{
--		.name		= "Greyscale 16-bit (Y16 )",
- 		.guid		= UVC_GUID_FORMAT_Y16,
- 		.fcc		= V4L2_PIX_FMT_Y16,
- 	},
- 	{
--		.name		= "BGGR Bayer (BY8 )",
- 		.guid		= UVC_GUID_FORMAT_BY8,
- 		.fcc		= V4L2_PIX_FMT_SBGGR8,
- 	},
- 	{
--		.name		= "BGGR Bayer (BA81)",
- 		.guid		= UVC_GUID_FORMAT_BA81,
- 		.fcc		= V4L2_PIX_FMT_SBGGR8,
- 	},
- 	{
--		.name		= "GBRG Bayer (GBRG)",
- 		.guid		= UVC_GUID_FORMAT_GBRG,
- 		.fcc		= V4L2_PIX_FMT_SGBRG8,
- 	},
- 	{
--		.name		= "GRBG Bayer (GRBG)",
- 		.guid		= UVC_GUID_FORMAT_GRBG,
- 		.fcc		= V4L2_PIX_FMT_SGRBG8,
- 	},
- 	{
--		.name		= "RGGB Bayer (RGGB)",
- 		.guid		= UVC_GUID_FORMAT_RGGB,
- 		.fcc		= V4L2_PIX_FMT_SRGGB8,
- 	},
- 	{
--		.name		= "RGB565",
- 		.guid		= UVC_GUID_FORMAT_RGBP,
- 		.fcc		= V4L2_PIX_FMT_RGB565,
- 	},
- 	{
--		.name		= "BGR 8:8:8 (BGR3)",
- 		.guid		= UVC_GUID_FORMAT_BGR3,
- 		.fcc		= V4L2_PIX_FMT_BGR24,
- 	},
- 	{
--		.name		= "H.264",
- 		.guid		= UVC_GUID_FORMAT_H264,
- 		.fcc		= V4L2_PIX_FMT_H264,
- 	},
- 	{
--		.name		= "H.265",
- 		.guid		= UVC_GUID_FORMAT_H265,
- 		.fcc		= V4L2_PIX_FMT_HEVC,
- 	},
- 	{
--		.name		= "Greyscale 8 L/R (Y8I)",
- 		.guid		= UVC_GUID_FORMAT_Y8I,
- 		.fcc		= V4L2_PIX_FMT_Y8I,
- 	},
- 	{
--		.name		= "Greyscale 12 L/R (Y12I)",
- 		.guid		= UVC_GUID_FORMAT_Y12I,
- 		.fcc		= V4L2_PIX_FMT_Y12I,
- 	},
- 	{
--		.name		= "Depth data 16-bit (Z16)",
- 		.guid		= UVC_GUID_FORMAT_Z16,
- 		.fcc		= V4L2_PIX_FMT_Z16,
- 	},
- 	{
--		.name		= "Bayer 10-bit (SRGGB10P)",
- 		.guid		= UVC_GUID_FORMAT_RW10,
- 		.fcc		= V4L2_PIX_FMT_SRGGB10P,
- 	},
- 	{
--		.name		= "Bayer 16-bit (SBGGR16)",
- 		.guid		= UVC_GUID_FORMAT_BG16,
- 		.fcc		= V4L2_PIX_FMT_SBGGR16,
- 	},
- 	{
--		.name		= "Bayer 16-bit (SGBRG16)",
- 		.guid		= UVC_GUID_FORMAT_GB16,
- 		.fcc		= V4L2_PIX_FMT_SGBRG16,
- 	},
- 	{
--		.name		= "Bayer 16-bit (SRGGB16)",
- 		.guid		= UVC_GUID_FORMAT_RG16,
- 		.fcc		= V4L2_PIX_FMT_SRGGB16,
- 	},
- 	{
--		.name		= "Bayer 16-bit (SGRBG16)",
- 		.guid		= UVC_GUID_FORMAT_GR16,
- 		.fcc		= V4L2_PIX_FMT_SGRBG16,
- 	},
- 	{
--		.name		= "Depth data 16-bit (Z16)",
- 		.guid		= UVC_GUID_FORMAT_INVZ,
- 		.fcc		= V4L2_PIX_FMT_Z16,
- 	},
- 	{
--		.name		= "Greyscale 10-bit (Y10 )",
- 		.guid		= UVC_GUID_FORMAT_INVI,
- 		.fcc		= V4L2_PIX_FMT_Y10,
- 	},
- 	{
--		.name		= "IR:Depth 26-bit (INZI)",
- 		.guid		= UVC_GUID_FORMAT_INZI,
- 		.fcc		= V4L2_PIX_FMT_INZI,
- 	},
- 	{
--		.name		= "4-bit Depth Confidence (Packed)",
- 		.guid		= UVC_GUID_FORMAT_CNF4,
- 		.fcc		= V4L2_PIX_FMT_CNF4,
- 	},
- 	{
--		.name		= "HEVC",
- 		.guid		= UVC_GUID_FORMAT_HEVC,
- 		.fcc		= V4L2_PIX_FMT_HEVC,
- 	},
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 12b6ad0966d94a..af92e730bde7c7 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -251,7 +251,13 @@ static int uvc_parse_format(struct uvc_device *dev,
- 		fmtdesc = uvc_format_by_guid(&buffer[5]);
- 
- 		if (fmtdesc != NULL) {
--			strscpy(format->name, fmtdesc->name,
-+			struct v4l2_fmtdesc fmt;
-+
-+			fmt.pixelformat = fmtdesc->fcc;
-+
-+			v4l2_fill_fmtdesc(&fmt);
-+
-+			strscpy(format->name, fmt.description,
- 				sizeof(format->name));
- 			format->fcc = fmtdesc->fcc;
- 		} else {
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 21e573e628f4e7..6e46fa1695f212 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -374,14 +374,10 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- 	if (!uformat)
- 		return -EINVAL;
- 
--	if (uformat->type != UVCG_UNCOMPRESSED)
--		f->flags |= V4L2_FMT_FLAG_COMPRESSED;
--
- 	fmtdesc = to_uvc_format(uformat);
- 	f->pixelformat = fmtdesc->fcc;
- 
--	strscpy(f->description, fmtdesc->name, sizeof(f->description));
--	f->description[strlen(fmtdesc->name) - 1] = 0;
-+	v4l2_fill_fmtdesc(f);
- 
- 	return 0;
- }
-diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-index 227a03f252a5c0..e407a7b8a91c70 100644
---- a/include/linux/usb/uvc.h
-+++ b/include/linux/usb/uvc.h
-@@ -146,7 +146,6 @@
- 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
- 
- struct uvc_format_desc {
--	char *name;
- 	u8 guid[16];
- 	u32 fcc;
- };
--- 
-2.30.2
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb3peri:resets: [[4294967295, 29]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb3peri: 'reset-names' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb@85060000:compatible: 'oneOf' conditional failed, one must be fixed:
+	'renesas,r9a09g011-xhci' is not one of ['renesas,xhci-r8a7742', 'renesas,xhci-r8a7743', 'renesas,xhci-r8a7744', 'renesas,xhci-r8a7790', 'renesas,xhci-r8a7791', 'renesas,xhci-r8a7793']
+	'renesas,r9a09g011-xhci' is not one of ['renesas,xhci-r8a774a1', 'renesas,xhci-r8a774b1', 'renesas,xhci-r8a774c0', 'renesas,xhci-r8a774e1', 'renesas,xhci-r8a7795', 'renesas,xhci-r8a7796', 'renesas,xhci-r8a77961', 'renesas,xhci-r8a77965', 'renesas,xhci-r8a77990']
+	'renesas,rcar-gen2-xhci' was expected
+	'renesas,rcar-gen3-xhci' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb@85060000:clocks: [[4294967295, 1, 34], [4294967295, 1, 36]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb@85060000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'compatible' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb:0:0: /example-0/usb@85070000/usb@85060000: failed to match any schema with compatible: ['renesas,r9a09g011-xhci', 'renesas,rzv2m-xhci']
+Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb:0:0: /example-0/usb@85070000/usb@85060000: failed to match any schema with compatible: ['renesas,r9a09g011-xhci', 'renesas,rzv2m-xhci']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb3peri: resets: [[4294967295, 29]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb3peri: 'reset-names' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221212172804.1277751-3-biju.das.jz@bp.renesas.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
