@@ -2,122 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE99564A96C
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 22:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB01A64A980
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 22:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbiLLVSu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 16:18:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S232955AbiLLV1b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 16:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbiLLVSV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 16:18:21 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4807E9596;
-        Mon, 12 Dec 2022 13:17:43 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id v82so12471874oib.4;
-        Mon, 12 Dec 2022 13:17:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5i3OUjIfqgpyWppxSNZ/0sQhPXWrsfvFFv33+eGTUl4=;
-        b=xkdIkh01XL3IPla8T1y5AODCOrMR0+Dpcl7jQceuBqsaMXjkfuckMiVz3dqY8V1zbf
-         yVXKWLJkmXVsitAz818K4m5p9XtuNt25dU97mjr0P7cSM2HJqdnbqP5YqvKJ04/3Lel3
-         oSbyoV/K44XF/63RLSh3H6HmMfOzuYCQnnv/Wn7cyFAQQ37gfxG8dB8H6IQYhTLCGaXq
-         o6x1nEb0BFkYscmY97kaFXLsYZlhzKzZNlPF2XUOfMbp+wQby4OVD/BFNkYdXDrp8fN2
-         2GZrZuFuGM2cYkhJt1+tyYh8ujOAmZqya3OuQ1LmWzykLmaTabpoO4Y/sbiJ22EDiACA
-         Hm1g==
-X-Gm-Message-State: ANoB5plMNEiqTi1YnUduD4pN+fMWPSOr11AsJ3iajMFoEM74FMP0zY6t
-        S52NyOn1fgv8xn1Y8aIeXg==
-X-Google-Smtp-Source: AA0mqf4+AKSiMJMkNJ6/wMjadMR4/AaXI94WHnBBeADPelFXDpvkXG1yHfFrwDbRA398jUaokJufjw==
-X-Received: by 2002:a05:6808:a9c:b0:35c:1301:3ec6 with SMTP id q28-20020a0568080a9c00b0035c13013ec6mr6822938oij.28.1670879862511;
-        Mon, 12 Dec 2022 13:17:42 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j11-20020a056808034b00b00354d8589a15sm3875940oie.45.2022.12.12.13.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 13:17:42 -0800 (PST)
-Received: (nullmailer pid 1545272 invoked by uid 1000);
-        Mon, 12 Dec 2022 21:17:41 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        with ESMTP id S229600AbiLLV1a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 16:27:30 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5071836D
+        for <linux-usb@vger.kernel.org>; Mon, 12 Dec 2022 13:27:29 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p4qKZ-0006kd-AS; Mon, 12 Dec 2022 22:27:23 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p4qKW-0046YO-Qf; Mon, 12 Dec 2022 22:27:21 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p4qKW-004bF8-Pb; Mon, 12 Dec 2022 22:27:20 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org
-In-Reply-To: <20221212172804.1277751-3-biju.das.jz@bp.renesas.com>
-References: <20221212172804.1277751-1-biju.das.jz@bp.renesas.com>
- <20221212172804.1277751-3-biju.das.jz@bp.renesas.com>
-Message-Id: <167087981089.1543932.15032317950577945818.robh@kernel.org>
-Subject: Re: [PATCH 02/16] dt-bindings: usb: Add RZ/V2M USB3DRD binding
-Date:   Mon, 12 Dec 2022 15:17:41 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] usb: chipidea: imx: Drop empty platform remove function
+Date:   Mon, 12 Dec 2022 22:27:17 +0100
+Message-Id: <20221212212717.3774606-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=941; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=2kYDKlPGuARAbHrfBQRS5FpDZ3D9CdFwmP0TiURMx9U=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjl5yyQXfkQFCadHn/h2R7ZLshTrqTWWmyCnMGf6yP ztLLsRCJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5ecsgAKCRDB/BR4rcrsCbMhB/ 4x8UZzpeBN3TrfNbcaTXnOujkORTxhMlGMNkb/792JRPxjz2MFP/pJ7y8fCxXActAfBIyaVT5Nm/rf EkabQxQurGlbBLdI7kgrf33e27wRKiAvd/BmOCkSl5b4Ceo/aUD3TJiOiBIGqqfETyor6iX5I5Aw6D xPcrZgI9J7RQZiD3iI3eSbxTHXRWix8fsHYPTmBfAlx/oQhJw2lAh+08fMXnCgLVcRSJkOoCQbU6Au k1b9wC08H/CwPaR0JRXIK2mdqiS8KSBQ0JejKEHF+SH4dh+GKnK9blf1unmsOASQtZgOwZkqg0f+aX OCFlJXh3vsc859AMnDCnBIlAmbDpkc
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+A remove callback just returning 0 is equivalent to no remove callback
+at all. So drop the useless function.
 
-On Mon, 12 Dec 2022 17:27:50 +0000, Biju Das wrote:
-> Add device tree bindings for the RZ/V2{M, MA} USB3DRD module.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
->  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 123 ++++++++++++++++++
->  1 file changed, 123 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-> 
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/usb/chipidea/usbmisc_imx.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+index bac0f5458cab..d09473a39424 100644
+--- a/drivers/usb/chipidea/usbmisc_imx.c
++++ b/drivers/usb/chipidea/usbmisc_imx.c
+@@ -1163,14 +1163,8 @@ static int usbmisc_imx_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static int usbmisc_imx_remove(struct platform_device *pdev)
+-{
+-	return 0;
+-}
+-
+ static struct platform_driver usbmisc_imx_driver = {
+ 	.probe = usbmisc_imx_probe,
+-	.remove = usbmisc_imx_remove,
+ 	.driver = {
+ 		.name = "usbmisc_imx",
+ 		.of_match_table = usbmisc_imx_dt_ids,
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb3peri:resets: [[4294967295, 29]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb3peri: 'reset-names' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb@85060000:compatible: 'oneOf' conditional failed, one must be fixed:
-	'renesas,r9a09g011-xhci' is not one of ['renesas,xhci-r8a7742', 'renesas,xhci-r8a7743', 'renesas,xhci-r8a7744', 'renesas,xhci-r8a7790', 'renesas,xhci-r8a7791', 'renesas,xhci-r8a7793']
-	'renesas,r9a09g011-xhci' is not one of ['renesas,xhci-r8a774a1', 'renesas,xhci-r8a774b1', 'renesas,xhci-r8a774c0', 'renesas,xhci-r8a774e1', 'renesas,xhci-r8a7795', 'renesas,xhci-r8a7796', 'renesas,xhci-r8a77961', 'renesas,xhci-r8a77965', 'renesas,xhci-r8a77990']
-	'renesas,rcar-gen2-xhci' was expected
-	'renesas,rcar-gen3-xhci' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb@85060000:clocks: [[4294967295, 1, 34], [4294967295, 1, 36]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb@85070000: usb@85060000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'compatible' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb:0:0: /example-0/usb@85070000/usb@85060000: failed to match any schema with compatible: ['renesas,r9a09g011-xhci', 'renesas,rzv2m-xhci']
-Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb:0:0: /example-0/usb@85070000/usb@85060000: failed to match any schema with compatible: ['renesas,r9a09g011-xhci', 'renesas,rzv2m-xhci']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb3peri: resets: [[4294967295, 29]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb: usb3peri: 'reset-names' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221212172804.1277751-3-biju.das.jz@bp.renesas.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+-- 
+2.38.1
 
