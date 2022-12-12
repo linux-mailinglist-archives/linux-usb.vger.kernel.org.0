@@ -2,235 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D811649D0F
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 12:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85E4649D5E
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 12:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiLLLHk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 06:07:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S232018AbiLLLRr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 06:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiLLLHF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 06:07:05 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2094.outbound.protection.outlook.com [40.107.114.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BAF11A07;
-        Mon, 12 Dec 2022 02:54:28 -0800 (PST)
+        with ESMTP id S232342AbiLLLRG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 06:17:06 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2056.outbound.protection.outlook.com [40.107.6.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEDC65C4;
+        Mon, 12 Dec 2022 03:14:00 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BIAHfwDosB9joC/7Qx6yHZ0fse+MR09TWRFCBRdxGT/sXWaeoN2ezBRY9Ka1wvBuputYbTqTA84v9KKFGU99wwIZW8SMbgkyo+fmhhvQeEjTosX9V6b54cgpm0biH9XRx1j/EfJh9BhU730KjDlwnYKkmeetmZ8D2+OgeuZYj6Fa8bGkMSGP75x178NNqaqTYGBXwiLNvLxO8r63t/mSWFb3XpGSceNfH9LraB4OdaYBlg4Y943FBUwwMHPpLMlB8MSHW75z1K3Hx1269WD+DdAYgZV0gTViw3lhN6N3Gv9fIsFkzQF6nco9jQsC3bZ7UYzFh487GT57eoK3suA1xQ==
+ b=Vxwmub2k1cmS2GgtlEiCWsbWsU2wxBAvdCtE7n5IUItbKx7jD9U0RSsT8092ON1wY17Lyd+qfW1AOaLThgQVz54eqJV1sFIlpxMihACeFpwD09xEm2qCIZh/IiXIQo/JysR1AsOUBy/qNgKPYZH670ieJDIYNposqIq9B/aSrM+OzdKVlYOGf9tZT9WTPAM0xvTUrETORkM91+J2kmeg6wvlLEmxILjXA0M1ZkzvJoqnZZjucU2Q2AcKaRYihj+nGg+0xqklPjX8Jcn3dfMhdZR5B6bPgux92MJw7ZIhFPaLYSNA91zopFLG3I7O1P28uXUTGi8FWKyodwpy5sPC9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1/8F4Q4gI0ADS94bjuD54/xOQMpq83X4dVhpcMZj9dY=;
- b=K7v40MvOeJD1hkDsKSXSb1+bGPWf63DuVTT8wRJSt/9EckCtPODffZo+nD+FUE6RdmMkK312Dc7jTL0mwSnPZjxD6yw8M/3L+KvpnVKrm/MFwseGNO53zx+OiC7XqUdloU969Mep3f2FFFg0viJjfACT7ExkmyDtAzAWPvYj5qwNV15UU4EH1jQBE2H07/Id4oWVRWvFXNT8b2REU0JV4xYrZgUAX/7EdmEKJvqR960Xj0NQO9Xbr1bkaHT4z074sq+vMBbQsVzO9f3bFRj9W4uE472nx9WwTPZSnXybvs3VA+tr6nYMVJmUZn/9IlAGtzOUXiCxxoP6njfVM4qQwg==
+ bh=mKMoIBbHOaOQt8p+4kBmSFnfA3o7DRU6cwy4uw5PqA8=;
+ b=CISelE/XnGY4fhNJPDtdF2yGUyc289uTOqyaVBfLXW37w+SsqbI3dmMO98Jc6g7geJu8eTdSs+Lc0RJocntzrdc/GLC6xtj7Ng45JphiXcl6bfH7rVnQAENuCkLiNB6xaQp45/sVrH5F+IzUZQw45YtGcrVq0ROGwjHvb1Tk232BIhS35SdolPdlRdReeNsaaZqYVFGkB0Ecjkh8WQQyQEtVspJm8NbvU6fmkjOouRXRFGmC5ac3s6j9lNvBeWYOLFkimAoAX34gBGJ7IP5+1CZUOxtkhaHUP9lsFlC6xN1XOmbpVgShq4FLt6e+AnIiYXK8htkPE5+jc/ZxUalgiQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1/8F4Q4gI0ADS94bjuD54/xOQMpq83X4dVhpcMZj9dY=;
- b=GcKHNtvNIO5V4rAMFZCGSriC62eYjl/X7TTGXlYZ7DWMliXgg2I0ltkNWnliqNIECzofxoyJR1uG2FfcKNVjewQoOrb92ax+wocsFVK4hni43GoGZWIX4T7VBVWbn3jxjwTQnEST03RnOgtmrgRUD0j+MxTw11SazBVDq96ki0s=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYWPR01MB10520.jpnprd01.prod.outlook.com (2603:1096:400:29f::12) with
+ bh=mKMoIBbHOaOQt8p+4kBmSFnfA3o7DRU6cwy4uw5PqA8=;
+ b=AgyH/76u8GdaRF2TyFj8sl2PX1o/cvIYp6USzOQsBgoqRhRbl8RrYhVNP1L1FSysfupFkrd9tRD91bnOt+AbjE/tkqNmOvzQ7tm5u6PtHO88im/kywNbNnkpaD6tCf7qza7SYe0B+T816r0+fdsqhHoWvryqSzSG1R4K9tLgPjjXaPsMTB4TFHD0+SY4SQlB2QafevwV4yClNoK9xr5qPBKGnDk0MMs9JNY2L/xFORXY2cA2ZzXXpOFm30eO80rMpFopEENZAI39AQJcLkF+YbnUGDAOxFk5Dk9hmD4oLOz7KVcw5FzfVdxl6eA3db0/7r+3j7QGK2qu/tI1M8/Yeg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by AM8PR04MB8035.eurprd04.prod.outlook.com (2603:10a6:20b:248::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 10:54:26 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::2cfb:38d2:d52e:c8a3]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::2cfb:38d2:d52e:c8a3%5]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 10:54:25 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2] usb: typec: hd3ss3220: Fix NULL pointer crash
-Thread-Topic: [PATCH v2] usb: typec: hd3ss3220: Fix NULL pointer crash
-Thread-Index: AQHZC/DC5zMigf6CwEe1ynb/crSS+K5qA3UAgAAKhHCAAAl9IA==
-Date:   Mon, 12 Dec 2022 10:54:25 +0000
-Message-ID: <OS0PR01MB5922FC3A7C5F0507292F99AF86E29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20221209170740.70539-1-biju.das.jz@bp.renesas.com>
- <Y5b24vdYTNW/aJ+0@kuha.fi.intel.com>
- <OS0PR01MB59225780B75FDC02C077ACE986E29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB59225780B75FDC02C077ACE986E29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Accept-Language: en-GB, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Mon, 12 Dec
+ 2022 11:13:56 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae59:a542:9cbc:5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae59:a542:9cbc:5b3%9]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
+ 11:13:56 +0000
+Message-ID: <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
+Date:   Mon, 12 Dec 2022 12:13:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB10520:EE_
-x-ms-office365-filtering-correlation-id: f3ebc2d8-7cec-4d46-e249-08dadc2f3c48
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JjOkZ2XAdR/QsWJMls1HH4zjZJp6LxZtRR1o+GPUx45wP+4EV6fnRH77+RVYJ3LSwvHRmAiPwjmyfEpUbgWzOMvhfbvS3Lb+Or4CjGd7MlLF0++7JIusX4kDqpFL82mly1g8phACDl9nRXRrXZ5b/oDPNeBmJbDxQ/nBbjhgKsipjyoHYbB63nobPhOtxxRQH63mXU8Iu+8ywMZIo5l2LfeFbgTRW1xts69yZHCCLVzoypbvg4wxFBNmpDy/KdKRtXobdAalzmbdveYMYCr3+CXimHLdmm2DHyMYluJt0X2PEyZW457FibSx4OTzOi+uwIxVYOBdzPRmPtpJ4iJ9VrKVfJg74TddJkyb6KGGyuQqIbkVahVPpRUxWP7caCtwztFo65qoqECxTCt92RRVDgvpyYpSY9c6MVyGjalU9bZLDB4heb4dyg1ecgRIMU2kxf39R4qh0/BYIQkaawgaEOFsE1kBxKsSO+/pk9oaE+cXBZ296VWZJb2VHDSpSQ93RD8HKl9DgNZEor/i6T9D2Z4VXFm8Jhj5SnJPMzJF/9xCtcrbaG4oQeVmLwok6VGKI4sAJ6IOf8CDuCkTRvBl3wK8DkAmeYKruMbEdqnpx02GARrNIRVjCqqWIPJ6mpiKIz1vn3JrYTQmrkCutZTVWgCETcEPtrP0Yi+hepZL9AJdVibRaaUe7hVrnPL2LburoS8FJ8tXzpYsj606zJGVAw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(39860400002)(346002)(396003)(451199015)(71200400001)(478600001)(33656002)(7696005)(2906002)(86362001)(52536014)(5660300002)(186003)(2940100002)(6506007)(38100700002)(38070700005)(55016003)(9686003)(26005)(8936002)(6916009)(64756008)(54906003)(122000001)(41300700001)(4326008)(83380400001)(66946007)(8676002)(66556008)(66476007)(66446008)(316002)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QQAdF+KmcKWnOkhg2a78xL+5h5Jt4/B4wii/anwckXDfaNhugQAsLzXrMBq2?=
- =?us-ascii?Q?PlX9zspC9ukA9ulYWydGQQY0shovibpDAn82raQjQTM7eDA4hTmfFPHS84PK?=
- =?us-ascii?Q?gSpBHE23dytQbzuKO6YATORRx28ETIBpMsK41ZfUmtlenmxKvB+W/jkhAD6u?=
- =?us-ascii?Q?5sCkXG44DwYnryaDjKbkuxRqlP5/fVbQt0KU9Lzs7Pcy033Tt4adjG5JLC+E?=
- =?us-ascii?Q?jxN7vdKL44PeB3SQDnjgngOu/Ge0sZ+pihHxNsg0rR6dgJ3iyfk4B9YOMM0M?=
- =?us-ascii?Q?mJbBLjosv/ilq/3jL6yFOMFSWfzM1haGsyQIfNgKlNbl590PHtXpJ8hKIGV6?=
- =?us-ascii?Q?Hw+26shu3sa049Feav+M0uqKczpAjLvHv+rR8ktKgNd9vnw2TNFtDHsDR1ZQ?=
- =?us-ascii?Q?+BVP51TaDw0ZuzUth7ZWW7n0aEiI02XvXRrv/+ZjEqH81Ur2JVgUqHHLHB7A?=
- =?us-ascii?Q?zNWzu7Jkbv3fC4E047f51V2eFwcpqY27igAUQCAAF5TnGFiO34/IF3SoY3h+?=
- =?us-ascii?Q?vRLW0oO0c/4ug35LNj9qDa74YZBoxhShvNYXYZqxTzJimr3CUDKWYhRVVeRU?=
- =?us-ascii?Q?xweaFsglYtYToGra0nAVG+rYJJ+xvvPZAFSovy5Sj0jgKm6dARTuZgd7B/ay?=
- =?us-ascii?Q?+DzVc5abA3JLBRknLe4SZHD2Rz+nfqsyL/9lPqMd0EJxGKRms1RoY3s8dLon?=
- =?us-ascii?Q?3XR48rxf03KybPgUS6ILiAf50d/o5ndhEAsKD8OptkFxCdTBKTDEYJvvwTwl?=
- =?us-ascii?Q?NFelkK/FJtwzUn9H47qNgWlWJhYzE5y5rPRFqAHg1dbyC5hM+ihNYD0qcpXT?=
- =?us-ascii?Q?cdXjN/mcQqQWzINX9+zs5Qd9uya0ioVg729S7v4aEdJxyy3Vo28GzdMl7DqH?=
- =?us-ascii?Q?9/QNLTMCdO2Yx40jjBtLMTRziyU9AHZVBLDLgOSVzOxoSm3BUj5QsZgzU61e?=
- =?us-ascii?Q?oF5EQ5yBSqcwWsJX3CbCPelXFgVfUF+ImRlc7cLvS1Ebj83ZqjtYC6F3H4sU?=
- =?us-ascii?Q?SGtNbDiMUY1n4I1M+W16uDdPB7+FfFudfmaV8bDXYlfYPb94qiqNAxW/XZ7Y?=
- =?us-ascii?Q?/H3PlIJsAc0QOLsNTkuuRhKaoeFxqp0c8+WNod9aAU5JK+MgsUGPgZWTUqkI?=
- =?us-ascii?Q?a/GSPs7g+h6dKq8KG4wcV5DU+BwwPTkA5kwMGtt4nZAUzzp3nKAxBrThta17?=
- =?us-ascii?Q?2sunQbdYSjSB+cJk1A71ZbV5Iw0O42+qxkp++RsoyN7vFiejM2wawPOigC/e?=
- =?us-ascii?Q?AWch6HrCB3BprubN0G1TYYb7/rPIUiMzP/z55SQ/GNnYMRtnycIU4nlWwH2j?=
- =?us-ascii?Q?UKIeraEh4BFfL/L708Zo4nWeWad1YVLmZk1lKUg5f2FWh2DP2XGGyzV9g+GW?=
- =?us-ascii?Q?ZIXNuqELJ0v6cERflnVBIkjjvvsoHlQHG6Xc8HbZPpxh2iixwRw3kTXk4SJV?=
- =?us-ascii?Q?tEeO9bltiykGlTSZpU6L7Qjq7Z/0egPWka6VB9CvBljse1sDKLfMR8yKg/nD?=
- =?us-ascii?Q?a5pXVQwOp78883weKmtSSjMx5mPSAGv7+am/IWX1DBLX1rQLN78Hri3LOgJf?=
- =?us-ascii?Q?61JfCJWTxxsSjjbZK+m06IsS80Z+V5eg7f4TT6D0FtKWv5JPPV3aEf7BxfDw?=
- =?us-ascii?Q?6w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221211120626.12210-1-johan@kernel.org>
+ <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
+ <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0094.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a9::14) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AM8PR04MB8035:EE_
+X-MS-Office365-Filtering-Correlation-Id: cbf79ff7-de42-43ad-f233-08dadc31f5f6
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Z6RuyT+4PbBbaEOgiBqUGEgAhyAw4IGv4JAaPLy89cDYex9pfsuBmL0Qi4kSFUEPKRGiklxBd65jVw8XUVAS7W03M4mSMEr6egTDntZCfXC5J3XJLeJDlxPEba3+nnrJ2XNyJQCT2sQDuj2sUZtnfrWD0Ky+g0OikK1bcHMqCyCQi94YRXU/NpUqF+K+CAaCJ6tqUP95JrTOYIsh8aBY5GI0rn4ranRlWPQK3+erDjI3R9zfBY9fcnP/H5h1eVoL8InPhke0c5WWsPbwfAikOOiiPEYBFtrJs61haz9iQKv0cAMXI98nForeHkQzecUiw3siu6DXOy2aajQtHKCYLESy1MY1EzvedKeNj/iLTDLUtYLpkzvSnNF4qMPwoooTHI7opJD6nGN6U3dArhQCWSzB6hiJIK917bzp+JIs5PWS65gc5u4bbU52fmlAoO04kpGR2gdZ4b9qUcN07xSt06NUpYYkZRP44eVj9mE6RUwqild/CHeQEPO79z8UnsbXZ2Vyj9UYlxy//2+CcLwf5vfKwM92e8HAc1V6uvPSUoHSQYNi/7OBA3Lz4nT+zp9Y/tuibNOR1ut4yTQ1xjoS0uo2ljfUs6AiPy4iD5fmZTFynLhGwsz7CrQpZcbTWljk6vhk6OAbexh0+5UjLE1nZ1AOuDR/gZKI6++gULWM1E4tAKXsOaXiiGRpO2Pg4HYgYNyEPiPG6so4kYYBDs1wZwIv8/zh1lzLTHlsxyMzbeU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(376002)(39860400002)(366004)(346002)(451199015)(36756003)(8936002)(6486002)(478600001)(38100700002)(31696002)(86362001)(5660300002)(31686004)(2616005)(316002)(6512007)(66476007)(54906003)(66946007)(41300700001)(110136005)(8676002)(4326008)(66556008)(186003)(83380400001)(6506007)(2906002)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZDdES1JIWmtQRkRkdTNjdVZXVnA0VEhpK1pmL2lYYU45NElpTTExV3J6NXFz?=
+ =?utf-8?B?QUVJZGN5Y0crN0hMNnhXR0prQlVOTTN6QWJmSGJwTUJwWWRYYWFWQ08zeitn?=
+ =?utf-8?B?dTNiYUVHNVBpd2NzNkM5OUF1bExEUW5ZOHhsQnN3U0VPT1FNS050R3ErTU94?=
+ =?utf-8?B?RVBuQWhOditZYktsdk9vWjR2UVZ0UE1mU1hJcVhUR1IzWC9FWWloWCtSK21m?=
+ =?utf-8?B?SlAzNkxTUk5PY2Z3UVlRQU9DQ0RqZEtMNWR0OWhoQVkzQmpjR01VeU9TK1hq?=
+ =?utf-8?B?TFIzZmVCQlR0ekE3RXBSZUVxbWkzeHYrWXRMUVB0bVE5bEtOMUtRbkI4T0JP?=
+ =?utf-8?B?ckZzSDlHMzNxK1c3SkVIdWM1YnlUOStaOUtmMmtzcW1CVW01SHM0MU9QdUdP?=
+ =?utf-8?B?UXlsSjUwaHVINEp3R0FuYi9xbC9SMytOUE14RENsZjJhaTNjTWM5WGFhZmNm?=
+ =?utf-8?B?WVNPTWRiZU1BZUJZSG5Tcncvb3hWSm9DSmwxQU1LNGdkQmRUNXVKRURBMFhI?=
+ =?utf-8?B?S215YWhIRXdjTWpuajFwRUY2b0N6STdGM3JFaC9Yb1o1TG9FRUVURzhhWWVD?=
+ =?utf-8?B?aFBDb08yK0hObGlaUThvcEdpWTNwS3JZZHFLWk5NSXlsL3JMakcxSlBpekN4?=
+ =?utf-8?B?RWlzM0JiY1lkUi8wR3FmRndKa0FSVUtqM2FiMkV6VVdBZTZDeGxUWkx3d00y?=
+ =?utf-8?B?cDBPVit6b0Z3cTlmeE9UeUZFbnFuYmxCNnZUZ1dsUGpIK3FVUTdURDVaeHd4?=
+ =?utf-8?B?aGdJeU93blFpRzVCcWlVRTJqU1FwcE1wWFdJamZYejZDb2FEQzVKY0FXU3gz?=
+ =?utf-8?B?R1hwaGNvbldCQUJXYU9BU2F3QTMzVG1KNFJ2UFJHSFI4SlMydnB1dkxoODhl?=
+ =?utf-8?B?QTFSM2plUHpkMDEyaG9jSFlGYTFXcklJZzI3WTlWbUU5NTRDdDlWOHNiUEJ2?=
+ =?utf-8?B?TzU4YjFFbnI3T1NhQmJuOW5VbVg0N0tRcG50bVJDTXZGemJNUXdobk9PWVZj?=
+ =?utf-8?B?bUlyR3I3V1BMekg2UG1EVTBSV2RQMDNKakwwOG81Z1kwTDcwcDJCL3JoeGpK?=
+ =?utf-8?B?YkYzNmlMakR5Y1JpT0YzV3lkN0hSNE94WG9JY2FyVHhVVkhaaWtGWWQxSjE3?=
+ =?utf-8?B?dDExL0I2QW5BQXg2TXMvWUhBUjA4a3M0eTQ3WjZDSzgvTlV0RWJlMVBaZUhq?=
+ =?utf-8?B?T1RPU3lTOVdoUWFnM3FEWVkwd0d2dEd5MHpuMFZRc0N0aHgya0VpMmxzVW1U?=
+ =?utf-8?B?TSs2Tk5TNS91RHYwZHlWUWRTNEEyVyszb0NxNm1Ndm05L3BobkhCTXUvbkVr?=
+ =?utf-8?B?V1JlSk0ySlpVbDZoWmk3Z1hrOEIxcGxqOE5aRTlyYjJxZWdSNHJNMmd0MUNZ?=
+ =?utf-8?B?UWRBcU5ZeGdXeDhUZzdZWnFWZVdHWTBRZ0cwWi9RMHNWV3VHSi84NWNCaDhm?=
+ =?utf-8?B?OWc2Z1Azb1pqZkZkU1JMQUlNMUlSS1pwVWJoOVZ3M3pyWHUyQTdRUUwwYWxt?=
+ =?utf-8?B?eXlTTjZCUFRYU0JXNEh1cmxXY2lGYVA3aGdaeDl5UVJSM0ZkUjhjWUQvSmZQ?=
+ =?utf-8?B?bFlQMlJVRTBvR2dMaXp1SG1KQ3NncloxTHFqSnQzUGRkbkdBaDRWMjBjRm15?=
+ =?utf-8?B?MHFuOGVTSE1YTEpyOUVCUHZ4UzBnTVl5by80SjR6ckFyZ2lSMm5lQ2Z4QmJF?=
+ =?utf-8?B?cldkRjJlcHRBdk5MR3VJSjhrNW8rZmlNdzF3dDZ6UEh2ZHFWZmJUamFLd3Zv?=
+ =?utf-8?B?czlhTHAzbTFETE5qWTBaZnBYYUhzS0pVcG5UbitVa2ZFcTAwc2FGR3E1eWE1?=
+ =?utf-8?B?NmFnRzdjRnpXYkVOaTRUNENma2FBeW9aZUZ3R3JtRi9VelI2Q2ZSbzNad3RF?=
+ =?utf-8?B?aWN5ejNMYTh3am5vZkFKZW1FeDFDRXNNc0JlQWpaYXhHVGhoS3ZJbkhMMGRO?=
+ =?utf-8?B?RFltS1o1RG5lM1VCclg3ZG00SHlLSlhlV1JaVi9rbXJqWnJtOHNmekxZVm9p?=
+ =?utf-8?B?ZFJQZlhXa0JKTFZNVmRHdytlNWJpVXRqTmVZQnhrRlNLN2M0T3M2ZnJIZEh0?=
+ =?utf-8?B?KzVuRFFDdWptOWY4NnJaOGVGdC95SGVTbjRZbEVPdTVhclJWZXZCWUwwNFNo?=
+ =?utf-8?B?NGcyUEtXSEgxdHZ4dUUwSThjMERKajk3NXBsb0VCV0poVDh6eTlSYWJLNDZ4?=
+ =?utf-8?Q?KesoeiezT0YNnuNfvvmIOeZHVfw4nSvCohLTjX5jpabI?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbf79ff7-de42-43ad-f233-08dadc31f5f6
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3ebc2d8-7cec-4d46-e249-08dadc2f3c48
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2022 10:54:25.8860
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 11:13:56.5862
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9uIPxd6Cw1sGeJ7wAPO5ZKqmtJwMdCuMUaQP4Bzb5bBY2zpawx4s2mVJTWOzpcxjFvstW+WOodifGR2o4nEgfWr3uFCW+mJOIEkBM6BDZc0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10520
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b/XaMQoAO1nqKgNEp/Z6T0jy4aSLmuBu8b1QKtWAswSbdphEz4rsNHdAWdxRlNX2dGjyXomJxRPS2SlSDxKV5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB8035
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Subject: RE: [PATCH v2] usb: typec: hd3ss3220: Fix NULL pointer crash
->=20
-> Hi Heikki,
->=20
-> > Subject: Re: [PATCH v2] usb: typec: hd3ss3220: Fix NULL pointer crash
-> >
-> > Hi Biju,
-> >
-> > On Fri, Dec 09, 2022 at 05:07:40PM +0000, Biju Das wrote:
-> > > The value returned by usb_role_switch_get() can be NULL and it leads
-> > > to NULL pointer crash. This patch fixes this issue by adding NULL
-> > > check for the role switch handle.
-> > >
-> > > [   25.336613] Hardware name: Silicon Linux RZ/G2E evaluation kit
-> EK874
-> > (CAT874 + CAT875) (DT)
-> > > [   25.344991] Workqueue: events_unbound deferred_probe_work_func
-> > > [   25.350869] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS
-> > BTYPE=3D--)
-> > > [   25.357854] pc : renesas_usb3_role_switch_get+0x40/0x80
-> > [renesas_usb3]
-> > > [   25.364428] lr : renesas_usb3_role_switch_get+0x24/0x80
-> > [renesas_usb3]
-> > > [   25.370986] sp : ffff80000a4b3a40
-> > > [   25.374311] x29: ffff80000a4b3a40 x28: 0000000000000000 x27:
-> > 0000000000000000
-> > > [   25.381476] x26: ffff80000a3ade78 x25: ffff00000a809005 x24:
-> > ffff80000117f178
-> > > [   25.388641] x23: ffff00000a8d7810 x22: ffff00000a8d8410 x21:
-> > 0000000000000000
-> > > [   25.395805] x20: ffff000011cd7080 x19: ffff000011cd7080 x18:
-> > 0000000000000020
-> > > [   25.402969] x17: ffff800076196000 x16: ffff800008004000 x15:
-> > 0000000000004000
-> > > [   25.410133] x14: 000000000000022b x13: 0000000000000001 x12:
-> > 0000000000000001
-> > > [   25.417291] x11: 0000000000000000 x10: 0000000000000a40 x9 :
-> > ffff80000a4b3770
-> > > [   25.424452] x8 : ffff00007fbc9000 x7 : 0040000000000008 x6 :
-> > ffff00000a8d8590
-> > > [   25.431615] x5 : ffff80000a4b3960 x4 : 0000000000000000 x3 :
-> > ffff00000a8d84f4
-> > > [   25.438776] x2 : 0000000000000218 x1 : ffff80000a715218 x0 :
-> > 0000000000000218
-> > > [   25.445942] Call trace:
-> > > [   25.448398]  renesas_usb3_role_switch_get+0x40/0x80 [renesas_usb3]
-> > > [   25.454613]  renesas_usb3_role_switch_set+0x4c/0x440 [renesas_usb3=
-]
-> > > [   25.460908]  usb_role_switch_set_role+0x44/0xa4
-> > > [   25.465468]  hd3ss3220_set_role+0xa0/0x100 [hd3ss3220]
-> > > [   25.470635]  hd3ss3220_probe+0x118/0x2fc [hd3ss3220]
-> > > [   25.475621]  i2c_device_probe+0x338/0x384
-> >
-> > Based on that backtrace, your role switch is not NULL.
-> >
-> > You can only end up calling renesas_usb3_role_switch_set() if your
-> > hd3ss3220->role_sw contains a handle to the renesas usb3 role switch.
->=20
-> Looks you are correct.
->=20
-> >
-> > > Fixes: 5a9a8a4c5058 ("usb: typec: hd3ss3220: hd3ss3220_probe() warn:
-> > > passing zero to 'PTR_ERR'")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > ---
-> > > This issue triggered on RZ/G2E board, where there is no USB3
-> > > firmware and it returned a null role switch handle.
-> > >
-> > > v1->v2:
-> > >  * Make it as individual patch
-> > >  * Added Cc tag
-> > > ---
-> > >  drivers/usb/typec/hd3ss3220.c | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/typec/hd3ss3220.c
-> > > b/drivers/usb/typec/hd3ss3220.c index 2a58185fb14c..c24bbccd14f9
-> > > 100644
-> > > --- a/drivers/usb/typec/hd3ss3220.c
-> > > +++ b/drivers/usb/typec/hd3ss3220.c
-> > > @@ -186,7 +186,10 @@ static int hd3ss3220_probe(struct i2c_client
-> > *client,
-> > >  		hd3ss3220->role_sw =3D usb_role_switch_get(hd3ss3220->dev);
-> > >  	}
-> > >
-> > > -	if (IS_ERR(hd3ss3220->role_sw)) {
-> > > +	if (!hd3ss3220->role_sw) {
-> > > +		ret =3D -ENODEV;
-> > > +		goto err_put_fwnode;
-> > > +	} else if (IS_ERR(hd3ss3220->role_sw)) {
-> > >  		ret =3D PTR_ERR(hd3ss3220->role_sw);
-> > >  		goto err_put_fwnode;
-> > >  	}
-> >
-> > You should not do that.
-> >
-> > Either I'm missing something, or this patch is hiding some other issue.
->=20
-> Looks It is a bug in renesas_usb3.c rather than this driver.
->=20
-> But how we will prevent hd3ss3220_set_role being called after
-> usb_role_switch_unregister(usb3->role_sw) from renesas_usb3.c driver??
 
-Do we need to add additional check for "fwnode_usb_role_switch_get" and
-"usb_role_switch_get" to return error if there is no registered role_switch=
- device
-Like the scenario above??
 
-Cheers,
-Biju
+On 12.12.22 11:31, Johan Hovold wrote:
+> On Mon, Dec 12, 2022 at 11:19:00AM +0100, Oliver Neukum wrote:
+>> On 11.12.22 13:06, Johan Hovold wrote:
+>>
+>>> Due to a misunderstanding, a redundant and misleading kernel doc comment
+>>> for usb_set_intfdata() was recently added which claimed that the driver
+>>> data pointer must not be cleared during disconnect before "all actions
+>>> [are] completed", which is both imprecise and incorrect.
+>>
+>> OK, but is that a reason to remove all kerneldoc? Kerneldoc is generally
+>> a good thing. And if a pointer is NULLed by driver core, that will need
+>> to be in it. IMHO you'd better just remove the questionable part of the
+>> kerneldoc.
+> 
+> Yeah, I started off with just rewriting the kernel doc and removing the
+> obviously incorrect bits, but then there is essentially nothing left of
+> the documentation.
+
+1. that the function exists and its purpose
+2. its parameters
+
+most kerneldoc isn't exactly a great revelation. Nevertheless it
+serves a purpose.
+
+> A driver does not need to care that the pointer is cleared by driver
+> core after the driver is unbound. The driver is gone.
+
+Is that true even with respect to sysfs?
+
+	Regards
+		Oliver
