@@ -2,131 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFEF64A406
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 16:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3906E64A412
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 16:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbiLLPUZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 10:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S232234AbiLLPXz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 10:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiLLPUX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 10:20:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF541643B;
-        Mon, 12 Dec 2022 07:20:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9548061025;
-        Mon, 12 Dec 2022 15:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0123CC433EF;
-        Mon, 12 Dec 2022 15:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670858422;
-        bh=mQpk7CV3/z1ODSFrCA9tNUlmPZ5Zr00nwKY2/kfEgoo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Zc9FN1Z1Kg/d5T13VaxnN9rlF2TLPKddbuT4fHVvhW0+MXfPP0egqSZIrNYNClL8i
-         uR93FJ9ti+aTZ3CSKpKSC7Tk1Ka9JX/qmJo37uOH+Y12wJHZlE3Xm5Mcey6kxpONV0
-         5rMRj4DwtI5M7TZtS5TTe7iyohAXSy+iKv8PmffSyEnUaACmriGiWXm1QpyHLkHgvy
-         UmBgra6/awuycT1c7+9Ozo+51X01o+mhWOH9Qtw5ppa7RRg0mo9YLKI2qq9GJ/k1eE
-         o17XyZKVaAfNTwf0a73DS9TuOaLwMaeylQpIZY8TSkdExZX23krpf7YltyHIY7H9HN
-         stF9bojCpHmlQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p4kbk-0008He-E9; Mon, 12 Dec 2022 16:20:45 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH v2] USB: fix misleading usb_set_intfdata() kernel doc
-Date:   Mon, 12 Dec 2022 16:20:35 +0100
-Message-Id: <20221212152035.31806-1-johan@kernel.org>
-X-Mailer: git-send-email 2.37.4
+        with ESMTP id S229600AbiLLPXy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 10:23:54 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410F4DF6F;
+        Mon, 12 Dec 2022 07:23:53 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id d20so13407889edn.0;
+        Mon, 12 Dec 2022 07:23:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ChHITi8TFnxzMUCCvh0ICYLsFw/8Il2tsX12Z2NSXOo=;
+        b=PSDAmMe+hWxRzmwceoDRF6ubxXRO1ox1EuLxysgOKbWBdQr9gaSeKoosyuP4EOl95S
+         Mg2iou5kEt/OXY3m3ZQWr16AX/TDzcXd2GDbVlW8CKXbCNpMjRWWYwOC+Ey3lEmvEFcK
+         gRtDYbm+gp+59Kwn1zmR1KQ0fsQXTDUboM0ZwcnOci0zOgIx57VgLtvIxjrgqLa+wT9b
+         LY3tef4KLMGfj3kkCmZkdGPz1eqxF4rXsMXJ7687Djhs69adb7zKT1FYoOCZbuwou4dM
+         1t/9j7PTzVqWZru1XM8UZe968tEpKbSfVH6YDsLNRSQGviMbeG2rYJul3dFIJgcroIfo
+         x28A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ChHITi8TFnxzMUCCvh0ICYLsFw/8Il2tsX12Z2NSXOo=;
+        b=bHbJxfkFNyPY7VukKNfKuXvy5JUjqKjm78m8vC0XJP2hyYj5+CSS2wUKrl3Q9mlr7g
+         tBtPHn85ClD9jEi8zmVvPdjKfMcwTiVq8iyMEhgbjDkS9QoyEGrW4fONzsK94ZiOgDP/
+         6FJSARAaqhGwoajfieepRO4mMZr6qn04ypYNVXYRFZIqYP9vmdKjrkmWOKh/hi/IgTW+
+         UI+U0mxEzL38eJIW2QkXQKNrszrutWZeNPbeq/hE0zY+MvliPMxu/nwtZn2jYYGUveet
+         wtovXYuQpGtrWWBRg4h1DnoYb60rzEqdGaVh892wDf4M18apBy2nu4KFf0EVUwWMM7ZM
+         ACHw==
+X-Gm-Message-State: ANoB5pm4ovn2UqJwHMC2QIL6Rhqvmie0Gt/r4dMfttvex1/X97bULFoJ
+        pM7bfTxukkIslEEzIhGRAWY76RG6oxg9rCAytZRjPmu9k/4=
+X-Google-Smtp-Source: AA0mqf5P7C8N2DcUDQeXuyNiXnMsH4ADDboDkylr8vx9skN4uB2SpAZ43Rrc0sB5PdkBcHMdWpuOxrSuuInEB73/wBk=
+X-Received: by 2002:a05:6402:35d6:b0:46d:e6b2:1ebd with SMTP id
+ z22-20020a05640235d600b0046de6b21ebdmr968810edc.179.1670858631850; Mon, 12
+ Dec 2022 07:23:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205210354.11846-1-andrew.smirnov@gmail.com> <20221205210354.11846-2-andrew.smirnov@gmail.com>
+In-Reply-To: <20221205210354.11846-2-andrew.smirnov@gmail.com>
+From:   David Rheinsberg <david.rheinsberg@gmail.com>
+Date:   Mon, 12 Dec 2022 16:23:40 +0100
+Message-ID: <CADyDSO6EBuKNZFTvuuhS9VM+dy8t8HOcHyodiQR8o_uXd8gXww@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] HID: uhid: Don't send the report ID if it's zero
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The struct device driver-data pointer is used for any data that a driver
-may need in various callbacks while bound to the device. For
-convenience, subsystems typically provide wrappers such as
-usb_set_intfdata() of the generic accessor functions for use in bus
-callbacks.
+Hi
 
-There is generally no longer any need for a driver to clear the pointer,
-but since commit 0998d0631001 ("device-core: Ensure drvdata = NULL when
-no driver is bound") the driver-data pointer is set to NULL by driver
-core post unbind anyway.
+On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+>
+> Report ID of zero is a special case handling ID-less reports and in
+> that case we should omit report ID from the payload being sent to the
+> backend.
+>
+> Without this change UHID_DEV_NUMBERED_{FEATURE,OUTPUT}_REPORTS doesn't
+> represent a semantical difference.
+>
+> Cc: David Rheinsberg <david.rheinsberg@gmail.com>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  drivers/hid/uhid.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/hid/uhid.c b/drivers/hid/uhid.c
+> index 2a918aeb0af1..7551120215e8 100644
+> --- a/drivers/hid/uhid.c
+> +++ b/drivers/hid/uhid.c
+> @@ -273,11 +273,11 @@ static int uhid_hid_get_report(struct hid_device *hid, unsigned char rnum,
+>  }
+>
+>  static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
+> -                              const u8 *buf, size_t count, u8 rtype)
+> +                              u8 *buf, size_t count, u8 rtype)
+>  {
+>         struct uhid_device *uhid = hid->driver_data;
+>         struct uhid_event *ev;
+> -       int ret;
+> +       int ret, skipped_report_id = 0;
+>
+>         if (!READ_ONCE(uhid->running) || count > UHID_DATA_MAX)
+>                 return -EIO;
+> @@ -286,6 +286,15 @@ static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
+>         if (!ev)
+>                 return -ENOMEM;
+>
+> +       /* Byte 0 is the report number. Report data starts at byte 1.*/
+> +       buf[0] = rnum;
+> +       if (buf[0] == 0x0) {
+> +               /* Don't send the Report ID */
+> +               buf++;
+> +               count--;
+> +               skipped_report_id = 1;
+> +       }
+> +
 
-For historical reasons, USB core also clears this pointer when an
-explicitly claimed interface is released.
+In HID core, the buffer is filled by a call to hid_output_report() in
+__hid_request(). And hid_output_report() only writes the ID if it is
+non-zero. So your patch looks like it is duplicating this logic? In
+which scenario is the report-ID not skipped exactly?
 
-Due to a misunderstanding, a misleading kernel doc comment for
-usb_set_intfdata() was recently added which claimed that the driver data
-pointer must not be cleared during disconnect before "all actions [are]
-completed", which is both imprecise and incorrect.
+Regardless, if you want to mess with the buffer, you should do that
+after the memcpy(). I don't see why we should mess with the buffer
+from HID core, when we have our own, anyway.
 
-Specifically, drivers like cdc-acm which claim additional interfaces use
-the driver-data pointer as a flag which is cleared when the first
-interface is unbound. As long as a driver does not do something odd like
-dereference the pointer in, for example, completion callbacks, this can
-be done at any time during disconnect. And in any case this is no
-different than for any other resource, like the driver data itself,
-which may be freed by the disconnect callback.
-
-Note that the comment actually also claimed that the interface itself
-was somehow being set to NULL by driver core.
-
-Fix the kernel doc by removing incorrect, overly specific and misleading
-details and adding a comment about why some drivers do clear the
-driver-data pointer.
-
-Fixes: 27ef17849779 ("usb: add usb_set_intfdata() documentation")
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
-
-Changes in v2
- - fix up rather than drop the comment
-
-
- include/linux/usb.h | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index b47371d44d1b..8a32e17f826e 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -267,16 +267,15 @@ static inline void *usb_get_intfdata(struct usb_interface *intf)
- }
- 
- /**
-- * usb_set_intfdata() - associate driver-specific data with the interface
-- * @intf: the usb interface
-- * @data: pointer to the device priv structure or %NULL
-+ * usb_set_intfdata() - associate driver-specific data with an interface
-+ * @intf: USB interface
-+ * @data: driver data
-  *
-- * Drivers should use this function in their probe() to associate their
-- * driver-specific data with the usb interface.
-+ * Drivers can use this function in their probe() callbacks to associate
-+ * driver-specific data with an interface.
-  *
-- * When disconnecting, the core will take care of setting @intf back to %NULL,
-- * so no actions are needed on the driver side. The interface should not be set
-- * to %NULL before all actions completed (e.g. no outsanding URB remaining).
-+ * Note that there is generally no need to clear the driver-data pointer even
-+ * if some drivers do so for historical or implementation-specific reasons.
-  */
- static inline void usb_set_intfdata(struct usb_interface *intf, void *data)
- {
--- 
-2.37.4
-
+David
