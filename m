@@ -2,53 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE37464A6B8
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 19:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D9164A7D1
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 20:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233182AbiLLSOf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 13:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
+        id S232290AbiLLTCZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 14:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbiLLSOF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 13:14:05 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E555018B3E;
-        Mon, 12 Dec 2022 10:11:20 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id u5so597803pjy.5;
-        Mon, 12 Dec 2022 10:11:20 -0800 (PST)
+        with ESMTP id S233406AbiLLTCF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 14:02:05 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9943B313;
+        Mon, 12 Dec 2022 11:01:44 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id jl24so13043795plb.8;
+        Mon, 12 Dec 2022 11:01:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e0uny2wKdDn2oX2hw7cfC9msWj09yDoQ8UJ3LtzZVJw=;
-        b=QbnZ73cQ9n+oG+GCjoFxkRZNsVkSWAtgBbBBOgz6o7OIco1fo/5F7XqcBKIb4JTKy1
-         CjJHHJ6bqkWIN2Br94R2xif2Q7427ix6/IVKZVt7SLioHCfh+FA56EiOpNHeb3Tynu3q
-         kpgFzmIMaUt8rdyo4wMLhHLEe5OWgM0wKVUyylt0D5P2z5iniOO90CD3rqrPyW1sBm0R
-         lGMwVWndZd90TIgLXetCHySw2tbe/qiIHAtr4aW6QefHIaLci97W6fPd1xAnkfIqddKb
-         TLWnDLKMp6Wo+BWm3JtOxnGBjPPid7/1ltW3jUaM9QCpjJPwze7uk6Q30NfrWmZFUZxL
-         Yj8w==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jXiYAyiEKIzocsl5NzqmaacJdcUm5UXG1kgIVkOG/n0=;
+        b=qjdG8SL+m9W7uH+If41w2e6S/DNskVQVQlzod3pjlLA40ep41oDNvZHWwI/AE+r+kE
+         yR3I/i7UBrTxIfDv+/jpPAvwogrwNg2JZ6SmeHn+a86rHnvb0N57HczIFoGwyrT3Zlnk
+         PNepCf6M28d//2kuLN6mOaJF8ZZlpN4qMthHlxgfxrHdsqkW7nlhhucoeLk72cnd5/e/
+         gft0/DY+U+zOBu6CSfBSzaeBzCnmqWlHLh7BI0pPlL477+U83XU841GfBwKkvG6UiyJT
+         WP3ZVC0CmDHhbuFhSrIgdJKizbCD7scMKDN9nqFj+jaVaM87dLbKG8duI9eagp0kZU5i
+         /zqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e0uny2wKdDn2oX2hw7cfC9msWj09yDoQ8UJ3LtzZVJw=;
-        b=DhcZa6ebsd8mvz2wODWsF3jPI3vsRkLxJuXSoHUv24gEtr+OK3O9SIt/mQjZAy3JDk
-         zmd4D8eMRT/bCyvBlL3jJIYVENXoe9TjX3aaNPAmmzsZhPCJBJQYr22fnbfgGi32uRwC
-         7QG3hPN5J9+JMlAPf9tzIp2Y4XJsI5lZNggHMCSPbQqQ3n7Fqk16D98V72wGd5Jq5aDH
-         1tJ8bTQ/nd0AYNtNK3dVX9owEMG6qHGnvnKL8LpdpAjRO7LToZogF03yrVuwm20JwSQ0
-         JyW5ihJpr3tl4x8na4amh9bKAFbgHf5WJvRiAqyCjs1Jy9R53/vDZRve7hhXlbFRcqu3
-         KnrQ==
-X-Gm-Message-State: ANoB5pnF+Y5qnNOSzZHUTpjutTTcHn6u9a8CeqJkjyaRRc87Khk9DGkB
-        lvubZeOM3j8WBxO1Rns9N2kj70YaupG22mXD15o=
-X-Google-Smtp-Source: AA0mqf7ZnOHBqMXIEwxjjfVsE3wfcB/KvrCS/A+a57iUBBnI0sWiyVVNUpt73ry6+9AzBy7odrLC89UVWryENRGUSsY=
-X-Received: by 2002:a17:902:8a98:b0:189:d081:1ebb with SMTP id
- p24-20020a1709028a9800b00189d0811ebbmr20776042plo.130.1670868674531; Mon, 12
- Dec 2022 10:11:14 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jXiYAyiEKIzocsl5NzqmaacJdcUm5UXG1kgIVkOG/n0=;
+        b=Dkiw4kIRC6XgHEAFsUA03viB6FnqDnHs+sdJybatSaXKV35Jc3S9MvKcwuVCWSVDd4
+         5zAs+0yBbsw4D9KRpgPTYVWMORQck1x9eZOo7Ai3vA1zjH+VoEWj2DScMo+AKZXdi0Gw
+         keGjLL6UbpSyz4xq15t9nr6Xm2wZG9wZ3RBnO/VxmkDD6ykpLae/OBzlMYuvEraf+mOd
+         VR4Ax9RheNkhmTJm6bl36YRhVrDFRmJWCaqrddpiJT6hfkMqKO9uEEIGnYHNfuRgUw0f
+         1A2aeYHyewMFOx7B33iyEt9mBbJOYiEcqvdHOmIWbHVPqe7rojRLyEUtvReY6gMvrEoe
+         NpwA==
+X-Gm-Message-State: ANoB5pl5gjsuOxjMe2lP8BJKYsAWZCooi7jyACR+szo0g0AGJy3SJgyP
+        Ewe6nGtODYP50CFskyPPBvc9XgSKUn+i8HKsCSg=
+X-Google-Smtp-Source: AA0mqf6ywgPV6ixT/JKHYQHS5vnWMLGv5H5QT3Oa20cy+YfMiCg1cCcKnS49cbY+WI3V/ELjcv/H4nkHMjLkEbr+Z+o=
+X-Received: by 2002:a17:902:b40b:b0:188:75bb:36d4 with SMTP id
+ x11-20020a170902b40b00b0018875bb36d4mr81059962plr.55.1670871704005; Mon, 12
+ Dec 2022 11:01:44 -0800 (PST)
 MIME-Version: 1.0
+References: <CAOMZO5AFsvwbC4Pr49WPFmZt7OnKjuJnYSf3cApGqtoZ_fFPPA@mail.gmail.com>
+In-Reply-To: <CAOMZO5AFsvwbC4Pr49WPFmZt7OnKjuJnYSf3cApGqtoZ_fFPPA@mail.gmail.com>
 From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 12 Dec 2022 15:10:56 -0300
-Message-ID: <CAOMZO5AFsvwbC4Pr49WPFmZt7OnKjuJnYSf3cApGqtoZ_fFPPA@mail.gmail.com>
-Subject: imx7: USB modem reset causes modem to not re-connect
+Date:   Mon, 12 Dec 2022 16:01:25 -0300
+Message-ID: <CAOMZO5AWRDLu5t0O=AG7CxNLv20HTmMTRh=so=s7+nTH0_qYgQ@mail.gmail.com>
+Subject: Re: imx7: USB modem reset causes modem to not re-connect
 To:     bjorn@mork.no, Peter Chen <peter.chen@kernel.org>,
         Marek Vasut <marex@denx.de>, Li Jun <jun.li@nxp.com>
 Cc:     netdev <netdev@vger.kernel.org>,
@@ -66,71 +69,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, Dec 12, 2022 at 3:10 PM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi,
+>
+> On an imx7d-based board running kernel 5.10.158, I noticed that a
+> Quectel BG96 modem is gone after sending a reset command via AT:
 
-On an imx7d-based board running kernel 5.10.158, I noticed that a
-Quectel BG96 modem is gone after sending a reset command via AT:
+Disabling runtime pm like this:
+
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c
+b/drivers/usb/chipidea/ci_hdrc_imx.c
+index 9ffcecd3058c..e2a263d583f9 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -62,7 +62,6 @@ static const struct ci_hdrc_imx_platform_flag
+imx6ul_usb_data = {
+ };
+
+ static const struct ci_hdrc_imx_platform_flag imx7d_usb_data = {
+-       .flags = CI_HDRC_SUPPORTS_RUNTIME_PM,
+ };
+
+ static const struct ci_hdrc_imx_platform_flag imx7ulp_usb_data = {
+
+makes the USB modem to stay connected after the reset command:
 
 # microcom /dev/ttyUSB3
 >AT+CFUN=1,1
 OK
- usb 2-1: USB disconnect, device number 6
-option1 ttyUSB0: GSM modem (1-port) converter now disconnected from ttyUSB0
-option 2-1:1.0: device disconnected
-option1 ttyUSB1: GSM modem (1-port) converter now disconnected from ttyUSB1
-option 2-1:1.1: device disconnected
-option1 ttyUSB2: GSM modem (1-port) converter now disconnected from ttyUSB2
-option 2-1:1.2: device disconnected
-option1 ttyUSB3: GSM modem (1-port) converter now disconnected from ttyUSB3
-option 2-1:1.3: device disconnected
-qmi_wwan 2-1:1.4 wwan0: unregister 'qmi_wwan' usb-ci_hdrc.1-1, WWAN/QMI device
+[   31.339416] usb 2-1: USB disconnect, device number 2
+[   31.349480] option1 ttyUSB0: GSM modem (1-port) converter now
+disconnected from ttyUSB0
+[   31.358298] option 2-1:1.0: device disconnected
+[   31.366390] option1 ttyUSB1: GSM modem (1-port) converter now
+disconnected from ttyUSB1
+[   31.374883] option 2-1:1.1: device disconnected
+[   31.383359] option1 ttyUSB2: GSM modem (1-port) converter now
+disconnected from ttyUSB2
+[   31.391800] option 2-1:1.2: device disconnected
+[   31.404700] option1 ttyUSB3: GSM modem (1-port) converter now
+disconnected from ttyUSB3
+# [   31.413261] option 2-1:1.3: device disconnected
+[   36.151388] usb 2-1: new high-speed USB device number 3 using ci_hdrc
+[   36.354398] usb 2-1: New USB device found, idVendor=2c7c,
+idProduct=0296, bcdDevice= 0.00
+[   36.362768] usb 2-1: New USB device strings: Mfr=3, Product=2, SerialNumber=4
+[   36.370031] usb 2-1: Product: Qualcomm CDMA Technologies MSM
+[   36.375818] usb 2-1: Manufacturer: Qualcomm, Incorporated
+[   36.381355] usb 2-1: SerialNumber: 7d1563c1
+[   36.389915] option 2-1:1.0: GSM modem (1-port) converter detected
+[   36.397679] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB0
+[   36.412591] option 2-1:1.1: GSM modem (1-port) converter detected
+[   36.420237] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB1
+[   36.434988] option 2-1:1.2: GSM modem (1-port) converter detected
+[   36.442792] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB2
+[   36.457745] option 2-1:1.3: GSM modem (1-port) converter detected
+[   36.465709] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB3
 
-# lsusb
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-
-The USB modem is gone.
-
-Forcing an 'echo on' to power/control makes the USB modem reappear:
-
-# echo 'on' > /sys/bus/usb/devices/usb2/power/control
-usb 2-1: new high-speed USB device number 7 using ci_hdrc
- usb 2-1: New USB device found, idVendor=2c7c, idProduct=0296, bcdDevice= 0.00
- usb 2-1: New USB device strings: Mfr=3, Product=2, SerialNumber=4
-usb 2-1: Product: Qualcomm CDMA Technologies MSM
- usb 2-1: Manufacturer: Qualcomm, Incorporated
-usb 2-1: SerialNumber: 7d1563c1
-option 2-1:1.0: GSM modem (1-port) converter detected
-usb 2-1: GSM modem (1-port) converter now attached to ttyUSB0
- option 2-1:1.1: GSM modem (1-port) converter detected
-usb 2-1: GSM modem (1-port) converter now attached to ttyUSB1
-option 2-1:1.2: GSM modem (1-port) converter detected
- usb 2-1: GSM modem (1-port) converter now attached to ttyUSB2
-option 2-1:1.3: GSM modem (1-port) converter detected
-usb 2-1: GSM modem (1-port) converter now attached to ttyUSB3
-qmi_wwan 2-1:1.4: cdc-wdm0: USB WDM device
-qmi_wwan 2-1:1.4 wwan0: register 'qmi_wwan' at usb-ci_hdrc.1-1,
-WWAN/QMI device, 12:bc:8c:zz:yy:xx
-
-# lsusb
-Bus 002 Device 007: ID 2c7c:0296 Quectel Wireless Solutions Co., Ltd.
-BG96 CAT-M1/NB-IoT modem
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-
-Sending the AT reset command afterward works fine, and the modem keeps
-connected.
-
-Previously, this board used a vendor-based 4.14 kernel and such a
-problem did not happen.
-
-Kernels 5.10 and 4.14 have the same 'auto' option selected by default.
-
-Also tested kernel 6.1 and it behaves the same as 5.10.158.
-
-What can be done so that the reset modem command does not cause the
-modem to disappear by default?
-
-Thanks,
-
-Fabio Estevam
+Does anyone have any suggestions as to what could be the problem with
+runtime pm?
