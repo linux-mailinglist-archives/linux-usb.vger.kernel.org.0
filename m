@@ -2,124 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538AD649FB2
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 14:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2749564A070
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 14:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiLLNN6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 08:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
+        id S232745AbiLLNY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 08:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbiLLNNs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 08:13:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F10C32;
-        Mon, 12 Dec 2022 05:13:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D807E61041;
-        Mon, 12 Dec 2022 13:13:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462E6C433EF;
-        Mon, 12 Dec 2022 13:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670850825;
-        bh=xBqcSjH2ykKNHWeS29A6f/ABA0xmeApYpT4bmdclxwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R/ERXN2/FU0xWK5RR25PGcd4u+2BATn9Om5ykZH2mdUaKLp81N+Up+nCBiri4/pRz
-         05BDA/XgSrQ55Un8f7xPpaj8cXMKVLMOVTMzB3Cm4NC0fxwTdvgso4C1oxMPSN9v7I
-         m8Q7i6CjFmUIinyNLUulk1w/DBmI3Kb1ydvkBtZiFGqMr0/Hq3oBrGxH+azrRVV5cJ
-         x7SGIZ2L8aBpT/vrELq/LLog749yIbWIVAXDJe+yv0p1ZyukNIu5PnOL0up+ftrC1G
-         hbR65/TPkEMXnOK10HGGFLIVGxUg4g0QWgd1Zs5PFBpc7Nlu/YAYnxgAgXGM3b4J2y
-         uVLN0jsOLzMBw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p4idD-0006NU-Jw; Mon, 12 Dec 2022 14:14:08 +0100
-Date:   Mon, 12 Dec 2022 14:14:07 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Message-ID: <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
-References: <20221211120626.12210-1-johan@kernel.org>
- <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
- <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
- <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
+        with ESMTP id S232700AbiLLNYv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 08:24:51 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0615F90;
+        Mon, 12 Dec 2022 05:24:49 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCCx1iV002490;
+        Mon, 12 Dec 2022 13:24:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=91cpds4v69UzBBGb1l3cLOexQaCW6Fg6qXLj+1lY1nQ=;
+ b=mrkSTDNyN69Vam0+Uc+EwDMRxr341Js4lwPeE4dmDMypicevmXAseEvfDtmrC7RKb8ps
+ ltRqeoJxfKRZUJS4FxW1vTS48WVPwHDxetyHwrBWtG1xrOmIikRq1c7XrE7eQqUZGW83
+ 3+CWVOxziw5wJl7sKhSBC/WPighui6XktoHu59lZKCdq02rmM5oBWAL3YfKs7xF5tUAx
+ XAwevaKzmMlo38uuuoxm7XItr4ypDURQANwoR7E9swDhuNBiypaexFyxCGMvh2vczMP/
+ 0GiPQEJPfvq3y/OG9Ii1klGDAP9ACrlYLuI6DmH9YVOUXYnJi1SC2N6lFKrKjo2b/rz6 Ag== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mchesc7dj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 13:24:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BCDOX4q004025
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 13:24:33 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 12 Dec 2022 05:24:29 -0800
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        John Keeping <john@metanate.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        "Dan Carpenter" <error27@gmail.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "# 5 . 15" <stable@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: usb: f_fs: Fix CFI failure in ki_complete
+Date:   Mon, 12 Dec 2022 18:54:24 +0530
+Message-ID: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: z2Ie-FTzCK62ZzaEgSBQhZSQ3M8w3Z81
+X-Proofpoint-GUID: z2Ie-FTzCK62ZzaEgSBQhZSQ3M8w3Z81
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=607 suspectscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212120123
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:13:54PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 12.12.22 11:31, Johan Hovold wrote:
-> > On Mon, Dec 12, 2022 at 11:19:00AM +0100, Oliver Neukum wrote:
-> >> On 11.12.22 13:06, Johan Hovold wrote:
-> >>
-> >>> Due to a misunderstanding, a redundant and misleading kernel doc comment
-> >>> for usb_set_intfdata() was recently added which claimed that the driver
-> >>> data pointer must not be cleared during disconnect before "all actions
-> >>> [are] completed", which is both imprecise and incorrect.
-> >>
-> >> OK, but is that a reason to remove all kerneldoc? Kerneldoc is generally
-> >> a good thing. And if a pointer is NULLed by driver core, that will need
-> >> to be in it. IMHO you'd better just remove the questionable part of the
-> >> kerneldoc.
-> > 
-> > Yeah, I started off with just rewriting the kernel doc and removing the
-> > obviously incorrect bits, but then there is essentially nothing left of
-> > the documentation.
-> 
-> 1. that the function exists and its purpose
+Function pointer ki_complete() expects 'long' as its second
+argument, but we pass integer from ffs_user_copy_worker. This
+might cause a CFI failure, as ki_complete is an indirect call
+with mismatched prototype. Fix this by typecasting the second
+argument to long.
 
-That should be apparent from the function name (and implementation).
+Cc: <stable@vger.kernel.org> # 5.15
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 
-> 2. its parameters
+---
+ drivers/usb/gadget/function/f_fs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Apparent from the prototype.
-
-But sure, it would not show up in generated documentation (like many
-other functions).
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 73dc10a7..9c26561 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -835,7 +835,7 @@ static void ffs_user_copy_worker(struct work_struct *work)
+ 		kthread_unuse_mm(io_data->mm);
+ 	}
  
-> most kerneldoc isn't exactly a great revelation. Nevertheless it
-> serves a purpose.
+-	io_data->kiocb->ki_complete(io_data->kiocb, ret);
++	io_data->kiocb->ki_complete(io_data->kiocb, (long)ret);
+ 
+ 	if (io_data->ffs->ffs_eventfd && !kiocb_has_eventfd)
+ 		eventfd_signal(io_data->ffs->ffs_eventfd, 1);
+-- 
+2.7.4
 
-Yeah, we have a lot of
-
-	/**
-	 * set_x_to_y() - set x to y
-	 * @x: the x
-	 * @y: the y
-	 */
-
-it seems. Not sure how much value there is in that, though.
-
-And in this case there was also no kernel doc for usb_get_intfdata()
-which is equally self documenting. Why add redundant docs for only one
-of these functions?
-
-I'd rather drop this particular documentation which was added due to a
-misunderstanding then go down the rabbit hole of adding mindless kernel
-doc to every helper we have.
-
-> > A driver does not need to care that the pointer is cleared by driver
-> > core after the driver is unbound. The driver is gone.
-> 
-> Is that true even with respect to sysfs?
-
-Yes. The (device group) attributes are removed by driver core before
-->remove() is called, otherwise you'd have an even bigger issue with the
-driver data itself which is typically deallocated before the pointer is
-cleared.
-
-Johan
