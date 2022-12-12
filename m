@@ -2,54 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB01A64A980
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 22:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BF864A9C7
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Dec 2022 22:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbiLLV1b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Dec 2022 16:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S232994AbiLLVwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Dec 2022 16:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiLLV1a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 16:27:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5071836D
-        for <linux-usb@vger.kernel.org>; Mon, 12 Dec 2022 13:27:29 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4qKZ-0006kd-AS; Mon, 12 Dec 2022 22:27:23 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4qKW-0046YO-Qf; Mon, 12 Dec 2022 22:27:21 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4qKW-004bF8-Pb; Mon, 12 Dec 2022 22:27:20 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] usb: chipidea: imx: Drop empty platform remove function
-Date:   Mon, 12 Dec 2022 22:27:17 +0100
-Message-Id: <20221212212717.3774606-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S233833AbiLLVvp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Dec 2022 16:51:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6942C1A07D;
+        Mon, 12 Dec 2022 13:51:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F01CBB80D90;
+        Mon, 12 Dec 2022 21:51:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC2EC433EF;
+        Mon, 12 Dec 2022 21:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670881901;
+        bh=FvG6dZl0qxOwzykqIDDbxpQVq9AhChXkUGGZgcBqCV4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=tbTmWUXI77okTiJlZBbt+kKIDjSaKmoA0w/2HDEFrObeQqzdVs7NUHLgLwvX+0qRU
+         SJc0ATq5emJ7CiEv3udAi7R7pEBNQZItcGm9YBVeTOsrFp647EofFZQUYNudYC5Xyp
+         on6HOSEjDqok9x/IP+YDfmo1PmeohZPeUz1+XyL0zWVs1n0Zc6Kl7VebLKq05BgwLG
+         9MUtPfmQcPFQqlqJnRCUGMaB9RVmR5JIdP0t4XJ//H8v8DHXE0J9YG10YoTezAjrsf
+         TUrk76ltl+kdssVis6o7dL5HDisnUUeJFmkeKPPoAObXE+THYaPtS6zeMkOPYGAsFd
+         1xaQl+SXhv/0w==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=941; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=2kYDKlPGuARAbHrfBQRS5FpDZ3D9CdFwmP0TiURMx9U=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjl5yyQXfkQFCadHn/h2R7ZLshTrqTWWmyCnMGf6yP ztLLsRCJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5ecsgAKCRDB/BR4rcrsCbMhB/ 4x8UZzpeBN3TrfNbcaTXnOujkORTxhMlGMNkb/792JRPxjz2MFP/pJ7y8fCxXActAfBIyaVT5Nm/rf EkabQxQurGlbBLdI7kgrf33e27wRKiAvd/BmOCkSl5b4Ceo/aUD3TJiOiBIGqqfETyor6iX5I5Aw6D xPcrZgI9J7RQZiD3iI3eSbxTHXRWix8fsHYPTmBfAlx/oQhJw2lAh+08fMXnCgLVcRSJkOoCQbU6Au k1b9wC08H/CwPaR0JRXIK2mdqiS8KSBQ0JejKEHF+SH4dh+GKnK9blf1unmsOASQtZgOwZkqg0f+aX OCFlJXh3vsc859AMnDCnBIlAmbDpkc
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <d92dbf13-5c64-03d0-1aab-6f96d8f45669@gmail.com>
+References: <20221110211132.297512-1-ftoth@exalondelft.nl> <20221110211132.297512-2-ftoth@exalondelft.nl> <d92dbf13-5c64-03d0-1aab-6f96d8f45669@gmail.com>
+Subject: Re: [PATCH v2 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ferry Toth <fntoth@gmail.com>, Ferry Toth <ftoth@exalondelft.nl>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Mon, 12 Dec 2022 13:51:39 -0800
+User-Agent: alot/0.10
+Message-Id: <20221212215141.ADC2EC433EF@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,35 +59,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A remove callback just returning 0 is equivalent to no remove callback
-at all. So drop the useless function.
+Quoting Ferry Toth (2022-11-11 06:04:16)
+> + Stephen Boyd
+>=20
+> On 10-11-2022 22:11, Ferry Toth wrote:
+> > Since commit 0f010171
+> > Dual Role support on Intel Merrifield platform broke due to rearranging
+> > the call to dwc3_get_extcon().
+> >=20
+> > It appears to be caused by ulpi_read_id() on the first test write faili=
+ng
+> > with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy v=
+ia
+> > DT when the test write fails and returns 0 in that case even if DT does=
+ not
+> > provide the phy. As a result usb probe completes without phy.
+> >=20
+> > Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+> > ---
+> >   drivers/usb/common/ulpi.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> > index d7c8461976ce..60e8174686a1 100644
+> > --- a/drivers/usb/common/ulpi.c
+> > +++ b/drivers/usb/common/ulpi.c
+> > @@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
+> >       /* Test the interface */
+> >       ret =3D ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+> >       if (ret < 0)
+> > -             goto err;
+> > +             return ret;
+> >  =20
+> >       ret =3D ulpi_read(ulpi, ULPI_SCRATCH);
+> >       if (ret < 0)
+>=20
+> Would this affect others phys (like qcom HSIC)? I'm not sure if failing=20
+> the test write is a normal behavior.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/usb/chipidea/usbmisc_imx.c | 6 ------
- 1 file changed, 6 deletions(-)
+I don't think failing a test write is normal behavior. I don't have this
+hardware on hand anymore though, so I can't help test it. Looks OK to me
+though:
 
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index bac0f5458cab..d09473a39424 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -1163,14 +1163,8 @@ static int usbmisc_imx_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int usbmisc_imx_remove(struct platform_device *pdev)
--{
--	return 0;
--}
--
- static struct platform_driver usbmisc_imx_driver = {
- 	.probe = usbmisc_imx_probe,
--	.remove = usbmisc_imx_remove,
- 	.driver = {
- 		.name = "usbmisc_imx",
- 		.of_match_table = usbmisc_imx_dt_ids,
-
-base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
--- 
-2.38.1
-
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
