@@ -2,134 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1945364B141
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 09:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE34E64B142
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 09:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiLMIhr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 03:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S234616AbiLMIhw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 03:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbiLMIho (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 03:37:44 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE37765BF;
-        Tue, 13 Dec 2022 00:37:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670920662; x=1702456662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=muyLhzUL6TC6ixkunPAAIPRNRRxzfocbzQkAtYhFLbQ=;
-  b=jDYKUiFCcQzs8mAoLAVn6kuDkZtYcRtYq3HkRpIso4t8FTb1jVXzNZyI
-   8uZKA82+DM097OR/i5xoyL0Vmew37sbcfI2w86G30fY3uog2viPE+3TDO
-   f7w8Wvovx4uosqAwQMtC2vWPLfRAgl+9vRESYZFtYtRL06kFvqrcq0pyE
-   Q7RFZmkABu6ZLG5HvhsgKCeafYPGoDOWQPybsaCU6bR2xJm+RJCU8Owy6
-   iZK+an9IrTrjpookfLopj4NZZ8ecyZREXkqunozSCnHDUWt4t44BWwGLn
-   AYh0d7Eh2RT1uoTAuBaYpqlAAX3CO5Laatg0vn78Km2b0FT8Nf4rAXbWz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="298420192"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="298420192"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 00:36:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="790810464"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="790810464"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 Dec 2022 00:36:33 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 13 Dec 2022 10:36:32 +0200
-Date:   Tue, 13 Dec 2022 10:36:32 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: typec: hd3ss3220: Fix NULL pointer crash
-Message-ID: <Y5g5kPYu9+tGfriE@kuha.fi.intel.com>
-References: <20221209170740.70539-1-biju.das.jz@bp.renesas.com>
- <Y5b24vdYTNW/aJ+0@kuha.fi.intel.com>
- <OS0PR01MB59225780B75FDC02C077ACE986E29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922FC3A7C5F0507292F99AF86E29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        with ESMTP id S234592AbiLMIhu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 03:37:50 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E6E1835C
+        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 00:37:48 -0800 (PST)
+Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A85364A7;
+        Tue, 13 Dec 2022 09:37:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670920666;
+        bh=UMZV6Xe1xWiKCB3hlwFxNrBZSh8/KFtKMpzax9ic2Nw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=czFrSlZtQaVSf+szlFgzPgBuyxANYitnrU5w8B0Og0Mw56AFJOYAdyyBaKKIUXRA9
+         c9qYlLF6NMGNqwGwy4cvQVpKGrlVBJGqOyZCHtWMg6wB9sV4wymqaOshnBc181NjGr
+         nZQ88LKAnHgoUUBxUgIWE/jx0anyNfeubn7B8HPY=
+From:   Daniel Scally <dan.scally@ideasonboard.com>
+To:     linux-usb@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
+        w36195@motorola.com, m.grzeschik@pengutronix.de,
+        kieran.bingham@ideasonboard.com, torleiv@huddly.com,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Subject: [PATCH 0/6] UVC Gadget: Extend color matching support
+Date:   Tue, 13 Dec 2022 08:37:30 +0000
+Message-Id: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS0PR01MB5922FC3A7C5F0507292F99AF86E29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The current UVC gadget implementation hardcodes a single color matching
+descriptor and transmits it a single time following all the format and frame
+descriptors. This is inflexible, and additionally applies only to the _last_
+format in the array of descriptors.
 
-On Mon, Dec 12, 2022 at 10:54:25AM +0000, Biju Das wrote:
-> > Looks It is a bug in renesas_usb3.c rather than this driver.
-> > 
-> > But how we will prevent hd3ss3220_set_role being called after
-> > usb_role_switch_unregister(usb3->role_sw) from renesas_usb3.c driver??
+This series extends the support such that the default descriptor can be amended
+and is transmitted once-per-format instead of once-only, it then adds the ability
+to create new color matching descriptors and associate them with particular formats.
+The default color matching descriptor is retained and used where the user does not
+link a new color matching descriptor to the format, so the default interaction
+with userspace is unchanged from the current implementation.
 
-Normally that should not be a problem. When you get a reference to the
-role switch, also the reference count of the switch driver module (on
-top of the device) is incremented.
+Daniel Scally (6):
+  usb: gadget: usb: Remove "default" from color matching attributes
+  usb: gadget: uvc: Add struct for color matching in configs
+  usb: gadget: uvc: Copy color matching descriptor for each frame
+  usb: gadget: uvc: Remove the hardcoded default color matching
+  usb: gadget: uvc: Make color matching attributes read/write
+  usb: gadget: uvc: Allow creating new color matching descriptors
 
-From where is usb_role_switch_unregister() being called in this case -
-is it renesas_usb3_probe()?
-
-If it is, would something like this help:
-
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index 615ba0a6fbee1..d2e01f7cfef11 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -2907,18 +2907,13 @@ static int renesas_usb3_probe(struct platform_device *pdev)
-        renesas_usb3_role_switch_desc.driver_data = usb3;
- 
-        INIT_WORK(&usb3->role_work, renesas_usb3_role_work);
--       usb3->role_sw = usb_role_switch_register(&pdev->dev,
--                                       &renesas_usb3_role_switch_desc);
--       if (!IS_ERR(usb3->role_sw)) {
--               usb3->host_dev = usb_of_get_companion_dev(&pdev->dev);
--               if (!usb3->host_dev) {
--                       /* If not found, this driver will not use a role sw */
--                       usb_role_switch_unregister(usb3->role_sw);
--                       usb3->role_sw = NULL;
--               }
--       } else {
-+
-+       usb3->host_dev = usb_of_get_companion_dev(&pdev->dev);
-+       if (usb3->host_dev)
-+               usb3->role_sw = usb_role_switch_register(&pdev->dev,
-+                                                        &renesas_usb3_role_switch_desc);
-+       if (IS_ERR(usb3->role_sw))
-                usb3->role_sw = NULL;
--       }
- 
-        usb3->workaround_for_vbus = priv->workaround_for_vbus;
- 
-
-
-> Do we need to add additional check for "fwnode_usb_role_switch_get" and
-> "usb_role_switch_get" to return error if there is no registered role_switch device
-> Like the scenario above??
-
-No. The switch is always an optional resource.
-
-Error means that there is a switch that you can control, but you can't
-get a handle to it for some reason.
-
-NULL means you don't need to worry about it - there is no switch on
-your platform that you could control.
-
-thanks,
+ .../ABI/testing/configfs-usb-gadget-uvc       |   6 +-
+ drivers/usb/gadget/function/f_uvc.c           |   9 -
+ drivers/usb/gadget/function/u_uvc.h           |   1 -
+ drivers/usb/gadget/function/uvc_configfs.c    | 247 +++++++++++++++---
+ drivers/usb/gadget/function/uvc_configfs.h    |   9 +
+ 5 files changed, 228 insertions(+), 44 deletions(-)
 
 -- 
-heikki
+2.34.1
+
