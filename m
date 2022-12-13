@@ -2,93 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E667364B509
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 13:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3C964B603
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 14:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235618AbiLMMVk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 07:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
+        id S235065AbiLMNXI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 08:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235603AbiLMMVi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 07:21:38 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56954C0;
-        Tue, 13 Dec 2022 04:21:36 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowAAXfuw9bphjbVvnBg--.1126S2;
-        Tue, 13 Dec 2022 20:21:17 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] usb: gadget: aspeed_udc: Add check for dma_alloc_coherent
-Date:   Tue, 13 Dec 2022 20:21:16 +0800
-Message-Id: <20221213122116.43278-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230061AbiLMNXG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 08:23:06 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E53A17E20;
+        Tue, 13 Dec 2022 05:23:04 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1C113240013;
+        Tue, 13 Dec 2022 13:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670937782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jL+xcBOYdD78r23PS31gaU3YWiITl+rwOOygEItoozc=;
+        b=R9lbeAi05SXD39ZRp974M2gOcfxUCkydItXUcL25E8l+i3X9Q10gtIXNvsjFoeHZ0mGAof
+        hlmzRAxYl2EBM+jdc/2tMtHqWNJUf3tASXMOhILMNJWwKgpccTEQgz7+c9sKsSpa5utsIN
+        hQ2zETYa1IjOKLpkNHZkh9r/c3B08ex+NbIteQYr2joiySEOj7D0Y4dqNlOrJxR69D7tAm
+        2iW0SMlg8c6mNtQyOI7Kdpp/l+XH3AzZACxHCmq4APQD84EzakheDHpDwpX3giYhWycz5c
+        ny1MOiwborctRk5UbT7cTWtbzIuOok26jp2YPH0P6KsscYO8dAmEhb+or5X0Uw==
+Date:   Tue, 13 Dec 2022 14:22:58 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v3 3/9] dt-bindings: PCI: renesas,pci-rcar-gen2:
+ 'depends-on' is no more optional
+Message-ID: <20221213142258.77767caf@bootlin.com>
+In-Reply-To: <15cb7a77-4308-15f0-4669-7a2673b4abcb@linaro.org>
+References: <20221207162435.1001782-1-herve.codina@bootlin.com>
+        <20221207162435.1001782-4-herve.codina@bootlin.com>
+        <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
+        <20221208100530.137fa8b7@bootlin.com>
+        <8dfb5b8a-766a-14ec-16d4-74fdd9f7d622@linaro.org>
+        <20221208165101.584e4b92@bootlin.com>
+        <15cb7a77-4308-15f0-4669-7a2673b4abcb@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAAXfuw9bphjbVvnBg--.1126S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKw4fKF45Zw17AF1UAr47urg_yoWftrgEkr
-        4UWFs5Wryav393Kr1jq343Cryjk34ku3s5uF1vkr13Aay3Ga4xXryUXrWkGa17uFyxCFn8
-        Aas8KrW7Xw47WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUbQeOJUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the check for the return value of dma_alloc_coherent
-in order to avoid NULL pointer dereference.
+Hi Krzysztof,
 
-Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+On Fri, 9 Dec 2022 09:06:55 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-v1 -> v2:
+> On 08/12/2022 16:51, Herve Codina wrote:
+> > Hi Krzysztof,
+> >=20
+> > On Thu, 8 Dec 2022 10:46:32 +0100
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >  =20
+> >> On 08/12/2022 10:05, Herve Codina wrote: =20
+> >>> Hi Krzysztof,
+> >>>
+> >>> On Thu, 8 Dec 2022 09:26:41 +0100
+> >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >>>    =20
+> >>>> On 07/12/2022 17:24, Herve Codina wrote:   =20
+> >>>>> The 'depends-on' property is set in involved DTS.
+> >>>>>
+> >>>>> Move it to a required property.
+> >>>>>
+> >>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> >>>>> ---
+> >>>>>  Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml |=
+ 1 +     =20
+> >>>>
+> >>>> This should be squashed with previous patch. There is no point to add
+> >>>> property and immediately in the next patch make it required. Remember
+> >>>> that bindings are separate from DTS.
+> >>>>
+> >>>> Best regards,
+> >>>> Krzysztof
+> >>>>   =20
+> >>>
+> >>> I though about make dtbs_check in case of git bisect.   =20
+> >>
+> >> And what would this commit change? In Git you will have
+> >> 1. dt-bindings: PCI: renesas,pci-rcar-gen2: Add depends-on for RZ/N1 S=
+oC
+> >> family
+> >> 2. dt-bindings: PCI: renesas,pci-rcar-gen2: 'depends-on' is no more op=
+tional
+> >>
+> >> so what is the difference for git bisect? =20
+> >=20
+> > Well, today, I have:
+> > 1. dt-bindings: Add depends-on
+> > 2. dts: Add depends-on
+> > 3. dt-bindings: Move depends-on to mandatory =20
+>=20
+> What does it mean "I have"? Patches on mailing list? But we talk about
+> Git and I wrote you bindings are DTS are not going the same tree.
+>=20
+> >=20
+> > If I squash dt-bindings commits, I am going to have:
+> >   1. dt-bindings: Add mandatory depends-on
+> >   2. dts: Add depends-on
+> > or
+> >   1. dts: Add depends-on
+> >   2. dt-bindings: Add mandatory depends-on =20
+>=20
+> And how does it matter? Anyway it goes separate trees.
 
-1. Add "goto err;" when allocation fails.
----
- drivers/usb/gadget/udc/aspeed_udc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I finally understand what you mean by separate trees.
+And indeed, you're right, my patches split does not make
+any sense.
 
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-index 01968e2167f9..7dc2457c7460 100644
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -1516,6 +1516,10 @@ static int ast_udc_probe(struct platform_device *pdev)
- 					  AST_UDC_EP_DMA_SIZE *
- 					  AST_UDC_NUM_ENDPOINTS,
- 					  &udc->ep0_buf_dma, GFP_KERNEL);
-+	if (!udc->ep0_buf) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
- 
- 	udc->gadget.speed = USB_SPEED_UNKNOWN;
- 	udc->gadget.max_speed = USB_SPEED_HIGH;
--- 
-2.25.1
+According to feedbacks on this v3 series, these 3 patches
+will be removed in v4.
 
+Thanks for the review,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
