@@ -2,69 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8694C64B76E
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 15:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D3464B7E0
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 15:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbiLMOcc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 09:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
+        id S236036AbiLMOyh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 09:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbiLMOca (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 09:32:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D06201A7;
-        Tue, 13 Dec 2022 06:32:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11063B810FB;
-        Tue, 13 Dec 2022 14:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E684C433D2;
-        Tue, 13 Dec 2022 14:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670941946;
-        bh=6Las1K6UsElcFFPKMNMg/lxZmRcl29cdsCfhLvP95Vk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UeIoSVBuUB/0IelecfTsfwwOBLOjzk4biEag1yZSGBsgssA16IZz7Zw3OF7b+Vy2V
-         3PH0MIiz/Y5bbJne7eAkOxpYE7wdDgq4SQY81kalO1rwQ0uyOSVFyVMea04l3GBuJV
-         68y42W5AGZiQuabz+FWzGA2XCMnqzGE7ALHC5oO4=
-Date:   Tue, 13 Dec 2022 15:32:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2] usb: gadget: aspeed_udc: Add check for
- dma_alloc_coherent
-Message-ID: <Y5iM90xfRT65Invq@kroah.com>
-References: <20221213122116.43278-1-jiasheng@iscas.ac.cn>
+        with ESMTP id S236037AbiLMOya (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 09:54:30 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E2A2188B;
+        Tue, 13 Dec 2022 06:54:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670943270; x=1702479270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZatOAHNkQsW1nDuKDZq+RkkySdsy6O82Kh9XxlKI6Hw=;
+  b=MrfJyXNJ5fIKwE495Vz3LTVpMCOk2xUN/GmMmF64HweSeRIvJL6pOW8r
+   tKHlFLoX3lfa8FOQwui4ZEe35T0n3uvRBiNQRKc1zr45H1/LAS7blTlgE
+   vj7m0x5UxmNMRGmGM1p2GQjYEPmqgKNHdvkl5PPJj9++t08GQ14ygLkJy
+   bk4BFVf7PemUrQ67YozyehtLRXL9z76qB710UGrRXMFSFAeYsttrJH0z3
+   L7kajOYcJrzPhFMlpkFcOxzXviCZ1pZkTTNZ2/Lyh50JC6LbvBWuxa63A
+   k3rlN8j1/1B7rt8fD5Eu/WYLvX1Mw3s3D/YsdQ1L6Pt19xMGdYfFa0/Aa
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="315784093"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="315784093"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 06:54:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="737419417"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="737419417"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Dec 2022 06:54:18 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id BE73AF7; Tue, 13 Dec 2022 16:54:46 +0200 (EET)
+Date:   Tue, 13 Dec 2022 16:54:46 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] thunderbolt (gcc13): synchronize
+ tb_port_is_clx_enabled()'s 2nd param
+Message-ID: <Y5iSNppygdGM3Ls6@black.fi.intel.com>
+References: <20221212102936.23074-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221213122116.43278-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221212102936.23074-1-jirislaby@kernel.org>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 08:21:16PM +0800, Jiasheng Jiang wrote:
-> Add the check for the return value of dma_alloc_coherent
-> in order to avoid NULL pointer dereference.
+Hi,
+
+On Mon, Dec 12, 2022 at 11:29:36AM +0100, Jiri Slaby (SUSE) wrote:
+> tb_port_is_clx_enabled() generates a valid warning with gcc-13:
+>   drivers/thunderbolt/switch.c:1286:6: error: conflicting types for 'tb_port_is_clx_enabled' due to enum/integer mismatch; have 'bool(struct tb_port *, unsigned int)' ...
+>   drivers/thunderbolt/tb.h:1050:6: note: previous declaration of 'tb_port_is_clx_enabled' with type 'bool(struct tb_port *, enum tb_clx)' ...
 > 
-> Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> I.e. the type of the 2nd parameter of tb_port_is_clx_enabled() in the
+> declaration is unsigned int, while the definition spells enum tb_clx.
+> Synchronize them to the former as the parameter is in fact a mask of the
+> enum values.
+> 
+> Cc: Martin Liska <mliska@suse.cz>
+> Cc: Andreas Noever <andreas.noever@gmail.com>
+> Cc: Michael Jamet <michael.jamet@intel.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 
-Again, please prove that you tested this and follow the requirements at:
-	Documentation/process/researcher-guidelines.rst
-in order for us to be able to accept your changes.
-
-thanks,
-
-greg k-h
+Looks good now. I will pick this up after the merge window closes.
+Thanks!
