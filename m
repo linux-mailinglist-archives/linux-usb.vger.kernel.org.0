@@ -2,191 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8B564BF45
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 23:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BB564C0DD
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 00:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236335AbiLMWUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 17:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S236628AbiLMXq5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 18:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236425AbiLMWUo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 17:20:44 -0500
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C3C1C134
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 14:20:40 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id 5DdapWVMLCoWh5Ddbpqpmv; Tue, 13 Dec 2022 23:20:38 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 13 Dec 2022 23:20:38 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <67878b69-89af-6a0c-24c6-ff111dae6ce6@wanadoo.fr>
-Date:   Tue, 13 Dec 2022 23:20:34 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for each
- configfs driver
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, imx@lists.linux.dev,
-        linhaoguo86@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        with ESMTP id S236343AbiLMXqn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 18:46:43 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2040.outbound.protection.outlook.com [40.107.21.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE15718B35;
+        Tue, 13 Dec 2022 15:46:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CW3HB3jd9QiP9j+C2VsOlozt2LwzUCMRoqFiMIoAmYja+SyRgJypK4YoXq2hC28lDkZ9V/lguajZI9IGP8qfPTAPROO/VEeCnRB3i0wlGXDHBlLgrk0sVT3uDklyl94KrF54qy3boJPwQrJQockanvGf2X2I/VKHiw5cEqet4kDV1hBEBbftsA5ObEG/UjZhOp0fnfmx3hfiZeB7l7Ov4zKTiDsJ6/oOf7VEu9GxHtoEE/Paflx9LUUXQB/PRdzPp3qIyr+js/GT5RzLAz3AiqD2gTbizqjMncUR8gXsDvPSNoOgXSMh6GneKLHlx5HyaY+C+J5owqHHgQDr16HFJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w4Kz90u9ABTU0UHoewoWC5ecuEFEPYuuwrj84Vtbnxk=;
+ b=Lm+T9IvWt+s5ccYoApFqWVD3keLH30PWpVpvNGS73N6uBy2jAljoImvW4fek5thef7hbidaEXN5GeMfARDbw5A63BlNXGuxkRzLcpphQ0xdxMjesLEyOwbsGtEiEUxEabhX9fDoeAay5+W1+eMWDM4h82Ibd8eLtNlYxkhXJuCUOyBw8LG5tLBSe4NNT1+MrHf1ejJcyZk0RPZVJ7ju9Ov/bCww3q4W6QmskujCMHMk4GgFdIvDX2BTsVQrUU3QZE5L42sqdgMr0STqcqX81icIEsKVxvhtm4sYilQK+eeNmQLRI9T9EX0gYPBy93DGizuTZPGjSOglHiXX/eQGGaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w4Kz90u9ABTU0UHoewoWC5ecuEFEPYuuwrj84Vtbnxk=;
+ b=DHctuGucjrr38y9cIfm7Uqp1choVGKhWavw8G8yf+DuIgiVU6w3tu0y4MPv3WiK25D+w6/VQfFOj9XIE2B8+RYpOKQnUMUMJeZ4DWIlMou85mnBCDEwxSGqTwoAAfloIJFFArwjCFcygzSArWR92b2LBsBeS9vz0tXzhCwdi0dE=
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by DB8PR04MB7099.eurprd04.prod.outlook.com (2603:10a6:10:12b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Tue, 13 Dec
+ 2022 23:46:39 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::203a:e5da:a4a:7663]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::203a:e5da:a4a:7663%12]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 23:46:38 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "linhaoguo86@gmail.com" <linhaoguo86@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
         Chanh Nguyen <chanh@os.amperecomputing.com>
+Subject: RE: [EXT] Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for
+ each configfs driver
+Thread-Topic: [EXT] Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for
+ each configfs driver
+Thread-Index: AQHZDz7Xq5KKpC+MIEabnI9j9xs4gK5sY74AgAAWKxA=
+Date:   Tue, 13 Dec 2022 23:46:38 +0000
+Message-ID: <HE1PR0401MB23311A1B78E2D210079FE4A088E39@HE1PR0401MB2331.eurprd04.prod.outlook.com>
 References: <20221213220354.628013-1-Frank.Li@nxp.com>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221213220354.628013-1-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <67878b69-89af-6a0c-24c6-ff111dae6ce6@wanadoo.fr>
+In-Reply-To: <67878b69-89af-6a0c-24c6-ff111dae6ce6@wanadoo.fr>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|DB8PR04MB7099:EE_
+x-ms-office365-filtering-correlation-id: 5c1e4f2b-bb1f-4845-ea5f-08dadd64474d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8kYoLXqyNtomtBtXfnaszFZ9DesukYl+XL0CLJANlaLzSKc4r8cDK0RX4dpdgI5pZlrn/WHbrCXI/w0CK8BpxuCAdCIryPk3iSlFq7bNtFiDjAnaeJ5KmYaJvI9myQGuyxuTdBF5ecqdzWCZpPEr3NIm6tR5Ti6G5BEKstFYvMr7jJEAjRdywtMf76CCxdgPiMy+t5bSWQSCR1jVixjfA7dxIM3Z1EF296i2VbCefoHgoZ7LDvWGxzm8vvwyahr4CRjGpCvthefYrT03/k9ZHfrCj3DcD2GZ5QrEZOsAj1FsTlSh4b/gRD+cLPVbGXJhwZkbYS+J8BbY1SDkUcCwI0l2I1892xiwKPTrjmiVMDf5ZOppW8yVck4W0WnpXdPpm0Eai1e3QAs1hf0ChJ7h154L7XZ+n0T5hj/TRiyA4lH6d9WGujeCmV1zd58q09dgX4WIjEdCOWD6DXysKGTyufYpbrYSk1T+CiAa0PhJMd2C+jSXnICKCILm3gsq7shCR2bCIyZl96JNHLrDwsLBe118/CwxdsQFutGtVAqaOdTrHg6o3KeBdcpJQT0AMIHDXdwu8sZ9Kd2f9LFTfxo7stXHI5c3BWayaxtLM5t7TNGJktshrrTF5QpXb0KUXwvipuQnPUGRzpRLiezEdy8w9AxST7CarBAQdH6w25NAuZcAloJgheXZmmelaRbOgxw91Of8ROFaTROWctgJ4J04G9zxElPIxvXJReW/spi79gU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(376002)(346002)(396003)(451199015)(122000001)(52536014)(8936002)(2906002)(38070700005)(5660300002)(4744005)(83380400001)(478600001)(44832011)(966005)(41300700001)(6916009)(316002)(7696005)(54906003)(86362001)(8676002)(66446008)(64756008)(76116006)(55016003)(33656002)(26005)(55236004)(4326008)(38100700002)(66946007)(66556008)(66476007)(71200400001)(9686003)(186003)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fkrWtID+nTL/QGhy4jOpxQltDU4BMCEelGnrGHhzR8MKxUXbULtNqWrBH1HF?=
+ =?us-ascii?Q?fhRM941PEHCA0Gkj/Znl8s3Od7V7DpY+JtytzU3viraxdOWgOek7w6YCrFgx?=
+ =?us-ascii?Q?J7Qp+142f+thJA79nuVQSziXiBC34hHxUlPpeeGfNmtCYY9oMHJOCRDh0FG8?=
+ =?us-ascii?Q?83FFK1XQdQ4g1aZjrqNIz0CZzwS4kYVffnFNeKqw6az01v1Qne8xeaha+hPG?=
+ =?us-ascii?Q?XVvWvf1dmun2quOQeuLaKwxEGcjfd6DKZU6DnoURG1X01PZCc1J67aINjO/C?=
+ =?us-ascii?Q?ixf55qyf0lBPLsWXUwb0lIQfvfucNor2ZsmvA1+bGnvzd9AiuTgrNfL+bjc/?=
+ =?us-ascii?Q?IQfcff1h/xspki/e103/lvD/lqKZbPIR9OUF15XC8llUq2Fw0Xtg62IjrCH1?=
+ =?us-ascii?Q?WQN2V5zimSPp1t3QQrxp3IdCuM9yeml6FotGEEoAUBS3ZdNydo0ClxYw+6j9?=
+ =?us-ascii?Q?ajus2Rtij770lPwulgt4WeUwvHGwwHrHCc1FiTjdKSXR/eSinbQtvvya7wMS?=
+ =?us-ascii?Q?EtspzBHTu679YiwnHVs04fmDt3bU1vg3WbvxlaEbR8fI52XDVlcOLma7aCHd?=
+ =?us-ascii?Q?E9727e5wcspxrEUR3YVgWoh0TbVz4zHtKVVzs7OeIfP7g7a2K98C1saqH5DL?=
+ =?us-ascii?Q?xc97o2naLSbsqN/sEVjSGTzRmUDkFfMCkR6h1XnXKJFkNjSpBad6ESy3qfTM?=
+ =?us-ascii?Q?CJQ3V6l3vmr705SXQUODVxTWH4j0tR6lw1n+fMpO0d5rEiGhIISzNhxFB9/c?=
+ =?us-ascii?Q?763r4XPKBSEBUilEBntk9ybqKaa3ZloFqbOqv0B8yfQZxunoru2fsbDIQst3?=
+ =?us-ascii?Q?4LyUr/7ZJzAIH6hRL/eKVFiX1lbZ30bYd2xMmZOHMY0DeEx1n5IDVxY6AiZK?=
+ =?us-ascii?Q?ZUU6dGxq9/nIwsM6wlKAK5psD23Zhi9MEVVVomBCf6ZuQp5tjdcBQSDAGrZq?=
+ =?us-ascii?Q?Vk1O3ZSU3tLu8yhJElidC3qoJhkJ9EUX8pyr5fMtoR7Kgo/QXpxewzVc4HUK?=
+ =?us-ascii?Q?4NT+JZJVbr8xHcpBlW7PCCQLnaRrIQCwlRkLkGrYIcOU4lmLWBaMJkY4maiR?=
+ =?us-ascii?Q?+WMRzSzT1xpqaBZYZrNhqkV/KKDRUfSp+DuOxXQVLnrJqSg7hyPmvgKEW0nP?=
+ =?us-ascii?Q?kLD9ws6jS39ZznOUvdHgQ0p0C+aff7I5bGd/dxzT+nzImlIpsxASw1n7cOqR?=
+ =?us-ascii?Q?dtai8WlCl+Iv1BoRMDJXwL59UQjpwvLjQiRviO6gmo5MWp/cHN82sRCYSlYq?=
+ =?us-ascii?Q?bI8ir0CKDzs+IzAbtHIxbmeKzDWtq+d5OtsZOXRpkVczZ22Wdr/tZRc/Y/v9?=
+ =?us-ascii?Q?SYjFfOpEmgs2sxVFLzOpeOnExNRyyJRfRsjbEVk9zbMzdU9gZUnBGj94oGPP?=
+ =?us-ascii?Q?qZY4gMYA/pO6a1Qmxay43NDgBDw8yDjn9kOM57kG2gW/AUzYLS3BExJmvYA1?=
+ =?us-ascii?Q?yg/ZJWD1whu1lDSNj/IWin/61ZAOrpI3EOan4lrwKo9mF4ptl9uu7H3UBMl+?=
+ =?us-ascii?Q?tw8fbUDuAXhpqGM/jGGU3j9jNZs0UPBZOQ0hPj+xeHfHk7c54Bj5YjjDmQaf?=
+ =?us-ascii?Q?xnhatm/14RJJy5CxEuo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c1e4f2b-bb1f-4845-ea5f-08dadd64474d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2022 23:46:38.8478
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Czq0m6fbdrGsOrz/RPJhHZAxT1Ucr82tCh/e2AFX3mqouwbX6Y9u6s4nIYdxCxx57TofriQ5LuixMSMMPSC4xQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7099
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Le 13/12/2022 à 23:03, Frank Li a écrit :
-> From: Rondreis <linhaoguo86@gmail.com>
-> 
-> When use configfs to attach more than one gadget.
-> 
-> Error: Driver 'configfs-gadget' is already registered, aborting...
-> 
-> 	UDC core: g1: driver registration failed: -16
-> 
-> The problem is that when creating multiple gadgets with configfs and
-> binding them to different UDCs, the UDC drivers have the same name
-> "configfs-gadget". Because of the addition of the "gadget" bus, naming
-> conflicts will occur when more than one UDC drivers registered to the
-> bus.
-> 
-> It's not an isolated case, this patch refers to the commit f2d8c2606825
-> ("usb: gadget: Fix non-unique driver names in raw-gadget driver").
-> Each configfs-gadget driver will be assigned a unique name
-> "configfs-gadget.N", with a different value of N for each driver
-> instance.
-> 
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> 
-> Signed-off-by: Rondreis <linhaoguo86@gmail.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> 
-> This patch is based on https://lore.kernel.org/lkml/20220907112210.11949-1-linhaoguo86@gmail.com/
-> fixed the all greg's comments.
-> 
-> I met the same issue.  Look likes Rodrieis have not continue to work this
-> patch since Sep, 2022.
-> 
-> I don't know full name of Rondreis.
+>=20
+> Hi,
+>=20
+> Also, out of curiosity, any link with this patch:
+> =09
+> https://lore.kernel.org/all/20221213041203.21080-1-chanh@os.amperecomputi=
+ng.com/
+>=20
+> Not exactly the same, but not very different.
+>=20
+> (adding Chanh Nguyen in cc)
 
-Hi,
+Yes, it is almost the same.=20
 
-Also, out of curiosity, any link with this patch:
- 
-https://lore.kernel.org/all/20221213041203.21080-1-chanh@os.amperecomputing.com/
-?
+I think it is not good place to free driver.name at gadget_drop function(),=
+ it should be close to kfree(gi).
 
-Not exactly the same, but not very different.
-
-(adding Chanh Nguyen in cc)
-
-CJ
-
-> 
->   drivers/usb/gadget/configfs.c | 30 ++++++++++++++++++++++++++----
->   1 file changed, 26 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 3a6b4926193e..785be6aea720 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -4,12 +4,17 @@
->   #include <linux/slab.h>
->   #include <linux/device.h>
->   #include <linux/nls.h>
-> +#include <linux/idr.h>
->   #include <linux/usb/composite.h>
->   #include <linux/usb/gadget_configfs.h>
->   #include "configfs.h"
->   #include "u_f.h"
->   #include "u_os_desc.h"
->   
-> +#define DRIVER_NAME "configfs-gadget"
-> +
-> +static DEFINE_IDA(driver_id_numbers);
-> +
->   int check_user_usb_string(const char *name,
->   		struct usb_gadget_strings *stringtab_dev)
->   {
-> @@ -46,6 +51,7 @@ struct gadget_info {
->   
->   	struct usb_composite_driver composite;
->   	struct usb_composite_dev cdev;
-> +	int driver_id_number;
->   	bool use_os_desc;
->   	char b_vendor_code;
->   	char qw_sign[OS_STRING_QW_SIGN_LEN];
-> @@ -392,6 +398,8 @@ static void gadget_info_attr_release(struct config_item *item)
->   	WARN_ON(!list_empty(&gi->string_list));
->   	WARN_ON(!list_empty(&gi->available_func));
->   	kfree(gi->composite.gadget_driver.function);
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->   	kfree(gi);
->   }
->   
-> @@ -1571,7 +1579,6 @@ static const struct usb_gadget_driver configfs_driver_template = {
->   	.max_speed	= USB_SPEED_SUPER_PLUS,
->   	.driver = {
->   		.owner          = THIS_MODULE,
-> -		.name		= "configfs-gadget",
->   	},
->   	.match_existing_only = 1,
->   };
-> @@ -1581,6 +1588,7 @@ static struct config_group *gadgets_make(
->   		const char *name)
->   {
->   	struct gadget_info *gi;
-> +	int ret = 0;
->   
->   	gi = kzalloc(sizeof(*gi), GFP_KERNEL);
->   	if (!gi)
-> @@ -1622,16 +1630,30 @@ static struct config_group *gadgets_make(
->   
->   	gi->composite.gadget_driver = configfs_driver_template;
->   
-> +	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-> +	if (ret < 0)
-> +		goto err;
-> +	gi->driver_id_number = ret;
-> +
-> +	gi->composite.gadget_driver.driver.name =
-> +		kasprintf(GFP_KERNEL, DRIVER_NAME ".%d", gi->driver_id_number);
-> +
->   	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->   	gi->composite.name = gi->composite.gadget_driver.function;
->   
-> -	if (!gi->composite.gadget_driver.function)
-> -		goto err;
-> +	if (!gi->composite.gadget_driver.function) {
-> +		ret = -ENOMEM;
-> +		goto err_func;
-> +	}
->   
->   	return &gi->group;
-> +
-> +err_func:
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->   err:
->   	kfree(gi);
-> -	return ERR_PTR(-ENOMEM);
-> +	return ERR_PTR(ret);
->   }
->   
->   static void gadgets_drop(struct config_group *group, struct config_item *item)
-
+>=20
+> CJ
+>=20
