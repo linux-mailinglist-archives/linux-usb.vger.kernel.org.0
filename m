@@ -2,52 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B9364B664
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 14:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA8D64B6C8
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 15:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbiLMNgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 08:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S235837AbiLMOGV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 09:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbiLMNgk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 08:36:40 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7343719C20
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 05:36:39 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id l21-20020a5d9315000000b006df7697880aso1877036ion.23
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 05:36:39 -0800 (PST)
+        with ESMTP id S235808AbiLMOF7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 09:05:59 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33C6205FA
+        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 06:05:56 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so5017513lfb.13
+        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 06:05:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n7BqOo+kSVPojQOVkzbf9L5JFXaDuXdJjEL2ta9kBZk=;
+        b=ipcLqkcCSJBmYMcjWYAK8N7S4kv1xzpURdexxEDp8GEA3roaRmw0q7SFBciihXd/l3
+         3r+BnPdP8QlkJDjP3glXn26OL3FDTB1Hs0pR6CpcfIAH8QR2dtkK4sJs0phs4zzqnHuc
+         8Vrv8esCATPjkZgdBLXr8Mo3hmY1E7jMYX5+dHqWlnADTHGIVmcPNfQPEZG3baQzqC/A
+         tetYPXB1KJQNZqLuM/mRfdu7WkxVrQ/RxgddZdtUULtYt29aQd1SCueOJ1SiyQFyw39Q
+         TTIhsu+dK/1j0QsXEf68bhgKSb1MnRnkCypiRuoJqf4hc5IMSzVwReeuaG66SUfZvNf2
+         cGsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k0YRwHAXNZ50GNWF2AK2coFpr1Tq8FUiG/h0+/L+UhI=;
-        b=yP045h1NBnbGeE25f87NxxE2HbPfOMYMc9jLdxmlNeedH5nJz2Mef0r5EK/SEeLpgy
-         yMMVnniC0iudFINxG6IOVEXQLF2WNi9HZR9AlcBVDdE7hXUoAalsT0/DX3jpyVLf2iiq
-         o4HUCv4Ps4iKw2+Om4oACLfm2bJCGSq+zOEVQh2Efh9Dw3BCnZvzti4MUQaAq64NLqC0
-         ACnRKjzQC18oCaIPJozZsk5MwKKiCdbe0akBwmq6vTgKZfYw3fMeN+LTIY4esrqnAz85
-         vlOsXYAPmjUC7AN2PNhKGHhk0N2oLjKAW3ay6eKWmqr2poYV/zM5EDdI7MOh+aZ7TDGA
-         T62Q==
-X-Gm-Message-State: ANoB5pnfc3S/qDD+ZAM6k83aBd0Yr8hwMeSPl5vaHlPkaW0PQEiycFEL
-        wlDe5d0XQQvHQLQA24EP5Zt+jYgKt4met+8b3iOUCdEzoesU
-X-Google-Smtp-Source: AA0mqf5h6cRF83tWEtYROGmLv5BMziYxszyo/HW8rorNHVYLLRNEmyTP5N1OgA+k5b+adYHWn8elJhqsqa3gRDA8kXM8n5kEB6Ih
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n7BqOo+kSVPojQOVkzbf9L5JFXaDuXdJjEL2ta9kBZk=;
+        b=Sg5WZnXEo/m/i1zA8m2nFlDdC8WSJdwDD3wvNN6xPA3K6zE3LXC12dr9VjtzrVybtF
+         5Y+36nCZgCQf9GI1w5k8M7VjZew2LDDe8Qt+jEEpEtocVpMvnRQ/iDY3TGSzp5L9QnyV
+         OSpizDNfvqd9m+JyagbihnhK0SUvW++QCVCksslXNI6lRzNBQeYwon7AYEEwfya+wklF
+         7N9FbSSv1vlFLNh9aInPyBbSQgmh4LVHNHE927PD+RbJhRIxct63mDcPfgHmZXaV2YCr
+         OHQ8hltmrQI+dFHPdGgUVt/YmDgUQD0qUDnTd5C9NR9LkNXZmQWf2PflzPKhEKqlAiOT
+         OERg==
+X-Gm-Message-State: ANoB5pnKXmo934XX3vh1rfOodXUSHCFQocI3iZs4rL8L+rn+aKyeVgbX
+        7C2xmWIx9dOBdt4gQ8MWbxaBqA==
+X-Google-Smtp-Source: AA0mqf7Xn1MU+m77o/IGeVd3CC1B0v4t8tqlCYVBFgxIcspAoPClDDqZKKcrYEERk/eC9teZbMP6ag==
+X-Received: by 2002:a05:6512:32b7:b0:4b5:82f1:7f3d with SMTP id q23-20020a05651232b700b004b582f17f3dmr7803471lfe.58.1670940354892;
+        Tue, 13 Dec 2022 06:05:54 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id d28-20020a194f1c000000b00498fbec3f8asm384059lfb.129.2022.12.13.06.05.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 06:05:54 -0800 (PST)
+Message-ID: <fe5e52d9-3f93-ecc3-b7ef-d3e17e07d2a5@linaro.org>
+Date:   Tue, 13 Dec 2022 15:05:52 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca8d:0:b0:302:de10:7ae1 with SMTP id
- t13-20020a92ca8d000000b00302de107ae1mr35537013ilo.15.1670938598794; Tue, 13
- Dec 2022 05:36:38 -0800 (PST)
-Date:   Tue, 13 Dec 2022 05:36:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009f6b9c05efb5b59c@google.com>
-Subject: [syzbot] KASAN: use-after-free Write in gadgetfs_kill_sb
-From:   syzbot <syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, hbh25y@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mingo@kernel.org, rdunlap@infradead.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v10 2/4] dt-bindings: usb: Add Qualcomm PMIC type C
+ controller dt-binding
+Content-Language: en-US
+To:     Wesley Cheng <wcheng@codeaurora.org>, sboyd@kernel.org,
+        heikki.krogerus@linux.intel.com, agross@kernel.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, sergei.shtylyov@gmail.com
+References: <20201008235934.8931-1-wcheng@codeaurora.org>
+ <20201008235934.8931-3-wcheng@codeaurora.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20201008235934.8931-3-wcheng@codeaurora.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,210 +80,143 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    830b3c68c1fb Linux 6.1
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=137401b7880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5a194ed4fc682723
-dashboard link: https://syzkaller.appspot.com/bug?extid=33d7ad66d65044b93f16
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176d36b7880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109371b7880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/955d55d85d6c/disk-830b3c68.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7ef0e1f6a0c3/vmlinux-830b3c68.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/27601eb5ff0b/bzImage-830b3c68.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
-BUG: KASAN: use-after-free in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
-BUG: KASAN: use-after-free in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-BUG: KASAN: use-after-free in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-BUG: KASAN: use-after-free in refcount_dec_and_test include/linux/refcount.h:333 [inline]
-BUG: KASAN: use-after-free in put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
-BUG: KASAN: use-after-free in gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
-Write of size 4 at addr ffff8880276d7840 by task syz-executor126/18689
-
-CPU: 0 PID: 18689 Comm: syz-executor126 Not tainted 6.1.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
- atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
- gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- vfs_get_super fs/super.c:1190 [inline]
- get_tree_single+0xd0/0x160 fs/super.c:1207
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- vfs_fsconfig_locked fs/fsopen.c:232 [inline]
- __do_sys_fsconfig fs/fsopen.c:439 [inline]
- __se_sys_fsconfig+0xbc0/0x1060 fs/fsopen.c:314
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1ce0ecbdf9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff0005e5f8 EFLAGS: 00000246 ORIG_RAX: 00000000000001af
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f1ce0ecbdf9
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000206b5
-R13: 00007fff0005e60c R14: 00007fff0005e620 R15: 00007fff0005e610
- </TASK>
-
-Allocated by task 18687:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
- kmalloc include/linux/slab.h:553 [inline]
- kzalloc include/linux/slab.h:689 [inline]
- dev_new drivers/usb/gadget/legacy/inode.c:170 [inline]
- gadgetfs_fill_super+0x2f9/0x8a0 drivers/usb/gadget/legacy/inode.c:2041
- vfs_get_super fs/super.c:1169 [inline]
- get_tree_single+0xb4/0x160 fs/super.c:1207
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- vfs_fsconfig_locked fs/fsopen.c:232 [inline]
- __do_sys_fsconfig fs/fsopen.c:439 [inline]
- __se_sys_fsconfig+0xbc0/0x1060 fs/fsopen.c:314
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 18687:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:511
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1724 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1750
- slab_free mm/slub.c:3661 [inline]
- __kmem_cache_free+0x71/0x110 mm/slub.c:3674
- put_dev drivers/usb/gadget/legacy/inode.c:163 [inline]
- gadgetfs_kill_sb+0x8a/0x100 drivers/usb/gadget/legacy/inode.c:2086
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- put_fs_context+0x90/0x7a0 fs/fs_context.c:465
- fscontext_release+0x61/0x80 fs/fsopen.c:73
- __fput+0x3ba/0x880 fs/file_table.c:320
- task_work_run+0x243/0x300 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x664/0x2070 kernel/exit.c:820
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
- __do_sys_exit_group kernel/exit.c:961 [inline]
- __se_sys_exit_group kernel/exit.c:959 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff8880276d7800
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 64 bytes inside of
- 1024-byte region [ffff8880276d7800, ffff8880276d7c00)
-
-The buggy address belongs to the physical page:
-page:ffffea00009db400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x276d0
-head:ffffea00009db400 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888012841dc0
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3626, tgid 3626 (sshd), ts 64243807059, free_ts 64103482939
- prep_new_page mm/page_alloc.c:2539 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
- alloc_slab_page+0xbd/0x190 mm/slub.c:1794
- allocate_slab+0x5e/0x4b0 mm/slub.c:1939
- new_slab mm/slub.c:1992 [inline]
- ___slab_alloc+0x782/0xe20 mm/slub.c:3180
- __slab_alloc mm/slub.c:3279 [inline]
- slab_alloc_node mm/slub.c:3364 [inline]
- __kmem_cache_alloc_node+0x252/0x310 mm/slub.c:3437
- __do_kmalloc_node mm/slab_common.c:954 [inline]
- __kmalloc_node_track_caller+0x9c/0x190 mm/slab_common.c:975
- kmalloc_reserve net/core/skbuff.c:437 [inline]
- __alloc_skb+0x112/0x2b0 net/core/skbuff.c:509
- alloc_skb_fclone include/linux/skbuff.h:1317 [inline]
- tcp_stream_alloc_skb+0x3c/0x300 net/ipv4/tcp.c:862
- tcp_sendmsg_locked+0xd70/0x40d0 net/ipv4/tcp.c:1325
- tcp_sendmsg+0x2c/0x40 net/ipv4/tcp.c:1483
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- sock_write_iter+0x3d4/0x540 net/socket.c:1108
- call_write_iter include/linux/fs.h:2199 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1459 [inline]
- free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3483
- free_slab mm/slub.c:2031 [inline]
- discard_slab mm/slub.c:2037 [inline]
- __unfreeze_partials+0x1ab/0x200 mm/slub.c:2586
- put_cpu_partial+0x106/0x170 mm/slub.c:2662
- qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x1f/0x70 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- kmem_cache_alloc_node+0x1ca/0x340 mm/slub.c:3443
- __alloc_skb+0xcf/0x2b0 net/core/skbuff.c:497
- alloc_skb_fclone include/linux/skbuff.h:1317 [inline]
- tcp_stream_alloc_skb+0x3c/0x300 net/ipv4/tcp.c:862
- tcp_sendmsg_locked+0xd70/0x40d0 net/ipv4/tcp.c:1325
- tcp_sendmsg+0x2c/0x40 net/ipv4/tcp.c:1483
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- sock_write_iter+0x3d4/0x540 net/socket.c:1108
- call_write_iter include/linux/fs.h:2199 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-
-Memory state around the buggy address:
- ffff8880276d7700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880276d7780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8880276d7800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                           ^
- ffff8880276d7880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880276d7900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 9.10.2020 01:59, Wesley Cheng wrote:
+> Introduce the dt-binding for enabling USB type C orientation and role
+> detection using the PM8150B.  The driver will be responsible for receiving
+> the interrupt at a state change on the CC lines, reading the
+> orientation/role, and communicating this information to the remote
+> clients, which can include a role switch node and a type C switch.
+> 
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+Hi all, sorry for playing archeology, but it looks like the driver
+was merged 2 years ago and this binding has been omitted..
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Konrad
+>  .../bindings/usb/qcom,pmic-typec.yaml         | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+> new file mode 100644
+> index 000000000000..40e0a296f922
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/qcom,pmic-typec.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm PMIC based USB type C Detection Driver
+> +
+> +maintainers:
+> +  - Wesley Cheng <wcheng@codeaurora.org>
+> +
+> +description: |
+> +  Qualcomm PMIC Type C Detect
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,pm8150b-usb-typec
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: Type C base address
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: CC change interrupt from PMIC
+> +
+> +  port:
+> +    description: Remote endpoint connection to the DRD switch
+> +    type: object
+> +
+> +    properties:
+> +      endpoint:
+> +        description: Connection to the DRD switch being used
+> +        type: object
+> +
+> +  connector:
+> +    $ref: /connector/usb-connector.yaml#
+> +    description: Connector type for remote endpoints
+> +    type: object
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - usb-c-connector
+> +
+> +      power-role: true
+> +      data-role: true
+> +
+> +      ports:
+> +        description: Remote endpoint connections for type C paths
+> +        type: object
+> +
+> +        properties:
+> +          port@1:
+> +            description: Remote endpoints for the Super Speed path
+> +            type: object
+> +
+> +            properties:
+> +              endpoint:
+> +                description: Connection to USB type C mux node
+> +                type: object
+> +
+> +    required:
+> +      - compatible
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - connector
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    pm8150b {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        pm8150b_typec: usb-typec@1500 {
+> +            compatible = "qcom,pm8150b-usb-typec";
+> +            reg = <0x1500>;
+> +            interrupts = <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>;
+> +
+> +            port {
+> +                usb3_role: endpoint {
+> +                    remote-endpoint = <&dwc3_drd_switch>;
+> +                };
+> +            };
+> +
+> +            connector {
+> +                compatible = "usb-c-connector";
+> +                power-role = "dual";
+> +                data-role = "dual";
+> +                ports {
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+> +                    port@0 {
+> +                        reg = <0>;
+> +                    };
+> +                    port@1 {
+> +                        reg = <1>;
+> +                        #address-cells = <1>;
+> +                        #size-cells = <0>;
+> +                        usb3_data_ss: endpoint {
+> +                            remote-endpoint = <&qmp_ss_mux>;
+> +                        };
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
