@@ -2,182 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF66464B05A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 08:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F3964B06D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 08:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234647AbiLMHWc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 02:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S234666AbiLMHb0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 02:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiLMHWb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 02:22:31 -0500
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DBA17E20
-        for <linux-usb@vger.kernel.org>; Mon, 12 Dec 2022 23:22:29 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id 4zcOpfbp15FWA4zcOpIi5P; Tue, 13 Dec 2022 08:22:27 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 13 Dec 2022 08:22:27 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <720b814d-5102-04d3-4938-33a25e87a46d@wanadoo.fr>
-Date:   Tue, 13 Dec 2022 08:22:24 +0100
+        with ESMTP id S234485AbiLMHbZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 02:31:25 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C261AF26;
+        Mon, 12 Dec 2022 23:31:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1670916683; x=1702452683;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9366RXwxTTJ4NdfsIPFfbNX3LynlC5Fa1dlBXeQMq+I=;
+  b=naLgdqBiH4SJakqf26hAphukKn0faTm6YJHJ7VHhctm2S/LZVbz59PGY
+   ehCWxs81vDKwOFf2BDAst6cRyJMQ5mf88kNyrjA+5ud3NC+GS08QY8qED
+   WGIZIR1eRYYUjI+jFJHevBWGOgTmkT0uzHYk4NTlC0/7lL33cpET7bBsY
+   FtlEVKlqNWwJNMfUe9i4EGOLvXFCH42+IjyYu29XwU9iYSDTHcFHO4bIS
+   kKQhJ3IXqnZX+9xLlPeG5e60UKU0U0A5ResokMF2i7prKl/yriXb67UqG
+   6jt7ZZxzKyTbhC8NvDcduePv9LGIm3XXfESlhtlxdFm82Hiascdoh/VlM
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,240,1665439200"; 
+   d="scan'208";a="27910777"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 13 Dec 2022 08:31:21 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 13 Dec 2022 08:31:21 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 13 Dec 2022 08:31:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1670916681; x=1702452681;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9366RXwxTTJ4NdfsIPFfbNX3LynlC5Fa1dlBXeQMq+I=;
+  b=hvLB55i0b3EbmEQTDq77D5sra8j8KoSdGh1nZH6W4t7+mHJ70HstWkyW
+   0pkyNIlihMDto4wWSZG+DepHDMBtgMUoxbQpi013oSJAVF0PflHvrnt2r
+   fzCvvaptixRLMWNWJU+kKgXbT8TFxlp3zSsG/9KNg2pi7sb//nzU5wE2h
+   Bncg5CvM7lDPK+pC00X4JjFgU3wuU4E632M8sUq6klqitpp9iyR0p2mJ4
+   eqMXbunE2xH/CftPudP/yTkYdPmJZAHcRcqsY5x+1Jhksls6pj9r9Owsr
+   P+RCbdV8uJVB5Lfry2mLlN5q6y+AUdOKOGDKinucq3+yA17E1BSH5vxo5
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,240,1665439200"; 
+   d="scan'208";a="27910776"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 13 Dec 2022 08:31:21 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2493B280071;
+        Tue, 13 Dec 2022 08:31:21 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     bjorn@mork.no, Peter Chen <peter.chen@kernel.org>,
+        Marek Vasut <marex@denx.de>, Li Jun <jun.li@nxp.com>,
+        netdev <netdev@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>
+Subject: Re: imx7: USB modem reset causes modem to not re-connect
+Date:   Tue, 13 Dec 2022 08:31:17 +0100
+Message-ID: <12353052.O9o76ZdvQC@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <CAOMZO5AWRDLu5t0O=AG7CxNLv20HTmMTRh=so=s7+nTH0_qYgQ@mail.gmail.com>
+References: <CAOMZO5AFsvwbC4Pr49WPFmZt7OnKjuJnYSf3cApGqtoZ_fFPPA@mail.gmail.com> <CAOMZO5AWRDLu5t0O=AG7CxNLv20HTmMTRh=so=s7+nTH0_qYgQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] USB: gadget: Add ID numbers to configfs-gadget driver
- names
-Content-Language: fr
-To:     Chanh Nguyen <chanh@os.amperecomputing.com>
-References: <20221213041203.21080-1-chanh@os.amperecomputing.com>
-Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221213041203.21080-1-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Le 13/12/2022 à 05:12, Chanh Nguyen a écrit :
-> It is unable to use configfs to attach more than one gadget. When
-> attaching the second gadget, it always fails and the kernel message
-> prints out:
+Hello Fabio,
+
+I had a problem regarding runtime suspend and detecting USB hub events on a 
+non-removable downstream hub. Disabling runtime suspend did work as well, but
+this was eventually fixed by 552ca27929ab2 ("ARM: dts: imx7: Move hsic_phy 
+power domain to HSIC PHY node").
+Maybe your USB device doesn't support some low power mode, but I'm not well 
+versed in that area.
+
+Best regards,
+Alexander
+
+Am Montag, 12. Dezember 2022, 20:01:25 CET schrieb Fabio Estevam:
+> On Mon, Dec 12, 2022 at 3:10 PM Fabio Estevam <festevam@gmail.com> wrote:
+> > Hi,
+> > 
+> > On an imx7d-based board running kernel 5.10.158, I noticed that a
 > 
-> Error: Driver 'configfs-gadget' is already registered, aborting...
-> UDC core: g1: driver registration failed: -16
+> > Quectel BG96 modem is gone after sending a reset command via AT:
+> Disabling runtime pm like this:
 > 
-> This commit fixes the problem by a ".N" suffix added to each
-> configfs_gadget's driver name (where N is a unique ID number),
-> thus making the names distinct.
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c
+> b/drivers/usb/chipidea/ci_hdrc_imx.c
+> index 9ffcecd3058c..e2a263d583f9 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -62,7 +62,6 @@ static const struct ci_hdrc_imx_platform_flag
+> imx6ul_usb_data = {
+>  };
 > 
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> Signed-off-by: Chanh Nguyen <chanh-shex6MNQR2J/SfDzf78azzKzEDxYleXD@public.gmane.org>
-> ---
->   drivers/usb/gadget/configfs.c | 42 +++++++++++++++++++++++++++++++++++
->   1 file changed, 42 insertions(+)
+>  static const struct ci_hdrc_imx_platform_flag imx7d_usb_data = {
+> -       .flags = CI_HDRC_SUPPORTS_RUNTIME_PM,
+>  };
 > 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 96121d1c8df4..d8c5156ad777 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -3,6 +3,7 @@
->   #include <linux/module.h>
->   #include <linux/slab.h>
->   #include <linux/device.h>
-> +#include <linux/idr.h>
->   #include <linux/kstrtox.h>
->   #include <linux/nls.h>
->   #include <linux/usb/composite.h>
-> @@ -11,6 +12,16 @@
->   #include "u_f.h"
->   #include "u_os_desc.h"
->   
-> +static DEFINE_IDA(driver_id_numbers);
-> +
-> +/*
-> + * Driver name has the form of "configfs-gadget.%d", where %d
-> + * is id allocated by ida_alloc(). The max value returns by
-> + * ida_alloc() is INT_MAX, in 64-bit system, it is about nine
-> + * quintillion: 19 digits in decimal. Set the max length to 35.
-> + */
-> +#define DRIVER_NAME_LENGTH_MAX 35
-
-Hi,
-
-if paranoiac, the final \0 seems to be missing in the max length 
-computation, but see below.
-
-> +
->   int check_user_usb_string(const char *name,
->   		struct usb_gadget_strings *stringtab_dev)
->   {
-> @@ -52,6 +63,9 @@ struct gadget_info {
->   	char qw_sign[OS_STRING_QW_SIGN_LEN];
->   	spinlock_t spinlock;
->   	bool unbind;
-> +
-> +	/* Make driver names unique */
-> +	int driver_id_number;
->   };
->   
->   static inline struct gadget_info *to_gadget_info(struct config_item *item)
-> @@ -1582,6 +1596,8 @@ static struct config_group *gadgets_make(
->   		const char *name)
->   {
->   	struct gadget_info *gi;
-> +	char *driver_name;
-> +	int ret;
->   
->   	gi = kzalloc(sizeof(*gi), GFP_KERNEL);
->   	if (!gi)
-> @@ -1623,6 +1639,21 @@ static struct config_group *gadgets_make(
->   
->   	gi->composite.gadget_driver = configfs_driver_template;
->   
-> +	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-> +	if (ret < 0)
-> +		goto err;
-> +	gi->driver_id_number = ret;
-> +
-> +	driver_name = kmalloc(DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-> +	if (!driver_name)
-> +		goto out_free_driver_id_number;
-> +
-> +	ret = scnprintf(driver_name, DRIVER_NAME_LENGTH_MAX,
-> +			"configfs-gadget.%d", gi->driver_id_number);
+>  static const struct ci_hdrc_imx_platform_flag imx7ulp_usb_data = {
+> 
+> makes the USB modem to stay connected after the reset command:
+> 
+> # microcom /dev/ttyUSB3
+> 
+> >AT+CFUN=1,1
+> 
+> OK
+> [   31.339416] usb 2-1: USB disconnect, device number 2
+> [   31.349480] option1 ttyUSB0: GSM modem (1-port) converter now
+> disconnected from ttyUSB0
+> [   31.358298] option 2-1:1.0: device disconnected
+> [   31.366390] option1 ttyUSB1: GSM modem (1-port) converter now
+> disconnected from ttyUSB1
+> [   31.374883] option 2-1:1.1: device disconnected
+> [   31.383359] option1 ttyUSB2: GSM modem (1-port) converter now
+> disconnected from ttyUSB2
+> [   31.391800] option 2-1:1.2: device disconnected
+> [   31.404700] option1 ttyUSB3: GSM modem (1-port) converter now
+> disconnected from ttyUSB3
+> # [   31.413261] option 2-1:1.3: device disconnected
+> [   36.151388] usb 2-1: new high-speed USB device number 3 using ci_hdrc
+> [   36.354398] usb 2-1: New USB device found, idVendor=2c7c,
+> idProduct=0296, bcdDevice= 0.00
+> [   36.362768] usb 2-1: New USB device strings: Mfr=3, Product=2,
+> SerialNumber=4 [   36.370031] usb 2-1: Product: Qualcomm CDMA Technologies
+> MSM
+> [   36.375818] usb 2-1: Manufacturer: Qualcomm, Incorporated
+> [   36.381355] usb 2-1: SerialNumber: 7d1563c1
+> [   36.389915] option 2-1:1.0: GSM modem (1-port) converter detected
+> [   36.397679] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB0
+> [   36.412591] option 2-1:1.1: GSM modem (1-port) converter detected [  
+> 36.420237] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB1 [ 
+>  36.434988] option 2-1:1.2: GSM modem (1-port) converter detected [  
+> 36.442792] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB2 [ 
+>  36.457745] option 2-1:1.3: GSM modem (1-port) converter detected [  
+> 36.465709] usb 2-1: GSM modem (1-port) converter now attached to ttyUSB3
+> 
+> Does anyone have any suggestions as to what could be the problem with
+> runtime pm?
 
 
-using kasprintf() looks simpler here.
-No need to kmalloc()+scnprintf(), and no need for DRIVER_NAME_LENGTH_MAX.
 
-Just my 2c,
-
-CJ
-
-> +	if (ret < 0)
-> +		goto out_free_driver_name;
-> +
-> +	gi->composite.gadget_driver.driver.name = driver_name;
->   	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->   	gi->composite.name = gi->composite.gadget_driver.function;
->   
-> @@ -1630,6 +1661,11 @@ static struct config_group *gadgets_make(
->   		goto err;
->   
->   	return &gi->group;
-> +
-> +out_free_driver_name:
-> +	kfree(driver_name);
-> +out_free_driver_id_number:
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->   err:
->   	kfree(gi);
->   	return ERR_PTR(-ENOMEM);
-> @@ -1637,6 +1673,12 @@ static struct config_group *gadgets_make(
->   
->   static void gadgets_drop(struct config_group *group, struct config_item *item)
->   {
-> +	struct gadget_info *gi = to_gadget_info(item);
-> +
-> +	mutex_lock(&gi->lock);
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
-> +	mutex_unlock(&gi->lock);
->   	config_item_put(item);
->   }
->   
 
