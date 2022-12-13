@@ -2,150 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0A664B93B
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 17:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E690C64BAB7
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 18:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235553AbiLMQF3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 11:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S235840AbiLMROo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 12:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiLMQF0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 11:05:26 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 37E7620F41
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 08:05:23 -0800 (PST)
-Received: (qmail 891916 invoked by uid 1000); 13 Dec 2022 11:05:22 -0500
-Date:   Tue, 13 Dec 2022 11:05:22 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, hbh25y@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mingo@kernel.org, rdunlap@infradead.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Write in gadgetfs_kill_sb
-Message-ID: <Y5iiwlZm8hgj8S0W@rowland.harvard.edu>
-References: <0000000000009f6b9c05efb5b59c@google.com>
+        with ESMTP id S235492AbiLMROm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 12:14:42 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FA6D11E;
+        Tue, 13 Dec 2022 09:14:41 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id 1so6021684lfz.4;
+        Tue, 13 Dec 2022 09:14:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ShqzOYw9CTrQG80APThrcA9ZR189RHfBmK2AcE3YXP8=;
+        b=JxA3KmNK35szjBBUByLal17A0FbCxzcqofjBf+uM6nv+XLGYinzDArtPX+8hC8cQpE
+         vlxHaAKjqRlzcs6sFkPobj4VwjxIz0tnLJ3oYgC+fOL1AjNYhTxBdQTRTTx+Ab107VJA
+         UZ2PzT2RIu/f+GcTJd670CbihwwUyWLYDJQCry2Z1evNCm7l1xKDUfhP3QYq7jmHOB7O
+         rThlshfL1xpXbaA2CZGhtXd6w4oIKAu4P2w8CJELyxfjrAXBQgpBh7yiMF/cpYG4MXbG
+         TwoKVxk71nkTr4V7H9GlIxEW92XK6FSJylPLsMIIDUzetz4OGOxvtRTxjasWO26WJqx/
+         WsIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ShqzOYw9CTrQG80APThrcA9ZR189RHfBmK2AcE3YXP8=;
+        b=R+6WH1KfEe0mWeztOg/1BIt8brqfXfqXNpZVEXj9jVhz7I3TjU1gQ7U2BEPXkH85VZ
+         nABYp0m6U+ZWJKRiaI9fsbm5bj29rx7Z0qzbImlTqwJyGeUzq1POBC7LeRIwp1NTpJ7U
+         W4673RvHLxCWeD8mQ4ylV1KpPoKe9LsG7NBLMO1AoEPimySTrYNh00k5jBghD7LJVOBZ
+         /M7qCrxT2ogAL8mdBuj8uLwJXny5cM6RiVkuOiYLKQu78UbqEALvzHX/zxMJRiMCcKGQ
+         0fShNBJBfyihlbu956j7PuK9dzFTJCvKA0TS9Rbnn1q9VadSJyVq7I+miladqOvvY0T/
+         yvwg==
+X-Gm-Message-State: ANoB5pnR+jOzJgCVeuQdTTmcYLBLkF2NSWgESpcK9SAQoRVdD7U3XXgv
+        C+jS2aaxm8mJYXrW0WgpapBtKjG/JXZxq2Cblw==
+X-Google-Smtp-Source: AA0mqf7+TK47LFZIJKhvzbdAU9vOoLQfGZHFr3/k0sb53fqlpg43oLLPILn5kGReDkcHH1K9hwESHKXGuyfl8Y11Z10=
+X-Received: by 2002:a05:6512:3b20:b0:4b4:d3aa:8f8c with SMTP id
+ f32-20020a0565123b2000b004b4d3aa8f8cmr27004428lfv.94.1670951679752; Tue, 13
+ Dec 2022 09:14:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000009f6b9c05efb5b59c@google.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+From:   "Seija K." <doremylover123@gmail.com>
+Date:   Tue, 13 Dec 2022 12:14:28 -0500
+Message-ID: <CAA42iKz_+MobnyyGi_7vQMwyqmK9=A9w3vWYa8QFVwwUzfrTAw@mail.gmail.com>
+Subject: [PATCH] net: Fix for packets being rejected in the xHCI controller's
+ ring buffer
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 05:36:38AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    830b3c68c1fb Linux 6.1
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=137401b7880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5a194ed4fc682723
-> dashboard link: https://syzkaller.appspot.com/bug?extid=33d7ad66d65044b93f16
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176d36b7880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109371b7880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/955d55d85d6c/disk-830b3c68.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/7ef0e1f6a0c3/vmlinux-830b3c68.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/27601eb5ff0b/bzImage-830b3c68.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
-> BUG: KASAN: use-after-free in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
-> BUG: KASAN: use-after-free in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-> BUG: KASAN: use-after-free in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-> BUG: KASAN: use-after-free in refcount_dec_and_test include/linux/refcount.h:333 [inline]
-> BUG: KASAN: use-after-free in put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
-> BUG: KASAN: use-after-free in gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
-> Write of size 4 at addr ffff8880276d7840 by task syz-executor126/18689
+When a packet larger than MTU arrives in Linux from the modem,
+it is discarded with -EOVERFLOW error (Babble error).
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ 830b3c68c1fb
+This is seen on USB3.0 and USB2.0 buses.
 
- drivers/usb/gadget/legacy/inode.c |   28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+This is because the MRU (Max Receive Size) is not a separate entity
+from the MTU (Max Transmit Size),
+and the received packets can be larger than those transmitted.
 
-Index: usb-devel/drivers/usb/gadget/legacy/inode.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/inode.c
-+++ usb-devel/drivers/usb/gadget/legacy/inode.c
-@@ -229,6 +229,7 @@ static void put_ep (struct ep_data *data
-  */
- 
- static const char *CHIP;
-+static DEFINE_MUTEX(sb_mutex);		/* Serialize superblock operations */
- 
- /*----------------------------------------------------------------------*/
- 
-@@ -2010,13 +2011,20 @@ gadgetfs_fill_super (struct super_block
- {
- 	struct inode	*inode;
- 	struct dev_data	*dev;
-+	int		rc;
- 
--	if (the_device)
--		return -ESRCH;
-+	mutex_lock(&sb_mutex);
-+
-+	if (the_device) {
-+		rc = -ESRCH;
-+		goto Done;
-+	}
- 
- 	CHIP = usb_get_gadget_udc_name();
--	if (!CHIP)
--		return -ENODEV;
-+	if (!CHIP) {
-+		rc = -ENODEV;
-+		goto Done;
-+	}
- 
- 	/* superblock */
- 	sb->s_blocksize = PAGE_SIZE;
-@@ -2053,13 +2061,17 @@ gadgetfs_fill_super (struct super_block
- 	 * from binding to a controller.
- 	 */
- 	the_device = dev;
--	return 0;
-+	rc = 0;
-+	goto Done;
- 
--Enomem:
-+ Enomem:
- 	kfree(CHIP);
- 	CHIP = NULL;
-+	rc = -ENOMEM;
- 
--	return -ENOMEM;
-+ Done:
-+	mutex_unlock(&sb_mutex);
-+	return rc;
- }
- 
- /* "mount -t gadgetfs path /dev/gadget" ends up here */
-@@ -2081,6 +2093,7 @@ static int gadgetfs_init_fs_context(stru
- static void
- gadgetfs_kill_sb (struct super_block *sb)
- {
-+	mutex_lock(&sb_mutex);
- 	kill_litter_super (sb);
- 	if (the_device) {
- 		put_dev (the_device);
-@@ -2088,6 +2101,7 @@ gadgetfs_kill_sb (struct super_block *sb
- 	}
- 	kfree(CHIP);
- 	CHIP = NULL;
-+	mutex_unlock(&sb_mutex);
- }
- 
- /*----------------------------------------------------------------------*/
+Following the babble error, there was an endless supply of zero-length URBs,
+which are rejected with -EPROTO (increasing the rx input error counter
+each time).
+
+This is only seen on USB3.0.
+These continue to come ad infinitum until the modem is shut down.
+
+There appears to be a bug in the core USB handling code in Linux
+that doesn't deal well with network MTUs smaller than 1500 bytes.
+
+By default, the dev->hard_mtu (the real MTU)
+is in lockstep with dev->rx_urb_size (essentially an MRU),
+and the latter is causing trouble.
+
+This has nothing to do with the modems,
+as the issue can be reproduced by getting a USB-Ethernet dongle,
+setting the MTU to 1430, and pinging with size greater than 1406.
+
+Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+Co-Authored-By: TarAldarion <gildeap@tcd.ie>
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 554d4e2a84a4..39db53a74b5a 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
+struct usb_interface *intf)
+}
+dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
++ /* LTE Networks don't always respect their own MTU on receive side;
++ * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
++ * far-end network. Make the receive buffer large enough to accommodate
++ * them, and add four bytes so MTU does not equal MRU on network
++ * with 1500 MTU otherwise usbnet_change_mtu() will change both.
++ */
++ dev->rx_urb_size = ETH_DATA_LEN + 4;
+err:
+return status;
+}
