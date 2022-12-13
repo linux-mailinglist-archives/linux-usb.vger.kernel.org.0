@@ -2,221 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA8D64B6C8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 15:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1F464B6FA
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 15:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235837AbiLMOGV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 09:06:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S235928AbiLMOL2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 09:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235808AbiLMOF7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 09:05:59 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33C6205FA
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 06:05:56 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bp15so5017513lfb.13
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 06:05:56 -0800 (PST)
+        with ESMTP id S235038AbiLMOKy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 09:10:54 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177C320BF1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 06:10:11 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id n16-20020a056a000d5000b005764608bb24so2122879pfv.12
+        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 06:10:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n7BqOo+kSVPojQOVkzbf9L5JFXaDuXdJjEL2ta9kBZk=;
-        b=ipcLqkcCSJBmYMcjWYAK8N7S4kv1xzpURdexxEDp8GEA3roaRmw0q7SFBciihXd/l3
-         3r+BnPdP8QlkJDjP3glXn26OL3FDTB1Hs0pR6CpcfIAH8QR2dtkK4sJs0phs4zzqnHuc
-         8Vrv8esCATPjkZgdBLXr8Mo3hmY1E7jMYX5+dHqWlnADTHGIVmcPNfQPEZG3baQzqC/A
-         tetYPXB1KJQNZqLuM/mRfdu7WkxVrQ/RxgddZdtUULtYt29aQd1SCueOJ1SiyQFyw39Q
-         TTIhsu+dK/1j0QsXEf68bhgKSb1MnRnkCypiRuoJqf4hc5IMSzVwReeuaG66SUfZvNf2
-         cGsA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Rri1C/o36RGpuqsNznRHQOSMU8c1Xc1sU+YfPaf6jlU=;
+        b=qOMVn54CBQX+zS3dkqSqXuujsqCKjQbxFTj8NLINxd0QSFY7ao73U2rwISYqxHmGRn
+         UfL1oqA6G7cWIT6jkcl8TTmPApDK3w53hI+Hg1T63gTUIL3PUP3vBUW1LX6d2n/ez6zi
+         27eMAeSmZqFSFoB1FP7B9cqhvtp/0emHq/QwkRP4bUNX6/NVV+MYnJR4U0kss5xmoPQH
+         qQJ08rqwXR5mpGR+gC2w2/C+oC9VFNkvsRVq6JftPGyxBYsK8jpz5WWY5Y8F2Kqdm61T
+         +t2qTj8nlP0hdzLrVMfJGTKqp0bV/8wAQ2u6aeiJpCJF2WyFdKJ8psxekovsKXjQeeSb
+         zZEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n7BqOo+kSVPojQOVkzbf9L5JFXaDuXdJjEL2ta9kBZk=;
-        b=Sg5WZnXEo/m/i1zA8m2nFlDdC8WSJdwDD3wvNN6xPA3K6zE3LXC12dr9VjtzrVybtF
-         5Y+36nCZgCQf9GI1w5k8M7VjZew2LDDe8Qt+jEEpEtocVpMvnRQ/iDY3TGSzp5L9QnyV
-         OSpizDNfvqd9m+JyagbihnhK0SUvW++QCVCksslXNI6lRzNBQeYwon7AYEEwfya+wklF
-         7N9FbSSv1vlFLNh9aInPyBbSQgmh4LVHNHE927PD+RbJhRIxct63mDcPfgHmZXaV2YCr
-         OHQ8hltmrQI+dFHPdGgUVt/YmDgUQD0qUDnTd5C9NR9LkNXZmQWf2PflzPKhEKqlAiOT
-         OERg==
-X-Gm-Message-State: ANoB5pnKXmo934XX3vh1rfOodXUSHCFQocI3iZs4rL8L+rn+aKyeVgbX
-        7C2xmWIx9dOBdt4gQ8MWbxaBqA==
-X-Google-Smtp-Source: AA0mqf7Xn1MU+m77o/IGeVd3CC1B0v4t8tqlCYVBFgxIcspAoPClDDqZKKcrYEERk/eC9teZbMP6ag==
-X-Received: by 2002:a05:6512:32b7:b0:4b5:82f1:7f3d with SMTP id q23-20020a05651232b700b004b582f17f3dmr7803471lfe.58.1670940354892;
-        Tue, 13 Dec 2022 06:05:54 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id d28-20020a194f1c000000b00498fbec3f8asm384059lfb.129.2022.12.13.06.05.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 06:05:54 -0800 (PST)
-Message-ID: <fe5e52d9-3f93-ecc3-b7ef-d3e17e07d2a5@linaro.org>
-Date:   Tue, 13 Dec 2022 15:05:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v10 2/4] dt-bindings: usb: Add Qualcomm PMIC type C
- controller dt-binding
-Content-Language: en-US
-To:     Wesley Cheng <wcheng@codeaurora.org>, sboyd@kernel.org,
-        heikki.krogerus@linux.intel.com, agross@kernel.org,
-        robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, sergei.shtylyov@gmail.com
-References: <20201008235934.8931-1-wcheng@codeaurora.org>
- <20201008235934.8931-3-wcheng@codeaurora.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20201008235934.8931-3-wcheng@codeaurora.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rri1C/o36RGpuqsNznRHQOSMU8c1Xc1sU+YfPaf6jlU=;
+        b=Zclazi57DudcS287K6qp8cn1sqZEeDjLMm3GjrYgAOe9lhTYeKQz9uHPLaP2mE0NMi
+         4TgqMU+EidDlPvwb4l4m7iNgkAXQ0vXntnpIdA0oNtaY2/BN4wC/xy3uU2bB/M/gBIZZ
+         gunqffVIb5i8CleB9w5BYB204t8PrEba7W3KrOv9WMycyaEd2kuHCj4867lXxePYZBtn
+         7YrEMK+o1WVBm32j5TSsA+nDV2q2XFTIPfc8XYsRcAkIojXBa9Fl6flmA2k+pBhWFDY6
+         Cne2TOV1RKzjDdeJfAgmsc6WYJTsPLaMDGVw7pM8QonAXeBkHMNEuV5jke8T5tZGdgw/
+         UG/A==
+X-Gm-Message-State: ANoB5pl9mC5OZWqHysSE7ulChJfwJD6pCjFxYPDjZJ/uA8jbrQ0LFxuU
+        cMRU1R9l9eX8irMxGoIYdjnBem97uErAtnSU7b0=
+X-Google-Smtp-Source: AA0mqf6ExuCX22MtPnxCObSDjOf4ji5iOalM+KjgGr+L98Qfs6x72V7xo+8y0XK99Lin59OhmWdUIGKNcHymnNn+vQs=
+X-Received: from albertccwang.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:83d])
+ (user=albertccwang job=sendgmr) by 2002:a17:902:6804:b0:189:907c:8380 with
+ SMTP id h4-20020a170902680400b00189907c8380mr49845920plk.104.1670940610549;
+ Tue, 13 Dec 2022 06:10:10 -0800 (PST)
+Date:   Tue, 13 Dec 2022 14:10:02 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221213141005.3068792-1-albertccwang@google.com>
+Subject: [PATCH v3 0/3] add xhci hooks for USB offload
+From:   Albert Wang <albertccwang@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     badhri@google.com, howardyen@google.com, pumahsu@google.com,
+        raychi@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Albert Wang <albertccwang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This serial patches enable the xhci driver to support USB offload, add
+hooks for vendor to have customized behavior for the initialization,
+memory allocation. Details are in each patch commit message. Meanwhile,
+the offload function implementations is uploaded as well.
 
+Albert Wang (1):
+  usb: host: add the xhci offload hooks implementations
 
-On 9.10.2020 01:59, Wesley Cheng wrote:
-> Introduce the dt-binding for enabling USB type C orientation and role
-> detection using the PM8150B.  The driver will be responsible for receiving
-> the interrupt at a state change on the CC lines, reading the
-> orientation/role, and communicating this information to the remote
-> clients, which can include a role switch node and a type C switch.
-> 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
-Hi all, sorry for playing archeology, but it looks like the driver
-was merged 2 years ago and this binding has been omitted..
+Howard Yen (2):
+  usb: host: add xhci hooks for USB offload
+  usb: xhci-plat: add xhci_plat_priv_overwrite
 
-Konrad
->  .../bindings/usb/qcom,pmic-typec.yaml         | 115 ++++++++++++++++++
->  1 file changed, 115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-> new file mode 100644
-> index 000000000000..40e0a296f922
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/qcom,pmic-typec.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm PMIC based USB type C Detection Driver
-> +
-> +maintainers:
-> +  - Wesley Cheng <wcheng@codeaurora.org>
-> +
-> +description: |
-> +  Qualcomm PMIC Type C Detect
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pm8150b-usb-typec
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: Type C base address
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: CC change interrupt from PMIC
-> +
-> +  port:
-> +    description: Remote endpoint connection to the DRD switch
-> +    type: object
-> +
-> +    properties:
-> +      endpoint:
-> +        description: Connection to the DRD switch being used
-> +        type: object
-> +
-> +  connector:
-> +    $ref: /connector/usb-connector.yaml#
-> +    description: Connector type for remote endpoints
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - usb-c-connector
-> +
-> +      power-role: true
-> +      data-role: true
-> +
-> +      ports:
-> +        description: Remote endpoint connections for type C paths
-> +        type: object
-> +
-> +        properties:
-> +          port@1:
-> +            description: Remote endpoints for the Super Speed path
-> +            type: object
-> +
-> +            properties:
-> +              endpoint:
-> +                description: Connection to USB type C mux node
-> +                type: object
-> +
-> +    required:
-> +      - compatible
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - connector
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    pm8150b {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        pm8150b_typec: usb-typec@1500 {
-> +            compatible = "qcom,pm8150b-usb-typec";
-> +            reg = <0x1500>;
-> +            interrupts = <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>;
-> +
-> +            port {
-> +                usb3_role: endpoint {
-> +                    remote-endpoint = <&dwc3_drd_switch>;
-> +                };
-> +            };
-> +
-> +            connector {
-> +                compatible = "usb-c-connector";
-> +                power-role = "dual";
-> +                data-role = "dual";
-> +                ports {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +                    port@0 {
-> +                        reg = <0>;
-> +                    };
-> +                    port@1 {
-> +                        reg = <1>;
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +                        usb3_data_ss: endpoint {
-> +                            remote-endpoint = <&qmp_ss_mux>;
-> +                        };
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
+ drivers/usb/host/aoc-usb.c           | 198 ++++++++++++++
+ drivers/usb/host/aoc-usb.h           | 108 ++++++++
+ drivers/usb/host/xhci-mem.c          |  97 ++++++-
+ drivers/usb/host/xhci-offload-impl.c | 396 +++++++++++++++++++++++++++
+ drivers/usb/host/xhci-plat.c         |  43 +++
+ drivers/usb/host/xhci-plat.h         |   8 +
+ drivers/usb/host/xhci.c              |  21 ++
+ drivers/usb/host/xhci.h              |  31 +++
+ 8 files changed, 889 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/usb/host/aoc-usb.c
+ create mode 100644 drivers/usb/host/aoc-usb.h
+ create mode 100644 drivers/usb/host/xhci-offload-impl.c
+
+---
+Changes in v3:
+- Add the offload implementation files
+
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
+
