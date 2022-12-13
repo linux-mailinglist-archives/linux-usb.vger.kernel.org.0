@@ -2,213 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4801264B75A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 15:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B2564B766
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Dec 2022 15:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235686AbiLMO30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 09:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S235913AbiLMOb7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 09:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiLMO3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 09:29:24 -0500
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1215D20BC3;
-        Tue, 13 Dec 2022 06:29:24 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1441d7d40c6so12715246fac.8;
-        Tue, 13 Dec 2022 06:29:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VQKy20lRkZdHqk3gT0sVQxdWUBVKKO65u2g9flbQKyU=;
-        b=XgC873sTMUct4De05UOWlKOZwltC5AZt627nV0bBAblGVQ/vl3wDhKs5Rbt1B1fskM
-         ldmkZ1+1mRa8YNl+P+VHExlSaukkGsLAXj5sZwjBjZvavvtbIbFbimjWE8Fx6HBwpf5A
-         +3AtpieepokXtZqN/4mnNoHWxSx0Y35WGYb4fz+4ns+Y7++wVnI2hnfwG/nBqBoUVhzS
-         yqmLPAaK9ZOifBv3xRcz3PS7kkA2XQNXhDqeb9IXB6OJWVKFePYUaWrs4UhlkQHQi0Ms
-         IBkbYkym41v+g0Qek7NQYEdA+oR8m+WtFDOSh7glxpuMtQSnzHbP+xhYtDG9kWF3OKIr
-         YMhg==
-X-Gm-Message-State: ANoB5plwRIf9LkH1sz5RruIUfqinWYqXqeDQCtsd2I4N5Yb1HI54tB2H
-        ogKbrfKGg/foy3iEDPdAeA==
-X-Google-Smtp-Source: AA0mqf7mesH76t/qTFVXBoPHFI+Q9oByg0u/+nUar5MhCtL9Fbvn0AAqhQrGcu2ftQYW+YFbJljXdA==
-X-Received: by 2002:a05:6870:8914:b0:13d:99fc:8d23 with SMTP id i20-20020a056870891400b0013d99fc8d23mr8742920oao.42.1670941763148;
-        Tue, 13 Dec 2022 06:29:23 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u39-20020a056870702700b001435fe636f2sm1440832oae.53.2022.12.13.06.29.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 06:29:22 -0800 (PST)
-Received: (nullmailer pid 967453 invoked by uid 1000);
-        Tue, 13 Dec 2022 14:29:21 -0000
-Date:   Tue, 13 Dec 2022 08:29:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 02/16] dt-bindings: usb: Add RZ/V2M USB3DRD binding
-Message-ID: <20221213142921.GA958810-robh@kernel.org>
-References: <20221212172804.1277751-1-biju.das.jz@bp.renesas.com>
- <20221212172804.1277751-3-biju.das.jz@bp.renesas.com>
+        with ESMTP id S235794AbiLMObw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 09:31:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68C020BC5;
+        Tue, 13 Dec 2022 06:31:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FD7DB810FB;
+        Tue, 13 Dec 2022 14:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91FC1C433D2;
+        Tue, 13 Dec 2022 14:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670941908;
+        bh=BP2D20qqRsIgeqfE7Stzv2DTidQHJtwB4teSCmQKVj0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jlmq5QByNg1QkkSq1g5C/mXAcKM4f6kMEiusL6jQY3OvCgdwnRbntw2b+Rl6mLtl0
+         iZo1H/SzhFO1b4iYIDXzsVtWcp/stnRzk8YOTP9FGJm8+0cN3iu5IVPVjnj3wVZUjp
+         vs1dU1UTxlp+eGO4d/UtDwpX0kA7RV7jDZnJKBTg=
+Date:   Tue, 13 Dec 2022 15:31:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH] usb: gadget: aspeed_udc: Add check for dma_alloc_coherent
+Message-ID: <Y5iM0LG2V5zN2D9u@kroah.com>
+References: <20221213121520.18088-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212172804.1277751-3-biju.das.jz@bp.renesas.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221213121520.18088-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 05:27:50PM +0000, Biju Das wrote:
-> Add device tree bindings for the RZ/V2{M, MA} USB3DRD module.
+On Tue, Dec 13, 2022 at 08:15:20PM +0800, Jiasheng Jiang wrote:
+> Thanks, I found my mistake and I will submit a v2.
 > 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
->  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 123 ++++++++++++++++++
->  1 file changed, 123 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+> > And how did you find this potential problem?  What tool did you use and
+> > why did you not follow the documentation for properly describing the
+> > tool?
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-> new file mode 100644
-> index 000000000000..0c473c3398b3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-> @@ -0,0 +1,123 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/renesas,rzv2m-usb3drd.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/V2M USB 3.1 DRD controller
-> +
-> +maintainers:
-> +  - Biju Das <biju.das.jz@bp.renesas.com>
-> +
-> +description: |
-> +  The RZ/V2{M, MA} USB3.1 DRD module supports the following functions
-> +  * Role swapping function by the ID pin of the Micro-AB receptacle
-> +  * Battery Charging Specification Revision 1.2
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - renesas,r9a09g011-usb3drd  # RZ/V2M
-> +          - renesas,r9a09g055-usb3drd  # RZ/V2MA
-> +      - const: renesas,rzv2m-usb3drd
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Peripheral AXI clock
-> +      - description: APB clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: peri_axi
-> +      - const: apb
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    items:
-> +      - description: DRD reset
-> +      - description: Peripheral reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: drd_reset
-> +      - const: aresetn_p
-> +
-> +  ranges: true
-> +
-> +  '#address-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +  '#size-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +  usb3peri:
-> +    $ref: /schemas/usb/renesas,usb3-peri.yaml
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    type: object
-> +    $ref: renesas,usb-xhci.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - power-domains
-> +  - resets
-> +  - reset-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/r9a09g011-cpg.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    usb3drd: usb@85070000 {
-> +        compatible = "renesas,r9a09g011-usb3drd", "renesas,rzv2m-usb3drd";
-> +        reg = <0x85070000 0x1000>;
-> +        clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
-> +                 <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-> +        clock-names = "peri_axi", "apb";
-> +        power-domains = <&cpg>;
-> +        resets = <&cpg R9A09G011_USB_DRD_RESET>,
-> +                 <&cpg R9A09G011_USB_ARESETN_P>;
-> +        reset-names = "drd_reset", "aresetn_p";
-> +        ranges;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        usb3host: usb@85060000 {
-> +           compatible = "renesas,r9a09g011-xhci",
-> +                        "renesas,rzv2m-xhci";
-> +           reg = <0x85060000 0x2000>;
-> +           interrupts = <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
-> +           clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_H>,
-> +                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-> +           clock-names = "host_axi", "reg";
-> +           power-domains = <&cpg>;
-> +           resets = <&cpg R9A09G011_USB_ARESETN_H>;
-> +        };
-> +
-> +        usb3peri: usb3peri {
-> +           compatible = "renesas,r9a09g011-usb3-peri",
-> +                        "renesas,rzv2m-usb3-peri";
-> +           interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>,
-> +                        <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>,
-> +                        <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>,
-> +                        <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>;
-> +           interrupt-names = "all_p", "drd", "bc", "gpi";
-> +           clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
-> +                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-> +           clock-names = "aclk", "reg";
-> +           power-domains = <&cpg>;
-> +           resets = <&cpg R9A09G011_USB_ARESETN_P>;
-> +        };
+> I used a tool I wrote myself to find it, which is unpublished.
+> Therefore, I think it is okay to submit patches without description of the
+> tools.
 
-The USB device ctrlr doesn't have registers? It looks to me like you've 
-created 3 nodes for instantiating drivers rather that because you have 3 
-separate h/w blocks. Either you should split this to 2 independent nodes 
-or move usb3peri resources to the parent node. That would only be 
-interrupts because everything else is already there.
+Nope!  Please read:
+	Documentation/process/researcher-guidelines.rst
+for what you must do.
 
-Rob
+thanks,
+
+greg k-h
