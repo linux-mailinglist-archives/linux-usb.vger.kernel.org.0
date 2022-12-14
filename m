@@ -2,33 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EEE64C17B
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 01:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD6364C192
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 02:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiLNAtU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 19:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S237595AbiLNBAS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 20:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236977AbiLNAtT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 19:49:19 -0500
+        with ESMTP id S229532AbiLNBAQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 20:00:16 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 72848FAF4
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 16:49:18 -0800 (PST)
-Received: (qmail 908379 invoked by uid 1000); 13 Dec 2022 19:49:17 -0500
-Date:   Tue, 13 Dec 2022 19:49:17 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8037622298
+        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 17:00:15 -0800 (PST)
+Received: (qmail 908581 invoked by uid 1000); 13 Dec 2022 20:00:14 -0500
+Date:   Tue, 13 Dec 2022 20:00:14 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, imx@lists.linux.dev,
-        linhaoguo86@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for each
- configfs driver
-Message-ID: <Y5kdjffhU2ply//V@rowland.harvard.edu>
-References: <20221213220354.628013-1-Frank.Li@nxp.com>
+To:     syzbot <syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, hbh25y@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mingo@kernel.org, rdunlap@infradead.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Write in gadgetfs_kill_sb
+Message-ID: <Y5kgHgl2dU6fkr3p@rowland.harvard.edu>
+References: <Y5iiwlZm8hgj8S0W@rowland.harvard.edu>
+ <0000000000008ca17805efbbc87f@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213220354.628013-1-Frank.Li@nxp.com>
+In-Reply-To: <0000000000008ca17805efbbc87f@google.com>
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
@@ -38,145 +39,138 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 05:03:54PM -0500, Frank Li wrote:
-> From: Rondreis <linhaoguo86@gmail.com>
+On Tue, Dec 13, 2022 at 12:51:26PM -0800, syzbot wrote:
+> Hello,
 > 
-> When use configfs to attach more than one gadget.
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> INFO: rcu detected stall in corrupted
 > 
-> Error: Driver 'configfs-gadget' is already registered, aborting...
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4116 } 2668 jiffies s: 2777 root: 0x0/T
+> rcu: blocking rcu_node structures (internal RCU debug):
 > 
-> 	UDC core: g1: driver registration failed: -16
 > 
-> The problem is that when creating multiple gadgets with configfs and
-> binding them to different UDCs, the UDC drivers have the same name
-> "configfs-gadget". Because of the addition of the "gadget" bus, naming
-> conflicts will occur when more than one UDC drivers registered to the
-> bus.
+> Tested on:
 > 
-> It's not an isolated case, this patch refers to the commit f2d8c2606825
-> ("usb: gadget: Fix non-unique driver names in raw-gadget driver").
-> Each configfs-gadget driver will be assigned a unique name
-> "configfs-gadget.N", with a different value of N for each driver
-> instance.
-> 
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> 
-> Signed-off-by: Rondreis <linhaoguo86@gmail.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> 
-> This patch is based on https://lore.kernel.org/lkml/20220907112210.11949-1-linhaoguo86@gmail.com/
-> fixed the all greg's comments.
-> 
-> I met the same issue.  Look likes Rodrieis have not continue to work this
-> patch since Sep, 2022.
-> 
-> I don't know full name of Rondreis.
-> 
->  drivers/usb/gadget/configfs.c | 30 ++++++++++++++++++++++++++----
->  1 file changed, 26 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 3a6b4926193e..785be6aea720 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -4,12 +4,17 @@
->  #include <linux/slab.h>
->  #include <linux/device.h>
->  #include <linux/nls.h>
-> +#include <linux/idr.h>
->  #include <linux/usb/composite.h>
->  #include <linux/usb/gadget_configfs.h>
->  #include "configfs.h"
->  #include "u_f.h"
->  #include "u_os_desc.h"
->  
-> +#define DRIVER_NAME "configfs-gadget"
-> +
-> +static DEFINE_IDA(driver_id_numbers);
-> +
->  int check_user_usb_string(const char *name,
->  		struct usb_gadget_strings *stringtab_dev)
->  {
-> @@ -46,6 +51,7 @@ struct gadget_info {
->  
->  	struct usb_composite_driver composite;
->  	struct usb_composite_dev cdev;
-> +	int driver_id_number;
->  	bool use_os_desc;
->  	char b_vendor_code;
->  	char qw_sign[OS_STRING_QW_SIGN_LEN];
-> @@ -392,6 +398,8 @@ static void gadget_info_attr_release(struct config_item *item)
->  	WARN_ON(!list_empty(&gi->string_list));
->  	WARN_ON(!list_empty(&gi->available_func));
->  	kfree(gi->composite.gadget_driver.function);
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->  	kfree(gi);
->  }
->  
-> @@ -1571,7 +1579,6 @@ static const struct usb_gadget_driver configfs_driver_template = {
->  	.max_speed	= USB_SPEED_SUPER_PLUS,
->  	.driver = {
->  		.owner          = THIS_MODULE,
-> -		.name		= "configfs-gadget",
->  	},
->  	.match_existing_only = 1,
->  };
-> @@ -1581,6 +1588,7 @@ static struct config_group *gadgets_make(
->  		const char *name)
->  {
->  	struct gadget_info *gi;
-> +	int ret = 0;
->  
->  	gi = kzalloc(sizeof(*gi), GFP_KERNEL);
->  	if (!gi)
-> @@ -1622,16 +1630,30 @@ static struct config_group *gadgets_make(
->  
->  	gi->composite.gadget_driver = configfs_driver_template;
->  
-> +	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-> +	if (ret < 0)
-> +		goto err;
-> +	gi->driver_id_number = ret;
-> +
-> +	gi->composite.gadget_driver.driver.name =
-> +		kasprintf(GFP_KERNEL, DRIVER_NAME ".%d", gi->driver_id_number);
+> commit:         830b3c68 Linux 6.1
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12066e8b880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5a194ed4fc682723
+> dashboard link: https://syzkaller.appspot.com/bug?extid=33d7ad66d65044b93f16
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=16793e8f880000
 
-Here you forgot to put:
-
-	if (!gi->composite.gadget_driver.driver.name) {
-		ret = -ENOMEM;
-		goto err_func;
-	}
-
-Or if you prefer, combine this test with the one below.
+Let's see if this is related to the patch or something completely 
+independent.
 
 Alan Stern
 
-> +
->  	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->  	gi->composite.name = gi->composite.gadget_driver.function;
->  
-> -	if (!gi->composite.gadget_driver.function)
-> -		goto err;
-> +	if (!gi->composite.gadget_driver.function) {
-> +		ret = -ENOMEM;
-> +		goto err_func;
-> +	}
->  
->  	return &gi->group;
-> +
-> +err_func:
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->  err:
->  	kfree(gi);
-> -	return ERR_PTR(-ENOMEM);
-> +	return ERR_PTR(ret);
->  }
->  
->  static void gadgets_drop(struct config_group *group, struct config_item *item)
-> -- 
-> 2.34.1
-> 
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ 830b3c68c1fb
+
+ drivers/usb/gadget/legacy/inode.c |   39 +++++++++++++++++++++++++++++++-------
+ 1 file changed, 32 insertions(+), 7 deletions(-)
+
+Index: usb-devel/drivers/usb/gadget/legacy/inode.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/legacy/inode.c
++++ usb-devel/drivers/usb/gadget/legacy/inode.c
+@@ -229,6 +229,7 @@ static void put_ep (struct ep_data *data
+  */
+ 
+ static const char *CHIP;
++static DEFINE_MUTEX(sb_mutex);		/* Serialize superblock maintenance */
+ 
+ /*----------------------------------------------------------------------*/
+ 
+@@ -2010,13 +2011,23 @@ gadgetfs_fill_super (struct super_block
+ {
+ 	struct inode	*inode;
+ 	struct dev_data	*dev;
++	int		rc;
+ 
+-	if (the_device)
+-		return -ESRCH;
++	printk(KERN_INFO "fill_super A\n");
++	mutex_lock(&sb_mutex);
++
++	if (the_device) {
++		rc = -ESRCH;
++		goto Done;
++	}
++	printk(KERN_INFO "fill_super B\n");
+ 
+ 	CHIP = usb_get_gadget_udc_name();
+-	if (!CHIP)
+-		return -ENODEV;
++	if (!CHIP) {
++		rc = -ENODEV;
++		goto Done;
++	}
++	printk(KERN_INFO "fill_super C\n");
+ 
+ 	/* superblock */
+ 	sb->s_blocksize = PAGE_SIZE;
+@@ -2029,6 +2040,7 @@ gadgetfs_fill_super (struct super_block
+ 	inode = gadgetfs_make_inode (sb,
+ 			NULL, &simple_dir_operations,
+ 			S_IFDIR | S_IRUGO | S_IXUGO);
++	printk(KERN_INFO "fill_super D\n");
+ 	if (!inode)
+ 		goto Enomem;
+ 	inode->i_op = &simple_dir_inode_operations;
+@@ -2039,11 +2051,13 @@ gadgetfs_fill_super (struct super_block
+ 	 * user mode code can use it for sanity checks, like we do.
+ 	 */
+ 	dev = dev_new ();
++	printk(KERN_INFO "fill_super E\n");
+ 	if (!dev)
+ 		goto Enomem;
+ 
+ 	dev->sb = sb;
+ 	dev->dentry = gadgetfs_create_file(sb, CHIP, dev, &ep0_operations);
++	printk(KERN_INFO "fill_super F\n");
+ 	if (!dev->dentry) {
+ 		put_dev(dev);
+ 		goto Enomem;
+@@ -2053,13 +2067,18 @@ gadgetfs_fill_super (struct super_block
+ 	 * from binding to a controller.
+ 	 */
+ 	the_device = dev;
+-	return 0;
++	rc = 0;
++	goto Done;
+ 
+-Enomem:
++ Enomem:
+ 	kfree(CHIP);
+ 	CHIP = NULL;
++	rc = -ENOMEM;
+ 
+-	return -ENOMEM;
++ Done:
++	printk(KERN_INFO "fill_super G\n");
++	mutex_unlock(&sb_mutex);
++	return rc;
+ }
+ 
+ /* "mount -t gadgetfs path /dev/gadget" ends up here */
+@@ -2081,13 +2100,19 @@ static int gadgetfs_init_fs_context(stru
+ static void
+ gadgetfs_kill_sb (struct super_block *sb)
+ {
++	printk(KERN_INFO "kill_sb A\n");
++	mutex_lock(&sb_mutex);
++	printk(KERN_INFO "kill_sb B\n");
+ 	kill_litter_super (sb);
++	printk(KERN_INFO "kill_sb C\n");
+ 	if (the_device) {
+ 		put_dev (the_device);
+ 		the_device = NULL;
+ 	}
+ 	kfree(CHIP);
+ 	CHIP = NULL;
++	printk(KERN_INFO "kill_sb D\n");
++	mutex_unlock(&sb_mutex);
+ }
+ 
+ /*----------------------------------------------------------------------*/
+
