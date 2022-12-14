@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA8064C2DB
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 04:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39C964C314
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 05:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237323AbiLNDh5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 22:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        id S236681AbiLNEQU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 23:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236681AbiLNDh4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 22:37:56 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2097.outbound.protection.outlook.com [40.107.96.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA333233A8;
-        Tue, 13 Dec 2022 19:37:53 -0800 (PST)
+        with ESMTP id S236745AbiLNEQJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 23:16:09 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2116.outbound.protection.outlook.com [40.107.100.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595D52715E;
+        Tue, 13 Dec 2022 20:16:04 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SpSq9IKP4RPTpWYYRy6d+vPAwT7fGAhmpQA2sBUK729HL8MbFEybXwcBiQy0fX2CSd/a6ynFntJO5PPFTn++VgRVRr9NldrZJUH8f0PAj4wwnevorj1SBGmV8j9SPgGzkcJ44afv2K0D8SYgVWYO/61Lug4hQo683hZALtZKUutvkVkouRckuS7z2hS3sjCAsv296wEe64Pv7pPBz1U9A0kGddwukhlwf4iD/3vf0Wh/GwfAchpEJqDTBy5OE1mqfOic9qx0dPODKQmAIwJBFMnzJpZaD8RK4l+MHTQduFdXh38yWYArGcfF4NV4ROMH0mfmlyYwHXSSEkUMIl+6Dg==
+ b=bm9vg71IC1zstRv9anE7tFnmW8zBKfnM1F4CV+cN30J4pGw7MxiScMj6FrSe9nh9eo857K9BRbybTxrUi18vi6UxcNnTZ05osc54Jrmw9ADTnInZ7t/+LzFhL+VdpFQ+5NYn4FJSG6CiCkD93JiC8bxk13ecroT7N1Gal9IGJ63Ll3KstrTxpMbquDe871L/tdaADfSvMBp0iw2c1/ZN1te4FU/tG4VIvkoeWoYaWW6l/sDl8cEtJD98tlHllfAX4F5r38H6dgJfS+/C7/ox2sQuc7qWGe1L1a1r9PcFv4m6aabhLOGnZxZzA8sHJB/tDpHfIRjuF5VqbP36VwakFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gSMAZ0zQtGYgHXqx94peQ5Xo9r+BqIVjllUScTUO/n4=;
- b=GW0EGvkBKBV0p2yGq+pIPwoJjXuqhOoNTHtlMmB+F++tbz2Fh9X0SijUWOQ9avamOeTz6M0YmyebsYuPJCGd0ACwxfU06Oq8/LwmOQjRe4EuTeS3qA8muNfuevMnMi67eXYMpxDYZBIGciJfqx7wNJw+vYmOyWV67VoYvQKza8+6Y9UZJoSyEMBu5BxOmclAfhJdWUmL6VAyhbDC47WFgWPGPRhNrQbhEtQ2jOiaUFd5BtzZseMtwGdwkY1lfKCbbhYObQOGyrOZ9yOY903875dBfACR0Vp2aRdAL5DF1RLw6avdoTXSAqdGPA2zwzm5w1ZR/nkqSdpZk5WxXizjgw==
+ bh=Qmj5Rxd31qMp69MMxv6HGopqfSC4FNy+0gJFUwIBOmA=;
+ b=FlCAdLECGEL02ZlZAuu8VRlUFsKryENnjMCa5YICioq+vE5wxad+kHWnPDwPggM4bhixNl532RW7hyy0ZWBRXhExh0tXwll5uASFU78+qY9SCSpvYZKTePjnbQR6SjHB4f2MvbdafwuTlTbXNrLDTCkIK6IcqLBpMtWudFElS2iIHx49k8LdpZKA4SCzuf5gcIup7Fy4zxpOo61ezpbgq6QEQ+DKQ/TPG78Jnmb8ws2qpt5ECf/FL41Kfp2jw3bxJKZohNB+9jjWT94gNvEUThix4o93FzUoCiHF7odtK4MhezXtx3cQa9aS1XpgJo4pBj8ARqdIqGWm2BK7ihTsnA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=amperemail.onmicrosoft.com; dkim=pass
@@ -28,98 +28,102 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gSMAZ0zQtGYgHXqx94peQ5Xo9r+BqIVjllUScTUO/n4=;
- b=Tdu9C8Z/1s6iEYDGHDXlT/OvZTEECXu7IZjrWaqgJiEs7PLzHZ9ChemBIPKw4O8lr6T7FvGmHfOdtMQ4GU3nLBsf/F1vFIeJErrGmUw94/bdzZ/+cAHhUy2JdVdROwbo86q1mlLabjAuYVzpkx+8EY4RLFIQFZPTHBtH8SsJ0j4=
+ bh=Qmj5Rxd31qMp69MMxv6HGopqfSC4FNy+0gJFUwIBOmA=;
+ b=p262+11oHcSgNsNPlXOfHA9vqR/+uAOKqNCEZqQL0r0Afz+iG2RAnsbiBkTjwtYYUULxVPtY2xcRJuL2Q8JP9pfgnNl8MZ8g4xrZAsXB+dYMG1x8rhqZ4h7HhTtsxmwegPXzyZSTQLH/xLVdCMeTWQxMWZBDZiWzPZ4bMMfN5Eg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
 Received: from SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13) by
- DM6PR01MB4778.prod.exchangelabs.com (2603:10b6:5:6d::10) with Microsoft SMTP
+ CY4PR01MB2471.prod.exchangelabs.com (2603:10b6:903:73::8) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.19; Wed, 14 Dec 2022 03:37:50 +0000
+ 15.20.5880.10; Wed, 14 Dec 2022 04:15:59 +0000
 Received: from SN6PR01MB4973.prod.exchangelabs.com
  ([fe80::1e67:38ac:ed37:be1c]) by SN6PR01MB4973.prod.exchangelabs.com
  ([fe80::1e67:38ac:ed37:be1c%3]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
- 03:37:49 +0000
-Message-ID: <f1bb6995-6901-3def-3ff0-a7438339625a@amperemail.onmicrosoft.com>
-Date:   Wed, 14 Dec 2022 10:37:39 +0700
+ 04:15:59 +0000
+Message-ID: <6044a542-fbcd-0fe7-abd3-83f38b731ecc@amperemail.onmicrosoft.com>
+Date:   Wed, 14 Dec 2022 11:15:48 +0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for each
- configfs driver
+Subject: Re: [PATCH] USB: gadget: Add ID numbers to configfs-gadget driver
+ names
 Content-Language: en-US
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Frank Li <Frank.Li@nxp.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, imx@lists.linux.dev,
-        linhaoguo86@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
         Chanh Nguyen <chanh@os.amperecomputing.com>
-References: <20221213220354.628013-1-Frank.Li@nxp.com>
- <67878b69-89af-6a0c-24c6-ff111dae6ce6@wanadoo.fr>
+Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Vacura <w36195@motorola.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Frank Li <Frank.Li@nxp.com>, Rondreis <linhaoguo86@gmail.com>
+References: <20221213041203.21080-1-chanh@os.amperecomputing.com>
+ <720b814d-5102-04d3-4938-33a25e87a46d@wanadoo.fr>
 From:   Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-In-Reply-To: <67878b69-89af-6a0c-24c6-ff111dae6ce6@wanadoo.fr>
+In-Reply-To: <720b814d-5102-04d3-4938-33a25e87a46d@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR01CA0021.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::19) To SN6PR01MB4973.prod.exchangelabs.com
- (2603:10b6:805:c4::13)
+X-ClientProxiedBy: SG2PR06CA0181.apcprd06.prod.outlook.com (2603:1096:4:1::13)
+ To SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4973:EE_|DM6PR01MB4778:EE_
-X-MS-Office365-Filtering-Correlation-Id: f85ca89e-a7ff-47d5-868f-08dadd849287
+X-MS-TrafficTypeDiagnostic: SN6PR01MB4973:EE_|CY4PR01MB2471:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ea07634-4f51-4183-8653-08dadd89e7b1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JHOV9MKLqLBUUv4X1m+yF4s4LcBzB0TuIFXuEhcB1YnoHQnn3WeSYcV+lhRpbsCnjzKKwCxlQleocWC4w7ST1MjFj7/avKPOxBmsYooNKg27l2dO6rTwXr8X2bgONETxybuM2aUnjv11pUIM/UTgBo5AvqT3eZmmXXUDAtJvczIWPxrroe+kQaorOjuTIgzNxisBHIOTKthYZm2QXsDfp6r/UWkNqKW1xo2a806LauUAxVljzW8gcExbK2Pt5hmkwRzCfwiu0hWBIiZgg8eaN7Dab17KeSyq09Wul4QieC/SJ+i2MFOTdVVwrVh12+vc/ueQsDVtzekyuw+3GxlpWw/TIsrzRXiH4FnEiLSgFlG3o4e6IhYK4G3HYxgPRD9HSREOe3/N33e6wkvshnnY22Px2kJ5ZaLYCdmYmV59TmEdvuIJuieX0nHAFPGCA2IXPkQVYhQPX/sz5JARTSpFa+zkjoziSDU7Cu2ZX5sHuAUP1lkfNEEpIvhHPppgERCL9qfW2eCbOPjG1EYleaxOy0dNdcQqwoG4YQ6QNObLIM4odaIZ82xhGD+mPzbM8/0CRS85od91uBEcfEHIoF/HpT9RPiyXOb17+755P+4/WnPlKWF+dbmvgBJUOQMgcJi3l4walxXUux3GsoQiirDsC24clKNH/YJsfmIJhR3RnwQy6e85P5a9D9R8XvcWvqEZ7ME51C5SenWM6ioRFz3T/LzNW8NRpEg8qtkML6If2PurtTs/EXaWYUuAVGQa5/z6UDMogyAm7QGOLkUPEn/F1g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4973.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(396003)(366004)(376002)(346002)(136003)(451199015)(41300700001)(2616005)(110136005)(31696002)(42882007)(478600001)(6512007)(83380400001)(53546011)(6486002)(186003)(6666004)(4326008)(107886003)(6506007)(966005)(26005)(38100700002)(83170400001)(5660300002)(66476007)(8676002)(316002)(66946007)(8936002)(31686004)(66556008)(2906002)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: weyGU8fgiaujg5du+mMVNGUnSNekx0xDyBN0sKdXkR4bl/XiwAyTUVKs9x9kL72p//ph8p+nfJbI5FXJVYgBTJkat5WFRr2j11pSMxrmHCbL1mg13EnTHCol+SSEhdk8Z7ySdCeNjLKTerlYo8RuLfo9qDHrbvmm8Hng31PG16wC2cd18L9jURSIpli81GDUrqbmz8vyODXyhpxaxQKCSp3bPwwqO/0OaadVeLbyWcjGm42O+Wx6tERQvu8+AQ494+dN5eEmDwUklq2pmgXM4BWSWD1LLHtHH69oVrCTP/0pWSD8j4bNUazcUaOxPtS/Sj2QArVB0+ESRNuvRoVCRpGv+XTq/5Sspb3p1rPYS3V4AYywh/ZgS882JHh9dhmGzQLqqCnYVh2HlJOOB5vHRyv1MCKt4EHqbEhUCQyblDJllgjZhlGIoRHb3UNfBDCpQKGUAhNYkYrkRX8Riqv8qua2XCKMyR0+2uGeKpoTciXnVvjhiAnkoReMdb4AnwLfIyEitDJXmHx8gw2Ud9iR7SrWZhC+EAySRvvtos5JQs+GCFx97t2ngm4bTvg/Xvbfc4vUmo3OinrJXRrxfIANbhwayHho6db7O01DzHLSp0y8Nsl6yt7+21hpK34xHgsH1lD0CFkLmK5sB6Yq+06JyA/firX3t6Nthz7hbDvraUPhTHC3lqQK1qJqNJ/z+Cv3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4973.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(396003)(376002)(39850400004)(451199015)(478600001)(31696002)(53546011)(6486002)(66946007)(66556008)(42882007)(6512007)(7416002)(8676002)(66476007)(8936002)(110136005)(316002)(2906002)(54906003)(5660300002)(41300700001)(66574015)(38100700002)(6666004)(26005)(83170400001)(6506007)(186003)(2616005)(4326008)(83380400001)(31686004)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SHFkUlJWSjg2RmNYVkJaTXJjKzkzYXhFdUU5WGtPOGpBam1zRU1IL3NBR1Z5?=
- =?utf-8?B?TldYN2ZJSzRtN2xGSk0wZjF3Z3dEOTNXZWo5MU5HWUwyditrbG92OUE5aWRz?=
- =?utf-8?B?eUEzb2RETmtzbUVlSFMwdzUxU0dEYWtpRXBWbno4N1I3ZC9oRTRKbDI2ZWN5?=
- =?utf-8?B?eG1VMU5paXFQMmwzWXI0ekJ3a0xJZlh0a2NEaXMvQnZSZU5UWExnRTNUVGR6?=
- =?utf-8?B?MGprMzNCYldrZHdRL0RVWFVWQ3VTUUJqNkgvRmZadUNCVkFtOUZPd0N3dTJi?=
- =?utf-8?B?N25RTmV4bzNaZVlJQnB1YWVucWhhQ05VcUIrOTVlVWowWEw3ZUtjejU4WFQx?=
- =?utf-8?B?L1oyNTdZbzZxRnpsdGkxdzVCVEN3WlFFUDY4ZDJhYnZwZWhYTHQ2KzRpVGNQ?=
- =?utf-8?B?SXFlZlE3Y21xS2t6NGtXWGRBMXRxVE9QclRkYWRHcW90Z0x6TG9meHJnazh1?=
- =?utf-8?B?ZThaak1MeUNia1RVbitOOXFiNEVETW5TckFPR2prNnphakRTczdadzF5MStm?=
- =?utf-8?B?REJ0WSt5ZSs5U2hPNFhzclVlVEc0ZmZnOEhKcFR0dVRZcE12UmNqdlNRY0l2?=
- =?utf-8?B?S1RaSjR1Um1oSnpjSFFRM0pQcmZhTitBVDhPdTJLSWlCeWZiQ0tGMy81NDVi?=
- =?utf-8?B?bzBKbEg3RTVWdlJVb1hubU1pKzM2KzJPY3ZVQzQvSlpIWjAzRThaV0c2b3Iz?=
- =?utf-8?B?OEVvNzU5QUNNVTJWTGpobEY0U3ZNUFBiSlE3OVNISVduSHVuOUJxWUhucTZH?=
- =?utf-8?B?d1FOMTdycSsvMk1KTWc1WVZFVzRBbTA3Vkg2VVN4cHMxa0d0Vk90cmJDMUZZ?=
- =?utf-8?B?R0FxQnVEZTVjMlJuakpuVDkzck9oMzJ5RUJhSnZhYzdDZWc2bGVReGpGK250?=
- =?utf-8?B?L2pid2ZORjFBa2t2T3hJNlJFQ0xsZ3RDWlZ4c0t1UWgxZC8zQXgrV3hDMDRF?=
- =?utf-8?B?WVVJWWd2WTZNclN4elNSNFlpVWtsZWhkaE0rQkpnQUN4U3RBZUprWStKNE5S?=
- =?utf-8?B?ZUJZQ2hmYUp5T3JqbGpKUWNVZ3dxbWh5M2ltTXp5clUvUDBDWmloVElFY0FZ?=
- =?utf-8?B?UjFYdEVhMGdLeTFXNzZwbTVyYzFWZkw1TFRzSys0N0hVbUprRnZzQ2hKajk0?=
- =?utf-8?B?R3oyeE5IUHZNbjloZkErUTJPd0wvUG83WEZ5RU9LZitZcENERkJ6bTMxR0Jj?=
- =?utf-8?B?TzVPRVlRZGlQSW9sSzVSRnJ0WUNyZHFPbUZRMFVJK05nOWp3RnpJUEpXSGho?=
- =?utf-8?B?SlhXZzhRQVNRdFpkeWdPeWk0cFluYVQ4OXQ0d1dSa1NjMDlieVRHd2Z6d2FI?=
- =?utf-8?B?TEVZUmg2R1J2L0lockdwbmtNQVdlYi9iZUlkZ3R0cDZuenc0ZndQM0hjNFdF?=
- =?utf-8?B?M25CajZyS3BIVHY0SHN3Z2FEMExUUW4xaDExbStHeFJ6RGVjdGJTSmdTYWFa?=
- =?utf-8?B?UnJSNzNPSVhMRnRBSDREYjJySGpEbytlbkZKNmpDTjhZbmUvZ3BVb0E1NlF5?=
- =?utf-8?B?Ni81VFN0bjlMZ1QzOEtGazEwTXF1aXdVa3YwNDBnSW8zZjQ5ejNxQS9kdXBZ?=
- =?utf-8?B?enpxZmo2SXJvKzd1K0dMUXFyaTJtMzZFVTNFM3l0OTI4K1VLOGNpbTgzLzB1?=
- =?utf-8?B?TzMrOWg3dFpNY0o5TXhuZDNIMHJRWGpHa2w4Uk85TDE2bW1VY25TS1NGSEVR?=
- =?utf-8?B?T1hsU2Z5MWNTNXNuUi9TVHBaRVNxbmxObVJQU2ZxR1FoVUM0WFJ2WjBvcnNr?=
- =?utf-8?B?UjFBankyUzlEazRMM1BmS0hZOTZwT0diajdmZVQxYzdGYkE4RGl1Nk95UktU?=
- =?utf-8?B?MFp1NFh0WkFkTGNXdFQvMXgyaFMxbkQ4YjJBTW9saDVnZlIrK0tnbU9jbXBk?=
- =?utf-8?B?enpQbEtwZURMQ3VZNEV6MjZKaFY2cnN6VWVvaGQ1RFZjd3pJZEYraklvVHlE?=
- =?utf-8?B?WExoRHh3cWtFcHpZNzlFK00rRGdDb0l6OXBEN29pWmxkWldGVFFFTGpKZk5j?=
- =?utf-8?B?RDVmQ0FHaXI0TFhoRHNyb2dFb2lFWDh1bHNjUFN3STVKUWk1WEV0UEJqSmt4?=
- =?utf-8?B?NHlNZGd4SE44bjFDTXcwL0xwcHZhTDFtZDlIZW16NE1FaFdsdUQ5VmkzcVVP?=
- =?utf-8?B?d1gxaGV3Y20rWm04ZW5tQUlmTnVaN1RzNUJEdXkwM1hucEhnK3dNUW56UHdK?=
- =?utf-8?Q?qkN+U08WNLu+5Lkzs1aaui4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MGhkc3VRY0U3UkxZUEZoaVVGYzdoQ1pWOWtSWi9peDlLSHRYT2FXanF5L0Rj?=
+ =?utf-8?B?VWY5NTR2Q0xiWkoySCtpRk1BMUZ0Y0U4ZFJITjVPTTRlTU9iTTJRaDBaWlJW?=
+ =?utf-8?B?d2tObUdCNy9vS01lazBQTVJBMW51QWFheFZmTURUWkRhNk8venFkYXVjU3Fv?=
+ =?utf-8?B?eHkrQ1FkV0JwNGR4V0RDR2pUdGw4Sk5kQlpmZVV4YnAxT0gvYyt0R1Y0bWRs?=
+ =?utf-8?B?amczWVhaQzVra095NjJodHE5eW94VDJ2V2t3U0pmUHJ2b1FFU2ExY2RaOC9C?=
+ =?utf-8?B?MWNhUE9DN1IxckhLb01OcDNHbHJmWmZKaUxlRnk3WVk3K3QybFdzYXNpdTFN?=
+ =?utf-8?B?TGU3UUpBUUl5Sk1ZQVZCNm9NQjMyVm0vZENnS1lwbDd4aUFaRXp3dm41L1g4?=
+ =?utf-8?B?VUZvTEZoT3c5MzhRRUhvN0g5cFlhdHhhd3REbXZmempRWU9yQUlzL3U0K0xl?=
+ =?utf-8?B?cnFOT0RoQ0g3TE9BN1djc2NRMzFWTmg2NldqcExHWlBiUVArRDVSc2dOdEhl?=
+ =?utf-8?B?T0xsY2ZYS1ZITWpocVlIMDM0MjdORkdIL09wZ2NkTDhmM0ovUDFuZTgvZVFr?=
+ =?utf-8?B?VHY2Mk5WdmhIK1A5QjNjTzUzZUlMcUZRZnVUWi8vaHpJdk9CTUF0NlJ4UHlL?=
+ =?utf-8?B?Y1gzelU1bFhNNEQySGpyNHNWYldBdGx5UU5ZRzNMeGpQb09qS2VyUlNhVGVz?=
+ =?utf-8?B?SGUzT01KTWZsVEV5M2hiYjJrejdON0thSHA4dVNvb1FFRldMakU3NUh3eFpG?=
+ =?utf-8?B?UlJQRCtZaGFXUFpNcjUwNXJDS29JNXJ1dlltb3RYNEJSRDNWZkhsMnUwbXVq?=
+ =?utf-8?B?T1RXZHFpL0wva2pKcGx6b0R4TS9Id2FVN2hRRXhOaGVPUjFPRFBNYWpSVzBK?=
+ =?utf-8?B?SDdtN1FUZEl6eHlnYmRzTGk3NFF5MXI1YXMwQ2NoemxHeXIyVHBpN0MrTWlh?=
+ =?utf-8?B?UjFKa05MMmtiRndTdE5WcmNoT1J6MEhsRXhLR1AxMXdCeE1RL3d1RFFCKzJj?=
+ =?utf-8?B?TFQwTU1aM285UUJZeDgvWUNXeDBUMWJ2UFA5dXpVNGU4STV2ZTVxU1IxYW1v?=
+ =?utf-8?B?QkFmckRrQ05SQzhReGs4NnJjOW1WeXdjeGpkTDluOU02Wlc0bHNzeFh5ZUUw?=
+ =?utf-8?B?eXpINjVEM0xobkVaVXpvaVZVQmpIUCswdVBqWlBnai9FY3NRVkRndE05bWxL?=
+ =?utf-8?B?MHV6akZtZ1A3dXpieTFGODRtNzErVkZVZW8yZW1qbU80ZVNPNndkZnVpM2tB?=
+ =?utf-8?B?SHk0eGVxdGZnYUx5Sjdab01MMGU4TE94L2dERmpjajlTT2lVeFJUNFdzMUUx?=
+ =?utf-8?B?MEIxYllJcG5UYzRjTHI1QkZEVEJyZTYvd0E2b3duQWVFWDc4VlZSN002Nkw5?=
+ =?utf-8?B?QlRVREY3dGVLZ0lJOXE2K2tZdUhaVys2L2d0dXM0eWdJYkwveFhza1RkdnJr?=
+ =?utf-8?B?WVh1QjloMmFOOHFJZDUwVUVCQzJLRU9NTCt6SlN4Um1vcndYWHpyWlhEbkVX?=
+ =?utf-8?B?b2VvU1dvekRNMW0zTUw0S1RuVGNMTGZsekZUUE9SL05FZG5TK2hxem5rU3dH?=
+ =?utf-8?B?WlQ0Y09JRnNMOG5meTJrY2NKV0IrOXo4d0dtRDhWRjRJT052RFJvVCtEWWdN?=
+ =?utf-8?B?dWlXQVg0ZS9PSUVFelEwbitsVGQvcnZtVWNXSHNPSi9Ua0JCMDNHNHZCQWxL?=
+ =?utf-8?B?MDlJcE0ycEsra1JWSDBzS3VwRDRvRjNwYktHUFhEVUc4Q3dseEh6OFBtVDVo?=
+ =?utf-8?B?SDc4a3hYUXJmOEFpaGRMQmFoWWFzbXEyQmMxdWlTVGIvbGpoalJXOFpYUjNw?=
+ =?utf-8?B?aUhLWUhwZFZRbVF2MlgwSnJlT2QzNFpZbnJ3am92MWh3aG9DTFN1cUJQSVdH?=
+ =?utf-8?B?TGRmZzBFVFBEcHNNWHJ3RjBNMGJZR2lOeERlazdnaDZoNnJ6ekQ4NnpUQTlV?=
+ =?utf-8?B?MnJpL2VyQUR0QThTZTd1M3drRWJrWklkVnAzYlF5RllPL2liZjRNaysrWElj?=
+ =?utf-8?B?dW9YVmU1b3FWcHBjY1V3anhnOGg0UHJyVUJSN2xNVDJFOEtCMjJHWHA5bzNm?=
+ =?utf-8?B?ZDYxQVdMeEV0WGVHQ0JxUHlGd0tTN0RvOEozRjZvMU9sSXRKK0trR1E5b0J2?=
+ =?utf-8?B?eldkK3ErVTZmZHlhTTJIVkhwZjlPcEw0ZnJKZ1YvMG5lbEtqeE9IeGJBaHpr?=
+ =?utf-8?Q?QR7skKucxa6uKbyAvFSNDSA=3D?=
 X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f85ca89e-a7ff-47d5-868f-08dadd849287
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ea07634-4f51-4183-8653-08dadd89e7b1
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4973.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 03:37:49.6841
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 04:15:59.7369
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KiuSmRIXTKXA0GU1ipbyBQYWcMCPbic0roOvaQbKTra3oDKCvmh9px0aHud47JUNZA9n4r9d1s7s6GIIAOQFNBs+UVrXmwVxEOsmn750srdQwtA4MV83TxzDEMU7S/Y4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB4778
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9VjESuY4RSOBJgOsn82xiyBrvrsL8y4ctSAskLKu52lbgaFQ58JxlZcwbKLNfuVZoIwPbNihoHPnQrRJydl/OL6SBiHRGfrK/F44CWjIcJnxyIj7XZCbC+CUm7FdHro7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR01MB2471
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
         DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -132,164 +136,170 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-On 14/12/2022 05:20, Christophe JAILLET wrote:
-> Le 13/12/2022 à 23:03, Frank Li a écrit :
->> From: Rondreis <linhaoguo86@gmail.com>
->>
->> When use configfs to attach more than one gadget.
+
+On 13/12/2022 14:22, Christophe JAILLET wrote:
+> Le 13/12/2022 à 05:12, Chanh Nguyen a écrit :
+>> It is unable to use configfs to attach more than one gadget. When
+>> attaching the second gadget, it always fails and the kernel message
+>> prints out:
 >>
 >> Error: Driver 'configfs-gadget' is already registered, aborting...
+>> UDC core: g1: driver registration failed: -16
 >>
->>     UDC core: g1: driver registration failed: -16
->>
->> The problem is that when creating multiple gadgets with configfs and
->> binding them to different UDCs, the UDC drivers have the same name
->> "configfs-gadget". Because of the addition of the "gadget" bus, naming
->> conflicts will occur when more than one UDC drivers registered to the
->> bus.
->>
->> It's not an isolated case, this patch refers to the commit f2d8c2606825
->> ("usb: gadget: Fix non-unique driver names in raw-gadget driver").
->> Each configfs-gadget driver will be assigned a unique name
->> "configfs-gadget.N", with a different value of N for each driver
->> instance.
+>> This commit fixes the problem by a ".N" suffix added to each
+>> configfs_gadget's driver name (where N is a unique ID number),
+>> thus making the names distinct.
 >>
 >> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
->>
->> Signed-off-by: Rondreis <linhaoguo86@gmail.com>
->> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+>> Signed-off-by: Chanh Nguyen 
+>> <chanh-shex6MNQR2J/SfDzf78azzKzEDxYleXD@public.gmane.org>
 >> ---
->>
->> This patch is based on 
->> https://lore.kernel.org/lkml/20220907112210.11949-1-linhaoguo86@gmail.com/
->> fixed the all greg's comments.
->>
->> I met the same issue.  Look likes Rodrieis have not continue to work this
->> patch since Sep, 2022.
->>
->> I don't know full name of Rondreis.
-> 
-> Hi,
-> 
-> Also, out of curiosity, any link with this patch:
-> 
-> https://lore.kernel.org/all/20221213041203.21080-1-chanh@os.amperecomputing.com/
-> ?
-> 
-> Not exactly the same, but not very different.
-> 
-> (adding Chanh Nguyen in cc)
-> 
-
-What a coincident :-)
-
-I did not aware there are some similar attempts to fix the same issue 
-and see both patches posted same time.
-
-We start to see the issue when OpenBMC started to adopt kernel 6.0 and 
-try to fix the issue since then (beginning of Oct 2022)
-
-We then could be able to identify the issue and try to fix it follow the 
-commit f2d8c2606825317b77db1f9ba0fc26ef26160b30
-
-Going forward, as we have both Frank and Rondreis interested in the 
-patch, we are really happy if you both could review and share the 
-comment. I'd really appreciate if you could help with that part.
-
-FYI, we have reviewed and made some changes based on CJ's comment in my 
-last patch (v1) yesterday. We are trying to test it as much as possible. 
-If it looks good we will re-post it as v2 shortly for further comment.
-
-Thanks a lot for interesting in the patch.
-- Chanh
-
-> 
->>
->>   drivers/usb/gadget/configfs.c | 30 ++++++++++++++++++++++++++----
->>   1 file changed, 26 insertions(+), 4 deletions(-)
+>>   drivers/usb/gadget/configfs.c | 42 +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 42 insertions(+)
 >>
 >> diff --git a/drivers/usb/gadget/configfs.c 
 >> b/drivers/usb/gadget/configfs.c
->> index 3a6b4926193e..785be6aea720 100644
+>> index 96121d1c8df4..d8c5156ad777 100644
 >> --- a/drivers/usb/gadget/configfs.c
 >> +++ b/drivers/usb/gadget/configfs.c
->> @@ -4,12 +4,17 @@
+>> @@ -3,6 +3,7 @@
+>>   #include <linux/module.h>
 >>   #include <linux/slab.h>
 >>   #include <linux/device.h>
->>   #include <linux/nls.h>
 >> +#include <linux/idr.h>
+>>   #include <linux/kstrtox.h>
+>>   #include <linux/nls.h>
 >>   #include <linux/usb/composite.h>
->>   #include <linux/usb/gadget_configfs.h>
->>   #include "configfs.h"
+>> @@ -11,6 +12,16 @@
 >>   #include "u_f.h"
 >>   #include "u_os_desc.h"
->> +#define DRIVER_NAME "configfs-gadget"
->> +
 >> +static DEFINE_IDA(driver_id_numbers);
+>> +
+>> +/*
+>> + * Driver name has the form of "configfs-gadget.%d", where %d
+>> + * is id allocated by ida_alloc(). The max value returns by
+>> + * ida_alloc() is INT_MAX, in 64-bit system, it is about nine
+>> + * quintillion: 19 digits in decimal. Set the max length to 35.
+>> + */
+>> +#define DRIVER_NAME_LENGTH_MAX 35
+> 
+> Hi,
+> 
+> if paranoiac, the final \0 seems to be missing in the max length 
+> computation, but see below.
+
+Thanks CJ! Indeed, I have missed that.
+
+> 
 >> +
 >>   int check_user_usb_string(const char *name,
 >>           struct usb_gadget_strings *stringtab_dev)
 >>   {
->> @@ -46,6 +51,7 @@ struct gadget_info {
->>       struct usb_composite_driver composite;
->>       struct usb_composite_dev cdev;
->> +    int driver_id_number;
->>       bool use_os_desc;
->>       char b_vendor_code;
+>> @@ -52,6 +63,9 @@ struct gadget_info {
 >>       char qw_sign[OS_STRING_QW_SIGN_LEN];
->> @@ -392,6 +398,8 @@ static void gadget_info_attr_release(struct 
->> config_item *item)
->>       WARN_ON(!list_empty(&gi->string_list));
->>       WARN_ON(!list_empty(&gi->available_func));
->>       kfree(gi->composite.gadget_driver.function);
->> +    kfree(gi->composite.gadget_driver.driver.name);
->> +    ida_free(&driver_id_numbers, gi->driver_id_number);
->>       kfree(gi);
->>   }
->> @@ -1571,7 +1579,6 @@ static const struct usb_gadget_driver 
->> configfs_driver_template = {
->>       .max_speed    = USB_SPEED_SUPER_PLUS,
->>       .driver = {
->>           .owner          = THIS_MODULE,
->> -        .name        = "configfs-gadget",
->>       },
->>       .match_existing_only = 1,
+>>       spinlock_t spinlock;
+>>       bool unbind;
+>> +
+>> +    /* Make driver names unique */
+>> +    int driver_id_number;
 >>   };
->> @@ -1581,6 +1588,7 @@ static struct config_group *gadgets_make(
+>>   static inline struct gadget_info *to_gadget_info(struct config_item 
+>> *item)
+>> @@ -1582,6 +1596,8 @@ static struct config_group *gadgets_make(
 >>           const char *name)
 >>   {
 >>       struct gadget_info *gi;
->> +    int ret = 0;
+>> +    char *driver_name;
+>> +    int ret;
 >>       gi = kzalloc(sizeof(*gi), GFP_KERNEL);
 >>       if (!gi)
->> @@ -1622,16 +1630,30 @@ static struct config_group *gadgets_make(
+>> @@ -1623,6 +1639,21 @@ static struct config_group *gadgets_make(
 >>       gi->composite.gadget_driver = configfs_driver_template;
 >> +    ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
 >> +    if (ret < 0)
 >> +        goto err;
 >> +    gi->driver_id_number = ret;
 >> +
->> +    gi->composite.gadget_driver.driver.name =
->> +        kasprintf(GFP_KERNEL, DRIVER_NAME ".%d", gi->driver_id_number);
+>> +    driver_name = kmalloc(DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
+>> +    if (!driver_name)
+>> +        goto out_free_driver_id_number;
 >> +
+>> +    ret = scnprintf(driver_name, DRIVER_NAME_LENGTH_MAX,
+>> +            "configfs-gadget.%d", gi->driver_id_number);
+> 
+> 
+> using kasprintf() looks simpler here.
+> No need to kmalloc()+scnprintf(), and no need for DRIVER_NAME_LENGTH_MAX.
+> 
+> Just my 2c,
+> 
+> CJ
+
+Thanks CJ for the review!
+
+I've made some changes as below (in gadgets_make() to remove unnecessary 
+variables) and now trying to test it as much as possible. Will re-post 
+it as v2 if looks good soon.
+
+static inline struct gadget_info *to_gadget_info(struct config_item *item)
+@@ -1623,13 +1629,25 @@ static struct config_group *gadgets_make(
+
+      gi->composite.gadget_driver = configfs_driver_template;
+
++    gi->driver_id_number = ida_alloc(&driver_id_numbers, GFP_KERNEL);
++    if (gi->driver_id_number < 0)
++        goto err;
++
++    gi->composite.gadget_driver.driver.name =
++                          kasprintf(GFP_KERNEL, "configfs-gadget.%d",
++                                    gi->driver_id_number);
++    if (!gi->composite.gadget_driver.driver.name)
++        goto out_free_driver_id_number;
++
+      gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
+      gi->composite.name = gi->composite.gadget_driver.function;
+
+      if (!gi->composite.gadget_driver.function)
+-        goto err;
++        goto out_free_driver_id_number;
+
+      return &gi->group;
++
++out_free_driver_id_number:
++    ida_free(&driver_id_numbers, gi->driver_id_number);
+  err:
+      kfree(gi);
+      return ERR_PTR(-ENOMEM);
+
+
+> 
+>> +    if (ret < 0)
+>> +        goto out_free_driver_name;
+>> +
+>> +    gi->composite.gadget_driver.driver.name = driver_name;
 >>       gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
 >>       gi->composite.name = gi->composite.gadget_driver.function;
->> -    if (!gi->composite.gadget_driver.function)
->> -        goto err;
->> +    if (!gi->composite.gadget_driver.function) {
->> +        ret = -ENOMEM;
->> +        goto err_func;
->> +    }
+>> @@ -1630,6 +1661,11 @@ static struct config_group *gadgets_make(
+>>           goto err;
 >>       return &gi->group;
 >> +
->> +err_func:
->> +    kfree(gi->composite.gadget_driver.driver.name);
+>> +out_free_driver_name:
+>> +    kfree(driver_name);
+>> +out_free_driver_id_number:
 >> +    ida_free(&driver_id_numbers, gi->driver_id_number);
 >>   err:
 >>       kfree(gi);
->> -    return ERR_PTR(-ENOMEM);
->> +    return ERR_PTR(ret);
->>   }
+>>       return ERR_PTR(-ENOMEM);
+>> @@ -1637,6 +1673,12 @@ static struct config_group *gadgets_make(
 >>   static void gadgets_drop(struct config_group *group, struct 
 >> config_item *item)
+>>   {
+>> +    struct gadget_info *gi = to_gadget_info(item);
+>> +
+>> +    mutex_lock(&gi->lock);
+>> +    kfree(gi->composite.gadget_driver.driver.name);
+>> +    ida_free(&driver_id_numbers, gi->driver_id_number);
+>> +    mutex_unlock(&gi->lock);
+>>       config_item_put(item);
+>>   }
 > 
