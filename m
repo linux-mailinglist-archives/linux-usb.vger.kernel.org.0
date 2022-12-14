@@ -2,74 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D86864C248
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 03:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC5664C271
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 03:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbiLNChU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Dec 2022 21:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
+        id S236890AbiLNCzB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Dec 2022 21:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236691AbiLNChT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 21:37:19 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F8726AD2
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 18:37:17 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id i7-20020a056e021b0700b003033a763270so8787005ilv.19
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 18:37:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0V8K4P+odUhFzrMPlgU7XI9XjkyUPNFDXnhnOg+jYUs=;
-        b=2lwUqnFsLfrupLc4En29cPlm6RJzg51Sc8lxZMt/RIKiRlGqOSyWGHBWtoez7Q0s2i
-         IuB35L4QPKgMs8/Qm4W619510MsGm86Uea4AYBRUYNyge3D0kRWAOwua9UoJzEiFc4Zg
-         XjBKFLDkojsyiq8QBwfbLHhZNhaWW5ehcLqdRbkuLuG0oictoy2GqrJETTraQYlZn1i1
-         Wk8K0/5isF56xTIF/FdSCu7sI+jAoWRkh5HxIAKHqInNBUDX6Dt3eUWpgcSCTfloOOd1
-         tjir58hizEHo42O5lP6uo7Friu3hOTegChp4Ze+WnvuSBVZhJ58gyM5tGWKDRbwwAqvY
-         +9pw==
-X-Gm-Message-State: ANoB5plwpePEOzfSdjZhedg2h9hXIkfdvNiunVavURn9JyI4+47cAHR6
-        ABk/Bmjg1X6mZrSd4ax3RiW6nb4apO0TtIFWpTnvvqm0YSL4
-X-Google-Smtp-Source: AA0mqf7u0eTswsmCa8LdNrGaamA5+mp4gNGUxGfLY2Eb+hqaukHdk7zxDNLOiCVwyu4aK3b6ZvvsyWg+r3SXppaMj/L4Cache0Sm
+        with ESMTP id S235717AbiLNCzA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Dec 2022 21:55:00 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07808B52;
+        Tue, 13 Dec 2022 18:54:57 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowAAHD5fXOpljjICpBg--.26176S2;
+        Wed, 14 Dec 2022 10:54:15 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] usb: gadget: aspeed_udc: Add check for dma_alloc_coherent
+Date:   Wed, 14 Dec 2022 10:54:14 +0800
+Message-Id: <20221214025414.44866-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:cccd:0:b0:302:58d0:2510 with SMTP id
- u13-20020a92cccd000000b0030258d02510mr39789401ilq.27.1670985437082; Tue, 13
- Dec 2022 18:37:17 -0800 (PST)
-Date:   Tue, 13 Dec 2022 18:37:17 -0800
-In-Reply-To: <Y5kgHgl2dU6fkr3p@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000066fb0905efc09dd1@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Write in gadgetfs_kill_sb
-From:   syzbot <syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, hbh25y@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mingo@kernel.org, rdunlap@infradead.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAAHD5fXOpljjICpBg--.26176S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GrWfGw4fZF4Uur1rZry8Grg_yoWkCrbE9F
+        4UWF15Wryava9Fgr1jvw13Aryq9a48u34kW3WvkF13Aa43Ga4xXr1jqr95ur47ZFy7uFn8
+        Aas0krW7X3y7XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUHWlkUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Add the check for the return value of dma_alloc_coherent in order to
+avoid NULL pointer dereference.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+This flaw was found using an experimental static analysis tool we are
+developing, APP-Miner, which has not been disclosed.
 
-Reported-and-tested-by: syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com
+The allyesconfig build using GCC 9.3.0 shows no new warning. As we
+don't have a UDC device to test with, no runtime testing was able to
+be performed.
 
-Tested on:
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-commit:         830b3c68 Linux 6.1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f5988b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5a194ed4fc682723
-dashboard link: https://syzkaller.appspot.com/bug?extid=33d7ad66d65044b93f16
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12208bc0480000
+v1 -> v2:
 
-Note: testing is done by a robot and is best-effort only.
+1. Add "goto err;" when allocation fails.
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 01968e2167f9..7dc2457c7460 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -1516,6 +1516,10 @@ static int ast_udc_probe(struct platform_device *pdev)
+ 					  AST_UDC_EP_DMA_SIZE *
+ 					  AST_UDC_NUM_ENDPOINTS,
+ 					  &udc->ep0_buf_dma, GFP_KERNEL);
++	if (!udc->ep0_buf) {
++		rc = -ENOMEM;
++		goto err;
++	}
+ 
+ 	udc->gadget.speed = USB_SPEED_UNKNOWN;
+ 	udc->gadget.max_speed = USB_SPEED_HIGH;
+-- 
+2.25.1
+
