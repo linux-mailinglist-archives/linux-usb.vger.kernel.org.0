@@ -2,178 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1059E64C43A
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 08:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0303E64C454
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 08:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237561AbiLNHID (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Dec 2022 02:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
+        id S237325AbiLNHRb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Dec 2022 02:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbiLNHHl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Dec 2022 02:07:41 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BFB10D3
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 23:07:32 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-39afd53dcdbso196085117b3.8
-        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 23:07:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwk10ScpIHN3TWeoCLrvB+vfcB+zS8T8ixzqnuDxGoQ=;
-        b=S+ZBF0aetxStcQmCeGXzwYt5EYr7NqwSqJG8AaIaHEbqVpEpSuzSjYiSUhXEiNbImV
-         Ea2GwSaPoQtaG8OF5d5huZF63W3lOkhWYFBhUN4HaXVfI5kKpUCHmE56fYPUv4HE3TRZ
-         AJGNUmrvAUpDemnzYe+M/w6HXUE6IyRoOn00f/cCeosedEWCZ7NRvAQBBQzInBW+LvqH
-         RMOyqbRFhjmyfTvTiUzIdN02SO9Q24DA+MljcTeC7wSNU9/sYR4oFxxCQxXgiJqW6kPo
-         Fa0u60FF0bOFRWFEHRXhwPiB9SWZ8B1p3GspHFf5Ehg484k4HqLEH+gP3sh1YIarVrMD
-         8S7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwk10ScpIHN3TWeoCLrvB+vfcB+zS8T8ixzqnuDxGoQ=;
-        b=l5kKYc9oJHmlXCd2oB5D6GCnqQK6esMTMNLCsTizdkBcU9nPxe97M6dKGodhlWs4X+
-         mzdkRdS2WVtmHD+Vx2OlRul46oiNA8TGHbBXDFsItjUfXk7JV93hMFNJBcc22qjy8Q/z
-         2Qe3jXY38+qHDZQG3gAlWLPPPfYdj9mv9zte1TjNMeT0ZuXiBHe5GXM0J0PKH/aCg2h9
-         Ni40dynmcgHEwNsy7PMchZyEF5E2zdrkfCaDLFcMSIZJICisSlYEK8/Ea/rvNVCUPoa0
-         14V8vEK4QEa8nvq+0+M/3GdKzq7wUQz1uzXAon2noesu85c2MPEMYHLhh0qj2RAlSNrO
-         FDtA==
-X-Gm-Message-State: ANoB5pk/SdJVgQf8nyfpZo4N0TNWuLb9M7ba1TQ7U7kbcoXgw0hOWb8X
-        6fy5mNMzDeqUwVW+iOyyZ10tZpAT0oU1
-X-Google-Smtp-Source: AA0mqf7avn4Qaej3IKAY16Oodzg8JnzSJ4uRyWnL1FJxff/YhffcMhV0BRcdqYY6ra/CH47c9Wb2HHr+juUv
-X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:cb1:cbe3:3a49:1751])
- (user=pumahsu job=sendgmr) by 2002:a5b:d0d:0:b0:6fe:bdb1:1529 with SMTP id
- y13-20020a5b0d0d000000b006febdb11529mr22480701ybp.628.1671001651345; Tue, 13
- Dec 2022 23:07:31 -0800 (PST)
-Date:   Wed, 14 Dec 2022 15:06:50 +0800
-In-Reply-To: <20221214070650.703793-1-pumahsu@google.com>
-Message-Id: <20221214070650.703793-3-pumahsu@google.com>
-Mime-Version: 1.0
-References: <20221214070650.703793-1-pumahsu@google.com>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Subject: [PATCH 2/2] usb: core: add implementations for usb suspend/resume hooks
-From:   Puma Hsu <pumahsu@google.com>
-To:     gregkh@linuxfoundation.org, mka@chromium.org, dianders@chromium.org
-Cc:     albertccwang@google.com, raychi@google.com, howardyen@google.com,
-        leejj@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Puma Hsu <pumahsu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S237276AbiLNHRa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Dec 2022 02:17:30 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0617223154
+        for <linux-usb@vger.kernel.org>; Tue, 13 Dec 2022 23:17:29 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE6VB7l014227;
+        Wed, 14 Dec 2022 07:17:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3QXIUezDgrA6UmkwPIkcpCrEznlqmrD88xgwOQd0gnk=;
+ b=Kh0OUeu7nUiqVAcRrKypOnTuxR7gBCsjKX6MRPIUzJMCRsXPUExUmOPqm01chJbqis93
+ EDIc+SihBAvaAFlREz9mq19b7AanLwhiW/2tbAdmki5FAkJEFs0R3bwvuul0RHhax84P
+ JPDwgueahqYx5Tx+r9US1pR9/GyyjS/TBP6mUZKUPn+Ff2rkgjtHVtsiFoYE+Mi0Lbya
+ BA6CoYqRD3soZl80J7kHmJEtKpfFizfuv0b0Y0nERN9Kd8FWys4EQC4bA1S+kmYeWL23
+ TUtrkeNy2J8zPKFNKPhWduVn4dXEIniSXHM/opQRGFaRAE1t62P+D7O19psoLdGSWtjc 0Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rcrcnk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 07:17:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BE7HNTJ005774
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 07:17:24 GMT
+Received: from [10.206.24.224] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 13 Dec
+ 2022 23:17:21 -0800
+Message-ID: <68e1a725-9343-c7ad-ff70-bcbf11a11bc8@quicinc.com>
+Date:   Wed, 14 Dec 2022 12:47:17 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [v3] usb: gadget: f_fs: Prevent race between functionfs_unbind &
+ ffs_ep0_queue_wait
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+CC:     Jack Pham <quic_jackp@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+References: <20221125054119.25135-1-quic_ugoswami@quicinc.com>
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <20221125054119.25135-1-quic_ugoswami@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Po-T1cU0NUiPI6xm5RU39r-UJIqMLLZb
+X-Proofpoint-ORIG-GUID: Po-T1cU0NUiPI6xm5RU39r-UJIqMLLZb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=694
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 adultscore=0
+ bulkscore=0 clxscore=1011 impostorscore=0 malwarescore=0 spamscore=0
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140054
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In mobile, a co-processor can be used for USB audio. When the co-processor
-is working for USB audio, the co-processor is the user/owner of the USB
-driver, and the ACPU is able to sleep in such condition to improve power
-consumption. In order to support this, we implement the hooks to handle USB
-suspend/resume requests.
+Hi All,
 
-This commit introduces two hook implementations:
-- usb_device_vendor_suspend()
-  Determine whether we should skip suspend request according to the status
-  of USB audio playback/capture.
-  Return:
-  - true: let driver.c know that we "handled" and it can just return
-          succeeded to ACPU to continue system suspend process.
-  - false: let driver.c know that it still run original suspend process.
+On 11/25/22 11:11 AM, Udipto Goswami wrote:
+> While performing fast composition switch, there is a possibility that the
+> process of ffs_ep0_write/ffs_ep0_read get into a race condition
+> due to ep0req being freed up from functionfs_unbind.
+> 
+> Consider the scenario that the ffs_ep0_write calls the ffs_ep0_queue_wait
+> by taking a lock &ffs->ev.waitq.lock. However, the functionfs_unbind isn't
+> bounded so it can go ahead and mark the ep0req to NULL, and since there
+> is no NULL check in ffs_ep0_queue_wait we will end up in use-after-free.
+> 
+> Fix this by making a serialized execution between the two functions using
+> a mutex_lock(ffs->mutex). Also, dequeue the ep0req to ensure that no
+> other function can use it after the free operation.
+> 
+> Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+> v3: Moved dequeue out of mutex to prevent deadlock
+> 
+>   drivers/usb/gadget/function/f_fs.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 73dc10a77cde..523a961b910b 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -279,6 +279,9 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
+>   	struct usb_request *req = ffs->ep0req;
+>   	int ret;
+>   
+> +	if (!req)
+> +		return -EINVAL;
+> +
+>   	req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
+>   
+>   	spin_unlock_irq(&ffs->ev.waitq.lock);
+> @@ -1892,10 +1895,14 @@ static void functionfs_unbind(struct ffs_data *ffs)
+>   	ENTER();
+>   
+>   	if (!WARN_ON(!ffs->gadget)) {
+> +		/* dequeue before freeing ep0req */
+> +		usb_ep_dequeue(ffs->gadget->ep0, ffs->ep0req);
+> +		mutex_lock(&ffs->mutex);
+>   		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
+>   		ffs->ep0req = NULL;
+>   		ffs->gadget = NULL;
+>   		clear_bit(FFS_FL_BOUND, &ffs->flags);
+> +		mutex_unlock(&ffs->mutex);
+>   		ffs_data_put(ffs);
+>   	}
+>   }
 
-- usb_device_vendor_resume()
-  Determine whether we should skip resume request according to the USB
-  device's suspend state.
-  Return:
-  - true: let driver.c know that it doesn't need to run resume process.
-  - false: let driver.c know that it still run original resume process.
+Gentle reminder for any comments/suggestions on this patch.
 
-Signed-off-by: Puma Hsu <pumahsu@google.com>
----
- drivers/usb/core/usb-hooks-impl-goog.c | 72 ++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 drivers/usb/core/usb-hooks-impl-goog.c
-
-diff --git a/drivers/usb/core/usb-hooks-impl-goog.c b/drivers/usb/core/usb-hooks-impl-goog.c
-new file mode 100644
-index 000000000000..89dc360babed
---- /dev/null
-+++ b/drivers/usb/core/usb-hooks-impl-goog.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Google Corp.
-+ *
-+ * Author:
-+ *  Puma Hsu <pumahsu@google.com>
-+ */
-+
-+#include <linux/usb.h>
-+#include "usb.h"
-+
-+extern int usb_dev_register_vendor_ops(struct usb_device_vendor_ops *vendor_ops);
-+
-+static bool usb_device_vendor_suspend(struct usb_device *udev, pm_message_t msg)
-+{
-+	bool usb_playback = false;
-+	bool usb_capture = false;
-+	bool handled = false;
-+
-+	if (!udev)
-+		return handled;
-+
-+	/*
-+	 * Note: Our private driver provides APIs to know the device is in audio playback
-+	 * or capture.
-+	 *
-+	 * usb_playback = usb_audio_playback_enabled();
-+	 * usb_capture = usb_audio_capture_enabled();
-+	 */
-+
-+	/*
-+	 * Note: When the USB audio is working, we will not let the usb device suspend.
-+	 * Return handled = true so that the System core can it's suspend process.
-+	 */
-+	if (usb_playback || usb_capture) {
-+		dev_info(&udev->dev, "%s: skip suspend process (playback:%d,capture:%d)\n",
-+			 __func__, usb_playback, usb_capture);
-+		handled = true;
-+	}
-+
-+	return handled;
-+}
-+
-+static bool usb_device_vendor_resume(struct usb_device *udev, pm_message_t msg)
-+{
-+	bool handled = false;
-+
-+	if (!udev)
-+		return handled;
-+
-+	/*
-+	 * Note: If the udev didn't suspend actually, we don't need to do resume.
-+	 */
-+	if (udev->port_is_suspended || udev->state == USB_STATE_SUSPENDED) {
-+		handled = false;
-+	} else {
-+		dev_info(&udev->dev, "%s: skip resume process\n", __func__);
-+		handled = true;
-+	}
-+
-+	return handled;
-+}
-+
-+static struct usb_device_vendor_ops usb_dev_vendor_ops = {
-+	.usb_dev_suspend = usb_device_vendor_suspend,
-+	.usb_dev_resume = usb_device_vendor_resume,
-+};
-+
-+int usb_vendor_helper_init(void)
-+{
-+	return usb_dev_register_vendor_ops(&usb_dev_vendor_ops);
-+}
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
-
+Thanks,
+-Udipto
