@@ -2,74 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4BB64C6FB
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 11:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8036864C6FF
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Dec 2022 11:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237658AbiLNKUm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Dec 2022 05:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S237757AbiLNKWv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Dec 2022 05:22:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237574AbiLNKUg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Dec 2022 05:20:36 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499B711816
-        for <linux-usb@vger.kernel.org>; Wed, 14 Dec 2022 02:20:35 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id m4so2858946pls.4
-        for <linux-usb@vger.kernel.org>; Wed, 14 Dec 2022 02:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iSY/aifT2udZaI81Js8AwAoR9LvNMo+zaU5J3YgtXW8=;
-        b=KA4HL+QcoDD5Lc5ElIT8KI/Vg12p5rvKSD4i9Tna33RKb/uI92YzjCNQYfEO/KeiJL
-         dUrcTt014y4ZfYLkCEVuC0skbf/m1hewY9N8pg4IBEaARtfbL8MKK8G+R8CsjxRbYVMI
-         hHwszrHy9si0riC+SbgX7/m0oDjAw/7GkGlmg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iSY/aifT2udZaI81Js8AwAoR9LvNMo+zaU5J3YgtXW8=;
-        b=dbdw/3rS17n2BRT+g+04KxfZfYzFs6AHsrXT+oDLIOwiRCxttdJdfAYY/hjLiqc3aq
-         DCyNIldUK1rxZZu0yc9YbU0RNndGccDovnkPeM/uS98Wxn3Ndi8wIJMLlEXIvJh4VwtQ
-         oYxu7IHhS1FvHtou6hJCPNda+l7POfX/mIrmlyPygqZFmnP5v3CystgIwmGLfQELHmai
-         lXE5v07DkgYJTvwqPEiWGPeTawTkzgIBri2p2abk11gSgp41kR+cINHw+FeBo8nHtipk
-         Bj21agZ8JnrcT+QrQzs22f8TiHBPjjEkUmtmPMUjuWtyy99u9/isoWYd6tGVcWy9KGT2
-         G1uw==
-X-Gm-Message-State: ANoB5pnWfVnruKSpGvwobDj5RG8HHFIA1C+uieFZ28sie21yLBWjIMKm
-        zE5vS8fPWy7L2Foj1VIUoqCSQGQifExGTfdXKiY=
-X-Google-Smtp-Source: AA0mqf4sUFOskEAiBkA8OdKYHG2odO4I0XmoKRHAxTwJO+Lrn3Dj6/ns61v40ebrEqDXY+khC2tmkg==
-X-Received: by 2002:a17:902:b20c:b0:189:3308:9a2b with SMTP id t12-20020a170902b20c00b0018933089a2bmr23359287plr.7.1671013234397;
-        Wed, 14 Dec 2022 02:20:34 -0800 (PST)
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com. [209.85.216.48])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170902e19400b0018980f14ecfsm1509570pla.115.2022.12.14.02.20.32
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 02:20:33 -0800 (PST)
-Received: by mail-pj1-f48.google.com with SMTP id t17so6420566pjo.3
-        for <linux-usb@vger.kernel.org>; Wed, 14 Dec 2022 02:20:32 -0800 (PST)
-X-Received: by 2002:a17:902:ce04:b0:174:af35:4b90 with SMTP id
- k4-20020a170902ce0400b00174af354b90mr79366094plg.8.1671013232099; Wed, 14 Dec
- 2022 02:20:32 -0800 (PST)
+        with ESMTP id S237744AbiLNKWs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Dec 2022 05:22:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90811624F
+        for <linux-usb@vger.kernel.org>; Wed, 14 Dec 2022 02:22:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE2EB817B1
+        for <linux-usb@vger.kernel.org>; Wed, 14 Dec 2022 10:22:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B35B0C433EF;
+        Wed, 14 Dec 2022 10:22:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671013362;
+        bh=xnpXd5UMGrv9R9RJhC+72XWqME6bvWjc8D0U8uXvzxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CzUcWGzZjQLgLbDSAHR4Z59+GnqnnX5pyWhaYDBlWjqjqzRWvSMiE8uAWyJT9mPFW
+         LEM5la/qMxNs7iHQr74L0Ylv8KpR5es33Qf2Mwa0GUlvW6e9OK3f41KBYM0LhBYgsV
+         RYokq0r5wWWVqt5lSQ1nK5DpA9595MiJlbFf0Ev0=
+Date:   Wed, 14 Dec 2022 11:22:39 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [v3] usb: gadget: f_fs: Prevent race between functionfs_unbind &
+ ffs_ep0_queue_wait
+Message-ID: <Y5mj71rsDkb+YOzj@kroah.com>
+References: <20221125054119.25135-1-quic_ugoswami@quicinc.com>
+ <68e1a725-9343-c7ad-ff70-bcbf11a11bc8@quicinc.com>
+ <Y5mICGooaaQJOOQL@kroah.com>
+ <43bbd23f-f560-8b65-daaf-2f205082fc7f@quicinc.com>
 MIME-Version: 1.0
-References: <20221212194716.2995569-1-m.grzeschik@pengutronix.de>
- <20221212194716.2995569-6-m.grzeschik@pengutronix.de> <6286e69b-4882-c75a-d3bd-44c88f421bfc@ideasonboard.com>
-In-Reply-To: <6286e69b-4882-c75a-d3bd-44c88f421bfc@ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 14 Dec 2022 11:20:20 +0100
-X-Gmail-Original-Message-ID: <CANiDSCvtULbNWY2AeZtHO2vP297uAZPAhFWvxuc0pXX89ArVxw@mail.gmail.com>
-Message-ID: <CANiDSCvtULbNWY2AeZtHO2vP297uAZPAhFWvxuc0pXX89ArVxw@mail.gmail.com>
-Subject: Re: [PATCH 5/5] usb: uvc: use v4l2_fill_fmtdesc instead of open coded
- format name
-To:     Dan Scally <dan.scally@ideasonboard.com>
-Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43bbd23f-f560-8b65-daaf-2f205082fc7f@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,282 +55,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan
+On Wed, Dec 14, 2022 at 03:42:10PM +0530, Udipto Goswami wrote:
+> Hi Greg,
+> 
+> On 12/14/22 1:53 PM, Greg Kroah-Hartman wrote:
+> > On Wed, Dec 14, 2022 at 12:47:17PM +0530, Udipto Goswami wrote:
+> > > Hi All,
+> > > 
+> > > On 11/25/22 11:11 AM, Udipto Goswami wrote:
+> > > > While performing fast composition switch, there is a possibility that the
+> > > > process of ffs_ep0_write/ffs_ep0_read get into a race condition
+> > > > due to ep0req being freed up from functionfs_unbind.
+> > > > 
+> > > > Consider the scenario that the ffs_ep0_write calls the ffs_ep0_queue_wait
+> > > > by taking a lock &ffs->ev.waitq.lock. However, the functionfs_unbind isn't
+> > > > bounded so it can go ahead and mark the ep0req to NULL, and since there
+> > > > is no NULL check in ffs_ep0_queue_wait we will end up in use-after-free.
+> > > > 
+> > > > Fix this by making a serialized execution between the two functions using
+> > > > a mutex_lock(ffs->mutex). Also, dequeue the ep0req to ensure that no
+> > > > other function can use it after the free operation.
+> > > > 
+> > > > Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+> > > > Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> > > > ---
+> > > > v3: Moved dequeue out of mutex to prevent deadlock
+> > > > 
+> > > >    drivers/usb/gadget/function/f_fs.c | 7 +++++++
+> > > >    1 file changed, 7 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> > > > index 73dc10a77cde..523a961b910b 100644
+> > > > --- a/drivers/usb/gadget/function/f_fs.c
+> > > > +++ b/drivers/usb/gadget/function/f_fs.c
+> > > > @@ -279,6 +279,9 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
+> > > >    	struct usb_request *req = ffs->ep0req;
+> > > >    	int ret;
+> > > > +	if (!req)
+> > > > +		return -EINVAL;
+> > > > +
+> > > >    	req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
+> > > >    	spin_unlock_irq(&ffs->ev.waitq.lock);
+> > > > @@ -1892,10 +1895,14 @@ static void functionfs_unbind(struct ffs_data *ffs)
+> > > >    	ENTER();
+> > > >    	if (!WARN_ON(!ffs->gadget)) {
+> > > > +		/* dequeue before freeing ep0req */
+> > > > +		usb_ep_dequeue(ffs->gadget->ep0, ffs->ep0req);
+> > > > +		mutex_lock(&ffs->mutex);
+> > > >    		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
+> > > >    		ffs->ep0req = NULL;
+> > > >    		ffs->gadget = NULL;
+> > > >    		clear_bit(FFS_FL_BOUND, &ffs->flags);
+> > > > +		mutex_unlock(&ffs->mutex);
+> > > >    		ffs_data_put(ffs);
+> > > >    	}
+> > > >    }
+> > > 
+> > > Gentle reminder for any comments/suggestions on this patch.
+> > 
+> > It's the middle of the merge window, and you submitted a patch that has
+> > obvious coding style issues, so there's nothing that we can do with it
+> > no matter what...
+> 
+> Apologies for this, I had ran checkpatch, I didn't get any error:
+> 
+> total: 0 errors, 0 warnings, 23 lines checked
+> 
+> 0001-usb-gadget-f_fs-Prevent-race-between-functionfs_unbi.patch has no
+> obvious style problems and is ready for submission.
+> 
+> was curious what's the coding style error you are referring here?
 
-On Wed, 14 Dec 2022 at 10:48, Dan Scally <dan.scally@ideasonboard.com> wrote:
->
-> Hi Michael
->
-> On 12/12/2022 19:47, Michael Grzeschik wrote:
-> > Since we have the helper function v4l2_fill_fmtdesc, we can use this to
-> > get the corresponding descriptive string for the pixelformat and set the
-> > compressed flag. This patch is removing the redundant name field in
-> > uvc_format_desc and makes use of v4l2_fill_fmtdesc instead.
-> >
-> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> > ---
->
->
-> The only thing that makes me wary about this one is that it will change
-> the format names reported by the uvcvideo driver to userspace, since
-> those returned by v4l2_fill_fmtdesc() are not the same as the ones being
-> dropped from uvc_format_desc[]...are we sure that's not going to matter?
+No blank line after the variable description and before your new if
+statement.
 
-I would expect apps using the fourcc, not the string to select one
-format or the other.
+thanks,
 
->
-> >   drivers/media/common/uvc.c             | 37 --------------------------
-> >   drivers/media/usb/uvc/uvc_driver.c     |  8 +++++-
-> >   drivers/usb/gadget/function/uvc_v4l2.c |  6 +----
-> >   include/linux/usb/uvc.h                |  1 -
-> >   4 files changed, 8 insertions(+), 44 deletions(-)
-> >
-> > diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
-> > index a6787f1999becd..02de0dcad0f088 100644
-> > --- a/drivers/media/common/uvc.c
-> > +++ b/drivers/media/common/uvc.c
-> > @@ -11,187 +11,150 @@
-> >
-> >   static const struct uvc_format_desc uvc_fmts[] = {
-> >       {
-> > -             .name           = "YUV 4:2:2 (YUYV)",
-> >               .guid           = UVC_GUID_FORMAT_YUY2,
-> >               .fcc            = V4L2_PIX_FMT_YUYV,
-> >       },
-> >       {
-> > -             .name           = "YUV 4:2:2 (YUYV)",
-> >               .guid           = UVC_GUID_FORMAT_YUY2_ISIGHT,
-> >               .fcc            = V4L2_PIX_FMT_YUYV,
-> >       },
-> >       {
-> > -             .name           = "YUV 4:2:0 (NV12)",
-> >               .guid           = UVC_GUID_FORMAT_NV12,
-> >               .fcc            = V4L2_PIX_FMT_NV12,
-> >       },
-> >       {
-> > -             .name           = "MJPEG",
-> >               .guid           = UVC_GUID_FORMAT_MJPEG,
-> >               .fcc            = V4L2_PIX_FMT_MJPEG,
-> >       },
-> >       {
-> > -             .name           = "YVU 4:2:0 (YV12)",
-> >               .guid           = UVC_GUID_FORMAT_YV12,
-> >               .fcc            = V4L2_PIX_FMT_YVU420,
-> >       },
-> >       {
-> > -             .name           = "YUV 4:2:0 (I420)",
-> >               .guid           = UVC_GUID_FORMAT_I420,
-> >               .fcc            = V4L2_PIX_FMT_YUV420,
-> >       },
-> >       {
-> > -             .name           = "YUV 4:2:0 (M420)",
-> >               .guid           = UVC_GUID_FORMAT_M420,
-> >               .fcc            = V4L2_PIX_FMT_M420,
-> >       },
-> >       {
-> > -             .name           = "YUV 4:2:2 (UYVY)",
-> >               .guid           = UVC_GUID_FORMAT_UYVY,
-> >               .fcc            = V4L2_PIX_FMT_UYVY,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 8-bit (Y800)",
-> >               .guid           = UVC_GUID_FORMAT_Y800,
-> >               .fcc            = V4L2_PIX_FMT_GREY,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 8-bit (Y8  )",
-> >               .guid           = UVC_GUID_FORMAT_Y8,
-> >               .fcc            = V4L2_PIX_FMT_GREY,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 8-bit (D3DFMT_L8)",
-> >               .guid           = UVC_GUID_FORMAT_D3DFMT_L8,
-> >               .fcc            = V4L2_PIX_FMT_GREY,
-> >       },
-> >       {
-> > -             .name           = "IR 8-bit (L8_IR)",
-> >               .guid           = UVC_GUID_FORMAT_KSMEDIA_L8_IR,
-> >               .fcc            = V4L2_PIX_FMT_GREY,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 10-bit (Y10 )",
-> >               .guid           = UVC_GUID_FORMAT_Y10,
-> >               .fcc            = V4L2_PIX_FMT_Y10,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 12-bit (Y12 )",
-> >               .guid           = UVC_GUID_FORMAT_Y12,
-> >               .fcc            = V4L2_PIX_FMT_Y12,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 16-bit (Y16 )",
-> >               .guid           = UVC_GUID_FORMAT_Y16,
-> >               .fcc            = V4L2_PIX_FMT_Y16,
-> >       },
-> >       {
-> > -             .name           = "BGGR Bayer (BY8 )",
-> >               .guid           = UVC_GUID_FORMAT_BY8,
-> >               .fcc            = V4L2_PIX_FMT_SBGGR8,
-> >       },
-> >       {
-> > -             .name           = "BGGR Bayer (BA81)",
-> >               .guid           = UVC_GUID_FORMAT_BA81,
-> >               .fcc            = V4L2_PIX_FMT_SBGGR8,
-> >       },
-> >       {
-> > -             .name           = "GBRG Bayer (GBRG)",
-> >               .guid           = UVC_GUID_FORMAT_GBRG,
-> >               .fcc            = V4L2_PIX_FMT_SGBRG8,
-> >       },
-> >       {
-> > -             .name           = "GRBG Bayer (GRBG)",
-> >               .guid           = UVC_GUID_FORMAT_GRBG,
-> >               .fcc            = V4L2_PIX_FMT_SGRBG8,
-> >       },
-> >       {
-> > -             .name           = "RGGB Bayer (RGGB)",
-> >               .guid           = UVC_GUID_FORMAT_RGGB,
-> >               .fcc            = V4L2_PIX_FMT_SRGGB8,
-> >       },
-> >       {
-> > -             .name           = "RGB565",
-> >               .guid           = UVC_GUID_FORMAT_RGBP,
-> >               .fcc            = V4L2_PIX_FMT_RGB565,
-> >       },
-> >       {
-> > -             .name           = "BGR 8:8:8 (BGR3)",
-> >               .guid           = UVC_GUID_FORMAT_BGR3,
-> >               .fcc            = V4L2_PIX_FMT_BGR24,
-> >       },
-> >       {
-> > -             .name           = "H.264",
-> >               .guid           = UVC_GUID_FORMAT_H264,
-> >               .fcc            = V4L2_PIX_FMT_H264,
-> >       },
-> >       {
-> > -             .name           = "H.265",
-> >               .guid           = UVC_GUID_FORMAT_H265,
-> >               .fcc            = V4L2_PIX_FMT_HEVC,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 8 L/R (Y8I)",
-> >               .guid           = UVC_GUID_FORMAT_Y8I,
-> >               .fcc            = V4L2_PIX_FMT_Y8I,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 12 L/R (Y12I)",
-> >               .guid           = UVC_GUID_FORMAT_Y12I,
-> >               .fcc            = V4L2_PIX_FMT_Y12I,
-> >       },
-> >       {
-> > -             .name           = "Depth data 16-bit (Z16)",
-> >               .guid           = UVC_GUID_FORMAT_Z16,
-> >               .fcc            = V4L2_PIX_FMT_Z16,
-> >       },
-> >       {
-> > -             .name           = "Bayer 10-bit (SRGGB10P)",
-> >               .guid           = UVC_GUID_FORMAT_RW10,
-> >               .fcc            = V4L2_PIX_FMT_SRGGB10P,
-> >       },
-> >       {
-> > -             .name           = "Bayer 16-bit (SBGGR16)",
-> >               .guid           = UVC_GUID_FORMAT_BG16,
-> >               .fcc            = V4L2_PIX_FMT_SBGGR16,
-> >       },
-> >       {
-> > -             .name           = "Bayer 16-bit (SGBRG16)",
-> >               .guid           = UVC_GUID_FORMAT_GB16,
-> >               .fcc            = V4L2_PIX_FMT_SGBRG16,
-> >       },
-> >       {
-> > -             .name           = "Bayer 16-bit (SRGGB16)",
-> >               .guid           = UVC_GUID_FORMAT_RG16,
-> >               .fcc            = V4L2_PIX_FMT_SRGGB16,
-> >       },
-> >       {
-> > -             .name           = "Bayer 16-bit (SGRBG16)",
-> >               .guid           = UVC_GUID_FORMAT_GR16,
-> >               .fcc            = V4L2_PIX_FMT_SGRBG16,
-> >       },
-> >       {
-> > -             .name           = "Depth data 16-bit (Z16)",
-> >               .guid           = UVC_GUID_FORMAT_INVZ,
-> >               .fcc            = V4L2_PIX_FMT_Z16,
-> >       },
-> >       {
-> > -             .name           = "Greyscale 10-bit (Y10 )",
-> >               .guid           = UVC_GUID_FORMAT_INVI,
-> >               .fcc            = V4L2_PIX_FMT_Y10,
-> >       },
-> >       {
-> > -             .name           = "IR:Depth 26-bit (INZI)",
-> >               .guid           = UVC_GUID_FORMAT_INZI,
-> >               .fcc            = V4L2_PIX_FMT_INZI,
-> >       },
-> >       {
-> > -             .name           = "4-bit Depth Confidence (Packed)",
-> >               .guid           = UVC_GUID_FORMAT_CNF4,
-> >               .fcc            = V4L2_PIX_FMT_CNF4,
-> >       },
-> >       {
-> > -             .name           = "HEVC",
-> >               .guid           = UVC_GUID_FORMAT_HEVC,
-> >               .fcc            = V4L2_PIX_FMT_HEVC,
-> >       },
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index 12b6ad0966d94a..af92e730bde7c7 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -251,7 +251,13 @@ static int uvc_parse_format(struct uvc_device *dev,
-> >               fmtdesc = uvc_format_by_guid(&buffer[5]);
-> >
-> >               if (fmtdesc != NULL) {
-> > -                     strscpy(format->name, fmtdesc->name,
-> > +                     struct v4l2_fmtdesc fmt;
-> > +
-> > +                     fmt.pixelformat = fmtdesc->fcc;
-> > +
-> > +                     v4l2_fill_fmtdesc(&fmt);
-> > +
-> > +                     strscpy(format->name, fmt.description,
-> >                               sizeof(format->name));
-> >                       format->fcc = fmtdesc->fcc;
-> >               } else {
-> > diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> > index 21e573e628f4e7..6e46fa1695f212 100644
-> > --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> > +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> > @@ -374,14 +374,10 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
-> >       if (!uformat)
-> >               return -EINVAL;
-> >
-> > -     if (uformat->type != UVCG_UNCOMPRESSED)
-> > -             f->flags |= V4L2_FMT_FLAG_COMPRESSED;
-> > -
-> >       fmtdesc = to_uvc_format(uformat);
-> >       f->pixelformat = fmtdesc->fcc;
-> >
-> > -     strscpy(f->description, fmtdesc->name, sizeof(f->description));
-> > -     f->description[strlen(fmtdesc->name) - 1] = 0;
-> > +     v4l2_fill_fmtdesc(f);
-> >
-> >       return 0;
-> >   }
-> > diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-> > index 227a03f252a5c0..e407a7b8a91c70 100644
-> > --- a/include/linux/usb/uvc.h
-> > +++ b/include/linux/usb/uvc.h
-> > @@ -146,7 +146,6 @@
-> >        0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> >
-> >   struct uvc_format_desc {
-> > -     char *name;
-> >       u8 guid[16];
-> >       u32 fcc;
-> >   };
-
-
-
--- 
-Ricardo Ribalda
+greg k-h
