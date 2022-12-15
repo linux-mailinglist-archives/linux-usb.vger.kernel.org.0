@@ -2,137 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D843364D844
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Dec 2022 10:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EFA64D877
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Dec 2022 10:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiLOJI0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Dec 2022 04:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S229914AbiLOJWC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Dec 2022 04:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiLOJIX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Dec 2022 04:08:23 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2138.outbound.protection.outlook.com [40.107.244.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1194A46665;
-        Thu, 15 Dec 2022 01:08:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N2ojxbHrY81b0lEzk9tmDgSnT8Jvai2WHLOdZACRFOD3xT209q1X6tpn+8LWoWxsvBrUCrCaNftDDpInCio2tJPecg5kgTfDg/dHW5XDHtnKqzk5kpMW1E/uGaD1O03gDn1k/T6GedGI1GJaBJUZA1oiwcKeCYoxAUUojhc5JWQEJTYc7oyeDafZh69NzHAGc4tGGVxO7GoApKxUpLNsohBqOpYdNYL+xJm0FyTSgZthpeEMSCQVCt2+eDsYOmVj9zdjnZn+q2qFY23hL9v5HDNaMUjvHbkOpkw9OpSz1n3YBNylP4QmIaRTR9yP9Q8Tgp5ExzurdSyToN+Znh3pGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IRjiZgUAmM5synlcEMzbQKl8s8tNZnj6B5uvlXA5koE=;
- b=AWJb43gbS92FSj2CSUj6Cdvp30RrH6jYsAtjPogg3CSnkeC6PkeY/bd5pX40tPlCs92gUHATYv3xqTFh636xGU2zccgmxkUPt6qZ1lAD7vpYFiuMjit/nAcUctBZN82TQMfX+l4npPnPzqpw9yj6jK6p/UnwcWateEEAzmIu9mssX2mtwKIMJ5W3WfKOQMpAgdTrXczgLPzYdaAVxAM3d952RhsuNpT1RX0qj9weL/2+pnPEAlNZXj1te6AYXMP+m+5z/AJmHAl9dD6wDX4O4d4RJ4P+oM1PivHaFzTIIHfjC3odoUD28hTqMiLcZbF+vBJ7JBZWy27WSn8UOJYXdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
+        with ESMTP id S229947AbiLOJV7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Dec 2022 04:21:59 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E36CCD6;
+        Thu, 15 Dec 2022 01:21:55 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id g10so6189237plo.11;
+        Thu, 15 Dec 2022 01:21:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IRjiZgUAmM5synlcEMzbQKl8s8tNZnj6B5uvlXA5koE=;
- b=UcLnD1kzqqLXSVOoqVzOfy/BOBpvFpn5jGmbC63MEYWdA+axqRJb79SPIjDKdcHwMsK8DGdSSnOgizVOusqCZPuGwgh/ZiD60pbBx9QPFUXnnjy0Ra69KoqfUIZtUYEzFHyq6Rsv2jMLfZBYt79xcRVdhdSv0WNPob0eBkNiWB4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13) by
- MN2PR01MB5375.prod.exchangelabs.com (2603:10b6:208:10f::27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5924.11; Thu, 15 Dec 2022 09:08:16 +0000
-Received: from SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c]) by SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c%3]) with mapi id 15.20.5880.019; Thu, 15 Dec 2022
- 09:08:16 +0000
-Message-ID: <56581822-eb30-2e1b-169e-2bdee6f961f3@amperemail.onmicrosoft.com>
-Date:   Thu, 15 Dec 2022 16:08:06 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [EXT] Re: [PATCH] USB: gadget: Add ID numbers to configfs-gadget
- driver names
-Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chanh Nguyen <chanh@os.amperecomputing.com>
-Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Rondreis <linhaoguo86@gmail.com>
-References: <20221213041203.21080-1-chanh@os.amperecomputing.com>
- <720b814d-5102-04d3-4938-33a25e87a46d@wanadoo.fr>
- <6044a542-fbcd-0fe7-abd3-83f38b731ecc@amperemail.onmicrosoft.com>
- <HE1PR0401MB23315376796AF65DEB8B636B88E09@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-From:   Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-In-Reply-To: <HE1PR0401MB23315376796AF65DEB8B636B88E09@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI1PR02CA0033.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::14) To SN6PR01MB4973.prod.exchangelabs.com
- (2603:10b6:805:c4::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4973:EE_|MN2PR01MB5375:EE_
-X-MS-Office365-Filtering-Correlation-Id: 90ba0db1-acdd-4520-8a6b-08dade7be680
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A+t9k7dR9Nm9nhPP/EBAg1AfgOCEBFgkx+/sB26ZoTLnlKFX0wHqGDEP1aUC9M+nu+M/S4LGrzvMmK+PKcQwzY3hv9jz6yW1ZimRPvMrqZStsvwKpdkzVr1TIftkkSlvCbpt44wbbpvTN9ZrVyx500dg+tXN1LI/Ha1PQdKiPPbT1Fa9W15uc1zdXNKRgmHQII/KxUAwV82Sdc0SrkOEe6KV2HxgsMqTFk4mgteNOkQ/DfCFQclayJB638VwVFZ9Vssa68W396b2cPLuYcqKlnTCqFZDqmSlnvf/XC1POn007uB2y+vsX+xp1Dd07rz3XkJ2dat3i8ZmX8WWyN3WhoqRC298/bSl/Xb3CPYjZPj7txV9rwY92p1kjmhGVFe6BhH6O3ofWrohDKhKNWH5oMpeKQouhr743iEpU4dA+MwWD2tNHzFzea5SPee6omH0+rFt0EbiaLQelIFiD2Z1q1798DfsNVA6VYMKJUKhyHmIdoE+IGTD8+5yAswdsAFl2JCZ1So1ObsJeDFTanKEHSyuxILvwNg0IR1qp5LkDwM+1cC8c/BIiQfK232af6GaMg4FItyIt2SW+U9BuoYRBvl3EZR61yKwPS7zawFRyBzyJ7imKQk/X6LvsQHzUWGl+47s5CSbWI5GBOVsKdFJ29l0HpdCJWmHb9cV5+PUNlIEzKrHoo9r3m2aKLcQWA70BdS8cS2dcGRWDSKrKkN1DQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4973.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(396003)(39850400004)(346002)(451199015)(66556008)(5660300002)(7416002)(83170400001)(8936002)(2906002)(8676002)(66476007)(4326008)(66946007)(41300700001)(83380400001)(31696002)(38100700002)(478600001)(6486002)(31686004)(186003)(53546011)(26005)(6512007)(6666004)(6506007)(66574015)(110136005)(316002)(42882007)(54906003)(2616005)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c0VRSVNMdzhDRW9jSmwvTEdLa2Jmem9BNkJwR05VQzRPTFdWN0JudEZBWmFj?=
- =?utf-8?B?VWJyTEQ3WHF5RjZJQVBuci9GVlFnc1BDYnBLM3paclcrTzdhZUNheUdCREJm?=
- =?utf-8?B?RytnczVqMlprckp2R0t6Wm0wQmZkMU5rdDB4TldzYlNvVW9Ea0JBU2Q4YStM?=
- =?utf-8?B?TWNtYkFiN2J3YU1wSGZXMnpjSkhhRnlvczNTOStHWWNPQm5PWExKTHlDTE1F?=
- =?utf-8?B?VFZCQjVHRk9VdEFZbVc1d0JqaUlzd0NhaWtzOTBBRWVKVGJJUzhlbWprUlJB?=
- =?utf-8?B?L21IT3FPY3F1a2VEb2d0bzRWd0c4d1JSOEd3MUZwNVRibmZ3aW9jQmVGUkJs?=
- =?utf-8?B?S1dzMjRkeEUyRHBOMmFqYzlRMFlLbmxMUFlBTVkyNVg5T2NSdjExbDhtZ05E?=
- =?utf-8?B?WUMydUE5UXF2aWxyWGdKTENqd0RhWlJzZzJSZSthVi9mUTNySGFXRlN1OUpr?=
- =?utf-8?B?Wm5BMkx4Z2VxbVo5NDNWOHo0RGFoZmxuZCtZU3RwZ2M5ZzFjZFVMUmNWZUI1?=
- =?utf-8?B?UHZsSldRQ1pvNSsrZ2NUazJDMmdUT0cxOFBHUzRxb05NcUwyd2tqdXE2RVBn?=
- =?utf-8?B?a2VmREV2OWxlaTdtUkxlVlE4TjJZMkJtajNCRHZlam5tRDFOcElLQkw0N3dv?=
- =?utf-8?B?bm5vdXFVLzd5Vk9sZk05K203cjkrN05xaEo3UTVTZHE1YVZUT2kyK2o4SldE?=
- =?utf-8?B?U0QxOE9ybDNwb2lyQktrU2c5bFlrbk5nY3k3ZHFCUzdkSUNTN2JLZ1dHRU90?=
- =?utf-8?B?eWFDbmlkWE9kb1JKYmhCWWVJUzJqZ3JKN3FUK1pIc0RQdzZNQ2diOGZxVytJ?=
- =?utf-8?B?dzVFbHRzeDJYUkF1K29BQVJ0RnBVZU1mcWR3bTNnU3BZSzAvaWJxUGwrQ0Nj?=
- =?utf-8?B?ek83b2kwcUVJV2JzdDJIWkpFa1orNGU4Nk85a0d4T3N1UlJQd2hkUjVYM1k4?=
- =?utf-8?B?TnpDeDFuQmMvUEZzdDdQM3g5enpOeSs2aVA4R0FISEZLbnMwV3MyWXFMaEhN?=
- =?utf-8?B?VlN5OHdEVURCWEcrd3gvTS9GSXBHT2JObThRT0tYSURTb1poSUtnWmpkRFpm?=
- =?utf-8?B?NTYyUFB1MWZBelh4dlZXTWZSMXJMNHphNHdIWW9mcDhDNVdJSzRiRW5uYlZO?=
- =?utf-8?B?YUZpd2llQjFEL1dnUytic0RzV1dMbjFGVkllemlRa0wrRGlqZ1JOUFpOODVS?=
- =?utf-8?B?Q1A3dWZ4ckRlZnVpV3hmQXRLRmZQSUNLYW5LekhpZGgxenFjSnhicDVha0ND?=
- =?utf-8?B?YzEwV2xiWDhBN3cvWkRPazN0QXRpY2RDZzgyWk55bDZVYU1hdHlkUklxbVJZ?=
- =?utf-8?B?dno2WVd0dDRlNStNSHZ0YStuT3N2ZlR6NHVzby9QUDVSejZDQmdBY280aGhz?=
- =?utf-8?B?SjJ2MUJrNnhla3pFZUVKUytCNFlTUHRGbmh2cWJwazFIbG9sbzJlUDRzYTda?=
- =?utf-8?B?Z3BNUXUyVHRlQUtud3BEcnpyU2lNcWw5czR3R2hDaUxkUU81a09Bd1RyMERo?=
- =?utf-8?B?U3c3NUlLL1RSb214R0ovZ0NrdXlnamhjZ1BsUHRsUCtNaEhndEszb09kRFBJ?=
- =?utf-8?B?VkJaSUFGR21LTlg4WERBbk9zVkYzNU5SUUpSM2U1UXBvN3ZKVWhJdkV1V1pr?=
- =?utf-8?B?dG9WNnlFNHlBNWM3SkdGQmluZktaZ3hZUE5PUmY0cFlNVTZ0MFJHSjU0RnFK?=
- =?utf-8?B?VjZFeGl0L21HeWo4UWpXTEFuOEM2WkxvalJmVnFncTdQNkw4YXF0WU94bjVu?=
- =?utf-8?B?WkVBOHNtaDR0VEUyYVJydUk2Sm1ONnEvVjBpUWNOTG5ldjlTZ2RoMzV0NnUx?=
- =?utf-8?B?VlRlR21FSW9wbFdtdkRiRXUrbGh0K28yTjR1Zkc3QmhiRTcrcVp5ZlVEaVNj?=
- =?utf-8?B?MlQrZk5rNFpINmp5OGtjMWpTUUpINERvVFhpRGZrZHV0R3BMV0EzeWozS1NB?=
- =?utf-8?B?b1ZWTXlyUmNyY0pFQkUrakorcFluSFcwcCtheXlveUdNRko3aDFuRUEwVHpV?=
- =?utf-8?B?U3JhZ2wxUVlXeTVNcVRtZ1V1OHNUNThXbDhHVGFVL0NqampzY1hYWjdDREti?=
- =?utf-8?B?MDEweklUeGFWZHFiNXBWZm0vNmdhcnZuQUJqQis3R1NWY3p4bEsyR0NGVFhs?=
- =?utf-8?B?dWwvS0VWSmVDTVdYUmFRR0hYeVlTdkRSRlFQbERIeGFoY3dWeGZKRWsxN2Zj?=
- =?utf-8?Q?o4F+D92bZ/ji5rSsCIksemQ=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90ba0db1-acdd-4520-8a6b-08dade7be680
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4973.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2022 09:08:15.9623
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ryVpt9roDez3g9hqFEnjy6aweXXZWpiVPEK3FAw+vstu1aTovccMnGo3HY/faI4BUV7R1eBUvqQl3gzFX8SU8LluNi+LmrQpxpiJhHRWmWDbvv/RPCYuOUUyS6bZepVD
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR01MB5375
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tKq+74lFzjG0ld+n/1zNhWFFCw+s5cZPvJZHWPcwlfs=;
+        b=Z8ftD08MnvO6lYokc6C0FaaznWFY7oZ2o88H4jjh1XTIGX6LCllsoCoAxrA/N8wBug
+         UTR2e/IWhyja/+QvOSxfe8qeW/TykJjcGxshfabALZTM0BPoTQ994q6LWQhnDU5bWH7M
+         dQWeF7BF5wj3Ye0QzJIrUbhazEzJXRvTPtEkPz1WFFq1Tzsz0vibXrETarxlClMVtlBk
+         eGJUNgHRgFszz48swWN2wMgNypMj3VWBODgPMWoH4YzOJC4EVQl/Z4IbC2dRp1o0vAV6
+         kwi54D/CUUdcx4EBco/m5r+z9lDAuOKrsjh7yC51H23U8y3vhBwXVAQkxmt1Ynn6nupS
+         9dYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tKq+74lFzjG0ld+n/1zNhWFFCw+s5cZPvJZHWPcwlfs=;
+        b=uqQuLsS8gFcaO46Wz/k6ogXjcOGnM+dXnqYwzosCvDGJxe9OTOQUP6sXXH3zJtulII
+         zbMPdncdFCDN25MsgZXWVMkFJFtrRQuWhDxDMIaKB4UNq6gXkDZSxLygMv3gYoPdcc9L
+         A+f+lKtw+bEPmu4u36kvmft9VnBti3Bs4Gh0bqpi16/HX8w03kIAL4iUpXwrHhgNkrQS
+         AlM6dAs7h9COJZR+el/23yOFgCSiQxEIpxBwgRd+P+DPkiX5xmZH2NrSIapwmmHI+pjL
+         uk/FlKDV/plhZ8eS0EcU2m4x42SrPVfVtmH/gXOHlRAbWTcMjSVTnObiU1EyTKxbP4L9
+         syLA==
+X-Gm-Message-State: ANoB5pkd3DwV5i0xEo8e7xPmb76wt2lTiB1gK50xozFW3LLqOglwsFax
+        nOHJbAvuBKMkW1IrLRpRdaA=
+X-Google-Smtp-Source: AA0mqf4M/m6d20Wa2QLk2x8QrsVMGAZaeNnv4gUOVoyKz4OfGf8lZpjqzPtas5y6ZGgoyfOzR4Bkcg==
+X-Received: by 2002:a17:902:f610:b0:185:441e:2349 with SMTP id n16-20020a170902f61000b00185441e2349mr31031911plg.63.1671096114339;
+        Thu, 15 Dec 2022 01:21:54 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:486:1c9c:f86e:3e0f:1a37:f7a5])
+        by smtp.gmail.com with ESMTPSA id k13-20020a170902c40d00b0017a032d7ae4sm3334796plk.104.2022.12.15.01.21.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Dec 2022 01:21:53 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        matthias.bgg@gmail.com
+Cc:     gregkh@linuxfoundation.org, tommyyl.chen@mediatek.com,
+        macpaul.lin@mediatek.com, gene_chen@richtek.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        ChiYuan Huang <cy_huang@richtek.com>, stable@vger.kernel.org
+Subject: [PATCH] usb: typec: tcpm: Fix altmode re-registration causes sysfs create fail
+Date:   Thu, 15 Dec 2022 17:21:36 +0800
+Message-Id: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -140,218 +70,159 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: ChiYuan Huang <cy_huang@richtek.com>
 
+There's the altmode re-registeration issue after data role
+swap (DR_SWAP).
 
-On 14/12/2022 11:20, Frank Li wrote:
->>
->> Caution: EXT Email
->>
->> On 13/12/2022 14:22, Christophe JAILLET wrote:
->>> Le 13/12/2022 à 05:12, Chanh Nguyen a écrit :
->>>> It is unable to use configfs to attach more than one gadget. When
->>>> attaching the second gadget, it always fails and the kernel message
->>>> prints out:
->>>>
->>>> Error: Driver 'configfs-gadget' is already registered, aborting...
->>>> UDC core: g1: driver registration failed: -16
->>>>
->>>> This commit fixes the problem by a ".N" suffix added to each
->>>> configfs_gadget's driver name (where N is a unique ID number),
->>>> thus making the names distinct.
->>>>
->>>> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
->>>> Signed-off-by: Chanh Nguyen
->>>> <chanh-shex6MNQR2J/SfDzf78azzKzEDxYleXD@public.gmane.org>
->>>> ---
->>>>    drivers/usb/gadget/configfs.c | 42
->> +++++++++++++++++++++++++++++++++++
->>>>    1 file changed, 42 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/gadget/configfs.c
->>>> b/drivers/usb/gadget/configfs.c
->>>> index 96121d1c8df4..d8c5156ad777 100644
->>>> --- a/drivers/usb/gadget/configfs.c
->>>> +++ b/drivers/usb/gadget/configfs.c
->>>> @@ -3,6 +3,7 @@
->>>>    #include <linux/module.h>
->>>>    #include <linux/slab.h>
->>>>    #include <linux/device.h>
->>>> +#include <linux/idr.h>
->>>>    #include <linux/kstrtox.h>
->>>>    #include <linux/nls.h>
->>>>    #include <linux/usb/composite.h>
->>>> @@ -11,6 +12,16 @@
->>>>    #include "u_f.h"
->>>>    #include "u_os_desc.h"
->>>> +static DEFINE_IDA(driver_id_numbers);
->>>> +
->>>> +/*
->>>> + * Driver name has the form of "configfs-gadget.%d", where %d
->>>> + * is id allocated by ida_alloc(). The max value returns by
->>>> + * ida_alloc() is INT_MAX, in 64-bit system, it is about nine
->>>> + * quintillion: 19 digits in decimal. Set the max length to 35.
->>>> + */
->>>> +#define DRIVER_NAME_LENGTH_MAX 35
->>>
->>> Hi,
->>>
->>> if paranoiac, the final \0 seems to be missing in the max length
->>> computation, but see below.
->>
->> Thanks CJ! Indeed, I have missed that.
->>
->>>
->>>> +
->>>>    int check_user_usb_string(const char *name,
->>>>            struct usb_gadget_strings *stringtab_dev)
->>>>    {
->>>> @@ -52,6 +63,9 @@ struct gadget_info {
->>>>        char qw_sign[OS_STRING_QW_SIGN_LEN];
->>>>        spinlock_t spinlock;
->>>>        bool unbind;
->>>> +
->>>> +    /* Make driver names unique */
->>>> +    int driver_id_number;
->>>>    };
->>>>    static inline struct gadget_info *to_gadget_info(struct config_item
->>>> *item)
->>>> @@ -1582,6 +1596,8 @@ static struct config_group *gadgets_make(
->>>>            const char *name)
->>>>    {
->>>>        struct gadget_info *gi;
->>>> +    char *driver_name;
->>>> +    int ret;
->>>>        gi = kzalloc(sizeof(*gi), GFP_KERNEL);
->>>>        if (!gi)
->>>> @@ -1623,6 +1639,21 @@ static struct config_group *gadgets_make(
->>>>        gi->composite.gadget_driver = configfs_driver_template;
->>>> +    ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
->>>> +    if (ret < 0)
->>>> +        goto err;
->>>> +    gi->driver_id_number = ret;
->>>> +
->>>> +    driver_name = kmalloc(DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
->>>> +    if (!driver_name)
->>>> +        goto out_free_driver_id_number;
->>>> +
->>>> +    ret = scnprintf(driver_name, DRIVER_NAME_LENGTH_MAX,
->>>> +            "configfs-gadget.%d", gi->driver_id_number);
->>>
->>>
->>> using kasprintf() looks simpler here.
->>> No need to kmalloc()+scnprintf(), and no need for
->> DRIVER_NAME_LENGTH_MAX.
->>>
->>> Just my 2c,
->>>
->>> CJ
->>
->> Thanks CJ for the review!
->>
->> I've made some changes as below (in gadgets_make() to remove
->> unnecessary
->> variables) and now trying to test it as much as possible. Will re-post
->> it as v2 if looks good soon.
->>
->> static inline struct gadget_info *to_gadget_info(struct config_item *item)
->> @@ -1623,13 +1629,25 @@ static struct config_group *gadgets_make(
->>
->>        gi->composite.gadget_driver = configfs_driver_template;
->>
->> +    gi->driver_id_number = ida_alloc(&driver_id_numbers, GFP_KERNEL);
->> +    if (gi->driver_id_number < 0)
->> +        goto err;
->> +
->> +    gi->composite.gadget_driver.driver.name =
->> +                          kasprintf(GFP_KERNEL, "configfs-gadget.%d",
->> +                                    gi->driver_id_number);
->> +    if (!gi->composite.gadget_driver.driver.name)
->> +        goto out_free_driver_id_number;
->> +
->>        gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->>        gi->composite.name = gi->composite.gadget_driver.function;
->>
->>        if (!gi->composite.gadget_driver.function)
->> -        goto err;
->> +        goto out_free_driver_id_number;
->>
->>        return &gi->group;
->> +
->> +out_free_driver_id_number:
->> +    ida_free(&driver_id_numbers, gi->driver_id_number);
->>    err:
->>        kfree(gi);
->>        return ERR_PTR(-ENOMEM);
->>
->>
->>>
->>>> +    if (ret < 0)
->>>> +        goto out_free_driver_name;
->>>> +
->>>> +    gi->composite.gadget_driver.driver.name = driver_name;
->>>>        gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->>>>        gi->composite.name = gi->composite.gadget_driver.function;
->>>> @@ -1630,6 +1661,11 @@ static struct config_group *gadgets_make(
->>>>            goto err;
->>>>        return &gi->group;
->>>> +
->>>> +out_free_driver_name:
->>>> +    kfree(driver_name);
->>>> +out_free_driver_id_number:
->>>> +    ida_free(&driver_id_numbers, gi->driver_id_number);
->>>>    err:
->>>>        kfree(gi);
->>>>        return ERR_PTR(-ENOMEM);
->>>> @@ -1637,6 +1673,12 @@ static struct config_group *gadgets_make(
->>>>    static void gadgets_drop(struct config_group *group, struct
->>>> config_item *item)
->>>>    {
->>>> +    struct gadget_info *gi = to_gadget_info(item);
->>>> +
->>>> +    mutex_lock(&gi->lock);
->>>> +    kfree(gi->composite.gadget_driver.driver.name);
->>>> +    ida_free(&driver_id_numbers, gi->driver_id_number);
->>>> +    mutex_unlock(&gi->lock);
-> 
-> Move all free into gadget_info_attr_release(), just before kfree(gi)
-> Driver.name and gi create at the same place,
-> Free should be the same place also.
-> 
+Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
+can initiate the VDM command to get partner identity information.
 
-Thanks a lot for the quick review comment.
+For a USBPD 3.0 UFP device, it may already get the identity information
+from its port partner before DR_SWAP. If DR_SWAP send or receive at the
+mean time, 'send_discover' flag will be raised again. It causes discover
+identify action restart while entering ready state. And after all
+discover actions are done, the 'tcpm_register_altmodes' will be called.
+If old altmode is not unregistered, this sysfs create fail can be found.
 
-As per my observation through the test, on the first mount, the 
-virtual-media the gadgets_make() is called, then later, when unmount, 
-the gadgets_drop() is called and followed by gadget_info_attr_release().
+In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
+For UFP, the original altmodes keep registered.
 
-The gadget_info_attr_release() is registered as .release() of 
-gadget_root_type for the gi->group via the call 
-"config_group_init_type_name(&gi->group, name, &gadget_root_type);"
+This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
+must be called whatever the current data role is.
 
-In general, the .release() will be called only for the group. There is 
-nothing to guarantee that the group will always be registered, ie: 
-incase without the call to "config_group_init_type_name(&gi->group, 
-name, &gadget_root_type);"
+Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
+Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+Hi,
 
-In this patch, what is added is an ida number to be used to make up the 
-composite driver name. This is done in gadgets_make() so we'd like to 
-add the cleanup code to gadgets_drop() as they are registered together 
-in the same place and would be a little easier to read than adding them 
-to _release() as the code below:
+Below's the issue log for the reference.
 
-     static struct configfs_group_operations gadgets_ops = {
-         .make_group = &gadgets_make,
-         .drop_item = &gadgets_drop,
-     };
+*TCPM
+[    3.856679] AMS DISCOVER_MODES start
+[    3.856687] PD TX, header: 0x188f
+[    3.858827] PD TX complete, status: 0
+[    3.865330] PD RX, header: 0x2daf [1]
+[    3.865340] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
+[    3.865348] AMS DISCOVER_MODES finished
+[    3.865352]  Alternate mode 0: SVID 0xff01, VDO 1: 0x001c0045
+[    3.865362] AMS DISCOVER_MODES start
+[    3.865367] PD TX, header: 0x1a8f
+[    3.867802] PD TX complete, status: 0
+[    3.875208] PD RX, header: 0x2faf [1]
+[    3.875216] Rx VDM cmd 0x413ca043 type 1 cmd 3 len 2
+[    3.875222] AMS DISCOVER_MODES finished
+[    3.875225]  Alternate mode 1: SVID 0x413c, VDO 1: 0x00000001
+[    3.938243] AMS GET_SINK_CAPABILITIES start
+[    3.938255] state change SNK_READY -> AMS_START [rev3 GET_SINK_CAPABILITIES]
+[    3.938266] state change AMS_START -> GET_SINK_CAP [rev3 GET_SINK_CAPABILITIES]
+[    3.938274] PD TX, header: 0xe88
+[    3.940268] PD TX complete, status: 0
+[    3.940310] pending state change GET_SINK_CAP -> GET_SINK_CAP_TIMEOUT @ 60 ms
+[rev3 GET_SINK_CAPABILITIES]
+[    3.946291] PD RX, header: 0x13a4 [1]
+[    3.946295] Port partner FRS capable partner_frs_current:0 port_frs_current:0 enable:n
+[    3.946298] state change GET_SINK_CAP -> SNK_READY [rev3 GET_SINK_CAPABILITIES]
+[    3.946304] AMS GET_SINK_CAPABILITIES finished
+[    4.239342] CC1: 5 -> 4, CC2: 0 -> 0 [state SNK_READY, polarity 0, connected]
+[    4.256594] PD RX, header: 0x5a9 [1]
+[    4.256603] state change SNK_READY -> DR_SWAP_ACCEPT [rev3 DATA_ROLE_SWAP]
+[    4.256609] PD TX, header: 0x83
+[    4.258528] PD TX complete, status: 0
+[    4.258584] state change DR_SWAP_ACCEPT -> DR_SWAP_CHANGE_DR [rev3 DATA_ROLE_SWAP]
+[    4.258591] Requesting mux state 1, usb-role 1, orientation 1
+[    4.259588] AMS DATA_ROLE_SWAP finished
+[    4.259592] state change DR_SWAP_CHANGE_DR -> SNK_READY [rev3 NONE_AMS]
+[    4.259605] AMS DISCOVER_IDENTITY start
+[    4.259609] Sink TX No Go
+[    4.260874] CC1: 4 -> 5, CC2: 0 -> 0 [state SNK_READY, polarity 0, connected]
+[    4.359636] AMS DISCOVER_IDENTITY start
+[    4.359642] PD TX, header: 0x12af
+[    4.361884] PD TX complete, status: 0
+[    4.369433] PD RX, header: 0x578f [1]
+[    4.369439] Rx VDM cmd 0xff00a041 type 1 cmd 1 len 5
+[    4.369448] AMS DISCOVER_IDENTITY finished
+[    4.369515] Identity: 413c:c013.0712
+[    4.369521] AMS DISCOVER_SVIDS start
+[    4.369524] PD TX, header: 0x14af
+[    4.371696] PD TX complete, status: 0
+[    4.378564] PD RX, header: 0x398f [1]
+[    4.378573] Rx VDM cmd 0xff00a042 type 1 cmd 2 len 3
+[    4.378579] AMS DISCOVER_SVIDS finished
+[    4.378582] SVID 1: 0xff01
+[    4.378584] SVID 2: 0x413c
+[    4.378594] AMS DISCOVER_MODES start
+[    4.378597] PD TX, header: 0x16af
+[    4.380696] PD TX complete, status: 0
+[    4.387008] PD RX, header: 0x2b8f [1]
+[    4.387014] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
+[    4.387021] AMS DISCOVER_MODES finished
+[    4.387023]  Alternate mode 0: SVID 0xff01, VDO 1: 0x001c0045
+[    4.387029] AMS DISCOVER_MODES start
+[    4.387031] PD TX, header: 0x18af
+[    4.389134] PD TX complete, status: 0
+[    4.395528] PD RX, header: 0x2d8f [1]
+[    4.395538] Rx VDM cmd 0x413ca043 type 1 cmd 3 len 2
+[    4.395546] AMS DISCOVER_MODES finished
+[    4.395548]  Alternate mode 1: SVID 0x413c, VDO 1: 0x00000001
 
-Anyway, we still doubt that there might be something that we have missed 
-so please let me know the reason why putting cleanup codes to _release() 
-would be a better solution.
+*Kernel TRACE
+sysfs: cannot create duplicate filename
+'/devices/platform/soc/11d01000.i2c/i2c-0/0-0034/mt6360-tcpc.6.auto/typec/port0/port0.0/partner'
+CPU: 2 PID: 299 Comm: mt6360-tcpc.6.a Tainted: GO      5.15.37-mtk+g880abc5122e7 #1
+Hardware name: MediaTek MT8195 demo board (DT)
+Call trace:
+ dump_backtrace+0x0/0x1ac
+ show_stack+0x24/0x30
+ dump_stack_lvl+0x68/0x84
+ dump_stack+0x1c/0x38
+ sysfs_warn_dup+0x70/0x90
+ typec_probe+0xa4/0x134 [typec]
+ really_probe.part.0+0xa4/0x310
+ __device_attach_driver+0x100/0x16c
+ bus_for_each_drv+0x84/0xe0
+ __device_attach+0xe0/0x1ac
+ device_add+0x39c/0x8b0
+ device_register+0x2c/0x40
+ typec_register_altmode+0x1f4/0x360 [typec]
+ typec_partner_register_altmode+0x1c/0x30 [typec]
+ tcpm_pd_rx_handler+0x19d4/0x1c0c [tcpm]
+ kthread_worker_fn+0xb8/0x290
+ kthread+0x15c/0x170
+ ret_from_fork+0x10/0x20
+[    4.395962] typec_displayport port0-partner.2: failed to create symlinks
+[    4.395967] typec_displayport: probe of port0-partner.2 failed with error -17
 
-Thank you and best regards,
-- Chanh
+It seems it's a common issue if typec port supports the modal operation.
 
-> 
->>>>        config_item_put(item);
->>>>    }
->>>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 904c7b4..59b366b 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
+ 		tcpm_set_state(port, ready_state(port), 0);
+ 		break;
+ 	case DR_SWAP_CHANGE_DR:
+-		if (port->data_role == TYPEC_HOST) {
+-			tcpm_unregister_altmodes(port);
++		tcpm_unregister_altmodes(port);
++		if (port->data_role == TYPEC_HOST)
+ 			tcpm_set_roles(port, true, port->pwr_role,
+ 				       TYPEC_DEVICE);
+-		} else {
++		else
+ 			tcpm_set_roles(port, true, port->pwr_role,
+ 				       TYPEC_HOST);
+-		}
+ 		tcpm_ams_finish(port);
+ 		tcpm_set_state(port, ready_state(port), 0);
+ 		break;
+-- 
+2.7.4
+
