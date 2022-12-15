@@ -2,76 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4950464D91F
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Dec 2022 10:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18A664D922
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Dec 2022 10:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiLOJ4x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Dec 2022 04:56:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S230114AbiLOJ6t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Dec 2022 04:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiLOJ4o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Dec 2022 04:56:44 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C8E1A818;
-        Thu, 15 Dec 2022 01:56:43 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bf43so1531609lfb.6;
-        Thu, 15 Dec 2022 01:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xdC+NqVZ5HkfusI624+eIJZSW53fh0N64m6gDUGd2ds=;
-        b=A8O4jEmI7cHdY5M+1FPkeI9jrWdn5WyiiyhgrKpHVPEMUzWdQOH2DC3thJcNBifQkH
-         ywNpYrvefS9oDO7L/T9jvB+/aAK6hgK88ekehcOdNgdHE6Ca1iLZWLCOt6CrK77Gbrbl
-         lOfPcq+Y1vtvAMeKBNdXh7lD6svIiXgE7RiQ4iimvpWqRDRCd0bCoF5m89rbQYfhiqbX
-         QeqLLy3fzvZhxuuuCjYBpU1swUVagsX2nlk5DisV3FF0Tw/3qeqo6qNhjmx18iW3v0+d
-         t29659iQXls+xB7/YBcJn1clgY4iLy4W72qLNVfZrOAhWsOOFVsAdVeRTXo196Y59hqC
-         /iJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xdC+NqVZ5HkfusI624+eIJZSW53fh0N64m6gDUGd2ds=;
-        b=S/9WVpEut+RRgu6Fgdq/Y8Spdv7Av7S4iPUDN6b8ywaOIqz7I3WENJE2rMlR38z7xT
-         hDRboC9sF6lG6ZHNgUst66Z14lnV1Gs8WDYRKlVR0FRFGSwUEGP0UQSG90+Gpcq2YczW
-         BsCp/OWgZNX9Dnleru8cEcEHaJjUr8m5S+/1OeXNB8dqqePfqFN0PKnIIybbm0KyF5J/
-         4RqYK57vM1JrQZHT7ApXi2h69PKZ3Z7MKvIkTz2byA8knwutN11/OcmMZ5YFp635mvkX
-         /lqZw6OG8V18dP7FM5Ykox1GUs57ravf8fqbTGrVOqRvAOkWWJUUUwn0+8+5t5viMQcR
-         RbNQ==
-X-Gm-Message-State: ANoB5pns+YH0QvKYvXDZKq/0AarR75EG5lrP1sJjQ6a8U1k1+lSHBA/c
-        pTriHtjq2WzlVIBZaTsArb/f2TKUbo4=
-X-Google-Smtp-Source: AA0mqf4XIzErzxRe9OK1/TvUKe+oVZKnbWxG0h1eOtaDL8coq7jSizBNxBQcHnpB1z8cfundW01feQ==
-X-Received: by 2002:a05:6512:1145:b0:4b5:39fa:6dc with SMTP id m5-20020a056512114500b004b539fa06dcmr7008978lfg.18.1671098201296;
-        Thu, 15 Dec 2022 01:56:41 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.75.188])
-        by smtp.gmail.com with ESMTPSA id v14-20020a19740e000000b0048b365176d9sm1114163lfe.286.2022.12.15.01.56.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 01:56:40 -0800 (PST)
-Subject: Re: [PATCH 2/4] usb: typec: hd3ss3220: Fix NULL pointer crash
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>, linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20221209155623.29147-1-biju.das.jz@bp.renesas.com>
- <20221209155623.29147-3-biju.das.jz@bp.renesas.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <6408543e-29ac-ecae-b871-8ab9349cd0f5@gmail.com>
-Date:   Thu, 15 Dec 2022 12:56:39 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S229652AbiLOJ6s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Dec 2022 04:58:48 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21DA193EB;
+        Thu, 15 Dec 2022 01:58:43 -0800 (PST)
+X-UUID: d340c21f11ce47178777f9129ab04fc3-20221215
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=63a5UIGzfu3Wi1UYpCYyrB4fgEwqDRpWf0vQJYcCngE=;
+        b=h9cxfIjojX5DinOfSiRqDxMF9Ajk1Gh8z5D/RqSpaCqA5EOw9hZd+zdSLLcEiDbbR6GP6LiwT9aMFA+3Ok/i6UAnpILNn5Jx/G/wDpPAY3F7hs9S6lBwsIk9um/KOxAEyBAPKsN8u0maW9/K8+6P+l1Nq7tQ+liBlMvrz8cBHUk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:4130c903-cf6c-4ef2-be1a-e9c749e48bac,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:828cb9af-9f02-4d44-9c44-6e4bb4e4f412,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d340c21f11ce47178777f9129ab04fc3-20221215
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1938023813; Thu, 15 Dec 2022 17:58:35 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 15 Dec 2022 17:58:34 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 15 Dec 2022 17:58:34 +0800
+Message-ID: <d15babbe-5f69-38c0-28d4-614b6ffd1b8b@mediatek.com>
+Date:   Thu, 15 Dec 2022 17:58:32 +0800
 MIME-Version: 1.0
-In-Reply-To: <20221209155623.29147-3-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: typec: tcpm: Fix altmode re-registration causes
+ sysfs create fail
 Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, <linux@roeck-us.net>,
+        <heikki.krogerus@linux.intel.com>, <matthias.bgg@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <tommyyl.chen@mediatek.com>,
+        <gene_chen@richtek.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        ChiYuan Huang <cy_huang@richtek.com>, <stable@vger.kernel.org>,
+        Bear Wang <bear.wang@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>
+References: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,63 +70,164 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 12/9/22 6:56 PM, Biju Das wrote:
-
-> The value returned by usb_role_switch_get() can be NULL and it leads
-> to NULL pointer crash. This patch fixes this issue by adding NULL
-> check for the role switch handle.
+On 12/15/22 17:21, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> [   25.336613] Hardware name: Silicon Linux RZ/G2E evaluation kit EK874 (CAT874 + CAT875) (DT)
-> [   25.344991] Workqueue: events_unbound deferred_probe_work_func
-> [   25.350869] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   25.357854] pc : renesas_usb3_role_switch_get+0x40/0x80 [renesas_usb3]
-> [   25.364428] lr : renesas_usb3_role_switch_get+0x24/0x80 [renesas_usb3]
-> [   25.370986] sp : ffff80000a4b3a40
-> [   25.374311] x29: ffff80000a4b3a40 x28: 0000000000000000 x27: 0000000000000000
-> [   25.381476] x26: ffff80000a3ade78 x25: ffff00000a809005 x24: ffff80000117f178
-> [   25.388641] x23: ffff00000a8d7810 x22: ffff00000a8d8410 x21: 0000000000000000
-> [   25.395805] x20: ffff000011cd7080 x19: ffff000011cd7080 x18: 0000000000000020
-> [   25.402969] x17: ffff800076196000 x16: ffff800008004000 x15: 0000000000004000
-> [   25.410133] x14: 000000000000022b x13: 0000000000000001 x12: 0000000000000001
-> [   25.417291] x11: 0000000000000000 x10: 0000000000000a40 x9 : ffff80000a4b3770
-> [   25.424452] x8 : ffff00007fbc9000 x7 : 0040000000000008 x6 : ffff00000a8d8590
-> [   25.431615] x5 : ffff80000a4b3960 x4 : 0000000000000000 x3 : ffff00000a8d84f4
-> [   25.438776] x2 : 0000000000000218 x1 : ffff80000a715218 x0 : 0000000000000218
-> [   25.445942] Call trace:
-> [   25.448398]  renesas_usb3_role_switch_get+0x40/0x80 [renesas_usb3]
-> [   25.454613]  renesas_usb3_role_switch_set+0x4c/0x440 [renesas_usb3]
-> [   25.460908]  usb_role_switch_set_role+0x44/0xa4
-> [   25.465468]  hd3ss3220_set_role+0xa0/0x100 [hd3ss3220]
-> [   25.470635]  hd3ss3220_probe+0x118/0x2fc [hd3ss3220]
-> [   25.475621]  i2c_device_probe+0x338/0x384
+> There's the altmode re-registeration issue after data role
+> swap (DR_SWAP).
 > 
-> Fixes: 5a9a8a4c5058 ("usb: typec: hd3ss3220: hd3ss3220_probe() warn: passing zero to 'PTR_ERR'")
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
+> can initiate the VDM command to get partner identity information.
+> 
+> For a USBPD 3.0 UFP device, it may already get the identity information
+> from its port partner before DR_SWAP. If DR_SWAP send or receive at the
+> mean time, 'send_discover' flag will be raised again. It causes discover
+> identify action restart while entering ready state. And after all
+> discover actions are done, the 'tcpm_register_altmodes' will be called.
+> If old altmode is not unregistered, this sysfs create fail can be found.
+> 
+> In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
+> For UFP, the original altmodes keep registered.
+> 
+> This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
+> must be called whatever the current data role is.
+> 
+> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
+> Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > ---
-> This issue triggered on RZ/G2E board, where there is no USB3 firmware and it
-> returned a null role switch handle.
-> ---
->  drivers/usb/typec/hd3ss3220.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Hi,
 > 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 2a58185fb14c..c24bbccd14f9 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -186,7 +186,10 @@ static int hd3ss3220_probe(struct i2c_client *client,
->  		hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
->  	}
->  
-> -	if (IS_ERR(hd3ss3220->role_sw)) {
-> +	if (!hd3ss3220->role_sw) {
-> +		ret = -ENODEV;
-> +		goto err_put_fwnode;
-> +	} else if (IS_ERR(hd3ss3220->role_sw)) {
+> Below's the issue log for the reference.
+> 
+> *TCPM
+> [    3.856679] AMS DISCOVER_MODES start
+> [    3.856687] PD TX, header: 0x188f
+> [    3.858827] PD TX complete, status: 0
+> [    3.865330] PD RX, header: 0x2daf [1]
+> [    3.865340] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
+> [    3.865348] AMS DISCOVER_MODES finished
+> [    3.865352]  Alternate mode 0: SVID 0xff01, VDO 1: 0x001c0045
+> [    3.865362] AMS DISCOVER_MODES start
+> [    3.865367] PD TX, header: 0x1a8f
+> [    3.867802] PD TX complete, status: 0
+> [    3.875208] PD RX, header: 0x2faf [1]
+> [    3.875216] Rx VDM cmd 0x413ca043 type 1 cmd 3 len 2
+> [    3.875222] AMS DISCOVER_MODES finished
+> [    3.875225]  Alternate mode 1: SVID 0x413c, VDO 1: 0x00000001
+> [    3.938243] AMS GET_SINK_CAPABILITIES start
+> [    3.938255] state change SNK_READY -> AMS_START [rev3 GET_SINK_CAPABILITIES]
+> [    3.938266] state change AMS_START -> GET_SINK_CAP [rev3 GET_SINK_CAPABILITIES]
+> [    3.938274] PD TX, header: 0xe88
+> [    3.940268] PD TX complete, status: 0
+> [    3.940310] pending state change GET_SINK_CAP -> GET_SINK_CAP_TIMEOUT @ 60 ms
+> [rev3 GET_SINK_CAPABILITIES]
+> [    3.946291] PD RX, header: 0x13a4 [1]
+> [    3.946295] Port partner FRS capable partner_frs_current:0 port_frs_current:0 enable:n
+> [    3.946298] state change GET_SINK_CAP -> SNK_READY [rev3 GET_SINK_CAPABILITIES]
+> [    3.946304] AMS GET_SINK_CAPABILITIES finished
+> [    4.239342] CC1: 5 -> 4, CC2: 0 -> 0 [state SNK_READY, polarity 0, connected]
+> [    4.256594] PD RX, header: 0x5a9 [1]
+> [    4.256603] state change SNK_READY -> DR_SWAP_ACCEPT [rev3 DATA_ROLE_SWAP]
+> [    4.256609] PD TX, header: 0x83
+> [    4.258528] PD TX complete, status: 0
+> [    4.258584] state change DR_SWAP_ACCEPT -> DR_SWAP_CHANGE_DR [rev3 DATA_ROLE_SWAP]
+> [    4.258591] Requesting mux state 1, usb-role 1, orientation 1
+> [    4.259588] AMS DATA_ROLE_SWAP finished
+> [    4.259592] state change DR_SWAP_CHANGE_DR -> SNK_READY [rev3 NONE_AMS]
+> [    4.259605] AMS DISCOVER_IDENTITY start
+> [    4.259609] Sink TX No Go
+> [    4.260874] CC1: 4 -> 5, CC2: 0 -> 0 [state SNK_READY, polarity 0, connected]
+> [    4.359636] AMS DISCOVER_IDENTITY start
+> [    4.359642] PD TX, header: 0x12af
+> [    4.361884] PD TX complete, status: 0
+> [    4.369433] PD RX, header: 0x578f [1]
+> [    4.369439] Rx VDM cmd 0xff00a041 type 1 cmd 1 len 5
+> [    4.369448] AMS DISCOVER_IDENTITY finished
+> [    4.369515] Identity: 413c:c013.0712
+> [    4.369521] AMS DISCOVER_SVIDS start
+> [    4.369524] PD TX, header: 0x14af
+> [    4.371696] PD TX complete, status: 0
+> [    4.378564] PD RX, header: 0x398f [1]
+> [    4.378573] Rx VDM cmd 0xff00a042 type 1 cmd 2 len 3
+> [    4.378579] AMS DISCOVER_SVIDS finished
+> [    4.378582] SVID 1: 0xff01
+> [    4.378584] SVID 2: 0x413c
+> [    4.378594] AMS DISCOVER_MODES start
+> [    4.378597] PD TX, header: 0x16af
+> [    4.380696] PD TX complete, status: 0
+> [    4.387008] PD RX, header: 0x2b8f [1]
+> [    4.387014] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
+> [    4.387021] AMS DISCOVER_MODES finished
+> [    4.387023]  Alternate mode 0: SVID 0xff01, VDO 1: 0x001c0045
+> [    4.387029] AMS DISCOVER_MODES start
+> [    4.387031] PD TX, header: 0x18af
+> [    4.389134] PD TX complete, status: 0
+> [    4.395528] PD RX, header: 0x2d8f [1]
+> [    4.395538] Rx VDM cmd 0x413ca043 type 1 cmd 3 len 2
+> [    4.395546] AMS DISCOVER_MODES finished
+> [    4.395548]  Alternate mode 1: SVID 0x413c, VDO 1: 0x00000001
+> 
+> *Kernel TRACE
+> sysfs: cannot create duplicate filename
+> '/devices/platform/soc/11d01000.i2c/i2c-0/0-0034/mt6360-tcpc.6.auto/typec/port0/port0.0/partner'
+> CPU: 2 PID: 299 Comm: mt6360-tcpc.6.a Tainted: GO      5.15.37-mtk+g880abc5122e7 #1
+> Hardware name: MediaTek MT8195 demo board (DT)
+> Call trace:
+>   dump_backtrace+0x0/0x1ac
+>   show_stack+0x24/0x30
+>   dump_stack_lvl+0x68/0x84
+>   dump_stack+0x1c/0x38
+>   sysfs_warn_dup+0x70/0x90
+>   typec_probe+0xa4/0x134 [typec]
+>   really_probe.part.0+0xa4/0x310
+>   __device_attach_driver+0x100/0x16c
+>   bus_for_each_drv+0x84/0xe0
+>   __device_attach+0xe0/0x1ac
+>   device_add+0x39c/0x8b0
+>   device_register+0x2c/0x40
+>   typec_register_altmode+0x1f4/0x360 [typec]
+>   typec_partner_register_altmode+0x1c/0x30 [typec]
+>   tcpm_pd_rx_handler+0x19d4/0x1c0c [tcpm]
+>   kthread_worker_fn+0xb8/0x290
+>   kthread+0x15c/0x170
+>   ret_from_fork+0x10/0x20
+> [    4.395962] typec_displayport port0-partner.2: failed to create symlinks
+> [    4.395967] typec_displayport: probe of port0-partner.2 failed with error -17
+> 
+> It seems it's a common issue if typec port supports the modal operation.
+> 
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 904c7b4..59b366b 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
+>   		tcpm_set_state(port, ready_state(port), 0);
+>   		break;
+>   	case DR_SWAP_CHANGE_DR:
+> -		if (port->data_role == TYPEC_HOST) {
+> -			tcpm_unregister_altmodes(port);
+> +		tcpm_unregister_altmodes(port);
+> +		if (port->data_role == TYPEC_HOST)
+>   			tcpm_set_roles(port, true, port->pwr_role,
+>   				       TYPEC_DEVICE);
+> -		} else {
+> +		else
+>   			tcpm_set_roles(port, true, port->pwr_role,
+>   				       TYPEC_HOST);
+> -		}
+>   		tcpm_ams_finish(port);
+>   		tcpm_set_state(port, ready_state(port), 0);
+>   		break;
 
-   No need for *else* after *goto*.
+Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
 
-[...]
+Thank for your help.
 
-MBR, Sergey
+Regards,
+Macpaul Lin
