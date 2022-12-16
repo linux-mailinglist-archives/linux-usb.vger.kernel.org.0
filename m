@@ -2,89 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69A764EB1B
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 13:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053DA64EC9C
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 15:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiLPMA6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Dec 2022 07:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
+        id S229614AbiLPOHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 09:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiLPMAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 07:00:43 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6899B511FB;
-        Fri, 16 Dec 2022 04:00:33 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id x2so2044886plb.13;
-        Fri, 16 Dec 2022 04:00:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Snl7BgVsFmc/5J29TspmwaDCZhYw6tUPa9r4mziXw4=;
-        b=RhgC+LBhmLt2RSAqSktOu7ZFqHz4N0Vp3uhEf3qW2nQ4iW7wCrIJ81wp0KaUa05mBv
-         SPuc91Dxe4jCcFpFVY6S1fOad5pq+5X5arL2IiKuy1UPf6Rg9PAv6mxH1ZRJSLDwE7H5
-         LoPZ28GzTlGJ64wOzwGiUTQHpoOMVEQBsFCdPe0qOU/AkQIWIMCDL5/QJ2vdjI5E+FkC
-         Pyk77L9Iaw00MUm4pS3SqTbJ/G/BMV84YPQGayaw5G+//dBNzZWaHvUCtzOabl02qENZ
-         0Iatj29KinYcfTjbIw9dvsqEP1AsBoDLrfht3cZsDAXOK2qJkIHhLcGDGhIT87bJW7lo
-         7r8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0Snl7BgVsFmc/5J29TspmwaDCZhYw6tUPa9r4mziXw4=;
-        b=ElpZbhma3+FOchTnmByYF5UM4urdv4qrppahR2noOn+yd86gJ+8UTanHNvX2vC4u4o
-         ewkBE6SYJMLqdFBo5XfoxtlwEZAO77Ekb8FOjI+AEZYCeB/sOPB4gPNI7Sb0YNa4ZpgI
-         CFHBNfxDQhX+GiL/AXoILhKn9lYrIuJSro9xPKX/1oa7E3OVSNtGgk/zvauuLIucgF1i
-         PN/ITbi1Qg9XFjgp1uhd+/MnwBQYbeMN/kUyB3F2ZCW15qRLWIdm3n+/ZCBlatgI5SEr
-         jsCY8pLMvA5hrlVXcErxNvumGf439D/vWnXp1F9FcMvjkljSN6fMuFv3cRYJNsXvbnOp
-         TVbQ==
-X-Gm-Message-State: AFqh2kr6KaI6yRuXmFDotVsPsdoFFcujR5V6C6vPI2xUwVVwB5GuMRor
-        gSJDWG4BWhLdoJjCPYCoGrBy0LXp7oDDQBToEEU=
-X-Google-Smtp-Source: AMrXdXsmay9yD3lb98nl7gf6xnfVfSOdLoQEcPmD5FPjUhryisMF2XJmX4NHqZfifvVsVlGXk09xn0GyjmecbdeUNw8=
-X-Received: by 2002:a17:90a:46c9:b0:219:c691:9933 with SMTP id
- x9-20020a17090a46c900b00219c6919933mr600907pjg.195.1671192032852; Fri, 16 Dec
- 2022 04:00:32 -0800 (PST)
+        with ESMTP id S230341AbiLPOGy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 09:06:54 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405E23381
+        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 06:06:53 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6DBB0A31;
+        Fri, 16 Dec 2022 15:06:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671199611;
+        bh=ZGPYJDasXhri32okFm/iC7lzA7hjszJkmV5iI/21oYs=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=QD8tF3tfcgUUVCChhNK6XyF/5afmnMxJR6NKnZSj9bGwwnV/eUdbwFkIWg2Y2WZYy
+         mJC/AA766eTP6knUZTadGAgxBioVD9oF/zwR2XLytP7Z5Le93s1tImhwhuVyfUveio
+         180h4H1QFl3ADElY2VOMsstmmMlAfPf5NcSHTA+w=
+Message-ID: <1420546b-b6ff-dfa0-d421-431972ec45c8@ideasonboard.com>
+Date:   Fri, 16 Dec 2022 14:06:48 +0000
 MIME-Version: 1.0
-References: <CAOMZO5AFsvwbC4Pr49WPFmZt7OnKjuJnYSf3cApGqtoZ_fFPPA@mail.gmail.com>
- <CAOMZO5AWRDLu5t0O=AG7CxNLv20HTmMTRh=so=s7+nTH0_qYgQ@mail.gmail.com>
- <PA4PR04MB96407AC656705A79BF72D2E089E39@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <CAOMZO5AMy_H-zw1phB6MtNdpbCwtXg74BwHrs5YttykN=-wvnQ@mail.gmail.com> <PA4PR04MB9640B1C33E8D5704885A9A3B89E39@PA4PR04MB9640.eurprd04.prod.outlook.com>
-In-Reply-To: <PA4PR04MB9640B1C33E8D5704885A9A3B89E39@PA4PR04MB9640.eurprd04.prod.outlook.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 16 Dec 2022 09:00:15 -0300
-Message-ID: <CAOMZO5AhUrYSesz9PC3o7T9Uum-X_QjmO=zjPAWkt25tbzJFSA@mail.gmail.com>
-Subject: Re: imx7: USB modem reset causes modem to not re-connect
-To:     Jun Li <jun.li@nxp.com>
-Cc:     "bjorn@mork.no" <bjorn@mork.no>,
-        Peter Chen <peter.chen@kernel.org>,
-        Marek Vasut <marex@denx.de>, netdev <netdev@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-usb@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
+        w36195@motorola.com, m.grzeschik@pengutronix.de, torleiv@huddly.com
+References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
+ <20221213083736.2284536-3-dan.scally@ideasonboard.com>
+ <167110474312.9133.3611120701301365792@Monstersaurus>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH 2/6] usb: gadget: uvc: Add struct for color matching in
+ configs
+In-Reply-To: <167110474312.9133.3611120701301365792@Monstersaurus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Li Jun,
+Hi Kieran
 
-On Tue, Dec 13, 2022 at 8:17 AM Jun Li <jun.li@nxp.com> wrote:
+On 15/12/2022 11:45, Kieran Bingham wrote:
+> Quoting Daniel Scally (2022-12-13 08:37:32)
+>> Color matching descriptors are meant to be a per-format piece of data
+>> and we need to be able to support different descriptors for different
+>> formats. As a preliminary step towards that goal, switch the default
+>> color matching configfs functionality to point to an instance of a
+>> new struct uvcg_cmd (for "color matching descriptor"). Use the same
+> Hrm .. I can't see 'cmd' and not think 'command' ... but longer names
+> are longer ...
 
-> What's the OC polarity config in your SW, active low, or active high?
-> Basically if the OC condition is active, the host mode cannot work
-> well.
 
-Yes, if I keep the OC pinctrl definition and pass
-'over-current-active-low;' the problem
-does not happen.
+Yeah. Naming things was never my strong suit...I couldn't think of a 
+name of intermediate length that wasn't rubbish so it was either this or 
+"uvcg_color_matching_descriptor" which is loooong.
 
-Thanks a lot,
+>
+>
+>> default values for its attributes as the currently hard-coded ones so
+>> that the interface to userspace is consistent.
+>>
+>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> ---
+>>   drivers/usb/gadget/function/uvc_configfs.c | 55 ++++++++++++++++------
+>>   drivers/usb/gadget/function/uvc_configfs.h |  8 ++++
+>>   2 files changed, 49 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+>> index 26d092790f12..9918e7b6a023 100644
+>> --- a/drivers/usb/gadget/function/uvc_configfs.c
+>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
+>> @@ -1788,20 +1788,19 @@ static ssize_t uvcg_color_matching_##cname##_show(                      \
+>>          struct config_item *item, char *page)                           \
+>>   {                                                                      \
+>>          struct config_group *group = to_config_group(item);             \
+>> +       struct uvcg_cmd *cmd = to_uvcg_cmd(group);                      \
+>>          struct f_uvc_opts *opts;                                        \
+>>          struct config_item *opts_item;                                  \
+>>          struct mutex *su_mutex = &group->cg_subsys->su_mutex;           \
+>> -       struct uvc_color_matching_descriptor *cd;                       \
+>>          int result;                                                     \
+>>                                                                          \
+>>          mutex_lock(su_mutex); /* for navigating configfs hierarchy */   \
+>>                                                                          \
+>>          opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;     \
+>>          opts = to_f_uvc_opts(opts_item);                                \
+>> -       cd = &opts->uvc_color_matching;                                 \
+>>                                                                          \
+>>          mutex_lock(&opts->lock);                                        \
+>> -       result = sprintf(page, "%u\n", le##bits##_to_cpu(cd->aname));   \
+>> +       result = sprintf(page, "%u\n", le##bits##_to_cpu(cmd->desc.aname));\
+>>          mutex_unlock(&opts->lock);                                      \
+>>                                                                          \
+>>          mutex_unlock(su_mutex);                                         \
+>> @@ -1823,29 +1822,57 @@ static struct configfs_attribute *uvcg_color_matching_attrs[] = {
+>>          NULL,
+>>   };
+>>   
+>> -static const struct uvcg_config_group_type uvcg_color_matching_type = {
+>> -       .type = {
+>> -               .ct_item_ops    = &uvcg_config_item_ops,
+>> -               .ct_attrs       = uvcg_color_matching_attrs,
+>> -               .ct_owner       = THIS_MODULE,
+>> -       },
+>> -       .name = "default",
+>> +static void uvcg_color_matching_release(struct config_item *item)
+>> +{
+>> +       struct uvcg_cmd *cmd;
+>> +
+>> +       cmd = to_uvcg_cmd(to_config_group(item));
+>> +       kfree(cmd);
+>> +}
+>> +
+>> +static struct configfs_item_operations uvcg_color_matching_item_ops = {
+>> +       .release        = uvcg_color_matching_release,
+>> +};
+>> +
+>> +static const struct config_item_type uvcg_color_matching_type = {
+>> +       .ct_item_ops    = &uvcg_color_matching_item_ops,
+>> +       .ct_attrs       = uvcg_color_matching_attrs,
+>> +       .ct_owner       = THIS_MODULE,
+>>   };
+>>   
+>>   /* -----------------------------------------------------------------------------
+>>    * streaming/color_matching
+>>    */
+>>   
+>> +static int uvcg_color_matching_create_children(struct config_group *parent)
+>> +{
+>> +       struct uvcg_cmd *cmd;
+>> +
+>> +       cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+>> +       if (!cmd)
+>> +               return -ENOMEM;
+>> +
+>> +       cmd->desc.bLength = UVC_DT_COLOR_MATCHING_SIZE;
+>> +       cmd->desc.bDescriptorType = USB_DT_CS_INTERFACE;
+>> +       cmd->desc.bDescriptorSubType = UVC_VS_COLORFORMAT;
+>> +       cmd->desc.bColorPrimaries = 1;
+>> +       cmd->desc.bTransferCharacteristics = 1;
+>> +       cmd->desc.bMatrixCoefficients = 4;
+> I realise these values were taken directly as existing code, but
+> particularly in regards to how these values will be set from userspace -
+> is it easy enough to have some common definitions in a preceeding patch
+> that state the supported values here from the spec, to avoid 'magic
+> values' here ...
+>
+> A header with defines or an enum isn't going to be usable from a bash
+> script configuring configfs, but at least a compiled program could use
+> the definitions.
 
-Fabio Estevam
+
+Yes, I think probably it's a candidate for 
+include/uapi/linux/usb/video.h...unless anyone thinks it's better elsewhere
+
+>
+>
+>> +
+>> +       config_group_init_type_name(&cmd->group, "default",
+>> +                                   &uvcg_color_matching_type);
+>> +       configfs_add_default_group(&cmd->group, parent);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>>   static const struct uvcg_config_group_type uvcg_color_matching_grp_type = {
+>>          .type = {
+>>                  .ct_item_ops    = &uvcg_config_item_ops,
+>>                  .ct_owner       = THIS_MODULE,
+>>          },
+>>          .name = "color_matching",
+>> -       .children = (const struct uvcg_config_group_type*[]) {
+>> -               &uvcg_color_matching_type,
+>> -               NULL,
+>> -       },
+>> +       .create_children = uvcg_color_matching_create_children,
+>>   };
+>>   
+>>   /* -----------------------------------------------------------------------------
+>> diff --git a/drivers/usb/gadget/function/uvc_configfs.h b/drivers/usb/gadget/function/uvc_configfs.h
+>> index ad2ec8c4c78c..f990739838d5 100644
+>> --- a/drivers/usb/gadget/function/uvc_configfs.h
+>> +++ b/drivers/usb/gadget/function/uvc_configfs.h
+>> @@ -37,6 +37,14 @@ static inline struct uvcg_control_header *to_uvcg_control_header(struct config_i
+>>          return container_of(item, struct uvcg_control_header, item);
+>>   }
+>>   
+>> +struct uvcg_cmd {
+>> +       struct config_group group;
+>> +       struct uvc_color_matching_descriptor desc;
+>> +};
+>> +
+>> +#define to_uvcg_cmd(group_ptr) \
+>> +container_of(group_ptr, struct uvcg_cmd, group)
+>> +
+>>   enum uvcg_format_type {
+>>          UVCG_UNCOMPRESSED = 0,
+>>          UVCG_MJPEG,
+>> -- 
+>> 2.34.1
+>>
