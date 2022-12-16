@@ -2,215 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053DA64EC9C
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 15:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8A864ECC7
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 15:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiLPOHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Dec 2022 09:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        id S231137AbiLPOR6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 09:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiLPOGy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 09:06:54 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405E23381
-        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 06:06:53 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6DBB0A31;
-        Fri, 16 Dec 2022 15:06:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671199611;
-        bh=ZGPYJDasXhri32okFm/iC7lzA7hjszJkmV5iI/21oYs=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=QD8tF3tfcgUUVCChhNK6XyF/5afmnMxJR6NKnZSj9bGwwnV/eUdbwFkIWg2Y2WZYy
-         mJC/AA766eTP6knUZTadGAgxBioVD9oF/zwR2XLytP7Z5Le93s1tImhwhuVyfUveio
-         180h4H1QFl3ADElY2VOMsstmmMlAfPf5NcSHTA+w=
-Message-ID: <1420546b-b6ff-dfa0-d421-431972ec45c8@ideasonboard.com>
-Date:   Fri, 16 Dec 2022 14:06:48 +0000
+        with ESMTP id S229680AbiLPOR4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 09:17:56 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2089.outbound.protection.outlook.com [40.107.22.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5813554F7;
+        Fri, 16 Dec 2022 06:17:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jad59vSgw8RdWufMPCukvTQBBVcyB3wL7C4tGLE0Vzdbi2xtRaHNc9xcZr2qRd3m0QsBx/CDJuYL70l7W58zQljiJcTNfCXq1NSlCK+27uPBOtB6nebsfr5M4oHO+5hmZlr/9Egq1cyFOWFEoeHm37rJCZSgXzwjloH/IgAsG+2qsmXANGNc3BM5ORexrifYsSYUe6arSO2nisXrWAdpBaK63kekMhVKJaGwJo9badI4a7si+wyvp301e7ma8FxJhUxHlhhqS2NUVIgKH/MvBL1DhFPk282+ZxVnrf8M41Le3AWueJKrsfv1WovsTQl8rQupbPagH89RPvXGPBrA1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9WU9wTRpXPdlHgmqrv65FsIBvWY3Z/hmv473ItmiG6o=;
+ b=lu7RPHZFTkBAywGzDxUk0VKZFs9qTiGpAFqMJDDE5PSi8vQqxnJCqpAGL5OU8V992Tg4wscXzb2NFEGM6IaWoQscaLgG+d917pM9l2rtUFy3MZRDYa8Mb1HDZuyhK71EUTGPW9P4zMEdj+1Z6GDzuJCQBHX49JgZ8t6C/nHJ5F+LEf5zySf1rIRrNZ/t0h4e5kq1ya31SIjLgmjudWpHTrkPZb/wMJHuB9UNO11n6sgPFn+QlVIx4dm1RGIkZ10kNF7xARZKJFSQBr2KclooMEFVASQLg/ewhzZWDyXhn72WNubbOCfh7qY93MVzua8QNPwbNeLG7PND1ljOrLVyxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 151.1.184.193) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=asem.it;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=asem.it;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9WU9wTRpXPdlHgmqrv65FsIBvWY3Z/hmv473ItmiG6o=;
+ b=a9JGxOS38HHV8p9Hx9Nvi+Hyv7Wn1jk4rue73rruQLzZMV4K8YqcfWyzozhFsVIaH38aAAQKVJY9hladwuc/TpE2Rkk/pmRUuY5/QwmHHhCeo/ZPkASwdRUZSmMRF7VRjGjmZmHeYFucSdPYyzy8KstdMg376+Y2sf5qMZjVOew=
+Received: from AM5PR0201CA0007.eurprd02.prod.outlook.com
+ (2603:10a6:203:3d::17) by PA4PR01MB7262.eurprd01.prod.exchangelabs.com
+ (2603:10a6:102:fb::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.15; Fri, 16 Dec
+ 2022 14:17:48 +0000
+Received: from VE1EUR01FT027.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:203:3d:cafe::df) by AM5PR0201CA0007.outlook.office365.com
+ (2603:10a6:203:3d::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12 via Frontend
+ Transport; Fri, 16 Dec 2022 14:17:48 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 151.1.184.193) smtp.mailfrom=asem.it; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=asem.it;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ asem.it discourages use of 151.1.184.193 as permitted sender)
+Received: from asas054.asem.intra (151.1.184.193) by
+ VE1EUR01FT027.mail.protection.outlook.com (10.152.2.216) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5924.15 via Frontend Transport; Fri, 16 Dec 2022 14:17:47 +0000
+Received: from flavio-x.asem.intra ([172.16.18.47]) by asas054.asem.intra with Microsoft SMTPSVC(10.0.14393.0);
+         Fri, 16 Dec 2022 15:17:46 +0100
+From:   Flavio Suligoi <f.suligoi@asem.it>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Ray Chi <raychi@google.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Flavio Suligoi <f.suligoi@asem.it>
+Subject: [PATCH v1] usb: core: hub: disable autosuspend for TI TUSB8041
+Date:   Fri, 16 Dec 2022 15:17:17 +0100
+Message-Id: <20221216141717.2728340-1-f.suligoi@asem.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-usb@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        w36195@motorola.com, m.grzeschik@pengutronix.de, torleiv@huddly.com
-References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
- <20221213083736.2284536-3-dan.scally@ideasonboard.com>
- <167110474312.9133.3611120701301365792@Monstersaurus>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH 2/6] usb: gadget: uvc: Add struct for color matching in
- configs
-In-Reply-To: <167110474312.9133.3611120701301365792@Monstersaurus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 16 Dec 2022 14:17:46.0812 (UTC) FILETIME=[2BC347C0:01D91159]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1EUR01FT027:EE_|PA4PR01MB7262:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 4102f323-9f70-4251-1ee9-08dadf704ea7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JHXiV7Gz4MCmQPz7oLLA7HnlRl99acZRVnur7tYYbiIfSmfNcDkVISR28ZQeK6eeNT6i8EofE2iKcLTTAbVJ1I+ZN0+8fOUG6/nYlZ+xXwY4TbY7ug050lT4XczI1ilCBVlKDiy2IIKtpvJdcrPFrWDXWGKCfvBixUFAuAAvWfyChDvIEJ+B3/fDZkwyQvaFNOjiJ8kayVwYsVilK2OlG3Ngi3XOP7HdkNpv2XoYVShDYa/9Ileu4snZoF0Kld5u7aIbzmuqSYvpHUfMKn7r47vcN2LRjrQbj9sO+I6tq0YiKa0b6uoyjvkNUPUzT36U73g6jymw52CFIL4zXdC7ABjNoMWjTQFus2vMWR7+tTyaAQlp1l4b+X3ZJmrlDILEB1xmWezM/xb6qF3ntnP4Q2I3+NuXKqWXN1jAW0v+u9Q/2JHB4seQm6NBQEFCJgTRCgeL/2UHbo7kPo+VuTl/PWLFlxYMXv5yQBI95Jzq/t5Fgfdi4BgoIYsAN1OyUp1q7kEui5LUMpEXBrsIvgnlSGnNchHnnuj31Pe0iRBtHgqIrDtEEv2W75LmZlue0mAGwx2MzmuehZswmY3GpOOuJAD6i9cNfzLg3SVmSRlqUJLBxP5sUvlL1Fgn00qIXqAuwBoriIkQ94TkYLyX+NXgpZAxCemj/bIK9IstDSXY9HufdNsk2bHMV5lD9hy/sc66bsxFK//Xk2Tj/vpfIa/MtQ==
+X-Forefront-Antispam-Report: CIP:151.1.184.193;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:asas054.asem.intra;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(39850400004)(396003)(376002)(346002)(136003)(451199015)(46966006)(36840700001)(1076003)(2616005)(47076005)(336012)(478600001)(316002)(186003)(110136005)(26005)(36756003)(2906002)(107886003)(86362001)(40480700001)(82740400003)(6666004)(36860700001)(41300700001)(82310400005)(5660300002)(70586007)(83380400001)(70206006)(8676002)(450100002)(356005)(4326008)(8936002)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: asem.it
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2022 14:17:47.4159
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4102f323-9f70-4251-1ee9-08dadf704ea7
+X-MS-Exchange-CrossTenant-Id: d0a766c6-7992-4344-a4a2-a467a7bb1ed2
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d0a766c6-7992-4344-a4a2-a467a7bb1ed2;Ip=[151.1.184.193];Helo=[asas054.asem.intra]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT027.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR01MB7262
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Kieran
+The Texas Instruments TUSB8041 has an autosuspend problem at high
+temperature.
 
-On 15/12/2022 11:45, Kieran Bingham wrote:
-> Quoting Daniel Scally (2022-12-13 08:37:32)
->> Color matching descriptors are meant to be a per-format piece of data
->> and we need to be able to support different descriptors for different
->> formats. As a preliminary step towards that goal, switch the default
->> color matching configfs functionality to point to an instance of a
->> new struct uvcg_cmd (for "color matching descriptor"). Use the same
-> Hrm .. I can't see 'cmd' and not think 'command' ... but longer names
-> are longer ...
+If there is not USB traffic, after a couple of ms, the device enters in
+autosuspend mode. In this condition the external clock stops working, to
+save energy. When the USB activity turns on, ther hub exits the
+autosuspend state, the clock starts running again and all works fine.
 
+At ambient temperature all works correctly, but at high temperature,
+when the USB activity turns on, the external clock doesn't restart and
+the hub disappears from the USB bus.
 
-Yeah. Naming things was never my strong suit...I couldn't think of a 
-name of intermediate length that wasn't rubbish so it was either this or 
-"uvcg_color_matching_descriptor" which is loooong.
+Disabling the autosuspend mode for this hub solves the issue.
 
->
->
->> default values for its attributes as the currently hard-coded ones so
->> that the interface to userspace is consistent.
->>
->> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->> ---
->>   drivers/usb/gadget/function/uvc_configfs.c | 55 ++++++++++++++++------
->>   drivers/usb/gadget/function/uvc_configfs.h |  8 ++++
->>   2 files changed, 49 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
->> index 26d092790f12..9918e7b6a023 100644
->> --- a/drivers/usb/gadget/function/uvc_configfs.c
->> +++ b/drivers/usb/gadget/function/uvc_configfs.c
->> @@ -1788,20 +1788,19 @@ static ssize_t uvcg_color_matching_##cname##_show(                      \
->>          struct config_item *item, char *page)                           \
->>   {                                                                      \
->>          struct config_group *group = to_config_group(item);             \
->> +       struct uvcg_cmd *cmd = to_uvcg_cmd(group);                      \
->>          struct f_uvc_opts *opts;                                        \
->>          struct config_item *opts_item;                                  \
->>          struct mutex *su_mutex = &group->cg_subsys->su_mutex;           \
->> -       struct uvc_color_matching_descriptor *cd;                       \
->>          int result;                                                     \
->>                                                                          \
->>          mutex_lock(su_mutex); /* for navigating configfs hierarchy */   \
->>                                                                          \
->>          opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;     \
->>          opts = to_f_uvc_opts(opts_item);                                \
->> -       cd = &opts->uvc_color_matching;                                 \
->>                                                                          \
->>          mutex_lock(&opts->lock);                                        \
->> -       result = sprintf(page, "%u\n", le##bits##_to_cpu(cd->aname));   \
->> +       result = sprintf(page, "%u\n", le##bits##_to_cpu(cmd->desc.aname));\
->>          mutex_unlock(&opts->lock);                                      \
->>                                                                          \
->>          mutex_unlock(su_mutex);                                         \
->> @@ -1823,29 +1822,57 @@ static struct configfs_attribute *uvcg_color_matching_attrs[] = {
->>          NULL,
->>   };
->>   
->> -static const struct uvcg_config_group_type uvcg_color_matching_type = {
->> -       .type = {
->> -               .ct_item_ops    = &uvcg_config_item_ops,
->> -               .ct_attrs       = uvcg_color_matching_attrs,
->> -               .ct_owner       = THIS_MODULE,
->> -       },
->> -       .name = "default",
->> +static void uvcg_color_matching_release(struct config_item *item)
->> +{
->> +       struct uvcg_cmd *cmd;
->> +
->> +       cmd = to_uvcg_cmd(to_config_group(item));
->> +       kfree(cmd);
->> +}
->> +
->> +static struct configfs_item_operations uvcg_color_matching_item_ops = {
->> +       .release        = uvcg_color_matching_release,
->> +};
->> +
->> +static const struct config_item_type uvcg_color_matching_type = {
->> +       .ct_item_ops    = &uvcg_color_matching_item_ops,
->> +       .ct_attrs       = uvcg_color_matching_attrs,
->> +       .ct_owner       = THIS_MODULE,
->>   };
->>   
->>   /* -----------------------------------------------------------------------------
->>    * streaming/color_matching
->>    */
->>   
->> +static int uvcg_color_matching_create_children(struct config_group *parent)
->> +{
->> +       struct uvcg_cmd *cmd;
->> +
->> +       cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
->> +       if (!cmd)
->> +               return -ENOMEM;
->> +
->> +       cmd->desc.bLength = UVC_DT_COLOR_MATCHING_SIZE;
->> +       cmd->desc.bDescriptorType = USB_DT_CS_INTERFACE;
->> +       cmd->desc.bDescriptorSubType = UVC_VS_COLORFORMAT;
->> +       cmd->desc.bColorPrimaries = 1;
->> +       cmd->desc.bTransferCharacteristics = 1;
->> +       cmd->desc.bMatrixCoefficients = 4;
-> I realise these values were taken directly as existing code, but
-> particularly in regards to how these values will be set from userspace -
-> is it easy enough to have some common definitions in a preceeding patch
-> that state the supported values here from the spec, to avoid 'magic
-> values' here ...
->
-> A header with defines or an enum isn't going to be usable from a bash
-> script configuring configfs, but at least a compiled program could use
-> the definitions.
+Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+---
+ drivers/usb/core/hub.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 77e73fc8d673..b64be35e203f 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -44,6 +44,10 @@
+ #define USB_PRODUCT_USB5534B			0x5534
+ #define USB_VENDOR_CYPRESS			0x04b4
+ #define USB_PRODUCT_CY7C65632			0x6570
++#define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
++#define USB_PRODUCT_TUSB8041_USB3		0x8140
++#define USB_PRODUCT_TUSB8041_USB2		\
++	(USB_PRODUCT_TUSB8041_USB3 | ((USB_PRODUCT_TUSB8041_USB3 & 0x00FF) ^ 0x02))
+ #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
+ #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
+ 
+@@ -5854,6 +5858,16 @@ static const struct usb_device_id hub_id_table[] = {
+       .idVendor = USB_VENDOR_GENESYS_LOGIC,
+       .bInterfaceClass = USB_CLASS_HUB,
+       .driver_info = HUB_QUIRK_CHECK_PORT_AUTOSUSPEND},
++    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
++			| USB_DEVICE_ID_MATCH_PRODUCT,
++      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
++      .idProduct = USB_PRODUCT_TUSB8041_USB2,
++      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
++    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
++			| USB_DEVICE_ID_MATCH_PRODUCT,
++      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
++      .idProduct = USB_PRODUCT_TUSB8041_USB3,
++      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
+     { .match_flags = USB_DEVICE_ID_MATCH_DEV_CLASS,
+       .bDeviceClass = USB_CLASS_HUB},
+     { .match_flags = USB_DEVICE_ID_MATCH_INT_CLASS,
+-- 
+2.25.1
 
-Yes, I think probably it's a candidate for 
-include/uapi/linux/usb/video.h...unless anyone thinks it's better elsewhere
-
->
->
->> +
->> +       config_group_init_type_name(&cmd->group, "default",
->> +                                   &uvcg_color_matching_type);
->> +       configfs_add_default_group(&cmd->group, parent);
->> +
->> +       return 0;
->> +}
->> +
->>   static const struct uvcg_config_group_type uvcg_color_matching_grp_type = {
->>          .type = {
->>                  .ct_item_ops    = &uvcg_config_item_ops,
->>                  .ct_owner       = THIS_MODULE,
->>          },
->>          .name = "color_matching",
->> -       .children = (const struct uvcg_config_group_type*[]) {
->> -               &uvcg_color_matching_type,
->> -               NULL,
->> -       },
->> +       .create_children = uvcg_color_matching_create_children,
->>   };
->>   
->>   /* -----------------------------------------------------------------------------
->> diff --git a/drivers/usb/gadget/function/uvc_configfs.h b/drivers/usb/gadget/function/uvc_configfs.h
->> index ad2ec8c4c78c..f990739838d5 100644
->> --- a/drivers/usb/gadget/function/uvc_configfs.h
->> +++ b/drivers/usb/gadget/function/uvc_configfs.h
->> @@ -37,6 +37,14 @@ static inline struct uvcg_control_header *to_uvcg_control_header(struct config_i
->>          return container_of(item, struct uvcg_control_header, item);
->>   }
->>   
->> +struct uvcg_cmd {
->> +       struct config_group group;
->> +       struct uvc_color_matching_descriptor desc;
->> +};
->> +
->> +#define to_uvcg_cmd(group_ptr) \
->> +container_of(group_ptr, struct uvcg_cmd, group)
->> +
->>   enum uvcg_format_type {
->>          UVCG_UNCOMPRESSED = 0,
->>          UVCG_MJPEG,
->> -- 
->> 2.34.1
->>
