@@ -2,200 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01BE64E6A6
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 05:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B62564E6DE
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 06:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiLPEVX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Dec 2022 23:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+        id S229504AbiLPFNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 00:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiLPEVU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Dec 2022 23:21:20 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2069.outbound.protection.outlook.com [40.107.93.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7E8D4;
-        Thu, 15 Dec 2022 20:21:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Unm/MhVigUczVlIt9a5AgXR2V3jaVUmmK81vlrjYjZOOY7eas0OypxTnad7E28IGuQDtxH+L16mcXL4CaNx6hV7JJR5udcTHfx3mQW1AGYR1wTh7wMSnfudQgkjEsChnhVwNXPKoKsm3MgG466HI67tyA+W2ZG7kxryXtahN2v0m7dY6pEzGIww/6sKxNQVIr2oobxp4r5+NcCHfw8Fp74hOBMUWVdntXgn/YMaqQyLVh8GKJHw6OcTeJAuXz504XVv2O9xVFvDRvQy9dlENMM1aaJRKeJP76YjomQkMJyVxp7db+kPVJis87dymeQCx3Z2Rka1yByfTSIwzesTaFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vF1eDrEq4aohZB6XFWrNwbnhzlg0r02RG5IhWRM8Zhg=;
- b=JINBGhWm6IJ31UpDqqcVcb3j6itT/xYqrbOsDanlsw+c8yf47VFrG+bXVpO6q8rKnv2i8W+2eGstYfdoKSkHJJqbayCbygwn9NszYdY+dNOQvRoCN54o4ysysOpID/S7bTDZCP8yB89pqH5OC3zPxn++WgkHpjyksqr/5V7UJNqpU2sMHzVtX6a3+iTd8PqiSncsAa0TTOTwTAYX1tvq17DhIENXp2blQy4a/gvy6VIdJ+KPzBKgnTqQwgXwUCAiL13dE6wcKxBlgzUqTBny6INCUrE5k1mlPuHbauyain0bVjBEQz9xxxOVfeHHCcc1MkgEAS6Cp+hr465bcIz8AA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vF1eDrEq4aohZB6XFWrNwbnhzlg0r02RG5IhWRM8Zhg=;
- b=LzqfLhWF2V30tsjGc/DLpSLImiTxyoyfsQlYDXKHMTa4rdCK7TTYomydFwmNb/Sc/45/J+QvJVtIiYVcSoBMyjGZU8Ot7nuyNgky2KUCPLiHay4KZYdvc/XfVVeH35YGDKkQ/IBq96CtzNmN8oEIGdYtTFw6m0QmiZZITuCuD1X/k1RdOuhNpBuAjDGa7T+CC7bUgiL8iRj8M5lQTZpucpDcR2zZKR6zCuHP2M/5icbxVXrDY2GhMhzc0kwlryOU5Jp5wDuiMq8yo5yfQ2X/D1vtmWK1aJ+BUq7qIcobqdDiKsVoeEzfbn2kuNs0cyd+R3VE1s4IU3p3KxMDr3bStw==
-Received: from MN2PR20CA0010.namprd20.prod.outlook.com (2603:10b6:208:e8::23)
- by SA3PR12MB8047.namprd12.prod.outlook.com (2603:10b6:806:31b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Fri, 16 Dec
- 2022 04:21:17 +0000
-Received: from BL02EPF00010209.namprd05.prod.outlook.com
- (2603:10b6:208:e8:cafe::1e) by MN2PR20CA0010.outlook.office365.com
- (2603:10b6:208:e8::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.15 via Frontend
- Transport; Fri, 16 Dec 2022 04:21:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF00010209.mail.protection.outlook.com (10.167.241.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5924.10 via Frontend Transport; Fri, 16 Dec 2022 04:21:17 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 15 Dec
- 2022 20:21:01 -0800
-Received: from 74ef364-lcelt.nvidia.com (10.126.231.37) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 15 Dec 2022 20:20:59 -0800
-From:   Haotien Hsu <haotienh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Wayne Chang <waynec@nvidia.com>,
-        Haotien Hsu <haotienh@nvidia.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Tom Rix <trix@redhat.com>, Jim Lin <jilin@nvidia.com>,
-        Tang Bin <tangbin@cmss.chinamobile.com>,
-        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: gadget: xudc: Refactor update data role work
-Date:   Fri, 16 Dec 2022 12:20:26 +0800
-Message-ID: <20221216042026.98517-1-haotienh@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229793AbiLPFNQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 00:13:16 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059344A5BF
+        for <linux-usb@vger.kernel.org>; Thu, 15 Dec 2022 21:13:15 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id r11so1060749oie.13
+        for <linux-usb@vger.kernel.org>; Thu, 15 Dec 2022 21:13:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hV7GON/TwLLqb993uwtDT+pFNyVjmV9sSQq5BBMzOjI=;
+        b=n3ENj7ShXP2PB4hptflJwPoH/sCadWMT1WQS+iZcqMgwPs3x7kEyL9BMVTYFUbxOQB
+         OJCyAm/1GgBjklNRTrVolpHyk9Xlqp0bAeYyiQzRDZwJ9X6qFGBHRdTEPoXYoTKFRtdq
+         hkkz/loUs1UNlmko42F4LkfbhOJwSpBT5M7lXHX766Fee3uyE5/iMHY5pvDYwS75diNu
+         ytmaCntNhIBf8o2NVHYfLFF7A1EepZzUfuLLeeGfMTNeBEbT+e6KsUwYCYkFD/1JxP0k
+         CxaVOEdp5aCKpggEQwP8U0bAHm1q2PSI9jutrGrqIfS1D4CsZGQR92cKpsPSH37y7ixl
+         /ZHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hV7GON/TwLLqb993uwtDT+pFNyVjmV9sSQq5BBMzOjI=;
+        b=Z1CNtYTjakC51DpmW1KMmx0e3kiGP1+SNvAyz/JVSLHVACmDZ9FcUrMzFK4I4hPFxV
+         jIfbWu2cLfIiF+bcIYjQXD56OgtZWeFtI4Rm7WCfXe9peDIwn7IE6NDYn6yc+w9wtBfd
+         up/Yskq8R68zvMjdb1MIzZzAwwV8h8SBI4pWDpBxmIRxquQRblFMohuJR8wAnbw+P4x6
+         ovCcinKbKKNOK2bJcGeNxE6A32gOrCoiLL6uvpSKM3uJo8ug3QEJx1Tbv065iTzo132j
+         q3umrRFZ/d59i0o3ugw71yk2c2uFOPyFct5NczcgNsv4eZylxrdDzGxf5eKnS4F1Hl8W
+         t1vg==
+X-Gm-Message-State: ANoB5plSn6QayoshSB8a0mFXFdlrdiUP0m7l7bMKRPwdlAaTpy2MCEI6
+        jGSzbshZPRhSUHwe0cMPNkf+OzAbmhM=
+X-Google-Smtp-Source: AA0mqf5IXS8YhWC5+1+yGp9AoY5bTPFw+C+/5LMVjyXgVtJh5u++l3/4NCcEgzzEQf+rY5GLAAkK4w==
+X-Received: by 2002:a05:6808:1709:b0:35b:d7dc:9f2a with SMTP id bc9-20020a056808170900b0035bd7dc9f2amr16929665oib.3.1671167594217;
+        Thu, 15 Dec 2022 21:13:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r25-20020a056808211900b0035c073aa0d8sm361432oiw.18.2022.12.15.21.13.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 21:13:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <acf0485c-8061-ef12-83d9-c3b22dc235ad@roeck-us.net>
+Date:   Thu, 15 Dec 2022 21:13:12 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00010209:EE_|SA3PR12MB8047:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61d61e0b-9ac7-418e-c5d3-08dadf1cfa19
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zUsjwGIlg2wnKHymltC3MzcRGQGu54sKL4xtfbtYcKRECcNVyUetIhEUaONf7Jl1fG6rU3ft1qI77zQncNYiNPB3ub4B6S5y63+mBpWsjX6Uyc12A7gG+DuXn9gpPf2MIJo+IkH+iZyUi0TtkcXA1aG7wYP3WrJeF/d13yxBIsGIHZf5o2LgA54cnwOksu8IIErCNbwHYP1PmNCj0ecp4ewuvRrHQ8Tg6TwmqIK/PuiPQi1DJPHb5XSmleOjoSz8X2T2p+VYk688/ORNn6B2GSDeml14zC1ESeD42TXHTWfP7kEtMItGQ8XjOaQDksqlmP55x5CCxgHV1kwNm9IbVpmXb0TICtwVQFjQqZslhLETnCjzrB4o0kokf6Ar29BaGuTqL7hEEWENSqDHFb0C9o6EBR7PTFGKM8Pqr7GFwmhwold/AuxsrURg24j9ATkXYGXOEIfYMqkUwu+jvW4LTS8laxJSkOfBZF5PoMt70+IAZvKKs1CPkvxL/ev02DPLRKo37uOw/ijEnAReeAJSMKkimgMVix5TmQ8J0SZNhc6FsI+PI3OwJ/d+6FxRP/+Q+/TW9BI/JEAJFO2VS8p/d0R/srgCIOa+VfyVT+TDjdh9b2pFHKfuZq/7uP7ohcHeH3dVjMrVBHdHaA5JTx/9Buv10aoT8E+j9rQwIGa0PmN7P17u/xAiR9msRYhNzOr/LqaPkl5QKhasvUu+m9KneQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(356005)(40480700001)(7636003)(36756003)(82740400003)(82310400005)(40460700003)(336012)(86362001)(1076003)(47076005)(7696005)(426003)(186003)(16526019)(6666004)(54906003)(26005)(316002)(6916009)(2616005)(478600001)(36860700001)(4326008)(8936002)(15650500001)(2906002)(5660300002)(8676002)(70586007)(83380400001)(70206006)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2022 04:21:17.2230
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61d61e0b-9ac7-418e-c5d3-08dadf1cfa19
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010209.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8047
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: typec: tcpm: fix create duplicate
+ source/sink-capabilities file
+Content-Language: en-US
+To:     Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-imx@nxp.com, jun.li@nxp.com
+References: <20221216033150.2683718-1-xu.yang_2@nxp.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221216033150.2683718-1-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wayne Chang <waynec@nvidia.com>
+On 12/15/22 19:31, Xu Yang wrote:
+> After soft reset has completed, an Explicit Contract negotiation occurs.
+> The sink device will receive source capabilitys again. This will cause
+> a duplicate source-capabilities file be created.
+> 
+> And the kernel will dump:
+> sysfs: cannot create duplicate filename '/devices/virtual/usb_power_delivery/pd1/source-capabilities'
+> 
+> This will unregister existing capabilities before register new one.
+> 
+> Fixes: 8203d26905ee ("usb: typec: tcpm: Register USB Power Delivery Capabilities")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 904c7b4ce2f0..02d8a704db95 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -2371,6 +2371,9 @@ static int tcpm_register_source_caps(struct tcpm_port *port)
+>   	if (IS_ERR(port->partner_pd))
+>   		return PTR_ERR(port->partner_pd);
+>   
+> +	/* remove existing capabilities since got new one */
+> +	usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+> +
+>   	memcpy(caps.pdo, port->source_caps, sizeof(u32) * port->nr_source_caps);
+>   	caps.role = TYPEC_SOURCE;
+>   
+> @@ -2394,6 +2397,9 @@ static int tcpm_register_sink_caps(struct tcpm_port *port)
+>   	if (IS_ERR(port->partner_pd))
+>   		return PTR_ERR(port->partner_pd);
+>   
+> +	/* remove existing capabilities since got new one */
+> +	usb_power_delivery_unregister_capabilities(port->partner_sink_caps);
+> +
+>   	memcpy(caps.pdo, port->sink_caps, sizeof(u32) * port->nr_sink_caps);
+>   	caps.role = TYPEC_SINK;
+>   
 
-The notification call chain should be registered after the device gets
-ready. Otherwise, we  might get errors when setting data roles in an
-incomplete system.
+Shouldn't usb_power_delivery_unregister_capabilities() be called from
+the SOFT_RESET state handler ?
 
-This patch refactors update data role work and register the notifier
-call chain after the system gets ready.
-
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
-Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 33 +++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index ff697190469b..2b71b33725f1 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -796,21 +796,16 @@ static int tegra_xudc_get_phy_index(struct tegra_xudc *xudc,
- 	return -1;
- }
- 
--static int tegra_xudc_vbus_notify(struct notifier_block *nb,
--					 unsigned long action, void *data)
-+static void tegra_xudc_update_data_role(struct tegra_xudc *xudc,
-+					      struct usb_phy *usbphy)
- {
--	struct tegra_xudc *xudc = container_of(nb, struct tegra_xudc,
--					       vbus_nb);
--	struct usb_phy *usbphy = (struct usb_phy *)data;
- 	int phy_index;
- 
--	dev_dbg(xudc->dev, "%s(): event is %d\n", __func__, usbphy->last_event);
--
- 	if ((xudc->device_mode && usbphy->last_event == USB_EVENT_VBUS) ||
- 	    (!xudc->device_mode && usbphy->last_event != USB_EVENT_VBUS)) {
- 		dev_dbg(xudc->dev, "Same role(%d) received. Ignore",
- 			xudc->device_mode);
--		return NOTIFY_OK;
-+		return;
- 	}
- 
- 	xudc->device_mode = (usbphy->last_event == USB_EVENT_VBUS) ? true :
-@@ -826,6 +821,18 @@ static int tegra_xudc_vbus_notify(struct notifier_block *nb,
- 		xudc->curr_usbphy = usbphy;
- 		schedule_work(&xudc->usb_role_sw_work);
- 	}
-+}
-+
-+static int tegra_xudc_vbus_notify(struct notifier_block *nb,
-+					 unsigned long action, void *data)
-+{
-+	struct tegra_xudc *xudc = container_of(nb, struct tegra_xudc,
-+					       vbus_nb);
-+	struct usb_phy *usbphy = (struct usb_phy *)data;
-+
-+	dev_dbg(xudc->dev, "%s(): event is %d\n", __func__, usbphy->last_event);
-+
-+	tegra_xudc_update_data_role(xudc, usbphy);
- 
- 	return NOTIFY_OK;
- }
-@@ -3521,7 +3528,7 @@ static int tegra_xudc_phy_get(struct tegra_xudc *xudc)
- 			/* Get usb-phy, if utmi phy is available */
- 			xudc->usbphy[i] = devm_usb_get_phy_by_node(xudc->dev,
- 						xudc->utmi_phy[i]->dev.of_node,
--						&xudc->vbus_nb);
-+						NULL);
- 			if (IS_ERR(xudc->usbphy[i])) {
- 				err = PTR_ERR(xudc->usbphy[i]);
- 				dev_err_probe(xudc->dev, err,
-@@ -3873,6 +3880,14 @@ static int tegra_xudc_probe(struct platform_device *pdev)
- 		goto free_eps;
- 	}
- 
-+	for (i = 0; i < xudc->soc->num_phys; i++) {
-+		if (!xudc->usbphy[i])
-+			continue;
-+
-+		usb_register_notifier(xudc->usbphy[i], &xudc->vbus_nb);
-+		tegra_xudc_update_data_role(xudc, xudc->usbphy[i]);
-+	}
-+
- 	return 0;
- 
- free_eps:
--- 
-2.25.1
+Guenter
 
