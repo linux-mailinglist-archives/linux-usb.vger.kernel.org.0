@@ -2,97 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6E764E9E1
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 12:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E69A764EB1B
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 13:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiLPLBD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Dec 2022 06:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S230305AbiLPMA6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 07:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiLPLA6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 06:00:58 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D3E2AC0
-        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 03:00:56 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6B3915C0062;
-        Fri, 16 Dec 2022 06:00:56 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 16 Dec 2022 06:00:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1671188456; x=1671274856; bh=vg+V55kKjH
-        iiK0WqR1vA7obDS2PuZgFnXvKFCuA6ArI=; b=FLOlg2J6+9wthVLVLNJ1FWry6T
-        4Iajug7W4N9ZjMUsm31+q/MNLoEJSIOgApu5okpxtzukjYcCFbZyvsqSRwAoRh1F
-        alsUykoNbQ6jH1U6YQoH+TWf3uirXdq7Da1p9Lt/YhUKpuTwW8LUDHecHfC5mJg8
-        NHGBbmO0SQz8g0yh7wMoYdBfgo0HYE/LpsOny/dWMj6zdhJpLeogp/rLtyDNWfdf
-        E1/xH0a/U73VR3hdZlHSV2HToLXAPYz1RXzArtQ1hKtNjyymD8VZ2Ka4H/IbURbB
-        yiMxcUBl8AKm/zW6JMCXdY9CiQQRa1x2/4XxFYYFzxgWDmFv9iKQNLxU911w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1671188456; x=1671274856; bh=vg+V55kKjHiiK0WqR1vA7obDS2Pu
-        ZgFnXvKFCuA6ArI=; b=jFL+msxNYqnTPwkj6wthnXbM0R4+0tfMCu8noF+pGRz0
-        RJz/xQnxoA/KIw1gx8PdBj3ISvl5gBfYPm+jQlPB+R1Cu2bEzYZg+paZWP+1dTG7
-        FX6tyKBJ85tpTtfM52ev5Vkg/bgd0VspLggBg3qyEgvTS5HYZLdWBKDE4wWBeVct
-        OXtjqNkAaG0HPnWiGtYU0dK2/TRAbK6XSg23/piUWDeSt7d778JF5+cXQnKsu218
-        vb/1CS2tulapTw5K6z0HckFKRv+I3K26jghEfs8A+LxU330y/Q59MvYYDKEfQdFW
-        IdC6Z3yy2r3DwdP504RyBneUJ0cS48Ca1JyrHAVncA==
-X-ME-Sender: <xms:6E-cY7FBY1oA-FsZ8AKt9w8Cnignzj3mtQ1RBjClgqdtAO3eRSNGBg>
-    <xme:6E-cY4Uaav71Z9litXKWYngWkQdrZ9YJKddA99Yr5e35eik3_GbQNXmXM_KPY8Squ
-    YThlwXJ38ov6w>
-X-ME-Received: <xmr:6E-cY9Ig_WY1bos63nVHJHSF2qnK5_9fP5QbB66tfu5uM3f6yn98ApuXEKZsaWD052udgVWjiekdSTinDXvof2rhC7Gw0YXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejgddvudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:6E-cY5ERv-dreeOrJJi6MfS804oQ-yYB9yO9XIpSBAMXGowNoHM3bA>
-    <xmx:6E-cYxWFEoLyfkgsAhW7rfquo_yPS9P4JpjHX2Z_ijfZ_OQsAKvxxg>
-    <xmx:6E-cY0MktmuwWy9QpqJ4L4GtF0aW29kHw8e23No7yBIykz3tW2Qdow>
-    <xmx:6E-cY-g_30hBf0YAH6ye5B1SanYYV3KDGmsHHVwg9PZTb2ogbtalZA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 16 Dec 2022 06:00:55 -0500 (EST)
-Date:   Fri, 16 Dec 2022 12:00:54 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Artem Egorkine <arteme@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] sound: line6: correct midi status byte when
- receiving data from podxt
-Message-ID: <Y5xP5ihBfHXUA7Un@kroah.com>
-References: <20221216100239.577805-1-arteme@gmail.com>
+        with ESMTP id S231214AbiLPMAn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 07:00:43 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6899B511FB;
+        Fri, 16 Dec 2022 04:00:33 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id x2so2044886plb.13;
+        Fri, 16 Dec 2022 04:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Snl7BgVsFmc/5J29TspmwaDCZhYw6tUPa9r4mziXw4=;
+        b=RhgC+LBhmLt2RSAqSktOu7ZFqHz4N0Vp3uhEf3qW2nQ4iW7wCrIJ81wp0KaUa05mBv
+         SPuc91Dxe4jCcFpFVY6S1fOad5pq+5X5arL2IiKuy1UPf6Rg9PAv6mxH1ZRJSLDwE7H5
+         LoPZ28GzTlGJ64wOzwGiUTQHpoOMVEQBsFCdPe0qOU/AkQIWIMCDL5/QJ2vdjI5E+FkC
+         Pyk77L9Iaw00MUm4pS3SqTbJ/G/BMV84YPQGayaw5G+//dBNzZWaHvUCtzOabl02qENZ
+         0Iatj29KinYcfTjbIw9dvsqEP1AsBoDLrfht3cZsDAXOK2qJkIHhLcGDGhIT87bJW7lo
+         7r8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Snl7BgVsFmc/5J29TspmwaDCZhYw6tUPa9r4mziXw4=;
+        b=ElpZbhma3+FOchTnmByYF5UM4urdv4qrppahR2noOn+yd86gJ+8UTanHNvX2vC4u4o
+         ewkBE6SYJMLqdFBo5XfoxtlwEZAO77Ekb8FOjI+AEZYCeB/sOPB4gPNI7Sb0YNa4ZpgI
+         CFHBNfxDQhX+GiL/AXoILhKn9lYrIuJSro9xPKX/1oa7E3OVSNtGgk/zvauuLIucgF1i
+         PN/ITbi1Qg9XFjgp1uhd+/MnwBQYbeMN/kUyB3F2ZCW15qRLWIdm3n+/ZCBlatgI5SEr
+         jsCY8pLMvA5hrlVXcErxNvumGf439D/vWnXp1F9FcMvjkljSN6fMuFv3cRYJNsXvbnOp
+         TVbQ==
+X-Gm-Message-State: AFqh2kr6KaI6yRuXmFDotVsPsdoFFcujR5V6C6vPI2xUwVVwB5GuMRor
+        gSJDWG4BWhLdoJjCPYCoGrBy0LXp7oDDQBToEEU=
+X-Google-Smtp-Source: AMrXdXsmay9yD3lb98nl7gf6xnfVfSOdLoQEcPmD5FPjUhryisMF2XJmX4NHqZfifvVsVlGXk09xn0GyjmecbdeUNw8=
+X-Received: by 2002:a17:90a:46c9:b0:219:c691:9933 with SMTP id
+ x9-20020a17090a46c900b00219c6919933mr600907pjg.195.1671192032852; Fri, 16 Dec
+ 2022 04:00:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216100239.577805-1-arteme@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAOMZO5AFsvwbC4Pr49WPFmZt7OnKjuJnYSf3cApGqtoZ_fFPPA@mail.gmail.com>
+ <CAOMZO5AWRDLu5t0O=AG7CxNLv20HTmMTRh=so=s7+nTH0_qYgQ@mail.gmail.com>
+ <PA4PR04MB96407AC656705A79BF72D2E089E39@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <CAOMZO5AMy_H-zw1phB6MtNdpbCwtXg74BwHrs5YttykN=-wvnQ@mail.gmail.com> <PA4PR04MB9640B1C33E8D5704885A9A3B89E39@PA4PR04MB9640.eurprd04.prod.outlook.com>
+In-Reply-To: <PA4PR04MB9640B1C33E8D5704885A9A3B89E39@PA4PR04MB9640.eurprd04.prod.outlook.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 16 Dec 2022 09:00:15 -0300
+Message-ID: <CAOMZO5AhUrYSesz9PC3o7T9Uum-X_QjmO=zjPAWkt25tbzJFSA@mail.gmail.com>
+Subject: Re: imx7: USB modem reset causes modem to not re-connect
+To:     Jun Li <jun.li@nxp.com>
+Cc:     "bjorn@mork.no" <bjorn@mork.no>,
+        Peter Chen <peter.chen@kernel.org>,
+        Marek Vasut <marex@denx.de>, netdev <netdev@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 12:02:38PM +0200, Artem Egorkine wrote:
-> A PODxt device sends 0xb2, 0xc2 or 0xf2 as a status byte for MIDI
-> messages over USB that should otherwise have a 0xb0, 0xc0 or 0xf0
-> status byte. This is usually corrected by the driver on other OSes.
-> 
-> This fixes MIDI sysex messages sent by PODxt.
-> 
-> Signed-off-by: Artem Egorkine <arteme@gmail.com>
+Hi Li Jun,
 
-Note, you also add debug logic here, that should be a separate patch,
-right?
+On Tue, Dec 13, 2022 at 8:17 AM Jun Li <jun.li@nxp.com> wrote:
 
-thanks,
+> What's the OC polarity config in your SW, active low, or active high?
+> Basically if the OC condition is active, the host mode cannot work
+> well.
 
-greg k-h
+Yes, if I keep the OC pinctrl definition and pass
+'over-current-active-low;' the problem
+does not happen.
+
+Thanks a lot,
+
+Fabio Estevam
