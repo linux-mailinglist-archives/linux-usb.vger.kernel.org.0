@@ -2,120 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1C164EDFC
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 16:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C06B64EE11
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 16:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiLPPcx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Dec 2022 10:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
+        id S231401AbiLPPpX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 10:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiLPPcv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 10:32:51 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51947DFB3
-        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 07:32:49 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7F9ACA31;
-        Fri, 16 Dec 2022 16:32:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671204766;
-        bh=gITIB40UCIhenJLBa68hquLycvRNBVciiZqcobuWXVw=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=ApPg1jJYrtGjY/Ado9CBWbV6rCb2/J9Ys22NO23c4jWhLMv6rEyYRa4OJNIuQz4zU
-         QQkaJ245IRlRlsP6Z1Mrikx9TKM6lzGh6U1LheAQ+UAyj+wjlcvEGuGmqSGedYgZwC
-         bEMzvDVhS4xObymnYlc916D0qg+JJB7FirtnuRqk=
-Message-ID: <6b7a930a-59e9-c4ca-f7f1-7ebcc89bc735@ideasonboard.com>
-Date:   Fri, 16 Dec 2022 15:32:43 +0000
+        with ESMTP id S230410AbiLPPpW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 10:45:22 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9CCA750D70
+        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 07:45:20 -0800 (PST)
+Received: (qmail 997666 invoked by uid 1000); 16 Dec 2022 10:45:19 -0500
+Date:   Fri, 16 Dec 2022 10:45:19 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Max Staudt <mstaudt@chromium.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ming Lei <tom.leiming@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Yunke Cao <yunkec@chromium.org>,
+        Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] media: uvcvideo: Code cleanup for dev->status
+Message-ID: <Y5ySj1+mGK/ioI/q@rowland.harvard.edu>
+References: <20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org>
+ <Y5s+kuxCAtS8Eixj@rowland.harvard.edu>
+ <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-usb@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        w36195@motorola.com, m.grzeschik@pengutronix.de, torleiv@huddly.com
-References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
- <20221213083736.2284536-5-dan.scally@ideasonboard.com>
- <167110488489.9133.920745374027359778@Monstersaurus>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH 4/6] usb: gadget: uvc: Remove the hardcoded default color
- matching
-In-Reply-To: <167110488489.9133.920745374027359778@Monstersaurus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCudMRATbHU4=hyjiVhwLr6zQubXPzzpYtXCxdMPsZFcuw@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Kieran
+On Fri, Dec 16, 2022 at 09:55:09AM +0100, Ricardo Ribalda wrote:
+> Hi Alan
+> 
+> On Thu, 15 Dec 2022 at 16:34, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, Dec 15, 2022 at 11:57:17AM +0100, Ricardo Ribalda wrote:
+> > > There is no need to make a kzalloc just for 16 bytes. Let's embed the data
+> > > into the main data structure.
+> > >
+> > > Now that we are at it, lets remove all the castings and open coding of
+> > > offsets for it.
+> > >
+> > > [Christoph, do you think dma wise we are violating any non written rules? :) thanks]
+> >
+> > There _is_ a rule, and it is not exactly unwritten.  The kerneldoc for
+> > the transfer_buffer member of struct urb says:
+> >
+> >         This buffer must be suitable for DMA; allocate it with
+> >         kmalloc() or equivalent.
+> >
+> > Which in general means that the buffer must not be part of a larger
+> > structure -- not unless the driver can guarantee that the structure will
+> > _never_ be accessed while a USB transfer to/from the buffer is taking
+> > place.
+> >
+> 
+> Thanks a lot for the clarification. I was mainly looking at the kerneldoc from:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/usb.h#n1687
+> 
+> and I could not see any reference to the DMA requirements.
+> 
+> Mind if I send a patch to add a reference there?
 
-On 15/12/2022 11:48, Kieran Bingham wrote:
-> Quoting Daniel Scally (2022-12-13 08:37:34)
->> A hardcoded default color matching descriptor is embedded in struct
->> f_uvc_opts but no longer has any use - remove it.
-> Does this affect the legacy g_webcam, or is this part independent ?
+Not at all.  But if you change the documentation for usb_fill_int_urb() 
+then you should also change it for usb_fill_control_urb() and 
+usb_fill_bulk_urb().
 
+Alan Stern
 
-It's not independent, but the legacy gadget doesn't use the 
-uvc_color_matching member of f_uvc_opts. Instead that file has a static 
-definition of the same thing [1], so this is safe to remove here.
-
-
-The legacy version does actually have the same issue with just a single 
-color matching descriptor trailing all the format/frame descriptors 
-rather than once-per-format...I'll patch that too.
-
->
->> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->> ---
->>   drivers/usb/gadget/function/f_uvc.c | 9 ---------
->>   drivers/usb/gadget/function/u_uvc.h | 1 -
->>   2 files changed, 10 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
->> index 6e196e06181e..46bdea73cdeb 100644
->> --- a/drivers/usb/gadget/function/f_uvc.c
->> +++ b/drivers/usb/gadget/function/f_uvc.c
->> @@ -793,7 +793,6 @@ static struct usb_function_instance *uvc_alloc_inst(void)
->>          struct uvc_camera_terminal_descriptor *cd;
->>          struct uvc_processing_unit_descriptor *pd;
->>          struct uvc_output_terminal_descriptor *od;
->> -       struct uvc_color_matching_descriptor *md;
->>          struct uvc_descriptor_header **ctl_cls;
->>          int ret;
->>   
->> @@ -842,14 +841,6 @@ static struct usb_function_instance *uvc_alloc_inst(void)
->>          od->bSourceID                   = 2;
->>          od->iTerminal                   = 0;
->>   
->> -       md = &opts->uvc_color_matching;
->> -       md->bLength                     = UVC_DT_COLOR_MATCHING_SIZE;
->> -       md->bDescriptorType             = USB_DT_CS_INTERFACE;
->> -       md->bDescriptorSubType          = UVC_VS_COLORFORMAT;
->> -       md->bColorPrimaries             = 1;
->> -       md->bTransferCharacteristics    = 1;
->> -       md->bMatrixCoefficients         = 4;
->> -
->>          /* Prepare fs control class descriptors for configfs-based gadgets */
->>          ctl_cls = opts->uvc_fs_control_cls;
->>          ctl_cls[0] = NULL;      /* assigned elsewhere by configfs */
->> diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
->> index 24b8681b0d6f..577c1c48ca4a 100644
->> --- a/drivers/usb/gadget/function/u_uvc.h
->> +++ b/drivers/usb/gadget/function/u_uvc.h
->> @@ -52,7 +52,6 @@ struct f_uvc_opts {
->>          struct uvc_camera_terminal_descriptor           uvc_camera_terminal;
->>          struct uvc_processing_unit_descriptor           uvc_processing;
->>          struct uvc_output_terminal_descriptor           uvc_output_terminal;
->> -       struct uvc_color_matching_descriptor            uvc_color_matching;
->>   
->>          /*
->>           * Control descriptors pointers arrays for full-/high-speed and
->> -- 
->> 2.34.1
->>
+> > There are examples all over the USB subsystem where buffers as small as
+> > one or two bytes get kmalloc'ed in order to obey this rule.  16 bytes is
+> > certainly big enough that you shouldn't worry about it being allocated
+> > separately.
+> >
+> Yep, we should keep it malloced. Thanks a lot for looking into this :)
+> 
+> 
+> > Alan Stern
+> 
+> 
+> 
+> -- 
+> Ricardo Ribalda
