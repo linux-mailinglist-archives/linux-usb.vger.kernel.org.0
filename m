@@ -2,128 +2,270 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8B664ED68
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 16:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A347A64EDB4
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 16:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbiLPPG2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Dec 2022 10:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S231287AbiLPPSp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 10:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiLPPFz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 10:05:55 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D9713DCB
-        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 07:05:51 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id fu10so2924967qtb.0
-        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 07:05:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1AzrHktixScbaXzl6gCbEa0rhGLreaC7RzX5ZwWFZp8=;
-        b=uMlCQnuBep8pY36cxvyQXOafmhqP/4zOVT62E66h56xvDKfQiMddjbBPaGUr19RGmR
-         rB7RVdJuyrk21ydY97CgHcHS67x80FoYo0zjtPqhKAubyXMNnaHgLDU/27SKw2Pj9m2H
-         anOWffARqQbYvNf/2x/oNVEbb3NWl2q40emmhNsPEfckk5ZebUDqLIAvCP2A7M/JDZGs
-         pN9zYCCpBvACmPtRBE0iXSVjdLMhF0EuXt2taCuNVuaw3eDiNEyaJLW2/Er9F2ibFLfS
-         Da/QfE13bSKwtjTcl825Cee7OtLGrOLaf0gpEPZaFow05FFMzUWJpBmRShdg8X1nmI8T
-         RlrA==
-X-Gm-Message-State: ANoB5pkGfthTu7P6qJdOLIQpqtAkn18EuGUa9xGHrBkKBrrUwY4XMXpW
-        5zYW9NzTLZB+P56ZfjBTYKdZYVLRCtM0CQ==
-X-Google-Smtp-Source: AA0mqf4ebReBFH2tGTvRJTRwlZb6DrZilnv+21kmI88vogf4iQZ5N7C6tocYJM4O8QEQfkjydyZR/w==
-X-Received: by 2002:ac8:660f:0:b0:3a8:b87:7f70 with SMTP id c15-20020ac8660f000000b003a80b877f70mr37171892qtp.11.1671203150513;
-        Fri, 16 Dec 2022 07:05:50 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id ch6-20020a05622a40c600b003a81029654csm1432939qtb.31.2022.12.16.07.05.49
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 07:05:49 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id 192so2649687ybt.6
-        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 07:05:49 -0800 (PST)
-X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
- n4-20020a257204000000b006f09ff51151mr66442813ybc.543.1671203149221; Fri, 16
- Dec 2022 07:05:49 -0800 (PST)
+        with ESMTP id S230030AbiLPPSk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 10:18:40 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7135D2B247;
+        Fri, 16 Dec 2022 07:18:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671203917; x=1702739917;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=02QCuar4dYfcGk8X71Ps6oFW/ok7pF7lniU7WvO+y+o=;
+  b=ZipIDMVoqOS0+ImdM2jzS1A4KQS2BkClU7P2JROSQICvfnrREjFo0Ukd
+   g9Gw1FTiltMuOlYSHd36wtFnA1zhog3VLnlmgbKhdYVth8CLEc84Nsfql
+   9gBA00pZidwBQkLecautY4jly2E4oOpWDObWKEcOMOlQumdzve6ygnn6m
+   prRYkoiUyR4evXF37O1IjhR3QS9SznWskYRUDma7MUhHnPTLt1vhMmv8L
+   sU6m2KZrx8vHIdVP/je2EyagwcytKxmhVQJ0MYU6B5+4barIx9Sc+aPAG
+   9Beql5KJzYu7m4xHf2zrU/RXeMHv2Ya6APeQvUmluDIj3/N6cpPH2aqyy
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="383319603"
+X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
+   d="scan'208";a="383319603"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 07:18:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="756782958"
+X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
+   d="scan'208";a="756782958"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Dec 2022 07:18:33 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p6CTo-0007EQ-1R;
+        Fri, 16 Dec 2022 15:18:32 +0000
+Date:   Fri, 16 Dec 2022 23:18:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     speakup@linux-speakup.org, linuxppc-dev@lists.ozlabs.org,
+        linux-xfs@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-mm@kvack.org,
+        linux-media@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kvm@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ ca39c4daa6f7f770b1329ffb46f1e4a6bcc3f291
+Message-ID: <639c8c39./q+QZSDrWluXOpoJ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CAMuHMdU4VQ8kvM=1bXpDmVGicU7-T78f0uZw8G2wZWctnwsJog@mail.gmail.com>
- <X66aMn2K4Kla/s5T@localhost>
-In-Reply-To: <X66aMn2K4Kla/s5T@localhost>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 16 Dec 2022 16:05:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW4x6Yycmhnra_NmAjS51Da-R-qtJJh1_n4QD4Es5mEcw@mail.gmail.com>
-Message-ID: <CAMuHMdW4x6Yycmhnra_NmAjS51Da-R-qtJJh1_n4QD4Es5mEcw@mail.gmail.com>
-Subject: Re: USB multi-serial using few endpoints?
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bin Liu <b-liu@ti.com>, Felipe Balbi <balbi@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Paul Stoffregen <paul@pjrc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: ca39c4daa6f7f770b1329ffb46f1e4a6bcc3f291  Add linux-next specific files for 20221216
 
-CC Andrew (mxuport), Paul (Teensy)
+Error/Warning reports:
 
-On Fri, Nov 13, 2020 at 3:37 PM Johan Hovold <johan@kernel.org> wrote:
-> On Fri, Nov 13, 2020 at 02:07:41PM +0100, Geert Uytterhoeven wrote:
-> > TL;DR: I'm looking for a USB-to-multi-serial solution that uses as few
-> > USB endpoints as possible.  Anyone with a good suggestion?
->
-> Moxa has a device with 16 ports that only use three endpoints; see the
-> mxuport driver.
+https://lore.kernel.org/oe-kbuild-all/202211180516.dtOWIlEo-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202211180955.UiXgTkeu-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202211190207.Rf66o1j0-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202211242120.MzZVGULn-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212020520.0OkMIno3-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212051759.cEv6fyHy-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212142121.vendKsOc-lkp@intel.com
 
-Thank you, that was exactly what I was looking for!
+Error/Warning: (recently discovered and may have been fixed)
 
-> > While I cannot replace USB-serial convertors on development boards, I
-> > can replace the USB serial implementation on the Teensy.  Hence I'm
-> > looking for a more efficient USB-multi-serial protocol (preferably one
-> > that has a Linux driver), using as few endpoints as possible.
-> > I'm not a USB expert, but If I'm not mistaken, an N-port
-> > USB-multi-serial adapter could be implemented using only 2 or 3
-> > endpoints (one "locked" input endpoint for signalling, and one (TX/RX
-> > combined) or two (TX and RX separated) multiplexed endpoints for data)?
->
-> Right, you'd (typically) need two bulk endpoints for tx and rx. The Moxa
-> protocol use a third for signalling events. (And USB devices always have
-> a control endpoint, which I don't count here).
->
-> > If no such thing exists, I guess I can use the mos7840 protocol instead?
-> > Or is there a better solution?
->
-> You can always roll your own minimal mux protocol in case the moxa one
-> is too complex (and we may want to keep an alternative implementation
-> separate for other reasons).
+Documentation/gpu/drm-internals:179: ./include/drm/drm_file.h:411: WARNING: undefined label: drm_accel_node (if the link has no caption the label must precede a section header)
+Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn't included in any toctree
+Warning: tools/power/cpupower/man/cpupower-powercap-info.1 references a file that doesn't exist: Documentation/power/powercap/powercap.txt
+arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
+arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn201/irq_service_dcn201.c:40:20: warning: no previous prototype for 'to_dal_irq_source_dcn201' [-Wmissing-prototypes]
+drivers/regulator/tps65219-regulator.c:310:32: warning: parameter 'dev' set but not used [-Wunused-but-set-parameter]
+drivers/regulator/tps65219-regulator.c:310:60: warning: parameter 'dev' set but not used [-Wunused-but-set-parameter]
+drivers/regulator/tps65219-regulator.c:370:26: sparse:    int
+drivers/regulator/tps65219-regulator.c:370:26: sparse:    struct regulator_dev *[assigned] rdev
+drivers/regulator/tps65219-regulator.c:370:26: warning: ordered comparison of pointer with integer zero [-Wextra]
 
-That's what Kevin suggested at last ELCE, too.  The main disadvantage
-is that it needs its own driver, and thus doesn't work with any existing
-(old) kernel.
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-Finally I managed to find to time to implement and deploy this, and
-it's been working fine in my board farm for the last 2 months.
-As this is not Linux-specific, but Teensy-specific, I like to direct
-the interested people to the Teensy forum:
-https://forum.pjrc.com/threads/71684-A-better-multi-serial
+drivers/accessibility/speakup/main.c:1290:26: sparse: sparse: obsolete array initializer, use C99 syntax
+drivers/i2c/busses/i2c-qcom-geni.c:1028:28: sparse: sparse: symbol 'i2c_master_hub' was not declared. Should it be static?
+drivers/media/platform/ti/davinci/vpif.c:483:20: sparse: sparse: cast from non-scalar
+drivers/media/platform/ti/davinci/vpif.c:483:20: sparse: sparse: cast to non-scalar
+drivers/media/test-drivers/visl/visl-video.c:690:22: sparse: sparse: symbol 'visl_qops' was not declared. Should it be static?
+drivers/usb/misc/sisusbvga/sisusbvga.c:528:9: sparse: sparse: incorrect type in assignment (different base types)
+fs/xfs/xfs_iomap.c:86:29: sparse: sparse: symbol 'xfs_iomap_page_ops' was not declared. Should it be static?
+hidma.c:(.text+0x46): undefined reference to `devm_ioremap_resource'
+mm/hugetlb.c:6897 hugetlb_reserve_pages() error: uninitialized symbol 'chg'.
 
-Thanks again!
+Error/Warning ids grouped by kconfigs:
 
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arc-randconfig-s053-20221216
+|   |-- drivers-i2c-busses-i2c-qcom-geni.c:sparse:sparse:symbol-i2c_master_hub-was-not-declared.-Should-it-be-static
+|   `-- drivers-media-test-drivers-visl-visl-video.c:sparse:sparse:symbol-visl_qops-was-not-declared.-Should-it-be-static
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arm64-buildonly-randconfig-r006-20221215
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|-- arm64-randconfig-s051-20221216
+|   |-- drivers-i2c-busses-i2c-qcom-geni.c:sparse:sparse:symbol-i2c_master_hub-was-not-declared.-Should-it-be-static
+|   |-- drivers-regulator-tps65219-regulator.c:sparse:int
+|   |-- drivers-regulator-tps65219-regulator.c:sparse:sparse:incompatible-types-for-operation-(-):
+|   |-- drivers-regulator-tps65219-regulator.c:sparse:struct-regulator_dev-assigned-rdev
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   |-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|   `-- fs-xfs-xfs_iomap.c:sparse:sparse:symbol-xfs_iomap_page_ops-was-not-declared.-Should-it-be-static
+|-- i386-allyesconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- i386-randconfig-s002
+|   `-- fs-xfs-xfs_iomap.c:sparse:sparse:symbol-xfs_iomap_page_ops-was-not-declared.-Should-it-be-static
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- m68k-allmodconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- m68k-allyesconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- m68k-randconfig-s041-20221216
+|   |-- drivers-media-platform-ti-davinci-vpif.c:sparse:sparse:cast-from-non-scalar
+|   `-- drivers-media-platform-ti-davinci-vpif.c:sparse:sparse:cast-to-non-scalar
+|-- m68k-randconfig-s043-20221216
+|   |-- drivers-accessibility-speakup-main.c:sparse:sparse:obsolete-array-initializer-use-C99-syntax
+|   |-- drivers-usb-misc-sisusbvga-sisusbvga.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-int-usertype-address-got-restricted-__le32-usertype
+clang_recent_errors
+|-- hexagon-allyesconfig
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- riscv-randconfig-r023-20221215
+|   |-- ld.lld:error:too-many-errors-emitted-stopping-now-(use-error-limit-to-see-all-errors)
+|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_lookup_name:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_seqs_of_names
+|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_lookup_names:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_num_syms
+|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_lookup_names:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_seqs_of_names
+|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_on_each_match_symbol:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_offsets
+|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_on_each_match_symbol:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_relative_base
+|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_on_each_match_symbol:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_seqs_of_names
+|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_sym_address:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_offsets
+|   `-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_sym_address:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_relative_base
+`-- s390-randconfig-r022-20221215
+    `-- hidma.c:(.text):undefined-reference-to-devm_ioremap_resource
 
+elapsed time: 731m
 
-Gr{oetje,eeting}s,
+configs tested: 81
+configs skipped: 2
 
-                        Geert
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                               rhel-8.3
+arm                                 defconfig
+ia64                             allmodconfig
+x86_64                           rhel-8.3-bpf
+m68k                             allyesconfig
+x86_64                           allyesconfig
+m68k                             allmodconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+arc                  randconfig-r043-20221215
+x86_64                        randconfig-a015
+i386                          randconfig-a001
+x86_64                          rhel-8.3-func
+i386                          randconfig-a003
+s390                             allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+s390                             allyesconfig
+s390                                defconfig
+x86_64                            allnoconfig
+x86_64                        randconfig-a004
+arm                  randconfig-r046-20221215
+arm64                            allyesconfig
+i386                          randconfig-a005
+arc                              allyesconfig
+i386                                defconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a002
+arm                              allyesconfig
+i386                          randconfig-a014
+alpha                            allyesconfig
+powerpc                          allmodconfig
+i386                          randconfig-a012
+x86_64                        randconfig-a006
+i386                          randconfig-a016
+sh                               allmodconfig
+mips                             allyesconfig
+mips                           xway_defconfig
+arc                              alldefconfig
+sh                            shmin_defconfig
+i386                             allyesconfig
+sh                          r7785rp_defconfig
+sparc                            alldefconfig
+sh                         ecovec24_defconfig
+i386                          randconfig-c001
+sh                         apsh4a3a_defconfig
+sh                        sh7757lcr_defconfig
+m68k                        m5307c3_defconfig
+arc                               allnoconfig
+arm                        clps711x_defconfig
+sh                            titan_defconfig
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+clang tested configs:
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a013
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+i386                          randconfig-a015
+i386                          randconfig-a006
+hexagon              randconfig-r041-20221215
+i386                          randconfig-a004
+hexagon              randconfig-r045-20221215
+x86_64                        randconfig-a005
+i386                          randconfig-a011
+x86_64                        randconfig-a001
+riscv                randconfig-r042-20221215
+s390                 randconfig-r044-20221215
+x86_64                        randconfig-a003
+mips                        qi_lb60_defconfig
+arm                             mxs_defconfig
+arm                         palmz72_defconfig
+arm                         hackkit_defconfig
+arm                          ixp4xx_defconfig
+arm                        vexpress_defconfig
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
