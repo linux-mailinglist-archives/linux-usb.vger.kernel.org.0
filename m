@@ -2,107 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7089864EE24
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 16:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D4C64EE3C
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 16:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiLPPtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Dec 2022 10:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S231555AbiLPPxx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 10:53:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiLPPts (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 10:49:48 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 12AF156D75
-        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 07:49:48 -0800 (PST)
-Received: (qmail 997870 invoked by uid 1000); 16 Dec 2022 10:49:47 -0500
-Date:   Fri, 16 Dec 2022 10:49:47 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Flavio Suligoi <f.suligoi@asem.it>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Ray Chi <raychi@google.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: core: hub: disable autosuspend for TI TUSB8041
-Message-ID: <Y5yTm5PsE8n4whq/@rowland.harvard.edu>
-References: <20221216141717.2728340-1-f.suligoi@asem.it>
+        with ESMTP id S231556AbiLPPxX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 10:53:23 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668A236C4C
+        for <linux-usb@vger.kernel.org>; Fri, 16 Dec 2022 07:53:11 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9B0F2A31;
+        Fri, 16 Dec 2022 16:53:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671205989;
+        bh=PoaKt2rUqH0Kl0ACCo1HzGqQ2kz6zNJfxm7+MYG5pdI=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=jcNejEQFEhzLuhnyNQr8wzm5+bQtmz4gyAPxzvYz0jD6lq/pZ/iv3U3FnWFBU4tps
+         Vr0NE9CzRNtNZi1BQPfRqWXGfcgLJ1gX0oQR4DP/fNIkAoCAIb5U1WTxeZaKR4xfjV
+         hA8Q7FFk7NdYua0NqtFf1cZacqi5VJBYTuLUm4fc=
+Message-ID: <699fe3cf-ecda-4301-cae7-49eb165aa10e@ideasonboard.com>
+Date:   Fri, 16 Dec 2022 15:53:05 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216141717.2728340-1-f.suligoi@asem.it>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-usb@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
+        w36195@motorola.com, m.grzeschik@pengutronix.de, torleiv@huddly.com
+References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
+ <20221213083736.2284536-6-dan.scally@ideasonboard.com>
+ <167110507266.9133.9781573969949845356@Monstersaurus>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH 5/6] usb: gadget: uvc: Make color matching attributes
+ read/write
+In-Reply-To: <167110507266.9133.9781573969949845356@Monstersaurus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 03:17:17PM +0100, Flavio Suligoi wrote:
-> The Texas Instruments TUSB8041 has an autosuspend problem at high
-> temperature.
-> 
-> If there is not USB traffic, after a couple of ms, the device enters in
-> autosuspend mode. In this condition the external clock stops working, to
-> save energy. When the USB activity turns on, ther hub exits the
-> autosuspend state, the clock starts running again and all works fine.
-> 
-> At ambient temperature all works correctly, but at high temperature,
-> when the USB activity turns on, the external clock doesn't restart and
-> the hub disappears from the USB bus.
-> 
-> Disabling the autosuspend mode for this hub solves the issue.
-> 
-> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
-> ---
->  drivers/usb/core/hub.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 77e73fc8d673..b64be35e203f 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -44,6 +44,10 @@
->  #define USB_PRODUCT_USB5534B			0x5534
->  #define USB_VENDOR_CYPRESS			0x04b4
->  #define USB_PRODUCT_CY7C65632			0x6570
-> +#define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
-> +#define USB_PRODUCT_TUSB8041_USB3		0x8140
-> +#define USB_PRODUCT_TUSB8041_USB2		\
-> +	(USB_PRODUCT_TUSB8041_USB3 | ((USB_PRODUCT_TUSB8041_USB3 & 0x00FF) ^ 0x02))
 
-Argh.  Just put the actual hex number here -- people don't want to do 
-calculations like this in their head when they are reading code.  (Not 
-to mention that the number would occupy only six characters of source 
-text whereas your calculation occupies a lot more.)
+On 15/12/2022 11:51, Kieran Bingham wrote:
+> Quoting Daniel Scally (2022-12-13 08:37:35)
+>> In preparation for allowing more than the default color matching
+>> descriptor, make the color matching attributes writeable.
+>>
+>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> ---
+>>   .../ABI/testing/configfs-usb-gadget-uvc       |  2 +-
+>>   drivers/usb/gadget/function/uvc_configfs.c    | 32 ++++++++++++++++++-
+>>   2 files changed, 32 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>> index 611b23e6488d..3512f4899fe3 100644
+>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>> @@ -165,7 +165,7 @@ Date:               Dec 2014
+>>   KernelVersion: 4.0
+>>   Description:   Default color matching descriptors
+>>   
+>> -               All attributes read only:
+>> +               All attributes read/write:
+> Do we need to specify here what acceptable values can now be written at
+> all?
 
-Otherwise fine.
 
-Alan Stern
+Yes I guess so...we probably need better documentation for this 
+somewhere. I don't think this file is the right place to describe it 
+fully, it's more of an enumeration. We probably need something like 
+Documentation/usb/gadget_serial.rst
 
->  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
->  #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
->  
-> @@ -5854,6 +5858,16 @@ static const struct usb_device_id hub_id_table[] = {
->        .idVendor = USB_VENDOR_GENESYS_LOGIC,
->        .bInterfaceClass = USB_CLASS_HUB,
->        .driver_info = HUB_QUIRK_CHECK_PORT_AUTOSUSPEND},
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +			| USB_DEVICE_ID_MATCH_PRODUCT,
-> +      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-> +      .idProduct = USB_PRODUCT_TUSB8041_USB2,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +			| USB_DEVICE_ID_MATCH_PRODUCT,
-> +      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-> +      .idProduct = USB_PRODUCT_TUSB8041_USB3,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
->      { .match_flags = USB_DEVICE_ID_MATCH_DEV_CLASS,
->        .bDeviceClass = USB_CLASS_HUB},
->      { .match_flags = USB_DEVICE_ID_MATCH_INT_CLASS,
-> -- 
-> 2.25.1
-> 
+>
+>>   
+>>                  ========================  ======================================
+>>                  bMatrixCoefficients       matrix used to compute luma and
+>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+>> index 6f5932c9f09c..4fbc42d738a4 100644
+>> --- a/drivers/usb/gadget/function/uvc_configfs.c
+>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
+>> @@ -1845,7 +1845,37 @@ static ssize_t uvcg_color_matching_##cname##_show(                       \
+>>          return result;                                                  \
+>>   }                                                                      \
+>>                                                                          \
+>> -UVC_ATTR_RO(uvcg_color_matching_, cname, aname)
+>> +static ssize_t uvcg_color_matching_##cname##_store(                    \
+>> +       struct config_item *item, const char *page, size_t len)         \
+>> +{                                                                      \
+>> +       struct config_group *group = to_config_group(item);             \
+>> +       struct mutex *su_mutex = &group->cg_subsys->su_mutex;           \
+>> +       struct uvcg_cmd *cmd = to_uvcg_cmd(group);                      \
+>> +       struct f_uvc_opts *opts;                                        \
+>> +       struct config_item *opts_item;                                  \
+>> +       int ret;                                                        \
+>> +       u##bits num;                                                    \
+>> +                                                                       \
+>> +       ret = kstrtou##bits(page, 0, &num);                             \
+>> +       if (ret)                                                        \
+>> +               return ret;                                             \
+> I don't know how horrible it would be - or if there's any other
+> precendence, but I'm weary that setting '1', or '4' in here from
+> userspace is fairly meaningless.
+>
+> Of course - the user doing so would have to know from the spec perhaps
+> what they are configuring - but it makes me wonder if we should support
+> string matching in here to also convert say "BT.709" to the appropriate
+> integer value (if a non-integer was set).
+>
+> It may depend on how 'most' other configfs entries that would be similar
+> to this would expect to operate.
+
+
+This might be abusing configfs slightly, though I did something similar 
+for the custom string descriptors (see [1] and ctrl-f for 
+"uvcg_language_strings_show") and I think it's a worthwhile thing. What 
+about an "enumerate options" attribute that's read only and simply 
+enumerates the settings with their corresponding descriptions? The 
+problem with string parsing is you've still got to know the exact string 
+to pass (and googling "BT.709" tells me it can also be called "Rec.709", 
+"Rec. 709" and "ITU 709" for example) so you'd have to look it up 
+anyway. I'm thinking something like:
+
+
+$ cat enumerate_options
+bColorPrimaries - This defines the color primaries and the reference white
+value       desc
+0           Unspecified (Image characteristics unknown)
+1           BT.709 (sRGB)
+2           BT.470-2 (M)
+3           BT.470 (B, G)
+4           SMPTE 170M
+5           SMPTE 240M
+6-255       Reserved
+
+bTransferCharacteristics - This field defines the opto-electronic transfer
+                                                 characteristics of the 
+source picture, also
+                                                 called the gamma function
+value       desc
+0           Unspecified (Image characteristics unknown)
+1           BT.7-0
+2           BT.470-2 M
+...          ...
+
+
+... and so on. What do you think?
+
+
+[1] 
+https://lore.kernel.org/linux-usb/20221121092517.225242-6-dan.scally@ideasonboard.com/
+
+>
+>> +                                                                       \
+>> +       mutex_lock(su_mutex); /* for navigating configfs hierarchy */   \
+>> +                                                                       \
+>> +       opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;     \
+>> +       opts = to_f_uvc_opts(opts_item);                                \
+>> +                                                                       \
+>> +       mutex_lock(&opts->lock);                                        \
+>> +                                                                       \
+>> +       cmd->desc.aname = num;                                          \
+>> +       ret = len;                                                      \
+>> +                                                                       \
+>> +       mutex_unlock(&opts->lock);                                      \
+>> +       mutex_unlock(su_mutex);                                         \
+>> +                                                                       \
+>> +       return ret;                                                     \
+>> +}                                                                      \
+>> +UVC_ATTR(uvcg_color_matching_, cname, aname)
+>>   
+>>   UVCG_COLOR_MATCHING_ATTR(b_color_primaries, bColorPrimaries, 8);
+>>   UVCG_COLOR_MATCHING_ATTR(b_transfer_characteristics, bTransferCharacteristics, 8);
+>> -- 
+>> 2.34.1
+>>
