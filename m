@@ -2,169 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C447764EEB0
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 17:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C5064EF1B
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Dec 2022 17:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiLPQM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Dec 2022 11:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S231241AbiLPQaR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Dec 2022 11:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbiLPQMD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 11:12:03 -0500
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D81419A9;
-        Fri, 16 Dec 2022 08:10:52 -0800 (PST)
-Received: by mail-ot1-f54.google.com with SMTP id p24-20020a0568301d5800b0066e6dc09be5so1618046oth.8;
-        Fri, 16 Dec 2022 08:10:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LKmglVVorDgKarJabc50doLGeuJcZROKiOk2euhvNdk=;
-        b=edBlcXc0UD61n9NlK3v0q3r3NKrT1GiwYIaRlX5THs8UpPLMQ/zX8xeSvvhRbNHU7b
-         7FUMs25oYwm9EgP5EApIcN9g8tUGBE5QtFKDjjE3TUykozBQWwqI0VP/Yb4yTpVrwf5a
-         a3Jau9IohJUNwAfMdjiSWVG9QlrEoC1Hkkkyc54Fg+ElTeWLbG9na2yjADGBWh15+TUr
-         0Oix0YkAGQ1J06foRv3TsTMWdQ0l0vifFrc3bbhGt1LRyVjx7EiI+H+5KW9uz+sc/Vs8
-         K2L9tD56tS7ywrRekLfEwwzsSKDEDS6o07OAjjvNM5IYtqcW4GGodnrmScbQvv1IAXld
-         bC0A==
-X-Gm-Message-State: ANoB5pkNZyd6O4CCr3o77xvtpk+mZvlXxiI6NK+2FtB6HiYQudegIEMJ
-        ldf0gOw3quHe+WyKgJJ3tUzLenRhaA==
-X-Google-Smtp-Source: AA0mqf5MAX9lrOy4Jxdxs2B98BYEOfxrXT0g31t0VHrSQd5I4QSouS6f3e4t9NRxQBVUVnp1WWzn3Q==
-X-Received: by 2002:a05:6830:3809:b0:66e:7670:e684 with SMTP id bh9-20020a056830380900b0066e7670e684mr20093740otb.20.1671207052054;
-        Fri, 16 Dec 2022 08:10:52 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j7-20020a9d7387000000b0066c3ca7b12csm969797otk.61.2022.12.16.08.10.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 08:10:51 -0800 (PST)
-Received: (nullmailer pid 2838833 invoked by uid 1000);
-        Fri, 16 Dec 2022 16:10:51 -0000
-Date:   Fri, 16 Dec 2022 10:10:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 04/16] dt-bindings: usb: renesas,usb-xhci: Document
- RZ/V2M support
-Message-ID: <20221216161051.GA2837295-robh@kernel.org>
-References: <20221212172804.1277751-1-biju.das.jz@bp.renesas.com>
- <20221212172804.1277751-5-biju.das.jz@bp.renesas.com>
+        with ESMTP id S231255AbiLPQaI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Dec 2022 11:30:08 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A0956D5D;
+        Fri, 16 Dec 2022 08:30:07 -0800 (PST)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id A9E43E000B;
+        Fri, 16 Dec 2022 16:30:01 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Quentin Schulz <foss+kernel@0leil.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bin Yang <yangbin@rock-chips.com>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: [PATCH v2 0/2] usb: dwc2: fix USB peripheral role in dual-role mode on PX30
+Date:   Fri, 16 Dec 2022 17:29:27 +0100
+Message-Id: <20221206-dwc2-gadget-dual-role-v2-0-0de821615dd3@theobroma-systems.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212172804.1277751-5-biju.das.jz@bp.renesas.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.11.0-dev-141d4
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 05:27:52PM +0000, Biju Das wrote:
-> Document the RZ/V2M SoC bindings.
-> The RZ/V2M SoC is a little different to the R-Car implementations.
-> You can access the registers associated with the currently set DRD mode,
-> therefore as part of init, we have to set the DRD mode to host.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
->  .../bindings/usb/renesas,usb-xhci.yaml        | 41 +++++++++++++++++--
->  1 file changed, 37 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
-> index 4c5efaf02308..ae678d249785 100644
-> --- a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
-> @@ -10,9 +10,6 @@ maintainers:
->    - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->    - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->  
-> -allOf:
-> -  - $ref: "usb-xhci.yaml"
-> -
->  properties:
->    compatible:
->      oneOf:
-> @@ -37,6 +34,11 @@ properties:
->                - renesas,xhci-r8a77965 # R-Car M3-N
->                - renesas,xhci-r8a77990 # R-Car E3
->            - const: renesas,rcar-gen3-xhci # R-Car Gen3 and RZ/G2
-> +      - items:
-> +          - enum:
-> +              - renesas,r9a09g011-xhci # RZ/V2M
-> +              - renesas,r9a09g055-xhci # RZ/V2MA
-> +          - const: renesas,rzv2m-xhci  # RZ/{V2M, V2MA}
->  
->    reg:
->      maxItems: 1
-> @@ -45,7 +47,16 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: Main clock for host
-> +      - description: Register access clock
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: host_axi
+On Theobroma Ringneck SoM, USB peripheral role when in dual-role mode does not
+work and displays the following error message:
+dwc2 ff300000.usb: dwc2_core_reset: HANG! Soft Reset timeout GRSTCTL_CSFTRST
 
-Drop 'host_'
+The USB sniffer shows nothing and dumping the host registers is stuck on
+HCDMA(0) register.
 
-> +      - const: reg
->  
->    phys:
->      maxItems: 1
-> @@ -68,6 +79,28 @@ required:
->    - power-domains
->    - resets
->  
-> +allOf:
-> +  - $ref: "usb-xhci.yaml"
+Note that for some reason it works "fine" on PX30-EVB (there's another issue but
+not related to/fixed in this patch series).
 
-Drop quotes since you are touching this.
+Since there's no documentation available for this IP, this patch series is
+basically just slightly adapted downstream BSP vendor kernel patches and I
+cannot unfortunately give more information than what I have.
 
-With that,
+This patch series was tested on Theobroma Ringneck SoM on Haikou devkit and PX30
+EVB. It fixes Ringneck support and does not break PX30-EVB's.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+For reference, the content of those commits can be found in tag
+linux-5.10-gen-rkr1, and the following commits have been used:
+964d50060bf53a8defd1fc561b9261424f25ddad
+ad81c375602819a538ad68d979906c05663046e2
+6e6adab8f735bc4fe27a67bdc3144d8fa89250d4
+7c3a4e60247fd7f7b04d95d15cb12c63a5c20408
 
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - renesas,rzv2m-xhci
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +        clock-names:
-> +          minItems: 2
-> +      required:
-> +        - clock-names
-> +    else:
-> +      properties:
-> +        clocks:
-> +          maxItems: 1
-> +
->  unevaluatedProperties: false
->  
->  examples:
-> -- 
-> 2.25.1
-> 
-> 
+Note that Rockchip kernel called a slightly different implementation of
+__dwc2_lowlevel_hw_enable instead of dwc2_lowlevel_hw_enable but it seemed more
+right to me to call dwc2_lowlevel_hw_enable as done for the forced peripheral
+mode.
+
+Note that it is still not flawlessly working but the support is improved
+(somewhat working vs not working at all).
+
+To: Minas Harutyunyan <hminas@synopsys.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Bin Yang <yangbin@rock-chips.com>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
+Changes in v2:
+- add "shadow" variable for HCD skip_phy_initialization so that it can be
+  configured on a per-platform basis,
+- Patch 1 and Patch 2 of the v1 are already in linux-next next-20221216, so removed from this series,
+- Link to v1: https://lore.kernel.org/r/20221206-dwc2-gadget-dual-role-v1-0-36515e1092cd@theobroma-systems.com
+
+---
+Quentin Schulz (2):
+      usb: dwc2: allow platforms to prevent core phy initialisation
+      usb: dwc2: prevent core PHY initialization on Rockchip
+
+ drivers/usb/dwc2/core.h   | 6 ++++++
+ drivers/usb/dwc2/hcd.c    | 2 ++
+ drivers/usb/dwc2/params.c | 1 +
+ 3 files changed, 9 insertions(+)
+---
+base-commit: ca39c4daa6f7f770b1329ffb46f1e4a6bcc3f291
+change-id: 20221206-dwc2-gadget-dual-role-aac67e6d42fd
+
+Best regards,
+-- 
+Quentin Schulz <quentin.schulz@theobroma-systems.com>
