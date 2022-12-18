@@ -2,156 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5269864FE41
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Dec 2022 11:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C068564FF07
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Dec 2022 14:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiLRKB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 18 Dec 2022 05:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        id S230259AbiLRNtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 18 Dec 2022 08:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiLRKBz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Dec 2022 05:01:55 -0500
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18E555A8
-        for <linux-usb@vger.kernel.org>; Sun, 18 Dec 2022 02:01:52 -0800 (PST)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 6qUNpydpiv5uI6qUPpQpbr; Sun, 18 Dec 2022 11:01:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671357710; bh=Owt8AtGuq4gpGcASBGzAU05B9mtOMW9CXzfxZwQ3ZmI=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=WXYMZBq0fKIL96pjjhqc8NXZxL4/lsd3wmk1unHapJGxE1er+YMwP3521hWYoiofa
-         sGVXFo8FwmYw2Vqk0QhqGU0lh+St7X5H2dKrmyAVMXOyNj6jdpwWS2p/GCAOyHiSy7
-         lCI1Mu8nHeJulSvJ1aEcN4e5jh9a9T2KihpkQdYVlCzyAMdOfVaZvK6sY+wNUtsd1F
-         BWwQb66GF2yUDTdsyS/EjXi9uhLxln+KXZqyyTm/nQOSvw9yeYG7eBTm32DsjtpW68
-         JBlOFV6769243NHjs4oNLWd45WKtECRBesOPn7nc8H6A3cGO1b/Yxvgw6b90nFbWl1
-         +0kdv62eoqQeQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671357710; bh=Owt8AtGuq4gpGcASBGzAU05B9mtOMW9CXzfxZwQ3ZmI=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=WXYMZBq0fKIL96pjjhqc8NXZxL4/lsd3wmk1unHapJGxE1er+YMwP3521hWYoiofa
-         sGVXFo8FwmYw2Vqk0QhqGU0lh+St7X5H2dKrmyAVMXOyNj6jdpwWS2p/GCAOyHiSy7
-         lCI1Mu8nHeJulSvJ1aEcN4e5jh9a9T2KihpkQdYVlCzyAMdOfVaZvK6sY+wNUtsd1F
-         BWwQb66GF2yUDTdsyS/EjXi9uhLxln+KXZqyyTm/nQOSvw9yeYG7eBTm32DsjtpW68
-         JBlOFV6769243NHjs4oNLWd45WKtECRBesOPn7nc8H6A3cGO1b/Yxvgw6b90nFbWl1
-         +0kdv62eoqQeQ==
-Date:   Sun, 18 Dec 2022 11:01:45 +0100
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Greg KH <greg@kroah.com>
-Cc:     Leesoo Ahn <lsahn@ooseel.net>, Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usbnet: jump to rx_cleanup case instead of calling
- skb_queue_tail
-Message-ID: <Y57lCffa61raoiDO@lenoch>
-References: <20221217161851.829497-1-lsahn@ooseel.net>
- <Y57VkLKetDsbUUjC@kroah.com>
+        with ESMTP id S230124AbiLRNtD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Dec 2022 08:49:03 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53191BC80
+        for <linux-usb@vger.kernel.org>; Sun, 18 Dec 2022 05:48:58 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MsYzF-1omUKh1mCh-00u276; Sun, 18 Dec 2022 14:35:44 +0100
+Message-ID: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
+Date:   Sun, 18 Dec 2022 14:35:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Subject: Regression: onboard-usb-hub breaks USB on RPi 3
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+        Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y57VkLKetDsbUUjC@kroah.com>
-X-CMAE-Envelope: MS4wfA1wtMOBCLHBUmJ8JMmP1mv5RZmEbWCjc8er8LlsDy2p0qnO0Fz6jPLSW3pVe98REsVX2ZAOaLWdFFYlwD9rmJjxar6cJ5OF43SrlCPLyUFOR8+3jJfy
- /2ahNH46dDGTP2Iza0T1prqs/PUXGDasGEgUT5AoGSqKrlibHluoHEfO6p1j1+pZyIdvWP6DsPTbGutkkP9H12qGNAmaejdh5Fy+vAH+RgSh67G6w7G7AKOb
- GQilL8215b3I/kjLiySqJxqfcjucDFewDipkSVr7DW9U70zmWbUUIF2Xeqvfh8u/Xp+ujfbAdVHJbhBy71ObOvKlFnQibkKqY77gIGAMMnjU3n1avQoWYZev
- lL8kPJSVEpjaw8B2kKbX2iwubVsvxlRSCQklD0zFG/vX2/qn+KFd2tFAmP1DaLhuOy0Fmzl7XoyhWWy6OSceobOyf0xEZw==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:gDzA7c/TuVoZ5rJbtljSuN6SqCdFsXHlW5B93ysBeqmWe8ZOPyt
+ SNooWtEAufPMxGwxn3njOB2btZPe9CkIEaYijymWXjHLG0oVuCHbnlQvkxU1qpFqqcRp5+3
+ XMe1uCNRZbTGOc6C4KZQ/C2c2XRKhbmhs+k7APeN0OUvPngWNx/WBfHwQA7B6INnRa2MQ8A
+ iLil96GMpKnJoXLyViaRw==
+UI-OutboundReport: notjunk:1;M01:P0:3yAJWckC6e8=;0m+W0zGZa8WnlFv9eyCdzZRl6Li
+ Zod1H7//pg5BDMFqxVRgd8/HaByOiKVJHXaJvLnJwEQWJNCbu5Xc4oBosub5jQNNAcy354Z1N
+ Z7RKm1dm0zzs61TOTSoBLHKiBQSf1feuokVAuVu2TMiQ7dMCE2pkvwyez3oztFEVkqg0fc79x
+ BMDDKQ+2KSCAtKNhya0RCLuyxa6HpjGLZS9Hh8vkI0ui6+lBc2w/2EEMn9lOAVXr2IynGRBHW
+ KN8Z+gcTpYdjSC98wdvMQQqETvB8n/Yjlw7G8mEAkb1YkgES4+3dOgKxHxC5c5axMlETf4VPb
+ mzhMxD12Jhr34yUmi/jNpMtIbc3qjUuRrjnO5u/8j52xfwNeog9p6Kej5WIY3jswpH7ju0g/7
+ nbUIXHjZAUf0/MTvVIGOk4zX/cJz+vsc1nYziHozg+DlqjwlZ3uH624nt56bo7M8jlzO7klkr
+ jmyirLe2USBMfY0Vfwv9pDlU623d6bIRCV/vp7fcftz9mCgYO1+iHTESTiQ6mbhS3xzRpZI/l
+ AGzd1Qt/hw7XteFLZmxZqo5R7DFBsXxg3oQn+35PsURl2uqLJB4G6/VlaffgFU442l0VyHOmn
+ WjTzwQ+OGuGEqnZymhKwM3AquAI/NCjRgBprV9mYNHUz0bO/BScbrKp/wPLAZ6CKhd4ncq37h
+ KpvnXxr2EjX2/Vir/IyCXR32P9XRgfUbxW+svLHhYA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 09:55:44AM +0100, Greg KH wrote:
-> On Sun, Dec 18, 2022 at 01:18:51AM +0900, Leesoo Ahn wrote:
-> > The current source pushes skb into dev->done queue by calling
-> > skb_queue_tail() and then, call skb_dequeue() to pop for rx_cleanup state
-> > to free urb and skb next in usbnet_bh().
-> > It wastes CPU resource with extra instructions. Instead, use return values
-> > jumping to rx_cleanup case directly to free them. Therefore calling
-> > skb_queue_tail() and skb_dequeue() is not necessary.
-> > 
-> > The follows are just showing difference between calling skb_queue_tail()
-> > and using return values jumping to rx_cleanup state directly in usbnet_bh()
-> > in Arm64 instructions with perf tool.
-> > 
-> > ----------- calling skb_queue_tail() -----------
-> >        │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
-> >   7.58 │248:   ldr     x0, [x20, #16]
-> >   2.46 │24c:   ldr     w0, [x0, #8]
-> >   1.64 │250: ↑ tbnz    w0, #14, 16c
-> >        │     dev->net->stats.rx_errors++;
-> >   0.57 │254:   ldr     x1, [x20, #184]
-> >   1.64 │258:   ldr     x0, [x1, #336]
-> >   2.65 │25c:   add     x0, x0, #0x1
-> >        │260:   str     x0, [x1, #336]
-> >        │     skb_queue_tail(&dev->done, skb);
-> >   0.38 │264:   mov     x1, x19
-> >        │268:   mov     x0, x21
-> >   2.27 │26c: → bl      skb_queue_tail
-> >   0.57 │270: ↑ b       44    // branch to call skb_dequeue()
-> > 
-> > ----------- jumping to rx_cleanup state -----------
-> >        │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
-> >   1.69 │25c:   ldr     x0, [x21, #16]
-> >   4.78 │260:   ldr     w0, [x0, #8]
-> >   3.28 │264: ↑ tbnz    w0, #14, e4    // jump to 'rx_cleanup' state
-> >        │     dev->net->stats.rx_errors++;
-> >   0.09 │268:   ldr     x1, [x21, #184]
-> >   2.72 │26c:   ldr     x0, [x1, #336]
-> >   3.37 │270:   add     x0, x0, #0x1
-> >   0.09 │274:   str     x0, [x1, #336]
-> >   0.66 │278: ↑ b       e4    // branch to 'rx_cleanup' state
-> 
-> Interesting, but does this even really matter given the slow speed of
-> the USB hardware?
+Hi,
 
-On the other side, it is pretty nice optimization and a proof someone
-read the code really carefully.
+unfortunately i didn't notice this regression sooner, but the following 
+commits breaks USB on Raspberry Pi 3:
 
-> > Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
-> > ---
-> >  drivers/net/usb/usbnet.c | 11 ++++++-----
-> >  1 file changed, 6 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> > index 64a9a80b2309..924392a37297 100644
-> > --- a/drivers/net/usb/usbnet.c
-> > +++ b/drivers/net/usb/usbnet.c
-> > @@ -555,7 +555,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
-> >  
-> >  /*-------------------------------------------------------------------------*/
-> >  
-> > -static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
-> > +static inline int rx_process(struct usbnet *dev, struct sk_buff *skb)
-> >  {
-> >  	if (dev->driver_info->rx_fixup &&
-> >  	    !dev->driver_info->rx_fixup (dev, skb)) {
-> > @@ -576,11 +576,11 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
-> >  		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
-> >  	} else {
-> >  		usbnet_skb_return(dev, skb);
-> > -		return;
-> > +		return 0;
-> >  	}
-> >  
-> >  done:
-> > -	skb_queue_tail(&dev->done, skb);
-> > +	return -1;
-> 
-> Don't make up error numbers, this makes it look like this failed, not
-> succeeded.  And if this failed, give it a real error value.
+usb: misc: Add onboard_usb_hub driver
+usb: misc: onboard-hub: add support for Microchip USB2514B USB 2.0 hub
 
-Note that jumps to 'done' label can be avoided now, so eventual v2 version
-of that patch doesn't increase total goto entropy.
+After these commits (and this new driver enabled like in 
+multi_v7_defconfig) the connected USB devices doesn't work anymore 
+(mouse is powered, but no function of keyboard and mouse). Reconnecting 
+doesn't help. Running lsusb hangs forever.
 
-	l.
+Here is the relevant dmesg in error case:
 
-> thanks,
-> 
-> greg k-h
+[    0.078446] usbcore: registered new interface driver usbfs
+[    0.078516] usbcore: registered new interface driver hub
+[    0.078574] usbcore: registered new device driver usb
+[    0.078827] usb_phy_generic phy: supply vcc not found, using dummy 
+regulator
+[    0.078990] usb_phy_generic phy: dummy supplies not allowed for 
+exclusive requests
+[    2.897258] usbcore: registered new interface driver pegasus
+[    2.903161] usbcore: registered new interface driver asix
+[    2.908809] usbcore: registered new interface driver ax88179_178a
+[    2.915185] usbcore: registered new interface driver cdc_ether
+[    2.921281] usbcore: registered new interface driver smsc75xx
+[    2.927305] usbcore: registered new interface driver smsc95xx
+[    2.933298] usbcore: registered new interface driver net1080
+[    2.939219] usbcore: registered new interface driver cdc_subset
+[    2.945407] usbcore: registered new interface driver zaurus
+[    2.951238] usbcore: registered new interface driver cdc_ncm
+[    3.030909] usbcore: registered new interface driver usb-storage
+[    3.178104] usbcore: registered new interface driver usbhid
+[    3.191022] usbhid: USB HID core driver
+[    3.981848] dwc2 3f980000.usb: supply vusb_d not found, using dummy 
+regulator
+[    3.992467] dwc2 3f980000.usb: supply vusb_a not found, using dummy 
+regulator
+[    4.053728] dwc2 3f980000.usb: DWC OTG Controller
+[    4.065343] dwc2 3f980000.usb: new USB bus registered, assigned bus 
+number 1
+[    4.079415] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
+[    4.463447] usb 1-1: new high-speed USB device number 2 using dwc2
+[    5.063444] usb 1-1.1: new high-speed USB device number 3 using dwc2
+[    5.523440] usb 1-1.3: new low-speed USB device number 4 using dwc2
+[    5.685546] input: HID 046a:0011 as 
+/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0001/input/input0
+[    5.763446] usb 1-1.1.2: new low-speed USB device number 5 using dwc2
+[    5.777968] hid-generic 0003:046A:0011.0001: input: USB HID v1.11 
+Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
+[    5.931991] input: PixArt Microsoft USB Optical Mouse as 
+/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0002/input/input1
+[    5.954668] hid-generic 0003:045E:00CB.0002: input: USB HID v1.11 
+Mouse [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
+[    6.263459] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
+[   14.828915] onboard-usb-hub 3f980000.usb:usb-port@1: supply vdd not 
+found, using dummy regulator
+[   14.829493] onboard-usb-hub 3f980000.usb:usb-port@1:usb-port@1: 
+supply vdd not found, using dummy regulator
+[   14.829729] usbcore: registered new device driver onboard-usb-hub
+[   14.829945] usb 1-1.1: USB disconnect, device number 3
+[   14.829958] usb 1-1.1.1: USB disconnect, device number 6
+[   14.830419] usb 1-1.1.2: USB disconnect, device number 5
+[   14.854725] usb 1-1.3: USB disconnect, device number 4
+[   14.896865] usbcore: registered new interface driver lan78xx
+
+Unfortunately i'm not that USB expert, so please tell me if you need 
+more information.
+
