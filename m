@@ -2,121 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F776507F9
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 08:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B50565080E
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 08:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiLSHLS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 02:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S231225AbiLSHav (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 02:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiLSHLP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 02:11:15 -0500
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095C0219D
-        for <linux-usb@vger.kernel.org>; Sun, 18 Dec 2022 23:11:12 -0800 (PST)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 7AImp6jMTv5uI7AIopSNaR; Mon, 19 Dec 2022 08:11:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671433870; bh=6i5C4+OH3Tid2jiq5igaPkFJqdwmCMxiRoJ4phiFfX4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=2JCH2TzaL6+sooHktF+kQ2T56xrEWiVMcbS7SpbyQIGls2D8ryKz6pJlHQoLRjw7u
-         G4oTRMaW87kFdr5HFcpN2cDvkD82rt4Ei5RdhuLtvI0JBSnE1mTQdGV7yr83q2jyKH
-         HzDF/E98Lx4MYTgolzGUg8WuLNlJBLpqx6yG9Ec7RrRJpviDibITwxzOlo1Of08AkX
-         4IdFHjnZSj0EksjvHKKpx6pSXcVVoiwIwoHtYV2IBbwpi/qRO6UVVi10dzBVNbvQDm
-         k3TmeHxSkGSOyMugJpooYRm0wqbpwaDpN/DiFTtp2T1Z7WYpyOQVDI8JO/aH0X5mq8
-         E7hKBjhlHwwxg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671433870; bh=6i5C4+OH3Tid2jiq5igaPkFJqdwmCMxiRoJ4phiFfX4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=2JCH2TzaL6+sooHktF+kQ2T56xrEWiVMcbS7SpbyQIGls2D8ryKz6pJlHQoLRjw7u
-         G4oTRMaW87kFdr5HFcpN2cDvkD82rt4Ei5RdhuLtvI0JBSnE1mTQdGV7yr83q2jyKH
-         HzDF/E98Lx4MYTgolzGUg8WuLNlJBLpqx6yG9Ec7RrRJpviDibITwxzOlo1Of08AkX
-         4IdFHjnZSj0EksjvHKKpx6pSXcVVoiwIwoHtYV2IBbwpi/qRO6UVVi10dzBVNbvQDm
-         k3TmeHxSkGSOyMugJpooYRm0wqbpwaDpN/DiFTtp2T1Z7WYpyOQVDI8JO/aH0X5mq8
-         E7hKBjhlHwwxg==
-Date:   Mon, 19 Dec 2022 08:11:08 +0100
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: xHCI host dies on device unplug
-Message-ID: <Y6AOjAx2qFnyv9k5@lenoch>
-References: <Y45iXb6VCNiz7ZVd@lenoch>
- <Y49A1Pv6dUScQ9x/@lenoch>
- <Y5tHWwHctY6wr+CJ@lenoch>
- <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
+        with ESMTP id S229528AbiLSHat (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 02:30:49 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87213AF
+        for <linux-usb@vger.kernel.org>; Sun, 18 Dec 2022 23:30:46 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 40581825;
+        Mon, 19 Dec 2022 08:30:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671435043;
+        bh=j4gC26iD+JUULFvc0WLPHfvRe2LA299meEOfoZbRTyc=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=t/GyqXN6Gr5+31P528BUVjK3f4yDmMj5PQ+lanNjxawTo/Kp4+ln3rulNWQd8GmHT
+         HgPzbH+Ck9iWtGvRejuO0BX8D6lF0OJsuPyhNPjcCxMzW/rnq0KT2REdgR3mczKxMC
+         UZ8d+MQ9jSlbh8VspGV0M3fMdzPbJA8RBfvIR0Dc=
+Message-ID: <5d8746a1-8568-de12-424e-68e9a9896c7d@ideasonboard.com>
+Date:   Mon, 19 Dec 2022 07:30:39 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
-X-CMAE-Envelope: MS4wfBLrfU1DIt7tkpqKT7ig3aU1va+9DwSQytYZ38uFuU6lqJQRyPiAmKub9NCjUw+JoEUK91EGTC0Ck4BjDCmL7qOMFQAEFzuNenwz3iwjyYtafFQpodNu
- cMIbAKbwLCZii0DsvNFHxTwfMaS7vqmy/Oq8nqEoHjXN6G5zDMMYq08vhPMt54f9B+sCaYFzW/UXUNCkJPdOc9dGI5gg6Gx5KgM=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        w36195@motorola.com, m.grzeschik@pengutronix.de,
+        kieran.bingham@ideasonboard.com, torleiv@huddly.com
+References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
+ <Y59X9+ndt7GxBvJx@pendragon.ideasonboard.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH 0/6] UVC Gadget: Extend color matching support
+In-Reply-To: <Y59X9+ndt7GxBvJx@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+Morning Laurent
 
-On Fri, Dec 16, 2022 at 12:13:23PM +0200, Mathias Nyman wrote:
-> On 15.12.2022 18.12, Ladislav Michl wrote:
-> > +Cc Mathias as he last touched this code path and may know more :)
-> > 
-> > On Tue, Dec 06, 2022 at 02:17:08PM +0100, Ladislav Michl wrote:
-> > > On Mon, Dec 05, 2022 at 10:27:57PM +0100, Ladislav Michl wrote:
-> > > > I'm running current linux.git on custom Marvell OCTEON III CN7020
-> > > > based board. USB devices like FTDI (idVendor=0403, idProduct=6001,
-> > > > bcdDevice= 6.00) Realtek WiFi dongle (idVendor=0bda, idProduct=8179,
-> > > > bcdDevice= 0.00) works without issues, while Ralink WiFi dongle
-> > > > (idVendor=148f, idProduct=5370, bcdDevice= 1.01) kills the host on
-> > > > disconnect:
-> > > > xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command
-> > > > xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
-> > > > xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
-> > > > 
-> > > > Unfortunately I do not have a datasheet for CN7020 SoC, so it is hard
-> > > > to tell if there is any errata :/ In case anyone see a clue in debug
-> > > > logs bellow, I'll happily give it a try.
-> > > 
-> > > So I do have datasheet now. As a wild guess I tried to use dlmc_ref_clk0
-> > > instead of dlmc_ref_clk1 as a refclk-type-ss and it fixed unplug death.
-> > > I have no clue why, but anyway - sorry for the noise :) Perhaps Octeon's
-> > > clock init is worth to be verified...
-> > 
-> > After all whenever xhci dies with "xHCI host not responding to stop endpoint
-> > command" depends also on temperature, so there seems to be race somewhere.
-> > 
-> > As a quick and dirty verification, whenever xhci really died, following patch
-> > was tested and it fixed issue. It just treats ep as if stop endpoint command
-> > succeeded. Any clues? I'll happily provide more traces.
-> 
-> It's possible the controller did complete the stop endpoint command but driver
-> didn't get the interrupt for the event for some reason.
+On 18/12/2022 18:12, Laurent Pinchart wrote:
+> Hi Dan,
+>
+> Thank you for the series.
+>
+> On Tue, Dec 13, 2022 at 08:37:30AM +0000, Daniel Scally wrote:
+>> The current UVC gadget implementation hardcodes a single color matching
+>> descriptor and transmits it a single time following all the format and frame
+> I'm not sure I would use "transmits" in this context.  Descriptors are
+> for sure transmitted over the wire, but all in one go, not as individual
+> units (at least within a configuration descriptor).  Maybe "includes"
+> would be a better term ? This is nitpicking for the cover letter, but
+> the comment applies more importantly to commit messages and code for the
+> whole series.
 
-Hmm, event did not complete for device directly connected to the xHCI port.
-However for the same device connected to the HUB, everything works as
-expected no matter if device is disconnected from the HUB or the HUB
-with device is disconnected altogether.
 
-> I wrote some patches that checks the event ring for this event during
-> timeout.
+I've used the same term I think in the series yes. No problem; I'll swap 
+to includes.
 
-In case device is plugged back before timeout kills xHCI, controller is
-still working reliably.
+>
+>> descriptors. This is inflexible, and additionally applies only to the _last_
+>> format in the array of descriptors.
+>>
+>> This series extends the support such that the default descriptor can be amended
+>> and is transmitted once-per-format instead of once-only, it then adds the ability
+>> to create new color matching descriptors and associate them with particular formats.
+>> The default color matching descriptor is retained and used where the user does not
+>> link a new color matching descriptor to the format, so the default interaction
+>> with userspace is unchanged from the current implementation.
+> I wonder if we shouldn't drop the default descriptor. If userspace
+> doesn't specify one, then we really can't know what colorimetry data
+> applies to the frames. Instead of providing a default to the host, not
+> providing any colorimetry information would be better.
 
-> code is in a stop_endpoint_fixes branch in my tree:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git stop_endpoint_fixes
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=stop_endpoint_fixes
-> 
-> Another thing would be checking command and event rings for this stop endpoint command.
-> So Instead of killing host at timeout, do nothing, and check sysfs after the disconnect:
-> 
-> cat /sys/kernel/debug/usb/xhci/<address>/event-ring/trbs
-> cat /sys/kernel/debug/usb/xhci/<address>/command-ring/trbs
-> 
-> -Mathias
+
+According to the spec:
+
+
+"In the absence of this descriptor, or in the case of "Unspecified" 
+values within the descriptor, color matching defaults will be assumed. 
+The color matching defaults are compliant with sRGB since the BT.709 
+transfer function and the sRGB transfer function are very similar"
+
+
+And it goes on to identify the default values for each of the 
+descriptor's fields...which happen to be the values that are set in our 
+default descriptor. So I think that including that default descriptor 
+shouldn't change the host's behaviour, but does give userspace an easy 
+way to see what's set...I think it's fine to keep.
+
+>
+>> Daniel Scally (6):
+>>    usb: gadget: usb: Remove "default" from color matching attributes
+>>    usb: gadget: uvc: Add struct for color matching in configs
+>>    usb: gadget: uvc: Copy color matching descriptor for each frame
+>>    usb: gadget: uvc: Remove the hardcoded default color matching
+>>    usb: gadget: uvc: Make color matching attributes read/write
+>>    usb: gadget: uvc: Allow creating new color matching descriptors
+>>
+>>   .../ABI/testing/configfs-usb-gadget-uvc       |   6 +-
+>>   drivers/usb/gadget/function/f_uvc.c           |   9 -
+>>   drivers/usb/gadget/function/u_uvc.h           |   1 -
+>>   drivers/usb/gadget/function/uvc_configfs.c    | 247 +++++++++++++++---
+>>   drivers/usb/gadget/function/uvc_configfs.h    |   9 +
+>>   5 files changed, 228 insertions(+), 44 deletions(-)
