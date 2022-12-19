@@ -2,250 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900C1650A2A
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 11:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82160650A45
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 11:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiLSKds (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 05:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S231676AbiLSKlL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 05:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiLSKdp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 05:33:45 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C0F63C3
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 02:33:44 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C4CEC825;
-        Mon, 19 Dec 2022 11:33:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671446022;
-        bh=zx5b+v33Ei5/N3qdN2yVvGIuBEoIkEZnlfRZD4g5S7Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sawd/TDER3uiU6lFa4QI51kw9Tpy4uw5mYtP9e5NGIVVyLr52nYz+vWGl3PRShxft
-         lFG4R586aD4BK7soa9laG8+sQMCtj1toQP8OUuBaQW5tRrTkhszovuJP+NYFIxJbKg
-         7pMcNOIihkIIPi+YxB6rEBQEtZOE0cSJIlaUuWOk=
-Message-ID: <a172fc2d-10b5-4498-644e-2e8a72a9ac99@ideasonboard.com>
-Date:   Mon, 19 Dec 2022 10:33:39 +0000
+        with ESMTP id S231330AbiLSKlI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 05:41:08 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F2CB4E
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 02:41:07 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p7DZy-0003XI-0p; Mon, 19 Dec 2022 11:41:06 +0100
+Message-ID: <4d8f77ab-d5e9-7366-a823-0e6a620d6374@leemhuis.info>
+Date:   Mon, 19 Dec 2022 11:41:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 3/6] usb: gadget: uvc: Copy color matching descriptor for
- each frame
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        w36195@motorola.com, m.grzeschik@pengutronix.de,
-        kieran.bingham@ideasonboard.com, torleiv@huddly.com
-References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
- <20221213083736.2284536-4-dan.scally@ideasonboard.com>
- <Y5+iCEl34mMeAOOc@pendragon.ideasonboard.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <Y5+iCEl34mMeAOOc@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.5.1
+Subject: Re: Regression: onboard-usb-hub breaks USB on RPi 3 #forregzbot
+Content-Language: en-US, de-DE
+To:     regressions@lists.linux.dev
+Cc:     linux-usb@vger.kernel.org
+References: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671446467;cac0c4de;
+X-HE-SMSGID: 1p7DZy-0003XI-0p
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent
+[Note: this mail contains only information for Linux kernel regression
+tracking. Mails like these contain '#forregzbot' in the subject to make
+then easy to spot and filter out. The author also tried to remove most
+or all individuals from the list of recipients to spare them the hassle.]
 
-On 18/12/2022 23:28, Laurent Pinchart wrote:
-> Hi Dan,
->
-> Thank you for the patch.
->
-> On Tue, Dec 13, 2022 at 08:37:33AM +0000, Daniel Scally wrote:
->> As currently implemented the default color matching descriptor is
->> appended after _all_ the formats and frames that the gadget is
->> configured with. According to the UVC specifications however this
->> is supposed to be on a per-format basis (section 3.9.2.6):
->>
->> "Only one instance is allowed for a given format and if present,
->> the Color Matching descriptor shall be placed following the Video
->> and Still Image Frame descriptors for that format."
->>
->> Associate the default color matching descriptor with struct
->> uvcg_format and copy it once-per-format instead of once only.
->>
->> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->> ---
->>   drivers/usb/gadget/function/uvc_configfs.c | 60 ++++++++++++++++++++--
->>   drivers/usb/gadget/function/uvc_configfs.h |  1 +
->>   2 files changed, 58 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
->> index 9918e7b6a023..6f5932c9f09c 100644
->> --- a/drivers/usb/gadget/function/uvc_configfs.c
->> +++ b/drivers/usb/gadget/function/uvc_configfs.c
->> @@ -747,6 +747,28 @@ static const char * const uvcg_format_names[] = {
->>   	"mjpeg",
->>   };
->>   
->> +static struct uvcg_cmd *uvcg_format_get_default_cmd(struct config_item *streaming)
->> +{
->> +	struct config_item *color_matching, *cm_default;
->> +	struct uvcg_cmd *cmd;
->> +
->> +	color_matching = config_group_find_item(to_config_group(streaming),
->> +						"color_matching");
->> +	if (!color_matching)
->> +		return NULL;
->> +
->> +	cm_default = config_group_find_item(to_config_group(color_matching),
->> +					    "default");
->> +	config_item_put(color_matching);
->> +	if (!cm_default)
->> +		return NULL;
->> +
->> +	cmd = to_uvcg_cmd(to_config_group(cm_default));
->> +	config_item_put(cm_default);
->> +
->> +	return cmd;
->> +}
->> +
->>   static ssize_t uvcg_format_bma_controls_show(struct uvcg_format *f, char *page)
->>   {
->>   	struct f_uvc_opts *opts;
->> @@ -1560,7 +1582,14 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
->>   		'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00,
->>   		 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
->>   	};
->> +	struct config_item *streaming;
->>   	struct uvcg_uncompressed *h;
->> +	struct uvcg_cmd *cmd;
->> +
->> +	streaming = group->cg_item.ci_parent;
->> +	cmd = uvcg_format_get_default_cmd(streaming);
->> +	if (!cmd)
->> +		return ERR_PTR(-EINVAL);
->>   
->>   	h = kzalloc(sizeof(*h), GFP_KERNEL);
->>   	if (!h)
->> @@ -1579,6 +1608,7 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
->>   
->>   	INIT_LIST_HEAD(&h->fmt.frames);
->>   	h->fmt.type = UVCG_UNCOMPRESSED;
->> +	h->fmt.color_matching = cmd;
-> Is there any need to reference-count cmd to make sure it doesn't get
-> deleted ? I don't expect that to be an issue for the default, but for
-> the user-defined color matching descriptors. This may be better
-> discussed in the context of other patches further in the series.
+On 18.12.22 14:35, Stefan Wahren wrote:
+> 
+> unfortunately i didn't notice this regression sooner, but the following
+> commits breaks USB on Raspberry Pi 3:
+> 
+> usb: misc: Add onboard_usb_hub driver
 
+that's 43993626de00
 
-configfs_symlink() holds references to the targets, so you can't remove 
-the color matching descriptors without first removing the symlink to them.
+> usb: misc: onboard-hub: add support for Microchip USB2514B USB 2.0 hub
 
->
->>   	config_group_init_type_name(&h->fmt.group, name,
->>   				    &uvcg_uncompressed_type);
->>   
->> @@ -1743,7 +1773,14 @@ static const struct config_item_type uvcg_mjpeg_type = {
->>   static struct config_group *uvcg_mjpeg_make(struct config_group *group,
->>   						   const char *name)
->>   {
->> +	struct config_item *streaming;
->>   	struct uvcg_mjpeg *h;
->> +	struct uvcg_cmd *cmd;
->> +
->> +	streaming = group->cg_item.ci_parent;
->> +	cmd = uvcg_format_get_default_cmd(streaming);
->> +	if (!cmd)
->> +		return ERR_PTR(-EINVAL);
->>   
->>   	h = kzalloc(sizeof(*h), GFP_KERNEL);
->>   	if (!h)
->> @@ -1760,6 +1797,7 @@ static struct config_group *uvcg_mjpeg_make(struct config_group *group,
->>   
->>   	INIT_LIST_HEAD(&h->fmt.frames);
->>   	h->fmt.type = UVCG_MJPEG;
->> +	h->fmt.color_matching = cmd;
->>   	config_group_init_type_name(&h->fmt.group, name,
->>   				    &uvcg_mjpeg_type);
->>   
->> @@ -1906,7 +1944,8 @@ static inline struct uvc_descriptor_header
->>   enum uvcg_strm_type {
->>   	UVCG_HEADER = 0,
->>   	UVCG_FORMAT,
->> -	UVCG_FRAME
->> +	UVCG_FRAME,
->> +	UVCG_CMD,
->>   };
->>   
->>   /*
->> @@ -1956,6 +1995,10 @@ static int __uvcg_iter_strm_cls(struct uvcg_streaming_header *h,
->>   			if (ret)
->>   				return ret;
->>   		}
->> +
->> +		ret = fun(f->fmt->color_matching, priv2, priv3, 0, UVCG_CMD);
->> +		if (ret)
->> +			return ret;
->>   	}
->>   
->>   	return ret;
->> @@ -2011,6 +2054,11 @@ static int __uvcg_cnt_strm(void *priv1, void *priv2, void *priv3, int n,
->>   		*size += frm->frame.b_frame_interval_type * sz;
->>   	}
->>   	break;
->> +	case UVCG_CMD: {
->> +		struct uvcg_cmd *cmd = priv1;
-> Missing blank line. Same below.
+that's 8bc063641ceb
 
+/me wonders which of this it actually is and assumes it's the latter
 
-Sorry; where below?
+> After these commits (and this new driver enabled like in
+> multi_v7_defconfig) the connected USB devices doesn't work anymore
+> (mouse is powered, but no function of keyboard and mouse). Reconnecting
+> doesn't help. Running lsusb hangs forever.
 
->
->> +		*size += sizeof(cmd->desc);
->> +	}
->> +	break;
->>   	}
->>   
->>   	++*count;
->> @@ -2096,6 +2144,13 @@ static int __uvcg_fill_strm(void *priv1, void *priv2, void *priv3, int n,
->>   				frm->frame.b_frame_interval_type);
->>   	}
->>   	break;
->> +	case UVCG_CMD: {
->> +		struct uvcg_cmd *cmd = priv1;
->> +
->> +		memcpy(*dest, &cmd->desc, sizeof(cmd->desc));
->> +		*dest += sizeof(cmd->desc);
->> +	}
->> +	break;
->>   	}
->>   
->>   	return 0;
->> @@ -2135,7 +2190,7 @@ static int uvcg_streaming_class_allow_link(struct config_item *src,
->>   	if (ret)
->>   		goto unlock;
->>   
->> -	count += 2; /* color_matching, NULL */
->> +	count += 1; /* NULL */
->>   	*class_array = kcalloc(count, sizeof(void *), GFP_KERNEL);
->>   	if (!*class_array) {
->>   		ret = -ENOMEM;
->> @@ -2162,7 +2217,6 @@ static int uvcg_streaming_class_allow_link(struct config_item *src,
->>   		kfree(data_save);
->>   		goto unlock;
->>   	}
->> -	*cl_arr = (struct uvc_descriptor_header *)&opts->uvc_color_matching;
->>   
->>   	++target_hdr->linked;
->>   	ret = 0;
->> diff --git a/drivers/usb/gadget/function/uvc_configfs.h b/drivers/usb/gadget/function/uvc_configfs.h
->> index f990739838d5..6582d6c7b6f6 100644
->> --- a/drivers/usb/gadget/function/uvc_configfs.h
->> +++ b/drivers/usb/gadget/function/uvc_configfs.h
->> @@ -57,6 +57,7 @@ struct uvcg_format {
->>   	struct list_head	frames;
->>   	unsigned		num_frames;
->>   	__u8			bmaControls[UVCG_STREAMING_CONTROL_SIZE];
->> +	struct uvcg_cmd		*color_matching;
->>   };
->>   
->>   struct uvcg_format_ptr {
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced 8bc063641ceb
+#regzbot title usb: onboard-usb-hub breaks USB on RPi3
+#regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+> Here is the relevant dmesg in error case:
+> 
+> [    0.078446] usbcore: registered new interface driver usbfs
+> [    0.078516] usbcore: registered new interface driver hub
+> [    0.078574] usbcore: registered new device driver usb
+> [    0.078827] usb_phy_generic phy: supply vcc not found, using dummy
+> regulator
+> [    0.078990] usb_phy_generic phy: dummy supplies not allowed for
+> exclusive requests
+> [    2.897258] usbcore: registered new interface driver pegasus
+> [    2.903161] usbcore: registered new interface driver asix
+> [    2.908809] usbcore: registered new interface driver ax88179_178a
+> [    2.915185] usbcore: registered new interface driver cdc_ether
+> [    2.921281] usbcore: registered new interface driver smsc75xx
+> [    2.927305] usbcore: registered new interface driver smsc95xx
+> [    2.933298] usbcore: registered new interface driver net1080
+> [    2.939219] usbcore: registered new interface driver cdc_subset
+> [    2.945407] usbcore: registered new interface driver zaurus
+> [    2.951238] usbcore: registered new interface driver cdc_ncm
+> [    3.030909] usbcore: registered new interface driver usb-storage
+> [    3.178104] usbcore: registered new interface driver usbhid
+> [    3.191022] usbhid: USB HID core driver
+> [    3.981848] dwc2 3f980000.usb: supply vusb_d not found, using dummy
+> regulator
+> [    3.992467] dwc2 3f980000.usb: supply vusb_a not found, using dummy
+> regulator
+> [    4.053728] dwc2 3f980000.usb: DWC OTG Controller
+> [    4.065343] dwc2 3f980000.usb: new USB bus registered, assigned bus
+> number 1
+> [    4.079415] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
+> [    4.463447] usb 1-1: new high-speed USB device number 2 using dwc2
+> [    5.063444] usb 1-1.1: new high-speed USB device number 3 using dwc2
+> [    5.523440] usb 1-1.3: new low-speed USB device number 4 using dwc2
+> [    5.685546] input: HID 046a:0011 as
+> /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0001/input/input0
+> [    5.763446] usb 1-1.1.2: new low-speed USB device number 5 using dwc2
+> [    5.777968] hid-generic 0003:046A:0011.0001: input: USB HID v1.11
+> Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
+> [    5.931991] input: PixArt Microsoft USB Optical Mouse as
+> /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0002/input/input1
+> [    5.954668] hid-generic 0003:045E:00CB.0002: input: USB HID v1.11
+> Mouse [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
+> [    6.263459] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
+> [   14.828915] onboard-usb-hub 3f980000.usb:usb-port@1: supply vdd not
+> found, using dummy regulator
+> [   14.829493] onboard-usb-hub 3f980000.usb:usb-port@1:usb-port@1:
+> supply vdd not found, using dummy regulator
+> [   14.829729] usbcore: registered new device driver onboard-usb-hub
+> [   14.829945] usb 1-1.1: USB disconnect, device number 3
+> [   14.829958] usb 1-1.1.1: USB disconnect, device number 6
+> [   14.830419] usb 1-1.1.2: USB disconnect, device number 5
+> [   14.854725] usb 1-1.3: USB disconnect, device number 4
+> [   14.896865] usbcore: registered new interface driver lan78xx
+> 
+> Unfortunately i'm not that USB expert, so please tell me if you need
+> more information.
+> 
+> 
+> 
