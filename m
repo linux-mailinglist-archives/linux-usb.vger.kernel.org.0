@@ -2,101 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22933650E87
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 16:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C309F650EF5
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 16:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiLSPVs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 10:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S232457AbiLSPoe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 10:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiLSPVr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 10:21:47 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7E32463F5
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 07:21:45 -0800 (PST)
-Received: (qmail 26221 invoked by uid 1000); 19 Dec 2022 10:21:44 -0500
-Date:   Mon, 19 Dec 2022 10:21:44 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Flavio Suligoi <f.suligoi@asem.it>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Ray Chi <raychi@google.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: hub: disable autosuspend for TI TUSB8041
-Message-ID: <Y6CBiGHm7jishpYQ@rowland.harvard.edu>
-References: <20221219124759.3207032-1-f.suligoi@asem.it>
+        with ESMTP id S232548AbiLSPoE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 10:44:04 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB41813D05;
+        Mon, 19 Dec 2022 07:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671464591; x=1703000591;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=jY3jHYLAYkAS0aE4T0DejdVw3nwg6vnENj2h5kDjznY=;
+  b=bxrpn8SkNLS3nnu63lkVuiW+tHm6ZgdU5Il4ozdL9LROjYRzFE1xDcnB
+   4TKf8QHLRAbh9lVbGY5zIOFj4kc0ow+eE3UTrR/6fstHGLr6ueqZpTdh0
+   Ud4JcWLJMwfJLubIIT3m9qC2BZPZYzgeaJi/GW2gTDp5Pq0SnV8/IhPJE
+   2tFXfeI/LvHY2oywiCe8T60kAjk9pG6DRPQk1UHFSojWgCjmZY/Cee7j9
+   PmdYZGaqhSfjMXTQMh/cRLFTZ56gzGmDKLqLve7z51Ms0e+PtMjhR8G0u
+   1uzwMqLyuNaFR9DWXujO1G9r238AONjQ8fMtyVppiQ3PYA2oFkbIrkTpC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="317014312"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="317014312"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 07:43:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="600708356"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="600708356"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga003.jf.intel.com with ESMTP; 19 Dec 2022 07:43:08 -0800
+Message-ID: <90f6c531-1fed-2d0a-c6a9-46685517f02b@linux.intel.com>
+Date:   Mon, 19 Dec 2022 17:44:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219124759.3207032-1-f.suligoi@asem.it>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Content-Language: en-US
+To:     Gongwei Li <lifangpi@hotmail.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ligongwei@kylinos.cn
+References: <SI2PR02MB4603295B418781879CE88751DDE59@SI2PR02MB4603.apcprd02.prod.outlook.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH V1] usb: Fix typo in comment
+In-Reply-To: <SI2PR02MB4603295B418781879CE88751DDE59@SI2PR02MB4603.apcprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 01:47:59PM +0100, Flavio Suligoi wrote:
-> The Texas Instruments TUSB8041 has an autosuspend problem at high
-> temperature.
+On 19.12.2022 3.38, Gongwei Li wrote:
+> From: Gongwei Li <ligongwei@kylinos.cn>
 > 
-> If there is not USB traffic, after a couple of ms, the device enters in
-> autosuspend mode. In this condition the external clock stops working, to
-> save energy. When the USB activity turns on, ther hub exits the
-> autosuspend state, the clock starts running again and all works fine.
+> Spelling mistake in comment.
 > 
-> At ambient temperature all works correctly, but at high temperature,
-> when the USB activity turns on, the external clock doesn't restart and
-> the hub disappears from the USB bus.
-> 
-> Disabling the autosuspend mode for this hub solves the issue.
-> 
-> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+> Signed-off-by: Gongwei Li <ligongwei@kylinos.cn>
 > ---
+>   drivers/usb/host/pci-quirks.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> index ef08d68b9714..9710425e69aa 100644
+> --- a/drivers/usb/host/pci-quirks.c
+> +++ b/drivers/usb/host/pci-quirks.c
+> @@ -1103,10 +1103,10 @@ void usb_enable_intel_xhci_ports(struct pci_dev *xhci_pdev)
+>   	pci_read_config_dword(xhci_pdev, USB_INTEL_USB2PRM,
+>   			&ports_available);
+>   
+> -	dev_dbg(&xhci_pdev->dev, "Configurable USB 2.0 ports to hand over to xCHI: 0x%x\n",
+> +	dev_dbg(&xhci_pdev->dev, "Configurable USB 2.0 ports to hand over to xHCI: 0x%x\n",
+>   			ports_available);
+>   
+> -	/* Write XUSB2PR, the xHC USB 2.0 Port Routing Register, to
+> +	/* Write XUSB2PR, the xHCI USB 2.0 Port Routing Register, to
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+xHC isn't a typo in this case, just refers to the actual xHC Extensible Host Controller itself.
+The port routing register isn't part of the  xHCI specification.
 
-> v2: set TUSB8041 vendor id directly as hexnumber, instead of a complex formula
-> 
->  drivers/usb/core/hub.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 77e73fc8d673..9eca403af2a8 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -44,6 +44,9 @@
->  #define USB_PRODUCT_USB5534B			0x5534
->  #define USB_VENDOR_CYPRESS			0x04b4
->  #define USB_PRODUCT_CY7C65632			0x6570
-> +#define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
-> +#define USB_PRODUCT_TUSB8041_USB3		0x8140
-> +#define USB_PRODUCT_TUSB8041_USB2		0x8142
->  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
->  #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
->  
-> @@ -5854,6 +5857,16 @@ static const struct usb_device_id hub_id_table[] = {
->        .idVendor = USB_VENDOR_GENESYS_LOGIC,
->        .bInterfaceClass = USB_CLASS_HUB,
->        .driver_info = HUB_QUIRK_CHECK_PORT_AUTOSUSPEND},
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +			| USB_DEVICE_ID_MATCH_PRODUCT,
-> +      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-> +      .idProduct = USB_PRODUCT_TUSB8041_USB2,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +			| USB_DEVICE_ID_MATCH_PRODUCT,
-> +      .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-> +      .idProduct = USB_PRODUCT_TUSB8041_USB3,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
->      { .match_flags = USB_DEVICE_ID_MATCH_DEV_CLASS,
->        .bDeviceClass = USB_CLASS_HUB},
->      { .match_flags = USB_DEVICE_ID_MATCH_INT_CLASS,
-> -- 
-> 2.25.1
-> 
+Thanks
+-Mathias
+
+
