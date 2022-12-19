@@ -2,265 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C353965097B
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 10:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5774B650987
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 10:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiLSJpB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 04:45:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
+        id S230373AbiLSJtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 04:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiLSJpA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 04:45:00 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A8995A9
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 01:44:59 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C5296825;
-        Mon, 19 Dec 2022 10:44:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671443097;
-        bh=nZKFqIj9GkBY/ARVrkMmGL6omLQaK9pBBT7glbHXUWs=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=u3ZkEYYjr54DTC6mGKELqvV4kJYhAe8+gaZ0p15wnjvmyp9afvQj/ycj/0ZYbAcpS
-         Haq8sPGVk9DvzYChHGPuGWZaOktArcfs+/qHl5dlIqBlWn6NHXFUhpUc7voIbcWGVG
-         Jqs0+OUh+dMrRrgj/BYAHk3h35SBEIgfTEWsR7vc=
-Message-ID: <df474580-3481-2924-c485-9259626acb95@ideasonboard.com>
-Date:   Mon, 19 Dec 2022 09:44:53 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+        with ESMTP id S229528AbiLSJtv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 04:49:51 -0500
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2045.outbound.protection.outlook.com [40.107.105.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBD8A198;
+        Mon, 19 Dec 2022 01:49:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Au9iVZEtJNjVn7XyGfi4Os1MyQmA5rSGo2CoP41L1wJuXu9r2oSYs4INCMwY5sH77O6q7qE+vBUsbPpVmPOyz66RNkQXR4xtErb+VrYmuQ5+dD7En5OBgI9LwRyBR01wIeEWERlPOitibX7yfVJjSP0Z4oP+jY/xqWsrvsaAZ6pyFmdFL6HNWDHvVA5juP626OSbFcsuBJqZ0i0KTuNOigwQ14NL1dBrZy9aNbUG1PZkm+A8ON4O6qBSdBJH49skEV/l+AV7+IEVezy4Hi+sIOm9flmmx4oU50IlP6Mx5ZS/6+1o+6LPK4y6r2PG9hS3mEopRtCzUVHnJT76Vr+r6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pOZvKclmF1OCLqmKxia5d63lnrr4ju1AoxE58hIRiBM=;
+ b=OyS3F9GqHsgC6S3+b2LPE5qv11Tga06sSXua379CNNWlR0TaRTz0gcRw4XQyXa3hE8ZAvtvXZRfEE+VLdWzzLnHdZebaerIHIvAvKquuxPQFHcnhp9NLfZa956pS6fyKQuVp/0rkad9yIZ3UeqaBF2UT+7SbiNCIcpi1NEnGjWV07RiHuJpjj3rqvpu74AXQlXlf/01JZ6vBphOXL+U6vMbMQxuQVn2lTb1JBl7Xh5MGFG6qoVPPe7AGhcjxiaWsKtrRSFSq9XqI1YXzseDri5Or/+C3LP+WWPo7O3bHDXKM6DphOcOmgO9GJ99ZlqeLU8D+78fuFjR/Vxf4ompvtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=asem.it; dmarc=pass action=none header.from=asem.it; dkim=pass
+ header.d=asem.it; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pOZvKclmF1OCLqmKxia5d63lnrr4ju1AoxE58hIRiBM=;
+ b=FXwIkssQPcUK4TGgc2EXzWiZDaSt0eq/lTp7kjKUSXLhHnD2r6RP+Qy/4zegssCZ6uq0ZlOQvkuC4XUhpjmUQs5GjcCW2fYJ9P6oEFII80TA4ut8PN/3QHDYyfNukyoviUxedkG/S3ZfwL0shoUQLyZqL4qcN3qO+7gFs/q/618=
+Received: from DU2PR01MB8034.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:273::14) by PA4PR01MB10134.eurprd01.prod.exchangelabs.com
+ (2603:10a6:102:263::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Mon, 19 Dec
+ 2022 09:49:43 +0000
+Received: from DU2PR01MB8034.eurprd01.prod.exchangelabs.com
+ ([fe80::d922:93f6:20ed:45d8]) by DU2PR01MB8034.eurprd01.prod.exchangelabs.com
+ ([fe80::d922:93f6:20ed:45d8%8]) with mapi id 15.20.5924.016; Mon, 19 Dec 2022
+ 09:49:43 +0000
+From:   Flavio Suligoi <f.suligoi@asem.it>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Ray Chi <raychi@google.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1] usb: core: hub: disable autosuspend for TI TUSB8041
+Thread-Topic: [PATCH v1] usb: core: hub: disable autosuspend for TI TUSB8041
+Thread-Index: AQHZEVkt+jYbVB9ekEOw/M01Qce2ea5wqVmAgARQ+nA=
+Date:   Mon, 19 Dec 2022 09:49:43 +0000
+Message-ID: <DU2PR01MB8034851942DE30E72080B943F9E59@DU2PR01MB8034.eurprd01.prod.exchangelabs.com>
+References: <20221216141717.2728340-1-f.suligoi@asem.it>
+ <Y5yTm5PsE8n4whq/@rowland.harvard.edu>
+In-Reply-To: <Y5yTm5PsE8n4whq/@rowland.harvard.edu>
+Accept-Language: it-IT, en-US
 Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        w36195@motorola.com, m.grzeschik@pengutronix.de, torleiv@huddly.com
-References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
- <20221213083736.2284536-7-dan.scally@ideasonboard.com>
- <167110563688.9133.15927668222226418339@Monstersaurus>
- <97d59440-016f-8326-6553-dc032db48b3c@ideasonboard.com>
- <Y5+fbfqO/P3VrwZT@pendragon.ideasonboard.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH 6/6] usb: gadget: uvc: Allow creating new color matching
- descriptors
-In-Reply-To: <Y5+fbfqO/P3VrwZT@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=asem.it;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU2PR01MB8034:EE_|PA4PR01MB10134:EE_
+x-ms-office365-filtering-correlation-id: f08475cb-75f1-4298-18d4-08dae1a65aed
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DwGo8fioT+ooRyzJHfb21IhOYTS9Ak9X8lha8fX3QaC0Zh5mGHNxOkSU/KKdy+1IJbeTj3aTul9PMkOzn/bVnef0bVKXqr7G+K2OhMGA/TQbQ0VvDiMExc84VQTdbSTrEDBlTOewYzkK/1EzOPXIEiIzswBFebx1Q+PZ06wHZTuk2s9bHlcb8o28rHPbQcnrAiIi4oVt5tBRnv7VpFQFdfgJV9+VbZsyz/ADKH7nsqfDssh8jkFBzbz86IA1lpbm/jpFXrIxfj5FkdWfl8BqCgdUl2fwb+gHC3y/Vlxn2Z7fM7YokgM3Ew9CWzwh3M2eDvf21bAULbAyPyynMTtSUtcMBf1Z8ruLHkC7fOmTKbmZgH8bD1OdXTPR8JAFHCyXok8S2bz6dpzJ3r+VHEhC3GRkBw42lHQHR4M+FS6vwKDm9spmE+B9rkBWXSckvNl8i6IlqjxFY6KjmLJJ6o1I8FsX0ox+WPcvY2VqxtZT0XhkKP8iXF9E/+Jf56aZBndhBcPuAHkH2XAz+l+ryEH25cWE1HIFWy32f5RXVcJUuTkMHXeSvtGiWUKxYcXxgtemugWudCRGH9jNrqq9l1MSlfG4+nydHVxzL9T/mk2rFfbfe4Lh6+CJOhomJI5Uhf2Ye4iAoEpZUkYVoqeqN0zXTOWToSLBQV9KIVjJBOZtl6U54hdpOyC9r5osyGBOQiD4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR01MB8034.eurprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39840400004)(366004)(346002)(396003)(376002)(451199015)(54906003)(38070700005)(6916009)(6506007)(7696005)(316002)(478600001)(38100700002)(8676002)(4326008)(76116006)(66476007)(86362001)(122000001)(66946007)(64756008)(66556008)(66446008)(71200400001)(5660300002)(4744005)(33656002)(52536014)(8936002)(9686003)(2906002)(41300700001)(186003)(55016003)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hUXkSDOnB3cR0iJzMTRPWCXL11M8duIB/T8UKOUFZiMfAVBeUCAJTkeJp/vP?=
+ =?us-ascii?Q?cPeprDF/VUScAoc70Jv0Gv13714KDBvpDXJNhN2HQOkB8VwuB36hdQNkDG/K?=
+ =?us-ascii?Q?sJ5CFKuuLtWOSyNwTCC//F5viFQAvclN6oyup3d9zg4m9r7AbhwJFcEMAj1t?=
+ =?us-ascii?Q?Se4FhOyKwxQ95MyfaVSMr7cFWou4OMz+zuQcUHbFb0w6Zv2Z4TD2EWxI2/vw?=
+ =?us-ascii?Q?/TstjhOHB1YPwOtbJS2nNRaEiRR7mKa/jGslkbe+avtVeyQwHf49Wghs4UeW?=
+ =?us-ascii?Q?2KHywwM8iFNADMF4vreFYFbkPG9PBzT3NGaFKsKhgYKFVtGwBRPWnEIrdRDA?=
+ =?us-ascii?Q?K8b/i9LBNyGfgsDIA5nVaSLLJWnTm9pVy+hxLxRcW/+OWtjmirJH3Y8gycvA?=
+ =?us-ascii?Q?Avg6A/EwBEn8hRX9cQCrK5fCkGgCoLwJEwl0Ko/7nPuoiKEA7K5DueLk5noR?=
+ =?us-ascii?Q?eL1AI3UuqfPcRrc0wtO0jkm3ZqmDuRB4VPnIuV006x3rPmgARTG3h4stfyXN?=
+ =?us-ascii?Q?BLiXl9xHXVK1OiVX6jgpL/TI72JEM6vSci44TSm7+loQs3tQjlL0MMPprzuo?=
+ =?us-ascii?Q?HRU2DQW3VpBJECOplEyL5Y/du3DK9/lx1k07ZV4XGT+Nq+Uh/dWv11Ee3e8m?=
+ =?us-ascii?Q?iA+lbuyjbClVo5kfJ3sbgy/z9SLLT58rm0NzMXb8VNeOM579GO21k4zG68lR?=
+ =?us-ascii?Q?0D7ftLJiss91k+XfL7JriuxDyDItRV1fI7F9ehIUQUrFCpyQuhtBQa3Ujx13?=
+ =?us-ascii?Q?MYBZmpKTGUANLvMj8EiNqazYTIojrk3SvPlnyKIKa68guX95lNoTb8EOuKPW?=
+ =?us-ascii?Q?qwInBCVhZ4PYvwZZhR4woIDx16KYC8As2sImXHw1lNrLgnYCYBTs1xKfVl7M?=
+ =?us-ascii?Q?G/a+D3LxhBbeN6/WGNra7s4W6EP2mTbHzInOesvBaWMlDCQuGRRH0zppstm/?=
+ =?us-ascii?Q?tyvqMHYW5tAhf+CmQKVooOTWNKfUL1EAdLCkf6/xna3DzFp6zrjgF+WIiOx6?=
+ =?us-ascii?Q?romBCKBmKouXHFWMkFoaKEYNYG36LX55JN9mbAwpCCN/PP3493OUwZCFlDWG?=
+ =?us-ascii?Q?gON8Ka9hpZ1kGwO68GnkQVPqHUPhZMvl0UshN5bt6NUKAVQZyV2OI58JA9eE?=
+ =?us-ascii?Q?nztOf0UOSmudEzo4JPnuJgwEKRdDwDJ0dK2GOdU68XTNIdKvXuOdrR3S2dow?=
+ =?us-ascii?Q?B0YGFd9cRhOKkma/ZDkdfYBafrHwDq+lTbUjVjaSnw33j4XtWMVM2R+S9rdj?=
+ =?us-ascii?Q?qxUMxL8G37vTyfwn6JBzabDrtbfSRGbn/TlDM+65Tz6j+2crLBpfns/cB4oM?=
+ =?us-ascii?Q?mSIJfDu+9PXowA0jV8R1lwzzNCXbYk3Tz/UwxJTG4xZnKWMGFQIxFel6s6d2?=
+ =?us-ascii?Q?UoJB4ftvRWpjhsvzEdqD6ykbfrfGAdPgCsyrXolCGLtd8su9cgRY4TWy8ZeQ?=
+ =?us-ascii?Q?eVaJD+JVsA2CI0nCNhdGFbMD5WQYX9mnKMQ6JjY/OuKQ2rX2XpvZ39MeONnq?=
+ =?us-ascii?Q?NbkAqqsBUTnASRzeBEUDMhnZcpW3Fub4r98qvjN6SsjVCAhtNspXi+bxo+u8?=
+ =?us-ascii?Q?df0de+VpOYlaBk7+X4s=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: asem.it
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR01MB8034.eurprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f08475cb-75f1-4298-18d4-08dae1a65aed
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2022 09:49:43.2030
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d0a766c6-7992-4344-a4a2-a467a7bb1ed2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +7Q9g8VqB1k30IyrCmBFxirpflzMdbz8vmnhs1OrrYbSVzpaW/i5ejMXUXlNdTGgDLB//GRnnrmhaBGSeL7DPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR01MB10134
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent
+HI Alan,
 
-On 18/12/2022 23:17, Laurent Pinchart wrote:
-> On Thu, Dec 15, 2022 at 12:03:03PM +0000, Dan Scally wrote:
->> On 15/12/2022 12:00, Kieran Bingham wrote:
->>> Quoting Daniel Scally (2022-12-13 08:37:36)
->>>> Allow users to create new color matching descriptors in addition to
->>>> the default one. These must be associated with a UVC format in order
->>>> to be transmitted to the host, which is achieved by symlinking from
->>>> the format to the newly created color matching descriptor - extend
->>>> the uncompressed and mjpeg formats to support that linking operation.
->>>>
->>>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->>>> ---
->>>>    .../ABI/testing/configfs-usb-gadget-uvc       |  4 +-
->>>>    drivers/usb/gadget/function/uvc_configfs.c    | 79 ++++++++++++++++++-
->>>>    2 files changed, 79 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>>> index 3512f4899fe3..ce629f0880a9 100644
->>>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>>> @@ -160,10 +160,10 @@ Date:             Dec 2014
->>>>    KernelVersion: 4.0
->>>>    Description:   Color matching descriptors
->>>>    
->>>> -What:          /config/usb-gadget/gadget/functions/uvc.name/streaming/color_matching/default
->>>> +What:          /config/usb-gadget/gadget/functions/uvc.name/streaming/color_matching/name
->>> Hrm... do we need to keep 'default' (and keep it available in patch
->>> 1/6?) so that the default is still kept accesible?
->> It's still there - it's just no longer necessarily the only entry
->>
->>> That would mean others are added as siblings to the default, and then
->>> the one that gets linked is the one that is used perhaps?
->> Yep that's how it's implemented
->>
->>> Feels like that would overcomplicate 'the default case' maybe ... but
->>> I'm weary that this is 'removing' the default from ABI...?
->>>
->>>>    Date:          Dec 2014
->>>>    KernelVersion: 4.0
->>> Hrm ... and this would leave the documentation stating that you could
->>> provide custom color matching descriptors from v4.0 onwards, which would
->>> be inaccurate ?
->> Ah, good point...fair enough, I'll add a new entry for the custom named
->> ones.
->>
->>> So I'm not sure we can just rename this documentation segment eitherway.
->>>
->>>> -Description:   Default color matching descriptors
->>>> +Description:   color matching descriptors
->>>>    
->>>>                   All attributes read/write:
->>>>    
->>>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
->>>> index 4fbc42d738a4..82c10f0dab71 100644
->>>> --- a/drivers/usb/gadget/function/uvc_configfs.c
->>>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
->>>> @@ -769,6 +769,58 @@ static struct uvcg_cmd *uvcg_format_get_default_cmd(struct config_item *streamin
->>>>           return cmd;
->>>>    }
->>>>    
->>>> +static int uvcg_format_allow_link(struct config_item *src, struct config_item *tgt)
->>>> +{
->>>> +       struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
->>>> +       struct config_item *streaming, *color_matching;
->>>> +       struct uvcg_cmd *color_matching_desc;
->>>> +       struct uvcg_format *fmt;
->>>> +       int ret = 0;
->>>> +
->>>> +       mutex_lock(su_mutex);
->>>> +
->>>> +       streaming = src->ci_parent->ci_parent;
->>>> +       color_matching = config_group_find_item(to_config_group(streaming), "color_matching");
->>>> +       if (!color_matching || color_matching != tgt->ci_parent) {
->>>> +               ret = -EINVAL;
->>>> +               goto out_put_cm;
->>>> +       }
->>>> +
->>>> +       color_matching_desc = to_uvcg_cmd(to_config_group(tgt));
->>>> +       fmt = to_uvcg_format(src);
->>>> +       fmt->color_matching = color_matching_desc;
-> As you store a pointer to the target, don't you need to keep a reference
-> to it somehow, to avoid the target being deleted ? Or is that handled by
-> configfs itself ?
+...
 
+drivers/usb/core/hub.c index
+> > 77e73fc8d673..b64be35e203f 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -44,6 +44,10 @@
+> >  #define USB_PRODUCT_USB5534B			0x5534
+> >  #define USB_VENDOR_CYPRESS			0x04b4
+> >  #define USB_PRODUCT_CY7C65632			0x6570
+> > +#define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
+> > +#define USB_PRODUCT_TUSB8041_USB3		0x8140
+> > +#define USB_PRODUCT_TUSB8041_USB2		\
+> > +	(USB_PRODUCT_TUSB8041_USB3 |
+> ((USB_PRODUCT_TUSB8041_USB3 & 0x00FF) ^
+> > +0x02))
+>=20
+> Argh.  Just put the actual hex number here -- people don't want to do
+> calculations like this in their head when they are reading code.  (Not to
+> mention that the number would occupy only six characters of source text
+> whereas your calculation occupies a lot more.)
+>=20
+> Otherwise fine.
 
-configfs is doing it in configfs_symlink()
+Ok, I'll put the actual hex number instead of the formula.
+Thanks for your suggestion!
 
-> It also looks like you need to refcount the number of links to the
-> target, to disallow changes to the color matching attributes when the
-> descriptor is linked.
+>=20
+> Alan Stern
+>=20
 
-
-Yes; I had thought that that was unnecessary so skipped it, but turns 
-out I'm wrong - I'll add that in.
-
-> This being said, are links the best option here ? Why can't we create
-> color matching descriptors as children of format descriptors the same
-> way that frame descriptors are handled ?
-
-
-We can do it that way, but I thought that it made more sense to expand 
-the current implementation because
-
-
-1) I'm reluctant to get rid of the default descriptor and I wouldn't 
-want to have them in multiple places.
-
-2) We're planning to expand the uncompressed format to support more than 
-just yuy2, which for some cameras might result in _a lot_ of available 
-formats (vivid has 80!). It seems easier to have color matching 
-descriptors that you can set once and simply link to than have to 
-recreate them for each format.
-
->
->>>> +
->>>> +out_put_cm:
->>>> +       config_item_put(color_matching);
->>>> +       mutex_unlock(su_mutex);
->>>> +
->>>> +       return ret;
->>>> +}
->>>> +
->>>> +static void uvcg_format_drop_link(struct config_item *src, struct config_item *tgt)
->>>> +{
->>>> +       struct config_item *streaming;
->>>> +       struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
->>>> +       struct uvcg_format *fmt;
->>>> +       struct uvcg_cmd *cmd;
->>>> +
->>>> +       mutex_lock(su_mutex);
->>>> +
->>>> +       streaming = src->ci_parent->ci_parent;
->>>> +       cmd = uvcg_format_get_default_cmd(streaming);
->>>> +
->>>> +       fmt = to_uvcg_format(src);
->>>> +       fmt->color_matching = cmd;
->>>> +
->>>> +       mutex_unlock(su_mutex);
->>>> +}
->>>> +
->>>> +static struct configfs_item_operations uvcg_format_item_operations = {
-> Not a candidate for this patch (or this series), but I wonder if this
-> could be made const. It would involve making several pointers in struct
-> config_item_type const, which may or may not be straightforward.
->
->>>> +       .release        = uvcg_config_item_release,
->>>> +       .allow_link     = uvcg_format_allow_link,
->>>> +       .drop_link      = uvcg_format_drop_link,
->>>> +};
->>>> +
->>>>    static ssize_t uvcg_format_bma_controls_show(struct uvcg_format *f, char *page)
->>>>    {
->>>>           struct f_uvc_opts *opts;
->>>> @@ -1569,7 +1621,7 @@ static struct configfs_attribute *uvcg_uncompressed_attrs[] = {
->>>>    };
->>>>    
->>>>    static const struct config_item_type uvcg_uncompressed_type = {
->>>> -       .ct_item_ops    = &uvcg_config_item_ops,
->>>> +       .ct_item_ops    = &uvcg_format_item_operations,
->>>>           .ct_group_ops   = &uvcg_uncompressed_group_ops,
->>>>           .ct_attrs       = uvcg_uncompressed_attrs,
->>>>           .ct_owner       = THIS_MODULE,
->>>> @@ -1764,7 +1816,7 @@ static struct configfs_attribute *uvcg_mjpeg_attrs[] = {
->>>>    };
->>>>    
->>>>    static const struct config_item_type uvcg_mjpeg_type = {
->>>> -       .ct_item_ops    = &uvcg_config_item_ops,
->>>> +       .ct_item_ops    = &uvcg_format_item_operations,
->>>>           .ct_group_ops   = &uvcg_mjpeg_group_ops,
->>>>           .ct_attrs       = uvcg_mjpeg_attrs,
->>>>           .ct_owner       = THIS_MODULE,
->>>> @@ -1912,6 +1964,28 @@ static const struct config_item_type uvcg_color_matching_type = {
->>>>     * streaming/color_matching
->>>>     */
->>>>    
->>>> +static struct config_group *uvcg_color_matching_make(struct config_group *group,
->>>> +                                                    const char *name)
->>>> +{
->>>> +       struct uvcg_cmd *cmd;
->>>> +
->>>> +       cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
->>>> +       if (!cmd)
->>>> +               return ERR_PTR(-ENOMEM);
->>>> +
->>>> +       cmd->desc.bLength = UVC_DT_COLOR_MATCHING_SIZE;
->>>> +       cmd->desc.bDescriptorType = USB_DT_CS_INTERFACE;
->>>> +       cmd->desc.bDescriptorSubType = UVC_VS_COLORFORMAT;
->>>> +
->>>> +       config_group_init_type_name(&cmd->group, name, &uvcg_color_matching_type);
->>>> +
->>>> +       return &cmd->group;
->>>> +}
->>>> +
->>>> +static struct configfs_group_operations uvcg_color_matching_grp_group_ops = {
->>>> +       .make_group     = uvcg_color_matching_make,
->>>> +};
->>>> +
->>>>    static int uvcg_color_matching_create_children(struct config_group *parent)
->>>>    {
->>>>           struct uvcg_cmd *cmd;
->>>> @@ -1937,6 +2011,7 @@ static int uvcg_color_matching_create_children(struct config_group *parent)
->>>>    static const struct uvcg_config_group_type uvcg_color_matching_grp_type = {
->>>>           .type = {
->>>>                   .ct_item_ops    = &uvcg_config_item_ops,
->>>> +               .ct_group_ops   = &uvcg_color_matching_grp_group_ops,
->>>>                   .ct_owner       = THIS_MODULE,
->>>>           },
->>>>           .name = "color_matching",
+Best regards,
+Flavio
