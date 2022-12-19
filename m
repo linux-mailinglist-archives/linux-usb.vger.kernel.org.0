@@ -2,187 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70A66508EE
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 09:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E90A650945
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 10:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiLSIzy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 03:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S229890AbiLSJVw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 04:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiLSIzw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 03:55:52 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B8E2DF7;
-        Mon, 19 Dec 2022 00:55:50 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8C6595C0043;
-        Mon, 19 Dec 2022 03:55:48 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 19 Dec 2022 03:55:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1671440148; x=
-        1671526548; bh=eMMPh/ciG0DXgfI+9o4EtPudEkxX99ooCttHrCr6mKg=; b=B
-        1LQMlTvdydkZ/exDbQA/COKdEJTiuSAPDsJoKXXMOrKKwwDOy5wUgebclFCOlO8y
-        Jc+RLS2C0tLfBsyKGBSzA+So5Rk3ut49hjkVvwValp3DUJO4WcCpCJII39kShlXN
-        P/B6DRdzzeTtTiZ3zBuuiBVEwABARZu7j38qybPjkYpIp1yjO9h11vF7hIlvAHyG
-        gwXSonP/lWxUBrgKs1yFqsTyIKrec5aD/N/ma2ypi+GY5UGXEx7wcrT9YI9v5rq1
-        zRW0ZtJHBQSUKyWP1XfKDj6k/OrhKjnXD2xBWeFbJp1z7YIRqwLk+Z0bVoRuNsRb
-        Hu28BXdT9dS85Sp/VCgTw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671440148; x=
-        1671526548; bh=eMMPh/ciG0DXgfI+9o4EtPudEkxX99ooCttHrCr6mKg=; b=p
-        q1elzxYKPqIrfUgE3Hkw/BavN27iYlmD8Ri/vc/7g557mcFAiBrj7R9mz9gUZkQ2
-        TVhbolU8DBCAdvPRaeTusEu65vwedeoptflLJLVHzcptOrwISmsZG8JBflFhXUTU
-        ZVTIpNSoUtORkXmJ+aONeJ4ecAOOc3ju3owZYQeyLdtVO0mCO/HCTQsyhSvnvmc4
-        eE2/mByaB4tw3fb40A2wfKNFXKTe663pRjJ6Z87mCzE3POAnKVo+4DBAm7YontDO
-        09tXyi27Ihyyz7JizhPpRtxAP3IRhZDMhJ2jfEQsZ4Cz9NoCA5yS2uG2Nc6GCbp7
-        5R6pPZug+T7c5AtY5fTVQ==
-X-ME-Sender: <xms:FCegYz4nbb6vPFHnOdvbozEthiVZ6PVKREHPOc3dJuhF8ejVc_vTVw>
-    <xme:FCegY46F2V650-NREpi4QXiiMFqmmKTAYeLZVKJo0tvXnHGNO6AtjypaC5dO-qC_r
-    S4aqlauHkEWtg>
-X-ME-Received: <xmr:FCegY6fJ4wo3qowdSN_SDB3F476RB7d7JGKXiVD7l_TTQ4OL-b3DyR3Gfn8ycNlc3ChR6UfV-5DnBlnkno4DIg9rf5G2fwL9>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvgdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
-    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:FCegY0JSAEeyCqs6z721Z3_qai_xDqU5C1OKXyn-s2ErRlhocuZFTw>
-    <xmx:FCegY3IWJtJp5frQPv_1Vfp5IK0p51QW5vYtIl-RF_xHM3rC5h2jFQ>
-    <xmx:FCegY9yWYMDwLHX7enGSnNAxnevPgfXiq021zUIaSU31nmNjAivCkA>
-    <xmx:FCegYw6DTjuJ9sdGozETtf73NoPu79OJGHkqBm4J0HhqE1B2Tcx5aw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Dec 2022 03:55:47 -0500 (EST)
-Date:   Mon, 19 Dec 2022 09:55:45 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Leesoo Ahn <lsahn@ooseel.net>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usbnet: jump to rx_cleanup case instead of calling
- skb_queue_tail
-Message-ID: <Y6AnEWWd7DQg0b6o@kroah.com>
-References: <20221217161851.829497-1-lsahn@ooseel.net>
- <Y57VkLKetDsbUUjC@kroah.com>
- <a2e0e98a-1044-908a-15bc-b165ff8b23ea@ooseel.net>
- <Y6AXqOlCUy7mahgj@kroah.com>
- <403f3ea8-eeec-2a78-640e-c11c3fe28f45@ooseel.net>
+        with ESMTP id S231531AbiLSJVu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 04:21:50 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FA663B8
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 01:21:48 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0776B825;
+        Mon, 19 Dec 2022 10:21:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671441706;
+        bh=0WBoX+XjtMDtPt7Rkv4QNW1gaI3Uyilw7XcPwSZZzkU=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=ZSdEzdiLGiM8wl4xE8CUK+yebS31epot27c5IsyLq5gpyziVCC5QX8XOrQXU7l3EF
+         WJBgvfuXKllK80YWUC5AwGhGtoMzgTdsKHPF7O0MLvHeT3M7ik+ILkqsj0VIATop1/
+         0HXcvmFYuTqx/zwpi8rtSSFjFrzUTjjusq2nrt1U=
+Message-ID: <26f86f15-273e-5479-3254-8d919c1672e6@ideasonboard.com>
+Date:   Mon, 19 Dec 2022 09:21:43 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        w36195@motorola.com, m.grzeschik@pengutronix.de, torleiv@huddly.com
+References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
+ <20221213083736.2284536-6-dan.scally@ideasonboard.com>
+ <167110507266.9133.9781573969949845356@Monstersaurus>
+ <699fe3cf-ecda-4301-cae7-49eb165aa10e@ideasonboard.com>
+ <Y5+cbZPU3ZJ0KsCe@pendragon.ideasonboard.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH 5/6] usb: gadget: uvc: Make color matching attributes
+ read/write
+In-Reply-To: <Y5+cbZPU3ZJ0KsCe@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <403f3ea8-eeec-2a78-640e-c11c3fe28f45@ooseel.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 05:09:21PM +0900, Leesoo Ahn wrote:
-> 
-> On 22. 12. 19. 16:50, Greg KH wrote:
-> > On Mon, Dec 19, 2022 at 04:41:16PM +0900, Leesoo Ahn wrote:
-> > > On 22. 12. 18. 17:55, Greg KH wrote:
-> > > > On Sun, Dec 18, 2022 at 01:18:51AM +0900, Leesoo Ahn wrote:
-> > > > > The current source pushes skb into dev->done queue by calling
-> > > > > skb_queue_tail() and then, call skb_dequeue() to pop for rx_cleanup state
-> > > > > to free urb and skb next in usbnet_bh().
-> > > > > It wastes CPU resource with extra instructions. Instead, use return values
-> > > > > jumping to rx_cleanup case directly to free them. Therefore calling
-> > > > > skb_queue_tail() and skb_dequeue() is not necessary.
-> > > > > 
-> > > > > The follows are just showing difference between calling skb_queue_tail()
-> > > > > and using return values jumping to rx_cleanup state directly in usbnet_bh()
-> > > > > in Arm64 instructions with perf tool.
-> > > > > 
-> > > > > ----------- calling skb_queue_tail() -----------
-> > > > >          │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
-> > > > >     7.58 │248:   ldr     x0, [x20, #16]
-> > > > >     2.46 │24c:   ldr     w0, [x0, #8]
-> > > > >     1.64 │250: ↑ tbnz    w0, #14, 16c
-> > > > >          │     dev->net->stats.rx_errors++;
-> > > > >     0.57 │254:   ldr     x1, [x20, #184]
-> > > > >     1.64 │258:   ldr     x0, [x1, #336]
-> > > > >     2.65 │25c:   add     x0, x0, #0x1
-> > > > >          │260:   str     x0, [x1, #336]
-> > > > >          │     skb_queue_tail(&dev->done, skb);
-> > > > >     0.38 │264:   mov     x1, x19
-> > > > >          │268:   mov     x0, x21
-> > > > >     2.27 │26c: → bl      skb_queue_tail
-> > > > >     0.57 │270: ↑ b       44    // branch to call skb_dequeue()
-> > > > > 
-> > > > > ----------- jumping to rx_cleanup state -----------
-> > > > >          │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
-> > > > >     1.69 │25c:   ldr     x0, [x21, #16]
-> > > > >     4.78 │260:   ldr     w0, [x0, #8]
-> > > > >     3.28 │264: ↑ tbnz    w0, #14, e4    // jump to 'rx_cleanup' state
-> > > > >          │     dev->net->stats.rx_errors++;
-> > > > >     0.09 │268:   ldr     x1, [x21, #184]
-> > > > >     2.72 │26c:   ldr     x0, [x1, #336]
-> > > > >     3.37 │270:   add     x0, x0, #0x1
-> > > > >     0.09 │274:   str     x0, [x1, #336]
-> > > > >     0.66 │278: ↑ b       e4    // branch to 'rx_cleanup' state
-> > > > Interesting, but does this even really matter given the slow speed of
-> > > > the USB hardware?
-> > > It doesn't if USB hardware has slow speed but in software view, it's still
-> > > worth avoiding calling skb_queue_tail() and skb_dequeue() which work with
-> > > spinlock, if possible.
-> > But can you actually measure that in either CPU load or in increased
-> > transfer speeds?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> I think the follows are maybe what you would be interested in. I have tested
-> both case with perf on the same machine and environments, also modified
-> driver code a bit to go to rx_cleanup case, not to net stack in a specific
-> packet.
-> 
-> ----- calling skb_queue_tail() -----
-> -   11.58%     0.26%  swapper          [k] usbnet_bh
->    - 11.32% usbnet_bh
->       - 6.43% skb_dequeue
->            6.34% _raw_spin_unlock_irqrestore
->       - 2.21% skb_queue_tail
->            2.19% _raw_spin_unlock_irqrestore
->       - 1.68% consume_skb
->          - 0.97% kfree_skbmem
->               0.80% kmem_cache_free
->            0.53% skb_release_data
-> 
-> ----- jump to rx_cleanup directly -----
-> -    7.62%     0.18%  swapper          [k] usbnet_bh
->    - 7.44% usbnet_bh
->       - 4.63% skb_dequeue
->            4.57% _raw_spin_unlock_irqrestore
->       - 1.76% consume_skb
->          - 1.03% kfree_skbmem
->               0.86% kmem_cache_free
->            0.56% skb_release_data
->         0.54% smsc95xx_rx_fixup
-> 
-> The first case takes CPU resource a bit much by the result.
+Morning Laurent
 
-Ok, great!  Fix up the patch based on the review comments and add this
-information to the changelog as well.
+On 18/12/2022 23:04, Laurent Pinchart wrote:
+> On Fri, Dec 16, 2022 at 03:53:05PM +0000, Dan Scally wrote:
+>> On 15/12/2022 11:51, Kieran Bingham wrote:
+>>> Quoting Daniel Scally (2022-12-13 08:37:35)
+>>>> In preparation for allowing more than the default color matching
+>>>> descriptor, make the color matching attributes writeable.
+>>>>
+>>>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+>>>> ---
+>>>>    .../ABI/testing/configfs-usb-gadget-uvc       |  2 +-
+>>>>    drivers/usb/gadget/function/uvc_configfs.c    | 32 ++++++++++++++++++-
+>>>>    2 files changed, 32 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>>> index 611b23e6488d..3512f4899fe3 100644
+>>>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>>>> @@ -165,7 +165,7 @@ Date:               Dec 2014
+>>>>    KernelVersion: 4.0
+>>>>    Description:   Default color matching descriptors
+>>>>    
+>>>> -               All attributes read only:
+>>>> +               All attributes read/write:
+>>> Do we need to specify here what acceptable values can now be written at
+>>> all?
+>> Yes I guess so...we probably need better documentation for this
+>> somewhere. I don't think this file is the right place to describe it
+>> fully, it's more of an enumeration. We probably need something like
+>> Documentation/usb/gadget_serial.rst
+> That would make sense. I think you can also heavily quote or reference
+> the USB video class documentation.
 
-thanks,
 
-greg k-h
+Ack. I've started this.
+
+>
+>>>>                   ========================  ======================================
+>>>>                   bMatrixCoefficients       matrix used to compute luma and
+>>>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+>>>> index 6f5932c9f09c..4fbc42d738a4 100644
+>>>> --- a/drivers/usb/gadget/function/uvc_configfs.c
+>>>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
+>>>> @@ -1845,7 +1845,37 @@ static ssize_t uvcg_color_matching_##cname##_show(                       \
+>>>>           return result;                                                  \
+>>>>    }                                                                      \
+>>>>                                                                           \
+>>>> -UVC_ATTR_RO(uvcg_color_matching_, cname, aname)
+>>>> +static ssize_t uvcg_color_matching_##cname##_store(                    \
+>>>> +       struct config_item *item, const char *page, size_t len)         \
+>>>> +{                                                                      \
+>>>> +       struct config_group *group = to_config_group(item);             \
+>>>> +       struct mutex *su_mutex = &group->cg_subsys->su_mutex;           \
+>>>> +       struct uvcg_cmd *cmd = to_uvcg_cmd(group);                      \
+>>>> +       struct f_uvc_opts *opts;                                        \
+>>>> +       struct config_item *opts_item;                                  \
+>>>> +       int ret;                                                        \
+> I'd make this one last.
+
+
+Hah I overthought this quite a lot because following the preprocessing 
+num might be shorter. No problem though, I'll switch it to last.
+>
+>>>> +       u##bits num;                                                    \
+> In other places we use
+>
+> 	typeof(cmd->desc.aname) num;
+>
+> Up to you.
+>
+>>>> +                                                                       \
+>>>> +       ret = kstrtou##bits(page, 0, &num);                             \
+>>>> +       if (ret)                                                        \
+>>>> +               return ret;                                             \
+>>> I don't know how horrible it would be - or if there's any other
+>>> precendence, but I'm weary that setting '1', or '4' in here from
+>>> userspace is fairly meaningless.
+>>>
+>>> Of course - the user doing so would have to know from the spec perhaps
+>>> what they are configuring - but it makes me wonder if we should support
+>>> string matching in here to also convert say "BT.709" to the appropriate
+>>> integer value (if a non-integer was set).
+>>>
+>>> It may depend on how 'most' other configfs entries that would be similar
+>>> to this would expect to operate.
+>> This might be abusing configfs slightly, though I did something similar
+>> for the custom string descriptors (see [1] and ctrl-f for
+>> "uvcg_language_strings_show") and I think it's a worthwhile thing. What
+>> about an "enumerate options" attribute that's read only and simply
+>> enumerates the settings with their corresponding descriptions? The
+>> problem with string parsing is you've still got to know the exact string
+>> to pass (and googling "BT.709" tells me it can also be called "Rec.709",
+>> "Rec. 709" and "ITU 709" for example) so you'd have to look it up
+>> anyway. I'm thinking something like:
+>>
+>> $ cat enumerate_options
+>> bColorPrimaries - This defines the color primaries and the reference white
+>> value       desc
+>> 0           Unspecified (Image characteristics unknown)
+>> 1           BT.709 (sRGB)
+>> 2           BT.470-2 (M)
+>> 3           BT.470 (B, G)
+>> 4           SMPTE 170M
+>> 5           SMPTE 240M
+>> 6-255       Reserved
+>>
+>> bTransferCharacteristics - This field defines the opto-electronic transfer
+>>                                                   characteristics of the
+>> source picture, also
+>>                                                   called the gamma function
+>> value       desc
+>> 0           Unspecified (Image characteristics unknown)
+>> 1           BT.7-0
+>> 2           BT.470-2 M
+>> ...          ...
+>>
+>>
+>> ... and so on. What do you think?
+> I think it's overkill. The userspace side of the UVC gadget is expected
+> to have good knowledge of UVC. This isn't an interface meant for users.
+
+
+Fair enough
+
+>
+>> [1] https://lore.kernel.org/linux-usb/20221121092517.225242-6-dan.scally@ideasonboard.com/
+>>
+>>>> +                                                                       \
+>>>> +       mutex_lock(su_mutex); /* for navigating configfs hierarchy */   \
+>>>> +                                                                       \
+>>>> +       opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;     \
+>>>> +       opts = to_f_uvc_opts(opts_item);                                \
+>>>> +                                                                       \
+>>>> +       mutex_lock(&opts->lock);                                        \
+> Don't you need a similar linked check as in uvcg_frame_##cname##_store()
+> ?
+
+
+Yes, actually. I was halfway through explaining why I had considered it 
+unnecessary and skipped it, and then realised I was wrong :)
+
+>
+>>>> +                                                                       \
+>>>> +       cmd->desc.aname = num;                                          \
+>>>> +       ret = len;                                                      \
+>>>> +                                                                       \
+>>>> +       mutex_unlock(&opts->lock);                                      \
+>>>> +       mutex_unlock(su_mutex);                                         \
+>>>> +                                                                       \
+>>>> +       return ret;                                                     \
+>>>> +}                                                                      \
+>>>> +UVC_ATTR(uvcg_color_matching_, cname, aname)
+>>>>    
+>>>>    UVCG_COLOR_MATCHING_ATTR(b_color_primaries, bColorPrimaries, 8);
+>>>>    UVCG_COLOR_MATCHING_ATTR(b_transfer_characteristics, bTransferCharacteristics, 8);
