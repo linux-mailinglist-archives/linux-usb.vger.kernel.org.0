@@ -2,142 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82160650A45
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 11:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D532650B67
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 13:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiLSKlL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 05:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S230226AbiLSMYd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 07:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiLSKlI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 05:41:08 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F2CB4E
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 02:41:07 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p7DZy-0003XI-0p; Mon, 19 Dec 2022 11:41:06 +0100
-Message-ID: <4d8f77ab-d5e9-7366-a823-0e6a620d6374@leemhuis.info>
-Date:   Mon, 19 Dec 2022 11:41:05 +0100
+        with ESMTP id S231733AbiLSMYc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 07:24:32 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B7CDEC1
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 04:24:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671452671; x=1702988671;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=b/Ja06ChzojhwtU9xOIyZa6e0znKmo560T14mQ4F9/I=;
+  b=RKThsEqmIyZ7uizPRb2RSUtZYNeTMZi0ENjaeaEERwDaNH4ydLRDD055
+   dmk9oPR3N9cU7hvxKnHM1Vm2jWvoBfVJEnT0I4JWZdVhR+wTiYHca7/+3
+   ReBwK1sHyJ77yi9Hsjgjgp0MecqH45TUV/lXyKIbdlsMKL+FfIa1PHyD9
+   p2knzAEFOvTkUVo5BcOQEFUtUxR5tB+dOMdz+Xyd2tSOau10M/xwS1iq7
+   3V41hOR4fK/1fzBK3k+80Bv+VelVegoHoojHwItg5xvxHvOM1awWL2srx
+   6myYeUw/dDt2fr0Fi4W1hNSzsRQOcOnI5e5f7ggDLU4Fo/5zpGVdL9Ou5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="319382362"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="319382362"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 04:24:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="757608932"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="757608932"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Dec 2022 04:24:25 -0800
+Message-ID: <983a1eb1-4599-517b-6c88-63a0051ae261@linux.intel.com>
+Date:   Mon, 19 Dec 2022 14:25:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: Regression: onboard-usb-hub breaks USB on RPi 3 #forregzbot
-Content-Language: en-US, de-DE
-To:     regressions@lists.linux.dev
+ Firefox/102.0 Thunderbird/102.4.2
+Content-Language: en-US
+To:     Ladislav Michl <oss-lists@triops.cz>
 Cc:     linux-usb@vger.kernel.org
-References: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671446467;cac0c4de;
-X-HE-SMSGID: 1p7DZy-0003XI-0p
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Y45iXb6VCNiz7ZVd@lenoch> <Y49A1Pv6dUScQ9x/@lenoch>
+ <Y5tHWwHctY6wr+CJ@lenoch>
+ <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
+ <Y5zkCxQqBWR+/b4F@lenoch>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: xHCI host dies on device unplug
+In-Reply-To: <Y5zkCxQqBWR+/b4F@lenoch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[Note: this mail contains only information for Linux kernel regression
-tracking. Mails like these contain '#forregzbot' in the subject to make
-then easy to spot and filter out. The author also tried to remove most
-or all individuals from the list of recipients to spare them the hassle.]
+On 16.12.2022 23.32, Ladislav Michl wrote:
+> On Fri, Dec 16, 2022 at 12:13:23PM +0200, Mathias Nyman wrote:
+>> On 15.12.2022 18.12, Ladislav Michl wrote:
+>>> +Cc Mathias as he last touched this code path and may know more :)
+>>>
+>>> On Tue, Dec 06, 2022 at 02:17:08PM +0100, Ladislav Michl wrote:
+>>>> On Mon, Dec 05, 2022 at 10:27:57PM +0100, Ladislav Michl wrote:
+>>>>> I'm running current linux.git on custom Marvell OCTEON III CN7020
+>>>>> based board. USB devices like FTDI (idVendor=0403, idProduct=6001,
+>>>>> bcdDevice= 6.00) Realtek WiFi dongle (idVendor=0bda, idProduct=8179,
+>>>>> bcdDevice= 0.00) works without issues, while Ralink WiFi dongle
+>>>>> (idVendor=148f, idProduct=5370, bcdDevice= 1.01) kills the host on
+>>>>> disconnect:
+>>>>> xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command
+>>>>> xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
+>>>>> xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
+>>>>>
+>>>>> Unfortunately I do not have a datasheet for CN7020 SoC, so it is hard
+>>>>> to tell if there is any errata :/ In case anyone see a clue in debug
+>>>>> logs bellow, I'll happily give it a try.
+>>>>
+>>>> So I do have datasheet now. As a wild guess I tried to use dlmc_ref_clk0
+>>>> instead of dlmc_ref_clk1 as a refclk-type-ss and it fixed unplug death.
+>>>> I have no clue why, but anyway - sorry for the noise :) Perhaps Octeon's
+>>>> clock init is worth to be verified...
+>>>
+>>> After all whenever xhci dies with "xHCI host not responding to stop endpoint
+>>> command" depends also on temperature, so there seems to be race somewhere.
+>>>
+>>> As a quick and dirty verification, whenever xhci really died, following patch
+>>> was tested and it fixed issue. It just treats ep as if stop endpoint command
+>>> succeeded. Any clues? I'll happily provide more traces.
+>>
+>> It's possible the controller did complete the stop endpoint command but driver
+>> didn't get the interrupt for the event for some reason.
+>>
 
-On 18.12.22 14:35, Stefan Wahren wrote:
-> 
-> unfortunately i didn't notice this regression sooner, but the following
-> commits breaks USB on Raspberry Pi 3:
-> 
-> usb: misc: Add onboard_usb_hub driver
+Looks like controller didn't complete the stop endpoint command.
 
-that's 43993626de00
+Event for last completed command (before cycle bit change "c" -> "C") was:
+   0x00000000028f55a0: TRB 00000000035e81a0 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c,
 
-> usb: misc: onboard-hub: add support for Microchip USB2514B USB 2.0 hub
+This was for command at 35e81a0, which in the command ring was:
+   0x00000000035e81a0: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
 
-that's 8bc063641ceb
+The stop endpoint command was the next command queued, at 35e81b0:
+   0x00000000035e81b0: Stop Ring Command: slot 1 sp 0 ep 3 flags c
 
-/me wonders which of this it actually is and assumes it's the latter
+There were a lot of URBs queued for this device, and they are cancelled one by one after disconnect.
 
-> After these commits (and this new driver enabled like in
-> multi_v7_defconfig) the connected USB devices doesn't work anymore
-> (mouse is powered, but no function of keyboard and mouse). Reconnecting
-> doesn't help. Running lsusb hangs forever.
+Was this the only device connected? If so does connecting another usb device to another root port help?
+Just to test if the host for some reason partially stops a while after last device disconnect?
 
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
+Another thing is that the stop endpoint command fails after three soft reset tries,
+does disabling soft reset help?
 
-#regzbot ^introduced 8bc063641ceb
-#regzbot title usb: onboard-usb-hub breaks USB on RPi3
-#regzbot ignore-activity
+Either add somwehere:
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+xhci->quirks |= XHCI_NO_SOFT_RETRY;
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+or:
 
-> Here is the relevant dmesg in error case:
-> 
-> [    0.078446] usbcore: registered new interface driver usbfs
-> [    0.078516] usbcore: registered new interface driver hub
-> [    0.078574] usbcore: registered new device driver usb
-> [    0.078827] usb_phy_generic phy: supply vcc not found, using dummy
-> regulator
-> [    0.078990] usb_phy_generic phy: dummy supplies not allowed for
-> exclusive requests
-> [    2.897258] usbcore: registered new interface driver pegasus
-> [    2.903161] usbcore: registered new interface driver asix
-> [    2.908809] usbcore: registered new interface driver ax88179_178a
-> [    2.915185] usbcore: registered new interface driver cdc_ether
-> [    2.921281] usbcore: registered new interface driver smsc75xx
-> [    2.927305] usbcore: registered new interface driver smsc95xx
-> [    2.933298] usbcore: registered new interface driver net1080
-> [    2.939219] usbcore: registered new interface driver cdc_subset
-> [    2.945407] usbcore: registered new interface driver zaurus
-> [    2.951238] usbcore: registered new interface driver cdc_ncm
-> [    3.030909] usbcore: registered new interface driver usb-storage
-> [    3.178104] usbcore: registered new interface driver usbhid
-> [    3.191022] usbhid: USB HID core driver
-> [    3.981848] dwc2 3f980000.usb: supply vusb_d not found, using dummy
-> regulator
-> [    3.992467] dwc2 3f980000.usb: supply vusb_a not found, using dummy
-> regulator
-> [    4.053728] dwc2 3f980000.usb: DWC OTG Controller
-> [    4.065343] dwc2 3f980000.usb: new USB bus registered, assigned bus
-> number 1
-> [    4.079415] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
-> [    4.463447] usb 1-1: new high-speed USB device number 2 using dwc2
-> [    5.063444] usb 1-1.1: new high-speed USB device number 3 using dwc2
-> [    5.523440] usb 1-1.3: new low-speed USB device number 4 using dwc2
-> [    5.685546] input: HID 046a:0011 as
-> /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0001/input/input0
-> [    5.763446] usb 1-1.1.2: new low-speed USB device number 5 using dwc2
-> [    5.777968] hid-generic 0003:046A:0011.0001: input: USB HID v1.11
-> Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
-> [    5.931991] input: PixArt Microsoft USB Optical Mouse as
-> /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0002/input/input1
-> [    5.954668] hid-generic 0003:045E:00CB.0002: input: USB HID v1.11
-> Mouse [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
-> [    6.263459] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
-> [   14.828915] onboard-usb-hub 3f980000.usb:usb-port@1: supply vdd not
-> found, using dummy regulator
-> [   14.829493] onboard-usb-hub 3f980000.usb:usb-port@1:usb-port@1:
-> supply vdd not found, using dummy regulator
-> [   14.829729] usbcore: registered new device driver onboard-usb-hub
-> [   14.829945] usb 1-1.1: USB disconnect, device number 3
-> [   14.829958] usb 1-1.1.1: USB disconnect, device number 6
-> [   14.830419] usb 1-1.1.2: USB disconnect, device number 5
-> [   14.854725] usb 1-1.3: USB disconnect, device number 4
-> [   14.896865] usbcore: registered new interface driver lan78xx
-> 
-> Unfortunately i'm not that USB expert, so please tell me if you need
-> more information.
-> 
-> 
-> 
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index b07d3740f554..aa1c92a72916 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2515,7 +2515,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+                 remaining       = 0;
+                 break;
+         case COMP_USB_TRANSACTION_ERROR:
+-               if (xhci->quirks & XHCI_NO_SOFT_RETRY ||
++               if (1 || xhci->quirks & XHCI_NO_SOFT_RETRY ||
+                     (ep_ring->err_count++ > MAX_SOFT_RETRY) ||
+                     le32_to_cpu(slot_ctx->tt_info) & TT_SLOT)
+                         break;
+
+
+
+Just for reference, the last events and commands:
+
+  # cat /sys/kernel/debug/usb/xhci/xhci-hcd.0.auto/event-ring/trbs
+
+  0x00000000028f5520: TRB 00000000036c9ce0 status 'Success' len 0 slot 1 ep 1 type 'Transfer Event' flags e:c
+  0x00000000028f5530: TRB 00000000036c9d10 status 'Success' len 0 slot 1 ep 1 type 'Transfer Event' flags e:c
+  0x00000000028f5540: TRB 00000000030fa9a0 status 'USB Transaction Error' len 3860 slot 1 ep 3 type 'Transfer Event' flags e:c
+  0x00000000028f5550: TRB 00000000035e8180 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c
+  0x00000000028f5560: TRB 0000000001000000 status 'Success' len 0 slot 0 ep 0 type 'Port Status Change Event' flags e:c
+  0x00000000028f5570: TRB 00000000030fa9a0 status 'USB Transaction Error' len 3860 slot 1 ep 3 type 'Transfer Event' flags e:c
+  0x00000000028f5580: TRB 00000000035e8190 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c
+  0x00000000028f5590: TRB 00000000030fa9a0 status 'USB Transaction Error' len 3860 slot 1 ep 3 type 'Transfer Event' flags e:c
+  0x00000000028f55a0: TRB 00000000035e81a0 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c
+
+  # cat /sys/kernel/debug/usb/xhci/xhci-hcd.0.auto/command-ring/trbs
+  0x00000000035e8120: Stop Ring Command: slot 1 sp 0 ep 3 flags c
+  0x00000000035e8130: Set TR Dequeue Pointer Command: deq 00000000030fa891 stream 0 slot 1 ep 3 flags c
+  0x00000000035e8140: Stop Ring Command: slot 1 sp 0 ep 3 flags c
+  0x00000000035e8150: Set TR Dequeue Pointer Command: deq 00000000030fa8a1 stream 0 slot 1 ep 3 flags c
+  0x00000000035e8160: Stop Ring Command: slot 1 sp 0 ep 3 flags c
+  0x00000000035e8170: Set TR Dequeue Pointer Command: deq 00000000030fa8b1 stream 0 slot 1 ep 3 flags c
+  0x00000000035e8180: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
+  0x00000000035e8190: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
+  0x00000000035e81a0: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
+  0x00000000035e81b0: Stop Ring Command: slot 1 sp 0 ep 3 flags c
+  
+-Mathias
