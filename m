@@ -2,67 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD7F651154
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 18:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7892651189
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 19:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiLSRoU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 12:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S231991AbiLSSLB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 13:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLSRoS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 12:44:18 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC79610573
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 09:44:17 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id z144so5069805iof.3
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 09:44:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YqliwFtcJutPu3minuCfL/fQPu5mhh9/fFlsiWaptxQ=;
-        b=LSPhxBMlDvUbquN88kj/pETVhz36BEiL8KPLu8lRowTRfpSdYadzsV7QarUczLC3Mv
-         s3naiKmuai8ILttvEyggAe2Gv21et014yZI5o7RIoOWszEdSUe7DhqTRP1lZKgQ+ZPUx
-         CuEAzxWGwx1kkrpNgH/jbN/zJw+XjnlF79jrQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YqliwFtcJutPu3minuCfL/fQPu5mhh9/fFlsiWaptxQ=;
-        b=OiDf6290n04TkSDWbOtha3fg2/In7hoTV8sUGvZJ1n//6jZFe57dKN2gLBJiOsO6FL
-         OSnc2TWB5zV3NvMp4wJxitmTZyoJOAm1xiqbeVVZZfnHGwdHa01/WjPT9nS/ulkkhZPT
-         1giNxKIlwOOQP9cNpAEf13okU5oDIlhpV8yY4LT4lb3iFDIHoD22Ra7dnbmpODQvMrwZ
-         nQZ9Z8l/JzAjgjuL/5Y1TEE/8F+aHkpMgrrsd7NpKEhzakrwwZeBQIKkXsjohwUJFXBK
-         Xb4pYJt6gAbZIC2i+90fg1mevXpuvZZtpZ1bao4KuOXC5zWKPYkWpY79vQsL7CPC5zd7
-         MA3w==
-X-Gm-Message-State: ANoB5pmatKv42WUf8omUs9Wx/tdMaLh/B0tjt6snye7FkujuYfcnQ9AO
-        NEM+f2Nv2AbC2yf2zEvo5oASXw==
-X-Google-Smtp-Source: AA0mqf4LLmCey9fB9AU/98DazVruZzCZN+1Q3RYhgvkYS3ur5qH8CSXmXOuA4oKNYnDKs8lCmRshOg==
-X-Received: by 2002:a6b:cac7:0:b0:6d4:264f:2427 with SMTP id a190-20020a6bcac7000000b006d4264f2427mr26778283iog.21.1671471857120;
-        Mon, 19 Dec 2022 09:44:17 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id x5-20020a0566022c4500b006d8b7bcaa6esm4197929iov.4.2022.12.19.09.44.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 09:44:16 -0800 (PST)
-Date:   Mon, 19 Dec 2022 17:44:15 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, regressions@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: Regression: onboard-usb-hub breaks USB on RPi 3
-Message-ID: <Y6Ci7wWvbBRRQkR6@google.com>
-References: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
+        with ESMTP id S232089AbiLSSK5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 13:10:57 -0500
+Received: from relay19.mail.ox.ac.uk (relay19.mail.ox.ac.uk [129.67.1.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E3D13D5A
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 10:10:54 -0800 (PST)
+Received: from smtp7.mail.ox.ac.uk ([129.67.1.205])
+        by relay19.mail.ox.ac.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <dima.pasechnik@cs.ox.ac.uk>)
+        id 1p7KbF-00041D-A9; Mon, 19 Dec 2022 18:10:53 +0000
+Received: from cpc78303-slou2-2-0-cust186.17-4.cable.virginm.net ([62.31.33.187]:56288 helo=hilbert.cs.ox.ac.uk)
+        by smtp7.mail.ox.ac.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <dima.pasechnik@cs.ox.ac.uk>)
+        id 1p7KbE-0003Ld-PD; Mon, 19 Dec 2022 18:10:52 +0000
+Received: by hilbert.cs.ox.ac.uk (Postfix, from userid 1000)
+        id BFF00744465; Mon, 19 Dec 2022 18:10:51 +0000 (GMT)
+Date:   Mon, 19 Dec 2022 18:10:51 +0000
+From:   dima.pasechnik@cs.ox.ac.uk
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: usb 1-3: Product: BBC micro:bit CMSIS-DAP not recognised
+Message-ID: <Y6CpKxZ4KsiYttbL@hilbert>
+References: <Y6Bfx+Ksm/Qz3N8y@hilbert>
+ <Y6B8jd7dHsa85Wny@kroah.com>
+ <Y6CRbgwHzjr2KNxK@hilbert>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wQAKYByI35Qcowj9"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <Y6CRbgwHzjr2KNxK@hilbert>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=vindex&search=dimpase@cs.ox.ac.uk
+X-Oxford-Username: coml0531
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,127 +50,155 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Stefan,
 
-Sorry for the regression.
+--wQAKYByI35Qcowj9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What seems to happen is this:
+On Mon, Dec 19, 2022 at 04:29:34PM +0000, dima.pasechnik@cs.ox.ac.uk wrote:
+> On Mon, Dec 19, 2022 at 04:00:29PM +0100, Greg KH wrote:
+> > On Mon, Dec 19, 2022 at 12:57:43PM +0000, dima.pasechnik@cs.ox.ac.uk wr=
+ote:
+> > > this is a popular in UK education board: https://microbit.org/
+> > > - the currently sold (Version 2) one. It does on the same USB 3 thing=
+s:
+> > >   mass storage, ACM, and serial. Serial appears unknown to the kernel.
+> > >=20
+> > > With Linux kernel 6.0.8 on x86_54, and various USB serial drivers ins=
+talled, upon plugging into USB
+> > > port, I see in dmesg:
+> > >=20
+> > > [45460.035306] usb 1-3: new full-speed USB device number 10 using xhc=
+i_hcd
+> > > [45460.166959] usb 1-3: New USB device found, idVendor=3D0d28, idProd=
+uct=3D0204, bcdDevice=3D10.00
+> > > [45460.166965] usb 1-3: New USB device strings: Mfr=3D1, Product=3D2,=
+ SerialNumber=3D3
+> > > [45460.166967] usb 1-3: Product: BBC micro:bit CMSIS-DAP
+> > > [45460.166968] usb 1-3: Manufacturer: Arm
+> > > [45460.166970] usb 1-3: SerialNumber: 9905360200052833525e24a702a6855=
+2000000006e052820
+> > > [45460.172168] usb-storage 1-3:1.0: USB Mass Storage device detected
+> > > [45460.172538] scsi host1: usb-storage 1-3:1.0
+> > > [45460.173203] cdc_acm 1-3:1.1: ttyACM0: USB ACM device
+> > > [45460.175258] hid-generic 0003:0D28:0204.0005: hiddev96,hidraw0: USB=
+ HID v1.00 Device [Arm BBC micro:bit CMSIS-DAP] on usb-0000:00:14.0-3/input3
+> > > [45460.175581] usbserial_generic 1-3:1.4: The "generic" usb-serial dr=
+iver is only for testing and one-off prototypes.
+> > > [45460.175585] usbserial_generic 1-3:1.4: Tell linux-usb@vger.kernel.=
+org to add your device to a proper driver.
+> > > [45460.175587] usbserial_generic 1-3:1.4: device has no bulk endpoints
+> > > [45460.175818] usbserial_generic 1-3:1.5: The "generic" usb-serial dr=
+iver is only for testing and one-off prototypes.
+> > > [45460.175821] usbserial_generic 1-3:1.5: Tell linux-usb@vger.kernel.=
+org to add your device to a proper driver.
+> > > [45460.175823] usbserial_generic 1-3:1.5: generic converter detected
+> >=20
+> > Is there some script adding this device id to the generic driver such
+> > that you are binding to this device?  Did the script come with the
+> > device?
+>=20
+> It didn't bind to a /dev/ttyUSB* device, even if I manually loaded the co=
+rresponding modules.
+> Then I read somewhere I had to do=20
+>=20
+>     echo 0d28 0204 >/sys/bus/usb-serial/drivers/generic/new_id
+>=20
+> (the numbers there are VID and PID of the board)
+> to make it recognisible by the driver.
+>=20
+> Unfortunately I can't easily tell you how it behaved without it,
+> as it seems to be impossible to remove things there :-(
+> https://unix.stackexchange.com/questions/463291/how-to-remove-device-id-f=
+rom-manually-entered-usb-serial-driver
+> Can it be wiped by reinstalling the kernel? I can do this...
 
-arch/arm/boot/dts/bcm283x-rpi-lan7515.dtsi specifies device nodes for the
-two (nested) USB hubs (which is done rarely since USB devices (including
-hubs) are autodetected). The DT nodes were most likely only added to be
-able to configure the LED modes of the USB to Ethernet adapter. With
-43993626de00 ("usb: misc: onboard-hub: add support for Microchip USB2514B
-USB 2.0 hub") the onboard_usb_hub driver gained support for the hubs on
-the RPi3. The onboard_usb_hub driver expects a regulator ("vdd") in the DT
-node of the USB hub, which isn't present for the RPi3 (this isn't an error
-per se). Without the regulator the onboard_hub platform driver fails to
-probe, when the USB driver of the hub is probed (onboard_hub_usbdev_probe())
-it doesn't find the corresponding platform driver instance
-(_find_onboard_hub()) and defers probing. When the deferred probe runs it
-encounters the same situation, rinse and repeat.
+OK, I removed the "new_id" by kernel reinstall, and
+now all I get is the following:
 
-One possible fix would be to specify the 'missing' "vdd" property, however
-that wouln't fix the issue for other boards with a similar configurations.
-Instead the driver could check if "vdd" exists in the DT node of the hub,
-and not defer probing if it doesn't.
+[  176.427839] usb 1-3: new full-speed USB device number 5 using xhci_hcd
+[  176.558808] usb 1-3: New USB device found, idVendor=3D0d28, idProduct=3D=
+0204, bcdDevice=3D10.00
+[  176.558825] usb 1-3: New USB device strings: Mfr=3D1, Product=3D2, Seria=
+lNumber=3D3
+[  176.558833] usb 1-3: Product: BBC micro:bit CMSIS-DAP
+[  176.558839] usb 1-3: Manufacturer: Arm
+[  176.558845] usb 1-3: SerialNumber: 9905360200052833525e24a702a6855200000=
+0006e052820
+[  176.566864] hid-generic 0003:0D28:0204.0001: hiddev96,hidraw0: USB HID v=
+1.00 Device [Arm BBC micro:bit CMSIS-DAP] on usb-0000:00:14.0-3/input3
+[  177.727061] usb-storage 1-3:1.0: USB Mass Storage device detected
+[  177.733180] scsi host0: usb-storage 1-3:1.0
+[  177.733333] usbcore: registered new interface driver usb-storage
+[  177.733607] cdc_acm 1-3:1.1: ttyACM0: USB ACM device
+[  177.733646] usbcore: registered new interface driver cdc_acm
+[  177.733648] cdc_acm: USB Abstract Control Model driver for USB modems an=
+d ISDN adapters
+[  177.739250] usbcore: registered new interface driver uas
+[  178.752970] scsi 0:0:0:0: Direct-Access     MBED     VFS              0.=
+1  PQ: 0 ANSI: 2
+[  178.759252] sd 0:0:0:0: [sda] 131200 512-byte logical blocks: (67.2 MB/6=
+4.1 MiB)
+[  178.759440] sd 0:0:0:0: [sda] Write Protect is off
+[  178.759443] sd 0:0:0:0: [sda] Mode Sense: 03 00 00 00
+[  178.759611] sd 0:0:0:0: [sda] No Caching mode page found
+[  178.759613] sd 0:0:0:0: [sda] Assuming drive cache: write through
+[  178.769674]  sda:
+[  178.769773] sd 0:0:0:0: [sda] Attached SCSI removable disk
 
-Could you please try if the below patch fixes the issue on the Rpi 3?
+As you see, no USB serial driver is loaded.
+However, https://tech.microbit.org/software/daplink-interface/
+tells you that there is a 2nd CPU on the board, aka "interface chip",
+capable of UART.
 
-Thanks
+If I manually load the driver:
+# insmod /lib/modules/6.0.8-gentoo-x86_64/kernel/drivers/usb/serial/usbseri=
+al.ko vendor=3D0x0d28 product=3D0x0204
+and re-insert the USB connector, I see dmesg log as in my previous
+message, and indeed, /dev/ttyUSB0 appears.
 
-m.
+Well, perhaps, it's all supposed to work without a kernel module, hard
+to say. It's however confusing that a /dev/tty1 (or some other number)
+appears, but it's totally non-transparent that it is a USB connection
+(no reflection of it in dmesg).
 
-
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index d63c63942af1..4d2a27afb09c 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -363,6 +363,15 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
- 	hub = dev_get_drvdata(&pdev->dev);
- 	put_device(&pdev->dev);
- 
-+	/*
-+	 * Some boards have device tree nodes for USB hubs supported by this
-+	 * driver, but the nodes don't have all properties needed for the driver
-+	 * to work properly. Use the absence of the "vdd" regulator as an
-+	 * indicator of such nodes.
-+	 */
-+	if (!of_get_property(pdev->dev.of_node, "vdd", NULL))
-+		return ERR_PTR(-ENODEV);
-+
- 	/*
- 	 * The presence of drvdata ('hub') indicates that the platform driver
- 	 * finished probing. This handles the case where (conceivably) we could
+HTH
+Dmitrii
 
 
+>=20
+> > How well does it work?  Why did the developer choose to use this generic
+> > driver instead of a real one?
+> I don't know, I followed the advice in dmesg, which sounds as if it's
+> not a "real" driver.
+>=20
+> Best,
+> Dmitrii
+> >=20
+> > > [45460.175905] usb 1-3: generic converter now attached to ttyUSB0
+> >=20
+> > It is not unknown, seems to bind here, but does it work?
+> >=20
+> > thanks,
+> >=20
+> > greg k-h
 
-On Sun, Dec 18, 2022 at 02:35:43PM +0100, Stefan Wahren wrote:
-> Hi,
-> 
-> unfortunately i didn't notice this regression sooner, but the following
-> commits breaks USB on Raspberry Pi 3:
-> 
-> usb: misc: Add onboard_usb_hub driver
-> usb: misc: onboard-hub: add support for Microchip USB2514B USB 2.0 hub
-> 
-> After these commits (and this new driver enabled like in multi_v7_defconfig)
-> the connected USB devices doesn't work anymore (mouse is powered, but no
-> function of keyboard and mouse). Reconnecting doesn't help. Running lsusb
-> hangs forever.
-> 
-> Here is the relevant dmesg in error case:
-> 
-> [    0.078446] usbcore: registered new interface driver usbfs
-> [    0.078516] usbcore: registered new interface driver hub
-> [    0.078574] usbcore: registered new device driver usb
-> [    0.078827] usb_phy_generic phy: supply vcc not found, using dummy
-> regulator
-> [    0.078990] usb_phy_generic phy: dummy supplies not allowed for exclusive
-> requests
-> [    2.897258] usbcore: registered new interface driver pegasus
-> [    2.903161] usbcore: registered new interface driver asix
-> [    2.908809] usbcore: registered new interface driver ax88179_178a
-> [    2.915185] usbcore: registered new interface driver cdc_ether
-> [    2.921281] usbcore: registered new interface driver smsc75xx
-> [    2.927305] usbcore: registered new interface driver smsc95xx
-> [    2.933298] usbcore: registered new interface driver net1080
-> [    2.939219] usbcore: registered new interface driver cdc_subset
-> [    2.945407] usbcore: registered new interface driver zaurus
-> [    2.951238] usbcore: registered new interface driver cdc_ncm
-> [    3.030909] usbcore: registered new interface driver usb-storage
-> [    3.178104] usbcore: registered new interface driver usbhid
-> [    3.191022] usbhid: USB HID core driver
-> [    3.981848] dwc2 3f980000.usb: supply vusb_d not found, using dummy
-> regulator
-> [    3.992467] dwc2 3f980000.usb: supply vusb_a not found, using dummy
-> regulator
-> [    4.053728] dwc2 3f980000.usb: DWC OTG Controller
-> [    4.065343] dwc2 3f980000.usb: new USB bus registered, assigned bus
-> number 1
-> [    4.079415] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
-> [    4.463447] usb 1-1: new high-speed USB device number 2 using dwc2
-> [    5.063444] usb 1-1.1: new high-speed USB device number 3 using dwc2
-> [    5.523440] usb 1-1.3: new low-speed USB device number 4 using dwc2
-> [    5.685546] input: HID 046a:0011 as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0001/input/input0
-> [    5.763446] usb 1-1.1.2: new low-speed USB device number 5 using dwc2
-> [    5.777968] hid-generic 0003:046A:0011.0001: input: USB HID v1.11
-> Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
-> [    5.931991] input: PixArt Microsoft USB Optical Mouse as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0002/input/input1
-> [    5.954668] hid-generic 0003:045E:00CB.0002: input: USB HID v1.11 Mouse
-> [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
-> [    6.263459] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
-> [   14.828915] onboard-usb-hub 3f980000.usb:usb-port@1: supply vdd not
-> found, using dummy regulator
-> [   14.829493] onboard-usb-hub 3f980000.usb:usb-port@1:usb-port@1: supply
-> vdd not found, using dummy regulator
-> [   14.829729] usbcore: registered new device driver onboard-usb-hub
-> [   14.829945] usb 1-1.1: USB disconnect, device number 3
-> [   14.829958] usb 1-1.1.1: USB disconnect, device number 6
-> [   14.830419] usb 1-1.1.2: USB disconnect, device number 5
-> [   14.854725] usb 1-1.3: USB disconnect, device number 4
-> [   14.896865] usbcore: registered new interface driver lan78xx
-> 
-> Unfortunately i'm not that USB expert, so please tell me if you need more
-> information.
-> 
+
+
+--wQAKYByI35Qcowj9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEJVdDnfI7raAa4RJxoksLHjfJBTEFAmOgqSgACgkQoksLHjfJ
+BTFIQwgAtITI2KG12X45s0HJU1ANbZMiFnvHCP8geCuOuIgjmpMBv5G5P0QzJfce
+HnNme8yrnz58uAzSDd2YntAyT1VqbURed+68ngE3SiBVekH/H1jHJdZaRsP3QrSS
+b7su+GpNxoy2nCSj75C6RCpJRf+51LFwdbJcmvwAWrKNvfDPq+c/Vad8aK23tT0y
+pROVeXrNJnD1BkFcDnixLQgLYktrAywwzPbL4B6CCRZdcou2hbdFQPjsZJDwHWMB
+HpBvlhbax6qamv0U09+jsA8rKNNO8qP9REMscmn40mZw1rPZT2Q9cDD6dE2MCaa9
+16OmXHfjva7esOLe/2zPd+ErPW3n5g==
+=Apzk
+-----END PGP SIGNATURE-----
+
+--wQAKYByI35Qcowj9--
