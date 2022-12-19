@@ -2,124 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B1765150B
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 22:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC3D651510
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 22:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiLSVk7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 16:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S232532AbiLSVpx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 16:45:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiLSVk4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 16:40:56 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5865D113
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 13:40:54 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id b189so10041552vsc.10
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 13:40:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b0lZ9H61ffuyWT5v/mD9MPUBMs9gBi6BOfPbdE5H3Cc=;
-        b=RGKpKnvwsu92s39ZICRbT6oNnETwNW3atD20amN/lcRp18RYNoO4wGtDFQDU+oeevE
-         tR3zVtefmWET6AXP6ucq5gASmcH62ZLkSqzv7cKmx1QG8AyEMguXdgTMN944C/zo8yGv
-         AxYgVRe8iccPJFPo92zKrPHz2gRwnRMawy755OsP0aH7BPO4wCUDpAki9F9pmDwmIg9t
-         feWk3S0+wTgieqkXVLcJobshpCKOYWR6T+eRgminpytOAEO87HqC5HrPTLd7nrBIt0Ie
-         pBd2+qmxKwiQuW7F/igh9192OvD+IvOy1Cw5NvW1hrO3cxd1Sp99CbOzONgjkBJ31zO0
-         TRrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b0lZ9H61ffuyWT5v/mD9MPUBMs9gBi6BOfPbdE5H3Cc=;
-        b=qYM2MsON2bBbCQS1z7Fzhu4kL+5pCq4sD/Im9yt4AC3ZAnm2UkRaRbhWfSUOXlVN31
-         +oWe+2rNSL/OruKsEIX0+Sb6YtjMgbBlv3mR7oaEUgCcOhYvQy1h6xaCIu5e8RNad2Fz
-         qeU44afElC5CUGx6hItYADzjpf7QQ+3pDnlM+1LBtvVZqfqtue82e9fnXIEDvbs82BVH
-         SSd+RZYnYMf62QP0lElzbcRlgfiLoevyqZeVUghJMyDKRrxKGeXVkKgabxyueO3rozWz
-         rFLHMuNZ1o+8STI64f1jS4fCt8kOibLPX3w84kemKYUY4Sguz0jJTrUyk9gq28hmvMnb
-         GtuQ==
-X-Gm-Message-State: AFqh2kodeBhv+GpvQFrscppkXzwdRX91tsx3ivByyG801LCy5/nfEdY8
-        ICjvIZZOZ+RMw4NYqvaUuWccUy15n3YjVJFya3wITA==
-X-Google-Smtp-Source: AMrXdXunXpVUQSC1E212BDorayyxTvtJQdCJ3MFfjCdbPC4ogzCh2qmoge/BZ4NqmL2AsBHr95/mAWiLa0TfgJV+fkI=
-X-Received: by 2002:a67:ffd5:0:b0:3bc:441f:a808 with SMTP id
- w21-20020a67ffd5000000b003bc441fa808mr984012vsq.36.1671486053254; Mon, 19 Dec
- 2022 13:40:53 -0800 (PST)
+        with ESMTP id S232117AbiLSVpv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 16:45:51 -0500
+Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D2326D3
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 13:45:48 -0800 (PST)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id 7Nx9pliOiPm6C7NxBplKIn; Mon, 19 Dec 2022 22:45:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1671486346; bh=NKbc23NBK5BLr/xqBDh7wQ03PlrsII3+Pq0wUHCHi7w=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=rD8tiNIkdK2+pSAcXwCddLZVewnKHuiDKdTS/UXxnmz25jQYglDr8V0eYJfdje+bC
+         NDIG6y9cFa+qMB0akc36CE6/VkV9RbxSMmzGkTMerUixqenc+e0zVe2HjeoUAC091l
+         YXUMZV2+3+GdS4uqEu6nYz/dldbrKKPPHldA4YxostTXwQSQXyTRMGOCgxMc3uBKHG
+         u8bEij4K7eMjRASv3RnMC0tjqF//aiQx+qBzMUN9e2YNg3iwEKCVEN7A1BnXn9Y5cE
+         Sb26320+NwSH0MvGgr5KKfV2/1cxF/dlWzmwNQeWFi3xCDnXZyHHOeeIMr6CyzM53R
+         6CQXNeK6wU2gw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1671486346; bh=NKbc23NBK5BLr/xqBDh7wQ03PlrsII3+Pq0wUHCHi7w=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=rD8tiNIkdK2+pSAcXwCddLZVewnKHuiDKdTS/UXxnmz25jQYglDr8V0eYJfdje+bC
+         NDIG6y9cFa+qMB0akc36CE6/VkV9RbxSMmzGkTMerUixqenc+e0zVe2HjeoUAC091l
+         YXUMZV2+3+GdS4uqEu6nYz/dldbrKKPPHldA4YxostTXwQSQXyTRMGOCgxMc3uBKHG
+         u8bEij4K7eMjRASv3RnMC0tjqF//aiQx+qBzMUN9e2YNg3iwEKCVEN7A1BnXn9Y5cE
+         Sb26320+NwSH0MvGgr5KKfV2/1cxF/dlWzmwNQeWFi3xCDnXZyHHOeeIMr6CyzM53R
+         6CQXNeK6wU2gw==
+Date:   Mon, 19 Dec 2022 22:45:43 +0100
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: xHCI host dies on device unplug
+Message-ID: <Y6Dbh1xJucfNvwXq@lenoch>
+References: <Y45iXb6VCNiz7ZVd@lenoch>
+ <Y49A1Pv6dUScQ9x/@lenoch>
+ <Y5tHWwHctY6wr+CJ@lenoch>
+ <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
+ <Y5zkCxQqBWR+/b4F@lenoch>
+ <983a1eb1-4599-517b-6c88-63a0051ae261@linux.intel.com>
+ <Y6Ct5s5fIoA9FsAt@lenoch>
 MIME-Version: 1.0
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-11-allenwebb@google.com>
- <Y6DWaODE5F9x+Qq1@bombadil.infradead.org>
-In-Reply-To: <Y6DWaODE5F9x+Qq1@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Mon, 19 Dec 2022 15:40:42 -0600
-Message-ID: <CAJzde07K0siUs-eKfXxVp7R47hF8TdADGeTEvFtwxHVg9NV7FA@mail.gmail.com>
-Subject: Re: [PATCH v9 10/10] docs: Include modules.builtin.alias
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6Ct5s5fIoA9FsAt@lenoch>
+X-CMAE-Envelope: MS4wfKziIYS2Bg50qU77fn+gwNai2R9LGvmk69m6/B0U416ZFuBROZnVBlquTr+aYavA5vujTU6lQIsQcuaf6IdNhlB+GaG02aRPaZwEz0TsbpYPvmYOiFeE
+ Q9/gMj4SWWPb+sPGdmSHA+anHSqT4sbNqGBlsAU5IKTjgaxKIF/Ca5Rb4rwxMjvsp5Ud6CgP+nWNK+Sh9iO8MNYTxsHAaWzFhE0=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Mon, Dec 19, 2022 at 02:46:18PM -0600, Allen Webb wrote:
-> > Update the documentation to include the presense and use case of
-> > modules.builtin.alias.
-> >
-> > Signed-off-by: Allen Webb <allenwebb@google.com>
-> > ---
-> >  Documentation/kbuild/kbuild.rst | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-> > index 08f575e6236c..1c7c02040a54 100644
-> > --- a/Documentation/kbuild/kbuild.rst
-> > +++ b/Documentation/kbuild/kbuild.rst
-> > @@ -17,6 +17,12 @@ modules.builtin
-> >  This file lists all modules that are built into the kernel. This is used
-> >  by modprobe to not fail when trying to load something builtin.
-> >
-> > +modules.builtin.alias
-> > +---------------------
-> > +This file lists all match-id based aliases for modules built into the kernel.
-> > +These are intended to enable userspace to make authorization decisions based
-> > +on which modules are likely to be bound to a device after it is authorized.
->
-> What is an example? This sounds obscure.
+On Mon, Dec 19, 2022 at 07:31:02PM +0100, Ladislav Michl wrote:
+> On Mon, Dec 19, 2022 at 02:25:46PM +0200, Mathias Nyman wrote:
+> > On 16.12.2022 23.32, Ladislav Michl wrote:
+> > > On Fri, Dec 16, 2022 at 12:13:23PM +0200, Mathias Nyman wrote:
+> > > > On 15.12.2022 18.12, Ladislav Michl wrote:
+> > > > > +Cc Mathias as he last touched this code path and may know more :)
+> > > > > 
+> > > > > On Tue, Dec 06, 2022 at 02:17:08PM +0100, Ladislav Michl wrote:
+> > > > > > On Mon, Dec 05, 2022 at 10:27:57PM +0100, Ladislav Michl wrote:
+> > > > > > > I'm running current linux.git on custom Marvell OCTEON III CN7020
+> > > > > > > based board. USB devices like FTDI (idVendor=0403, idProduct=6001,
+> > > > > > > bcdDevice= 6.00) Realtek WiFi dongle (idVendor=0bda, idProduct=8179,
+> > > > > > > bcdDevice= 0.00) works without issues, while Ralink WiFi dongle
+> > > > > > > (idVendor=148f, idProduct=5370, bcdDevice= 1.01) kills the host on
+> > > > > > > disconnect:
+> > > > > > > xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command
+> > > > > > > xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
+> > > > > > > xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
+> > > > > > > 
+> > > > > > > Unfortunately I do not have a datasheet for CN7020 SoC, so it is hard
+> > > > > > > to tell if there is any errata :/ In case anyone see a clue in debug
+> > > > > > > logs bellow, I'll happily give it a try.
+> > > > > > 
+> > > > > > So I do have datasheet now. As a wild guess I tried to use dlmc_ref_clk0
+> > > > > > instead of dlmc_ref_clk1 as a refclk-type-ss and it fixed unplug death.
+> > > > > > I have no clue why, but anyway - sorry for the noise :) Perhaps Octeon's
+> > > > > > clock init is worth to be verified...
+> > > > > 
+> > > > > After all whenever xhci dies with "xHCI host not responding to stop endpoint
+> > > > > command" depends also on temperature, so there seems to be race somewhere.
+> > > > > 
+> > > > > As a quick and dirty verification, whenever xhci really died, following patch
+> > > > > was tested and it fixed issue. It just treats ep as if stop endpoint command
+> > > > > succeeded. Any clues? I'll happily provide more traces.
+> > > > 
+> > > > It's possible the controller did complete the stop endpoint command but driver
+> > > > didn't get the interrupt for the event for some reason.
+> > > > 
+> > 
+> > Looks like controller didn't complete the stop endpoint command.
+> > 
+> > Event for last completed command (before cycle bit change "c" -> "C") was:
+> >   0x00000000028f55a0: TRB 00000000035e81a0 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c,
+> > 
+> > This was for command at 35e81a0, which in the command ring was:
+> >   0x00000000035e81a0: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
+> > 
+> > The stop endpoint command was the next command queued, at 35e81b0:
+> >   0x00000000035e81b0: Stop Ring Command: slot 1 sp 0 ep 3 flags c
+> > 
+> > There were a lot of URBs queued for this device, and they are cancelled one by one after disconnect.
+> > 
+> > Was this the only device connected? If so does connecting another usb device to another root port help?
+> > Just to test if the host for some reason partially stops a while after last device disconnect?
+> 
+> Device is connected directly into SoC. Once connected into HUB, host doesn't die
+> (as noted in other email, sorry for not replying to my own message, so it got lost)
+> It seems as intentional (power management?) optimization. If another device is
+> plugged in before 5 sec timeout expires, host completes stop endpoint command.
+> 
+> Unfortunately I cannot find anything describing this behavior in
+> documentation, so I'll ask manufacturer support.
 
-Many of the devices that match the usb_storage driver only specify the
-vendor id, product id, and device id (VID:PID:D) and do not match
-against device class, interface class, etc. Here are some examples
-from modules.alias: A grep for wildcards in these fields yields 6136
-matches:
-grep 'dc\*dsc\*dp\*ic\*isc\*ip\*in\*'
-/lib/modules/5.19.11-1rodete1-amd64/modules.alias | wc -l
-6136
+As support is usually slow I asked search engine first and this sounds
+familiar:
+"Synopsis Designware USB3 IP earlier than v3.00a which is configured in silicon
+with DWC_USB3_SUSPEND_ON_DISCONNECT_EN=1, would need a specific quirk to prevent
+xhci host controller from dying when device is disconnected."
 
-To write USBGuard policy that only authorizes devices that bind to a
-particular module the policy needs to be aware of all these VID:PID:D
-which can change between kernel versions.
+usb: dwc3: Add quirk for Synopsis device disconnection errata
+https://patchwork.kernel.org/project/linux-omap/patch/1424151697-2084-5-git-send-email-Sneeker.Yeh@tw.fujitsu.com/
 
-This is done at runtime rather than excluding modules from the build
-because some devices are not needed at or before login or when a
-device is locked. By not authorizing new devices that would bind to a
-set of modules, these modules become unreachable to an attacker who
-seeks to exploit kernel bugs in those modules.
+Any clue what happened with that? I haven't found any meaningfull traces...
 
-I could add this detail to the documentation file, but I was trying to
-keep the description to about the same length as the others around it.
-
->
->   Luis
+> Both solutions, do nothing or reset controller once last device is unpluged
+> works, but I doubt they are suitable for mainline kernel without further
+> investigation.
+> 
+> > Another thing is that the stop endpoint command fails after three soft reset tries,
+> > does disabling soft reset help?
+> 
+> No, this does not cause any change.
+> 
+> 	ladis
