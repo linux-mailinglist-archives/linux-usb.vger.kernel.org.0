@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB08650DAA
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 15:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D24D5650DAF
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 15:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiLSOoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 09:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S232397AbiLSOoL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 09:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiLSOnq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 09:43:46 -0500
+        with ESMTP id S232396AbiLSOnv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 09:43:51 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7556316
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 06:43:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC65E642E
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 06:43:42 -0800 (PST)
 Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B67DA1571;
-        Mon, 19 Dec 2022 15:43:34 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 55D7615D2;
+        Mon, 19 Dec 2022 15:43:35 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1671461015;
-        bh=VCftue8huFKAyhHeL43GelP5sN1zLCu1RLmY1eDQGWI=;
+        bh=l5U3od6CjsJom8By1Dy/VEIPFHiRs/1mkrVLPexRPUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Snpp+9XyafDAHb9M+7+rUMeMA6p9noP6kjDusYtvITbUqctLg35Kr3PQiBmwrx0jA
-         P8OXkdat9pz8NyPkyn8ikfEToHHdgGjN4dxlfS00xb5dGmTzUz0J11UGd9XTHaxH/X
-         IuiCDfnp8t2c3gXsPGeF6nmOTdkKAAWsoFMDE7do=
+        b=jDCMG9LPDAnrqypHx1zDWYIw6rYd1vNrRAYH+oQ+ammFZ3E3/D0xlcgidjNo9Baum
+         fOltlX7T1fAXUizJJ8YUd76oCeocdXd0c7kDi96e73eP2xrXlJmIKxc3kSTaSzmgR/
+         rSNT7w3uH2thcCuJaqrv4/OGuGIVDvQ3qe4NhGw4=
 From:   Daniel Scally <dan.scally@ideasonboard.com>
 To:     linux-usb@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
         w36195@motorola.com, m.grzeschik@pengutronix.de,
         kieran.bingham@ideasonboard.com, torleiv@huddly.com,
         Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2 4/7] usb: gadget: uvc: Copy color matching descriptor for each frame
-Date:   Mon, 19 Dec 2022 14:43:13 +0000
-Message-Id: <20221219144316.757680-5-dan.scally@ideasonboard.com>
+Subject: [PATCH v2 5/7] usb: gadget: uvc: Remove the hardcoded default color matching
+Date:   Mon, 19 Dec 2022 14:43:14 +0000
+Message-Id: <20221219144316.757680-6-dan.scally@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221219144316.757680-1-dan.scally@ideasonboard.com>
 References: <20221219144316.757680-1-dan.scally@ideasonboard.com>
@@ -47,204 +47,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As currently implemented the default color matching descriptor is
-appended after _all_ the formats and frames that the gadget is
-configured with. According to the UVC specifications however this
-is supposed to be on a per-format basis (section 3.9.2.6):
+A hardcoded default color matching descriptor is embedded in struct
+f_uvc_opts but no longer has any use - remove it.
 
-"Only one instance is allowed for a given format and if present,
-the Color Matching descriptor shall be placed following the Video
-and Still Image Frame descriptors for that format."
-
-Associate the default color matching descriptor with struct
-uvcg_format and copy it once-per-format instead of once only.
-
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
 Changes in v2:
 
-	- Renamed uvcg_cmd and associated variables.
-	- Formatting
-	- Increased the refcnt variable for the color matching struct in
-	the format make() functions
+	- None
 
- drivers/usb/gadget/function/uvc_configfs.c | 64 +++++++++++++++++++++-
- drivers/usb/gadget/function/uvc_configfs.h | 13 +++--
- 2 files changed, 68 insertions(+), 9 deletions(-)
+ drivers/usb/gadget/function/f_uvc.c | 9 ---------
+ drivers/usb/gadget/function/u_uvc.h | 1 -
+ 2 files changed, 10 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 147d3def24dd..6fb7ac8366fe 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -748,6 +748,29 @@ static const char * const uvcg_format_names[] = {
- 	"mjpeg",
- };
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 32f2c1645467..fbb57a0df57f 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -803,7 +803,6 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+ 	struct uvc_camera_terminal_descriptor *cd;
+ 	struct uvc_processing_unit_descriptor *pd;
+ 	struct uvc_output_terminal_descriptor *od;
+-	struct uvc_color_matching_descriptor *md;
+ 	struct uvc_descriptor_header **ctl_cls;
+ 	int ret;
  
-+static struct uvcg_color_matching *
-+uvcg_format_get_default_color_match(struct config_item *streaming)
-+{
-+	struct config_item *color_matching_item, *cm_default;
-+	struct uvcg_color_matching *color_match;
-+
-+	color_matching_item = config_group_find_item(to_config_group(streaming),
-+						     "color_matching");
-+	if (!color_matching_item)
-+		return NULL;
-+
-+	cm_default = config_group_find_item(to_config_group(color_matching_item),
-+					    "default");
-+	config_item_put(color_matching_item);
-+	if (!cm_default)
-+		return NULL;
-+
-+	color_match = to_uvcg_color_matching(to_config_group(cm_default));
-+	config_item_put(cm_default);
-+
-+	return color_match;
-+}
-+
- static ssize_t uvcg_format_bma_controls_show(struct uvcg_format *f, char *page)
- {
- 	struct f_uvc_opts *opts;
-@@ -1561,8 +1584,15 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
- 		'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00,
- 		 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
- 	};
-+	struct uvcg_color_matching *color_match;
-+	struct config_item *streaming;
- 	struct uvcg_uncompressed *h;
+@@ -852,14 +851,6 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+ 	od->bSourceID			= 2;
+ 	od->iTerminal			= 0;
  
-+	streaming = group->cg_item.ci_parent;
-+	color_match = uvcg_format_get_default_color_match(streaming);
-+	if (!color_match)
-+		return ERR_PTR(-EINVAL);
-+
- 	h = kzalloc(sizeof(*h), GFP_KERNEL);
- 	if (!h)
- 		return ERR_PTR(-ENOMEM);
-@@ -1580,6 +1610,8 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
+-	md = &opts->uvc_color_matching;
+-	md->bLength			= UVC_DT_COLOR_MATCHING_SIZE;
+-	md->bDescriptorType		= USB_DT_CS_INTERFACE;
+-	md->bDescriptorSubType		= UVC_VS_COLORFORMAT;
+-	md->bColorPrimaries		= 1;
+-	md->bTransferCharacteristics	= 1;
+-	md->bMatrixCoefficients		= 4;
+-
+ 	/* Prepare fs control class descriptors for configfs-based gadgets */
+ 	ctl_cls = opts->uvc_fs_control_cls;
+ 	ctl_cls[0] = NULL;	/* assigned elsewhere by configfs */
+diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
+index 24b8681b0d6f..577c1c48ca4a 100644
+--- a/drivers/usb/gadget/function/u_uvc.h
++++ b/drivers/usb/gadget/function/u_uvc.h
+@@ -52,7 +52,6 @@ struct f_uvc_opts {
+ 	struct uvc_camera_terminal_descriptor		uvc_camera_terminal;
+ 	struct uvc_processing_unit_descriptor		uvc_processing;
+ 	struct uvc_output_terminal_descriptor		uvc_output_terminal;
+-	struct uvc_color_matching_descriptor		uvc_color_matching;
  
- 	INIT_LIST_HEAD(&h->fmt.frames);
- 	h->fmt.type = UVCG_UNCOMPRESSED;
-+	h->fmt.color_matching = color_match;
-+	color_match->refcnt++;
- 	config_group_init_type_name(&h->fmt.group, name,
- 				    &uvcg_uncompressed_type);
- 
-@@ -1744,8 +1776,15 @@ static const struct config_item_type uvcg_mjpeg_type = {
- static struct config_group *uvcg_mjpeg_make(struct config_group *group,
- 						   const char *name)
- {
-+	struct uvcg_color_matching *color_match;
-+	struct config_item *streaming;
- 	struct uvcg_mjpeg *h;
- 
-+	streaming = group->cg_item.ci_parent;
-+	color_match = uvcg_format_get_default_color_match(streaming);
-+	if (!color_match)
-+		return ERR_PTR(-EINVAL);
-+
- 	h = kzalloc(sizeof(*h), GFP_KERNEL);
- 	if (!h)
- 		return ERR_PTR(-ENOMEM);
-@@ -1761,6 +1800,8 @@ static struct config_group *uvcg_mjpeg_make(struct config_group *group,
- 
- 	INIT_LIST_HEAD(&h->fmt.frames);
- 	h->fmt.type = UVCG_MJPEG;
-+	h->fmt.color_matching = color_match;
-+	color_match->refcnt++;
- 	config_group_init_type_name(&h->fmt.group, name,
- 				    &uvcg_mjpeg_type);
- 
-@@ -1909,7 +1950,8 @@ static inline struct uvc_descriptor_header
- enum uvcg_strm_type {
- 	UVCG_HEADER = 0,
- 	UVCG_FORMAT,
--	UVCG_FRAME
-+	UVCG_FRAME,
-+	UVCG_CMD,
- };
- 
- /*
-@@ -1959,6 +2001,10 @@ static int __uvcg_iter_strm_cls(struct uvcg_streaming_header *h,
- 			if (ret)
- 				return ret;
- 		}
-+
-+		ret = fun(f->fmt->color_matching, priv2, priv3, 0, UVCG_CMD);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	return ret;
-@@ -2014,6 +2060,12 @@ static int __uvcg_cnt_strm(void *priv1, void *priv2, void *priv3, int n,
- 		*size += frm->frame.b_frame_interval_type * sz;
- 	}
- 	break;
-+	case UVCG_CMD: {
-+		struct uvcg_color_matching *color_match = priv1;
-+
-+		*size += sizeof(color_match->desc);
-+	}
-+	break;
- 	}
- 
- 	++*count;
-@@ -2099,6 +2151,13 @@ static int __uvcg_fill_strm(void *priv1, void *priv2, void *priv3, int n,
- 				frm->frame.b_frame_interval_type);
- 	}
- 	break;
-+	case UVCG_CMD: {
-+		struct uvcg_color_matching *color_match = priv1;
-+
-+		memcpy(*dest, &color_match->desc, sizeof(color_match->desc));
-+		*dest += sizeof(color_match->desc);
-+	}
-+	break;
- 	}
- 
- 	return 0;
-@@ -2138,7 +2197,7 @@ static int uvcg_streaming_class_allow_link(struct config_item *src,
- 	if (ret)
- 		goto unlock;
- 
--	count += 2; /* color_matching, NULL */
-+	count += 1; /* NULL */
- 	*class_array = kcalloc(count, sizeof(void *), GFP_KERNEL);
- 	if (!*class_array) {
- 		ret = -ENOMEM;
-@@ -2165,7 +2224,6 @@ static int uvcg_streaming_class_allow_link(struct config_item *src,
- 		kfree(data_save);
- 		goto unlock;
- 	}
--	*cl_arr = (struct uvc_descriptor_header *)&opts->uvc_color_matching;
- 
- 	++target_hdr->linked;
- 	ret = 0;
-diff --git a/drivers/usb/gadget/function/uvc_configfs.h b/drivers/usb/gadget/function/uvc_configfs.h
-index c7392c9b840e..174ee691302b 100644
---- a/drivers/usb/gadget/function/uvc_configfs.h
-+++ b/drivers/usb/gadget/function/uvc_configfs.h
-@@ -52,12 +52,13 @@ enum uvcg_format_type {
- };
- 
- struct uvcg_format {
--	struct config_group	group;
--	enum uvcg_format_type	type;
--	unsigned		linked;
--	struct list_head	frames;
--	unsigned		num_frames;
--	__u8			bmaControls[UVCG_STREAMING_CONTROL_SIZE];
-+	struct config_group		group;
-+	enum uvcg_format_type		type;
-+	unsigned			linked;
-+	struct list_head		frames;
-+	unsigned			num_frames;
-+	__u8				bmaControls[UVCG_STREAMING_CONTROL_SIZE];
-+	struct uvcg_color_matching	*color_matching;
- };
- 
- struct uvcg_format_ptr {
+ 	/*
+ 	 * Control descriptors pointers arrays for full-/high-speed and
 -- 
 2.34.1
 
