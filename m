@@ -2,145 +2,287 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167C7650F6D
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 16:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A90650FC2
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 17:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbiLSP43 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 10:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
+        id S231370AbiLSQF6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 11:05:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiLSP4Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 10:56:24 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4229CB9C
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 07:56:23 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id f189so9092478vsc.11
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 07:56:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lp/jDDrui9+5VJNtK3d7ggJcR4YcH0qlGdYeLuREwOY=;
-        b=cExqj1N6ke9SAEWp6hyoMjK/wbi9P1LF2RVF2RAcfw6SqFFoZ3Q9c/pUsaZe1XlkDh
-         63ANSopPN9UE4om7K8GyHeo9Z+JkWeXV1M0pG7juwsEkepuFajxMvackRcAyVuWeeSgf
-         IbRmVxs1sN/WPbhovtHJmsP3IFpQfIgXmRePR30DgseCqk0hkciifzAp+G15c+GYEcWR
-         a9MI8FnwNb7wQ12f6SZHflIpkDZwYbuGh5/D72hcnu7QK5j+56N2uPM20W2QzFYrAwy2
-         iPJTGrWQ6b6TJzyNw3zn6wSUlCdv3YuWwIcjDEkVV4IXhOYSq5IVM8S97Qb9IuheJeV/
-         dFnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lp/jDDrui9+5VJNtK3d7ggJcR4YcH0qlGdYeLuREwOY=;
-        b=paS1+2+ShYTqjj9X9w/WbtxYbxhi1wf1WiRLG/avWQkgjtfweGLHkzhUyVadMJzb+7
-         ltLuQJPCqzIMG0FDpB7JCYgwGCT+GmfQpfIxt/7eDf14hVdMV0uc/aI1aijHBVrJ4Uh9
-         ZftvlBrPorp/lTeoLnpkL1XlkV8HS89MoooTDZQUyXWG5SdDsu8DhBU/wjlUNG0lK6h4
-         pm34MS7U552RoguZc+twfVwEW5GbEuhAvT8ohB1KVAB9TTIF9i9CHRkphIHTvz/ZTh64
-         ASMMXnZIlqobbYA8XnMlhsyS6LjDtLYh1wkMib9IK8HscqGRduOYmZu9VByyFFX4ouxk
-         lERw==
-X-Gm-Message-State: ANoB5pk3Zhs6ql22XDXBLEumRmNbVX6sO5ZhSZF5DDqn2ySAp0PKbpOQ
-        t/2HHcOe9pigSzvPV8wxBHg6Ht0qaJu3NzwSK5c+1g==
-X-Google-Smtp-Source: AA0mqf7kDeOJmjEY7eLa8lKHcdZzwrkGFwHP28WkElG0ZxYbBHQA2QvybQCOSf7aWFoZROXqDSlsIzn/6MvqP0Nhf5A=
-X-Received: by 2002:a67:bd14:0:b0:3b2:e40d:1d9b with SMTP id
- y20-20020a67bd14000000b003b2e40d1d9bmr11897913vsq.51.1671465382222; Mon, 19
- Dec 2022 07:56:22 -0800 (PST)
+        with ESMTP id S232120AbiLSQFv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 11:05:51 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCBBF68
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 08:05:50 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1699A825;
+        Mon, 19 Dec 2022 17:05:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671465948;
+        bh=FJ7OOkLbkDN3y2wUjdcHJ3V75mCgpUs9vQMN0xhAY8c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H62TEZ/hTCpSnaG4+gpx4fgdXyO6jQ20pka96Y5aUC+ONpT1hnCongq+OzeTzMe2t
+         TlEnz//2p6JGT2Svm4UZMNHdbdnUGfWFEW9OfaxuOqnKgyi9lDoXNojtZTHEezEE7T
+         iJVREVax6lOvvlTyUDh4iOcfLceUswwwFuVxDLFk=
+Date:   Mon, 19 Dec 2022 18:05:43 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dan Scally <dan.scally@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        w36195@motorola.com, m.grzeschik@pengutronix.de, torleiv@huddly.com
+Subject: Re: [PATCH 6/6] usb: gadget: uvc: Allow creating new color matching
+ descriptors
+Message-ID: <Y6CL1xa/4ilz9Ovx@pendragon.ideasonboard.com>
+References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
+ <20221213083736.2284536-7-dan.scally@ideasonboard.com>
+ <167110563688.9133.15927668222226418339@Monstersaurus>
+ <97d59440-016f-8326-6553-dc032db48b3c@ideasonboard.com>
+ <Y5+fbfqO/P3VrwZT@pendragon.ideasonboard.com>
+ <df474580-3481-2924-c485-9259626acb95@ideasonboard.com>
 MIME-Version: 1.0
-References: <Y5IA2NYE5IaAzNby@kroah.com> <20221216221703.294683-1-allenwebb@google.com>
- <20221216221703.294683-2-allenwebb@google.com> <7394f5cc-35be-0bc8-f92d-bb9e71d3f85c@csgroup.eu>
-In-Reply-To: <7394f5cc-35be-0bc8-f92d-bb9e71d3f85c@csgroup.eu>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Mon, 19 Dec 2022 09:56:11 -0600
-Message-ID: <CAJzde07sLeqALQ-rwtdSkx0n3eqOj94TJ0w-BhCwGRJjLDGj0g@mail.gmail.com>
-Subject: Re: [PATCH v7 1/5] module.h: MODULE_DEVICE_TABLE for built-in modules
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <df474580-3481-2924-c485-9259626acb95@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 17, 2022 at 4:05 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 16/12/2022 =C3=A0 23:16, Allen Webb a =C3=A9crit :
-> > Implement MODULE_DEVICE_TABLE for build-in modules to make it possible
-> > to generate a builtin.alias file to complement modules.alias.
+Hi Dan,
+
+On Mon, Dec 19, 2022 at 09:44:53AM +0000, Dan Scally wrote:
+> On 18/12/2022 23:17, Laurent Pinchart wrote:
+> > On Thu, Dec 15, 2022 at 12:03:03PM +0000, Dan Scally wrote:
+> >> On 15/12/2022 12:00, Kieran Bingham wrote:
+> >>> Quoting Daniel Scally (2022-12-13 08:37:36)
+> >>>> Allow users to create new color matching descriptors in addition to
+> >>>> the default one. These must be associated with a UVC format in order
+> >>>> to be transmitted to the host, which is achieved by symlinking from
+> >>>> the format to the newly created color matching descriptor - extend
+> >>>> the uncompressed and mjpeg formats to support that linking operation.
+> >>>>
+> >>>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> >>>> ---
+> >>>>    .../ABI/testing/configfs-usb-gadget-uvc       |  4 +-
+> >>>>    drivers/usb/gadget/function/uvc_configfs.c    | 79 ++++++++++++++++++-
+> >>>>    2 files changed, 79 insertions(+), 4 deletions(-)
+> >>>>
+> >>>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> >>>> index 3512f4899fe3..ce629f0880a9 100644
+> >>>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> >>>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> >>>> @@ -160,10 +160,10 @@ Date:             Dec 2014
+> >>>>    KernelVersion: 4.0
+> >>>>    Description:   Color matching descriptors
+> >>>>    
+> >>>> -What:          /config/usb-gadget/gadget/functions/uvc.name/streaming/color_matching/default
+> >>>> +What:          /config/usb-gadget/gadget/functions/uvc.name/streaming/color_matching/name
+> >>>
+> >>> Hrm... do we need to keep 'default' (and keep it available in patch
+> >>> 1/6?) so that the default is still kept accesible?
+> >>
+> >> It's still there - it's just no longer necessarily the only entry
+> >>
+> >>> That would mean others are added as siblings to the default, and then
+> >>> the one that gets linked is the one that is used perhaps?
+> >>
+> >> Yep that's how it's implemented
+> >>
+> >>> Feels like that would overcomplicate 'the default case' maybe ... but
+> >>> I'm weary that this is 'removing' the default from ABI...?
+> >>>
+> >>>>    Date:          Dec 2014
+> >>>>    KernelVersion: 4.0
+> >>>
+> >>> Hrm ... and this would leave the documentation stating that you could
+> >>> provide custom color matching descriptors from v4.0 onwards, which would
+> >>> be inaccurate ?
+> >>
+> >> Ah, good point...fair enough, I'll add a new entry for the custom named
+> >> ones.
+> >>
+> >>> So I'm not sure we can just rename this documentation segment eitherway.
+> >>>
+> >>>> -Description:   Default color matching descriptors
+> >>>> +Description:   color matching descriptors
+> >>>>    
+> >>>>                   All attributes read/write:
+> >>>>    
+> >>>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+> >>>> index 4fbc42d738a4..82c10f0dab71 100644
+> >>>> --- a/drivers/usb/gadget/function/uvc_configfs.c
+> >>>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
+> >>>> @@ -769,6 +769,58 @@ static struct uvcg_cmd *uvcg_format_get_default_cmd(struct config_item *streamin
+> >>>>           return cmd;
+> >>>>    }
+> >>>>    
+> >>>> +static int uvcg_format_allow_link(struct config_item *src, struct config_item *tgt)
+> >>>> +{
+> >>>> +       struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
+> >>>> +       struct config_item *streaming, *color_matching;
+> >>>> +       struct uvcg_cmd *color_matching_desc;
+> >>>> +       struct uvcg_format *fmt;
+> >>>> +       int ret = 0;
+> >>>> +
+> >>>> +       mutex_lock(su_mutex);
+> >>>> +
+> >>>> +       streaming = src->ci_parent->ci_parent;
+> >>>> +       color_matching = config_group_find_item(to_config_group(streaming), "color_matching");
+> >>>> +       if (!color_matching || color_matching != tgt->ci_parent) {
+> >>>> +               ret = -EINVAL;
+> >>>> +               goto out_put_cm;
+> >>>> +       }
+> >>>> +
+> >>>> +       color_matching_desc = to_uvcg_cmd(to_config_group(tgt));
+> >>>> +       fmt = to_uvcg_format(src);
+> >>>> +       fmt->color_matching = color_matching_desc;
 > >
-> > Signed-off-by: Allen Webb <allenwebb@google.com>
-> > ---
-> >   include/linux/module.h | 10 +++++++++-
-> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> > As you store a pointer to the target, don't you need to keep a reference
+> > to it somehow, to avoid the target being deleted ? Or is that handled by
+> > configfs itself ?
+> 
+> configfs is doing it in configfs_symlink()
+> 
+> > It also looks like you need to refcount the number of links to the
+> > target, to disallow changes to the color matching attributes when the
+> > descriptor is linked.
+> 
+> Yes; I had thought that that was unnecessary so skipped it, but turns 
+> out I'm wrong - I'll add that in.
+> 
+> > This being said, are links the best option here ? Why can't we create
+> > color matching descriptors as children of format descriptors the same
+> > way that frame descriptors are handled ?
+> 
+> We can do it that way, but I thought that it made more sense to expand 
+> the current implementation because
+> 
+> 
+> 1) I'm reluctant to get rid of the default descriptor and I wouldn't 
+> want to have them in multiple places.
+> 
+> 2) We're planning to expand the uncompressed format to support more than 
+> just yuy2, which for some cameras might result in _a lot_ of available 
+> formats (vivid has 80!). It seems easier to have color matching 
+> descriptors that you can set once and simply link to than have to 
+> recreate them for each format.
+
+The first point doesn't convince me, as I think we should remove the
+default. As the UVC specification doesn't mandate a color matching
+descriptor, I think it should be left to the system integrator whether
+to include one or not.
+
+I had considered the second point as well. In practice I expect we'll
+have few formats, but still more than one. I also expect them to have
+identical color matching data. Links could avoid recreating the same
+descriptors, but the gain isn't very big. Consider the format
+descriptors as well, we could have identifical format descriptors for
+different formats, and we don't use links.
+
+I thus still think links are overkill, but if the general consensus is
+that they're better, I'm fine with that.
+
+> >>>> +
+> >>>> +out_put_cm:
+> >>>> +       config_item_put(color_matching);
+> >>>> +       mutex_unlock(su_mutex);
+> >>>> +
+> >>>> +       return ret;
+> >>>> +}
+> >>>> +
+> >>>> +static void uvcg_format_drop_link(struct config_item *src, struct config_item *tgt)
+> >>>> +{
+> >>>> +       struct config_item *streaming;
+> >>>> +       struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
+> >>>> +       struct uvcg_format *fmt;
+> >>>> +       struct uvcg_cmd *cmd;
+> >>>> +
+> >>>> +       mutex_lock(su_mutex);
+> >>>> +
+> >>>> +       streaming = src->ci_parent->ci_parent;
+> >>>> +       cmd = uvcg_format_get_default_cmd(streaming);
+> >>>> +
+> >>>> +       fmt = to_uvcg_format(src);
+> >>>> +       fmt->color_matching = cmd;
+> >>>> +
+> >>>> +       mutex_unlock(su_mutex);
+> >>>> +}
+> >>>> +
+> >>>> +static struct configfs_item_operations uvcg_format_item_operations = {
 > >
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index ec61fb53979a9..49e4019393127 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -243,7 +243,15 @@ extern void cleanup_module(void);
-> >   extern typeof(name) __mod_##type##__##name##_device_table           \
-> >     __attribute__ ((unused, alias(__stringify(name))))
-> >   #else  /* !MODULE */
-> > -#define MODULE_DEVICE_TABLE(type, name)
-> > +/* The names may not be unique for built-in modules, so include the mo=
-dule name
-> > + * to guarantee uniqueness.
-> > + */
->
-> This is network only comment style.
-
-I have fixed this in my local copy and will include it with the next upload=
-.
-
->
-> Other parts of kenel have different style, see
-> https://docs.kernel.org/process/coding-style.html#commenting
->
-> > +#define MODULE_DEVICE_TABLE(type, name)                               =
-       \
-> > +extern void *CONCATENATE(                                            \
->
-> 'extern' keyword is pointless of function prototypes and deprecated.
-> Don't add new occurences.
-
-
-This is a weird case because these symbols are used for post
-compilation processing by modpost. If I drop the extern keyword, the
-build fails with a bunch of errors of the form:
-
-/mnt/host/source/src/third_party/kernel/upstream/drivers/hid/hid-generic.c:=
-79:1:
-error: definition
-'__mod_hid__hid_table__kmod_hid_generic_device_table' cannot also be
-an alias
-MODULE_DEVICE_TABLE(hid, hid_table);
-^
-/mnt/host/source/src/third_party/kernel/upstream/include/linux/module.h:255=
-:26:
-note: expanded from macro 'MODULE_DEVICE_TABLE'
-        __attribute__ ((unused, alias(__stringify(name))))
-
->
->
-> > +     CONCATENATE(__mod_##type##__##name##__,                         \
-> > +             __KBUILD_MODNAME),                                      \
-> > +     _device_table)                                                  \
-> > +     __attribute__ ((unused, alias(__stringify(name))))
-> >   #endif
+> > Not a candidate for this patch (or this series), but I wonder if this
+> > could be made const. It would involve making several pointers in struct
+> > config_item_type const, which may or may not be straightforward.
 > >
-> >   /* Version of form [<epoch>:]<version>[-<extra-version>].
+> >>>> +       .release        = uvcg_config_item_release,
+> >>>> +       .allow_link     = uvcg_format_allow_link,
+> >>>> +       .drop_link      = uvcg_format_drop_link,
+> >>>> +};
+> >>>> +
+> >>>>    static ssize_t uvcg_format_bma_controls_show(struct uvcg_format *f, char *page)
+> >>>>    {
+> >>>>           struct f_uvc_opts *opts;
+> >>>> @@ -1569,7 +1621,7 @@ static struct configfs_attribute *uvcg_uncompressed_attrs[] = {
+> >>>>    };
+> >>>>    
+> >>>>    static const struct config_item_type uvcg_uncompressed_type = {
+> >>>> -       .ct_item_ops    = &uvcg_config_item_ops,
+> >>>> +       .ct_item_ops    = &uvcg_format_item_operations,
+> >>>>           .ct_group_ops   = &uvcg_uncompressed_group_ops,
+> >>>>           .ct_attrs       = uvcg_uncompressed_attrs,
+> >>>>           .ct_owner       = THIS_MODULE,
+> >>>> @@ -1764,7 +1816,7 @@ static struct configfs_attribute *uvcg_mjpeg_attrs[] = {
+> >>>>    };
+> >>>>    
+> >>>>    static const struct config_item_type uvcg_mjpeg_type = {
+> >>>> -       .ct_item_ops    = &uvcg_config_item_ops,
+> >>>> +       .ct_item_ops    = &uvcg_format_item_operations,
+> >>>>           .ct_group_ops   = &uvcg_mjpeg_group_ops,
+> >>>>           .ct_attrs       = uvcg_mjpeg_attrs,
+> >>>>           .ct_owner       = THIS_MODULE,
+> >>>> @@ -1912,6 +1964,28 @@ static const struct config_item_type uvcg_color_matching_type = {
+> >>>>     * streaming/color_matching
+> >>>>     */
+> >>>>    
+> >>>> +static struct config_group *uvcg_color_matching_make(struct config_group *group,
+> >>>> +                                                    const char *name)
+> >>>> +{
+> >>>> +       struct uvcg_cmd *cmd;
+> >>>> +
+> >>>> +       cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+> >>>> +       if (!cmd)
+> >>>> +               return ERR_PTR(-ENOMEM);
+> >>>> +
+> >>>> +       cmd->desc.bLength = UVC_DT_COLOR_MATCHING_SIZE;
+> >>>> +       cmd->desc.bDescriptorType = USB_DT_CS_INTERFACE;
+> >>>> +       cmd->desc.bDescriptorSubType = UVC_VS_COLORFORMAT;
+> >>>> +
+> >>>> +       config_group_init_type_name(&cmd->group, name, &uvcg_color_matching_type);
+> >>>> +
+> >>>> +       return &cmd->group;
+> >>>> +}
+> >>>> +
+> >>>> +static struct configfs_group_operations uvcg_color_matching_grp_group_ops = {
+> >>>> +       .make_group     = uvcg_color_matching_make,
+> >>>> +};
+> >>>> +
+> >>>>    static int uvcg_color_matching_create_children(struct config_group *parent)
+> >>>>    {
+> >>>>           struct uvcg_cmd *cmd;
+> >>>> @@ -1937,6 +2011,7 @@ static int uvcg_color_matching_create_children(struct config_group *parent)
+> >>>>    static const struct uvcg_config_group_type uvcg_color_matching_grp_type = {
+> >>>>           .type = {
+> >>>>                   .ct_item_ops    = &uvcg_config_item_ops,
+> >>>> +               .ct_group_ops   = &uvcg_color_matching_grp_group_ops,
+> >>>>                   .ct_owner       = THIS_MODULE,
+> >>>>           },
+> >>>>           .name = "color_matching",
+
+-- 
+Regards,
+
+Laurent Pinchart
