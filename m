@@ -2,64 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B1E65126C
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 20:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2388B6512AC
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 20:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiLSTLN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 14:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S232171AbiLSTTI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 14:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiLSTLA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 14:11:00 -0500
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42954DFE7;
-        Mon, 19 Dec 2022 11:10:57 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1322d768ba7so12737096fac.5;
-        Mon, 19 Dec 2022 11:10:57 -0800 (PST)
+        with ESMTP id S231539AbiLSTTA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 14:19:00 -0500
+Received: from mail-oa1-x49.google.com (mail-oa1-x49.google.com [IPv6:2001:4860:4864:20::49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9454310FE2
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 11:18:59 -0800 (PST)
+Received: by mail-oa1-x49.google.com with SMTP id 586e51a60fabf-1444cf9e0d8so4640882fac.20
+        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 11:18:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eiMsBFbuAwwWsYZNb0dq7gOOooiEFAWwdKh7AXEOnMI=;
+        b=tG6Uh3Z9k4jSwxOaxcN6OQxf4A6DyUPQN+PXW+hziPymUkCM9V6sWgKzGQFEjiPvnk
+         l8ZiG6ScI3h7Tl6DLWNhreYHLKlhzuA/bfH+IxOgrZm5Mi4KyMF1Olu8Kx1u7+8Q8pjV
+         P3/oBaT5dSxMpVqWFG7Y1189wi+y+sXb4JGAfQ+CQHQsSifhGYIs2uQDuEs8FmzWWCoK
+         u27LXxUyHmVi5cHa63muTYGy7nmuM93PjZuja1+fYw62O0XgCTfIoGOhUXkqe/u1gBFV
+         f0eOEmnLPcn3+X0bEuk4CIGrgqTspj058qgQhdu2GxJEpA8iTcYsnW8eO99RYiq+ofX4
+         +NpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gHyNrMLw9TVdwvo9glGPtmC9whUFGDHMxj6CFCq5jcQ=;
-        b=Ucs6/9s0KQnLYQPCEq3fFyKZKjRD2OrC/pFSCmkzUFsvbVFA21Zb0QY/tUw5SXiBbi
-         TjR01k+21JZc8+P7v0eQf6rR+qtf+yQUwIna6Bj/+semOCq1lqxDNnLyF/PAhM6hP/AN
-         b3eRWB74kGOb/DQUKa300XwieknEB2x/Llj3PUnUoDsHbL5wXQbpz3g36ROME63c3J9N
-         2VPu4KSAwB1waxUkn10z1o9b16claTvbFUPUI6/C1SfnMh0CGioxEFov9M8N5VXR8z9J
-         BSOLu7dpZGkcFoHuzOBts3Tsqm5SbIhzvOEY1F9z6L6lSgGzNxobQ5G7PORJzMVNXWNf
-         vxjA==
-X-Gm-Message-State: ANoB5pn7YXXjnEnSgle92Xp51Rm02czU8nsSOFOn/yO1NAdfAC1iWkUY
-        chFpi0d5WPQcc6zaHdJBOg==
-X-Google-Smtp-Source: AA0mqf4ztAfqoCZ6mZ2cdyIEJB0UEQoy+ZFvktD++nPsr/zZhNIUv1aPDTv895sfSbNoXEc2hhllRg==
-X-Received: by 2002:a05:6870:c10e:b0:144:54b3:750 with SMTP id f14-20020a056870c10e00b0014454b30750mr21813961oad.12.1671477057063;
-        Mon, 19 Dec 2022 11:10:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w11-20020a056870430b00b001447602267esm5007095oah.41.2022.12.19.11.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 11:10:56 -0800 (PST)
-Received: (nullmailer pid 1974257 invoked by uid 1000);
-        Mon, 19 Dec 2022 19:10:56 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Heiko Stuebner <heiko@sntech.de>,
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eiMsBFbuAwwWsYZNb0dq7gOOooiEFAWwdKh7AXEOnMI=;
+        b=2IJZDBziFTuL9dyst0N/1Y1mFzIv+yj/4UF9aA8TwiYbAouQdnGZ350oQxWJetUIMV
+         DKdb//b8hLb3tfKbT1PBkoKCvhlGgkM5+f/TF7za+bYulrhDPOJP6gIHxoutQbch9u5U
+         2VBGDoaWzPdEr1gQ5sr4u6xV2VrifSsp0s3cofxjaP1TBiA7B48h1qPoKoGWogN4E3ja
+         6QjSavcI8XNMINlgGldcCr283ewKsnEN1OtCfw7ZFbKZDu/eADzVM5NHsS/MYyGDJhqZ
+         eAjy4IXQMgfHy3QniTN+/kB0WxfFtB7ugnfry3WXlbX+FGl7ji7AO0V4iZEWvNF6meDK
+         f9sA==
+X-Gm-Message-State: ANoB5pncJpXUwNdYLrcusPAG1xnw12HGB7Fv0MqAdUGShT1LqmR4dMt9
+        zsnNjyYi1l8MS9TRLzADflJc/OE5E1JHDtA=
+X-Google-Smtp-Source: AA0mqf4DLi2UOpHwa3pj3dhe8A3SizukPo6ORwrd7gzGfGnSsu4F9JCgksQuy24CWtDMyQ4r53h73DKvZRm/mwM=
+X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
+ (user=allenwebb job=sendgmr) by 2002:a05:6830:6408:b0:66e:6b6b:f7a5 with SMTP
+ id cj8-20020a056830640800b0066e6b6bf7a5mr20681030otb.153.1671477538946; Mon,
+ 19 Dec 2022 11:18:58 -0800 (PST)
+Date:   Mon, 19 Dec 2022 13:18:46 -0600
+In-Reply-To: <20221216221703.294683-1-allenwebb@google.com>
+Mime-Version: 1.0
+References: <20221216221703.294683-1-allenwebb@google.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221219191855.2010466-1-allenwebb@google.com>
+Subject: [PATCH v8 0/9] Generate modules.builtin.alias from match ids
+From:   Allen Webb <allenwebb@google.com>
+To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-rockchip@lists.infradead.org,
-        Johan Jonker <jbx6244@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its own schema
-Date:   Mon, 19 Dec 2022 13:10:38 -0600
-Message-Id: <20221219191038.1973807-2-robh@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221219191038.1973807-1-robh@kernel.org>
-References: <20221219191038.1973807-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Allen Webb <allenwebb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,188 +71,88 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK3399
-uses the discouraged parent wrapper node and child 'generic' DWC3 node.
-The intent was to modify the RK3399 DTs to use a single node, but the DT
-changes were rejected for ABI reasons. However, the schema was accepted
-as-is.
+Generate modules.builtin.alias from match ids
 
-To fix this, we need to move the RK3399 binding to its own schema file.
-The RK3328 and RK3568 bindings are correct and use a single node.
+This patch series (v8) generates `modules.builtin.alias` during modpost.
+The goal is for tools like USBGuard to leverage not only modules.aliases
+but also `modules.builtin.aliases` to associate devices with the modules
+that may be bound before deciding to authorize a device or not. This is
+particularly useful in cases when new devices of a particular type
+shouldn't be allowed part of the time like for lock screens.
 
-Cc: Johan Jonker <jbx6244@gmail.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/usb/rockchip,dwc3.yaml           |  10 +-
- .../bindings/usb/rockchip,rk3399-dwc3.yaml    | 115 ++++++++++++++++++
- 2 files changed, 119 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
+Also included in this series are style fixes and fixes for build
+breakages for built-in modules that relied on MODULE_DEVICE_TABLE being
+a no-op. Some of these were typos in the device table name and one
+ifdef-ed out the device table.
 
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-index b3798d94d2fd..edb130c780e4 100644
---- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-@@ -29,7 +29,6 @@ select:
-       contains:
-         enum:
-           - rockchip,rk3328-dwc3
--          - rockchip,rk3399-dwc3
-           - rockchip,rk3568-dwc3
-   required:
-     - compatible
-@@ -39,7 +38,6 @@ properties:
-     items:
-       - enum:
-           - rockchip,rk3328-dwc3
--          - rockchip,rk3399-dwc3
-           - rockchip,rk3568-dwc3
-       - const: snps,dwc3
- 
-@@ -90,7 +88,7 @@ required:
- 
- examples:
-   - |
--    #include <dt-bindings/clock/rk3399-cru.h>
-+    #include <dt-bindings/clock/rk3328-cru.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
-     bus {
-@@ -98,11 +96,11 @@ examples:
-       #size-cells = <2>;
- 
-       usbdrd3_0: usb@fe800000 {
--        compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
-+        compatible = "rockchip,rk3328-dwc3", "snps,dwc3";
-         reg = <0x0 0xfe800000 0x0 0x100000>;
-         interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
--        clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
--                 <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_GRF>;
-+        clocks = <&cru SCLK_USB3OTG_REF>, <&cru SCLK_USB3OTG_SUSPEND>,
-+                <&cru ACLK_USB3OTG>;
-         clock-names = "ref_clk", "suspend_clk",
-                       "bus_clk", "grf_clk";
-         dr_mode = "otg";
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
-new file mode 100644
-index 000000000000..e39a8a3a7ab3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
-@@ -0,0 +1,115 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/rockchip,rk3399-dwc3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip RK3399 SuperSpeed DWC3 USB SoC controller
-+
-+maintainers:
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+properties:
-+  compatible:
-+    const: rockchip,rk3399-dwc3
-+
-+  '#address-cells':
-+    const: 2
-+
-+  '#size-cells':
-+    const: 2
-+
-+  ranges: true
-+
-+  clocks:
-+    items:
-+      - description:
-+          Controller reference clock, must to be 24 MHz
-+      - description:
-+          Controller suspend clock, must to be 24 MHz or 32 KHz
-+      - description:
-+          Master/Core clock, must to be >= 62.5 MHz for SS
-+          operation and >= 30MHz for HS operation
-+      - description:
-+          USB3 aclk peri
-+      - description:
-+          USB3 aclk
-+      - description:
-+          Controller grf clock
-+
-+  clock-names:
-+    items:
-+      - const: ref_clk
-+      - const: suspend_clk
-+      - const: bus_clk
-+      - const: aclk_usb3_rksoc_axi_perf
-+      - const: aclk_usb3
-+      - const: grf_clk
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    const: usb3-otg
-+
-+patternProperties:
-+  '^usb@':
-+    $ref: snps,dwc3.yaml#
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#address-cells'
-+  - '#size-cells'
-+  - ranges
-+  - clocks
-+  - clock-names
-+  - resets
-+  - reset-names
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/rk3399-cru.h>
-+    #include <dt-bindings/power/rk3399-power.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    bus {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        usb {
-+            compatible = "rockchip,rk3399-dwc3";
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+            ranges;
-+            clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
-+              <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_RKSOC_AXI_PERF>,
-+              <&cru ACLK_USB3>, <&cru ACLK_USB3_GRF>;
-+            clock-names = "ref_clk", "suspend_clk",
-+                    "bus_clk", "aclk_usb3_rksoc_axi_perf",
-+                    "aclk_usb3", "grf_clk";
-+            resets = <&cru SRST_A_USB3_OTG0>;
-+            reset-names = "usb3-otg";
-+
-+            usb@fe800000 {
-+                compatible = "snps,dwc3";
-+                reg = <0x0 0xfe800000 0x0 0x100000>;
-+                interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH 0>;
-+                clocks = <&cru SCLK_USB3OTG0_REF>, <&cru ACLK_USB3OTG0>,
-+                  <&cru SCLK_USB3OTG0_SUSPEND>;
-+                clock-names = "ref", "bus_early", "suspend";
-+                dr_mode = "otg";
-+                phys = <&u2phy0_otg>, <&tcphy0_usb3>;
-+                phy-names = "usb2-phy", "usb3-phy";
-+                phy_type = "utmi_wide";
-+                snps,dis_enblslpm_quirk;
-+                snps,dis-u2-freeclk-exists-quirk;
-+                snps,dis_u2_susphy_quirk;
-+                snps,dis-del-phy-power-chg-quirk;
-+                snps,dis-tx-ipgap-linecheck-quirk;
-+                power-domains = <&power RK3399_PD_USB3>;
-+            };
-+        };
-+    };
-+...
+--
+
+# Generate modules.builtin.alias from match ids
+
+This series (v7) has incremental improvements over the previous series.
+One big positive of this patch series is it makes it harder for bugs
+in kernel modules related to MODULE_DEVICE_TABLE to hide when a module
+is only ever tested as a built-in module. This is demonstrated by all
+the required fixes at the beginning of the series.
+
+Note, cover letters were first added in v5.
+
+  RFC (broken patch): https://lore.kernel.org/lkml/CAJzde042-M4UbpNYKw0eDVg4JqYmwmPYSsmgK+kCMTqsi+-2Yw@mail.gmail.com/
+  v1 (missing v1 label): https://lore.kernel.org/lkml/20221111152852.2837363-1-allenwebb@google.com/
+  v2 (missing v2 label): https://lore.kernel.org/lkml/20221128201332.3482092-1-allenwebb@google.com/
+  v3: https://lore.kernel.org/lkml/20221129224313.455862-1-allenwebb@google.com/
+  v4: https://lore.kernel.org/lkml/20221130221447.1202206-1-allenwebb@google.com/
+  v5: https://lore.kernel.org/lkml/20221201211630.101541-1-allenwebb@google.com/
+  v6: https://lore.kernel.org/lkml/20221202224540.1446952-1-allenwebb@google.com/
+  v7: https://lore.kernel.org/lkml/20221216221703.294683-1-allenwebb@google.com/
+  v8: This version
+
+## Patch series status
+123456789012345678901234567890123456789012345678901234567890123456789012
+This series is still going through revisions in response to comments.
+
+I believe there is potential to improve the Makefile part of the patch
+series as well as an open question of whether modpost should generate
+`modules.built.alias` directly or create a vmlinuz.mod.c containing the
+missing module info for the match-id based aliases for built-in modules.
+
+## Acknowledgements
+
+Thanks to Greg Kroah-Hartman, Christophe Leroy, and the Linux
+maintainers for being patient with me as I have worked through learning
+the kernel workflow to get this series into a more presentable state.
+
+Thanks to Luis Chamberlain for raising the alternative of using kmod to
+address the primary motivation of the patch series.
+
+Also, thanks to Intel's kernel test robot <lkp@intel.com> for catching
+issues that showed up on different kernel configurations.
+
+
+Allen Webb (9):
+  imx: Fix typo
+  rockchip-mailbox: Fix typo
+  scsi/BusLogic: Always include device id table
+  stmpe-spi: Fix typo
+  module.h: MODULE_DEVICE_TABLE for built-in modules
+  modpost: Track module name for built-in modules
+  modpost: Add -b option for emitting built-in aliases
+  file2alias.c: Implement builtin.alias generation
+  build: Add modules.builtin.alias
+
+ .gitignore                         |  1 +
+ Makefile                           |  1 +
+ drivers/mailbox/rockchip-mailbox.c |  2 +-
+ drivers/mfd/stmpe-spi.c            |  2 +-
+ drivers/scsi/BusLogic.c            |  2 -
+ drivers/soc/imx/imx8mp-blk-ctrl.c  |  2 +-
+ include/linux/module.h             | 15 ++++-
+ scripts/Makefile.modpost           | 17 +++++-
+ scripts/mod/file2alias.c           | 94 +++++++++++++++++++++++-------
+ scripts/mod/modpost.c              | 23 +++++++-
+ scripts/mod/modpost.h              |  2 +
+ 11 files changed, 131 insertions(+), 30 deletions(-)
+
 -- 
-2.35.1
+2.37.3
 
