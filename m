@@ -2,118 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B50565080E
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 08:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6E1650825
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Dec 2022 08:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbiLSHav (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Dec 2022 02:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
+        id S231644AbiLSHl0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Dec 2022 02:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiLSHat (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 02:30:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87213AF
-        for <linux-usb@vger.kernel.org>; Sun, 18 Dec 2022 23:30:46 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 40581825;
-        Mon, 19 Dec 2022 08:30:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671435043;
-        bh=j4gC26iD+JUULFvc0WLPHfvRe2LA299meEOfoZbRTyc=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=t/GyqXN6Gr5+31P528BUVjK3f4yDmMj5PQ+lanNjxawTo/Kp4+ln3rulNWQd8GmHT
-         HgPzbH+Ck9iWtGvRejuO0BX8D6lF0OJsuPyhNPjcCxMzW/rnq0KT2REdgR3mczKxMC
-         UZ8d+MQ9jSlbh8VspGV0M3fMdzPbJA8RBfvIR0Dc=
-Message-ID: <5d8746a1-8568-de12-424e-68e9a9896c7d@ideasonboard.com>
-Date:   Mon, 19 Dec 2022 07:30:39 +0000
+        with ESMTP id S231589AbiLSHlW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Dec 2022 02:41:22 -0500
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674312AC1;
+        Sun, 18 Dec 2022 23:41:21 -0800 (PST)
+Received: by mail-pf1-f180.google.com with SMTP id c7so5591674pfc.12;
+        Sun, 18 Dec 2022 23:41:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WBGRE1+2gVpyciRz6kal4GRgitcm3glibRbLj9MWFrg=;
+        b=2v/kSswAM8b+2TpErxE8BSOZPAhqWI1Vuon6xmAYQlw2bBELAL4B0u0GdPir1Yx4FJ
+         RxNlDhlkr718NVqBdG9SvFm69hmbrmjc/shiAdZh2nNSJOAXZWKfU5HGD19K2CGGMgzT
+         D/TDQE5v0+PCUC8/P5Yu6y9x8Ag5GeE0TNU7l33dAbXnJ1FM0TodeIZg4t+uTBAyWQvO
+         ErbHyX3UEr7s4Vmx8aHvSkBqKXwavzzJJcN3qwKykuOkfkdiriXsei0vKarnRmy6h9fe
+         illwcFbw+Rp361O4t8HwvsBnam0/NWJ6Q5qiebNFuVxpCs9p5P1jKoh6DwNv5LG+ESmn
+         F8LQ==
+X-Gm-Message-State: ANoB5pl8iekoYEM7jJ8avVw/khoAIPKGb2fHayfZKVvc5DfSSOXGNMr/
+        LIwi5jlKazp186Pt8o6xOWM=
+X-Google-Smtp-Source: AA0mqf4p4ZNMgTYVqbLumGYc2FkVA3jzfFM5c5P5zjj0bpBPibwRAC6aDekK2LPz4tFQUdDkuLFiBw==
+X-Received: by 2002:a05:6a00:1c81:b0:577:8bae:29a7 with SMTP id y1-20020a056a001c8100b005778bae29a7mr40469582pfw.33.1671435680895;
+        Sun, 18 Dec 2022 23:41:20 -0800 (PST)
+Received: from [192.168.219.108] ([14.4.134.166])
+        by smtp.gmail.com with ESMTPSA id w185-20020a627bc2000000b00575d1ba0ecfsm5836772pfc.133.2022.12.18.23.41.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Dec 2022 23:41:20 -0800 (PST)
+Message-ID: <a2e0e98a-1044-908a-15bc-b165ff8b23ea@ooseel.net>
+Date:   Mon, 19 Dec 2022 16:41:16 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] usbnet: jump to rx_cleanup case instead of calling
+ skb_queue_tail
 Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        w36195@motorola.com, m.grzeschik@pengutronix.de,
-        kieran.bingham@ideasonboard.com, torleiv@huddly.com
-References: <20221213083736.2284536-1-dan.scally@ideasonboard.com>
- <Y59X9+ndt7GxBvJx@pendragon.ideasonboard.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH 0/6] UVC Gadget: Extend color matching support
-In-Reply-To: <Y59X9+ndt7GxBvJx@pendragon.ideasonboard.com>
+To:     Greg KH <greg@kroah.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221217161851.829497-1-lsahn@ooseel.net>
+ <Y57VkLKetDsbUUjC@kroah.com>
+From:   Leesoo Ahn <lsahn@ooseel.net>
+In-Reply-To: <Y57VkLKetDsbUUjC@kroah.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Morning Laurent
 
-On 18/12/2022 18:12, Laurent Pinchart wrote:
-> Hi Dan,
->
-> Thank you for the series.
->
-> On Tue, Dec 13, 2022 at 08:37:30AM +0000, Daniel Scally wrote:
->> The current UVC gadget implementation hardcodes a single color matching
->> descriptor and transmits it a single time following all the format and frame
-> I'm not sure I would use "transmits" in this context.  Descriptors are
-> for sure transmitted over the wire, but all in one go, not as individual
-> units (at least within a configuration descriptor).  Maybe "includes"
-> would be a better term ? This is nitpicking for the cover letter, but
-> the comment applies more importantly to commit messages and code for the
-> whole series.
-
-
-I've used the same term I think in the series yes. No problem; I'll swap 
-to includes.
-
->
->> descriptors. This is inflexible, and additionally applies only to the _last_
->> format in the array of descriptors.
+On 22. 12. 18. 17:55, Greg KH wrote:
+> On Sun, Dec 18, 2022 at 01:18:51AM +0900, Leesoo Ahn wrote:
+>> The current source pushes skb into dev->done queue by calling
+>> skb_queue_tail() and then, call skb_dequeue() to pop for rx_cleanup state
+>> to free urb and skb next in usbnet_bh().
+>> It wastes CPU resource with extra instructions. Instead, use return values
+>> jumping to rx_cleanup case directly to free them. Therefore calling
+>> skb_queue_tail() and skb_dequeue() is not necessary.
 >>
->> This series extends the support such that the default descriptor can be amended
->> and is transmitted once-per-format instead of once-only, it then adds the ability
->> to create new color matching descriptors and associate them with particular formats.
->> The default color matching descriptor is retained and used where the user does not
->> link a new color matching descriptor to the format, so the default interaction
->> with userspace is unchanged from the current implementation.
-> I wonder if we shouldn't drop the default descriptor. If userspace
-> doesn't specify one, then we really can't know what colorimetry data
-> applies to the frames. Instead of providing a default to the host, not
-> providing any colorimetry information would be better.
-
-
-According to the spec:
-
-
-"In the absence of this descriptor, or in the case of "Unspecified" 
-values within the descriptor, color matching defaults will be assumed. 
-The color matching defaults are compliant with sRGB since the BT.709 
-transfer function and the sRGB transfer function are very similar"
-
-
-And it goes on to identify the default values for each of the 
-descriptor's fields...which happen to be the values that are set in our 
-default descriptor. So I think that including that default descriptor 
-shouldn't change the host's behaviour, but does give userspace an easy 
-way to see what's set...I think it's fine to keep.
-
->
->> Daniel Scally (6):
->>    usb: gadget: usb: Remove "default" from color matching attributes
->>    usb: gadget: uvc: Add struct for color matching in configs
->>    usb: gadget: uvc: Copy color matching descriptor for each frame
->>    usb: gadget: uvc: Remove the hardcoded default color matching
->>    usb: gadget: uvc: Make color matching attributes read/write
->>    usb: gadget: uvc: Allow creating new color matching descriptors
+>> The follows are just showing difference between calling skb_queue_tail()
+>> and using return values jumping to rx_cleanup state directly in usbnet_bh()
+>> in Arm64 instructions with perf tool.
 >>
->>   .../ABI/testing/configfs-usb-gadget-uvc       |   6 +-
->>   drivers/usb/gadget/function/f_uvc.c           |   9 -
->>   drivers/usb/gadget/function/u_uvc.h           |   1 -
->>   drivers/usb/gadget/function/uvc_configfs.c    | 247 +++++++++++++++---
->>   drivers/usb/gadget/function/uvc_configfs.h    |   9 +
->>   5 files changed, 228 insertions(+), 44 deletions(-)
+>> ----------- calling skb_queue_tail() -----------
+>>         │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
+>>    7.58 │248:   ldr     x0, [x20, #16]
+>>    2.46 │24c:   ldr     w0, [x0, #8]
+>>    1.64 │250: ↑ tbnz    w0, #14, 16c
+>>         │     dev->net->stats.rx_errors++;
+>>    0.57 │254:   ldr     x1, [x20, #184]
+>>    1.64 │258:   ldr     x0, [x1, #336]
+>>    2.65 │25c:   add     x0, x0, #0x1
+>>         │260:   str     x0, [x1, #336]
+>>         │     skb_queue_tail(&dev->done, skb);
+>>    0.38 │264:   mov     x1, x19
+>>         │268:   mov     x0, x21
+>>    2.27 │26c: → bl      skb_queue_tail
+>>    0.57 │270: ↑ b       44    // branch to call skb_dequeue()
+>>
+>> ----------- jumping to rx_cleanup state -----------
+>>         │     if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
+>>    1.69 │25c:   ldr     x0, [x21, #16]
+>>    4.78 │260:   ldr     w0, [x0, #8]
+>>    3.28 │264: ↑ tbnz    w0, #14, e4    // jump to 'rx_cleanup' state
+>>         │     dev->net->stats.rx_errors++;
+>>    0.09 │268:   ldr     x1, [x21, #184]
+>>    2.72 │26c:   ldr     x0, [x1, #336]
+>>    3.37 │270:   add     x0, x0, #0x1
+>>    0.09 │274:   str     x0, [x1, #336]
+>>    0.66 │278: ↑ b       e4    // branch to 'rx_cleanup' state
+> Interesting, but does this even really matter given the slow speed of
+> the USB hardware?
+
+It doesn't if USB hardware has slow speed but in software view, it's 
+still worth avoiding calling skb_queue_tail() and skb_dequeue() which 
+work with spinlock, if possible.
+
+
+>> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
+>> ---
+>>   drivers/net/usb/usbnet.c | 11 ++++++-----
+>>   1 file changed, 6 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+>> index 64a9a80b2309..924392a37297 100644
+>> --- a/drivers/net/usb/usbnet.c
+>> +++ b/drivers/net/usb/usbnet.c
+>> @@ -555,7 +555,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
+>>   
+>>   /*-------------------------------------------------------------------------*/
+>>   
+>> -static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
+>> +static inline int rx_process(struct usbnet *dev, struct sk_buff *skb)
+>>   {
+>>   	if (dev->driver_info->rx_fixup &&
+>>   	    !dev->driver_info->rx_fixup (dev, skb)) {
+>> @@ -576,11 +576,11 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
+>>   		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
+>>   	} else {
+>>   		usbnet_skb_return(dev, skb);
+>> -		return;
+>> +		return 0;
+>>   	}
+>>   
+>>   done:
+>> -	skb_queue_tail(&dev->done, skb);
+>> +	return -1;
+> Don't make up error numbers, this makes it look like this failed, not
+> succeeded.  And if this failed, give it a real error value.
+>
+> thanks,
+>
+> greg k-h
+
+Best regards,
+Leesoo
+
