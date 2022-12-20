@@ -2,63 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA966521F6
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 15:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 342C265223E
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 15:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiLTOEw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 09:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        id S233865AbiLTOPv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 09:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiLTOEv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 09:04:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E981B1CA;
-        Tue, 20 Dec 2022 06:04:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64F3BB8120C;
-        Tue, 20 Dec 2022 14:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4CCC433F0;
-        Tue, 20 Dec 2022 14:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671545086;
-        bh=W7Nt9CNlbNQTRtOJ+Ou9FJetWciHdrJoIDblv/IyaxY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W8gBo7DlbzbFGiVxqKnDzbddmVtiUu8dnjSgUzI+ahxBpvXYwtq03/lVGFBHCkM8x
-         Ew23AGP8R8/4yhwY8AIc5canf3OnsMpb4HGycC52evWSth/oto9lNDQJ6e+AbJOX9T
-         XfLpWRg1nYU5Z5/eq2q9D5RbS9eV7/Vh6p9b9xcuqXTGg+QabVGlY2L61Oh0p91p0U
-         KH+n6D2u3hlI8nCxMzVSf86uWUY883tQ8XWBGTPnUXI9Q30chZOUDV9+nKFa2oKUH9
-         gjbghHg0obc79L6a5B6sy7484gqrRy61FQQeVbtczHNUN6ljhmoQRKa7fnxG3VKUk/
-         j5XjgQ312VTRA==
-Received: by mail-vs1-f51.google.com with SMTP id c184so11851618vsc.3;
-        Tue, 20 Dec 2022 06:04:45 -0800 (PST)
-X-Gm-Message-State: ANoB5pm3II7IV3cR9RmoHWJu9oogeU57F3ijFyAHjCLn1pm/qWlZVXxk
-        delVgLPOuaG+MJdbPKPgbIEVc5sT/an0mEfv8w==
-X-Google-Smtp-Source: AA0mqf4hj49Vys16ZOKgDVRoRCT4+rE3ssmiSoKl4jx+LV2S2QRh6yunp4wCQEs0sr9wyCLBw8uplqiATyBk5IpMnAk=
-X-Received: by 2002:a67:af07:0:b0:3b1:1713:ba12 with SMTP id
- v7-20020a67af07000000b003b11713ba12mr18042140vsl.6.1671545084970; Tue, 20 Dec
- 2022 06:04:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219191038.1973807-1-robh@kernel.org> <87edsua5q4.fsf@balbi.sh>
-In-Reply-To: <87edsua5q4.fsf@balbi.sh>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 20 Dec 2022 08:04:33 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
-Message-ID: <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains property
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
+        with ESMTP id S233871AbiLTOPX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 09:15:23 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAB81004
+        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 06:15:22 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id y2so6352139ily.5
+        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 06:15:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n5YVSZP1qMDUAMZj5yVmhmGJiwrbCGslZLrs7dgXveI=;
+        b=aahg07TO5qqL2P8ldfKzEwDW1JTMSKZC7uZ2mS+qUzY52sD3nQxiCcE25vBpcZMwT7
+         T0KbmRrQs2AL/Lk12okLloni24OffsT9qD+DcZwuA5dWv9rz/8xsHtOPduvCVfpPpOn+
+         gekyUcos3FunUsdfbc3cGdQFcOxsjMgLrt1zE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n5YVSZP1qMDUAMZj5yVmhmGJiwrbCGslZLrs7dgXveI=;
+        b=grTtED9QVcIueckNBDLMjrZfi9PL0MJG7Di3RdMf4ahlHRVqUto3KfSPu3Wfjpv6YX
+         njEd1g/G8+1oHLJcAdAfS/+PdNsXpf7EPlOJgas8o4pki2nSnCmHa6j6WNR0e83P/cyG
+         KzSvCAdsVQ5F8T6CQ5/veCNlZ6m3E4ADAQOM3j/E9cduQJgHr17jeCDb/vEthfgXm7Og
+         xxNdUCcaNJSl/Gr9U9B1FRivw8dMfAlRvOGTtIulRa2gZukHL/DAOHxt7o+odFHIvnek
+         MJpGkA/gxnAY4MxofPv8m+wIExR0Ba4hCOU/kB8zK53AMKBvXdzHoDfz4kzAGyZHadZJ
+         k12A==
+X-Gm-Message-State: AFqh2krYuafxsQJA6V98PRD3NHOzLi+7sWtnPI9ho74NdXQYH8wSA4BF
+        tamccL58dWUNoIEAcU/pZSuwpg==
+X-Google-Smtp-Source: AMrXdXuRFfwLfDBIq+/ekNW2bbhN+jz9C7S5kvkw7f7+IrC7TMcYvk71jw6fIXy2uItSi8mNpHIEtg==
+X-Received: by 2002:a05:6e02:4aa:b0:300:9a8:f586 with SMTP id e10-20020a056e0204aa00b0030009a8f586mr7189236ils.16.1671545722315;
+        Tue, 20 Dec 2022 06:15:22 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id x24-20020a0566380cb800b00389d6a02740sm4628983jad.157.2022.12.20.06.15.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 06:15:21 -0800 (PST)
+Date:   Tue, 20 Dec 2022 14:15:19 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-rockchip@lists.infradead.org,
-        Johan Jonker <jbx6244@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Don't defer probing for
+ 'incomplete' DT nodes
+Message-ID: <Y6HDXiRzaAZ+3uTp@google.com>
+References: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <Y6FqiA/SoZHr36jl@hovoldconsulting.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y6FqiA/SoZHr36jl@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,47 +72,82 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 1:34 AM Felipe Balbi <balbi@kernel.org> wrote:
->
->
-> Hi,
->
-> Rob Herring <robh@kernel.org> writes:
->
-> > The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
-> > allowed by the schema:
-> >
-> > usb@fe900000: Unevaluated properties are not allowed ('power-domains' was unexpected)
-> >
-> > Allow DWC3 nodes to have a single power-domains entry. We could instead
-> > move the power-domains property to the parent wrapper node, but the
-> > could be an ABI break (Linux shouldn't care). Also, we don't want to
-> > encourage the pattern of wrapper nodes just to define resources such as
-> > clocks, resets, power-domains, etc. when not necessary.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
+Hi Johan,
+
+On Tue, Dec 20, 2022 at 08:55:52AM +0100, Johan Hovold wrote:
+> On Tue, Dec 20, 2022 at 12:45:01AM +0000, Matthias Kaehlcke wrote:
+> > Some boards have device tree nodes for USB hubs supported by the
+> > onboard_usb_hub driver, but the nodes don't have all properties
+> > needed for the driver to work properly (which is not necessarily
+> > an error in the DT). Currently _find_onboard_hub() returns
+> > -EPROBE_DEFER in such cases, which results in an unusable USB hub,
+> > since successive probes fail in the same way. Use the absence of
+> > the "vdd" supply as an indicator of such 'incomplete' DT nodes
+> > and return -ENODEV.
+> > 
+> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > > ---
-> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > index 6d78048c4613..bcefd1c2410a 100644
-> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > @@ -91,6 +91,9 @@ properties:
-> >          - usb2-phy
-> >          - usb3-phy
-> >
-> > +  power-domains:
-> > +    maxItems: 1
->
-> AFAICT this can be incorrect. Also, you could have Cc the dwc3
-> maintainer to get comments.
+> > 
+> >  drivers/usb/misc/onboard_usb_hub.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> > index d63c63942af1..2968da515016 100644
+> > --- a/drivers/usb/misc/onboard_usb_hub.c
+> > +++ b/drivers/usb/misc/onboard_usb_hub.c
+> > @@ -363,6 +363,15 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
+> >  	hub = dev_get_drvdata(&pdev->dev);
+> >  	put_device(&pdev->dev);
+> >  
+> > +	/*
+> > +	 * Some boards have device tree nodes for USB hubs supported by this
+> > +	 * driver, but the nodes don't have all properties needed for the driver
+> > +	 * to work properly. Use the absence of the "vdd" supply as an indicator
+> > +	 * of such nodes.
+> > +	 */
+> > +	if (!of_get_property(pdev->dev.of_node, "vdd", NULL))
+> > +		return ERR_PTR(-ENODEV);
+> 
+> Does this not break your original use case? Don't you want "vdd-supply"
+> here?
 
-When we have a user with more and know what each one is, then we can
-extend it. All the other users (upstream), put 'power-domains' in the
-wrapper node. But this is what we need now for RK3399.
+Ouch, yes it does (to a certain degree). Thanks for pointing it out. My
+sanity check didn't catch this because the platform driver still probes
+successfully and powers the hub on.
 
-I used get_maintainers.pl. If that's the wrong output, fix it please.
+> That said, this seems like the wrong property to look for both in
+> principle and as it is described as optional by the binding:
+> 
+> 	Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> 
+> It seems that you should use the compatible property and check that it
+> holds one of the expected values:
+> 
+>  - usbbda,5411
+>  - usbbda,411
+> 
+> rather than treat every hub node as describing a realtek hub (AFAIK,
+> there is no generic binding for this yet).
 
-Rob
+The driver only probes for specific hub models, among them the Microchip
+USB2514B hub with which Stefan encountered the regression [1].
+
+My initial assumption when writing this driver was that the existence of
+a node for a supported hub means that the driver should be used. However
+the regression encountered by Stefan makes clear that this assumption is
+incorrect. It's not common, but a device tree may have nodes for onboard
+USB devices, among them hubs (which might become more common with this
+driver). Not in all instances the hub nodes were added with the intention
+of using this driver for power sequencing the hub (e.g. [2]). The
+compatible string alone doesn't indicate that the onboard_hub driver
+should be instantiated for a given hub, which is why I'm using the
+existence of "vdd-supply" as indicator.
+
+Thanks
+
+m.
+
+[1] https://lore.kernel.org/linux-usb/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
+[2] https://elixir.bootlin.com/linux/v6.1/source/arch/arm/boot/dts/bcm283x-rpi-lan7515.dtsi
