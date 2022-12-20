@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A2F651BC6
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 08:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A91651BFE
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 08:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbiLTHhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 02:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        id S232633AbiLTHzN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 02:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbiLTHhI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 02:37:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99624DEC9;
-        Mon, 19 Dec 2022 23:37:07 -0800 (PST)
+        with ESMTP id S229690AbiLTHzL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 02:55:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822B92629;
+        Mon, 19 Dec 2022 23:55:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FADF61280;
-        Tue, 20 Dec 2022 07:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2691C433EF;
-        Tue, 20 Dec 2022 07:37:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DBA7B8105C;
+        Tue, 20 Dec 2022 07:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CD7C433EF;
+        Tue, 20 Dec 2022 07:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671521826;
-        bh=66SlnYG/nwUzCZrhRPG1TjPvZM9jtU1rQo7zEHGPSqU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=vJB4jk/y5LQIaiEIhTFeBKn0rmFWU1H/8Vzf0VJLLZspPVyyheAqH7K3M9YGN6wgX
-         UxMCDyPdyAWw/z2IKWHGy4uJwYQEmV/txn3N8VAw29BBAavaTQ/MJmmO8HxKKz9oQq
-         ebsD/pIY0KHJHnocDD+LZnWleYHvr2G9Q6f69MxEiVFzixTTgwrFwJ3t8tZwxG560n
-         mtTkiMpkNBDjNusK3sJqN5gLT2S85Au+/5errsNy+6xPf1nJBONFCfQhOaECaAts87
-         zsmQ5L2zsoWepxt7mpIIdmvmXrhHtXUK4RLGzrFxVNMJ2d8OKTVo+DGy6ImTfE/joh
-         aXj4zPS8Tjtig==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Rob Herring <robh@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     linux-rockchip@lists.infradead.org,
-        Johan Jonker <jbx6244@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its
- own schema
-In-Reply-To: <20221219191038.1973807-2-robh@kernel.org>
-References: <20221219191038.1973807-1-robh@kernel.org>
- <20221219191038.1973807-2-robh@kernel.org>
-Date:   Tue, 20 Dec 2022 09:37:00 +0200
-Message-ID: <87bknya5lv.fsf@balbi.sh>
+        s=k20201202; t=1671522907;
+        bh=Tyff5dKkJUEMJgpOCplHCQLNFPV2khvh5mON+5VPI9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L1jWkxqZy7WM77o3a+22gS5N/twe7BP74DnPzl0gynYuF9JdkfQB+FkmLu4HajH0m
+         JmBWY6bDKaLO6pQB/eAZfrQBsPD9zfZK0vxFkkWG17qCI/wLHoGAdh9qSvlM8Rxt/T
+         ZOVpPUFKhd/e362JjgZdarddkMfsb2jiDW6pL36tNXagoE/TdSmocusVZdozAk2p1J
+         BwYU1lo8gzDApn5TlvHgTAxWYg/zFZT0zxS7mZXMnTKO1RtdOywql0lwv+eRKKJe9M
+         umOYeL/zAvN1t5FEL6SOPucJSMA+Ri3/uOp/eod+tDzFnoeuJzBi6WrZQhe79pmIEZ
+         9VZA+bySEvXSw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p7XTc-00015F-D2; Tue, 20 Dec 2022 08:55:52 +0100
+Date:   Tue, 20 Dec 2022 08:55:52 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>, Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Don't defer probing for
+ 'incomplete' DT nodes
+Message-ID: <Y6FqiA/SoZHr36jl@hovoldconsulting.com>
+References: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,40 +59,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Tue, Dec 20, 2022 at 12:45:01AM +0000, Matthias Kaehlcke wrote:
+> Some boards have device tree nodes for USB hubs supported by the
+> onboard_usb_hub driver, but the nodes don't have all properties
+> needed for the driver to work properly (which is not necessarily
+> an error in the DT). Currently _find_onboard_hub() returns
+> -EPROBE_DEFER in such cases, which results in an unusable USB hub,
+> since successive probes fail in the same way. Use the absence of
+> the "vdd" supply as an indicator of such 'incomplete' DT nodes
+> and return -ENODEV.
+> 
+> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+> 
+>  drivers/usb/misc/onboard_usb_hub.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index d63c63942af1..2968da515016 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -363,6 +363,15 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
+>  	hub = dev_get_drvdata(&pdev->dev);
+>  	put_device(&pdev->dev);
+>  
+> +	/*
+> +	 * Some boards have device tree nodes for USB hubs supported by this
+> +	 * driver, but the nodes don't have all properties needed for the driver
+> +	 * to work properly. Use the absence of the "vdd" supply as an indicator
+> +	 * of such nodes.
+> +	 */
+> +	if (!of_get_property(pdev->dev.of_node, "vdd", NULL))
+> +		return ERR_PTR(-ENODEV);
 
-Rob Herring <robh@kernel.org> writes:
+Does this not break your original use case? Don't you want "vdd-supply"
+here?
 
-> The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK3399
-> uses the discouraged parent wrapper node and child 'generic' DWC3 node.
+That said, this seems like the wrong property to look for both in
+principle and as it is described as optional by the binding:
 
-Why discouraged? Splitting those two separate devices (yes, they are
-separate physical modules) has greatly simplified e.g. power management
-and encapsulation of the core module.
+	Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
 
-=2D-=20
-balbi
+It seems that you should use the compatible property and check that it
+holds one of the expected values:
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+ - usbbda,5411
+ - usbbda,411
 
------BEGIN PGP SIGNATURE-----
+rather than treat every hub node as describing a realtek hub (AFAIK,
+there is no generic binding for this yet).
 
-iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOhZhwRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQho6y4DXKpEQmdQ/9HUBWlOG25MYVfiwdxaImz5mgCa6Tkae3
-5Jsmxxfrv702yoTBc/Pfh32g6Vfbn5u0zO0D956HzXZub+q4ZXKNzJMRz6Hkgq5Q
-8L3ta+RfPmSGc3pd9cB0zY77xeI4NAWQXeIbt1wz3uik9+RqHONmz2oTU47vIgHS
-U6yNIecEBDIPBIxJ8jgi1kadmPeyBZAEzHjwqzMsJjDM3aYUXY3pMn+tL4N3noxD
-xtCLfnCKSStZfkf1I+J9IG25apct/gdJmVXh8nkL4jxnLJKvobCXBszM/AI4uBo9
-ROgE8mzawpuR8cBzh0FQMhSwcEHFkPoOA30GgJXwgnvrsSXgNSFAWQTdY4T38201
-gKaWXK3dIeQBU32K1Zxlm7/vcLZn2mR6HfkmgRG0Y6ZlVeLvZIj2UVkcQHrMVAGx
-GEjhev3Yn3TBU+237RRAYR6+uYKcFFgtmhc7YU1u6uQWJUVniztdpEe/Yvocz6xK
-CVU8EYO1y4U1jo326JCRnGMwHDKH9JUyt0so+mDmuVGltkMCb+4R26VAXGC3iNl+
-rs2pUYlXUn178Zs8rbBEBQUg/OoToFaT7R3h5zvdDiMr7ux+AhJALy2b+El63q1N
-724mM2/9cm84opCok1LxBLaxeLxUGdCREL7A3uJrhiqK9rC6za8emL86KNPuh6na
-ttm1GYfsohg=
-=LkjN
------END PGP SIGNATURE-----
---=-=-=--
+> +
+>  	/*
+>  	 * The presence of drvdata ('hub') indicates that the platform driver
+>  	 * finished probing. This handles the case where (conceivably) we could
+
+Johan
