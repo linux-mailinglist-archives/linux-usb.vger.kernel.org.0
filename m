@@ -2,121 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E83F651C07
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 08:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F96D651F3F
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 11:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiLTH7K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 02:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S233450AbiLTKwS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 05:52:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232967AbiLTH7F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 02:59:05 -0500
-Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A4B9FE3
-        for <linux-usb@vger.kernel.org>; Mon, 19 Dec 2022 23:59:02 -0800 (PST)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 7XWcpI8grv5uI7XWdpVXAe; Tue, 20 Dec 2022 08:59:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671523140; bh=nimnCZA/3S4UB7RwfkDov3tvtTBo//DU3r2yie/NRoY=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=O53OkAV61k+23dKLJKJDW8RxXyG+Cg61/mUCqpEzLwfx5emFMWJUq8MbJqWK8gX25
-         3OWOODS400bQt+x3V4dT++fx71eHjyp4jwGeoji3hrDeei4oyOtF07preVD01MjnXc
-         1iNi/Oyv5mTklOYqnhg7kPqFYGCofX/FNZz8AvwRJSPrLyAlClZKIOBQei2Qyqt1Nr
-         unLVPDg2N8zPIiwc+TkbD+Uxr5K+CnfNuMNI6aT7E/DQEgtq7Pv2/ACYuPAwXArhFI
-         //j/etrstJF7w8xej/srnFAbWttF/UOuqRXZbOCQ6bLoC3+BWYrCg97i7w9X6rOA9Z
-         q9p0+6LcIRojQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671523140; bh=nimnCZA/3S4UB7RwfkDov3tvtTBo//DU3r2yie/NRoY=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=O53OkAV61k+23dKLJKJDW8RxXyG+Cg61/mUCqpEzLwfx5emFMWJUq8MbJqWK8gX25
-         3OWOODS400bQt+x3V4dT++fx71eHjyp4jwGeoji3hrDeei4oyOtF07preVD01MjnXc
-         1iNi/Oyv5mTklOYqnhg7kPqFYGCofX/FNZz8AvwRJSPrLyAlClZKIOBQei2Qyqt1Nr
-         unLVPDg2N8zPIiwc+TkbD+Uxr5K+CnfNuMNI6aT7E/DQEgtq7Pv2/ACYuPAwXArhFI
-         //j/etrstJF7w8xej/srnFAbWttF/UOuqRXZbOCQ6bLoC3+BWYrCg97i7w9X6rOA9Z
-         q9p0+6LcIRojQ==
-Date:   Tue, 20 Dec 2022 08:58:58 +0100
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: xHCI host dies on device unplug
-Message-ID: <Y6FrQm5mYrwAnbFt@lenoch>
-References: <Y45iXb6VCNiz7ZVd@lenoch>
- <Y49A1Pv6dUScQ9x/@lenoch>
- <Y5tHWwHctY6wr+CJ@lenoch>
- <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
- <Y5zkCxQqBWR+/b4F@lenoch>
- <983a1eb1-4599-517b-6c88-63a0051ae261@linux.intel.com>
- <Y6Ct5s5fIoA9FsAt@lenoch>
- <Y6Dbh1xJucfNvwXq@lenoch>
+        with ESMTP id S233608AbiLTKv4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 05:51:56 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2005186B2
+        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 02:51:54 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id l10so11861125plb.8
+        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 02:51:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3J2t6zleCgSaKLgdwsyrOWk3vUr6ggb3hDwqkO8Hsk8=;
+        b=yhJTjcPyEVStYIqzGKgu5LXSn6WS+0vwVkXG5oR+b5ML6XrciGesuHKBApFAUcmCJu
+         txkw4JXcbHCIoLUnNMFU2YIdYzn5/KFH1sb8CCCqkUon43LmuU5k2pSPdezzgcJwlweU
+         4W6Kw1T9xr4KiyydwA0f5BpuH/neWa8SYEi+ko/Ggm5qkaJSRYcilX/d4sSFHgDw/fkx
+         wb5jwMoypxD2HdtVZQYt/2AjuOgKZ9HKoK6H2hUOcRD+kROH+DryZzmyHAGTsjTdw/0Y
+         MMxiZvZoQzyT0tTZk/S6MBKHavCvMM2AAAny+UkoJ7hxBSx6Ju/x/tS9qerbsTGm6fz3
+         NhKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3J2t6zleCgSaKLgdwsyrOWk3vUr6ggb3hDwqkO8Hsk8=;
+        b=JR+Z4KGxGb48P6xqXMrqGJlEpnMBBf0fHcu0mUCqOlRmeRr4I4lvmLqpYRZE/+Qv8e
+         BluRhxptZTkV2LcEDMaLm+mZf9dLEgT7tBJ0o9+ctnQ/vRAGgCFf5oBM9OQ7cW0lu/Ha
+         6YzvSD8leTGZDRIa0yXbSTbTYY0DlfxVl51Wo3Y0zkvK0rIjiz4Qx7/5ytSu0OGTggMQ
+         YgsKD2ThdhQpnL97LOpgiUGVVugEA1j/ABv1/S2jxejUVSz7nxGpwoUYlj38DauUNy1p
+         bAAuVKAza6ouILkqSBHFv5LjO9HbSZYoyPmzHlrPxafB32oyDQ3/ACjygwg4jD4Vaxsl
+         Eycg==
+X-Gm-Message-State: AFqh2kpCPowveJl6qPBWe5uizb5s5NNHnwLaNho+75FoyOQwwejqmy3r
+        BwxZUeMbawJMdBQXto7s+CJnDoU8iXo5cBuX5Lw7Hw==
+X-Google-Smtp-Source: AMrXdXsbMmZ+abZvthKeUcE6S5KJ0Nw21C9lu75JjjhYsXq0C550qP+sb4SA09XW0kDvRbpGa0qljFkuavCHYUa5urw=
+X-Received: by 2002:a17:903:25c5:b0:191:4149:2800 with SMTP id
+ jc5-20020a17090325c500b0019141492800mr208plb.3.1671533514185; Tue, 20 Dec
+ 2022 02:51:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6Dbh1xJucfNvwXq@lenoch>
-X-CMAE-Envelope: MS4wfB3O/l2fEUf/bXfCj9k9dXzx7fv5iHLg339ueCssMjenLo8mhhblXOU5e0jKHw3Zd3oStsouRhe457+96V263ilMovMODrMkAQZXEaLM3PL3RkjV/JN9
- 5P49uvQw7fYSAa7+rQD4+hPmdzpfvxnaaAJzG3XO99FhPlDBASXOzoz2cIOs5SHCOFZOJmWe+J1WwqirgktoZebS/tkowvXvDJY=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221024094853.2877441-1-yulei.sh@bytedance.com>
+ <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
+ <HK0PR06MB320203EF8E3AD14C34359B0580329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1ueEYJk2epT/g4J@kroah.com> <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1uyssu84kl1INSR@kroah.com>
+In-Reply-To: <Y1uyssu84kl1INSR@kroah.com>
+From:   Lei Yu <yulei.sh@bytedance.com>
+Date:   Tue, 20 Dec 2022 18:51:42 +0800
+Message-ID: <CAGm54UGmp=kTKGLhEfENF4SqkvRt_GcpuGH_g5PjtQiBkwtOsA@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: aspeed: fix buffer overflow
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 10:45:43PM +0100, Ladislav Michl wrote:
-> On Mon, Dec 19, 2022 at 07:31:02PM +0100, Ladislav Michl wrote:
-> > On Mon, Dec 19, 2022 at 02:25:46PM +0200, Mathias Nyman wrote:
-> > > Looks like controller didn't complete the stop endpoint command.
-> > > 
-> > > Event for last completed command (before cycle bit change "c" -> "C") was:
-> > >   0x00000000028f55a0: TRB 00000000035e81a0 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c,
-> > > 
-> > > This was for command at 35e81a0, which in the command ring was:
-> > >   0x00000000035e81a0: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
-> > > 
-> > > The stop endpoint command was the next command queued, at 35e81b0:
-> > >   0x00000000035e81b0: Stop Ring Command: slot 1 sp 0 ep 3 flags c
-> > > 
-> > > There were a lot of URBs queued for this device, and they are cancelled one by one after disconnect.
-> > > 
-> > > Was this the only device connected? If so does connecting another usb device to another root port help?
-> > > Just to test if the host for some reason partially stops a while after last device disconnect?
-> > 
-> > Device is connected directly into SoC. Once connected into HUB, host doesn't die
-> > (as noted in other email, sorry for not replying to my own message, so it got lost)
-> > It seems as intentional (power management?) optimization. If another device is
-> > plugged in before 5 sec timeout expires, host completes stop endpoint command.
-> > 
-> > Unfortunately I cannot find anything describing this behavior in
-> > documentation, so I'll ask manufacturer support.
-> 
-> As support is usually slow I asked search engine first and this sounds
-> familiar:
-> "Synopsis Designware USB3 IP earlier than v3.00a which is configured in silicon
-> with DWC_USB3_SUSPEND_ON_DISCONNECT_EN=1, would need a specific quirk to prevent
-> xhci host controller from dying when device is disconnected."
-> 
-> usb: dwc3: Add quirk for Synopsis device disconnection errata
-> https://patchwork.kernel.org/project/linux-omap/patch/1424151697-2084-5-git-send-email-Sneeker.Yeh@tw.fujitsu.com/
-> 
-> Any clue what happened with that? I haven't found any meaningfull traces...
+On Fri, Oct 28, 2022 at 6:45 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Oct 28, 2022 at 09:55:57AM +0000, Neal Liu wrote:
+> > > > > > Thanks for your feedback.
+> > > > > > I tried to reproduce it on my side, and it cannot be reproduce it.
+> > > > > > Here are my test sequences:
+> > > > > > 1. emulate one of the vhub port to usb ethernet through Linux
+> > > > > > gadget
+> > > > > > (ncm)
+> > > > >
+> > > > > We are using rndis instead of ncm.
+> > > > >
+> > > > > > 2. connect BMC vhub to Host
+> > > > > > 3. BMC & Host can ping each other (both usb eth dev default mtu is
+> > > > > > 1500) 4. Set BMC mtu to 1000 (Host OS cannot set usb eth dev mtu
+> > > > > > to 2000, it's maxmtu is 1500)
+> > > > >
+> > > > > Not sure if it's related, but in my case (USB rndis, Debian 10 OS)
+> > > > > it should be able to set MTU to 2000.
+> > > >
+> > > > Using rndis is able to set MTU to 2000, and the issue can be reproduced.
 
-Just for completeness, this turned into:
-41135de1e7fd ("usb: xhci: add quirk flag for broken PED bits")
-and it is enabled:
-cc params 0x0220f065 hci version 0x100 quirks 0x0000000002010010
+USB ecm is also tested and it is possible to set MTU to 2000, and
+could reproduce the issue.
+So I think this patch is needed anyway.
 
-However I do not see original logic there, clearing PORT_CSC before
-stopping endpoint.
+@Neal Liu Could you kindly help to verify the USB ECM case?
 
-> > Both solutions, do nothing or reset controller once last device is unpluged
-> > works, but I doubt they are suitable for mainline kernel without further
-> > investigation.
-> > 
-> > > Another thing is that the stop endpoint command fails after three soft reset tries,
-> > > does disabling soft reset help?
-> > 
-> > No, this does not cause any change.
-> > 
-> > 	ladis
+> > >
+> > > Please NEVER use rndis anymore.  I need to go just delete that driver from
+> > > the tree.
+> > >
+> > > It is insecure-by-design and will cause any system that runs it to be instantly
+> > > compromised and it can not be fixed.  Never trust it.
+> > >
+> > > Even for data throughput tests, I wouldn't trust it as it does odd things with
+> > > packet sizes as you show here.
+> >
+> > Thanks for the info, Greg.
+> > If rndis will no longer be supported, how to use usb-ethernet on Windows OS?
+> > For my understanding, ncm/ecm cannot work on Windows OS.
+>
+> rndis should ONLY be there for Windows XP, which is long out-of-support.
+> Newer versions of windows have more sane usb protocols built into it and
+> this driver is not needed.
+>
+> As proof of this, Android devices removed this from their kernel
+> configuration a few years ago and no one has complained :)
+>
+> thanks,
+>
+> greg k-h
