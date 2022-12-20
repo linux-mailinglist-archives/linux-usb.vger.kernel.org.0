@@ -2,167 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A64A65268D
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 19:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32088652737
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 20:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234107AbiLTSrh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 13:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S234139AbiLTTkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 14:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbiLTSrc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 13:47:32 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833C4AC;
-        Tue, 20 Dec 2022 10:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dYyvYAGOdcnUds1h4RkJHQsDRENimICfASD3zlmnD5Q=; b=bomXsWtZ9s97dnCXTM2BGAfHGh
-        arVoq/JDHmfHf7dVZ7KwVdnF4jEd78btvGQ2vT9vt4Jr+lDiaXnyvHlkM0auPZSBMGrGeVZGX6Ei8
-        XUyjHNHYl3XnJDRAL7ainXMYrEFT+Af8yT/erlSiQz9A91TYCa1CTaZUkCpWhZYmoT7dNMhrh8fS5
-        7rCkNUURGoBHVxD50boSHb7p493JqfXTYpfbcFLoDW1XXoAnzCKlfQlI5+2I12HfVyWJCWM/YAMN6
-        KdeRndcDiiILDe9EgGabKKLlJ8JSu3KuBYaLE3lJrBCFtRErAuQBj5NIEF0NtHpv19U5/hVTRYVwz
-        rUfCjM5A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7he7-002nx1-Od; Tue, 20 Dec 2022 18:47:23 +0000
-Date:   Tue, 20 Dec 2022 10:47:23 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Allen Webb <allenwebb@google.com>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
-Message-ID: <Y6IDOwxOxZpsdtiu@bombadil.infradead.org>
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com>
- <20221219204619.2205248-3-allenwebb@google.com>
- <Y6FaUynXTrYD6OYT@kroah.com>
- <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
- <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
- <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
+        with ESMTP id S229757AbiLTTkA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 14:40:00 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C3D2187;
+        Tue, 20 Dec 2022 11:39:58 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 8D0971C09F9; Tue, 20 Dec 2022 20:39:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1671565196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z6Z4LV97YlfeiHNsI0GPtvBWuPiFBia9iXHj9p0V7f4=;
+        b=iSK/6k6YdYfe0pf3QIaGF0m9os72nxF3CAqc4kVpFydNcBeDZyAXwLd29ygI3aWdCD/P4E
+        hjb1tP04xpxvEqTGSku5jVwZ3Ze5vyiRMUS/PfukmleXTPDA24OIQLtf5lIYLLX2i19Nc9
+        ctnIK+xkRK2AK199jxQW3iEge/uxrTY=
+Date:   Tue, 20 Dec 2022 20:39:56 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>, linux-sh@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-bluetooth@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, linux-scsi@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-ext4@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, bridge@lists.linux-foundation.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        lvs-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Subject: Re: [PATCH] treewide: Convert del_timer*() to timer_shutdown*()
+Message-ID: <Y6IPjC9mpnoquL8S@duo.ucw.cz>
+References: <20221220134519.3dd1318b@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Q4QndSuPZQc8d5xp"
 Content-Disposition: inline
-In-Reply-To: <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221220134519.3dd1318b@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 12:19:49PM -0600, Allen Webb wrote:
-> On Tue, Dec 20, 2022 at 12:12 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Tue, Dec 20, 2022 at 08:58:36AM -0600, Allen Webb wrote:
-> > > As mentioned in a different sub-thread this cannot be built as a
-> > > module so I updated the commit message to:
-> > >
-> > > imx: Fix typo
-> > >
-> > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
-> > > breaks compilation for SOC_IMX8M after built-in modules can generate
-> > > match-id based module aliases, so fix the typo.
-> >
-> > Are you saying that it is a typo *now* only, and fixing it does not fix
-> > compilation now, but that fixing the typo will fix a future compilation
-> > issue once your patches get merged for built-in module aliases?
-> 
-> It was always a typo, it just doesn't affect the build because
-> MODULE_DEVICE_TABLE is not doing anything for built-in modules before
-> this patch series.
-> 
-> >
-> > > This was not caught earlier because SOC_IMX8M can not be built as a
-> > > module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
-> >
-> > Odd, so why did it use MODULE_DEVICE_TABLE then? What was the reason for
-> > the driver having MODULE_DEVICE_TABLE if it was a no-op?
-> 
-> That is a good question. I can only speculate as to the answer
 
-You can use git blame to trace back to the original commit that added
-it, then  use git blame foo.c commit-id~1  on the file to keep going
-back until you get to the first commit that added that entry, check out
-that as a branch and see if the driver was still not a module then
-(tristate). If so then your speculation is very likely accurate and
-can be spelled out in the commit log message.
+--Q4QndSuPZQc8d5xp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It begs the inverse question too though, you are finding uses of
-built-in-always code (never tristate) which uses MODULE_DEVICE_TABLE().
-Although today that's a no-op, after your changes this becomes useful
-information, so do you need to scrape to see what built-in-aways code
-*do* not use MODULE_DEVICE_TABLE() where after your patches it would
-have become useful?
+On Tue 2022-12-20 13:45:19, Steven Rostedt wrote:
+> [
+>   Linus,
+>=20
+>     I ran the script against your latest master branch:
+>     commit b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+>=20
+>     As the timer_shutdown*() code is now in your tree, I figured
+>     we can start doing the conversions. At least add the trivial ones
+>     now as Thomas suggested that this gets applied at the end of the
+>     merge window, to avoid conflicts with linux-next during the
+>     development cycle. I can wait to Friday to run it again, and
+>     resubmit.
+>=20
+>     What is the best way to handle this?
+> ]
+>=20
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>=20
+> Due to several bugs caused by timers being re-armed after they are
+> shutdown and just before they are freed, a new state of timers was added
+> called "shutdown". After a timer is set to this state, then it can no
+> longer be re-armed.
+>=20
+> The following script was run to find all the trivial locations where
+> del_timer() or del_timer_sync() is called in the same function that the
+> object holding the timer is freed. It also ignores any locations where the
+> timer->function is modified between the del_timer*() and the free(), as
+> that is not considered a "trivial" case.
+>=20
+> This was created by using a coccinelle script and the following
+commands:
 
-Determing if there is value to that endeavour should be easily grasped by
-reading the description you are adding to MODULE_DEVICE_TABLE() --
-in your patch 5 "module.h: MODULE_DEVICE_TABLE for built-in modules".
-Driver developers for built-in-always code should read that description
-and be able to decide if they should use it or not. But even your latest
-replies to Greg do not make that clear, *I personally gather* rather that
-this would in no way shape or form be useful. But is that true?
+LED parts looks good to me.
 
-So why not just remove MODULE_DEVICE_TABLE() from code we know is
-built-in-always code instead of fixing a typo just to fix a future
-compile issue?
+Getting it in just before -rc1 would be best solution for me.
 
-Then your commit log is not about "fix typo", but rather remove a no-op
-macro as the driver is always built-in and keeping that macro would not
-help built-in code.
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-> but it
-> is plausible people copied a common pattern and since no breakage was
-> noticed left it as is.
+--Q4QndSuPZQc8d5xp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This level of clarity is important to spell out in the commit log
-message, specially if you are suggesting it is just a typo fix. Because
-I will take it for granted that it is just that.
+-----BEGIN PGP SIGNATURE-----
 
-If it fixes a future use case where the typo would be more of an issue,
-you can mention that in a secondary paragraph or sentence.
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY6IPjAAKCRAw5/Bqldv6
+8qFnAJ4h7/YkgMmaMAi5FTo4aeUHj64lowCgv7jO/1JyimzJx+06JHTOXFlIAIk=
+=01ne
+-----END PGP SIGNATURE-----
 
-> It also raises the question how many modules have device tables, but
-> do not call MODULE_DEVICE_TABLE since they are only ever built-in.
-> Maybe there should be some build time enforcement mechanism to make
-> sure that these are consistent.
-
-Definitely, Nick Alcock is doing some related work where the semantics
-of built-in modules needs to be clearer, he for instance is now removing
-a few MODULE_() macros for things which *are never* modules, and this is
-because after commit 8b41fc4454e ("kbuild: create modules.builtin
-without Makefile.modbuiltin or tristate.conf") we rely on the module
-license tag to generate the modules.builtin file. Without that commit
-we end up traversing the source tree twice. Nick's work builds on
-that work and futher clarifies these semantics by adding tooling which
-complains when something which is *never* capable of being a module
-uses module macros. The macro you are extending, MODULE_DEVICE_TABLE(),
-today is a no-op for built-in, but you are adding support to extend it
-for built-in stuff. Nick's work will help with clarifying symbol locality
-and so he may be interested in your association for the data in
-MODULE_DEVICE_TABLE and how you associate to a respective would-be
-module. His work is useful for making tracing more accurate with respect
-to symbol associations, so the data in MODULE_DEVICE_TABLE() may be
-useful as well to him.
-
-You folks may want to Cc each other on your patches.
-
-If we know for certain things *will never* be used or *should not be
-used*, as in the case of the module license tag, we should certainly
-have tooling to pick up on that crap to help us tidy it up. 
-
-If you determine MODULE_DEVICE_TABLE() *should* not be used for built-in
-always code (never tristate) then you and Nick likely have overlap of
-macros to tidy up and tooling to share to spot these sort of issues.
-
-  Luis
+--Q4QndSuPZQc8d5xp--
