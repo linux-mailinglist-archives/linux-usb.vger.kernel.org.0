@@ -2,53 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B1E6521D0
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 14:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA966521F6
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 15:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiLTNy4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 08:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S233191AbiLTOEw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 09:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233751AbiLTNys (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 08:54:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832521AF37;
-        Tue, 20 Dec 2022 05:54:46 -0800 (PST)
+        with ESMTP id S229610AbiLTOEv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 09:04:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E981B1CA;
+        Tue, 20 Dec 2022 06:04:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16D016142D;
-        Tue, 20 Dec 2022 13:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72381C433F2;
-        Tue, 20 Dec 2022 13:54:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64F3BB8120C;
+        Tue, 20 Dec 2022 14:04:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4CCC433F0;
+        Tue, 20 Dec 2022 14:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671544485;
-        bh=51j3DYi8PZsu2ybBFHEAX2nCHXBMVEEWlcDfMcYe4e8=;
+        s=k20201202; t=1671545086;
+        bh=W7Nt9CNlbNQTRtOJ+Ou9FJetWciHdrJoIDblv/IyaxY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pU6+zDkb5cKgDWZhuAi9MjT8WLszi9Lp07cU4XVZnD+0Tg14V3BB0/q+QyaD8XTWc
-         3orwrwUMh78gDLH6b5vozEXSD/EKiYXt9xBkP9D0mbI+GUmahT4wNxp6MnigbwwoNQ
-         xPWk7rN0ri0YI0hUIGBiVxfNTf2GCjG/sIrA1OWR48GiXc9W9N8Y3omYn8U02Yw9k+
-         qEMA0lO64KDyxB4heR7MkFBxCPRA+KUOGcQgqGZ06Zyqx4541oEqpsHVyqsd/ijVdc
-         EJjAVSKOTyt0mYfUvKaf7iNGngQ8tO4EqEiREcBbV2jKwJuQdckbazPOyV4kNvImDH
-         NAKmRpBo6gLBQ==
-Received: by mail-vk1-f170.google.com with SMTP id r3so5755388vkq.13;
-        Tue, 20 Dec 2022 05:54:45 -0800 (PST)
-X-Gm-Message-State: ANoB5pmqed35NOwzQHq7GopWwSJocef2EotyntFWCvsAglr7JNMjyIah
-        w1vuqamwXpg4FZ+Z+EiZAmHHdAMaOVHuyVOwjA==
-X-Google-Smtp-Source: AA0mqf4CTiHHWgyBY3CrYkE5S3j+xNstE0jPZU+DdqZ/nO+EaBdB9F5/87UaaeM+5CRZufhy9UOUFvc3xxEixGezAio=
-X-Received: by 2002:a1f:2c01:0:b0:3c1:1c3b:c4d9 with SMTP id
- s1-20020a1f2c01000000b003c11c3bc4d9mr3491939vks.19.1671544484430; Tue, 20 Dec
- 2022 05:54:44 -0800 (PST)
+        b=W8gBo7DlbzbFGiVxqKnDzbddmVtiUu8dnjSgUzI+ahxBpvXYwtq03/lVGFBHCkM8x
+         Ew23AGP8R8/4yhwY8AIc5canf3OnsMpb4HGycC52evWSth/oto9lNDQJ6e+AbJOX9T
+         XfLpWRg1nYU5Z5/eq2q9D5RbS9eV7/Vh6p9b9xcuqXTGg+QabVGlY2L61Oh0p91p0U
+         KH+n6D2u3hlI8nCxMzVSf86uWUY883tQ8XWBGTPnUXI9Q30chZOUDV9+nKFa2oKUH9
+         gjbghHg0obc79L6a5B6sy7484gqrRy61FQQeVbtczHNUN6ljhmoQRKa7fnxG3VKUk/
+         j5XjgQ312VTRA==
+Received: by mail-vs1-f51.google.com with SMTP id c184so11851618vsc.3;
+        Tue, 20 Dec 2022 06:04:45 -0800 (PST)
+X-Gm-Message-State: ANoB5pm3II7IV3cR9RmoHWJu9oogeU57F3ijFyAHjCLn1pm/qWlZVXxk
+        delVgLPOuaG+MJdbPKPgbIEVc5sT/an0mEfv8w==
+X-Google-Smtp-Source: AA0mqf4hj49Vys16ZOKgDVRoRCT4+rE3ssmiSoKl4jx+LV2S2QRh6yunp4wCQEs0sr9wyCLBw8uplqiATyBk5IpMnAk=
+X-Received: by 2002:a67:af07:0:b0:3b1:1713:ba12 with SMTP id
+ v7-20020a67af07000000b003b11713ba12mr18042140vsl.6.1671545084970; Tue, 20 Dec
+ 2022 06:04:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20221219191038.1973807-1-robh@kernel.org> <20221219191038.1973807-2-robh@kernel.org>
- <87bknya5lv.fsf@balbi.sh>
-In-Reply-To: <87bknya5lv.fsf@balbi.sh>
+References: <20221219191038.1973807-1-robh@kernel.org> <87edsua5q4.fsf@balbi.sh>
+In-Reply-To: <87edsua5q4.fsf@balbi.sh>
 From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 20 Dec 2022 07:54:33 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLo4qZRTOu7UR_AN_jHNgiFZp39dsXYwWnD_njyDQfmAA@mail.gmail.com>
-Message-ID: <CAL_JsqLo4qZRTOu7UR_AN_jHNgiFZp39dsXYwWnD_njyDQfmAA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its
- own schema
+Date:   Tue, 20 Dec 2022 08:04:33 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+Message-ID: <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains property
 To:     Felipe Balbi <balbi@kernel.org>
 Cc:     Heiko Stuebner <heiko@sntech.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,23 +66,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 1:37 AM Felipe Balbi <balbi@kernel.org> wrote:
+On Tue, Dec 20, 2022 at 1:34 AM Felipe Balbi <balbi@kernel.org> wrote:
+>
+>
+> Hi,
 >
 > Rob Herring <robh@kernel.org> writes:
 >
-> > The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK3399
-> > uses the discouraged parent wrapper node and child 'generic' DWC3 node.
+> > The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
+> > allowed by the schema:
+> >
+> > usb@fe900000: Unevaluated properties are not allowed ('power-domains' was unexpected)
+> >
+> > Allow DWC3 nodes to have a single power-domains entry. We could instead
+> > move the power-domains property to the parent wrapper node, but the
+> > could be an ABI break (Linux shouldn't care). Also, we don't want to
+> > encourage the pattern of wrapper nodes just to define resources such as
+> > clocks, resets, power-domains, etc. when not necessary.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > index 6d78048c4613..bcefd1c2410a 100644
+> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > @@ -91,6 +91,9 @@ properties:
+> >          - usb2-phy
+> >          - usb3-phy
+> >
+> > +  power-domains:
+> > +    maxItems: 1
 >
-> Why discouraged? Splitting those two separate devices (yes, they are
-> separate physical modules) has greatly simplified e.g. power management
-> and encapsulation of the core module.
+> AFAICT this can be incorrect. Also, you could have Cc the dwc3
+> maintainer to get comments.
 
-Sometimes they are separate and that's fine, but often it's just
-different clocks, resets, etc. and that's no different from every
-other block. If there's wrapper registers or something clearly extra,
-then I agree a wrapper parent node makes sense. Otherwise, for cases
-like RK3399, I don't think it does, but we're stuck with it now.
+When we have a user with more and know what each one is, then we can
+extend it. All the other users (upstream), put 'power-domains' in the
+wrapper node. But this is what we need now for RK3399.
 
-Also, we have this pattern pretty much nowhere else and DWC3 is not special.
+I used get_maintainers.pl. If that's the wrong output, fix it please.
 
 Rob
