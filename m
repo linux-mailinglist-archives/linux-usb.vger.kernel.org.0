@@ -2,109 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A2365227C
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 15:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359026522A4
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 15:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbiLTO03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 09:26:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S233957AbiLTOc3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 09:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbiLTO0V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 09:26:21 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F8B186FD
-        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 06:26:18 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id 128so11867663vsz.12
-        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 06:26:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dOTj4EKc4DtuiZEeC7kPyAapzOMSPLY5av1ZgnWFYWs=;
-        b=URjdmIRpeR3h3kPCGuMWB46Qb6AeKarBtQuQr0z3itmqEsfYG8YgF1CyXzgprN3zgz
-         yskU7RLRo3xI88jMG/JaXIQ4pfv/IbwOdD5AG6t2n4aiYQUzraubORsbiX3blEBYfRdw
-         t/CXjlStdRZd6yQwlrM+QhExtut7jnhlndE89Zz7uBMUZGM0eEd7Gp4Xbp/G5BzPkjpw
-         GPF4+DSuPuzwQmtIN+NecYTnynJIR1P4aZL2atFRQVKnMIQIjEJ51csAIrK+iGcLa40T
-         D6HWDjqfbE8Z+ppQ0kM9wRraiJzPxC6A3CQpApIMUv6ayzDOy77GMLs/tGPWdzfOI4t1
-         DUjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dOTj4EKc4DtuiZEeC7kPyAapzOMSPLY5av1ZgnWFYWs=;
-        b=yxJDF8xqqt9PtLrWPrsSc9GdHvT4EJmWGTv3anDmVZ4oQq6CqHjCkVS0FGZ/e3URH0
-         8/32S1ZPkti6gXa51cjFsyYjtmmZ2VvUKqMS4ovy2dBkD4Os5huYUH6+Mva5TfkWUkvK
-         k1qlcPBUrwpxSI5tHAfWcZShWrUp9By7kGLiLYp2RBP8QQLL6esj4/EvKcMHtjzPzm5c
-         by62+qVBN4LX2k7yBqO9pT5j4gqevRUqO6+b9eF5YmWdqpZYoS1t2Af1EmpNl578iGh9
-         j0mqVHuD5kSQ9hSN/0egNvwMB1MLYfTeJZKMGzYlKwzxh0wGq8Yna6fQrAbKavN34ozC
-         doxw==
-X-Gm-Message-State: ANoB5pliH86PzDjkGxpAfLERM00gSkQrmx0qZRfgEFEHCNgh5G0ZFiKQ
-        HKhxRo/FMZAB26fcIyTDXbHwd7rckNZC2LF9aRGdUA==
-X-Google-Smtp-Source: AA0mqf5JjKIjeV+9+aHhQxj19YLPX6LE+tWVIFecY61JnDpk4xJOJkg+52bmreGQ8g5xpC6CGIush1JD5XH4IlUpNWY=
-X-Received: by 2002:a67:f04e:0:b0:3b1:1713:ba11 with SMTP id
- q14-20020a67f04e000000b003b11713ba11mr21558567vsm.76.1671546377728; Tue, 20
- Dec 2022 06:26:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-2-allenwebb@google.com>
- <Y6FZWOC1DSHHZNWy@kroah.com>
-In-Reply-To: <Y6FZWOC1DSHHZNWy@kroah.com>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Tue, 20 Dec 2022 08:26:06 -0600
-Message-ID: <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
-Subject: Re: [PATCH v9 01/10] imx: Fix typo
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S234140AbiLTOcV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 09:32:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E756DDEA9;
+        Tue, 20 Dec 2022 06:32:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC6A61478;
+        Tue, 20 Dec 2022 14:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B91C433EF;
+        Tue, 20 Dec 2022 14:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671546739;
+        bh=I9Cu+kAKzr7nMCJCiEna+C9QzBUQlwXRBtFRhj+AnWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i6ikgmsgRMPQj5I+OkiUddOnkhLld+aADGqP/TPYKPzpZ6Exmj7qfvunajVl8SbaS
+         BwClnc3miLkgwLxgoLdjqCg7/7pVvccQuRisfE4G4cBqLkhv8j7gI6cUC6PxerLH7H
+         O/wxsdusiIWFJl/5DkVzQqiUMAepsFo1sb96DzAk=
+Date:   Tue, 20 Dec 2022 15:32:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Allen Webb <allenwebb@google.com>
 Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
         kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v9 01/10] imx: Fix typo
+Message-ID: <Y6HHb8alGpMHLpM/@kroah.com>
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com>
+ <20221219204619.2205248-2-allenwebb@google.com>
+ <Y6FZWOC1DSHHZNWy@kroah.com>
+ <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
-> > A one character difference in the name supplied to MODULE_DEVICE_TABLE
-> > breaks a future patch set, so fix the typo.
->
-> What behaviour is broken here for older kernels? What would not work
-> that makes this patch worthy of consideration for stable? The commit
-> log should be clear on that.
->
-> In the future, it may be useful for you to wait at least 1 week or so
-> before sending a new series becuase just a couple of days is not enough
-> if you are getting feedback.
->
-> So before sending a v10, please give it at least a few days or a week.
->
->   Luis
+On Tue, Dec 20, 2022 at 08:26:06AM -0600, Allen Webb wrote:
+> On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > breaks a future patch set, so fix the typo.
+> >
+> > What behaviour is broken here for older kernels? What would not work
+> > that makes this patch worthy of consideration for stable? The commit
+> > log should be clear on that.
+> >
+> > In the future, it may be useful for you to wait at least 1 week or so
+> > before sending a new series becuase just a couple of days is not enough
+> > if you are getting feedback.
+> >
+> > So before sending a v10, please give it at least a few days or a week.
+> >
+> >   Luis
+> 
+> On Tue, Dec 20, 2022 at 12:42 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > breaks a future patch set, so fix the typo.
+> >
+> > Breaking a future change is not worth a stable backport, right?  Doesn't
+> > this fix a real issue now?  If so, please explain that.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> I will update the commit message to say that it breaks compilation
+> when building imx8mp-blk-ctrl as a module (and so forth for the other
+> similar patches).
 
-On Tue, Dec 20, 2022 at 12:42 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
-> > A one character difference in the name supplied to MODULE_DEVICE_TABLE
-> > breaks a future patch set, so fix the typo.
->
-> Breaking a future change is not worth a stable backport, right?  Doesn't
-> this fix a real issue now?  If so, please explain that.
->
-> thanks,
->
-> greg k-h
-
-I will update the commit message to say that it breaks compilation
-when building imx8mp-blk-ctrl as a module (and so forth for the other
-similar patches).
+Can that code be built as a module?  Same for the other changes...
