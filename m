@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C0A651BC0
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 08:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A2F651BC6
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 08:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbiLTHep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 02:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S233601AbiLTHhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 02:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbiLTHeo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 02:34:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA83A259;
-        Mon, 19 Dec 2022 23:34:43 -0800 (PST)
+        with ESMTP id S233591AbiLTHhI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 02:37:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99624DEC9;
+        Mon, 19 Dec 2022 23:37:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E88261295;
-        Tue, 20 Dec 2022 07:34:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA409C433D2;
-        Tue, 20 Dec 2022 07:34:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FADF61280;
+        Tue, 20 Dec 2022 07:37:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2691C433EF;
+        Tue, 20 Dec 2022 07:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671521682;
-        bh=SKMTGuyR9554FXAyRA1M/fIfSE7/4Gt7RZF/9BPt6Cw=;
+        s=k20201202; t=1671521826;
+        bh=66SlnYG/nwUzCZrhRPG1TjPvZM9jtU1rQo7zEHGPSqU=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dCZXpIPtL0dB6yr7d3HMzMgJkVE9LMfEcGABEzn3ZGygCr+Nqklr6fbHFgV8g2Yv+
-         GKoU4GWxg15VcoWV9OyiUj+6tJM5StECeug+nMgx6NcLiYxJxWbtFX4LsF6Kg2Ffbe
-         1TGZOMzQzT/SRWYCX2DxBJSirw9kkz2MAo8kZgNpB+ISFR7GBHIqaKpTCzWZ6oaDgh
-         nWNsHnvaYcBRM3zzJo3udZLLonwTsRxykkl8nUjCjzxnFgT4m0BbsezKvg5NBBFS9Z
-         a17CzgGIUu7jou1HxNOdpl0FuDewGXLvO3YLM1ynIINmG5u+csZ1ngj/7wUmFOXAbT
-         1mjmtFMOG+JRg==
+        b=vJB4jk/y5LQIaiEIhTFeBKn0rmFWU1H/8Vzf0VJLLZspPVyyheAqH7K3M9YGN6wgX
+         UxMCDyPdyAWw/z2IKWHGy4uJwYQEmV/txn3N8VAw29BBAavaTQ/MJmmO8HxKKz9oQq
+         ebsD/pIY0KHJHnocDD+LZnWleYHvr2G9Q6f69MxEiVFzixTTgwrFwJ3t8tZwxG560n
+         mtTkiMpkNBDjNusK3sJqN5gLT2S85Au+/5errsNy+6xPf1nJBONFCfQhOaECaAts87
+         zsmQ5L2zsoWepxt7mpIIdmvmXrhHtXUK4RLGzrFxVNMJ2d8OKTVo+DGy6ImTfE/joh
+         aXj4zPS8Tjtig==
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Rob Herring <robh@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,12 +40,13 @@ Cc:     linux-rockchip@lists.infradead.org,
         Johan Jonker <jbx6244@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains
- property
-In-Reply-To: <20221219191038.1973807-1-robh@kernel.org>
+Subject: Re: [PATCH 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its
+ own schema
+In-Reply-To: <20221219191038.1973807-2-robh@kernel.org>
 References: <20221219191038.1973807-1-robh@kernel.org>
-Date:   Tue, 20 Dec 2022 09:34:27 +0200
-Message-ID: <87edsua5q4.fsf@balbi.sh>
+ <20221219191038.1973807-2-robh@kernel.org>
+Date:   Tue, 20 Dec 2022 09:37:00 +0200
+Message-ID: <87bknya5lv.fsf@balbi.sh>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -62,47 +63,14 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-
-Hi,
-
 Rob Herring <robh@kernel.org> writes:
 
-> The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
-> allowed by the schema:
->
-> usb@fe900000: Unevaluated properties are not allowed ('power-domains' was=
- unexpected)
->
-> Allow DWC3 nodes to have a single power-domains entry. We could instead
-> move the power-domains property to the parent wrapper node, but the
-> could be an ABI break (Linux shouldn't care). Also, we don't want to
-> encourage the pattern of wrapper nodes just to define resources such as
-> clocks, resets, power-domains, etc. when not necessary.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Docum=
-entation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 6d78048c4613..bcefd1c2410a 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -91,6 +91,9 @@ properties:
->          - usb2-phy
->          - usb3-phy
->=20=20
-> +  power-domains:
-> +    maxItems: 1
+> The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK3399
+> uses the discouraged parent wrapper node and child 'generic' DWC3 node.
 
-AFAICT this can be incorrect. Also, you could have Cc the dwc3
-maintainer to get comments.
-
-@Thinh, how many power rails does dwc3 need? I don't have access to a
-databook anymore, but I have a vague memory that different parts of dwc3
-could, potentially, be powered by completely separate supplies, no? Or
-is that only the case for clock domains in dwc3?
+Why discouraged? Splitting those two separate devices (yes, they are
+separate physical modules) has greatly simplified e.g. power management
+and encapsulation of the core module.
 
 =2D-=20
 balbi
@@ -112,19 +80,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOhZYMRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQho6y4DXKpEQIqA/9H58KYeua+8Pyj7k6pt7/Ib13Pe38UG2p
-d19FS68TdSHctH947Qq126h+hpjanuLKzD4rBPWEoGw3gkC+CKAZhffv0dD6mr48
-IroyOq9ApwHQ4qX7OvRN3f6gwxv3Ab9FvVT0fkcdiX4otdWs6OQku3Wa62hhHl2m
-cgWD0iPrWgZb2TbWcC8r9eEbdFNvu+QEx728WqZuMxYNwUANjkptpwUEQgQyHw52
-nwWASeFu4nl46/p2fOXmKYcFoCLDPDInteIGCg0U9SKFNIDpyKPZXlnfWNQJPLJC
-4oaKORO6h3+aamKcE0b2yZq8o24R4FGx7XpwLJTH2OwnK/z30vwABL0vbvHNW8y6
-0air/Db7AUkAxFpKcwtrze99LtoG5dvTpI7tHxLcCO/E5/UOg5WqzfsVXL6RCIM7
-V11ZlteWaG+LGL2C88XzASTNR+vNUEUUiJv/3sheEYA9WDowoWnTtMGzUAsfq7LH
-1KpHVXd0Yz+vgBNTkpRr1poxnneSCqLgoIs6z94s6WIdSc5Pl9gKIpx84a1dX8od
-LJnhf9eEli91dn9jbM20aXabj/qi32UfE6w6e0FlFDXyLl8itHiqzqAfpm4w2voq
-m75uXunv0FzPkMAIp10+5H0z8lpw8cvcNE+i+5gz8lnbEluJWQkelzttNMbN07TX
-uJ6uSFoq2Hs=
-=ufPS
+iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOhZhwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQho6y4DXKpEQmdQ/9HUBWlOG25MYVfiwdxaImz5mgCa6Tkae3
+5Jsmxxfrv702yoTBc/Pfh32g6Vfbn5u0zO0D956HzXZub+q4ZXKNzJMRz6Hkgq5Q
+8L3ta+RfPmSGc3pd9cB0zY77xeI4NAWQXeIbt1wz3uik9+RqHONmz2oTU47vIgHS
+U6yNIecEBDIPBIxJ8jgi1kadmPeyBZAEzHjwqzMsJjDM3aYUXY3pMn+tL4N3noxD
+xtCLfnCKSStZfkf1I+J9IG25apct/gdJmVXh8nkL4jxnLJKvobCXBszM/AI4uBo9
+ROgE8mzawpuR8cBzh0FQMhSwcEHFkPoOA30GgJXwgnvrsSXgNSFAWQTdY4T38201
+gKaWXK3dIeQBU32K1Zxlm7/vcLZn2mR6HfkmgRG0Y6ZlVeLvZIj2UVkcQHrMVAGx
+GEjhev3Yn3TBU+237RRAYR6+uYKcFFgtmhc7YU1u6uQWJUVniztdpEe/Yvocz6xK
+CVU8EYO1y4U1jo326JCRnGMwHDKH9JUyt0so+mDmuVGltkMCb+4R26VAXGC3iNl+
+rs2pUYlXUn178Zs8rbBEBQUg/OoToFaT7R3h5zvdDiMr7ux+AhJALy2b+El63q1N
+724mM2/9cm84opCok1LxBLaxeLxUGdCREL7A3uJrhiqK9rC6za8emL86KNPuh6na
+ttm1GYfsohg=
+=LkjN
 -----END PGP SIGNATURE-----
 --=-=-=--
