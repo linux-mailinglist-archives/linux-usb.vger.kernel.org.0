@@ -2,142 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52791652487
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 17:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0239F6524C6
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Dec 2022 17:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiLTQTw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Dec 2022 11:19:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S234130AbiLTQiY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Dec 2022 11:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbiLTQTr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 11:19:47 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A090C3B9
-        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 08:19:45 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M2w0K-1pAyj51sgG-003MZU; Tue, 20 Dec 2022 17:19:35 +0100
-Message-ID: <db6f59bf-33a1-776e-b52c-4818ff9114e3@i2se.com>
-Date:   Tue, 20 Dec 2022 17:19:34 +0100
+        with ESMTP id S234100AbiLTQhb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Dec 2022 11:37:31 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132EC1CB27
+        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 08:36:50 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id b189so12234482vsc.10
+        for <linux-usb@vger.kernel.org>; Tue, 20 Dec 2022 08:36:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xuaIgdrjgSOzMo0krQvdSpwz4+gLmJzCPx4n2C3GWWg=;
+        b=KA5C5mCK4DkoBX7TmkC4kDN2pWzNfgWi+uuBcg83pVxnMliZJB1+YE6X9022DlADKE
+         36+dVkarCwV8znCcsO1M8QYkrpr/eBuY7YUhHisKuhaQsP0fykmOlqU7wyW3J1BeuX6S
+         4aZ4arDyWmi2WaukiIt2POIdojW86TKr9fko+44PduAwEMA41FCgmQuZOErhUxtfTT/Q
+         WMU1B1vo1pd6X7ZCRNIAl0Fom0vLTYA9gHweKvIC1Yk4og73wWll3jO03H/gzs9YxxC9
+         MkPBJa9YXyiyHgubnhQ14h+icm2P2qWSgpkzG94fAc7fsQf6qIFYY8JR0VL+bkON2nzg
+         FhkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xuaIgdrjgSOzMo0krQvdSpwz4+gLmJzCPx4n2C3GWWg=;
+        b=xoHdt6NXn6sTbX+GekW6lQ2ww+lCJA7nmZI2lEkMgQP8jsP1EfWgZ/gGcEMiKtJTjd
+         MWLU1knoN84/7Bf3bTULH4MFLPRmh1+SlVBRKJvHqoO/doXWBUBOkg8/G73XPKhXKI4S
+         6yUzOIwoy8ldf+1jPJtU05yafTRRjk4MEqbzHik1KXK9BuFvTwOybLwzLAuBk7rVI6Yp
+         rTyKv5IKaFuz2tKWxOhXvfU/3jK55E53TsdgJqqg8RVt6Fd9KxtvCCDjPyLYzsYHVxci
+         5v+mwN0I/48uzfy1yASMq8+RfyxC4r6/tk6nwli1Q5ac8lz81tISD/kOrKqWXFkjZ7Uu
+         j19g==
+X-Gm-Message-State: ANoB5pm3xqvP6yzwjSyPFg8OaIoogPuqGFN2pziEgy1+NrxBvLzW9SIJ
+        J+fu5eqiKXE++vFNUr7aBZ2IResPvDuSWCznuH9LSw==
+X-Google-Smtp-Source: AA0mqf46UpQnJlDvWcWPOzfpi6F2pJn5D75RpfYbIbNwm3EJr4pDvZD7b3Y6oOAJz8qvfWxFWzDmm9zIBqZ/CczeVfU=
+X-Received: by 2002:a67:f04e:0:b0:3b1:1713:ba11 with SMTP id
+ q14-20020a67f04e000000b003b11713ba11mr21621691vsm.76.1671554208999; Tue, 20
+ Dec 2022 08:36:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Regression: onboard-usb-hub breaks USB on RPi 3
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, regressions@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>
-References: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
- <Y6Ci7wWvbBRRQkR6@google.com> <97c9b305-86f4-5918-54bf-4057e99eae3d@i2se.com>
- <Y6ECMZeh7G9bH8Fi@google.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <Y6ECMZeh7G9bH8Fi@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:rppBP7ELZeC/w1L9EmkgsbH5XfXYSiTeMWLQD9ZCSxlBWUYEuBE
- XAflW9rnSQPasoN/3+nnAk0hyvYOw3hNvC+6z9qvY6KiWhpR8/F1W/McIE247VIf2cicq21
- 3FFWGzg45IonhPqa+nUq0zO1glALyosKjpjOcYGAvdOvju/cPRvJHoHkJ4ZCIsNZL3VgUmh
- BRmxkFfMtVEOt9pv88hbw==
-UI-OutboundReport: notjunk:1;M01:P0:1iAib5eTT0s=;x0hQWWyMfPNJK4kh4PDTtegdJDK
- Z/H2L1xryUTg3rdYlT3rXIL7c0o+ozLYi8ITEok2BvF2wz5m8CfUUh5VLOQo9xbx1+XH6ie4q
- oddJ/K3pQ2+zKmV6RZ+1StXoL2IEoFal9S9j9E0HvWnzCPpRFTcpxUL6c2lDiNuASAdPr5T8M
- tcVqUYrgpDhUL0Mg708+O/O6t+X3sEGxQDjnBPE/CGNia4CyeE572p31uR7vdhGGiFKy4kyLd
- z8d+6ykJtUxwWTE1fXvQt3weW1eKa/WhWpAUPWgz6lev6hFioOu7VJ4lPSX5BszJ8UjpZ1Dd9
- BQip7V71/Cu1worhHzkPiyL8QeOZd2tsfv3W8ahJagF1wyAH8dz04AwEAEeibYcllXb2Eb4kp
- 43crMg6cZkyXkoTSD4OEFcu0r/uiTovo+47Ow963y/Ghpmco/rBw6eScwz89vp0VaN0DcDYut
- geKE7FsMMZ+/ybvogQlvpKuIv5BaaIDdaJ4kruGJ9G2m+W/RnlZYQKwY7P8wqqebB5mjnL5vL
- d7ph6qDsvSyhm/f9XfWgXpk3XJuTkwTurb1jwD73wIR9G4obG5+ngkftS6GjpZ9Ocke0pdQVO
- ojrCqesq85ClTSJwkgk7A9l6ZVoGv88X6vfj2UDwcBm5LXg/in5TwD2J1GclZxG67vqtgtfXt
- feoT3goAXdvt9A7SPMCa1j4dhY1kDjqqUY3sYP8slg==
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-6-allenwebb@google.com>
+ <Y6FaEoAAFFP0WqK3@kroah.com>
+In-Reply-To: <Y6FaEoAAFFP0WqK3@kroah.com>
+From:   Allen Webb <allenwebb@google.com>
+Date:   Tue, 20 Dec 2022 10:36:37 -0600
+Message-ID: <CAJzde04mhRh2SajwdfMTzoDJ_F_Xo_3utfcvxY1Dpgqrv-rzOg@mail.gmail.com>
+Subject: Re: [PATCH v9 05/10] module.h: MODULE_DEVICE_TABLE for built-in modules
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matthias,
+On Tue, Dec 20, 2022 at 12:45 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Dec 19, 2022 at 02:46:13PM -0600, Allen Webb wrote:
+> > Implement MODULE_DEVICE_TABLE for build-in modules to make it possible
+> > to generate a builtin.alias file to complement modules.alias.
+> >
+> > Signed-off-by: Allen Webb <allenwebb@google.com>
+> > ---
+> >  include/linux/module.h | 15 ++++++++++++++-
+> >  1 file changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/module.h b/include/linux/module.h
+> > index ec61fb53979a..3d1b04ca6350 100644
+> > --- a/include/linux/module.h
+> > +++ b/include/linux/module.h
+> > @@ -243,7 +243,20 @@ extern void cleanup_module(void);
+> >  extern typeof(name) __mod_##type##__##name##_device_table            \
+> >    __attribute__ ((unused, alias(__stringify(name))))
+> >  #else  /* !MODULE */
+> > -#define MODULE_DEVICE_TABLE(type, name)
+> > +/*
+> > + * The names may not be unique for built-in modules, so include the module name
+> > + * to guarantee uniqueness.
+>
+> What "names" are you referring to here with the words, "The names"?
+>
+> And built-in modules have the same rules as external names, they have to
+> be unique so I do not understand the problem you are trying to solve
+> here, which means you need to describe it better in both the changelog
+> text and the comment.
 
-Am 20.12.22 um 01:30 schrieb Matthias Kaehlcke:
-> On Mon, Dec 19, 2022 at 11:32:58PM +0100, Stefan Wahren wrote:
->> Hi Matthias,
->>
->> Am 19.12.22 um 18:44 schrieb Matthias Kaehlcke:
->>> Hi Stefan,
->>>
->>> Sorry for the regression.
->>>
->>> What seems to happen is this:
->>>
->>> arch/arm/boot/dts/bcm283x-rpi-lan7515.dtsi specifies device nodes for the
->>> two (nested) USB hubs (which is done rarely since USB devices (including
->>> hubs) are autodetected). The DT nodes were most likely only added to be
->>> able to configure the LED modes of the USB to Ethernet adapter. With
->>> 43993626de00 ("usb: misc: onboard-hub: add support for Microchip USB2514B
->>> USB 2.0 hub") the onboard_usb_hub driver gained support for the hubs on
->>> the RPi3. The onboard_usb_hub driver expects a regulator ("vdd") in the DT
->>> node of the USB hub, which isn't present for the RPi3 (this isn't an error
->>> per se). Without the regulator the onboard_hub platform driver fails to
->>> probe, when the USB driver of the hub is probed (onboard_hub_usbdev_probe())
->>> it doesn't find the corresponding platform driver instance
->>> (_find_onboard_hub()) and defers probing. When the deferred probe runs it
->>> encounters the same situation, rinse and repeat.
->> I forgot to mention that in error case /sys/kernel/debug/devices_deferred
->> was empty.
->>> One possible fix would be to specify the 'missing' "vdd" property, however
->>> that wouln't fix the issue for other boards with a similar configurations.
->>> Instead the driver could check if "vdd" exists in the DT node of the hub,
->>> and not defer probing if it doesn't.
->>>
->>> Could you please try if the below patch fixes the issue on the Rpi 3?
->> Yes, this prevents probing of onboard-usb-hub and the issue.
-> Thanks for the confirmation, I'll send out a proper patch to get this fixed
-> upstream.
+I changed the comment to:
+/*
+ * Creates an alias so file2alias.c can find device table for built in modules.
+ *
+ * The module name is included for two reasons:
+ *   - Adding the module name to the alias avoids creating two aliases with the
+ *     same name. Historically MODULE_DEVICE_TABLE was a no-op for built-in
+ *     modules, so there was nothing to stop different modules from having the
+ *     same device table name and consequently the same alias when building as a
+ *     module.
+ *   - The module name is needed by files2alias.c to associate a particular
+ *     device table with its associated module since files2alias would otherwise
+ *     see the module name as `vmlinuz.o` for built-in modules.
+ */
 
-sorry, i accidentally disabled this driver during testing of the patch. 
-So i erroneously assumed the patch is working, but it's not. I seems 
-that the change is never reached (add dev_info around your change).
+>
+> > + *
+> > + * Note that extern is needed because modpost reads these symbols to generate
+> > + * modalias entries for each match id in each device table. They are not used
+> > + * at runtime.
+>
+> This comment isn't explaining much about what the #define is to be used
+> for, is it?
 
-The following worked on my Raspberry Pi 3 B+
+I will drop this. I originally added the comment because Christophe Leroy said:
+"'extern' keyword is pointless of function prototypes and deprecated.
+Don't add new occurences."
 
-diff --git a/drivers/usb/misc/onboard_usb_hub.c 
-b/drivers/usb/misc/onboard_usb_hub.c
-index de3627af3c84..570e9f3d2d89 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -227,6 +227,9 @@ static int onboard_hub_probe(struct platform_device 
-*pdev)
-      if (!hub)
-          return -ENOMEM;
+This is clearly not a typical function prototype and the guidance from:
+https://www.kernel.org/doc/html/latest/process/coding-style.html#function-prototypes
+should not apply.
 
-+    if (!of_get_property(dev->of_node, "vdd", NULL))
-+        return -ENODEV;
-+
-      hub->vdd = devm_regulator_get(dev, "vdd");
-      if (IS_ERR(hub->vdd))
-          return PTR_ERR(hub->vdd);
-@@ -340,6 +343,15 @@ static struct onboard_hub *_find_onboard_hub(struct 
-device *dev)
-      hub = dev_get_drvdata(&pdev->dev);
-      put_device(&pdev->dev);
-
-+    /*
-+     * Some boards have device tree nodes for USB hubs supported by this
-+     * driver, but the nodes don't have all properties needed for the 
-driver
-+     * to work properly. Use the absence of the "vdd" regulator as an
-+     * indicator of such nodes.
-+     */
-+    if (!of_get_property(pdev->dev.of_node, "vdd", NULL))
-+        return ERR_PTR(-ENODEV);
-+
-      /*
-       * The presence of drvdata ('hub') indicates that the platform driver
-       * finished probing. This handles the case where (conceivably) we 
-couldThe following changes worked for me:
-
-
+>
+> confused,
+>
+> greg k-h
