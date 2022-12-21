@@ -2,213 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87638652F13
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 11:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E88652F25
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 11:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiLUKAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 05:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S232975AbiLUKIc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 05:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbiLUKAA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 05:00:00 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F188164F8
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 01:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671616642; x=1703152642;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=noHHOAmAUrzzpoaJ5OeRYc8m5HjZzaues+Y0cZo/JGk=;
-  b=EWhFB3Moi3m4aQ8PPnEfKtA2QbBGx1rgpufw30kpnyV8TkwX/vuUDryv
-   gpmzsRllnE3PBjh8zsttBvrL7tbRD3nBauGvo0rMUy7idPmx7Apo9ZvMY
-   hYL2rXZXeQJUH1O+8TlEprWY1ahfAQthbIbWYVj80ep/qB1x06S5QpNe2
-   7LDW/FGUUPTQeKXuAVk4HszR3wJ70Yt7zhYk+TX1KoXOOduIGJgG8PHdT
-   HMB4r4HWI1vrEYHkkImNG8a18aF1VvNknI2/pBSoi2ckrRfSsSs6H2OLk
-   r62U8FnizhcDFwbV4IjaUHshJRqu/YmTTooT+MHEaju9bnMRxDkVWWPWn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="319886376"
-X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
-   d="scan'208";a="319886376"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 01:57:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="681976154"
-X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
-   d="scan'208";a="681976154"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2022 01:57:20 -0800
-Message-ID: <6ac1cee8-b58a-b53f-2d0f-94336ac039b1@linux.intel.com>
-Date:   Wed, 21 Dec 2022 11:58:42 +0200
+        with ESMTP id S233234AbiLUKIB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 05:08:01 -0500
+Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51D57B03;
+        Wed, 21 Dec 2022 02:07:55 -0800 (PST)
+Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
+        by radex-web.radex.nl (Postfix) with ESMTPS id 6B56E24065;
+        Wed, 21 Dec 2022 11:07:53 +0100 (CET)
+Message-ID: <4d6f0bdb-500b-7ae5-ef10-a844a7abbf23@gmail.com>
+Date:   Wed, 21 Dec 2022 11:07:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
 Content-Language: en-US
-To:     Ladislav Michl <oss-lists@triops.cz>
-Cc:     linux-usb@vger.kernel.org, Sneeker Yeh <sneeker.yeh@gmail.com>
-References: <Y45iXb6VCNiz7ZVd@lenoch> <Y49A1Pv6dUScQ9x/@lenoch>
- <Y5tHWwHctY6wr+CJ@lenoch>
- <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
- <Y5zkCxQqBWR+/b4F@lenoch>
- <983a1eb1-4599-517b-6c88-63a0051ae261@linux.intel.com>
- <Y6Ct5s5fIoA9FsAt@lenoch> <Y6Dbh1xJucfNvwXq@lenoch> <Y6KyWqnHi1TFN0pa@lenoch>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: xHCI host dies on device unplug
-In-Reply-To: <Y6KyWqnHi1TFN0pa@lenoch>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Ferry Toth <ftoth@exalondelft.nl>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org
+References: <20221205201527.13525-1-ftoth@exalondelft.nl>
+ <20221205201527.13525-2-ftoth@exalondelft.nl>
+ <20221220194334.GA942039@roeck-us.net>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20221220194334.GA942039@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.12.2022 9.14, Ladislav Michl wrote:
-> +Cc: Sneeker Yeh
-> 
-> On Mon, Dec 19, 2022 at 10:45:43PM +0100, Ladislav Michl wrote:
->> On Mon, Dec 19, 2022 at 07:31:02PM +0100, Ladislav Michl wrote:
->>> On Mon, Dec 19, 2022 at 02:25:46PM +0200, Mathias Nyman wrote:
->>>> On 16.12.2022 23.32, Ladislav Michl wrote:
->>>>> On Fri, Dec 16, 2022 at 12:13:23PM +0200, Mathias Nyman wrote:
->>>>>> On 15.12.2022 18.12, Ladislav Michl wrote:
->>>>>>> +Cc Mathias as he last touched this code path and may know more :)
->>>>>>>
->>>>>>> On Tue, Dec 06, 2022 at 02:17:08PM +0100, Ladislav Michl wrote:
->>>>>>>> On Mon, Dec 05, 2022 at 10:27:57PM +0100, Ladislav Michl wrote:
->>>>>>>>> I'm running current linux.git on custom Marvell OCTEON III CN7020
->>>>>>>>> based board. USB devices like FTDI (idVendor=0403, idProduct=6001,
->>>>>>>>> bcdDevice= 6.00) Realtek WiFi dongle (idVendor=0bda, idProduct=8179,
->>>>>>>>> bcdDevice= 0.00) works without issues, while Ralink WiFi dongle
->>>>>>>>> (idVendor=148f, idProduct=5370, bcdDevice= 1.01) kills the host on
->>>>>>>>> disconnect:
->>>>>>>>> xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command
->>>>>>>>> xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
->>>>>>>>> xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
->>>>>>>>>
->>>>>>>>> Unfortunately I do not have a datasheet for CN7020 SoC, so it is hard
->>>>>>>>> to tell if there is any errata :/ In case anyone see a clue in debug
->>>>>>>>> logs bellow, I'll happily give it a try.
->>>>>>>>
->>>>>>>> So I do have datasheet now. As a wild guess I tried to use dlmc_ref_clk0
->>>>>>>> instead of dlmc_ref_clk1 as a refclk-type-ss and it fixed unplug death.
->>>>>>>> I have no clue why, but anyway - sorry for the noise :) Perhaps Octeon's
->>>>>>>> clock init is worth to be verified...
->>>>>>>
->>>>>>> After all whenever xhci dies with "xHCI host not responding to stop endpoint
->>>>>>> command" depends also on temperature, so there seems to be race somewhere.
->>>>>>>
->>>>>>> As a quick and dirty verification, whenever xhci really died, following patch
->>>>>>> was tested and it fixed issue. It just treats ep as if stop endpoint command
->>>>>>> succeeded. Any clues? I'll happily provide more traces.
->>>>>>
->>>>>> It's possible the controller did complete the stop endpoint command but driver
->>>>>> didn't get the interrupt for the event for some reason.
->>>>>>
->>>>
->>>> Looks like controller didn't complete the stop endpoint command.
->>>>
->>>> Event for last completed command (before cycle bit change "c" -> "C") was:
->>>>    0x00000000028f55a0: TRB 00000000035e81a0 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c,
->>>>
->>>> This was for command at 35e81a0, which in the command ring was:
->>>>    0x00000000035e81a0: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
->>>>
->>>> The stop endpoint command was the next command queued, at 35e81b0:
->>>>    0x00000000035e81b0: Stop Ring Command: slot 1 sp 0 ep 3 flags c
->>>>
->>>> There were a lot of URBs queued for this device, and they are cancelled one by one after disconnect.
->>>>
->>>> Was this the only device connected? If so does connecting another usb device to another root port help?
->>>> Just to test if the host for some reason partially stops a while after last device disconnect?
->>>
->>> Device is connected directly into SoC. Once connected into HUB, host doesn't die
->>> (as noted in other email, sorry for not replying to my own message, so it got lost)
->>> It seems as intentional (power management?) optimization. If another device is
->>> plugged in before 5 sec timeout expires, host completes stop endpoint command.
->>>
->>> Unfortunately I cannot find anything describing this behavior in
->>> documentation, so I'll ask manufacturer support.
+Hi,
+
+On 20-12-2022 20:43, Guenter Roeck wrote:
+> On Mon, Dec 05, 2022 at 09:15:26PM +0100, Ferry Toth wrote:
+>> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
+>> if extcon is present") Dual Role support on Intel Merrifield platform
+>> broke due to rearranging the call to dwc3_get_extcon().
 >>
->> As support is usually slow I asked search engine first and this sounds
->> familiar:
->> "Synopsis Designware USB3 IP earlier than v3.00a which is configured in silicon
->> with DWC_USB3_SUSPEND_ON_DISCONNECT_EN=1, would need a specific quirk to prevent
->> xhci host controller from dying when device is disconnected."
+>> It appears to be caused by ulpi_read_id() on the first test write failing
+>> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+>> DT when the test write fails and returns 0 in that case, even if DT does not
+>> provide the phy. As a result usb probe completes without phy.
 >>
->> usb: dwc3: Add quirk for Synopsis device disconnection errata
->> https://patchwork.kernel.org/project/linux-omap/patch/1424151697-2084-5-git-send-email-Sneeker.Yeh@tw.fujitsu.com/
+>> Make ulpi_read_id() return -ETIMEDOUT to its user if the first test write
+>> fails. The user should then handle it appropriately. A follow up patch
+>> will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
 >>
->> Any clue what happened with that? I haven't found any meaningfull traces...
-> 
-> Lets step back a bit. All test so far was done with mainline 6.1.0 kernel.
-> I also tested Marvell's vendor tree, one based on 4.9.79, second on 5.4.30,
-> both heavily patched. The last version of above patch I found is v5:
-> https://lkml.org/lkml/2015/2/21/260
-> 
+>> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+> Hi,
+>
+> this patch results in some qemu test failures, specifically xilinx-zynq-a9
+> machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
+> to boot from USB drive. The log shows
 
-Looked at that same series and turned patch 1/5 into a standalone quick hack that applies on 6.1
+I'm not familiar with that platform. Does it use dt to discover the ulpi 
+device?
 
-Untested, does it work for you?
+I'm guessing that the problem is actually caused by "usb: ulpi: defer 
+ulpi_register on ulpi_read_id timeout".
 
-Can be found in a delay_csc_clear branch in my tree:
+ulpi_read_id() now returns ETIMEDOUT due to the test write 
+ulpi_write(ulpi, ULPI_SCRATCH, 0xaa) failing.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git delay_csc_clear
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=delay_csc_clear
+Maybe  we can create a fix by skipping the test write in case dt 
+discovery is available and calling of_device_request_module() directly, 
+instead of masking the timed out test write as it was before?
 
-looks like this: (copypasted, might mess up tabs)
-
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 4619d5e89d5b..5bc1f78b41da 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -603,6 +603,10 @@ static void xhci_clear_port_change_bit(struct xhci_hcd *xhci, u16 wValue,
-                 port_change_bit = "warm(BH) reset";
-                 break;
-         case USB_PORT_FEAT_C_CONNECTION:
-+               if (1 && !(readl(addr) & PORT_CONNECT)) { /* add proper quirk */
-+                       xhci_warn(xhci, "Delay clearing port-%d CSC\n", wIndex + 1);
-+                       return;
-+               }
-                 status = PORT_CSC;
-                 port_change_bit = "connect";
-                 break;
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 79d7931c048a..133ec4b8930f 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4000,6 +4000,28 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
-                 virt_dev->eps[i].ep_state &= ~EP_STOP_CMD_PENDING;
-         virt_dev->udev = NULL;
-         xhci_disable_slot(xhci, udev->slot_id);
-+
-+       if (1 && udev->parent && !udev->parent->parent) { /*fixme, real quirk */
-+               struct xhci_hub *rhub;
-+               u32 portsc;
-+
-+               rhub = xhci_get_rhub(hcd);
-+
-+               if (udev->portnum > rhub->num_ports) {
-+                       xhci_warn(xhci, "Invalid portnum %d for late clearing CSC\n", udev->portnum);
-+                       goto out;
-+               }
-+
-+               portsc = readl(rhub->ports[udev->portnum - 1]->addr);
-+
-+               if (!(portsc & PORT_CONNECT) && (portsc & PORT_CSC)) {
-+                       xhci_warn(xhci, "Late clearing port-%d CSC, portsc 0x%x\n",
-+                                 udev->portnum, portsc);
-+                       portsc = xhci_port_state_to_neutral(portsc);
-+                       writel(portsc | PORT_CSC, rhub->ports[udev->portnum - 1]->addr);
-+               }
-+       }
-+out:
-         xhci_free_virt_device(xhci, udev->slot_id);
-  }
-
-
-Thanks
--Mathias
+> ci_hdrc ci_hdrc.0: failed to register ULPI interface
+> ci_hdrc: probe of ci_hdrc.0 failed with error -110
+>
+> and the USB interface does not instantiate. Reverting this patch fixes
+> the problem. Bisect log is attached.
+>
+> A detailed log is available at
+> https://kerneltests.org/builders/qemu-arm-v7-master/builds/484/steps/qemubuildcommand/logs/stdio
+>
+> Guenter
+>
+> ---
+> # bad: [35f79d0e2c98ff6ecb9b5fc33113158dc7f7353c] Merge tag 'parisc-for-6.2-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
+> # good: [830b3c68c1fb1e9176028d02ef86f3cf76aa2476] Linux 6.1
+> git bisect start 'HEAD' 'v6.1'
+> # good: [90b12f423d3c8a89424c7bdde18e1923dfd0941e] Merge tag 'for-linus-6.2-1' of https://github.com/cminyard/linux-ipmi
+> git bisect good 90b12f423d3c8a89424c7bdde18e1923dfd0941e
+> # good: [c7020e1b346d5840e93b58cc4f2c67fc645d8df9] Merge tag 'pci-v6.2-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci
+> git bisect good c7020e1b346d5840e93b58cc4f2c67fc645d8df9
+> # bad: [b83a7080d30032cf70832bc2bb04cc342e203b88] Merge tag 'staging-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+> git bisect bad b83a7080d30032cf70832bc2bb04cc342e203b88
+> # good: [057b40f43ce429a02e793adf3cfbf2446a19a38e] Merge tag 'acpi-6.2-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+> git bisect good 057b40f43ce429a02e793adf3cfbf2446a19a38e
+> # good: [851f657a86421dded42b6175c6ea0f4f5e86af97] Merge tag '6.2-rc-smb3-client-fixes-part1' of git://git.samba.org/sfrench/cifs-2.6
+> git bisect good 851f657a86421dded42b6175c6ea0f4f5e86af97
+> # good: [fa205589d5e9fc2d1b2f8d31f665152da04160bc] staging: r8188eu: stop beacon processing if kmalloc fails
+> git bisect good fa205589d5e9fc2d1b2f8d31f665152da04160bc
+> # good: [4051a1c96e4883f3445cc8f239c214be622f4c6c] Merge tag 'thunderbolt-for-v6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+> git bisect good 4051a1c96e4883f3445cc8f239c214be622f4c6c
+> # good: [84e57d292203a45c96dbcb2e6be9dd80961d981a] Merge tag 'exfat-for-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat
+> git bisect good 84e57d292203a45c96dbcb2e6be9dd80961d981a
+> # good: [6f1f0ad910f73f5533b65e1748448d334e0ec697] usb: gadget: udc: drop obsolete dependencies on COMPILE_TEST
+> git bisect good 6f1f0ad910f73f5533b65e1748448d334e0ec697
+> # good: [c7912f27dedd874d49eadf78b5b6fbfdec52c7c3] staging: rtl8192e: Fix spelling mistake "ContryIE" -> "CountryIE"
+> git bisect good c7912f27dedd874d49eadf78b5b6fbfdec52c7c3
+> # bad: [63130462c919ece0ad0d9bb5a1f795ef8d79687e] usb: dwc3: core: defer probe on ulpi_read_id timeout
+> git bisect bad 63130462c919ece0ad0d9bb5a1f795ef8d79687e
+> # good: [38cea8e31e9ef143187135d714aed4d7bd18463c] dt-bindings: vendor-prefixes: add Genesys Logic
+> git bisect good 38cea8e31e9ef143187135d714aed4d7bd18463c
+> # good: [9bae996ffa28ac03b6d95382a2a082eb219e745a] usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+> git bisect good 9bae996ffa28ac03b6d95382a2a082eb219e745a
+> # bad: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+> git bisect bad 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac
+> # first bad commit: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
