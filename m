@@ -2,212 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535B865327D
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 15:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAA9653455
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 17:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiLUO3T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 09:29:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S230144AbiLUQuX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 11:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiLUO3Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 09:29:16 -0500
-Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3967313D;
-        Wed, 21 Dec 2022 06:29:10 -0800 (PST)
-Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
-        by radex-web.radex.nl (Postfix) with ESMTPS id 03E77240A8;
-        Wed, 21 Dec 2022 15:29:10 +0100 (CET)
-Message-ID: <b6692501-5c6e-945a-9a54-986ae8dd1687@gmail.com>
-Date:   Wed, 21 Dec 2022 15:29:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
- timeout
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, Ferry Toth <fntoth@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S229844AbiLUQuV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 11:50:21 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCAC24BFC
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 08:50:18 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id o8so6845432ilq.6
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 08:50:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VQdZu8N/DS9tgyGPl3GlJuDcOjmwaH3SgMLnskg/MIw=;
+        b=fspS9VnVPM4o2NizSSRZoGdKGxwaFSrhib45ZZMVp9ywsmZEU11dDKZmHtHq6NJQQ7
+         6jn9kyzssAZVK10sMUF6+klu7zYZBLrfdc4K9YoSYCsivGMhPpKtAY3v25yuRch8rxi5
+         dbx0eGanaFUUX+BC27wZ/TdXTrkNkXcUIuovY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQdZu8N/DS9tgyGPl3GlJuDcOjmwaH3SgMLnskg/MIw=;
+        b=4KvmIcxiScQVqW56HG7AdAWpOyLNNHE7PTbQvPiQpKoo6qM8YSpJYj+xydcanXvqNB
+         Myt60gSrIa1z/rD9if24DwrJ+BAu+Mr8f1iXoZxEucQUPD8cxggE8Aov463RpukYGjU5
+         Kigm5WFPhisJ/Fd/i1pNQ7Rls/t/tAvDdTBiBobGtg4kXk+L3yn0MMRaOGoV3yPqdgnL
+         G3fpXF2mKVk9syc+ZJ7l9tTH6n1M1zpFzajsxIzRhYpTm5Yo5ctWi4omYN+BmZjbwkII
+         LLHASUCqMCPonq1yQt2mcPGbaeOcmFckK4FiNwwLXVjihXONMR1Hql60NOx4/23Ao8Zp
+         xO1Q==
+X-Gm-Message-State: AFqh2kr4rFswuwEf0wGrw+QUTT+2n6j7fxRciRwhcsalzs1LnB34aAzW
+        Pg4M1BYYhpsjdAoOE8Ih6WBfGA==
+X-Google-Smtp-Source: AMrXdXuRq/OmsQF1FIMl8uXXTKt/MhDbMAEE5otg3ZjGplharDSVgaXnPxJOw6cVsxYWx/GW95scpw==
+X-Received: by 2002:a92:cb44:0:b0:303:2965:9617 with SMTP id f4-20020a92cb44000000b0030329659617mr1690890ilq.9.1671641417467;
+        Wed, 21 Dec 2022 08:50:17 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id e6-20020a022106000000b0038a007a26e7sm5803049jaa.126.2022.12.21.08.50.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 08:50:17 -0800 (PST)
+Date:   Wed, 21 Dec 2022 16:50:16 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        stable@vger.kernel.org
-References: <20221205201527.13525-1-ftoth@exalondelft.nl>
- <20221205201527.13525-2-ftoth@exalondelft.nl>
- <20221220194334.GA942039@roeck-us.net>
- <4d6f0bdb-500b-7ae5-ef10-a844a7abbf23@gmail.com>
- <20221221124104.GB1353152@roeck-us.net>
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <20221221124104.GB1353152@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: Regression: onboard-usb-hub breaks USB on RPi 3
+Message-ID: <Y6M5SPBpp/xMzUz7@google.com>
+References: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
+ <Y6Ci7wWvbBRRQkR6@google.com>
+ <97c9b305-86f4-5918-54bf-4057e99eae3d@i2se.com>
+ <Y6ECMZeh7G9bH8Fi@google.com>
+ <db6f59bf-33a1-776e-b52c-4818ff9114e3@i2se.com>
+ <Y6I8L45rDhqBMfUZ@google.com>
+ <dde8b5e1-fbce-dd6c-6047-09e03ff2c00d@i2se.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <dde8b5e1-fbce-dd6c-6047-09e03ff2c00d@i2se.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+On Wed, Dec 21, 2022 at 01:29:25PM +0100, Stefan Wahren wrote:
+> Hi Matthias,
+> 
+> Am 20.12.22 um 23:50 schrieb Matthias Kaehlcke:
+> > 
+> > Today I learned that regulator_get() doesn't return an error when the regulator
+> > isn't specified, but the 'dummy regulator'. With that the platform driver is
+> > instantiated, which is not intended. The proper fix is probably to skip the
+> > creation of the 'raw' platform device in onboard_hub_create_pdevs() when the
+> > 'vdd-supply' does not exist.
+> 
+> Yes, i can confirm this by debugfs:
+> 
+>  regulator                      use open bypass  opmode voltage current    
+> min     max
+> ---------------------------------------------------------------------------------------
+>  regulator-dummy                  8    7      0 unknown 0mV     0mA    
+> 0mV     0mV
+>     serial0-0-vddio 1                                 0mA     0mV     0mV
+>     serial0-0-vbat 1                                 0mA     0mV     0mV
+>     3f980000.usb:usb-port@1:usb-port@1-vdd 1                                
+> 0mA     0mV     0mV
+>     3f980000.usb:usb-port@1-vdd 1                                 0mA    
+> 0mV     0mV
+>     3f980000.usb-vusb_a 1                                 0mA     0mV    
+> 0mV
+>     3f980000.usb-vusb_d 1                                 0mA     0mV    
+> 0mV
+>     phy-vcc 1                                 0mA     0mV     0mV
+> 
+> > 
+> > I tried to repro the Rpi 3 case by adjusting sc7280-herobrine.dtsi to look
+> > somewhat similar to the Rpi 3 hub config, but so far I wasn't 'successful'
+> > with breaking USB by deleting 'vdd-supply' (and 'peer-hub'). So I don't fully
+> > understand your scenario, but I'm relatively confident that not creating the
+> > platform devices should fix it.
+> 
+> I just played a little bit with arch/arm/boot/dts/bcm283x-rpi-lan7515.dtsi
+> and removed only the second hub node (including ethernet chip). After this
+> the issue also doesn't occur without any modification to onboard-usb-hub. So
+> it seems to me that the real issue is caused by the cascade of 2x Microchip
+> USB2514B USB 2.0 hubs.
 
-On 21-12-2022 13:41, Guenter Roeck wrote:
-> On Wed, Dec 21, 2022 at 11:07:50AM +0100, Ferry Toth wrote:
->> Hi,
->>
->> On 20-12-2022 20:43, Guenter Roeck wrote:
->>> On Mon, Dec 05, 2022 at 09:15:26PM +0100, Ferry Toth wrote:
->>>> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
->>>> if extcon is present") Dual Role support on Intel Merrifield platform
->>>> broke due to rearranging the call to dwc3_get_extcon().
->>>>
->>>> It appears to be caused by ulpi_read_id() on the first test write failing
->>>> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
->>>> DT when the test write fails and returns 0 in that case, even if DT does not
->>>> provide the phy. As a result usb probe completes without phy.
->>>>
->>>> Make ulpi_read_id() return -ETIMEDOUT to its user if the first test write
->>>> fails. The user should then handle it appropriately. A follow up patch
->>>> will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
->>>>
->>>> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
->>>> Cc: stable@vger.kernel.org
->>>> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
->>> Hi,
->>>
->>> this patch results in some qemu test failures, specifically xilinx-zynq-a9
->>> machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
->>> to boot from USB drive. The log shows
->> I'm not familiar with that platform. Does it use dt to discover the ulpi
->> device?
->>
-> The dt usb description includes
->
-> 	usb_phy0: phy0 {
->                  compatible = "usb-nop-xceiv";
->                  #phy-cells = <0>;
->          };
->
-> ...
->
-> &usb0 {
->          status = "okay";
->          dr_mode = "host";
->          usb-phy = <&usb_phy0>;
-> };
->
-> ...
->
->                  usb0: usb@e0002000 {
->                          compatible = "xlnx,zynq-usb-2.20a", "chipidea,usb2";
->                          status = "disabled";
->                          clocks = <&clkc 28>;
->                          interrupt-parent = <&intc>;
->                          interrupts = <0 21 4>;
->                          reg = <0xe0002000 0x1000>;
->                          phy_type = "ulpi";
->                  };
->
-> The chipidea core initialization code includes
->
->          if (!platdata->phy_mode)
->                  platdata->phy_mode = of_usb_get_phy_mode(dev->of_node);
->
-> Does that mean that every chipidea based usb implementation specifying
-> 	phy_type = "ulpi";
-> in their devicetree description will now fail, plus maybe others
-> who determine the phy mode from devicetree ?
-I don't think so.
->> I'm guessing that the problem is actually caused by "usb: ulpi: defer
->> ulpi_register on ulpi_read_id timeout".
->>
-> Confused. Isn't that this patch ?
-Ehem. Yes.
->> ulpi_read_id() now returns ETIMEDOUT due to the test write ulpi_write(ulpi,
->> ULPI_SCRATCH, 0xaa) failing.
->>
->> Maybe  we can create a fix by skipping the test write in case dt discovery
->> is available and calling of_device_request_module() directly, instead of
->> masking the timed out test write as it was before?
->>
-> I have no idea. All I can see is that it appears that there was a reason
-> for not returning an error if that test write failed.
+Thanks for your debugging efforts.
 
-It seems to have been a quick patch to solve a power sequencing issue:
+I did some limited testing with nested hubs during development of the
+driver, using an external hub as alleged 2nd level onboard hub. I went
+back to such a configuration, unfortunately I still can't repro what
+you are seeing :(
 
-"The ULPI bus code supports native enumeration by reading the
-vendor ID and product ID registers at device creation time, but
-we can't be certain that those register reads will succeed if the
-phy is not powered up. To avoid any problems with reading the ID
-registers before the phy is powered we fallback to DT matching
-when the ID reads fail.
+> Here are the relevant kernel log entries:
+> 
+> [    4.025150] dwc2 3f980000.usb: supply vusb_d not found, using dummy
+> regulator
+> [    4.038776] dwc2 3f980000.usb: supply vusb_a not found, using dummy
+> regulator
+> [    4.104207] dwc2 3f980000.usb: DWC OTG Controller
+> [    4.115852] dwc2 3f980000.usb: new USB bus registered, assigned bus
+> number 1
+> [    4.129921] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
+> [    4.513217] usb 1-1: new high-speed USB device number 2 using dwc2
+> [    5.123296] usb 1-1.1: new high-speed USB device number 3 using dwc2
+> [    5.623217] usb 1-1.3: new low-speed USB device number 4 using dwc2
+> [    5.785049] input: HID 046a:0011 as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0001/input/input0
+> [    5.863240] usb 1-1.1.2: new low-speed USB device number 5 using dwc2
+> [    5.868998] hid-generic 0003:046A:0011.0001: input: USB HID v1.11
+> Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
+> [    6.031327] input: PixArt Microsoft USB Optical Mouse as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0002/input/input1
+> [    6.031490] hid-generic 0003:045E:00CB.0002: input: USB HID v1.11 Mouse
+> [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
+> [    6.333278] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
+> [   24.165633] usbcore: registered new interface driver lan78xx
+> [   24.423801] onboard-usb-hub 3f980000.usb:usb-port@1: supply vdd not
+> found, using dummy regulator
+> [   24.424202] usbcore: registered new device driver onboard-usb-hub
+> [   24.424376] usb 1-1.1: USB disconnect, device number 3
+> [   24.424385] usb 1-1.1.1: USB disconnect, device number 6
+> [   24.564921] usb 1-1.1.2: USB disconnect, device number 5
+> [   24.624696] usb 1-1.3: USB disconnect, device number 4
+> [   25.523236] usb 1-1.1: new high-speed USB device number 7 using dwc2
+> [   26.143248] usb 1-1.3: new low-speed USB device number 8 using dwc2
+> [   26.305673] input: HID 046a:0011 as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0003/input/input2
+> [   26.374840] hid-generic 0003:046A:0011.0003: input: USB HID v1.11
+> Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
+> [   26.383241] usb 1-1.1.2: new low-speed USB device number 9 using dwc2
+> [   26.521526] input: PixArt Microsoft USB Optical Mouse as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0004/input/input3
+> [   26.522241] hid-generic 0003:045E:00CB.0004: input: USB HID v1.11 Mouse
+> [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
+> [   26.833251] usb 1-1.1.1: new high-speed USB device number 10 using dwc2
+> 
+> As you can see the input devices are deregistered after probing of
+> onboard-usb-hub and then registered again.
 
-If the ULPI spec had some generic power sequencing for these
-registers we could put that into the ULPI bus layer and power up
-the device before reading the ID registers. Unfortunately this
-doesn't exist and the power sequence is usually device specific.
-By having the device matched up with DT we can avoid this
-problem."
+It looks like the onboard_usb_hub driver is built as a module, which
+is the cause of the de- and re-registration. On a system that actually
+intends to use the onboard_hub driver I would recommand to make it a
+builtin driver to avoid this, but a module driver should still work.
 
-But as is, the code now requires a DT when there is a power
-sequencing issue, which is wrong for Merrifield. It seems my patch
-breaks the OF path, by replacing that by a deferred probe.
+I changed my kernel config to use a onboard_hub module, but that didn't
+help either with reproducing the issue.
 
-I'm thinking the correct way would be:
-- if present use DT
-- else if test write fails, defer probe
-- else enumeration by reading the vendor ID and product ID registers
+Which kernel version are you running on the Rpi 3?
 
->
-> Thanks,
-> Guenter
->
->>> ci_hdrc ci_hdrc.0: failed to register ULPI interface
->>> ci_hdrc: probe of ci_hdrc.0 failed with error -110
->>>
->>> and the USB interface does not instantiate. Reverting this patch fixes
->>> the problem. Bisect log is attached.
->>>
->>> A detailed log is available at
->>> https://kerneltests.org/builders/qemu-arm-v7-master/builds/484/steps/qemubuildcommand/logs/stdio
->>>
->>> Guenter
->>>
->>> ---
->>> # bad: [35f79d0e2c98ff6ecb9b5fc33113158dc7f7353c] Merge tag 'parisc-for-6.2-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
->>> # good: [830b3c68c1fb1e9176028d02ef86f3cf76aa2476] Linux 6.1
->>> git bisect start 'HEAD' 'v6.1'
->>> # good: [90b12f423d3c8a89424c7bdde18e1923dfd0941e] Merge tag 'for-linus-6.2-1' of https://github.com/cminyard/linux-ipmi
->>> git bisect good 90b12f423d3c8a89424c7bdde18e1923dfd0941e
->>> # good: [c7020e1b346d5840e93b58cc4f2c67fc645d8df9] Merge tag 'pci-v6.2-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci
->>> git bisect good c7020e1b346d5840e93b58cc4f2c67fc645d8df9
->>> # bad: [b83a7080d30032cf70832bc2bb04cc342e203b88] Merge tag 'staging-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
->>> git bisect bad b83a7080d30032cf70832bc2bb04cc342e203b88
->>> # good: [057b40f43ce429a02e793adf3cfbf2446a19a38e] Merge tag 'acpi-6.2-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
->>> git bisect good 057b40f43ce429a02e793adf3cfbf2446a19a38e
->>> # good: [851f657a86421dded42b6175c6ea0f4f5e86af97] Merge tag '6.2-rc-smb3-client-fixes-part1' of git://git.samba.org/sfrench/cifs-2.6
->>> git bisect good 851f657a86421dded42b6175c6ea0f4f5e86af97
->>> # good: [fa205589d5e9fc2d1b2f8d31f665152da04160bc] staging: r8188eu: stop beacon processing if kmalloc fails
->>> git bisect good fa205589d5e9fc2d1b2f8d31f665152da04160bc
->>> # good: [4051a1c96e4883f3445cc8f239c214be622f4c6c] Merge tag 'thunderbolt-for-v6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
->>> git bisect good 4051a1c96e4883f3445cc8f239c214be622f4c6c
->>> # good: [84e57d292203a45c96dbcb2e6be9dd80961d981a] Merge tag 'exfat-for-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat
->>> git bisect good 84e57d292203a45c96dbcb2e6be9dd80961d981a
->>> # good: [6f1f0ad910f73f5533b65e1748448d334e0ec697] usb: gadget: udc: drop obsolete dependencies on COMPILE_TEST
->>> git bisect good 6f1f0ad910f73f5533b65e1748448d334e0ec697
->>> # good: [c7912f27dedd874d49eadf78b5b6fbfdec52c7c3] staging: rtl8192e: Fix spelling mistake "ContryIE" -> "CountryIE"
->>> git bisect good c7912f27dedd874d49eadf78b5b6fbfdec52c7c3
->>> # bad: [63130462c919ece0ad0d9bb5a1f795ef8d79687e] usb: dwc3: core: defer probe on ulpi_read_id timeout
->>> git bisect bad 63130462c919ece0ad0d9bb5a1f795ef8d79687e
->>> # good: [38cea8e31e9ef143187135d714aed4d7bd18463c] dt-bindings: vendor-prefixes: add Genesys Logic
->>> git bisect good 38cea8e31e9ef143187135d714aed4d7bd18463c
->>> # good: [9bae996ffa28ac03b6d95382a2a082eb219e745a] usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
->>> git bisect good 9bae996ffa28ac03b6d95382a2a082eb219e745a
->>> # bad: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
->>> git bisect bad 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac
->>> # first bad commit: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+> The re-registering doesn't happen in the error case (as in my first email).
+
+Could you add logs to onboard_hub_usbdev_probe() to see whether it is called
+at all and how far it gets? Confirming whether onboard_hub_probe() completes
+successfully might also help.
+
+> Also in error case i noticed an unusual high load on the Rpi board, which
+> doesn't occur in good case. Is it possible that both onboard-usb-hub
+> instances are in some kind of deadlock?
+
+Possibly. The driver itself uses a mutex for locking, which shouldn't result
+in a high load in case of a deadlock, in any case the high load you are
+observing seems to be related with the issue if it is only seen in the error
+case.
+
+Do things work properly when of_is_onboard_usb_hub() returns always false?
+That would be similar to the fix I have in mind for configs that shouldn't
+use the onboard_hub driver.
