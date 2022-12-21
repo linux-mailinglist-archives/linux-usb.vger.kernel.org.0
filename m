@@ -2,206 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DF0653712
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 20:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E04653777
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 21:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbiLUTfC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 14:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S229620AbiLUUSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 15:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234765AbiLUTfB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 14:35:01 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD76248CD
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 11:35:00 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id a1so8429595edf.5
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 11:35:00 -0800 (PST)
+        with ESMTP id S231417AbiLUUSr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 15:18:47 -0500
+Received: from mailfilter05-out40.webhostingserver.nl (mailfilter05-out40.webhostingserver.nl [195.211.74.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729E11EAE0
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 12:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ZoaqwFfMJRYS6bjyWuTQdFret4zs82sAsNZ5sch7lg=;
-        b=l8dSNhnqny8nMc5DjJfLRtvsmGg0ME7hV5iYRvg5w+eNZuDHHr4w0UEDd/9UQHDJof
-         z3tGovwwNokBETmuD975+QLTOQB7s1p2vVrZKMpNi9/M67j13B5CVOedFbYouSsFxrqv
-         zWDCb7nGV4QJXYD0HgitE0NWZjkMwCXeMoS4c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8ZoaqwFfMJRYS6bjyWuTQdFret4zs82sAsNZ5sch7lg=;
-        b=MHdNWbz8gNMvbc6f1noBUR5jFIL/jvqH/HRSvGql5RemgESsBaICAQ+sEW5n6U4pvZ
-         PkdrM6A9ie7y2cjHL4QkJophEPfFoA49PgUcEqqgOAAEk31z8eKyoyqVTX6aOR8WBYWs
-         Ks5E/h7yDYHBojKwxIjORpj76fq8lJIzMYkjoGcG9de08ccmQNv4DTV5LnPiFQ+lFXeR
-         mVxF6lIRrLB5XPZgfC8cMSktxyG1QppgAwlepFp960rg3lttmzPQNydBGyDHLmitu85C
-         jJLFQbVZe891OHricFpfzXhjvplwopN6pNX7+m5kgmyOhlXrn/gBp3djgMfKb32BpVjj
-         wwPg==
-X-Gm-Message-State: AFqh2kpsvFlYik0bjGHR+MjPU5yVED+6lNUqfL6rNM1OxXPQAeo8rV/J
-        RW3dLZPbag7+dSHEdTdWKzibUA==
-X-Google-Smtp-Source: AMrXdXsi8t74Lm0ZkbpdGHxAtDQYMa5Relc63SBgfq5cCxhE4rxGmq+t4JAXA1mqzydpBqnP30uxog==
-X-Received: by 2002:a05:6402:12d4:b0:45c:835c:c6d3 with SMTP id k20-20020a05640212d400b0045c835cc6d3mr2450625edx.4.1671651298986;
-        Wed, 21 Dec 2022 11:34:58 -0800 (PST)
-Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b0082ddfb47d06sm3763748ejf.148.2022.12.21.11.34.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 11:34:58 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 21 Dec 2022 20:34:51 +0100
-Subject: [PATCH v4] USB: Improve usb_fill_* documentation
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=pWO3hqi+QAixwpdeI1+jy7duJrkYMUdLerm7qfnV53A=;
+        b=bt4Sry3aTw0lf00bXdiWU63WNWX2xULSlnLeoMlYGJgIUrA0UaELJreJBK7qG0rqme9vHQccu0DoQ
+         8d3jK+pqdJdDihGPzjRg4FlbGmDFRo7y3oT5vU/K7Dkd5ui7thxDwpTQOSR2xRnPpbzp8I8FQNCspe
+         hj0dFvmoyiD65Vr2SZ3fTiI1QsZTL/sYxq5Xh8YQr/iK9AMKfK/gXygUtgotOmBL+zuuI6gf9DU7ET
+         SfZZLnuV3uYR/e5rT+4J2382bjF+8WdY28g1ypON7S585DxzeBsvzts5se2S7rpdADrzVsXtn7p/6N
+         61PBJ40+gS6dIWvhLrArPQBZxs30OFw==
+X-Halon-ID: e54b552b-816b-11ed-936b-001a4a4cb933
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter05.webhostingserver.nl (Halon) with ESMTPSA
+        id e54b552b-816b-11ed-936b-001a4a4cb933;
+        Wed, 21 Dec 2022 21:13:12 +0100 (CET)
+Received: from 2a02-a466-68ed-1-b319-6467-c1bf-a947.fixed6.kpn.net ([2a02:a466:68ed:1:b319:6467:c1bf:a947] helo=delfion.fritz.box)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1p85Y1-00ELTs-1X;
+        Wed, 21 Dec 2022 21:18:41 +0100
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ferry Toth <ftoth@exalondelft.nl>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org
+Subject: [PATCH v1 1/1] Revert "usb: ulpi: defer ulpi_register on ulpi_read_id timeout"
+Date:   Wed, 21 Dec 2022 21:18:05 +0100
+Message-Id: <20221221201805.19436-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221220-usb-dmadoc-v4-0-74a045bf14f4@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-usb@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5121; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=cwCTpwzbfFoWlRwkZxXRWPyS41WSzHGFXVWqG5IZyoI=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjo1/ct4dOAygrudSidqVGmm16+h6sFFIRGhBig1RD
- sHtuJiyJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY6Nf3AAKCRDRN9E+zzrEiHitD/
- 0QSyX7XZR1OgyrL0jRhCfZcbYreo8xbF84BlXTrq/KjfWcvCpyXYYHR+QETCxl+Qbi8amteAuwbWIh
- yHGu59apOeN7QQ6NwrvnfnfrEsqLQte6Y8k4FuOJ+paIeo27Rhp4Zzu3XDMZHwnWdK3f9QW2B0eZnJ
- cKtbbl1S4ptqShFzcKQsh020TMXwh7PsY13TubimzAxfOIB98lepw5EkhyRLxDJIhT1VqTNsIMt5oq
- m+y+/MibTOy1YBYwtC179qbF2DWvqtL0tRkzKypIdbFeDQf/nKNdb7HclOTTgU6xEmBytZp7B6a1Ek
- hrSFdQU4CzKBHdo7+wJPaSL2HB0GZJUI1QPg0X4tEXDgPy3kzyyHE989FlmlGH3G9v0ugBnl9hJWke
- Oc54L5kLhUgJzcCCofO5cZR4p/L3lybDdR0ZEfpaX09jfL+3ETG2xatA7i9urGVN3xHRDkkygDlifR
- o86ntB0zducsVZWKcSEJJ39isMzHHYmSL2/6gZz3C5uNo5Q7CjVPkllBNk3//adG2im3KXbPQV/JX1
- xTxil2N6AyfpvdBzOA8IG8viEw+RIA7XYLAKd7cUyDufrokP/fFPMmA+EZUmZ/5llrbojF7Q+KBnMv
- shl0fvxyCFdtCLEj1Gvc5s4GGUJ0lV87q1qkK+9WYu3GPJocqAwhC4fwF2DQ==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document the transfer buffer requirement. That is, the buffer must be
-DMAble - otherwise data corruption might occur.
+This reverts commit 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+This patch results in some qemu test failures, specifically xilinx-zynq-a9
+machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
+to boot from USB drive.
+
+Fixes: 8a7b31d545d3 ("usb: ulpi: defer ulpi_register on ulpi_read_id timeout")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: stable@vger.kernel.org
+Link: https://lkml.org/lkml/2022/12/20/803
+Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
 ---
-USB: Improve usb_fill_* documentation
+ drivers/usb/common/ulpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-After trying to "cleanup" the uvc code, I was patiently explained about
-the requirements of the urb transfer buffers.
-
-Lets make this explicit, so other developers do not make the same mistake.
-
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Randy Dunlap <rdunlap@infradead.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-To: Christoph Hellwig <hch@lst.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes in v4:
-- Unpolite version :P. Thanks Laurent!
-- Make explicit reference to DMA in/out. Thanks Alan!
-- Reference struct urb. Thanks Alan!
-- Link to v3: https://lore.kernel.org/r/20221220-usb-dmadoc-v3-0-6009f4d27631@chromium.org
-
-Changes in v3:
-- Improve commit message. Thanks Bagas!
-- Improve field description. Thanks Alan!
-- Link to v2: https://lore.kernel.org/r/20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org
-
-Changes in v2:
-- s/allocatiing/allocating/ Thanks Randy
-- Link to v1: https://lore.kernel.org/r/20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org
----
- include/linux/usb.h | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 7d5325d47c45..4e98ebacec96 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1626,14 +1626,25 @@ struct urb {
-  * @urb: pointer to the urb to initialize.
-  * @dev: pointer to the struct usb_device for this urb.
-  * @pipe: the endpoint pipe
-- * @setup_packet: pointer to the setup_packet buffer
-- * @transfer_buffer: pointer to the transfer buffer
-+ * @setup_packet: pointer to the setup_packet buffer. The buffer must be
-+ *	suitable for DMA.
-+ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
-+ *	suitable for DMA.
-  * @buffer_length: length of the transfer buffer
-  * @complete_fn: pointer to the usb_complete_t function
-  * @context: what to set the urb context to.
-  *
-  * Initializes a control urb with the proper information needed to submit
-  * it to a device.
-+ *
-+ * The transfer buffer and the setup_packet buffer will most likely be filled
-+ * or read via DMA. The simplest way to get a buffer that can be DMAed to is
-+ * allocating it via kmalloc() or equivalent, even for very small buffers.
-+ * If the buffers are embedded in a bigger structure, there is a risk that
-+ * the buffer itself, the previous fields and/or the next fields are corrupted
-+ * due to cache incoherencies; or slowed down if they are evicted from the
-+ * cache. For more information, check &struct urb.
-+ *
-  */
- static inline void usb_fill_control_urb(struct urb *urb,
- 					struct usb_device *dev,
-@@ -1658,13 +1669,17 @@ static inline void usb_fill_control_urb(struct urb *urb,
-  * @urb: pointer to the urb to initialize.
-  * @dev: pointer to the struct usb_device for this urb.
-  * @pipe: the endpoint pipe
-- * @transfer_buffer: pointer to the transfer buffer
-+ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
-+ *	suitable for DMA.
-  * @buffer_length: length of the transfer buffer
-  * @complete_fn: pointer to the usb_complete_t function
-  * @context: what to set the urb context to.
-  *
-  * Initializes a bulk urb with the proper information needed to submit it
-  * to a device.
-+ *
-+ * Refer to usb_fill_control_urb() for a description of the requirements for
-+ * transfer_buffer.
-  */
- static inline void usb_fill_bulk_urb(struct urb *urb,
- 				     struct usb_device *dev,
-@@ -1687,7 +1702,8 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
-  * @urb: pointer to the urb to initialize.
-  * @dev: pointer to the struct usb_device for this urb.
-  * @pipe: the endpoint pipe
-- * @transfer_buffer: pointer to the transfer buffer
-+ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
-+ *	suitable for DMA.
-  * @buffer_length: length of the transfer buffer
-  * @complete_fn: pointer to the usb_complete_t function
-  * @context: what to set the urb context to.
-@@ -1697,6 +1713,9 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
-  * Initializes a interrupt urb with the proper information needed to submit
-  * it to a device.
-  *
-+ * Refer to usb_fill_control_urb() for a description of the requirements for
-+ * transfer_buffer.
-+ *
-  * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
-  * encoding of the endpoint interval, and express polling intervals in
-  * microframes (eight per millisecond) rather than in frames (one per
-
----
-base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-change-id: 20221220-usb-dmadoc-29384acebd48
-
-Best regards,
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index 60e8174686a1..d7c8461976ce 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
+ 	/* Test the interface */
+ 	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+ 	if (ret < 0)
+-		return ret;
++		goto err;
+ 
+ 	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+ 	if (ret < 0)
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.37.2
+
