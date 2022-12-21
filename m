@@ -2,76 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BF865308B
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 13:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17A6653095
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 13:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiLUMF7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 07:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S229880AbiLUMKx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 07:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLUMF6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 07:05:58 -0500
-Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC49389F
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 04:05:55 -0800 (PST)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 7xr5p2Hy0Pm6C7xr6pq6SC; Wed, 21 Dec 2022 13:05:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671624353; bh=vEuANjwNfjVYvIeAr8Wz4It+sVgJ5ulC3ipw9ZcnQFQ=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=WcraAVQQvAYnfwvy7Ql3GqvLBfe7k7TbtezLoFAgW2ijlCKczgACSL6hJ4OMqoZRe
-         Of3zrI84+VQ0/HVjOQI9F32+t88cwJMA9HPs1nbF1YESJUe5xAqBierDvz7vb0hxS1
-         g9dlRzXVKuKnO8f9n42u6A8fbZY6P1MRLdfcb9omQx/uqV6uLiAHEZZ9xKgsJWZyyo
-         ZABSa6BtPSWyDdU9Z+xQ5ieDbEKLM+liafiR5CesSJL0/Rd3QY4ZLoq02UbiKEKs86
-         IUSplZtlR0sAnQ6NZn1AKc3AEV/Jrf4fepgYs/dPZtyU2qKTyGXffFljJsMOOC39Pc
-         GDSkqiWgbPqAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671624353; bh=vEuANjwNfjVYvIeAr8Wz4It+sVgJ5ulC3ipw9ZcnQFQ=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=WcraAVQQvAYnfwvy7Ql3GqvLBfe7k7TbtezLoFAgW2ijlCKczgACSL6hJ4OMqoZRe
-         Of3zrI84+VQ0/HVjOQI9F32+t88cwJMA9HPs1nbF1YESJUe5xAqBierDvz7vb0hxS1
-         g9dlRzXVKuKnO8f9n42u6A8fbZY6P1MRLdfcb9omQx/uqV6uLiAHEZZ9xKgsJWZyyo
-         ZABSa6BtPSWyDdU9Z+xQ5ieDbEKLM+liafiR5CesSJL0/Rd3QY4ZLoq02UbiKEKs86
-         IUSplZtlR0sAnQ6NZn1AKc3AEV/Jrf4fepgYs/dPZtyU2qKTyGXffFljJsMOOC39Pc
-         GDSkqiWgbPqAA==
-Date:   Wed, 21 Dec 2022 13:05:50 +0100
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+        with ESMTP id S229635AbiLUMKq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 07:10:46 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5742628
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 04:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671624644; x=1703160644;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=FonXqvC3MdpAUmoUeG7HU6VzUlq963VLfVuVKg/zpm8=;
+  b=U6VFL+TiqLTUxaNClIxbExDS6TuTeXAAszCKLwa2pOhqepEaPHwhW3ic
+   UAOlw9x/c721A5rR2Q9U8O95CHdo4H4uISEDySFTarbnyzkLipsLJuTH5
+   t9dqR/YqkFT89sdY07ihxzdsQQ0R/fnvcfczy2MxVXNEdfSyKFfkLM3br
+   Cdef96am5Y7qAtVDABru2xdThcD7AVl1i+27Vcr6zcTl33SumqaIItLvV
+   196DfooUpAU108E1w2Un7p8u877UNjcxOHbCCMKtFmHg4N0pUVSbSQ9d5
+   39Ha1CfUulNl40cVZOesjfbYUZC650sVGlkr7JTanCwBLnMfspOF3lXH6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="321034914"
+X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
+   d="scan'208";a="321034914"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 04:10:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="714802896"
+X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
+   d="scan'208";a="714802896"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Dec 2022 04:10:42 -0800
+Message-ID: <e890f735-25a6-6855-11d4-e6bf82670181@linux.intel.com>
+Date:   Wed, 21 Dec 2022 14:12:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Content-Language: en-US
+To:     Ladislav Michl <oss-lists@triops.cz>
 Cc:     linux-usb@vger.kernel.org, Sneeker Yeh <sneeker.yeh@gmail.com>
-Subject: Re: xHCI host dies on device unplug
-Message-ID: <Y6L2nnXpkkAJVLgh@lenoch>
-References: <Y49A1Pv6dUScQ9x/@lenoch>
+References: <Y45iXb6VCNiz7ZVd@lenoch> <Y49A1Pv6dUScQ9x/@lenoch>
  <Y5tHWwHctY6wr+CJ@lenoch>
  <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
  <Y5zkCxQqBWR+/b4F@lenoch>
  <983a1eb1-4599-517b-6c88-63a0051ae261@linux.intel.com>
- <Y6Ct5s5fIoA9FsAt@lenoch>
- <Y6Dbh1xJucfNvwXq@lenoch>
- <Y6KyWqnHi1TFN0pa@lenoch>
+ <Y6Ct5s5fIoA9FsAt@lenoch> <Y6Dbh1xJucfNvwXq@lenoch> <Y6KyWqnHi1TFN0pa@lenoch>
  <6ac1cee8-b58a-b53f-2d0f-94336ac039b1@linux.intel.com>
  <Y6Lbxhc/98QA6dMU@lenoch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: xHCI host dies on device unplug
 In-Reply-To: <Y6Lbxhc/98QA6dMU@lenoch>
-X-CMAE-Envelope: MS4wfM6AagF/ySLIYyghncd4RC4ljxMrOEAXBxEcaJV4kXoyvEIt2FR6hfLivnTXogRBr1iSoMtO7qS9f0JPDmECnNpZjZdKZl1hLJO0CAK+MOc3+uDj0i+m
- /AYWXDs9xPREP1r4zS8gDmZNjqu+1cjbkiU2m7i+6GpAuNbe4vXIWcbi9UL6b4ZZufdQSUfxOiA4sbKsGG7mH4Aj7raHR4tSjmYfWOg0oE5XBCex9wfcmytv
- Yg6nL/cptW2EHF2CKFnb+w==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 11:11:19AM +0100, Ladislav Michl wrote:
+On 21.12.2022 12.11, Ladislav Michl wrote:
 > On Wed, Dec 21, 2022 at 11:58:42AM +0200, Mathias Nyman wrote:
-> > Looked at that same series and turned patch 1/5 into a standalone quick hack that applies on 6.1
-> > 
-> > Untested, does it work for you?
+>> On 21.12.2022 9.14, Ladislav Michl wrote:
+>>> +Cc: Sneeker Yeh
+>>>
+>>> On Mon, Dec 19, 2022 at 10:45:43PM +0100, Ladislav Michl wrote:
+>>>> On Mon, Dec 19, 2022 at 07:31:02PM +0100, Ladislav Michl wrote:
+>>>>> On Mon, Dec 19, 2022 at 02:25:46PM +0200, Mathias Nyman wrote:
+>>>>>>
+>>>>>> Looks like controller didn't complete the stop endpoint command.
+>>>>>>
+>>>>>> Event for last completed command (before cycle bit change "c" -> "C") was:
+>>>>>>     0x00000000028f55a0: TRB 00000000035e81a0 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c,
+>>>>>>
+>>>>>> This was for command at 35e81a0, which in the command ring was:
+>>>>>>     0x00000000035e81a0: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
+>>>>>>
+>>>>>> The stop endpoint command was the next command queued, at 35e81b0:
+>>>>>>     0x00000000035e81b0: Stop Ring Command: slot 1 sp 0 ep 3 flags c
+>>>>>>
+>>>>>> There were a lot of URBs queued for this device, and they are cancelled one by one after disconnect.
+>>>>>>
+>>>>>> Was this the only device connected? If so does connecting another usb device to another root port help?
+>>>>>> Just to test if the host for some reason partially stops a while after last device disconnect?
+>>>>>
+>>>>> Device is connected directly into SoC. Once connected into HUB, host doesn't die
+>>>>> (as noted in other email, sorry for not replying to my own message, so it got lost)
+>>>>> It seems as intentional (power management?) optimization. If another device is
+>>>>> plugged in before 5 sec timeout expires, host completes stop endpoint command.
+>>>>>
+>>>>> Unfortunately I cannot find anything describing this behavior in
+>>>>> documentation, so I'll ask manufacturer support.
+>>>>
+>>>> As support is usually slow I asked search engine first and this sounds
+>>>> familiar:
+>>>> "Synopsis Designware USB3 IP earlier than v3.00a which is configured in silicon
+>>>> with DWC_USB3_SUSPEND_ON_DISCONNECT_EN=1, would need a specific quirk to prevent
+>>>> xhci host controller from dying when device is disconnected."
+>>>>
+>>>> usb: dwc3: Add quirk for Synopsis device disconnection errata
+>>>> https://patchwork.kernel.org/project/linux-omap/patch/1424151697-2084-5-git-send-email-Sneeker.Yeh@tw.fujitsu.com/
+>>>>
+>>>> Any clue what happened with that? I haven't found any meaningfull traces...
+>>>
+>>> Lets step back a bit. All test so far was done with mainline 6.1.0 kernel.
+>>> I also tested Marvell's vendor tree, one based on 4.9.79, second on 5.4.30,
+>>> both heavily patched. The last version of above patch I found is v5:
+>>> https://lkml.org/lkml/2015/2/21/260
+>>>
+>>
+>> Looked at that same series and turned patch 1/5 into a standalone quick hack that applies on 6.1
+>>
+>> Untested, does it work for you?
 > 
 > Applied on the top of you stop_endpoint_fixes, 6.1.0. is a base tree:
 > [   24.800835] xhci-hcd xhci-hcd.0.auto: Delay clearing port-1 CSC
@@ -84,69 +134,23 @@ On Wed, Dec 21, 2022 at 11:11:19AM +0100, Ladislav Michl wrote:
 > 
 > What about checking whenever anything is still connected on command timeout
 > and considering device autosuspended instead of killing it?
+Agree that we shouldn't kill it now that we know about this case.
 
-Just completed test run, it is working, but I'd consider it insane at least...
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index b07d3740f554..d7b7faaac647 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1580,6 +1580,21 @@ static bool xhci_pending_command_completion(struct xhci_hcd *xhci)
- 	return false;
- }
- 
-+static bool xhci_is_anything_connected(struct xhci_hcd *xhci)
-+{
-+	struct usb_hcd *hcd = xhci_to_hcd(xhci);
-+	struct xhci_hub *rhub = xhci_get_rhub(hcd);
-+	struct xhci_port **ports = rhub->ports;
-+	int i, max_ports = rhub->num_ports;
-+
-+	max_ports = rhub->num_ports;
-+	for (i = 0; i < max_ports; i++)
-+		if (PORT_CONNECT & readl(ports[i]->addr))
-+			return true;
-+
-+	return false;
-+}
-+
- void xhci_handle_command_timeout(struct work_struct *work)
- {
- 	struct xhci_hcd	*xhci;
-@@ -1587,7 +1602,6 @@ void xhci_handle_command_timeout(struct work_struct *work)
- 	char		str[XHCI_MSG_MAX];
- 	u64		hw_ring_state;
- 	u32		cmd_field3;
--	u32		usbsts;
- 
- 	xhci = container_of(to_delayed_work(work), struct xhci_hcd, cmd_timer);
- 
-@@ -1602,9 +1616,9 @@ void xhci_handle_command_timeout(struct work_struct *work)
- 		return;
- 	}
- 
--	cmd_field3 = le32_to_cpu(xhci->current_cmd->command_trb->generic.field[3]);
--	usbsts = readl(&xhci->op_regs->status);
--	xhci_dbg(xhci, "Command timeout, USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
-+	xhci_dbg(xhci, "Command timeout, USBSTS:%s, USBCMD: %08x\n",
-+		 xhci_decode_usbsts(str, readl(&xhci->op_regs->status)),
-+		 readl(&xhci->op_regs->command));
- 
- 	/* Did hw complete the command but event handler was blocked? */
- 	if (xhci_pending_interrupt(xhci) > 0 &&
-@@ -1616,10 +1630,16 @@ void xhci_handle_command_timeout(struct work_struct *work)
- 		return;
- 	}
- 
-+	cmd_field3 = le32_to_cpu(xhci->current_cmd->command_trb->generic.field[3]);
- 	/* Bail out and tear down xhci if a stop endpoint command failed */
- 	if (TRB_FIELD_TO_TYPE(cmd_field3) == TRB_STOP_RING) {
- 		struct xhci_virt_ep	*ep;
- 
-+		if (!(xhci_is_anything_connected(xhci))) {
-+			xhci_info(xhci, "xHCI autosuspended?\n");
-+			goto time_out_completed;
-+		}
-+
- 		xhci_warn(xhci, "xHCI host not responding to stop endpoint command\n");
- 
- 		ep = xhci_get_virt_ep(xhci, TRB_TO_SLOT_ID(cmd_field3),
+Any idea what happens to the unhandled commands that are queued.
+Are they lost, or does host continue processing them after reconnect?
+
+If stop endpoint command times out without any device connected we should
+probably start by manually giving back pending/cancelled URBs.
+
+There will probably be a couple more commands queued after this when endpoints
+are dropped and usb device freed (disable xhci slot)
+Need to figure out what to do with these.
+
+host still seems to respond to register writes even if it doesn't handle commands,
+so entering suspend should be easier to tackle.
+
+-Mathias
+
+> 
+> 	ladis
+
