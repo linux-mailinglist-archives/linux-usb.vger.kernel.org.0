@@ -2,66 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33C8653790
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 21:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5439A653799
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 21:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbiLUU1X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 15:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S230088AbiLUUcl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 15:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234833AbiLUU1W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 15:27:22 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9045224F1D
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 12:27:21 -0800 (PST)
-Received: (qmail 100059 invoked by uid 1000); 21 Dec 2022 15:27:20 -0500
-Date:   Wed, 21 Dec 2022 15:27:20 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4] USB: Improve usb_fill_* documentation
-Message-ID: <Y6NsKH2VurBlufst@rowland.harvard.edu>
-References: <20221220-usb-dmadoc-v4-0-74a045bf14f4@chromium.org>
+        with ESMTP id S229601AbiLUUcj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 15:32:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9FAAE4F
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 12:32:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B2666191A
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 20:32:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D4D01C433F1
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 20:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671654757;
+        bh=Euxs2soz6DzqRvS9KZlgkmHLDQCz1VXVcbBqMbW9LN0=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=lurLuLvp+10dNfNk9gINvmLjtVvxMV+N13HRlNZkAOGRHLjyC78yci04d0bXQn32C
+         MoTapKLaVqe8le22L0iE/7NNj7lGDoq4l3y8wsL0I6ufKY1Qtgre5WQalALTnkBbXv
+         YLpHa1fz0jid5klLAHsLCKJekIKr/giShRNvBDdrIrG45vCRg/6ckdo/hFyCt7JQ0D
+         LG8GGCO1qw2kO6y+N+MBDljpaSd3ujSpfrOvqNsjeK6F5uHVD+V7FNxTMKqBTJRM7U
+         yD5QEKtjC99A3jQIt0wlfPTlfMV151fYfFKhCXgp0BGE3MC2jrYXChaTjPv11hPSIS
+         TKBK3QrqhlKug==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C2139C43142; Wed, 21 Dec 2022 20:32:37 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216697] Resume from suspend stopped working
+Date:   Wed, 21 Dec 2022 20:32:37 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: alchernaev@protonmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-216697-208809-2xSi2fcBRH@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216697-208809@https.bugzilla.kernel.org/>
+References: <bug-216697-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220-usb-dmadoc-v4-0-74a045bf14f4@chromium.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 08:34:51PM +0100, Ricardo Ribalda wrote:
-> Document the transfer buffer requirement. That is, the buffer must be
-> DMAble - otherwise data corruption might occur.
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> USB: Improve usb_fill_* documentation
-> 
-> After trying to "cleanup" the uvc code, I was patiently explained about
-> the requirements of the urb transfer buffers.
-> 
-> Lets make this explicit, so other developers do not make the same mistake.
-> 
-> To: Bagas Sanjaya <bagasdotme@gmail.com>
-> To: Randy Dunlap <rdunlap@infradead.org>
-> To: Alan Stern <stern@rowland.harvard.edu>
-> To: Christoph Hellwig <hch@lst.de>
-> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216697
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+--- Comment #9 from Alexander Chernaev (alchernaev@protonmail.com) ---
+Created attachment 303449
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303449&action=3Dedit
+screenshot of error with patch
+
+Tested with mentioned patch applied to kernel 6.1.0, unfortunately the issu=
+e is
+not resolved.
+Patch tested: https://bugzilla.kernel.org/attachment.cgi?id=3D303247
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
