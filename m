@@ -2,172 +2,283 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736D1652D9F
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 09:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B2F652E0B
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 09:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbiLUID7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 03:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S234446AbiLUIi5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 03:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbiLUIDi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 03:03:38 -0500
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB4B21820;
-        Wed, 21 Dec 2022 00:03:36 -0800 (PST)
-Received: by mail-pj1-f49.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so1374435pjd.0;
-        Wed, 21 Dec 2022 00:03:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S6bhRp4WBLcDJ1rkcGiP9uV5hcS5HELckUtTTBKpWiU=;
-        b=6lliVL6QuqH4pO49pyVHCzWsbXccNXEOwyliTXa1PBNwA/iOl9I1ZggUkyHFq/Uchq
-         vJAbhCUOTorcoaN1L+hZfb+X4I+tJ+vv7c3wuvJ3DLpnRbS2n5/l3p2MsRs4iBcRvLCP
-         30sZg1tNxmqkdWclKkcLuZN8Ee7lQ9R5GSQM4JUtgS1jGTizWP801PzwgvEPY4z2ebk2
-         5BWwTaVogKezDGaiAGWWgjlJ+Np+i6WQSmzxAYVTyy1twF3MVj0z3OudsycFZ3hVoIPC
-         JsKi3+KFENHim6DQOsiAeK43werV3k3VKR4sAxp0pw2ZzOMy3fwRXjKF2PuYLkVB4aPW
-         ZFQg==
-X-Gm-Message-State: AFqh2kri6HseVcaBI4vvNuLkA9I/DlYd7onzTrDr1FxqLf6XeaT8jzdx
-        pUDDYUBIGsPVqoDdPFaN9GYLvz575u6f1VN2
-X-Google-Smtp-Source: AMrXdXuj5drmDHM+tFwCEcvwZ5ELz7h0tr8ghqlRvLfBKTWalhuqXi6TQyxyaZfuS2+fyW7y7/dsBw==
-X-Received: by 2002:a05:6a20:a690:b0:a5:418:8341 with SMTP id ba16-20020a056a20a69000b000a504188341mr1703217pzb.28.1671609815650;
-        Wed, 21 Dec 2022 00:03:35 -0800 (PST)
-Received: from localhost.localdomain ([14.4.134.166])
-        by smtp.gmail.com with ESMTPSA id q9-20020aa78429000000b0057716769289sm9890776pfn.196.2022.12.21.00.03.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 00:03:35 -0800 (PST)
-From:   Leesoo Ahn <lsahn@ooseel.net>
-To:     lsahn@ooseel.net
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Greg KH <greg@kroah.com>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usbnet: optimize usbnet_bh() to reduce CPU load
-Date:   Wed, 21 Dec 2022 16:59:24 +0900
-Message-Id: <20221221075924.1141346-1-lsahn@ooseel.net>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229436AbiLUIiz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 03:38:55 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4151900A;
+        Wed, 21 Dec 2022 00:38:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nIfKenBbDKlcJDrbY05PSoz3uS3oCO8VY2n2tvE7K7PoEwaHRW481479ZScHRPSUz+kA0g3DR08oAFFTRlqJkuCkZ2RFf0qDl4HdpzvzaasdVINloqkZkj0FPo89rcJ1Cn2AdkhCf+P4NynlMI4S1sgrniIEYvnKPBlfy4+eFolsHnF+hHXF8AAiimDmAz/klij2NASJllrXlU5dY5nqq+BlPE81aPFwk/wMpGIc5bytanPu4IKZDWlKmU+SlvCK/i2XT45IgbJZ2mpUV+738/5d1RhRbHAOv7Rhakqzkafa75ef3x+m3be6ffBmPfJE4iUUMnbZ2up4W5xRghL+Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=km9fV0cRlqiX2JXMFF94a+sU8QImK18P/sLCSxJcEQs=;
+ b=COVVqVqZMxI/XyUI+OIuYKp1KR4jo3dzGS6f+iZ7GVUx8Uc6n+3t1yoFmuJ13ZY0V7IWE5NdkhoJ21X9RspOQC3yQc6IQyNf3bdqznILPltwaA8cyO6gPjwcHY4YTw1Wyqml3eC8TBsfDwCcvv9QaDknwMR1glirvseggxbLsjMsWu2Q0eNebrIHPaDgINcQ5Oqv7XXZJOtBDzaynyLVwtew4IOJndtAumiuIZrmtLprIVLClwGgyLYBs1+nYVPF7kUM+iopuvg19fSvA1wFSSiy5JPdM7uS+ykkreyQYwqtZWdTmL3c/BEKuaHZjE3fnexJUFKGF8uwK2Blzat+JA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=km9fV0cRlqiX2JXMFF94a+sU8QImK18P/sLCSxJcEQs=;
+ b=ofMiqE9BkvW5lLNDcjh8qYuBFMn6cPLJIcBvlIPZRI73ajv7aV53SmRu573QkBDTP4d9SosVsSnx5KCNrysluZJ6IiDUZCCV3LewelSthtOklZVG5K499zgt4FV1MtRgSCpaxharblfUn+kuOSjTGptykmpy42eJUA4ivraKtxFABNxBGb9NHKz99kKMt2ky3Z4V1rFZ9m7XJMFCto5esBKi7sQBar15C/FgFMq+zppVUs+HEpvND4jONr2XRXi3RlyZFJZSkKVY6RJWeE1YacOd7gNvIlZcB9cNTrVsRpZbVOH/OE488dGXAJt/0IFBpGX4ANTmMBIXYDztmpzYYg==
+Received: from BN1PR10CA0008.namprd10.prod.outlook.com (2603:10b6:408:e0::13)
+ by PH8PR12MB7232.namprd12.prod.outlook.com (2603:10b6:510:224::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
+ 2022 08:38:52 +0000
+Received: from BN8NAM11FT090.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e0:cafe::67) by BN1PR10CA0008.outlook.office365.com
+ (2603:10b6:408:e0::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
+ Transport; Wed, 21 Dec 2022 08:38:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT090.mail.protection.outlook.com (10.13.177.105) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.10 via Frontend Transport; Wed, 21 Dec 2022 08:38:51 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 21 Dec
+ 2022 00:38:36 -0800
+Received: from 74ef364-lcelt.nvidia.com (10.126.231.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 21 Dec 2022 00:38:33 -0800
+From:   Haotien Hsu <haotienh@nvidia.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Wayne Chang <waynec@nvidia.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Haotien Hsu <haotienh@nvidia.com>
+Subject: [PATCH] ucsi_ccg: Refine the UCSI Interrupt handling
+Date:   Wed, 21 Dec 2022 16:38:12 +0800
+Message-ID: <20221221083812.3363045-1-haotienh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT090:EE_|PH8PR12MB7232:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ba09d95-8931-4d33-1f38-08dae32ec969
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kzeJeGemaY1pDQOukeDFOr0/06Avluj07YIxy1a93ucpGER9+Ykxf3AnICVoNQWrJ+TK65NXhlvGRFn31V0LYPGIEPbRWVOMiCW9f1DCKQgVn95troSyi5WuuNigZl0x2pQnbmh03pmeUFynp/9ky6sI12Rp8X9+a4m1PC+7H6uUfdmCzMw0X//+Vip8/wdblm0FE/Fo6nVPb7P+4wNsMpFZIjwJOyRweNAZ4qXGHXkt6LyW/Sj9fPWTNcE752zAaVG74NSQ9lvUuC+MeOZ7SR8TjrYLS4/LjTe8CVk0I9rWDe7TlkmQ5AM5Zqr/GHNaHDvJOu+NkNrZMVoY7JyiEqE320Hjmj9d7Rlj2BTMFBezj1024hFe074VBcXkf6tZSmHQ7+ZrAF0+ui2pUbyf62UMMxnyIMRwd1goW7UIopx4rsivMp8xrFZ3JzRKaAqo/YVlO2xrT9OT8SI8uQTYCh73BC14No+uwb9FfWf1jzoB+KosoS8k52/l6DjXowt1recEI9U4K63rzOOj/iiC1oCyHE1xnvtlK4E5o5rmFx1SB7r5UwcSO7kkjnXuQBggbpHy0cokbd86Ar+3tezZpInJtZKjPjw0Fda4Ifsng0HPdPFxU17RvWgTyDfHEvAP0929natkzf+L2UyXueRW9vrVq64iChUWaAoxyd9iASYATtfymyYtKbUkBgyGe3CuVlYGdizOzKP/FXy9EvogAA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199015)(46966006)(40470700004)(36840700001)(107886003)(6666004)(40480700001)(54906003)(110136005)(36860700001)(47076005)(8936002)(5660300002)(83380400001)(426003)(40460700003)(356005)(478600001)(16526019)(26005)(41300700001)(186003)(7696005)(336012)(2906002)(82310400005)(7636003)(70586007)(316002)(4326008)(2616005)(36756003)(8676002)(86362001)(70206006)(82740400003)(1076003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 08:38:51.1425
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ba09d95-8931-4d33-1f38-08dae32ec969
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT090.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7232
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current source pushes skb into dev->done queue by calling
-skb_queue_tail() and then pop it by calling skb_dequeue() to branch to
-rx_cleanup state for freeing urb/skb in usbnet_bh(). It takes extra CPU
-load, 2.21% (skb_queue_tail) as follows.
+From: Sing-Han Chen <singhanc@nvidia.com>
 
--   11.58%     0.26%  swapper          [k] usbnet_bh
-   - 11.32% usbnet_bh
-      - 6.43% skb_dequeue
-           6.34% _raw_spin_unlock_irqrestore
-      - 2.21% skb_queue_tail
-           2.19% _raw_spin_unlock_irqrestore
-      - 1.68% consume_skb
-         - 0.97% kfree_skbmem
-              0.80% kmem_cache_free
-           0.53% skb_release_data
+For the CCGx, when the OPM field in the INTR_REG is cleared, then the
+CCI data in the PPM is reset.
 
-To reduce the extra CPU load use return values jumping to rx_cleanup
-state directly to free them instead of calling skb_queue_tail() and
-skb_dequeue() for push/pop respectively.
+To align with the CCGx UCSI interface guide, this patch updates the
+driver to copy CCI and MESSAGE_IN before clearing UCSI interrupt.
+When a new command is sent, the driver will clear the old CCI and
+MESSAGE_IN copy.
 
--    7.87%     0.25%  swapper          [k] usbnet_bh
-   - 7.62% usbnet_bh
-      - 4.81% skb_dequeue
-           4.74% _raw_spin_unlock_irqrestore
-      - 1.75% consume_skb
-         - 0.98% kfree_skbmem
-              0.78% kmem_cache_free
-           0.58% skb_release_data
-        0.53% smsc95xx_rx_fixup
+Finally, clear UCSI_READ_INT before calling complete() to ensure that
+the ucsi_ccg_sync_write() would wait for the interrupt handling to
+complete.
+It prevents the driver from resetting CCI prematurely.
 
-Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
+Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
 ---
-v3:
-  - Replace return values with proper -ERR values in rx_process()
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 84 ++++++++++++++++++++++++++++---
+ 1 file changed, 78 insertions(+), 6 deletions(-)
 
-v2:
-  - Replace goto label with return statement to reduce goto entropy
-  - Add CPU load information by perf in commit message
-
-v1 at:
-  https://patchwork.kernel.org/project/netdevbpf/patch/20221217161851.829497-1-lsahn@ooseel.net/
-
----
- drivers/net/usb/usbnet.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 64a9a80b2309..98d594210df4 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -555,32 +555,30 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index eab3012e1b01..f59494aae6b9 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
+ 	bool checked;
+ } __packed;
  
- /*-------------------------------------------------------------------------*/
++#define CCGX_MESSAGE_IN_MAX 4
++struct op_region {
++	u32 cci;
++	u32 message_in[CCGX_MESSAGE_IN_MAX];
++};
++
+ struct ucsi_ccg {
+ 	struct device *dev;
+ 	struct ucsi *ucsi;
+@@ -222,6 +228,9 @@ struct ucsi_ccg {
+ 	bool has_multiple_dp;
+ 	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
+ 	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
++
++	spinlock_t op_lock;
++	struct op_region op_data;
+ };
  
--static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
-+static inline int rx_process(struct usbnet *dev, struct sk_buff *skb)
- {
- 	if (dev->driver_info->rx_fixup &&
- 	    !dev->driver_info->rx_fixup (dev, skb)) {
- 		/* With RX_ASSEMBLE, rx_fixup() must update counters */
- 		if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
- 			dev->net->stats.rx_errors++;
--		goto done;
-+		return -EPROTO;
- 	}
- 	// else network stack removes extra byte if we forced a short packet
- 
- 	/* all data was already cloned from skb inside the driver */
- 	if (dev->driver_info->flags & FLAG_MULTI_PACKET)
--		goto done;
-+		return -EALREADY;
- 
- 	if (skb->len < ETH_HLEN) {
- 		dev->net->stats.rx_errors++;
- 		dev->net->stats.rx_length_errors++;
- 		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
--	} else {
--		usbnet_skb_return(dev, skb);
--		return;
-+		return -EPROTO;
- 	}
- 
--done:
--	skb_queue_tail(&dev->done, skb);
-+	usbnet_skb_return(dev, skb);
-+	return 0;
+ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+@@ -305,12 +314,57 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
+ 	return 0;
  }
  
- /*-------------------------------------------------------------------------*/
-@@ -1528,13 +1526,14 @@ static void usbnet_bh (struct timer_list *t)
- 		entry = (struct skb_data *) skb->cb;
- 		switch (entry->state) {
- 		case rx_done:
--			entry->state = rx_cleanup;
--			rx_process (dev, skb);
-+			if (rx_process(dev, skb))
-+				goto cleanup;
- 			continue;
- 		case tx_done:
- 			kfree(entry->urb->sg);
- 			fallthrough;
- 		case rx_cleanup:
-+cleanup:
- 			usb_free_urb (entry->urb);
- 			dev_kfree_skb (skb);
- 			continue;
++static void ccg_op_region_read(struct ucsi_ccg *uc, unsigned int offset,
++		void *val, size_t val_len)
++{
++	struct op_region *data = &uc->op_data;
++
++	spin_lock(&uc->op_lock);
++	if (offset == UCSI_CCI)
++		memcpy(val, &data->cci, val_len);
++	else if (offset == UCSI_MESSAGE_IN)
++		memcpy(val, &data->message_in, val_len);
++	spin_unlock(&uc->op_lock);
++}
++
++static void ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
++{
++	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
++	struct op_region *data = &uc->op_data;
++	u32 message_in[CCGX_MESSAGE_IN_MAX];
++
++	if (UCSI_CCI_LENGTH(cci))
++		if (ccg_read(uc, reg, (void *)&message_in,
++					sizeof(message_in))) {
++			dev_err(uc->dev, "failed to read MESSAGE_IN\n");
++			return;
++		}
++
++	spin_lock(&uc->op_lock);
++	memcpy(&data->cci, &cci, sizeof(cci));
++	if (UCSI_CCI_LENGTH(cci))
++		memcpy(&data->message_in, &message_in, sizeof(message_in));
++	spin_unlock(&uc->op_lock);
++}
++
++static void ccg_op_region_clean(struct ucsi_ccg *uc)
++{
++	struct op_region *data = &uc->op_data;
++
++	spin_lock(&uc->op_lock);
++	memset(&data->cci, 0, sizeof(data->cci));
++	memset(&data->message_in, 0, sizeof(data->message_in));
++	spin_unlock(&uc->op_lock);
++}
++
+ static int ucsi_ccg_init(struct ucsi_ccg *uc)
+ {
+ 	unsigned int count = 10;
+ 	u8 data;
+ 	int status;
+ 
++	spin_lock_init(&uc->op_lock);
++
+ 	data = CCGX_RAB_UCSI_CONTROL_STOP;
+ 	status = ccg_write(uc, CCGX_RAB_UCSI_CONTROL, &data, sizeof(data));
+ 	if (status < 0)
+@@ -520,9 +574,13 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+ 	struct ucsi_capability *cap;
+ 	struct ucsi_altmode *alt;
+-	int ret;
++	int ret = 0;
++
++	if ((offset == UCSI_CCI) || (offset == UCSI_MESSAGE_IN))
++		ccg_op_region_read(uc, offset, val, val_len);
++	else
++		ret = ccg_read(uc, reg, val, val_len);
+ 
+-	ret = ccg_read(uc, reg, val, val_len);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -559,9 +617,13 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
+ 				const void *val, size_t val_len)
+ {
++	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+ 
+-	return ccg_write(ucsi_get_drvdata(ucsi), reg, val, val_len);
++	if (offset == UCSI_CONTROL)
++		ccg_op_region_clean(uc);
++
++	return ccg_write(uc, reg, val, val_len);
+ }
+ 
+ static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
+@@ -622,6 +684,11 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
+ 	if (ret)
+ 		return ret;
+ 
++	if (!intr_reg)
++		return IRQ_HANDLED;
++	else if (!(intr_reg & UCSI_READ_INT))
++		goto err_clear_irq;
++
+ 	ret = ccg_read(uc, reg, (void *)&cci, sizeof(cci));
+ 	if (ret)
+ 		goto err_clear_irq;
+@@ -629,13 +696,18 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
+ 	if (UCSI_CCI_CONNECTOR(cci))
+ 		ucsi_connector_change(uc->ucsi, UCSI_CCI_CONNECTOR(cci));
+ 
+-	if (test_bit(DEV_CMD_PENDING, &uc->flags) &&
+-	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
+-		complete(&uc->complete);
++	/* As per CCGx UCSI interface guide, copy CCI and MESSAGE_IN
++	 * to the OpRegion before clear the UCSI interrupt
++	 */
++	ccg_op_region_update(uc, cci);
+ 
+ err_clear_irq:
+ 	ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+ 
++	if (!ret && test_bit(DEV_CMD_PENDING, &uc->flags) &&
++	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
++		complete(&uc->complete);
++
+ 	return IRQ_HANDLED;
+ }
+ 
 -- 
-2.34.1
+2.25.1
 
