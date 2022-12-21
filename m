@@ -2,93 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FAC653026
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 12:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BF865308B
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 13:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbiLULYN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 06:24:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
+        id S229476AbiLUMF7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 07:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbiLULX7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 06:23:59 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C7A22B30
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 03:23:51 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id co23so14599741wrb.4
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 03:23:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CwfLJ2j9ddDE9ndQsP/1NZjFMdx9BPUMMCB4FULzZy4=;
-        b=KfsHMQwomiQjJsqsvnN2cDI1EZRH17lULriN+nItf+G19LQ3Km0MC1B6pzc8ByMRqx
-         t+s/xDq+rIriJp8B+isKnNxKmQXC19HmmWGl/hW9FT8SYOZKLtWjJ2zcoW5+/FnBt88C
-         lUDVq6tfBaZAv36Wa6auqiuyou1EDmT51JitJb8vmSjrxMcYfVt5+VrlsqYKN4ZXR2yH
-         W17nkq4rRAsFzmECIBjHEps/WWKXnz6axHeQS1s2AvXbE2wYVB1a5JCePMRx+fJ3qnpq
-         sn+fQaVQRDV9hRCLBycFxnWo5k8OPchHHXE+Kdcps3nCKYoHIPgNEV35/1534lEmRrDi
-         VGVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CwfLJ2j9ddDE9ndQsP/1NZjFMdx9BPUMMCB4FULzZy4=;
-        b=IpBma8TqI3lV4V7XkjNFwhI5qMj91qLMEj6qTTkZmQExPuQ7PRSWAHySrCoaAZP3Sw
-         /G0Oj3Rlcq8C43RG1GqaqYtw8XPdJL06MgUe65rCwHg1F5qaG4bWafWwenARnDrAX/1/
-         tktQg4ZYviyWGmzWUAjIGxzZY1+bulGo0XgO9RXp73N2E6ZFn9HmPf4jrA5bNCOtN/7g
-         a7xb8eLJnk5C9am8KrHPCG1XsJGxz5gnGr2CUyjCIn/g7//2kHkhmSD4USqkAgW/KKEW
-         5gU4tDGa/WkoinZAnvaj1CyVQ0rcJRtqeKh+iwFwgx1wlz8rEI4ZD5JQrUW+YN/9FPBv
-         IfyA==
-X-Gm-Message-State: AFqh2kqTEloOJ/KtY96cbWdJeGquJ5iQqT2BR17IY64HYqMxnqCQVG3I
-        n+uh9Y/Aq5RLGeUlq8+dZLKxJycvuTqD3gYduKI=
-X-Google-Smtp-Source: AMrXdXubFeAiMHXUnQV489/0ANb6Lta636lfLCjt+qPIgGUM8fVo7B+tszPiVs5Bqh/RMAgAPpM6V8GLCDp89M+FdHQ=
-X-Received: by 2002:a5d:5485:0:b0:25b:7a31:21b9 with SMTP id
- h5-20020a5d5485000000b0025b7a3121b9mr52205wrv.249.1671621829958; Wed, 21 Dec
- 2022 03:23:49 -0800 (PST)
+        with ESMTP id S229448AbiLUMF6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 07:05:58 -0500
+Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC49389F
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 04:05:55 -0800 (PST)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id 7xr5p2Hy0Pm6C7xr6pq6SC; Wed, 21 Dec 2022 13:05:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1671624353; bh=vEuANjwNfjVYvIeAr8Wz4It+sVgJ5ulC3ipw9ZcnQFQ=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=WcraAVQQvAYnfwvy7Ql3GqvLBfe7k7TbtezLoFAgW2ijlCKczgACSL6hJ4OMqoZRe
+         Of3zrI84+VQ0/HVjOQI9F32+t88cwJMA9HPs1nbF1YESJUe5xAqBierDvz7vb0hxS1
+         g9dlRzXVKuKnO8f9n42u6A8fbZY6P1MRLdfcb9omQx/uqV6uLiAHEZZ9xKgsJWZyyo
+         ZABSa6BtPSWyDdU9Z+xQ5ieDbEKLM+liafiR5CesSJL0/Rd3QY4ZLoq02UbiKEKs86
+         IUSplZtlR0sAnQ6NZn1AKc3AEV/Jrf4fepgYs/dPZtyU2qKTyGXffFljJsMOOC39Pc
+         GDSkqiWgbPqAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1671624353; bh=vEuANjwNfjVYvIeAr8Wz4It+sVgJ5ulC3ipw9ZcnQFQ=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=WcraAVQQvAYnfwvy7Ql3GqvLBfe7k7TbtezLoFAgW2ijlCKczgACSL6hJ4OMqoZRe
+         Of3zrI84+VQ0/HVjOQI9F32+t88cwJMA9HPs1nbF1YESJUe5xAqBierDvz7vb0hxS1
+         g9dlRzXVKuKnO8f9n42u6A8fbZY6P1MRLdfcb9omQx/uqV6uLiAHEZZ9xKgsJWZyyo
+         ZABSa6BtPSWyDdU9Z+xQ5ieDbEKLM+liafiR5CesSJL0/Rd3QY4ZLoq02UbiKEKs86
+         IUSplZtlR0sAnQ6NZn1AKc3AEV/Jrf4fepgYs/dPZtyU2qKTyGXffFljJsMOOC39Pc
+         GDSkqiWgbPqAA==
+Date:   Wed, 21 Dec 2022 13:05:50 +0100
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Sneeker Yeh <sneeker.yeh@gmail.com>
+Subject: Re: xHCI host dies on device unplug
+Message-ID: <Y6L2nnXpkkAJVLgh@lenoch>
+References: <Y49A1Pv6dUScQ9x/@lenoch>
+ <Y5tHWwHctY6wr+CJ@lenoch>
+ <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
+ <Y5zkCxQqBWR+/b4F@lenoch>
+ <983a1eb1-4599-517b-6c88-63a0051ae261@linux.intel.com>
+ <Y6Ct5s5fIoA9FsAt@lenoch>
+ <Y6Dbh1xJucfNvwXq@lenoch>
+ <Y6KyWqnHi1TFN0pa@lenoch>
+ <6ac1cee8-b58a-b53f-2d0f-94336ac039b1@linux.intel.com>
+ <Y6Lbxhc/98QA6dMU@lenoch>
 MIME-Version: 1.0
-Received: by 2002:a5d:5290:0:0:0:0:0 with HTTP; Wed, 21 Dec 2022 03:23:49
- -0800 (PST)
-Reply-To: shellymarhkva@gmail.com
-From:   Shelly Marhevka <kekererukayatoux@gmail.com>
-Date:   Wed, 21 Dec 2022 11:23:49 +0000
-Message-ID: <CAN5qXwGe_rVdZjTtWmef58X678cwvpsCost-1-=GS1juRS9AsQ@mail.gmail.com>
-Subject: Good Day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:434 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6163]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kekererukayatoux[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6Lbxhc/98QA6dMU@lenoch>
+X-CMAE-Envelope: MS4wfM6AagF/ySLIYyghncd4RC4ljxMrOEAXBxEcaJV4kXoyvEIt2FR6hfLivnTXogRBr1iSoMtO7qS9f0JPDmECnNpZjZdKZl1hLJO0CAK+MOc3+uDj0i+m
+ /AYWXDs9xPREP1r4zS8gDmZNjqu+1cjbkiU2m7i+6GpAuNbe4vXIWcbi9UL6b4ZZufdQSUfxOiA4sbKsGG7mH4Aj7raHR4tSjmYfWOg0oE5XBCex9wfcmytv
+ Yg6nL/cptW2EHF2CKFnb+w==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A mail was sent to you sometime last week with the expectation of
-having a return mail from you but to my surprise you never bothered to replied.
-Kindly reply for further explanations.
+On Wed, Dec 21, 2022 at 11:11:19AM +0100, Ladislav Michl wrote:
+> On Wed, Dec 21, 2022 at 11:58:42AM +0200, Mathias Nyman wrote:
+> > Looked at that same series and turned patch 1/5 into a standalone quick hack that applies on 6.1
+> > 
+> > Untested, does it work for you?
+> 
+> Applied on the top of you stop_endpoint_fixes, 6.1.0. is a base tree:
+> [   24.800835] xhci-hcd xhci-hcd.0.auto: Delay clearing port-1 CSC
+> [   24.806788] usb 1-1: USB disconnect, device number 2
+> [   28.148451] ieee80211 phy0: rt2x00usb_vendor_request: Error - Vendor Request 0x07 failed for offset 0x101c with error -19
+> [   29.828466] xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command
+> [   29.856656] xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
+> [   29.864804] xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
+> [   29.949460] xhci-hcd xhci-hcd.0.auto: Late clearing port-1 CSC, portsc 0x202a0
+> 
+> What about checking whenever anything is still connected on command timeout
+> and considering device autosuspended instead of killing it?
 
-Respectfully yours,
-Shelly Marhevka.
+Just completed test run, it is working, but I'd consider it insane at least...
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index b07d3740f554..d7b7faaac647 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1580,6 +1580,21 @@ static bool xhci_pending_command_completion(struct xhci_hcd *xhci)
+ 	return false;
+ }
+ 
++static bool xhci_is_anything_connected(struct xhci_hcd *xhci)
++{
++	struct usb_hcd *hcd = xhci_to_hcd(xhci);
++	struct xhci_hub *rhub = xhci_get_rhub(hcd);
++	struct xhci_port **ports = rhub->ports;
++	int i, max_ports = rhub->num_ports;
++
++	max_ports = rhub->num_ports;
++	for (i = 0; i < max_ports; i++)
++		if (PORT_CONNECT & readl(ports[i]->addr))
++			return true;
++
++	return false;
++}
++
+ void xhci_handle_command_timeout(struct work_struct *work)
+ {
+ 	struct xhci_hcd	*xhci;
+@@ -1587,7 +1602,6 @@ void xhci_handle_command_timeout(struct work_struct *work)
+ 	char		str[XHCI_MSG_MAX];
+ 	u64		hw_ring_state;
+ 	u32		cmd_field3;
+-	u32		usbsts;
+ 
+ 	xhci = container_of(to_delayed_work(work), struct xhci_hcd, cmd_timer);
+ 
+@@ -1602,9 +1616,9 @@ void xhci_handle_command_timeout(struct work_struct *work)
+ 		return;
+ 	}
+ 
+-	cmd_field3 = le32_to_cpu(xhci->current_cmd->command_trb->generic.field[3]);
+-	usbsts = readl(&xhci->op_regs->status);
+-	xhci_dbg(xhci, "Command timeout, USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
++	xhci_dbg(xhci, "Command timeout, USBSTS:%s, USBCMD: %08x\n",
++		 xhci_decode_usbsts(str, readl(&xhci->op_regs->status)),
++		 readl(&xhci->op_regs->command));
+ 
+ 	/* Did hw complete the command but event handler was blocked? */
+ 	if (xhci_pending_interrupt(xhci) > 0 &&
+@@ -1616,10 +1630,16 @@ void xhci_handle_command_timeout(struct work_struct *work)
+ 		return;
+ 	}
+ 
++	cmd_field3 = le32_to_cpu(xhci->current_cmd->command_trb->generic.field[3]);
+ 	/* Bail out and tear down xhci if a stop endpoint command failed */
+ 	if (TRB_FIELD_TO_TYPE(cmd_field3) == TRB_STOP_RING) {
+ 		struct xhci_virt_ep	*ep;
+ 
++		if (!(xhci_is_anything_connected(xhci))) {
++			xhci_info(xhci, "xHCI autosuspended?\n");
++			goto time_out_completed;
++		}
++
+ 		xhci_warn(xhci, "xHCI host not responding to stop endpoint command\n");
+ 
+ 		ep = xhci_get_virt_ep(xhci, TRB_TO_SLOT_ID(cmd_field3),
