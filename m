@@ -2,134 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E18652F27
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 11:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E46A652F37
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 11:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiLUKL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 05:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S234450AbiLUKQ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 05:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbiLUKLY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 05:11:24 -0500
-Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A7BBB5
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 02:11:22 -0800 (PST)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 7w4Ep1HVhPm6C7w4FppflA; Wed, 21 Dec 2022 11:11:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671617479; bh=vcocw7BJkvvWkAAh84zETI4gnwnkQGPu8xZsX8EERGk=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=GmSDWNA0VwNF3CwzJjttuYxEAkOhNycK4KIZ4TMhCnZdHr8gS+7e5H9ILtW9LSsMh
-         xL13lsnfXdY1/9De7mHmRzlsnuxcr3pq8fuuvzmgwdq9qc0QyE8jP0IIKTWz7vnygr
-         lzNg6xGNiHeMREvDtB7fA7XN6Ka4myGivPTB1u7f+A+zRyi5PJ1MvlPmWKJxeeD+vr
-         QQk3yP5pNogeQUmoOwV0vDBmxHvQgA3RIbHG6fnAb/tnMvL0TY5SkC1HnuSJC/NkdX
-         fzirYuEYNar+xy0Wmdv4a1pB0DPv3SUWgA1TBg/4UcHEuSkn4G3VB+bwXNaVBp+7It
-         wkJWmtNUKA0KQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671617479; bh=vcocw7BJkvvWkAAh84zETI4gnwnkQGPu8xZsX8EERGk=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=GmSDWNA0VwNF3CwzJjttuYxEAkOhNycK4KIZ4TMhCnZdHr8gS+7e5H9ILtW9LSsMh
-         xL13lsnfXdY1/9De7mHmRzlsnuxcr3pq8fuuvzmgwdq9qc0QyE8jP0IIKTWz7vnygr
-         lzNg6xGNiHeMREvDtB7fA7XN6Ka4myGivPTB1u7f+A+zRyi5PJ1MvlPmWKJxeeD+vr
-         QQk3yP5pNogeQUmoOwV0vDBmxHvQgA3RIbHG6fnAb/tnMvL0TY5SkC1HnuSJC/NkdX
-         fzirYuEYNar+xy0Wmdv4a1pB0DPv3SUWgA1TBg/4UcHEuSkn4G3VB+bwXNaVBp+7It
-         wkJWmtNUKA0KQ==
-Date:   Wed, 21 Dec 2022 11:11:18 +0100
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Sneeker Yeh <sneeker.yeh@gmail.com>
-Subject: Re: xHCI host dies on device unplug
-Message-ID: <Y6Lbxhc/98QA6dMU@lenoch>
-References: <Y45iXb6VCNiz7ZVd@lenoch>
- <Y49A1Pv6dUScQ9x/@lenoch>
- <Y5tHWwHctY6wr+CJ@lenoch>
- <abfec817-0b32-ece3-4965-7503aa5a77fa@linux.intel.com>
- <Y5zkCxQqBWR+/b4F@lenoch>
- <983a1eb1-4599-517b-6c88-63a0051ae261@linux.intel.com>
- <Y6Ct5s5fIoA9FsAt@lenoch>
- <Y6Dbh1xJucfNvwXq@lenoch>
- <Y6KyWqnHi1TFN0pa@lenoch>
- <6ac1cee8-b58a-b53f-2d0f-94336ac039b1@linux.intel.com>
+        with ESMTP id S234743AbiLUKQE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 05:16:04 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58973896
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 02:15:45 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id m21so10823445edc.3
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 02:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s8TQ65XghkOPiAq/wiBW7MGAtx2Yz5vWTOYzTpQiFwY=;
+        b=VgWqM7n/+2TECRS+UTktIX1FMswAitsWrjyjPRSkEMnUUqIGIPghBosp75x9v8x7OG
+         MeR+gRg/9fWOhzwRKNBW3/n0EH8yiFVuqB8JH5/jj0U1PFl0hecohvgitD8RbHyusIG7
+         i2brmILMQgvdZYi+hiWWF1137V78NczGOEqQA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s8TQ65XghkOPiAq/wiBW7MGAtx2Yz5vWTOYzTpQiFwY=;
+        b=MN1h+uGbM0gJuIhLJkYQNzkquoHacli6sgXva5XHc4YdhwaGb8657ZiTO77eUVwLxa
+         MqnelnwtV1MDN/EpSxiDqmYKlbO0xGlvUZM+7BT3mrpEEaZ3FJ28sJcZZbHVysI82ktH
+         mwC7shYOyJdBPRrdcFif3sfU3ofzikg84J6j255fuLZfEiDdUeyEzUK6pC7Z8QRP3nGT
+         q5SgnM9Pyr01BNnV+qe3kJykRok3EjggTqdP0dUejG8UPwR2QFnu/gchX05VC78bb2va
+         aS71OlbeGODOibrGAn5EypV6QB1Qc4dxQd5G7abWVu+W3CVg27ncK3Y9ul+OyJIdopX/
+         supw==
+X-Gm-Message-State: AFqh2ko8IvnsLrUahtZTRXuDxIzAf56O2PdHOpYWF6NhcuPFpg0r+O1P
+        kAbrM1pUzpnufM2laYac4PK8mw==
+X-Google-Smtp-Source: AMrXdXtX8WKMYQWAG6na2BVhiJzYxEfsqA2gp4cThpQXe9mYmybIpM3Wr3K0cRBMA96HWT3TwfQncQ==
+X-Received: by 2002:a05:6402:40c5:b0:473:ae62:40d0 with SMTP id z5-20020a05640240c500b00473ae6240d0mr6025354edb.7.1671617744514;
+        Wed, 21 Dec 2022 02:15:44 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:39e5:d0e8:4943:9f63])
+        by smtp.gmail.com with ESMTPSA id o15-20020aa7c7cf000000b0046f77031d40sm6680086eds.10.2022.12.21.02.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 02:15:43 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 21 Dec 2022 11:15:14 +0100
+Subject: [PATCH v3] USB: Improve usb_fill_* documentation
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ac1cee8-b58a-b53f-2d0f-94336ac039b1@linux.intel.com>
-X-CMAE-Envelope: MS4wfJCRbpuqrXKuI6XqNsd6EUtFK3PdBf9HvKPbxgnlYfN9uSv1P+NAv0Zt1LZi0ktH4gqpjQ1oa4tCApIEwDz7Ev97H0T8D4jCEtZPsBVBvOEMqCbrognF
- fTsI7UkfyDoixsyyHEnJL0vRcUx9xZCofisE0cafqLUQdzzqI9CanY8hi/8sc6n2GZqLJ8Z8KrFdKUROZvOL+HWBllRHA2Wg0TaAwRHh3YZtjBSV60tRNbOz
- mb+Y+20DOFSMweo+iZG9og==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221220-usb-dmadoc-v3-0-6009f4d27631@chromium.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4774; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=0PXjFPGPwH2AHv79/k4M21SMY9pAk4iVw/gw7Yt85yU=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjoty2Nfhz5hV1squR5H/i2T+GfYp2ZQ7DUFsziPez
+ ExeaB6uJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY6LctgAKCRDRN9E+zzrEiAoYD/
+ 4gt7LATKt7Ac0fAFxGLSQ97lUhoz6fjFk7pf8W3JLm3+6T6v309U7ppiUe8iS2RVpjKMQu+jkIe9VB
+ WnQBXuFIqr/gNjNznMgFaCF+J/gmT2EEaCAK2w0Tgf/Vx+1TV2LsnrN/08yUzLLHzhyA9Td8Hlbm6w
+ TOSa50No/yR1RxahaNsDkbaYjspJHFtlyktb1sPA7xFxTvtQ/QW2Iouk0eRM7LYoqtz8LsM5crftO3
+ sP7TihCemyoodP8c73fGNXHIC6no/YSqqTwfoUTiRsuLj4rjquaHr93PbWT8o2Slr0O9GWscNsAHDk
+ xRZ8C+wNKSi+2KXFpMbmQZmR+YDrMrKZc5snwrcTOlbHvYYytGqfd/z4uqHhFqw7gdjaJl7bhMmgfk
+ ln4ma0C+qUwn3D4ZC2qK+D+7zK7PHtwXnPDRzpCzuhyCLUWy3Ih95dWKeIr+d4cnfz3+8HdzcoY7Li
+ 9z2RY5CCCP7J8ps2NELSdcgTTfKd/S/DrUL469D+fEvRyrN7DzqouPjL7VFEStXbCOTGlF+QWAzRBr
+ cmqlvIaImxhgm+6+i3E6nEfa9NbUJgKDozDlEHjJZU8o7r1fCwSC9MpQi3pAN+tXn+Q2sQ4GkLKZF5
+ Hg8IJP40VRCFqTE+6QlGBBjUCFXN62Jd6dEy33DCVZLJ6Cmy83pkYNmXKSRg==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 11:58:42AM +0200, Mathias Nyman wrote:
-> On 21.12.2022 9.14, Ladislav Michl wrote:
-> > +Cc: Sneeker Yeh
-> > 
-> > On Mon, Dec 19, 2022 at 10:45:43PM +0100, Ladislav Michl wrote:
-> > > On Mon, Dec 19, 2022 at 07:31:02PM +0100, Ladislav Michl wrote:
-> > > > On Mon, Dec 19, 2022 at 02:25:46PM +0200, Mathias Nyman wrote:
-> > > > > 
-> > > > > Looks like controller didn't complete the stop endpoint command.
-> > > > > 
-> > > > > Event for last completed command (before cycle bit change "c" -> "C") was:
-> > > > >    0x00000000028f55a0: TRB 00000000035e81a0 status 'Success' len 0 slot 1 ep 0 type 'Command Completion Event' flags e:c,
-> > > > > 
-> > > > > This was for command at 35e81a0, which in the command ring was:
-> > > > >    0x00000000035e81a0: Reset Endpoint Command: ctx 0000000000000000 slot 1 ep 3 flags T:c
-> > > > > 
-> > > > > The stop endpoint command was the next command queued, at 35e81b0:
-> > > > >    0x00000000035e81b0: Stop Ring Command: slot 1 sp 0 ep 3 flags c
-> > > > > 
-> > > > > There were a lot of URBs queued for this device, and they are cancelled one by one after disconnect.
-> > > > > 
-> > > > > Was this the only device connected? If so does connecting another usb device to another root port help?
-> > > > > Just to test if the host for some reason partially stops a while after last device disconnect?
-> > > > 
-> > > > Device is connected directly into SoC. Once connected into HUB, host doesn't die
-> > > > (as noted in other email, sorry for not replying to my own message, so it got lost)
-> > > > It seems as intentional (power management?) optimization. If another device is
-> > > > plugged in before 5 sec timeout expires, host completes stop endpoint command.
-> > > > 
-> > > > Unfortunately I cannot find anything describing this behavior in
-> > > > documentation, so I'll ask manufacturer support.
-> > > 
-> > > As support is usually slow I asked search engine first and this sounds
-> > > familiar:
-> > > "Synopsis Designware USB3 IP earlier than v3.00a which is configured in silicon
-> > > with DWC_USB3_SUSPEND_ON_DISCONNECT_EN=1, would need a specific quirk to prevent
-> > > xhci host controller from dying when device is disconnected."
-> > > 
-> > > usb: dwc3: Add quirk for Synopsis device disconnection errata
-> > > https://patchwork.kernel.org/project/linux-omap/patch/1424151697-2084-5-git-send-email-Sneeker.Yeh@tw.fujitsu.com/
-> > > 
-> > > Any clue what happened with that? I haven't found any meaningfull traces...
-> > 
-> > Lets step back a bit. All test so far was done with mainline 6.1.0 kernel.
-> > I also tested Marvell's vendor tree, one based on 4.9.79, second on 5.4.30,
-> > both heavily patched. The last version of above patch I found is v5:
-> > https://lkml.org/lkml/2015/2/21/260
-> > 
-> 
-> Looked at that same series and turned patch 1/5 into a standalone quick hack that applies on 6.1
-> 
-> Untested, does it work for you?
+Document the transfer buffer requirement. That is, the buffer must be
+DMAble - otherwise data corruption might occur.
 
-Applied on the top of you stop_endpoint_fixes, 6.1.0. is a base tree:
-[   24.800835] xhci-hcd xhci-hcd.0.auto: Delay clearing port-1 CSC
-[   24.806788] usb 1-1: USB disconnect, device number 2
-[   28.148451] ieee80211 phy0: rt2x00usb_vendor_request: Error - Vendor Request 0x07 failed for offset 0x101c with error -19
-[   29.828466] xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command
-[   29.856656] xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
-[   29.864804] xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
-[   29.949460] xhci-hcd xhci-hcd.0.auto: Late clearing port-1 CSC, portsc 0x202a0
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+USB: Improve usb_fill_* documentation
 
-What about checking whenever anything is still connected on command timeout
-and considering device autosuspended instead of killing it?
+After trying to "cleanup" the uvc code, I was patiently explained about
+the requirements of the urb transfer buffers.
 
-	ladis
+Lets make this explicit, so other developers do not make the same mistake.
+
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+To: Christoph Hellwig <hch@lst.de>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v3:
+- Improve commit message. Thanks Bagas!
+- Improve field description. Thanks Alan!
+- Link to v2: https://lore.kernel.org/r/20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org
+
+Changes in v2:
+- s/allocatiing/allocating/ Thanks Randy
+- Link to v1: https://lore.kernel.org/r/20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org
+---
+ include/linux/usb.h | 27 +++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 7d5325d47c45..06cde9ddca97 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1626,14 +1626,25 @@ struct urb {
+  * @urb: pointer to the urb to initialize.
+  * @dev: pointer to the struct usb_device for this urb.
+  * @pipe: the endpoint pipe
+- * @setup_packet: pointer to the setup_packet buffer
+- * @transfer_buffer: pointer to the transfer buffer
++ * @setup_packet: pointer to the setup_packet buffer. The buffer must be
++ *	suitable for DMA.
++ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
++ *	suitable for DMA.
+  * @buffer_length: length of the transfer buffer
+  * @complete_fn: pointer to the usb_complete_t function
+  * @context: what to set the urb context to.
+  *
+  * Initializes a control urb with the proper information needed to submit
+  * it to a device.
++ *
++ * The transfer buffer and the setup_packet buffer will most likely be filled
++ * via DMA. The simplest way to get a buffer that can be DMAed to is
++ * allocating it via kmalloc() or equivalent, even for very small buffers.
++ * If the buffers are embedded in a bigger structure, there is a risk that
++ * the buffer itself, the previous field and/or the next field are corrupted
++ * due to cache incoherencies; or slowed down if they are evicted from the
++ * cache.
++ *
+  */
+ static inline void usb_fill_control_urb(struct urb *urb,
+ 					struct usb_device *dev,
+@@ -1658,13 +1669,17 @@ static inline void usb_fill_control_urb(struct urb *urb,
+  * @urb: pointer to the urb to initialize.
+  * @dev: pointer to the struct usb_device for this urb.
+  * @pipe: the endpoint pipe
+- * @transfer_buffer: pointer to the transfer buffer
++ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
++ *	suitable for DMA.
+  * @buffer_length: length of the transfer buffer
+  * @complete_fn: pointer to the usb_complete_t function
+  * @context: what to set the urb context to.
+  *
+  * Initializes a bulk urb with the proper information needed to submit it
+  * to a device.
++ *
++ * Please refer to usb_fill_control_urb() for a description of the
++ * requirements for transfer_buffer.
+  */
+ static inline void usb_fill_bulk_urb(struct urb *urb,
+ 				     struct usb_device *dev,
+@@ -1687,7 +1702,8 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+  * @urb: pointer to the urb to initialize.
+  * @dev: pointer to the struct usb_device for this urb.
+  * @pipe: the endpoint pipe
+- * @transfer_buffer: pointer to the transfer buffer
++ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
++ *	suitable for DMA.
+  * @buffer_length: length of the transfer buffer
+  * @complete_fn: pointer to the usb_complete_t function
+  * @context: what to set the urb context to.
+@@ -1697,6 +1713,9 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+  * Initializes a interrupt urb with the proper information needed to submit
+  * it to a device.
+  *
++ * Please refer to usb_fill_control_urb() for a description of the
++ * requirements for transfer_buffer.
++ *
+  * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
+  * encoding of the endpoint interval, and express polling intervals in
+  * microframes (eight per millisecond) rather than in frames (one per
+
+---
+base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+change-id: 20221220-usb-dmadoc-29384acebd48
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
