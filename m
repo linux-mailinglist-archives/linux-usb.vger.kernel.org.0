@@ -2,243 +2,383 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BD46535BD
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 19:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF10653606
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Dec 2022 19:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234643AbiLUSBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 13:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S234725AbiLUSUE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 13:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234701AbiLUSAz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 13:00:55 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A957676
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 10:00:53 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MWixU-1pNQWo3Eca-00X5Si; Wed, 21 Dec 2022 19:00:42 +0100
-Message-ID: <4a170314-6082-f3ba-cfb4-c19d7eb576c0@i2se.com>
-Date:   Wed, 21 Dec 2022 19:00:41 +0100
+        with ESMTP id S229728AbiLUSUD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 13:20:03 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49F4F2F;
+        Wed, 21 Dec 2022 10:20:01 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id bj12so38680726ejb.13;
+        Wed, 21 Dec 2022 10:20:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oICMjrhWPQNlOjRYsHXcTIDJG/XY6KY3jXRiCxaOR5k=;
+        b=mpMpTYrKmvQKR45tEnN8rPjjRK2vmIyCfoHuZoMGcECzjqRp4GJN2fNZXghPxL3bci
+         QpY5Yz69D0wlVf9Dhr+NrGYjVZE4uJt7vtKQd2S8rQz9N0evrn2sSS7JxOwVDrFwZdFW
+         yA0cjs/4kWDas+eb6bvKwuFKAMopNyHDdsy7Ii233hZQJAfFtDVoQGn+BYi8IdzhDaKB
+         5VVSegRY0YP8/pczOH8wWSDr/9JGWWUswoNSFn+7s5E+a1Oa284qPX23fstwLeuyhItz
+         X9wO0Y+djEYgB9VAIxU02ujfvHr3yAQWegOF/0YSbGHR+9A4AZkV7Nz+7TVs/mdTcG+C
+         hfwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oICMjrhWPQNlOjRYsHXcTIDJG/XY6KY3jXRiCxaOR5k=;
+        b=WXaYp9cRxdCVnW4yN33g4V8KXrZEGIOXTMQtmewY0aKMW2ePo9Ttla4MF17KZWHVul
+         LWFajz0Hm6qj5sLdcpIFf+zblICoplVIwaJ7iMV1807w261jc0Wsdf7s2m4q9XgtU3XU
+         L/1YwU8B5QJ7FKGMJ1HhXJtA7dVupETV+a4RJQiKXS5NZ5zVVZUjYzPfqe4fbkXSVSYN
+         2xitpPypfzuE4zKXB7pI+xT8AXRIOYXF8Zy8E1miqyw1NUkZzWdy2vONMkO1opZn0Euq
+         jdnJzUDchJlmc75V+W0eLiMj7csWoqfK9L0yiD59C0fh4SZTfNMuhptln/umg5OVTwkM
+         IOuQ==
+X-Gm-Message-State: AFqh2kpqdkpweLPra5DZ7ZoFdwUQq1zoAqLoKyPhV8A1cXsQY7dyiIvq
+        HcInsvwf5iOIUPj9QJEAF5fO4oGKQfs=
+X-Google-Smtp-Source: AMrXdXueXAVF4LxAnfZfIoZqqygUHnsTiu71LNBrRqH4gnVAe46GpLxicVSVa4DX40viLigQbIf0Ow==
+X-Received: by 2002:a17:907:9d19:b0:7b9:f9d8:9554 with SMTP id kt25-20020a1709079d1900b007b9f9d89554mr2016613ejc.40.1671646800337;
+        Wed, 21 Dec 2022 10:20:00 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id h17-20020a170906111100b007bff9fb211fsm7463148eja.57.2022.12.21.10.19.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 10:19:59 -0800 (PST)
+Message-ID: <7f883643-c796-029f-ba38-73532325632d@gmail.com>
+Date:   Wed, 21 Dec 2022 19:19:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Regression: onboard-usb-hub breaks USB on RPi 3
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, regressions@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>
-References: <d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com>
- <Y6Ci7wWvbBRRQkR6@google.com> <97c9b305-86f4-5918-54bf-4057e99eae3d@i2se.com>
- <Y6ECMZeh7G9bH8Fi@google.com> <db6f59bf-33a1-776e-b52c-4818ff9114e3@i2se.com>
- <Y6I8L45rDhqBMfUZ@google.com> <dde8b5e1-fbce-dd6c-6047-09e03ff2c00d@i2se.com>
- <Y6M5SPBpp/xMzUz7@google.com>
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v5 01/12] dt-bindings: display: rockchip: convert
+ rockchip-lvds.txt to YAML
+To:     heiko@sntech.de
+Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org
 Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <Y6M5SPBpp/xMzUz7@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:8Nl0fu1XpP1qaKzIcJNB4iqNTZBdyVTIf96QqMa4K7+kq95nuHG
- PJkvwbrf1JCX/des3KBC4LU97I7b5ScsiYil14YdCD1ztaTiJR3XOjDCpJ959icFYHBCRf5
- s6gV4CElwEphnvR3ZNYXx1tFZSIiiBtNCk2tyzWO0ye/q6fkYWmEjzHJ2vhac0O34H5/zqj
- rr+h3D914TVQPT00D9BMQ==
-UI-OutboundReport: notjunk:1;M01:P0:A3pw0p8sNXM=;ynD0m/ZzqPGFcJEqInT/AiC6HD/
- dsH1ssMLs6br3y7ekPHlPcVBlOVjoD/DdpHIUMIcToU8mllJgGnKwPNgSzm3L1fBbCjLvpzKf
- NtefPXvJAxjvLFFw1FFwAEEOWBZJ4MuH5rgL5/B8ZFvQiBRi5ZnGzwQGB/2icVAbVdGeLv8rh
- lZ6LCKMPBip/4DeA57gSud5FKpJRmwLn+ZGHOch7848zqqQu4KXUUz9gmkD30TzRHRfQ1Pi2Q
- AVQHr0b0WAhHJOB54rL7roixt2ukuLiRJ+2jKEDtlbvCotCXdgzalSOu4btdi/BjayAlQjoe3
- TGgMyjMD8aVkx2c/BPGJq1g0rk6HOdaVoaJb+Yu5D7Jlrs9bBKJARICDC/ky+Vk1DI9yp5Dvv
- vWYnqkoLRWh/Wb0fV37NFK9UUOAII4wJSxGqBIwEnIDlNt/DIXwFIuT6cIKLWQFECynRiN3ob
- XMkWeFvwPbJT5moAnI91NuPoKp/7xq3HTIZyJI8M4Od4tkZb4K4FGYP6pK3T4I1zFiErTXZM2
- WvVkpxmgEan6arITjmBp8Dhb3xfsLktUqk/3aFp7BxCnUIb7iqyKoqz617JvkCdrlb6R7UGgF
- iHjU1FT9qeKIVK7Y85orqiPyduuFcJ0kN0HwCgevEC1RewIgrFyjfgQfmlWQcMgtyFHBFIC4L
- qlTFl3s8vfkE9wt3iauCc89vxJkhH/KxtHe/8XNtMg==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matthias,
+Convert rockchip-lvds.txt to YAML.
 
-Am 21.12.22 um 17:50 schrieb Matthias Kaehlcke:
-> On Wed, Dec 21, 2022 at 01:29:25PM +0100, Stefan Wahren wrote:
->> Hi Matthias,
->>
->> Am 20.12.22 um 23:50 schrieb Matthias Kaehlcke:
->>> Today I learned that regulator_get() doesn't return an error when the regulator
->>> isn't specified, but the 'dummy regulator'. With that the platform driver is
->>> instantiated, which is not intended. The proper fix is probably to skip the
->>> creation of the 'raw' platform device in onboard_hub_create_pdevs() when the
->>> 'vdd-supply' does not exist.
->> Yes, i can confirm this by debugfs:
->>
->>   regulator                      use open bypass  opmode voltage current
->> min     max
->> ---------------------------------------------------------------------------------------
->>   regulator-dummy                  8    7      0 unknown 0mV     0mA
->> 0mV     0mV
->>      serial0-0-vddio 1                                 0mA     0mV     0mV
->>      serial0-0-vbat 1                                 0mA     0mV     0mV
->>      3f980000.usb:usb-port@1:usb-port@1-vdd 1
->> 0mA     0mV     0mV
->>      3f980000.usb:usb-port@1-vdd 1                                 0mA
->> 0mV     0mV
->>      3f980000.usb-vusb_a 1                                 0mA     0mV
->> 0mV
->>      3f980000.usb-vusb_d 1                                 0mA     0mV
->> 0mV
->>      phy-vcc 1                                 0mA     0mV     0mV
->>
->>> I tried to repro the Rpi 3 case by adjusting sc7280-herobrine.dtsi to look
->>> somewhat similar to the Rpi 3 hub config, but so far I wasn't 'successful'
->>> with breaking USB by deleting 'vdd-supply' (and 'peer-hub'). So I don't fully
->>> understand your scenario, but I'm relatively confident that not creating the
->>> platform devices should fix it.
->> I just played a little bit with arch/arm/boot/dts/bcm283x-rpi-lan7515.dtsi
->> and removed only the second hub node (including ethernet chip). After this
->> the issue also doesn't occur without any modification to onboard-usb-hub. So
->> it seems to me that the real issue is caused by the cascade of 2x Microchip
->> USB2514B USB 2.0 hubs.
-> Thanks for your debugging efforts.
->
-> I did some limited testing with nested hubs during development of the
-> driver, using an external hub as alleged 2nd level onboard hub. I went
-> back to such a configuration, unfortunately I still can't repro what
-> you are seeing :(
->
->> Here are the relevant kernel log entries:
->>
->> [    4.025150] dwc2 3f980000.usb: supply vusb_d not found, using dummy
->> regulator
->> [    4.038776] dwc2 3f980000.usb: supply vusb_a not found, using dummy
->> regulator
->> [    4.104207] dwc2 3f980000.usb: DWC OTG Controller
->> [    4.115852] dwc2 3f980000.usb: new USB bus registered, assigned bus
->> number 1
->> [    4.129921] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
->> [    4.513217] usb 1-1: new high-speed USB device number 2 using dwc2
->> [    5.123296] usb 1-1.1: new high-speed USB device number 3 using dwc2
->> [    5.623217] usb 1-1.3: new low-speed USB device number 4 using dwc2
->> [    5.785049] input: HID 046a:0011 as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0001/input/input0
->> [    5.863240] usb 1-1.1.2: new low-speed USB device number 5 using dwc2
->> [    5.868998] hid-generic 0003:046A:0011.0001: input: USB HID v1.11
->> Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
->> [    6.031327] input: PixArt Microsoft USB Optical Mouse as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0002/input/input1
->> [    6.031490] hid-generic 0003:045E:00CB.0002: input: USB HID v1.11 Mouse
->> [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
->> [    6.333278] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
->> [   24.165633] usbcore: registered new interface driver lan78xx
->> [   24.423801] onboard-usb-hub 3f980000.usb:usb-port@1: supply vdd not
->> found, using dummy regulator
->> [   24.424202] usbcore: registered new device driver onboard-usb-hub
->> [   24.424376] usb 1-1.1: USB disconnect, device number 3
->> [   24.424385] usb 1-1.1.1: USB disconnect, device number 6
->> [   24.564921] usb 1-1.1.2: USB disconnect, device number 5
->> [   24.624696] usb 1-1.3: USB disconnect, device number 4
->> [   25.523236] usb 1-1.1: new high-speed USB device number 7 using dwc2
->> [   26.143248] usb 1-1.3: new low-speed USB device number 8 using dwc2
->> [   26.305673] input: HID 046a:0011 as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0003/input/input2
->> [   26.374840] hid-generic 0003:046A:0011.0003: input: USB HID v1.11
->> Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
->> [   26.383241] usb 1-1.1.2: new low-speed USB device number 9 using dwc2
->> [   26.521526] input: PixArt Microsoft USB Optical Mouse as /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0004/input/input3
->> [   26.522241] hid-generic 0003:045E:00CB.0004: input: USB HID v1.11 Mouse
->> [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
->> [   26.833251] usb 1-1.1.1: new high-speed USB device number 10 using dwc2
->>
->> As you can see the input devices are deregistered after probing of
->> onboard-usb-hub and then registered again.
-> It looks like the onboard_usb_hub driver is built as a module, which
-> is the cause of the de- and re-registration. On a system that actually
-> intends to use the onboard_hub driver I would recommand to make it a
-> builtin driver to avoid this, but a module driver should still work.
-Yes, most of the USB stuff is builtin, but onboard-usb-hub is build as 
-module.
-> I changed my kernel config to use a onboard_hub module, but that didn't
-> help either with reproducing the issue.
->
-> Which kernel version are you running on the Rpi 3?
+Changed:
+  Add power-domains property.
+  Requirements between PX30 and RK3288
 
-I started with v6.1, then went to v6.0 and then
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
 
-43993626de00 ("usb: misc: onboard-hub: add support for Microchip 
-USB2514B USB 2.0 hub"). All of them showed the issue. The configuration 
-based on arm/multi_v7_defconfig. In the last case i need to enable 
-ONBOARD_USB_HUB in the configuration.
+Changed V3:
+  Filename matching compatible style
+  Drop "Regulator phandle for "
+  Specify properties and requirements per SoC
+  Sort order and restyle
 
-Based on my observations in v6.1 it wasn't always reproducible (50/50 
-chance).
+Changed V2:
+  Fix title
+---
+ .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
+ .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+ 2 files changed, 170 insertions(+), 92 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+ delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
 
-Btw the initial subject wasn't precise only Rpi 3 B Plus is affected.
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+new file mode 100644
+index 000000000..03b002a05
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+@@ -0,0 +1,170 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/rockchip/rockchip,lvds.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip low-voltage differential signal (LVDS) transmitter
++
++maintainers:
++  - Sandy Huang <hjc@rock-chips.com>
++  - Heiko Stuebner <heiko@sntech.de>
++
++properties:
++  compatible:
++    enum:
++      - rockchip,px30-lvds
++      - rockchip,rk3288-lvds
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: pclk_lvds
++
++  avdd1v0-supply:
++    description: 1.0V analog power.
++
++  avdd1v8-supply:
++    description: 1.8V analog power.
++
++  avdd3v3-supply:
++    description: 3.3V analog power.
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: Phandle to the general register files syscon.
++
++  rockchip,output:
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [rgb, lvds, duallvds]
++    description: This describes the output interface.
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    const: dphy
++
++  pinctrl-names:
++    const: lcdc
++
++  pinctrl-0: true
++
++  power-domains:
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Video port 0 for the VOP input.
++          The remote endpoint maybe vopb or vopl.
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Video port 1 for either a panel or subsequent encoder.
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - rockchip,grf
++  - rockchip,output
++  - ports
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,px30-lvds
++
++    then:
++      properties:
++        reg: false
++        clocks: false
++        clock-names: false
++        avdd1v0-supply: false
++        avdd1v8-supply: false
++        avdd3v3-supply: false
++
++      required:
++        - phys
++        - phy-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,rk3288-lvds
++
++    then:
++      properties:
++        phys: false
++        phy-names: false
++
++      required:
++        - reg
++        - clocks
++        - clock-names
++        - avdd1v0-supply
++        - avdd1v8-supply
++        - avdd3v3-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rk3288-cru.h>
++
++    lvds: lvds@ff96c000 {
++      compatible = "rockchip,rk3288-lvds";
++      reg = <0xff96c000 0x4000>;
++      clocks = <&cru PCLK_LVDS_PHY>;
++      clock-names = "pclk_lvds";
++      avdd1v0-supply = <&vdd10_lcd>;
++      avdd1v8-supply = <&vcc18_lcd>;
++      avdd3v3-supply = <&vcca_33>;
++      pinctrl-names = "lcdc";
++      pinctrl-0 = <&lcdc_ctl>;
++      rockchip,grf = <&grf>;
++      rockchip,output = "rgb";
++
++      ports {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        lvds_in: port@0 {
++          reg = <0>;
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          lvds_in_vopb: endpoint@0 {
++            reg = <0>;
++            remote-endpoint = <&vopb_out_lvds>;
++          };
++          lvds_in_vopl: endpoint@1 {
++            reg = <1>;
++            remote-endpoint = <&vopl_out_lvds>;
++          };
++        };
++
++        lvds_out: port@1 {
++          reg = <1>;
++
++          lvds_out_panel: endpoint {
++            remote-endpoint = <&panel_in_lvds>;
++          };
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt b/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
+deleted file mode 100644
+index aaf8c44cf..000000000
+--- a/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
++++ /dev/null
+@@ -1,92 +0,0 @@
+-Rockchip RK3288 LVDS interface
+-================================
+-
+-Required properties:
+-- compatible: matching the soc type, one of
+-	- "rockchip,rk3288-lvds";
+-	- "rockchip,px30-lvds";
+-
+-- reg: physical base address of the controller and length
+-	of memory mapped region.
+-- clocks: must include clock specifiers corresponding to entries in the
+-	clock-names property.
+-- clock-names: must contain "pclk_lvds"
+-
+-- avdd1v0-supply: regulator phandle for 1.0V analog power
+-- avdd1v8-supply: regulator phandle for 1.8V analog power
+-- avdd3v3-supply: regulator phandle for 3.3V analog power
+-
+-- rockchip,grf: phandle to the general register files syscon
+-- rockchip,output: "rgb", "lvds" or "duallvds", This describes the output interface
+-
+-- phys: LVDS/DSI DPHY (px30 only)
+-- phy-names: name of the PHY, must be "dphy" (px30 only)
+-
+-Optional properties:
+-- pinctrl-names: must contain a "lcdc" entry.
+-- pinctrl-0: pin control group to be used for this controller.
+-
+-Required nodes:
+-
+-The lvds has two video ports as described by
+-	Documentation/devicetree/bindings/media/video-interfaces.txt
+-Their connections are modeled using the OF graph bindings specified in
+-	Documentation/devicetree/bindings/graph.txt.
+-
+-- video port 0 for the VOP input, the remote endpoint maybe vopb or vopl
+-- video port 1 for either a panel or subsequent encoder
+-
+-Example:
+-
+-lvds_panel: lvds-panel {
+-	compatible = "auo,b101ean01";
+-	enable-gpios = <&gpio7 21 GPIO_ACTIVE_HIGH>;
+-	data-mapping = "jeida-24";
+-
+-	ports {
+-		panel_in_lvds: endpoint {
+-			remote-endpoint = <&lvds_out_panel>;
+-		};
+-	};
+-};
+-
+-For Rockchip RK3288:
+-
+-	lvds: lvds@ff96c000 {
+-		compatible = "rockchip,rk3288-lvds";
+-		rockchip,grf = <&grf>;
+-		reg = <0xff96c000 0x4000>;
+-		clocks = <&cru PCLK_LVDS_PHY>;
+-		clock-names = "pclk_lvds";
+-		pinctrl-names = "lcdc";
+-		pinctrl-0 = <&lcdc_ctl>;
+-		avdd1v0-supply = <&vdd10_lcd>;
+-		avdd1v8-supply = <&vcc18_lcd>;
+-		avdd3v3-supply = <&vcca_33>;
+-		rockchip,output = "rgb";
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			lvds_in: port@0 {
+-				reg = <0>;
+-
+-				lvds_in_vopb: endpoint@0 {
+-					reg = <0>;
+-					remote-endpoint = <&vopb_out_lvds>;
+-				};
+-				lvds_in_vopl: endpoint@1 {
+-					reg = <1>;
+-					remote-endpoint = <&vopl_out_lvds>;
+-				};
+-			};
+-
+-			lvds_out: port@1 {
+-				reg = <1>;
+-
+-				lvds_out_panel: endpoint {
+-					remote-endpoint = <&panel_in_lvds>;
+-				};
+-			};
+-		};
+-	};
+--
+2.20.1
 
->
->> The re-registering doesn't happen in the error case (as in my first email).
-> Could you add logs to onboard_hub_usbdev_probe() to see whether it is called
-> at all and how far it gets? Confirming whether onboard_hub_probe() completes
-> successfully might also help.
-
-Sure:
-
-[    7.963910] usbcore: registered new interface driver lan78xx
-[    8.231548] onboard-usb-hub 3f980000.usb:usb-port@1: 
-onboard_hub_probe called
-[    8.231590] onboard-usb-hub 3f980000.usb:usb-port@1: supply vdd not 
-found, using dummy regulator
-[    8.231763] onboard-usb-hub 3f980000.usb:usb-port@1: 
-onboard_hub_probe success
-[    8.231867] onboard-usb-hub 3f980000.usb:usb-port@1:usb-port@1: 
-onboard_hub_probe called
-[    8.231880] onboard-usb-hub 3f980000.usb:usb-port@1:usb-port@1: 
-supply vdd not found, using dummy regulator
-[    8.231971] onboard-usb-hub 3f980000.usb:usb-port@1:usb-port@1: 
-onboard_hub_probe success
-[    8.232090] usbcore: registered new device driver onboard-usb-hub
-[    8.232256] usb 1-1.1: USB disconnect, device number 3
-[    8.232264] usb 1-1.1.1: USB disconnect, device number 6
-[    8.380602] usb 1-1.1.2: USB disconnect, device number 5
-[    8.447421] usb 1-1.3: USB disconnect, device number 4
-
-So onboard_hub_probe() is called successfully, but 
-onboard_hub_usbdev_probe() doesn't seems to be.
-
->
->> Also in error case i noticed an unusual high load on the Rpi board, which
->> doesn't occur in good case. Is it possible that both onboard-usb-hub
->> instances are in some kind of deadlock?
-> Possibly. The driver itself uses a mutex for locking, which shouldn't result
-> in a high load in case of a deadlock, in any case the high load you are
-> observing seems to be related with the issue if it is only seen in the error
-> case.
-I will try to play with lock debugging.
->
-> Do things work properly when of_is_onboard_usb_hub() returns always false?
-> That would be similar to the fix I have in mind for configs that shouldn't
-> use the onboard_hub driver.
-[   24.781914] usbcore: registered new device driver onboard-usb-hub
-[   24.782097] usb 1-1.1: USB disconnect, device number 3
-[   24.782110] usb 1-1.1.1: USB disconnect, device number 6
-[   24.916725] usb 1-1.1.2: USB disconnect, device number 5
-[   25.011118] usb 1-1.3: USB disconnect, device number 4
-[   25.648211] onboard-usb-hub 1-1: onboard_hub_usbdev_probe called
-[   25.648259] onboard-usb-hub 1-1: failed to find device node for peer hub
-[   25.648264] onboard-usb-hub: probe of 1-1 failed with error -22
-[   25.965643] usb 1-1.1: new high-speed USB device number 7 using dwc2
-[   26.107578] onboard-usb-hub 1-1.1: onboard_hub_usbdev_probe called
-[   26.107636] onboard-usb-hub 1-1.1: failed to find device node for 
-peer hub
-[   26.107642] onboard-usb-hub: probe of 1-1.1 failed with error -22
-[   26.415691] usb 1-1.3: new low-speed USB device number 8 using dwc2
-[   26.567393] input: HID 046a:0011 as 
-/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.0/0003:046A:0011.0003/input/input2
-[   26.637183] hid-generic 0003:046A:0011.0003: input: USB HID v1.11 
-Keyboard [HID 046a:0011] on usb-3f980000.usb-1.3/input0
-[   26.645694] usb 1-1.1.2: new low-speed USB device number 9 using dwc2
-[   26.793634] input: PixArt Microsoft USB Optical Mouse as 
-/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.0/0003:045E:00CB.0004/input/input3
-[   26.793859] hid-generic 0003:045E:00CB.0004: input: USB HID v1.11 
-Mouse [PixArt Microsoft USB Optical Mouse] on usb-3f980000.usb-1.1.2/input0
-[   27.135695] usb 1-1.1.1: new high-speed USB device number 10 using dwc2
