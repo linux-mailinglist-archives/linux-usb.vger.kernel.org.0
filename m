@@ -2,123 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B816653C82
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 08:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B8C653CD2
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 09:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiLVH3W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 02:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S235042AbiLVINS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 03:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLVH3T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 02:29:19 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE7A22B01
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 23:29:18 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-434eb7c6fa5so12809437b3.14
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 23:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YDBQOU+0luLi27shrHHDO2SRv4ai6dz5pCa52is39dQ=;
-        b=iyErmQImVKKNNTRt+pdj6Ntw0fQgB9SlSnTHvhEXKX9A1ANKW81xBXTTwAdp7y2JDx
-         u6bWXDVQuSRQjViyREmniY3etXM4sCrTuCKcLWSBbs2hRUH4CNCuWooUyMkW3gVccYEt
-         7K4yX2KFPokD1wGq7s9sSWJNSHYUbdlsiDfEjILmWobBEJnLEE5JkKpwvVAd93q665gT
-         cNuCR8oY7J1lWy4ntIfDwlL/8p6TJ+dQMm7RC/pX4Z5nCOyFeagZE49TF4JrNdLLW0s6
-         rSYu7mEakG3h5ZTcpaFegNCEla3Mku56Zw59AYRALgXhl1zfa9ZmaGU6XRoVh96alT4o
-         llIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YDBQOU+0luLi27shrHHDO2SRv4ai6dz5pCa52is39dQ=;
-        b=QC4KSSYtlNTxIk/BmfgX86dKaRLNUCV6GL+BFvyszePjOoW1cAHm9Z+bl4dhzhUmjd
-         2DlSxsOQefVHAh9bUA7eMo9qKWw+ERUIVCg3Ela+TtBzuFKOu7jdb6CbP4hEEmv/rIxT
-         dFr3CmhFzR9joIlLgBPmyjd/3BUV7lPaewc63oJF6EBqaeXI9pEY4NevOrXCbPcdRQM5
-         bTTqKuwP/SqwnPaPzrPvnOkfhdU3h+S/Wp0un/UEaCzR64zU4UrQIft0vOi3rO0vit26
-         LjTvcuEmApsJhkyNkV/aPNObs5IEG0DuZwEHEnjrrnUT8W5mH/LM42VSAZepx1NjLs79
-         X11w==
-X-Gm-Message-State: AFqh2koZOYJa+sw2v+OJedHnUnZygCUWMB5Zo687NZ5LkUVswX+c0TFP
-        OwU+SK1u5Beuy5Vna4sGXraytA0YdMM=
-X-Google-Smtp-Source: AMrXdXsw3K5e0ejM3+wRydXNF+NfW/0OfhSvRepRxGDF2lEIac10qPBfPK6x49VmTKZSNK9p4LXq5kKUgok=
-X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
- (user=hhhuuu job=sendgmr) by 2002:a0d:ca93:0:b0:44d:26dc:2fc7 with SMTP id
- m141-20020a0dca93000000b0044d26dc2fc7mr359175ywd.333.1671694158099; Wed, 21
- Dec 2022 23:29:18 -0800 (PST)
-Date:   Thu, 22 Dec 2022 07:29:12 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221222072912.1843384-1-hhhuuu@google.com>
-Subject: [PATCH v2] usb: xhci: Check endpoint is valid before dereferencing it
-From:   Jimmy Hu <hhhuuu@google.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>,
-        stable@vger.kernel.org
+        with ESMTP id S235050AbiLVINN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 03:13:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590C6252BC
+        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 00:13:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11D05B81CDF
+        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 08:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 968A0C433F0
+        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 08:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671696789;
+        bh=tLOPP05yFNJeVZC/+MdTkTa9Ete5wfQy8QMo66B077U=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=A6KD5gDi0nnrfLuD6NclZw+5DcBW2qOAgX1eHjL1NMfyIt0FXbG54T6CBHZXNEhtL
+         3LDme9lQvop1HHaVYJqAKC1KKebvm5DAzqzTEm57tzk2bc+It7ZizLI+MdDd6o+dqo
+         6DdsfljKSKl78uqj/f4vExghi8CxCfyZjDS2SJ/PORaualFYOjFOMkuNMUHt5FvQc1
+         h5m45PhdVg50EpFM9y5d6kB2aNoHjMMnYvVCjjJ8GScHGiKc+VUAPkpJz4uABppiSr
+         08kZRCYT+pPxMASCEA+v5zMWJOaumtiY9LgIlKUGHi3cwULBoc71AyQ3TpCriDJLgS
+         WQF4AqaK+rh5A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 7A0CBC43142; Thu, 22 Dec 2022 08:13:09 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216822] Thunderbolt USB Controller (Maple Ridge) and its
+ upstream pcie port fail to runtime resume
+Date:   Thu, 22 Dec 2022 08:13:09 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: max.lee@canonical.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-216822-208809-QDjrBx1v4E@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216822-208809@https.bugzilla.kernel.org/>
+References: <bug-216822-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the host controller is not responding, all URBs queued to all
-endpoints need to be killed. This can cause a kernel panic if we
-dereference an invalid endpoint.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216822
 
-Fix this by using xhci_get_virt_ep() helper to find the endpoint and
-checking if the endpoint is valid before dereferencing it.
+--- Comment #4 from Max Lee (max.lee@canonical.com) ---
+On this platforms, OEM didn't design RTD3 on Maple Ridge.
+Since the MR AIC is to share with other desktop projects, and the NVM was s=
+et
+to Native + RTD3 enabled.
+This cause the driver to get the RTD3 enabled from NVM. and set Linux TBT
+controller in D3 state then PME doesn't toggled by device hot plug.
+Current BIOS sent _S0W to TBT RP and the NVM native +RTD3 doesn't change to
+native only. Is this a correct setting on the NVM to support non-RTD3 platf=
+orm?
+should BIOS sent command to modify NVM offset to disable RTD3?
 
-[233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
-[233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+--=20
+You may reply to this email to add a comment.
 
-[233311.853964] pc : xhci_hc_died+0x10c/0x270
-[233311.853971] lr : xhci_hc_died+0x1ac/0x270
-
-[233311.854077] Call trace:
-[233311.854085]  xhci_hc_died+0x10c/0x270
-[233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
-[233311.854105]  call_timer_fn+0x50/0x2d4
-[233311.854112]  expire_timers+0xac/0x2e4
-[233311.854118]  run_timer_softirq+0x300/0xabc
-[233311.854127]  __do_softirq+0x148/0x528
-[233311.854135]  irq_exit+0x194/0x1a8
-[233311.854143]  __handle_domain_irq+0x164/0x1d0
-[233311.854149]  gic_handle_irq.22273+0x10c/0x188
-[233311.854156]  el1_irq+0xfc/0x1a8
-[233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
-[233311.854185]  cpuidle_enter_state+0x1f0/0x764
-[233311.854194]  do_idle+0x594/0x6ac
-[233311.854201]  cpu_startup_entry+0x7c/0x80
-[233311.854209]  secondary_start_kernel+0x170/0x198
-
-Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jimmy Hu <hhhuuu@google.com>
----
- drivers/usb/host/xhci-ring.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index ddc30037f9ce..f5b0e1ce22af 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
- 	struct xhci_virt_ep *ep;
- 	struct xhci_ring *ring;
- 
--	ep = &xhci->devs[slot_id]->eps[ep_index];
-+	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
-+	if (!ep)
-+		return;
-+
- 	if ((ep->ep_state & EP_HAS_STREAMS) ||
- 			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
- 		int stream_id;
--- 
-2.39.0.314.g84b9a713c41-goog
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
