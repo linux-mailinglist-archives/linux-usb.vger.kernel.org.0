@@ -2,131 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C48653D4F
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 10:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA559653D6F
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 10:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiLVJKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 04:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S235205AbiLVJXf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 04:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235029AbiLVJKL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 04:10:11 -0500
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142F7218AE;
-        Thu, 22 Dec 2022 01:10:07 -0800 (PST)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM5jlBa009021;
-        Thu, 22 Dec 2022 01:09:57 -0800
+        with ESMTP id S235191AbiLVJXc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 04:23:32 -0500
+Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D485C1D0E3;
+        Thu, 22 Dec 2022 01:23:31 -0800 (PST)
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM8H72h018601;
+        Thu, 22 Dec 2022 01:23:19 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=proofpoint;
- bh=cSuiH3NV3hyDesH21pZK5xDXV4kQ+sp6Tvknwim7ZWY=;
- b=VSSsPin5AWnwjdfBLB3w/BfZ6NzzlRbivejSRP2CR9g8Irq6IaDOyyK5KBqec0mOU3NN
- RtNkpvfKILiYK/VUaGVY8vQJBwauniHloVBeeA/pZFUpWxe15gbrO6HfiiRSxV6JYQzj
- 1YthJRhJkXm7/UkHKsEfOVvPBv/vxvyyewF2ZiLlg3zqdeF8AHX78Is1FaVHk84P6nzu
- 6otOrWEzgCWpIYCS2ya2AO8sUTE4cHPH/Bob5/Bt4p5Q1uzNicWAYmSila3XS+jBj+GV
- HlKxmELn2EhaCrhKH0xm8ffs/pnNP/c5VMhAnzIfxZc7d+LHIfeM3u5l/qnhaNzQ9ufz 9A== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3mjxkjc1xc-1
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=pcQH8X547k3nlGK9ObhgRzwVwYyPFrFd8MepKzGMntw=;
+ b=fb3Bg8w3yE1fahKlWp1l15034E1Nqg/fk1dkU9wYTApgnzGsFgCSZgZjhCwZKpsxseDo
+ u3O7IkSEQgyXSBUkxU36th6O+6oXkyotHOmRBp96K547u6wyFTb/AaHgdF5rZ/D5Pbto
+ ay+LPUBK7ndpKAUEnaHfbUYWOuGwrkUPSy5SW1Wm2xdT3AvYlMkHqB1Ch7aLsvSbsEdh
+ W7LpnI+O5wUdNn/6C7L+uJgjh0zegwDqEnKf97oIJt9Kzt9/ShDWEziskqJLZBVSKlHL
+ IszXf3NggjV+9cjTkL8eObNLa7ck5Lw2qsxYCwJI93bdBU7el5sQjQUfk553LwDfAZW5 8Q== 
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2049.outbound.protection.outlook.com [104.47.51.49])
+        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3mhb73cass-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 01:09:57 -0800
+        Thu, 22 Dec 2022 01:23:18 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PzfooUH9M1DGS2HG+gxz4MTBypPnWjXZdYFnTF5uCu0JpTS7HXHEzwXqWKv9CBbBxpQT2+GR1AjE0c3kTCUKS0ZJz+NBI3AX4ReX78/atF03vQm/zYa0UJ+3djTZjzdQrMMbSBB5RVU/PPqjXXKr+6544VbP1AtDkOHKJ7RwMVIWsG6jpXo3u6hcnwYHtIwS9UmNfMGR7jaejtXaixXNKNRCP1sasdMS1orrv7KpOMoNQK7NNVQBh7idNCHlS1QqBrOT8t0DHu9u6N+BkM3W0lR3PRF1n9eT427RasBwArSjEt7NsH86HiAYL2nHyH42nJHJPn9cXWsQTub6EYn8nA==
+ b=YvVnun3Dm0i0bXQk6PgZTlzV0USTAiP9Ez03WnfIonyTxycJKdqUlUlm04s3LyDctRL79Hn5vVA2X2WBnIvLYoHokPGgLYAOtZvLHLNNvY4uFE92haf2Ms7bbHBPqo2Mm58MVQxzar72NzHt/HKy7H+e/P10El9zk+bHN5z0bKjLcKn9W94ttHFFT8tzCvmH+eCOOB5agZK/kKEMmH66oIqlLZ/P+U1m7r26vygqItzMLMklmt+Eo6bMipuJu8G00w03BezHj3rzVc6xh3LzfaVvAc1KyUm1y/v/t0l1xaQYRzgLBkngQ3MwMbh1C4q9GQzZkXk9yUbgxCmfJFBRZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cSuiH3NV3hyDesH21pZK5xDXV4kQ+sp6Tvknwim7ZWY=;
- b=lTIIjG5ftIDq0Rh6AmTwUyqFGVKiHqh0utLpskKtiN4ypewvVkA8mmVtY0IQuNex6nPJFTiULxSbiHR9iQ94+tu4/CyxcHdqfhU7sN4YYBX0qGpPoe7v+3madvkT82q1eekPn3+9Z/1CwYycR1uJhTxqE8NgOilrNd+URhp8M6x8MNmnTp2CIGDY1DS42qAhS8Ahe56l4KPtSiTmOrfm9DUweOsxX6Jg8309WJxqlwGDTBqspwDa++J+eDkylNbC1jQad+g+7B5R74Ln6RAw+91MUNSoPlCJiCYHd0BfLkc0bggg2uBjW4/C3nYjhlFcnsvK2JvR36M1VrSEJBKC3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
+ bh=pcQH8X547k3nlGK9ObhgRzwVwYyPFrFd8MepKzGMntw=;
+ b=cGSaw0WefU1hKu0l2mrbbNabEuPpR43BX/UZTD6U8IU+Khj4tVSD5JAgv1PS9JCvN1GLwQ46VniNuRZHxQOqCB3pEdc+v7vRH7P40JF2kR92bXVXjXlppK3pWw1OgUbB/JAyuwX9gi2lYV+uDeD3JhrYDbTOuffJHM6+VXlWW1PjEDixnx9rts+ogL6px8yW6jK3h2SG8SaMZNkEZRYDloItlWotk9bzo17SpjGtwghHBmMl9syTkL/poQb+tzDfqmsrmIGPoXZNBFr+Cv2E97rO/EYoHKzYMeQ3MihXKjmCwN5S4Fbt3EvTRX7/VVqAqLKXA8cWrsnH4LMdPUDEuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cSuiH3NV3hyDesH21pZK5xDXV4kQ+sp6Tvknwim7ZWY=;
- b=IQdjY8QjYNLV5q7g5cbLU9uES4TrrTIK2T/Lg3kjyXBMq3H2cU0zawc8rs3Iz3ibgb1FpbcUniicHhHvkYANzODTy76vyQ6vfhA4qhaSextAR6/XP7nLkH79AU0u4i06A7d3B9BymyHTwSgZNKBkT36x8IfPRVGpOycxFpQQEWY=
-Received: from MW4PR03CA0355.namprd03.prod.outlook.com (2603:10b6:303:dc::30)
- by BYAPR07MB5909.namprd07.prod.outlook.com (2603:10b6:a03:12f::10) with
+ bh=pcQH8X547k3nlGK9ObhgRzwVwYyPFrFd8MepKzGMntw=;
+ b=ejzu+SIFiJiwLN+stFGGl+AKfDEnp82TqPrd3lCwxiEb8wChylETSntriUfX+2lfrvxxwEMav7txZCd+BjIC56b4q8eiUgwiLTiNXHVzBzked4L+3DXmHF/TQac82hXy5e3Sg3in+LZiKvv6Ib+ogKs++WU1epnZkvZ60JspMmc=
+Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
+ by SJ0PR07MB9274.namprd07.prod.outlook.com (2603:10b6:a03:409::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
- 2022 09:09:53 +0000
-Received: from MW2NAM12FT047.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::8e) by MW4PR03CA0355.outlook.office365.com
- (2603:10b6:303:dc::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
- Transport; Thu, 22 Dec 2022 09:09:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
-Received: from sjmaillnx1.cadence.com (158.140.1.147) by
- MW2NAM12FT047.mail.protection.outlook.com (10.13.180.173) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5966.7 via Frontend Transport; Thu, 22 Dec 2022 09:09:53 +0000
-Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
-        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 2BM99n7F011857
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Dec 2022 01:09:50 -0800
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 22 Dec 2022 10:09:48 +0100
-Received: from eu-cn02.cadence.com (10.160.89.185) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Thu, 22 Dec 2022 10:09:48 +0100
-Received: from eu-cn02.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn02.cadence.com (8.14.7/8.14.7) with ESMTP id 2BM99m15145295;
-        Thu, 22 Dec 2022 04:09:48 -0500
-Received: (from pawell@localhost)
-        by eu-cn02.cadence.com (8.14.7/8.14.7/Submit) id 2BM99lcp145284;
-        Thu, 22 Dec 2022 04:09:47 -0500
+ 2022 09:23:14 +0000
+Received: from BYAPR07MB5381.namprd07.prod.outlook.com
+ ([fe80::f36d:8292:963:59c6]) by BYAPR07MB5381.namprd07.prod.outlook.com
+ ([fe80::f36d:8292:963:59c6%4]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
+ 09:23:14 +0000
 From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdnsp: : add scatter gather support for ISOC endpoint
-Date:   Thu, 22 Dec 2022 04:09:34 -0500
-Message-ID: <20221222090934.145140-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+To:     Peter Chen <hzpeterchen@gmail.com>
+CC:     "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "a-govindraju@ti.com" <a-govindraju@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] usb: cdns3: remove fetched trb from cache before
+ dequeuing
+Thread-Topic: [PATCH] usb: cdns3: remove fetched trb from cache before
+ dequeuing
+Thread-Index: AQHY+Nk1O9kuBWtXZk65xRZeSi7JF65DBooAgAAAr4CANtQm8A==
+Date:   Thu, 22 Dec 2022 09:23:14 +0000
+Message-ID: <BYAPR07MB5381EB87B6C0446CB2160413DDE89@BYAPR07MB5381.namprd07.prod.outlook.com>
+References: <20221115100039.441295-1-pawell@cadence.com>
+ <CAL411-o4BETLPd-V_4yR6foXbES=72-P4tq-fQ_W_p0P_3ZqEw@mail.gmail.com>
+ <BYAPR07MB5381AE961B59046ECB615C65DD069@BYAPR07MB5381.namprd07.prod.outlook.com>
+In-Reply-To: <BYAPR07MB5381AE961B59046ECB615C65DD069@BYAPR07MB5381.namprd07.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNDBhYTA1ZjgtODFkYS0xMWVkLWE4NTQtMDBiZTQzMTQxNTFlXGFtZS10ZXN0XDQwYWEwNWZhLTgxZGEtMTFlZC1hODU0LTAwYmU0MzE0MTUxZWJvZHkudHh0IiBzej0iMzY1NSIgdD0iMTMzMTYxNzQ1OTE2MTc3NDMxIiBoPSJWNy9vL0dKVE9OWGpnYjA5YWdEc3daSUZ3TXM9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR07MB5381:EE_|SJ0PR07MB9274:EE_
+x-ms-office365-filtering-correlation-id: f9234ea2-463f-42e2-d48a-08dae3fe2707
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IxmeI4h/DnCvcqjrHg5ANF25S5BQ6+fxLfEul6IVyzS3e06jUSK/HIO+r5kSXYABMdYcXXt5NyMDsJtLS1gJ6uopXM76vp9FtSBon5S+gijDzwrkJyFx3gPoO+8caZ3zcGlV6cgPrvfdwgsd0+MwKqg4EnsKCKYRAOHix44ZJkyOm8fwBFHA3k1oF4TwWvcWJdPH8l8iaXvsGSguqZ4Ws8igCthCgaGUvWavz2hdlG/6AM65LC9aIOYTJ1pYVHQsOEStEBeecQ80Q0kVQscXZFFByluTJl9eyfPLhIGatUCKrCOy/llw1skADOHiplmOHXu40XE0Pm+39+N9Qrg0miqwgs8haPIsxlBsLwopWfvBoO6IH1VjwFBPicIirlpeTCghA2vtHYxfEMay16K1hvd5jG2swEQMQpY1q0EqOHTKlztcIzrBuFQnZSUXknnNSYFi4pxVbZ7E6Ixvfy/LMgszMkQ/VLt6r4ynvxbwJDEs9wohae6dnW874eacC1uYDartX2X/eGOWYT9FqBtQ0k+P9e6+i5PtPUhR/b8TeE69dKET2niVmyN2UVgissjZnblrAWWVWOXSdJV8xXfJ1FMZTWn254nAswAjpD7XXyrmbT+BkHFiy4owIvBK1KHssOVQsCRiNLVFA5IYQwWObjp98d3SPka6iNKvbXWb2KH0OUk1VOD2yfrR8a9/Vy+3pvv+vgc4Mt+RHPt64CE1Rg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(346002)(39860400002)(136003)(376002)(36092001)(451199015)(33656002)(2906002)(38070700005)(38100700002)(122000001)(5660300002)(41300700001)(8936002)(52536014)(86362001)(83380400001)(66446008)(66476007)(64756008)(54906003)(6916009)(71200400001)(66556008)(8676002)(4326008)(316002)(478600001)(7696005)(6506007)(55016003)(66946007)(186003)(9686003)(76116006)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U0Z3c1BTWUhMdmd1U3dhbEhZUzlsMWNRUTBZZGFZRFcwUG9STWE3NHV6bmZX?=
+ =?utf-8?B?OHJkWTJFSkJ5ZTEvbTkxSHEwVm1sY2t2Y1hRMWswbVpCcC9Pc01aL1BVcGNF?=
+ =?utf-8?B?RjNyc0c5dkxJQ1BSQzVhcEk2endybCtQVmFPSjRBUFRLdzFsTEFUa3M3bG0y?=
+ =?utf-8?B?ZGdtcnk0eU8zQWtmb0pvVllCZWIzTEF6dFpZTDlBT0dHd0ZwZkxVRHUwYVp1?=
+ =?utf-8?B?NGxBWWZIWU12N0VOZjhQSDdrNTcweWdGTWpJMUc1UGtzbUxpT1FaZTIrUnhZ?=
+ =?utf-8?B?T0J5ekNOdlV0NXdmamJwWE9mbVFKVTVJTTI4N1dFVmZzOUdGVzRNU2lDUno5?=
+ =?utf-8?B?U0Z2TXhFdHIxQno4MnlZSnBwcFNzOVlvWDYva29DT2RSRXlBL01BSjNLN0xk?=
+ =?utf-8?B?aG4wbk9hV0xRM2Y3eFkrQ3diU2hKVGtac1JnSHBLaFNQclp3R1FJZER0eUVs?=
+ =?utf-8?B?bTlrUEJ1ZHhBQW9yVDcrR3VMeTRDaFdNTDQ1OHZKak9CREZ4WWgwbTQ4eDAw?=
+ =?utf-8?B?WVpTNVlncEZHaTJEWERpWHBkbU1RVzZaMVZYQmxRbmlhN3gwMGFRa2tDNFNG?=
+ =?utf-8?B?QllScFl0N0F3TFhLUlYyUU0yV1l3cUFoSGRsTTlaQWtuQ0dOZmZ2TjM0ajZ3?=
+ =?utf-8?B?enFBTEI3WHdCTEd6YVo5bG1idkFKd3hmT1YrcElJdHVxRndaTSt5TFdxRTk3?=
+ =?utf-8?B?Rm91RjEvd240SW5RSEVQMzZhTTdRVWplQ1oxb0ROaFZ3cVQ5UVViVVFTQiti?=
+ =?utf-8?B?T3VIR0RCRUhKT2dOUWsyc0JmMkFGVnlSalpPblhPcTdSZ1U3dDhuOGxuNmZF?=
+ =?utf-8?B?SnBBOTEwNHVxVjRwVGVrVUg3SnF6azVORThVQWNDK2xXQ3FRUEdsbjBWTFFX?=
+ =?utf-8?B?Y0lwUEEzR0xKakdMcFlxVUh1b000bU5waFZ4K1VaSnBZZU4wQzNqZXRhMFc0?=
+ =?utf-8?B?VGFHakkzQmsvNUl1UmZ2NUdDYnlDRGY4ZXpBVmVnOHZlczliMDRMVWFOVEdM?=
+ =?utf-8?B?OEF1SFF2bXUzZnY4dmNlekhUdnlnOW4zVXB5SG9sdXlKcHdxL2FQUnQ2dlln?=
+ =?utf-8?B?L1BnWG1IeFJDRStDVHJ5M1V4S2VQMUhtUUVlOW85MStRSGNma2t6T3B3Z2dL?=
+ =?utf-8?B?b2F0YjJmWTIwc1hBS1BJMUtnM0dwQUJPU3NkcDlLck8zeVkybjNmUFFJY040?=
+ =?utf-8?B?RzNMV1k3K1YzY01QOFpHZVNYLzg1OEo4L2N1VndjSHB3M0pQUEh6b1Q0ZFBP?=
+ =?utf-8?B?Wk53OExFckVJWWlRVVJySkg3UjJNTDA2ZEZpQVY1MjFwUld4MXpRWStmcm5T?=
+ =?utf-8?B?cmRVbkFBQjA5dFFqclRGUGkrRzNycHlmWDNPZkpMVkE2ODFOdkpmcjgvU2Z6?=
+ =?utf-8?B?VDVEZ296STRMdjlxSnpLYnlVelZnZk9haTN4VHlDTG9YUDZhSVBOaFV4VkFJ?=
+ =?utf-8?B?SlFGcEZzVnNKRG1sTnVmQUp0dkEzS28zYml4NHp4TUNaQ21hdVZCVVpXSjQ4?=
+ =?utf-8?B?ai8yL2YxcnM4ZW9FRWZOU1VTWGFQbHQrK3RNSlJYSndKQzVvMTc3SVNRUkpr?=
+ =?utf-8?B?NG9kdkhtMUpXTW5Hd0FqVStOQzVmNGcwb1Z0N3RCR3EwTXozTFF1NUtYQkdD?=
+ =?utf-8?B?RGNqbytIaWsxZU1JV3dXd090KzE1NjZHTzhqNjJBVVBYSDVqYU9CR3dubGU2?=
+ =?utf-8?B?YXV5MWU5Z1IwejBTRTY5VFp6eHhMb0RtL0J4SmhndkxUNGFVN3ZuNEYxYkRy?=
+ =?utf-8?B?SWFIc1ZrU1BxU2pnd2p5cjFXWEx1WTJHZk9jbEQ5anMvamZOSzExa3RpVmxt?=
+ =?utf-8?B?MVYzdmY0NVF6WTNWQ041UTAzenZaTTVPeFRqTENZaDN3SFZlQmlxMnAyUnAr?=
+ =?utf-8?B?NElHRlN0VW1NRGc4S0pacDE3U0M0bzN0K1RzWVNiczR2enRKUDZwR3pXQ3lN?=
+ =?utf-8?B?aUFWK292TElBMHZoVFk2VXVDWFJWR09aRjlFVEVGTzAyR29OVU1CRHNPeVBP?=
+ =?utf-8?B?SHdQMW1vV2g4N1FuVGZzS1F6OTJkbVpDcm1laEhXWVQ3Rkw4VHhuVTNKMUNl?=
+ =?utf-8?B?WnNTSHdPRnFiTnR4QmZxbVd5U2lGeXpLTXBCeXEraUVSRjBPUlJCWCt6Z2tW?=
+ =?utf-8?B?cjJjc2F5ajJ6MjFYMnZzVnY4TklKUTc4SVNQVlNNUlJyOFZ1cmgyeU5pVlFn?=
+ =?utf-8?B?alE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
-X-OrganizationHeadersPreserved: maileu5.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2NAM12FT047:EE_|BYAPR07MB5909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1206d009-23f3-4946-3b7d-08dae3fc4984
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dWSl7E1381joVqNYw3yDE/ZvkbvFUbPmygXOXlwe5B6tKKW4JzExKofI0TBfBDtu+Nm9Qd5xXhTss/La7aJMB36t+lC6Nw9a/7P71bNk4fs3jJ7HBvWKKRDJzDEK1om/and+Y3BamDbc2k3virKQDBjLelwV+mF/4n+WQvA+GGxskMQxvMOJfOrE9syB6YtOVCLkbE5JSuPFH/mclQSwXuZFrB1+kpJcQ/7I7SAg5Dg+d3EdLXneHVQAVtojBFOGRuDhaMdzProadKZmoy+XgB1Dhy++BlYW5wwlU73aA8hP63wOlWTgfbmUiYWfkszJWbbak2FOLyulOjr1Qg8oAXnr/TPFZz4/Lf7ONK/HUk9TKQWrvEDvoVa/IG44pijq83WdLsQpYCU5MQd6wazyAhtZZah6tLB75Zevg42TYO8ZbXEURyfd5OKfROgYHR+8kYvUm9C91JzPZzt4dC3RkU49/K6mFuyylhlgSzgBj0G5hOtGZw4mwszttMkDyhDTHIxLrQHN7NQLymSWk5zME8Z2qCN7NHrZRadgTcBKp6O19cU6IuIDREjJ+jgRhab0/2FiyUjHHXEQUJXQzjhanLfl8l6GMiwFTYCNf1UFMdkWlBnLNgMkIGNhljLLAInbhnd0wP/5XHB1PvI1qpAL7oTR3KLk7T1fPfSSmecZKDEsKpcUJmv9dqiPNtY/DSiht2QIzDVjlQY2obCYrZg6zrKRiI/OT489UhSwuPClJUw1rEnua020c7SuE5dz+Mnn
-X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(36092001)(451199015)(46966006)(36840700001)(40470700004)(8676002)(34020700004)(4326008)(36756003)(82310400005)(70586007)(70206006)(5660300002)(8936002)(41300700001)(478600001)(40460700003)(6666004)(86362001)(26005)(54906003)(42186006)(6916009)(83380400001)(316002)(1076003)(426003)(336012)(47076005)(2616005)(82740400003)(186003)(356005)(7636003)(36860700001)(40480700001)(2906002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 09:09:53.0544
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9234ea2-463f-42e2-d48a-08dae3fe2707
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Dec 2022 09:23:14.1900
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1206d009-23f3-4946-3b7d-08dae3fc4984
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT047.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5909
-X-Proofpoint-ORIG-GUID: J399LHw07xAOgMC3OqvXSDz02gAFIHhR
-X-Proofpoint-GUID: J399LHw07xAOgMC3OqvXSDz02gAFIHhR
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xiiU+t2PotyMmH+RGdTcqPiepGx7RBKky1ccFrgRudILtsxDwfRIR/kVMcBoiAx2WFuHDtYgfqTYpzsTUaxrR7FK6Pp1CHW0pN8SQogVTLU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB9274
+X-Proofpoint-GUID: jcawFUyAQXY5KI3K6HmByTjpmfW5ahEq
+X-Proofpoint-ORIG-GUID: jcawFUyAQXY5KI3K6HmByTjpmfW5ahEq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-22_03,2022-12-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1011
- bulkscore=0 suspectscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 malwarescore=0
- adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212220080
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ lowpriorityscore=0 mlxscore=0 suspectscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 mlxlogscore=619 spamscore=0 adultscore=0 malwarescore=0
+ impostorscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2212220082
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -136,252 +160,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Patch implements scatter gather support for isochronous endpoint.
-This fix is forced by 'commit e81e7f9a0eb9
-("usb: gadget: uvc: add scatter gather support")'.
-After this fix CDNSP driver stop working with UVC class.
-
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdnsp-gadget.c |   2 +-
- drivers/usb/cdns3/cdnsp-gadget.h |   4 +-
- drivers/usb/cdns3/cdnsp-ring.c   | 110 +++++++++++++++++--------------
- 3 files changed, 63 insertions(+), 53 deletions(-)
-
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index a8640516c895..e81dca0e62a8 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -382,7 +382,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
- 		ret = cdnsp_queue_bulk_tx(pdev, preq);
- 		break;
- 	case USB_ENDPOINT_XFER_ISOC:
--		ret = cdnsp_queue_isoc_tx_prepare(pdev, preq);
-+		ret = cdnsp_queue_isoc_tx(pdev, preq);
- 	}
- 
- 	if (ret)
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-index f740fa6089d8..e1b5801fdddf 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.h
-+++ b/drivers/usb/cdns3/cdnsp-gadget.h
-@@ -1532,8 +1532,8 @@ void cdnsp_queue_stop_endpoint(struct cdnsp_device *pdev,
- 			       unsigned int ep_index);
- int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq);
- int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq);
--int cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
--				struct cdnsp_request *preq);
-+int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
-+			struct cdnsp_request *preq);
- void cdnsp_queue_configure_endpoint(struct cdnsp_device *pdev,
- 				    dma_addr_t in_ctx_ptr);
- void cdnsp_queue_reset_ep(struct cdnsp_device *pdev, unsigned int ep_index);
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index b23e543b3a3d..07f6068342d4 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -1333,6 +1333,20 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
- 					 ep_ring->dequeue, td->last_trb,
- 					 ep_trb_dma);
- 
-+		desc = td->preq->pep->endpoint.desc;
-+
-+		if (ep_seg) {
-+			ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
-+					       / sizeof(*ep_trb)];
-+
-+			trace_cdnsp_handle_transfer(ep_ring,
-+					(struct cdnsp_generic_trb *)ep_trb);
-+
-+			if (pep->skip && usb_endpoint_xfer_isoc(desc) &&
-+			    td->last_trb != ep_trb)
-+				return -EAGAIN;
-+		}
-+
- 		/*
- 		 * Skip the Force Stopped Event. The event_trb(ep_trb_dma)
- 		 * of FSE is not in the current TD pointed by ep_ring->dequeue
-@@ -1347,7 +1361,6 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
- 			goto cleanup;
- 		}
- 
--		desc = td->preq->pep->endpoint.desc;
- 		if (!ep_seg) {
- 			if (!pep->skip || !usb_endpoint_xfer_isoc(desc)) {
- 				/* Something is busted, give up! */
-@@ -1374,12 +1387,6 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
- 			goto cleanup;
- 		}
- 
--		ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
--				       / sizeof(*ep_trb)];
--
--		trace_cdnsp_handle_transfer(ep_ring,
--					    (struct cdnsp_generic_trb *)ep_trb);
--
- 		if (cdnsp_trb_is_noop(ep_trb))
- 			goto cleanup;
- 
-@@ -1726,11 +1733,6 @@ static unsigned int count_sg_trbs_needed(struct cdnsp_request *preq)
- 	return num_trbs;
- }
- 
--static unsigned int count_isoc_trbs_needed(struct cdnsp_request *preq)
--{
--	return cdnsp_count_trbs(preq->request.dma, preq->request.length);
--}
--
- static void cdnsp_check_trb_math(struct cdnsp_request *preq, int running_total)
- {
- 	if (running_total != preq->request.length)
-@@ -2192,28 +2194,48 @@ static unsigned int
- }
- 
- /* Queue function isoc transfer */
--static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
--			       struct cdnsp_request *preq)
-+int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
-+			struct cdnsp_request *preq)
- {
--	int trb_buff_len, td_len, td_remain_len, ret;
-+	unsigned int trb_buff_len, td_len, td_remain_len, block_len;
- 	unsigned int burst_count, last_burst_pkt;
- 	unsigned int total_pkt_count, max_pkt;
- 	struct cdnsp_generic_trb *start_trb;
-+	struct scatterlist *sg = NULL;
- 	bool more_trbs_coming = true;
- 	struct cdnsp_ring *ep_ring;
-+	unsigned int num_sgs = 0;
- 	int running_total = 0;
- 	u32 field, length_field;
-+	u64 addr, send_addr;
- 	int start_cycle;
- 	int trbs_per_td;
--	u64 addr;
--	int i;
-+	int i, sent_len, ret;
- 
- 	ep_ring = preq->pep->ring;
-+
-+	td_len = preq->request.length;
-+
-+	if (preq->request.num_sgs) {
-+		num_sgs = preq->request.num_sgs;
-+		sg = preq->request.sg;
-+		addr = (u64)sg_dma_address(sg);
-+		block_len = sg_dma_len(sg);
-+		trbs_per_td = count_sg_trbs_needed(preq);
-+	} else {
-+		addr = (u64)preq->request.dma;
-+		block_len = td_len;
-+		trbs_per_td = count_trbs_needed(preq);
-+	}
-+
-+	ret = cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
-+	if (ret)
-+		return ret;
-+
- 	start_trb = &ep_ring->enqueue->generic;
- 	start_cycle = ep_ring->cycle_state;
--	td_len = preq->request.length;
--	addr = (u64)preq->request.dma;
- 	td_remain_len = td_len;
-+	send_addr = addr;
- 
- 	max_pkt = usb_endpoint_maxp(preq->pep->endpoint.desc);
- 	total_pkt_count = DIV_ROUND_UP(td_len, max_pkt);
-@@ -2225,11 +2247,6 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
- 	burst_count = cdnsp_get_burst_count(pdev, preq, total_pkt_count);
- 	last_burst_pkt = cdnsp_get_last_burst_packet_count(pdev, preq,
- 							   total_pkt_count);
--	trbs_per_td = count_isoc_trbs_needed(preq);
--
--	ret = cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
--	if (ret)
--		goto cleanup;
- 
- 	/*
- 	 * Set isoc specific data for the first TRB in a TD.
-@@ -2248,6 +2265,7 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
- 
- 		/* Calculate TRB length. */
- 		trb_buff_len = TRB_BUFF_LEN_UP_TO_BOUNDARY(addr);
-+		trb_buff_len = min(trb_buff_len, block_len);
- 		if (trb_buff_len > td_remain_len)
- 			trb_buff_len = td_remain_len;
- 
-@@ -2256,7 +2274,8 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
- 					       trb_buff_len, td_len, preq,
- 					       more_trbs_coming, 0);
- 
--		length_field = TRB_LEN(trb_buff_len) | TRB_INTR_TARGET(0);
-+		length_field = TRB_LEN(trb_buff_len) | TRB_TD_SIZE(remainder) |
-+			TRB_INTR_TARGET(0);
- 
- 		/* Only first TRB is isoc, overwrite otherwise. */
- 		if (i) {
-@@ -2281,12 +2300,27 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
- 		}
- 
- 		cdnsp_queue_trb(pdev, ep_ring, more_trbs_coming,
--				lower_32_bits(addr), upper_32_bits(addr),
-+				lower_32_bits(send_addr), upper_32_bits(send_addr),
- 				length_field, field);
- 
- 		running_total += trb_buff_len;
- 		addr += trb_buff_len;
- 		td_remain_len -= trb_buff_len;
-+
-+		sent_len = trb_buff_len;
-+		while (sg && sent_len >= block_len) {
-+			/* New sg entry */
-+			--num_sgs;
-+			sent_len -= block_len;
-+			if (num_sgs != 0) {
-+				sg = sg_next(sg);
-+				block_len = sg_dma_len(sg);
-+				addr = (u64)sg_dma_address(sg);
-+				addr += sent_len;
-+			}
-+		}
-+		block_len -= sent_len;
-+		send_addr = addr;
- 	}
- 
- 	/* Check TD length */
-@@ -2324,30 +2358,6 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
- 	return ret;
- }
- 
--int cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
--				struct cdnsp_request *preq)
--{
--	struct cdnsp_ring *ep_ring;
--	u32 ep_state;
--	int num_trbs;
--	int ret;
--
--	ep_ring = preq->pep->ring;
--	ep_state = GET_EP_CTX_STATE(preq->pep->out_ctx);
--	num_trbs = count_isoc_trbs_needed(preq);
--
--	/*
--	 * Check the ring to guarantee there is enough room for the whole
--	 * request. Do not insert any td of the USB Request to the ring if the
--	 * check failed.
--	 */
--	ret = cdnsp_prepare_ring(pdev, ep_ring, ep_state, num_trbs, GFP_ATOMIC);
--	if (ret)
--		return ret;
--
--	return cdnsp_queue_isoc_tx(pdev, preq);
--}
--
- /****		Command Ring Operations		****/
- /*
-  * Generic function for queuing a command TRB on the command ring.
--- 
-2.25.1
-
+SGkgUGV0ZXIsDQoNCldoYXQgYWJvdXQgdGhpcyBwYXRjaD8NCkNhbiB5b3UgcHVzaCBpdD8NCg0K
+UmVnYXJkcywNClBhd2VsDQoNCj4+T24gVHVlLCBOb3YgMTUsIDIwMjIgYXQgNjowMSBQTSBQYXdl
+bCBMYXN6Y3phayA8cGF3ZWxsQGNhZGVuY2UuY29tPg0KPj53cm90ZToNCj4+Pg0KPj4+IEFmdGVy
+IGRvb3JiZWxsIERNQSBmZXRjaGVzIHRoZSBUUkIuIElmIGR1cmluZyBkZXF1ZXVpbmcgcmVxdWVz
+dA0KPj4+IGRyaXZlciBjaGFuZ2VzIE5PUk1BTCBUUkIgdG8gTElOSyBUUkIgYnV0IGRvZXNuJ3Qg
+ZGVsZXRlIGl0IGZyb20NCj4+PiBjb250cm9sbGVyIGNhY2hlIHRoZW4gY29udHJvbGxlciB3aWxs
+IGhhbmRsZSBjYWNoZWQgVFJCIGFuZCBwYWNrZXQgY2FuIGJlDQo+bG9zdC4NCj4+Pg0KPj4+IFRo
+ZSBleGFtcGxlIHNjZW5hcmlvIGZvciB0aGlzIGlzc3VlIGxvb2tzIGxpa2U6DQo+Pj4gMS4gcXVl
+dWUgcmVxdWVzdCAtIHNldCBkb29yYmVsbA0KPj4+IDIuIGRlcXVldWUgcmVxdWVzdA0KPj4+IDMu
+IHNlbmQgT1VUIGRhdGEgcGFja2V0IGZyb20gaG9zdA0KPj4+IDQuIERldmljZSB3aWxsIGFjY2Vw
+dCB0aGlzIHBhY2tldCB3aGljaCBpcyB1bmV4cGVjdGVkIDUuIHF1ZXVlIG5ldw0KPj4+IHJlcXVl
+c3QgLSBzZXQgZG9vcmJlbGwgNi4gRGV2aWNlIGxvc3QgdGhlIGV4cGVjdGVkIHBhY2tldC4NCj4+
+Pg0KPj4+IEJ5IHNldHRpbmcgREZMVVNIIGNvbnRyb2xsZXIgY2xlYXJzIERSRFkgYml0IGFuZCBz
+dG9wIERNQSB0cmFuc2Zlci4NCj4+Pg0KPj4+IEZpeGVzOiA3NzMzZjZjMzJlMzYgKCJ1c2I6IGNk
+bnMzOiBBZGQgQ2FkZW5jZSBVU0IzIERSRCBEcml2ZXIiKQ0KPj4+IGNjOiA8c3RhYmxlQHZnZXIu
+a2VybmVsLm9yZz4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBQYXdlbCBMYXN6Y3phayA8cGF3ZWxsQGNh
+ZGVuY2UuY29tPg0KPj4+IC0tLQ0KPj4+ICBkcml2ZXJzL3VzYi9jZG5zMy9jZG5zMy1nYWRnZXQu
+YyB8IDEyICsrKysrKysrKysrKw0KPj4+ICAxIGZpbGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygr
+KQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NkbnMzL2NkbnMzLWdhZGdldC5j
+DQo+Pj4gYi9kcml2ZXJzL3VzYi9jZG5zMy9jZG5zMy1nYWRnZXQuYw0KPj4+IGluZGV4IDVhZGNi
+MzQ5NzE4Yy4uY2NmYWViY2E2ZmFhIDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvdXNiL2NkbnMz
+L2NkbnMzLWdhZGdldC5jDQo+Pj4gKysrIGIvZHJpdmVycy91c2IvY2RuczMvY2RuczMtZ2FkZ2V0
+LmMNCj4+PiBAQCAtMjYxNCw2ICsyNjE0LDcgQEAgaW50IGNkbnMzX2dhZGdldF9lcF9kZXF1ZXVl
+KHN0cnVjdCB1c2JfZXAgKmVwLA0KPj4+ICAgICAgICAgdTggcmVxX29uX2h3X3JpbmcgPSAwOw0K
+Pj4+ICAgICAgICAgdW5zaWduZWQgbG9uZyBmbGFnczsNCj4+PiAgICAgICAgIGludCByZXQgPSAw
+Ow0KPj4+ICsgICAgICAgaW50IHZhbDsNCj4+Pg0KPj4+ICAgICAgICAgaWYgKCFlcCB8fCAhcmVx
+dWVzdCB8fCAhZXAtPmRlc2MpDQo+Pj4gICAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0K
+Pj4+IEBAIC0yNjQ5LDYgKzI2NTAsMTMgQEAgaW50IGNkbnMzX2dhZGdldF9lcF9kZXF1ZXVlKHN0
+cnVjdCB1c2JfZXANCj4+KmVwLA0KPj4+DQo+Pj4gICAgICAgICAvKiBVcGRhdGUgcmluZyBvbmx5
+IGlmIHJlbW92ZWQgcmVxdWVzdCBpcyBvbiBwZW5kaW5nX3JlcV9saXN0IGxpc3QgKi8NCj4+PiAg
+ICAgICAgIGlmIChyZXFfb25faHdfcmluZyAmJiBsaW5rX3RyYikgew0KPj4+ICsgICAgICAgICAg
+ICAgICAvKiBTdG9wIERNQSAqLw0KPj4+ICsgICAgICAgICAgICAgICB3cml0ZWwoRVBfQ01EX0RG
+TFVTSCwgJnByaXZfZGV2LT5yZWdzLT5lcF9jbWQpOw0KPj4+ICsNCj4+PiArICAgICAgICAgICAg
+ICAgLyogd2FpdCBmb3IgREZMVVNIIGNsZWFyZWQgKi8NCj4+PiArICAgICAgICAgICAgICAgcmVh
+ZGxfcG9sbF90aW1lb3V0X2F0b21pYygmcHJpdl9kZXYtPnJlZ3MtPmVwX2NtZCwgdmFsLA0KPj4+
+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICEodmFsICYgRVBfQ01E
+X0RGTFVTSCksIDEsDQo+Pj4gKyAxMDAwKTsNCj4+PiArDQo+Pj4gICAgICAgICAgICAgICAgIGxp
+bmtfdHJiLT5idWZmZXIgPSBjcHVfdG9fbGUzMihUUkJfQlVGRkVSKHByaXZfZXAtDQo+Pj50cmJf
+cG9vbF9kbWEgKw0KPj4+ICAgICAgICAgICAgICAgICAgICAgICAgICgocHJpdl9yZXEtPmVuZF90
+cmIgKyAxKSAqIFRSQl9TSVpFKSkpOw0KPj4+ICAgICAgICAgICAgICAgICBsaW5rX3RyYi0+Y29u
+dHJvbCA9DQo+Pj4gY3B1X3RvX2xlMzIoKGxlMzJfdG9fY3B1KGxpbmtfdHJiLT5jb250cm9sKSAm
+IFRSQl9DWUNMRSkgfCBAQCAtMjY2MCw2DQo+Pj4gKzI2NjgsMTAgQEAgaW50IGNkbnMzX2dhZGdl
+dF9lcF9kZXF1ZXVlKHN0cnVjdCB1c2JfZXAgKmVwLA0KPj4+DQo+Pj4gICAgICAgICBjZG5zM19n
+YWRnZXRfZ2l2ZWJhY2socHJpdl9lcCwgcHJpdl9yZXEsIC1FQ09OTlJFU0VUKTsNCj4+Pg0KPj4+
+ICsgICAgICAgcmVxID0gY2RuczNfbmV4dF9yZXF1ZXN0KCZwcml2X2VwLT5wZW5kaW5nX3JlcV9s
+aXN0KTsNCj4+PiArICAgICAgIGlmIChyZXEpDQo+Pj4gKyAgICAgICAgICAgICAgIGNkbnMzX3Jl
+YXJtX3RyYW5zZmVyKHByaXZfZXAsIDEpOw0KPj4+ICsNCj4+DQo+PldoeSB0aGUgYWJvdmUgY2hh
+bmdlcyBhcmUgbmVlZGVkPw0KPj4NCj4NCj5EbyB5b3UgbWVhbiB0aGUgbGFzdCBsaW5lIG9yIHRo
+aXMgcGF0Y2g/DQo+DQo+TGFzdCBsaW5lOg0KPkRNQSBpcyBzdG9wcGVkLCBzbyBkcml2ZXIgYXJt
+IHRoZSBxdWV1ZWQgdHJhbnNmZXJzDQo+DQo+SWYgeW91IG1lYW5zIHRoaXMgcGF0Y2g6DQo+SXNz
+dWUgd2FzIGRldGVjdGVkIGJ5IGN1c3RvbWVyIHRlc3QuIEkgZG9u4oCZdCBrbm93IHdoZXRoZXIg
+aXQgd2FzIG9ubHkgdGVzdCBvcg0KPnRoZSByZWFsIGFwcGxpY2F0aW9uLg0KPg0KPlRoZSBwcm9i
+bGVtIGhhcHBlbnMgYmVjYXVzZSB1c2VyIGFwcGxpY2F0aW9uIHF1ZXVlZCB0aGUgdHJhbnNmZXIg
+KGVuZHBvaW50DQo+aGFzIGJlZW4gYXJtZWQpLCBzbyBjb250cm9sbGVyIGZldGNoIHRoZSBUUkIu
+DQo+V2hlbiB1c2VyIGFwcGxpY2F0aW9uIHJlbW92ZWQgdGhpcyByZXF1ZXN0IHRoZSBUUkIgd2Fz
+IHN0aWxsIHByb2Nlc3NlZCBieQ0KPmNvbnRyb2xsZXIuIElmIGF0IHRoYXQgdGltZSB0aGUgaG9z
+dCB3aWxsIHNlbmQgZGF0YSBwYWNrZXQgdGhlbiBjb250cm9sbGVyIHdpbGwNCj5hY2NlcHQgaXQs
+IGJ1dCBpdCBzaG91bGRuJ3QgYmVjYXVzZSB0aGUgdXNiX3JlcXVlc3QgYXNzb2NpYXRlZCB3aXRo
+IFRSQiBjYWNoZWQNCj5ieSBjb250cm9sbGVyIHdhcyByZW1vdmVkLg0KPlRvIGZvcmNlIHRoZSBj
+b250cm9sbGVyIHRvIGRyb3AgdGhpcyBUUkIgREZMVVNIIGlzIHJlcXVpcmVkLg0KPg0KPlBhd2Vs
+DQo+DQo+Pg0KPj4+ICBub3RfZm91bmQ6DQo+Pj4gICAgICAgICBzcGluX3VubG9ja19pcnFyZXN0
+b3JlKCZwcml2X2Rldi0+bG9jaywgZmxhZ3MpOw0KPj4+ICAgICAgICAgcmV0dXJuIHJldDsNCj4+
+PiAtLQ0KPj4+IDIuMjUuMQ0KPj4+DQo=
