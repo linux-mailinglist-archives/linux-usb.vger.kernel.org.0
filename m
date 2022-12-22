@@ -2,96 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B09D653DDD
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 11:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8177B654B2E
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 03:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbiLVKDu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 05:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S230444AbiLWCke convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 22 Dec 2022 21:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235142AbiLVKDs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 05:03:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580732654A
-        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 02:02:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671703334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o6jO/LCV2IF2UxvEuH5GPFWr6SJ3JZsJjPnFQmLY128=;
-        b=VPSAzvZsd0VOW0Pl30eVauKyaeyjrHeZyCKLjc73aCE0sDFNugWd332Tf8Gnf2vM6ktSsq
-        o4AXqF1IvloyT4WAPqILWIDn4nvNCDVbbf9ElBuTPa5ti0AU/YRO/UojBqvS08s5Y6pfM8
-        3mkvIzE4KULEPGaldccqosp5ef/3JS4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-673-WHBz8tWrPGqn9H_Be1zT3g-1; Thu, 22 Dec 2022 05:02:11 -0500
-X-MC-Unique: WHBz8tWrPGqn9H_Be1zT3g-1
-Received: by mail-qk1-f199.google.com with SMTP id q20-20020a05620a0d9400b006fcaa1eac9bso884961qkl.23
-        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 02:02:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o6jO/LCV2IF2UxvEuH5GPFWr6SJ3JZsJjPnFQmLY128=;
-        b=eFoMXucgcEd0ONQpa7MV0p5ZjHtyhJB7P1kg2DHBBM+PlLLpMBOVJ9zy0Ss7pzHlzE
-         zGxaFtNyBruOu79RL2Ks133cbuUrTbvHSPE+ooq1WdML18wCPx/J/dSohklCkxGUiqM5
-         YMvQfs/BK1WOeHUTtqjKgHKG98abQtdFIH0DpaMTlpSdSqBHL9eTE8mK6MIVfDZ3275u
-         FiZv2Rw6g/ZEFOaXfcxrbMK7cXahAyp4AFHRVUhQqoLdFUo5jXUhu+WGhy+/CQ30TDWq
-         CzkChDZxHXnZDMxLK20DEg967qGnLvlyrCvlzCCrmELt8BQTGih/mjWMGMNTE9/7ThbW
-         Cbug==
-X-Gm-Message-State: AFqh2kpGCdTnY87DB1wj/h1MW1Hzv32/BDK+816h3hehJ3DfsKW4QiD5
-        Vk3J25l1TRHm3W3pdI2uel5uBXlNhi0SgbEu2AD7ppeRatWwoHnTKaj81X/UJgOiKVv+wvi48OK
-        2tgtSr3ZImIh4KvdymwEn
-X-Received: by 2002:a0c:c508:0:b0:4e5:a127:382f with SMTP id x8-20020a0cc508000000b004e5a127382fmr6466227qvi.48.1671703331045;
-        Thu, 22 Dec 2022 02:02:11 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtZnBvcAi4VqZ0nAfseRa5ZZncJObkgh59kN1yODkWBS5WICo+kLsdO+KK5pqcbrrZqdW1DHQ==
-X-Received: by 2002:a0c:c508:0:b0:4e5:a127:382f with SMTP id x8-20020a0cc508000000b004e5a127382fmr6466171qvi.48.1671703330733;
-        Thu, 22 Dec 2022 02:02:10 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
-        by smtp.gmail.com with ESMTPSA id f1-20020a05620a408100b006cfc9846594sm4269qko.93.2022.12.22.02.02.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 02:02:10 -0800 (PST)
-Message-ID: <8d91ab13f56e88af0f6133130808f9623b3adb2e.camel@redhat.com>
-Subject: Re: [PATCH] treewide: Convert del_timer*() to timer_shutdown*()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>, linux-sh@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-bluetooth@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-scsi@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-ext4@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, bridge@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        lvs-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Date:   Thu, 22 Dec 2022 11:02:01 +0100
-In-Reply-To: <20221220134519.3dd1318b@gandalf.local.home>
-References: <20221220134519.3dd1318b@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S229524AbiLWCkd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 21:40:33 -0500
+X-Greylist: delayed 58089 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Dec 2022 18:40:31 PST
+Received: from fallback4.mail.ox.ac.uk (fallback4.mail.ox.ac.uk [129.67.1.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688D218E25
+        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 18:40:31 -0800 (PST)
+Received: from relay20.mail.ox.ac.uk ([163.1.2.170])
+        by fallback4.mail.ox.ac.uk with esmtp (Exim 4.92)
+        (envelope-from <dimpase@cs.ox.ac.uk>)
+        id 1p8Is9-0000YK-GR; Thu, 22 Dec 2022 10:32:21 +0000
+Received: from smtp8.mail.ox.ac.uk ([163.1.2.204])
+        by relay20.mail.ox.ac.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <dimpase@cs.ox.ac.uk>)
+        id 1p8Is1-000735-Fh; Thu, 22 Dec 2022 10:32:13 +0000
+Received: from 170.red-88-24-106.staticip.rima-tde.net ([88.24.106.170]:37392 helo=[127.0.0.1])
+        by smtp8.mail.ox.ac.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <dimpase@cs.ox.ac.uk>)
+        id 1p8Is0-000350-So; Thu, 22 Dec 2022 10:32:13 +0000
+Date:   Thu, 22 Dec 2022 10:32:09 +0000
+From:   Dima Pasechnik <dimpase@cs.ox.ac.uk>
+To:     Alan Stern <stern@rowland.harvard.edu>, dima.pasechnik@cs.ox.ac.uk
+CC:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: usb 1-3: Product: BBC micro:bit CMSIS-DAP not recognised
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Y6ITkWEb25Si4zts@rowland.harvard.edu>
+References: <Y6Bfx+Ksm/Qz3N8y@hilbert> <Y6B8jd7dHsa85Wny@kroah.com> <Y6CRbgwHzjr2KNxK@hilbert> <Y6CpKxZ4KsiYttbL@hilbert> <Y6Csfzqvy6GExhVB@kroah.com> <Y6DjwFAp4M8I+T4P@hilbert> <Y6Fc2Fz8w4KoX952@kroah.com> <Y6HLqYpxwT+v3BgX@hilbert> <Y6ITkWEb25Si4zts@rowland.harvard.edu>
+Message-ID: <35B854FE-1F32-47FD-8ED1-CDE033327531@cs.ox.ac.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Oxford-Username: coml0531
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,90 +52,77 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-12-20 at 13:45 -0500, Steven Rostedt wrote:
-> [
->   Linus,
-> 
->     I ran the script against your latest master branch:
->     commit b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-> 
->     As the timer_shutdown*() code is now in your tree, I figured
->     we can start doing the conversions. At least add the trivial ones
->     now as Thomas suggested that this gets applied at the end of the
->     merge window, to avoid conflicts with linux-next during the
->     development cycle. I can wait to Friday to run it again, and
->     resubmit.
-> 
->     What is the best way to handle this?
-> ]
-> 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> Due to several bugs caused by timers being re-armed after they are
-> shutdown and just before they are freed, a new state of timers was added
-> called "shutdown". After a timer is set to this state, then it can no
-> longer be re-armed.
-> 
-> The following script was run to find all the trivial locations where
-> del_timer() or del_timer_sync() is called in the same function that the
-> object holding the timer is freed. It also ignores any locations where the
-> timer->function is modified between the del_timer*() and the free(), as
-> that is not considered a "trivial" case.
-> 
-> This was created by using a coccinelle script and the following commands:
-> 
->  $ cat timer.cocci
-> @@
-> expression ptr, slab;
-> identifier timer, rfield;
-> @@
-> (
-> -       del_timer(&ptr->timer);
-> +       timer_shutdown(&ptr->timer);
-> > 
-> -       del_timer_sync(&ptr->timer);
-> +       timer_shutdown_sync(&ptr->timer);
-> )
->   ... when strict
->       when != ptr->timer
-> (
->         kfree_rcu(ptr, rfield);
-> > 
->         kmem_cache_free(slab, ptr);
-> > 
->         kfree(ptr);
-> )
-> 
->  $ spatch timer.cocci . > /tmp/t.patch
->  $ patch -p1 < /tmp/t.patch
-> 
-> Link: https://lore.kernel.org/lkml/20221123201306.823305113@linutronix.de/
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-For the networking bits:
 
->  drivers/net/ethernet/intel/i40e/i40e_main.c      |  6 +++---
->  drivers/net/ethernet/marvell/sky2.c              |  2 +-
->  drivers/net/ethernet/sun/sunvnet.c               |  2 +-
->  drivers/net/usb/sierra_net.c                     |  2 +-
->  net/802/garp.c                                   |  2 +-
->  net/802/mrp.c                                    |  4 ++--
->  net/bridge/br_multicast.c                        |  8 ++++----
->  net/bridge/br_multicast_eht.c                    |  4 ++--
->  net/core/gen_estimator.c                         |  2 +-
->  net/ipv4/ipmr.c                                  |  2 +-
->  net/ipv6/ip6mr.c                                 |  2 +-
->  net/mac80211/mesh_pathtbl.c                      |  2 +-
->  net/netfilter/ipset/ip_set_list_set.c            |  2 +-
->  net/netfilter/ipvs/ip_vs_lblc.c                  |  2 +-
->  net/netfilter/ipvs/ip_vs_lblcr.c                 |  2 +-
->  net/netfilter/xt_IDLETIMER.c                     |  4 ++--
->  net/netfilter/xt_LED.c                           |  2 +-
->  net/sched/cls_flow.c                             |  2 +-
->  net/sunrpc/svc.c                                 |  2 +-
->  net/tipc/discover.c                              |  2 +-
->  net/tipc/monitor.c                               |  2 +-
+On 20 December 2022 19:57:05 WET, Alan Stern <stern@rowland.harvard.edu> wrote:
+>On Tue, Dec 20, 2022 at 02:50:17PM +0000, dima.pasechnik@cs.ox.ac.uk wrote:
+>> See https://tech.microbit.org/hardware/ 
+>> (choose V2.2X there)
+>> I have nRF52833-QDAA (there is also a different option)
+>
+>Under the "USB Communications" section, that page says:
+>
+>USB classes supported	Mass Storage Class (MSC)
+>			Communications Device Class (CDC)
+>			CMSIS-DAP HID & WinUSB
+>			WebUSB CMSIS-DAP HID
+>
+>You already know about the MSC and CDC classes.  The other two appear to 
+>be versions of a CMSIS-DAP HID protocol, which is clearly not a serial 
+>communications protocol since it is HID.
+>
+>So it looks like you aren't missing anything.
+>
+>> here is "details" on the board itself (describing firmware, I suppose)
+>> 
+>> # DAPLink Firmware - see https://daplink.io
+>> Build ID: alpha9-189-g5dd23001 (gcc)
+>> Unique ID: 9905360200052833525e24a702a68552000000006e052820
+>> HIC ID: 6e052820
+>> Auto Reset: 1
+>> Automation allowed: 0
+>> Overflow detection: 0
+>> Incompatible image detection: 1
+>> Page erasing: 0
+>> Daplink Mode: Interface
+>> Interface Version: 0256
+>> Bootloader Version: 0256
+>> Git SHA: 5dd23001a7a3199d74870790049d6686e183316c
+>> Local Mods: 0
+>> USB Interfaces: MSD, CDC, HID, WebUSB
+>
+>Which agrees with the information on the web site.  I have no idea what 
+>WebUSB is supposed to be.
 
-Acked-by: Paolo Abeni <pabeni@redhat.com>
+WebUSB is a JavaScript API, supported by Chromium -derived browsers (Firefox not there yet)
 
+https://en.wikipedia.org/wiki/WebUSB
+
+
+>  In the lsusb output it doesn't have any 
+>resources -- in particular, no endpoints -- so all of its communications 
+>must occur over endpoint 0.
+>
+>> Bootloader CRC: 0xa60a7780
+>> Interface CRC: 0x0bac75fa
+>> Remount count: 0
+>> URL: https://microbit.org/device/?id=9905&v=0256
+>
+>The dmesg log in your original message showed you were trying to bind 
+>the usb-serial generic driver to interfaces 4 and 5.  But interface 4 is 
+>the WebUSB thing which, whatever it is, certainly isn't a serial 
+>interface.  And interface 5 is another HID interface; it calls itself 
+>CMSIS-DAP v2.  It sounds like an updated form of the other CMSIS-DAP HID 
+>interface.  It probably would have bound to the HID driver if you hadn't 
+>told the usb-serial driver to control it.
+>
+>In short, there's no reason at all to expect the micro:bit board to give 
+>rise to a ttyUSB device.
+
+Thanks for the advice, much appreciated.
+
+Best,
+Dmitrii
+
+>
+>Alan Stern
