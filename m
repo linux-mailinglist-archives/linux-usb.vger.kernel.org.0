@@ -2,236 +2,386 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C78654198
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 14:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205046542C9
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 15:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235372AbiLVNRw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 08:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S235671AbiLVOWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 09:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiLVNRr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 08:17:47 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5D12B269;
-        Thu, 22 Dec 2022 05:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671715055; x=1703251055;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=dfHYhHeVc907lIsPPsA55ZfTAeCOXwi9AQBDrXC8Qxg=;
-  b=hO2rZyE6ZxCarcOcN2i5GVuqg0tur3FZhDsRME/bYtE9XZLhMu3R6Cf2
-   fArgNGcGOIqiqZ0/RL/LiKc3CPTY3IyN0fqlvbuk73ikJonpzdY6K69i0
-   tv9VhFPpOErk8AfM7evZn9g885aVI/WZI6pOWBNVDq/mEy+SAHKe8QEU+
-   ptfAQ6H4tQEsYmZDWXhS3PTLiMNYJrAoPP41RqHLDhgYAzhXiqHq/cb6Y
-   V46yI5FyAxmslcR/yv4Ds2oFli/8IKvINMnLvli2MQ9tvmSHjW57F0z7Z
-   UZUGnzZK5e1przyZVZjwl1bylx86w+kLpaS+N2BoKzCkttXXCkqqfpfQi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="320179190"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="320179190"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 05:17:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="684187507"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="684187507"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 22 Dec 2022 05:17:31 -0800
-Message-ID: <0fe978ed-8269-9774-1c40-f8a98c17e838@linux.intel.com>
-Date:   Thu, 22 Dec 2022 15:18:53 +0200
+        with ESMTP id S235504AbiLVOW1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 09:22:27 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E722872E;
+        Thu, 22 Dec 2022 06:22:18 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id c17so3085308edj.13;
+        Thu, 22 Dec 2022 06:22:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oICMjrhWPQNlOjRYsHXcTIDJG/XY6KY3jXRiCxaOR5k=;
+        b=mUGPHBW4QRXeFFV7FJDSbecBTqr1tslLU3yOCyBavt55l7X11d5hyqA9/Brcwvrees
+         FNG4XOQ8HhLRxyfAxl6C/Dwhq66DzSxbDNpIXFwCVl9e0AYUo+aip7v5Cq+rGFqi7ISP
+         RFCcozGWwpjAjP1ScW0zEwJiqnvI1lSg7+B7vsE2PwguQdwp+DovtF939ER5rNxLt5WT
+         vNxiXo03obALBaRWG1brVYep0VA3Z6GeC/rHJ3ndxvnI3XfqhSvmkS8c/e+yEm/KM/DE
+         7cxJRjifEcT5L1su9TCkWsRp1AWCvHHHYoBTdboLo/ucSWSJCEsWn9HdPeEfacD5Spx/
+         caSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oICMjrhWPQNlOjRYsHXcTIDJG/XY6KY3jXRiCxaOR5k=;
+        b=o8uPpxOwazKKn567RLDW8biuv5X9eUEhg9TLMUjYdcA+rXE13K+W79zaNg+8T4JxEB
+         LyryUx9pyQTTxlTUZhBc6Gg+6GWK0wZsRG/dNGV71b6jOJYj2HO83VhFCciPwNlGfv2A
+         aM3neWNAW7/vVZf6ezj4sxYrmpNQK78m2jJrJvNX1K7rSJWyIoXScfyyWUAY/sNJWDyy
+         Vw7wLbDSBVUu1nHc+Y1TClbfajOv7de+L0KtRg1gPKOW02woqHPREQJ5b2qvhPJn5m+2
+         qKWVQ2WXXWkOswyFobnVSXkIaMt/mkHrcOn+0Y5r01i1ijaf0aRpN3DgDP1a6gBsRZ3n
+         W0vQ==
+X-Gm-Message-State: AFqh2koxiFnC/M3YLOUpJFT5S4Un+m9Xkejrgc51o/V/QYEJt3+fR5eh
+        psl1Al/H8DobjF+17o7/pzA=
+X-Google-Smtp-Source: AMrXdXtEz8EfVtvD9kAV2temSw86S2imfQcIVy6XS9fb1KMtCwWpEnJA6CGg+F96FSZHVL2zWnWybg==
+X-Received: by 2002:a05:6402:5254:b0:461:bf05:2be1 with SMTP id t20-20020a056402525400b00461bf052be1mr6593252edd.0.1671718937371;
+        Thu, 22 Dec 2022 06:22:17 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id by13-20020a0564021b0d00b0046bd3b366f9sm428708edb.32.2022.12.22.06.22.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 06:22:16 -0800 (PST)
+Message-ID: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+Date:   Thu, 22 Dec 2022 15:22:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v6 01/17] dt-bindings: display: rockchip: convert
+ rockchip-lvds.txt to YAML
+To:     heiko@sntech.de
+Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        linus.walleij@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
 Content-Language: en-US
-To:     Ladislav Michl <oss-lists@triops.cz>
-Cc:     Jimmy Hu <hhhuuu@google.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221222072912.1843384-1-hhhuuu@google.com>
- <Y6Qc1p4saGFTdh9n@lenoch>
- <23fe0fe3-f330-b58e-c366-3ac5bd80fe22@linux.intel.com>
- <Y6RFCjbMswOBoKdV@lenoch>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
- dereferencing it
-In-Reply-To: <Y6RFCjbMswOBoKdV@lenoch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22.12.2022 13.52, Ladislav Michl wrote:
-> On Thu, Dec 22, 2022 at 01:08:47PM +0200, Mathias Nyman wrote:
->> On 22.12.2022 11.01, Ladislav Michl wrote:
->>> On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
->>>> When the host controller is not responding, all URBs queued to all
->>>> endpoints need to be killed. This can cause a kernel panic if we
->>>> dereference an invalid endpoint.
->>>>
->>>> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
->>>> checking if the endpoint is valid before dereferencing it.
->>>>
->>>> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
->>>> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
->>>>
->>>> [233311.853964] pc : xhci_hc_died+0x10c/0x270
->>>> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
->>>>
->>>> [233311.854077] Call trace:
->>>> [233311.854085]  xhci_hc_died+0x10c/0x270
->>>> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
->>>> [233311.854105]  call_timer_fn+0x50/0x2d4
->>>> [233311.854112]  expire_timers+0xac/0x2e4
->>>> [233311.854118]  run_timer_softirq+0x300/0xabc
->>>> [233311.854127]  __do_softirq+0x148/0x528
->>>> [233311.854135]  irq_exit+0x194/0x1a8
->>>> [233311.854143]  __handle_domain_irq+0x164/0x1d0
->>>> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
->>>> [233311.854156]  el1_irq+0xfc/0x1a8
->>>> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
->>>> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
->>>> [233311.854194]  do_idle+0x594/0x6ac
->>>> [233311.854201]  cpu_startup_entry+0x7c/0x80
->>>> [233311.854209]  secondary_start_kernel+0x170/0x198
->>>>
->>>> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
->>>> Cc: stable@vger.kernel.org
->>>> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
->>>> ---
->>>>    drivers/usb/host/xhci-ring.c | 5 ++++-
->>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>>> index ddc30037f9ce..f5b0e1ce22af 100644
->>>> --- a/drivers/usb/host/xhci-ring.c
->>>> +++ b/drivers/usb/host/xhci-ring.c
->>>> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>>>    	struct xhci_virt_ep *ep;
->>>>    	struct xhci_ring *ring;
->>>> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->>>> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
->>>> +	if (!ep)
->>>> +		return;
->>>> +
->>>
->>> xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
->>> do we really want to skip that slot? Original code went from 0 to
->>> MAX_HC_SLOTS-1.
->>>
->>> It seems to be off by one to me. Am I missing anything?
->>
->> slot_id 0 is always invalid, so this is a good change.
-> 
-> I see. Now reading more carefully:
-> #define HCS_MAX_SLOTS(p)	(((p) >> 0) & 0xff)
-> #define MAX_HC_SLOTS		256
-> So the loop should go:
-> 	for (i = 1; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++)
+Convert rockchip-lvds.txt to YAML.
 
-yes
+Changed:
+  Add power-domains property.
+  Requirements between PX30 and RK3288
 
-> 
->>> Also, what about passing ep directly to xhci_kill_endpoint_urbs
->>> and do the check in xhci_hc_died? Not even compile tested:
->>
->> passing ep to a function named kill_endpoint_urbs() sound like the
->> right thing to do, but as a generic change.
->>
->> I think its a good idea to first do a targeted fix for this null pointer
->> issue that we can send to stable fist.
-> 
-> Agree. But I still do not understand the root cause. There is a check
-> for NULL xhci->devs[i] already, so patch does not add much more, except
-> for test for slot_id == 0. And the eps array is just array of
-> struct xhci_virt_ep, not a pointers to them, so &xhci->devs[i]->eps[j]
-> should be always valid pointer. However struct xhci_ring in each eps
-> is allocated and not protected by any lock here. Is that correct?
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
 
-I think root cause is that freeing xhci->devs[i] and including rings isn't
-protected by the lock, this happens in xhci_free_virt_device() called by
-xhci_free_dev(), which in turn may be called by usbcore at any time
+Changed V3:
+  Filename matching compatible style
+  Drop "Regulator phandle for "
+  Specify properties and requirements per SoC
+  Sort order and restyle
 
-So xhci->devs[i] might just suddenly disappear
+Changed V2:
+  Fix title
+---
+ .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
+ .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+ 2 files changed, 170 insertions(+), 92 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+ delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
 
-Patch just checks more often if xhci->devs[i] is valid, between every endpoint.
-So the race between xhci_free_virt_device() and xhci_kill_endpoint_urbs()
-doesn't trigger null pointer deref as easily.
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+new file mode 100644
+index 000000000..03b002a05
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+@@ -0,0 +1,170 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/rockchip/rockchip,lvds.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip low-voltage differential signal (LVDS) transmitter
++
++maintainers:
++  - Sandy Huang <hjc@rock-chips.com>
++  - Heiko Stuebner <heiko@sntech.de>
++
++properties:
++  compatible:
++    enum:
++      - rockchip,px30-lvds
++      - rockchip,rk3288-lvds
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: pclk_lvds
++
++  avdd1v0-supply:
++    description: 1.0V analog power.
++
++  avdd1v8-supply:
++    description: 1.8V analog power.
++
++  avdd3v3-supply:
++    description: 3.3V analog power.
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: Phandle to the general register files syscon.
++
++  rockchip,output:
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [rgb, lvds, duallvds]
++    description: This describes the output interface.
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    const: dphy
++
++  pinctrl-names:
++    const: lcdc
++
++  pinctrl-0: true
++
++  power-domains:
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Video port 0 for the VOP input.
++          The remote endpoint maybe vopb or vopl.
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Video port 1 for either a panel or subsequent encoder.
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - rockchip,grf
++  - rockchip,output
++  - ports
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,px30-lvds
++
++    then:
++      properties:
++        reg: false
++        clocks: false
++        clock-names: false
++        avdd1v0-supply: false
++        avdd1v8-supply: false
++        avdd3v3-supply: false
++
++      required:
++        - phys
++        - phy-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,rk3288-lvds
++
++    then:
++      properties:
++        phys: false
++        phy-names: false
++
++      required:
++        - reg
++        - clocks
++        - clock-names
++        - avdd1v0-supply
++        - avdd1v8-supply
++        - avdd3v3-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rk3288-cru.h>
++
++    lvds: lvds@ff96c000 {
++      compatible = "rockchip,rk3288-lvds";
++      reg = <0xff96c000 0x4000>;
++      clocks = <&cru PCLK_LVDS_PHY>;
++      clock-names = "pclk_lvds";
++      avdd1v0-supply = <&vdd10_lcd>;
++      avdd1v8-supply = <&vcc18_lcd>;
++      avdd3v3-supply = <&vcca_33>;
++      pinctrl-names = "lcdc";
++      pinctrl-0 = <&lcdc_ctl>;
++      rockchip,grf = <&grf>;
++      rockchip,output = "rgb";
++
++      ports {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        lvds_in: port@0 {
++          reg = <0>;
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          lvds_in_vopb: endpoint@0 {
++            reg = <0>;
++            remote-endpoint = <&vopb_out_lvds>;
++          };
++          lvds_in_vopl: endpoint@1 {
++            reg = <1>;
++            remote-endpoint = <&vopl_out_lvds>;
++          };
++        };
++
++        lvds_out: port@1 {
++          reg = <1>;
++
++          lvds_out_panel: endpoint {
++            remote-endpoint = <&panel_in_lvds>;
++          };
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt b/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
+deleted file mode 100644
+index aaf8c44cf..000000000
+--- a/Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
++++ /dev/null
+@@ -1,92 +0,0 @@
+-Rockchip RK3288 LVDS interface
+-================================
+-
+-Required properties:
+-- compatible: matching the soc type, one of
+-	- "rockchip,rk3288-lvds";
+-	- "rockchip,px30-lvds";
+-
+-- reg: physical base address of the controller and length
+-	of memory mapped region.
+-- clocks: must include clock specifiers corresponding to entries in the
+-	clock-names property.
+-- clock-names: must contain "pclk_lvds"
+-
+-- avdd1v0-supply: regulator phandle for 1.0V analog power
+-- avdd1v8-supply: regulator phandle for 1.8V analog power
+-- avdd3v3-supply: regulator phandle for 3.3V analog power
+-
+-- rockchip,grf: phandle to the general register files syscon
+-- rockchip,output: "rgb", "lvds" or "duallvds", This describes the output interface
+-
+-- phys: LVDS/DSI DPHY (px30 only)
+-- phy-names: name of the PHY, must be "dphy" (px30 only)
+-
+-Optional properties:
+-- pinctrl-names: must contain a "lcdc" entry.
+-- pinctrl-0: pin control group to be used for this controller.
+-
+-Required nodes:
+-
+-The lvds has two video ports as described by
+-	Documentation/devicetree/bindings/media/video-interfaces.txt
+-Their connections are modeled using the OF graph bindings specified in
+-	Documentation/devicetree/bindings/graph.txt.
+-
+-- video port 0 for the VOP input, the remote endpoint maybe vopb or vopl
+-- video port 1 for either a panel or subsequent encoder
+-
+-Example:
+-
+-lvds_panel: lvds-panel {
+-	compatible = "auo,b101ean01";
+-	enable-gpios = <&gpio7 21 GPIO_ACTIVE_HIGH>;
+-	data-mapping = "jeida-24";
+-
+-	ports {
+-		panel_in_lvds: endpoint {
+-			remote-endpoint = <&lvds_out_panel>;
+-		};
+-	};
+-};
+-
+-For Rockchip RK3288:
+-
+-	lvds: lvds@ff96c000 {
+-		compatible = "rockchip,rk3288-lvds";
+-		rockchip,grf = <&grf>;
+-		reg = <0xff96c000 0x4000>;
+-		clocks = <&cru PCLK_LVDS_PHY>;
+-		clock-names = "pclk_lvds";
+-		pinctrl-names = "lcdc";
+-		pinctrl-0 = <&lcdc_ctl>;
+-		avdd1v0-supply = <&vdd10_lcd>;
+-		avdd1v8-supply = <&vcc18_lcd>;
+-		avdd3v3-supply = <&vcca_33>;
+-		rockchip,output = "rgb";
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			lvds_in: port@0 {
+-				reg = <0>;
+-
+-				lvds_in_vopb: endpoint@0 {
+-					reg = <0>;
+-					remote-endpoint = <&vopb_out_lvds>;
+-				};
+-				lvds_in_vopl: endpoint@1 {
+-					reg = <1>;
+-					remote-endpoint = <&vopl_out_lvds>;
+-				};
+-			};
+-
+-			lvds_out: port@1 {
+-				reg = <1>;
+-
+-				lvds_out_panel: endpoint {
+-					remote-endpoint = <&panel_in_lvds>;
+-				};
+-			};
+-		};
+-	};
+--
+2.20.1
 
-
-> 
->>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>> index ddc30037f9ce..5dac483c562a 100644
->>> --- a/drivers/usb/host/xhci-ring.c
->>> +++ b/drivers/usb/host/xhci-ring.c
->>> @@ -1162,14 +1162,12 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
->>>    }
->>>    static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>> -		int slot_id, int ep_index)
->>> +		struct xhci_virt_ep *ep)
->>>    {
->>>    	struct xhci_td *cur_td;
->>>    	struct xhci_td *tmp;
->>> -	struct xhci_virt_ep *ep;
->>>    	struct xhci_ring *ring;
->>> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->>>    	if ((ep->ep_state & EP_HAS_STREAMS) ||
->>>    			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
->>>    		int stream_id;
->>> @@ -1180,18 +1178,12 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>>    			if (!ring)
->>>    				continue;
->>> -			xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
->>> -					"Killing URBs for slot ID %u, ep index %u, stream %u",
->>> -					slot_id, ep_index, stream_id);
->>>    			xhci_kill_ring_urbs(xhci, ring);
->>>    		}
->>>    	} else {
->>>    		ring = ep->ring;
->>>    		if (!ring)
->>>    			return;
->>> -		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
->>> -				"Killing URBs for slot ID %u, ep index %u",
->>> -				slot_id, ep_index);
->>>    		xhci_kill_ring_urbs(xhci, ring);
->>>    	}
->>> @@ -1217,6 +1209,7 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>>    void xhci_hc_died(struct xhci_hcd *xhci)
->>>    {
->>>    	int i, j;
->>> +	struct xhci_virt_ep *ep;
->>>    	if (xhci->xhc_state & XHCI_STATE_DYING)
->>>    		return;
->>> @@ -1227,11 +1220,14 @@ void xhci_hc_died(struct xhci_hcd *xhci)
->>>    	xhci_cleanup_command_queue(xhci);
->>>    	/* return any pending urbs, remove may be waiting for them */
->>> -	for (i = 0; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
->>> +	for (i = 0; i < HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
->>>    		if (!xhci->devs[i])
->>>    			continue;
->>> -		for (j = 0; j < 31; j++)
->>> -			xhci_kill_endpoint_urbs(xhci, i, j);
->>> +		for (j = 0; j < EP_CTX_PER_DEV; j++) {
->>> +			ep = &xhci->devs[i]->eps[j];
->>> +			if (ep)
->>> +				xhci_kill_endpoint_urbs(xhci, ep);
->>> +		}
->>
->> This does loop a bit more than the existing code.
->> With this change its always HCS_MAX_SLOTS * EP_CTX_PER_DEV.
->> Previously best case was just HCS_MAX_SLOTS.
-> 
-> No, that's just the same:
-
-you're right, incorrectly read that your patch deleted the
-"if (!xhci->devs[i]) continue;" lines.
-
-Thanks
--Mathias
