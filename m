@@ -2,209 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955E0653EB3
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 12:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC50653ED1
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 12:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiLVLH4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 06:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S234961AbiLVLOc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 06:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235361AbiLVLHt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 06:07:49 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C254BF019;
-        Thu, 22 Dec 2022 03:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671707267; x=1703243267;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=PzxNWDti1cf66pFXSYkQzqiTjHe4km403foTbIRPRcE=;
-  b=mCKUYJxRcyIXzIt1sHFstmUcJDhyl04Q/aGwQEFY/CC/LAlcI82M/4OI
-   dzRNh5DyzKLCSs+WPAcjMTD04R8ttiQt72BOKWlt9wTuKwMip3jN73ltt
-   womYfWvneha/UB2gG4f3TPLuYjwRuey2RSIvqt03wu/SxpJChj5e3v4Ij
-   NGCcu0wPzu5KzTEDLAYdGuIai/z2pvv7Iv//QzI7bUhKaXIhM4QKH9W/a
-   chRU6Cln+Wwdgfc+97+0d7ZkqT8yuL2kBB3VohphHppdQf9YTxIKA48Lt
-   a1+spTEi3XWESPzpi1vZz+7H17xoj6LeR2aXMsDnTeIVnGkpAvPf1cNRq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="303535009"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="303535009"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:07:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="629491068"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="629491068"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2022 03:07:25 -0800
-Message-ID: <23fe0fe3-f330-b58e-c366-3ac5bd80fe22@linux.intel.com>
-Date:   Thu, 22 Dec 2022 13:08:47 +0200
+        with ESMTP id S230014AbiLVLOa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 06:14:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF4B1A827
+        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 03:13:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671707629;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p6wmUSjFPm20MNQz86DYSx27hpB1OpMKe0+xx4dP5io=;
+        b=EoYbAJm71hoQB7V8/M4o9qAOEhd/mAr70d/Czwd19zL6kk6HJusd8G8ffS+YJjwt4W3aXH
+        rlotRP1tg9/AIZqQURzVWDVUEhgAf39ep69A62Muj4VT3LoVOrXM5XeLZjhUXGujKqumDL
+        51RcbwMS7+/T5x76j8qjAK0IvasyrmM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-595-GseQVGQxOBKF-zxusKkAiA-1; Thu, 22 Dec 2022 06:13:48 -0500
+X-MC-Unique: GseQVGQxOBKF-zxusKkAiA-1
+Received: by mail-wr1-f70.google.com with SMTP id u9-20020adfa189000000b00242121eebe2so327986wru.3
+        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 03:13:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p6wmUSjFPm20MNQz86DYSx27hpB1OpMKe0+xx4dP5io=;
+        b=dUdVGa7ATh9+BgsjMRMaBo+EdOQK4U8+PQXvfrMr/l5jXzSSgJmUDEJ6X2iN5yzuOt
+         5YhWshROxd+ruksPA6fwyJSgUtT9JZ8eBKrc+afTs+ypUVacVjJWlJOrh84uDap3wxNu
+         r0UizJaSB5N9qvA2QT62d5qOmTkAVrijTdQUR1w78rsN3n1oY12ZggPibS1szVcHanFf
+         IO2btD3XGDyM93osRCmGOxbs+5tF8SXcZ2i+x+Lt8wJdG8tJzhoTzUI4ybqYSwT8A5x7
+         0fu8HYQiNEmMgO2IxJthb0FBw3zdurRkVy/aD/qvekGDgCZjWw+VqkImP6150FY59DMn
+         B2DQ==
+X-Gm-Message-State: AFqh2kqxc06yRTV6Zq1jrOSZTCLlnoHb4ZdA11NCkdKpFSKiK347rrfN
+        W3W62pXmPXAKcdwt5TtHaoi0NYqp5i/H0gsGn9ljG52LwnSzIkUh+NGYU64TbLwcft/u/fpFeBG
+        Dbmj+p7LIiCbq9h4uK7zq
+X-Received: by 2002:adf:fe48:0:b0:242:2a13:bbd0 with SMTP id m8-20020adffe48000000b002422a13bbd0mr3444002wrs.65.1671707626648;
+        Thu, 22 Dec 2022 03:13:46 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvFYTsQXXUN7xT2shHzM4FMDAcqZ6mknPwn7aY/S6iGl6EO+PE5M2Bs/eLrVdjOH5CE5aybFA==
+X-Received: by 2002:adf:fe48:0:b0:242:2a13:bbd0 with SMTP id m8-20020adffe48000000b002422a13bbd0mr3443996wrs.65.1671707626439;
+        Thu, 22 Dec 2022 03:13:46 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
+        by smtp.gmail.com with ESMTPSA id f8-20020a056000128800b0024216d2e386sm286561wrx.16.2022.12.22.03.13.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 03:13:45 -0800 (PST)
+Message-ID: <070c6690ad7ea537a7081bc9faa0f78861751bc4.camel@redhat.com>
+Subject: Re: [PATCH v3] usbnet: optimize usbnet_bh() to reduce CPU load
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Leesoo Ahn <lsahn@ooseel.net>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Greg KH <greg@kroah.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 22 Dec 2022 12:13:44 +0100
+In-Reply-To: <20221221075924.1141346-1-lsahn@ooseel.net>
+References: <20221221075924.1141346-1-lsahn@ooseel.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Content-Language: en-US
-To:     Ladislav Michl <oss-lists@triops.cz>, Jimmy Hu <hhhuuu@google.com>
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221222072912.1843384-1-hhhuuu@google.com>
- <Y6Qc1p4saGFTdh9n@lenoch>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
- dereferencing it
-In-Reply-To: <Y6Qc1p4saGFTdh9n@lenoch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22.12.2022 11.01, Ladislav Michl wrote:
-> On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
->> When the host controller is not responding, all URBs queued to all
->> endpoints need to be killed. This can cause a kernel panic if we
->> dereference an invalid endpoint.
->>
->> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
->> checking if the endpoint is valid before dereferencing it.
->>
->> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
->> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
->>
->> [233311.853964] pc : xhci_hc_died+0x10c/0x270
->> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
->>
->> [233311.854077] Call trace:
->> [233311.854085]  xhci_hc_died+0x10c/0x270
->> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
->> [233311.854105]  call_timer_fn+0x50/0x2d4
->> [233311.854112]  expire_timers+0xac/0x2e4
->> [233311.854118]  run_timer_softirq+0x300/0xabc
->> [233311.854127]  __do_softirq+0x148/0x528
->> [233311.854135]  irq_exit+0x194/0x1a8
->> [233311.854143]  __handle_domain_irq+0x164/0x1d0
->> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
->> [233311.854156]  el1_irq+0xfc/0x1a8
->> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
->> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
->> [233311.854194]  do_idle+0x594/0x6ac
->> [233311.854201]  cpu_startup_entry+0x7c/0x80
->> [233311.854209]  secondary_start_kernel+0x170/0x198
->>
->> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
->> ---
->>   drivers/usb/host/xhci-ring.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->> index ddc30037f9ce..f5b0e1ce22af 100644
->> --- a/drivers/usb/host/xhci-ring.c
->> +++ b/drivers/usb/host/xhci-ring.c
->> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>   	struct xhci_virt_ep *ep;
->>   	struct xhci_ring *ring;
->>   
->> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
->> +	if (!ep)
->> +		return;
->> +
+On Wed, 2022-12-21 at 16:59 +0900, Leesoo Ahn wrote:
+> The current source pushes skb into dev->done queue by calling
+> skb_queue_tail() and then pop it by calling skb_dequeue() to branch to
+> rx_cleanup state for freeing urb/skb in usbnet_bh(). It takes extra CPU
+> load, 2.21% (skb_queue_tail) as follows.
 > 
-> xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
-> do we really want to skip that slot? Original code went from 0 to
-> MAX_HC_SLOTS-1.
+> -   11.58%     0.26%  swapper          [k] usbnet_bh
+>    - 11.32% usbnet_bh
+>       - 6.43% skb_dequeue
+>            6.34% _raw_spin_unlock_irqrestore
+>       - 2.21% skb_queue_tail
+>            2.19% _raw_spin_unlock_irqrestore
+>       - 1.68% consume_skb
+>          - 0.97% kfree_skbmem
+>               0.80% kmem_cache_free
+>            0.53% skb_release_data
 > 
-> It seems to be off by one to me. Am I missing anything?
-
-slot_id 0 is always invalid, so this is a good change.
-
-
-> Also, what about passing ep directly to xhci_kill_endpoint_urbs
-> and do the check in xhci_hc_died? Not even compile tested:
-
-passing ep to a function named kill_endpoint_urbs() sound like the
-right thing to do, but as a generic change.
-
-I think its a good idea to first do a targeted fix for this null pointer
-issue that we can send to stable fist.
-
-
+> To reduce the extra CPU load use return values jumping to rx_cleanup
+> state directly to free them instead of calling skb_queue_tail() and
+> skb_dequeue() for push/pop respectively.
 > 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index ddc30037f9ce..5dac483c562a 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1162,14 +1162,12 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
->   }
->   
->   static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
-> -		int slot_id, int ep_index)
-> +		struct xhci_virt_ep *ep)
->   {
->   	struct xhci_td *cur_td;
->   	struct xhci_td *tmp;
-> -	struct xhci_virt_ep *ep;
->   	struct xhci_ring *ring;
->   
-> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->   	if ((ep->ep_state & EP_HAS_STREAMS) ||
->   			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
->   		int stream_id;
-> @@ -1180,18 +1178,12 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->   			if (!ring)
->   				continue;
->   
-> -			xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
-> -					"Killing URBs for slot ID %u, ep index %u, stream %u",
-> -					slot_id, ep_index, stream_id);
->   			xhci_kill_ring_urbs(xhci, ring);
->   		}
->   	} else {
->   		ring = ep->ring;
->   		if (!ring)
->   			return;
-> -		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
-> -				"Killing URBs for slot ID %u, ep index %u",
-> -				slot_id, ep_index);
->   		xhci_kill_ring_urbs(xhci, ring);
->   	}
->   
-> @@ -1217,6 +1209,7 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->   void xhci_hc_died(struct xhci_hcd *xhci)
->   {
->   	int i, j;
-> +	struct xhci_virt_ep *ep;
->   
->   	if (xhci->xhc_state & XHCI_STATE_DYING)
->   		return;
-> @@ -1227,11 +1220,14 @@ void xhci_hc_died(struct xhci_hcd *xhci)
->   	xhci_cleanup_command_queue(xhci);
->   
->   	/* return any pending urbs, remove may be waiting for them */
-> -	for (i = 0; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
-> +	for (i = 0; i < HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
->   		if (!xhci->devs[i])
->   			continue;
-> -		for (j = 0; j < 31; j++)
-> -			xhci_kill_endpoint_urbs(xhci, i, j);
-> +		for (j = 0; j < EP_CTX_PER_DEV; j++) {
-> +			ep = &xhci->devs[i]->eps[j];
-> +			if (ep)
-> +				xhci_kill_endpoint_urbs(xhci, ep);
-> +		}
+> -    7.87%     0.25%  swapper          [k] usbnet_bh
+>    - 7.62% usbnet_bh
+>       - 4.81% skb_dequeue
+>            4.74% _raw_spin_unlock_irqrestore
+>       - 1.75% consume_skb
+>          - 0.98% kfree_skbmem
+>               0.78% kmem_cache_free
+>            0.58% skb_release_data
+>         0.53% smsc95xx_rx_fixup
+> 
+> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
+> ---
+> v3:
+>   - Replace return values with proper -ERR values in rx_process()
+> 
+> v2:
+>   - Replace goto label with return statement to reduce goto entropy
+>   - Add CPU load information by perf in commit message
+> 
+> v1 at:
+>   https://patchwork.kernel.org/project/netdevbpf/patch/20221217161851.829497-1-lsahn@ooseel.net/
 
-This does loop a bit more than the existing code.
-With this change its always HCS_MAX_SLOTS * EP_CTX_PER_DEV.
-Previously best case was just HCS_MAX_SLOTS.
+This looks like net-next material.
 
--Mathias
+We have already submitted the networking pull request to Linus
+for v6.2 and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
 
+Please repost when net-next reopens after Jan 2nd, including the
+expected 'net-next' tag into the subject line.
+
+RFC patches sent for review only are obviously welcome at any time.
+
+[...]
+
+> @@ -1528,13 +1526,14 @@ static void usbnet_bh (struct timer_list *t)
+>  		entry = (struct skb_data *) skb->cb;
+>  		switch (entry->state) {
+>  		case rx_done:
+> -			entry->state = rx_cleanup;
+> -			rx_process (dev, skb);
+> +			if (rx_process(dev, skb))
+> +				goto cleanup;
+
+You can avoid this additional label (which is a little confusing inside
+a switch) factoring out a usb_free_skb(skb) helper and calling it here
+and under the rx_cleanup case.
+
+Cheers,
+
+Paolo
 
