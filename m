@@ -2,152 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA826654448
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 16:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017EC65444E
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 16:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbiLVP0U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 10:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S235729AbiLVP1r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 10:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235759AbiLVPZ5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 10:25:57 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003E52B268;
-        Thu, 22 Dec 2022 07:24:42 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A6BD140002;
-        Thu, 22 Dec 2022 15:24:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1671722681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=paTDVkvAnOW0G/nrH5hLopHfXkzR9wnPXZ3DRptHKzE=;
-        b=An1s8lISNjsPvQ1ituTK/aN3u0eD6UmoFmKwIL0GQfGp0XvXqvtsK7VWOQKsisikEGAN7q
-        muHMLfnUj9yHCYDEFEMNgMuF7RfsFT/acVCNbJH7UNgauLLskDpn43sPiZ/dBSMYF7lrzA
-        zP4cUUaSokxDZ4VxRXLq01Zun+/zSNg4/3lrpVCYkyojIls7kUtcdLgMNik5FrwTPJsBxp
-        c4pm2wnqiWjeg+ZliKFWAAp/2G1W+ZeGAyrooqc7g9jfxp5qHhp8AGzu5JDv61DkzHMALr
-        MDCoPNRIpRzb53IT9AqPTu59V4MlDFJOc2aZ9wTUQnOYjjAI8RhTisk42WDATg==
-Date:   Thu, 22 Dec 2022 16:24:38 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v4 3/5] usb: gadget: udc: add Renesas RZ/N1 USBF
- controller support
-Message-ID: <20221222162438.4d06bd77@bootlin.com>
-In-Reply-To: <Y6MFKdOU4IUQo70L@kroah.com>
-References: <20221213133302.218955-1-herve.codina@bootlin.com>
- <20221213133302.218955-4-herve.codina@bootlin.com>
- <CAMuHMdV7QNZ8Rv6iFLhj_MmBHL-vGWuWZdKB=REWba1UAWgkHw@mail.gmail.com>
- <Y6MFKdOU4IUQo70L@kroah.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        with ESMTP id S235340AbiLVP12 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 10:27:28 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B3F2A53D;
+        Thu, 22 Dec 2022 07:27:27 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id u9so5819045ejo.0;
+        Thu, 22 Dec 2022 07:27:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nba1yEUQ4IspImoTxgBgulwRJGaLwUT3y2k3SAEhk2w=;
+        b=CaCIlnKjNyZ4IyoUl+CgZj1LqeAv9MAUxcCT859S9HP2t5qJm9Z4T8ey94mFBH8ttk
+         rRfDw3HtPeNHw+PyicPwUuEWNZKkQiijoLR4MytrrV+YDkcOxqCH9i9t9EWROX1eDlTG
+         /16W1xVzGdK/R2S8hFNqPaspaZhRiVygxVhZHBzaz5uxAVfcNYlqeEzqvGFepV1bwBcY
+         gACWjC5FWnUjp96e35P6klxU71HUaaF6DdRIGf/8S7Uir5/qtheBU+fiVk3o1j2uar9B
+         DPmWS7QT7jqvjX4YY62nbAocHeExvpWxEGASrJ5QGIBtylTjaIhuR/h7N4r3j6oPyxVb
+         cFiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nba1yEUQ4IspImoTxgBgulwRJGaLwUT3y2k3SAEhk2w=;
+        b=zsUbUOn5Bx6YFmwDnBfp5hhfSS3nIma79g/QvshFtSi5BJlISVqHhQ54DkNc0jMb8H
+         vZzcjDVsAXcOUYip8yLIvHTkmcUavj57Mxu7zBzljBIvPpVlh9iZ//bPUA5g5q3o9zrL
+         T6K46N7mLKE/LSYwT943Q6pcCryUxlIatIBqRb3/ZbQ01KuY+56RrJ3UN5D1soZtpta0
+         0ozeittyN5AwMOcsOaTkCqDwHUfYElWYoynC6Gl/TvOyZkv44mlyKewacdFmob6szI/i
+         8Bj4zVsbU7sPz+kUOvvS/SqYA+TbpfCjmxWADeOm7tX99p4DHn5Cf/o5Vxij6bsnPWkL
+         qYOQ==
+X-Gm-Message-State: AFqh2kqc6V+GAdLYJWrLNATFeDX/hSOw1H6CLriMZq2coWmpLgAncP8b
+        O/arimf3O5459TPAHn2DzBBqJhkzT6QVXqeJRl+MDOLD18w=
+X-Google-Smtp-Source: AMrXdXuKwHbEzVI/+VFZfpbd00bwED3WJ37vP8KCdY6EfPyam9i8faYgGpnmna4jNYZ3lVMwBm89LZRw3SLaZIlWnuM=
+X-Received: by 2002:a17:907:6f13:b0:7ad:e161:b026 with SMTP id
+ sy19-20020a1709076f1300b007ade161b026mr792609ejc.760.1671722846022; Thu, 22
+ Dec 2022 07:27:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20221222-hid-v1-0-f4a6c35487a5@weissschuh.net>
+In-Reply-To: <20221222-hid-v1-0-f4a6c35487a5@weissschuh.net>
+From:   David Rheinsberg <david.rheinsberg@gmail.com>
+Date:   Thu, 22 Dec 2022 16:27:14 +0100
+Message-ID: <CADyDSO7ui6cmhga-vjaxfw82gK6erDO54aYRWWqO4L6DKzNgug@mail.gmail.com>
+Subject: Re: [PATCH 0/8] HID: remove some unneeded exported symbols from hid.h
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Geert, Greg,
+Hi
 
-On Wed, 21 Dec 2022 14:07:53 +0100
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+On Thu, 22 Dec 2022 at 06:10, Thomas Wei=C3=9Fschuh <linux@weissschuh.net> =
+wrote:
+> Small cleanup to get rid of exports of the lowlevel hid drivers and to ma=
+ke
+> them const.
+[...]
+> Thomas Wei=C3=9Fschuh (8):
+>       HID: letsketch: Use hid_is_usb()
+>       HID: usbhid: Make hid_is_usb() non-inline
+>       HID: Remove unused function hid_is_using_ll_driver()
+>       HID: Unexport struct usb_hid_driver
+>       HID: Unexport struct uhid_hid_driver
+>       HID: Unexport struct hidp_hid_driver
+>       HID: Unexport struct i2c_hid_ll_driver
+>       HID: Make lowlevel driver structs const
 
-> On Wed, Dec 21, 2022 at 02:03:43PM +0100, Geert Uytterhoeven wrote:
-> > Hi Herv=C3=A9,
-> >=20
-> > On Tue, Dec 13, 2022 at 2:33 PM Herve Codina <herve.codina@bootlin.com>=
- wrote: =20
-> > > Add support for the Renesas USBF controller.
-> > > This controller is an USB2.0 UDC controller available in the
-> > > Renesas r9a06g032 SoC (RZ/N1 family).
-> > >
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
-> >=20
-> > Thanks for your patch!
-> >  =20
-> > > --- /dev/null
-> > > +++ b/drivers/usb/gadget/udc/renesas_usbf.c =20
-> >  =20
-> > > +#ifdef DEBUG
-> > > +#define TRACE(_fmt, ...) trace_printk("%s: " _fmt, __func__, ##__VA_=
-ARGS__)
-> > > +#define USBF_TRACE_EP_MASK 0x0ffff /* All the 16 endpoints */
-> > > +#define TRACEEP(_ep, _fmt, ...)                                     =
-        \
-> > > +       do {                                                         =
-       \
-> > > +               if ((1 << (_ep)->id) & USBF_TRACE_EP_MASK)           =
-       \
-> > > +                       trace_printk("%s: " _fmt, __func__, ##__VA_AR=
-GS__); \
-> > > +       } while (0)
-> > > +#else
-> > > +#define TRACE(_fmt, ...) do { } while (0)
-> > > +#define TRACEEP(_ep, _fmt, ...) do { } while (0) =20
-> >=20
-> > Please use "no_printk(fmt, ##__VA_ARGS__)" instead of dummy loops,
-> > to avoid bad callers going unnoticed if DEBUG is not defined. =20
->=20
-> Even better, do NOT define custom debug/trace macros for a single
-> driver, just use the ones that the rest of the kernel uses instead
-> please.
->=20
-> thanks,
->=20
-> greg k-h
+Yeah, it makes sense to avoid exposing the structs.
 
-I would like to keep some granularity in debug messages and
-also keep the function name automatically added.
-I propose 3 kinds of messages:
-- general ones,
-- specific Endpoint0 ones,
-- other Endpoints ones.
+Reviewed-by: David Rheinsberg <david.rheinsberg@gmail.com>
 
-So before doing any modification in the source code, what do you
-think about:
-    /*
-     * Suggested tracers:
-     * - no_printk:    Disable tracing
-     * - trace_printk: Print to trace buffer
-     */
-    #define usbf_dbg(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA_ARG=
-S__)
-    #define usbf_dbg_ep0(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
-_ARGS__)
-    #define usbf_dbg_epn(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
-_ARGS__)
-
-The code will use only these macros instead of the previously
-defined TRACE and TRACEEP as follow:
-- usbf_dbg() will be called instead of TRACE()
-- usbf_dbg_ep0() will be called instead of TRACEEP() for Endpoint0
-- usbf_dbg_epn() will be called instead of TRACEEP() for other Endpoints
-
-Is that ok for you ?
-
-Best regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks
+David
