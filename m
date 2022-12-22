@@ -2,62 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D97165441F
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 16:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA826654448
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 16:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbiLVPUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 10:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S235438AbiLVP0U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 10:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbiLVPUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 10:20:18 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557CF1AD;
-        Thu, 22 Dec 2022 07:20:16 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E32616602CD4;
-        Thu, 22 Dec 2022 15:20:13 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671722414;
-        bh=0WLku65f/V6ZFbTI8eRaD22um8ER97RajgZyN2ZWo+w=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=bYpPeK+exgNtp/fIMWWDdygR1jbWZ+llFWRNMB19amjByhA3Y8ydSKLTnwVbY+Uxw
-         6xs7cztJbbVOOKen5ui4FK6AIeSR8Uu3M4XxwF4C/7NQeQix16PjOR9oBjg3BqbZw1
-         X8k/wU71V0+IKxaJ/xfuQCC7GUfGIonMEVRQ9U+P+e7txp+x0CXyHevGptTF/OeQmG
-         DbpHYERswk2kdGi38AR4rCczLFa0G+o7al15HOrJdw1QYD583Ey/W0uNv1psVW3gS+
-         +9SsYbCZZH9DJkYTrDGHWa1qHe8ERf7WKdHkh3MshmGJPYsjqWtDq8fd11scLHOIpS
-         17ZwZdeagFy5w==
-Message-ID: <f7067028-9662-7776-80a5-3bbe046c92e0@collabora.com>
-Date:   Thu, 22 Dec 2022 16:20:11 +0100
+        with ESMTP id S235759AbiLVPZ5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 10:25:57 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003E52B268;
+        Thu, 22 Dec 2022 07:24:42 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A6BD140002;
+        Thu, 22 Dec 2022 15:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1671722681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=paTDVkvAnOW0G/nrH5hLopHfXkzR9wnPXZ3DRptHKzE=;
+        b=An1s8lISNjsPvQ1ituTK/aN3u0eD6UmoFmKwIL0GQfGp0XvXqvtsK7VWOQKsisikEGAN7q
+        muHMLfnUj9yHCYDEFEMNgMuF7RfsFT/acVCNbJH7UNgauLLskDpn43sPiZ/dBSMYF7lrzA
+        zP4cUUaSokxDZ4VxRXLq01Zun+/zSNg4/3lrpVCYkyojIls7kUtcdLgMNik5FrwTPJsBxp
+        c4pm2wnqiWjeg+ZliKFWAAp/2G1W+ZeGAyrooqc7g9jfxp5qHhp8AGzu5JDv61DkzHMALr
+        MDCoPNRIpRzb53IT9AqPTu59V4MlDFJOc2aZ9wTUQnOYjjAI8RhTisk42WDATg==
+Date:   Thu, 22 Dec 2022 16:24:38 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v4 3/5] usb: gadget: udc: add Renesas RZ/N1 USBF
+ controller support
+Message-ID: <20221222162438.4d06bd77@bootlin.com>
+In-Reply-To: <Y6MFKdOU4IUQo70L@kroah.com>
+References: <20221213133302.218955-1-herve.codina@bootlin.com>
+ <20221213133302.218955-4-herve.codina@bootlin.com>
+ <CAMuHMdV7QNZ8Rv6iFLhj_MmBHL-vGWuWZdKB=REWba1UAWgkHw@mail.gmail.com>
+ <Y6MFKdOU4IUQo70L@kroah.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] USB: gadget: Add ID numbers to configfs-gadget driver
- names
-To:     Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Li <frank.li@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-References: <20221221091317.19380-1-chanh@os.amperecomputing.com>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20221221091317.19380-1-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,130 +66,88 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Geert, Greg,
 
-W dniu 21.12.2022 o 10:13, Chanh Nguyen pisze:
-> It is unable to use configfs to attach more than one gadget. When
-> attaching the second gadget, it always fails and the kernel message
-> prints out:
-> 
-> Error: Driver 'configfs-gadget' is already registered, aborting...
-> UDC core: g1: driver registration failed: -16
-> 
+On Wed, 21 Dec 2022 14:07:53 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-I assume you are interested in a scenario where there is more than one
-UDC available which means you can have more than one active gadget?
+> On Wed, Dec 21, 2022 at 02:03:43PM +0100, Geert Uytterhoeven wrote:
+> > Hi Herv=C3=A9,
+> >=20
+> > On Tue, Dec 13, 2022 at 2:33 PM Herve Codina <herve.codina@bootlin.com>=
+ wrote: =20
+> > > Add support for the Renesas USBF controller.
+> > > This controller is an USB2.0 UDC controller available in the
+> > > Renesas r9a06g032 SoC (RZ/N1 family).
+> > >
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+> >=20
+> > Thanks for your patch!
+> >  =20
+> > > --- /dev/null
+> > > +++ b/drivers/usb/gadget/udc/renesas_usbf.c =20
+> >  =20
+> > > +#ifdef DEBUG
+> > > +#define TRACE(_fmt, ...) trace_printk("%s: " _fmt, __func__, ##__VA_=
+ARGS__)
+> > > +#define USBF_TRACE_EP_MASK 0x0ffff /* All the 16 endpoints */
+> > > +#define TRACEEP(_ep, _fmt, ...)                                     =
+        \
+> > > +       do {                                                         =
+       \
+> > > +               if ((1 << (_ep)->id) & USBF_TRACE_EP_MASK)           =
+       \
+> > > +                       trace_printk("%s: " _fmt, __func__, ##__VA_AR=
+GS__); \
+> > > +       } while (0)
+> > > +#else
+> > > +#define TRACE(_fmt, ...) do { } while (0)
+> > > +#define TRACEEP(_ep, _fmt, ...) do { } while (0) =20
+> >=20
+> > Please use "no_printk(fmt, ##__VA_ARGS__)" instead of dummy loops,
+> > to avoid bad callers going unnoticed if DEBUG is not defined. =20
+>=20
+> Even better, do NOT define custom debug/trace macros for a single
+> driver, just use the ones that the rest of the kernel uses instead
+> please.
+>=20
+> thanks,
+>=20
+> greg k-h
 
-> This commit fixes the problem by a ".N" suffix added to each
-> configfs_gadget's driver name (where N is a unique ID number),
-> thus making the names distinct.
-> 
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
-> 
-> ---
-> Changes in v2:
->    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
->    - Move the clean up code from gadgets_drop() to
->      gadget_info_attr_release()                        [Frank Li]
->    - Correct the resource free up in gadges_make()   [Alan Stern]
->    - Remove the unnecessary variable in gadgets_make()    [Chanh]
->    - Fixes minor grammar issue in commit message          [Chanh]
-> ---
->   drivers/usb/gadget/configfs.c | 25 ++++++++++++++++++++++++-
->   1 file changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 96121d1c8df4..7faf68bfa716 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -3,6 +3,7 @@
->   #include <linux/module.h>
->   #include <linux/slab.h>
->   #include <linux/device.h>
-> +#include <linux/idr.h>
->   #include <linux/kstrtox.h>
->   #include <linux/nls.h>
->   #include <linux/usb/composite.h>
-> @@ -11,6 +12,8 @@
->   #include "u_f.h"
->   #include "u_os_desc.h"
->   
-> +static DEFINE_IDA(driver_id_numbers);
-> +
->   int check_user_usb_string(const char *name,
->   		struct usb_gadget_strings *stringtab_dev)
->   {
-> @@ -52,6 +55,9 @@ struct gadget_info {
->   	char qw_sign[OS_STRING_QW_SIGN_LEN];
->   	spinlock_t spinlock;
->   	bool unbind;
-> +
-> +	/* Make driver names unique */
-> +	int driver_id_number;
->   };
->   
->   static inline struct gadget_info *to_gadget_info(struct config_item *item)
-> @@ -393,6 +399,8 @@ static void gadget_info_attr_release(struct config_item *item)
->   	WARN_ON(!list_empty(&gi->string_list));
->   	WARN_ON(!list_empty(&gi->available_func));
->   	kfree(gi->composite.gadget_driver.function);
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->   	kfree(gi);
->   }
->   
-> @@ -1623,13 +1631,28 @@ static struct config_group *gadgets_make(
->   
->   	gi->composite.gadget_driver = configfs_driver_template;
->   
-> +	gi->driver_id_number = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-> +	if (gi->driver_id_number < 0)
-> +		goto err;
-> +
-> +	gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
-> +							    "configfs-gadget.%d",
-> +							    gi->driver_id_number);
+I would like to keep some granularity in debug messages and
+also keep the function name automatically added.
+I propose 3 kinds of messages:
+- general ones,
+- specific Endpoint0 ones,
+- other Endpoints ones.
 
-I'm wondering if it maybe makes more sense to use the gadget name as a suffix
-instead?
+So before doing any modification in the source code, what do you
+think about:
+    /*
+     * Suggested tracers:
+     * - no_printk:    Disable tracing
+     * - trace_printk: Print to trace buffer
+     */
+    #define usbf_dbg(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA_ARG=
+S__)
+    #define usbf_dbg_ep0(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
+_ARGS__)
+    #define usbf_dbg_epn(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
+_ARGS__)
 
-	gi->composite.gadget_driver.driver.name =
-		kasprintf(GFP_KERNEL, "configfs-gadget.%s" name);
+The code will use only these macros instead of the previously
+defined TRACE and TRACEEP as follow:
+- usbf_dbg() will be called instead of TRACE()
+- usbf_dbg_ep0() will be called instead of TRACEEP() for Endpoint0
+- usbf_dbg_epn() will be called instead of TRACEEP() for other Endpoints
 
-So that when you
+Is that ok for you ?
 
-mkdir g1
+Best regards,
+Herv=C3=A9
 
-you will ultimately see /sys/bus/gadget/drivers/configfs-gadget.g1
-
-instead of /sys/bus/gadget/drivers/configfs-gadget.0
-
-Gadget names are guaranteed to be unique because they are created
-as sibling subdirectories in configfs. Your patch would then be greatly
-simplified (no need for ida).
-
-Regards,
-
-Andrzej
-
-> +	if (!gi->composite.gadget_driver.driver.name)
-> +		goto out_free_driver_id_number;
-> +
->   	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->   	gi->composite.name = gi->composite.gadget_driver.function;
->   
->   	if (!gi->composite.gadget_driver.function)
-> -		goto err;
-> +		goto out_free_driver_name;
->   
->   	return &gi->group;
-> +
-> +out_free_driver_name:
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +out_free_driver_id_number:
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->   err:
->   	kfree(gi);
->   	return ERR_PTR(-ENOMEM);
-
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
