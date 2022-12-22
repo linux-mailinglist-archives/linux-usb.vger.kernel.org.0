@@ -2,157 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC50653ED1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 12:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C810C653EF4
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 12:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiLVLOc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 06:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S235562AbiLVLUc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 06:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiLVLOa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 06:14:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF4B1A827
-        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 03:13:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671707629;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p6wmUSjFPm20MNQz86DYSx27hpB1OpMKe0+xx4dP5io=;
-        b=EoYbAJm71hoQB7V8/M4o9qAOEhd/mAr70d/Czwd19zL6kk6HJusd8G8ffS+YJjwt4W3aXH
-        rlotRP1tg9/AIZqQURzVWDVUEhgAf39ep69A62Muj4VT3LoVOrXM5XeLZjhUXGujKqumDL
-        51RcbwMS7+/T5x76j8qjAK0IvasyrmM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-595-GseQVGQxOBKF-zxusKkAiA-1; Thu, 22 Dec 2022 06:13:48 -0500
-X-MC-Unique: GseQVGQxOBKF-zxusKkAiA-1
-Received: by mail-wr1-f70.google.com with SMTP id u9-20020adfa189000000b00242121eebe2so327986wru.3
-        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 03:13:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p6wmUSjFPm20MNQz86DYSx27hpB1OpMKe0+xx4dP5io=;
-        b=dUdVGa7ATh9+BgsjMRMaBo+EdOQK4U8+PQXvfrMr/l5jXzSSgJmUDEJ6X2iN5yzuOt
-         5YhWshROxd+ruksPA6fwyJSgUtT9JZ8eBKrc+afTs+ypUVacVjJWlJOrh84uDap3wxNu
-         r0UizJaSB5N9qvA2QT62d5qOmTkAVrijTdQUR1w78rsN3n1oY12ZggPibS1szVcHanFf
-         IO2btD3XGDyM93osRCmGOxbs+5tF8SXcZ2i+x+Lt8wJdG8tJzhoTzUI4ybqYSwT8A5x7
-         0fu8HYQiNEmMgO2IxJthb0FBw3zdurRkVy/aD/qvekGDgCZjWw+VqkImP6150FY59DMn
-         B2DQ==
-X-Gm-Message-State: AFqh2kqxc06yRTV6Zq1jrOSZTCLlnoHb4ZdA11NCkdKpFSKiK347rrfN
-        W3W62pXmPXAKcdwt5TtHaoi0NYqp5i/H0gsGn9ljG52LwnSzIkUh+NGYU64TbLwcft/u/fpFeBG
-        Dbmj+p7LIiCbq9h4uK7zq
-X-Received: by 2002:adf:fe48:0:b0:242:2a13:bbd0 with SMTP id m8-20020adffe48000000b002422a13bbd0mr3444002wrs.65.1671707626648;
-        Thu, 22 Dec 2022 03:13:46 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvFYTsQXXUN7xT2shHzM4FMDAcqZ6mknPwn7aY/S6iGl6EO+PE5M2Bs/eLrVdjOH5CE5aybFA==
-X-Received: by 2002:adf:fe48:0:b0:242:2a13:bbd0 with SMTP id m8-20020adffe48000000b002422a13bbd0mr3443996wrs.65.1671707626439;
-        Thu, 22 Dec 2022 03:13:46 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
-        by smtp.gmail.com with ESMTPSA id f8-20020a056000128800b0024216d2e386sm286561wrx.16.2022.12.22.03.13.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 03:13:45 -0800 (PST)
-Message-ID: <070c6690ad7ea537a7081bc9faa0f78861751bc4.camel@redhat.com>
-Subject: Re: [PATCH v3] usbnet: optimize usbnet_bh() to reduce CPU load
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Leesoo Ahn <lsahn@ooseel.net>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Greg KH <greg@kroah.com>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 22 Dec 2022 12:13:44 +0100
-In-Reply-To: <20221221075924.1141346-1-lsahn@ooseel.net>
-References: <20221221075924.1141346-1-lsahn@ooseel.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S235504AbiLVLUN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 06:20:13 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940FE2A261
+        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 03:19:44 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MsZBb-1otwNv1ERH-00u50t; Thu, 22 Dec 2022 12:19:12 +0100
+Message-ID: <054ed59b-f59d-4354-8468-25f6c0dd6343@i2se.com>
+Date:   Thu, 22 Dec 2022 12:19:11 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Regression: onboard-usb-hub breaks USB on RPi 3
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+        Florian Fainelli <f.fainelli@gmail.com>
+References: <Y6Ci7wWvbBRRQkR6@google.com>
+ <97c9b305-86f4-5918-54bf-4057e99eae3d@i2se.com> <Y6ECMZeh7G9bH8Fi@google.com>
+ <db6f59bf-33a1-776e-b52c-4818ff9114e3@i2se.com> <Y6I8L45rDhqBMfUZ@google.com>
+ <dde8b5e1-fbce-dd6c-6047-09e03ff2c00d@i2se.com> <Y6M5SPBpp/xMzUz7@google.com>
+ <4a170314-6082-f3ba-cfb4-c19d7eb576c0@i2se.com> <Y6NYK4/jp/QmusOX@google.com>
+ <8503cdb5-6089-b9e4-25ff-f3ac294b7a79@i2se.com> <Y6OrGbqaMy2iVDWB@google.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <Y6OrGbqaMy2iVDWB@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:EM9C8clx6msbv66oRNFlP0QuPNGJjq8s56Nz8FCIhvFliCTPaGK
+ NzxBacSg6fqLZqeCjJLY69tzV/hvDk0bk3bEtHSBnd3J3TLb3nk7XObwSTt8JG3LF9A79sX
+ pvIfQUxF7rEZHyssq5idNM/7ucaB9Q0TxZ59MhGOcEd/C1uRuA//G+K5GzVkQrQoXWMewum
+ 40XEnk6RYkpZZCQGUsMMg==
+UI-OutboundReport: notjunk:1;M01:P0:H4B0rsmSfiA=;lTlTGgV8wKycrNTAoJwlEuEXX2t
+ bSXN39s1/bD3ZFNCagHrQEm8aetwb8DhjOMmtDXOZmgEI7GkrmriC3cdiqYMwjicJamiwm34F
+ r9hhXHhkwjRoG3Tu9pnF/h0tSm1EV1wx9DdzLPcdDOJ8OoWcmOMm9CoSh7cIpw3ztzN7fCZms
+ yEBHzhX53p5SBTGT+izL0HGiR8913/sFVNM1u0neg34EgZ4Mx5OqViNJpIuYcDdIMdWVY2fYK
+ K6wH+atiixFMYhg03zzTWKPXQiPHkaECHtBbuDegDtAGRBfsziIlyI+tFWypKF1/5hZHOf6YK
+ HOY818a6n1s+lTRas0Saf2xyTri3W31cxhG6cebSN6LoEdAMxvC1mGudgrrr2yU/US4zvJAuQ
+ IZm/T56TYGoM/1kvdSAklnrgtOZQiQBF9J0YnhtcYlVgbx39G8fABZ3EHDUeOGL8q9miPQYic
+ 5Hj2+Qj2ZpoEgYxcyJEhndBc2ZyRW0sFBZTVVEkORBL9O8bwRN/bhpV5vMLGpm2PktMAjnUBD
+ Frhbv1RTfW3qBx0iJXJ60IzLVZ0CWkPPEAqOMgtgPox+fiHTdz7l4kc25dooHbAf7Va2xQoGB
+ 3MT3y3cPz/NkNovRkQG1uUhJ5dckkEIsYEsswOQHy5UuHHKG7Ivf3v1clwMzMpch5cxZXEbQW
+ yaj4Q6T9Svys7HeogUC+Jf9a1Skig08BWdW4wYqPPQ==
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2022-12-21 at 16:59 +0900, Leesoo Ahn wrote:
-> The current source pushes skb into dev->done queue by calling
-> skb_queue_tail() and then pop it by calling skb_dequeue() to branch to
-> rx_cleanup state for freeing urb/skb in usbnet_bh(). It takes extra CPU
-> load, 2.21% (skb_queue_tail) as follows.
-> 
-> -   11.58%     0.26%  swapper          [k] usbnet_bh
->    - 11.32% usbnet_bh
->       - 6.43% skb_dequeue
->            6.34% _raw_spin_unlock_irqrestore
->       - 2.21% skb_queue_tail
->            2.19% _raw_spin_unlock_irqrestore
->       - 1.68% consume_skb
->          - 0.97% kfree_skbmem
->               0.80% kmem_cache_free
->            0.53% skb_release_data
-> 
-> To reduce the extra CPU load use return values jumping to rx_cleanup
-> state directly to free them instead of calling skb_queue_tail() and
-> skb_dequeue() for push/pop respectively.
-> 
-> -    7.87%     0.25%  swapper          [k] usbnet_bh
->    - 7.62% usbnet_bh
->       - 4.81% skb_dequeue
->            4.74% _raw_spin_unlock_irqrestore
->       - 1.75% consume_skb
->          - 0.98% kfree_skbmem
->               0.78% kmem_cache_free
->            0.58% skb_release_data
->         0.53% smsc95xx_rx_fixup
-> 
-> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
-> ---
-> v3:
->   - Replace return values with proper -ERR values in rx_process()
-> 
-> v2:
->   - Replace goto label with return statement to reduce goto entropy
->   - Add CPU load information by perf in commit message
-> 
-> v1 at:
->   https://patchwork.kernel.org/project/netdevbpf/patch/20221217161851.829497-1-lsahn@ooseel.net/
+Hi Matthias,
 
-This looks like net-next material.
-
-We have already submitted the networking pull request to Linus
-for v6.2 and therefore net-next is closed for new drivers, features,
-code refactoring and optimizations. We are currently accepting
-bug fixes only.
-
-Please repost when net-next reopens after Jan 2nd, including the
-expected 'net-next' tag into the subject line.
-
-RFC patches sent for review only are obviously welcome at any time.
-
-[...]
-
-> @@ -1528,13 +1526,14 @@ static void usbnet_bh (struct timer_list *t)
->  		entry = (struct skb_data *) skb->cb;
->  		switch (entry->state) {
->  		case rx_done:
-> -			entry->state = rx_cleanup;
-> -			rx_process (dev, skb);
-> +			if (rx_process(dev, skb))
-> +				goto cleanup;
-
-You can avoid this additional label (which is a little confusing inside
-a switch) factoring out a usb_free_skb(skb) helper and calling it here
-and under the rx_cleanup case.
-
-Cheers,
-
-Paolo
-
+Am 22.12.22 um 01:55 schrieb Matthias Kaehlcke:
+> The above race condition could also impact boards which actually should
+> use the onboard_hub driver, so not creating the pdevs for some boards
+> won't be enough.
+>
+> Out of my head I can't think of a clean solution. The onboard hub driver
+> doesn't control the locks involved. Detaching the driver is necessary
+> to make sure the onboard_hub USB devices don't hold stale pointers to
+> their platform device. Re-attaching is needed because of the detach.
+>
+> One option could be to change the 'attach' work from being a member of
+> struct onboard_hub to a static variable owned by the driver. With that
+> onboard_hub_remove() wouldn't have to wait for the work to finish. An
+> inconvenient is that only one instance of the work can run at any time,
+> which could result in a race condition when multiple onboard hubs are
+> probed closely together. It could happen that the USB device of the 2nd
+> (or 3rd, ...) hub isn't re-attached if it wasn't on the system wide USB
+> 'bus' yet when the 'attach' work of the 1st hub runs. Probably a rare
+> condition within the (as of now) rare scenario of multiple onboard hubs,
+> but it could happen. A mitigation could be to enter a sleepy loop if
+> schedule_work() returns false (work is already running) and schedule it
+> again until it is actually scheduled on behalf of the platform device
+> in question. I might go for that if I don't get a better idea.
+i don't have any idea.
+> Happy holidays!
+Thank you. Happy holidays to you, too!
+>
+> m.
