@@ -2,117 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4602D653A98
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 03:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8D2653ACA
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 03:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiLVC0w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Dec 2022 21:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S234961AbiLVCqp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Dec 2022 21:46:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbiLVC0u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 21:26:50 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33128FCFB
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 18:26:50 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id d123so363581iof.6
-        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 18:26:50 -0800 (PST)
+        with ESMTP id S232013AbiLVCqn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Dec 2022 21:46:43 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4EFE0E1
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 18:46:42 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-410f1a84ed2so7916827b3.15
+        for <linux-usb@vger.kernel.org>; Wed, 21 Dec 2022 18:46:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fVWA7/D2KvjMyMicmKIzWkp9wEe3Q6Twufyriuc4mnk=;
-        b=F+cvtx7SUTBiDbyXWwC1K3FSy9wvZ3+6N3Ol2twXHs8J8w4KDcC3F1O1+gSzcMeK3X
-         Aj4VfFDE8EzvrmHmiq0I9CxoJZAMmE+mYUaWWJzu6CNM+4jWd/SyDIjcr/BmG40Sdr3s
-         e+ao1Efe1LBSnUNdNyzTedN629/nEG+bd9ZuU=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Efktw4hJ8FupRr4DbW13wyao5oV1mILrrOmGsxieh5g=;
+        b=hIYk/tbRU8Rxy+twOLZ5QXSjOx5ydJ3m2rrO01CElOVULlqfTH9bSnDeqB/ks7/YUX
+         xLp9jHyK4J6oOjvsSbRbz7KDaWUAkBbzxAcACmbn93oh1+dEoFtmLZdDMfnMrQY7+pPm
+         7Fbo1dIyXEUdo69/3LBshEmzkvvwzQACMq2AAl6+8wA5g4b7kqZNWwRlZVakPROnwARV
+         h6uyx68TT0yjSS3IQ0YA1+klsjVkOtSn1BF1C1L3KPC7xD5LJFyMyDX9QkOS0jo//JZB
+         kYero4XVvQ1xCqa/vfs7WY9s7ko3qxOoe1JcJmm/H+u1JXlwDLqKbqtn/SvM6XC9sPA7
+         gOsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fVWA7/D2KvjMyMicmKIzWkp9wEe3Q6Twufyriuc4mnk=;
-        b=S6GaRFLKbGogMmAeaz0oc7qmSWWJeCdys54tPK2+Ej3mbBVunyBI2nY9KtPfCOXuwd
-         jTtnXLkqVVhnVZksu/IUDIxQl6xTBgm3BNw67hPOYAE/jwM/Wn3altGdaWVk8IBgwTnc
-         GMKCwuACNAMHVhDR1LEYgDaqCe3An2jFUQ9EJbTyOgeYayORsG+2fVo2cyI67uRKseux
-         ilp9ZMvfMONhRJYxdElLx75YWGaxUrcV+Li5GSsdMhRh7bjDHZ/6Q5wJqbYVsNow2lkU
-         88uz54k2Be+q5hbDTHel0eVgzV9UlnmMvgV8+NHzLLSys69lT95NUMJhHdzaLFuAEzbu
-         A0Sg==
-X-Gm-Message-State: AFqh2krxdjEPhKNFab92tmzYNKaqNP+H8mI2HZxok1V2GKTSkj35hP6M
-        wxCf6HdySuELCv9fnojLNKDa2A==
-X-Google-Smtp-Source: AMrXdXta0auQ6KBKrMkNKxV0MubHW/Vl+yjQV7HxmnSm0MYbIwEb5899dmogvKr3NTgh01lj6IJOZw==
-X-Received: by 2002:a6b:dc02:0:b0:6e2:d3fa:76eb with SMTP id s2-20020a6bdc02000000b006e2d3fa76ebmr2618945ioc.20.1671676009612;
-        Wed, 21 Dec 2022 18:26:49 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id x43-20020a0294ae000000b00375783003fcsm5994321jah.136.2022.12.21.18.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 18:26:49 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: [PATCH v2 2/2] usb: misc: onboard_hub: Fail silently when there is no platform device
-Date:   Thu, 22 Dec 2022 02:26:45 +0000
-Message-Id: <20221222022605.v2.2.I0c5ce35d591fa1f405f213c444522585be5601f0@changeid>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Efktw4hJ8FupRr4DbW13wyao5oV1mILrrOmGsxieh5g=;
+        b=Kg9YAxEgtmAsA1KwVjXz12UKIBlQZFMTShx7tAmfykg6Zndf7IFQ0V4jI4nwYGXQT3
+         C9YS3WAnWbUMCIRQaP4+GcM/3eiMUsYdYRXT8icqkUTh+JpiwlVOUNv+oZzAVxXk1/S3
+         Tjg0DoFAV1vc40qQaMUvmCS1SdhMgQ1y+VaH8KOakpTv+K4b5glFOpdNYmxcrzoSRz08
+         cj0mi73Og+XnqDAsIqKwOy1cSQZ0TtrIYDF1sSqtqiuB8ka4+HpmZOSahGo4GHa24ynA
+         uHxLXwlsopAsmjfyUhmRvu1XR1ot1HGiPHRvhkJ+xIqLnZi6mKQN8STsYu0UVG+hD2QM
+         VVkw==
+X-Gm-Message-State: AFqh2kpwyGgYmzA9ToNREtaS26dDMKzmcNyBog/33BkVaLKx9ZnhofXe
+        8XSg7ms09W82d8TB1VgD969jAK1r2iQ=
+X-Google-Smtp-Source: AMrXdXuWlrIE6Oy8pEzY9NWbVmBoFIZ/fQ3evw1pDghtWywUSctAE6LXlqriJan1QoyX4pOxTScHAH0KakQ=
+X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
+ (user=hhhuuu job=sendgmr) by 2002:a05:6902:128d:b0:6f9:fd74:22f with SMTP id
+ i13-20020a056902128d00b006f9fd74022fmr398672ybu.100.1671677202022; Wed, 21
+ Dec 2022 18:46:42 -0800 (PST)
+Date:   Thu, 22 Dec 2022 02:46:30 +0000
+Mime-Version: 1.0
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
-References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Message-ID: <20221222024630.1812735-1-hhhuuu@google.com>
+Subject: [PATCH 1/1] usb: xhci: Check endpoint is valid before dereferencing it
+From:   Jimmy Hu <hhhuuu@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some boards with an onboard USB hub supported by the onboard_hub
-driver have a device tree node for the hub, but the node doesn't
-specify all properties needed by the driver (which is not a DT
-error per se). For such a hub no onboard_hub platform device is
-created. However the USB portion of the onboard hub driver still
-probes and uses _find_onboard_hub() to find the platform device
-that corresponds to the hub. If the DT node of the hub doesn't
-have an associated platform device the function looks for a
-"peer-hub" node (to get the platform device from there), if
-that doesn't exist either it logs an error and returns -EINVAL.
+When the host controller is not responding, all URBs queued to all
+endpoints need to be killed. This can cause a kernel panic if we
+dereference an invalid endpoint.
 
-The absence of a platform device is expected in some
-configurations, so drop the error log and fail silently with
--ENODEV.
+Fix this by using xhci_get_virt_ep() helper to find the endpoint and
+checking if the endpoint is valid before dereferencing it.
 
-Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+[233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
+[233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+
+[233311.853964] pc : xhci_hc_died+0x10c/0x270
+[233311.853971] lr : xhci_hc_died+0x1ac/0x270
+
+[233311.854077] Call trace:
+[233311.854085]  xhci_hc_died+0x10c/0x270
+[233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
+[233311.854105]  call_timer_fn+0x50/0x2d4
+[233311.854112]  expire_timers+0xac/0x2e4
+[233311.854118]  run_timer_softirq+0x300/0xabc
+[233311.854127]  __do_softirq+0x148/0x528
+[233311.854135]  irq_exit+0x194/0x1a8
+[233311.854143]  __handle_domain_irq+0x164/0x1d0
+[233311.854149]  gic_handle_irq.22273+0x10c/0x188
+[233311.854156]  el1_irq+0xfc/0x1a8
+[233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
+[233311.854185]  cpuidle_enter_state+0x1f0/0x764
+[233311.854194]  do_idle+0x594/0x6ac
+[233311.854201]  cpu_startup_entry+0x7c/0x80
+[233311.854209]  secondary_start_kernel+0x170/0x198
+
+Signed-off-by: Jimmy Hu <hhhuuu@google.com>
 ---
+ drivers/usb/host/xhci-ring.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Changes in v2:
-- patch added to the series
-
- drivers/usb/misc/onboard_usb_hub.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index d63c63942af1..44a0b0ddee55 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -348,10 +348,8 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
- 	pdev = of_find_device_by_node(dev->of_node);
- 	if (!pdev) {
- 		np = of_parse_phandle(dev->of_node, "peer-hub", 0);
--		if (!np) {
--			dev_err(dev, "failed to find device node for peer hub\n");
--			return ERR_PTR(-EINVAL);
--		}
-+		if (!np)
-+			return ERR_PTR(-ENODEV);
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index ad81e9a508b1..4a514c227db7 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1170,7 +1170,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+ 	struct xhci_virt_ep *ep;
+ 	struct xhci_ring *ring;
  
- 		pdev = of_find_device_by_node(np);
- 		of_node_put(np);
+-	ep = &xhci->devs[slot_id]->eps[ep_index];
++	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
++	if (!ep)
++		return;
++
+ 	if ((ep->ep_state & EP_HAS_STREAMS) ||
+ 			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
+ 		int stream_id;
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.38.0.rc1.362.ged0d419d3c-goog
 
