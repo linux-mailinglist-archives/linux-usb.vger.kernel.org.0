@@ -2,178 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6674D654153
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 13:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C78654198
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Dec 2022 14:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiLVMv1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Dec 2022 07:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S235372AbiLVNRw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Dec 2022 08:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiLVMvY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 07:51:24 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336171FCD1;
-        Thu, 22 Dec 2022 04:51:23 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMAlwfd010892;
-        Thu, 22 Dec 2022 12:51:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dQWDc633Ytw2GCHBm5Z4OBT+5qdBrfSR64+yxyehY5U=;
- b=A6I4I3zXD+b6XJ2x5w2tRukd4ZStZVXv18iAI6N6UV6uAU8C7ymhuLXgb3KNO07CKAOR
- iIUHnY5Cjxfnfx5SDXCUkuNYB+A1o5FNXw7pn1c79NrwUOzPDHgthBurCF8cCLyZ2TR6
- j4tHPu/7TXL4fy473JjmBjK0YJgaUFaRAJsq+Yhl5ImXeGP1xwX4FOGTE4TMMRAeOCSk
- y5/s5WdFYEvbsRuD5MK8U//Vf6Y73EWq160A0S32FEsDXd35vWE6eTCnUQjD7rbZxDJ7
- zR9vRpgmbrXLBJui6GaV/quf9kS7Ps6jCJNsPq1dneLVlAFMui8j8ETra3z7PDB5HgSd Ng== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk90t5rse-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:51:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMCpAaU005294
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:51:10 GMT
-Received: from [10.206.25.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 22 Dec
- 2022 04:51:06 -0800
-Message-ID: <acdda510-945f-ff68-5c8b-a1a0290bed6d@quicinc.com>
-Date:   Thu, 22 Dec 2022 18:21:03 +0530
+        with ESMTP id S235473AbiLVNRr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Dec 2022 08:17:47 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5D12B269;
+        Thu, 22 Dec 2022 05:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671715055; x=1703251055;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=dfHYhHeVc907lIsPPsA55ZfTAeCOXwi9AQBDrXC8Qxg=;
+  b=hO2rZyE6ZxCarcOcN2i5GVuqg0tur3FZhDsRME/bYtE9XZLhMu3R6Cf2
+   fArgNGcGOIqiqZ0/RL/LiKc3CPTY3IyN0fqlvbuk73ikJonpzdY6K69i0
+   tv9VhFPpOErk8AfM7evZn9g885aVI/WZI6pOWBNVDq/mEy+SAHKe8QEU+
+   ptfAQ6H4tQEsYmZDWXhS3PTLiMNYJrAoPP41RqHLDhgYAzhXiqHq/cb6Y
+   V46yI5FyAxmslcR/yv4Ds2oFli/8IKvINMnLvli2MQ9tvmSHjW57F0z7Z
+   UZUGnzZK5e1przyZVZjwl1bylx86w+kLpaS+N2BoKzCkttXXCkqqfpfQi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="320179190"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="320179190"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 05:17:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="684187507"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="684187507"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 22 Dec 2022 05:17:31 -0800
+Message-ID: <0fe978ed-8269-9774-1c40-f8a98c17e838@linux.intel.com>
+Date:   Thu, 22 Dec 2022 15:18:53 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: usb: f_fs: Fix CFI failure in ki_complete
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
 Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>
-CC:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Keeping <john@metanate.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        "Udipto Goswami" <quic_ugoswami@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "# 5 . 15" <stable@vger.kernel.org>
-References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
- <Y5cuCMhFIaKraUyi@kroah.com>
- <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Ladislav Michl <oss-lists@triops.cz>
+Cc:     Jimmy Hu <hhhuuu@google.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20221222072912.1843384-1-hhhuuu@google.com>
+ <Y6Qc1p4saGFTdh9n@lenoch>
+ <23fe0fe3-f330-b58e-c366-3ac5bd80fe22@linux.intel.com>
+ <Y6RFCjbMswOBoKdV@lenoch>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
+ dereferencing it
+In-Reply-To: <Y6RFCjbMswOBoKdV@lenoch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pFPZgNiXiluh-RTeQnpXqgMOU1DpSMA7
-X-Proofpoint-ORIG-GUID: pFPZgNiXiluh-RTeQnpXqgMOU1DpSMA7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_05,2022-12-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- spamscore=0 impostorscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- suspectscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212220112
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 14-12-22 11:05 pm, David Laight wrote:
-> From: Greg Kroah-Hartman
->> Sent: 12 December 2022 13:35
+On 22.12.2022 13.52, Ladislav Michl wrote:
+> On Thu, Dec 22, 2022 at 01:08:47PM +0200, Mathias Nyman wrote:
+>> On 22.12.2022 11.01, Ladislav Michl wrote:
+>>> On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
+>>>> When the host controller is not responding, all URBs queued to all
+>>>> endpoints need to be killed. This can cause a kernel panic if we
+>>>> dereference an invalid endpoint.
+>>>>
+>>>> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
+>>>> checking if the endpoint is valid before dereferencing it.
+>>>>
+>>>> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
+>>>> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+>>>>
+>>>> [233311.853964] pc : xhci_hc_died+0x10c/0x270
+>>>> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
+>>>>
+>>>> [233311.854077] Call trace:
+>>>> [233311.854085]  xhci_hc_died+0x10c/0x270
+>>>> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
+>>>> [233311.854105]  call_timer_fn+0x50/0x2d4
+>>>> [233311.854112]  expire_timers+0xac/0x2e4
+>>>> [233311.854118]  run_timer_softirq+0x300/0xabc
+>>>> [233311.854127]  __do_softirq+0x148/0x528
+>>>> [233311.854135]  irq_exit+0x194/0x1a8
+>>>> [233311.854143]  __handle_domain_irq+0x164/0x1d0
+>>>> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
+>>>> [233311.854156]  el1_irq+0xfc/0x1a8
+>>>> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
+>>>> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
+>>>> [233311.854194]  do_idle+0x594/0x6ac
+>>>> [233311.854201]  cpu_startup_entry+0x7c/0x80
+>>>> [233311.854209]  secondary_start_kernel+0x170/0x198
+>>>>
+>>>> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
+>>>> Cc: stable@vger.kernel.org
+>>>> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+>>>> ---
+>>>>    drivers/usb/host/xhci-ring.c | 5 ++++-
+>>>>    1 file changed, 4 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>>>> index ddc30037f9ce..f5b0e1ce22af 100644
+>>>> --- a/drivers/usb/host/xhci-ring.c
+>>>> +++ b/drivers/usb/host/xhci-ring.c
+>>>> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>>>>    	struct xhci_virt_ep *ep;
+>>>>    	struct xhci_ring *ring;
+>>>> -	ep = &xhci->devs[slot_id]->eps[ep_index];
+>>>> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
+>>>> +	if (!ep)
+>>>> +		return;
+>>>> +
+>>>
+>>> xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
+>>> do we really want to skip that slot? Original code went from 0 to
+>>> MAX_HC_SLOTS-1.
+>>>
+>>> It seems to be off by one to me. Am I missing anything?
 >>
->> On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
->>> Function pointer ki_complete() expects 'long' as its second
->>> argument, but we pass integer from ffs_user_copy_worker. This
->>> might cause a CFI failure, as ki_complete is an indirect call
->>> with mismatched prototype. Fix this by typecasting the second
->>> argument to long.
+>> slot_id 0 is always invalid, so this is a good change.
+> 
+> I see. Now reading more carefully:
+> #define HCS_MAX_SLOTS(p)	(((p) >> 0) & 0xff)
+> #define MAX_HC_SLOTS		256
+> So the loop should go:
+> 	for (i = 1; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++)
+
+yes
+
+> 
+>>> Also, what about passing ep directly to xhci_kill_endpoint_urbs
+>>> and do the check in xhci_hc_died? Not even compile tested:
 >>
->> "might"?  Does it or not?  If it does, why hasn't this been reported
->> before?
+>> passing ep to a function named kill_endpoint_urbs() sound like the
+>> right thing to do, but as a generic change.
+>>
+>> I think its a good idea to first do a targeted fix for this null pointer
+>> issue that we can send to stable fist.
 > 
-> Does the cast even help at all.
-Actually I also have these same questions
-- why we haven't seen any instances other than this one?
-- why its not seen on other indirect function calls?
+> Agree. But I still do not understand the root cause. There is a check
+> for NULL xhci->devs[i] already, so patch does not add much more, except
+> for test for slot_id == 0. And the eps array is just array of
+> struct xhci_virt_ep, not a pointers to them, so &xhci->devs[i]->eps[j]
+> should be always valid pointer. However struct xhci_ring in each eps
+> is allocated and not protected by any lock here. Is that correct?
 
-Here is the the call stack of the failure that we got.
+I think root cause is that freeing xhci->devs[i] and including rings isn't
+protected by the lock, this happens in xhci_free_virt_device() called by
+xhci_free_dev(), which in turn may be called by usbcore at any time
 
-[  323.288681][    T7] Kernel panic - not syncing: CFI failure (target: 
-0xffffffe5fc811f98)
-[  323.288710][    T7] CPU: 6 PID: 7 Comm: kworker/u16:0 Tainted: G S 
-    W  OE     5.15.41-android13-8-g5ffc5644bd20 #1
-[  323.288730][    T7] Workqueue: adb ffs_user_copy_worker.cfi_jt
-[  323.288752][    T7] Call trace:
-[  323.288755][    T7]  dump_backtrace.cfi_jt+0x0/0x8
-[  323.288772][    T7]  dump_stack_lvl+0x80/0xb8
-[  323.288785][    T7]  panic+0x180/0x444
-[  323.288797][    T7]  find_check_fn+0x0/0x218
-[  323.288810][    T7]  ffs_user_copy_worker+0x1dc/0x204
-[  323.288822][    T7]  kretprobe_trampoline.cfi_jt+0x0/0x8
-[  323.288837][    T7]  worker_thread+0x3ec/0x920
-[  323.288850][    T7]  kthread+0x168/0x1dc
-[  323.288859][    T7]  ret_from_fork+0x10/0x20
-[  323.288866][    T7] SMP: stopping secondary CPUs
+So xhci->devs[i] might just suddenly disappear
 
-And from address to line translation, we got know the issue is from
-ffs_user_copy_worker+0x1dc/0x204
-		||
-io_data->kiocb->ki_complete(io_data->kiocb, ret);
+Patch just checks more often if xhci->devs[i] is valid, between every endpoint.
+So the race between xhci_free_virt_device() and xhci_kill_endpoint_urbs()
+doesn't trigger null pointer deref as easily.
 
-And "find_check_fn" was getting invoked from ki_complete. Only thing 
-that I found suspicious about ki_complete() is its argument types. 
-That's why I pushed this patch here, so that we can discuss this out here.
-
-Thanks in advance
 
 > 
-> ...
->>> -	io_data->kiocb->ki_complete(io_data->kiocb, ret);
->>> +	io_data->kiocb->ki_complete(io_data->kiocb, (long)ret);
-> ...
+>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>>> index ddc30037f9ce..5dac483c562a 100644
+>>> --- a/drivers/usb/host/xhci-ring.c
+>>> +++ b/drivers/usb/host/xhci-ring.c
+>>> @@ -1162,14 +1162,12 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
+>>>    }
+>>>    static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>>> -		int slot_id, int ep_index)
+>>> +		struct xhci_virt_ep *ep)
+>>>    {
+>>>    	struct xhci_td *cur_td;
+>>>    	struct xhci_td *tmp;
+>>> -	struct xhci_virt_ep *ep;
+>>>    	struct xhci_ring *ring;
+>>> -	ep = &xhci->devs[slot_id]->eps[ep_index];
+>>>    	if ((ep->ep_state & EP_HAS_STREAMS) ||
+>>>    			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
+>>>    		int stream_id;
+>>> @@ -1180,18 +1178,12 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>>>    			if (!ring)
+>>>    				continue;
+>>> -			xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
+>>> -					"Killing URBs for slot ID %u, ep index %u, stream %u",
+>>> -					slot_id, ep_index, stream_id);
+>>>    			xhci_kill_ring_urbs(xhci, ring);
+>>>    		}
+>>>    	} else {
+>>>    		ring = ep->ring;
+>>>    		if (!ring)
+>>>    			return;
+>>> -		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
+>>> -				"Killing URBs for slot ID %u, ep index %u",
+>>> -				slot_id, ep_index);
+>>>    		xhci_kill_ring_urbs(xhci, ring);
+>>>    	}
+>>> @@ -1217,6 +1209,7 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>>>    void xhci_hc_died(struct xhci_hcd *xhci)
+>>>    {
+>>>    	int i, j;
+>>> +	struct xhci_virt_ep *ep;
+>>>    	if (xhci->xhc_state & XHCI_STATE_DYING)
+>>>    		return;
+>>> @@ -1227,11 +1220,14 @@ void xhci_hc_died(struct xhci_hcd *xhci)
+>>>    	xhci_cleanup_command_queue(xhci);
+>>>    	/* return any pending urbs, remove may be waiting for them */
+>>> -	for (i = 0; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
+>>> +	for (i = 0; i < HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
+>>>    		if (!xhci->devs[i])
+>>>    			continue;
+>>> -		for (j = 0; j < 31; j++)
+>>> -			xhci_kill_endpoint_urbs(xhci, i, j);
+>>> +		for (j = 0; j < EP_CTX_PER_DEV; j++) {
+>>> +			ep = &xhci->devs[i]->eps[j];
+>>> +			if (ep)
+>>> +				xhci_kill_endpoint_urbs(xhci, ep);
+>>> +		}
+>>
+>> This does loop a bit more than the existing code.
+>> With this change its always HCS_MAX_SLOTS * EP_CTX_PER_DEV.
+>> Previously best case was just HCS_MAX_SLOTS.
 > 
-> If definition of the parameter in the structure member ki_complete()
-> definition is 'long' then the compiler has to promote 'ret' to long
-> anyway. CFI has nothing to do with it.
-> 
-> OTOH if you've used a cast to assign a function with a
-> different prototype to ki_complete then 'all bets are off'
-> and you get all the run time errors you deserve.
-> CFI just converts some of them to compile time errors.
-> 
-> For instance if you assign xx_complete(long) to (*ki_complete)(int)
-> then it is very likely that xx_complete() will an argument
-> with some of the high bits set.
-> But adding a cast to the call - ki_complete((long)int_var)
-> will make absolutely no difference.
-> The compiler wont zero/sign extend int_var to 64bits for you,
-> that will just get optimised away and the high bits will
-> be unchanged.
-> 
-> You're description seems to be the other way around (which might
-> be safe, but CFI probably still barfs).
-> But you need to fix the indirect calls so the function types
-> match.
-So does that mean, we need to add casts in al indirect calls to match 
-the function signature?
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
+> No, that's just the same:
 
+you're right, incorrectly read that your patch deleted the
+"if (!xhci->devs[i]) continue;" lines.
+
+Thanks
+-Mathias
