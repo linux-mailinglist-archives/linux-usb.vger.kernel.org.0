@@ -2,112 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35916551A7
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 15:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EE26551AA
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 15:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236430AbiLWOwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Dec 2022 09:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
+        id S236365AbiLWOyo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Dec 2022 09:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236336AbiLWOwx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 09:52:53 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 80DDC31DCA
-        for <linux-usb@vger.kernel.org>; Fri, 23 Dec 2022 06:52:51 -0800 (PST)
-Received: (qmail 152534 invoked by uid 1000); 23 Dec 2022 09:52:50 -0500
-Date:   Fri, 23 Dec 2022 09:52:50 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dmitrii Pasechnik <dima.pasechnik@cs.ox.ac.uk>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: usb 1-3: Product: BBC micro:bit CMSIS-DAP not recognised
-Message-ID: <Y6XAwjr96YKAMSt/@rowland.harvard.edu>
-References: <Y6CRbgwHzjr2KNxK@hilbert>
- <Y6CpKxZ4KsiYttbL@hilbert>
- <Y6Csfzqvy6GExhVB@kroah.com>
- <Y6DjwFAp4M8I+T4P@hilbert>
- <Y6Fc2Fz8w4KoX952@kroah.com>
- <Y6HLqYpxwT+v3BgX@hilbert>
- <Y6ITkWEb25Si4zts@rowland.harvard.edu>
- <35B854FE-1F32-47FD-8ED1-CDE033327531@cs.ox.ac.uk>
- <Y6TLJ94ubE4tOTev@rowland.harvard.edu>
- <Y6WmAXzpCd7Jj3rS@cs.ox.ac.uk>
+        with ESMTP id S230469AbiLWOym (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 09:54:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238C331DC7;
+        Fri, 23 Dec 2022 06:54:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB4F461215;
+        Fri, 23 Dec 2022 14:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70414C433EF;
+        Fri, 23 Dec 2022 14:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671807280;
+        bh=cSy0mW+JcTGb7wHmP//5AEf5hO9OkLMlS2Uwg9AqFDc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gX5Y35IKQGdNunDgzb61X+D8dOY93c74L5LknWjdD5pCpgadFrpFyVtU4rvB0RlrQ
+         ZnZNwY2E1QprEiZCKqBLfE5KtLSI+rfB2HzIreroor7O2mDD4qFaXHOcvIMDqJGRwL
+         FErdqywfeKrilpUbIcjoopCPLFlOle5jGZXefO5s=
+Date:   Fri, 23 Dec 2022 15:54:37 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v3] usb: gadget: aspeed_udc: Add check for
+ dma_alloc_coherent
+Message-ID: <Y6XBLcTGUp/2ta9i@kroah.com>
+References: <20221215123112.20553-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6WmAXzpCd7Jj3rS@cs.ox.ac.uk>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221215123112.20553-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 12:58:41PM +0000, Dmitrii Pasechnik wrote:
-> On Thu, Dec 22, 2022 at 04:24:55PM -0500, Alan Stern wrote:
-> > A bit off to the side from the main point of this thread, but...
-> > 
-> > On Thu, Dec 22, 2022 at 10:32:09AM +0000, Dima Pasechnik wrote:
-> > > 
-> > > 
-> > > On 20 December 2022 19:57:05 WET, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > >> USB Interfaces: MSD, CDC, HID, WebUSB
-> > > >
-> > > >Which agrees with the information on the web site.  I have no idea what 
-> > > >WebUSB is supposed to be.
-> > > 
-> > > WebUSB is a JavaScript API, supported by Chromium -derived browsers (Firefox not there yet)
-> > > 
-> > > https://en.wikipedia.org/wiki/WebUSB
-> > 
-> > The Wikipedia article agrees with you that WebUSB is a JavaScript API.  
-> > As such, it is used for communication between web browsers and 
-> > JavaScript programs.
+On Thu, Dec 15, 2022 at 08:31:12PM +0800, Jiasheng Jiang wrote:
+> Add the check for the return value of dma_alloc_coherent in order to
+> avoid NULL pointer dereference.
 > 
-> No, it's used by browsers (which  run JavaScript code in them) to
-> communicate with USB hardware. Or, if you like,
-> standalone JavaScript programs to communicate with USB hardware. 
-> Let me copy from the wiki here:
+> This flaw was found using an experimental static analysis tool we are
+> developing, APP-Miner, which has not been disclosed.
 > 
-> ---------------------------------
-> A Universal Serial Bus, or a USB is an industry standard [...]
-> WebUSB is a set of API calls that enable access to these hardware
-> devices from web pages. WebUSB is developed by the World Wide Web
-> Consortium(W3C).[1] The webUSB API provides a safe, and developer
-> familiar means of communication to edges devices from web pages. The
-> webUSB API integrates into existing USB libraries and shortens the
-> development cycle for integrating new devices into the web environment
-> by not needing to wait for browser support for these devices.
+> The allyesconfig build using GCC 9.3.0 shows no new warning. As we
+> don't have a UDC device to test with, no runtime testing was able to
+> be performed.
 > 
-> Early versions of webUSB came out around as an alternative to Flash,
-> Chrome Serial, and other custom approaches to connecting browsers to
-> hardware. WebUSB aims to solve the four goals of any interface being;
-> fast to make, cross platform, look good, accessibility.
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
 > 
-> >  Not for communication between programs and USB 
-> > devices.  So I don't understand why a USB device needs to be concerned 
-> > about it.
+> v2 -> v3:
 > 
-> I hope the above explains.
+> 1. Add information of finding tool and tests to commit message.
+> 
+> v1 -> v2:
+> 
+> 1. Add "goto err;" when allocation fails.
+> ---
+>  drivers/usb/gadget/udc/aspeed_udc.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+> index 01968e2167f9..7dc2457c7460 100644
+> --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> @@ -1516,6 +1516,10 @@ static int ast_udc_probe(struct platform_device *pdev)
+>  					  AST_UDC_EP_DMA_SIZE *
+>  					  AST_UDC_NUM_ENDPOINTS,
+>  					  &udc->ep0_buf_dma, GFP_KERNEL);
+> +	if (!udc->ep0_buf) {
+> +		rc = -ENOMEM;
+> +		goto err;
+> +	}
+>  
+>  	udc->gadget.speed = USB_SPEED_UNKNOWN;
+>  	udc->gadget.max_speed = USB_SPEED_HIGH;
+> -- 
+> 2.25.1
+> 
 
-Actually, it's ambiguous.
+Why is this just a duplicate of the patch previously submitted here:
+	https://lore.kernel.org/r/20221125092833.74822-1-yuancan@huawei.com
 
-The article says that WebUSB is an API used by JavaScript programs when 
-they want to interact with a USB device.  Which means it is something 
-that JavaScript programs can know about and interact with.  Fine.
+confused,
 
-But the article doesn't say what happens on the device's side of the 
-conversation.  Does the WebUSB framework use some special messages when 
-communicating with a USB device, so it will only work with devices which 
-support WebUSB's protocol, or does it use plain ordinary USB messages 
-which any USB device will support?
-
-To put it another way, do USB devices need to have specialized firmware 
-in order to be compatible with WebUSB, or will WebUSB work with all USB 
-devices?  If the latter is true then why does the BBC micro:bit device 
-have a special WebUSB interface?  Does the extra interface provide some 
-sort of device-specific information which WebUSB can make use of but 
-which isn't essential?
-
-Alan Stern
+greg k-h
