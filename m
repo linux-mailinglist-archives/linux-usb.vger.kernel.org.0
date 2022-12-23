@@ -2,56 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCF965519E
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 15:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F47C6551A0
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 15:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiLWOvQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Dec 2022 09:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        id S236387AbiLWOwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Dec 2022 09:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236398AbiLWOvO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 09:51:14 -0500
+        with ESMTP id S230282AbiLWOwH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 09:52:07 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30D4B1D8;
-        Fri, 23 Dec 2022 06:51:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA30B490;
+        Fri, 23 Dec 2022 06:52:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 731BCB80315;
-        Fri, 23 Dec 2022 14:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0616C433EF;
-        Fri, 23 Dec 2022 14:51:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F8ECB80315;
+        Fri, 23 Dec 2022 14:52:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 668E4C433D2;
+        Fri, 23 Dec 2022 14:52:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671807071;
-        bh=kNH4zf3D7/4hjbqE5cHwauHXbJqf2MkEh7zrETewNzY=;
+        s=korg; t=1671807123;
+        bh=ZqINvsqVNRXwYbI0s1JzUb9QAQtGd0IZGVVPh94JtJk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T2OsMkeaLXZ3LoGvMPLrR3x1WKZSESD6cVCnbf/dB9Cr4Q/NXvqwtIHf2bBNtDPQo
-         vpKqj8Y2m/xZuAftmJcIuKSwliu6gXgLjoZe9n7ED09GeyHIY5wxitEED0db2S/ZpJ
-         EdxphWMWrVUxKWQRVRTcJywe5yerH5IMYy/BDYGg=
-Date:   Fri, 23 Dec 2022 15:51:07 +0100
-From:   'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Dan Carpenter <error27@gmail.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Keeping <john@metanate.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "# 5 . 15" <stable@vger.kernel.org>
-Subject: Re: usb: f_fs: Fix CFI failure in ki_complete
-Message-ID: <Y6XAW8JrwjQ4DkJV@kroah.com>
-References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
- <Y5cuCMhFIaKraUyi@kroah.com>
- <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
- <acdda510-945f-ff68-5c8b-a1a0290bed6d@quicinc.com>
+        b=pH7GVQYxLmiMQTu2OuoMWE3vHeoCumrc9t0hJZAusc+LQ411W+KWa82pqo6mjOShc
+         lGYVi4VX5kEhdRLvf7hrJBK2hScF4W+eQ9iJjKkMM6jcx0b6Wj3fTDCc1mLRpXyXuo
+         8jbQmKJYbJG9JGm+/pqBtIheS6JiqfTUqvpi1Dv0=
+Date:   Fri, 23 Dec 2022 15:52:00 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Puma Hsu <pumahsu@google.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, mka@chromium.org,
+        dianders@chromium.org, albertccwang@google.com, raychi@google.com,
+        howardyen@google.com, leejj@google.com, hch@infradead.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] add hooks for usb suspend and resume
+Message-ID: <Y6XAkF5MyfW6XNzV@kroah.com>
+References: <20221214081456.714859-1-pumahsu@google.com>
+ <c5f24a60-2756-dc99-ee48-99a657a9626c@suse.com>
+ <CAGCq0LZ6PLF+CCOAU6LSr3DaZ78MQ3kAmKwnXPEtjC76GsRPUg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <acdda510-945f-ff68-5c8b-a1a0290bed6d@quicinc.com>
+In-Reply-To: <CAGCq0LZ6PLF+CCOAU6LSr3DaZ78MQ3kAmKwnXPEtjC76GsRPUg@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,31 +53,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 06:21:03PM +0530, Prashanth K wrote:
-> 
-> 
-> On 14-12-22 11:05 pm, David Laight wrote:
-> > From: Greg Kroah-Hartman
-> > > Sent: 12 December 2022 13:35
-> > > 
-> > > On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
-> > > > Function pointer ki_complete() expects 'long' as its second
-> > > > argument, but we pass integer from ffs_user_copy_worker. This
-> > > > might cause a CFI failure, as ki_complete is an indirect call
-> > > > with mismatched prototype. Fix this by typecasting the second
-> > > > argument to long.
-> > > 
-> > > "might"?  Does it or not?  If it does, why hasn't this been reported
-> > > before?
-> > 
-> > Does the cast even help at all.
-> Actually I also have these same questions
-> - why we haven't seen any instances other than this one?
-> - why its not seen on other indirect function calls?
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-Great, please work on figuring these out before you resubmit this again
-as obviously we can't take this change without knowing the answers here.
+A: No.
+Q: Should I include quotations after my reply?
 
-good luck!
+http://daringfireball.net/2007/07/on_top
+
+On Fri, Dec 23, 2022 at 11:00:00AM +0800, Puma Hsu wrote:
+> Thanks for the comments. I will have an introduction for our design first.
+
+<snip>
+
+Please put this in the next round of patches you all submit, and work
+together to NOT submit independant patch series when they are obviously
+interconnected.
+
+thanks,
 
 greg k-h
