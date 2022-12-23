@@ -2,75 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE0F6551B4
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 15:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F9D6551C1
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 15:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236430AbiLWO4v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Dec 2022 09:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S236430AbiLWO7M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Dec 2022 09:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiLWO4u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 09:56:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE691A047;
-        Fri, 23 Dec 2022 06:56:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1B8EB820DE;
-        Fri, 23 Dec 2022 14:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47336C433EF;
-        Fri, 23 Dec 2022 14:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671807407;
-        bh=qHfY0XUQ6jGaf6+6ji3OiIeEWQW3wFYAbnvzIIxCzLI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HErUaAY8L4JH3P6jccurgovJDesb9mt8pfOXtH/cbEflD2tusdQOU5+lz0Lsy3xAX
-         pkrlDj1C8rY7SsE1hS1OgZ0J/NE0c26Yl/PEtmN/WhVKZYFkm1MTQMFIiN4AueKgc0
-         gjF+bUGPDI1roIe6QCiscdwOVzU2mxWFKj/YeI4I=
-Date:   Fri, 23 Dec 2022 15:56:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Joe Perches <joe@perches.com>, Julian Scheel <julian@jusst.de>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: usb: gadget: f_uac2: Fix incorrect increment of bNumEndpoints
-Message-ID: <Y6XBrF1vLclcJm3w@kroah.com>
-References: <1669193290-24263-1-git-send-email-quic_prashk@quicinc.com>
+        with ESMTP id S236441AbiLWO7L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 09:59:11 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 325B51A06E
+        for <linux-usb@vger.kernel.org>; Fri, 23 Dec 2022 06:59:10 -0800 (PST)
+Received: (qmail 152722 invoked by uid 1000); 23 Dec 2022 09:59:09 -0500
+Date:   Fri, 23 Dec 2022 09:59:09 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Gerald Lee <sundaywind2004@gmail.com>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: gadgetfs: Fix race between mounting and unmounting
+Message-ID: <Y6XCPXBpn3tmjdCC@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1669193290-24263-1-git-send-email-quic_prashk@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 02:18:10PM +0530, Prashanth K wrote:
-> Currently connect/disconnect of USB cable calls afunc_bind and
-> eventually increments the bNumEndpoints. And performing multiple
-> plugin/plugout will incorrectly increment bNumEndpoints on the
-> next plug-in leading to invalid configuration of descriptor and
-> hence enumeration failure.
-> 
-> Fix this by resetting the value of bNumEndpoints to 1 on every
-> afunc_bind call.
-> 
-> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+The syzbot fuzzer and Gerald Lee have identified a use-after-free bug
+in the gadgetfs driver, involving processes concurrently mounting and
+unmounting the gadgetfs filesystem.  In particular, gadgetfs_fill_super()
+can race with gadgetfs_kill_sb(), causing the latter to deallocate
+the_device while the former is using it.  The output from KASAN says,
+in part:
 
-Who authored this, Pratham or you?
 
-And why no "[PATCH]" in the subject line?
+BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
+BUG: KASAN: use-after-free in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
+BUG: KASAN: use-after-free in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+BUG: KASAN: use-after-free in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+BUG: KASAN: use-after-free in refcount_dec_and_test include/linux/refcount.h:333 [inline]
+BUG: KASAN: use-after-free in put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
+BUG: KASAN: use-after-free in gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
+Write of size 4 at addr ffff8880276d7840 by task syz-executor126/18689
 
-What commit id does this fix?
+CPU: 0 PID: 18689 Comm: syz-executor126 Not tainted 6.1.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+...
+ atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
+ __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
+ gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ vfs_get_super fs/super.c:1190 [inline]
+ get_tree_single+0xd0/0x160 fs/super.c:1207
+ vfs_get_tree+0x88/0x270 fs/super.c:1531
+ vfs_fsconfig_locked fs/fsopen.c:232 [inline]
 
-thanks,
 
-greg k-h
+The simplest solution is to ensure that gadgetfs_fill_super() and
+gadgetfs_kill_sb() are serialized by making them both acquire a new
+mutex.
+
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-and-tested-by: syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com
+Reported-and-tested-by: Gerald Lee <sundaywind2004@gmail.com>
+Link: https://lore.kernel.org/linux-usb/CAO3qeMVzXDP-JU6v1u5Ags6Q-bb35kg3=C6d04DjzA9ffa5x1g@mail.gmail.com/
+Fixes: e5d82a7360d1 ("vfs: Convert gadgetfs to use the new mount API")
+CC: <stable@vger.kernel.org>
+
+---
+
+I really don't know if the Fixes: commit above is the one which caused
+this bug, but it's a reasonable guess since it introduced one of the
+two racing paths (presumably, before this commit the routines didn't
+race).  In any case, this patch should apply to all the currently
+maintained kernel versions.
+
+
+[as1989]
+
+
+ drivers/usb/gadget/legacy/inode.c |   28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
+
+Index: usb-devel/drivers/usb/gadget/legacy/inode.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/legacy/inode.c
++++ usb-devel/drivers/usb/gadget/legacy/inode.c
+@@ -229,6 +229,7 @@ static void put_ep (struct ep_data *data
+  */
+ 
+ static const char *CHIP;
++static DEFINE_MUTEX(sb_mutex);		/* Serialize superblock operations */
+ 
+ /*----------------------------------------------------------------------*/
+ 
+@@ -2010,13 +2011,20 @@ gadgetfs_fill_super (struct super_block
+ {
+ 	struct inode	*inode;
+ 	struct dev_data	*dev;
++	int		rc;
+ 
+-	if (the_device)
+-		return -ESRCH;
++	mutex_lock(&sb_mutex);
++
++	if (the_device) {
++		rc = -ESRCH;
++		goto Done;
++	}
+ 
+ 	CHIP = usb_get_gadget_udc_name();
+-	if (!CHIP)
+-		return -ENODEV;
++	if (!CHIP) {
++		rc = -ENODEV;
++		goto Done;
++	}
+ 
+ 	/* superblock */
+ 	sb->s_blocksize = PAGE_SIZE;
+@@ -2053,13 +2061,17 @@ gadgetfs_fill_super (struct super_block
+ 	 * from binding to a controller.
+ 	 */
+ 	the_device = dev;
+-	return 0;
++	rc = 0;
++	goto Done;
+ 
+-Enomem:
++ Enomem:
+ 	kfree(CHIP);
+ 	CHIP = NULL;
++	rc = -ENOMEM;
+ 
+-	return -ENOMEM;
++ Done:
++	mutex_unlock(&sb_mutex);
++	return rc;
+ }
+ 
+ /* "mount -t gadgetfs path /dev/gadget" ends up here */
+@@ -2081,6 +2093,7 @@ static int gadgetfs_init_fs_context(stru
+ static void
+ gadgetfs_kill_sb (struct super_block *sb)
+ {
++	mutex_lock(&sb_mutex);
+ 	kill_litter_super (sb);
+ 	if (the_device) {
+ 		put_dev (the_device);
+@@ -2088,6 +2101,7 @@ gadgetfs_kill_sb (struct super_block *sb
+ 	}
+ 	kfree(CHIP);
+ 	CHIP = NULL;
++	mutex_unlock(&sb_mutex);
+ }
+ 
+ /*----------------------------------------------------------------------*/
