@@ -2,139 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D94654CA7
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 07:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74209654CFA
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Dec 2022 08:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbiLWG5l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Dec 2022 01:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S235854AbiLWHrK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Dec 2022 02:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiLWG5i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 01:57:38 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830622870F
-        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 22:57:34 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id g11-20020a6be60b000000b006e2c707e565so1605080ioh.14
-        for <linux-usb@vger.kernel.org>; Thu, 22 Dec 2022 22:57:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KMSbyUfyO6NDTW70zNN+3BdvFcUTCl3kbP4QW5G+jko=;
-        b=W336T6WUaQCpvWTD65jjEGVokiG+gn96izsqyuOYBuSMcxhmhkVssbzk36tRR8DXVU
-         YvEjsHNXgCGH2k2Z5q0VwCO7j7EYp/PCaCD/kzRPlxj1Jg+ACSB3K+pMWBLMG+QmTORu
-         RtV+0xoXhCZrnm9whBkCUjwMTgukgdE2Rcg+I3vY4owYy7qsmfcgJ0IC6ddRV1mrYP6p
-         VZ2Fa8ssvQe1xdvtgEP+ftCzNnjUzrK2UoTD4vUqz96ucTwRpVjAEAwI6nSq5tgL0hhB
-         AM6XSJJRPdTxylsR7sCUjVmCCIQ2cHsoC5fZk1yvAh+HatwHuXN+ACg1YDk/vFCN9KKH
-         wt0A==
-X-Gm-Message-State: AFqh2kq8lsNWE7NyM83Mow37VBs6ZYZeShpw2O525hCiLSuntFEMF5p5
-        ainGOn39Nu5ELXj0LzQXypXPCFNw6CbN/+KC8OgwCDfETe8K
-X-Google-Smtp-Source: AMrXdXtP7XurYqc2ojv9IS+bGffVewCZgVpsXvQwms0Gy4bgBL9R8/FI6PCfsO1oCwI+33XStFvuf01LnmjduQE0EIUW73bWY+Us
-MIME-Version: 1.0
-X-Received: by 2002:a92:c54f:0:b0:303:3119:420e with SMTP id
- a15-20020a92c54f000000b003033119420emr815440ilj.320.1671778653727; Thu, 22
- Dec 2022 22:57:33 -0800 (PST)
-Date:   Thu, 22 Dec 2022 22:57:33 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cc732d05f0794cf7@google.com>
-Subject: [syzbot] WARNING: refcount bug in gadgetfs_kill_sb
-From:   syzbot <syzbot+ac031e7435393ad05df6@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, hbh25y@gmail.com, jomajm@gmail.com,
+        with ESMTP id S229506AbiLWHrI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 02:47:08 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1A825EA8;
+        Thu, 22 Dec 2022 23:47:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1671781611; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=WAmnG/7WmBojD5yX/BMhJvXhQP81hfEKSP6Bz+Ki3Tr1FisxiO0jZXfXvuyNae8hXIW4kbhLZdMeEt2TXQmLxnJw69ZimeiorMXRBd59rWNl14NMLIHBUZwgosrRQ1jQJ9xq+lIjkOQ+nx9//il/FWw/EqWM1peXWMdzWmmq02E=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1671781611; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=OPemjbTg3A1NAV8ZaqaXhvWUyc8aIggBEADkKRR9l40=; 
+        b=DdicahY5LwXcRCIviVf8bCRVTGEzwGsuOKgQJQANy5AzOUVwSe8QG+I3RRb0df+9LoUiY03EO+aB9rvJXdrrXUP4iQ4QhYqGIq77DjpTYPo3FRxrOh7dqMensaoekocLNaRZCnm5M7MmsGBWJd9/sbP97uRAHtvIzhKY0O2NwZU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671781611;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=OPemjbTg3A1NAV8ZaqaXhvWUyc8aIggBEADkKRR9l40=;
+        b=V9DGAhl5Ovyl2TN1MqS2IxkBaHNh9hec2F5INe5PdvTAWx3TWrwpc3EKlLRHTfmq
+        sOxMSTsSwvAZ+FMb4AptqhZZqsTlUnEPIScXFOeucCF4i7m+aEIIF2e2Xo3yzvjpq8D
+        JaDObqqylLueTLy1YXfhyxUNgDRgOJElEBa55hoQ=
+Received: from edelgard.fodlan.icenowy.me (120.85.98.209 [120.85.98.209]) by mx.zohomail.com
+        with SMTPS id 167178160951175.93162783383423; Thu, 22 Dec 2022 23:46:49 -0800 (PST)
+Message-ID: <aa9fdfc04c3b6a3bba688bac244a157242faab82.camel@icenowy.me>
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create
+ platform devices for DT nodes without 'vdd-supply'
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mingo@kernel.org, rdunlap@infradead.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
+        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Date:   Fri, 23 Dec 2022 15:46:45 +0800
+In-Reply-To: <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
+References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+         <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
+Organization: Anthon Open-Source Community
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-ZohoMailClient: External
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+=E5=9C=A8 2022-12-22=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 11:26 -0800=EF=BC=
+=8CDoug Anderson=E5=86=99=E9=81=93=EF=BC=9A
+> Hi,
+>=20
+> On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org>
+> wrote:
+> >=20
+> > The primary task of the onboard_usb_hub driver is to control the
+> > power of an onboard USB hub. The driver gets the regulator from the
+> > device tree property "vdd-supply" of the hub's DT node. Some boards
+> > have device tree nodes for USB hubs supported by this driver, but
+> > don't specify a "vdd-supply". This is not an error per se, it just
+> > means that the onboard hub driver can't be used for these hubs, so
+> > don't create platform devices for such nodes.
+> >=20
+> > This change doesn't completely fix the reported regression. It
+> > should fix it for the RPi 3 B Plus and boards with similar hub
+> > configurations (compatible DT nodes without "vdd-supply"), boards
+> > that actually use the onboard hub driver could still be impacted
+> > by the race conditions discussed in that thread. Not creating the
+> > platform devices for nodes without "vdd-supply" is the right
+> > thing to do, independently from the race condition, which will
+> > be fixed in future patch.
+> >=20
+> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > Link:
+> > https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com=
+/
+> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> >=20
+> > Changes in v2:
+> > - don't create platform devices when "vdd-supply" is missing,
+> > =C2=A0 rather than returning an error from _find_onboard_hub()
+> > - check for "vdd-supply" not "vdd" (Johan)
+> > - updated subject and commit message
+> > - added 'Link' tag (regzbot)
+> >=20
+> > =C2=A0drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
+> > =C2=A01 file changed, 13 insertions(+)
+>=20
+> I'm a tad bit skeptical.
+>=20
+> It somehow feels a bit too much like "inside knowledge" to add this
+> here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
+> entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
+> keep the absolute minimum amount of stuff in it and all of the
+> details
+> be in the other file.
+>=20
+> If this was the only issue though, I'd be tempted to let it slide. As
+> it is, I'm kinda worried that your patch will break Alexander Stein,
+> who should have been CCed (I've CCed him now) or Icenowy Zheng (also
+> CCed now). I believe those folks are using the USB hub driver
+> primarily to drive a reset GPIO. Looking at the example in the
+> bindings for one of them (genesys,gl850g.yaml), I even see that the
+> reset-gpio is specified but not a vdd-supply. I think you'll break
+> that?
 
-syzbot found the following issue on:
+Well technically in my final DT a regulator is included (to have the
+Vbus enabled when enabling the hub), however I am still against this
+patch, because the driver should work w/o vdd-supply (or w/o reset-
+gpios), and changing this behavior is a DT binding stability breakage.
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1310cd10480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=ac031e7435393ad05df6
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=151fd1f0480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122eacc8480000
+In addition the kernel never fails because of a lacking regulator
+unless explicitly forbid dummy regulators.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+BTW USB is a discoverable bus, and if a hub do not need special
+handlement, it just does not need to appear in the DT, thus no onboard
+hub DT node.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ac031e7435393ad05df6@syzkaller.appspotmail.com
+>=20
+> In general, it feels like it should actually be fine to create the
+> USB
+> hub driver even if vdd isn't supplied. Sure, it won't do a lot, but
+> it
+> shouldn't actively hurt anything. You'll just be turning off and on
+> bogus regulators and burning a few CPU cycles. I guess the problem is
+> some race condition that you talk about in the commit message. I'd
+> rather see that fixed... That being said, if we want to be more
+> efficient and not burn CPU cycles and memory in Stefan Wahren's case,
+> maybe the USB hub driver itself could return a canonical error value
+> from its probe when it detects that it has no useful job and then
+> "onboard_usb_hub_pdevs" could just silently bail out?
 
-------------[ cut here ]------------
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 1 PID: 3448 at lib/refcount.c:28 refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
-Modules linked in:
-CPU: 1 PID: 3448 Comm: syz-executor242 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
-lr : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
-sp : ffff800012ed3c60
-x29: ffff800012ed3c60 x28: ffff80000c40fe48 x27: 0000000000000006
-x26: ffff0000c70d6508 x25: 0000000000000000 x24: ffff0000c70d6400
-x23: 0000000000000000 x22: ffff80000f183000 x21: 0000000000000000
-x20: 0000000000000003 x19: ffff80000d95e000 x18: 000000000000030d
-x17: ffff80000c0cd83c x16: ffff80000dbe6158 x15: ffff0000cdd34ec0
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000cdd34ec0
-x11: ff808000081c4d64 x10: 0000000000000000 x9 : 6a9cd14bd183ed00
-x8 : 6a9cd14bd183ed00 x7 : ffff80000816678c x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000006 x1 : 0000000100000000 x0 : 0000000000000026
-Call trace:
- refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
- __refcount_sub_and_test include/linux/refcount.h:283 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
- gadgetfs_kill_sb+0xd4/0x104 drivers/usb/gadget/legacy/inode.c:2086
- deactivate_locked_super+0x70/0xe8 fs/super.c:332
- vfs_get_super fs/super.c:1190 [inline]
- get_tree_single+0x98/0xe8 fs/super.c:1207
- gadgetfs_get_tree+0x28/0x38 drivers/usb/gadget/legacy/inode.c:2068
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- vfs_fsconfig_locked fs/fsopen.c:232 [inline]
- __do_sys_fsconfig fs/fsopen.c:439 [inline]
- __se_sys_fsconfig fs/fsopen.c:314 [inline]
- __arm64_sys_fsconfig+0x758/0x818 fs/fsopen.c:314
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-irq event stamp: 442
-hardirqs last  enabled at (441): [<ffff80000816681c>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
-hardirqs last  enabled at (441): [<ffff80000816681c>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4968
-hardirqs last disabled at (442): [<ffff80000c084084>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (360): [<ffff80000801c82c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (358): [<ffff80000801c7f8>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
+I agree.
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
