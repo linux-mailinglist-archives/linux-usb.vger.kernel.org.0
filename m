@@ -2,50 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DAF6557AD
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Dec 2022 02:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B646557CC
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Dec 2022 02:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbiLXBiy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Dec 2022 20:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S236863AbiLXBkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Dec 2022 20:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236945AbiLXBiD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 20:38:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99202537DF;
-        Fri, 23 Dec 2022 17:32:40 -0800 (PST)
+        with ESMTP id S236664AbiLXBjn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 20:39:43 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346C953EF0;
+        Fri, 23 Dec 2022 17:33:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3B8CB821B2;
-        Sat, 24 Dec 2022 01:32:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E4CC433D2;
-        Sat, 24 Dec 2022 01:32:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1E1FBCE1D05;
+        Sat, 24 Dec 2022 01:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CE7C433D2;
+        Sat, 24 Dec 2022 01:32:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671845548;
-        bh=eBdmMoYqPAMaY7fpBt1FfWbXAyji4qaZIeN0i+4cCaE=;
+        s=k20201202; t=1671845562;
+        bh=S5MPGFOs8CQGz7DP6f7RiUIyLU+Iohmst9KrpGtTkRI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oE3KHHP6ozTty9JCUAzJxVYlo1NOzMzrYt861JhR03pWVT8cKvmy1rl9WnGiWLMTK
-         XVE2ShEXMq/rCiwiksStx6RuigQ8Tj7L2zpTs99IMmVJeUmnW6CcysHJcpRWRjT6ZN
-         6k2ElCViwBNdtIaQfetXozK+l2/lk/PcZNVUXbvWZOznuL++X+2vM6YCX2OyVFdU+L
-         s9UrCw04JY3XSsLwXxMWzH8EXecvcAbPicDX/QlYBLd0MipvqQ8SKIFN3mT1Vz96M3
-         BLOxJDOQN+AZq9SwYtzBWBqLQw9vRbOE8Ja7J6uOYCw6sLID9Yzv41lhNlhDLpsEVF
-         NIkP8SjJaDyyQ==
+        b=LE9KS6c6oV8iIwY70QKwernCa1bBsCFxm3lfcD3IsHldirtJFXpzpRLDOhxXCzz+L
+         l4jm4Xg3iS+quv1QiSMTcKwcJEDEW1XymyJL+L9RcrySS+tj6D6NDoEyb0eJNumHcF
+         DnEHo6IpnVVohTsj9RWcKjLIfrA1g5UnTawcUprlXRysY9XWg7Q9fLpYuxG8F97I+f
+         XSlxQvvP6/RSMXsSVaXCm6oy4UwkNu7vBkl8rm1FTOH0/+xUBwlfQUeHlv3SPyqi3U
+         X1DVjKt4f2lrDEtmhdMH/oF5uCUJxrDNrT/l18TS3zkyDYSb5SugdE5rNATDJsnObM
+         8uJcYvlZXOQbA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc:     Henry Tian <tianxiaofeng@bytedance.com>,
+        Lei YU <yulei.sh@bytedance.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, mathias.nyman@intel.com,
-        bhelgaas@google.com, rafael.j.wysocki@intel.com,
-        christophe.leroy@csgroup.eu, yj84.jang@samsung.com,
-        heikki.krogerus@linux.intel.com, evgreen@chromium.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 08/11] xhci: disable U3 suspended ports in S4 hibernate poweroff_late stage
-Date:   Fri, 23 Dec 2022 20:31:58 -0500
-Message-Id: <20221224013202.393372-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, joel@jms.id.au,
+        jakobkoschel@gmail.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 5.4 2/7] usb: gadget: aspeed: fix buffer overflow
+Date:   Fri, 23 Dec 2022 20:32:28 -0500
+Message-Id: <20221224013233.393537-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221224013202.393372-1-sashal@kernel.org>
-References: <20221224013202.393372-1-sashal@kernel.org>
+In-Reply-To: <20221224013233.393537-1-sashal@kernel.org>
+References: <20221224013233.393537-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,153 +60,103 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Henry Tian <tianxiaofeng@bytedance.com>
 
-[ Upstream commit c3bbacd61baace2f4fbab17012c3d149df2d50f1 ]
+[ Upstream commit 83045e19feae937c425248824d1dc0fc95583842 ]
 
-Disable U3 suspended ports in hibernate S4 poweroff_late for systems
-with XHCI_RESET_TO_DEFAULT quirk, if wakeup is not enabled.
+In ast_vhub_epn_handle_ack() when the received data length exceeds the
+buffer, it does not check the case and just copies to req.buf and cause
+a buffer overflow, kernel oops on this case.
 
-This reduces the number of self-powered usb devices from surviving in
-U3 suspended state into next reboot.
+This issue could be reproduced on a BMC with an OS that enables the
+lan over USB:
+1. In OS, enable the usb eth dev, verify it pings the BMC OK;
+2. In OS, set the usb dev mtu to 2000. (Default is 1500);
+3. In OS, ping the BMC with `-s 2000` argument.
 
-Bootloader/firmware on these systems can't handle usb ports in U3, and
-will timeout, causing extra delay during reboot/restore from S4.
+The BMC kernel will get oops with below logs:
 
-Add pci_poweroff_late() callback to struct usb_hcd to get this done at
-the correct stage in hibernate.
+    skbuff: skb_over_panic: text:8058e098 len:2048 put:2048 head:84c678a0 data:84c678c2 tail:0x84c680c2 end:0x84c67f00 dev:usb0
+    ------------[ cut here ]------------
+    kernel BUG at net/core/skbuff.c:113!
+    Internal error: Oops - BUG: 0 [#1] ARM
+    CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.69-c9fb275-dirty-d1e579a #1
+    Hardware name: Generic DT based system
+    PC is at skb_panic+0x60/0x6c
+    LR is at irq_work_queue+0x6c/0x94
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20221130091944.2171610-5-mathias.nyman@linux.intel.com
+Fix the issue by checking the length and set `-EOVERFLOW`.
+
+Tested: Verify the BMC kernel does not get oops in the above case, and
+the usb ethernet gets RX packets errors instead.
+
+Signed-off-by: Lei YU <yulei.sh@bytedance.com>
+Signed-off-by: Henry Tian <tianxiaofeng@bytedance.com>
+Reviewed-by: Neal Liu <neal_liu@aspeedtech.com>
+Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Link: https://lore.kernel.org/r/20221024094853.2877441-1-yulei.sh@bytedance.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hcd-pci.c  | 13 ++++++++++
- drivers/usb/host/xhci-pci.c | 52 +++++++++++++++++++++++++++++++++++++
- include/linux/usb/hcd.h     |  3 +++
- 3 files changed, 68 insertions(+)
+ drivers/usb/gadget/udc/aspeed-vhub/core.c |  2 +-
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c  | 16 ++++++++++++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index eee78cbfaa72..c827626df16e 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -562,6 +562,17 @@ static int hcd_pci_suspend_noirq(struct device *dev)
- 	return retval;
- }
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+index c1bfbfd9491d..0812967e1d5a 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+@@ -42,7 +42,7 @@ void ast_vhub_done(struct ast_vhub_ep *ep, struct ast_vhub_req *req,
  
-+static int hcd_pci_poweroff_late(struct device *dev)
-+{
-+	struct pci_dev		*pci_dev = to_pci_dev(dev);
-+	struct usb_hcd		*hcd = pci_get_drvdata(pci_dev);
-+
-+	if (hcd->driver->pci_poweroff_late && !HCD_DEAD(hcd))
-+		return hcd->driver->pci_poweroff_late(hcd, device_may_wakeup(dev));
-+
-+	return 0;
-+}
-+
- static int hcd_pci_resume_noirq(struct device *dev)
+ 	list_del_init(&req->queue);
+ 
+-	if (req->req.status == -EINPROGRESS)
++	if ((req->req.status == -EINPROGRESS) ||  (status == -EOVERFLOW))
+ 		req->req.status = status;
+ 
+ 	if (req->req.dma) {
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+index 2cd406e8dd99..90d1279eca64 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+@@ -89,6 +89,7 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
  {
- 	powermac_set_asic(to_pci_dev(dev), 1);
-@@ -582,6 +593,7 @@ static int hcd_pci_restore(struct device *dev)
+ 	struct ast_vhub_req *req;
+ 	unsigned int len;
++	int status = 0;
+ 	u32 stat;
  
- #define hcd_pci_suspend		NULL
- #define hcd_pci_suspend_noirq	NULL
-+#define hcd_pci_poweroff_late	NULL
- #define hcd_pci_resume_noirq	NULL
- #define hcd_pci_resume		NULL
- #define hcd_pci_restore		NULL
-@@ -619,6 +631,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
- 	.thaw_noirq	= NULL,
- 	.thaw		= hcd_pci_resume,
- 	.poweroff	= hcd_pci_suspend,
-+	.poweroff_late	= hcd_pci_poweroff_late,
- 	.poweroff_noirq	= hcd_pci_suspend_noirq,
- 	.restore_noirq	= hcd_pci_resume_noirq,
- 	.restore	= hcd_pci_restore,
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 0ee11a937011..3380b5b273e1 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -618,6 +618,57 @@ static int xhci_pci_resume(struct usb_hcd *hcd, bool hibernated)
- 	return retval;
- }
+ 	/* Read EP status */
+@@ -124,9 +125,15 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
+ 	len = VHUB_EP_DMA_TX_SIZE(stat);
  
-+static int xhci_pci_poweroff_late(struct usb_hcd *hcd, bool do_wakeup)
-+{
-+	struct xhci_hcd		*xhci = hcd_to_xhci(hcd);
-+	struct xhci_port	*port;
-+	struct usb_device	*udev;
-+	unsigned int		slot_id;
-+	u32			portsc;
-+	int			i;
-+
-+	/*
-+	 * Systems with XHCI_RESET_TO_DEFAULT quirk have boot firmware that
-+	 * cause significant boot delay if usb ports are in suspended U3 state
-+	 * during boot. Some USB devices survive in U3 state over S4 hibernate
-+	 *
-+	 * Disable ports that are in U3 if remote wake is not enabled for either
-+	 * host controller or connected device
-+	 */
-+
-+	if (!(xhci->quirks & XHCI_RESET_TO_DEFAULT))
-+		return 0;
-+
-+	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
-+		port = &xhci->hw_ports[i];
-+		portsc = readl(port->addr);
-+
-+		if ((portsc & PORT_PLS_MASK) != XDEV_U3)
-+			continue;
-+
-+		slot_id = xhci_find_slot_id_by_port(port->rhub->hcd, xhci,
-+						    port->hcd_portnum + 1);
-+		if (!slot_id || !xhci->devs[slot_id]) {
-+			xhci_err(xhci, "No dev for slot_id %d for port %d-%d in U3\n",
-+				 slot_id, port->rhub->hcd->self.busnum, port->hcd_portnum + 1);
-+			continue;
+ 	/* If not using DMA, copy data out if needed */
+-	if (!req->req.dma && !ep->epn.is_in && len)
+-		memcpy(req->req.buf + req->req.actual, ep->buf, len);
+-
++	if (!req->req.dma && !ep->epn.is_in && len) {
++		if (req->req.actual + len > req->req.length) {
++			req->last_desc = 1;
++			status = -EOVERFLOW;
++			goto done;
++		} else {
++			memcpy(req->req.buf + req->req.actual, ep->buf, len);
 +		}
-+
-+		udev = xhci->devs[slot_id]->udev;
-+
-+		/* if wakeup is enabled then don't disable the port */
-+		if (udev->do_remote_wakeup && do_wakeup)
-+			continue;
-+
-+		xhci_dbg(xhci, "port %d-%d in U3 without wakeup, disable it\n",
-+			 port->rhub->hcd->self.busnum, port->hcd_portnum + 1);
-+		portsc = xhci_port_state_to_neutral(portsc);
-+		writel(portsc | PORT_PE, port->addr);
 +	}
-+
-+	return 0;
-+}
-+
- static void xhci_pci_shutdown(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd		*xhci = hcd_to_xhci(hcd);
-@@ -684,6 +735,7 @@ static int __init xhci_pci_init(void)
- #ifdef CONFIG_PM
- 	xhci_pci_hc_driver.pci_suspend = xhci_pci_suspend;
- 	xhci_pci_hc_driver.pci_resume = xhci_pci_resume;
-+	xhci_pci_hc_driver.pci_poweroff_late = xhci_pci_poweroff_late;
- 	xhci_pci_hc_driver.shutdown = xhci_pci_shutdown;
- #endif
- 	return pci_register_driver(&xhci_pci_driver);
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index c0cf20b19e63..cdd18d914307 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -283,6 +283,9 @@ struct hc_driver {
- 	/* called after entering D0 (etc), before resuming the hub */
- 	int	(*pci_resume)(struct usb_hcd *hcd, bool hibernated);
+ 	/* Adjust size */
+ 	req->req.actual += len;
  
-+	/* called just before hibernate final D3 state, allows host to poweroff parts */
-+	int	(*pci_poweroff_late)(struct usb_hcd *hcd, bool do_wakeup);
-+
- 	/* cleanly make HCD stop writing memory and doing I/O */
- 	void	(*stop) (struct usb_hcd *hcd);
+@@ -134,9 +141,10 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
+ 	if (len < ep->ep.maxpacket)
+ 		req->last_desc = 1;
+ 
++done:
+ 	/* That's it ? complete the request and pick a new one */
+ 	if (req->last_desc >= 0) {
+-		ast_vhub_done(ep, req, 0);
++		ast_vhub_done(ep, req, status);
+ 		req = list_first_entry_or_null(&ep->queue, struct ast_vhub_req,
+ 					       queue);
  
 -- 
 2.35.1
