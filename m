@@ -2,96 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0416558F7
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Dec 2022 08:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E16B655922
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Dec 2022 09:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiLXHgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Dec 2022 02:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S230341AbiLXIT2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Dec 2022 03:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiLXHgB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Dec 2022 02:36:01 -0500
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02E9938A1;
-        Fri, 23 Dec 2022 23:35:54 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowADn7JTJq6Zj1ihdCA--.4680S2;
-        Sat, 24 Dec 2022 15:35:37 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH v3] usb: gadget: aspeed_udc: Add check for dma_alloc_coherent
-Date:   Sat, 24 Dec 2022 15:35:36 +0800
-Message-Id: <20221224073536.24889-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229487AbiLXIT0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Dec 2022 03:19:26 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31337BC31;
+        Sat, 24 Dec 2022 00:19:22 -0800 (PST)
+Received: from [192.168.1.103] (178.176.73.194) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 24 Dec
+ 2022 11:19:11 +0300
+Subject: Re: [RFC PATCH 12/14] sound: soc: qcom: qusb6: Ensure PCM format is
+ supported by USB audio device
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-13-quic_wcheng@quicinc.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <6e5da084-d2fb-4b84-1c3c-cd428ee111ec@omp.ru>
+Date:   Sat, 24 Dec 2022 11:19:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowADn7JTJq6Zj1ihdCA--.4680S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrur4UGF4UXr1UZFW3Wry3Arb_yoWDKrgEkr
-        4UuFW7C34UZF98tF17J34ayrWDKF95Z3s5WF1q9FnxZa43JayxXr4Uuryv9a13ZF1xCFs3
-        Cw15JanrXa4FgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUm-eOUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221223233200.26089-13-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.73.194]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 12/24/2022 07:56:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 174384 [Dec 24 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.194 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;178.176.73.194:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.194
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 12/24/2022 07:59:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 12/24/2022 6:00:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 10:54:37PM +0800, Greg KH wrote:
->> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
->> index 01968e2167f9..7dc2457c7460 100644
->> --- a/drivers/usb/gadget/udc/aspeed_udc.c
->> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
->> @@ -1516,6 +1516,10 @@ static int ast_udc_probe(struct platform_device *pdev)
->>  					  AST_UDC_EP_DMA_SIZE *
->>  					  AST_UDC_NUM_ENDPOINTS,
->>  					  &udc->ep0_buf_dma, GFP_KERNEL);
->> +	if (!udc->ep0_buf) {
->> +		rc = -ENOMEM;
->> +		goto err;
->> +	}
->>  
->>  	udc->gadget.speed = USB_SPEED_UNKNOWN;
->>  	udc->gadget.max_speed = USB_SPEED_HIGH;
->> -- 
->> 2.25.1
->> 
-> 
-> Why is this just a duplicate of the patch previously submitted here:
-> 	https://lore.kernel.org/r/20221125092833.74822-1-yuancan@huawei.com
-> 
-> confused,
-> 
-> greg k-h
+Hello!
 
-Yes, it is the same as mine.
-As the previous patch had not been merged into the Linux kernel,
-my tool found the same error and report it.
-And both of us chose the most concise way to fix the error.
-That is why the patches are the same.
+On 12/24/22 2:31 AM, Wesley Cheng wrote:
 
-Thanks,
-Jiang
+> Check for if the PCM format is supported during the hw_params callback.  If
+> the profile is not supported then the userspace ALSA entity will receive an
+> error, and can take further action.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  sound/soc/qcom/qdsp6/q6usb.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/qcom/qdsp6/q6usb.c b/sound/soc/qcom/qdsp6/q6usb.c
+> index a9da6dec6c6f..128e0974db4e 100644
+> --- a/sound/soc/qcom/qdsp6/q6usb.c
+> +++ b/sound/soc/qcom/qdsp6/q6usb.c
+> @@ -42,7 +42,14 @@ static int q6usb_hw_params(struct snd_pcm_substream *substream,
+>  			   struct snd_pcm_hw_params *params,
+>  			   struct snd_soc_dai *dai)
+>  {
+> -	return 0;
+> +	struct q6usb_port_data *data = dev_get_drvdata(dai->dev);
+> +	int direction = substream->stream;
+> +	int ret;
 
+   You don't seem to need this variable, just use *return*
+snd_soc_usb_find_format(...).
+
+> +
+> +	ret = snd_soc_usb_find_format(data->active_idx, params, direction);
+> +
+> +	return ret;
+> +
+>  }
+>  static const struct snd_soc_dai_ops q6usb_ops = {
+>  	.hw_params	= q6usb_hw_params,
+
+MBR, Sergey
