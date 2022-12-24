@@ -2,43 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDFD655749
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Dec 2022 02:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945DD65574B
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Dec 2022 02:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236713AbiLXBde (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Dec 2022 20:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S236722AbiLXBdg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Dec 2022 20:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbiLXBcb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 20:32:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E978C193D4;
-        Fri, 23 Dec 2022 17:31:07 -0800 (PST)
+        with ESMTP id S236562AbiLXBce (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Dec 2022 20:32:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A552634D0E;
+        Fri, 23 Dec 2022 17:31:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 585E1B8213E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 318D060D38;
+        Sat, 24 Dec 2022 01:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFFFDC433EF;
         Sat, 24 Dec 2022 01:31:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E80FC433EF;
-        Sat, 24 Dec 2022 01:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671845466;
-        bh=/489chSvrSehPDPnwlYEg6/lHXpA0t+YpsTDC9zquKE=;
+        s=k20201202; t=1671845468;
+        bh=v05YtagQilWYyBP35pywbT1fDrboLNZJRHlRDODJlk4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qXxmHkMlm8QCvlc94jwpwNMNtqnRvGBrJn/XUz4hzmVYxYmGrXhdjs6uQYJl/+NeF
-         E5GHMTOPy0umeGMM7T9C/p6SlocpjV2nWkRcnmzs3KLP2gw2nCJL1WRCHRgu00amzf
-         KzMv0BBx8Wql1s789H1C2bRAewu/z5ug1zmkmfVLy/uE9V9P9DucsaH9SBHGHFvxXI
-         3pOw+B1BwvokvyIw2BmBLOuo79M1qnDktZBVYLMeefexLc/oSGLNoqgw1rTRHPplRu
-         8NoaDzHyPSQKQ+DW02/tfxscGkpwLb8LsWMw94A1e/yskli0+NngPhwLqxaqoJ6jMK
-         8EJW+2lEBhqDw==
+        b=vOCHfiydayhEXUlKtY2XzGqBet1GhStVQyx8NO2CVwMZTRO60rwm4hHyZBnqe01S1
+         KN6saBS3AeDhY0BpoqmkPYoKfTQ4+cEfXNENmdII2XnsQ3N67EnCQTHm++NFDJ7cTd
+         sZRj4SuiyXbC/ONj2p5YiBbSWPes54QXQ61ewl/L4JZ/P9+WlGLRzO7hTmPVUSal5L
+         gsiFVWPvPTPbn5UCNQ+OMefLyAvSpAL4O6+or0R6SGLJnxsx9fKN4NEYTGlvCo5Ec2
+         eb99vdB7s7ZBZO2h0sJx7cgKIfDznGeja1km68FS+nBggy2uWrrr9AnxFffaiy4t4A
+         9Qs6Bse0QXExg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 06/18] usb: gadget: f_ecm: Always set current gadget in ecm_bind()
-Date:   Fri, 23 Dec 2022 20:30:22 -0500
-Message-Id: <20221224013034.392810-6-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, valentina.manea.m@gmail.com,
+        shuah@kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 08/18] usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK define
+Date:   Fri, 23 Dec 2022 20:30:24 -0500
+Message-Id: <20221224013034.392810-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221224013034.392810-1-sashal@kernel.org>
 References: <20221224013034.392810-1-sashal@kernel.org>
@@ -55,96 +56,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sascha Hauer <s.hauer@pengutronix.de>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit d65e6b6e884a38360fc1cadf8ff31858151da57f ]
+[ Upstream commit dd65a243a915ca319ed5fee9161a168c836fa2f2 ]
 
-The gadget may change over bind/unbind cycles, so set it each time during
-bind, not only the first time. Without it we get a use-after-free with
-the following example:
+Fix v_recv_cmd_submit() to use PIPE_BULK define instead of hard coded
+values. This also fixes the following signed integer overflow error
+reported by cppcheck. This is not an issue since pipe is unsigned int.
+However, this change improves the code to use proper define.
 
-cd /sys/kernel/config/usb_gadget/; mkdir -p mygadget; cd mygadget
-mkdir -p configs/c.1/strings/0x409
-echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
-mkdir -p functions/ecm.usb0
-ln -s functions/ecm.usb0 configs/c.1/
-rmmod dummy_hcd
-modprobe dummy_hcd
+drivers/usb/usbip/vudc_rx.c:152:26: error: Signed integer overflow for expression '3<<30'. [integerOverflow]
+ urb_p->urb->pipe &= ~(3 << 30);
 
-KASAN will complain shortly after the 'modprobe':
+In addition, add a build time check for PIPE_BULK != 3 as the code path
+depends on PIPE_BULK = 3.
 
-usb 2-1: New USB device found, idVendor=0000, idProduct=0000, bcdDevice= 6.01
-usb 2-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-==================================================================
-BUG: KASAN: use-after-free in gether_connect+0xb8/0x30c
-Read of size 4 at addr cbef170c by task swapper/3/0
-
-CPU: 3 PID: 0 Comm: swapper/3 Not tainted 6.1.0-rc3-00014-g41ff012f50cb-dirty #322
-Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
- unwind_backtrace from show_stack+0x10/0x14
- show_stack from dump_stack_lvl+0x58/0x70
- dump_stack_lvl from print_report+0x134/0x4d4
- print_report from kasan_report+0x78/0x10c
- kasan_report from gether_connect+0xb8/0x30c
- gether_connect from ecm_set_alt+0x124/0x254
- ecm_set_alt from composite_setup+0xb98/0x2b18
- composite_setup from configfs_composite_setup+0x80/0x98
- configfs_composite_setup from dummy_timer+0x8f0/0x14a0 [dummy_hcd]
- ...
-
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Link: https://lore.kernel.org/r/20221104131031.850850-3-s.hauer@pengutronix.de
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20221110194738.38514-1-skhan@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_ecm.c | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+ drivers/usb/usbip/vudc_rx.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/f_ecm.c b/drivers/usb/gadget/function/f_ecm.c
-index ffe2486fce71..a7ab30e603e2 100644
---- a/drivers/usb/gadget/function/f_ecm.c
-+++ b/drivers/usb/gadget/function/f_ecm.c
-@@ -685,7 +685,7 @@ ecm_bind(struct usb_configuration *c, struct usb_function *f)
- 	struct usb_composite_dev *cdev = c->cdev;
- 	struct f_ecm		*ecm = func_to_ecm(f);
- 	struct usb_string	*us;
--	int			status;
-+	int			status = 0;
- 	struct usb_ep		*ep;
+diff --git a/drivers/usb/usbip/vudc_rx.c b/drivers/usb/usbip/vudc_rx.c
+index d4a2f30a7580..51bb70837b90 100644
+--- a/drivers/usb/usbip/vudc_rx.c
++++ b/drivers/usb/usbip/vudc_rx.c
+@@ -149,7 +149,9 @@ static int v_recv_cmd_submit(struct vudc *udc,
+ 	urb_p->urb->status = -EINPROGRESS;
  
- 	struct f_ecm_opts	*ecm_opts;
-@@ -695,23 +695,19 @@ ecm_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	ecm_opts = container_of(f->fi, struct f_ecm_opts, func_inst);
- 
--	/*
--	 * in drivers/usb/gadget/configfs.c:configfs_composite_bind()
--	 * configurations are bound in sequence with list_for_each_entry,
--	 * in each configuration its functions are bound in sequence
--	 * with list_for_each_entry, so we assume no race condition
--	 * with regard to ecm_opts->bound access
--	 */
-+	mutex_lock(&ecm_opts->lock);
+ 	/* FIXME: more pipe setup to please usbip_common */
+-	urb_p->urb->pipe &= ~(3 << 30);
++	BUILD_BUG_ON_MSG(PIPE_BULK != 3, "PIPE_* doesn't range from 0 to 3");
 +
-+	gether_set_gadget(ecm_opts->net, cdev->gadget);
-+
- 	if (!ecm_opts->bound) {
--		mutex_lock(&ecm_opts->lock);
--		gether_set_gadget(ecm_opts->net, cdev->gadget);
- 		status = gether_register_netdev(ecm_opts->net);
--		mutex_unlock(&ecm_opts->lock);
--		if (status)
--			return status;
- 		ecm_opts->bound = true;
- 	}
- 
-+	mutex_unlock(&ecm_opts->lock);
-+	if (status)
-+		return status;
-+
- 	ecm_string_defs[1].s = ecm->ethaddr;
- 
- 	us = usb_gstrings_attach(cdev, ecm_strings,
++	urb_p->urb->pipe &= ~(PIPE_BULK << 30);
+ 	switch (urb_p->ep->type) {
+ 	case USB_ENDPOINT_XFER_BULK:
+ 		urb_p->urb->pipe |= (PIPE_BULK << 30);
 -- 
 2.35.1
 
