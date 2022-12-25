@@ -2,149 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAC0655C38
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Dec 2022 04:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED19F655CE6
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Dec 2022 12:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiLYDHS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Dec 2022 22:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
+        id S229464AbiLYLIg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Dec 2022 06:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLYDHR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Dec 2022 22:07:17 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2051.outbound.protection.outlook.com [40.107.22.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58380658D;
-        Sat, 24 Dec 2022 19:07:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T43zYQoLzESZ7CYd5iMz0vBAWCGJUWYuInSdOOsxmCCms0D6Mjc/8Qmu7/ZjFkHcIDaPwKHaRUdsLYDHhUbpl2E01xvNUZp/sjqBttoo98JKxxiWdfcPTdsymmrPSes56yOnZKiLCaXXrSD3qw0T+hEdGe09WqSegVPAx3I77YFQlX+etZITATX/C+XCIvq+pEasI3sLQXSPiNZ5sSvzr6L4A2TLBxjdshlk1D97Zm7HAbzd53+sv6VqR8VMU5DFcmijXBD12REDpnsINJBzatjHw1bQ/aDhr3pfiWOrErBS4JnbAjv8anikd7jSUEEz6o/6z7fcLJ53ehuLgfzB6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oWSixQwkG9Ol8egy7g25WR3s91TN2h7PXJ2kQetu+bI=;
- b=M9LHqjX26f7Reoz228rt9Yv8tQ56kmQFDF1CXx0SS7cjudS8tm/WwAXBSW5YM4RXhSCpDe6ZYHrI71S/eXvEnyC7DX8PciFNLEtqRl/78LEVtrMUneznT3zPRyMyn2AU8FPQE4FN5yLiKP3+YLAVu3806lH+e98irkkzqfJwDm3ItB3GXE+kC1T1KP5BmKrfiBUaLmJsIN4V/wXPF98tTIeWWp3kzPaJJ8eu81yg9mexfF4NkaAhliOt/mtXXmUcPCIweU+EbQklm0Ukn5cktFH2mqIWXCbd1dqKPGbDTVInZuCzgZl5WhB6YVypCqBg8rFNDbvgRC8DmL11xuw8+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oWSixQwkG9Ol8egy7g25WR3s91TN2h7PXJ2kQetu+bI=;
- b=nTL82isyKH0KEmo/4ofZ7q31Cm5eUpJiD6B/uwEP0raEQO4r38bQvORqKBSer7EJKlxXmusnebR6yz5TqIg5Wt8e0qYUNVnIMpocpYc21Oz7rl50+xJtlfsO4gVKswHmi6oRdN9dUswsSDxHMIhdBV53uKGl2LWR8n/UkL2rOyw=
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by DB9PR04MB8188.eurprd04.prod.outlook.com (2603:10a6:10:25e::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.13; Sun, 25 Dec
- 2022 03:07:13 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.5944.016; Sun, 25 Dec 2022
- 03:07:13 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Open Source Submission <patches@amperecomputing.com>
-Subject: RE: [EXT] Re: [PATCH v2] USB: gadget: Add ID numbers to
- configfs-gadget driver names
-Thread-Topic: [EXT] Re: [PATCH v2] USB: gadget: Add ID numbers to
- configfs-gadget driver names
-Thread-Index: AQHZFhjlqf1edg9mHkmn/Ogctu3iV65973mQ
-Date:   Sun, 25 Dec 2022 03:07:12 +0000
-Message-ID: <HE1PR0401MB2331C0314D27002E5F3FC17288EF9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-References: <20221221091317.19380-1-chanh@os.amperecomputing.com>
- <f7067028-9662-7776-80a5-3bbe046c92e0@collabora.com>
-In-Reply-To: <f7067028-9662-7776-80a5-3bbe046c92e0@collabora.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|DB9PR04MB8188:EE_
-x-ms-office365-filtering-correlation-id: 0f885017-5cd3-4362-f1cd-08dae6251ea6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ua6ZkwYyrn6Y+tW4N8PXI9hwl85nsi/xzbxS9NFVE2sJqhl240M11IXQoOTkW6Q4sYZ4Pw0j71XZO6ZjOSVrci0yU6IG+fDpOLfgauBC3qOXiSaAqTcBo31lKecuky3SaSN6Apu0ByQ9wj00lXkYKEbQ6LlOqlpLl75z84A81kiA/XUPy/wTDyMWyqgROqNY2wvRp4K2JjFokuWDGKMHGduskLwO9ld2ice2dOJ54VN8hp0ikYqRe/hNX91RkxPoDv5USsEHIFJqMGIwDuYhrXRl2wHi7wHNFWDi26VqCm5pCleuSaB5WOmq+rlKGte7qV9wx9yVD5QwPT8Br3eIMsApzCQmqQijJFYgYhEqFuTg9WNqht6u30KIepuohff1J17Gh7ZG3R7jHXm+vhGEn20NFLwknkDusAbGaPfNEv+2WnGjaPd60G6WbGbdD6qQxhP6Bm66Fkuy+wtbEF+uS+NROmQE8U9oNsiHWXNKjQ2wbIfPuxQIA/BmoerjjVhkkHIvfyhIt7tG2z9MTljLrNYuoNkuTzfhria6EWm5fI+WtPXlqyzzWEPHAJL1lw7e64I/RHdFQz02bzGTbP96tQMO2TH00t3eSajjBgxj7JO9nmdlSIl55FiOHM7qcQ0GE9yZijsasz17SF3e1O82GnLJxlfbvjo6D1BNQejmW7SVqha/jBwsVfB2HNbBRY4dJeRnPv6du61qK1dcgS6uDw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(376002)(39860400002)(366004)(451199015)(33656002)(110136005)(44832011)(4744005)(41300700001)(52536014)(86362001)(8936002)(7416002)(76116006)(55016003)(66946007)(2906002)(66556008)(66476007)(64756008)(8676002)(316002)(5660300002)(66446008)(38070700005)(9686003)(26005)(186003)(38100700002)(122000001)(921005)(55236004)(6506007)(71200400001)(478600001)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dmpoeVNBTnFGS0pEekhUdDBvREdvcmxUR25FTzNnZTM0eDJNK01jd24xcXhm?=
- =?utf-8?B?U2dHUUk4NkJCeWtqck5EckZDak1FUHFVRlB0Q2d4UnpDUExwRERZNlRBNTNZ?=
- =?utf-8?B?TXZ2R0dIaG9jelg5RTN2U2g3RjBtSTFNa0s0UWYwMERKT2Q3Um1GUTNIUWtF?=
- =?utf-8?B?OVZYeWtKbmQrZmtEeGN0RWJJbCtkSmxVUklOcy9EVmNDZlp4MEJVUmk3c1E4?=
- =?utf-8?B?VU1pbGhYQlBuZEpOK2RNam4ralZuUncydW1IOGZDVGF6MHJVTGlHT292eXlo?=
- =?utf-8?B?REtYMHRuZHo0RGY0RjBkNDdyeUZFVHh0RU0zbnpabEF2ZjFsRWl5RjRuN2lr?=
- =?utf-8?B?UzQzQ3AxL0JsOVgwLytTU0lxMFBxV0lBKzNocTVqWEF3dE91RWlLeEVneUll?=
- =?utf-8?B?MkZvOFo0LzVNc1RPMFBDOWRkaWMxS1hncWR2aXc3Z05pZ0lRU0UzV2JZYTU5?=
- =?utf-8?B?MExXc2ZrOTNWQ3Q0aUNzY1g4OUc4VXNVUytnQ3NSZGVaNXhXVFhFR2w5ZUli?=
- =?utf-8?B?c1NKeHpsTjNjRTZ6amdaa0RQeFN5YUN0REdpNlNpeDcwQUlKZllYekpSdTJN?=
- =?utf-8?B?Qk9udDB2bmpDNTBmQlpRZUdQQUVIdVg5OExjM1B3L0dDOUU4SkFsNVA0Y29h?=
- =?utf-8?B?bnBoa3BpRFRyOTdranBVeEZxaU51RTduNXVYcXh2eXdiU00vcWs5QkIwWkZw?=
- =?utf-8?B?MUowT1c3ZnVyTVpsODBsZk93SmlzSTdPNXN3aTBLSC90a3FGQWViM3pYRHVD?=
- =?utf-8?B?OWhnV2ZUaGVXVEZaTklZK0xOQ1dld05qYTVTOHg3VFZ2Q2M1V1NmNDk5QjVF?=
- =?utf-8?B?Ym8raFhvWWszd0VMbzhobDNnOUlzdFB1a0U1MUZqbjBPcS9TZGRMMWhua3NL?=
- =?utf-8?B?ek9uSWs2NWFpRTk4bnV2VDVQcFA0NG01cCt3RUE5dFpndnl1cGsrbUs3MVpr?=
- =?utf-8?B?NlBYZHZZMGpmREtML01QcFYzQjdrYk5XckR1VGpsQlpJcnV6ZWt6OUpnOXB3?=
- =?utf-8?B?anpHMFFzemhRcTJNRytocHhSYTRGclQ2UllSaTl6bVVCdlBQNk5iSFhzTk9q?=
- =?utf-8?B?djlxMEFwUEhONXFJZyt6KzFBSXdQY3lvY2NGVUNJTncxWWNjSVZuWUdlYndU?=
- =?utf-8?B?aWRRTCtpdk5uYWxqdmxQUXJMZEoxZnU0NGYyQ0o1NE5pQ2FGcFp4U1o1S0ZN?=
- =?utf-8?B?K003QUdYNGZCUHdCaUNKcURwb1BYNGZwTWZseVM0RHhBZXI4WDEwb3N5WEh0?=
- =?utf-8?B?cllES0xsSVRLOUdnR3dtejMvU2EwRTBxSlZrMTVLbmNhdmdXbDNOM2FnaHQ2?=
- =?utf-8?B?Z24vdklXSGxOUXBlRlJVNWpTVVVLckVjc0Zqdk9JQlZpRU9YOVdZVXNlNUpB?=
- =?utf-8?B?emZTZjJ6ekJQYjdqdHlaVHJuOGpueUJUSHpOekRjNm9hblBTUGVrd0ZxK3VB?=
- =?utf-8?B?dW9SenBaN2RsTkZ6VzJqT0N1WEpRYXlTOHhrY2xVeGhUV2VDZDl5elltRWI4?=
- =?utf-8?B?U1kzdTFoQ3VSVUFoaW1FczFlQjByYUZnUmF5bGdZWlgwenJYVkFGK3h4ZHM0?=
- =?utf-8?B?RnNGMlpVMWxsaVhxRW5rbWpmQS9qcThuWVlBdFRmTlEwbzhhNVVBSFJzNkFM?=
- =?utf-8?B?cGRQVG1Ia2pRSFlBQ2FYQXVvTnFoK3BMSWlmRUtZaXp3UlpQTDRtb3lENnNz?=
- =?utf-8?B?SXJaYU5Zb0lZR2w5OUg1c1BUSmlYanVSdW5yK0FkbUE4cUNuek5NTFljYUdK?=
- =?utf-8?B?N01jQjBIR1pGV0FDZVN4L1ZiUWs1OFJ1Vm9uWk9UdHJUUmFkL0ZEbUxLWE5x?=
- =?utf-8?B?c05KMTE1TWlaLzMzZXUxOVVnSyt5UDArUDBvMjhUaWdPdlpMRHZXKzRETzN2?=
- =?utf-8?B?alhTbDVGbkxFcmNDcVNFZHpsTm5EQTNZT0pTaFhQdjRQbS9KbFNWS3ZhRGd1?=
- =?utf-8?B?eVZnS25lcndWbml3RFZhY0RVbjdGclM1RGhTQlN2N3RoRTY5cUlrTXE5LzJY?=
- =?utf-8?B?WEN6cEhyMFpHd01GdU5sQlh3UTB6MCtndlRQMElKNDFFR0t4c3pVV3YrSFBO?=
- =?utf-8?B?QyttTm9xN1VhcTV6cnE5bCtMMmF6L2UyaWNrem81YnRRdm5VZUpLOTg0U2ZM?=
- =?utf-8?Q?fOCk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229441AbiLYLIf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Dec 2022 06:08:35 -0500
+Received: from relay19.mail.ox.ac.uk (relay19.mail.ox.ac.uk [129.67.1.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC1E5F88
+        for <linux-usb@vger.kernel.org>; Sun, 25 Dec 2022 03:08:32 -0800 (PST)
+Received: from smtp8.mail.ox.ac.uk ([163.1.2.204])
+        by relay19.mail.ox.ac.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <dima.pasechnik@cs.ox.ac.uk>)
+        id 1p9Orl-0007jn-9h; Sun, 25 Dec 2022 11:08:29 +0000
+Received: from 183.red-88-24-108.staticip.rima-tde.net ([88.24.108.183]:40226 helo=hilbert.cs.ox.ac.uk)
+        by smtp8.mail.ox.ac.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <dima.pasechnik@cs.ox.ac.uk>)
+        id 1p9Orj-0000a4-Sx; Sun, 25 Dec 2022 11:08:28 +0000
+Received: by hilbert.cs.ox.ac.uk (Postfix, from userid 1000)
+        id 388D0741515; Sun, 25 Dec 2022 11:08:26 +0000 (GMT)
+Date:   Sun, 25 Dec 2022 11:08:26 +0000
+From:   dima.pasechnik@cs.ox.ac.uk
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        Mike.Spivey@cs.ox.ac.uk
+Subject: Re: usb 1-3: Product: BBC micro:bit CMSIS-DAP not recognised
+Message-ID: <Y6gvKlalZQGnIiuB@hilbert>
+References: <Y6B8jd7dHsa85Wny@kroah.com>
+ <Y6CRbgwHzjr2KNxK@hilbert>
+ <Y6CpKxZ4KsiYttbL@hilbert>
+ <Y6Csfzqvy6GExhVB@kroah.com>
+ <Y6DjwFAp4M8I+T4P@hilbert>
+ <Y6D1j+AVp8YTJjCd@rowland.harvard.edu>
+ <Y6Gz6wWb6bpz0rRb@hilbert>
+ <Y6XAMmx7LjDn1J6R@kroah.com>
+ <Y6Y/FB1IS6BrKsCW@hilbert>
+ <Y6aiAtZUd56VfS8i@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f885017-5cd3-4362-f1cd-08dae6251ea6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Dec 2022 03:07:12.8626
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0PFhYVRSxZrEn3X+lqIBAbArSKETlZz+lH62ascs4DdW4Exi3OlMwecSnr/BQPShjHVROeO4g68iVjUdeozVOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8188
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Q7+jHLoY2orbCZAf"
+Content-Disposition: inline
+In-Reply-To: <Y6aiAtZUd56VfS8i@kroah.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=vindex&search=dimpase@cs.ox.ac.uk
+X-Oxford-Username: coml0531
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiANCj4gSSdtIHdvbmRlcmluZyBpZiBpdCBtYXliZSBtYWtlcyBtb3JlIHNlbnNlIHRvIHVzZSB0
-aGUgZ2FkZ2V0IG5hbWUgYXMgYQ0KPiBzdWZmaXgNCj4gaW5zdGVhZD8NCj4gDQo+ICAgICAgICAg
-Z2ktPmNvbXBvc2l0ZS5nYWRnZXRfZHJpdmVyLmRyaXZlci5uYW1lID0NCj4gICAgICAgICAgICAg
-ICAgIGthc3ByaW50ZihHRlBfS0VSTkVMLCAiY29uZmlnZnMtZ2FkZ2V0LiVzIiBuYW1lKTsNCj4g
-DQo+IFNvIHRoYXQgd2hlbiB5b3UNCj4gDQo+IG1rZGlyIGcxDQo+IA0KPiB5b3Ugd2lsbCB1bHRp
-bWF0ZWx5IHNlZSAvc3lzL2J1cy9nYWRnZXQvZHJpdmVycy9jb25maWdmcy1nYWRnZXQuZzENCj4g
-DQo+IGluc3RlYWQgb2YgL3N5cy9idXMvZ2FkZ2V0L2RyaXZlcnMvY29uZmlnZnMtZ2FkZ2V0LjAN
-Cj4gDQo+IEdhZGdldCBuYW1lcyBhcmUgZ3VhcmFudGVlZCB0byBiZSB1bmlxdWUgYmVjYXVzZSB0
-aGV5IGFyZSBjcmVhdGVkDQo+IGFzIHNpYmxpbmcgc3ViZGlyZWN0b3JpZXMgaW4gY29uZmlnZnMu
-IFlvdXIgcGF0Y2ggd291bGQgdGhlbiBiZSBncmVhdGx5DQo+IHNpbXBsaWZpZWQgKG5vIG5lZWQg
-Zm9yIGlkYSkuDQoNCkkgdm90ZSB0aGlzIHdheXMuIA0KDQpCZXN0IHJlZ2FyZHMNCkZyYW5rIExp
-DQoNCj4gDQo+IFJlZ2FyZHMsDQo+IA0KPiBBbmRyemVqDQo+IA0KDQo=
+
+--Q7+jHLoY2orbCZAf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Dec 24, 2022 at 07:53:54AM +0100, Greg KH wrote:
+> On Fri, Dec 23, 2022 at 11:51:48PM +0000, dima.pasechnik@cs.ox.ac.uk wrot=
+e:
+> > On Fri, Dec 23, 2022 at 03:50:26PM +0100, Greg KH wrote:
+> > > On Tue, Dec 20, 2022 at 01:08:59PM +0000, dima.pasechnik@cs.ox.ac.uk =
+wrote:
+> > > > On Mon, Dec 19, 2022 at 06:36:47PM -0500, Alan Stern wrote:
+> > > > >=20
+> > > > > It might help if you post the output of "lsusb -v" for this devic=
+e.
+> > > > Please see attached; I also attached the output for an older versio=
+n of
+> > > > this board (V1). The one we talk about is V2. Both versions have the
+> > > > same VID, and, weirdly, the same PID (internally they aren't binary
+> > > > compatible, even)
+> > >=20
+> > > That's horrible, someone should talk to the vendor here and get them =
+to
+> > > at least bump the device id.
+> >=20
+> > The vendor is ARM (https://www.arm.com/) - I guess Linux Foundation is =
+a good "someone"
+> > to talk to the vendor in this case.
+>=20
+> I do not understand here, are you asking me to talk to someone?  If so,
+> great, who?  If not, who are you asking?
+>=20
+> > Can PID be bumped up by a firmware update?
+>=20
+> Depends on how the hardware was designed.  Most can, some can not.  Is
+> the hardware design and firmware source available anywhere?
+As far I know, firmware comes from
+https://tech.microbit.org/software/runtime/
+
+As to why these V1 and V2 happened to get the same product ID, perhaps
+my colleague Mike, in CC, who teaches a course using this board,  knows mor=
+e.
+
+Cheers
+Dima
+
+--Q7+jHLoY2orbCZAf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEJVdDnfI7raAa4RJxoksLHjfJBTEFAmOoLyoACgkQoksLHjfJ
+BTEHXgf/a5qiRFWxOpKvkngU7lgzLQY6prAG3l1BPcSdEyHKEJlmZVE/BCvOiadr
+qdoeGk7B0NOadJ+iVqW9TRMPP9E1NS/qm0OEr2h18YSIOrVtYgFp37bVqP5rrHU2
+ZHXQ+EEtuMTI/wt7gP26LAx713m2kGzZCIrr4Dll4wr4XjJNi50LtfMjpyxFjYBB
+Qavx+I3RgDFNcj9zXcys6V8fMaZMw6wGNpxWy2wppVAo2QucK6jEQS5L9XyBMfsj
+pnn7dG1OIQ80nr1I05uK13YTNMqOvMFV1cLR4qF4n5r0Afe87W2DIXgmkkaEqglu
+JsYO1UhmKyHNAUdNOCwcfpIDnKSGng==
+=MDwh
+-----END PGP SIGNATURE-----
+
+--Q7+jHLoY2orbCZAf--
