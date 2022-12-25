@@ -2,190 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA65655CF5
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Dec 2022 12:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD93F655E35
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Dec 2022 21:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiLYLvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Dec 2022 06:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
+        id S229723AbiLYUMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Dec 2022 15:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLYLvA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Dec 2022 06:51:00 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F81BA0;
-        Sun, 25 Dec 2022 03:50:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1671968822;
-        bh=cigTGUVAg3Yj9PBuOXrP7a8GktisvMkb4W/saccjwJQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ma/xkta6H/Vvu8O4rhc4uZyrSkGoLzcj0u3e+4+TsD4ecPjO4RdiTm8nzUIpHBg8t
-         yODU1TLBIFTfdJLVBlQPzfNkaUw4INHVjuJ4gklf1gC+4NS7bQxFhZdLTJComCawxT
-         FoNsX+YKxX2QusrfdnIZzotnf9ovGBKNZvqERLVsG8XKa+QpTP+3jnz5cduXBc6ZJb
-         XDpzyAP8rRElSmXpRYqE6Flyu5JYhkA9jbHoa88IAt8F0oKr/i8WXIlnG/A1H+x37k
-         jIamcERWlvttUqlamw9zawJZdLhlNurOM2MxVzlYyQE7NYgmOINTAzmtKMDzqbr6AT
-         fINsT6KW8DG/g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [157.180.225.172] ([157.180.225.172]) by web-mail.gmx.net
- (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Sun, 25 Dec 2022
- 12:47:02 +0100
+        with ESMTP id S229445AbiLYUMy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Dec 2022 15:12:54 -0500
+X-Greylist: delayed 4694 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Dec 2022 12:12:52 PST
+Received: from fallback4.mail.ox.ac.uk (fallback4.mail.ox.ac.uk [129.67.1.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDFF242
+        for <linux-usb@vger.kernel.org>; Sun, 25 Dec 2022 12:12:51 -0800 (PST)
+Received: from relay19.mail.ox.ac.uk ([129.67.1.170])
+        by fallback4.mail.ox.ac.uk with esmtp (Exim 4.92)
+        (envelope-from <mike@cs.ox.ac.uk>)
+        id 1p9W8r-0001RV-IA
+        for linux-usb@vger.kernel.org; Sun, 25 Dec 2022 18:54:37 +0000
+Received: from smtp8.mail.ox.ac.uk ([163.1.2.204])
+        by relay19.mail.ox.ac.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mike@cs.ox.ac.uk>)
+        id 1p9W8o-0003oO-Bq; Sun, 25 Dec 2022 18:54:34 +0000
+Received: from [213.31.71.29] (port=53136 helo=[192.168.1.75])
+        by smtp8.mail.ox.ac.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mike@cs.ox.ac.uk>)
+        id 1p9W8n-0004Jz-RV; Sun, 25 Dec 2022 18:54:34 +0000
+Message-ID: <3482c592-ff59-612b-881a-b638e77911a2@cs.ox.ac.uk>
+Date:   Sun, 25 Dec 2022 18:52:28 +0000
 MIME-Version: 1.0
-Message-ID: <trinity-b51cbf64-8df3-4a0b-883a-dbb7443eb954-1671968822286@3c-app-gmx-bap38>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        devicetree@vger.kernel.org
-Subject: Aw: Re: [next v7 8/8] arm64: dts: mt7986: add Bananapi R3
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 25 Dec 2022 12:47:02 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <Y6dMWFy7gChG88j0@makrotopia.org>
-References: <20221127114142.156573-1-linux@fw-web.de>
- <20221127114142.156573-9-linux@fw-web.de> <Y6dMWFy7gChG88j0@makrotopia.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:10CT/kHfUVpSwqOqwS7PiCBR0/UkRQWIuyHUPEIPBF4ZQybqHeav5erxkfhPt6CkPU6ev
- P2jwPeR/U1/CsU0cypsmIs4UKNmh6TMGRmE9N8BKS0TbhXVNMX4nifJlVBx0/sT+mC1DTHpe7Lm0
- ZWTvo5zBoXH7rzgei9CR+fXrJGdfl+LYJmaNbBJV9dJV3cfgTHqW/IWi9dXZWuu9PEWsGOdppoeX
- JFIMemszjkAeplliNJluXNK5PmagMPT+eXXsMkTHO3XWdQck6hJrq/ckQvChW3JNDndJB1bzqU4q
- GY=
-UI-OutboundReport: notjunk:1;M01:P0:pwFcvI8EngI=;Xzb4kTlhYwuChZI1qpgA1uiBqPU
- 0VRdCykSt9KTXu8yY9kmRrx7TUx5EFBj/CWBFLhFCAuUvqO+4VGvbUWKt0/ui4Stz591phL4x
- V6D2S/PlSOoK+x7PH/19JEuZKEr5cZZhv/LAaLdmWxmbQ6Ch8dMf/wUp1jZ/eXMG6DQ5sj46p
- EXO5bAt6xkRITCny9gY4QR1XL7ITdV97qUPfmQRubcACLurNRiTr1QjoIHgepkenO2tKABFEZ
- aJlUCiDQm5KNF8h4qRZgm+UrvL87097zlMkEmBYS0EhImEM4apgdFixunpgiN9VC0tE6hKIN0
- RulXsPDMfJyIbonqk8r0HLhEzVeqs6enS34vIqnFEbe8J51x8eU6Jg6NdGPFevExob8aDMeA5
- r4qRPKfr7LrlcIZgNnTPkmGZlLHG8op2cuELClFACNBxSYklDi61bGdcrGZ7zgWk3QN5sMjFd
- KlKgPUWpw5/2Ky/5xfMK3GT7p3vDoQsfCHWpotsshwNqzEVX7wneqQHwqgxD//E/bDFOw5OMa
- ok4obFcCNMkLzPS+ofYi4/P0dL4DeC2uH2WDbe3VoYjcV/6sH3jn/5XmyqldDIs+E5Djrt7LP
- QLVtrJzCxdBJwNbpDlCK6jlqsRSUyIk7Auv2qYiSoTNGfBqQuwpHW2LI5G2C0x3uOnx2kkzUP
- sFzbOVN9r/dTxS9JeWVf4mH3r5urzdXFrMvBaujgNVJ3jt6wvufj84Ejbe88doESaimya4+QF
- +jTNS8V4hj1DozC05FKDuBggiU2hqUxx5Q6lGPoMFa94cU4cBp5hYxx4dU5WsG6eYssc0MUJe
- v7pKBoXRZTACH/SOAAOVa4uzu3j406KqJjqu430gP7Hiw=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: usb 1-3: Product: BBC micro:bit CMSIS-DAP not recognised
+Content-Language: en-US
+To:     dima.pasechnik@cs.ox.ac.uk, Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
+References: <Y6B8jd7dHsa85Wny@kroah.com> <Y6CRbgwHzjr2KNxK@hilbert>
+ <Y6CpKxZ4KsiYttbL@hilbert> <Y6Csfzqvy6GExhVB@kroah.com>
+ <Y6DjwFAp4M8I+T4P@hilbert> <Y6D1j+AVp8YTJjCd@rowland.harvard.edu>
+ <Y6Gz6wWb6bpz0rRb@hilbert> <Y6XAMmx7LjDn1J6R@kroah.com>
+ <Y6Y/FB1IS6BrKsCW@hilbert> <Y6aiAtZUd56VfS8i@kroah.com>
+ <Y6gvKlalZQGnIiuB@hilbert>
+From:   Mike Spivey <mike@cs.ox.ac.uk>
+In-Reply-To: <Y6gvKlalZQGnIiuB@hilbert>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Oxford-Username: spivey
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+Not seeing all of the discussion, I'm not sure what the underlying 
+problem might be.  So just a few remarks that might be helpful, given 
+what I can recall during Christmas in deepest Yorkshire.
 
-> Gesendet: Samstag, 24. Dezember 2022 um 20:00 Uhr
-> Von: "Daniel Golle" <daniel@makrotopia.org>
+-- Mike
 
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
-> > @@ -0,0 +1,30 @@
-> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > +/*
-> > + * Copyright (C) 2021 MediaTek Inc.
-> > + * Author: Sam.Shih <sam.shih@mediatek.com>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +/plugin/;
-> > +
-> > +/ {
-> > +	compatible =3D "bananapi,bpi-r3", "mediatek,mt7986a";
-> > +	model =3D "Bananapi BPI-R3 (emmc)";
+(i) I'm sure the identical USB id's are deliberate; the intention is 
+that higher-level tools will assemble version-independent binaries that 
+can be uploaded to either device in the same way. Dima and I are 
+preparing lower-level programs that will only work on one board or the 
+other -- actually, if things go according to plan, we will use only the 
+V1 board this year.  You could get in touch with the micro:bit 
+foundation, but they won't change this.
+
+(ii) I don't believe I've had any difficulty communicating with either 
+board using recent versions of PyOCD, given an appropriate udev rule -- 
+the same rule for both devices.  I think PyOCD probes for the processor 
+it is talking to -- nRF51 or nRF52 -- or you can tell it on the comand line.
+
+(iii) The micro:bit is what I call a two-chip eval board, with the 
+target processor running arbitrary code on the bare metal, and a 
+separate serial/programming/debugging chip that runs firmware that is 
+usually not changed.  That's in contrast to the kind of one-chip board 
+where the target processor has some kind of USB-based bootloader on it.  
+The separate chip on the micro:bit is a Freescale KL25, I believe, and a 
+bit more powerful than the nRF51 target chip on the V1.  I believe the 
+firmware is open source and can be replaced through some kind of 
+bootstrap ritual -- perhaps involving pressing the reset button while 
+plugging in the device.
+
+On 25/12/2022 11:08, dima.pasechnik@cs.ox.ac.uk wrote:
+> On Sat, Dec 24, 2022 at 07:53:54AM +0100, Greg KH wrote:
+>> On Fri, Dec 23, 2022 at 11:51:48PM +0000, dima.pasechnik@cs.ox.ac.uk wrote:
+>>> On Fri, Dec 23, 2022 at 03:50:26PM +0100, Greg KH wrote:
+>>>> On Tue, Dec 20, 2022 at 01:08:59PM +0000, dima.pasechnik@cs.ox.ac.uk wrote:
+>>>>> On Mon, Dec 19, 2022 at 06:36:47PM -0500, Alan Stern wrote:
+>>>>>> It might help if you post the output of "lsusb -v" for this device.
+>>>>> Please see attached; I also attached the output for an older version of
+>>>>> this board (V1). The one we talk about is V2. Both versions have the
+>>>>> same VID, and, weirdly, the same PID (internally they aren't binary
+>>>>> compatible, even)
+>>>> That's horrible, someone should talk to the vendor here and get them to
+>>>> at least bump the device id.
+>>> The vendor is ARM (https://www.arm.com/) - I guess Linux Foundation is a good "someone"
+>>> to talk to the vendor in this case.
+>> I do not understand here, are you asking me to talk to someone?  If so,
+>> great, who?  If not, who are you asking?
+>>
+>>> Can PID be bumped up by a firmware update?
+>> Depends on how the hardware was designed.  Most can, some can not.  Is
+>> the hardware design and firmware source available anywhere?
+> As far I know, firmware comes from
+> https://tech.microbit.org/software/runtime/
 >
-> Why do you set the model string here?
-
-seems to be a left over from testing where i wanted to see which base-dtb =
-was
-loaded without comparing mmc-node settings. Was easier to see with model-s=
-tring :)
-
-> > +
-> > +	fragment@0 {
-> > +		target-path =3D "/soc/mmc@11230000";
-> > +		__overlay__ {
-> > +			bus-width =3D <8>;
-> > +			max-frequency =3D <200000000>;
-> > +			cap-mmc-highspeed;
-> > +			mmc-hs200-1_8v;
-> > +			mmc-hs400-1_8v;
-> > +			hs400-ds-delay =3D <0x14014>;
-> > +			non-removable;
-> > +			no-sd;
-> > +			no-sdio;
-> > +			status =3D "okay";
-> > +		};
-> > +	};
-> > +};
-
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts =
-b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
-> > new file mode 100644
-> > index 000000000000..618d3bb2f32f
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
-
-> > +&mdio {
-> > +	switch: switch@31 {
-> > +		compatible =3D "mediatek,mt7531";
-> > +		reg =3D <31>;
-> > +		reset-gpios =3D <&pio 5 GPIO_ACTIVE_HIGH>;
+> As to why these V1 and V2 happened to get the same product ID, perhaps
+> my colleague Mike, in CC, who teaches a course using this board,  knows more.
 >
-> Please add:
->
->                 interrupt-controller;
->                 #interrupt-cells =3D <1>;
->                 interrupt-parent =3D <&pio>;
->                 interrupts =3D <66 IRQ_TYPE_LEVEL_HIGH>;
->
-> to have IRQ driven phy status instead of having to poll the link status
-> of the 5x rj-45 ports.
-> The value comes from schematics (pin AD24, GPIO66, 7531_INT) and I've
-> tested this on my board.
-
-ok, if you have it tested i add these properties in next version (and test=
- it too).
-I wait for tphy-binding to be applied to next (pcie and xhci already in to=
-rvalds/master).
-
-> > +	};
-> > +};
-> > +
-
-> > +&spi0 {
-> > +	pinctrl-names =3D "default";
-> > +	pinctrl-0 =3D <&spi_flash_pins>;
-> > +	cs-gpios =3D <0>, <0>;
->
-> I don't think those bogus cs-gpios here and for spi1 below are needed.
-
-can drop them in next version
-
-> > +	status =3D "okay";
-> > +};
-> > +
-> > +&spi1 {
-> > +	pinctrl-names =3D "default";
-> > +	pinctrl-0 =3D <&spic_pins>;
-> > +	cs-gpios =3D <0>, <0>;
-> > +	status =3D "okay";
-> > +};
-> > +
-
-regards Frank
+> Cheers
+> Dima
