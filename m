@@ -2,110 +2,230 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38C3656290
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Dec 2022 13:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAC16563E2
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Dec 2022 16:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiLZM2c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Dec 2022 07:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S229823AbiLZPve (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Dec 2022 10:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiLZM2b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Dec 2022 07:28:31 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694A62AD4
-        for <linux-usb@vger.kernel.org>; Mon, 26 Dec 2022 04:28:30 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id o6so15798153lfi.5
-        for <linux-usb@vger.kernel.org>; Mon, 26 Dec 2022 04:28:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o9VsUfbXpnBl5i0jqV0GHVfHb2fzN94uWi/WF4L80bQ=;
-        b=EGt0tVqCcxNMIPHFjFmmSJmtfepupOLGU6WfTr20N1cfbTWvjad6h6ZyUMyzbXS0dO
-         JwBOXpGJdV3w+qcgu5Rtn5uwfbndTK2SGADbeGhlzTuVf7uZXZEx8VcwS+kZjHfqtDIP
-         0tWkhL8h3pGUklT9nVvyHj4zjSRCy5xxV+pU7mEF8fHn8n2Pzbx/vNAJUk9eKyE4MOv6
-         /ROyOZvwmpzEkhxUOBbEQKal3v1MhUJFVTJoQnI2Ek26xL8C3MZk9lT2MbSWWw3qhtGc
-         hcLQCFFEXXWcAowwQGVoYha+nXJpA+xlunoGYxSaFci2gOGQuDyynfLOtalsc1HLCyM3
-         GllA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o9VsUfbXpnBl5i0jqV0GHVfHb2fzN94uWi/WF4L80bQ=;
-        b=pnXB5Lscq5Dwf7b080KRNsnBOQqngSXYiPX2fwr5hnejW9PKeXOlZWu5pleBUSY6Ki
-         d+DNeSW8j9v5Gx2+zkMJ4LlO8b5sFQzGyjoAVBseBvTlixY/JFdw2I5TkcBLjk+Tpj6H
-         l0JnVtOSZz0mZighvcvfOr+tMLvsMWYF9jk+rT1CZgxH5DsvsqI72e+205uOLGoUZCgI
-         jz/eO2sSlwW0xUw/4zIBGVFepy7Xgf9HLg/mP28rwT3YrCzry16RmgbjJvBPf8ahb8tO
-         wT5DepLgkVl73Q8QgTJQGLbhmFGnO8MeV6vrbNOGDSeiYxv/HUjxT6lNYcB0j9LAFao2
-         u2GA==
-X-Gm-Message-State: AFqh2kpDU/GMmhzm/cl9nhSwfKByOVocgjMLLO1jfRAfYB6Y2rH5fJnl
-        my8quYLj43vdpUwkWzoYEOSOPg==
-X-Google-Smtp-Source: AMrXdXt+SG75PQYPAqAyfLTtW57mlbWYpcItg3HmguNy4OAxCp6Z8zw35YRYWDPCc637ckI/5JBHRQ==
-X-Received: by 2002:a05:6512:6d0:b0:4b5:d:efb2 with SMTP id u16-20020a05651206d000b004b5000defb2mr5311841lff.14.1672057708771;
-        Mon, 26 Dec 2022 04:28:28 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a11-20020ac25e6b000000b004cafd013f54sm1174058lfr.118.2022.12.26.04.28.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Dec 2022 04:28:28 -0800 (PST)
-Message-ID: <9e93a28b-c735-5250-34d0-9b41c0f488b5@linaro.org>
-Date:   Mon, 26 Dec 2022 13:28:27 +0100
+        with ESMTP id S229476AbiLZPvb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Dec 2022 10:51:31 -0500
+X-Greylist: delayed 380 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Dec 2022 07:51:27 PST
+Received: from smtp-out-04.comm2000.it (smtp-out-04.comm2000.it [212.97.32.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1A3C7E
+        for <linux-usb@vger.kernel.org>; Mon, 26 Dec 2022 07:51:27 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-04.comm2000.it (Postfix) with ESMTPSA id EA6D5BC3042;
+        Mon, 26 Dec 2022 16:44:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1672069504;
+        bh=JyUXcb49oj84ABjWXO7qnR1+TICymj+GVtGQMMfWIOE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=YNFoUti0WohPG9u6tt45hREKi7gQ6uVlduuqYnMDjpLTtXW36fpMuoyTDoJzFYAp7
+         KHvX/4cQDMOjQxXxHWqEmSzZy8wCqcb0p0DCjlzY76Yp/HmBlxIWS8UmKat91H++4n
+         zQ5/BbZJwAFzlyqYqPyFZOlNES01k0N6O1S5zvtF5ep7GIxo3lTeEbqpURTTWz7l0g
+         gYMVbgNvrZbTSNcgekUbRaHgEu42franMuBkgJSoPnyY2PdK0PPf4X+Qm+MEDnFCY9
+         BUXQzvFiQVe8h7Nm8InO3XvUVhk9UYg3Cub1yfN78+XFsbfgKd7mNVExHYhIl6rg64
+         3fYqedy8YSiag==
+Date:   Mon, 26 Dec 2022 16:44:47 +0100
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        "Jun Li (OSS)" <jun.li@oss.nxp.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "philippe.schenker@toradex.com" <philippe.schenker@toradex.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: USB runtime PM issues on i.MX6ULL
+Message-ID: <Y6nBb4pq4+GD1DDB@francesco-nb.int.toradex.com>
+References: <Y1vLpaxpc5WBCuGD@francesco-nb.int.toradex.com>
+ <PA4PR04MB9640E8D3E851800492D8FCAD89379@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <Y1/TZqsqy/ZRVNqJ@francesco-nb.int.toradex.com>
+ <PA4PR04MB9640863D2A1F38A10C8BDFDC89369@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <Y2F4tCMaB4x2fZck@francesco-nb.int.toradex.com>
+ <PA4PR04MB9640FA4674C8B80A9FEA44DC89399@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <PA4PR04MB9640217920D3CD7A506FF9E389399@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <Y2Kv6IkOFc4W0Ebc@francesco-nb.int.toradex.com>
+ <PA4PR04MB9640FC6466D5BC1588FC37F789389@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <PA4PR04MB9640BDD0B040765259B010E489EC9@PA4PR04MB9640.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 08/14] usb: dwc3: Add DT parameter to specify maximum
- number of interrupters
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com, quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-9-quic_wcheng@quicinc.com>
- <CAA8EJppsK=L69AaBgj=MzWp-ess3NSn=gPYf8-3QtJVqEVqGzw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJppsK=L69AaBgj=MzWp-ess3NSn=gPYf8-3QtJVqEVqGzw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4PR04MB9640BDD0B040765259B010E489EC9@PA4PR04MB9640.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/12/2022 12:13, Dmitry Baryshkov wrote:
->> @@ -1468,6 +1469,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>          */
->>         tx_fifo_resize_max_num = 6;
->>
->> +       /* default to a single XHCI interrupter */
->> +       num_hc_interrupters = 1;
->> +
->>         dwc->maximum_speed = usb_get_maximum_speed(dev);
->>         dwc->max_ssp_rate = usb_get_maximum_ssp_rate(dev);
->>         dwc->dr_mode = usb_get_dr_mode(dev);
->> @@ -1511,6 +1515,12 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>                                 &tx_thr_num_pkt_prd);
->>         device_property_read_u8(dev, "snps,tx-max-burst-prd",
->>                                 &tx_max_burst_prd);
->> +       device_property_read_u8(dev, "snps,num-hc-interrupters",
->> +                               &num_hc_interrupters);
+On Mon, Dec 26, 2022 at 03:17:12AM +0000, Jun Li wrote:
+> > From: Jun Li
+> > Sent: Thursday, November 3, 2022 7:53 PM
+> > > From: Francesco Dolcini <francesco@dolcini.it>
+> > > Sent: Thursday, November 3, 2022 1:59 AM
+> > > On Wed, Nov 02, 2022 at 10:12:42AM +0000, Jun Li wrote:
+> > > > > > On Tue, Nov 01, 2022 at 03:10:46AM +0000, Jun Li wrote:
+> > > > > > > > On Mon, Oct 31, 2022 at 01:40:39PM +0000, Jun Li (OSS) wrote:
+> > > > > > > > > > I am debugging some unexpected USB behavior on a
+> > > > > > > > > > i.MX6ULL SOC, chipidea controller ("fsl,imx6ul-usb") and
+> > > > > > > > > > a fsl mxs usbphy ("fsl,imx6ul-usbphy").
+> > > > > > > > > >
+> > > > > > > > > > The HW design has 2 USB interface, the first one is
+> > > > > > > > > > dual-role, while the second one is a host port with NO
+> > > > > > > > > > way to re-read
+> > > the
+> > > > > > > > > > VBUS (USB_OTG2_VBUS is not really connected, there is
+> > > > > > > > > > just
+> > > a
+> > > > > > > > > > capacitor to GND).
+> > > > > > > > >
+> > > > > > > > > How is your USB_OTG1_VBUS status? Can you try to make your
+> > > > > > > > > USB_OTG1_VBUS pad has a valid VBUS voltage, then run your
+> > > > > > > > > Host only port test with runtime PM enabled?
+> > > > > > > >
+> > > > > > > > USB_OTG1_VBUS is tied to GND the same way as USB_OTG2_VBUS,
+> > > > > > > > not really straightforward to do such a test.
+> > > > > > >
+> > > > > > > iMX6ULL need at least one valid VBUS(either from OTG1 or OTG2)
+> > > > > > > as input to power the internal USB LDO if I understand correctly.
+> > > > > > This surprise me a little bit, since
+> > > > > >  - the i.MX6ULL datasheet prescribe to keep the VBUS disconnected
+> > if
+> > > > > >    unused
+> > > > >
+> > > > > I think "unused" here means you do not need/enable the port at all.
+> > > > >
+> > > > > >  - downstream NXP kernel seems to work fine ("seems" since we do
+> > have
+> > > > > >    some patches there, so I could be wrong)
+> > > > >
+> > > > > What do you mean by " downstream NXP kernel seems to work fine"?
+> > > > > The downstream kernel can work on your HW? But upstream kernel
+> > > > > driver does not?
+> > >
+> > > Correct, NXP downstream kernel is working fine, upstream kernel
+> > > requires runtime PM disabled to work correctly.
+> > >
+> > > > > >  - disabling runtime pm on upstream Linux kernel make it works
+> > > > > >    perfectly, so there is a way in SW to have this HW configuration
+> > > > > >    working.
+> > > > >
+> > > > > Again I want to make sure the both VBUS pads(OTG1 and OTG2)
+> > > > > voltage are always at 0v on your HW, can you double check and confirm?
+> > > > > I ask this again because such situation should cause the USB port
+> > > > > Cannot work at any cases, but your current status is: only low
+> > > > > power wakeup cannot work.
+> > > >
+> > > > Could you please check the voltage of pad of VDD_USB_CAP on your HW?
+> > >
+> > > I was about to clarify you this point, it's important and I forgot
+> > > about it, sorry about that!
+> > >
+> > > VDD_USB_CAP in our design is connected to a 3.0V external LDO, voltage
+> > > on both VBUS pads is 0V (FYI: this specific hardware design was
+> > > validated by NXP hardware engineers).
+> > 
+> > Then the HW design should be fine.
+> > I need find time to try the upstream kernel on my iMX6ULL board to check
+> > this.
 > 
-> bindings change?
+> My iMX6ULL EVK board cannot reproduce this issue with upstream kernel.
+> 
+> Could you try to set the bits [7,3] of 0x020c8200(for 2nd USB controller OTG2)
+> to be value like 0x1000FC? This may be done at your bootloader(uboot), so
+> make sure those targets bits are set before doing your test, or doing this
+> with below change(not compiled or tested):
+> 
+> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+> index d2836ef5d15c..e390ef534a7c 100644
+> --- a/drivers/usb/phy/phy-mxs-usb.c
+> +++ b/drivers/usb/phy/phy-mxs-usb.c
+> @@ -89,6 +89,9 @@
+>  #define ANADIG_USB1_CHRG_DET_STAT_CHRG_DETECTED        BIT(1)
+>  #define ANADIG_USB1_CHRG_DET_STAT_PLUG_CONTACT BIT(0)
+>  
+> +#define ANADIG_USB2_VBUS_DET_SET               0x204
+> +#define ANADIG_USB2_VBUS_DET_VBUS_OVERRIDE     GENMASK(7, 3)
+> +
+>  #define ANADIG_USB2_VBUS_DET_STAT              0x220
+>  
+>  #define ANADIG_USB1_LOOPBACK_SET               0x1e4
+> @@ -288,6 +291,11 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
+>         if (ret)
+>                 goto disable_pll;
+>  
+> +       if (mxs_phy->regmap_anatop && (mxs_phy->port_id == 1))
+> +               regmap_write(mxs_phy->regmap_anatop,
+> +                            ANADIG_USB2_VBUS_DET_SET,
+> +                            ANADIG_USB2_VBUS_DET_VBUS_OVERRIDE);
+> +
+>         /* Power up the PHY */
+>         writel(0, base + HW_USBPHY_PWD);
 
-Undocumented bindings change :(
+Hello,
+I tested your patch and it does not work. I therefore tested a slightly
+improved version that really ensure the right register value is written.
 
-Best regards,
-Krzysztof
+[    8.408564] port=0 reg=0x200 val=0x1000fc
+[    8.440235] port=1 reg=0x204 val=0x1000fc
+
+but it does not work never the less. Unfortunately bits 7-3 are not
+documented, so I was not able to do much more.
+
+
+diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+index d2836ef5d15c..3ff5489d679e 100644
+--- a/drivers/usb/phy/phy-mxs-usb.c
++++ b/drivers/usb/phy/phy-mxs-usb.c
+@@ -89,6 +89,10 @@
+ #define ANADIG_USB1_CHRG_DET_STAT_CHRG_DETECTED        BIT(1)
+ #define ANADIG_USB1_CHRG_DET_STAT_PLUG_CONTACT BIT(0)
+ 
++#define ANADIG_USB1_VBUS_DET_SET               0x200
++#define ANADIG_USB2_VBUS_DET_SET               0x204
++#define ANADIG_USB1_VBUS_DET_VBUS_OVERRIDE     GENMASK(7, 3)
++
+ #define ANADIG_USB2_VBUS_DET_STAT              0x220
+ 
+ #define ANADIG_USB1_LOOPBACK_SET               0x1e4
+@@ -309,6 +313,7 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
+                writel(BM_USBPHY_IP_FIX, base + HW_USBPHY_IP_SET);
+ 
+        if (mxs_phy->regmap_anatop) {
++               unsigned int val;
+                unsigned int reg = mxs_phy->port_id ?
+                        ANADIG_USB1_CHRG_DETECT_SET :
+                        ANADIG_USB2_CHRG_DETECT_SET;
+@@ -319,6 +324,15 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
+                regmap_write(mxs_phy->regmap_anatop, reg,
+                             ANADIG_USB1_CHRG_DETECT_EN_B |
+                             ANADIG_USB1_CHRG_DETECT_CHK_CHRG_B);
++
++               reg = mxs_phy->port_id ?
++                       ANADIG_USB2_VBUS_DET_SET :
++                       ANADIG_USB1_VBUS_DET_SET;
++
++               regmap_set_bits(mxs_phy->regmap_anatop, reg,
++                            ANADIG_USB1_VBUS_DET_VBUS_OVERRIDE);
++               regmap_read(mxs_phy->regmap_anatop, reg, &val);
++               printk("port=%d reg=0x%x val=0x%x\n", mxs_phy->port_id, reg, val);
+        }
+ 
+        mxs_phy_tx_init(mxs_phy);
+
 
