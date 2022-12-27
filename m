@@ -2,116 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78364656B97
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 15:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51163656BBE
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 15:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiL0OLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Dec 2022 09:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S229533AbiL0O20 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Dec 2022 09:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiL0OLi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 09:11:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605B11B1;
-        Tue, 27 Dec 2022 06:11:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAE3B61157;
-        Tue, 27 Dec 2022 14:11:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E35E5C433F0;
-        Tue, 27 Dec 2022 14:11:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672150296;
-        bh=w1Tt5KpHeU6LrhFDV3MOo7Ka2OTOJdZOMGYD+HubpdU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MMmr8g6crtYz7sD8hp5VXA4d0W4r+qQfith6dYe66hivk1PanPlB8k2INiMFjpziB
-         oAL3Rc/zqddnLdjZ8Y7vE1cxxeBjOfHpw8VCiWeFx4RQmfLcQm2IU30imG0SqUiJPQ
-         YdiUnzoLNFwQ8nTcuGUozrnsMjEMphQHc8tjPb/32a5crd0tKPb5VcbNhSIN5UxrRA
-         Gl9is9ej3XQlw8VUPOU+gTTc5CkQ9EK4km/A9AmWBUBD9Th3RKRGE7GkDz+qxegTJs
-         vnTIaa4Zv8kbdnDp+XnezBZKvTDHE8ZeKcb28HR6/t+J0smuj/ZsOKOU7hiGzeA8x7
-         0f6c5GSoBEAlQ==
-Date:   Tue, 27 Dec 2022 14:11:28 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com, quic_plai@quicinc.com
-Subject: Re: [RFC PATCH 03/14] ASoC: qcom: Add USB backend ASoC driver for Q6
-Message-ID: <Y6r9EKn7WU3eWl8e@sirena.org.uk>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-4-quic_wcheng@quicinc.com>
- <Y6bAQ8hDLkvrvjQQ@kroah.com>
- <Y6rtdy4NPfi/KOqd@sirena.org.uk>
- <Y6r26VfIfpE8zpPY@kroah.com>
- <87r0wl0wso.wl-tiwai@suse.de>
+        with ESMTP id S229445AbiL0O2Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 09:28:24 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B6C26DF
+        for <linux-usb@vger.kernel.org>; Tue, 27 Dec 2022 06:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672151301; x=1703687301;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=s8h1N9I+PVIOwNYieIlB2VY3KZKNz/TtQtJ9FyJ22pE=;
+  b=MdqXD7Dd1eLp66LnOkS2d6fYK5BICXPgDmVQGxAt8GtFLqCsi2Ua1bTW
+   KPFoN89+ezOnyswDq+cO8McnMyaBLPo/63S354gAtBIvw+nFGtKOq+NyZ
+   cY0J6IiZC/twITKejj01K9OiYyoWfpxyckIo3EK3Xg5rEhc0C5+XtG3BG
+   JuZ8RTnzw9F0oHtFZPqw7t6UX9YeWvL72Y6AInUOeHxOsEHBxL/0g3dyM
+   emycBXFUjiuTNy9M6te1OtJBQahiMO99BgFSAK0lKtidw9OBEEKF3X4bv
+   cA5HA+q1a1h6N2zI4piCzWb2o77mn0G5ejt8j9a4ebn2mwSgN9dOdfYbn
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="318384521"
+X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
+   d="scan'208";a="318384521"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 06:28:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="898364934"
+X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
+   d="scan'208";a="898364934"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 27 Dec 2022 06:28:20 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 7AF1CF8; Tue, 27 Dec 2022 16:28:51 +0200 (EET)
+Date:   Tue, 27 Dec 2022 16:28:51 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+Cc:     linux-usb@vger.kernel.org,
+        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
+Subject: Re: Possible problem with thunderbolt 4
+Message-ID: <Y6sBI+xrkQaWtQxo@black.fi.intel.com>
+References: <b556f5ed-5ee8-9990-9910-afd60db93310@gmx.at>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MoDs+V7j52bwbfqu"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87r0wl0wso.wl-tiwai@suse.de>
-X-Cookie: There's only one everything.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b556f5ed-5ee8-9990-9910-afd60db93310@gmx.at>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---MoDs+V7j52bwbfqu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Dec 23, 2022 at 12:24:35PM +0100, Christian Schaubschläger wrote:
+> Hello list,
+> 
+> I'm having an issue which I guess might be related to thunderbolt 4.
+> 
+> I have an HP EliteBook 630 G9 notebook and an HP Thunderbolt Dock G4, both with Thunderbolt 4. I run linux on it and need a working network interface (the one on the dock) in the UEFI firmware for PXE boot.
+> 
+> When I come from a cold boot, the thunderbolt connection works well both in the UEFI firmware (I can do PXE), and also later in linux. After a reboot from linux, the dock disappears from the PCI bus and is no longer accessible in the UEFI firmware. Hence a PXE boot is not possible. When I then boot into linux again, the dock is there again, working just fine.
+> 
+> On my machine the thunderbolt controller has the PCI address 0000.00.0d.2, and the PCI bridge to the dock has the address 0000.00.07.0.
+> I've attached the PCI config spaces of these two devices as they are seen from the UEFI firmeware from two different states:
+> 
+>  1. When the machine comes from a cold boot. In that state the UEFI firmware sees the dock and all devices on the dock.
+>  2. When the machine comes from a linux reboot. In that state the dock is not visible on the PCI bus.
+> 
+> The config spaces of the mentioned two devices are different in the two states.
+> 
+> Note: once the machine is in state 2, it is necessary to remove the power supply from the dock (or physically disconnect and re-connect the thunderbolt cable) in order to get it working in UEFI again. That's what "cold boot" above actually means.
+> 
+> Also, when the machine is in state 2 and boots into Windows the dock does not not become visible on the PCI bus. Interestingly, after a subsequent reboot from Windows it does become avialable in UEFI again (no need to disconnect the power supply or thunderbolt cable in this case!!)
+> 
+> So I guess the linux kernel does something on shutdown (or misses to do something) that prevents the dock to wake up again after the reboot in the UEFI firmware.
+> 
+> I'm observing this on all kernels I've tried (5.18.x, 6.0.x, 6.1.x; also when I run a vanilla Ubuntu 22.04 this happens); the logs below are from a pre-release kernel from today (which will be 6.2-rc1 in a few days). I've also experimented with some powersaving related settings on the kernel command line, unfortunately without success.
+> 
+> Can anyone confirm this behaviour?
 
-On Tue, Dec 27, 2022 at 03:02:31PM +0100, Takashi Iwai wrote:
-> Greg KH wrote:
-> > On Tue, Dec 27, 2022 at 01:04:55PM +0000, Mark Brown wrote:
-> > > On Sat, Dec 24, 2022 at 10:02:59AM +0100, Greg KH wrote:
+First of all can you check if you are running Intel or Microsoft driver
+for the Thunderbolt controller? It can be seen in Device Manager
+somehow. It is possible that Windows and Linux use different "connection
+manager" so that explains why there is a difference in behaviour.
 
-> > > > "be"?  What is that?
+In case of Linux this is software connection manager so it is Linux that
+does all the tunneling. In case of Windows it may be also firmware
+connection manager so it is handled in the firmware (and this might
+explain why it magically works after rebooting from Windows).
 
-> > > Back end.  This is a concept in DPCM which should be reasonably
-> > > discoverable to people working on the audio portions of this code.
-
-> > Ok, then how is the reference counting logic handled here?  USB devices
-> > can be removed from the system at any point in time...
-
-> The whole picture is fairly complex, and this patch is a part
-> belonging to the ASoC machine driver -- that is, it's bound to the
-> Qualcomm host, and there can be only one on a system. =20
-
-> OTOH, USB audio devices are still managed by the existing USB audio
-> driver as is, and they can be multiple and any devices.  The basic
-> idea here is a hijack of the USB data processing in USB audio driver
-> with the offloading mechanism by this ASoC driver (only if the
-> condition met).
-
-Right.  I haven't even begun to look at the actual code here, just
-triaging my inbox, so I've got no thoughts on if things work or not.
-
---MoDs+V7j52bwbfqu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOq/Q8ACgkQJNaLcl1U
-h9AJLwf/TGoSsJdiOtmJ/KDGP2WpqZDVbQqPyJeobJzTd9iQ0WISteeWXhCaQzEP
-prsfQuOnpN59pIx92wR1QiQhG1hIfloZm9D0+2GFs6ig70JB/2tR4vrDwyOvpJab
-jdL+aAl495L95M2FyBU6iaBTSAkmJTiBro++bgcYRJHtExYiuVM0zSLnHnGXjpY/
-Q8VngUTeGebIQnTK/yjDIqCamWLQ1uygyiEexa6irqBZJxAf5E2QXww1573HF1ma
-7icaSGlaaDRvIz4f9tKvj7j7y++W8xHSZI/dUvGSQV++tuFVy5BxpysjqNncFT9t
-VB0GkLnFBoQ4w00oIOLbYMsqF69weA==
-=fyRg
------END PGP SIGNATURE-----
-
---MoDs+V7j52bwbfqu--
+In general this depends on the BIOS setting whether there is PCIe tunnel
+or not. Typically there is something like "boot from Thunderbolt" or
+similar option that turns it on so I suggest checking if you have
+such option.
