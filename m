@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0256D656BF4
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 15:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AB8656C55
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 16:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbiL0Ogf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Dec 2022 09:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S231678AbiL0PLw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Dec 2022 10:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbiL0Oga (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 09:36:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100C82A3;
-        Tue, 27 Dec 2022 06:36:29 -0800 (PST)
+        with ESMTP id S231289AbiL0PLj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 10:11:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0449E60;
+        Tue, 27 Dec 2022 07:11:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E71360F92;
-        Tue, 27 Dec 2022 14:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C23DC433D2;
-        Tue, 27 Dec 2022 14:36:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F881B8106C;
+        Tue, 27 Dec 2022 15:11:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D01C433D2;
+        Tue, 27 Dec 2022 15:11:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672151788;
-        bh=/EDm6xhhHpeJLbxbvhfcWbFizxBuWlsdVT/F3n9zhI8=;
+        s=k20201202; t=1672153895;
+        bh=vJFbSuGYShvkxrhsg3x4ZX9c59Djy1db+HUXeEPs4Jc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CLqf7O8kcixh9nFMoanB7/3AjIQ/vkR6JwoLk/VkZpj/dZIOCVMr9XHmbajyDVUkq
-         DMynJ4rVrF1rYXU5ED00w18DFAHLR+lj3isG3KzHwRnKfb+7ni3KrBNcn9IxDrteU/
-         gQu3GI7S14K+jwCyCR/BjVfJMh5+E0aQXEY3OyyYHW2f8S83HNMNjoYZzXhJh15dlC
-         COFEKUOJdwwzauI7le8XIP39UiH+8Pkl+66lQf145BESc9gHJdmFU18qxf3w0anHaO
-         mqCBRpcJwFSMHEHsB88PZNbZ6WsPFSIQY2OObZcZ983HjO2Boqe5fGwrW0cSFI1fD/
-         HKWrefRYy432g==
-Date:   Tue, 27 Dec 2022 14:36:21 +0000
+        b=Z+YTTVJVpNMmLoJLD77Wx0lLkd46IABLuElsajSxMkkYxSejLQdPAjr5hKlwHKdEV
+         7/b+eTuRi9//jPc/DoaT/pFksIFrRKJ8KETWR0ozYQQEJVlPmBZcMnUCwK+aJiJy5i
+         MWnguaAaX0l18HHwFPn9alVuyUbwTDTeI3c8j2367T2o4Ju2xOcQNWZcBdLQPOOlP3
+         uz2tpG6YsyQl+RTfGFsLQIvUs2CVKdvW1e7wjq4fL4rh3xlcWPOk22rUDXa/6rAbwA
+         AdfV78bE3VsjQrHYKsndJQkrNEL/5okmk1X9KUtYpzZObnbjGTcAWetjNgNIX7tl3C
+         YEyZhh9IlawsA==
+Date:   Tue, 27 Dec 2022 15:11:27 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
@@ -43,15 +43,18 @@ Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
         linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
         quic_jackp@quicinc.com, quic_plai@quicinc.com
-Subject: Re: [RFC PATCH 00/14] Introduce QC USB SND audio offloading support
-Message-ID: <Y6sC5e9Zrd2JWTHU@sirena.org.uk>
+Subject: Re: [RFC PATCH 03/14] ASoC: qcom: Add USB backend ASoC driver for Q6
+Message-ID: <Y6sLH+8nVFImL0Oo@sirena.org.uk>
 References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <Y6agEsfXKMMXPpmz@kroah.com>
+ <20221223233200.26089-4-quic_wcheng@quicinc.com>
+ <Y6bAQ8hDLkvrvjQQ@kroah.com>
+ <Y6rtdy4NPfi/KOqd@sirena.org.uk>
+ <Y6r26VfIfpE8zpPY@kroah.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1+ZKSFcDOruBirf+"
+        protocol="application/pgp-signature"; boundary="bScRnfjqovRwO9fK"
 Content-Disposition: inline
-In-Reply-To: <Y6agEsfXKMMXPpmz@kroah.com>
+In-Reply-To: <Y6r26VfIfpE8zpPY@kroah.com>
 X-Cookie: If it heals good, say it.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -63,50 +66,55 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---1+ZKSFcDOruBirf+
+--bScRnfjqovRwO9fK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Sat, Dec 24, 2022 at 07:45:38AM +0100, Greg KH wrote:
-> On Fri, Dec 23, 2022 at 03:31:46PM -0800, Wesley Cheng wrote:
+On Tue, Dec 27, 2022 at 02:45:13PM +0100, Greg KH wrote:
+> On Tue, Dec 27, 2022 at 01:04:55PM +0000, Mark Brown wrote:
+> > On Sat, Dec 24, 2022 at 10:02:59AM +0100, Greg KH wrote:
 
-> > soc-usb: Intention is to treat a USB port similar to a headphone jack.
-> > The port is always present on the device, but cable/pin status can be
-> > enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
-> > communicate with USB SND.
+> > > > + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
 
-> > Create a USB backend for Q6DSP:
-> > q6usb: Basic backend driver that will be responsible for maintaining the
-> > resources needed to initiate a playback stream using the Q6DSP.  Will
+> > > All of the code in this patch series is older than 2022 as I know it has
+> > > been in shipping devices for many years.  Please use the proper
+> > > copyright year to make your lawyers happy...
 
-> This looks to duplicate a bunch of the same things that a number of
-> different google developers have posted recently.  Please work with them
-> to come up with a unified set of patches that you all can agree with,
-> AND get them to sign off on the changes before resubmitting them.
+> > Are you *positive* about this.  Based on some preparatory discussions
+> > the Qualcomm people had with Takashi and I it seemed like this was a new
+> > version of existing concepts.  I'm sure they had something already but
+> > it's not obvious to me that they're just posting the same code.
 
-> This uncoordinated drip of patches from different people doing the same
-> thing is almost impossible to review from our side, as I'm sure you can
-> imagine.
+> I thought that this same code has been shipping in devices for a few
+> years now in the last few Samsung phone models.  Is this not the same
+> code that is in those devices?
 
-I have to say this is the first I've heard of any such patches other
-than from the Qualcomm people and I can't immediately see anything that
-was on the list either, though I might be missing something since I
-don't have the subject or anything.  If other people send things again
-it's probably good to suggest they copy in audio people and lists.
+> If not, why not, what happened to that codebase that makes it not worthy
+> of being submitted upstream?
 
---1+ZKSFcDOruBirf+
+I don't specifically know anything about that code but I'd expect that
+for out of tree code breaking new ground like this there'd be a strong
+likelyhood that there'd be design level issues and that's what the pre
+submission discussions were all about - how to fit the concept into the
+kernel subsystems in a way that might be maintainable.  There's also
+been the whole transition to their new DSP firmware going on.  It's
+possible that what was shipped was implemented in the same way with the
+same code but I'd not assume that this is the case without actually
+comparing the two.
+
+--bScRnfjqovRwO9fK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOrAuQACgkQJNaLcl1U
-h9AjZwgAhsVgucuD8v8EbY26CtQPykN5gxWGJ+7ciqU2SrnCmlf+PFa++50wRWOa
-pDrX7dQ+fLhgUGMXCKWlY7dRqGjtYicvaKElyZXfKt8vdXifdNur+KBhJW979lbF
-X2c3CK0pl7plOpv43L4vYExx5Qlr7B4Jz+sYbdw6ND1CqpW7a5lghIAOL2d0kTxB
-yPdeMrE4vmzXcN24/XFrTb0zgfTkh13j6et4DocgNe9UhHjgMzgEfHKmM7W/QBZf
-RNE8voHGyXvSb0w92ZyX1AGLIZF0sU2gOSR0tAQwH/5w5emoHj3b+LvGz1ArQVmj
-ms5nPnW0UpzZU8QkG6f+w8tJiSQCcw==
-=XxVJ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOrCx8ACgkQJNaLcl1U
+h9CnuAf+MGvd+7W+bQWW+xi1CuE7tof8WZ9OioNEjvAye+7vSMT+3xz69FpZCsDj
+qjLn5KpAJ0d+8GmyK2A7q7G0mq7m86Vfy32SL0CJ85glIwXsle7Et1qMjHlChD3a
+Z5W81ijSkUe8OJVIvYBgsUKOdpLiJLtrhRype+FPWs8jU5FPpS42j5PNC0U9XNkP
+jJJmYssHD+Hu2jzMljinkqK6yD97EQ7QlKHUDf3Y4CzpnIx3JBhkGszFGzNHHxp+
+qtkKie0btBhrJzPDM5nrRn8ugSehraG7r0RRTv/d4IsIgoQkrnwtS2e36SP7WVTz
+N6aswJRsm0m/Qxjwxgx5P8lS6k6JnQ==
+=AYE8
 -----END PGP SIGNATURE-----
 
---1+ZKSFcDOruBirf+--
+--bScRnfjqovRwO9fK--
