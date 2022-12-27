@@ -2,111 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124F7656841
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 09:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF3365687E
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 09:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiL0IMJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Dec 2022 03:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S229643AbiL0Ih5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Dec 2022 03:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiL0IMB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 03:12:01 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D24637D;
-        Tue, 27 Dec 2022 00:11:54 -0800 (PST)
-Received: from [192.168.1.103] (31.173.80.202) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 27 Dec
- 2022 11:11:44 +0300
-Subject: Re: [PATCH V2] usb: Fix typo in comment
-To:     Gongwei Li <lifangpi@hotmail.com>, <mathias.nyman@intel.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <972624427@qq.com>, Gongwei Li <ligongwei@kylinos.cn>
-References: <SI2PR02MB4603F6E3B7E062EF76656956DDED9@SI2PR02MB4603.apcprd02.prod.outlook.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <777db5f6-cf5b-0c68-7dae-c1577b930178@omp.ru>
-Date:   Tue, 27 Dec 2022 11:11:44 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S229496AbiL0Ih4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 03:37:56 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6C31D7;
+        Tue, 27 Dec 2022 00:37:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672130276; x=1703666276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JdaJO+fkzogC42+/Cx0uzxpw8R6GdnStKstxrzQC840=;
+  b=CTZxoLaPEn3qMHspEUiYL1sVj9gOPDFewbqwuESqXmtuapYv3XeJbccg
+   wWgJSDHxW3ABdkRzarDyAR6XOqYYl554JycoxOGggC2nRO2uV6dZ+fSTw
+   KDFF7gip+rmS6OzT5+KkuBlv+Xektshv5mwfKYizxfy/B96ElonAHrG+7
+   YyPrbBZVwRM6DJ9exdnM6Oe9FkUIpa3WQDWDWkP8h/MzBKCKiCY0KPLmo
+   fWXJL2qzzcwlJLoKxnhpvHqkUr4y8fRz8e3/zPQyAyPFFWK71pzdHTmGR
+   LBqU+PNVThOlrYzkNkEtvaX8AdB6MekTiwrqUeaktt6VsQc5Uwfod7NXA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="385090269"
+X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
+   d="scan'208";a="385090269"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 00:37:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="760268759"
+X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
+   d="scan'208";a="760268759"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 27 Dec 2022 00:37:49 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 7B985159; Tue, 27 Dec 2022 10:38:20 +0200 (EET)
+Date:   Tue, 27 Dec 2022 10:38:20 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] thunderbolt (gcc13): synchronize
+ tb_port_is_clx_enabled()'s 2nd param
+Message-ID: <Y6qu/MeTAwqZURDg@black.fi.intel.com>
+References: <20221212102936.23074-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <SI2PR02MB4603F6E3B7E062EF76656956DDED9@SI2PR02MB4603.apcprd02.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.80.202]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 12/27/2022 07:53:23
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 174420 [Dec 27 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.202 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.202 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;31.173.80.202:7.1.2;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.202
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 12/27/2022 07:57:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 12/27/2022 4:33:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221212102936.23074-1-jirislaby@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 12/27/22 9:59 AM, Gongwei Li wrote:
-
-> From: Gongwei Li <ligongwei@kylinos.cn>
+On Mon, Dec 12, 2022 at 11:29:36AM +0100, Jiri Slaby (SUSE) wrote:
+> tb_port_is_clx_enabled() generates a valid warning with gcc-13:
+>   drivers/thunderbolt/switch.c:1286:6: error: conflicting types for 'tb_port_is_clx_enabled' due to enum/integer mismatch; have 'bool(struct tb_port *, unsigned int)' ...
+>   drivers/thunderbolt/tb.h:1050:6: note: previous declaration of 'tb_port_is_clx_enabled' with type 'bool(struct tb_port *, enum tb_clx)' ...
 > 
-> Spelling mistake in comment.
-
-   That was not a comment...
-
-> Signed-off-by: Gongwei Li <ligongwei@kylinos.cn>
-> ---
->  drivers/usb/host/pci-quirks.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I.e. the type of the 2nd parameter of tb_port_is_clx_enabled() in the
+> declaration is unsigned int, while the definition spells enum tb_clx.
+> Synchronize them to the former as the parameter is in fact a mask of the
+> enum values.
 > 
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index ef08d68b9714..ebc478def1d7 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-> @@ -1103,7 +1103,7 @@ void usb_enable_intel_xhci_ports(struct pci_dev *xhci_pdev)
->  	pci_read_config_dword(xhci_pdev, USB_INTEL_USB2PRM,
->  			&ports_available);
->  
-> -	dev_dbg(&xhci_pdev->dev, "Configurable USB 2.0 ports to hand over to xCHI: 0x%x\n",
-> +	dev_dbg(&xhci_pdev->dev, "Configurable USB 2.0 ports to hand over to xHCI: 0x%x\n",
->  			ports_available);
->  
->  	/* Write XUSB2PR, the xHC USB 2.0 Port Routing Register, to
+> Cc: Martin Liska <mliska@suse.cz>
+> Cc: Andreas Noever <andreas.noever@gmail.com>
+> Cc: Michael Jamet <michael.jamet@intel.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 
-MBR, Sergey
+Applied now, thanks!
+
+I changed the title slightly to avoid words like "synchronize" because
+that makes me think this is fixing a race condition somewhere but in
+fact this is simply fixing a function prototope to match the definition :)
