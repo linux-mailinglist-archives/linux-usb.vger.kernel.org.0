@@ -2,160 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E966E656FFD
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 22:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AD0657013
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Dec 2022 22:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiL0VdS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Dec 2022 16:33:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S229533AbiL0Vpl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Dec 2022 16:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiL0VdQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 16:33:16 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A002648
-        for <linux-usb@vger.kernel.org>; Tue, 27 Dec 2022 13:33:14 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id cf42so21216904lfb.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Dec 2022 13:33:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=blLdzUMAkH6NNOpHUUK0r2VWc/AFPUHqvr7AifIWIZI=;
-        b=TwQ0/7811fSSzMqrJssEzw6BoEyyvfG48ujo0eQ+zgnPM/yKo+OCopgEGg+EKtRWMY
-         Qjz1Qd+h/pa7QIfjiFjtXEuuzalGr2V0xAUOmPIIrIpnacNZDIceeuFTlQ4tSbvmSEsv
-         Rpsbm/XfJ+wTPN5x5I4uoJF5xuYOJgInoSgEOKn8owlQAsn3CaVmMkZaMayM19wLxfr7
-         MiEReiWiQ/jT3i/siSclbwlZ99e+tyrR1hXoHr05Xur+WotgBs5evT2iu/fUdGLBxinv
-         xTk8zpsTHIFDLNj2Tj2qaasRYvWJHLmLPEy0T96EoTjlvvQi2XSk6uegPdpiJ0dmRrD2
-         7wlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=blLdzUMAkH6NNOpHUUK0r2VWc/AFPUHqvr7AifIWIZI=;
-        b=MJGccl+zKvzygvUYoW8pAD9mKuoPzDuoVZxTufsIZHuyOML+D+aDGX+jG9FWnMEO/8
-         J1joGgljLsxralGKPOwPBepjeKfafR9+2oRSat9jWfrzZFLNJJHttqhIoIOo3RJnCzTW
-         j3bndLJ76WBV20pk3UyERjKzUrabUMsnnBx0jgcIie+Oi7Z5+L91GhO+LZdZZqB+lvZk
-         n2uqNCiPDQespcubDngBy/naPTIAuRbY3BuXnyZSrxMRYAHlsP7Xc/Xaw+eeTN3Shvhz
-         7oPMBlTCibXYKAMkxFMJ4s/tlwcXvYBIncfngnd6ZZZxG/aSYJo+Fkii+gG5KxWB/PoB
-         fuMw==
-X-Gm-Message-State: AFqh2koaZ3hKs0Rc4bucUaNGqFDV2Ik2jmgpqqWeJsfAVCMPPu/ip+rc
-        fSeFRmhrghcp5wcThlnMIGumhA==
-X-Google-Smtp-Source: AMrXdXuaAAOW9AP+69/mg0K8pYcjI6noxqGBDzQUMRrrItvqeB0VXR5G4dXsaLjX2lWQlF+DRJmCSg==
-X-Received: by 2002:a19:7b18:0:b0:4b5:9cce:73a0 with SMTP id w24-20020a197b18000000b004b59cce73a0mr6987359lfc.39.1672176792470;
-        Tue, 27 Dec 2022 13:33:12 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id q25-20020a194319000000b004c57abccb8bsm2388708lfa.102.2022.12.27.13.33.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 13:33:11 -0800 (PST)
-Message-ID: <f6e4e538-b4dd-a45a-0078-ea7ebb960672@linaro.org>
-Date:   Tue, 27 Dec 2022 23:33:10 +0200
+        with ESMTP id S229731AbiL0Vpj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Dec 2022 16:45:39 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BC6633C
+        for <linux-usb@vger.kernel.org>; Tue, 27 Dec 2022 13:45:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672177539; x=1703713539;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wKC6zi4mWCZf4x87CzOmRB9JpS98OIigpmJ4qZnn8yI=;
+  b=T+A2V5lRx8Ne24gdV0RLLh/gB/7kZF6Yrh64PgqDFId5LXWeqzstDSln
+   TW+/5zR+3PxU8gEqtcplV3RdzmXhyepoOy6x5HFJn0UJSqF7huxNHEk6R
+   dWD4HSwwYY199ew4EuHRwYkQY/KND/s643c16h5GNFWq6scjsknF/B8q1
+   1FM2lHEy0Q3+kpVNi2ra4BrAR1OG2PfcgKJlXvyzJpMFM1E0g5BZu46P7
+   9kZDplM+/lj658G+tA2L9oBpmCsjXJ9iTHAPg6YM8Jn3zsxTvOm/Bd+no
+   LA9sofw0lrXWNTAefUNp0nF4EtLDZtGHzw+BAURE5HyG00VcAgc3RmeKQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="385185731"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="385185731"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 13:45:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="683725984"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="683725984"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 27 Dec 2022 13:45:37 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pAHlQ-000FDm-1o;
+        Tue, 27 Dec 2022 21:45:36 +0000
+Date:   Wed, 28 Dec 2022 05:45:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
+ c28f3d80383571d3630df1a0e89500d23e855924
+Message-ID: <63ab676e.Ciwz1Mk0YgggncAP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 04/14] sound: usb: card: Introduce USB SND vendor op
- callbacks
-Content-Language: en-GB
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com, quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-5-quic_wcheng@quicinc.com>
- <CAA8EJprFD53zmECHJ44FpjztRjwsMym2QP_Gk-JWya-SL_ryHA@mail.gmail.com>
- <730d8cbc-c391-6d77-2374-713f539d38b6@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <730d8cbc-c391-6d77-2374-713f539d38b6@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27/12/2022 23:07, Wesley Cheng wrote:
-> Hi Dmitry,
-> 
-> On 12/24/2022 3:03 AM, Dmitry Baryshkov wrote:
->> Hi,
->>
->> On Sat, 24 Dec 2022 at 01:33, Wesley Cheng <quic_wcheng@quicinc.com> 
->> wrote:
->>>
->>> Allow for different vendors to be notified on USB SND connect/disconnect
->>> seqeunces.  This allows for vendor USB SND modules to properly 
->>> initialize
->>> and populate internal structures with references to the USB SND chip
->>> device.
->>
->> The commit message definitely needs some improvement. We do not notify
->> vendors on SND connect/disconnect events.
->>
->>
->>>
->>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>> ---
->>>   sound/usb/card.c | 22 ++++++++++++++++++++++
->>>   sound/usb/card.h |  7 +++++++
->>>   2 files changed, 29 insertions(+)
->>>
->>> diff --git a/sound/usb/card.c b/sound/usb/card.c
->>> index 26268ffb8274..212f55a7683c 100644
->>> --- a/sound/usb/card.c
->>> +++ b/sound/usb/card.c
->>> @@ -117,6 +117,21 @@ MODULE_PARM_DESC(skip_validation, "Skip unit 
->>> descriptor validation (default: no)
->>>   static DEFINE_MUTEX(register_mutex);
->>>   static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
->>>   static struct usb_driver usb_audio_driver;
->>> +static struct snd_usb_vendor_ops *vendor_ops;
->>> +
->>> +int snd_usb_register_vendor_ops(struct snd_usb_vendor_ops *ops)
->>
->> platform ops?
->>
-> 
-> Will change it.
-> 
->>> +{
->>> +       vendor_ops = ops;
->>> +       return 0;
->>> +}
->>> +EXPORT_SYMBOL_GPL(snd_usb_register_vendor_ops);
->>
->> What happens if several platforms try to register different ops? I saw
->> from the patch 09/14 that you register these ops unconditionally. If
->> other devices follow your approach there is an obvious conflict.
->>
-> 
-> Thank you for the review.
-> 
-> That is true.  I don't think there is a proper need to have multiple 
-> vendor ops being registered, so maybe just returning an error for if ops 
-> are already registered is sufficient.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
+branch HEAD: c28f3d80383571d3630df1a0e89500d23e855924  thunderbolt: Do not report errors if on-board retimers are found
 
-This would be a required step. And also you have to check the running 
-platform before registering your ops unconditionally. Ideally this 
-should be done as a part of the device's driver, so that we can control 
-registration of the platform ops using the usual interface.
+elapsed time: 722m
 
-> 
-> Thanks
-> Wesley Cheng
+configs tested: 94
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+powerpc                           allnoconfig
+ia64                             allmodconfig
+i386                 randconfig-a012-20221226
+i386                 randconfig-a011-20221226
+i386                 randconfig-a013-20221226
+i386                 randconfig-a014-20221226
+sh                               allmodconfig
+x86_64                              defconfig
+i386                 randconfig-a016-20221226
+i386                 randconfig-a015-20221226
+x86_64                               rhel-8.3
+x86_64               randconfig-a014-20221226
+arc                                 defconfig
+x86_64                           allyesconfig
+mips                             allyesconfig
+x86_64               randconfig-a013-20221226
+s390                             allmodconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a011-20221226
+alpha                               defconfig
+x86_64               randconfig-a012-20221226
+x86_64                           rhel-8.3-bpf
+s390                                defconfig
+x86_64                           rhel-8.3-syz
+x86_64               randconfig-a015-20221226
+x86_64                         rhel-8.3-kunit
+x86_64               randconfig-a016-20221226
+x86_64                           rhel-8.3-kvm
+arm                                 defconfig
+m68k                             allyesconfig
+s390                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                                defconfig
+arm                  randconfig-r046-20221225
+arc                  randconfig-r043-20221225
+arc                  randconfig-r043-20221227
+arm                  randconfig-r046-20221227
+arc                  randconfig-r043-20221226
+riscv                randconfig-r042-20221226
+arm64                            allyesconfig
+s390                 randconfig-r044-20221226
+arm                              allyesconfig
+i386                             allyesconfig
+x86_64                            allnoconfig
+sh                        apsh4ad0a_defconfig
+powerpc                  storcenter_defconfig
+i386                          randconfig-c001
+s390                       zfcpdump_defconfig
+arm                           stm32_defconfig
+arm                        spear6xx_defconfig
+powerpc                mpc7448_hpc2_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+i386                 randconfig-a004-20221226
+i386                 randconfig-a001-20221226
+i386                 randconfig-a003-20221226
+i386                 randconfig-a002-20221226
+x86_64               randconfig-a002-20221226
+i386                 randconfig-a006-20221226
+i386                 randconfig-a005-20221226
+x86_64               randconfig-a003-20221226
+x86_64               randconfig-a006-20221226
+x86_64               randconfig-a001-20221226
+x86_64               randconfig-a004-20221226
+x86_64               randconfig-a005-20221226
+hexagon              randconfig-r045-20221225
+riscv                randconfig-r042-20221227
+hexagon              randconfig-r041-20221225
+hexagon              randconfig-r041-20221227
+hexagon              randconfig-r041-20221226
+arm                  randconfig-r046-20221226
+s390                 randconfig-r044-20221225
+hexagon              randconfig-r045-20221226
+riscv                randconfig-r042-20221225
+hexagon              randconfig-r045-20221227
+s390                 randconfig-r044-20221227
+x86_64                        randconfig-k001
+arm                         socfpga_defconfig
+arm                     am200epdkit_defconfig
+powerpc                     akebono_defconfig
 
 -- 
-With best wishes
-Dmitry
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
