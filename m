@@ -2,132 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B14657520
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 11:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F099D657528
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 11:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbiL1KGU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 05:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S232499AbiL1KKH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 05:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbiL1KGE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 05:06:04 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFE4297;
-        Wed, 28 Dec 2022 02:06:03 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id g16so5975103plq.12;
-        Wed, 28 Dec 2022 02:06:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SKyVlX/Mpa7o0t27gnVLycSg68+P2J70WhEPAp5+xtQ=;
-        b=jW6UGc8/hz58oCJqSTWk/8gf9CLM3mNxTZAFS3SXwTFhJ/Z78w8psS4N18vpeYFb6o
-         7VOWq3YknGEueXdTDv93bve3q7NB9V9CPgrDiH9jP1gSjA8m0SvBIQe3W7qp8xqpSLDs
-         NCmpb6xtwd41Gg4PL2MDXo8JHtfEYrGo8EYjw9tq8YukXxQjbLsYI+SrCBc7IK68Zs4o
-         kytjatg3jUQqANdrm7BJPnxuOMDbTCgONcx1ZAFs6/bH9CtzyfEH5JhF1019Mfo6oZKm
-         udYiaC57Qi8k8lZZ+8KyzfcIfd74so98zxwVcm4iZ2/1nSYFeHEn1qOxZ+n4TdxSrGTy
-         aUeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SKyVlX/Mpa7o0t27gnVLycSg68+P2J70WhEPAp5+xtQ=;
-        b=LsOyqIAcj8t7meskK13kzuViSMkdJHHB8YnONPajLG1DcAeAZ2Jy7O63mptL+MKQ3/
-         kVbm9qgSejU2e1MsXkFkQjCQgTTU4/MWL6yVmVH+tXYtvfBaoCWWc/XDvk9y3EtdLsBw
-         VRv5rcm9Ud+mTpxzPJu3W/wKXiALqYNCeMYU9j4mchWxUkaV8hcqinymxBwk/AaGNY++
-         Z4JE/WTArhoav4A5daTR8tjR+CrZ6U+cIbp+bQcwKC+4u45TDl97cHlMluf4B/I17WF5
-         c5kRUgxwriwReXVPu8mwZK/u4qrqBgWQab26VBGDUU8f1bXeQvq41uEr1rZ06v7xZohR
-         Mu+g==
-X-Gm-Message-State: AFqh2kqZplNtXlaeVT2qrBiXZXhLITw8lY59VPWv7b6purbiIXT2ERUX
-        MhHu3nCSyQv1oX4QViLcBpM=
-X-Google-Smtp-Source: AMrXdXs8wZYfIJ+CtLGOH0BY4QUfPWlXmu4EZUOEgBiXxFuHJG5Tq3gPePXoBIHSu9XinQ2fw2/aqw==
-X-Received: by 2002:a17:902:7042:b0:189:6a5a:7289 with SMTP id h2-20020a170902704200b001896a5a7289mr33309457plt.52.1672221963337;
-        Wed, 28 Dec 2022 02:06:03 -0800 (PST)
-Received: from localhost.localdomain ([45.112.3.26])
-        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0019277df45a6sm5794915plb.53.2022.12.28.02.06.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 02:06:02 -0800 (PST)
-From:   Anand Moon <linux.amoon@gmail.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S232921AbiL1KJm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 05:09:42 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21011144C;
+        Wed, 28 Dec 2022 02:08:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672222100; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=DR7EU7XZmfJBsV2/fzc+7dKvSMdtHaD/bwPhesW4sa4eMih2Y1Ph9CuNLETSurqR8o2Ai6hOwQbyTn+dVXGTxCAmEjcFzH446+Kx80SWfo+VJgw2Hc2Dg39mjyAyzs6lLXkFGOca1Pk+IwAw4sCFetUMl2RL9gpfk1jH9P91ZuI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1672222100; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=6RIh+iAefWxFs9a9psv5C07vlRmV2frNtjn4+K4G0VM=; 
+        b=BKs3u9KWDNUajiU+Op2bpOgXKzEeCIjYwETWhAV87+4/RT9u1qFGzgjWW9JQ/Wo2a/bJfd/XaZo0xtNWpHxuUUFfZM9GIb7US8g1ORsYQlC+l8FIAmFvaNvJN/AxPMCT/JinzJ1Wagm/qN15itYSSgINEo9C1Io8cDRrWRq2Lzw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672222100;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=6RIh+iAefWxFs9a9psv5C07vlRmV2frNtjn4+K4G0VM=;
+        b=F8u11A+Qt19bpek999EarlNKxkoaqLgAYN38B8vxF24KC138yn43JyPyf+oG0LGf
+        IkDuB71tnIwS34asv4r4AZoW4TJA+AYc3Ns8A45xmR+6YNL20rDeLZFyw55jq9kjkoL
+        /B09D9UzudyRmbuS+XujDxBHHuSD+EknYGBfNkcU=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.39 [120.85.99.39]) by mx.zohomail.com
+        with SMTPS id 1672222099827577.0094574854984; Wed, 28 Dec 2022 02:08:19 -0800 (PST)
+Message-ID: <ef20a7dfa027f1a5a24a515e347af10c06a4da85.camel@icenowy.me>
+Subject: Re: [PATCH v1 01/11] dt-bindings: usb: Add device id for Genesys
+ Logic hub controller
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 10/11] usb: misc: onboard_usb_hub: add VIA LAB VL817Q7 hub support
-Date:   Wed, 28 Dec 2022 10:03:19 +0000
-Message-Id: <20221228100321.15949-11-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221228100321.15949-1-linux.amoon@gmail.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 28 Dec 2022 18:08:15 +0800
+In-Reply-To: <20221228100321.15949-2-linux.amoon@gmail.com>
 References: <20221228100321.15949-1-linux.amoon@gmail.com>
+         <20221228100321.15949-2-linux.amoon@gmail.com>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VIA LAB VL817Q7 is a 4-port USB 3.1 hub that has a reset pin to
-toggle and a 5.0V core supply exported though an integrated LDO is
-available for powering it.
+=E5=9C=A8 2022-12-28=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:03 +0000=EF=BC=
+=8CAnand Moon=E5=86=99=E9=81=93=EF=BC=9A
+> Add usb hub device id for Genesys Logic, Inc. GL852G-OHG Hub USB 2.0
+> root hub and Genesys Logic, Inc. GL3523-QFN76 USB 3.1 root hub.
+>=20
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> =C2=A0Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 2 ++
+> =C2=A01 file changed, 2 insertions(+)
+>=20
+> diff --git
+> a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> index a9f831448cca..db009f3ef438 100644
+> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> @@ -16,6 +16,8 @@ properties:
+> =C2=A0=C2=A0 compatible:
+> =C2=A0=C2=A0=C2=A0=C2=A0 enum:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - usb5e3,608
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - genesys,usb5e3,610
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - genesys,usb5e3,620
 
-Add the support for this hub, for controlling the reset pin and the core
-power supply.
+I don't think genesys, is needed here because usb5e3 means USB VID
+0x05e3, which is already linked to Genesys Logic.
 
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
- drivers/usb/misc/onboard_usb_hub.c | 2 ++
- drivers/usb/misc/onboard_usb_hub.h | 5 +++++
- 2 files changed, 7 insertions(+)
+In addition, the control logic of these two hubs are needed to be
+verified.
 
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index 699050eb3f17..025572019d16 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -335,6 +335,7 @@ static struct platform_driver onboard_hub_driver = {
- #define VENDOR_ID_MICROCHIP	0x0424
- #define VENDOR_ID_REALTEK	0x0bda
- #define VENDOR_ID_TI		0x0451
-+#define VENDOR_ID_VIA		0x2109
- 
- /*
-  * Returns the onboard_hub platform device that is associated with the USB
-@@ -418,6 +419,7 @@ static const struct usb_device_id onboard_hub_id_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
- 	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
- 	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
-+	{ USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817Q7 3.1 */
- 	{}
- };
- MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
-diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index b32fad3a70f9..1fb3371ebdae 100644
---- a/drivers/usb/misc/onboard_usb_hub.h
-+++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -26,6 +26,10 @@ static const struct onboard_hub_pdata genesys_gl850g_data = {
- 	.reset_us = 3,
- };
- 
-+static const struct onboard_hub_pdata vialab_vl817q7_data = {
-+	.reset_us = 3,
-+};
-+
- static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
- 	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
-@@ -37,6 +41,7 @@ static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
- 	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
- 	{ .compatible = "usbbda,5414", .data = &realtek_rts5411_data, },
-+	{ .compatible = "vialab,usb2109", .data = &vialab_vl817q7_data, },
- 	{}
- };
- 
--- 
-2.38.1
+And what's the status of the companion hub of the USB3 hub? Is it
+really a USB3-only hub, or is its USB2 part just equal to another USB3
+hub?
+
+> =C2=A0
+> =C2=A0=C2=A0 reg: true
+> =C2=A0
 
