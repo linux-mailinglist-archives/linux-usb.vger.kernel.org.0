@@ -2,116 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69947658532
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 18:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31176586BC
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 21:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbiL1RQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 12:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        id S231523AbiL1UcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 15:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbiL1RQr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 12:16:47 -0500
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743E713D4F;
-        Wed, 28 Dec 2022 09:16:46 -0800 (PST)
-Received: by mail-il1-f171.google.com with SMTP id z18so8471211ils.3;
-        Wed, 28 Dec 2022 09:16:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GtsNziqtosk5fGA4iQynew9CXVas2xeRqJXm3p7E/xg=;
-        b=un/CJNX8XRZHlc0PPJnIvFhS5IpgRD8I6/R/zoBGRhbmLkaNpqf64wYynampwtftgC
-         5tupdgtNjTp2tKIbjujzszPg4IBsX0CiFcE1QIPLgTIcqT348hIKvToiDFboIRAGAw8Y
-         J7Su0eKkpGOpNbYo+H9p7SFxoZugmm/yanqjZ+CrL9vF+sizCTiLuffdUg+Yo/KFWfR8
-         ksmR+6cDhqN2RxTP9WUESd7If1/P9sBhw53a3alfH5KKxE574hqphl/0ykhN7glQM+Un
-         ihVkViQBQsEccM1hY5JpafwloJ8TwAIYT/5t4hSoo2TdiEe2x+djtxA/+p4m5l9s1HSm
-         /xvA==
-X-Gm-Message-State: AFqh2kp6e2+gYMRLPbeGsLALpYFPi0TV5AvFPCCWITpjO6TIHxfwrBWu
-        Ii2aXliqRT62NFy0VAXYLVQHfGzR3A==
-X-Google-Smtp-Source: AMrXdXvqv/LDMIFwAHIsqBV/YKVKwU0ASsP/hpfrlmxnnqj/Tb1UjRUMXdmHtr2gPuHf0d0UPxuEhQ==
-X-Received: by 2002:a05:6e02:218d:b0:30c:2266:cfca with SMTP id j13-20020a056e02218d00b0030c2266cfcamr1939780ila.9.1672247805656;
-        Wed, 28 Dec 2022 09:16:45 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f27-20020a056638329b00b003758bcba4b5sm5184514jav.153.2022.12.28.09.16.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 09:16:45 -0800 (PST)
-Received: (nullmailer pid 1928458 invoked by uid 1000);
-        Wed, 28 Dec 2022 17:16:44 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229668AbiL1UcW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 15:32:22 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B4F13D44;
+        Wed, 28 Dec 2022 12:32:21 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BSKQ4vf001927;
+        Wed, 28 Dec 2022 20:31:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hPQ+xZA2/zQFK/5r/OYDYGZHuiZAzHLvGCCkk6+8BqU=;
+ b=Tblo4UVL5I9f+H4Vyb9GQIhGdgvdzrX8xmD9rzwsOcptx1dRfxj8xn43qJDGkELahOxA
+ ui+jjqhoYNbmY1Dib2K72bHWVcORa6sZPJGoJda+mU9u0hS7YUdBHwTMRloDuE5pJwsJ
+ +7AjRwL27uIo+ZzlC4cB3KDT2hKKiLNfW92jn39zhlTJZ4gtulxpE5uWCSVXVSe6ZF20
+ Oa6uRAlRx9EGhESeEnKsQjZmIB7PTXM+1M72RA2bDxBpZi9AduV6m3NFT5MBJ8Ew2oLh
+ /nmGXCwxXYVw1VaGZU5Wr98CHXxA+uATZibweArUWPSVKm17R5LHuWybafGr8ri0efl0 7Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mrp0yrt3p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 20:31:19 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BSKVI3P031506
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 20:31:18 GMT
+Received: from [10.110.31.102] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 28 Dec
+ 2022 12:31:17 -0800
+Message-ID: <559030ff-112b-e0a8-b278-72f909724496@quicinc.com>
+Date:   Wed, 28 Dec 2022 12:31:16 -0800
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20221228100321.15949-9-linux.amoon@gmail.com>
-References: <20221228100321.15949-1-linux.amoon@gmail.com>
- <20221228100321.15949-9-linux.amoon@gmail.com>
-Message-Id: <167224753802.1921489.221143833426610237.robh@kernel.org>
-Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
- VL817Q7 hub controller
-Date:   Wed, 28 Dec 2022 11:16:44 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 06/14] usb: core: hcd: Introduce USB HCD APIs for
+ interrupter management
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-7-quic_wcheng@quicinc.com>
+ <Y6ca8IKLK9g497Qv@rowland.harvard.edu>
+ <e1203849-01b4-b196-36f3-76d58dd7c724@quicinc.com>
+ <bf1011a8-c746-c465-f161-f0293409d922@suse.com>
+ <Y6xd1c3s2XPpOqfi@rowland.harvard.edu>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <Y6xd1c3s2XPpOqfi@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pNo8f1lNCunriSs5wwMKfDcH_pIE4amA
+X-Proofpoint-ORIG-GUID: pNo8f1lNCunriSs5wwMKfDcH_pIE4amA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-28_15,2022-12-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=346 phishscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212280176
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Alan,
 
-On Wed, 28 Dec 2022 10:03:17 +0000, Anand Moon wrote:
-> The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
-> features 4 downstream ports, an internal 5V regulator and has
-> external reset pin.
+On 12/28/2022 7:16 AM, Alan Stern wrote:
+> On Wed, Dec 28, 2022 at 09:59:03AM +0100, Oliver Neukum wrote:
+>>
+>>
+>> On 27.12.22 22:07, Wesley Cheng wrote:
+>>
+>>>
+>>> Hmmm...maybe I should change the name of the API then to avoid the confusion.  Yes, usb_hcd_flush_endpoint() does ensure that URBs submitted to the EP are stopped.  However, with this offloading concept, we aren't actually submitting URBs from the main processor, so the ep->urb_list will be empty.
+>>>
+>>> This means the usb_hcd_flush_endpoint() API won't actually do anything.  What we need is to ensure that we send a XHCI stop ep command to the controller.
+>>
+>> That is a concept specific to XHCI, yet you are adding a generic
+>> API. The namin should reflect that. usb_quiesce_endpoint() ?
 > 
-> Add a device tree binding for its USB protocol part.
-> The internal LDO is not covered by this and can just be modelled
-> as a fixed regulator.
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
->  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> Or even xhci_send_stop_ep_cmd(), which is what the routine is intended
+> to do.
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Just to clarify, you're talking about renaming the API that was added in 
+the XHCI driver, correct?
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml: '$id' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-Error: Documentation/devicetree/bindings/usb/vialab,vl817q7.example.dts:26.17-18 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/usb/vialab,vl817q7.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1508: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221228100321.15949-9-linux.amoon@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Thanks
+Wesley Cheng
 
