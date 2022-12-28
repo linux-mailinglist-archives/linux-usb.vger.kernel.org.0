@@ -2,47 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0152657AF4
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 16:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CD4657B28
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 16:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbiL1PQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 10:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S233237AbiL1PSf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 10:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbiL1PQk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 10:16:40 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A6B8B228
-        for <linux-usb@vger.kernel.org>; Wed, 28 Dec 2022 07:16:38 -0800 (PST)
-Received: (qmail 279415 invoked by uid 1000); 28 Dec 2022 10:16:37 -0500
-Date:   Wed, 28 Dec 2022 10:16:37 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com, quic_plai@quicinc.com
-Subject: Re: [RFC PATCH 06/14] usb: core: hcd: Introduce USB HCD APIs for
- interrupter management
-Message-ID: <Y6xd1c3s2XPpOqfi@rowland.harvard.edu>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-7-quic_wcheng@quicinc.com>
- <Y6ca8IKLK9g497Qv@rowland.harvard.edu>
- <e1203849-01b4-b196-36f3-76d58dd7c724@quicinc.com>
- <bf1011a8-c746-c465-f161-f0293409d922@suse.com>
+        with ESMTP id S233258AbiL1PSd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 10:18:33 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4E313F1F;
+        Wed, 28 Dec 2022 07:18:32 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id g65so4107257vkh.8;
+        Wed, 28 Dec 2022 07:18:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkaAG2YOajQYFJDJM0i4sGT7QKIFbLQrj4z1FPIpfyU=;
+        b=GzmHM6smAHp5ldKDKJlC8ic+MWAvqfbXRTL1wMlO/CfghIxbb8H/HXDZO7Lhgg3/3S
+         frOyEKhQJ4KfhNbX4Lzp15tOVGSWO9rcTyhipEiTobRnAkMTKNIBS1u4f1bNb4vJHAnY
+         +U3dWEMtyGHTX24tbr0KDEFw2rH73lBFA/sDdpG+JPzQLcqE1Pxv1zdvFK5o/RYjDnM5
+         WHApMN1UQJCOZG9KcdLwJVwj3NnPRO0nDmXNhwRt+woMVRxRJ9aIb+mwHMZ7YU9OtSdk
+         tWjVi7skhMy2t4qa5BzfLGQecEOuNxHctPmpcACjYBbofMr9Hq7rzuWwsvfXKl6OG81s
+         8wjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lkaAG2YOajQYFJDJM0i4sGT7QKIFbLQrj4z1FPIpfyU=;
+        b=Fq8T/Ik+04zxDaTLAswMniYSOcdXyPbpPHr4an/t9lCzsIS0SMoxO93R8Dx4niV1wx
+         y0nXVYI3Bj/4XV4rp5TfLdmCZXLoMSxjnS7N1HVtPlAziq1Y2U+n0JQoe8wMr+k2G4QD
+         uoYKJ6BdD+dsZrEr+KFwG+qMw1hYEzsay+ec4+4AAbwSlWUmJPlQL5g70gJMPrvMPo6G
+         Jr0bKwj2uWFhN4QcQRdPd+0JkmZ8vWEsi1t290c+LiEQhCkh1ovDxMnYC+bM4nxVfoLo
+         KrEADitOnl24pT3bYghr8tNTEnWpyso96u4+Luk0WxESay0bwYsiRR4ezG/igSjCYSDz
+         M1vg==
+X-Gm-Message-State: AFqh2kqSIRyVnmmkbXp+NpgDCTb5GqhS6W6x/dlnIqZiQyY7vB36fsha
+        rLaGgXx4kamQ/gh1lcov47vgE15LQDWXNWcj/bhpjuNsYjOVMg==
+X-Google-Smtp-Source: AMrXdXux0yInKtn4v33xY2OSIkdigLnD4DPsiOKVxemqi8YoaAUVw2IQPco2RqhN0ev+9q2aSW3n/JSRZ8Se1oJX4Wo=
+X-Received: by 2002:a05:6122:1689:b0:3c5:db35:9288 with SMTP id
+ 9-20020a056122168900b003c5db359288mr2701335vkl.32.1672240711908; Wed, 28 Dec
+ 2022 07:18:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bf1011a8-c746-c465-f161-f0293409d922@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-2-linux.amoon@gmail.com>
+ <d0127811-6be1-4f1c-c138-1e8b0c69aaeb@linaro.org>
+In-Reply-To: <d0127811-6be1-4f1c-c138-1e8b0c69aaeb@linaro.org>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Wed, 28 Dec 2022 20:48:15 +0530
+Message-ID: <CANAwSgSD_zTmPTJQ7PMDqQeagppv2SsaO9+H2h4XVJdYJAg1Qw@mail.gmail.com>
+Subject: Re: [PATCH v1 01/11] dt-bindings: usb: Add device id for Genesys
+ Logic hub controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,20 +72,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 09:59:03AM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 27.12.22 22:07, Wesley Cheng wrote:
-> 
-> > 
-> > Hmmm...maybe I should change the name of the API then to avoid the confusion.  Yes, usb_hcd_flush_endpoint() does ensure that URBs submitted to the EP are stopped.  However, with this offloading concept, we aren't actually submitting URBs from the main processor, so the ep->urb_list will be empty.
-> > 
-> > This means the usb_hcd_flush_endpoint() API won't actually do anything.  What we need is to ensure that we send a XHCI stop ep command to the controller.
-> 
-> That is a concept specific to XHCI, yet you are adding a generic
-> API. The namin should reflect that. usb_quiesce_endpoint() ?
+Hi Krzysztof,
 
-Or even xhci_send_stop_ep_cmd(), which is what the routine is intended 
-to do.
+Thanks for your review comments.
 
-Alan Stern
+On Wed, 28 Dec 2022 at 20:38, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 28/12/2022 11:03, Anand Moon wrote:
+> > Add usb hub device id for Genesys Logic, Inc. GL852G-OHG Hub USB 2.0
+> > root hub and Genesys Logic, Inc. GL3523-QFN76 USB 3.1 root hub.
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > index a9f831448cca..db009f3ef438 100644
+> > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > @@ -16,6 +16,8 @@ properties:
+> >    compatible:
+> >      enum:
+> >        - usb5e3,608
+> > +      - genesys,usb5e3,610
+> > +      - genesys,usb5e3,620
+>
+> This does not look like correct compatible. Did you test the bindings
+> and DTS? This should fail.
+>
+
+Yes, I have done and it did not report any error.
+
+make ARCH=arm64 mrproper
+make ARCH=arm64 defconfig
+make ARCH=arm64 -j$(nproc) dtbs
+make CHECK_DTBS=y amlogic/meson-gxbb-odroidc2.dtb
+make CHECK_DTBS=y amlogic/meson-g12b-odroid-n2.dtb
+make CHECK_DTBS=y amlogic/meson-sm1-odroid-c4.dtb
+
+Ok I will update this in the next version for all the patches.
+
+> Best regards,
+> Krzysztof
+>
+
+Thanks
+-Anand
