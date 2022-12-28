@@ -2,61 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C36F657516
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 11:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BB8657521
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 11:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiL1KFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 05:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S232912AbiL1KGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 05:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbiL1KFk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 05:05:40 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589E510063;
-        Wed, 28 Dec 2022 02:05:39 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso19634461pjp.4;
-        Wed, 28 Dec 2022 02:05:39 -0800 (PST)
+        with ESMTP id S232898AbiL1KFz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 05:05:55 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52A0DF2;
+        Wed, 28 Dec 2022 02:05:51 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so15604888pjh.5;
+        Wed, 28 Dec 2022 02:05:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mxRBm2XU4XIQi7X1v3Ft+eONrO9UoVmTZcrD/eMtUhA=;
-        b=Hv0yLKSAHoWZ2/9bzhG3A+tIIUGjScb43m92UrfPWc6xCgpHp9lR4WGbUASMXI05BH
-         S7CE7WBmVOapa2gkkdkYpjA314eulSNrRRTF+ctmtR0JjqChdWJLPYZ9Y2Ln6+WbW7Zy
-         RoWu+Va2xQ3MEdAQ5QfyMXIqUtOIvz0umLKxfWGz7xtBln24SJLjoc/6xs0x/TLofVSX
-         Q28A31YRPB4CVkoWaN/XaqrsOFI/Td1tkcqmOllJkd+PED6716ZbO31Lpbtge4/SgzNU
-         gA4KNDoiTnnlCvPwHpRpdR6A/37deTAe+Rr+dJnyqfgMU1dBUkNk3/Ux0vHLp1iUyIs3
-         /LoA==
+        bh=XddeMIQqpQATN+V02+mnCt6s/9dpQm+lysoFjgM/iXM=;
+        b=bk9fPXdUuyhpiB21Zc6lECqP3DGFcZuDaRjM9NiTQcDW49oyZnaprUVChuBu13cveQ
+         +tuR2ei4Gmmks6GNZpxuFlZ48YVzWw+gkqvpwyUiSGGq/Y2syUZgKcfFTnDPhxp3VgIC
+         BpOrcy7TMVP3fdt3Ik2ZrM5IVJRK9/7SH+CxvzZgWFQNNwfov1ra7ELkyAC7d6Y4EqHn
+         F5nagEcXFH3dZzg3tuNpg9MQsoqD03c8DCLicI0G+mRDOd4fj51Bny/By7Ut0BsCtl8D
+         J1F8UKUC0yEtzECuDGWz7qceGVaLHeKQ7RyFNkYllKcWZxwBbvn5aHZQ+miHxIV/waIE
+         z0xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mxRBm2XU4XIQi7X1v3Ft+eONrO9UoVmTZcrD/eMtUhA=;
-        b=AfCS05AWppxeEO7Q6Is8HyQNhTHEeNJPx47ww/eqJT/9m6uafyOxA1YStAXfslvVNy
-         XYXX3kw7O/eLvLqNpZxo93YVNngGSZXdj3mmYrgmo6p6gbDPkSYKxrjrd2oBLLraoOMt
-         cU6WPEBtzp8LAthvOK+cRbq1iNiIgteZCyXJ8O8k2Z7k+0mUGY6xVFm4SPfxoK/Bja9t
-         APftP2vn9mdZ2VNERfUNnV+rTErQePdDQV5dop3YQJcgUt3YWyouzKMMyBkaG5Vm3YDM
-         JvR3VfZBPWU+YnXXEIRqoUe77IRyXZYsGb6eWiMN4IOUMbPAhd5vLCvkNlOkQaylfrZl
-         HjQA==
-X-Gm-Message-State: AFqh2kqcaK5DeCP5VJIwj0lCbU/DpI/7kApARSJC8XQVyuIsqxXtnGTD
-        CI+bZ2kj4/r7tnPJZ/F5vDZrLIkMh7N1AQ==
-X-Google-Smtp-Source: AMrXdXtRNwZT3qCdQbi16HHYR45qm7jdb3TcssmNhTmKUcumlM4A5zcxGE+hkQEO2/YbQo/zhgCyrQ==
-X-Received: by 2002:a05:6a20:94c6:b0:ad:aaac:d40b with SMTP id ht6-20020a056a2094c600b000adaaacd40bmr30232618pzb.45.1672221938899;
-        Wed, 28 Dec 2022 02:05:38 -0800 (PST)
+        bh=XddeMIQqpQATN+V02+mnCt6s/9dpQm+lysoFjgM/iXM=;
+        b=xKMPbeXG91DdqmU7AJFR+BW06R4hbFDFpjr6SkVWaqZEkF/xV+EZtx+sWT91Ucr3G2
+         OcZm1zqR2r88uPxnyZGZonSNI7enIB9jcYNGzpa4+iUFlIWFC1psYforF58W6ja1aodg
+         +e2a/MJF/aKVTG6uH+98SZnQ3VEXForycdYB01WfiAtIt93tZn4n4fd8FATSIcBGs9Pl
+         9v5egeuI2rSFbzc9qoHmWcFVye8ZY9sx12qd8o4CTLeH6UsAajx3Wl8ZRITIeNXUtJkV
+         bqaRmBvhulQZbys0O83wRzR7wyjcBvLWprtYUyPr5+hnqmRAUL/n/6+kuZqPLkqKq+13
+         JrrA==
+X-Gm-Message-State: AFqh2kpxkfKi1BvjDE4x+XzcNsA5hxr98V0z5lMkQQy/UtKwkd1Ssybr
+        +zEaPxvfXbKTqySmsV5peuTpwS9iSDyj5A==
+X-Google-Smtp-Source: AMrXdXsGyKPlSNurOpXtQXDm488FCNp4MXLMzNFxR/gCvJmOImwthWm4FQ5Snt8HpVO9Gw2aqoOuyg==
+X-Received: by 2002:a17:902:da86:b0:189:747e:97cc with SMTP id j6-20020a170902da8600b00189747e97ccmr35072825plx.26.1672221951502;
+        Wed, 28 Dec 2022 02:05:51 -0800 (PST)
 Received: from localhost.localdomain ([45.112.3.26])
-        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0019277df45a6sm5794915plb.53.2022.12.28.02.05.36
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0019277df45a6sm5794915plb.53.2022.12.28.02.05.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 02:05:38 -0800 (PST)
+        Wed, 28 Dec 2022 02:05:51 -0800 (PST)
 From:   Anand Moon <linux.amoon@gmail.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 06/11] usb: misc: onboard_usb_hub: add Genesys Logic GL3523-QFN76 hub support
-Date:   Wed, 28 Dec 2022 10:03:15 +0000
-Message-Id: <20221228100321.15949-7-linux.amoon@gmail.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab VL817Q7 hub controller
+Date:   Wed, 28 Dec 2022 10:03:17 +0000
+Message-Id: <20221228100321.15949-9-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221228100321.15949-1-linux.amoon@gmail.com>
 References: <20221228100321.15949-1-linux.amoon@gmail.com>
@@ -72,43 +73,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Genesys Logic GL3523-QFN76 is a 4-port USB 3.1 hub that has a reset pin to
-toggle and a 5.0V core supply exported though an integrated LDO is
-available for powering it.
+The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
+features 4 downstream ports, an internal 5V regulator and has
+external reset pin.
 
-Add the support for this hub, for controlling the reset pin and the core
-power supply.
+Add a device tree binding for its USB protocol part.
+The internal LDO is not covered by this and can just be modelled
+as a fixed regulator.
 
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
- drivers/usb/misc/onboard_usb_hub.c | 1 +
- drivers/usb/misc/onboard_usb_hub.h | 1 +
- 2 files changed, 2 insertions(+)
+ .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
 
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index c0e8e6f4ec0a..699050eb3f17 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -410,6 +410,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
- static const struct usb_device_id onboard_hub_id_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G-OHG USB 2.0 */
-+	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0620) }, /* Genesys Logic GL3523-QFN76 USB 3.1 */
- 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
- 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
-diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index 2ee1b0032d23..b32fad3a70f9 100644
---- a/drivers/usb/misc/onboard_usb_hub.h
-+++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -32,6 +32,7 @@ static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
- 	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
- 	{ .compatible = "genesys,usb5e3,610", .data = &genesys_gl850g_data, },
-+	{ .compatible = "genesys,usb5e3,620", .data = &genesys_gl850g_data, },
- 	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
- 	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
- 	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
+diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+new file mode 100644
+index 000000000000..4ae995160fd5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++%YAML 1.2
++---
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Via labs VL817Q7 USB 3.1 hub controller
++
++maintainers:
++  - Anand Moon <linux.amoon@gmail.com>
++
++allOf:
++  - $ref: usb-device.yaml#
++
++properties:
++  compatible:
++    enum:
++      - vialab,usb2109
++
++  reg: true
++
++  reset-gpios:
++    description: GPIO controlling the RESET# pin.
++
++  vdd-supply:
++    description:
++      the regulator that provides 5.0V core power to the hub.
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    usb {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hub: hub@1 {
++            compatible = "vialab,usb2109"
++            reg = <1>;
++            reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
++        };
++    };
 -- 
 2.38.1
 
