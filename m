@@ -2,68 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE206575A3
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 12:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4B66575F4
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 12:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiL1LJd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 06:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S230486AbiL1Ljn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 06:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiL1LJb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 06:09:31 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F7021F;
-        Wed, 28 Dec 2022 03:09:29 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id d185so15248370vsd.0;
-        Wed, 28 Dec 2022 03:09:29 -0800 (PST)
+        with ESMTP id S232906AbiL1Ljk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 06:39:40 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BD0D2C1;
+        Wed, 28 Dec 2022 03:39:38 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id fc4so37753531ejc.12;
+        Wed, 28 Dec 2022 03:39:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1CvxPRIDVT1nlOHFUSTb+riWEiFvrCUY5v0nfrRaE1U=;
-        b=HMXFlEf+CZ4SixDofP0Wxuev/ISinqvAGBy2hHxXrEu7zJVWbKrEfHBbmeAkRxcYvP
-         3nZzJt1ScaZzBLTK5jXqw6h5AlwjNiZfgEYLy17+YDLYKlvgSyYv8E0173Wr/CnsI91D
-         gqeNqGe59TqYzrWJoigg10uuJO5HQqjqGM2x+4Rcsn4lxf3gDtcMSkEi3ups0+g3FYQV
-         1oB5y4Da1jdQUtasLoQXEBZ8e/ldIHfecxdwbXhG3+pY2krptsej+802I9fKl7NKSmli
-         c8Lw2Rm6TASSBu1K9DQzY2DAxKRzU6E0IhOpRg4DrgrmXzhccP/hLj+p+lU2P16PQwD1
-         jEZA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uvi6sBw7ki9dgaGuzIYTU1IrH3J6sZPrceOSxNB0Qmo=;
+        b=Dz82XmNtSPfQfl+OCy/aFOccsyEQsmM8cLvX4v8mTSr/nzR5oI/fka+BPGhSbe/g7P
+         gI8eO2wqNUReGsIxvrReKVcxNE6lVBTdj23rPFFTKeteFVq6hfm3EwflJDex2BF0Srda
+         DMZ1bsXYeupGOF1Jo8L92ORunMPoc/SDvVVPD3taurAAKTScK2N/g40bHUZpeW0ePe+P
+         J1Eu7kxc79SDNVl4EZYDnjfMfUGzv3IzsqFDMmw6/J9SUfbgDoy8W0Ean6RDQy4pskIs
+         c6IlCeALUQV1mWZGW9welTQgm2FTK9Y/BuE95soif6lFp65WUUOhkqXNg419oKMynrAb
+         qhWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1CvxPRIDVT1nlOHFUSTb+riWEiFvrCUY5v0nfrRaE1U=;
-        b=v7QsZ9AMVf3z8c+PDLrh/Xj59ssqRTLQD3/vT/GZojlshr0PNG5CszQFfOyRig14Yz
-         w/BUy71zLDSbPcMpmbwwHDZWtZC5Xm08TQ3A3dR2XzWcwZn+hp9wexRLDdV1sxa1woDr
-         9trZYvSAKjqp6T6VGbnfgT2UxMDJz4y94rs9gMe6fEsfrrDEzPbF8tFgB/H2SL+RHniP
-         6NIPIXqG8vV0FDGVkWIK7uGLUF39kPsmVIQMslerz4h9+b9mq326fFIAgehbFqOynAqW
-         LU3xBTEVgb9wd4PAxk3EcBQWwt9xQUtOsf01vqljUaA0SwwVlIj08PsIwpaFdwqKUWaP
-         lpuw==
-X-Gm-Message-State: AFqh2kq0APG+fpTQigKYbVUAHR7ixQCEMB0dh3NZexErpIHQxqRS59/E
-        XWgu3lIegxXeYT3WLAfPUthrFg7B0Qo9JXLKxN8=
-X-Google-Smtp-Source: AMrXdXuXc0bJ2Iae/CwTiyA+ZMoJb28nQikQvULssdkmceYo23LWBl6lxh2qfJufFz3h9ArkNk9Y3oyFve8Yn/ktVoA=
-X-Received: by 2002:a67:fb07:0:b0:3c9:35c8:e6a with SMTP id
- d7-20020a67fb07000000b003c935c80e6amr809992vsr.63.1672225769058; Wed, 28 Dec
- 2022 03:09:29 -0800 (PST)
+        bh=Uvi6sBw7ki9dgaGuzIYTU1IrH3J6sZPrceOSxNB0Qmo=;
+        b=cYI3qUPZLkNK/abBrSdY96Nddg8Spbrp/h72lfvP2YI9EI3tJZZJLh79PaGW1UygMN
+         i28qWcboaN7W8FUzKKKY9rlazbweEqpbzQDvD2oA4Jwm/15Y7pcbqDn8w9ogYG1cbRDQ
+         77haaIG8ZNMOjEqo28V/Zh5ikjaRVe0Qc/qam7xPJ1iLfEjus5MDbFiPOBSMTCkd2Pj3
+         tKxwJT1DHJeEVfyVr75qJYMWPXM0Li7DLK82ADE9jemHKBRS+tmQcRWhSQPqjqZ95cch
+         Wfr2vGB998ihQVNcbN6OoP7utt/mGjA7AK0FWszG9rT37mY5IHolK3W9Lx6dCHrrfT3m
+         fSwg==
+X-Gm-Message-State: AFqh2kqEJPTomUu3u2hNKKOZmiAJqU7TN9+NvKd4pt2vI/OdXHqN6Ru3
+        K0OtcZlEqvzxGLV8F+NVTEGT74aBZqNNfCTx
+X-Google-Smtp-Source: AMrXdXvyrrIn6nDMkr9ANMaPMX7uTZVDeUKFJB/akTfWo1mFqRtRdkrUdfjLyaUxATl9e4563qun8A==
+X-Received: by 2002:a17:907:c24e:b0:7c0:1db5:ea10 with SMTP id tj14-20020a170907c24e00b007c01db5ea10mr29065914ejc.53.1672227577221;
+        Wed, 28 Dec 2022 03:39:37 -0800 (PST)
+Received: from localhost.localdomain ([5.237.247.245])
+        by smtp.googlemail.com with ESMTPSA id jj20-20020a170907985400b007c0b6e1c7fdsm7271884ejc.104.2022.12.28.03.39.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 03:39:36 -0800 (PST)
+From:   Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
+Subject: [PATCH] USB: serial: option: add Quectel EC200U modem
+Date:   Wed, 28 Dec 2022 15:08:47 +0330
+Message-Id: <20221228113847.8550-1-ali.mirghasemi1376@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-9-linux.amoon@gmail.com>
- <Y6wiWIH5S3jJnkai@hovoldconsulting.com>
-In-Reply-To: <Y6wiWIH5S3jJnkai@hovoldconsulting.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 28 Dec 2022 16:39:12 +0530
-Message-ID: <CANAwSgT5D-8S7MkDXruztck6S6vjsrPDqbGg=k1=iYW5Bm_yPg@mail.gmail.com>
-Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
- VL817Q7 hub controller
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,62 +68,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan
+Add support for EC200U modem
 
-Thanks for your review comments.
+0x0901: EC200U - AT + AP + CP + NMEA + DIAG + MOS
 
-On Wed, 28 Dec 2022 at 16:32, Johan Hovold <johan@kernel.org> wrote:
->
-> On Wed, Dec 28, 2022 at 10:03:17AM +0000, Anand Moon wrote:
-> > The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
-> > features 4 downstream ports, an internal 5V regulator and has
-> > external reset pin.
-> >
-> > Add a device tree binding for its USB protocol part.
-> > The internal LDO is not covered by this and can just be modelled
-> > as a fixed regulator.
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> >  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
-> >  1 file changed, 47 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> > new file mode 100644
-> > index 000000000000..4ae995160fd5
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> > @@ -0,0 +1,47 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Via labs VL817Q7 USB 3.1 hub controller
-> > +
-> > +maintainers:
-> > +  - Anand Moon <linux.amoon@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: usb-device.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - vialab,usb2109
->
-> This isn't a valid compatible string for USB devices (should be
-> "usb<vid>,<pid>").
->
-> Same for the other binding.
->
+usb-device output:
+T: Bus=01 Lev=02 Prnt=02 Port=02 Cnt=01 Dev#= 4 Spd=480 MxCh= 0
+D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+P: Vendor=2c7c ProdID=0901 Rev= 3.18
+S: Manufacturer=Android
+S: Product=Android
+C:* #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=400mA
+A: FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E: Ad=81(I) Atr=03(Int.) MxPS= 16 Ivl=32ms
+I: If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=83(I) Atr=03(Int.) MxPS= 512 Ivl=4096ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=89(I) Atr=03(Int.) MxPS= 512 Ivl=4096ms
+I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E: Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-ok, I will change this in the next version.
+Signed-off-by: Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
+---
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Also the bindings should go before the driver changes in the series.
->
-> Johan
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index dee79c7d82d5..2918064dddaf 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -259,6 +259,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
+ #define QUECTEL_PRODUCT_RM520N			0x0801
++#define QUECTEL_PRODUCT_EC200U			0x0901
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+ #define QUECTEL_PRODUCT_EC200T			0x6026
+ #define QUECTEL_PRODUCT_RM500K			0x7001
+@@ -1180,6 +1181,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200U, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
+-- 
+2.25.1
 
-Thanks
--Anand
