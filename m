@@ -2,117 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26D4657DBC
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 16:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69947658532
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Dec 2022 18:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234020AbiL1PqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 10:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S234638AbiL1RQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 12:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234015AbiL1PqP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 10:46:15 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8947614D27;
-        Wed, 28 Dec 2022 07:46:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672242373; x=1703778373;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=SB1x38s3dv6Gdzi7eiwaN7LwRGEtLuEFsZIEzhZwdls=;
-  b=UBGqbU5V0c0n6bGCc03FYH4wSOXmVytfP7hOBWhgEvMoeakXOeHgXye/
-   1UVzWNvVQX4SjM/i7kVfGDDo60mc2NIN3/yb2y2U93Wd2flct+JbcPz7y
-   In508AxydbVsy1R5WG7xulsQo0GythLWrg3omyiPmbcInouCAZRe8UFgg
-   SOCj2FMdzP6medUMzDI/MQxthO9LM25JBt/4opvIYB0ciIzXA73Q5y+3A
-   ABkj6j3WY/FLy58jn6m8NzzqulbNu63Us+AsOGEcyyRA0kKr5zbngx3QJ
-   ZVEm2ebkJyzuz40afva9gx7DJZgtQr/CLVKXPGPpu4xcgchJKsi83MypU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="304388687"
-X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
-   d="scan'208";a="304388687"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 07:46:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="982118992"
-X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
-   d="scan'208";a="982118992"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Dec 2022 07:46:07 -0800
-Message-ID: <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
-Date:   Wed, 28 Dec 2022 17:47:24 +0200
+        with ESMTP id S234477AbiL1RQr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 12:16:47 -0500
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743E713D4F;
+        Wed, 28 Dec 2022 09:16:46 -0800 (PST)
+Received: by mail-il1-f171.google.com with SMTP id z18so8471211ils.3;
+        Wed, 28 Dec 2022 09:16:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GtsNziqtosk5fGA4iQynew9CXVas2xeRqJXm3p7E/xg=;
+        b=un/CJNX8XRZHlc0PPJnIvFhS5IpgRD8I6/R/zoBGRhbmLkaNpqf64wYynampwtftgC
+         5tupdgtNjTp2tKIbjujzszPg4IBsX0CiFcE1QIPLgTIcqT348hIKvToiDFboIRAGAw8Y
+         J7Su0eKkpGOpNbYo+H9p7SFxoZugmm/yanqjZ+CrL9vF+sizCTiLuffdUg+Yo/KFWfR8
+         ksmR+6cDhqN2RxTP9WUESd7If1/P9sBhw53a3alfH5KKxE574hqphl/0ykhN7glQM+Un
+         ihVkViQBQsEccM1hY5JpafwloJ8TwAIYT/5t4hSoo2TdiEe2x+djtxA/+p4m5l9s1HSm
+         /xvA==
+X-Gm-Message-State: AFqh2kp6e2+gYMRLPbeGsLALpYFPi0TV5AvFPCCWITpjO6TIHxfwrBWu
+        Ii2aXliqRT62NFy0VAXYLVQHfGzR3A==
+X-Google-Smtp-Source: AMrXdXvqv/LDMIFwAHIsqBV/YKVKwU0ASsP/hpfrlmxnnqj/Tb1UjRUMXdmHtr2gPuHf0d0UPxuEhQ==
+X-Received: by 2002:a05:6e02:218d:b0:30c:2266:cfca with SMTP id j13-20020a056e02218d00b0030c2266cfcamr1939780ila.9.1672247805656;
+        Wed, 28 Dec 2022 09:16:45 -0800 (PST)
+Received: from robh_at_kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id f27-20020a056638329b00b003758bcba4b5sm5184514jav.153.2022.12.28.09.16.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 09:16:45 -0800 (PST)
+Received: (nullmailer pid 1928458 invoked by uid 1000);
+        Wed, 28 Dec 2022 17:16:44 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-8-quic_wcheng@quicinc.com>
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
- support
-In-Reply-To: <20221223233200.26089-8-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20221228100321.15949-9-linux.amoon@gmail.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
+ <20221228100321.15949-9-linux.amoon@gmail.com>
+Message-Id: <167224753802.1921489.221143833426610237.robh@kernel.org>
+Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
+ VL817Q7 hub controller
+Date:   Wed, 28 Dec 2022 11:16:44 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.12.2022 1.31, Wesley Cheng wrote:
-> Implement the XHCI operations for allocating and requesting for a secondary
-> interrupter.  The secondary interrupter can allow for events for a
-> particular endpoint to be routed to a separate event ring.  The event
-> routing is defined when submitting a transfer descriptor to the USB HW.
-> There is a specific field which denotes which interrupter ring to route the
-> event to when the transfer is completed.
+
+On Wed, 28 Dec 2022 10:03:17 +0000, Anand Moon wrote:
+> The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
+> features 4 downstream ports, an internal 5V regulator and has
+> external reset pin.
 > 
-> An example use case, such as audio packet offloading can utilize a separate
-> event ring, so that these events can be routed to a different processor
-> within the system.  The processor would be able to independently submit
-> transfers and handle its completions without intervention from the main
-> processor.
+> Add a device tree binding for its USB protocol part.
+> The internal LDO is not covered by this and can just be modelled
+> as a fixed regulator.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+>  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
 > 
 
-Adding support for more xHCI interrupters than just the primary one make sense for
-both the offloading and virtualization cases.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-xHCI support for several interrupters was probably added to support virtualization,
-to hand over usb devices to virtual machines and give them their own event ring and
-MSI/MSI-X vector.
+yamllint warnings/errors:
 
-In this offloading case you probably want to avoid xHC interrupts from this device
-completely, making sure it doesn't wake up the main CPU unnecessarily.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml: '$id' is a required property
+	hint: Metaschema for devicetree binding documentation
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+Error: Documentation/devicetree/bindings/usb/vialab,vl817q7.example.dts:26.17-18 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/usb/vialab,vl817q7.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1508: dt_binding_check] Error 2
 
-So is the idea here to let xhci driver set up the new interrupter, its event ring,
-and the endpoint transfer rings. Then pass the address of the endpoint transfer rings
-and the new event ring to the separate processor.
+doc reference errors (make refcheckdocs):
 
-This separate processor then both polls the event ring for new events, sets its dequeue
-pointer, clears EHB bit, and queues new TRBs on the transfer ring.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221228100321.15949-9-linux.amoon@gmail.com
 
-so xhci driver does not handle any events for the audio part, and no audio data URBs
-are sent to usb core?
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-How about the control part?
-Is the control endpoint for this device still handled normally by usb core/xhci?
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-For the xhci parts I think we should start start by adding generic support for several
-interrupters, then add parts needed for offloading.
+pip3 install dtschema --upgrade
 
-Thanks
-Mathias
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
