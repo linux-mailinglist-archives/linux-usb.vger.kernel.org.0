@@ -2,90 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E2E65914A
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 20:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FE56591BF
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 21:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbiL2Tzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Dec 2022 14:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S234219AbiL2Uo6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Dec 2022 15:44:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiL2Tzu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Dec 2022 14:55:50 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463285F89
-        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 11:55:49 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id i15so27994140edf.2
-        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 11:55:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q6Wkge06zczYAAj7DhM5Xt+bLRLfVVDh4b53VtAv8V0=;
-        b=dYcaTK2Y6q8+dBM9M9BA2CtdrLqbWMe6ub90o75QqgjvX7sIfqzklvtuDoUO7ADAa3
-         3yvTRN2whJcwkjxT7a90BxMVe47IKMiW6bMUk70n1NMttP0oHWyoTTNSOVoGyNhTkHhF
-         FLecafXiCsliIJU2wk2zWFuDLo+zjmW6+MLAXsIqYIw3v2vXjq2+br4dlZOxZMoJb+3k
-         beA2vvrxkfDI0DLmgQW03wmDTWg6LW4fslDL9VWWmRxXS+kyi7OcGn3mNeMBSnMY+mKA
-         Q3FLyV4HZ7TVO2MzbMhyPLCBxNg9Y1C49SiGgYuA2qfJGf6xp0xyoVJ0Xkg0dsLS+z3T
-         PthQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q6Wkge06zczYAAj7DhM5Xt+bLRLfVVDh4b53VtAv8V0=;
-        b=mEfhVKoPx+TgMDcDJ4bUPK7xSIPh6EcOGYDkfj8QNfsMhjQO1xMzZ92L4MmoJPskFa
-         ual+T/uhT5ZLYOlyKEVyr+9hmJ9VVS+wWfjTRolKXjwT86oWLFUs+K1Y8u4TOmc/A5z+
-         Zc1t0i7zevBkbz6WH6FxecZ+ssQaN5Bh1i7qIkcW/WXMyXk4g0AFE6sV9BY/UK+EL6S0
-         AzaQoaiLg5qszN5tha3CrUifhuwP6GHSK59xTi7vL6XwiNO6MqBHj4baru64iOowbg1P
-         jx5ZyuVzCIGRnUbC6SFDY5FLBK8CKUH6XupjCp5Wj7LnbMfy+qxuf3rFrHr5PGjvdD1Q
-         8DKA==
-X-Gm-Message-State: AFqh2kr9boJISoZWeA78exCvd4u9PcYqC8SO3LVY0t7O8yFj68Tq3l81
-        NYjlqEe9I0Q8dzo8jIqk137SbA==
-X-Google-Smtp-Source: AMrXdXvx/IQ7UCmJNw4ibq/ovq6FFnOIl9VZYTkZSTXeE7H+cJ09bEECjagxOE6AcwvCYtagZ9pzUA==
-X-Received: by 2002:a05:6402:2a04:b0:463:9193:404a with SMTP id ey4-20020a0564022a0400b004639193404amr27707591edb.21.1672343747905;
-        Thu, 29 Dec 2022 11:55:47 -0800 (PST)
-Received: from ?IPV6:2001:1c06:2302:5600:12a8:8cf4:e3f6:f90f? (2001-1c06-2302-5600-12a8-8cf4-e3f6-f90f.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:12a8:8cf4:e3f6:f90f])
-        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b0084c723a626csm3333075ejf.209.2022.12.29.11.55.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 11:55:47 -0800 (PST)
-Message-ID: <aa948164-9ef0-797a-6241-718694ae9b69@linaro.org>
-Date:   Thu, 29 Dec 2022 19:55:46 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] phy: qcom-usb-hs: Add qcom,dp-manual-pullup logic
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
+        with ESMTP id S234240AbiL2UoQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Dec 2022 15:44:16 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C439B15731;
+        Thu, 29 Dec 2022 12:43:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1672346588;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=8QGE3H6HUAez0GfC25LkzeuSNeAMMalWPYUYYnz225A=;
+    b=LDo/68IAE7J0UqYZCI9gfFTGsYjYdFMrvwgqvvJj7jbHoVi5ir+da7X+6v9ptO5bef
+    HY8ZVCN7/wuJ2wnR+iZMjWWjerh5ntH7yw6Xp8hmH6FRV9/H+UAmECKkmMEjQ3TVwXhG
+    8ocfD7XEJdTwZMJgPJK3rXJwXdczxGK4SYyIoBaEJp8qRJ9haH2Q+ifo2BcglYSMOe3g
+    vST2f5xiIkkBEV0KpcilPZFi8aJ0UHdmjlE12amVrQ9KAHzfp5FrKFAP1JkKz9pxmsAo
+    ThodkWB/0r2Yxxsj8gthvXABij5vsPsXKG6q+P1QRI9JEnXTe9cIrwBB+5XQlbKNCLq6
+    41ig==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWyvDI"
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
+    with ESMTPSA id Yce349yBTKh8Xon
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 29 Dec 2022 21:43:08 +0100 (CET)
+Date:   Thu, 29 Dec 2022 21:43:01 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Cc:     agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
         kishon@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: phy: Add qcom,dp-manual-pullup
+ description
+Message-ID: <Y6371UEjOK4qZ9hh@gerhold.net>
 References: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
- <20221229183410.683584-3-bryan.odonoghue@linaro.org>
- <Y63uSgMdP4m6nvhL@gerhold.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <Y63uSgMdP4m6nvhL@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221229183410.683584-2-bryan.odonoghue@linaro.org>
+ <Y63jBu38L/5cQ75S@gerhold.net>
+ <d1cd6d30-2142-765b-c201-4d6662576665@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1cd6d30-2142-765b-c201-4d6662576665@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29/12/2022 19:45, Stephan Gerhold wrote:
-> For the implementation, I think this flag should effectively emulate the
-> logic that is currently used if you assign an extcon
+On Thu, Dec 29, 2022 at 07:48:46PM +0000, Bryan O'Donoghue wrote:
+> On 29/12/2022 18:57, Stephan Gerhold wrote:
+> > AFAIK it is not possible to route VBUS directly to the controller on
+> > these SoCs so this property would likely be added to the SoC dtsi
+> > (i.e. msm8916.dtsi and msm8939.dtsi) and used by all boards.
+> 
+> So db410c signals the SoC via GPIO 121 / USB_HS_ID
+> 
+> https://fccid.io/2AFQA-DB410C/Schematics/Schematics-2816094.pdf
+> 
+> Which causes ULPI_MISC_A_VBUSVLDEXT to be updated depending on the state
+> VBUS.
+> 
 
-Actually that's fine, its a better solution than pushing the pullup 
-constantly as I just suggested in my previous email, there's also zero 
-potential impact to existing boards this way, so, that's obviously better.
+Correct. If I'm reading the DB410c schematic correctly the USB_HS_ID on
+DB410c is actually derived from VBUS on the micro USB port (and not the
+ID pin of the port as one would normally expect).
 
----
-bod
+> But not ULPI_MISC_A_VBUSVLDEXTSEL this is the additional register that
+> downstream updates when "VBUS is not routed to the controller"
+
+AFAICT ULPI_MISC_A_VBUSVLDEXTSEL is set in qcom_usb_hs_phy_set_mode() if
+the USB controller enables device mode? (And disabled again in host mode.)
+
+> 
+> I don't have a bit-level description of these registers at the moment so,
+> I'm guessing that ULPI_MISC_A_VBUSVLDEXTSEL *is* being updated.
+> 
+> The reason for that is if I just set ULPI_MISC_A_VBUSVLDEXT then as a device
+> a host never sees my SoC via the internal USB hub.
+> 
+> In other words, for me at any rate I need to see both
+> 
+> - ULPI_MISC_A_VBUSVLDEXT
+> - ULPI_MISC_A_VBUSVLDEXTSEL
+> 
+> to get the pullup to work and hence the Hub/Host to detect the 8939.
+> 
+
+The bit-level description of this register in the public APQ8016E TRM
+[1] is not very useful (page 1957):
+
+VBUSVLDEXTSEL = "External VBUS valid select"
+VBUSVLDEXT = "External VBUS valid indicator"
+
+But I think VBUSVLDEXTSEL basically means "Use external VBUS state from
+VBUSVLDEXT instead of internal detection". And VBUSVLDEXT then contains
+the actual VBUS state.
+
+The VBUS state is then probably used somewhere inside the USB controller
+or PHY to enable necessary USB protocol things such as enabling this "DP
+pull-up" (to be fair I have no idea how the USB protocol really works :)).
+
+[1]: https://developer.qualcomm.com/download/sd410/snapdragon-410e-technical-reference-manual.pdf
+
+> > This means we could just bind this behavior to the existing SoC-specific
+> > compatible (i.e. of_device_is_compatible(..., "qcom,usb-hs-phy-msm8916"))
+> > and avoid having an extra property.
+> > 
+> > Thoughts?
+> 
+> So. I'm OOO at the moment and didn't bring my db410c but TBH to me I don't
+> see why we do this whole dance with the pullup on/off with VBUS.
+> 
+> The right thing to do is to run an experiment statically setting
+> 
+> - ULPI_MISC_A_VBUSVLDEXT
+> - ULPI_MISC_A_VBUSVLDEXTSEL
+> 
+> On/off at power on/off respectively on
+> 
+> - db410c
+> - My reference where I already know it works
+> 
+> I'm not really seeing the utility of - partially waggling one of two
+> registers with VBUS.
+> 
+> Why not just push the pullup on with power-on and off with power-off..
+> 
+
+I don't feel qualified to comment on this. I'd just follow the
+suggestion from the docs here to make VBUSVLDEXT effectively represent
+the result of the external VBUS detection (see APQ8016E TRM [1] section
+6.4.5.3.3 Software control for SESS_VALID, page 1927).
+
+DB410c and other devices with USB hub are obviously a bit special, but
+I think it works correctly for DB410c at the moment because its USB_HS_ID
+GPIO basically indicates the incoming VBUS on the micro USB port.
+
+There might be some funky design where it is completely impossible to
+detect the incoming VBUS. In that case we have no choice but to force
+the detected VBUS state on permanently.
+
+Thanks,
+Stephan
+
+[1]: https://developer.qualcomm.com/download/sd410/snapdragon-410e-technical-reference-manual.pdf
