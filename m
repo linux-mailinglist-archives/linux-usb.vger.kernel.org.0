@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37481658C97
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 13:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEFB658CA3
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 13:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiL2MOo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Dec 2022 07:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S229611AbiL2MTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Dec 2022 07:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiL2MOn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Dec 2022 07:14:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FF825E0
-        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 04:14:42 -0800 (PST)
+        with ESMTP id S233257AbiL2MTL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Dec 2022 07:19:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E0210FC7
+        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 04:19:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EADD461794
-        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 12:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 51778C433F0
-        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 12:14:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3180B819C2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 12:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6532DC433F0
+        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 12:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672316081;
-        bh=b34yj5vE+Jd5XAFe15B4iBOYanW0Wg7s7EsgFsfgDLU=;
+        s=k20201202; t=1672316348;
+        bh=g4D16CroCnGhf176qqfpEfqfoRqFNqkL6nwNfdpAogc=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ofO3L51z2GsbYO5lR28xqXAsPvTTmHN2QpgJWtDaQusRMDuEfhXcaElt6hwWG11xt
-         HM9MbIaP5p97geFFHe1kle0IvvWwoa+/pbtpyoNJl65TzMeJm3oowqU/FIfJxRgsb1
-         Bw4/HFMb7D/uv0bwehfJZTvJ24O+/I9iHm2lao4RkiVfHM0lezhlLXCZLueuOcm0O+
-         zitaVNOL2d3nXumKznn9UmF/6+BXwXQrrMo5hWdhNjmAGdaYv8mwKSz/81kmFsr5yH
-         PW7IZ6CKvnKla4/3mRIGjCCzJODh3R9bG0MrjU/tqIvamFfzF4gRpvFrhEimzCqOdP
-         FQUu3/BH5tP0w==
+        b=N2qpJjLFclrqg8NO48gZmcnwchxwUw8+NJPs6M2zytyH9ZtFYDLqrEemJHJwSrWFa
+         yfCqHMeAu86fHcI2eNW3XbLvICh4+Yt8krEy6iZ9iPTH1O43FS9vzSAWhKxrTsSe6a
+         ddsBfh+7jT52zMwZqgjaXbRgh31DhQwwbc2KiSs1aNCqeEGdMybRaFSifg880SgdNK
+         yBLQpkPY2smArbyz3r72Z1for3b90veznVXD5/D/aO+bmIsAEArUEib617C/qfK2E0
+         lQP6bS2ZCMFWKUj1lRg1xYaZSAM9/fx/EvKUcXKlxFO0rhanDwq4PaZTPg1dcj5SZ+
+         jNm6rHCXBJCng==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 3829CC43141; Thu, 29 Dec 2022 12:14:41 +0000 (UTC)
+        id 494ABC43143; Thu, 29 Dec 2022 12:19:08 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 216474] Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus
  Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
-Date:   Thu, 29 Dec 2022 12:14:40 +0000
+Date:   Thu, 29 Dec 2022 12:19:08 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216474-208809-BZMgaEEWMD@https.bugzilla.kernel.org/>
+Message-ID: <bug-216474-208809-KEiwXZfmgO@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-216474-208809@https.bugzilla.kernel.org/>
 References: <bug-216474-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,11 +72,9 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D216474
 
---- Comment #3 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+--- Comment #4 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
  ---
-As it=E2=80=99s another device, please create a separate bug report (and re=
-ference it
-here).
+I am going to test with `pcie_aspm=3Doff` next week.
 
 --=20
 You may reply to this email to add a comment.
