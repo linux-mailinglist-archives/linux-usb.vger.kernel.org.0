@@ -2,96 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2595565886F
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 02:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3461F658877
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 02:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbiL2BmG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 20:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S230435AbiL2BqU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 20:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiL2Bl7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 20:41:59 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9E81E12ABF
-        for <linux-usb@vger.kernel.org>; Wed, 28 Dec 2022 17:41:57 -0800 (PST)
-Received: (qmail 291561 invoked by uid 1000); 28 Dec 2022 20:41:56 -0500
-Date:   Wed, 28 Dec 2022 20:41:56 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     Oliver Neukum <oneukum@suse.com>, srinivas.kandagatla@linaro.org,
-        mathias.nyman@intel.com, perex@perex.cz, broonie@kernel.org,
-        lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [RFC PATCH 06/14] usb: core: hcd: Introduce USB HCD APIs for
- interrupter management
-Message-ID: <Y6zwZOquZOTZfnvP@rowland.harvard.edu>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-7-quic_wcheng@quicinc.com>
- <Y6ca8IKLK9g497Qv@rowland.harvard.edu>
- <e1203849-01b4-b196-36f3-76d58dd7c724@quicinc.com>
- <bf1011a8-c746-c465-f161-f0293409d922@suse.com>
- <Y6xd1c3s2XPpOqfi@rowland.harvard.edu>
- <559030ff-112b-e0a8-b278-72f909724496@quicinc.com>
+        with ESMTP id S230106AbiL2BqS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 20:46:18 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA723DE97
+        for <linux-usb@vger.kernel.org>; Wed, 28 Dec 2022 17:46:16 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D3E34109;
+        Thu, 29 Dec 2022 02:46:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672278375;
+        bh=xd/tt0Tz/0pyvLeczt5eV6fsvvVtmt16khq1jHyVJMI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VTlHYcNwZAvRvf6qESXAET1y9/bypc/z2KanKj2H08mSciYbgOwRl9jU86FIL4knx
+         8Jxui/wkaOQQap2YBsNpM9XvGN1bp5dy4jfEBTqDoNnnhTfnW58y7jswyP2DQBj+UQ
+         T+oFpNJP4mBDD+KyZ7s4IpIrK2LnXgvo/rPyT+sQ=
+Date:   Thu, 29 Dec 2022 03:46:10 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dan Scally <dan.scally@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, kieran.bingham@ideasonboard.com,
+        torleiv@huddly.com, mgr@pengutronix.de
+Subject: Re: [PATCH v2 4/9] usb: gadget: uvc: Copy XU descriptors during
+ .bind()
+Message-ID: <Y6zxYohF5+an3Wob@pendragon.ideasonboard.com>
+References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
+ <20221121092517.225242-5-dan.scally@ideasonboard.com>
+ <090c49e0-3f6c-52f4-d614-0d095eb78c1c@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <559030ff-112b-e0a8-b278-72f909724496@quicinc.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <090c49e0-3f6c-52f4-d614-0d095eb78c1c@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 12:31:16PM -0800, Wesley Cheng wrote:
-> Hi Alan,
+Hi Dan,
+
+Thank you for the patch.
+
+On Mon, Nov 21, 2022 at 09:51:32AM +0000, Dan Scally wrote:
+> On 21/11/2022 09:25, Daniel Scally wrote:
+> > Now that extension unit support is available through configfs we need
+> > to copy the descriptors for the XUs during uvc_function_bind() so that
+> > they're exposed to the usb subsystem.
+> >
+> > Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> > ---
+> > Changes in v2:
+> >
+> > 	- none
+> >
+> >   drivers/usb/gadget/function/f_uvc.c | 35 +++++++++++++++++++++++++++++
+> >   drivers/usb/gadget/function/uvc.h   |  1 +
+> >   2 files changed, 36 insertions(+)
+> >
+> > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> > index eca5f36dfa74..e0a308f1355c 100644
+> > --- a/drivers/usb/gadget/function/f_uvc.c
+> > +++ b/drivers/usb/gadget/function/f_uvc.c
+> > @@ -464,6 +464,25 @@ uvc_register_video(struct uvc_device *uvc)
+> >   		} \
+> >   	} while (0)
+> >   
+> > +#define UVC_COPY_XU_DESCRIPTOR(mem, dst, desc)					\
+> > +	do {									\
+> > +		*(dst)++ = mem;							\
+> > +		memcpy(mem, desc, 22); /* bLength to bNrInPins */		\
+> > +		mem += 22;							\
+> > +										\
+> > +		memcpy(mem, desc->baSourceID, desc->bNrInPins);			\
+> > +		mem += desc->bNrInPins;						\
+> > +										\
+> > +		memcpy(mem, &desc->bControlSize, 1);				\
+> > +		mem++;								\
+> > +										\
+> > +		memcpy(mem, desc->bmControls, desc->bControlSize);		\
+> > +		mem += desc->bControlSize;					\
+> > +										\
+> > +		memcpy(mem, &desc->iExtension, 1);				\
+> > +		mem++;								\
+> > +	} while (0)
+> > +
 > 
-> On 12/28/2022 7:16 AM, Alan Stern wrote:
-> > On Wed, Dec 28, 2022 at 09:59:03AM +0100, Oliver Neukum wrote:
-> > > 
-> > > 
-> > > On 27.12.22 22:07, Wesley Cheng wrote:
-> > > 
-> > > > 
-> > > > Hmmm...maybe I should change the name of the API then to avoid the confusion.  Yes, usb_hcd_flush_endpoint() does ensure that URBs submitted to the EP are stopped.  However, with this offloading concept, we aren't actually submitting URBs from the main processor, so the ep->urb_list will be empty.
-> > > > 
-> > > > This means the usb_hcd_flush_endpoint() API won't actually do anything.  What we need is to ensure that we send a XHCI stop ep command to the controller.
-> > > 
-> > > That is a concept specific to XHCI, yet you are adding a generic
-> > > API. The namin should reflect that. usb_quiesce_endpoint() ?
-> > 
-> > Or even xhci_send_stop_ep_cmd(), which is what the routine is intended
-> > to do.
-> > 
-> 
-> Just to clarify, you're talking about renaming the API that was added in the
-> XHCI driver, correct?
+> |I don't especially like UVC_COPY_XU_DESCRIPTOR(), but the need to vary 
+> the array size for baSourceID and bmControls plus the requirement for 
+> the struct to be copied to consecutive bytes of memory constrained it a 
+> bit. An alternative might be to replace baSourceID, bControlSize, 
+> bmControls and iExtension in struct uvcg_extension_unit_descriptor with 
+> a single flexible array member (called data[] or something). That would 
+> allow the copy to be a much more straight forward memcpy(mem, desc, 
+> desc->bLength); - but the cost would be reallocating the entire struct 
+> each time the baSourceID or bmControls attributes was changed. That 
+> might be a better method, but I thought I'd stick with this for this 
+> submission at least on the grounds that it's less confusing.|
 
-To be precise, we're talking about renaming your usb_hcd_stop_endpoint() 
-function, although similar arguments probably apply to your 
-usb_free_interrupter(), usb_set_interrupter(), and 
-usb_hcd_get_transfer_resource() routines.
+I think it's fine. I'm tempted to turn the macro into a function though.
+We can't do that with UVC_COPY_DESCRIPTOR() as the macro accepts
+different types of descriptors, but here you know that desc will be an
+XU descriptor.
 
-You wrote earlier:
+> >   static struct usb_descriptor_header **
+> >   uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+> >   {
+> > @@ -475,6 +494,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+> >   	const struct usb_descriptor_header * const *src;
+> >   	struct usb_descriptor_header **dst;
+> >   	struct usb_descriptor_header **hdr;
+> > +	struct uvcg_extension *xu;
+> >   	unsigned int control_size;
+> >   	unsigned int streaming_size;
+> >   	unsigned int n_desc;
+> > @@ -539,6 +559,13 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+> >   		bytes += (*src)->bLength;
+> >   		n_desc++;
+> >   	}
+> > +
+> > +	list_for_each_entry(xu, uvc->desc.extension_units, list) {
+> > +		control_size += xu->desc.bLength;
+> > +		bytes += xu->desc.bLength;
+> > +		n_desc++;
+> > +	}
+> > +
+> >   	for (src = (const struct usb_descriptor_header **)uvc_streaming_cls;
+> >   	     *src; ++src) {
+> >   		streaming_size += (*src)->bLength;
+> > @@ -565,6 +592,13 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+> >   	uvc_control_header = mem;
+> >   	UVC_COPY_DESCRIPTORS(mem, dst,
+> >   		(const struct usb_descriptor_header **)uvc_control_desc);
+> > +
+> > +	list_for_each_entry(xu, uvc->desc.extension_units, list) {
+> > +		struct uvcg_extension_unit_descriptor *desc = &xu->desc;
+> > +
+> > +		UVC_COPY_XU_DESCRIPTOR(mem, dst, desc);
 
-	The XHCI driver is the one that maintains the list of 
-	interrupters that are available, so the locking was placed in 
-	the XHCI driver versus adding it in the core hcd layer.
+You could possibly skip the local variable
 
-The "stop ep" functionality and other interrupter management things you 
-want to add seem a lot like this locking stuff.  Since you decided to 
-put the locking in the xhci-hcd driver instead of the core HCD layer, it 
-would be logical to do the same with the "stop ep" and other routines.  
-Which means there shouldn't be any need to make changes to hcd.c or 
-include/linux/usb/hcd.h.
+		UVC_COPY_XU_DESCRIPTOR(mem, dst, &xu->desc);
 
-Alan Stern
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> > +	}
+> > +
+> >   	uvc_control_header->wTotalLength = cpu_to_le16(control_size);
+> >   	uvc_control_header->bInCollection = 1;
+> >   	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
+> > @@ -988,6 +1022,7 @@ static struct usb_function *uvc_alloc(struct usb_function_instance *fi)
+> >   	uvc->desc.fs_streaming = opts->fs_streaming;
+> >   	uvc->desc.hs_streaming = opts->hs_streaming;
+> >   	uvc->desc.ss_streaming = opts->ss_streaming;
+> > +	uvc->desc.extension_units = &opts->extension_units;
+> >   
+> >   	streaming = config_group_find_item(&opts->func_inst.group, "streaming");
+> >   	if (!streaming)
+> > diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> > index 40226b1f7e14..f1a016d20bb6 100644
+> > --- a/drivers/usb/gadget/function/uvc.h
+> > +++ b/drivers/usb/gadget/function/uvc.h
+> > @@ -143,6 +143,7 @@ struct uvc_device {
+> >   		const struct uvc_descriptor_header * const *fs_streaming;
+> >   		const struct uvc_descriptor_header * const *hs_streaming;
+> >   		const struct uvc_descriptor_header * const *ss_streaming;
+> > +		struct list_head *extension_units;
+> >   	} desc;
+> >   
+> >   	unsigned int control_intf;
+
+-- 
+Regards,
+
+Laurent Pinchart
