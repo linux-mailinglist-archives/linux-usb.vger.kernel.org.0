@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDC865882B
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 01:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF361658863
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 02:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiL2Asm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 19:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        id S232508AbiL2BgG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Dec 2022 20:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiL2Ask (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 19:48:40 -0500
+        with ESMTP id S232545AbiL2Bf6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 20:35:58 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAF712AFC
-        for <linux-usb@vger.kernel.org>; Wed, 28 Dec 2022 16:48:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DD631D
+        for <linux-usb@vger.kernel.org>; Wed, 28 Dec 2022 17:35:56 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3A892109;
-        Thu, 29 Dec 2022 01:48:37 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2311A109;
+        Thu, 29 Dec 2022 02:35:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672274917;
-        bh=kheaavWIh8Igzegxp4sP+5jWkZeP5vz4UewdoId+QSE=;
+        s=mail; t=1672277754;
+        bh=gwNMvx7rKqXSc4jk6N1F/U8U79JWm99AgIdo9X5/BKM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MmYB12VbZMAD54tgliHM7iU3hYyymDfn0YT2wYiLwAfiH2EwnCCP/2HBYe5CFVAr9
-         usvkXLyh45y7KE0av5XCvBS+ivVlq4ftrl3310vnUVYCgYSgBHCojU1dCuwslKATyz
-         yZrYuuCv/oEEiFKX28DQGxCsQP0H8SWxXI7EA6/A=
-Date:   Thu, 29 Dec 2022 02:48:32 +0200
+        b=k6d85Qy9bOIdCE96DkoDUwj8Fca50I9bMMqoFWkYATPEN/AX52khxwltMg2QiHHwh
+         0n7HUkPQgdCgL+XAgfRYLYAjAo2nyPlWbHhK9zOW6iJfvqEa9WyLwNQk8lbiGFbzJW
+         NRkmEBUgs8AH3JtJnQapLIwJjPcH+99ujaj/vi68=
+Date:   Thu, 29 Dec 2022 03:35:50 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Daniel Scally <dan.scally@ideasonboard.com>
 Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
         gregkh@linuxfoundation.org, kieran.bingham@ideasonboard.com,
         torleiv@huddly.com, mgr@pengutronix.de
-Subject: Re: [PATCH v2 2/9] usb: gadget: uvc: Generalise helper functions for
- reuse
-Message-ID: <Y6zj4Oqr98QqgVae@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v2 3/9] usb: gadget: uvc: Allow definition of XUs in
+ configfs
+Message-ID: <Y6zu9kv8B7V4n8mV@pendragon.ideasonboard.com>
 References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
- <20221121092517.225242-3-dan.scally@ideasonboard.com>
+ <20221121092517.225242-4-dan.scally@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221121092517.225242-3-dan.scally@ideasonboard.com>
+In-Reply-To: <20221121092517.225242-4-dan.scally@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -52,190 +52,690 @@ Hi Dan,
 
 Thank you for the patch.
 
-On Mon, Nov 21, 2022 at 09:25:10AM +0000, Daniel Scally wrote:
-> the __uvcg_*frm_intrv() helper functions can be helpful when adding
-
-s/the/The/
-
-> support for similar attributes. Generalise the function names and
-> move them higher in the file for better coverage. We also need copies
-> of the functions for different sized targets, so refactor them to
-> a macro with configurable bit size.
+On Mon, Nov 21, 2022 at 09:25:11AM +0000, Daniel Scally wrote:
+> The UVC gadget at present has no support for extension units. Add the
+> infrastructure to uvc_configfs.c that allows users to create XUs via
+> configfs. These will be stored in a new child of uvcg_control_grp_type
+> with the name "extensions".
 > 
 > Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 > ---
 > Changes in v2:
 > 
-> 	- none
+> 	- Updated the ABI documentation with the new elements.
+> 	- Locked the su_mutex when appropriate.
 > 
->  drivers/usb/gadget/function/uvc_configfs.c | 109 +++++++++++----------
->  1 file changed, 56 insertions(+), 53 deletions(-)
+>  .../ABI/testing/configfs-usb-gadget-uvc       |  28 +
+>  drivers/usb/gadget/function/f_uvc.c           |   9 +
+>  drivers/usb/gadget/function/u_uvc.h           |   7 +
+>  drivers/usb/gadget/function/uvc_configfs.c    | 480 ++++++++++++++++++
+>  drivers/usb/gadget/function/uvc_configfs.h    |  29 ++
+>  5 files changed, 553 insertions(+)
 > 
+> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> index feb3f2cc0c16..045c57e7e245 100644
+> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> @@ -111,6 +111,34 @@ Description:	Default processing unit descriptors
+>  		bUnitID		a non-zero id of this unit
+>  		===============	========================================
+>  
+> +What:		/config/usb-gadget/gadget/functions/uvc.name/control/extensions
+> +Date:		Nov 2022
+> +KernelVersion:	6.1
+> +Description:	Extension unit descriptors
+> +
+> +What:		/config/usb-gadget/gadget/functions/uvc.name/control/extensions/name
+> +Date:		Nov 2022
+> +KernelVersion:	6.1
+> +Description:	Extension Unit (XU) Descriptor
+> +
+> +		bLength, bUnitID and iExtension are read-only. All others are
+> +		read-write.
+> +
+> +		===============		========================================
+> +		bLength			size of the descriptor in bytes
+> +		bUnitID			non-zero ID of this unit
+> +		guidExtensionCode	vendor specific code identifying the XU
+
+s/vendor specific/vendor-specific/
+
+> +		bNumControls		number of controls in this XU
+> +		bNrInPins		number of input pins for this unit
+> +		baSourceID		list of the IDs of the units or terminals
+> +					to which this XU is connected
+> +		bControlSize		size of the bmControls field in bytes
+> +		bmControls		list of bitmaps detailing which vendor
+> +					specific controls are supported
+> +		iExtension		index of a string descriptor that describes
+> +					this extension unit
+> +		===============		========================================
+> +
+>  What:		/config/usb-gadget/gadget/functions/uvc.name/control/header
+>  Date:		Dec 2014
+>  KernelVersion:	4.0
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 6e196e06181e..eca5f36dfa74 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -842,6 +842,13 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+>  	od->bSourceID			= 2;
+>  	od->iTerminal			= 0;
+>  
+> +	/*
+> +	 * With the ability to add XUs to the UVC function graph, we need to be
+> +	 * able to allocate unique unit IDs to them. The IDs are 1-based, with
+> +	 * the CT, PU and OT above consuming the first 3.
+> +	 */
+
+Maybe we could use the same dynamic allocation mechanism for all units,
+but this is fine for now.
+
+> +	opts->last_unit_id		= 3;
+> +
+>  	md = &opts->uvc_color_matching;
+>  	md->bLength			= UVC_DT_COLOR_MATCHING_SIZE;
+>  	md->bDescriptorType		= USB_DT_CS_INTERFACE;
+> @@ -870,6 +877,8 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+>  	opts->ss_control =
+>  		(const struct uvc_descriptor_header * const *)ctl_cls;
+>  
+> +	INIT_LIST_HEAD(&opts->extension_units);
+> +
+>  	opts->streaming_interval = 1;
+>  	opts->streaming_maxpacket = 1024;
+>  	snprintf(opts->function_name, sizeof(opts->function_name), "UVC Camera");
+> diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
+> index 24b8681b0d6f..5119cfe5ee4e 100644
+> --- a/drivers/usb/gadget/function/u_uvc.h
+> +++ b/drivers/usb/gadget/function/u_uvc.h
+> @@ -28,6 +28,7 @@ struct f_uvc_opts {
+>  	unsigned int					control_interface;
+>  	unsigned int					streaming_interface;
+>  	char						function_name[32];
+> +	unsigned int					last_unit_id;
+>  
+>  	/*
+>  	 * Control descriptors array pointers for full-/high-speed and
+> @@ -64,6 +65,12 @@ struct f_uvc_opts {
+>  	struct uvc_descriptor_header			*uvc_fs_control_cls[5];
+>  	struct uvc_descriptor_header			*uvc_ss_control_cls[5];
+>  
+> +	/*
+> +	 * Control descriptors for extension units. There could be any number
+> +	 * of these, including none at all.
+> +	 */
+> +	struct list_head				extension_units;
+> +
+>  	/*
+>  	 * Streaming descriptors for full-speed, high-speed and super-speed.
+>  	 * Used by configfs only, must not be touched by legacy gadgets. The
 > diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-> index af4258120f9a..d542dd251633 100644
+> index d542dd251633..0a69eb6cf221 100644
 > --- a/drivers/usb/gadget/function/uvc_configfs.c
 > +++ b/drivers/usb/gadget/function/uvc_configfs.c
-> @@ -594,6 +594,60 @@ static const struct uvcg_config_group_type uvcg_terminal_grp_type = {
->  	},
->  };
+> @@ -646,8 +646,487 @@ static int __uvcg_iter_item_entries_u##bits(const char *page, size_t len,\
+>  	return 0;							\
+>  }
 >  
-> +static inline int __uvcg_count_item_entries(char *buf, void *priv)
-> +{
-> +	++*((int *)priv);
-> +	return 0;
-> +}
+> +UVCG_ITEM_ENTRY_FUNCS(8)
+>  UVCG_ITEM_ENTRY_FUNCS(32)
+>  
+> +/* -----------------------------------------------------------------------------
+> + * control/extensions
+> + */
 > +
-> +#define UVCG_ITEM_ENTRY_FUNCS(bits)					\
-> +static inline int __uvcg_fill_item_entries_u##bits(char *buf, void *priv)\
+> +#define UVCG_EXTENSION_ATTR(cname, aname, ro...)			\
+> +static ssize_t uvcg_extension_##cname##_show(struct config_item *item,	\
+> +					     char *page)		\
 > +{									\
-> +	u##bits num, **interv;						\
-
-I'd rename interv to values as the function is now generic.
-
+> +	struct config_group *group = to_config_group(item->ci_parent);	\
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;		\
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);		\
+> +	struct config_item *opts_item;					\
+> +	struct f_uvc_opts *opts;					\
 > +	int ret;							\
 > +									\
-> +	ret = kstrtou##bits(buf, 0, &num);				\
-> +	if (ret)							\
-> +		return ret;						\
+> +	mutex_lock(su_mutex);						\
 > +									\
-> +	interv = priv;							\
-> +	**interv = num;							\
-> +	++*interv;							\
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;		\
+> +	opts = to_f_uvc_opts(opts_item);				\
 > +									\
-> +	return 0;							\
+> +	mutex_lock(&opts->lock);					\
+> +	ret = sprintf(page, "%u\n", xu->desc.aname);			\
+> +	mutex_unlock(&opts->lock);					\
+> +									\
+> +	mutex_unlock(su_mutex);						\
+> +									\
+> +	return ret;							\
 > +}									\
-> +									\
-> +static int __uvcg_iter_item_entries_u##bits(const char *page, size_t len,\
-> +				 int (*fun)(char *, void *), void *priv)\
-> +{									\
-> +	/* sign, base 2 representation, newline, terminator */		\
-> +	char buf[1 + sizeof(u##bits) * 8 + 1 + 1];			\
 
-As the only dependence on bits is a size, how about passing the size to
-the function as a parameter instead of duplicating the whole
-implementation ?
+We gace soooooo much boilerplate code related to attributes. One of
+these days it would be nice to try and simplify all that.
 
-> +	const char *pg = page;						\
-> +	int i, ret;							\
-> +									\
-> +	if (!fun)							\
-> +		return -EINVAL;						\
-> +									\
-> +	while (pg - page < len) {					\
-> +		i = 0;							\
-> +		while (i < sizeof(buf) && (pg - page < len) &&		\
-> +				*pg != '\0' && *pg != '\n')		\
-> +			buf[i++] = *pg++;				\
-> +		if (i == sizeof(buf))					\
-> +			return -EINVAL;					\
-> +		while ((pg - page < len) && (*pg == '\0' || *pg == '\n'))\
-> +			++pg;						\
-> +		buf[i] = '\0';						\
-> +		ret = fun(buf, priv);					\
-> +		if (ret)						\
-> +			return ret;					\
-> +	}								\
-> +									\
-> +	return 0;							\
+> +UVC_ATTR##ro(uvcg_extension_, cname, aname)
+> +
+> +UVCG_EXTENSION_ATTR(b_length, bLength, _RO);
+> +UVCG_EXTENSION_ATTR(b_unit_id, bUnitID, _RO);
+> +UVCG_EXTENSION_ATTR(i_extension, iExtension, _RO);
+> +
+> +static ssize_t uvcg_extension_b_num_controls_store(struct config_item *item,
+> +						   const char *page, size_t len)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	int ret;
+> +	u8 num;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	ret = kstrtou8(page, 0, &num);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&opts->lock);
+> +	xu->desc.bNumControls = num;
+> +	mutex_unlock(&opts->lock);
+> +
+> +	mutex_unlock(su_mutex);
+> +
+> +	return len;
+> +}
+> +UVCG_EXTENSION_ATTR(b_num_controls, bNumControls);
+> +
+> +/*
+> + * In addition to storing bNrInPins, this function needs to realloc the
+> + * memory for the baSourceID array and additionally expand bLength.
+> + */
+> +static ssize_t uvcg_extension_b_nr_in_pins_store(struct config_item *item,
+> +						 const char *page, size_t len)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	void *tmp_buf;
+> +	int ret;
+> +	u8 num;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	ret = kstrtou8(page, 0, &num);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&opts->lock);
+> +
+> +	if (num == xu->desc.bNrInPins) {
+> +		ret = len;
+> +		goto unlock;
+> +	}
+> +
+> +	tmp_buf = krealloc_array(xu->desc.baSourceID, num, sizeof(u8),
+> +				 GFP_KERNEL);
+> +	if (!tmp_buf) {
+> +		ret = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	if (num >= xu->desc.bNrInPins)
+> +		memset(tmp_buf + xu->desc.bNrInPins, 0,
+> +		       (num - xu->desc.bNrInPins) * sizeof(u8));
+
+You could also pass GFP_KERNEL | __GFP_ZERO to krealloc_array() and drop
+this. This applies to the next function too.
+
+> +
+> +	xu->desc.baSourceID = tmp_buf;
+> +	xu->desc.bNrInPins = num;
+> +	xu->desc.bLength = 24 + xu->desc.bNrInPins + xu->desc.bControlSize;
+
+A static inline helper to recompute bLength would be nice.
+
+> +
+> +	ret = len;
+> +
+> +unlock:
+> +	mutex_unlock(&opts->lock);
+> +	mutex_unlock(su_mutex);
+> +	return ret;
+> +}
+> +UVCG_EXTENSION_ATTR(b_nr_in_pins, bNrInPins);
+> +
+> +/*
+> + * In addition to storing bControlSize, this function needs to realloc the
+> + * memory for the bmControls array and additionally expand bLength.
+> + */
+> +static ssize_t uvcg_extension_b_control_size_store(struct config_item *item,
+> +						   const char *page, size_t len)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	void *tmp_buf;
+> +	int ret;
+> +	u8 num;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	ret = kstrtou8(page, 0, &num);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&opts->lock);
+> +
+> +	if (num == xu->desc.bControlSize) {
+> +		ret = len;
+> +		goto unlock;
+> +	}
+> +
+> +	tmp_buf = krealloc_array(xu->desc.bmControls, num, sizeof(u8),
+> +				 GFP_KERNEL);
+> +	if (!tmp_buf) {
+> +		ret = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	if (num >= xu->desc.bControlSize)
+> +		memset(tmp_buf + xu->desc.bControlSize, 0,
+> +		       (num - xu->desc.bControlSize) * sizeof(u8));
+> +
+> +	xu->desc.bmControls = tmp_buf;
+> +	xu->desc.bControlSize = num;
+> +	xu->desc.bLength = 24 + xu->desc.bNrInPins + xu->desc.bControlSize;
+> +
+> +	ret = len;
+> +
+> +unlock:
+> +	mutex_unlock(&opts->lock);
+> +	mutex_unlock(su_mutex);
+> +	return ret;
 > +}
 > +
-> +UVCG_ITEM_ENTRY_FUNCS(32)
+> +UVCG_EXTENSION_ATTR(b_control_size, bControlSize);
+> +
+> +static ssize_t uvcg_extension_guid_extension_code_show(struct config_item *item,
+> +						       char *page)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +	memcpy(page, xu->desc.guidExtensionCode, sizeof(xu->desc.guidExtensionCode));
+> +	mutex_unlock(&opts->lock);
+> +
+> +	mutex_unlock(su_mutex);
+> +
+> +	return sizeof(xu->desc.guidExtensionCode);
+> +}
+> +
+> +static ssize_t uvcg_extension_guid_extension_code_store(struct config_item *item,
+> +							const char *page, size_t len)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	int ret;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +	memcpy(xu->desc.guidExtensionCode, page,
+> +	       min(sizeof(xu->desc.guidExtensionCode), len));
+> +	mutex_unlock(&opts->lock);
+> +
+> +	mutex_unlock(su_mutex);
+> +
+> +	ret = sizeof(xu->desc.guidExtensionCode);
+> +
+> +	return ret;
+> +}
+> +
+> +UVC_ATTR(uvcg_extension_, guid_extension_code, guidExtensionCode);
+> +
+> +static ssize_t uvcg_extension_ba_source_id_show(struct config_item *item,
+> +						char *page)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	char *pg = page;
+> +	int ret, i;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +	for (ret = 0, i = 0; i < xu->desc.bNrInPins; ++i) {
+> +		ret += sprintf(pg, "%u\n", xu->desc.baSourceID[i]);
+> +		pg = page + ret;
+> +	}
+> +	mutex_unlock(&opts->lock);
+> +
+> +	mutex_unlock(su_mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t uvcg_extension_ba_source_id_store(struct config_item *item,
+> +						 const char *page, size_t len)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	u8 *source_ids, *tmp;
+> +	int ret, n = 0;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +
+> +	ret = __uvcg_iter_item_entries_u8(page, len, __uvcg_count_item_entries, &n);
+> +	if (ret)
+> +		goto unlock;
+> +
+> +	tmp = source_ids = kcalloc(n, sizeof(u8), GFP_KERNEL);
+
+tmp is usually a bad name. iter would be better. Bonus points for
+patching uvcg_frame_dw_frame_interval_store() accordingly.
+
+I'm also thinking that kcalloc() may not be that useful when the second
+argument is 1 :-) It's fine though, conceptually that's the right API.
+
+> +	if (!source_ids) {
+> +		ret = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	ret = __uvcg_iter_item_entries_u8(page, len, __uvcg_fill_item_entries_u8, &tmp);
+> +	if (ret) {
+> +		kfree(source_ids);
+> +		goto unlock;
+> +	}
+> +
+> +	kfree(xu->desc.baSourceID);
+> +	xu->desc.baSourceID = source_ids;
+> +	xu->desc.bNrInPins = n;
+> +	xu->desc.bLength = 24 + xu->desc.bNrInPins + xu->desc.bControlSize;
+> +
+> +	ret = len;
+> +
+> +unlock:
+> +	mutex_unlock(&opts->lock);
+> +	mutex_unlock(su_mutex);
+> +	return ret;
+> +}
+> +UVC_ATTR(uvcg_extension_, ba_source_id, baSourceID);
+> +
+> +static ssize_t uvcg_extension_bm_controls_show(struct config_item *item,
+> +					       char *page)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	char *pg = page;
+> +	int ret, i;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +	for (ret = 0, i = 0; i < xu->desc.bControlSize; ++i) {
+> +		ret += sprintf(pg, "0x%02x\n", xu->desc.bmControls[i]);
+> +		pg = page + ret;
+> +	}
+> +	mutex_unlock(&opts->lock);
+> +
+> +	mutex_unlock(su_mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t uvcg_extension_bm_controls_store(struct config_item *item,
+> +						const char *page, size_t len)
+> +{
+> +	struct config_group *group = to_config_group(item->ci_parent);
+> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
+> +	struct uvcg_extension *xu = to_uvcg_extension(item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +	u8 *bm_controls, *tmp;
+> +	int ret, n = 0;
+> +
+> +	mutex_lock(su_mutex);
+> +
+> +	opts_item = item->ci_parent->ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +
+> +	ret = __uvcg_iter_item_entries_u8(page, len, __uvcg_count_item_entries, &n);
+> +	if (ret)
+> +		goto unlock;
+> +
+> +	tmp = bm_controls = kcalloc(n, sizeof(u8), GFP_KERNEL);
+> +	if (!bm_controls) {
+> +		ret = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	ret = __uvcg_iter_item_entries_u8(page, len, __uvcg_fill_item_entries_u8, &tmp);
+> +	if (ret) {
+> +		kfree(bm_controls);
+> +		goto unlock;
+> +	}
+> +
+> +	kfree(xu->desc.bmControls);
+> +	xu->desc.bmControls = bm_controls;
+> +	xu->desc.bControlSize = n;
+> +	xu->desc.bLength = 24 + xu->desc.bNrInPins + xu->desc.bControlSize;
+> +
+> +	ret = len;
+> +
+> +unlock:
+> +	mutex_unlock(&opts->lock);
+> +	mutex_unlock(su_mutex);
+> +	return ret;
+> +}
+> +
+> +UVC_ATTR(uvcg_extension_, bm_controls, bmControls);
+> +
+> +static struct configfs_attribute *uvcg_extension_attrs[] = {
+> +	&uvcg_extension_attr_b_length,
+> +	&uvcg_extension_attr_b_unit_id,
+> +	&uvcg_extension_attr_b_num_controls,
+> +	&uvcg_extension_attr_b_nr_in_pins,
+> +	&uvcg_extension_attr_b_control_size,
+> +	&uvcg_extension_attr_guid_extension_code,
+> +	&uvcg_extension_attr_ba_source_id,
+> +	&uvcg_extension_attr_bm_controls,
+> +	&uvcg_extension_attr_i_extension,
+> +	NULL,
+> +};
+> +
+> +static void uvcg_extension_release(struct config_item *item)
+> +{
+> +	struct uvcg_extension *xu = container_of(item, struct uvcg_extension, item);
+> +
+> +	kfree(xu);
+> +}
+> +
+> +static struct configfs_item_operations uvcg_extension_item_ops = {
+> +	.release	= uvcg_extension_release,
+> +};
+> +
+> +static const struct config_item_type uvcg_extension_type = {
+> +	.ct_item_ops	= &uvcg_extension_item_ops,
+> +	.ct_attrs	= uvcg_extension_attrs,
+> +	.ct_owner	= THIS_MODULE,
+> +};
+> +
+> +static void uvcg_extension_drop(struct config_group *group, struct config_item *item)
+> +{
+> +	struct uvcg_extension *xu = container_of(item, struct uvcg_extension, item);
+> +	struct config_item *opts_item;
+> +	struct f_uvc_opts *opts;
+> +
+> +	opts_item = group->cg_item.ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +
+> +	config_item_put(item);
+> +	list_del(&xu->list);
+> +	kfree(xu->desc.baSourceID);
+> +	kfree(xu->desc.bmControls);
+> +
+> +	mutex_unlock(&opts->lock);
+> +}
+> +
+> +static struct config_item *uvcg_extension_make(struct config_group *group, const char *name)
+> +{
+> +	struct config_item *opts_item;
+> +	struct uvcg_extension *xu;
+> +	struct f_uvc_opts *opts;
+> +
+> +	opts_item = group->cg_item.ci_parent->ci_parent;
+> +	opts = to_f_uvc_opts(opts_item);
+> +
+> +	mutex_lock(&opts->lock);
+> +
+> +	xu = kzalloc(sizeof(*xu), GFP_KERNEL);
+> +	if (!xu)
+> +		return ERR_PTR(-ENOMEM);
+
+You're returning without unlocking. Move the allocation above the lock
+to fix this.
+
+> +
+> +	xu->desc.bLength = UVC_DT_EXTENSION_UNIT_SIZE(0, 0);
+> +	xu->desc.bDescriptorType = USB_DT_CS_INTERFACE;
+> +	xu->desc.bDescriptorSubType = UVC_VC_EXTENSION_UNIT;
+> +	xu->desc.bUnitID = ++opts->last_unit_id;
+> +	xu->desc.bNumControls = 0;
+> +	xu->desc.bNrInPins = 0;
+> +	xu->desc.baSourceID = NULL;
+> +	xu->desc.bControlSize = 0;
+> +	xu->desc.bmControls = NULL;
+> +
+> +	config_item_init_type_name(&xu->item, name, &uvcg_extension_type);
+
+You could move all of this but the bUnitID initialization above the
+mutex_lock() call too.
+
+> +	list_add_tail(&xu->list, &opts->extension_units);
+> +
+> +	mutex_unlock(&opts->lock);
+> +
+> +	return &xu->item;
+> +}
+> +
+> +static struct configfs_group_operations uvcg_extensions_grp_ops = {
+> +	.make_item	= uvcg_extension_make,
+> +	.drop_item	= uvcg_extension_drop,
+> +};
+> +
+> +static const struct uvcg_config_group_type uvcg_extensions_grp_type = {
+> +	.type = {
+> +		.ct_item_ops	= &uvcg_config_item_ops,
+> +		.ct_group_ops	= &uvcg_extensions_grp_ops,
+> +		.ct_owner	= THIS_MODULE,
+> +	},
+> +	.name = "extensions",
+> +};
 > +
 >  /* -----------------------------------------------------------------------------
 >   * control/class/{fs|ss}
 >   */
-> @@ -1186,57 +1240,6 @@ static ssize_t uvcg_frame_dw_frame_interval_show(struct config_item *item,
->  	return result;
+> @@ -842,6 +1321,7 @@ static const struct uvcg_config_group_type uvcg_control_grp_type = {
+>  		&uvcg_processing_grp_type,
+>  		&uvcg_terminal_grp_type,
+>  		&uvcg_control_class_grp_type,
+> +		&uvcg_extensions_grp_type,
+>  		NULL,
+>  	},
+>  };
+> diff --git a/drivers/usb/gadget/function/uvc_configfs.h b/drivers/usb/gadget/function/uvc_configfs.h
+> index ad2ec8c4c78c..c9a4182fb26f 100644
+> --- a/drivers/usb/gadget/function/uvc_configfs.h
+> +++ b/drivers/usb/gadget/function/uvc_configfs.h
+> @@ -132,6 +132,35 @@ static inline struct uvcg_mjpeg *to_uvcg_mjpeg(struct config_item *item)
+>  	return container_of(to_uvcg_format(item), struct uvcg_mjpeg, fmt);
 >  }
 >  
-> -static inline int __uvcg_count_frm_intrv(char *buf, void *priv)
-> -{
-> -	++*((int *)priv);
-> -	return 0;
-> -}
-> -
-> -static inline int __uvcg_fill_frm_intrv(char *buf, void *priv)
-> -{
-> -	u32 num, **interv;
-> -	int ret;
-> -
-> -	ret = kstrtou32(buf, 0, &num);
-> -	if (ret)
-> -		return ret;
-> -
-> -	interv = priv;
-> -	**interv = num;
-> -	++*interv;
-> -
-> -	return 0;
-> -}
-> -
-> -static int __uvcg_iter_frm_intrv(const char *page, size_t len,
-> -				 int (*fun)(char *, void *), void *priv)
-> -{
-> -	/* sign, base 2 representation, newline, terminator */
-> -	char buf[1 + sizeof(u32) * 8 + 1 + 1];
-> -	const char *pg = page;
-> -	int i, ret;
-> -
-> -	if (!fun)
-> -		return -EINVAL;
-> -
-> -	while (pg - page < len) {
-> -		i = 0;
-> -		while (i < sizeof(buf) && (pg - page < len) &&
-> -				*pg != '\0' && *pg != '\n')
-> -			buf[i++] = *pg++;
-> -		if (i == sizeof(buf))
-> -			return -EINVAL;
-> -		while ((pg - page < len) && (*pg == '\0' || *pg == '\n'))
-> -			++pg;
-> -		buf[i] = '\0';
-> -		ret = fun(buf, priv);
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
->  						  const char *page, size_t len)
->  {
-> @@ -1260,7 +1263,7 @@ static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
->  		goto end;
->  	}
+> +/* -----------------------------------------------------------------------------
+> + * control/extensions/<NAME>
+> + */
+> +
+> +struct uvcg_extension_unit_descriptor {
+> +	u8 bLength;
+> +	u8 bDescriptorType;
+> +	u8 bDescriptorSubType;
+> +	u8 bUnitID;
+> +	u8 guidExtensionCode[16];
+> +	u8 bNumControls;
+> +	u8 bNrInPins;
+> +	u8 *baSourceID;
+> +	u8 bControlSize;
+> +	u8 *bmControls;
+> +	u8 iExtension;
+> +} __packed;
+> +
+> +struct uvcg_extension {
+> +	struct config_item item;
+> +	struct list_head list;
+> +	struct uvcg_extension_unit_descriptor desc;
+> +};
+> +
+> +static inline struct uvcg_extension *to_uvcg_extension(struct config_item *item)
+> +{
+> +	return container_of(item, struct uvcg_extension, item);
+> +}
+> +
+>  int uvcg_attach_configfs(struct f_uvc_opts *opts);
 >  
-> -	ret = __uvcg_iter_frm_intrv(page, len, __uvcg_count_frm_intrv, &n);
-> +	ret = __uvcg_iter_item_entries_u32(page, len, __uvcg_count_item_entries, &n);
-
-A wrapper macro could be nice, to be written
-
-	ret = uvcg_count_item_entries(u32, page, len, &n);
-
->  	if (ret)
->  		goto end;
->  
-> @@ -1270,7 +1273,7 @@ static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
->  		goto end;
->  	}
->  
-> -	ret = __uvcg_iter_frm_intrv(page, len, __uvcg_fill_frm_intrv, &tmp);
-> +	ret = __uvcg_iter_item_entries_u32(page, len, __uvcg_fill_item_entries_u32, &tmp);
-
-And
-
-	ret = uvcg_fill_item_entries(u32, page, len, &tmp);
-
-This in particular would make sure that the __uvcg_fill_item_entries_*()
-variant always matches the size passed to
-__uvcg_iter_item_entries_u32().
-
-This is probably a candidate for a separate patch on top of this one.
-
->  	if (ret) {
->  		kfree(frm_intrv);
->  		goto end;
+>  #endif /* UVC_CONFIGFS_H */
 
 -- 
 Regards,
