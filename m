@@ -2,182 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1081658886
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 03:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A637F658A6F
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Dec 2022 09:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiL2CIT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Dec 2022 21:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        id S233160AbiL2IWt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Dec 2022 03:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiL2CIS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Dec 2022 21:08:18 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC50B877
-        for <linux-usb@vger.kernel.org>; Wed, 28 Dec 2022 18:08:17 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 670C7109;
-        Thu, 29 Dec 2022 03:08:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672279695;
-        bh=FYxliOABXRDqkeKAypfhOm9Iv9MEyyTIhrYwgAXFz50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O+NglguI3Z6FusQ17Wg3HZ0ObpM7A19b5wz3oSkUex9QfhgiJM5X4ZRvIVMHU+Da4
-         437SL6C3YNXjTg/xE8re3CPLcVBy9AKhOkBM7aWjjIVYnFQcCobPYohzyz9bvSyBC9
-         OZtdxv0VjZLLYazsU0f6VjosfXA3iFYarWwgQtYs=
-Date:   Thu, 29 Dec 2022 04:08:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dan Scally <dan.scally@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, kieran.bingham@ideasonboard.com,
-        torleiv@huddly.com, mgr@pengutronix.de
-Subject: Re: [PATCH v2 8/9] usb: gadget: uvc: Allow linking function to
- string descs
-Message-ID: <Y6z2i6ANAKzgf/x6@pendragon.ideasonboard.com>
-References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
- <20221121092517.225242-9-dan.scally@ideasonboard.com>
- <a350247d-396a-d732-793d-f9e07a09d032@ideasonboard.com>
+        with ESMTP id S230380AbiL2IWq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Dec 2022 03:22:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03BC11A16
+        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 00:22:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7776F61722
+        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 08:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DA41AC433F0
+        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 08:22:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672302164;
+        bh=HOlApPiApwvXcPJ/hqSeBo5CweZ+ND4RGROhDLRG934=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=apTLhnc0RnO5GrLyqppRUNbkTYsa8xYBiDNrEb6jFAEdbqbnfsII+IcxmzBy70+mS
+         FPAlLYxuaSPfmsx62xVXM88G/5BZFPtXPsnMn9MbXvC0a1HDncvys8HdQY2CWhuIwJ
+         cr1LUCdaRZJD/ai2BNgLjok8nznYTC5PwFht4ArJeZswBpIvXW9BTGqeYOdIeYO6PC
+         Rnx3iLBiqy/F6NfqjR9+XRRFazy0XuLGooCoXwmGpa5J7tcjAoO6np0cTY1wvM33NS
+         t5ToO8oX8qbIx+2OsSU/WImfpROCWZCWwH52s8X9AB7CJpZOogDSCrtvL1QxUWMADf
+         tf2rKbVjYtlDQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C0506C43143; Thu, 29 Dec 2022 08:22:44 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216474] Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus
+ Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
+Date:   Thu, 29 Dec 2022 08:22:44 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: frederick888@tsundere.moe
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216474-208809-DCIdyojnTp@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216474-208809@https.bugzilla.kernel.org/>
+References: <bug-216474-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a350247d-396a-d732-793d-f9e07a09d032@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216474
 
-Thank you for the patch.
+Frederick Zhang (frederick888@tsundere.moe) changed:
 
-On Mon, Nov 21, 2022 at 09:57:38AM +0000, Dan Scally wrote:
-> Hi all - apologies, meant to add this discussion point before sending
-> 
-> On 21/11/2022 09:25, Daniel Scally wrote:
-> > Currently the string descriptors for the IAD, VideoControl Interface
-> > and VideoStreaming Interfaces are hardcoded into f_uvc. Now that we
-> > can create arbitrary string descriptors, add a mechanism to define
-> > string descriptors for the IAD, VC and VS interfaces by linking to
-> > the appropriate directory at function level.
-> >
-> > Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> > ---
-> > Changes in v2:
-> >
-> > 	- New patch
-> >
-> >   drivers/usb/gadget/function/u_uvc.h        |  8 +++
-> >   drivers/usb/gadget/function/uvc_configfs.c | 59 ++++++++++++++++++++++
-> >   2 files changed, 67 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
-> > index c1c9ea5931d3..331cdf5ba9c8 100644
-> > --- a/drivers/usb/gadget/function/u_uvc.h
-> > +++ b/drivers/usb/gadget/function/u_uvc.h
-> > @@ -88,6 +88,14 @@ struct f_uvc_opts {
-> >   	struct list_head				languages;
-> >   	unsigned int					nlangs;
-> >   
-> > +	/*
-> > +	 * Indexes into the function's string descriptors allowing users to set
-> > +	 * custom descriptions rather than the hard-coded defaults.
-> > +	 */
-> > +	u8						iad_index;
-> > +	u8						vs0_index;
-> > +	u8						vs1_index;
-> > +
-> >   	/*
-> >   	 * Read/write access to configfs attributes is handled by configfs.
-> >   	 *
-> > diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-> > index 5c51862150c4..e8faa31998fa 100644
-> > --- a/drivers/usb/gadget/function/uvc_configfs.c
-> > +++ b/drivers/usb/gadget/function/uvc_configfs.c
-> > @@ -3197,8 +3197,67 @@ static void uvc_func_item_release(struct config_item *item)
-> >   	usb_put_function_instance(&opts->func_inst);
-> >   }
-> >   
-> > +static int uvc_func_allow_link(struct config_item *src, struct config_item *tgt)
-> > +{
-> > +	struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
-> > +	struct config_item *strings;
-> > +	struct uvcg_string *string;
-> > +	struct f_uvc_opts *opts;
-> > +	int ret = 0;
-> > +
-> > +	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-> > +
-> > +	/* Validate that the target is an entry in strings/<langid> */
-> > +	strings = config_group_find_item(to_config_group(src), "strings");
-> > +	if (!strings || tgt->ci_parent->ci_parent != strings) {
-> > +		ret = -EINVAL;
-> > +		goto put_strings;
-> > +	}
-> > +
-> > +	string = to_uvcg_string(tgt);
-> > +
-> > +	opts = to_f_uvc_opts(src);
-> > +	mutex_lock(&opts->lock);
-> > +
-> > +	if (!strcmp(tgt->ci_name, "iad_desc"))
-> > +		opts->iad_index = string->usb_string.id;
-> > +	else if (!strcmp(tgt->ci_name, "vs0_desc"))
-> > +		opts->vs0_index = string->usb_string.id;
-> > +	else if (!strcmp(tgt->ci_name, "vs1_desc"))
-> > +		opts->vs1_index = string->usb_string.id;
-> > +	else
-> > +		ret = -EINVAL;
-> 
-> Is this reliance on the name of the target to set the right internal 
-> index an acceptable method? I wasn't quite sure, but it seemed like the 
-> simplest way to do it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |frederick888@tsundere.moe
 
-I haven't dug in the USB gadget configfs implementation, but I think
-string support is something that shouldn't be specific to the UVC
-gadget. I think we should be able to create a config item of "type"
-string, and have gadget helpers handle the rest.
+--- Comment #1 from Frederick Zhang (frederick888@tsundere.moe) ---
+I recently purchased a Thunderbolt 4 dock and started seeing something simi=
+lar
+with 6.0 & 6.1 kernels on my Thinkpad.
 
-Feedback from the USB gadget maintainers would be useful.
+Dec 29 18:51:05 FredArch systemd[1]: Starting System Suspend...
+Dec 29 18:51:05 FredArch systemd-sleep[31007]: Entering sleep state
+'suspend'...
+Dec 29 18:51:05 FredArch kernel: PM: suspend entry (s2idle)
+Dec 29 18:51:07 FredArch kernel: Filesystems sync: 1.566 seconds
+Dec 29 18:52:30 FredArch kernel: Freezing user space processes ... (elapsed
+0.001 seconds) done.
+Dec 29 18:52:30 FredArch kernel: OOM killer disabled.
+Dec 29 18:52:30 FredArch kernel: Freezing remaining freezable tasks ...
+(elapsed 0.001 seconds) done.
+Dec 29 18:52:30 FredArch kernel: printk: Suspending console(s) (use
+no_console_suspend to debug)
+Dec 29 18:52:30 FredArch kernel: ACPI: EC: interrupt blocked
+Dec 29 18:52:30 FredArch kernel: ACPI: EC: interrupt unblocked
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:00:1d.0: AER: Multiple Corre=
+cted
+error received: 0000:21:01.0
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0: PCIe Bus Error:
+severity=3DCorrected, type=3DData Link Layer, (Transmitter ID)
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0:   device [8086:1136]
+error status/mask=3D00001100/00002000
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0:    [ 8] Rollover
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0:    [12] Timeout
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0: AER:   Error of this
+Agent is reported first
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:23:00.0: PCIe Bus Error:
+severity=3DCorrected, type=3DData Link Layer, (Transmitter ID)
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:23:00.0:   device [8086:0b26]
+error status/mask=3D00001000/00002000
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:23:00.0:    [12] Timeout
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:00:1d.0: AER: Corrected error
+received: 0000:21:01.0
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0: PCIe Bus Error:
+severity=3DCorrected, type=3DData Link Layer, (Transmitter ID)
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0:   device [8086:1136]
+error status/mask=3D00001100/00002000
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0:    [ 8] Rollover
+Dec 29 18:52:30 FredArch kernel: pcieport 0000:21:01.0:    [12] Timeout
 
-> > +
-> > +	mutex_unlock(&opts->lock);
-> > +
-> > +put_strings:
-> > +	config_item_put(strings);
-> > +	mutex_unlock(su_mutex);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static void uvc_func_drop_link(struct config_item *src, struct config_item *tgt)
-> > +{
-> > +	struct f_uvc_opts *opts;
-> > +
-> > +	opts = to_f_uvc_opts(src);
-> > +	mutex_lock(&opts->lock);
-> > +
-> > +	if (!strcmp(tgt->ci_name, "iad_desc"))
-> > +		opts->iad_index = 0;
-> > +	else if (!strcmp(tgt->ci_name, "vs0_desc"))
-> > +		opts->vs0_index = 0;
-> > +	else if (!strcmp(tgt->ci_name, "vs1_desc"))
-> > +		opts->vs1_index = 0;
-> > +
-> > +	mutex_unlock(&opts->lock);
-> > +}
-> > +
-> >   static struct configfs_item_operations uvc_func_item_ops = {
-> >   	.release	= uvc_func_item_release,
-> > +	.allow_link	= uvc_func_allow_link,
-> > +	.drop_link	= uvc_func_drop_link,
-> >   };
-> >   
-> >   #define UVCG_OPTS_ATTR(cname, aname, limit)				\
+--=20
+You may reply to this email to add a comment.
 
--- 
-Regards,
-
-Laurent Pinchart
+You are receiving this mail because:
+You are watching the assignee of the bug.=
