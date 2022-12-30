@@ -2,117 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23ADF659C9A
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 23:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 857DB659D0F
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 23:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbiL3V75 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Dec 2022 16:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        id S235580AbiL3WlI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Dec 2022 17:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235488AbiL3V74 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 16:59:56 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A041CFF7;
-        Fri, 30 Dec 2022 13:59:55 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so15032603pjk.3;
-        Fri, 30 Dec 2022 13:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPOpzf4r9Hh/EAielWLYD69jlQAV80ZobxYu4vuYggg=;
-        b=L90HY9drT6SHzImE+7wWGUSE3BAbqBnVtnqK0bouVXSOg37GvVcdDJ+fhprEZE+hnS
-         7ph2bNLyk8fFRgN036z2Rtm2o0PZeqx+YrAU5AH7yOlT72RvuineviST0yrcSN/Hnmm/
-         +wJ0qyEMyMGX0VZQ7spwX7N0J3KYjDe2TySwt/a5V+2BMSmKIapDyOPGuexIAmK80rVi
-         OTLJZx7jg4e+LwsPhM550IP0CwmmSegtZj8QGmsZk5ZbBtW1lGw3u5PxnV+zfpB6/4K4
-         unlpYcUGTSgcfiTr3lGVZ9i5sg6WJ5OT7IpAThRRS2QJcpZO2L/ORf090rq/uRbJz/Sc
-         cv8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BPOpzf4r9Hh/EAielWLYD69jlQAV80ZobxYu4vuYggg=;
-        b=InT/UTki78HM9mRWKDs4dl7GdaUGN0+oiQ+OSuPueLuerdOxmEbZtpIlJgbqq9lnks
-         XkMSBiGhwxmVAQT/krG6DeN89ur7KwrRzrckc45+f6FJFCvUeeBufRx3Hd6uXTDWfRBC
-         zZhQXYMW+YAJV/XgKmApW4HkAKw7u7wvL/eso+Ku80uFY4MFdzYT1LN7OBzAU3PsQb6k
-         CZ2o4V+5JiQf5dQ32UTLlbAqSgQOCXJbntMLxjdT8ULMnhxC5TV9laroF4xjb9Mi++0Y
-         aYQP3pNVJumXdps/GrDZGZ44+6f+B4gVlQM2Bsgmn52dYDzQ82IoroXRkFM+G9fH1cNO
-         k1iw==
-X-Gm-Message-State: AFqh2koplAsdHbyIfypkxz3uifHxHFVFGcAYjUXogastqbwlAM91Y/eD
-        BLZDTKA5Whzhq2cYa0TYyi4=
-X-Google-Smtp-Source: AMrXdXsyDm3y9SzyCfbVbczxNS0+3W2zcOER/n7L248Jnz8BpsPIDueIG4+9jGW+8XxZtiVVzWUY/A==
-X-Received: by 2002:a17:903:30d2:b0:189:8c38:cb96 with SMTP id s18-20020a17090330d200b001898c38cb96mr29225269plc.20.1672437594713;
-        Fri, 30 Dec 2022 13:59:54 -0800 (PST)
-Received: from athina.mtv.corp.google.com ([2620:15c:211:200:2403:e698:5f2a:3c9b])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902c20200b00190f5e3bcd9sm15481897pll.23.2022.12.30.13.59.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 13:59:53 -0800 (PST)
-From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
-To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Subject: [PATCH] usb: storage: de-quirk Seagate Expansion Portable Drive SRD00F1 [0bc2:2320]
-Date:   Fri, 30 Dec 2022 13:59:42 -0800
-Message-Id: <20221230215942.3241955-1-zenczykowski@gmail.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-MIME-Version: 1.0
+        with ESMTP id S235541AbiL3WlD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 17:41:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24B7F78;
+        Fri, 30 Dec 2022 14:41:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ED3BB81C06;
+        Fri, 30 Dec 2022 22:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32887C433EF;
+        Fri, 30 Dec 2022 22:41:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672440060;
+        bh=modTSy1vCT2gxH29EjhljDH3rQB/B9z2JuOf7c3W/Vs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P9PsFTGCH8xdqF06N8P2gxEMkzdfo/EXRCu7Yg6ul/QolpSWDtq0nxMgLzDEDR1E5
+         D6rIzfd31blvFPlHkMdN+aXVbqpAg+e9ZQLqSbb/AxLEpK7JMOAuleJ22B6RzgM/At
+         nEItP74/XPAUXP887dP8FsW/fD/5/h50Ux/QjSutfOq+gS8utrEWVIHs1mNY/YI2tH
+         e7XhH1MX9xLKdGwXlDHmm1WcWTo5XMQw/0yJASZQ2K69WYAy68TwtB92NbcMDJ5PFZ
+         ux+uwNR+k8wNyFsgO4PR5HrVkO2HljdO1TvnAe5i++JtGOc2XqxnqGK69plZ0p/4kH
+         0Q2Nlwl1ARJ5Q==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pBO3d-00FxL1-Ot;
+        Fri, 30 Dec 2022 22:40:57 +0000
+Date:   Fri, 30 Dec 2022 22:39:36 +0000
+Message-ID: <87v8lsect3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bernhard =?UTF-8?B?Um9zZW5rcsOkbnplcg==?= <bero@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        chunfeng.yun@mediatek.com, linus.walleij@linaro.org,
+        lee@kernel.org, tglx@linutronix.de,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH v6 7/7] arm64: dts: mediatek: Initial mt8365-evk support
+In-Reply-To: <20221230203541.146807-8-bero@baylibre.com>
+References: <20221230203541.146807-1-bero@baylibre.com>
+        <20221230203541.146807-8-bero@baylibre.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: bero@baylibre.com, linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, gregkh@linuxfoundation.org, chunfeng.yun@mediatek.com, linus.walleij@linaro.org, lee@kernel.org, tglx@linutronix.de, angelogioacchino.delregno@collabora.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Maciej Żenczykowski <maze@google.com>
+On Fri, 30 Dec 2022 20:35:41 +0000,
+Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com> wrote:
+>=20
+> From: Fabien Parent <fparent@baylibre.com>
+>=20
+> This adds minimal support for the Mediatek 8365 SOC and the EVK reference
+> board, allowing the board to boot to initramfs with serial port I/O.
+>=20
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> [bero@baylibre.com: Removed parts depending on drivers that aren't upstre=
+am yet, cleanups, add CPU cache layout, add systimer]
+> Signed-off-by: Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
 
-Since November 2017 commit 7fee72d5e8f1 ("uas: Always apply US_FL_NO_ATA_1X
-quirk to Seagate devices"), the US_FL_NO_ATA_1X is always set for Seagate
-devices, but it doesn't appear to be required - at least for this one
-(based on internet searches, probably for a fair number more...).
+[...]
 
-ID 0bc2:2320 Seagate RSS LLC USB 3.0 bridge [Portable Expansion Drive]
+> +	soc {
+> +		#address-cells =3D <2>;
+> +		#size-cells =3D <2>;
+> +		compatible =3D "simple-bus";
+> +		ranges;
+> +
+> +		gic: interrupt-controller@c000000 {
+> +			compatible =3D "arm,gic-v3";
+> +			#interrupt-cells =3D <4>;
 
-Confirmed via:
-  smartctl -a /dev/sda
-working fine with
-  modprobe usb_storage quirks=0bc2:2320:
-on
-  5.19.11-1rodete1-amd64
+Why 4 cells? All the SPIs routed via sysirq are perfectly happy with 3
+cells, and all the PPIs have 0 for the 4th cell (none of them use any
+form of partitioning that'd require 4 cells). So where is this coming
+from?
 
-Fixes: 7fee72d5e8f1 ("uas: Always apply US_FL_NO_ATA_1X quirk to Seagate devices")
-Cc: stable <stable@vger.kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Maciej Żenczykowski <zenczykowski@gmail.com>
----
- drivers/usb/storage/uas-detect.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> +			interrupt-parent =3D <&gic>;
+> +			interrupt-controller;
+> +			reg =3D <0 0x0c000000 0 0x80000>, <0 0x0c080000 0 0x80000>;
+> +
 
-diff --git a/drivers/usb/storage/uas-detect.h b/drivers/usb/storage/uas-detect.h
-index 3f720faa6f97..74d65810f09a 100644
---- a/drivers/usb/storage/uas-detect.h
-+++ b/drivers/usb/storage/uas-detect.h
-@@ -112,8 +112,9 @@ static int uas_use_uas_driver(struct usb_interface *intf,
- 		}
- 	}
- 
--	/* All Seagate disk enclosures have broken ATA pass-through support */
--	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
-+	/* Most Seagate disk enclosures have broken ATA pass-through support */
-+	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2 &&
-+	    le16_to_cpu(udev->descriptor.idProduct) != 0x2320)
- 		flags |= US_FL_NO_ATA_1X;
- 
- 	usb_stor_adjust_quirks(udev, &flags);
--- 
-2.39.0.314.g84b9a713c41-goog
+The first region is obviously wrong (512kB for the distributor?
+that's... most generous, but the architecture states that it is 64kB,
+and that's wasteful enough).
 
+This is also missing the GICC/GICH/GICV regions that Cortex-A53
+implements, and that must be provided as per the binding.
+
+> +			interrupts =3D <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		};
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
