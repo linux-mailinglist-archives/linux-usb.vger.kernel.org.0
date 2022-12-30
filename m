@@ -2,111 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC46659A88
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 17:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A04A659AB6
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 17:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiL3Qee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Dec 2022 11:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S235088AbiL3QzA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Dec 2022 11:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiL3Qec (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 11:34:32 -0500
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62B4FDF;
-        Fri, 30 Dec 2022 08:34:31 -0800 (PST)
-Received: by mail-io1-f49.google.com with SMTP id n63so11335704iod.7;
-        Fri, 30 Dec 2022 08:34:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=p0lVTJW+o2MV1Wr+rp1DHYDL0BIjyZC98wPp6+2qLBY=;
-        b=Blv0c2NOZ4OhnqrDgn0Y9E55t2meW1oNIAwnyodpAkCjIvVwngE1F1mPzDQRRAn5ze
-         FXI665GGAt476RIyI2hqw00bimH3NPhAOADGBfL/dtYLeLUUsbz+9VMt46Nc0wC/0/Db
-         RTkc/QSRs6pX23UgHqpH6Avi6HB2RyNaJu/mKSmH1K9IwQK54FSWeBuv6f1K5VlZR6FX
-         +KVbmQGhNq1khEQxjgFg0YvvdARcRWaubw7qLQlRb+d9595cL/NiNXw3wJMeTvLnsIMH
-         PWLekwBMCg6W/QKmz0JDxGeFpWJrmf2MOADDer/qeP5BKF4Ji2cQYlm5s6k5zgCVjgXU
-         +TcQ==
-X-Gm-Message-State: AFqh2kr4EjfKzX9luQmTnY52rq9aTKL8gv9L06WtPbihCKlZmuJh8raW
-        /suBz9bB/MMHS0IVOA7WPQt2TWZCnA==
-X-Google-Smtp-Source: AMrXdXtmmwEiDuX/16L//5BcoPYSJ1o3moPc/QYb+10ZKGI08/ULjxqkJC1zOa3EBVcJCs6vhnYQfg==
-X-Received: by 2002:a5d:928e:0:b0:6e0:7dd:59ac with SMTP id s14-20020a5d928e000000b006e007dd59acmr22689251iom.14.1672418071006;
-        Fri, 30 Dec 2022 08:34:31 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id x6-20020a056602160600b006e00556dc9esm7676832iow.16.2022.12.30.08.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 08:34:30 -0800 (PST)
-Received: (nullmailer pid 1935050 invoked by uid 1000);
-        Fri, 30 Dec 2022 16:34:28 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S235124AbiL3Qy6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 11:54:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40871705B;
+        Fri, 30 Dec 2022 08:54:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7A63B81CBF;
+        Fri, 30 Dec 2022 16:54:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CB64C433F2;
+        Fri, 30 Dec 2022 16:54:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672419293;
+        bh=wMTbZBZdHwe+AegUDhTrGzJ3+CruNpZA1K+aMuLHyH4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rQH727dt54Q09lqOhW67vBwRfO8K49iotzyqXwdn3v5m3K4METxLA7kJp/ZR/T7NC
+         c70QqxCTzl2UJeZqnAoV4t27DsImVYhBs4OiY9m0P95rcc8IqM/INr7ss7BY7OCt2N
+         angDWLmEc4xLRn6elvWL0Lxm78w9KJgURIdZq2ZhALsxBkcCMt2A7+w9OOXdu/k9CP
+         rZZnu9yVTk7llOxTHbTa7AY5M7eaWIXEoQYDErgMAxX0rYP1ihfyNXzc34WUXkYoTi
+         yUOM+CmiHgzYP9PjkNLJM8kWipxmehvU1et9Ro3ReEoAnjRtxrMVpG7njnimGp49yZ
+         qjjMxhkb81E1g==
+Received: by mail-ua1-f47.google.com with SMTP id c26so4887731uak.5;
+        Fri, 30 Dec 2022 08:54:53 -0800 (PST)
+X-Gm-Message-State: AFqh2kqYDHLYf4YY3nHIEUMxZtq87m71RLkerhgUTOeTxx1Ft5FSvAG0
+        ldNKcH9DvLBSHKXc0szhAQf2mv6lw/z+POAILQ==
+X-Google-Smtp-Source: AMrXdXsS7FfVgV0fjTEXH61ZUzuUyw5HxHta/oNb2Sysh5es3t9SjTC8tM9XhPZcne3NYqxR4vguBo8oFXaF7J/5eog=
+X-Received: by 2002:ab0:3a8d:0:b0:419:678:cf31 with SMTP id
+ r13-20020ab03a8d000000b004190678cf31mr2942324uaw.63.1672419292215; Fri, 30
+ Dec 2022 08:54:52 -0800 (PST)
 MIME-Version: 1.0
+References: <20221219191038.1973807-1-robh@kernel.org> <87edsua5q4.fsf@balbi.sh>
+ <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+ <878riy9ztm.fsf@balbi.sh> <20221223235712.h54lggnjjuu3weol@synopsys.com>
+ <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com> <87o7rlffi7.fsf@balbi.sh>
+In-Reply-To: <87o7rlffi7.fsf@balbi.sh>
 From:   Rob Herring <robh@kernel.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        jh0801.jung@samsung.com, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, Mathias Nyman <mathias.nyman@intel.com>,
+Date:   Fri, 30 Dec 2022 10:54:40 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+viP_aY3n378WC7WpxZFnsTc-vKjW9Ojvcy0Ef-z09Ng@mail.gmail.com>
+Message-ID: <CAL_Jsq+viP_aY3n378WC7WpxZFnsTc-vKjW9Ojvcy0Ef-z09Ng@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains property
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        eomji.oh@samsung.com, Felipe Balbi <balbi@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org
-In-Reply-To: <1672307866-25839-4-git-send-email-dh10.jung@samsung.com>
-References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>        
- =?utf-8?q?=3CCGME20221229100416epcas2p18f7600737b8f4149a1d75d2d8db3317a=40e?=
- =?utf-8?q?pcas2p1=2Esamsung=2Ecom=3E?=
- <1672307866-25839-4-git-send-email-dh10.jung@samsung.com>
-Message-Id: <167241769120.1925686.13640146638423143826.robh@kernel.org>
-Subject: Re: [RFC PATCH v2 3/3] dt-bindings: usb: snps,dwc3: add generic-xhci as child
-Date:   Fri, 30 Dec 2022 10:34:28 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Dec 30, 2022 at 2:43 AM Felipe Balbi <balbi@kernel.org> wrote:
+>
+>
+> Hi,
+>
+> Rob Herring <robh@kernel.org> writes:
+> > On Fri, Dec 23, 2022 at 5:57 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> >> > Rob Herring <robh@kernel.org> writes:
+> >> > >> > The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
+> >> > >> > allowed by the schema:
+> >> > >> >
+> >> > >> > usb@fe900000: Unevaluated properties are not allowed ('power-domains' was unexpected)
+> >> > >> >
+> >> > >> > Allow DWC3 nodes to have a single power-domains entry. We could instead
+> >> > >> > move the power-domains property to the parent wrapper node, but the
+> >> > >> > could be an ABI break (Linux shouldn't care). Also, we don't want to
+> >> > >> > encourage the pattern of wrapper nodes just to define resources such as
+> >> > >> > clocks, resets, power-domains, etc. when not necessary.
+> >> > >> >
+> >> > >> > Signed-off-by: Rob Herring <robh@kernel.org>
+> >> > >> > ---
+> >> > >> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
+> >> > >> >  1 file changed, 3 insertions(+)
+> >> > >> >
+> >> > >> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> >> > >> > index 6d78048c4613..bcefd1c2410a 100644
+> >> > >> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> >> > >> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> >> > >> > @@ -91,6 +91,9 @@ properties:
+> >> > >> >          - usb2-phy
+> >> > >> >          - usb3-phy
+> >> > >> >
+> >> > >> > +  power-domains:
+> >> > >> > +    maxItems: 1
+> >> > >>
+> >> > >> AFAICT this can be incorrect. Also, you could have Cc the dwc3
+> >> > >> maintainer to get comments.
+> >>
+> >> Felipe is correct. We have 2 power-domains: Core domain and PMU.
+> >
+> > Power management unit? Performance management unit?
+> >
+> > That doesn't change that the rk3399 is 1 and we're stuck with it. So I
+> > can say 1 or 2 domains, or we add the 2nd domain when someone needs
+> > it.
+>
+> Isn't the snps,dwc3.yaml document supposed to document dwc3's view of
+> the world? In that case, dwc3 expects 2 power domains. It just so
+> happens that in rk3399 they are fed from the same power supply, but
+> dwc3' still thinks there are two of them. No?
 
-On Thu, 29 Dec 2022 18:57:46 +0900, Daehwan Jung wrote:
-> Currently, dwc3 invokes just xhci platform driver(generic-xhci) without
-> DT schema even though xhci works as child of dwc3. It makes sense to add
-> xhci as child of dwc3 with DT schema. It also supports to use another
-> compatible in xhci platform driver.
-> 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml    | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
+Yes. That is how bindings *should* be. However, RK3399 defined one PD
+long ago and it's an ABI. So we are stuck with it. Everyone else put
+power-domains in the parent because obviously the DWC3 has 0
+power-domains.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> It's a similar situation when you have multiple clock domains with the
+> same parent clock.
 
-yamllint warnings/errors:
+Yes, that's a common problem in clock bindings too. Not really
+anything we can do about that other than require a detailed reference
+manual with every binding and someone (me) reviewing the manual
+against the binding. Neither of those are going to happen. Even on Arm
+Primecell blocks which clearly (and publicly) document the clocks,
+we've gotten these wrong (or .dts authors just didn't follow the
+binding).
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a200000: #size-cells:0:0: 0 was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1672307866-25839-4-git-send-email-dh10.jung@samsung.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Rob
