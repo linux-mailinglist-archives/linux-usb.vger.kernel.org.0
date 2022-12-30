@@ -2,122 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80376597E6
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 12:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0046597FA
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 13:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbiL3Lyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Dec 2022 06:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
+        id S234828AbiL3MGG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Dec 2022 07:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiL3Lyo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 06:54:44 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C023A62F9
-        for <linux-usb@vger.kernel.org>; Fri, 30 Dec 2022 03:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672401283; x=1703937283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pk09DT4LBV2+P4GS3To8QDzTKwLs5bV75eKCUbnNuOw=;
-  b=HdFqDbfCX9GL5tk1qPqfP5QZ4YMLvp0CHjXnLBTMsFxISZs9av3CZvZE
-   +gXeWdj6wPXal5yqXX2SOfegWXu3O7XprI0yasE3S7o4FCT3divjIF6kj
-   Vy64KdHN9vbYw1HQHDhQjpEtoLSaLOHaHz3Lly/FjZ9EXUXlk3dTG6JM7
-   nK61fyGEt69GEj/0mRDRwhD2bHVaInVL/n25zUhI0rK3RjGi466da0fng
-   pSn310SDrXyN+ETb3Ln5ZLS1E9zU602acHBIg7Zm48zi5SJWaJvWQfa3X
-   eJoUupG5zim9v7z1xi3YSSZwAssnQoGjcMp3BHgMGNgGgXPUCogyo5N5C
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="300888884"
-X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
-   d="scan'208";a="300888884"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 03:54:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="777944501"
-X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
-   d="scan'208";a="777944501"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 30 Dec 2022 03:54:42 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id A88EAF8; Fri, 30 Dec 2022 13:55:13 +0200 (EET)
-Date:   Fri, 30 Dec 2022 13:55:13 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-Cc:     linux-usb@vger.kernel.org,
-        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
-Subject: Re: Possible problem with thunderbolt 4
-Message-ID: <Y67RoYvbRC6OgfOq@black.fi.intel.com>
-References: <b556f5ed-5ee8-9990-9910-afd60db93310@gmx.at>
- <Y6sBI+xrkQaWtQxo@black.fi.intel.com>
- <588ed5c7-864f-46b5-d7d7-af6c32ca2c52@gmx.at>
- <Y66vWYdLLAOG81+f@black.fi.intel.com>
- <c334eb1f-1130-04d7-e7a6-cce9a90fd2e8@gmx.at>
+        with ESMTP id S231328AbiL3MGE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 07:06:04 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51346D8A;
+        Fri, 30 Dec 2022 04:06:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1672401955;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=EwBEUtWQM+CIXSqRF+omnXUkb+ypVnL3yjnzwSrntUs=;
+    b=FuLbBcknLwS9BsNPXPu7AnkJVkRJDpZBWdIpjR2Cd9PREzRZJRA153ksJ6Kd4I2Mt4
+    e1T/PYVrPRmE5a0Uc2EjwQ3Ox1OklSzbjMY0cLP8kz1TUCYKJJD8U5De1J54m+sOBgH2
+    mtWjfyiimfvju5Jy/DO2wKLt7UB290Mx3w8fCWByUXbbSKrb0zBmHa3gle/vWuyVLeXI
+    Aw50xM7/GwubXhtI/MP/UoGRTG+7UnNyvyyNbyKv/1V0wYTw37HjcNzcrqfkyr0ghc7R
+    UMP7PprTgS4xJpzqgWVKgv0wH/yMRnPUbH9VzoojsDFNBAxb2lGf2NqEy6kfETH11HtX
+    UzdQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWwfOntQ=="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
+    with ESMTPSA id Yce349yBUC5qYxl
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 30 Dec 2022 13:05:52 +0100 (CET)
+Date:   Fri, 30 Dec 2022 13:05:51 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] phy: qcom-usb-hs: Add qcom,dp-manual-pullup logic
+Message-ID: <Y67UH0xfTPH0GN+S@gerhold.net>
+References: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
+ <20221229183410.683584-3-bryan.odonoghue@linaro.org>
+ <Y63uSgMdP4m6nvhL@gerhold.net>
+ <Y64AfHcUw192Pyr6@gerhold.net>
+ <6061938c-b830-2fe0-2f4d-368e34c33676@linaro.org>
+ <Y64CaOzWZXERrvkz@gerhold.net>
+ <cdcef656-1ae7-fe8a-a4dd-3547d6395b33@linaro.org>
+ <Y64Jgu2o6aJV4ggk@gerhold.net>
+ <da671da3-61f5-ce4d-05aa-76f3f6ae12cf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c334eb1f-1130-04d7-e7a6-cce9a90fd2e8@gmx.at>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <da671da3-61f5-ce4d-05aa-76f3f6ae12cf@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 12:38:27PM +0100, Christian Schaubschläger wrote:
-> Ok, setting CONFIG_USB4=n makes everything work as expected! Even
-> hotplugging the dock works fine.
+On Thu, Dec 29, 2022 at 11:38:04PM +0000, Bryan O'Donoghue wrote:
+> On 29/12/2022 21:41, Stephan Gerhold wrote:
+> > That is still good enough to replace qcom,dp-manual-pullup though.
+> 
+> But there's no requirement to tie USB_IN_x high if VBUS is not connected to
+> it.
+> 
 
-Yes but things like power management does not.
+I've yet to find any device where USB_IN is not connected in a usable way.
 
-> Now I've tried this: CONFIG_USB4=m and blacklist the thunderbolt
-> module (because disabling CONFIG_USB4 in general is not an option for
-> me (I guess?) There's probably hardware out there where the firmware
-> doesn't set up the PCIe tunnels. Then I need the linux thunderbolt
-> driver to do this I suppose).
+But as I said I leave it up to you - it would be nice to have a proper
+solution for devices where VBUS state cannot be determined at all. Those
+devices should be rare though so if &pm8916_usbin works in your case
+maybe the time would be better invested into other open problems right
+now. :)
 
-You must have CONFIG_USB4=n because that makes the Linux ACPI core not
-to negotiate software connection manager support. Blaclisting the
-Thunderbolt driver does not do that as that code is always built-in.
-
-> So with CONFIG_USB=m and blacklisting the thunderbolt module this
-> happens: the tunnel is there before and after linux (PXE works), but
-> in linux none of the devices that sit behind the PCIe tunnel (network,
-> external display) are there... that's strange, because I would have
-> expected that CONFIG_USB4=m + blacklist thunderbolt would be the same
-> as CONFIG_USB4=n. Which obviously isn't the case. I've attached lspci
-> output from either case.
-
-See above.
-
-> Is there any other option to decide at boottime whether or not to use
-> the USB4 driver (besides using two different kernels)?
-
-No but this is not the "final" solution - just an experiment.
-
-Okay so we have this:
-
-- When both Linux and Windows uses the same firmware connection manager
-  all work.
-
-- If you install Windows 11 (or whatever the fresh one is that actually
-  supports USB4 and software connection manager) you end up in the
-  exact same situation.
-
-Can you try following:
-
-1. Go back to CONFIG_USB4=m
-2. Boot the system up
-3. Check that the PCIe tunneling is up and things work as expected
-4. Unplug the dock
-5. Unload the Thunderbolt driver
-
-  # rmmod thunderbolt
-
-6. Plug the dock back
-7. Soft reboot the system
-
-Does this make the PXE boot see the connected device?
+Thanks,
+Stephan
