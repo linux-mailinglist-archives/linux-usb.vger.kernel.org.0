@@ -2,85 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67BD65959B
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 08:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A963D659603
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 08:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbiL3HLn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Dec 2022 02:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
+        id S234688AbiL3H6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Dec 2022 02:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiL3HLl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 02:11:41 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894E2A452;
-        Thu, 29 Dec 2022 23:11:39 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BU5sFsr026256;
-        Fri, 30 Dec 2022 07:10:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=FwhgSt+H12LokA09wY+Ljn6TvSwI6v7ncaNm3O6cwro=;
- b=J/mcI0k/6vjX9FhdSxYJYSt40LPnfc/hcIYWxD2v846nVodvXcdDdlw/duoiE3ywlZHb
- YGHRzGwgkoCFOjTzsqfMbLxRtVczH6NpeAB+gn2OH5gHj4/ukVXE5LJff+fvwEeUcE4t
- HsWLiWsBsU/amsSjsiIpAnt2pWLHyViBBAwZa7AU8nK5m2wgDzUMIJfnSXAv4oMeJgtG
- h5n2TQPFNWOXWZPeJ4LP3HyBS9aVAyBp/lRmptm7trMZpPZkbb+9uN+ONQF7WNT3ZllT
- zYX9PRSoeXB2uHjuvAICTBNKG/6SsAwxn6BwngGLBgPzaLThWlUGZhnzcT03N4GWVNPq 5A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ms2nra9nb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Dec 2022 07:10:46 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BU7AcoQ007450
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Dec 2022 07:10:38 GMT
-Received: from [10.110.125.32] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 29 Dec
- 2022 23:10:37 -0800
-Message-ID: <ec632e64-2d9c-3f71-4fe7-e1c6acb81393@quicinc.com>
-Date:   Thu, 29 Dec 2022 23:10:36 -0800
+        with ESMTP id S234613AbiL3H6p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 02:58:45 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C71EBEB
+        for <linux-usb@vger.kernel.org>; Thu, 29 Dec 2022 23:58:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
+        t=1672387117; bh=gf4O4g+fzkX1oHFf35aiuowEUPfgs+XrCZBRd3P6/1g=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=W6G00bimMHAt9BQtk/OLL1MFkQ3ZUAhvhTKwnTQTE2t+JtEZC7SuEwogDgl8RDNye
+         rwLaHahvZO0i6MIalDzKqrHC7zazO18DPU1JE/5KbF2g6R/wtIIaaiEzMeO1s7WOmJ
+         HPNscHtKpFruiMDauKFT7w90QiLeIEQ1IRmlGGpyEhcYKCpbBUCU5Dp3cJQhellzHE
+         svqWhuGfsiorTH/sHp/fYqjxnvY95Z7WuJyDgMlhwEQsf2EHDoFcLVbggnwS/S60l9
+         IH5gn7QuN2RaTxStdwyXy06KhbLAauxz7NctAoMn/Hce+89yzJe6E7B2NCoFkUQ8qm
+         2sbeetHhkekXA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([81.189.232.75]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MybGX-1ouqvJ3dYT-00z0cc; Fri, 30
+ Dec 2022 08:58:36 +0100
+Message-ID: <588ed5c7-864f-46b5-d7d7-af6c32ca2c52@gmx.at>
+Date:   Fri, 30 Dec 2022 08:57:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 04/14] sound: usb: card: Introduce USB SND vendor op
- callbacks
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Possible problem with thunderbolt 4
 Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>, Oliver Neukum <oneukum@suse.com>
-CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-5-quic_wcheng@quicinc.com>
- <80f92635-6d14-8ff3-17ac-de2e5b977947@suse.com> <87lemqxpet.wl-tiwai@suse.de>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <87lemqxpet.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Eb4Q5qdFJpjmSWS6gnMU0-nbVChD5pAE
-X-Proofpoint-GUID: Eb4Q5qdFJpjmSWS6gnMU0-nbVChD5pAE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-30_03,2022-12-29_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- impostorscore=0 malwarescore=0 phishscore=0 mlxlogscore=682 spamscore=0
- lowpriorityscore=0 adultscore=0 priorityscore=1501 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212300061
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
+References: <b556f5ed-5ee8-9990-9910-afd60db93310@gmx.at>
+ <Y6sBI+xrkQaWtQxo@black.fi.intel.com>
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+In-Reply-To: <Y6sBI+xrkQaWtQxo@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Ds6ef/dtfZLgwx5nIP3JETWCiwNWv9bfU7Hzc5PEKXqRZMKNz9A
+ 2xpY9ZoP5CQ3yNTRiuEuu8Ome3IpmEfhkLJg29Jm/1prkSiH2awhLh4V4WFjsycE9JT9Lai
+ iIPhCB/24gWB89mY6Qwldl44vYp9gXWAO5kpRhlQ8Odvq6Bh5OKGmgvViTAgBp8b+ozPz75
+ HahmPchnqSR4/QHlOH6gA==
+UI-OutboundReport: notjunk:1;M01:P0:bk16gMBOQso=;ztTSRhuyUl6tdIE9Pf1apWyZVcr
+ VmvMZZ9G7j1plhUVzJ/PXixNj0AAYR2BKufPQEw53qrvlmMFmAw4/0adgyzNzqNa4enKgO117
+ EogPjbu2w0Ks+SzyXpQW2QNIQGe4b/C6fk1+dF8OJE4SCnPveOYSITDuLh1RAP+l62xyBcP1g
+ ENauMbibYQ1PuJssacOLxvzLsP/U9JqJob28bcnqclI8JjhcJywBzl3B8udeEpSuPf3rTV7A/
+ BD+tcbY6wiAQXeVhHIr/tGCmGwPOtLXt7wgjk1CBr79TGZXztq1jwTHzaa4Q/9ljtfPyKTw7E
+ z25JvFfIpdqJu6sd/CevEuThWiG6y0MN75DVojeCHmUuqI6kNoWTh2u9Jk02IDBHxpa3leBwj
+ 5H+X2L4xUeKsUMS/ch0TUmwEkA+QpAo0veNCDWlYLJsiwaCyHH6bp1HO4Wrf7qWLJcg+dnR2t
+ HINsVOj3ZXDvn1ZP5J0YY1+AUsMsSST8/D6iQz2nVo122CxtQWBCBurn4Z/1GVD4MXwENYkbc
+ 1xlKQ+B+xVspmwsXqeSYDeKQySAEECI9D52HjizeQwnzhELnHHbWknoKL1kINu9eVaw3wwKog
+ Mn+gACFY+1LqaF0U3L1ofRXOR/hZqGNWNbsR3vdOg8M4xvQkyTZJQCbcJbiyM5kjQjs9rbTV0
+ FHO+0v8kkM9DgnAB6B/w3p0C2nOGBn9nLMSOOMH7jDTiJkmfmnRKkKIdYJpyelRFPjwwJFZNi
+ GqmnRitVYCbaBjnPl4VN0trCuq81e/6tD1GJJgYN9rDzGZqz2sjlL5uCDKIYCXKjwPw8ROzBv
+ yRzBkkgq4Te2K0Hcla4h+EKEdonUaYdQRH8kn+EAaSkYuFzrNMBKnsI7VeKJLHh5Tufj1TETP
+ gFO/3eW/o0lDu1z9m01mZ8QkbS293FkXUf2D5m4u0Ksiop8ZccpgfxpgomXYV5xNGduIpFNi9
+ utvcdLggeCw5lFWHx58Rkj0N/X0=
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,48 +75,88 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On 12/29/2022 6:20 AM, Takashi Iwai wrote:
-> On Thu, 29 Dec 2022 14:49:21 +0100,
-> Oliver Neukum wrote:
+Am 27.12.22 um 15:28 schrieb Mika Westerberg:
+> Hi,
+>
+> On Fri, Dec 23, 2022 at 12:24:35PM +0100, Christian Schaubschl=C3=A4ger =
+wrote:
+>> Hello list,
 >>
+>> I'm having an issue which I guess might be related to thunderbolt 4.
 >>
+>> I have an HP EliteBook 630 G9 notebook and an HP Thunderbolt Dock G4, b=
+oth with Thunderbolt 4. I run linux on it and need a working network inter=
+face (the one on the dock) in the UEFI firmware for PXE boot.
 >>
->> On 24.12.22 00:31, Wesley Cheng wrote:
->>> Allow for different vendors to be notified on USB SND connect/disconnect
->>> seqeunces.  This allows for vendor USB SND modules to properly initialize
->>> and populate internal structures with references to the USB SND chip
->>> device.
+>> When I come from a cold boot, the thunderbolt connection works well bot=
+h in the UEFI firmware (I can do PXE), and also later in linux. After a re=
+boot from linux, the dock disappears from the PCI bus and is no longer acc=
+essible in the UEFI firmware. Hence a PXE boot is not possible. When I the=
+n boot into linux again, the dock is there again, working just fine.
 >>
->> Hi,
+>> On my machine the thunderbolt controller has the PCI address 0000.00.0d=
+.2, and the PCI bridge to the dock has the address 0000.00.07.0.
+>> I've attached the PCI config spaces of these two devices as they are se=
+en from the UEFI firmeware from two different states:
 >>
->> this raises a design question. If the system is suspending or, worse,
->> hibernating, how do you make sure the offloader and the device are
->> suspended in the correct order?
->> And what happens if you need to go into reset_resume() when resuming?
+>>  1. When the machine comes from a cold boot. In that state the UEFI fir=
+mware sees the dock and all devices on the dock.
+>>  2. When the machine comes from a linux reboot. In that state the dock =
+is not visible on the PCI bus.
+>>
+>> The config spaces of the mentioned two devices are different in the two=
+ states.
+>>
+>> Note: once the machine is in state 2, it is necessary to remove the pow=
+er supply from the dock (or physically disconnect and re-connect the thund=
+erbolt cable) in order to get it working in UEFI again. That's what "cold =
+boot" above actually means.
+>>
+>> Also, when the machine is in state 2 and boots into Windows the dock do=
+es not not become visible on the PCI bus. Interestingly, after a subsequen=
+t reboot from Windows it does become avialable in UEFI again (no need to d=
+isconnect the power supply or thunderbolt cable in this case!!)
+>>
+>> So I guess the linux kernel does something on shutdown (or misses to do=
+ something) that prevents the dock to wake up again after the reboot in th=
+e UEFI firmware.
+>>
+>> I'm observing this on all kernels I've tried (5.18.x, 6.0.x, 6.1.x; als=
+o when I run a vanilla Ubuntu 22.04 this happens); the logs below are from=
+ a pre-release kernel from today (which will be 6.2-rc1 in a few days). I'=
+ve also experimented with some powersaving related settings on the kernel =
+command line, unfortunately without success.
+>>
+>> Can anyone confirm this behaviour?
+> First of all can you check if you are running Intel or Microsoft driver
+> for the Thunderbolt controller? It can be seen in Device Manager
+> somehow. It is possible that Windows and Linux use different "connection
+> manager" so that explains why there is a difference in behaviour.
+The TB contoller in Windows uses the Intel driver, the dock itself a drive=
+r from Microsoft.
 
-It may depend on how the offloading is implemented, but we do have a 
-mechanism to force the audio stream off from the qc_usb_audio_offload. 
-Regardless of if the UDEV is suspended first, or the USB backend, as 
-long as we ensure that the offloading is disabled before entering 
-suspend, I think that should be sufficient.  I would need to add some 
-suspend handling in the offload driver to issue the command to stop the 
-offloading.
+> In case of Linux this is software connection manager so it is Linux that
+> does all the tunneling. In case of Windows it may be also firmware
+> connection manager so it is handled in the firmware (and this might
+> explain why it magically works after rebooting from Windows).
+>
+> In general this depends on the BIOS setting whether there is PCIe tunnel
+> or not. Typically there is something like "boot from Thunderbolt" or
+> similar option that turns it on so I suggest checking if you have
+> such option.
+Unfortunately there is no such BIOS setting on this machine...
 
-As for the resume path, is there a concern if either device is resumed 
-first?  The only scenario where maybe it could cause some mishandling is 
-if the USB backend is resumed before the offload driver is 
-connected/resumed.  This means that the userspace ALSA would have access 
-to the platform sound card, and could potentially attempt to route audio 
-streams to it.  I think in worst case, if we were going through a 
-reset_resume() we would end up rejecting that request coming from the 
-audio DSP to enable the stream.  However, userspace entities would be 
-resumed/unfrozen last, so not sure if that would ever be a problem.
+But as described above: when the laptop comes from a cold boot (with power=
+ supply removed before, etc.), then there _is_ a PCIe tunnel in the UEFI f=
+irmware; so the firmware can do that. Only after a reboot from Linux somet=
+hing prohibits the firmware from re-establishing the tunnel again. And I'm=
+ not sure if this is a kernel issue or a firmware issue, but it clearly ma=
+kes a valid use case (pxe boot after linux) impossible.
 
-The reset_resume() path is fine.  Bus reset is going to cause a 
-disconnect() callback in the offload driver, in which we already have 
-the proper handling for ensuring the offload path is halted, and we 
-reject any incoming stream start requests.
+Can I do anything to bring more light to this problem?
 
-Thanks
-Wesley Cheng
+Thanks and best regards,
+Christian
+
+
 
