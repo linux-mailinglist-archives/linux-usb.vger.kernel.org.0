@@ -2,141 +2,531 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A8F659AD5
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 18:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A60659B19
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 18:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbiL3RJH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Dec 2022 12:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S235374AbiL3RvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Dec 2022 12:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiL3RJF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 12:09:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0337114011;
-        Fri, 30 Dec 2022 09:09:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95AB561B0C;
-        Fri, 30 Dec 2022 17:09:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D798AC433D2;
-        Fri, 30 Dec 2022 17:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672420144;
-        bh=GvOiKqNHF1H13zIfDzDktRmecgOy4gbqAWyr1vFM/84=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Pa2dtf4MfixEfHN8xynX38q0GPGJHp0VN/zKLX/gGc1+pO+MPbw56VNkUFU3lBg9q
-         uK4rcvqNnC4iWfRvp+Nvc2zrw4OI48KnOUVk93nnXmwGuS70rQJmmSAtN9zSWBqfjl
-         yie+H8PXjJY9Ax9Yc9eJdgqM6Y/yE79v8yBsMUp6XtUjQ+RfltNqjF4JjTsb4TkQCt
-         KdbkKQ9JF/5FR4hoRpROuWiYP5yp3h6hunc9C+2/lxeRWqiWcspsZfIKNjLdK/PP71
-         2fJmYLNEzZt1Dr8UWy7G8g/ilV8rcjgx+qdf0/Cl7Y3SIIQVPCCvNDAlFujz7zytsT
-         zJPYBtdTa76xw==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains
- property
-In-Reply-To: <CAL_Jsq+viP_aY3n378WC7WpxZFnsTc-vKjW9Ojvcy0Ef-z09Ng@mail.gmail.com>
-References: <20221219191038.1973807-1-robh@kernel.org>
- <87edsua5q4.fsf@balbi.sh>
- <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
- <878riy9ztm.fsf@balbi.sh> <20221223235712.h54lggnjjuu3weol@synopsys.com>
- <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com>
- <87o7rlffi7.fsf@balbi.sh>
- <CAL_Jsq+viP_aY3n378WC7WpxZFnsTc-vKjW9Ojvcy0Ef-z09Ng@mail.gmail.com>
-Date:   Fri, 30 Dec 2022 19:08:58 +0200
-Message-ID: <87k028g6ol.fsf@balbi.sh>
+        with ESMTP id S229812AbiL3RvP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 12:51:15 -0500
+Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087D7F1C
+        for <linux-usb@vger.kernel.org>; Fri, 30 Dec 2022 09:51:11 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id BJXBp7AKRkLMzBJXBpolGO; Fri, 30 Dec 2022 18:51:10 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 30 Dec 2022 18:51:10 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <7615b2ac-a849-94a7-94a5-fb1c2075d7db@wanadoo.fr>
+Date:   Fri, 30 Dec 2022 18:51:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: gadget: add WebUSB support
+Content-Language: fr
+To:     jgilab@gmail.com
+References: <Y68Yy26sQgV6QKxV@jo-einhundert>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+In-Reply-To: <Y68Yy26sQgV6QKxV@jo-einhundert>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Le 30/12/2022 à 17:58, Jó Ágila Bitsch a écrit :
+> There is a custom (non-USB IF) extension to the USB standard:
+> 
+> https://wicg.github.io/webusb/
+> 
+> This specification is published under the W3C Community Contributor
+> Agreement, which in particular allows to implement the specification
+> without any royalties.
+> 
+> The specification allows USB gadgets to announce an URL to landing
+> page and describes a Javascript interface for websites to interact
+> with the USB gadget, if the user allows it. It is currently
+> supported by Chromium-based browsers, such as Chrome, Edge and
+> Opera on all major operating systems including Linux.
+> 
+> This patch adds optional support for Linux-based USB gadgets
+> wishing to expose such a landing page.
+> 
+> During device enumeration, a host recognizes that the announced
+> USB version is at least 2.01, which means, that there are BOS
+> descriptors available. The device than announces WebUSB support
+> using a platform device capability. This includes a vendor code
+> under which the landing page URL can be retrieved using a
+> vendor-specific request.
+> 
+> Usage is modeled after os_desc descriptors:
+> echo 1 > webusb/use
+> echo "https://www.kernel.org" > webusb/landingPage
+> 
+> lsusb will report the device with the following lines:
+>    Platform Device Capability:
+>      bLength                24
+>      bDescriptorType        16
+>      bDevCapabilityType      5
+>      bReserved               0
+>      PlatformCapabilityUUID    {3408b638-09a9-47a0-8bfd-a0768815b665}
+>        WebUSB:
+>          bcdVersion    1.00
+>          bVendorCode      0
+>          iLandingPage     1 https://www.kernel.org
+> 
+> Signed-off-by: Jó Ágila Bitsch <jgilab-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
 
 Hi,
 
-Rob Herring <robh@kernel.org> writes:
->> >> > >> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
->> >> > >> >  1 file changed, 3 insertions(+)
->> >> > >> >
->> >> > >> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> >> > >> > index 6d78048c4613..bcefd1c2410a 100644
->> >> > >> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> >> > >> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> >> > >> > @@ -91,6 +91,9 @@ properties:
->> >> > >> >          - usb2-phy
->> >> > >> >          - usb3-phy
->> >> > >> >
->> >> > >> > +  power-domains:
->> >> > >> > +    maxItems: 1
->> >> > >>
->> >> > >> AFAICT this can be incorrect. Also, you could have Cc the dwc3
->> >> > >> maintainer to get comments.
->> >>
->> >> Felipe is correct. We have 2 power-domains: Core domain and PMU.
->> >
->> > Power management unit? Performance management unit?
->> >
->> > That doesn't change that the rk3399 is 1 and we're stuck with it. So I
->> > can say 1 or 2 domains, or we add the 2nd domain when someone needs
->> > it.
->>
->> Isn't the snps,dwc3.yaml document supposed to document dwc3's view of
->> the world? In that case, dwc3 expects 2 power domains. It just so
->> happens that in rk3399 they are fed from the same power supply, but
->> dwc3' still thinks there are two of them. No?
->
-> Yes. That is how bindings *should* be. However, RK3399 defined one PD
-> long ago and it's an ABI. So we are stuck with it. Everyone else put
+a few nits below.
 
-Are you confusing things, perhaps? DWC3, the block Synopsys licenses,
-has, as Thinh confirmed, 2 internal power domains. How OEMs (TI, Intel,
-Rockchip, Allwinner, etc) decide to integrate the IP into their systems
-is something different. That is part of the (so-called)
-wrapper. Different integrators will wrap Synopsys IP however they see
-fit, as long as they can provide a suitable translation layer between
-Synopsys own view of the world (its own interconnect implementation, of
-which there are 3 to choose from, IIRC) and the rest of the SoC.
+CJ
 
-Perhaps what RK3399 did was provide a single power domain at the wrapper
-level that feeds both of DWC3's own power domains, but DWC3 itself still
-has 2 power domains, that's not something rockchip can change without
-risking the loss of support from Synopsys, as it would not be Synopsys
-IP anymore.
+> ---
+>   Documentation/ABI/testing/configfs-usb-gadget |  13 ++
+>   drivers/usb/gadget/composite.c                | 102 +++++++++++--
+>   drivers/usb/gadget/configfs.c                 | 139 ++++++++++++++++++
+>   include/linux/usb/composite.h                 |   6 +
+>   include/uapi/linux/usb/ch9.h                  |  33 +++++
+>   5 files changed, 283 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/configfs-usb-gadget b/Documentation/ABI/testing/configfs-usb-gadget
+> index b7943aa7e997..8399e0f0ed1c 100644
+> --- a/Documentation/ABI/testing/configfs-usb-gadget
+> +++ b/Documentation/ABI/testing/configfs-usb-gadget
+> @@ -143,3 +143,16 @@ Description:
+>   		qw_sign		an identifier to be reported as "OS String"
+>   				proper
+>   		=============	===============================================
+> +
+> +What:		/config/usb-gadget/gadget/webusb
+> +Date:		Dec 2022
+> +KernelVersion:	6.2
+> +Description:
+> +		This group contains "WebUSB" extension handling attributes.
+> +
+> +		=============	===============================================
+> +		use		flag turning "WebUSB" support on/off
+> +		bcdVersion	bcd WebUSB specification version number
+> +		b_vendor_code	one-byte value used for custom per-device
+> +		landing_page	UTF-8 encoded URL of the device's landing page
+> +		=============	===============================================
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> index 403563c06477..937695dc5366 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/device.h>
+>   #include <linux/utsname.h>
+>   #include <linux/bitfield.h>
+> +#include <linux/uuid.h>
+>   
+>   #include <linux/usb/composite.h>
+>   #include <linux/usb/otg.h>
+> @@ -713,14 +714,16 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>   	 * A SuperSpeed device shall include the USB2.0 extension descriptor
+>   	 * and shall support LPM when operating in USB2.0 HS mode.
+>   	 */
+> -	usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> -	bos->bNumDeviceCaps++;
+> -	le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
+> -	usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
+> -	usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> -	usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
+> -	usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
+> -					    USB_BESL_SUPPORT | besl);
+> +	if (cdev->gadget->lpm_capable) {
+> +		usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> +		bos->bNumDeviceCaps++;
+> +		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
+> +		usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
+> +		usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> +		usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
+> +		usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
+> +							USB_BESL_SUPPORT | besl);
+> +	}
+>   
+>   	/*
+>   	 * The Superspeed USB Capability descriptor shall be implemented by all
+> @@ -821,6 +824,41 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>   		}
+>   	}
+>   
+> +	/*
+> +	 * Following the specifaction at:
+> +	 * https://wicg.github.io/webusb/#webusb-platform-capability-descriptor
+> +	 */
+> +	if (cdev->use_webusb) {
+> +		struct usb_webusb_cap_descriptor *webusb_cap;
+> +		/*
+> +		 * little endian PlatformCapablityUUID for WebUSB:
+> +		 * 3408b638-09a9-47a0-8bfd-a0768815b665
+> +		 */
+> +#define WEBUSB_UUID UUID_INIT(0x38b60834, 0xa909, 0xa047, \
+> +			      0x8b, 0xfd, 0xa0, 0x76, 0x88, 0x15, 0xb6, 0x65)
+> +		uuid_t webusb_uuid = WEBUSB_UUID;
+> +
+> +		webusb_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> +		bos->bNumDeviceCaps++;
+> +
+> +		le16_add_cpu(&bos->wTotalLength, USB_DT_WEBUSB_SIZE);
+> +		webusb_cap->bLength = USB_DT_WEBUSB_SIZE;
+> +		webusb_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> +		webusb_cap->bDevCapabilityType = USB_PLAT_DEV_CAP_TYPE;
+> +		webusb_cap->bReserved = 0;
+> +		export_uuid(webusb_cap->UUID, &webusb_uuid);
+> +		if (cdev->bcd_webusb_version != 0)
+> +			webusb_cap->bcdVersion = cpu_to_le16(cdev->bcd_webusb_version);
+> +		else
+> +			webusb_cap->bcdVersion = cpu_to_le16(0x0100);
+> +
+> +		webusb_cap->bVendorCode = cdev->b_webusb_vendor_code;
+> +		if (strnlen(cdev->landing_page, sizeof(cdev->landing_page)) > 0)
+> +			webusb_cap->iLandingPage = 1;
+> +		else
+> +			webusb_cap->iLandingPage = 0;
+> +	}
+> +
+>   	return le16_to_cpu(bos->wTotalLength);
+>   }
+>   
+> @@ -1744,7 +1782,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>   					cdev->desc.bcdUSB = cpu_to_le16(0x0210);
+>   				}
+>   			} else {
+> -				if (gadget->lpm_capable)
+> +				if (gadget->lpm_capable || cdev->use_webusb)
+>   					cdev->desc.bcdUSB = cpu_to_le16(0x0201);
+>   				else
+>   					cdev->desc.bcdUSB = cpu_to_le16(0x0200);
+> @@ -1779,7 +1817,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>   			break;
+>   		case USB_DT_BOS:
+>   			if (gadget_is_superspeed(gadget) ||
+> -			    gadget->lpm_capable) {
+> +			    gadget->lpm_capable || cdev->use_webusb) {
+>   				value = bos_desc(cdev);
+>   				value = min(w_length, (u16) value);
+>   			}
+> @@ -2013,6 +2051,50 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>   			goto check_value;
+>   		}
+>   
+> +		/*
+> +		 * webusb descriptor handling, following:
+> +		 * https://wicg.github.io/webusb/#device-requests
+> +		 */
+> +		#define WEBUSB_GET_URL 2
+> +		if (cdev->use_webusb &&
+> +		    (ctrl->bRequestType & USB_TYPE_VENDOR) &&
+> +			ctrl->wIndex == WEBUSB_GET_URL &&
+> +			ctrl->bRequest == cdev->b_webusb_vendor_code) {
+> +			/*
+> +			 * specification of the url descriptor in WebUSB:
+> +			 * https://wicg.github.io/webusb/#webusb-descriptors
+> +			 */
+> +			u8				*buf;
+> +			unsigned int	schema_http;
+> +			unsigned int	schema_https;
+> +			unsigned int	landing_page_length;
+> +
+> +			buf = cdev->req->buf;
+> +			#define WEBUSB_URL 3
+> +			buf[1] = WEBUSB_URL;
+> +
+> +			landing_page_length = strnlen(cdev->landing_page, 252);
+> +			schema_https = (strncmp("https://", cdev->landing_page, 8) == 0);
+> +			schema_http = (strncmp("http://", cdev->landing_page, 7) == 0);
+> +			if (schema_https) {
+> +				buf[2] = 0x01;
+> +				memcpy(buf+3, cdev->landing_page+8, landing_page_length-8);
+> +				buf[0] = landing_page_length - 8 + 3;
+> +			} else if (schema_http) {
+> +				buf[2] = 0x00;
+> +				memcpy(buf+3, cdev->landing_page+7, landing_page_length-7);
+> +				buf[0] = landing_page_length - 7 + 3;
+> +			} else {
+> +				buf[2] = 0xFF;
+> +				memcpy(buf+3, cdev->landing_page, landing_page_length);
+> +				buf[0] = landing_page_length + 3;
+> +			}
+> +
+> +			value = buf[0];
+> +
+> +			goto check_value;
+> +		}
+> +
+>   		VDBG(cdev,
+>   			"non-core control req%02x.%02x v%04x i%04x l%d\n",
+>   			ctrl->bRequestType, ctrl->bRequest,
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 96121d1c8df4..0c1a78d9b5a0 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -39,6 +39,7 @@ struct gadget_info {
+>   	struct config_group configs_group;
+>   	struct config_group strings_group;
+>   	struct config_group os_desc_group;
+> +	struct config_group webusb_group;
+>   
+>   	struct mutex lock;
+>   	struct usb_gadget_strings *gstrings[MAX_USB_STRING_LANGS + 1];
+> @@ -50,6 +51,11 @@ struct gadget_info {
+>   	bool use_os_desc;
+>   	char b_vendor_code;
+>   	char qw_sign[OS_STRING_QW_SIGN_LEN];
+> +	bool			use_webusb;
+> +	u16				bcd_webusb_version;
+> +	u8				b_webusb_vendor_code;
+> +	char			landing_page[255];
+> +
+>   	spinlock_t spinlock;
+>   	bool unbind;
+>   };
+> @@ -780,6 +786,125 @@ static void gadget_strings_attr_release(struct config_item *item)
+>   USB_CONFIG_STRING_RW_OPS(gadget_strings);
+>   USB_CONFIG_STRINGS_LANG(gadget_strings, gadget_info);
+>   
+> +static inline struct gadget_info *webusb_item_to_gadget_info(
+> +		struct config_item *item)
+> +{
+> +	return container_of(to_config_group(item),
+> +			struct gadget_info, webusb_group);
+> +}
+> +
+> +static ssize_t webusb_use_show(struct config_item *item, char *page)
+> +{
+> +	return sprintf(page, "%d\n",
+> +			webusb_item_to_gadget_info(item)->use_webusb);
+> +}
 
-> power-domains in the parent because obviously the DWC3 has 0
-> power-domains.
+sysfs_emit()?
 
-How did you come to this conclusion?
+> +
+> +static ssize_t webusb_use_store(struct config_item *item, const char *page,
+> +				 size_t len)
+> +{
+> +	struct gadget_info *gi = webusb_item_to_gadget_info(item);
+> +	int ret;
+> +	bool use;
+> +
+> +	mutex_lock(&gi->lock);
+> +	ret = kstrtobool(page, &use);
+> +	if (!ret) {
+> +		gi->use_webusb = use;
+> +		ret = len;
+> +	}
+> +	mutex_unlock(&gi->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t webusb_bcdVersion_show(struct config_item *item, char *page)
+> +{
+> +	return snprintf(page, PAGE_SIZE, "0x%04x\n",
+> +					webusb_item_to_gadget_info(item)->bcd_webusb_version);
+> +}
 
->> It's a similar situation when you have multiple clock domains with the
->> same parent clock.
->
-> Yes, that's a common problem in clock bindings too. Not really
-> anything we can do about that other than require a detailed reference
-> manual with every binding and someone (me) reviewing the manual
-> against the binding. Neither of those are going to happen. Even on Arm
-> Primecell blocks which clearly (and publicly) document the clocks,
-> we've gotten these wrong (or .dts authors just didn't follow the
-> binding).
+sysfs_emit()?
 
-Heh
+> +
+> +static ssize_t webusb_bcdVersion_store(struct config_item *item,
+> +		const char *page, size_t len)
+> +{
+> +	struct gadget_info *gi = webusb_item_to_gadget_info(item);
+> +	u16 bcdVersion;
 
--- 
-balbi
+Why camelCase here?
+
+> +	int ret;
+
+no mutex_lock(&gi->lock); here?
+Other _store functions have.
+
+> +
+> +	ret = kstrtou16(page, 0, &bcdVersion);
+> +	if (ret)
+> +		return ret;
+> +	ret = is_valid_bcd(bcdVersion);
+> +	if (ret)
+> +		return ret;
+> +
+> +	gi->bcd_webusb_version = bcdVersion;
+> +	return len;
+> +}
+> +
+> +static ssize_t webusb_bVendorCode_show(struct config_item *item, char *page)
+> +{
+> +	return sprintf(page, "0x%02x\n",
+> +			webusb_item_to_gadget_info(item)->b_webusb_vendor_code);
+> +}
+
+sysfs_emit()?
+
+> +
+> +static ssize_t webusb_bVendorCode_store(struct config_item *item,
+> +					   const char *page, size_t len)
+> +{
+> +	struct gadget_info *gi = webusb_item_to_gadget_info(item);
+> +	int ret;
+> +	u8 b_vendor_code;
+> +
+> +	mutex_lock(&gi->lock);
+> +	ret = kstrtou8(page, 0, &b_vendor_code);
+> +	if (!ret) {
+> +		gi->b_webusb_vendor_code = b_vendor_code;
+> +		ret = len;
+> +	}
+> +	mutex_unlock(&gi->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t webusb_landingPage_show(struct config_item *item, char *page)
+> +{
+> +	return snprintf(page, PAGE_SIZE, "%s\n", webusb_item_to_gadget_info(item)->landing_page);
+> +}
+
+sysfs_emit()?
+
+> +
+> +static ssize_t webusb_landingPage_store(struct config_item *item, const char *page,
+> +				     size_t len)
+> +{
+> +	struct gadget_info *gi = webusb_item_to_gadget_info(item);
+> +	int l;
+> +
+> +	l = min(len, sizeof(gi->landing_page));
+> +	if (page[l - 1] == '\n')
+> +		--l;
+> +
+> +	mutex_lock(&gi->lock);
+> +	memcpy(gi->landing_page, page, l);
+> +	mutex_unlock(&gi->lock);
+> +
+> +	return len;
+> +}
+> +
+> +CONFIGFS_ATTR(webusb_, use);
+> +CONFIGFS_ATTR(webusb_, bVendorCode);
+> +CONFIGFS_ATTR(webusb_, bcdVersion);
+> +CONFIGFS_ATTR(webusb_, landingPage);
+> +
+> +static struct configfs_attribute *webusb_attrs[] = {
+> +	&webusb_attr_use,
+> +	&webusb_attr_bcdVersion,
+> +	&webusb_attr_bVendorCode,
+> +	&webusb_attr_landingPage,
+> +	NULL,
+> +};
+> +
+> +static struct config_item_type webusb_type = {
+> +	.ct_attrs	= webusb_attrs,
+> +	.ct_owner	= THIS_MODULE,
+> +};
+> +
+>   static inline struct gadget_info *os_desc_item_to_gadget_info(
+>   		struct config_item *item)
+>   {
+> @@ -1341,6 +1466,16 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+>   		gi->cdev.desc.iSerialNumber = s[USB_GADGET_SERIAL_IDX].id;
+>   	}
+>   
+> +	if (gi->use_webusb) {
+> +		cdev->use_webusb = true;
+> +		cdev->bcd_webusb_version = gi->bcd_webusb_version;
+> +		cdev->b_webusb_vendor_code = gi->b_webusb_vendor_code;
+> +		memcpy(cdev->landing_page, gi->landing_page,
+> +				strnlen(gi->landing_page,
+> +						min(sizeof(cdev->landing_page),
+> +							sizeof(gi->landing_page))));
+> +	}
+> +
+>   	if (gi->use_os_desc) {
+>   		cdev->use_os_string = true;
+>   		cdev->b_vendor_code = gi->b_vendor_code;
+> @@ -1605,6 +1740,10 @@ static struct config_group *gadgets_make(
+>   			&os_desc_type);
+>   	configfs_add_default_group(&gi->os_desc_group, &gi->group);
+>   
+> +	config_group_init_type_name(&gi->webusb_group, "webusb",
+> +			&webusb_type);
+> +	configfs_add_default_group(&gi->webusb_group, &gi->group);
+> +
+>   	gi->composite.bind = configfs_do_nothing;
+>   	gi->composite.unbind = configfs_do_nothing;
+>   	gi->composite.suspend = NULL;
+> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+> index 43ac3fa760db..44f90c37dda9 100644
+> --- a/include/linux/usb/composite.h
+> +++ b/include/linux/usb/composite.h
+> @@ -474,6 +474,12 @@ struct usb_composite_dev {
+>   	struct usb_configuration	*os_desc_config;
+>   	unsigned int			use_os_string:1;
+>   
+> +	/* WebUSB */
+> +	u16				bcd_webusb_version;
+> +	u8				b_webusb_vendor_code;
+> +	char			landing_page[255];
+> +	unsigned int			use_webusb:1;
+> +
+>   	/* private: */
+>   	/* internals */
+>   	unsigned int			suspended:1;
+> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+> index 31fcfa084e63..3a36550297bc 100644
+> --- a/include/uapi/linux/usb/ch9.h
+> +++ b/include/uapi/linux/usb/ch9.h
+> @@ -947,6 +947,39 @@ struct usb_ss_container_id_descriptor {
+>   
+>   #define USB_DT_USB_SS_CONTN_ID_SIZE	20
+>   
+> +/*
+> + * Platform Device Capability descriptor: Defines platform specific device
+> + * capabilities
+> + */
+> +#define	USB_PLAT_DEV_CAP_TYPE	5
+> +struct usb_plat_dev_cap_descriptor {
+> +	__u8  bLength;
+> +	__u8  bDescriptorType;
+> +	__u8  bDevCapabilityType;
+> +	__u8  bReserved;
+> +	__u8  UUID[16];
+> +} __attribute__((packed));
+> +
+> +#define USB_DT_USB_PLAT_DEV_CAP_SIZE	20
+> +
+> +/*
+> + * WebUSB Platform Capability descriptor: A device announces support for the
+> + * WebUSB command set by including the following Platform Descriptor in its
+> + * Binary Object Store
+> + * https://wicg.github.io/webusb/#webusb-platform-capability-descriptor
+> + */
+> +struct usb_webusb_cap_descriptor {
+> +	__u8  bLength;
+> +	__u8  bDescriptorType;
+> +	__u8  bDevCapabilityType;
+> +	__u8  bReserved;
+> +	__u8  UUID[16];
+> +	__u16 bcdVersion;
+> +	__u8  bVendorCode;
+> +	__u8  iLandingPage;
+> +} __attribute__((packed));
+> +#define USB_DT_WEBUSB_SIZE	(USB_DT_USB_PLAT_DEV_CAP_SIZE + 4)
+> +
+>   /*
+>    * SuperSpeed Plus USB Capability descriptor: Defines the set of
+>    * SuperSpeed Plus USB specific device level capabilities
+
