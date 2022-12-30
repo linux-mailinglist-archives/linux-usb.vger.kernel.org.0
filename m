@@ -2,127 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BF9659643
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 09:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80916659664
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Dec 2022 09:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234798AbiL3IWG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Dec 2022 03:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S234814AbiL3Inx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Dec 2022 03:43:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234785AbiL3IWC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 03:22:02 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26585FD25
-        for <linux-usb@vger.kernel.org>; Fri, 30 Dec 2022 00:22:00 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bt23so14202674lfb.5
-        for <linux-usb@vger.kernel.org>; Fri, 30 Dec 2022 00:22:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bAnyyfuNqQmQvEppT7FkugRphAcXPYjh2BEsSM40weQ=;
-        b=YDM3xsBL4hjlX2yRXGZOX3s9wdciMI5NPmFnk7jGnE730AtD0oiYK+qSxizUbaVvDK
-         pInWdU7XCDDiVJlleM7on5EdvIUVSCbwWcG6hD86b/bfCmMCOmTUqZNrCdZgGXXIpUxq
-         GNlXogZ3suBdnlp3nff56MST2hCXrsux7YmouR0HHK5Zg0WXar2bCKzISZgIXIdiaYVb
-         k0jyKfb+HWYD4xrjeV0FVa0GalqTjxRJsgvh3FYApdE2Tx+2pPiuXj+Pva9bKu9Q0sT9
-         oNDo2HOiTMFKy7QYvH32xK+q9PI+UGVmYTitT2u9z1xdTH39Jam786YJVgolMbuz+60E
-         kGtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bAnyyfuNqQmQvEppT7FkugRphAcXPYjh2BEsSM40weQ=;
-        b=eyxDWUQVRsrliQuVCaTzLKhuLGaOTdYxjxC/qP8v1SYH3ux/YWGnopLcxBqy2eqOES
-         oIyNpC2ulxbo6oA4SFALrxfoQnkh3oF1mZmvI2CnfV2D+J+g9UcJEbMtbyqPbMldgE/T
-         bEno7IUP+5iXtvdmu2LbpcHS3GeoHdw+vBD0qWrA9htBa1xBUmAD0y2Rf4ulXWlwOZaQ
-         h7hjKVTcJoY5bLI0YiUJub5VEg5bqyAhCop3EhcIyz2EKaP2VQNhlm56y1NywRDpM6I6
-         1aeZ9TL62Bc9wjn5BQBD3Lf/0b31J6n31z3jSVGdyrq7WjTHA75q48eUBY4iUik03m4O
-         Z8sQ==
-X-Gm-Message-State: AFqh2krMyApxfV27pVXOgN3IHeobJ4ae65v03cX1ByjYiJPxr5x+obE0
-        zQj8L1AI04B1mPGbYQBfutvvaQ==
-X-Google-Smtp-Source: AMrXdXs66FW6eSUKv7C5khMqMv0kG/5KJRDx92H/vnali+TbjLXc+HKnG3MgYcfaCLXO6/AqOwxwrA==
-X-Received: by 2002:a05:6512:3701:b0:4b5:9e59:8cdd with SMTP id z1-20020a056512370100b004b59e598cddmr9338231lfr.67.1672388518539;
-        Fri, 30 Dec 2022 00:21:58 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05651236cd00b004b57a810e09sm3398791lfs.288.2022.12.30.00.21.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 00:21:58 -0800 (PST)
-Message-ID: <b23c9e9d-35ea-ebc7-eb18-46fd0c9f3d45@linaro.org>
-Date:   Fri, 30 Dec 2022 09:21:56 +0100
+        with ESMTP id S230316AbiL3Inw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Dec 2022 03:43:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B4918E36;
+        Fri, 30 Dec 2022 00:43:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5FBB61A0D;
+        Fri, 30 Dec 2022 08:43:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D86AC433D2;
+        Fri, 30 Dec 2022 08:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672389830;
+        bh=oxPX55GSzrEg4Xut6zu5HPxj2Ni8vtV2mF93cd30lns=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=roDK69SfgitggRUmVYhS1zUe2p+s9s47eId7r7uDqmn66uyeyQS7KtAAgRa1c8/OO
+         Wl26PgoSJLBGjFFLhssXINx0Wz7ZM5ueJIvqltcGObsUGXUCLeDATQZn7lxDWsOdhu
+         qhtYL+x7ynbWQj5eCAE63YIAXkN7PQWC13jfG0fTgWagj0LhwbtzLAL/cBDw1YnLtg
+         Y+6jYrOa7UTTB3JkKQIpoV76+3fBhJc/JEa0BO/xvlpmBq+T4Z/54tou5W/e1VO/f8
+         qN+nan6MDluay6Hl3ME4LQmmYow8WdR5YalsUzIl8eCJe/e9PQ2fMenyJqIwmJe4ro
+         guFTz/dtfpyeQ==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Rob Herring <robh@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains
+ property
+In-Reply-To: <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com>
+References: <20221219191038.1973807-1-robh@kernel.org>
+ <87edsua5q4.fsf@balbi.sh>
+ <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+ <878riy9ztm.fsf@balbi.sh> <20221223235712.h54lggnjjuu3weol@synopsys.com>
+ <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com>
+Date:   Fri, 30 Dec 2022 10:43:44 +0200
+Message-ID: <87o7rlffi7.fsf@balbi.sh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: Add qcom,dp-manual-pullup
- description
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, vkoul@kernel.org, kishon@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
- <20221229183410.683584-2-bryan.odonoghue@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221229183410.683584-2-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29/12/2022 19:34, Bryan O'Donoghue wrote:
-> The original Qualcomm driver for the HighSpeed USB PHY contains a flag
-> which tells the driver that the controller and PHY do not connect to VBUS.
-> 
-> In this case an external IC such as a Type-C port manager supplies VBUS and
-> the VBUS signal is not routed to the SoC. This means we cannot detect the
-> presence or absence of VBUS and cannot take action based on it.
-> 
-> Document the downstream boolean qcom,dp-manual-pullup to allow the HS PHY
-> implement the necessary logic.
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-> index aa97478dd0161..c55a59df71ad0 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-> @@ -80,6 +80,13 @@ properties:
->              the address is offset from the ULPI_EXT_VENDOR_SPECIFIC address
->          - description: value
->  
-> +  qcom,dp-manual-pullup:
-> +    type: boolean
-> +    description: This flag indicates to the HS USB PHY driver that it should
 
-Drop references to the driver and rephrase it to describe the controller
-behavior/feature or the board layout/configuration, not the driver. The
-same applies to property name - "manual pullup" is describing driver,
-not hardware.
+Hi,
 
-> +                 enable or disable an internal pullup when powering on or
-> +                 powering off the HS PHY instead of toggling the value when VBUS
-> +                 is absent or present.
+Rob Herring <robh@kernel.org> writes:
+> On Fri, Dec 23, 2022 at 5:57 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>> > Rob Herring <robh@kernel.org> writes:
+>> > >> > The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
+>> > >> > allowed by the schema:
+>> > >> >
+>> > >> > usb@fe900000: Unevaluated properties are not allowed ('power-domains' was unexpected)
+>> > >> >
+>> > >> > Allow DWC3 nodes to have a single power-domains entry. We could instead
+>> > >> > move the power-domains property to the parent wrapper node, but the
+>> > >> > could be an ABI break (Linux shouldn't care). Also, we don't want to
+>> > >> > encourage the pattern of wrapper nodes just to define resources such as
+>> > >> > clocks, resets, power-domains, etc. when not necessary.
+>> > >> >
+>> > >> > Signed-off-by: Rob Herring <robh@kernel.org>
+>> > >> > ---
+>> > >> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
+>> > >> >  1 file changed, 3 insertions(+)
+>> > >> >
+>> > >> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> > >> > index 6d78048c4613..bcefd1c2410a 100644
+>> > >> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> > >> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> > >> > @@ -91,6 +91,9 @@ properties:
+>> > >> >          - usb2-phy
+>> > >> >          - usb3-phy
+>> > >> >
+>> > >> > +  power-domains:
+>> > >> > +    maxItems: 1
+>> > >>
+>> > >> AFAICT this can be incorrect. Also, you could have Cc the dwc3
+>> > >> maintainer to get comments.
+>>
+>> Felipe is correct. We have 2 power-domains: Core domain and PMU.
+>
+> Power management unit? Performance management unit?
+>
+> That doesn't change that the rk3399 is 1 and we're stuck with it. So I
+> can say 1 or 2 domains, or we add the 2nd domain when someone needs
+> it.
 
-Wrong indentation. It's two spaces.
+Isn't the snps,dwc3.yaml document supposed to document dwc3's view of
+the world? In that case, dwc3 expects 2 power domains. It just so
+happens that in rk3399 they are fed from the same power supply, but
+dwc3' still thinks there are two of them. No?
 
-> +
->  required:
->    - clocks
->    - clock-names
+It's a similar situation when you have multiple clock domains with the
+same parent clock.
 
-Best regards,
-Krzysztof
-
+-- 
+balbi
