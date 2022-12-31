@@ -2,125 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62F265A607
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Dec 2022 19:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D96F65A65C
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Dec 2022 20:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiLaSWE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 31 Dec 2022 13:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S232326AbiLaTrs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 31 Dec 2022 14:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLaSWC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Dec 2022 13:22:02 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2054.outbound.protection.outlook.com [40.107.21.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750FBE9E;
-        Sat, 31 Dec 2022 10:22:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GRlBJgCGwmK/H5GaRizGus+msZPZPvZH16uXKufUhH4z7t7px9A3AYUqoOdaVEEFBZlqxA0EZZq2cy6BwM7HI09NonGy4K0oar17nacIRM7dH/f76/P0Wpej/A7o8cOJ2dh+borU7j3rXq30DcrxoYUw1n+ai+gvw9qBoZsnr60apOHUuxVa0RN8mzDONJtJvEyuKSTLdve39nbgI6/FZRe1tPc/uqJ6jRIuz7IYIUrzRmPEFalkWTBNWb1qAoI2fq+WYrvOVcNiQdtRiDRD5+fINkt4aFm4vuG/kIkp5bhU47C91IPFD20xDRzEaTVf3QXPPJT0+XfU9CwJ5AgSbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6rRo+JQrGoK3uIZWzz2g+ubJhgB67RQeEJz9XWmZTns=;
- b=LjyXUfySPDVs41rdz1r3xtp9XZw3Wxd4A9eejCKXkxQm+SCBlHCx+PtY1/R3j5Yo2f5wYAzCoLWPn+/4S9ac4noaBeiAtXpo/52d+tP9VBhb6GhMngcIiwWwWOJQ0lJrohzop44BM9V2YACH8JSee7UiZSEzweA12FraKUaqtIhhg3n4VdAVXWL1lQzdRGnBO+yGFXeyuXj4RoOikvvfDGTWcc0ETsXX7aPzvom6TYGzeWhnSoApyllB9yUAtQPAn9S0hx+nluRqKKMuONFeK4y5aIvqHDnTLcQW1MIGzBz+fquWoTOrpNduA86E+7PMnNInsSqms8wuD7YE2C2JMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6rRo+JQrGoK3uIZWzz2g+ubJhgB67RQeEJz9XWmZTns=;
- b=zWYF4VzCJ8drogXbAaHugWuM/LVCa1XyZDYMxEDLJF+FMycZyQnnE2RTQ5LR3BWwFgHddWwobQ1RSN1kM9An5jameLhP2Fkm60AMX4LTgJq9LAPykxLr1xUvDyRnL8Lq1UxuuctR9/OF+ZmGS28axkA28schxzxU6NWgu5eW1k7Qx9Imv8qysbJ+z6xBXM+0Mo4WJPsK9zAvrJHbxnVnEC5JNbdio2gRpRmVYZrql4Rtsi8ZffcOFLfAZH1iLhnUMA1sH3OydkY2D1jEwHufRpbp0O1eugRAaD90h8FjzSs9wM60VdSD7QGct5V5+1r2N19yVBD+DpYmYct7Zsh8yw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by PAXPR04MB8224.eurprd04.prod.outlook.com (2603:10a6:102:1cb::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.18; Sat, 31 Dec
- 2022 18:21:59 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b%7]) with mapi id 15.20.5944.018; Sat, 31 Dec 2022
- 18:21:58 +0000
-Message-ID: <4a9bf157-af42-8247-8b66-0c66e425f9af@suse.com>
-Date:   Sat, 31 Dec 2022 19:21:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] usb: storage: de-quirk Seagate Expansion Portable Drive
- SRD00F1 [0bc2:2320]
-To:     =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <zenczykowski@gmail.com>,
-        =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221230215942.3241955-1-zenczykowski@gmail.com>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20221230215942.3241955-1-zenczykowski@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0029.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::16) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S229595AbiLaTrq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Dec 2022 14:47:46 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B102760E5
+        for <linux-usb@vger.kernel.org>; Sat, 31 Dec 2022 11:47:44 -0800 (PST)
+Received: (qmail 362789 invoked by uid 1000); 31 Dec 2022 14:47:43 -0500
+Date:   Sat, 31 Dec 2022 14:47:43 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1] usb: gadget:  add WebUSB support
+Message-ID: <Y7CR30YUj2znMDm7@rowland.harvard.edu>
+References: <7615b2ac-a849-94a7-94a5-fb1c2075d7db@wanadoo.fr>
+ <Y69F/5+DLAEqujXC@jo-einhundert>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PAXPR04MB8224:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4adf710d-80cb-43ee-6844-08daeb5be758
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CTwbc8VLs7t9JUkCh4PvRV+keVcdI3cJ04cxR15gfkdRzmqUBqzszMHwTCZjgtqICAMpNmamSsYflDZd+frrg7Xetz7suLG/u9xyBXG4IjxWs+6PjMM7PRau0v3uiBpzlRJ0Q4rHOJVZ+kJ+STb96rgYxIz8ADBBnlJ8jgQJdHo8Q98FE/JI1Tb/t/E2wGhc/7QuUIHwyp4b9K4q8kR7YQgU0HjeivtjsxIvoqp744AJQhNXFBl3Bpjd04X6CqU14WikeRErWXwpexgG9+ffnuPEHzSz/HVaVqs2k73c8SyZl1B0ehD9/iYylXuoLp3K3G9BdtnfmzvJ7PmIm4fqRGJpfy7tpIpQbDDWGNJdfklzX/tql5ScVnL1WzjqsHIQjI4TegWI6BbK+RnuSGcyyBxirkp2MMwZGElR9ihvi1AGpA7kyXjD+jm4x90JjTySiIpvmRxjgb0k5Bn5xlDHULHqLzVrlvxFKpzMKfZvUlqQQa5tlWkYJjeeeLa65S0h04odnqzupxtL1RSXa/pAnWwEqK1IKuoA+4rSGuMtGKh01dZwZiDILVUCLe3Bv55pDT5SBdxQZRna2RREz7B2JTHSN4y1cEoMyj8pQrOzIXC6s/43LJ2qeRWR+I/2r/RV/57+iQnC/ZyQCjAm18Ve6Cm2i39Aw36R9l45cXfofoNxbJYJOtS9GyiJwDFNaNMrIrUT3l7qjGqPck6Ufx2WDQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(396003)(366004)(136003)(39860400002)(451199015)(5660300002)(2906002)(4744005)(4326008)(8676002)(8936002)(31686004)(41300700001)(66476007)(478600001)(66556008)(316002)(66946007)(110136005)(54906003)(6486002)(2616005)(53546011)(186003)(6512007)(6506007)(83380400001)(38100700002)(31696002)(86362001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L3dIY0kydjBQL01iaUYwN3k1djl2TStuUzdrZkRnS2pnRlF2ZWl1cDRnUlN2?=
- =?utf-8?B?ekVJRnhkUXFWRlhrdDhDYWJlY1dXR2ZlcFVWajJaT2lKM2wzT2xFTkhPWUhS?=
- =?utf-8?B?WlFJL2hDVU9VZ2ptRURaeExQYkNaa1dheFU2eDhrYzhxeCs1V0hIZmdxOHp2?=
- =?utf-8?B?QnYzYy9EV1FzbGpsYVJ1UmFUWW1iOVpvc0t5dUQ3TEUxUFg4Lzl4cEkzR3k5?=
- =?utf-8?B?cEhSM0NqRTlIYko2MzkzT2xrTmVMVWt3RkZuUFM3ZnFscWppd3JkTTk1MSsv?=
- =?utf-8?B?a0gxWGRBWjUxSDRJRFNibzZhQW1EQ0krWFUyYXhxeEZnZ1JqRVpaWjg4cjIv?=
- =?utf-8?B?eUZxUHZHbDMxRzlHT1YzOVY5MlFVZ0tGdUhySWZFZmErRGdsZDJoUGczWHgx?=
- =?utf-8?B?TGZLNTgzTDJyNFBFUGlpc1pmQnBMckZsbGd1dzV5RTZPcmlMQWxFQktOZ3J0?=
- =?utf-8?B?ZXRob0JkcTVzanpCTldPTTNUYW14THdNTE5vRXFVR09lakowOWlmNmtKY1Bs?=
- =?utf-8?B?eDdHOWlJeFdyOWhmTkU1RTVlMUprYzgwODlPaDh0TjNndHZOUjRYUEJmekIy?=
- =?utf-8?B?Y0tJZnNhSG84d3UwaWZSWjIyaFpURHNRbzNIVTh4SEdqU1M4RVU4a2p1N1dz?=
- =?utf-8?B?aTRGS0N3SFhsSDdNdTAxd2hmWHpKc1huZ1BhcTFBYTcvUXREbDAvUm9JdGVC?=
- =?utf-8?B?cm1kZzh3d1lNaVJpaWp2d1E0YVRnTFNzbENvTyt2M2QxMktEUW1YZitRQlFV?=
- =?utf-8?B?NE51T20zeFVjempsYXNYOEoybWRnMTlVUEY0ZnY4dVhJUFRYdFZvMDhpVzhC?=
- =?utf-8?B?MUpFK0NsQlpCRGlqM1pWZm83dTRDM1NYams5bWl5b1dSZTJHYWRUY0pRMURH?=
- =?utf-8?B?QUI2WVFsWXhkbXNENm91cVpDNSs5dVh1NmZSWVBDc0Fjckt0YlR5UUVacGFW?=
- =?utf-8?B?Vi9zbU1VSnJEZDFPNjRuTlJpRUZnckhoTTRYQzB1T3R4L1lPZDEwaUViVDJJ?=
- =?utf-8?B?a3cwSkRMNjJZb0pJNDFnbWVUd1pVakpBYkdyNDE3NjExQWR6TzczMWg4dCsz?=
- =?utf-8?B?TkZBckJOLzg2RTdiZkhmUElNRkZUc3FWbnF0RzB0Sm01MjVPekpycHhUZkFx?=
- =?utf-8?B?Mkh4aG0zem51NVp6UVhLc1F4NmlXNDc5eVhMRzZQcDZKc0lEVXplTlA2TW5y?=
- =?utf-8?B?QW9GMlhMK1BhZ0VpZ0FnMGRZM3grdFdjbFlhdUEyMHpxTndnZkVWMDgzWU10?=
- =?utf-8?B?d3p6MG5BYWlrTFpFeVZQNTdNOU50YTAzeUJiOVp3NEVhVTNkUVZKTUlFcitV?=
- =?utf-8?B?dVVIanVQQzhHSWNwT3lOaXVFMDBuQ0tzdzR1Y245WUozYnpML2RyUCt0Q3No?=
- =?utf-8?B?dDl3SmlrUENEQlI2cThaaE9nRXhFcURWVE1NWU5VR3BiOUFISWVQQjdMWmJC?=
- =?utf-8?B?OWozV2JyRnhua3pFL0JTYmlESkhQYmorMmVCNE52SXMxa1pHdGY3Mjk3cnFv?=
- =?utf-8?B?TjdmeVZ4V1ZBdzJOUy9kenJCRHZ3RllpRy84U1pZdFNvY1M0M1o4eVQwM1Zw?=
- =?utf-8?B?S1BRc1k4UzVRYkZBcnlBTEVCRlEzOENkTVlLc2xDSy82cGl6MjVtK3VhZDUr?=
- =?utf-8?B?UitIVUZtK1huS1B1dG5nTjJEcFpIMFVzSnQ0aDNkZm8vVUdGWm5CbTlBQXY2?=
- =?utf-8?B?SUk4YnUrekZYQ3REZGhBUzJERGo1SG1ZU0RLaDgzOTVxNUJ6WHRrZzFhRXpu?=
- =?utf-8?B?WFNkcE14OVh0aklFN0RsYW5JZUtFUkxmRFhJTG1TK0QwcFgrVnQ4c2szQm1F?=
- =?utf-8?B?SU9RN0tJT0RGV1RqOHUydmQxU3hjMWRYRnJnQTg4ZHUrUDQvMVFFNXEwTjJo?=
- =?utf-8?B?OHN4RjlXWlRoRmRRV1pEQ3ZMdU9vWG85dU9JWm5zaW1BSUFDNmdmM0JXVkQx?=
- =?utf-8?B?K05RYzhFTXIrYTN6dzZ2ejJtdk5UMTFYQU9Ob0N6MEk0b1llYmxTcS9Kd0Y1?=
- =?utf-8?B?UFY2anp0UVY0QmF6dG9EL0FCdzlFYUxML0xnZTJJb3YzWktvRWt0bUVtMVdK?=
- =?utf-8?B?cnpqZmY5ZDUyNmlTM3RPV1pDa2dzUXU1M2tUNjRwRnF0YTRzM2FoN2IyOTJ2?=
- =?utf-8?B?K0U1R1NSNWFEbkRQM2VCeHdpY1hER0hHcGN6VWVmU0NiK0dxMVB3SE16cU1y?=
- =?utf-8?Q?q4Pd8Q4wkDbf+KpciYjFDjN/0wQlHZOeThcm9W5H5zz8?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4adf710d-80cb-43ee-6844-08daeb5be758
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2022 18:21:58.5665
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qLClrkOf/cK2QKplawhL0aCQbFKkBnTmf6bDkb7YTdPCPnItf1ZyCa28gT/pNLJ9Slt+9+aEtJrMKM5ukhhYPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8224
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y69F/5+DLAEqujXC@jo-einhundert>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,23 +39,307 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30.12.22 22:59, Maciej Å»enczykowski wrote:
+On Fri, Dec 30, 2022 at 09:11:43PM +0100, Jó Ágila Bitsch wrote:
+> There is a custom (non-USB IF) extension to the USB standard:
+> 
+> https://wicg.github.io/webusb/
+> 
+> This specification is published under the W3C Community Contributor
+> Agreement, which in particular allows to implement the specification
+> without any royalties.
+> 
+> The specification allows USB gadgets to announce an URL to landing
+> page and describes a Javascript interface for websites to interact
+> with the USB gadget, if the user allows it. It is currently
+> supported by Chromium-based browsers, such as Chrome, Edge and
+> Opera on all major operating systems including Linux.
+> 
+> This patch adds optional support for Linux-based USB gadgets
+> wishing to expose such a landing page.
+> 
+> During device enumeration, a host recognizes that the announced
+> USB version is at least 2.01, which means, that there are BOS
 
-> -	/* All Seagate disk enclosures have broken ATA pass-through support */
-> -	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
-> +	/* Most Seagate disk enclosures have broken ATA pass-through support */
-> +	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2 &&
-> +	    le16_to_cpu(udev->descriptor.idProduct) != 0x2320)
->   		flags |= US_FL_NO_ATA_1X;
->   
->   	usb_stor_adjust_quirks(udev, &flags);
+Where is this 2.01 value specified?  I don't remember seeing it in the 
+usual USBIF documents.
 
+> descriptors available. The device than announces WebUSB support
+> using a platform device capability. This includes a vendor code
+> under which the landing page URL can be retrieved using a
+> vendor-specific request.
+> 
+> Usage is modeled after os_desc descriptors:
+> echo 1 > webusb/use
+> echo "https://www.kernel.org" > webusb/landingPage
+> 
+> lsusb will report the device with the following lines:
+>   Platform Device Capability:
+>     bLength                24
+>     bDescriptorType        16
+>     bDevCapabilityType      5
+>     bReserved               0
+>     PlatformCapabilityUUID    {3408b638-09a9-47a0-8bfd-a0768815b665}
+>       WebUSB:
+>         bcdVersion    1.00
+>         bVendorCode      0
+>         iLandingPage     1 https://www.kernel.org
+> 
+> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+> ---
+>  Documentation/ABI/testing/configfs-usb-gadget |  13 ++
+>  drivers/usb/gadget/composite.c                | 102 ++++++++++--
+>  drivers/usb/gadget/configfs.c                 | 145 ++++++++++++++++++
+>  include/linux/usb/composite.h                 |   6 +
+>  include/uapi/linux/usb/ch9.h                  |  33 ++++
+>  5 files changed, 289 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/configfs-usb-gadget b/Documentation/ABI/testing/configfs-usb-gadget
+> index b7943aa7e997..8399e0f0ed1c 100644
+> --- a/Documentation/ABI/testing/configfs-usb-gadget
+> +++ b/Documentation/ABI/testing/configfs-usb-gadget
+> @@ -143,3 +143,16 @@ Description:
+>  		qw_sign		an identifier to be reported as "OS String"
+>  				proper
+>  		=============	===============================================
+> +
+> +What:		/config/usb-gadget/gadget/webusb
+> +Date:		Dec 2022
+> +KernelVersion:	6.2
+> +Description:
+> +		This group contains "WebUSB" extension handling attributes.
+> +
+> +		=============	===============================================
+> +		use		flag turning "WebUSB" support on/off
+> +		bcdVersion	bcd WebUSB specification version number
+> +		b_vendor_code	one-byte value used for custom per-device
+> +		landing_page	UTF-8 encoded URL of the device's landing page
+> +		=============	===============================================
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> index 403563c06477..937695dc5366 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/device.h>
+>  #include <linux/utsname.h>
+>  #include <linux/bitfield.h>
+> +#include <linux/uuid.h>
+>  
+>  #include <linux/usb/composite.h>
+>  #include <linux/usb/otg.h>
+> @@ -713,14 +714,16 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>  	 * A SuperSpeed device shall include the USB2.0 extension descriptor
+>  	 * and shall support LPM when operating in USB2.0 HS mode.
+>  	 */
+> -	usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> -	bos->bNumDeviceCaps++;
+> -	le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
+> -	usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
+> -	usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> -	usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
+> -	usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
+> -					    USB_BESL_SUPPORT | besl);
+> +	if (cdev->gadget->lpm_capable) {
 
-Hi,
+This change doesn't seem to be related to the purpose of this patch.
 
-I am sorry, but no. We cannot accomodate a list of of devices to be
-dequirked that is sure to grow in the future. Please define a flag for
-these devices.
+> +		usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> +		bos->bNumDeviceCaps++;
+> +		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
+> +		usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
+> +		usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> +		usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
+> +		usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
+> +							USB_BESL_SUPPORT | besl);
+> +	}
+>  
+>  	/*
+>  	 * The Superspeed USB Capability descriptor shall be implemented by all
+> @@ -821,6 +824,41 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * Following the specifaction at:
+> +	 * https://wicg.github.io/webusb/#webusb-platform-capability-descriptor
+> +	 */
+> +	if (cdev->use_webusb) {
+> +		struct usb_webusb_cap_descriptor *webusb_cap;
+> +		/*
+> +		 * little endian PlatformCapablityUUID for WebUSB:
+> +		 * 3408b638-09a9-47a0-8bfd-a0768815b665
+> +		 */
+> +#define WEBUSB_UUID UUID_INIT(0x38b60834, 0xa909, 0xa047, \
+> +			      0x8b, 0xfd, 0xa0, 0x76, 0x88, 0x15, 0xb6, 0x65)
+> +		uuid_t webusb_uuid = WEBUSB_UUID;
 
-	Regards
-		Oliver
+This #define seems to be pointless.  It is used nowhere but in the 
+immediately following line.  You might as well eliminate it.
+
+Or you might define this UUID at the same place in the header file 
+where you define struct usb_webusb_cap_descriptor.
+
+> +
+> +		webusb_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> +		bos->bNumDeviceCaps++;
+> +
+> +		le16_add_cpu(&bos->wTotalLength, USB_DT_WEBUSB_SIZE);
+> +		webusb_cap->bLength = USB_DT_WEBUSB_SIZE;
+> +		webusb_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> +		webusb_cap->bDevCapabilityType = USB_PLAT_DEV_CAP_TYPE;
+> +		webusb_cap->bReserved = 0;
+> +		export_uuid(webusb_cap->UUID, &webusb_uuid);
+> +		if (cdev->bcd_webusb_version != 0)
+> +			webusb_cap->bcdVersion = cpu_to_le16(cdev->bcd_webusb_version);
+> +		else
+> +			webusb_cap->bcdVersion = cpu_to_le16(0x0100);
+> +
+> +		webusb_cap->bVendorCode = cdev->b_webusb_vendor_code;
+> +		if (strnlen(cdev->landing_page, sizeof(cdev->landing_page)) > 0)
+> +			webusb_cap->iLandingPage = 1;
+> +		else
+> +			webusb_cap->iLandingPage = 0;
+> +	}
+> +
+>  	return le16_to_cpu(bos->wTotalLength);
+>  }
+>  
+> @@ -1744,7 +1782,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>  					cdev->desc.bcdUSB = cpu_to_le16(0x0210);
+>  				}
+>  			} else {
+> -				if (gadget->lpm_capable)
+> +				if (gadget->lpm_capable || cdev->use_webusb)
+>  					cdev->desc.bcdUSB = cpu_to_le16(0x0201);
+>  				else
+>  					cdev->desc.bcdUSB = cpu_to_le16(0x0200);
+> @@ -1779,7 +1817,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>  			break;
+>  		case USB_DT_BOS:
+>  			if (gadget_is_superspeed(gadget) ||
+> -			    gadget->lpm_capable) {
+> +			    gadget->lpm_capable || cdev->use_webusb) {
+>  				value = bos_desc(cdev);
+>  				value = min(w_length, (u16) value);
+>  			}
+> @@ -2013,6 +2051,50 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>  			goto check_value;
+>  		}
+>  
+> +		/*
+> +		 * webusb descriptor handling, following:
+> +		 * https://wicg.github.io/webusb/#device-requests
+> +		 */
+> +		#define WEBUSB_GET_URL 2
+
+A similar comment applies to this #define.  In this case it might make 
+sense to put all the WebUSB-related #defines in an appropriate header 
+file.
+
+> +		if (cdev->use_webusb &&
+> +		    (ctrl->bRequestType & USB_TYPE_VENDOR) &&
+> +			ctrl->wIndex == WEBUSB_GET_URL &&
+> +			ctrl->bRequest == cdev->b_webusb_vendor_code) {
+
+Bad indentation.  Visually this makes it look like the last two tests 
+are part of the conditional block, because they share its indentation 
+level.
+
+> +			/*
+> +			 * specification of the url descriptor in WebUSB:
+> +			 * https://wicg.github.io/webusb/#webusb-descriptors
+> +			 */
+> +			u8				*buf;
+> +			unsigned int	schema_http;
+
+*buf and schema_http should be indented by the same amount.
+
+> +			unsigned int	schema_https;
+> +			unsigned int	landing_page_length;
+> +
+> +			buf = cdev->req->buf;
+> +			#define WEBUSB_URL 3
+> +			buf[1] = WEBUSB_URL;
+> +
+> +			landing_page_length = strnlen(cdev->landing_page, 252);
+> +			schema_https = (strncmp("https://", cdev->landing_page, 8) == 0);
+> +			schema_http = (strncmp("http://", cdev->landing_page, 7) == 0);
+
+Do you really need these temporary variables?  Why not put the tests 
+directly into the "if" conditions?
+
+Also, should the comparisons be case-insensitive?
+
+> +			if (schema_https) {
+> +				buf[2] = 0x01;
+> +				memcpy(buf+3, cdev->landing_page+8, landing_page_length-8);
+> +				buf[0] = landing_page_length - 8 + 3;
+> +			} else if (schema_http) {
+> +				buf[2] = 0x00;
+> +				memcpy(buf+3, cdev->landing_page+7, landing_page_length-7);
+> +				buf[0] = landing_page_length - 7 + 3;
+> +			} else {
+> +				buf[2] = 0xFF;
+> +				memcpy(buf+3, cdev->landing_page, landing_page_length);
+> +				buf[0] = landing_page_length + 3;
+> +			}
+> +
+> +			value = buf[0];
+> +
+> +			goto check_value;
+> +		}
+> +
+>  		VDBG(cdev,
+>  			"non-core control req%02x.%02x v%04x i%04x l%d\n",
+>  			ctrl->bRequestType, ctrl->bRequest,
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 96121d1c8df4..da49b36f7033 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -39,6 +39,7 @@ struct gadget_info {
+>  	struct config_group configs_group;
+>  	struct config_group strings_group;
+>  	struct config_group os_desc_group;
+> +	struct config_group webusb_group;
+>  
+>  	struct mutex lock;
+>  	struct usb_gadget_strings *gstrings[MAX_USB_STRING_LANGS + 1];
+> @@ -50,6 +51,11 @@ struct gadget_info {
+>  	bool use_os_desc;
+>  	char b_vendor_code;
+>  	char qw_sign[OS_STRING_QW_SIGN_LEN];
+> +	bool			use_webusb;
+> +	u16				bcd_webusb_version;
+> +	u8				b_webusb_vendor_code;
+
+Again, improper indentation.
+
+> +	char			landing_page[255];
+> +
+>  	spinlock_t spinlock;
+>  	bool unbind;
+>  };
+
+...
+
+> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+> index 43ac3fa760db..44f90c37dda9 100644
+> --- a/include/linux/usb/composite.h
+> +++ b/include/linux/usb/composite.h
+> @@ -474,6 +474,12 @@ struct usb_composite_dev {
+>  	struct usb_configuration	*os_desc_config;
+>  	unsigned int			use_os_string:1;
+>  
+> +	/* WebUSB */
+> +	u16				bcd_webusb_version;
+> +	u8				b_webusb_vendor_code;
+> +	char			landing_page[255];
+
+Improper indentation.
+
+> +	unsigned int			use_webusb:1;
+> +
+>  	/* private: */
+>  	/* internals */
+>  	unsigned int			suspended:1;
+
+Alan Stern
