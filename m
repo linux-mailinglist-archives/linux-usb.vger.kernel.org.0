@@ -2,215 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B90865A486
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Dec 2022 14:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62F265A607
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Dec 2022 19:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbiLaNIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 31 Dec 2022 08:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S232039AbiLaSWE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 31 Dec 2022 13:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235614AbiLaNIF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Dec 2022 08:08:05 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8203662F0
-        for <linux-usb@vger.kernel.org>; Sat, 31 Dec 2022 05:08:04 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id m4so24473037pls.4
-        for <linux-usb@vger.kernel.org>; Sat, 31 Dec 2022 05:08:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X0IXPVtq9K1twOTm6NDDEYDtsm5gy6I4CxkJN0usls4=;
-        b=NPUExoCXn3bv8cVrXHBiUZJGue0soQHb0G96tLN0n+eLz1Y50SDNQycB5NyZt/PrWK
-         I5k3uGeMmYGPn1HASohpdtr4BCdHvND+EgsZkkoIajo6b7Ztmme+b2k2ill/YfPT5Vgq
-         EfCjIyK+VBql5cb4wXG3/pVmg0ymjASCkQQ4M1ZtolzRnpmqpwFzt+5hsu/as449mZEO
-         6qQBkj9ToM7FtoEqQNAjSDdGT50UpqLY6z4xjbUuCGrcJKQXYbz7IBEcFYKsCMp4Yl+Y
-         bT6BjZrOhtvlvJSlellsMcOE9bf4raX5DDV3/RIxUwn00hSGiHO/ZbLvDHkPGHNR9dTB
-         ShOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X0IXPVtq9K1twOTm6NDDEYDtsm5gy6I4CxkJN0usls4=;
-        b=nPLG18sXEJrpvBJnZS/tuUQdEeRhyn4ea0SNbRKJ3yeNjSy/Ja743PlWuRSoL8V8O8
-         L/YaXmQ3sUrsMimA0CzLq6efCsSirusLwi684Wj1MWZFAPD1Ulxd8ImOOFX4htlOWGQo
-         YieArWQ6Lp7lHj5LaU361NKoGdqGqZ33ObfCYDqE9fI1atD4GVmKirg6T5auXds8pszI
-         s3KA7i7SmDNjny5jWUmfFma+QqZFeYkMSVk41pNCcjQTpr5UehhTBFjiBd/p7MbgIF3j
-         JofXfKdeyqVfSPC2k+JlPwK92ODvlegIG6GS8tDXUSMi7AlEKVgvRoUK48ckGYsPVQLf
-         D6Jw==
-X-Gm-Message-State: AFqh2koScKXiZ5jDE2f3fsRy2mfOejnopxGXLVcVaIp/SrdGI3rHicaf
-        oMhUc6x8krUMl19zBgTUm7zaAw==
-X-Google-Smtp-Source: AMrXdXuqJjc0Lfay/2Vg+JTsADhCB4qlilRKlTowJFlv2eMMxqzXbSnqX9K3pDAVuk7FzJ9S2PurLg==
-X-Received: by 2002:a17:90a:1bc7:b0:223:b680:d78b with SMTP id r7-20020a17090a1bc700b00223b680d78bmr36330841pjr.37.1672492083968;
-        Sat, 31 Dec 2022 05:08:03 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c5e:e3b5:c341:16de:ce17:b857])
-        by smtp.gmail.com with ESMTPSA id d7-20020a17090ab30700b0021904307a53sm14568161pjr.19.2022.12.31.05.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 05:08:03 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org
-Subject: [PATCH 2/2] usb: misc: eud: Add driver support for SM6115 / SM4250
-Date:   Sat, 31 Dec 2022 18:37:43 +0530
-Message-Id: <20221231130743.3285664-3-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221231130743.3285664-1-bhupesh.sharma@linaro.org>
-References: <20221231130743.3285664-1-bhupesh.sharma@linaro.org>
-MIME-Version: 1.0
+        with ESMTP id S229628AbiLaSWC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Dec 2022 13:22:02 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2054.outbound.protection.outlook.com [40.107.21.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750FBE9E;
+        Sat, 31 Dec 2022 10:22:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GRlBJgCGwmK/H5GaRizGus+msZPZPvZH16uXKufUhH4z7t7px9A3AYUqoOdaVEEFBZlqxA0EZZq2cy6BwM7HI09NonGy4K0oar17nacIRM7dH/f76/P0Wpej/A7o8cOJ2dh+borU7j3rXq30DcrxoYUw1n+ai+gvw9qBoZsnr60apOHUuxVa0RN8mzDONJtJvEyuKSTLdve39nbgI6/FZRe1tPc/uqJ6jRIuz7IYIUrzRmPEFalkWTBNWb1qAoI2fq+WYrvOVcNiQdtRiDRD5+fINkt4aFm4vuG/kIkp5bhU47C91IPFD20xDRzEaTVf3QXPPJT0+XfU9CwJ5AgSbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6rRo+JQrGoK3uIZWzz2g+ubJhgB67RQeEJz9XWmZTns=;
+ b=LjyXUfySPDVs41rdz1r3xtp9XZw3Wxd4A9eejCKXkxQm+SCBlHCx+PtY1/R3j5Yo2f5wYAzCoLWPn+/4S9ac4noaBeiAtXpo/52d+tP9VBhb6GhMngcIiwWwWOJQ0lJrohzop44BM9V2YACH8JSee7UiZSEzweA12FraKUaqtIhhg3n4VdAVXWL1lQzdRGnBO+yGFXeyuXj4RoOikvvfDGTWcc0ETsXX7aPzvom6TYGzeWhnSoApyllB9yUAtQPAn9S0hx+nluRqKKMuONFeK4y5aIvqHDnTLcQW1MIGzBz+fquWoTOrpNduA86E+7PMnNInsSqms8wuD7YE2C2JMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6rRo+JQrGoK3uIZWzz2g+ubJhgB67RQeEJz9XWmZTns=;
+ b=zWYF4VzCJ8drogXbAaHugWuM/LVCa1XyZDYMxEDLJF+FMycZyQnnE2RTQ5LR3BWwFgHddWwobQ1RSN1kM9An5jameLhP2Fkm60AMX4LTgJq9LAPykxLr1xUvDyRnL8Lq1UxuuctR9/OF+ZmGS28axkA28schxzxU6NWgu5eW1k7Qx9Imv8qysbJ+z6xBXM+0Mo4WJPsK9zAvrJHbxnVnEC5JNbdio2gRpRmVYZrql4Rtsi8ZffcOFLfAZH1iLhnUMA1sH3OydkY2D1jEwHufRpbp0O1eugRAaD90h8FjzSs9wM60VdSD7QGct5V5+1r2N19yVBD+DpYmYct7Zsh8yw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by PAXPR04MB8224.eurprd04.prod.outlook.com (2603:10a6:102:1cb::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.18; Sat, 31 Dec
+ 2022 18:21:59 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::8d51:14ac:adfd:2d9b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::8d51:14ac:adfd:2d9b%7]) with mapi id 15.20.5944.018; Sat, 31 Dec 2022
+ 18:21:58 +0000
+Message-ID: <4a9bf157-af42-8247-8b66-0c66e425f9af@suse.com>
+Date:   Sat, 31 Dec 2022 19:21:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] usb: storage: de-quirk Seagate Expansion Portable Drive
+ SRD00F1 [0bc2:2320]
+To:     =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <zenczykowski@gmail.com>,
+        =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20221230215942.3241955-1-zenczykowski@gmail.com>
+Content-Language: en-US
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20221230215942.3241955-1-zenczykowski@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR2P281CA0029.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:14::16) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PAXPR04MB8224:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4adf710d-80cb-43ee-6844-08daeb5be758
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CTwbc8VLs7t9JUkCh4PvRV+keVcdI3cJ04cxR15gfkdRzmqUBqzszMHwTCZjgtqICAMpNmamSsYflDZd+frrg7Xetz7suLG/u9xyBXG4IjxWs+6PjMM7PRau0v3uiBpzlRJ0Q4rHOJVZ+kJ+STb96rgYxIz8ADBBnlJ8jgQJdHo8Q98FE/JI1Tb/t/E2wGhc/7QuUIHwyp4b9K4q8kR7YQgU0HjeivtjsxIvoqp744AJQhNXFBl3Bpjd04X6CqU14WikeRErWXwpexgG9+ffnuPEHzSz/HVaVqs2k73c8SyZl1B0ehD9/iYylXuoLp3K3G9BdtnfmzvJ7PmIm4fqRGJpfy7tpIpQbDDWGNJdfklzX/tql5ScVnL1WzjqsHIQjI4TegWI6BbK+RnuSGcyyBxirkp2MMwZGElR9ihvi1AGpA7kyXjD+jm4x90JjTySiIpvmRxjgb0k5Bn5xlDHULHqLzVrlvxFKpzMKfZvUlqQQa5tlWkYJjeeeLa65S0h04odnqzupxtL1RSXa/pAnWwEqK1IKuoA+4rSGuMtGKh01dZwZiDILVUCLe3Bv55pDT5SBdxQZRna2RREz7B2JTHSN4y1cEoMyj8pQrOzIXC6s/43LJ2qeRWR+I/2r/RV/57+iQnC/ZyQCjAm18Ve6Cm2i39Aw36R9l45cXfofoNxbJYJOtS9GyiJwDFNaNMrIrUT3l7qjGqPck6Ufx2WDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(396003)(366004)(136003)(39860400002)(451199015)(5660300002)(2906002)(4744005)(4326008)(8676002)(8936002)(31686004)(41300700001)(66476007)(478600001)(66556008)(316002)(66946007)(110136005)(54906003)(6486002)(2616005)(53546011)(186003)(6512007)(6506007)(83380400001)(38100700002)(31696002)(86362001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L3dIY0kydjBQL01iaUYwN3k1djl2TStuUzdrZkRnS2pnRlF2ZWl1cDRnUlN2?=
+ =?utf-8?B?ekVJRnhkUXFWRlhrdDhDYWJlY1dXR2ZlcFVWajJaT2lKM2wzT2xFTkhPWUhS?=
+ =?utf-8?B?WlFJL2hDVU9VZ2ptRURaeExQYkNaa1dheFU2eDhrYzhxeCs1V0hIZmdxOHp2?=
+ =?utf-8?B?QnYzYy9EV1FzbGpsYVJ1UmFUWW1iOVpvc0t5dUQ3TEUxUFg4Lzl4cEkzR3k5?=
+ =?utf-8?B?cEhSM0NqRTlIYko2MzkzT2xrTmVMVWt3RkZuUFM3ZnFscWppd3JkTTk1MSsv?=
+ =?utf-8?B?a0gxWGRBWjUxSDRJRFNibzZhQW1EQ0krWFUyYXhxeEZnZ1JqRVpaWjg4cjIv?=
+ =?utf-8?B?eUZxUHZHbDMxRzlHT1YzOVY5MlFVZ0tGdUhySWZFZmErRGdsZDJoUGczWHgx?=
+ =?utf-8?B?TGZLNTgzTDJyNFBFUGlpc1pmQnBMckZsbGd1dzV5RTZPcmlMQWxFQktOZ3J0?=
+ =?utf-8?B?ZXRob0JkcTVzanpCTldPTTNUYW14THdNTE5vRXFVR09lakowOWlmNmtKY1Bs?=
+ =?utf-8?B?eDdHOWlJeFdyOWhmTkU1RTVlMUprYzgwODlPaDh0TjNndHZOUjRYUEJmekIy?=
+ =?utf-8?B?Y0tJZnNhSG84d3UwaWZSWjIyaFpURHNRbzNIVTh4SEdqU1M4RVU4a2p1N1dz?=
+ =?utf-8?B?aTRGS0N3SFhsSDdNdTAxd2hmWHpKc1huZ1BhcTFBYTcvUXREbDAvUm9JdGVC?=
+ =?utf-8?B?cm1kZzh3d1lNaVJpaWp2d1E0YVRnTFNzbENvTyt2M2QxMktEUW1YZitRQlFV?=
+ =?utf-8?B?NE51T20zeFVjempsYXNYOEoybWRnMTlVUEY0ZnY4dVhJUFRYdFZvMDhpVzhC?=
+ =?utf-8?B?MUpFK0NsQlpCRGlqM1pWZm83dTRDM1NYams5bWl5b1dSZTJHYWRUY0pRMURH?=
+ =?utf-8?B?QUI2WVFsWXhkbXNENm91cVpDNSs5dVh1NmZSWVBDc0Fjckt0YlR5UUVacGFW?=
+ =?utf-8?B?Vi9zbU1VSnJEZDFPNjRuTlJpRUZnckhoTTRYQzB1T3R4L1lPZDEwaUViVDJJ?=
+ =?utf-8?B?a3cwSkRMNjJZb0pJNDFnbWVUd1pVakpBYkdyNDE3NjExQWR6TzczMWg4dCsz?=
+ =?utf-8?B?TkZBckJOLzg2RTdiZkhmUElNRkZUc3FWbnF0RzB0Sm01MjVPekpycHhUZkFx?=
+ =?utf-8?B?Mkh4aG0zem51NVp6UVhLc1F4NmlXNDc5eVhMRzZQcDZKc0lEVXplTlA2TW5y?=
+ =?utf-8?B?QW9GMlhMK1BhZ0VpZ0FnMGRZM3grdFdjbFlhdUEyMHpxTndnZkVWMDgzWU10?=
+ =?utf-8?B?d3p6MG5BYWlrTFpFeVZQNTdNOU50YTAzeUJiOVp3NEVhVTNkUVZKTUlFcitV?=
+ =?utf-8?B?dVVIanVQQzhHSWNwT3lOaXVFMDBuQ0tzdzR1Y245WUozYnpML2RyUCt0Q3No?=
+ =?utf-8?B?dDl3SmlrUENEQlI2cThaaE9nRXhFcURWVE1NWU5VR3BiOUFISWVQQjdMWmJC?=
+ =?utf-8?B?OWozV2JyRnhua3pFL0JTYmlESkhQYmorMmVCNE52SXMxa1pHdGY3Mjk3cnFv?=
+ =?utf-8?B?TjdmeVZ4V1ZBdzJOUy9kenJCRHZ3RllpRy84U1pZdFNvY1M0M1o4eVQwM1Zw?=
+ =?utf-8?B?S1BRc1k4UzVRYkZBcnlBTEVCRlEzOENkTVlLc2xDSy82cGl6MjVtK3VhZDUr?=
+ =?utf-8?B?UitIVUZtK1huS1B1dG5nTjJEcFpIMFVzSnQ0aDNkZm8vVUdGWm5CbTlBQXY2?=
+ =?utf-8?B?SUk4YnUrekZYQ3REZGhBUzJERGo1SG1ZU0RLaDgzOTVxNUJ6WHRrZzFhRXpu?=
+ =?utf-8?B?WFNkcE14OVh0aklFN0RsYW5JZUtFUkxmRFhJTG1TK0QwcFgrVnQ4c2szQm1F?=
+ =?utf-8?B?SU9RN0tJT0RGV1RqOHUydmQxU3hjMWRYRnJnQTg4ZHUrUDQvMVFFNXEwTjJo?=
+ =?utf-8?B?OHN4RjlXWlRoRmRRV1pEQ3ZMdU9vWG85dU9JWm5zaW1BSUFDNmdmM0JXVkQx?=
+ =?utf-8?B?K05RYzhFTXIrYTN6dzZ2ejJtdk5UMTFYQU9Ob0N6MEk0b1llYmxTcS9Kd0Y1?=
+ =?utf-8?B?UFY2anp0UVY0QmF6dG9EL0FCdzlFYUxML0xnZTJJb3YzWktvRWt0bUVtMVdK?=
+ =?utf-8?B?cnpqZmY5ZDUyNmlTM3RPV1pDa2dzUXU1M2tUNjRwRnF0YTRzM2FoN2IyOTJ2?=
+ =?utf-8?B?K0U1R1NSNWFEbkRQM2VCeHdpY1hER0hHcGN6VWVmU0NiK0dxMVB3SE16cU1y?=
+ =?utf-8?Q?q4Pd8Q4wkDbf+KpciYjFDjN/0wQlHZOeThcm9W5H5zz8?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4adf710d-80cb-43ee-6844-08daeb5be758
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2022 18:21:58.5665
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qLClrkOf/cK2QKplawhL0aCQbFKkBnTmf6bDkb7YTdPCPnItf1ZyCa28gT/pNLJ9Slt+9+aEtJrMKM5ukhhYPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8224
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
+On 30.12.22 22:59, Maciej Żenczykowski wrote:
 
-On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-needs to be accessed only via the secure world (through 'scm'
-calls).
+> -	/* All Seagate disk enclosures have broken ATA pass-through support */
+> -	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
+> +	/* Most Seagate disk enclosures have broken ATA pass-through support */
+> +	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2 &&
+> +	    le16_to_cpu(udev->descriptor.idProduct) != 0x2320)
+>   		flags |= US_FL_NO_ATA_1X;
+>   
+>   	usb_stor_adjust_quirks(udev, &flags);
 
-Also, the enable bit inside 'tcsr_check_reg' needs to be set
-first to set the eud in 'enable' mode on these SoCs.
 
-Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- drivers/usb/misc/qcom_eud.c | 49 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 46 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-index b7f13df007646..a96ca28a4899b 100644
---- a/drivers/usb/misc/qcom_eud.c
-+++ b/drivers/usb/misc/qcom_eud.c
-@@ -11,7 +11,9 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
-+#include <linux/qcom_scm.h>
- #include <linux/slab.h>
- #include <linux/sysfs.h>
- #include <linux/usb/role.h>
-@@ -30,15 +32,24 @@
- #define EUD_INT_SAFE_MODE	BIT(4)
- #define EUD_INT_ALL		(EUD_INT_VBUS | EUD_INT_SAFE_MODE)
- 
-+struct eud_soc_data {
-+	bool secure_eud_en;
-+	bool tcsr_check_enable;
-+};
-+
- struct eud_chip {
- 	struct device			*dev;
- 	struct usb_role_switch		*role_sw;
-+	const struct eud_soc_data	*eud_data;
- 	void __iomem			*base;
- 	void __iomem			*mode_mgr;
- 	unsigned int			int_status;
- 	int				irq;
- 	bool				enabled;
- 	bool				usb_attached;
-+	phys_addr_t			mode_mgr_phys_base;
-+	phys_addr_t			tcsr_check_phys_base;
-+
- };
- 
- static int enable_eud(struct eud_chip *priv)
-@@ -46,7 +57,11 @@ static int enable_eud(struct eud_chip *priv)
- 	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
- 	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
- 			priv->base + EUD_REG_INT1_EN_MASK);
--	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-+
-+	if (priv->eud_data->secure_eud_en)
-+		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, BIT(0));
-+	else
-+		writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
- 
- 	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
- }
-@@ -54,7 +69,11 @@ static int enable_eud(struct eud_chip *priv)
- static void disable_eud(struct eud_chip *priv)
- {
- 	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
--	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-+
-+	if (priv->eud_data->secure_eud_en)
-+		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, 0);
-+	else
-+		writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
- }
- 
- static ssize_t enable_show(struct device *dev,
-@@ -178,12 +197,15 @@ static void eud_role_switch_release(void *data)
- static int eud_probe(struct platform_device *pdev)
- {
- 	struct eud_chip *chip;
-+	struct resource *res;
- 	int ret;
- 
- 	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
- 	if (!chip)
- 		return -ENOMEM;
- 
-+	chip->eud_data = of_device_get_match_data(&pdev->dev);
-+
- 	chip->dev = &pdev->dev;
- 
- 	chip->role_sw = usb_role_switch_get(&pdev->dev);
-@@ -200,10 +222,25 @@ static int eud_probe(struct platform_device *pdev)
- 	if (IS_ERR(chip->base))
- 		return PTR_ERR(chip->base);
- 
--	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-+	chip->mode_mgr = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
- 	if (IS_ERR(chip->mode_mgr))
- 		return PTR_ERR(chip->mode_mgr);
- 
-+	if (chip->eud_data->secure_eud_en)
-+		chip->mode_mgr_phys_base = res->start;
-+
-+	if (chip->eud_data->tcsr_check_enable) {
-+		res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
-+		if (!res)
-+			return dev_err_probe(chip->dev, -ENODEV, "failed to get tcsr reg base\n");
-+
-+		chip->tcsr_check_phys_base = res->start;
-+
-+		ret = qcom_scm_io_writel(chip->tcsr_check_phys_base, BIT(0));
-+		if (ret)
-+			return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
-+	}
-+
- 	chip->irq = platform_get_irq(pdev, 0);
- 	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
- 			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
-@@ -230,8 +267,14 @@ static int eud_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct eud_soc_data sm6115_eud_data = {
-+	.secure_eud_en = true,
-+	.tcsr_check_enable = true,
-+};
-+
- static const struct of_device_id eud_dt_match[] = {
- 	{ .compatible = "qcom,sc7280-eud" },
-+	{ .compatible = "qcom,sm6115-eud", .data = &sm6115_eud_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, eud_dt_match);
--- 
-2.38.1
+I am sorry, but no. We cannot accomodate a list of of devices to be
+dequirked that is sure to grow in the future. Please define a flag for
+these devices.
 
+	Regards
+		Oliver
