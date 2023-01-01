@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F95565AB8B
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 21:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BA365AB91
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 21:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjAAUZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Jan 2023 15:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S230178AbjAAUeJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Jan 2023 15:34:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjAAUZM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 15:25:12 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DFE263C
-        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 12:25:11 -0800 (PST)
+        with ESMTP id S229496AbjAAUeI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 15:34:08 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8901CB
+        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 12:34:07 -0800 (PST)
 Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 219A25BA;
-        Sun,  1 Jan 2023 21:25:08 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F3E295BA;
+        Sun,  1 Jan 2023 21:34:03 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672604708;
-        bh=OgwMG/f98J6lnJa74DbfxWHfLVLdrLKyd35bV7sH3ss=;
+        s=mail; t=1672605244;
+        bh=oabfXwbyrVCR4KjB3yov9v54IA4kN/CH4z2DW3BZHic=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FyqXJC5EBieJqtu7cvhc3LeEAJvK2+OqiBk8lk1BQKraYh7Es0+KNPCzpar7yYZ8T
-         xEakpFKK91BIuVrIS+Eu+4egEg5af1ID6yNYiCrqsTeqlyDmk9zKU3dC25loV3f6tW
-         WP77BMisJkGgNm6p7X6Re83RlSXL9fGXomz5KGp0=
-Message-ID: <f8dd473b-a4f9-29d5-201b-631029dc226d@ideasonboard.com>
-Date:   Sun, 1 Jan 2023 20:25:04 +0000
+        b=sCQ9rcQocaKrIQ1gjqcxqJ9pROA7IWlZaRtW02ygTexFS4nWbcFVyFm7/mpbRiS0M
+         z4qvPQ2rDcep4wMmboX/Kvo6glWIdBEuIg+EH7tRP/ItJs0MiBwj0OP/eBvOH/RDcL
+         a7EYgjLThzugCWtKt9vcTnFgaBDh+v8PA3pkalPM=
+Message-ID: <0ae65812-c937-d071-455b-7c1d6418b080@ideasonboard.com>
+Date:   Sun, 1 Jan 2023 20:34:01 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 1/3] usb: gadget: uvc: Rename uvc_control_ep
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        mgr@pengutronix.de, kieran.bingham@ideasonboard.com
-References: <20221205143758.1096914-1-dan.scally@ideasonboard.com>
- <20221205143758.1096914-2-dan.scally@ideasonboard.com>
- <Y6ujGxxWd5ffq7qY@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v2 0/9] Add XU support to UVC Gadget
 Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, kieran.bingham@ideasonboard.com,
+        torleiv@huddly.com, mgr@pengutronix.de
+References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
+ <Y6zc0sFxIGbOciwD@pendragon.ideasonboard.com>
 From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <Y6ujGxxWd5ffq7qY@pendragon.ideasonboard.com>
+In-Reply-To: <Y6zc0sFxIGbOciwD@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -50,136 +50,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent - thank you for the review!
+Hi Laurent
 
-On 28/12/2022 01:59, Laurent Pinchart wrote:
+On 29/12/2022 00:18, Laurent Pinchart wrote:
 > Hi Dan,
 >
-> Thank you for the patch.
->
-> On Mon, Dec 05, 2022 at 02:37:56PM +0000, Daniel Scally wrote:
->> The f_uvc code defines an endpoint named "uvc_control_ep" but it
->> is configured with a non-zero endpoint address and has its
->> bmAttributes flagged as USB_ENDPOINT_XFER_INT - this cannot be the
->> VideoControl interface's control endpoint, as the default endpoint
->> 0 is used for that purpose. This is instead the optional interrupt
->> endpoint that can be contained by a VideoControl interface.
+> On Mon, Nov 21, 2022 at 09:25:08AM +0000, Daniel Scally wrote:
+>> Hello all
 >>
->> Rename the variables to make that clear.
+>> This series adds support for the definition of extension units in configfs for
+>> the UVC Gadget. The XUs are modelled as config_items within a new "extensions"
+>> group under control, which seemed like an appropriate place to put them.
 >>
->> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->> ---
->>   drivers/usb/gadget/function/f_uvc.c | 24 ++++++++++++------------
->>   drivers/usb/gadget/function/uvc.h   |  2 +-
->>   2 files changed, 13 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
->> index 6e196e06181e..49b7231742d6 100644
->> --- a/drivers/usb/gadget/function/f_uvc.c
->> +++ b/drivers/usb/gadget/function/f_uvc.c
->> @@ -86,7 +86,7 @@ static struct usb_interface_descriptor uvc_control_intf = {
->>   	.iInterface		= 0,
->>   };
->>   
->> -static struct usb_endpoint_descriptor uvc_control_ep = {
->> +static struct usb_endpoint_descriptor uvc_interrupt_ep = {
->>   	.bLength		= USB_DT_ENDPOINT_SIZE,
->>   	.bDescriptorType	= USB_DT_ENDPOINT,
->>   	.bEndpointAddress	= USB_DIR_IN,
->> @@ -290,14 +290,14 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
->>   		if (alt)
->>   			return -EINVAL;
->>   
->> -		uvcg_info(f, "reset UVC Control\n");
->> -		usb_ep_disable(uvc->control_ep);
->> +		uvcg_info(f, "reset UVC interrupt endpoint\n");
->> +		usb_ep_disable(uvc->interrupt_ep);
-> Technically it's called the "VideoControl Interrupt Endpoint", but that
-> would be quite long, and given that UVC has a single interrupt endpoint
-> in all interfaces, I think the name is fine.
->
->>   
->> -		if (!uvc->control_ep->desc)
->> -			if (config_ep_by_speed(cdev->gadget, f, uvc->control_ep))
->> +		if (!uvc->interrupt_ep->desc)
->> +			if (config_ep_by_speed(cdev->gadget, f, uvc->interrupt_ep))
->>   				return -EINVAL;
->>   
->> -		usb_ep_enable(uvc->control_ep);
->> +		usb_ep_enable(uvc->interrupt_ep);
->>   
->>   		if (uvc->state == UVC_STATE_DISCONNECTED) {
->>   			memset(&v4l2_event, 0, sizeof(v4l2_event));
->> @@ -375,7 +375,7 @@ uvc_function_disable(struct usb_function *f)
->>   	uvc->state = UVC_STATE_DISCONNECTED;
->>   
->>   	usb_ep_disable(uvc->video.ep);
->> -	usb_ep_disable(uvc->control_ep);
->> +	usb_ep_disable(uvc->interrupt_ep);
->>   }
->>   
->>   /* --------------------------------------------------------------------------
->> @@ -511,7 +511,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
->>   	 * uvc_iad
->>   	 * uvc_control_intf
->>   	 * Class-specific UVC control descriptors
->> -	 * uvc_control_ep
->> +	 * uvc_interrupt_ep
->>   	 * uvc_control_cs_ep
->>   	 * uvc_ss_control_comp (for SS only)
-> Shouldn't you also rename those two variables ?
+>> To allow the XU's to be inserted in the function graph, the bSourceID attribute
+>> for the default output terminal is made writeable - users will need to configure
+>> it with the bUnitID of the XU that they want to use as the OT's source. This does
+>> mean that the XUs can _only_ be placed immediately preceding the OT, but I think
+>> that that's fine for now.
+> Is this something that we'll be able to extend later in a
+> backward-compatible way ?
 
 
-Yes, I hadn't realised that they were related. That's fixed in the v2.
+Yes...placing the XUs requires users to set the source of the Output 
+Terminal and the XU. If we later make them placeable anywhere in the 
+chain they'd just have to be set differently, I think it's fine.
 
 >
-> Ideally I would also rename struct uvc_control_endpoint_descriptor and
-> UVC_DT_CONTROL_ENDPOINT_SIZE, but those are exposed to userspace :-(
+> Please also note that, in general, nothing prevents a device from
+> exposing multiple XUs, as well as exposing XUs that are not linked in
+> the IT to OT pipeline. Is this also something we'll be able to support
+> if needed ?
+
+
+I've tried both scenarios already and found no problems.
+
+>> Series level changes:
+>>
+>>    - Added patches 5-9 which additionally add the ability to create string
+>>    descriptors through configfs and link them to the extension units as well as
+>>    to override the default descriptors for the IAD and VC/VS interfaces
+>>
+>> The XUs configured through this series have been tested via uvc-gadget, uvcvideo
+>> and uvcdynctrl.
+> Do you have an example script that shows how to create and link an XU
+> through configfs ? That would give an overview of the feature, useful
+> for review.
+
+
+Yes, but it's not currently public. I can get it updated to the 
+uvc-gadget master branch before I'll get round to a v3 of this series so 
+I can link it on that submission.
+
 >
->>   	 * uvc_streaming_intf_alt0
->> @@ -523,7 +523,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
->>   	control_size = 0;
->>   	streaming_size = 0;
->>   	bytes = uvc_iad.bLength + uvc_control_intf.bLength
->> -	      + uvc_control_ep.bLength + uvc_control_cs_ep.bLength
->> +	      + uvc_interrupt_ep.bLength + uvc_control_cs_ep.bLength
->>   	      + uvc_streaming_intf_alt0.bLength;
->>   
->>   	if (speed == USB_SPEED_SUPER) {
->> @@ -569,7 +569,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
->>   	uvc_control_header->bInCollection = 1;
->>   	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
->>   
->> -	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_ep);
->> +	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_ep);
->>   	if (speed == USB_SPEED_SUPER)
->>   		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_control_comp);
->>   
->> @@ -656,12 +656,12 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
->>   			    (opts->streaming_maxburst + 1));
->>   
->>   	/* Allocate endpoints. */
->> -	ep = usb_ep_autoconfig(cdev->gadget, &uvc_control_ep);
->> +	ep = usb_ep_autoconfig(cdev->gadget, &uvc_interrupt_ep);
->>   	if (!ep) {
->>   		uvcg_info(f, "Unable to allocate control EP\n");
->>   		goto error;
->>   	}
->> -	uvc->control_ep = ep;
->> +	uvc->interrupt_ep = ep;
->>   
->>   	if (gadget_is_superspeed(c->cdev->gadget))
->>   		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_ss_streaming_ep,
->> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
->> index 40226b1f7e14..48b71e04c2b1 100644
->> --- a/drivers/usb/gadget/function/uvc.h
->> +++ b/drivers/usb/gadget/function/uvc.h
->> @@ -146,7 +146,7 @@ struct uvc_device {
->>   	} desc;
->>   
->>   	unsigned int control_intf;
->> -	struct usb_ep *control_ep;
->> +	struct usb_ep *interrupt_ep;
->>   	struct usb_request *control_req;
->>   	void *control_buf;
->>   
+>> Daniel Scally (9):
+>>    usb: gadget: uvc: Make bSourceID read/write
+>>    usb: gadget: uvc: Generalise helper functions for reuse
+>>    usb: gadget: uvc: Allow definition of XUs in configfs
+>>    usb: gadget: uvc: Copy XU descriptors during .bind()
+>>    usb: gadget: uvc: Support arbitrary string descriptors
+>>    usb: gadget: uvc: Allow linking XUs to string descriptors
+>>    usb: gadget: uvc: Attach custom string descriptors
+>>    usb: gadget: uvc: Allow linking function to string descs
+>>    usb: gadget: uvc: Use custom strings if available
+>>
+>>   .../ABI/testing/configfs-usb-gadget-uvc       |   50 +-
+>>   drivers/usb/gadget/function/f_uvc.c           |  134 +-
+>>   drivers/usb/gadget/function/u_uvc.h           |   22 +
+>>   drivers/usb/gadget/function/uvc.h             |    1 +
+>>   drivers/usb/gadget/function/uvc_configfs.c    | 1087 ++++++++++++++++-
+>>   drivers/usb/gadget/function/uvc_configfs.h    |   60 +
+>>   6 files changed, 1283 insertions(+), 71 deletions(-)
