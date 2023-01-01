@@ -2,131 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBDF65AA46
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 16:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8492565AA8C
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 17:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjAAPF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Jan 2023 10:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
+        id S230092AbjAAQVh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Jan 2023 11:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjAAPFz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 10:05:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89E4C77;
-        Sun,  1 Jan 2023 07:05:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E43060DCF;
-        Sun,  1 Jan 2023 15:05:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78BE0C433D2;
-        Sun,  1 Jan 2023 15:05:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672585552;
-        bh=H/enneL0rRp4lwUmCHUJup6uIYXBeBZ/Ryo3CKNus4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=194sWSpskcjGaehygRIpIho5kNsNaf+Ut0S4jvvAleEju6UzZy5A+jnaWxR3SVTxr
-         QZRkzJWzC9YfgizO+e1uuYc/Um7QYKi0PS7McgttXiqu1NKdU0tVtbHqOICNQqopNc
-         dYS3LxHC7JCKLQKa/RTQLA4fNe2f9ZpAT5gY5ICA=
-Date:   Sun, 1 Jan 2023 16:05:49 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
+        with ESMTP id S229817AbjAAQVf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 11:21:35 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 52114DF4
+        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 08:21:34 -0800 (PST)
+Received: (qmail 386026 invoked by uid 1000); 1 Jan 2023 11:21:33 -0500
+Date:   Sun, 1 Jan 2023 11:21:33 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget:  add WebUSB support
-Message-ID: <Y7GhTY0qLcWgWHMw@kroah.com>
-References: <Y7CR30YUj2znMDm7@rowland.harvard.edu>
- <Y7FxHDUQxoc9cmL6@jo-einhundert>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1] usb: gadget: add WebUSB support
+Message-ID: <Y7GzDRxyH9x2Shf1@rowland.harvard.edu>
+References: <7615b2ac-a849-94a7-94a5-fb1c2075d7db@wanadoo.fr>
+ <Y69F/5+DLAEqujXC@jo-einhundert>
+ <Y7CR30YUj2znMDm7@rowland.harvard.edu>
+ <CAMUOyH29XnTGO-LbJj5Hh9nzvT6aKNZH+ykvpBfq-PqyQFwioQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7FxHDUQxoc9cmL6@jo-einhundert>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMUOyH29XnTGO-LbJj5Hh9nzvT6aKNZH+ykvpBfq-PqyQFwioQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 12:40:12PM +0100, Jó Ágila Bitsch wrote:
-> There is a custom (non-USB IF) extension to the USB standard:
+On Sat, Dec 31, 2022 at 09:26:44PM +0100, Jó Ágila Bitsch wrote:
+> On Sat, Dec 31, 2022 at 8:47 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Fri, Dec 30, 2022 at 09:11:43PM +0100, Jó Ágila Bitsch wrote:
+> > >
+> > > During device enumeration, a host recognizes that the announced
+> > > USB version is at least 2.01, which means, that there are BOS
+> >
+> > Where is this 2.01 value specified?  I don't remember seeing it in the
+> > usual USBIF documents.
 > 
-> https://wicg.github.io/webusb/
+> This is actually from the backport of BOS descriptors to USB 2
 > 
-> This specification is published under the W3C Community Contributor
-> Agreement, which in particular allows to implement the specification
-> without any royalties.
-> 
-> The specification allows USB gadgets to announce an URL to landing
-> page and describes a Javascript interface for websites to interact
-> with the USB gadget, if the user allows it. It is currently
-> supported by Chromium-based browsers, such as Chrome, Edge and
-> Opera on all major operating systems including Linux.
-> 
-> This patch adds optional support for Linux-based USB gadgets
-> wishing to expose such a landing page.
-> 
-> During device enumeration, a host recognizes that the announced
-> USB version is at least 2.01, which means, that there are BOS
-> descriptors available. The device than announces WebUSB support
-> using a platform device capability. This includes a vendor code
-> under which the landing page URL can be retrieved using a
-> vendor-specific request.
-> 
-> Usage is modeled after os_desc descriptors:
-> echo 1 > webusb/use
-> echo "https://www.kernel.org" > webusb/landingPage
-> 
-> lsusb will report the device with the following lines:
->   Platform Device Capability:
->     bLength                24
->     bDescriptorType        16
->     bDevCapabilityType      5
->     bReserved               0
->     PlatformCapabilityUUID    {3408b638-09a9-47a0-8bfd-a0768815b665}
->       WebUSB:
->         bcdVersion    1.00
->         bVendorCode      0
->         iLandingPage     1 https://www.kernel.org
-> 
-> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
-> ---
->  Documentation/ABI/testing/configfs-usb-gadget |  13 ++
->  drivers/usb/gadget/composite.c                |  96 ++++++++++--
->  drivers/usb/gadget/configfs.c                 | 145 ++++++++++++++++++
->  include/linux/usb/composite.h                 |   6 +
->  include/uapi/linux/usb/ch9.h                  |  33 ++++
->  5 files changed, 283 insertions(+), 10 deletions(-)
-> 
+> Citing Randy Aull from
+> https://community.osr.com/discussion/comment/249742/#Comment_249742
+> >  There is no specification called USB 2.1, however there is such a thing as a USB 2.1 device.
+> > The USB 2.0 ECN for LPM introduced a new descriptor request to the enumeration process
+> > for USB 2 devices (the BOS descriptor set). The problem is that software can't request a new
+> > descriptor type to old devices that don't understand it without introducing compatibility issues
+> > with some devices (more than you would probably expect). So, software needed a way to
+> > identify whether a device could support the host requesting a BOS descriptor set. The solution
+> > in this ECN was to require devices supporting the ECN to set their bcdUSB to 0x0201 (2.01).
+> >
+> > Now, when we created the USB 3.0 spec, we again wanted to leverage the BOS descriptor, not
+> > only because we wanted to mandate USB 2 LPM in 3.0 devices when operating at high-speed,
+> > but also so the device can indicate to a host that it can operate at SuperSpeed (to support
+> > everyone's favorite "your device can perform faster" popup). Knowing that when operating at
+> > high-speed these devices needed to report the BOS descriptor set, we knew that it couldn't
+> > set the bcdUSB to 0x0200. We mistakenly wrote it down as 0x0210 instead of 0x0201 in the
+> > 3.0 spec (perhaps we just said "two point one" which might have been ambiguous) when we
+> > were trying to just be consistent with the requirement from the LPM ECN. So, rather than
+> > changing it back to 0x0201 in the USB 3.0 spec, we just ran with it.
+> >
+> > So, there are USB 2.0 devices, USB 2.01 devices and USB 2.1 devices, even though the latest
+> > revision of the USB 2 spec is USB 2.0. I have recommended that the USB-IF actually create a
+> > USB 2.1 specification that captures all of the various errata, ECNs, etc from over the years, but
+> > it hasn't happened yet.
 
-Hi,
+Interesting history.  And now that you point it out, I do see at the end 
+of section 3 of the USB 2.0 Link Power Management ECN:
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+	Devices that support the BOS descriptor must have a bcdUSB value 
+	of 0201H or larger.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+> Btw, configfs already includes these version codes to support Link
+> Power Management (LPM) and
+> the associated BOS descriptor, so I didn't add that part, I only added
+> webusb as a condition as to
+> when to send BOS descriptors.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
+Right.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+> > > @@ -713,14 +714,16 @@ static int bos_desc(struct usb_composite_dev *cdev)
+> > >        * A SuperSpeed device shall include the USB2.0 extension descriptor
+> > >        * and shall support LPM when operating in USB2.0 HS mode.
+> > >        */
+> > > -     usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> > > -     bos->bNumDeviceCaps++;
+> > > -     le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
+> > > -     usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
+> > > -     usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> > > -     usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
+> > > -     usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
+> > > -                                         USB_BESL_SUPPORT | besl);
+> > > +     if (cdev->gadget->lpm_capable) {
+> >
+> > This change doesn't seem to be related to the purpose of this patch.
+> 
+> Actually, it is.
+> 
+> Previously, BOS descriptors would only ever be sent if the device was
+> lpm_capable.
+> For this reason, this descriptor was previously sent unconditionally.
+> 
+> With my patch in place, it could be that a device is not lpm_capable, but still
+> wants to send BOS descriptors to announce its WebUSB capability,
+> therefore I added
+> this condition.
 
-thanks,
+Okay.  It would be good to explain this in the patch description.
 
-greg k-h's patch email bot
+Alan Stern
