@@ -2,51 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A3865ABE1
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 23:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C5C65ABE4
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 23:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjAAWB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Jan 2023 17:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S231180AbjAAWB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Jan 2023 17:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjAAWBy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 17:01:54 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57A7273A
-        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 14:01:52 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id vm8so56059906ejc.2
-        for <linux-usb@vger.kernel.org>; Sun, 01 Jan 2023 14:01:52 -0800 (PST)
+        with ESMTP id S230385AbjAAWBz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 17:01:55 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0452AC3
+        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 14:01:54 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ud5so62991173ejc.4
+        for <linux-usb@vger.kernel.org>; Sun, 01 Jan 2023 14:01:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9nAEQgskD1p+skSduuar8ryWV0VfVRmc/5BdM22AEHM=;
-        b=QHZknpCyz6goEZvOFtEpnRgZs7Bjhg4tCY45czBLsETy73xMfeLOZ4svEmlqO04aQd
-         P2Gg9WJzpPVmELWtFMIsV6H+ZWqHwl5d3zrBhQsWycE0LTzR60IahcIDIqWPLGl9WrV6
-         5yavHHY96RmAlStBCsNXggvH6hougx5I0KWCDSUEUafetM5qMopZBuyhqq0JdXn5mfJO
-         rdpJyq9YsOkEBEza1HdCMpLSx6xgQrvM19dtEnT68fvtBhfZYdrdwi2yIU4LuLJ0sV4B
-         cdayUYAR5IAu+KDUGY0ktUjOEOluvrgWGYb2GfoUzZi2QM3/txkf9fj2x2RR07rg4u/T
-         qCiQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dWHvYV5ANxh44fAnbu/SIKvM1eyaybv8RI9j5qMIu70=;
+        b=D80aUyXF24nfC9838cOKHP96aBm8eEFTNO5NV26uqleYoSwnPs4VT8p66pZ5t7rNlO
+         WbymV29lTpfnvjFdBVgDYYU75DKxiDZSM/9YMEiORNZ9hhqOGChgGAkB81Fvm4MlDQA6
+         tAtt67s1rvSdf8D82rDwELCZ72CWr1aqMDIteuo8o0LTL7cTDcuCh+Il9lllpM9sNTxv
+         FAtB2OZk830T2QVef0M+3KHXD2axQPhySdEq2WU1mdozzi2298Qxh10XFti/38d2yeuC
+         8LiA03SZvkFg1pZDH1/whvcGcdSITcBbXGf3e5kUA8mDmCSKssMfNJZOcSQ8jcY6x2VZ
+         9QGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9nAEQgskD1p+skSduuar8ryWV0VfVRmc/5BdM22AEHM=;
-        b=nGGIHK4qfYlvwJOQiry1/pJUrbA+DPJ46jiK91vWPUXeIkfRnjEOQgZLaxv/E8JB53
-         l53jyFnvF98XQLA5kkoBiQgxjWSP6IkqQm1WRRJc0gBnyuypg+Sox0sswd4geocjlq3J
-         F//1irKZqXKI04MPkFf3JB19y1G/41lRUd7/3fprno2JTO39dLoEeHYpzNuLfC63GxJi
-         r8e6b5m/9ilNntp9VcngfFCTsKRvwJ9l23Hyg14XwFaKZ0IatkSnm07FFETaB57xmHcB
-         BSkkiVh5gw5qE/EUqNn+k4PDDIOeVkuS8TP+U/GsHGM0DivXWEqSpkYTDN1krN35eZmt
-         Q42A==
-X-Gm-Message-State: AFqh2krtZwluPy+GOBEmEk76KyGAOOvw7ovWq4ndkoBmU+yGO+GF5jN3
-        mMTMxrYl45Ndkm8rhhxe3wlcwA==
-X-Google-Smtp-Source: AMrXdXvEfhtw8CmHeGkLwdMMPysWFJzv5uV+nc1KGgWUinvLxJebmQBqV1yB7wAGo/jHBa6kwrZbdA==
-X-Received: by 2002:a17:906:6807:b0:7c0:9805:4060 with SMTP id k7-20020a170906680700b007c098054060mr44649306ejr.38.1672610511451;
-        Sun, 01 Jan 2023 14:01:51 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dWHvYV5ANxh44fAnbu/SIKvM1eyaybv8RI9j5qMIu70=;
+        b=tNGjJ8lf5Q9HN7HzigVj9+ZnT+AZfXWXHf4UF86A758Lihw3iqmVZ+1/XxWCH31dBu
+         150xqUxL14Xf2DutMjErU6arj7VRg/ZX7wdSkXzXILNy2UejEs0rfhc3dsdV6eL01bbX
+         bvw8PUKe1hf8hBIegpN4Rft2/Nf7Mjvqffmzu1PykinCyHaFgpbPoN+byFyQ0LJBy8lX
+         licxId4g677zaym5kt5TIEhsty8/9O5LKxWgJO4pCG0RtBWWO78uJmBZPAR9C3n26Xfx
+         7BXCio/A5Q+P5idipiQLvmMYJhR94u8ihYz0XPHBMTOBzHIHp4IhGLZ+BF4a9fgDWBLG
+         tfQQ==
+X-Gm-Message-State: AFqh2kqWR7wYeIK6I1UYtpcvnE1PICY0EzPGwyNdgQnbHdH5edHv6zn5
+        vU1991dpJBJ+xNfeqwnk3b+y5Q==
+X-Google-Smtp-Source: AMrXdXvKToPZxcHkuMoE/615y81aE+lenmdxC3R2EXwCVGX0r600chYCaTjessAPeLLeFcT9WsYkxg==
+X-Received: by 2002:a17:907:a643:b0:7c1:1752:da68 with SMTP id vu3-20020a170907a64300b007c11752da68mr29439639ejc.76.1672610512844;
+        Sun, 01 Jan 2023 14:01:52 -0800 (PST)
 Received: from predatorhelios.fritz.box (dynamic-2a01-0c23-7c55-d800-0fbe-25d2-487e-ae5c.c23.pool.telefonica.de. [2a01:c23:7c55:d800:fbe:25d2:487e:ae5c])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170906304c00b007c17b3a4163sm12486807ejd.15.2023.01.01.14.01.50
+        by smtp.gmail.com with ESMTPSA id d12-20020a170906304c00b007c17b3a4163sm12486807ejd.15.2023.01.01.14.01.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 14:01:51 -0800 (PST)
+        Sun, 01 Jan 2023 14:01:52 -0800 (PST)
 From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
 To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -58,10 +60,12 @@ To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         angelogioacchino.delregno@collabora.com,
         allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
         sean.wang@mediatek.com, zhiyong.tao@mediatek.com
-Subject: [PATCH v7 0/7] Add minimal MT8365 and MT8365-EVK support
-Date:   Sun,  1 Jan 2023 23:01:42 +0100
-Message-Id: <20230101220149.3035048-1-bero@baylibre.com>
+Subject: [PATCH v7 1/7] dt-bindings: arm64: dts: mediatek: Add mt8365-evk board
+Date:   Sun,  1 Jan 2023 23:01:43 +0100
+Message-Id: <20230101220149.3035048-2-bero@baylibre.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230101220149.3035048-1-bero@baylibre.com>
+References: <20230101220149.3035048-1-bero@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,69 +78,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This adds minimal support for the MediaTek 8365 SOC and the EVK reference
-board, allowing the board to boot to initramfs with serial port I/O.
+Add bindings for the Mediatek mt8365-evk board.
 
-v7:
-  - Update GIC information in mt8365.dtsi (thanks to Marc Zyngier for
-    pointing out the problem)
-  - Adjust the timer to match the updated GIC information
+Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-v6:
-  - Add systimer in mt8365.dtsi
-  - Add I/D caches and L2 cache details in mt8365.dtsi
-  - Move bl31_secmon_reserved from mt8365.dtsi to mt8365-evk.dts
-  - Fix inconsistent indentation in mt8365-pinctrl example
-  - Further mt8365.dtsi cleanups
-  - Submit to additional maintainers spotted by get_maintainer.pl
-
-v5:
-  - Reorder top-level entries in mediatek,mt8365-pinctrl.yaml to match
-    example-schema
-  - Use consistent quotes
-
-v4:
-  - Remove pins-are-numbered references that have been holding things up
-    now that the patches removing it from dt-bindings have landed in linux-next
-
-v3:
-  - Remove a number of components that are not yet supported (they will
-    come back alongside the corresponding drivers)
-  - Address issues found by dt_binding_check (mostly fixing pinctrl
-    bindings)
-  - Address issues pointed out in comments
-  - Reorder patches
-
-v2:
-  - Add missing dt-bindings documentation
-  - Small cleanups addressing issues in v1 pointed out by Krzysztof Kozlowski
-
-
-Bernhard Rosenkränzer (4):
-  dt-bindings: arm64: dts: mediatek: Add mt8365-evk board
-  dt-bindings: irq: mtk, sysirq: add support for mt8365
-  dt-bindings: mfd: syscon: Add mt8365-syscfg
-  dt-bindings: pinctrl: add bindings for Mediatek MT8365 SoC
-
-Fabien Parent (3):
-  dt-bindings: usb: mediatek,mtu3: add MT8365 SoC bindings
-  dt-bindings: usb: mediatek,mtk-xhci: add MT8365 SoC bindings
-  arm64: dts: mediatek: Initial mt8365-evk support
-
- .../devicetree/bindings/arm/mediatek.yaml     |   4 +
- .../interrupt-controller/mediatek,sysirq.txt  |   1 +
- .../devicetree/bindings/mfd/syscon.yaml       |   1 +
- .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 197 +++++++++
- .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
- .../bindings/usb/mediatek,mtu3.yaml           |   1 +
- arch/arm64/boot/dts/mediatek/Makefile         |   1 +
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts   | 169 ++++++++
- arch/arm64/boot/dts/mediatek/mt8365.dtsi      | 378 ++++++++++++++++++
- 9 files changed, 753 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
-
+diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+index 2275e5d93721b..ae12b1cab9fbd 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+@@ -244,6 +244,10 @@ properties:
+           - enum:
+               - mediatek,mt8183-pumpkin
+           - const: mediatek,mt8183
++      - items:
++          - enum:
++              - mediatek,mt8365-evk
++          - const: mediatek,mt8365
+       - items:
+           - enum:
+               - mediatek,mt8516-pumpkin
 -- 
 2.39.0
 
