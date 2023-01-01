@@ -2,180 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ABE65ABA7
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 22:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2965465ABD8
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Jan 2023 22:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjAAVSU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Jan 2023 16:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S230161AbjAAV6N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Jan 2023 16:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjAAVST (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 16:18:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B49DD85
-        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 13:18:18 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0F0A36DB;
-        Sun,  1 Jan 2023 22:18:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672607896;
-        bh=xTbsz3NV8xZg4h+0rkRcJ4/S8QTz572CBxcPhhg8KUQ=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=hEJBgrgiEjLhRpsAmf2V7nKDmr+rufXEepDFyf/cueoazQkT1wkm491QTme214yay
-         9MSOB7SvmRwB4VYQ+0sem+8ed2gY0TKMYW5Ma9wPOKGEzFnZiNJ7g+wpES1xZzTEqd
-         A2R+J4ICxO6/PTSr1/zlb6VZFymnEw8OpTbLji48=
-Message-ID: <c9546d48-63de-16db-d3ea-65535103a49f@ideasonboard.com>
-Date:   Sun, 1 Jan 2023 21:18:13 +0000
+        with ESMTP id S230004AbjAAV6M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Jan 2023 16:58:12 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EF82722
+        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 13:58:10 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so16414634otk.8
+        for <linux-usb@vger.kernel.org>; Sun, 01 Jan 2023 13:58:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=itENd4bv7sUz5J3kCLw+9gAbPG9mWjjKo0129xbt1AQ=;
+        b=fb3LXnCyZ/kIWmb8tqNRWca8LIYBDCd5S3QU9qS017ZBuOHwJAjp+7E2RHKrwghQXA
+         F89bQEWQvafxF0QTsYtfvmnT9B9ObbMuXSZLZ0Z4iu25Wi4QZ9pm31JRiQb1DGxqM8kg
+         bKaa/o1DTP9MJKqpZI3nwwYjJLm3JLVzu1pgpf+AkBkWfuGJ2W6iKguyxa1s7VtCEuuX
+         xrVeEaiCOnUiewnJ/MAySvKL/TNapMzc1RnofDNBVdu+OSqhQf5wHlzjOyNX+S1tMnnR
+         GwHW7xQnDN6N6yg8yH6mUKhHkQDQyTf9KgtT9ISuGGkQ2ysnrKYx6sSPM2Ba/RG4ipgc
+         l57A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=itENd4bv7sUz5J3kCLw+9gAbPG9mWjjKo0129xbt1AQ=;
+        b=ddZsqMe53zwXoD6vxCVKjbFcL8h3f8pzMsOfO54OnZhqSBR23HJbMWn3U+8w4PMvYx
+         g8Qv0l0XWe276bAxtToKOahxihWK/Z3Ij+hMiwhVGHBK59NqF15d6jPZP8zyl1Df3osP
+         Ja8AO3VIb15lvGBV2+8pyFxv5Rn/iidwQec+f1rBWNqz0X+eG0oJ8eUPtsZ/rAdb1Ogy
+         Y/Z4xyX/ezUdIZkkXx1zPsLFD4DUTyWf+DlB8D9PnZhuuaF3fwfAFGRy1LaX6F2+rBAY
+         ostGh2K8K2paITmE86WK5JVaHDTZAGgDUNYbSLuWjZO09M0EpuycXCvCwfq5Rblu/amI
+         XNlg==
+X-Gm-Message-State: AFqh2ko24iu1H2hSvYj7/3QwPSqmAvflAAOJ/XP1m+oEbJ2k4p6Y1fwF
+        R+AfXzjosG/yOdGHjPKvqBw8p2m4Y19NUyis03CJLRQmw/0OEOjj
+X-Google-Smtp-Source: AMrXdXvYUSzWN57SlzCh3DW6LHX/uMQkh78bq7FU+RCyZ2XJRZPNKpSvrWCsru+LAl/TArGUqJFdjZTYm0mHsKAx6SI=
+X-Received: by 2002:a05:6830:1dac:b0:670:99fe:2dc5 with SMTP id
+ z12-20020a0568301dac00b0067099fe2dc5mr1566669oti.137.1672610289731; Sun, 01
+ Jan 2023 13:58:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, kieran.bingham@ideasonboard.com,
-        torleiv@huddly.com, mgr@pengutronix.de
-References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
- <20221121092517.225242-2-dan.scally@ideasonboard.com>
- <Y6zfiiCjcGTHeYd9@pendragon.ideasonboard.com>
- <Y6zfvXakE9stRqXw@pendragon.ideasonboard.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v2 1/9] usb: gadget: uvc: Make bSourceID read/write
-In-Reply-To: <Y6zfvXakE9stRqXw@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221230203541.146807-1-bero@baylibre.com> <20221230203541.146807-8-bero@baylibre.com>
+ <87v8lsect3.wl-maz@kernel.org>
+In-Reply-To: <87v8lsect3.wl-maz@kernel.org>
+From:   =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Date:   Sun, 1 Jan 2023 22:57:58 +0100
+Message-ID: <CAP2ifjMkKJbE_+B=XaxzXoALrc5+FUb7TKpPJQBLV3-3xqVh=g@mail.gmail.com>
+Subject: Re: [PATCH v6 7/7] arm64: dts: mediatek: Initial mt8365-evk support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        chunfeng.yun@mediatek.com, linus.walleij@linaro.org,
+        lee@kernel.org, tglx@linutronix.de,
+        angelogioacchino.delregno@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent
-
-On 29/12/2022 00:30, Laurent Pinchart wrote:
-> On Thu, Dec 29, 2022 at 02:30:04AM +0200, Laurent Pinchart wrote:
->> Hi Dan,
->>
->> Thank you for the patch.
->>
->> On Mon, Nov 21, 2022 at 09:25:09AM +0000, Daniel Scally wrote:
->>> At the moment, the UVC function graph is hardcoded IT -> PU -> OT.
->>> To add XU support we need the ability to insert the XU descriptors
->>> into the chain. To facilitate that, make the output terminal's
->>> bSourceID attribute writeable so that we can configure its source.
->>>
->>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->>> ---
->>> Changes in v2:
->>>
->>> 	- Updated the ABI Documentation to reflect the change.
->>>
->>>   .../ABI/testing/configfs-usb-gadget-uvc       |  2 +-
->>>   drivers/usb/gadget/function/uvc_configfs.c    | 57 ++++++++++++++++++-
->>>   2 files changed, 57 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>> index 611b23e6488d..feb3f2cc0c16 100644
->>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>> @@ -52,7 +52,7 @@ Date:		Dec 2014
->>>   KernelVersion:	4.0
->>>   Description:	Default output terminal descriptors
->>>   
->>> -		All attributes read only:
->>> +		All attributes read only except bSourceID:
->>>   
->>>   		==============	=============================================
->>>   		iTerminal	index of string descriptor
->>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
->>> index 4303a3283ba0..af4258120f9a 100644
->>> --- a/drivers/usb/gadget/function/uvc_configfs.c
->>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
->>> @@ -483,11 +483,66 @@ UVC_ATTR_RO(uvcg_default_output_, cname, aname)
->>>   UVCG_DEFAULT_OUTPUT_ATTR(b_terminal_id, bTerminalID, 8);
->>>   UVCG_DEFAULT_OUTPUT_ATTR(w_terminal_type, wTerminalType, 16);
->>>   UVCG_DEFAULT_OUTPUT_ATTR(b_assoc_terminal, bAssocTerminal, 8);
->>> -UVCG_DEFAULT_OUTPUT_ATTR(b_source_id, bSourceID, 8);
->>>   UVCG_DEFAULT_OUTPUT_ATTR(i_terminal, iTerminal, 8);
->>>   
->>>   #undef UVCG_DEFAULT_OUTPUT_ATTR
->>>   
->>> +static ssize_t uvcg_default_output_b_source_id_show(struct config_item *item,
->>> +						    char *page)
->>> +{
->>> +	struct config_group *group = to_config_group(item);
->>> +	struct f_uvc_opts *opts;
->>> +	struct config_item *opts_item;
->>> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
->>> +	struct uvc_output_terminal_descriptor *cd;
->>> +	int result;
->>> +
->>> +	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
->>> +
->>> +	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent->ci_parent;
->>> +	opts = to_f_uvc_opts(opts_item);
->>> +	cd = &opts->uvc_output_terminal;
->>> +
->>> +	mutex_lock(&opts->lock);
->>> +	result = sprintf(page, "%u\n", le8_to_cpu(cd->bSourceID));
->>> +	mutex_unlock(&opts->lock);
->>> +
->>> +	mutex_unlock(su_mutex);
->>> +
->>> +	return result;
->>> +}
->>> +
->>> +static ssize_t uvcg_default_output_b_source_id_store(struct config_item *item,
->>> +						     const char *page, size_t len)
->>> +{
->>> +	struct config_group *group = to_config_group(item);
->>> +	struct f_uvc_opts *opts;
->>> +	struct config_item *opts_item;
->>> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
->>> +	struct uvc_output_terminal_descriptor *cd;
->>> +	int result;
->>> +	u8 num;
->>> +
->>> +	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
->>> +
->>> +	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent->ci_parent;
->>> +	opts = to_f_uvc_opts(opts_item);
->>> +	cd = &opts->uvc_output_terminal;
->>> +
->>> +	result = kstrtou8(page, 0, &num);
->>> +	if (result)
->>> +		return result;
->>> +
->>> +	mutex_lock(&opts->lock);
->>> +	cd->bSourceID = num;
->>> +	mutex_unlock(&opts->lock);
->>> +
->>> +	mutex_unlock(su_mutex);
->>> +
->>> +	return len;
->>> +}
->>> +UVC_ATTR(uvcg_default_output_, b_source_id, bSourceID);
->> Feel free to shoot this idea down if it's a bad one: given that the
->> bSourceID attributes serve to create a pipeline by linking entities,
->> would it make sense to model these links with symlinks ?
-> I forgot to mention that this would handle the bSourceID attribute
-> automatically, avoiding mistakes. But maybe we're over-engineering all
-> this...
-
-
-Hmmmm, maybe. I lean towards over-engineered, but not strongly so. 
-Assuming the string descriptors stand as is, the .allow_link() for XUs 
-would have to account for linking to both a string and another unit. The 
-position of the Source ID field in the Unit Descriptors differs, and for 
-the XUs is nested behind another struct...and properly supporting XUs as 
-specified means we'd need to allow multiple links in to an XU, all of 
-which might make it a bit more complicated than it is helpful. Happy to 
-be convinced otherwise though; I'm on the fence about it.
-
+On Fri, Dec 30, 2022 at 11:41 PM Marc Zyngier <maz@kernel.org> wrote:
+> > +             gic: interrupt-controller@c000000 {
+> > +                     compatible = "arm,gic-v3";
+> > +                     #interrupt-cells = <4>;
 >
->>> +
->>>   static struct configfs_attribute *uvcg_default_output_attrs[] = {
->>>   	&uvcg_default_output_attr_b_terminal_id,
->>>   	&uvcg_default_output_attr_w_terminal_type,
+> Why 4 cells? All the SPIs routed via sysirq are perfectly happy with 3
+> cells, and all the PPIs have 0 for the 4th cell (none of them use any
+> form of partitioning that'd require 4 cells). So where is this coming
+> from?
+
+It's coming from the SoC vendor kernel (and went unnoticed because it
+happens to work).
+Will send an updated version that does the right thing instead. I've
+been running it most of the day, so far looking good.
+
+> > +                     interrupt-parent = <&gic>;
+> > +                     interrupt-controller;
+> > +                     reg = <0 0x0c000000 0 0x80000>, <0 0x0c080000 0 0x80000>;
+> > +
+>
+> The first region is obviously wrong (512kB for the distributor?
+> that's... most generous, but the architecture states that it is 64kB,
+> and that's wasteful enough).
+>
+> This is also missing the GICC/GICH/GICV regions that Cortex-A53
+> implements, and that must be provided as per the binding.
+
+This was also taken from the vendor kernel; unfortunately neiter the
+datasheet for the SoC not the vendor kernel specifies the addresses
+for GICC/GICH/GICV.
+I've "guessed" based on what's in similar SoCs (MT8183, MT7986a) in
+v7; this seems to work (boots, kvm initializes hyp mode properly).
+
+ttyl
+bero
