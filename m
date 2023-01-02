@@ -2,140 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DE265B527
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 17:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA0865B5DB
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 18:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbjABQhr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Jan 2023 11:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S234436AbjABR25 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Jan 2023 12:28:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjABQhp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 11:37:45 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911BC138;
-        Mon,  2 Jan 2023 08:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672677464; x=1704213464;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=kN/SHISxRWT2L0F6Vw5HZe3KAE4ojWJmQqCG+JrHEBY=;
-  b=bkWqbt/f39Iw7pW+XOg9nMrRmbBXx7XZ62MCajUm5kMOcV56gWMEU3eQ
-   Zia2FjVcaHHhFuha+7K80h9s06ArLjp0cCGssNZL0/L4G5Z7xLXtgbn9b
-   ACfHB5vfn6u1vp2qBFNEylhfyXhFEtqOotOp/FlXLOLyOzMyyNc17Rtv/
-   R5pAUb3ANPglM/HfkcEuUbcUw1oGnfpYQ5PvLsp+97aepUg2v6E3jqJQ4
-   qZf7mXBel/mpa/OFTgrVl0/TLsovW/Mi6k9R05x7S6WmKJjgKivry3O0R
-   ub749ADbGAUaTu/BHrk8mf3U4I5P5cpPVLE/7p5EnuxdRkvhIrAsl1SNg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="305019794"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="305019794"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 08:37:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="743245438"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="743245438"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Jan 2023 08:37:38 -0800
-Message-ID: <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
-Date:   Mon, 2 Jan 2023 18:38:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
+        with ESMTP id S232808AbjABR2m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 12:28:42 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B30019F;
+        Mon,  2 Jan 2023 09:28:37 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C7BE6342A7;
+        Mon,  2 Jan 2023 17:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1672680515; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c+p+ZHZvJLaVRQr5NTszckwP5nV6LjSTDHOD89k5qNI=;
+        b=ANkNie0iEw+MUPgAvLqNXpLtkCUzRqRfOgJpC594NUXYaDxiY0ZToLCCvayH8+/acLOskm
+        WjgRbB9mrM9lwKA6rIRi2W++cSewn6f0kr15VS9qKwvPKpl5O5EPwiARv+2ujwKx5eFeKN
+        0w6nMhR/x82e6RGCWuEETudE7Id91l4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1672680515;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c+p+ZHZvJLaVRQr5NTszckwP5nV6LjSTDHOD89k5qNI=;
+        b=tWgOFZcqs4GLxyLAh3jp6i0EgE7JPjCDyRfptR9lzceBDEYk76L6j/PcrKE6zBOBjdSpj5
+        1KDBnaRWSnWbIVCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6BE0513427;
+        Mon,  2 Jan 2023 17:28:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6vZjGUMUs2ORIQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 02 Jan 2023 17:28:35 +0000
+Date:   Mon, 02 Jan 2023 18:28:34 +0100
+Message-ID: <87edscsv5p.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
+Subject: Re: [RFC PATCH 09/14] sound: usb: Introduce QC USB SND offloading support
+In-Reply-To: <20221223233200.26089-10-quic_wcheng@quicinc.com>
 References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-8-quic_wcheng@quicinc.com>
- <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
- <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
- support
-In-Reply-To: <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        <20221223233200.26089-10-quic_wcheng@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29.12.2022 23.14, Wesley Cheng wrote:
-> Hi Mathias,
+On Sat, 24 Dec 2022 00:31:55 +0100,
+Wesley Cheng wrote:
 > 
-> On 12/28/2022 7:47 AM, Mathias Nyman wrote:
->> On 24.12.2022 1.31, Wesley Cheng wrote:
->>> Implement the XHCI operations for allocating and requesting for a secondary
->>> interrupter.  The secondary interrupter can allow for events for a
->>> particular endpoint to be routed to a separate event ring.  The event
->>> routing is defined when submitting a transfer descriptor to the USB HW.
->>> There is a specific field which denotes which interrupter ring to route the
->>> event to when the transfer is completed.
->>>
->>> An example use case, such as audio packet offloading can utilize a separate
->>> event ring, so that these events can be routed to a different processor
->>> within the system.  The processor would be able to independently submit
->>> transfers and handle its completions without intervention from the main
->>> processor.
->>>
->>
->> Adding support for more xHCI interrupters than just the primary one make sense for
->> both the offloading and virtualization cases.
->>
->> xHCI support for several interrupters was probably added to support virtualization,
->> to hand over usb devices to virtual machines and give them their own event ring and
->> MSI/MSI-X vector.
->>
->> In this offloading case you probably want to avoid xHC interrupts from this device
->> completely, making sure it doesn't wake up the main CPU unnecessarily.
->>
->> So is the idea here to let xhci driver set up the new interrupter, its event ring,
->> and the endpoint transfer rings. Then pass the address of the endpoint transfer rings
->> and the new event ring to the separate processor.
->>
->> This separate processor then both polls the event ring for new events, sets its dequeue
->> pointer, clears EHB bit, and queues new TRBs on the transfer ring.
->>
->> so xhci driver does not handle any events for the audio part, and no audio data URBs
->> are sent to usb core?
+> Several Qualcomm SoCs have a dedicated audio DSP, which has the ability to
+> support USB sound devices.  This vendor driver will implement the required
+> handshaking with the DSP, in order to pass along required resources that
+> will be utilized by the DSP's USB SW.  The communication channel used for
+> this handshaking will be using the QMI protocol.  Required resources
+> include:
+> - Allocated secondary event ring address
+> - EP transfer ring address
+> - Interrupter number
 > 
-> Your entire description is correct.  To clarify, the interfaces which are non-audio will still be handled by the main processor.  For example, a USB headset can have a HID interface as well for volume control.  The HID interface will still be handled by the main processor, and events routed to the main event ring.
+> The above information will allow for the audio DSP to execute USB transfers
+> over the USB bus.  It will also be able to support devices that have an
+> implicit feedback and sync endpoint as well.  Offloading these data
+> transfers will allow the main/applications processor to enter lower CPU
+> power modes, and sustain a longer duration in those modes.
 > 
->>
->> How about the control part?
->> Is the control endpoint for this device still handled normally by usb core/xhci?
->>
-> 
-> Control transfers are always handled on the main processor.  Only audio interface's endpoints.
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 
-Good to know, that means interrupter should be chosen per endpoint, not per device.
+Hmm, this must be the main part that works to bypass the normal USB
+packet handling in USB audio driver but hooks to the own offload one,
+but there is no description how to take over and manage.
+A missing "big picture" makes it difficult to understand and review.
 
-> 
->> For the xhci parts I think we should start start by adding generic support for several
->> interrupters, then add parts needed for offloading.
-> 
-> I can split up the patchsets to add interrupters first, then adding the offloading APIs in a separate patch.
+Also, since both drivers are asynchronous, we may need some proper
+locking.
+
+More on the code change:
+
+> +static int snd_interval_refine_set(struct snd_interval *i, unsigned int val)
+> +{
+> +	struct snd_interval t;
+> +
+> +	t.empty = 0;
+> +	t.min = t.max = val;
+> +	t.openmin = t.openmax = 0;
+> +	t.integer = 1;
+> +	return snd_interval_refine(i, &t);
+> +}
+> +
+> +static int _snd_pcm_hw_param_set(struct snd_pcm_hw_params *params,
+> +				 snd_pcm_hw_param_t var, unsigned int val,
+> +				 int dir)
+> +{
+> +	int changed;
+> +
+> +	if (hw_is_mask(var)) {
+> +		struct snd_mask *m = hw_param_mask(params, var);
+> +
+> +		if (val == 0 && dir < 0) {
+> +			changed = -EINVAL;
+> +			snd_mask_none(m);
+> +		} else {
+> +			if (dir > 0)
+> +				val++;
+> +			else if (dir < 0)
+> +				val--;
+> +			changed = snd_mask_refine_set(
+> +					hw_param_mask(params, var), val);
+> +		}
+> +	} else if (hw_is_interval(var)) {
+> +		struct snd_interval *i = hw_param_interval(params, var);
+> +
+> +		if (val == 0 && dir < 0) {
+> +			changed = -EINVAL;
+> +			snd_interval_none(i);
+> +		} else if (dir == 0)
+> +			changed = snd_interval_refine_set(i, val);
+> +		else {
+> +			struct snd_interval t;
+> +
+> +			t.openmin = 1;
+> +			t.openmax = 1;
+> +			t.empty = 0;
+> +			t.integer = 0;
+> +			if (dir < 0) {
+> +				t.min = val - 1;
+> +				t.max = val;
+> +			} else {
+> +				t.min = val;
+> +				t.max = val+1;
+> +			}
+> +			changed = snd_interval_refine(i, &t);
+> +		}
+> +	} else
+> +		return -EINVAL;
+> +	if (changed) {
+> +		params->cmask |= 1 << var;
+> +		params->rmask |= 1 << var;
+> +	}
+> +	return changed;
+> +}
+
+Those are taken from sound/core/oss/pcm_oss.c?  We may put to the
+common PCM helper instead of duplication.
+
+> +static void disable_audio_stream(struct snd_usb_substream *subs)
+> +{
+> +	struct snd_usb_audio *chip = subs->stream->chip;
+> +
+> +	if (subs->data_endpoint || subs->sync_endpoint) {
+> +		close_endpoints(chip, subs);
+> +
+> +		mutex_lock(&chip->mutex);
+> +		subs->cur_audiofmt = NULL;
+> +		mutex_unlock(&chip->mutex);
+> +	}
+> +
+> +	snd_usb_autosuspend(chip);
+> +}
+> +
+> +static int enable_audio_stream(struct snd_usb_substream *subs,
+> +				snd_pcm_format_t pcm_format,
+> +				unsigned int channels, unsigned int cur_rate,
+> +				int datainterval)
+> +{
+> +	struct snd_usb_audio *chip = subs->stream->chip;
+> +	struct snd_pcm_hw_params params;
+> +	const struct audioformat *fmt;
+> +	int ret;
+> +
+> +	_snd_pcm_hw_params_any(&params);
+> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_FORMAT,
+> +			pcm_format, 0);
+> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_CHANNELS,
+> +			channels, 0);
+> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_RATE,
+> +			cur_rate, 0);
+
+What about other parameters like period / buffer sizes?
+
+> +struct qmi_uaudio_stream_req_msg_v01 {
+> +	u8 enable;
+> +	u32 usb_token;
+> +	u8 audio_format_valid;
+> +	u32 audio_format;
+> +	u8 number_of_ch_valid;
+> +	u32 number_of_ch;
+> +	u8 bit_rate_valid;
+> +	u32 bit_rate;
+> +	u8 xfer_buff_size_valid;
+> +	u32 xfer_buff_size;
+> +	u8 service_interval_valid;
+> +	u32 service_interval;
+> +};
+
+Are this and the other structs a part of DSP ABI?
+Or is it a definition only used in kernel?  I'm asking because
+__packed attribute is required for most of ABI definitions with
+different field types.
 
 
-I started looking at supporting secondary interrupters myself.
-Let me work on that part a bit first. We have a bit different end goals.
-I want to handle interrupts from a secondary interrupter, while this audio offload
-really just wants to mask some interrupts.
+thanks,
 
-Thanks
-Mathias
-
+Takashi
