@@ -2,185 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4E265AD2D
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 06:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEAC65AD3F
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 06:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjABFML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Jan 2023 00:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S229675AbjABFhD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Jan 2023 00:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjABFKm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 00:10:42 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F87271E
-        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 21:08:42 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230102050840epoutp0478cbdd897b852208d13caaa83932f171~2ZbCf6zWu2481124811epoutp04N
-        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 05:08:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230102050840epoutp0478cbdd897b852208d13caaa83932f171~2ZbCf6zWu2481124811epoutp04N
+        with ESMTP id S230466AbjABFg7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 00:36:59 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0C9114F
+        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 21:36:55 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230102053652epoutp01b755a2205796905f9e5d7aea63f14f42~2Zzp4d3Hm2731727317epoutp010
+        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 05:36:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230102053652epoutp01b755a2205796905f9e5d7aea63f14f42~2Zzp4d3Hm2731727317epoutp010
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1672636120;
-        bh=QuTmYE28MUecwpy1+68iyqX/b1xd0I8r7MjhXIX+ErA=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=J5TqYZgRlXfjecOSxm3Y4BjXRghOHsLhpi2PP7NlnQD+7v4SRbRTzdSxkYJaMDsdD
-         59i8zXz5ny56tPi8Q9h+rpBF+DegAbpIKFC5HhJxSHJVgowI63eauzuCGPnLBm9TLI
-         kP2sOzEk/1cDK5OvLL24EVo5eD0aQcjkmR1wU9XQ=
+        s=mail20170921; t=1672637812;
+        bh=2zdqGEKgFKRQC4ThirZiGZBm1TO9HpEh7hl1O9l+xc0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IKF6OuFGZjpNoFqjhz8FD7//xuG6RZ2KGvlWsObzjQibdYo3OoWLDexLt6/d/OUH7
+         YQSTJ1SCPzfTXhneSjWbBcgR0gnfTxPdsQAlBqlNtAnzO/nSQAVmXfkxdz3rn6+ClD
+         eYw2wOMurhFmdlT0vkSWuzXuQ18oczLswnNd1Q+U=
 Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
         epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230102050840epcas2p480bbcdb30003e8d21989f6749436ffe2~2ZbCB9aog2715427154epcas2p4-;
-        Mon,  2 Jan 2023 05:08:40 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4NlkRD0Qwqz4x9Q8; Mon,  2 Jan
-        2023 05:08:40 +0000 (GMT)
+        20230102053651epcas2p400bd9d0e8d06e3cee3f85fd5ce62c500~2ZzpLumjz1090410904epcas2p4g;
+        Mon,  2 Jan 2023 05:36:51 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Nll3l2XTtz4x9Pv; Mon,  2 Jan
+        2023 05:36:51 +0000 (GMT)
 Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        16.3C.15497.7D662B36; Mon,  2 Jan 2023 14:08:39 +0900 (KST)
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F7.1B.03803.37D62B36; Mon,  2 Jan 2023 14:36:51 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3~2ZbBVCKeh3229832298epcas2p4I;
-        Mon,  2 Jan 2023 05:08:39 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        20230102053650epcas2p4e261cc28b63a0002a39af7098bc32677~2ZzoJpoFf1088710887epcas2p4_;
+        Mon,  2 Jan 2023 05:36:50 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230102050839epsmtrp1d67c37d7ee0b27b3e64180842a7b72e7~2ZbBUUyvD1063610636epsmtrp1y;
-        Mon,  2 Jan 2023 05:08:39 +0000 (GMT)
-X-AuditID: b6c32a48-225ff70000023c89-6d-63b266d79048
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B2.C8.02211.7D662B36; Mon,  2 Jan 2023 14:08:39 +0900 (KST)
-Received: from PlatFormDev3.dsn.sec.samsung.com (unknown [10.166.246.26]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230102050839epsmtip1211b1f9fbfc0c19521ee465b336f03c4~2ZbBHEVlF0461604616epsmtip1E;
-        Mon,  2 Jan 2023 05:08:39 +0000 (GMT)
-From:   JaeHun Jung <jh0801.jung@samsung.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
-        linux-kernel@vger.kernel.org (open list),
-        Seungchull Suh <sc.suh@samsung.com>,
-        Daehwan Jung <dh10.jung@samsung.com>,
-        JaeHun Jung <jh0801.jung@samsung.com>
-Subject: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
-Date:   Mon,  2 Jan 2023 14:08:31 +0900
-Message-Id: <20230102050831.105499-1-jh0801.jung@samsung.com>
-X-Mailer: git-send-email 2.31.1
+        20230102053650epsmtrp114a7f3634cc44ab7a33c0bf7d2697d4e~2ZzoF4qrQ2758227582epsmtrp1u;
+        Mon,  2 Jan 2023 05:36:50 +0000 (GMT)
+X-AuditID: b6c32a45-f47ff70000020edb-f3-63b26d73be22
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FC.EB.10542.27D62B36; Mon,  2 Jan 2023 14:36:50 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230102053650epsmtip28c9e1bdff7774081c4574524a4946b1e~2Zzn4pTmj2504225042epsmtip2J;
+        Mon,  2 Jan 2023 05:36:50 +0000 (GMT)
+Date:   Mon, 2 Jan 2023 14:30:37 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
+        eomji.oh@samsung.com
+Subject: Re: [RFC PATCH v2 2/3] dt-bindings: usb: generic-xhci: add Samsung
+ Exynos compatible
+Message-ID: <20230102053037.GA74470@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJKsWRmVeSWpSXmKPExsWy7bCmqe71tE3JBl9v21gca3vCbnFnwTQm
-        i+bF69ks7j78wWJxedccNotFy1qZLbru3mB0YPfYtKqTzWP/3DXsHn1bVjF6fN4kF8ASlW2T
-        kZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SBkkJZYk4p
-        UCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQvXS8vtcTK0MDAyBSoMCE7o3fD
-        ZcaC69IVjya2sTUwrhXrYuTkkBAwkVj94wUziC0ksINRYsLMyC5GLiD7E6PEoh9HmCGcb4wS
-        jc8fssF0TD76hQ0isZdRYtqrF4wQzj9GiePvLoDNYhPQltg3ZxE7iC0iECYxcdk+FpAiZoHb
-        jBIr5l1gBEkIC7hI3Hj+EqyBRUBV4tPqq2ANvAK2ElNm7WCHWCcvcfrENUaIuKDEyZlPWEBs
-        ZqB489bZYPdJCJxil7g/bSpQAweQ4yKxapsQRK+wxKvjW6DmSEm87G+DsrMldm14wwxhV0j0
-        9C9jgbCNJWY9a2cEGcMsoCmxfpc+xERliSO3oLbySXQc/gu1iFeiow1qkarEwcabUEOkJb71
-        vmOEsD0kuvpa2SGhGyvRcGIB6wRG+VlIfpmF5JdZCHsXMDKvYhRLLSjOTU8tNiowgcdpcn7u
-        JkZwGtTy2ME4++0HvUOMTByMhxglOJiVRHgvf16XLMSbklhZlVqUH19UmpNafIjRFBi6E5ml
-        RJPzgYk4ryTe0MTSwMTMzNDcyNTAXEmcN2jr/GQhgfTEktTs1NSC1CKYPiYOTqkGpoM5TCp7
-        bub+3bd+sdzeA26SOVfSZO2OMVjfP1da/vrwi+9Lv6zufBuadsKstyNt52GzQ0UeJmWH5PT1
-        4k+KnJOdbN3EadY0Tdj27B31C4Fp15tmtn2SmBQb0+N1NGjmuxLZMxkKPgtT6sVffec4evy8
-        zfvcOsMIPibBec9PcW7eedB/UvWRkoYTz+L/Tt9f/pzp8EO/YJfWEpa13Sq9G9/Pnu30psBT
-        c8e2vKzz4hIeG448sdENyXQT2JYy6eaUvGeSMuU/7TsPz01wqrJ6tC7RaVdX40S2U+/WpcUv
-        yMz1uN8p3Z675+yF2aknkrWSLy/8buoUsHPperMcQ4va7/m834u08ni3fjxccen+PCWW4oxE
-        Qy3mouJEAHNHThEMBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNLMWRmVeSWpSXmKPExsWy7bCSnO71tE3JBl/OyFkca3vCbnFnwTQm
-        i+bF69ks7j78wWJxedccNotFy1qZLbru3mB0YPfYtKqTzWP/3DXsHn1bVjF6fN4kF8ASxWWT
-        kpqTWZZapG+XwJXRu+EyY8F16YpHE9vYGhjXinUxcnJICJhITD76ha2LkYtDSGA3o8T/Z73M
-        EAlpiZ2dU5kgbGGJ+y1HWCGK/jBKfDg+jQUkwSagLbFvziJ2EFtEIEzi36OLLCBFzAJ3GSWa
-        TkxkA0kIC7hI3Hj+Emwqi4CqxKfVV8EaeAVsJabM2sEOsUFe4vSJa4wQcUGJkzOfgC1gBoo3
-        b53NPIGRbxaS1CwkqQWMTKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYLDU0tzB+P2
-        VR/0DjEycTAeYpTgYFYS4b38eV2yEG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tS
-        s1NTC1KLYLJMHJxSDUxXZpldT/ic/Uj5+J+c/7k/tvzh33qixzVC3vnrAg2+26IF6rVrF2jN
-        rK1r0/zUu9ZHkc9LV27iJPXE9VeFWz/E/lffWaK6lH2KZXrguyvK1+daCB+7xfshWr7ZUKT7
-        8ku+nwxnWhj7ph3+drlr9qPkuvrHOso5E6ZP7w64vvDX67R+6ee3tHedfiMY8ScgPtltR6N0
-        76UXs5+t6tU6lCaqEn7vu5vymdZ7OY2dmcmKxUeNAlfd4b1lPHm6u0rXp1WRFzzSXQUXRUTb
-        /GhoqPp08b9KbKqxvfHGD3wl+78YPXFcdvvEtn+J/W+luRZf17xutELH2jyxdQL/vhn80q0G
-        O5ZdehMTlRV/vpL91SYlluKMREMt5qLiRABaTgyIvgIAAA==
-X-CMS-MailID: 20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3
+In-Reply-To: <d84f46f5-9975-cde2-0b56-b51990e27150@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEJsWRmVeSWpSXmKPExsWy7bCmqW5x7qZkg3td7BbH2p6wW8w/co7V
+        4tTyhUwWzYvXs1ncffiDxaLvxUNmi72vt7JbXN41h81i0bJWZovmTVNYLVr3HmG36Lp7g9Fi
+        0kFRi1ULDrA78Hks3vOSyWPTqk42jzvX9rB57J+7ht2jb8sqRo8t+z8zenzeJBfAHpVtk5Ga
+        mJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0spJCWWJOKVAo
+        ILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO+P6qQlM
+        BbcEKzZMX8jWwNjB18XIySEhYCLR3XKcDcQWEtjBKPFmm3AXIxeQ/YlRYvWv2SwQzmdGiedr
+        f7HDdPzf8pkZIrGLUWLG5weMEO1PGCWuzNIHsVkEVCQO/TwCNpZNQEvi3o8TzCC2iICFxOIN
+        C1lBmpkFVrFIbH/1kAUkISwQL7H881GwBl4BbYkPm/axQtiCEidnPgGr4RSwk3jdvA+ohoND
+        FGjBq4P1IHMkBHZwSDz80ckGcZ2LxJ2GaawQtrDEq+NboK6WknjZ3wZlZ0tc/9bNAmFXSKzY
+        C2MbS8x61g72DLNAhkTf4rPMILskBJQljtxigQjzSXQc/ssOEeaV6GgTguhUlph+eQLUVkmJ
+        g6/PMUPYHhLvL05jhIRVJ5PEjtvfWSYwys9C8tksJNsgbB2JBbs/sc0CWsEsIC2x/B8HhKkp
+        sX6X/gJG1lWMYqkFxbnpqcVGBYbwuE7Oz93ECE7MWq47GCe//aB3iJGJg/EQowQHs5II7+XP
+        65KFeFMSK6tSi/Lji0pzUosPMZoC42kis5Rocj4wN+SVxBuaWBqYmJkZmhuZGpgrifMGbZ2f
+        LCSQnliSmp2aWpBaBNPHxMEp1cA0M+XfZ7ebC6b/mDgnJvLoEUctCRljx+U10zse7ZGcdW/X
+        JmeGvENvTKJyDAM1P31canpL6tIlxajCbwyVGSvN1we9WV4uV6NzzTHszCT+7p2ZN15qbGX2
+        WHIt8YAxi8a+5v512tnO1taTZi+beHzdzpk31wuYhiwIYyxQLXx+rue+wJkQ7m5Nv9OW9qvt
+        FWU+PfXyVPX6vXVGwyd1leIP5488+zNbft+MxXMEn7zdn9eYNtn++vFnhyYf536bd1vy1MwW
+        84S6TL0H1ZsuPDROVFw8yUbR8+zsFeznZi1dHNLHLF03tcnv6o+PT6vfPff7yL9QMm96Ypmk
+        bpBIzAbev7JvTKs4lr3KvSg69aXtHSWW4oxEQy3mouJEAI3T2UFVBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJXrcod1Oywa39khbH2p6wW8w/co7V
+        4tTyhUwWzYvXs1ncffiDxaLvxUNmi72vt7JbXN41h81i0bJWZovmTVNYLVr3HmG36Lp7g9Fi
+        0kFRi1ULDrA78Hks3vOSyWPTqk42jzvX9rB57J+7ht2jb8sqRo8t+z8zenzeJBfAHsVlk5Ka
+        k1mWWqRvl8CVceTtLraCWfwVWz5vZW9gfMjdxcjJISFgIvF/y2dmEFtIYAejxJbDARBxSYml
+        c2+wQ9jCEvdbjrB2MXIB1TxilOjtfMoGkmARUJE49PMImM0moCVx78cJsEEiAhYSizcsZAWx
+        mQXWsUhsnRwPYgsLxEss/3wUrJ5XQFviw6Z9UEM7mSQmTv3FDJEQlDg58wkLRLOWxI1/L5m6
+        GDmAbGmJ5f84QMKcAnYSr5v3sYGERYFueHWwfgKj4CwkzbOQNM9CaF7AyLyKUTK1oDg3PbfY
+        sMAoL7Vcrzgxt7g0L10vOT93EyM4srS0djDuWfVB7xAjEwfjIUYJDmYlEd7Ln9clC/GmJFZW
+        pRblxxeV5qQWH2KU5mBREue90HUyXkggPbEkNTs1tSC1CCbLxMEp1cCk/XTmlXNLFSZZz+2Q
+        nllgruxb/HL6jJTtqsJhQTeb5dbsf8cgtDJrrsmD56IsRlsiKzn6M/6L6nCtiru+aLI9m3ip
+        wYRkNTFe9cw5HAaf3qr6CKySjf1643JfRJ5v4XKVpzHea2+nXnRuVZWOfqtz3H91/aHSBi+R
+        9Y4Vk5jfaCcan/fMns2w9EPQD6kdz7Lzee/PCZq42vizxrzv7oynXbd/Mfa0y5pQL2F9Uf7g
+        4vehbDsbQ6KPcZo0dHExHky5PjnwzOy2nIk7ry2W/FK0y9hMvE6wVMfn8B23V3ZhqfssUhd5
+        pWpxr9l7af9nCY3Ih/9jynKuOr20ron2tDVe/VtvyuubtucrFP1bk5RYijMSDbWYi4oTAULF
+        roYbAwAA
+X-CMS-MailID: 20230102053650epcas2p4e261cc28b63a0002a39af7098bc32677
 X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/mixed;
+        boundary="-----MZMhAa2FDKenVcG4rwH3wgKue-rxPmwBkiUVsWz4GNry_6C=_e4678_"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3
-References: <CGME20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3@epcas2p4.samsung.com>
+X-CMS-RootMailID: 20221229100416epcas2p3614b693ab922aadbdc76c0387f768de9
+References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20221229100416epcas2p3614b693ab922aadbdc76c0387f768de9@epcas2p3.samsung.com>
+        <1672307866-25839-3-git-send-email-dh10.jung@samsung.com>
+        <d84f46f5-9975-cde2-0b56-b51990e27150@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sometimes very rarely, The count is 0 and the DWC3 flag is set has status.
-It must not have these status. Because, It can make happen interrupt storming
-status.
-So, It have to clean up DWC3_EVENT_PENDING flags set when count is 0.
-It means "There are no interrupts to handle.".
+-------MZMhAa2FDKenVcG4rwH3wgKue-rxPmwBkiUVsWz4GNry_6C=_e4678_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-(struct dwc3_event_buffer *) ev_buf = 0xFFFFFF883DBF1180 (
-	(void *) buf = 0xFFFFFFC00DBDD000 = end+0x337D000,
-	(void *) cache = 0xFFFFFF8839F54080,
-	(unsigned int) length = 0x1000,
-	(unsigned int) lpos = 0x0,
-	(unsigned int) count = 0x0,
-	(unsigned int) flags = 0x00000001,
-	(dma_addr_t) dma = 0x00000008BD7D7000,
-	(struct dwc3 *) dwc = 0xFFFFFF8839CBC880,
-	(u64) android_kabi_reserved1 = 0x0),
+On Thu, Dec 29, 2022 at 11:19:09AM +0100, Krzysztof Kozlowski wrote:
+> On 29/12/2022 10:57, Daehwan Jung wrote:
+> > Add compatible for Samsung Exynos SOCs
+> 
+> Missing full stop. Please explain here in details the hardware.
+> Otherwise it looks it is not for any hardware and patch should be dropped.
+> 
 
-(time = 47557628930999, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628931268, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628932383, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628932652, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628933768, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628934037, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628935152, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628935460, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628936575, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628936845, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628937960, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628938229, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628939345, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628939652, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628940768, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628941037, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628942152, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628942422, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628943537, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628943806, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628944922, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628945229, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628946345, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628946614, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
-(time = 47557628947729, irq = 165, fn = dwc3_interrupt, latency = 0, en = 1),
-(time = 47557628947999, irq = 165, fn = dwc3_interrupt, latency = 0, en = 3),
+I got it. This patch may be for new feature of generic xhci not for exynos.
+I will add hardware description on next submission.
 
-Signed-off-by: JaeHun Jung <jh0801.jung@samsung.com>
----
- drivers/usb/dwc3/gadget.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> Also, missing DTS. I am going to keep NAK-ing this till you provide the
+> user.
+> 
+> NAK.
+> 
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 789976567f9f..5d2d5a9b9915 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4355,8 +4355,11 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
- 	 * irq event handler completes before caching new event to prevent
- 	 * losing events.
- 	 */
--	if (evt->flags & DWC3_EVENT_PENDING)
-+	if (evt->flags & DWC3_EVENT_PENDING) {
-+		if (!evt->count)
-+			evt->flags &= ~DWC3_EVENT_PENDING;
- 		return IRQ_HANDLED;
-+	}
- 
- 	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
- 	count &= DWC3_GEVNTCOUNT_MASK;
--- 
-2.31.1
+I've added a example and checked bindings following below guides.
 
+https://docs.kernel.org/devicetree/bindings/submitting-patches.html
+https://docs.kernel.org/devicetree/bindings/writing-schema.html
+
+I have no idea that I have to also submit DTS.
+I will submit it on next submission.
+
+> > 
+> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/generic-xhci.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+> > index db841589fc33..f54aff477637 100644
+> > --- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+> > @@ -29,6 +29,8 @@ properties:
+> >          enum:
+> >            - brcm,xhci-brcm-v2
+> >            - brcm,bcm7445-xhci
+> > +      - description: Samsung Exynos SoCs with xHCI
+> > +        const: samsung,exynos-xhci
+> 
+> Missing fallback.
+
+Modifying it like below is OK?
+
+decription: Samsung Exynos SoCs with xHCI
+        items:
+            - const: samsung,exynos-xhci
+            - const: generic-xhci
+
+Best Regards,
+Jung Daehwan
+
+> 
+> >        - description: Generic xHCI device>          const: xhci-platform
+> >          deprecated: true
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+
+-------MZMhAa2FDKenVcG4rwH3wgKue-rxPmwBkiUVsWz4GNry_6C=_e4678_
+Content-Type: text/plain; charset="utf-8"
+
+
+-------MZMhAa2FDKenVcG4rwH3wgKue-rxPmwBkiUVsWz4GNry_6C=_e4678_--
