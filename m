@@ -2,298 +2,313 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD3365AF27
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 11:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6960065AF4D
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 11:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjABKBB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Jan 2023 05:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S231567AbjABKJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Jan 2023 05:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbjABKA4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 05:00:56 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3471710BC
-        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 02:00:54 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id x8-20020a056e02194800b0030c1ca49d7dso8496617ilu.8
-        for <linux-usb@vger.kernel.org>; Mon, 02 Jan 2023 02:00:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XmjMwtXpxAbnC88x8JLvG4A4xNTrO1itYQdLASs/0jw=;
-        b=Ppr4nWteuOIte9nZxg5upoTEziCyFgfG+h3dmB4k9xo5wTRFhedo1fdy0iI5G5RBbG
-         kLa4Cs+8q6dnDXhkLa5ykDj2UW18XqPD0IN0YiL6+U+M7gPgpj5xtV8Law5CNRarYCFE
-         o2mSV6/QFtz0xe50edGliv/OA5mVIEvKhWEphxBM6h9mNJzwzlqPI41ofkLJZi5VQaDG
-         TKXwIVKmqY9RKtgs/gpRc5pZ43ZWZhJVgRDGHabEFfmxND4PLdlTnVch43GSbSawziQJ
-         h6vZejNfXbZSvj8dUxriZLne7xhmNldCIwboF/69RxqR4JAV3DAmcqUWoQS+KTpxEuM2
-         5pTg==
-X-Gm-Message-State: AFqh2kqF7IVfGUflK+zhj+yM7SpNE7OMGhhOf5+54CbpFYWHtobHPIGc
-        bDuX7WUJRk9MAsPljKhm2scfVBEDMYPdvwhtiQYgrWwiq1fL
-X-Google-Smtp-Source: AMrXdXuoa3oMoNhdchTv5L7Tdl0dRBYNBdc8Ojlip/aSpwLDI94+jF14KRCd0fkFT9WhUTBJIXE0Mo5DyJtn/9b2oWh1Kr1hdiah
+        with ESMTP id S230076AbjABKJX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 05:09:23 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31F21DF
+        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 02:09:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672654160; x=1704190160;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=cs6jXBI/HRgvmeiVk7c/Bbeq4ZzjV/ivUH04xWN1dA4=;
+  b=KYzZALa5TEyUoxvppS65WZe8UhgowR9UhqpwXj9EYW5BdOTDdpNEuNkk
+   jEYa1NmerPQhvAYlPRuqeYjNAeL1qv4DAkUuMmxWYCKkSRIVkCzDQUfnq
+   LB6iATwxRO7+JkEHZkLFG4yJjvm2tfoYNUJ03g5RQT9xJG6qwsSjs+d99
+   Q1qtbN6mKwMJkCbzlfhpiLY5tFQSpyezdnr7xyEX2L71NTGnauJYx4qZ+
+   YVVrc+NYTdKBXOlx1RsPnxVAiCVdz4Odz9GIeLAxnB60zYMzmz6jxWMck
+   UATu10qE0CclsldPIfEOerUH7HkFEqOcV0sGfMF8q/bm9FSKMolayRyTr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="319161543"
+X-IronPort-AV: E=Sophos;i="5.96,293,1665471600"; 
+   d="scan'208";a="319161543"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 02:09:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="796831838"
+X-IronPort-AV: E=Sophos;i="5.96,293,1665471600"; 
+   d="scan'208";a="796831838"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 02 Jan 2023 02:09:17 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 02 Jan 2023 12:09:16 +0200
+Date:   Mon, 2 Jan 2023 12:09:16 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: How to proceed: usci_acpi: PPM init failed (-110)
+Message-ID: <Y7KtTBTNYeeR7v/C@kuha.fi.intel.com>
+References: <20210824164942.6pakfzf2crnxes7w@fastboi.localdomain>
+ <YSX5Gewqat7zbEXY@kuha.fi.intel.com>
+ <20210825092138.jmhbjx2innikurw2@fastboi.localdomain>
+ <YSdIb+f+/cbRyBs1@kuha.fi.intel.com>
+ <20210826114105.amyjjhslqhiqdw6e@fastboi.localdomain>
+ <178d8c7ca72400c2aa12679d4532611d@cavoj.net>
+ <Ye5wFVwQTWawdPPK@kuha.fi.intel.com>
+ <23e8104421efcf0937168e0ac5489367@cavoj.net>
+ <Yjw9n5FXHMp8TpsM@kuha.fi.intel.com>
+ <d2952e0a1356d88f899d26173cc14205@cavoj.net>
 MIME-Version: 1.0
-X-Received: by 2002:a92:dd89:0:b0:30c:39a:b4b1 with SMTP id
- g9-20020a92dd89000000b0030c039ab4b1mr1666036iln.75.1672653653559; Mon, 02 Jan
- 2023 02:00:53 -0800 (PST)
-Date:   Mon, 02 Jan 2023 02:00:53 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000da505a05f1450636@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in hiddev_release (2)
-From:   syzbot <syzbot+9554fc2c9f37f1b9fe77@syzkaller.appspotmail.com>
-To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d2952e0a1356d88f899d26173cc14205@cavoj.net>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Sam,
 
-syzbot found the following issue on:
+Sorry to keep you waiting.
 
-HEAD commit:    f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=124e11c8480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d0b80bd549c34918
-dashboard link: https://syzkaller.appspot.com/bug?extid=9554fc2c9f37f1b9fe77
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+On Thu, Dec 22, 2022 at 09:18:27PM +0100, Samuel Čavoj wrote:
+> Hi Heikki,
+> 
+> I gave this a hard look and figured out the issue. Long story short, the
+> firmware is clearing the CCI on EC RAM after copying from EC RAM to
+> system memory. This happens both when notifications are delivered and
+> when a read operation is explicitly performed via _DSM(read). What the
+> driver currently does after receiving a notification is performing an
+> explicit read. However by this time the CCI in EC RAM has been cleared
+> by the AML and the information is lost.
+> 
+> Details:
+> 
+> 1. _DSM(read) of the UCSI device:
+> 
+> Copies all relevant fields of the mailbox data structure from EC RAM
+> to a SystemMemory OperationRegion. The last field to be copied is the
+> CCI:
+> 
+>     [...]
+>     CCI0 = \_SB.PCI0.SBRG.EC0.ECRD (RefOf (\_SB.PCI0.SBRG.EC0.CCI0))
+>     CCI1 = \_SB.PCI0.SBRG.EC0.ECRD (RefOf (\_SB.PCI0.SBRG.EC0.CCI1))
+>     CCI2 = \_SB.PCI0.SBRG.EC0.ECRD (RefOf (\_SB.PCI0.SBRG.EC0.CCI2))
+>     CCI3 = \_SB.PCI0.SBRG.EC0.ECRD (RefOf (\_SB.PCI0.SBRG.EC0.CCI3))
+>     [...]
+> 
+> However, for some reason, this is followed by another two operations,
+> which zero-out half of the CCI:
+> 
+>     [...]
+>     \_SB.PCI0.SBRG.EC0.ECWT (Zero, RefOf (\_SB.PCI0.SBRG.EC0.CCI0))
+>     \_SB.PCI0.SBRG.EC0.ECWT (Zero, RefOf (\_SB.PCI0.SBRG.EC0.CCI3))
+> 
+> I don't know why this is present. This does not cause the problem,
+> however, only leads to issues if two explicit reads are performed
+> consecutively. What does cause problems with the current driver
+> implementation is:
+> 
+> 2. The event handler (_Q79)
+> 
+> The _Q79 event handler on my machine is responsible for the UCSI
+> notifications. It performs a copy from EC RAM to system memory and
+> triggers the 0x80 notification on the UCSI device (called UBTC).
+> The final instructions of this handler are:
+> 
+>     [...]
+>     ^^^^UBTC.CCI0 = CCI0 /* \_SB_.PCI0.SBRG.EC0_.CCI0 */
+>     ^^^^UBTC.CCI1 = CCI1 /* \_SB_.PCI0.SBRG.EC0_.CCI1 */
+>     ^^^^UBTC.CCI2 = CCI2 /* \_SB_.PCI0.SBRG.EC0_.CCI2 */
+>     ^^^^UBTC.CCI3 = CCI3 /* \_SB_.PCI0.SBRG.EC0_.CCI3 */
+>     USGC = 0xF1
+>     CCI0 = Zero // These two lines are the culprit
+>     CCI3 = Zero
+>     Local1 = ((Timer - Local0) / 0x2710)
+>     Notify (UBTC, 0x80) // Status Change
+>     Release (ECMT)
+> 
+> 
+> A side note:
+> I figured this out by booting up a Windows installation and convincing
+> the local kernel debugger to dump ACPI trace information to a file. The file
+> contained an outrageous amount of information with inconsistent formatting
+> (missing commas and stuff) for which I wrote an extremely janky parser in
+> Python. This let me examine the exact steps performed by the Windows driver.
+> And the difference I noticed is that the Linux driver was issuing a
+> _DSM(read)
+> after every notification, reading the already-zeroed-out CCI.
+> 
+> Patching the AML to remove the zeroing-out instructions seemed to work as
+> well, but I suppose this is not a good general solution.
+> 
+> Following is a prototype-grade patch, in essence performing soft-reads most
+> of
+> the time (i.e. just reading from the OpRegion and not calling _DSM) and
+> explicit
+> reads when necessary. I am unfortunately not familiar with the spec and the
+> hardware in the wild and I understand that it is possible that some devices
+> on
+> the other hand do not synchronize the mailbox when notifying and it needs to
+> be
+> done explicitly. I suppose we'd need a parameter to configure this behaviour
+> in
+> that case with a quirk system. The patch works on my system. Some other
+> issues
+> surface later, but I think they are related to a particular cheap dongle I
+> have
+> because they don't seem to occur without it.
+> 
+> What do you think about this situation? Is the patch reasonable, or does it
+> need
+> a significant re-think?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This is great! Thank you so much for figuring this one out!
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/39b24e3d0967/disk-f9ff5644.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/91e3c62e1185/vmlinux-f9ff5644.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7737d489c34c/bzImage-f9ff5644.xz
+I think your patch looks totally reasonable, but let me test it with
+a couple of different systems that I have. I'll check the event
+handlers from the ACPI tables. If that is how Windows works in
+general, then this is what has to be done.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9554fc2c9f37f1b9fe77@syzkaller.appspotmail.com
+Thanks!
 
-==================================================================
-BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
-Read of size 8 at addr ffff888115c8dc30 by task syz-executor.0/26716
+> From 45a29c149a29da989fbdd843c7f040a4454c3a33 Mon Sep 17 00:00:00 2001
+> From: =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>
+> Date: Fri, 11 Nov 2022 00:06:24 +0100
+> Subject: [PATCH] TODO: ucsi: introduce read_explicit
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=UTF-8
+> Content-Transfer-Encoding: 8bit
+> 
+> Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c         |  9 +++++----
+>  drivers/usb/typec/ucsi/ucsi.h         |  3 +++
+>  drivers/usb/typec/ucsi/ucsi_acpi.c    | 11 +++++++++++
+>  drivers/usb/typec/ucsi/ucsi_ccg.c     |  1 +
+>  drivers/usb/typec/ucsi/ucsi_stm32g0.c |  1 +
+>  5 files changed, 21 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index e690fa50ffce..c2fce8b27821 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -884,7 +884,7 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
+>  			goto out;
+>  		}
+> 
+> -		ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +		ret = ucsi->ops->read_explicit(ucsi, UCSI_CCI, &cci, sizeof(cci));
+>  		if (ret)
+>  			goto out;
+> 
+> @@ -1351,7 +1351,8 @@ struct ucsi *ucsi_create(struct device *dev, const
+> struct ucsi_operations *ops)
+>  {
+>  	struct ucsi *ucsi;
+> 
+> -	if (!ops || !ops->read || !ops->sync_write || !ops->async_write)
+> +	if (!ops || !ops->read || !ops->read_explicit || !ops->sync_write ||
+> +	    !ops->async_write)
+>  		return ERR_PTR(-EINVAL);
+> 
+>  	ucsi = kzalloc(sizeof(*ucsi), GFP_KERNEL);
+> @@ -1385,8 +1386,8 @@ int ucsi_register(struct ucsi *ucsi)
+>  {
+>  	int ret;
+> 
+> -	ret = ucsi->ops->read(ucsi, UCSI_VERSION, &ucsi->version,
+> -			      sizeof(ucsi->version));
+> +	ret = ucsi->ops->read_explicit(ucsi, UCSI_VERSION, &ucsi->version,
+> +				       sizeof(ucsi->version));
+>  	if (ret)
+>  		return ret;
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 8eb391e3e592..e961ec1f92a0 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -37,6 +37,7 @@ struct ucsi_altmode;
+>  /**
+>   * struct ucsi_operations - UCSI I/O operations
+>   * @read: Read operation
+> + * @read_explicit: Read operation with explicit poll if applicable
+>   * @sync_write: Blocking write operation
+>   * @async_write: Non-blocking write operation
+>   * @update_altmodes: Squashes duplicate DP altmodes
+> @@ -48,6 +49,8 @@ struct ucsi_altmode;
+>  struct ucsi_operations {
+>  	int (*read)(struct ucsi *ucsi, unsigned int offset,
+>  		    void *val, size_t val_len);
+> +	int (*read_explicit)(struct ucsi *ucsi, unsigned int offset,
+> +			     void *val, size_t val_len);
+>  	int (*sync_write)(struct ucsi *ucsi, unsigned int offset,
+>  			  const void *val, size_t val_len);
+>  	int (*async_write)(struct ucsi *ucsi, unsigned int offset,
+> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> index a0cd8c4ebe31..20432f4313c9 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> @@ -52,6 +52,16 @@ static int ucsi_acpi_read(struct ucsi *ucsi, unsigned int
+> offset,
+>  			  void *val, size_t val_len)
+>  {
+>  	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+> +
+> +	memcpy(val, ua->base + offset, val_len);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ucsi_acpi_read_explicit(struct ucsi *ucsi, unsigned int offset,
+> +				   void *val, size_t val_len)
+> +{
+> +	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+>  	int ret;
+> 
+>  	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+> @@ -101,6 +111,7 @@ static int ucsi_acpi_sync_write(struct ucsi *ucsi,
+> unsigned int offset,
+> 
+>  static const struct ucsi_operations ucsi_acpi_ops = {
+>  	.read = ucsi_acpi_read,
+> +	.read_explicit = ucsi_acpi_read_explicit,
+>  	.sync_write = ucsi_acpi_sync_write,
+>  	.async_write = ucsi_acpi_async_write
+>  };
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 5c0bf48be766..c1d2db3a7363 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -593,6 +593,7 @@ static int ucsi_ccg_sync_write(struct ucsi *ucsi,
+> unsigned int offset,
+> 
+>  static const struct ucsi_operations ucsi_ccg_ops = {
+>  	.read = ucsi_ccg_read,
+> +	.read_explicit = ucsi_ccg_read,
+>  	.sync_write = ucsi_ccg_sync_write,
+>  	.async_write = ucsi_ccg_async_write,
+>  	.update_altmodes = ucsi_ccg_update_altmodes
+> diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> index 061551d464f1..274b5f016dfb 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> @@ -437,6 +437,7 @@ static irqreturn_t ucsi_stm32g0_irq_handler(int irq,
+> void *data)
+> 
+>  static const struct ucsi_operations ucsi_stm32g0_ops = {
+>  	.read = ucsi_stm32g0_read,
+> +	.read_explicit = ucsi_stm32g0_read,
+>  	.sync_write = ucsi_stm32g0_sync_write,
+>  	.async_write = ucsi_stm32g0_async_write,
+>  };
 
-CPU: 0 PID: 26716 Comm: syz-executor.0 Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xbb/0x1f0 mm/kasan/report.c:517
- __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- __mutex_unlock_slowpath+0x18e/0x5e0 kernel/locking/mutex.c:932
- hiddev_release+0x3af/0x520 drivers/hid/usbhid/hiddev.c:238
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16b/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x1f7/0x200 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb6eca82f8b
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007fb6ebe23120 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007fb6ecbf1050 RCX: 00007fb6eca82f8b
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fb6ecb2cae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000003 R11: 0000000000000293 R12: 0000000000000000
-R13: 00007ffedbcffaef R14: 00007fb6ebe23300 R15: 0000000000022000
- </TASK>
+Br,
 
-Allocated by task 16834:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- kasan_set_track+0x21/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- __kasan_kmalloc+0x7a/0x90 mm/kasan/common.c:380
- kmalloc include/linux/slab.h:580 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- hiddev_connect+0x246/0x5c0 drivers/hid/usbhid/hiddev.c:893
- hid_connect+0x26d/0x17c0 drivers/hid/hid-core.c:2174
- hid_hw_start drivers/hid/hid-core.c:2282 [inline]
- hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2273
- plantronics_probe+0x300/0x3d0 drivers/hid/hid-plantronics.c:191
- hid_device_probe+0x296/0x3c0 drivers/hid/hid-core.c:2603
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3479
- hid_add_device+0x373/0xa10 drivers/hid/hid-core.c:2755
- usbhid_probe+0xbaa/0x1020 drivers/hid/usbhid/hid-core.c:1424
- usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3479
- usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2171
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3479
- usb_new_device.cold+0x685/0x10ad drivers/usb/core/hub.c:2573
- hub_port_connect drivers/usb/core/hub.c:5405 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5549 [inline]
- port_event drivers/usb/core/hub.c:5709 [inline]
- hub_event+0x2d58/0x4810 drivers/usb/core/hub.c:5791
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- process_scheduled_works kernel/workqueue.c:2352 [inline]
- worker_thread+0x854/0x1080 kernel/workqueue.c:2438
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-Freed by task 16833:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- kasan_set_track+0x21/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x144/0x1b0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook mm/slub.c:1807 [inline]
- slab_free mm/slub.c:3787 [inline]
- __kmem_cache_free+0x95/0x400 mm/slub.c:3800
- hiddev_disconnect+0x172/0x1c0 drivers/hid/usbhid/hiddev.c:943
- hid_disconnect+0xb4/0x1a0 drivers/hid/hid-core.c:2257
- hid_hw_stop drivers/hid/hid-core.c:2302 [inline]
- hid_device_remove+0x15d/0x200 drivers/hid/hid-core.c:2634
- device_remove+0xc8/0x170 drivers/base/dd.c:548
- __device_release_driver drivers/base/dd.c:1253 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1279
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3666
- hid_remove_device drivers/hid/hid-core.c:2803 [inline]
- hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2822
- usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1451
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:550 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:542
- __device_release_driver drivers/base/dd.c:1253 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1279
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3666
- usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1420
- usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
- hub_port_connect drivers/usb/core/hub.c:5244 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5549 [inline]
- port_event drivers/usb/core/hub.c:5709 [inline]
- hub_event+0x1fb1/0x4810 drivers/usb/core/hub.c:5791
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-The buggy address belongs to the object at ffff888115c8dc00
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 48 bytes inside of
- 512-byte region [ffff888115c8dc00, ffff888115c8de00)
-
-The buggy address belongs to the physical page:
-page:ffffea0004572300 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x115c8c
-head:ffffea0004572300 order:2 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
-flags: 0x200000000010200(slab|head|node=0|zone=2)
-raw: 0200000000010200 ffff888100041c80 ffffea000448bd00 dead000000000002
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 19882, tgid 19882 (udevd), ts 1810039154353, free_ts 1800647190180
- prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x1263/0x2c00 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5549
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2285
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- __kmem_cache_alloc_node+0x300/0x3d0 mm/slub.c:3491
- kmalloc_trace+0x22/0x60 mm/slab_common.c:1062
- kmalloc include/linux/slab.h:580 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- kernfs_fop_open+0x31a/0xe70 fs/kernfs/file.c:670
- do_dentry_open+0x6c7/0x12a0 fs/open.c:882
- do_open fs/namei.c:3557 [inline]
- path_openat+0x1bbc/0x2a50 fs/namei.c:3714
- do_filp_open+0x1b6/0x400 fs/namei.c:3741
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare+0x64a/0xbf0 mm/page_alloc.c:1496
- free_unref_page_prepare mm/page_alloc.c:3369 [inline]
- free_unref_page+0x19/0x3c0 mm/page_alloc.c:3464
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x18e/0x220 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x44/0x60 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:761 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- kmem_cache_alloc_node+0x1fa/0x410 mm/slub.c:3497
- __alloc_skb+0x212/0x310 net/core/skbuff.c:552
- alloc_skb include/linux/skbuff.h:1270 [inline]
- netlink_alloc_large_skb net/netlink/af_netlink.c:1202 [inline]
- netlink_sendmsg+0x9a2/0xe10 net/netlink/af_netlink.c:1907
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
- __sys_sendmsg+0xf3/0x1c0 net/socket.c:2559
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff888115c8db00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888115c8db80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888115c8dc00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                     ^
- ffff888115c8dc80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888115c8dd00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+heikki
