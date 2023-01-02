@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A33965AE17
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 09:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F99865AE1F
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 09:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjABI2F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Jan 2023 03:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S231795AbjABIat (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Jan 2023 03:30:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbjABI1l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 03:27:41 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC20E6F
-        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 00:27:39 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id z26so40705911lfu.8
-        for <linux-usb@vger.kernel.org>; Mon, 02 Jan 2023 00:27:39 -0800 (PST)
+        with ESMTP id S232007AbjABIap (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 03:30:45 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C69E6F
+        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 00:30:44 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id z26so40714452lfu.8
+        for <linux-usb@vger.kernel.org>; Mon, 02 Jan 2023 00:30:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=L04AZWaiWesb6eBK3cp/zqwn40YV+OPlEgA7md0ob4U=;
-        b=F9fBHuM9sdn6dwEo0JrNQ8JASX2OM+8r/5ItrgBR23G+lJ6RmmCkYZhjxrNTl7V7cR
-         UX2K3scWpfkFYc4m+wwHszrPFDElfDpUBgFjSvfVk8H1p9m21SRgE6iBiDwqi7dH8lph
-         nhTLCjTxe3l6vhUciHjLYkDV7F57wqLcJh0JEsEpoW9BLRDobo6ZDrQw/ejv96ZpvaHG
-         ll+EggShdprOatpI3JJ79+8l0gPiU483TNrZpJPfQzKkff4MWHrXp0472VeAt+s8CtCP
-         fQcLbME1t221tjtp08kZQCgrmW8REFWIabmI39mjYS0Ene/4NqhZlCZiaHzUW04+bYXq
-         I7fQ==
+        bh=rtiFQpyWhpU5ex37LxYmByZTtx64yGOprdYoXMKibYc=;
+        b=n1TVVWwSUQdO4/Y6dHg574l1nbWHzqX5oWXwr1OUGxHMY+d7mxwhRUC8cPImKYCT/y
+         8xanzMicEq/864fBVGMZUtX26ZhqVicRuWkuzOsG4vNA0u1E2kOKrv9CYewbdsihSO9L
+         DoqJA1EteBJzlyeZHC6PtaiwhNAy35R5D3QZby4GchWZi7HLxJJN/DgMoViPZyrjBR8y
+         H6fyq8TnY9FVz+F4EysOmrGkzAp9oyeaOr4+dj0aYBl1RhNUUx/aJwsVRMxBJtCszwk3
+         FaiLgEXTLpoww25G0rdycB2Gfg2AgqH+gS7XNDxZoRbyjAv/ngBuXwDuJ80dJNA8290L
+         2zDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L04AZWaiWesb6eBK3cp/zqwn40YV+OPlEgA7md0ob4U=;
-        b=AMKtCKhFeUr817eTB/Fd3bflf+q1xad2+CvWTVHScZ+V2uxuqOMxwpzZt9zMxAOOWb
-         6VWRrX6x/LK8x7MlHJFMKiZqTF+qvX0eBGXfnLhgL9glpX+QZ7lVI/1fYrNxnidJvgga
-         XG61+/vNiUCCC1eaC4zpoMNXhReNs6KILwunzX2QR7RyF6m6/WBRF7aa5+Efw0nzcnEu
-         D6cfhwNcUdeOIY0qIxS7ycUu7SSzpFuBxl7n78s7t9qWjOF9tJ8QgfcMLaaMyAI+6LOO
-         kpNZUUWCu+GB2XxYnUTRp1n0zR/C51sswGy9o+XZ9vlI9qkN4LZF3IoGV/NtI3As7iBX
-         ONHA==
-X-Gm-Message-State: AFqh2kpTsbMHVBzG6tmNjRU9OASst6gSXKUQMC3pxDJddc2dPnyY0cPI
-        NqwpzTF3CUqKDRWYqaruEU0vyA==
-X-Google-Smtp-Source: AMrXdXsc6wd1cCK9qhTawzgWuFX069SRtNljbI7ok5uULLoEn6bdnw0/TAsWEbw0dogDTTGFMNPOxQ==
-X-Received: by 2002:ac2:464f:0:b0:4b5:7925:870d with SMTP id s15-20020ac2464f000000b004b57925870dmr12169856lfo.12.1672648057834;
-        Mon, 02 Jan 2023 00:27:37 -0800 (PST)
+        bh=rtiFQpyWhpU5ex37LxYmByZTtx64yGOprdYoXMKibYc=;
+        b=4I8yxJiUMNNjj80GBnyo1QWL3sdZpHWL0KO3ZbybWJidXlEO36mxjP1TV7OXhJFqAa
+         a8qfx6X969R7py6Sd+YfQ+KXBDAkRZZvU6e6xoMfp7uDXM4QlyIkXFLaOEmSbkhSct8I
+         te2Yu/lue0txCgtYd9M5HGao9cjn9veQXpVTKHvV1yI1jU3HJkn/XjMffwDyLmny1Cgk
+         84dJmCMVsHvVwjfw6w6R+s2T5xR2u2nBleFNIInv4baRgVA/Zz1pyrxl+g18S62+HM4t
+         9IKDxl5GjASNSjvKKVhcMGzJT2PemW7uVF89OXyYjf8t6HdlFCN8fiFIbmPTKw++ugRM
+         5Ozg==
+X-Gm-Message-State: AFqh2kr1rpz8TkUFX37nimyTiFq+u2m88uP9riftWAk5RCzMi8cbQ2gz
+        6zrgSvL4snWPXRGaGOUoOmXx4Q==
+X-Google-Smtp-Source: AMrXdXtHLYARNcvpffbs1r2sdcc97L2+H9iPXEjItpIwDj3p2J/1deLZLgAoR0gW2EMmnQmQT6waOQ==
+X-Received: by 2002:a05:6512:2316:b0:4b0:6023:6f6f with SMTP id o22-20020a056512231600b004b060236f6fmr13521416lfu.57.1672648242380;
+        Mon, 02 Jan 2023 00:30:42 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05651211cd00b004a2511b8224sm4336808lfr.103.2023.01.02.00.27.36
+        by smtp.gmail.com with ESMTPSA id d13-20020a056512368d00b0049478cc4eb9sm4363058lfs.230.2023.01.02.00.30.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 00:27:37 -0800 (PST)
-Message-ID: <546b74c0-27b2-30f5-86b5-b6606eef474f@linaro.org>
-Date:   Mon, 2 Jan 2023 09:27:36 +0100
+        Mon, 02 Jan 2023 00:30:41 -0800 (PST)
+Message-ID: <6451aafa-7021-0769-d408-9dba40d58668@linaro.org>
+Date:   Mon, 2 Jan 2023 09:30:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [RFC PATCH v2 2/3] dt-bindings: usb: generic-xhci: add Samsung
- Exynos compatible
+Subject: Re: [RFC PATCH v2 1/3] usb: support Samsung Exynos xHCI Controller
+Content-Language: en-US
 To:     Jung Daehwan <dh10.jung@samsung.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -70,84 +70,109 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         taehyun.cho@samsung.com, jh0801.jung@samsung.com,
         eomji.oh@samsung.com
 References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
- <CGME20221229100416epcas2p3614b693ab922aadbdc76c0387f768de9@epcas2p3.samsung.com>
- <1672307866-25839-3-git-send-email-dh10.jung@samsung.com>
- <d84f46f5-9975-cde2-0b56-b51990e27150@linaro.org>
- <20230102053037.GA74470@ubuntu>
-Content-Language: en-US
+ <CGME20221229100413epcas2p34c702faf8c96d207cf1659b1173f8858@epcas2p3.samsung.com>
+ <1672307866-25839-2-git-send-email-dh10.jung@samsung.com>
+ <bc531774-ed70-39b7-3534-5683dff20591@linaro.org>
+ <20230102062448.GC74470@ubuntu>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230102053037.GA74470@ubuntu>
+In-Reply-To: <20230102062448.GC74470@ubuntu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/01/2023 06:30, Jung Daehwan wrote:
-> On Thu, Dec 29, 2022 at 11:19:09AM +0100, Krzysztof Kozlowski wrote:
+On 02/01/2023 07:24, Jung Daehwan wrote:
+> On Thu, Dec 29, 2022 at 11:25:58AM +0100, Krzysztof Kozlowski wrote:
 >> On 29/12/2022 10:57, Daehwan Jung wrote:
->>> Add compatible for Samsung Exynos SOCs
->>
->> Missing full stop. Please explain here in details the hardware.
->> Otherwise it looks it is not for any hardware and patch should be dropped.
->>
-> 
-> I got it. This patch may be for new feature of generic xhci not for exynos.
-> I will add hardware description on next submission.
-> 
->> Also, missing DTS. I am going to keep NAK-ing this till you provide the
->> user.
->>
->> NAK.
->>
-> 
-> I've added a example and checked bindings following below guides.
-> 
-> https://docs.kernel.org/devicetree/bindings/submitting-patches.html
-> https://docs.kernel.org/devicetree/bindings/writing-schema.html
-> 
-> I have no idea that I have to also submit DTS.
-> I will submit it on next submission.
-
-I have doubts that this accurate description of hardware, therefore I
-want the DTS user of these bindings which will show entire picture.
-
-> 
+>>> Currently, dwc3 invokes just xhci platform driver without any data.
+>>> We add xhci node as child of dwc3 node in order to get data from
+>>> device tree. It populates "xhci" child by name during initialization
+>>> of host. This patch only effects if dwc3 node has a child named "xhci"
+>>> not to disturb original path.
 >>>
->>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
->>> ---
->>>  Documentation/devicetree/bindings/usb/generic-xhci.yaml | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
->>> index db841589fc33..f54aff477637 100644
->>> --- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
->>> @@ -29,6 +29,8 @@ properties:
->>>          enum:
->>>            - brcm,xhci-brcm-v2
->>>            - brcm,bcm7445-xhci
->>> +      - description: Samsung Exynos SoCs with xHCI
->>> +        const: samsung,exynos-xhci
+>>> We add "samsung,exynos-xhci" compatible in xhci platform driver
 >>
->> Missing fallback.
+>> Where? It is not documented.
 > 
-> Modifying it like below is OK?
+> I submitted the patch of dt bindings on same patchset.
+> Is there any missing documentation?
+
+This is your first patch in the series and in this patch there is no
+such bindings. Re-order the patches to have proper order.
+
 > 
-> decription: Samsung Exynos SoCs with xHCI
->         items:
->             - const: samsung,exynos-xhci
->             - const: generic-xhci
+>>
+>>> to support Exynos SOCs. 
+>>
+>> That's so not true. You do nothing to support Exynos SoC here. Please
+>> stop pasting incorrect and misleading commit msgs.
+> 
+> I agree misleading commit msgs. I will modify it.
+> 
+>>
+>>> We introduce roothub wakeup, which uses roothub
+>>> as system wakeup source. It needs xhci platform driver to override
+>>> roothub ops.
+>>
+>> You did not explain why you introduced wakelocks...
+>>
+> 
+> I'm sorry I didn't write description enough.
+> I add it below.
+> 
+>>
+>> (...)
+>>
+>>>  	if (shared_hcd) {
+>>>  		usb_remove_hcd(shared_hcd);
+>>>  		xhci->shared_hcd = NULL;
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index 79d7931c048a..693495054001 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>>> @@ -5502,6 +5502,10 @@ void xhci_init_driver(struct hc_driver *drv,
+>>>  			drv->check_bandwidth = over->check_bandwidth;
+>>>  		if (over->reset_bandwidth)
+>>>  			drv->reset_bandwidth = over->reset_bandwidth;
+>>> +		if (over->bus_suspend)
+>>> +			drv->bus_suspend = over->bus_suspend;
+>>> +		if (over->bus_resume)
+>>> +			drv->bus_resume = over->bus_resume;
+>>>  	}
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(xhci_init_driver);
+>>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>>> index c9f06c5e4e9d..cb9c54a6a22c 100644
+>>> --- a/drivers/usb/host/xhci.h
+>>> +++ b/drivers/usb/host/xhci.h
+>>> @@ -1752,6 +1752,8 @@ struct xhci_hub {
+>>>  struct xhci_hcd {
+>>>  	struct usb_hcd *main_hcd;
+>>>  	struct usb_hcd *shared_hcd;
+>>> +	struct wakeup_source *main_wakelock;
+>>> +	struct wakeup_source *shared_wakelock;
+>>
+>> Drop wakelocks. This is not related to USB and not needed here. Do you
+>> see anywhere else in core kernel code usage of the wakelocks?
+>>
+>> You got this comment already, didn't you? So why you do not address it?
+>>
+> 
+> I want to add a new feature in xhci platform driver. I want to make it
+> possible to enter system sleep while usb host connected like USB Mouse.
+> It gets system enter sleep only if there's no usb transaction at all.
+> Deciding if there's tranaction or not is in root hub because it's parent
+> of all child usb devices.
 
-To this comment yes, but in general this does not solve my concerns that
-it does not look like real hardware at all.
 
+I have USB mouse connected to my system and the system enters suspend,
+thus I don't think this patch solves this particular issue.
 
 Best regards,
 Krzysztof
