@@ -2,47 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF1365B05A
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 12:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC8565B17C
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 12:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjABLOU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Jan 2023 06:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
+        id S232050AbjABLty (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Jan 2023 06:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbjABLOT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 06:14:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D409ABFF
-        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 03:14:17 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 200715BA;
-        Mon,  2 Jan 2023 12:14:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672658055;
-        bh=2bFOSamu7mp7HSK/Wxul2FQDHKnln/ACJyUGSFXSbb4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jf7tNDmfUdh1lpfTINVkEznZGtNaTgYilYC3W7sjEO5ZicyoXqV1bziqJ5nr7JG9e
-         LNaKWZ5eH/pEVLfByA3Yw8mIlMqkwIGBv38OVhJggp2Fm9d0MLGcang8YDsA0D7X8i
-         U+TgvTlapHl3bVw1LaC/udrqq1guZ8q0mfWG5s3M=
-Date:   Mon, 2 Jan 2023 13:14:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dan Scally <dan.scally@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, kieran.bingham@ideasonboard.com,
-        torleiv@huddly.com, mgr@pengutronix.de
-Subject: Re: [PATCH v2 1/9] usb: gadget: uvc: Make bSourceID read/write
-Message-ID: <Y7K8g7Zh7uwQRpig@pendragon.ideasonboard.com>
-References: <20221121092517.225242-1-dan.scally@ideasonboard.com>
- <20221121092517.225242-2-dan.scally@ideasonboard.com>
- <Y6zfiiCjcGTHeYd9@pendragon.ideasonboard.com>
- <Y6zfvXakE9stRqXw@pendragon.ideasonboard.com>
- <c9546d48-63de-16db-d3ea-65535103a49f@ideasonboard.com>
+        with ESMTP id S232667AbjABLts (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 06:49:48 -0500
+X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 Jan 2023 03:49:46 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FC010AA;
+        Mon,  2 Jan 2023 03:49:45 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N9dg5-1oijbD07Bl-015aNV; Mon, 02 Jan 2023 12:44:34 +0100
+Message-ID: <fdfe4b3c-1e7c-b9d5-6173-ce2c0e8dd52b@i2se.com>
+Date:   Mon, 2 Jan 2023 12:44:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c9546d48-63de-16db-d3ea-65535103a49f@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
+ devices for DT nodes without 'vdd-supply'
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Icenowy Zheng <uwu@icenowy.me>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
+ <aa9fdfc04c3b6a3bba688bac244a157242faab82.camel@icenowy.me>
+ <3724284.kQq0lBPeGt@steina-w>
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <3724284.kQq0lBPeGt@steina-w>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:8H+d7hWesExJl4kSwA6nWmwGDR2OGL48FFwKuGrTC9dYxMS7eA+
+ 0MIf8ChqjS40OU28w9dpUwHTjN4MaX04QHiCLC1uv41EdlZs/90KEb9XdfwMN9PQONT92tc
+ dnZXthXgVruaA9EYuQlVCatMkCI+MdSz2uleZAIXSiRoEXl2rxiBv9oSQkXC3aTMW/0vUHn
+ /OrxlEYUzYrYd2ajBsqNA==
+UI-OutboundReport: notjunk:1;M01:P0:tYGoUjyvkw0=;f2l2XlgSgtAduqMOWaKN9HvdtXM
+ AhQt8sS4YPTFpa5YCkp//cMSKWHQb11Xw073mmPeOTwDsElXMVssdoWeyXq9GG64GMEn7Eyyt
+ St13qc/kWToWP4sHpOpaA0m/pb3emfkbv6pVfze/acHmPxYsmBDiLDl/jcyXZHhSOjYNpq2Tk
+ Qdj1QtQas4gYML9TtGp3OmT4VKpDBs/cklrRAHW5ekpXUER6GUniB0iNZ2zjEOw4mk/KyE4P0
+ M+UIwvSuuqjo4JBz+CVgYlCa2w+B7dZtIKtYkZOS5Ah8V+snoJMVVLuXNEuX6QNe2BaQjSpwj
+ vVfybHq/YP2kc2OWj28r8kmsN8hKF1RaLIvC76ZUNijt2HEVO5h0GWo1gJZxY07jcyLZo+8Hh
+ wtqyW2tGNBSTRA2t6teLhOvSIgjGMwCBt7xZASWPQJw48+/MJxElyNG9lvXkwHEb9iUWNYXf5
+ IRbaEX+zP9N/+TqDCwIj9jpBIYcvZcSHbVkDsw7C0aR3Mvnc++1A4Ur+JJzdfGV96tziWuW3P
+ rJoSj+V45HkbhYLpi29VzGj23Vyn5HSJfAWaLg8Trdjzp6GostEzARnv/Ar1Wx+M7M9iDAeIl
+ pqR19xEH5/XXJyzk/ReUiOLs0Sv5Tbb08otxF3L0nVKbldtoIoIs4jMtHhkuz7CmsxDqcEOlv
+ toeJsTOowifGGZCXj2eWbF0FYG787OVv6QIEBn8EiA==
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,139 +66,106 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
+Hello Alexander,
 
-On Sun, Jan 01, 2023 at 09:18:13PM +0000, Dan Scally wrote:
-> On 29/12/2022 00:30, Laurent Pinchart wrote:
-> > On Thu, Dec 29, 2022 at 02:30:04AM +0200, Laurent Pinchart wrote:
-> >> On Mon, Nov 21, 2022 at 09:25:09AM +0000, Daniel Scally wrote:
-> >>> At the moment, the UVC function graph is hardcoded IT -> PU -> OT.
-> >>> To add XU support we need the ability to insert the XU descriptors
-> >>> into the chain. To facilitate that, make the output terminal's
-> >>> bSourceID attribute writeable so that we can configure its source.
-> >>>
-> >>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> >>> ---
-> >>> Changes in v2:
-> >>>
-> >>> 	- Updated the ABI Documentation to reflect the change.
-> >>>
-> >>>   .../ABI/testing/configfs-usb-gadget-uvc       |  2 +-
-> >>>   drivers/usb/gadget/function/uvc_configfs.c    | 57 ++++++++++++++++++-
-> >>>   2 files changed, 57 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> >>> index 611b23e6488d..feb3f2cc0c16 100644
-> >>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> >>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> >>> @@ -52,7 +52,7 @@ Date:		Dec 2014
-> >>>   KernelVersion:	4.0
-> >>>   Description:	Default output terminal descriptors
-> >>>   
-> >>> -		All attributes read only:
-> >>> +		All attributes read only except bSourceID:
-> >>>   
-> >>>   		==============	=============================================
-> >>>   		iTerminal	index of string descriptor
-> >>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-> >>> index 4303a3283ba0..af4258120f9a 100644
-> >>> --- a/drivers/usb/gadget/function/uvc_configfs.c
-> >>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
-> >>> @@ -483,11 +483,66 @@ UVC_ATTR_RO(uvcg_default_output_, cname, aname)
-> >>>   UVCG_DEFAULT_OUTPUT_ATTR(b_terminal_id, bTerminalID, 8);
-> >>>   UVCG_DEFAULT_OUTPUT_ATTR(w_terminal_type, wTerminalType, 16);
-> >>>   UVCG_DEFAULT_OUTPUT_ATTR(b_assoc_terminal, bAssocTerminal, 8);
-> >>> -UVCG_DEFAULT_OUTPUT_ATTR(b_source_id, bSourceID, 8);
-> >>>   UVCG_DEFAULT_OUTPUT_ATTR(i_terminal, iTerminal, 8);
-> >>>   
-> >>>   #undef UVCG_DEFAULT_OUTPUT_ATTR
-> >>>   
-> >>> +static ssize_t uvcg_default_output_b_source_id_show(struct config_item *item,
-> >>> +						    char *page)
-> >>> +{
-> >>> +	struct config_group *group = to_config_group(item);
-> >>> +	struct f_uvc_opts *opts;
-> >>> +	struct config_item *opts_item;
-> >>> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-> >>> +	struct uvc_output_terminal_descriptor *cd;
-> >>> +	int result;
-> >>> +
-> >>> +	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-> >>> +
-> >>> +	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent->ci_parent;
-> >>> +	opts = to_f_uvc_opts(opts_item);
-> >>> +	cd = &opts->uvc_output_terminal;
-> >>> +
-> >>> +	mutex_lock(&opts->lock);
-> >>> +	result = sprintf(page, "%u\n", le8_to_cpu(cd->bSourceID));
-> >>> +	mutex_unlock(&opts->lock);
-> >>> +
-> >>> +	mutex_unlock(su_mutex);
-> >>> +
-> >>> +	return result;
-> >>> +}
-> >>> +
-> >>> +static ssize_t uvcg_default_output_b_source_id_store(struct config_item *item,
-> >>> +						     const char *page, size_t len)
-> >>> +{
-> >>> +	struct config_group *group = to_config_group(item);
-> >>> +	struct f_uvc_opts *opts;
-> >>> +	struct config_item *opts_item;
-> >>> +	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-> >>> +	struct uvc_output_terminal_descriptor *cd;
-> >>> +	int result;
-> >>> +	u8 num;
-> >>> +
-> >>> +	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-> >>> +
-> >>> +	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent->ci_parent;
-> >>> +	opts = to_f_uvc_opts(opts_item);
-> >>> +	cd = &opts->uvc_output_terminal;
-> >>> +
-> >>> +	result = kstrtou8(page, 0, &num);
-> >>> +	if (result)
-> >>> +		return result;
-> >>> +
-> >>> +	mutex_lock(&opts->lock);
-> >>> +	cd->bSourceID = num;
-> >>> +	mutex_unlock(&opts->lock);
-> >>> +
-> >>> +	mutex_unlock(su_mutex);
-> >>> +
-> >>> +	return len;
-> >>> +}
-> >>> +UVC_ATTR(uvcg_default_output_, b_source_id, bSourceID);
-> >>
-> >> Feel free to shoot this idea down if it's a bad one: given that the
-> >> bSourceID attributes serve to create a pipeline by linking entities,
-> >> would it make sense to model these links with symlinks ?
-> >
-> > I forgot to mention that this would handle the bSourceID attribute
-> > automatically, avoiding mistakes. But maybe we're over-engineering all
-> > this...
-> 
-> Hmmmm, maybe. I lean towards over-engineered, but not strongly so. 
-> Assuming the string descriptors stand as is, the .allow_link() for XUs 
-> would have to account for linking to both a string and another unit. The 
-> position of the Source ID field in the Unit Descriptors differs, and for 
-> the XUs is nested behind another struct...and properly supporting XUs as 
-> specified means we'd need to allow multiple links in to an XU, all of 
-> which might make it a bit more complicated than it is helpful. Happy to 
-> be convinced otherwise though; I'm on the fence about it.
+Am 02.01.23 um 10:20 schrieb Alexander Stein:
+> Hi everybody,
+>
+> Am Freitag, 23. Dezember 2022, 08:46:45 CET schrieb Icenowy Zheng:
+>> 在 2022-12-22星期四的 11:26 -0800，Doug Anderson写道：
+>>
+>>> Hi,
+>>>
+>>> On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org>
+>>>
+>>> wrote:
+>>>> The primary task of the onboard_usb_hub driver is to control the
+>>>> power of an onboard USB hub. The driver gets the regulator from the
+>>>> device tree property "vdd-supply" of the hub's DT node. Some boards
+>>>> have device tree nodes for USB hubs supported by this driver, but
+>>>> don't specify a "vdd-supply". This is not an error per se, it just
+>>>> means that the onboard hub driver can't be used for these hubs, so
+>>>> don't create platform devices for such nodes.
+>>>>
+>>>> This change doesn't completely fix the reported regression. It
+>>>> should fix it for the RPi 3 B Plus and boards with similar hub
+>>>> configurations (compatible DT nodes without "vdd-supply"), boards
+>>>> that actually use the onboard hub driver could still be impacted
+>>>> by the race conditions discussed in that thread. Not creating the
+>>>> platform devices for nodes without "vdd-supply" is the right
+>>>> thing to do, independently from the race condition, which will
+>>>> be fixed in future patch.
+>>>>
+>>>> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+>>>> Link:
+>>>> https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
+>>>> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+>>>> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> - don't create platform devices when "vdd-supply" is missing,
+>>>>    rather than returning an error from _find_onboard_hub()
+>>>> - check for "vdd-supply" not "vdd" (Johan)
+>>>> - updated subject and commit message
+>>>> - added 'Link' tag (regzbot)
+>>>>
+>>>>   drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
+>>>>   1 file changed, 13 insertions(+)
+>>> I'm a tad bit skeptical.
+>>>
+>>> It somehow feels a bit too much like "inside knowledge" to add this
+>>> here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
+>>> entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
+>>> keep the absolute minimum amount of stuff in it and all of the
+>>> details
+>>> be in the other file.
+>>>
+>>> If this was the only issue though, I'd be tempted to let it slide. As
+>>> it is, I'm kinda worried that your patch will break Alexander Stein,
+>>> who should have been CCed (I've CCed him now) or Icenowy Zheng (also
+>>> CCed now). I believe those folks are using the USB hub driver
+>>> primarily to drive a reset GPIO. Looking at the example in the
+>>> bindings for one of them (genesys,gl850g.yaml), I even see that the
+>>> reset-gpio is specified but not a vdd-supply. I think you'll break
+>>> that?
+>> Well technically in my final DT a regulator is included (to have the
+>> Vbus enabled when enabling the hub), however I am still against this
+>> patch, because the driver should work w/o vdd-supply (or w/o reset-
+>> gpios), and changing this behavior is a DT binding stability breakage.
+> I second that. The bindings don't require neither vdd-supply nor reset-gpios.
+>
+> But I have to admit I lack to understand the purpose of this series in the
+> first place. What is the benefit or fix?
 
-So am I :-) I agree about the multiple links issue, and the fact that an
-XU can have multiple sources makes it more complicated. That's what made
-me think we may be over-engineering all this, it's all about passing a
-set of descriptors from userspace to the host, without a real need for
-the kernel to access that data. configfs really starts feeling like a
-bad solution for this, at least in its current form :-(
+did you followed the provided link from the patch?
 
-> >>> +
-> >>>   static struct configfs_attribute *uvcg_default_output_attrs[] = {
-> >>>   	&uvcg_default_output_attr_b_terminal_id,
-> >>>   	&uvcg_default_output_attr_w_terminal_type,
+Best regards
 
--- 
-Regards,
-
-Laurent Pinchart
+>
+> Best regards,
+> Alexader
+>
+>> In addition the kernel never fails because of a lacking regulator
+>> unless explicitly forbid dummy regulators.
+>>
+>> BTW USB is a discoverable bus, and if a hub do not need special
+>> handlement, it just does not need to appear in the DT, thus no onboard
+>> hub DT node.
+>>
+>>> In general, it feels like it should actually be fine to create the
+>>> USB
+>>> hub driver even if vdd isn't supplied. Sure, it won't do a lot, but
+>>> it
+>>> shouldn't actively hurt anything. You'll just be turning off and on
+>>> bogus regulators and burning a few CPU cycles. I guess the problem is
+>>> some race condition that you talk about in the commit message. I'd
+>>> rather see that fixed... That being said, if we want to be more
+>>> efficient and not burn CPU cycles and memory in Stefan Wahren's case,
+>>> maybe the USB hub driver itself could return a canonical error value
+>>> from its probe when it detects that it has no useful job and then
+>>> "onboard_usb_hub_pdevs" could just silently bail out?
+>> I agree.
+>
+>
+>
