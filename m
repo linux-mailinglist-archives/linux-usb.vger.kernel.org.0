@@ -2,316 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6BD65ADFF
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 09:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A33965AE17
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 09:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjABIUp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Jan 2023 03:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S230384AbjABI2F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Jan 2023 03:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjABIUh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 03:20:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2859C1141;
-        Mon,  2 Jan 2023 00:20:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1C92B80C83;
-        Mon,  2 Jan 2023 08:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2B2C433D2;
-        Mon,  2 Jan 2023 08:20:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672647631;
-        bh=8MiLsIlCg85ximPPgt6+OfpmqpnRCZNjJOkwEjVlJWc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ThpIClg38fWqbyst3BIkwjW4HDaPl07kyYYj+yb+bNaDD93FW+F35DazEXnq04Bn3
-         x+8Yztj6DKeWulW6AHXYfpY8l10ADdsoVxVNHzOV+c4LRs4K6EpAejo0JvP470jDEW
-         vowrLnAntjgHk+pUTFAdvTO1ggAaeWeIHN5IgS2zYBFa8Mb+FAcgsf6yrh7YH9FDnx
-         0PfDhzHdaaJOX8rPWEvHWLyLmNw/EGI35RKEosqfYzRYfCyiOdbluxLDjo1eu7spvG
-         uRTrOXztIvI/Wa/Pd9DcUc0AkQVN8Wt8ubqrQzB40OH61W7/Lkrd31eVnqbjVYdnsk
-         FYa4l4CTL/rUQ==
-Date:   Mon, 2 Jan 2023 16:20:21 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: cdnsp: : add scatter gather support for ISOC
- endpoint
-Message-ID: <20230102082021.GB40748@nchen-desktop>
-References: <20221222090934.145140-1-pawell@cadence.com>
+        with ESMTP id S231633AbjABI1l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 03:27:41 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC20E6F
+        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 00:27:39 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id z26so40705911lfu.8
+        for <linux-usb@vger.kernel.org>; Mon, 02 Jan 2023 00:27:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L04AZWaiWesb6eBK3cp/zqwn40YV+OPlEgA7md0ob4U=;
+        b=F9fBHuM9sdn6dwEo0JrNQ8JASX2OM+8r/5ItrgBR23G+lJ6RmmCkYZhjxrNTl7V7cR
+         UX2K3scWpfkFYc4m+wwHszrPFDElfDpUBgFjSvfVk8H1p9m21SRgE6iBiDwqi7dH8lph
+         nhTLCjTxe3l6vhUciHjLYkDV7F57wqLcJh0JEsEpoW9BLRDobo6ZDrQw/ejv96ZpvaHG
+         ll+EggShdprOatpI3JJ79+8l0gPiU483TNrZpJPfQzKkff4MWHrXp0472VeAt+s8CtCP
+         fQcLbME1t221tjtp08kZQCgrmW8REFWIabmI39mjYS0Ene/4NqhZlCZiaHzUW04+bYXq
+         I7fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L04AZWaiWesb6eBK3cp/zqwn40YV+OPlEgA7md0ob4U=;
+        b=AMKtCKhFeUr817eTB/Fd3bflf+q1xad2+CvWTVHScZ+V2uxuqOMxwpzZt9zMxAOOWb
+         6VWRrX6x/LK8x7MlHJFMKiZqTF+qvX0eBGXfnLhgL9glpX+QZ7lVI/1fYrNxnidJvgga
+         XG61+/vNiUCCC1eaC4zpoMNXhReNs6KILwunzX2QR7RyF6m6/WBRF7aa5+Efw0nzcnEu
+         D6cfhwNcUdeOIY0qIxS7ycUu7SSzpFuBxl7n78s7t9qWjOF9tJ8QgfcMLaaMyAI+6LOO
+         kpNZUUWCu+GB2XxYnUTRp1n0zR/C51sswGy9o+XZ9vlI9qkN4LZF3IoGV/NtI3As7iBX
+         ONHA==
+X-Gm-Message-State: AFqh2kpTsbMHVBzG6tmNjRU9OASst6gSXKUQMC3pxDJddc2dPnyY0cPI
+        NqwpzTF3CUqKDRWYqaruEU0vyA==
+X-Google-Smtp-Source: AMrXdXsc6wd1cCK9qhTawzgWuFX069SRtNljbI7ok5uULLoEn6bdnw0/TAsWEbw0dogDTTGFMNPOxQ==
+X-Received: by 2002:ac2:464f:0:b0:4b5:7925:870d with SMTP id s15-20020ac2464f000000b004b57925870dmr12169856lfo.12.1672648057834;
+        Mon, 02 Jan 2023 00:27:37 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id h13-20020a05651211cd00b004a2511b8224sm4336808lfr.103.2023.01.02.00.27.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 00:27:37 -0800 (PST)
+Message-ID: <546b74c0-27b2-30f5-86b5-b6606eef474f@linaro.org>
+Date:   Mon, 2 Jan 2023 09:27:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222090934.145140-1-pawell@cadence.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH v2 2/3] dt-bindings: usb: generic-xhci: add Samsung
+ Exynos compatible
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
+        eomji.oh@samsung.com
+References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20221229100416epcas2p3614b693ab922aadbdc76c0387f768de9@epcas2p3.samsung.com>
+ <1672307866-25839-3-git-send-email-dh10.jung@samsung.com>
+ <d84f46f5-9975-cde2-0b56-b51990e27150@linaro.org>
+ <20230102053037.GA74470@ubuntu>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230102053037.GA74470@ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-12-22 04:09:34, Pawel Laszczak wrote:
-> Patch implements scatter gather support for isochronous endpoint.
-> This fix is forced by 'commit e81e7f9a0eb9
-> ("usb: gadget: uvc: add scatter gather support")'.
-> After this fix CDNSP driver stop working with UVC class.
+On 02/01/2023 06:30, Jung Daehwan wrote:
+> On Thu, Dec 29, 2022 at 11:19:09AM +0100, Krzysztof Kozlowski wrote:
+>> On 29/12/2022 10:57, Daehwan Jung wrote:
+>>> Add compatible for Samsung Exynos SOCs
+>>
+>> Missing full stop. Please explain here in details the hardware.
+>> Otherwise it looks it is not for any hardware and patch should be dropped.
+>>
 > 
-> cc: <stable@vger.kernel.org>
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/cdns3/cdnsp-gadget.c |   2 +-
->  drivers/usb/cdns3/cdnsp-gadget.h |   4 +-
->  drivers/usb/cdns3/cdnsp-ring.c   | 110 +++++++++++++++++--------------
->  3 files changed, 63 insertions(+), 53 deletions(-)
+> I got it. This patch may be for new feature of generic xhci not for exynos.
+> I will add hardware description on next submission.
 > 
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-> index a8640516c895..e81dca0e62a8 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.c
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> @@ -382,7 +382,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
->  		ret = cdnsp_queue_bulk_tx(pdev, preq);
->  		break;
->  	case USB_ENDPOINT_XFER_ISOC:
-> -		ret = cdnsp_queue_isoc_tx_prepare(pdev, preq);
-> +		ret = cdnsp_queue_isoc_tx(pdev, preq);
->  	}
->  
->  	if (ret)
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-> index f740fa6089d8..e1b5801fdddf 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.h
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
-> @@ -1532,8 +1532,8 @@ void cdnsp_queue_stop_endpoint(struct cdnsp_device *pdev,
->  			       unsigned int ep_index);
->  int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq);
->  int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq);
-> -int cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
-> -				struct cdnsp_request *preq);
-> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
-> +			struct cdnsp_request *preq);
-
-Why you re-name this function?
-
-Other changes are ok for me.
-
-Peter
-
->  void cdnsp_queue_configure_endpoint(struct cdnsp_device *pdev,
->  				    dma_addr_t in_ctx_ptr);
->  void cdnsp_queue_reset_ep(struct cdnsp_device *pdev, unsigned int ep_index);
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index b23e543b3a3d..07f6068342d4 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -1333,6 +1333,20 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
->  					 ep_ring->dequeue, td->last_trb,
->  					 ep_trb_dma);
->  
-> +		desc = td->preq->pep->endpoint.desc;
-> +
-> +		if (ep_seg) {
-> +			ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
-> +					       / sizeof(*ep_trb)];
-> +
-> +			trace_cdnsp_handle_transfer(ep_ring,
-> +					(struct cdnsp_generic_trb *)ep_trb);
-> +
-> +			if (pep->skip && usb_endpoint_xfer_isoc(desc) &&
-> +			    td->last_trb != ep_trb)
-> +				return -EAGAIN;
-> +		}
-> +
->  		/*
->  		 * Skip the Force Stopped Event. The event_trb(ep_trb_dma)
->  		 * of FSE is not in the current TD pointed by ep_ring->dequeue
-> @@ -1347,7 +1361,6 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
->  			goto cleanup;
->  		}
->  
-> -		desc = td->preq->pep->endpoint.desc;
->  		if (!ep_seg) {
->  			if (!pep->skip || !usb_endpoint_xfer_isoc(desc)) {
->  				/* Something is busted, give up! */
-> @@ -1374,12 +1387,6 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
->  			goto cleanup;
->  		}
->  
-> -		ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
-> -				       / sizeof(*ep_trb)];
-> -
-> -		trace_cdnsp_handle_transfer(ep_ring,
-> -					    (struct cdnsp_generic_trb *)ep_trb);
-> -
->  		if (cdnsp_trb_is_noop(ep_trb))
->  			goto cleanup;
->  
-> @@ -1726,11 +1733,6 @@ static unsigned int count_sg_trbs_needed(struct cdnsp_request *preq)
->  	return num_trbs;
->  }
->  
-> -static unsigned int count_isoc_trbs_needed(struct cdnsp_request *preq)
-> -{
-> -	return cdnsp_count_trbs(preq->request.dma, preq->request.length);
-> -}
-> -
->  static void cdnsp_check_trb_math(struct cdnsp_request *preq, int running_total)
->  {
->  	if (running_total != preq->request.length)
-> @@ -2192,28 +2194,48 @@ static unsigned int
->  }
->  
->  /* Queue function isoc transfer */
-> -static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
-> -			       struct cdnsp_request *preq)
-> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
-> +			struct cdnsp_request *preq)
->  {
-> -	int trb_buff_len, td_len, td_remain_len, ret;
-> +	unsigned int trb_buff_len, td_len, td_remain_len, block_len;
->  	unsigned int burst_count, last_burst_pkt;
->  	unsigned int total_pkt_count, max_pkt;
->  	struct cdnsp_generic_trb *start_trb;
-> +	struct scatterlist *sg = NULL;
->  	bool more_trbs_coming = true;
->  	struct cdnsp_ring *ep_ring;
-> +	unsigned int num_sgs = 0;
->  	int running_total = 0;
->  	u32 field, length_field;
-> +	u64 addr, send_addr;
->  	int start_cycle;
->  	int trbs_per_td;
-> -	u64 addr;
-> -	int i;
-> +	int i, sent_len, ret;
->  
->  	ep_ring = preq->pep->ring;
-> +
-> +	td_len = preq->request.length;
-> +
-> +	if (preq->request.num_sgs) {
-> +		num_sgs = preq->request.num_sgs;
-> +		sg = preq->request.sg;
-> +		addr = (u64)sg_dma_address(sg);
-> +		block_len = sg_dma_len(sg);
-> +		trbs_per_td = count_sg_trbs_needed(preq);
-> +	} else {
-> +		addr = (u64)preq->request.dma;
-> +		block_len = td_len;
-> +		trbs_per_td = count_trbs_needed(preq);
-> +	}
-> +
-> +	ret = cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
-> +	if (ret)
-> +		return ret;
-> +
->  	start_trb = &ep_ring->enqueue->generic;
->  	start_cycle = ep_ring->cycle_state;
-> -	td_len = preq->request.length;
-> -	addr = (u64)preq->request.dma;
->  	td_remain_len = td_len;
-> +	send_addr = addr;
->  
->  	max_pkt = usb_endpoint_maxp(preq->pep->endpoint.desc);
->  	total_pkt_count = DIV_ROUND_UP(td_len, max_pkt);
-> @@ -2225,11 +2247,6 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->  	burst_count = cdnsp_get_burst_count(pdev, preq, total_pkt_count);
->  	last_burst_pkt = cdnsp_get_last_burst_packet_count(pdev, preq,
->  							   total_pkt_count);
-> -	trbs_per_td = count_isoc_trbs_needed(preq);
-> -
-> -	ret = cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
-> -	if (ret)
-> -		goto cleanup;
->  
->  	/*
->  	 * Set isoc specific data for the first TRB in a TD.
-> @@ -2248,6 +2265,7 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->  
->  		/* Calculate TRB length. */
->  		trb_buff_len = TRB_BUFF_LEN_UP_TO_BOUNDARY(addr);
-> +		trb_buff_len = min(trb_buff_len, block_len);
->  		if (trb_buff_len > td_remain_len)
->  			trb_buff_len = td_remain_len;
->  
-> @@ -2256,7 +2274,8 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->  					       trb_buff_len, td_len, preq,
->  					       more_trbs_coming, 0);
->  
-> -		length_field = TRB_LEN(trb_buff_len) | TRB_INTR_TARGET(0);
-> +		length_field = TRB_LEN(trb_buff_len) | TRB_TD_SIZE(remainder) |
-> +			TRB_INTR_TARGET(0);
->  
->  		/* Only first TRB is isoc, overwrite otherwise. */
->  		if (i) {
-> @@ -2281,12 +2300,27 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->  		}
->  
->  		cdnsp_queue_trb(pdev, ep_ring, more_trbs_coming,
-> -				lower_32_bits(addr), upper_32_bits(addr),
-> +				lower_32_bits(send_addr), upper_32_bits(send_addr),
->  				length_field, field);
->  
->  		running_total += trb_buff_len;
->  		addr += trb_buff_len;
->  		td_remain_len -= trb_buff_len;
-> +
-> +		sent_len = trb_buff_len;
-> +		while (sg && sent_len >= block_len) {
-> +			/* New sg entry */
-> +			--num_sgs;
-> +			sent_len -= block_len;
-> +			if (num_sgs != 0) {
-> +				sg = sg_next(sg);
-> +				block_len = sg_dma_len(sg);
-> +				addr = (u64)sg_dma_address(sg);
-> +				addr += sent_len;
-> +			}
-> +		}
-> +		block_len -= sent_len;
-> +		send_addr = addr;
->  	}
->  
->  	/* Check TD length */
-> @@ -2324,30 +2358,6 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->  	return ret;
->  }
->  
-> -int cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
-> -				struct cdnsp_request *preq)
-> -{
-> -	struct cdnsp_ring *ep_ring;
-> -	u32 ep_state;
-> -	int num_trbs;
-> -	int ret;
-> -
-> -	ep_ring = preq->pep->ring;
-> -	ep_state = GET_EP_CTX_STATE(preq->pep->out_ctx);
-> -	num_trbs = count_isoc_trbs_needed(preq);
-> -
-> -	/*
-> -	 * Check the ring to guarantee there is enough room for the whole
-> -	 * request. Do not insert any td of the USB Request to the ring if the
-> -	 * check failed.
-> -	 */
-> -	ret = cdnsp_prepare_ring(pdev, ep_ring, ep_state, num_trbs, GFP_ATOMIC);
-> -	if (ret)
-> -		return ret;
-> -
-> -	return cdnsp_queue_isoc_tx(pdev, preq);
-> -}
-> -
->  /****		Command Ring Operations		****/
->  /*
->   * Generic function for queuing a command TRB on the command ring.
-> -- 
-> 2.25.1
+>> Also, missing DTS. I am going to keep NAK-ing this till you provide the
+>> user.
+>>
+>> NAK.
+>>
 > 
+> I've added a example and checked bindings following below guides.
+> 
+> https://docs.kernel.org/devicetree/bindings/submitting-patches.html
+> https://docs.kernel.org/devicetree/bindings/writing-schema.html
+> 
+> I have no idea that I have to also submit DTS.
+> I will submit it on next submission.
 
--- 
+I have doubts that this accurate description of hardware, therefore I
+want the DTS user of these bindings which will show entire picture.
 
-Thanks,
-Peter Chen
+> 
+>>>
+>>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/usb/generic-xhci.yaml | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+>>> index db841589fc33..f54aff477637 100644
+>>> --- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+>>> @@ -29,6 +29,8 @@ properties:
+>>>          enum:
+>>>            - brcm,xhci-brcm-v2
+>>>            - brcm,bcm7445-xhci
+>>> +      - description: Samsung Exynos SoCs with xHCI
+>>> +        const: samsung,exynos-xhci
+>>
+>> Missing fallback.
+> 
+> Modifying it like below is OK?
+> 
+> decription: Samsung Exynos SoCs with xHCI
+>         items:
+>             - const: samsung,exynos-xhci
+>             - const: generic-xhci
+
+To this comment yes, but in general this does not solve my concerns that
+it does not look like real hardware at all.
+
+
+Best regards,
+Krzysztof
+
