@@ -2,57 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F5E65AD66
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 07:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED2265AD73
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jan 2023 07:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjABGPf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Jan 2023 01:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S229828AbjABGbK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Jan 2023 01:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjABGPe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 01:15:34 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F0025C6
-        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 22:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672640132; x=1704176132;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YOTzHULBqFb3mHrl9MHt54dspJImzJXBEDv8u/5XsM8=;
-  b=G06N040YsM+OTcH0t/QUvcj+sSl8BJlinSXg2wztTWs8jFsPrcPxoCpo
-   cLOi1sFKPAkWcz5nzNNwsTEBSUGw3p3TWCJDkFKSlPaFLRHAZ85jgfYks
-   nIhoM8mMttrl+YX1x2+zGOUX++JDFMwWpKvkAhi0TbB/F9mwkrRg8TE+7
-   7vi8/WGjEavMWhjEG6v7aMKqSLGnFx3TpjhtJ/ij7fPiY6moNxsRdVBcG
-   Zixd5Qag9/UJXx4Jd4FGIHFrqODNLcTfdWUGKkXhZjfPwAt6vfeeqy/ZK
-   xmmdzaJdbPvJzw+mnk+VmbhIaFZ6vuxmkKRWv6BZKYL/5cwlFony7C/o/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="309209070"
-X-IronPort-AV: E=Sophos;i="5.96,293,1665471600"; 
-   d="scan'208";a="309209070"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2023 22:15:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="656394091"
-X-IronPort-AV: E=Sophos;i="5.96,293,1665471600"; 
-   d="scan'208";a="656394091"
-Received: from senthil-nuc10i7fnh.iind.intel.com ([10.223.107.70])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Jan 2023 22:15:29 -0800
-From:   Saranya Gopal <saranya.gopal@intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org,
-        Saranya Gopal <saranya.gopal@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Rajaram Regupathy <rajaram.regupathy@intel.com>
-Subject: [PATCH] usb: typec: ucsi: Register USB Power Delivery Capabilities
-Date:   Mon,  2 Jan 2023 11:51:08 +0530
-Message-Id: <20230102062108.838423-1-saranya.gopal@intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229462AbjABGbI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Jan 2023 01:31:08 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78EAB84
+        for <linux-usb@vger.kernel.org>; Sun,  1 Jan 2023 22:31:03 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230102063100epoutp04e56e57e91acca5c28002c35afbf99931~2ai7KTwaD3011530115epoutp04F
+        for <linux-usb@vger.kernel.org>; Mon,  2 Jan 2023 06:31:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230102063100epoutp04e56e57e91acca5c28002c35afbf99931~2ai7KTwaD3011530115epoutp04F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1672641060;
+        bh=7tBwUf3Kq8nD/SIRcrI8SZniUmf4dKkROAwFjgpQz5E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I/zRZb7yAYi237KtKyHu+SS6U33WfMoTSL4VzLOG1CaoazYv9wcqt6z1BqSN8tU5V
+         8tRGsEQSSOS9ZT8Pxu1dBzUpokarreuj/AEwE8qjHl6wr4DQ+KQT6Q8GEatsVia4iy
+         eK70AT4FYeJOST7jZ06XPJoAjabR7EjTMlv7AQ5g=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20230102063100epcas2p39a2ec49e6a42b90112afc18707cbbd6a~2ai6o4n-n2056620566epcas2p39;
+        Mon,  2 Jan 2023 06:31:00 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4NlmGC5G4rz4x9Px; Mon,  2 Jan
+        2023 06:30:59 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        20.18.03803.32A72B36; Mon,  2 Jan 2023 15:30:59 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230102063059epcas2p133914a8e92a801f6538c6e0c66a86ea0~2ai5f6fjo0942309423epcas2p1V;
+        Mon,  2 Jan 2023 06:30:59 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230102063059epsmtrp26314cc103f1d301d78830e10301e6441~2ai5fDX9y0836308363epsmtrp2U;
+        Mon,  2 Jan 2023 06:30:59 +0000 (GMT)
+X-AuditID: b6c32a45-f47ff70000020edb-27-63b27a23f2ff
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1A.30.02211.22A72B36; Mon,  2 Jan 2023 15:30:58 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230102063058epsmtip1ec0dfbd07b5ac7b086d5d6ea24bc971f~2ai5SPT021961819618epsmtip1U;
+        Mon,  2 Jan 2023 06:30:58 +0000 (GMT)
+Date:   Mon, 2 Jan 2023 15:24:48 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
+        eomji.oh@samsung.com
+Subject: Re: [RFC PATCH v2 1/3] usb: support Samsung Exynos xHCI Controller
+Message-ID: <20230102062448.GC74470@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <bc531774-ed70-39b7-3534-5683dff20591@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMJsWRmVeSWpSXmKPExsWy7bCmha5y1aZkg1edshbH2p6wW8w/co7V
+        4tTyhUwWzYvXs1ncffiDxaLvxUNmi72vt7JbXN41h81i0bJWZovmTVNYLVr3HmG36Lp7g9Fi
+        0kFRi1ULDrA78Hks3vOSyWPTqk42jzvX9rB57J+7ht2jb8sqRo8t+z8zenzeJBfAHpVtk5Ga
+        mJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0spJCWWJOKVAo
+        ILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO+Pox/2M
+        BZMkKyaeaWVtYJwp0sXIySEhYCKxcfIGli5GLg4hgR2MEr3PHrFCOJ8YJZa/OMoO4XxjlHjR
+        eZ8JpmXJ90nMEIm9jBIn3m+CannCKPHmWhM7SBWLgIrEwy97wWw2AS2Jez9OMIPYIgIWEos3
+        LARrYBZYxSKx/dVDFpCEsIC3xJyzPWA2r4C2RMv9OUwQtqDEyZlPwOKcAnYSXxp2AdkcHKJA
+        C14drIe4aA+HxOF9ZRC2i8TEL1dYIWxhiVfHt7BD2FISn9/tZYOwsyWuf+tmgbArJFbshbGN
+        JWY9a2cEsZkFMiT2LV/FBLJKQkBZ4sgtFogwn0TH4b/sEGFeiY42IYhOZYnplydAbZWUOPj6
+        HDOE7SGx/dgnaPB2Mkl8mdzMPoFRfhaSx2Yh2QZh60gs2P2JbRbQCmYBaYnl/zggTE2J9bv0
+        FzCyrmIUSy0ozk1PLTYqMIRHdnJ+7iZGcGrWct3BOPntB71DjEwcjIcYJTiYlUR4L39elyzE
+        m5JYWZValB9fVJqTWnyI0RQYTROZpUST84HZIa8k3tDE0sDEzMzQ3MjUwFxJnDdo6/xkIYH0
+        xJLU7NTUgtQimD4mDk6pBibDaY+a93S3tbrnq1w4/uLp2fTV6Ue22WxuvMsdnbdQb06oj9fr
+        qyceT1zOtPdQ9za1uV8yH3gcYbqzNI053K789LPinf9zXZsY1zVyFthrJxXIPpTvqk8L89/6
+        ojOM7Xnd0ldqJ66E/+1zt9p3kFfF9GNlDOObnGmK9efk1/+Nr+5WPiZ1rrrXdoOGugULr+HL
+        L0VlB73vXmC9139i2dGJgXoaKbvN3yZr+53efX56/MoLR44fmvmy7Ydqf2FQwMl7bzz1pZ2W
+        W36/1v575fOguvq6klN/3tb0eCuurN/caCDPXaTnm2OWuGI7T2mAdXJI6O8XHqbz3ilNq+CK
+        87OYOvFItl9oqWxi88mCf0osxRmJhlrMRcWJABANY39WBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJTlepalOywZFmC4tjbU/YLeYfOcdq
+        cWr5QiaL5sXr2SzuPvzBYtH34iGzxd7XW9ktLu+aw2axaFkrs0XzpimsFq17j7BbdN29wWgx
+        6aCoxaoFB9gd+DwW73nJ5LFpVSebx51re9g89s9dw+7Rt2UVo8eW/Z8ZPT5vkgtgj+KySUnN
+        ySxLLdK3S+DKOPRhH3PBJbGKXw1NjA2MnwS7GDk5JARMJJZ8n8QMYgsJ7GaUeDjLCiIuKbF0
+        7g12CFtY4n7LEdYuRi6gmkeMEk8uzWIDSbAIqEg8/LIXrIhNQEvi3o8TYINEBCwkFm9YyApi
+        MwusY5HYOjkexBYW8JaYc7aHBcTmFdCWaLk/hwliaCeTxJw7q5ghEoISJ2c+YYFo1pK48e8l
+        UBEHkC0tsfwfB0iYU8BO4kvDLhaQsCjQDa8O1k9gFJyFpHkWkuZZCM0LGJlXMUqmFhTnpucW
+        GxYY5qWW6xUn5haX5qXrJefnbmIER5aW5g7G7as+6B1iZOJgPMQowcGsJMJ7+fO6ZCHelMTK
+        qtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYChUdXRsV+RUeH123
+        +9mDS8Yn4gRn5csLfjH4U1z6im3R5cVR5avchb35Yg3yLvcHGNfJrjSZYKvSaCfFEOn3KnRr
+        eYLzc0uBmx9NJO02zIsNWXb+Yk3cs5ctU/dwxwTw7mfee5NLt97WwbnlN//Uf21+18yllWpT
+        bxQeTuAU91mzWrD9/u69Oa3vfPQseNSSp+7/t/jn6RNuR3bI8ObMDZC4n1oQzHvifJdLtOLf
+        2MTn37l/HVAoWdnEe/R1Wciqlc17lx/y3vInI0DjzhIZ19jL21mYN/xnT+Ew3upSd+fdc6+r
+        sv7tiRmvjh9Xirg38YHplVXJcgZC9y+8iHnJt1b3RCN7u1PzjsYrtxWVWIozEg21mIuKEwHo
+        kiLpGwMAAA==
+X-CMS-MailID: 20230102063059epcas2p133914a8e92a801f6538c6e0c66a86ea0
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----q0R.rfVsiCQSGj.gN--CgCxe04.wFXW5ZK4nZZPhzE8cX7uJ=_e4814_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221229100413epcas2p34c702faf8c96d207cf1659b1173f8858
+References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20221229100413epcas2p34c702faf8c96d207cf1659b1173f8858@epcas2p3.samsung.com>
+        <1672307866-25839-2-git-send-email-dh10.jung@samsung.com>
+        <bc531774-ed70-39b7-3534-5683dff20591@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,305 +128,98 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UCSI allows the USB PD capabilities to be read with the GET_PDO
-command. This will register those capabilities and make them
-visible to user space.
+------q0R.rfVsiCQSGj.gN--CgCxe04.wFXW5ZK4nZZPhzE8cX7uJ=_e4814_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Co-developed-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 163 +++++++++++++++++++++++++++++++---
- drivers/usb/typec/ucsi/ucsi.h |   8 ++
- 2 files changed, 158 insertions(+), 13 deletions(-)
+On Thu, Dec 29, 2022 at 11:25:58AM +0100, Krzysztof Kozlowski wrote:
+> On 29/12/2022 10:57, Daehwan Jung wrote:
+> > Currently, dwc3 invokes just xhci platform driver without any data.
+> > We add xhci node as child of dwc3 node in order to get data from
+> > device tree. It populates "xhci" child by name during initialization
+> > of host. This patch only effects if dwc3 node has a child named "xhci"
+> > not to disturb original path.
+> > 
+> > We add "samsung,exynos-xhci" compatible in xhci platform driver
+> 
+> Where? It is not documented.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index eabe519013e7..d04809476f71 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -562,8 +562,9 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 	}
- }
- 
--static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
--			 u32 *pdos, int offset, int num_pdos)
-+static int ucsi_read_pdos(struct ucsi_connector *con,
-+			  enum typec_role role, int is_partner,
-+			  u32 *pdos, int offset, int num_pdos)
- {
- 	struct ucsi *ucsi = con->ucsi;
- 	u64 command;
-@@ -573,7 +574,7 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
- 	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
- 	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
- 	command |= UCSI_GET_PDOS_NUM_PDOS(num_pdos - 1);
--	command |= UCSI_GET_PDOS_SRC_PDOS;
-+	command |= is_source(role) ? UCSI_GET_PDOS_SRC_PDOS : 0;
- 	ret = ucsi_send_command(ucsi, command, pdos + offset,
- 				num_pdos * sizeof(u32));
- 	if (ret < 0 && ret != -ETIMEDOUT)
-@@ -582,30 +583,43 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
- 	return ret;
- }
- 
--static int ucsi_get_src_pdos(struct ucsi_connector *con)
-+static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
-+			 int is_partner, u32 *pdos)
- {
-+	u8 num_pdos;
- 	int ret;
- 
- 	/* UCSI max payload means only getting at most 4 PDOs at a time */
--	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
-+	ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
- 	if (ret < 0)
- 		return ret;
- 
--	con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
--	if (con->num_pdos < UCSI_MAX_PDOS)
--		return 0;
-+	num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
-+	if (num_pdos < UCSI_MAX_PDOS)
-+		return num_pdos;
- 
- 	/* get the remaining PDOs, if any */
--	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
--			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
-+	ret = ucsi_read_pdos(con, role, is_partner, pdos, UCSI_MAX_PDOS,
-+			     PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
- 	if (ret < 0)
- 		return ret;
- 
--	con->num_pdos += ret / sizeof(u32);
-+	return ret / sizeof(u32) + num_pdos;
-+}
-+
-+static int ucsi_get_src_pdos(struct ucsi_connector *con)
-+{
-+	int ret;
-+
-+	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, con->src_pdos);
-+	if (ret < 0)
-+		return ret;
-+
-+	con->num_pdos = ret;
- 
- 	ucsi_port_psy_changed(con);
- 
--	return 0;
-+	return ret;
- }
- 
- static int ucsi_check_altmodes(struct ucsi_connector *con)
-@@ -630,6 +644,72 @@ static int ucsi_check_altmodes(struct ucsi_connector *con)
- 	return ret;
- }
- 
-+static int ucsi_register_partner_pdos(struct ucsi_connector *con)
-+{
-+	struct usb_power_delivery_desc desc = { con->ucsi->cap.pd_version };
-+	struct usb_power_delivery_capabilities_desc caps;
-+	struct usb_power_delivery_capabilities *cap;
-+	int ret;
-+
-+	if (con->partner_pd)
-+		return 0;
-+
-+	con->partner_pd = usb_power_delivery_register(NULL, &desc);
-+	if (IS_ERR(con->partner_pd))
-+		return PTR_ERR(con->partner_pd);
-+
-+	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, caps.pdo);
-+	if (ret > 0) {
-+		if (ret < PDO_MAX_OBJECTS)
-+			caps.pdo[ret] = 0;
-+
-+		caps.role = TYPEC_SOURCE;
-+		cap = usb_power_delivery_register_capabilities(con->partner_pd, &caps);
-+		if (IS_ERR(cap))
-+			return PTR_ERR(cap);
-+
-+		con->partner_source_caps = cap;
-+
-+		ret = typec_partner_set_usb_power_delivery(con->partner, con->partner_pd);
-+		if (ret) {
-+			usb_power_delivery_unregister_capabilities(con->partner_source_caps);
-+			return ret;
-+		}
-+	}
-+
-+	ret = ucsi_get_pdos(con, TYPEC_SINK, 1, caps.pdo);
-+	if (ret > 0) {
-+		if (ret < PDO_MAX_OBJECTS)
-+			caps.pdo[ret] = 0;
-+
-+		caps.role = TYPEC_SINK;
-+
-+		cap = usb_power_delivery_register_capabilities(con->partner_pd, &caps);
-+		if (IS_ERR(cap))
-+			return PTR_ERR(cap);
-+
-+		con->partner_sink_caps = cap;
-+
-+		ret = typec_partner_set_usb_power_delivery(con->partner, con->partner_pd);
-+		if (ret) {
-+			usb_power_delivery_unregister_capabilities(con->partner_sink_caps);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void ucsi_unregister_partner_pdos(struct ucsi_connector *con)
-+{
-+	usb_power_delivery_unregister_capabilities(con->partner_sink_caps);
-+	con->partner_sink_caps = NULL;
-+	usb_power_delivery_unregister_capabilities(con->partner_source_caps);
-+	con->partner_source_caps = NULL;
-+	usb_power_delivery_unregister(con->partner_pd);
-+	con->partner_pd = NULL;
-+}
-+
- static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
- {
- 	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
-@@ -638,6 +718,7 @@ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
- 		typec_set_pwr_opmode(con->port, TYPEC_PWR_MODE_PD);
- 		ucsi_partner_task(con, ucsi_get_src_pdos, 30, 0);
- 		ucsi_partner_task(con, ucsi_check_altmodes, 30, 0);
-+		ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
- 		break;
- 	case UCSI_CONSTAT_PWR_OPMODE_TYPEC1_5:
- 		con->rdo = 0;
-@@ -696,6 +777,7 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
- 	if (!con->partner)
- 		return;
- 
-+	ucsi_unregister_partner_pdos(con);
- 	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
- 	typec_unregister_partner(con->partner);
- 	con->partner = NULL;
-@@ -800,6 +882,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 		if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
- 			ucsi_register_partner(con);
- 			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
-+
-+			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
-+			    UCSI_CONSTAT_PWR_OPMODE_PD)
-+				ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
- 		} else {
- 			ucsi_unregister_partner(con);
- 		}
-@@ -1036,6 +1122,9 @@ static struct fwnode_handle *ucsi_find_fwnode(struct ucsi_connector *con)
- 
- static int ucsi_register_port(struct ucsi *ucsi, int index)
- {
-+	struct usb_power_delivery_desc desc = { ucsi->cap.pd_version};
-+	struct usb_power_delivery_capabilities_desc pd_caps;
-+	struct usb_power_delivery_capabilities *pd_cap;
- 	struct ucsi_connector *con = &ucsi->connector[index];
- 	struct typec_capability *cap = &con->typec_cap;
- 	enum typec_accessory *accessory = cap->accessory;
-@@ -1114,6 +1203,41 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 		goto out;
- 	}
- 
-+	con->pd = usb_power_delivery_register(ucsi->dev, &desc);
-+
-+	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 0, pd_caps.pdo);
-+	if (ret > 0) {
-+		if (ret < PDO_MAX_OBJECTS)
-+			pd_caps.pdo[ret] = 0;
-+
-+		pd_caps.role = TYPEC_SOURCE;
-+		pd_cap = usb_power_delivery_register_capabilities(con->pd, &pd_caps);
-+		if (IS_ERR(pd_cap)) {
-+			ret = PTR_ERR(pd_cap);
-+			goto out;
-+		}
-+
-+		con->port_source_caps = pd_cap;
-+		typec_port_set_usb_power_delivery(con->port, con->pd);
-+	}
-+
-+	memset(&pd_caps, 0, sizeof(pd_caps));
-+	ret = ucsi_get_pdos(con, TYPEC_SINK, 0, pd_caps.pdo);
-+	if (ret > 0) {
-+		if (ret < PDO_MAX_OBJECTS)
-+			pd_caps.pdo[ret] = 0;
-+
-+		pd_caps.role = TYPEC_SINK;
-+		pd_cap = usb_power_delivery_register_capabilities(con->pd, &pd_caps);
-+		if (IS_ERR(pd_cap)) {
-+			ret = PTR_ERR(pd_cap);
-+			goto out;
-+		}
-+
-+		con->port_sink_caps = pd_cap;
-+		typec_port_set_usb_power_delivery(con->port, con->pd);
-+	}
-+
- 	/* Alternate modes */
- 	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_CON);
- 	if (ret) {
-@@ -1152,8 +1276,8 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
- 		typec_set_pwr_role(con->port,
- 				  !!(con->status.flags & UCSI_CONSTAT_PWR_DIR));
--		ucsi_pwr_opmode_change(con);
- 		ucsi_register_partner(con);
-+		ucsi_pwr_opmode_change(con);
- 		ucsi_port_psy_changed(con);
- 	}
- 
-@@ -1259,6 +1383,13 @@ static int ucsi_init(struct ucsi *ucsi)
- 		ucsi_unregister_port_psy(con);
- 		if (con->wq)
- 			destroy_workqueue(con->wq);
-+
-+		usb_power_delivery_unregister_capabilities(con->port_sink_caps);
-+		con->port_sink_caps = NULL;
-+		usb_power_delivery_unregister_capabilities(con->port_source_caps);
-+		con->port_source_caps = NULL;
-+		usb_power_delivery_unregister(con->pd);
-+		con->pd = NULL;
- 		typec_unregister_port(con->port);
- 		con->port = NULL;
- 	}
-@@ -1422,6 +1553,12 @@ void ucsi_unregister(struct ucsi *ucsi)
- 		ucsi_unregister_port_psy(&ucsi->connector[i]);
- 		if (ucsi->connector[i].wq)
- 			destroy_workqueue(ucsi->connector[i].wq);
-+		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_sink_caps);
-+		ucsi->connector[i].port_sink_caps = NULL;
-+		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_source_caps);
-+		ucsi->connector[i].port_source_caps = NULL;
-+		usb_power_delivery_unregister(ucsi->connector[i].pd);
-+		ucsi->connector[i].pd = NULL;
- 		typec_unregister_port(ucsi->connector[i].port);
- 	}
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index c968474ee547..e2191e37be12 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -339,6 +339,14 @@ struct ucsi_connector {
- 	u32 src_pdos[PDO_MAX_OBJECTS];
- 	int num_pdos;
- 
-+	/* USB PD objects */
-+	struct usb_power_delivery *pd;
-+	struct usb_power_delivery_capabilities *port_source_caps;
-+	struct usb_power_delivery_capabilities *port_sink_caps;
-+	struct usb_power_delivery *partner_pd;
-+	struct usb_power_delivery_capabilities *partner_source_caps;
-+	struct usb_power_delivery_capabilities *partner_sink_caps;
-+
- 	struct usb_role_switch *usb_role_sw;
- };
- 
--- 
-2.25.1
+I submitted the patch of dt bindings on same patchset.
+Is there any missing documentation?
 
+> 
+> > to support Exynos SOCs. 
+> 
+> That's so not true. You do nothing to support Exynos SoC here. Please
+> stop pasting incorrect and misleading commit msgs.
+
+I agree misleading commit msgs. I will modify it.
+
+> 
+> > We introduce roothub wakeup, which uses roothub
+> > as system wakeup source. It needs xhci platform driver to override
+> > roothub ops.
+> 
+> You did not explain why you introduced wakelocks...
+> 
+
+I'm sorry I didn't write description enough.
+I add it below.
+
+> 
+> (...)
+> 
+> >  	if (shared_hcd) {
+> >  		usb_remove_hcd(shared_hcd);
+> >  		xhci->shared_hcd = NULL;
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index 79d7931c048a..693495054001 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -5502,6 +5502,10 @@ void xhci_init_driver(struct hc_driver *drv,
+> >  			drv->check_bandwidth = over->check_bandwidth;
+> >  		if (over->reset_bandwidth)
+> >  			drv->reset_bandwidth = over->reset_bandwidth;
+> > +		if (over->bus_suspend)
+> > +			drv->bus_suspend = over->bus_suspend;
+> > +		if (over->bus_resume)
+> > +			drv->bus_resume = over->bus_resume;
+> >  	}
+> >  }
+> >  EXPORT_SYMBOL_GPL(xhci_init_driver);
+> > diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> > index c9f06c5e4e9d..cb9c54a6a22c 100644
+> > --- a/drivers/usb/host/xhci.h
+> > +++ b/drivers/usb/host/xhci.h
+> > @@ -1752,6 +1752,8 @@ struct xhci_hub {
+> >  struct xhci_hcd {
+> >  	struct usb_hcd *main_hcd;
+> >  	struct usb_hcd *shared_hcd;
+> > +	struct wakeup_source *main_wakelock;
+> > +	struct wakeup_source *shared_wakelock;
+> 
+> Drop wakelocks. This is not related to USB and not needed here. Do you
+> see anywhere else in core kernel code usage of the wakelocks?
+> 
+> You got this comment already, didn't you? So why you do not address it?
+> 
+
+I want to add a new feature in xhci platform driver. I want to make it
+possible to enter system sleep while usb host connected like USB Mouse.
+It gets system enter sleep only if there's no usb transaction at all.
+Deciding if there's tranaction or not is in root hub because it's parent
+of all child usb devices.
+
+Best Regards,
+Jung Daehwan
+
+> Best regards,
+> Krzysztof
+> 
+> 
+
+------q0R.rfVsiCQSGj.gN--CgCxe04.wFXW5ZK4nZZPhzE8cX7uJ=_e4814_
+Content-Type: text/plain; charset="utf-8"
+
+
+------q0R.rfVsiCQSGj.gN--CgCxe04.wFXW5ZK4nZZPhzE8cX7uJ=_e4814_--
