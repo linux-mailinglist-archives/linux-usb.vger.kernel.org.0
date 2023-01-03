@@ -2,52 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A7E65BEA1
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 12:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4210565BFB6
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 13:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbjACLHj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 06:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S237540AbjACMP1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Jan 2023 07:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237298AbjACLHg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 06:07:36 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F49D100D
-        for <linux-usb@vger.kernel.org>; Tue,  3 Jan 2023 03:07:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672744055; x=1704280055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Hjdd3lWsNunIHfOqIrD5TeeP+MLoQOHttullyGOZllc=;
-  b=B7TZfkhHBU+ZuywaWcBJ6BcM2Hbe7EEaHUHGf1dm+juEUkFEfMgyeLKs
-   Iy/T2TgWYramPxDtvpzG64Hn28w3Kxs2RhfHcfA/dg+RNkwpdZFpAHILg
-   INH9hTR/+cEkBAdPJHedqrvym+Yy9QfCkjm7atJeQtiGwKdc6pA5dBN06
-   ZLjqro1jsaZghpH9N2QZAXMptYWZ3aLKGWVU3jE8EybEJ547VTyYdiiW9
-   iSywmpe0v/jOlO8rjOnjYkq+tLFgwRBWJ4Mv2UI3Io1zVxqhxe8/xxcKQ
-   VE0rgwZ1YKV/LzMgGvcewubocwe3RKVHJVJT+9agH/OQcZDVY9i5DBFkG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="302011918"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="302011918"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 03:07:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="718061019"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="718061019"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Jan 2023 03:07:33 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id BC72A19E; Tue,  3 Jan 2023 13:08:05 +0200 (EET)
-Date:   Tue, 3 Jan 2023 13:08:05 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
-        <christian.schaubschlaeger@gmx.at>
+        with ESMTP id S237308AbjACMPZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 07:15:25 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49AD10072
+        for <linux-usb@vger.kernel.org>; Tue,  3 Jan 2023 04:15:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
+        t=1672748115; bh=imK32XzF5+kkIpyty7uPvTZmWtlJHzMD+TaPaQv9JWY=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=nd7d/BB31LKl8eW6tffCURQzYVrDm7LeNkuJa4E3oiPf0Roipb7UXzetE0bPsEKZ7
+         +0X3GrMeuvzbW1nzCsvXYw6Azt60KvzrdOZ+yPMKLdl8pVYdEy5hITK7z4zxFhvG2Z
+         buHOVrn1Y4weeIk9ZWa9WxDOhLr1bOnmy9cWbUyF5XOWXzjeQOfXQm1V3akut84eZE
+         O689uBKJpntGOMjjV7oPA2io564d9vO+mo7HYFJTugtIYakkllCbVR5L3silzRNrWp
+         KCliB9sfb6+dVdQuyo8Ait3y66fa0s8oYi1LEv6eLgPjfSvIUPXtIkEz1AiH3oDFst
+         RlgIbjUhNbkaQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([81.189.232.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEUz4-1p2F0j249C-00G1mO; Tue, 03
+ Jan 2023 13:15:15 +0100
+Content-Type: multipart/mixed; boundary="------------bGctblQDjr0q89Y9c0rUEfT6"
+Message-ID: <a8c1dd4b-7227-5ba2-97a4-a2dc3d561ea3@gmx.at>
+Date:   Tue, 3 Jan 2023 13:14:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Possible problem with thunderbolt 4
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc:     linux-usb@vger.kernel.org,
         "michael.simon@cpsd.at" <michael.simon@cpsd.at>
-Subject: Re: Possible problem with thunderbolt 4
-Message-ID: <Y7QMlV82mtaApJwJ@black.fi.intel.com>
 References: <Y66vWYdLLAOG81+f@black.fi.intel.com>
  <c334eb1f-1130-04d7-e7a6-cce9a90fd2e8@gmx.at>
  <Y67RoYvbRC6OgfOq@black.fi.intel.com>
@@ -58,139 +48,557 @@ References: <Y66vWYdLLAOG81+f@black.fi.intel.com>
  <011df027-5381-1e10-9c54-e0935ae549f9@gmx.at>
  <Y7ME7EwduIQE38+2@black.fi.intel.com>
  <a324ff2a-d014-83d2-4f30-b865db7c352b@gmx.at>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a324ff2a-d014-83d2-4f30-b865db7c352b@gmx.at>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ <Y7QMlV82mtaApJwJ@black.fi.intel.com>
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+In-Reply-To: <Y7QMlV82mtaApJwJ@black.fi.intel.com>
+X-Provags-ID: V03:K1:o7F3RcnHD9HulfB9VL4v8Rmsz/e82H6cMTmE477hLJEDdUedQUO
+ zF5xvqEt7TMAHr6glTzEXOi1ev1x6SFbFDGVLBZ9Nl+HPrKuHxM0u0//BNMgaKhJzL76a92
+ 1WJzKL5ns3auA/zAM2Mq7vmf7A92uDgEUjcR+KYs2QTWmQd4bXcXfziOrr+Sk+JU8CJ1l3R
+ SBsIkfDBJ1ArW0j6BX60g==
+UI-OutboundReport: notjunk:1;M01:P0:c0T/csep5dE=;UG63u8I1oSKJmT80/D+F4Yb5dQ4
+ sCCsgqgdFi1muhNIs00A8bKKnJhVivFWtC3UojaJZNAsQbkxxVnwB60aJ5V4fR/4ZNK/z7P30
+ SiJjDz0FEsbFrJ3Sp6LaAOcHOjxbkVZn+KVghBku3kZYJpvX8NYAphCtCyxP/puAESFiRyFuI
+ kduIoFRxqeqW4OXr1rMRJfhKKm5UuWO5Pt3+cR4nqYyo59s15/vtKp5YJ7KeFw0iIu7lVz8Gn
+ SrhD4oYzota+7fdFq3ui7OywHPMn1KCAco0SqHtQ6L0vvwKtaTmwE2AJJDkKJb2kPTHGGfKC+
+ YX9DiamBaqRIk4j7HwfWjCkofP2OlyMYQKQvkMc7hTShY25bd+uB1HVOcLCDzrM0xsf5JYyOU
+ N2+MY4JVRpeesGMs+Hn/6aibnhnNXYIa+OCnPUK0Bpb6dbESR9NSVo+kDEScXO738xRxOD+Uv
+ LvIU+LurzEk/qi7q5R+A2hYZghdy8FFJdjezyMtpuMiiDedYVaEn1+w53KSvCi5omko3Uz+Qv
+ ExbnyvgWlxl31AgDWzGDPBvvCldLWp0KdrYj0+QiZVEVLjAWS55uFHndrrurVk3QL183eEiMu
+ L3qbV1Rj9qHr3G5fXYKnwFOBGKIEMTERh9I4vFHOQSYyFOkqMXqHK+zTw5cKp2Dzz1ntc0+1q
+ S0QbFlbjj4cCpnBNi0IwZEbek+dvNs6MfBqJfbKBuXenGuxqwL0jLjLntbQo9cKNtsrcUqLAu
+ 5LgTrXvljFJsXMuC21IJDGtbdCF0vQsFiebUo8tLk7jWBWYCkAddLtBFhjyAonko/aWovfxoi
+ 7VL2iyXs0n2AaS6uFA4mGMLUNjvQSrPvsJRM+Ofn+v+DL3rW/6oTyZ7pZLWDhxKGMHq14Yr9H
+ LHqfsaA6q5QoJ7gYEQRtLLqZHOHwboWHPdC3G63WxeVfMDVUTR0IOlo+Yp9HRJtVcu3SmbOvm
+ lhl8ww==
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This is a multi-part message in MIME format.
+--------------bGctblQDjr0q89Y9c0rUEfT6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
 Hi,
 
-On Tue, Jan 03, 2023 at 10:08:16AM +0100, Christian Schaubschläger wrote:
-> Good morning,
-> 
-> > Can you try the below hack? It should tear down all tunnels during
-> > reboot so the firmware should see pristine path configuration spaces
-> > (assuming it is looking at them and failing because if already configure
-> > paths).
-> >
-> > diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> > index 1711dc19b1e2..e0544843e242 100644
-> > --- a/drivers/thunderbolt/tb.c
-> > +++ b/drivers/thunderbolt/tb.c
-> > @@ -1982,13 +1982,7 @@ static void tb_stop(struct tb *tb)
-> >  	cancel_delayed_work(&tcm->remove_work);
-> >  	/* tunnels are only present after everything has been initialized */
-> >  	list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list) {
-> > -		/*
-> > -		 * DMA tunnels require the driver to be functional so we
-> > -		 * tear them down. Other protocol tunnels can be left
-> > -		 * intact.
-> > -		 */
-> > -		if (tb_tunnel_is_dma(tunnel))
-> > -			tb_tunnel_deactivate(tunnel);
-> > +		tb_tunnel_deactivate(tunnel);
-> >  		tb_tunnel_free(tunnel);
-> >  	}
-> >  	tb_switch_remove(tb->root_switch);
-> That doesn't change the behaviour unfortunately.
+>> I did find out two (confusing) things, though. The network interface
+>> on the dock is an Intel I255-LMvP, in linux it's eth1. When I do this
+>> before the reboot:
+>>
+>> echo 1 > /sys/class/net/eth1/device/remove
+>>
+>> the device is removed and then added again immedidately:
+>>
+>> [=C2=A0=C2=A0 31.930950] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link beco=
+mes ready
+>> [=C2=A0=C2=A0 77.496059] igc 0000:2c:00.0 eth1: PHC removed
+>> [=C2=A0=C2=A0 77.670531] pci 0000:2c:00.0: Removing from iommu group 21
+>> [=C2=A0=C2=A0 78.551553] pci 0000:2c:00.0: [8086:5502] type 00 class 0x=
+020000
+>> [=C2=A0=C2=A0 78.552412] pci 0000:2c:00.0: reg 0x10: [mem 0x00000000-0x=
+000fffff]
+>> [=C2=A0=C2=A0 78.553194] pci 0000:2c:00.0: reg 0x1c: [mem 0x00000000-0x=
+00003fff]
+>> [=C2=A0=C2=A0 78.554128] pci 0000:2c:00.0: PME# supported from D0 D3hot=
+ D3cold
+>> [=C2=A0=C2=A0 78.555110] pci 0000:2c:00.0: Adding to iommu group 21
+>> [=C2=A0=C2=A0 78.555913] pcieport 0000:04:04.0: ASPM: current common cl=
+ock configuration is inconsistent, reconfiguring
+>> [=C2=A0=C2=A0 78.566265] pci_bus 0000:05: Allocating resources
+>> [=C2=A0=C2=A0 78.566285] pci_bus 0000:2c: Allocating resources
+>> [=C2=A0=C2=A0 78.566296] pci 0000:2c:00.0: BAR 0: assigned [mem 0x82000=
+000-0x820fffff]
+>> [=C2=A0=C2=A0 78.567075] pci 0000:2c:00.0: BAR 3: assigned [mem 0x82100=
+000-0x82103fff]
+>> [=C2=A0=C2=A0 78.567862] igc 0000:2c:00.0: enabling device (0000 -> 000=
+2)
+>> [=C2=A0=C2=A0 78.568671] igc 0000:2c:00.0: PTM enabled, 4ns granularity
+>> [=C2=A0=C2=A0 78.626297] pps pps0: new PPS source ptp1
+>> [=C2=A0=C2=A0 78.627161] igc 0000:2c:00.0 (unnamed net_device) (uniniti=
+alized): PHC added
+>> [=C2=A0=C2=A0 78.653444] igc 0000:2c:00.0: 4.000 Gb/s available PCIe ba=
+ndwidth (5.0 GT/s PCIe x1 link)
+>> [=C2=A0=C2=A0 78.654448] igc 0000:2c:00.0 eth1: MAC: 5c:60:ba:71:ea:be
+>> [=C2=A0=C2=A0 78.655307] pci_bus 0000:05: Allocating resources
+>> [=C2=A0=C2=A0 78.655327] pci_bus 0000:2c: Allocating resources
+>> [=C2=A0=C2=A0 81.598703] igc 0000:2c:00.0 eth1: NIC Link is Up 1000 Mbp=
+s Full Duplex, Flow Control: RX/TX
+>> [=C2=A0=C2=A0 81.599729] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link beco=
+mes ready
+>>
+>>
+>> If I reboot now, I can see the network interface in the firmware!
+> Does this happens 100% or it happened just once?
+This happens always.
+>> Also, after the
+>>
+>> echo 1 > /sys/class/net/eth1/device/remove
+>>
+>>
+>> the device doesn't show up in linux again:
+>>
+>> [=C2=A0=C2=A0 10.158596] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link beco=
+mes ready
+>> [=C2=A0=C2=A0 42.773958] igc 0000:2c:00.0 eth1: PHC removed
+>> [=C2=A0=C2=A0 42.962208] pci 0000:2c:00.0: Removing from iommu group 21
+> You mean with display connected it does not show up again?
+Correct! This is also always the case.
+> So I wonder if you can run another test still?
+>
+> 0. Remove the hack patch if not already.
+>
+> Steps 1-3 same as before.
+>
+> 4. Disable runtime PM from the PCIe root ports:
+>
+>   # echo on > /sys/bus/pci/devices/0000:00:07.0/power/control
+>   # echo on > /sys/bus/pci/devices/0000:00:07.1/power/control
+>   # echo on > /sys/bus/pci/devices/0000:00:07.2/power/control
+>   # echo on > /sys/bus/pci/devices/0000:00:07.3/power/control
+>
+> (or how many Thunderbolt PCIE root ports you have, disable it from all o=
+f them).
+>
+> 5. De-authorize the PCIe tunnel
+>
+>   # echo 0 > /sys/bus/thunderbolt/devices/.../authorized
+>
+> 6. Soft reboot
+>
+> Does this change anything or the behavior is the same?
+No, that doesn't change anything; though I'm not sure how many Thunderbolt=
+ PCIe root ports I have; I guess only one: 0000:00:07.0 - please have a lo=
+ok into the attached lspci output.
 
-Okay then it is not about the paths.
+dmesg after the above two steps:
 
-> I did find out two (confusing) things, though. The network interface
-> on the dock is an Intel I255-LMvP, in linux it's eth1. When I do this
-> before the reboot:
-> 
-> echo 1 > /sys/class/net/eth1/device/remove
-> 
-> the device is removed and then added again immedidately:
-> 
-> [   31.930950] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
-> [   77.496059] igc 0000:2c:00.0 eth1: PHC removed
-> [   77.670531] pci 0000:2c:00.0: Removing from iommu group 21
-> [   78.551553] pci 0000:2c:00.0: [8086:5502] type 00 class 0x020000
-> [   78.552412] pci 0000:2c:00.0: reg 0x10: [mem 0x00000000-0x000fffff]
-> [   78.553194] pci 0000:2c:00.0: reg 0x1c: [mem 0x00000000-0x00003fff]
-> [   78.554128] pci 0000:2c:00.0: PME# supported from D0 D3hot D3cold
-> [   78.555110] pci 0000:2c:00.0: Adding to iommu group 21
-> [   78.555913] pcieport 0000:04:04.0: ASPM: current common clock configuration is inconsistent, reconfiguring
-> [   78.566265] pci_bus 0000:05: Allocating resources
-> [   78.566285] pci_bus 0000:2c: Allocating resources
-> [   78.566296] pci 0000:2c:00.0: BAR 0: assigned [mem 0x82000000-0x820fffff]
-> [   78.567075] pci 0000:2c:00.0: BAR 3: assigned [mem 0x82100000-0x82103fff]
-> [   78.567862] igc 0000:2c:00.0: enabling device (0000 -> 0002)
-> [   78.568671] igc 0000:2c:00.0: PTM enabled, 4ns granularity
-> [   78.626297] pps pps0: new PPS source ptp1
-> [   78.627161] igc 0000:2c:00.0 (unnamed net_device) (uninitialized): PHC added
-> [   78.653444] igc 0000:2c:00.0: 4.000 Gb/s available PCIe bandwidth (5.0 GT/s PCIe x1 link)
-> [   78.654448] igc 0000:2c:00.0 eth1: MAC: 5c:60:ba:71:ea:be
-> [   78.655307] pci_bus 0000:05: Allocating resources
-> [   78.655327] pci_bus 0000:2c: Allocating resources
-> [   81.598703] igc 0000:2c:00.0 eth1: NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
-> [   81.599729] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
-> 
-> 
-> If I reboot now, I can see the network interface in the firmware!
+[=C2=A0=C2=A0 91.655320] pcieport 0000:00:07.0: pciehp: Slot(3): Link Down
+[=C2=A0=C2=A0 91.657353] pcieport 0000:00:07.0: pciehp: Slot(3): Card not =
+present
+[=C2=A0=C2=A0 91.659525] igc 0000:2c:00.0 eth1: PHC removed
+[=C2=A0=C2=A0 91.786204] pcieport 0000:04:03.0: Unable to change power sta=
+te from D3hot to D0, device inaccessible
+[=C2=A0=C2=A0 91.788645] pcieport 0000:04:03.0: Runtime PM usage count und=
+erflow!
+[=C2=A0=C2=A0 91.790766] pcieport 0000:04:02.0: Unable to change power sta=
+te from D3hot to D0, device inaccessible
+[=C2=A0=C2=A0 91.793156] pcieport 0000:04:02.0: Runtime PM usage count und=
+erflow!
+[=C2=A0=C2=A0 91.795341] pcieport 0000:04:01.0: Unable to change power sta=
+te from D3hot to D0, device inaccessible
+[=C2=A0=C2=A0 91.797797] pcieport 0000:04:01.0: Runtime PM usage count und=
+erflow!
+[=C2=A0=C2=A0 91.800031] pcieport 0000:04:00.0: Unable to change power sta=
+te from D3hot to D0, device inaccessible
+[=C2=A0=C2=A0 91.802671] pci_bus 0000:05: busn_res: [bus 05] is released
+[=C2=A0=C2=A0 91.805004] pci 0000:04:00.0: Removing from iommu group 16
+[=C2=A0=C2=A0 91.807261] pci_bus 0000:06: busn_res: [bus 06-12] is release=
+d
+[=C2=A0=C2=A0 91.809582] pci 0000:04:01.0: Removing from iommu group 17
+[=C2=A0=C2=A0 91.811925] pci_bus 0000:13: busn_res: [bus 13-1f] is release=
+d
+[=C2=A0=C2=A0 91.814303] pci 0000:04:02.0: Removing from iommu group 18
+[=C2=A0=C2=A0 91.816604] pci_bus 0000:20: busn_res: [bus 20-2b] is release=
+d
+[=C2=A0=C2=A0 91.818985] pci 0000:04:03.0: Removing from iommu group 19
+[=C2=A0=C2=A0 91.821412] pci 0000:2c:00.0: Removing from iommu group 21
+[=C2=A0=C2=A0 91.823875] pci_bus 0000:2c: busn_res: [bus 2c] is released
+[=C2=A0=C2=A0 91.826241] pci 0000:04:04.0: Removing from iommu group 20
+[=C2=A0=C2=A0 91.828592] pci_bus 0000:04: busn_res: [bus 04-2c] is release=
+d
+[=C2=A0=C2=A0 91.831018] pci 0000:03:00.0: Removing from iommu group 15
 
-Does this happens 100% or it happened just once?
+Still, no network interface after the reboot in the firmware...
 
-> And now for the confusing part: I do exactly the same steps as above,
-> but whith an external display connected to the dock. Even if I don't
-> touch this display in Linux (the i915 driver isn't loaded, just efi
-> framebuffer), then the net interface is gone in the firmware after the
-> reboot...
+Best regards,
+Christian
 
-It is enough if there is monitor plugged the DP tunnel is then up even
-if there is no i915.
+--------------bGctblQDjr0q89Y9c0rUEfT6
+Content-Type: text/plain; charset=UTF-8; name="lspci.txt"
+Content-Disposition: attachment; filename="lspci.txt"
+Content-Transfer-Encoding: base64
 
-> Also, after the
-> 
-> echo 1 > /sys/class/net/eth1/device/remove
-> 
-> 
-> the device doesn't show up in linux again:
-> 
-> [   10.158596] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
-> [   42.773958] igc 0000:2c:00.0 eth1: PHC removed
-> [   42.962208] pci 0000:2c:00.0: Removing from iommu group 21
+MDA6MDAuMCBIb3N0IGJyaWRnZTogSW50ZWwgQ29ycG9yYXRpb24gRGV2aWNlIDQ2MDEgKHJl
+diAwNCkKCVN1YnN5c3RlbTogSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkgRGV2aWNlIDg5N2EK
+CUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJT01NVSBncm91
+cCAwCglDYXBhYmlsaXRpZXM6IFtlMF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBM
+ZW49MTQgPD8+CgowMDowMi4wIFZHQSBjb21wYXRpYmxlIGNvbnRyb2xsZXI6IEludGVsIENv
+cnBvcmF0aW9uIERldmljZSA0NjI4IChyZXYgMGMpIChwcm9nLWlmIDAwIFtWR0EgY29udHJv
+bGxlcl0pCglEZXZpY2VOYW1lOiBPbmJvYXJkIElHRAoJU3Vic3lzdGVtOiBIZXdsZXR0LVBh
+Y2thcmQgQ29tcGFueSBEZXZpY2UgODk3YQoJRmxhZ3M6IGJ1cyBtYXN0ZXIsIGZhc3QgZGV2
+c2VsLCBsYXRlbmN5IDAsIElSUSAyNTUsIElPTU1VIGdyb3VwIDEKCU1lbW9yeSBhdCA2MDFj
+MDAwMDAwICg2NC1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFtzaXplPTE2TV0KCU1lbW9yeSBh
+dCA0MDAwMDAwMDAwICg2NC1iaXQsIHByZWZldGNoYWJsZSkgW3NpemU9MjU2TV0KCUkvTyBw
+b3J0cyBhdCAzMDAwIFtzaXplPTY0XQoJRXhwYW5zaW9uIFJPTSBhdCAwMDBjMDAwMCBbdmly
+dHVhbF0gW2Rpc2FibGVkXSBbc2l6ZT0xMjhLXQoJQ2FwYWJpbGl0aWVzOiBbNDBdIFZlbmRv
+ciBTcGVjaWZpYyBJbmZvcm1hdGlvbjogTGVuPTBjIDw/PgoJQ2FwYWJpbGl0aWVzOiBbNzBd
+IEV4cHJlc3MgUm9vdCBDb21wbGV4IEludGVncmF0ZWQgRW5kcG9pbnQsIE1TSSAwMAoJQ2Fw
+YWJpbGl0aWVzOiBbYWNdIE1TSTogRW5hYmxlLSBDb3VudD0xLzEgTWFza2FibGUrIDY0Yml0
+LQoJQ2FwYWJpbGl0aWVzOiBbZDBdIFBvd2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAyCglDYXBh
+YmlsaXRpZXM6IFsxMDBdIFByb2Nlc3MgQWRkcmVzcyBTcGFjZSBJRCAoUEFTSUQpCglDYXBh
+YmlsaXRpZXM6IFsyMDBdIEFkZHJlc3MgVHJhbnNsYXRpb24gU2VydmljZSAoQVRTKQoJQ2Fw
+YWJpbGl0aWVzOiBbMzAwXSBQYWdlIFJlcXVlc3QgSW50ZXJmYWNlIChQUkkpCglDYXBhYmls
+aXRpZXM6IFszMjBdIFNpbmdsZSBSb290IEkvTyBWaXJ0dWFsaXphdGlvbiAoU1ItSU9WKQoJ
+S2VybmVsIG1vZHVsZXM6IGk5MTUKCjAwOjA0LjAgU2lnbmFsIHByb2Nlc3NpbmcgY29udHJv
+bGxlcjogSW50ZWwgQ29ycG9yYXRpb24gRGV2aWNlIDQ2MWQgKHJldiAwNCkKCVN1YnN5c3Rl
+bTogSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkgRGV2aWNlIDg5N2EKCUZsYWdzOiBmYXN0IGRl
+dnNlbCwgSVJRIDI1NSwgSU9NTVUgZ3JvdXAgMgoJTWVtb3J5IGF0IDYwMWQxNDAwMDAgKDY0
+LWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW2Rpc2FibGVkXSBbc2l6ZT0xMjhLXQoJQ2FwYWJp
+bGl0aWVzOiBbOTBdIE1TSTogRW5hYmxlLSBDb3VudD0xLzEgTWFza2FibGUtIDY0Yml0LQoJ
+Q2FwYWJpbGl0aWVzOiBbZDBdIFBvd2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAzCglDYXBhYmls
+aXRpZXM6IFtlMF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBMZW49MGMgPD8+Cgow
+MDowNi4wIFBDSSBicmlkZ2U6IEludGVsIENvcnBvcmF0aW9uIERldmljZSA0NjRkIChyZXYg
+MDQpIChwcm9nLWlmIDAwIFtOb3JtYWwgZGVjb2RlXSkKCUZsYWdzOiBidXMgbWFzdGVyLCBm
+YXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJUlEgMTIyLCBJT01NVSBncm91cCAzCglCdXM6IHBy
+aW1hcnk9MDAsIHNlY29uZGFyeT0wMSwgc3Vib3JkaW5hdGU9MDEsIHNlYy1sYXRlbmN5PTAK
+CUkvTyBiZWhpbmQgYnJpZGdlOiBbZGlzYWJsZWRdCglNZW1vcnkgYmVoaW5kIGJyaWRnZTog
+W2Rpc2FibGVkXQoJUHJlZmV0Y2hhYmxlIG1lbW9yeSBiZWhpbmQgYnJpZGdlOiBbZGlzYWJs
+ZWRdCglDYXBhYmlsaXRpZXM6IFs0MF0gRXhwcmVzcyBSb290IFBvcnQgKFNsb3QrKSwgTVNJ
+IDAwCglDYXBhYmlsaXRpZXM6IFs4MF0gTVNJOiBFbmFibGUrIENvdW50PTEvMSBNYXNrYWJs
+ZS0gNjRiaXQtCglDYXBhYmlsaXRpZXM6IFs5MF0gU3Vic3lzdGVtOiBIZXdsZXR0LVBhY2th
+cmQgQ29tcGFueSBEZXZpY2UgODk3YQoJQ2FwYWJpbGl0aWVzOiBbYTBdIFBvd2VyIE1hbmFn
+ZW1lbnQgdmVyc2lvbiAzCglDYXBhYmlsaXRpZXM6IFsxMDBdIEFkdmFuY2VkIEVycm9yIFJl
+cG9ydGluZwoJQ2FwYWJpbGl0aWVzOiBbMjIwXSBBY2Nlc3MgQ29udHJvbCBTZXJ2aWNlcwoJ
+Q2FwYWJpbGl0aWVzOiBbMTUwXSBQcmVjaXNpb24gVGltZSBNZWFzdXJlbWVudAoJQ2FwYWJp
+bGl0aWVzOiBbMjgwXSBWaXJ0dWFsIENoYW5uZWwKCUNhcGFiaWxpdGllczogW2EzMF0gU2Vj
+b25kYXJ5IFBDSSBFeHByZXNzCglDYXBhYmlsaXRpZXM6IFthOTBdIERhdGEgTGluayBGZWF0
+dXJlIDw/PgoJQ2FwYWJpbGl0aWVzOiBbYTljXSBQaHlzaWNhbCBMYXllciAxNi4wIEdUL3Mg
+PD8+CglDYXBhYmlsaXRpZXM6IFtlZGNdIExhbmUgTWFyZ2luaW5nIGF0IHRoZSBSZWNlaXZl
+ciA8Pz4KCUtlcm5lbCBkcml2ZXIgaW4gdXNlOiBwY2llcG9ydAoKMDA6MDYuMiBQQ0kgYnJp
+ZGdlOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgNDYzZCAocmV2IDA0KSAocHJvZy1pZiAw
+MCBbTm9ybWFsIGRlY29kZV0pCglGbGFnczogYnVzIG1hc3RlciwgZmFzdCBkZXZzZWwsIGxh
+dGVuY3kgMCwgSVJRIDEyMywgSU9NTVUgZ3JvdXAgNAoJQnVzOiBwcmltYXJ5PTAwLCBzZWNv
+bmRhcnk9MDIsIHN1Ym9yZGluYXRlPTAyLCBzZWMtbGF0ZW5jeT0wCglJL08gYmVoaW5kIGJy
+aWRnZTogW2Rpc2FibGVkXQoJTWVtb3J5IGJlaGluZCBicmlkZ2U6IDgyMjAwMDAwLTgyMmZm
+ZmZmIFtzaXplPTFNXQoJUHJlZmV0Y2hhYmxlIG1lbW9yeSBiZWhpbmQgYnJpZGdlOiBbZGlz
+YWJsZWRdCglDYXBhYmlsaXRpZXM6IFs0MF0gRXhwcmVzcyBSb290IFBvcnQgKFNsb3QrKSwg
+TVNJIDAwCglDYXBhYmlsaXRpZXM6IFs4MF0gTVNJOiBFbmFibGUrIENvdW50PTEvMSBNYXNr
+YWJsZS0gNjRiaXQtCglDYXBhYmlsaXRpZXM6IFs5MF0gU3Vic3lzdGVtOiBIZXdsZXR0LVBh
+Y2thcmQgQ29tcGFueSBEZXZpY2UgODk3YQoJQ2FwYWJpbGl0aWVzOiBbYTBdIFBvd2VyIE1h
+bmFnZW1lbnQgdmVyc2lvbiAzCglDYXBhYmlsaXRpZXM6IFsxMDBdIEFkdmFuY2VkIEVycm9y
+IFJlcG9ydGluZwoJQ2FwYWJpbGl0aWVzOiBbMjIwXSBBY2Nlc3MgQ29udHJvbCBTZXJ2aWNl
+cwoJQ2FwYWJpbGl0aWVzOiBbMjAwXSBMMSBQTSBTdWJzdGF0ZXMKCUNhcGFiaWxpdGllczog
+WzE1MF0gUHJlY2lzaW9uIFRpbWUgTWVhc3VyZW1lbnQKCUNhcGFiaWxpdGllczogWzI4MF0g
+VmlydHVhbCBDaGFubmVsCglDYXBhYmlsaXRpZXM6IFthMzBdIFNlY29uZGFyeSBQQ0kgRXhw
+cmVzcwoJQ2FwYWJpbGl0aWVzOiBbYTkwXSBEYXRhIExpbmsgRmVhdHVyZSA8Pz4KCUNhcGFi
+aWxpdGllczogW2E5Y10gUGh5c2ljYWwgTGF5ZXIgMTYuMCBHVC9zIDw/PgoJQ2FwYWJpbGl0
+aWVzOiBbZWRjXSBMYW5lIE1hcmdpbmluZyBhdCB0aGUgUmVjZWl2ZXIgPD8+CglLZXJuZWwg
+ZHJpdmVyIGluIHVzZTogcGNpZXBvcnQKCjAwOjA3LjAgUENJIGJyaWRnZTogSW50ZWwgQ29y
+cG9yYXRpb24gRGV2aWNlIDQ2NmUgKHJldiAwNCkgKHByb2ctaWYgMDAgW05vcm1hbCBkZWNv
+ZGVdKQoJRmxhZ3M6IGJ1cyBtYXN0ZXIsIGZhc3QgZGV2c2VsLCBsYXRlbmN5IDAsIElSUSAx
+MjQsIElPTU1VIGdyb3VwIDUKCUJ1czogcHJpbWFyeT0wMCwgc2Vjb25kYXJ5PTAzLCBzdWJv
+cmRpbmF0ZT0yYywgc2VjLWxhdGVuY3k9MAoJSS9PIGJlaGluZCBicmlkZ2U6IDAwMDA0MDAw
+LTAwMDA0ZmZmIFtzaXplPTRLXQoJTWVtb3J5IGJlaGluZCBicmlkZ2U6IDc2MDAwMDAwLTgy
+MWZmZmZmIFtzaXplPTE5NE1dCglQcmVmZXRjaGFibGUgbWVtb3J5IGJlaGluZCBicmlkZ2U6
+IDAwMDAwMDYwMDAwMDAwMDAtMDAwMDAwNjAxYmZmZmZmZiBbc2l6ZT00NDhNXQoJQ2FwYWJp
+bGl0aWVzOiBbNDBdIEV4cHJlc3MgUm9vdCBQb3J0IChTbG90KyksIE1TSSAwMAoJQ2FwYWJp
+bGl0aWVzOiBbODBdIE1TSTogRW5hYmxlKyBDb3VudD0xLzEgTWFza2FibGUtIDY0Yml0LQoJ
+Q2FwYWJpbGl0aWVzOiBbOTBdIFN1YnN5c3RlbTogSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkg
+RGV2aWNlIDg5N2EKCUNhcGFiaWxpdGllczogW2EwXSBQb3dlciBNYW5hZ2VtZW50IHZlcnNp
+b24gMwoJQ2FwYWJpbGl0aWVzOiBbMTAwXSBBZHZhbmNlZCBFcnJvciBSZXBvcnRpbmcKCUNh
+cGFiaWxpdGllczogWzIyMF0gQWNjZXNzIENvbnRyb2wgU2VydmljZXMKCUNhcGFiaWxpdGll
+czogWzE1MF0gUHJlY2lzaW9uIFRpbWUgTWVhc3VyZW1lbnQKCUNhcGFiaWxpdGllczogW2Ew
+MF0gRG93bnN0cmVhbSBQb3J0IENvbnRhaW5tZW50CglDYXBhYmlsaXRpZXM6IFthMzBdIFNl
+Y29uZGFyeSBQQ0kgRXhwcmVzcwoJQ2FwYWJpbGl0aWVzOiBbYTkwXSBEYXRhIExpbmsgRmVh
+dHVyZSA8Pz4KCUNhcGFiaWxpdGllczogW2JhMF0gUGh5c2ljYWwgUmVzaXphYmxlIEJBUgoJ
+S2VybmVsIGRyaXZlciBpbiB1c2U6IHBjaWVwb3J0CgowMDowOC4wIFN5c3RlbSBwZXJpcGhl
+cmFsOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgNDY0ZiAocmV2IDA0KQoJU3Vic3lzdGVt
+OiBIZXdsZXR0LVBhY2thcmQgQ29tcGFueSBEZXZpY2UgODk3YQoJRmxhZ3M6IGZhc3QgZGV2
+c2VsLCBJUlEgMjU1LCBJT01NVSBncm91cCA2CglNZW1vcnkgYXQgNjAxZDE5MzAwMCAoNjQt
+Yml0LCBub24tcHJlZmV0Y2hhYmxlKSBbZGlzYWJsZWRdIFtzaXplPTRLXQoJQ2FwYWJpbGl0
+aWVzOiBbOTBdIE1TSTogRW5hYmxlLSBDb3VudD0xLzEgTWFza2FibGUtIDY0Yml0LQoJQ2Fw
+YWJpbGl0aWVzOiBbYTBdIFZlbmRvciBTcGVjaWZpYyBJbmZvcm1hdGlvbjogTGVuPTE0IDw/
+PgoJQ2FwYWJpbGl0aWVzOiBbZGNdIFBvd2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAyCglDYXBh
+YmlsaXRpZXM6IFtmMF0gUENJIEFkdmFuY2VkIEZlYXR1cmVzCgowMDowZC4wIFVTQiBjb250
+cm9sbGVyOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgNDYxZSAocmV2IDA0KSAocHJvZy1p
+ZiAzMCBbWEhDSV0pCglTdWJzeXN0ZW06IEhld2xldHQtUGFja2FyZCBDb21wYW55IERldmlj
+ZSA4OTdhCglGbGFnczogYnVzIG1hc3RlciwgbWVkaXVtIGRldnNlbCwgbGF0ZW5jeSAwLCBJ
+UlEgMTY0LCBJT01NVSBncm91cCA3CglNZW1vcnkgYXQgNjAxZDE3MDAwMCAoNjQtYml0LCBu
+b24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT02NEtdCglDYXBhYmlsaXRpZXM6IFs3MF0gUG93ZXIg
+TWFuYWdlbWVudCB2ZXJzaW9uIDIKCUNhcGFiaWxpdGllczogWzgwXSBNU0k6IEVuYWJsZSsg
+Q291bnQ9MS84IE1hc2thYmxlLSA2NGJpdCsKCUNhcGFiaWxpdGllczogWzkwXSBWZW5kb3Ig
+U3BlY2lmaWMgSW5mb3JtYXRpb246IExlbj0xNCA8Pz4KCUNhcGFiaWxpdGllczogW2IwXSBW
+ZW5kb3IgU3BlY2lmaWMgSW5mb3JtYXRpb246IExlbj0wMCA8Pz4KCUtlcm5lbCBkcml2ZXIg
+aW4gdXNlOiB4aGNpX2hjZAoJS2VybmVsIG1vZHVsZXM6IHhoY2lfcGNpCgowMDowZC4yIFVT
+QiBjb250cm9sbGVyOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgNDYzZSAocmV2IDA0KSAo
+cHJvZy1pZiA0MCBbVVNCNCBIb3N0IEludGVyZmFjZV0pCglTdWJzeXN0ZW06IEhld2xldHQt
+UGFja2FyZCBDb21wYW55IERldmljZSA4OTdhCglGbGFnczogYnVzIG1hc3RlciwgZmFzdCBk
+ZXZzZWwsIGxhdGVuY3kgMCwgSVJRIDE2LCBJT01NVSBncm91cCA3CglNZW1vcnkgYXQgNjAx
+ZDEwMDAwMCAoNjQtYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT0yNTZLXQoJTWVtb3J5
+IGF0IDYwMWQxOTIwMDAgKDY0LWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW3NpemU9NEtdCglD
+YXBhYmlsaXRpZXM6IFs4MF0gUG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCUNhcGFiaWxp
+dGllczogWzg4XSBNU0k6IEVuYWJsZS0gQ291bnQ9MS8xIE1hc2thYmxlLSA2NGJpdCsKCUNh
+cGFiaWxpdGllczogW2EwXSBNU0ktWDogRW5hYmxlKyBDb3VudD0xNiBNYXNrZWQtCglLZXJu
+ZWwgZHJpdmVyIGluIHVzZTogdGh1bmRlcmJvbHQKCUtlcm5lbCBtb2R1bGVzOiB0aHVuZGVy
+Ym9sdAoKMDA6MTQuMCBVU0IgY29udHJvbGxlcjogSW50ZWwgQ29ycG9yYXRpb24gRGV2aWNl
+IDUxZWQgKHJldiAwMSkgKHByb2ctaWYgMzAgW1hIQ0ldKQoJU3Vic3lzdGVtOiBIZXdsZXR0
+LVBhY2thcmQgQ29tcGFueSBEZXZpY2UgODk3YQoJRmxhZ3M6IGJ1cyBtYXN0ZXIsIG1lZGl1
+bSBkZXZzZWwsIGxhdGVuY3kgMCwgSVJRIDE2MywgSU9NTVUgZ3JvdXAgOAoJTWVtb3J5IGF0
+IDYwMWQxNjAwMDAgKDY0LWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW3NpemU9NjRLXQoJQ2Fw
+YWJpbGl0aWVzOiBbNzBdIFBvd2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAyCglDYXBhYmlsaXRp
+ZXM6IFs4MF0gTVNJOiBFbmFibGUrIENvdW50PTEvOCBNYXNrYWJsZS0gNjRiaXQrCglDYXBh
+YmlsaXRpZXM6IFs5MF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBMZW49MTQgPD8+
+CglDYXBhYmlsaXRpZXM6IFtiMF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBMZW49
+MDAgPD8+CglLZXJuZWwgZHJpdmVyIGluIHVzZTogeGhjaV9oY2QKCUtlcm5lbCBtb2R1bGVz
+OiB4aGNpX3BjaQoKMDA6MTQuMiBSQU0gbWVtb3J5OiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZp
+Y2UgNTFlZiAocmV2IDAxKQoJU3Vic3lzdGVtOiBIZXdsZXR0LVBhY2thcmQgQ29tcGFueSBE
+ZXZpY2UgODk3YQoJRmxhZ3M6IGZhc3QgZGV2c2VsLCBJT01NVSBncm91cCA4CglNZW1vcnkg
+YXQgNjAxZDE4ODAwMCAoNjQtYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbZGlzYWJsZWRdIFtz
+aXplPTE2S10KCU1lbW9yeSBhdCA2MDFkMTkxMDAwICg2NC1iaXQsIG5vbi1wcmVmZXRjaGFi
+bGUpIFtkaXNhYmxlZF0gW3NpemU9NEtdCglDYXBhYmlsaXRpZXM6IFs4MF0gUG93ZXIgTWFu
+YWdlbWVudCB2ZXJzaW9uIDMKCjAwOjE0LjMgTmV0d29yayBjb250cm9sbGVyOiBJbnRlbCBD
+b3Jwb3JhdGlvbiBEZXZpY2UgNTFmMCAocmV2IDAxKQoJU3Vic3lzdGVtOiBJbnRlbCBDb3Jw
+b3JhdGlvbiBEZXZpY2UgMDA5MAoJRmxhZ3M6IGJ1cyBtYXN0ZXIsIGZhc3QgZGV2c2VsLCBs
+YXRlbmN5IDAsIElSUSAxNiwgSU9NTVUgZ3JvdXAgOQoJTWVtb3J5IGF0IDYwMWQxODQwMDAg
+KDY0LWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW3NpemU9MTZLXQoJQ2FwYWJpbGl0aWVzOiBb
+YzhdIFBvd2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAzCglDYXBhYmlsaXRpZXM6IFtkMF0gTVNJ
+OiBFbmFibGUtIENvdW50PTEvMSBNYXNrYWJsZS0gNjRiaXQrCglDYXBhYmlsaXRpZXM6IFs0
+MF0gRXhwcmVzcyBSb290IENvbXBsZXggSW50ZWdyYXRlZCBFbmRwb2ludCwgTVNJIDAwCglD
+YXBhYmlsaXRpZXM6IFs4MF0gTVNJLVg6IEVuYWJsZSsgQ291bnQ9MTYgTWFza2VkLQoJQ2Fw
+YWJpbGl0aWVzOiBbMTAwXSBMYXRlbmN5IFRvbGVyYW5jZSBSZXBvcnRpbmcKCUNhcGFiaWxp
+dGllczogWzE2NF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBJRD0wMDEwIFJldj0w
+IExlbj0wMTQgPD8+CglLZXJuZWwgZHJpdmVyIGluIHVzZTogaXdsd2lmaQoJS2VybmVsIG1v
+ZHVsZXM6IGl3bHdpZmkKCjAwOjE1LjAgU2VyaWFsIGJ1cyBjb250cm9sbGVyIFswYzgwXTog
+SW50ZWwgQ29ycG9yYXRpb24gRGV2aWNlIDUxZTggKHJldiAwMSkKCVN1YnN5c3RlbTogSGV3
+bGV0dC1QYWNrYXJkIENvbXBhbnkgRGV2aWNlIDg5N2EKCUZsYWdzOiBidXMgbWFzdGVyLCBm
+YXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJUlEgMjcsIElPTU1VIGdyb3VwIDEwCglNZW1vcnkg
+YXQgNDAxNzAwMDAwMCAoNjQtYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbdmlydHVhbF0gW3Np
+emU9NEtdCglDYXBhYmlsaXRpZXM6IFs4MF0gUG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMK
+CUNhcGFiaWxpdGllczogWzkwXSBWZW5kb3IgU3BlY2lmaWMgSW5mb3JtYXRpb246IExlbj0x
+NCA8Pz4KCUtlcm5lbCBkcml2ZXIgaW4gdXNlOiBpbnRlbC1scHNzCgowMDoxNi4wIENvbW11
+bmljYXRpb24gY29udHJvbGxlcjogSW50ZWwgQ29ycG9yYXRpb24gRGV2aWNlIDUxZTAgKHJl
+diAwMSkKCVN1YnN5c3RlbTogSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkgRGV2aWNlIDg5N2EK
+CUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJUlEgMTM1LCBJ
+T01NVSBncm91cCAxMQoJTWVtb3J5IGF0IDYwMWQxOGYwMDAgKDY0LWJpdCwgbm9uLXByZWZl
+dGNoYWJsZSkgW3NpemU9NEtdCglDYXBhYmlsaXRpZXM6IFs1MF0gUG93ZXIgTWFuYWdlbWVu
+dCB2ZXJzaW9uIDMKCUNhcGFiaWxpdGllczogWzhjXSBNU0k6IEVuYWJsZSsgQ291bnQ9MS8x
+IE1hc2thYmxlLSA2NGJpdCsKCUNhcGFiaWxpdGllczogW2E0XSBWZW5kb3IgU3BlY2lmaWMg
+SW5mb3JtYXRpb246IExlbj0xNCA8Pz4KCUtlcm5lbCBkcml2ZXIgaW4gdXNlOiBtZWlfbWUK
+CUtlcm5lbCBtb2R1bGVzOiBtZWlfbWUKCjAwOjE2LjMgU2VyaWFsIGNvbnRyb2xsZXI6IElu
+dGVsIENvcnBvcmF0aW9uIERldmljZSA1MWUzIChyZXYgMDEpIChwcm9nLWlmIDAyIFsxNjU1
+MF0pCglTdWJzeXN0ZW06IEhld2xldHQtUGFja2FyZCBDb21wYW55IERldmljZSA4OTdhCglG
+bGFnczogNjZNSHosIGZhc3QgZGV2c2VsLCBJUlEgMTksIElPTU1VIGdyb3VwIDExCglJL08g
+cG9ydHMgYXQgMzA2MCBbc2l6ZT04XQoJTWVtb3J5IGF0IDgyMzIxMDAwICgzMi1iaXQsIG5v
+bi1wcmVmZXRjaGFibGUpIFtzaXplPTRLXQoJQ2FwYWJpbGl0aWVzOiBbNDBdIE1TSTogRW5h
+YmxlLSBDb3VudD0xLzEgTWFza2FibGUtIDY0Yml0KwoJQ2FwYWJpbGl0aWVzOiBbNTBdIFBv
+d2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAzCglLZXJuZWwgZHJpdmVyIGluIHVzZTogc2VyaWFs
+CglLZXJuZWwgbW9kdWxlczogODI1MF9wY2kKCjAwOjFlLjAgQ29tbXVuaWNhdGlvbiBjb250
+cm9sbGVyOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgNTFhOCAocmV2IDAxKQoJU3Vic3lz
+dGVtOiBIZXdsZXR0LVBhY2thcmQgQ29tcGFueSBEZXZpY2UgODk3YQoJRmxhZ3M6IGJ1cyBt
+YXN0ZXIsIGZhc3QgZGV2c2VsLCBsYXRlbmN5IDAsIElSUSAxNiwgSU9NTVUgZ3JvdXAgMTIK
+CU1lbW9yeSBhdCA0MDE3MDAxMDAwICg2NC1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFt2aXJ0
+dWFsXSBbc2l6ZT00S10KCUNhcGFiaWxpdGllczogWzgwXSBQb3dlciBNYW5hZ2VtZW50IHZl
+cnNpb24gMwoJQ2FwYWJpbGl0aWVzOiBbOTBdIFZlbmRvciBTcGVjaWZpYyBJbmZvcm1hdGlv
+bjogTGVuPTE0IDw/PgoJS2VybmVsIGRyaXZlciBpbiB1c2U6IGludGVsLWxwc3MKCjAwOjFl
+LjIgU2VyaWFsIGJ1cyBjb250cm9sbGVyIFswYzgwXTogSW50ZWwgQ29ycG9yYXRpb24gRGV2
+aWNlIDUxYWEgKHJldiAwMSkKCVN1YnN5c3RlbTogSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkg
+RGV2aWNlIDg5N2EKCUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRldnNlbCwgbGF0ZW5jeSAw
+LCBJUlEgMzYsIElPTU1VIGdyb3VwIDEyCglNZW1vcnkgYXQgNDAxNzAwMjAwMCAoNjQtYml0
+LCBub24tcHJlZmV0Y2hhYmxlKSBbdmlydHVhbF0gW3NpemU9NEtdCglDYXBhYmlsaXRpZXM6
+IFs4MF0gUG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCUNhcGFiaWxpdGllczogWzkwXSBW
+ZW5kb3IgU3BlY2lmaWMgSW5mb3JtYXRpb246IExlbj0xNCA8Pz4KCUtlcm5lbCBkcml2ZXIg
+aW4gdXNlOiBpbnRlbC1scHNzCgowMDoxZi4wIElTQSBicmlkZ2U6IEludGVsIENvcnBvcmF0
+aW9uIERldmljZSA1MTgyIChyZXYgMDEpCglTdWJzeXN0ZW06IEhld2xldHQtUGFja2FyZCBD
+b21wYW55IERldmljZSA4OTdhCglGbGFnczogYnVzIG1hc3RlciwgZmFzdCBkZXZzZWwsIGxh
+dGVuY3kgMCwgSU9NTVUgZ3JvdXAgMTMKCjAwOjFmLjMgTXVsdGltZWRpYSBhdWRpbyBjb250
+cm9sbGVyOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgNTFjOCAocmV2IDAxKQoJRGV2aWNl
+TmFtZTogT25ib2FyZCBBdWRpbwoJU3Vic3lzdGVtOiBIZXdsZXR0LVBhY2thcmQgQ29tcGFu
+eSBEZXZpY2UgODk3YQoJRmxhZ3M6IGZhc3QgZGV2c2VsLCBJUlEgMjU1LCBJT01NVSBncm91
+cCAxMwoJTWVtb3J5IGF0IDYwMWQxODAwMDAgKDY0LWJpdCwgbm9uLXByZWZldGNoYWJsZSkg
+W2Rpc2FibGVkXSBbc2l6ZT0xNktdCglNZW1vcnkgYXQgNjAxZDAwMDAwMCAoNjQtYml0LCBu
+b24tcHJlZmV0Y2hhYmxlKSBbZGlzYWJsZWRdIFtzaXplPTFNXQoJQ2FwYWJpbGl0aWVzOiBb
+NTBdIFBvd2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAzCglDYXBhYmlsaXRpZXM6IFs4MF0gVmVu
+ZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBMZW49MTQgPD8+CglDYXBhYmlsaXRpZXM6IFs2
+MF0gTVNJOiBFbmFibGUtIENvdW50PTEvMSBNYXNrYWJsZS0gNjRiaXQrCglLZXJuZWwgbW9k
+dWxlczogc25kX2hkYV9pbnRlbAoKMDA6MWYuNCBTTUJ1czogSW50ZWwgQ29ycG9yYXRpb24g
+RGV2aWNlIDUxYTMgKHJldiAwMSkKCVN1YnN5c3RlbTogSGV3bGV0dC1QYWNrYXJkIENvbXBh
+bnkgRGV2aWNlIDg5N2EKCUZsYWdzOiBtZWRpdW0gZGV2c2VsLCBJUlEgMTYsIElPTU1VIGdy
+b3VwIDEzCglNZW1vcnkgYXQgNjAxZDE4YzAwMCAoNjQtYml0LCBub24tcHJlZmV0Y2hhYmxl
+KSBbc2l6ZT0yNTZdCglJL08gcG9ydHMgYXQgZWZhMCBbc2l6ZT0zMl0KCUtlcm5lbCBkcml2
+ZXIgaW4gdXNlOiBpODAxX3NtYnVzCglLZXJuZWwgbW9kdWxlczogaTJjX2k4MDEKCjAwOjFm
+LjUgU2VyaWFsIGJ1cyBjb250cm9sbGVyIFswYzgwXTogSW50ZWwgQ29ycG9yYXRpb24gRGV2
+aWNlIDUxYTQgKHJldiAwMSkKCVN1YnN5c3RlbTogSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkg
+RGV2aWNlIDg5N2EKCUZsYWdzOiBmYXN0IGRldnNlbCwgSU9NTVUgZ3JvdXAgMTMKCU1lbW9y
+eSBhdCA3NDgwMDAwMCAoMzItYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT00S10KCjAw
+OjFmLjYgRXRoZXJuZXQgY29udHJvbGxlcjogSW50ZWwgQ29ycG9yYXRpb24gRXRoZXJuZXQg
+Q29ubmVjdGlvbiAoMTYpIEkyMTktTE0gKHJldiAwMSkKCVN1YnN5c3RlbTogSGV3bGV0dC1Q
+YWNrYXJkIENvbXBhbnkgRGV2aWNlIDg5N2EKCUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRl
+dnNlbCwgbGF0ZW5jeSAwLCBJUlEgMTUyLCBJT01NVSBncm91cCAxMwoJTWVtb3J5IGF0IDgy
+MzAwMDAwICgzMi1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFtzaXplPTEyOEtdCglDYXBhYmls
+aXRpZXM6IFtjOF0gUG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCUNhcGFiaWxpdGllczog
+W2QwXSBNU0k6IEVuYWJsZSsgQ291bnQ9MS8xIE1hc2thYmxlLSA2NGJpdCsKCUtlcm5lbCBk
+cml2ZXIgaW4gdXNlOiBlMTAwMGUKCUtlcm5lbCBtb2R1bGVzOiBlMTAwMGUKCjAyOjAwLjAg
+Tm9uLVZvbGF0aWxlIG1lbW9yeSBjb250cm9sbGVyOiBNaWNyb24gVGVjaG5vbG9neSBJbmMg
+RGV2aWNlIDU0MDcgKHByb2ctaWYgMDIgW05WTSBFeHByZXNzXSkKCVN1YnN5c3RlbTogTWlj
+cm9uIFRlY2hub2xvZ3kgSW5jIERldmljZSAwMTAwCglGbGFnczogYnVzIG1hc3RlciwgZmFz
+dCBkZXZzZWwsIGxhdGVuY3kgMCwgSVJRIDE2LCBJT01NVSBncm91cCAxNAoJTWVtb3J5IGF0
+IDgyMjAwMDAwICg2NC1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFtzaXplPTE2S10KCUNhcGFi
+aWxpdGllczogWzQwXSBQb3dlciBNYW5hZ2VtZW50IHZlcnNpb24gMwoJQ2FwYWJpbGl0aWVz
+OiBbNTBdIE1TSS1YOiBFbmFibGUrIENvdW50PTMyIE1hc2tlZC0KCUNhcGFiaWxpdGllczog
+WzYwXSBFeHByZXNzIEVuZHBvaW50LCBNU0kgMDAKCUNhcGFiaWxpdGllczogWzEwMF0gQWR2
+YW5jZWQgRXJyb3IgUmVwb3J0aW5nCglDYXBhYmlsaXRpZXM6IFsyYTBdIFNlY29uZGFyeSBQ
+Q0kgRXhwcmVzcwoJQ2FwYWJpbGl0aWVzOiBbMmQwXSBMYXRlbmN5IFRvbGVyYW5jZSBSZXBv
+cnRpbmcKCUNhcGFiaWxpdGllczogWzMyMF0gRGF0YSBMaW5rIEZlYXR1cmUgPD8+CglDYXBh
+YmlsaXRpZXM6IFszMzBdIFBoeXNpY2FsIExheWVyIDE2LjAgR1QvcyA8Pz4KCUNhcGFiaWxp
+dGllczogWzM2MF0gTGFuZSBNYXJnaW5pbmcgYXQgdGhlIFJlY2VpdmVyIDw/PgoJQ2FwYWJp
+bGl0aWVzOiBbNzAwXSBMMSBQTSBTdWJzdGF0ZXMKCUtlcm5lbCBkcml2ZXIgaW4gdXNlOiBu
+dm1lCgowMzowMC4wIFBDSSBicmlkZ2U6IEludGVsIENvcnBvcmF0aW9uIERldmljZSAwYjI2
+IChyZXYgMDMpIChwcm9nLWlmIDAwIFtOb3JtYWwgZGVjb2RlXSkKCVBoeXNpY2FsIFNsb3Q6
+IDMKCUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJUlEgMTYs
+IElPTU1VIGdyb3VwIDE1CglCdXM6IHByaW1hcnk9MDMsIHNlY29uZGFyeT0wNCwgc3Vib3Jk
+aW5hdGU9MmMsIHNlYy1sYXRlbmN5PTAKCUkvTyBiZWhpbmQgYnJpZGdlOiAwMDAwNDAwMC0w
+MDAwNGZmZiBbc2l6ZT00S10KCU1lbW9yeSBiZWhpbmQgYnJpZGdlOiA3NjAwMDAwMC04MjFm
+ZmZmZiBbc2l6ZT0xOTRNXQoJUHJlZmV0Y2hhYmxlIG1lbW9yeSBiZWhpbmQgYnJpZGdlOiAw
+MDAwMDA2MDAwMDAwMDAwLTAwMDAwMDYwMWJmZmZmZmYgW3NpemU9NDQ4TV0KCUNhcGFiaWxp
+dGllczogWzgwXSBQb3dlciBNYW5hZ2VtZW50IHZlcnNpb24gMwoJQ2FwYWJpbGl0aWVzOiBb
+ODhdIE1TSTogRW5hYmxlLSBDb3VudD0xLzEgTWFza2FibGUtIDY0Yml0KwoJQ2FwYWJpbGl0
+aWVzOiBbYWNdIFN1YnN5c3RlbTogSW50ZWwgQ29ycG9yYXRpb24gRGV2aWNlIDAwMDAKCUNh
+cGFiaWxpdGllczogW2MwXSBFeHByZXNzIFVwc3RyZWFtIFBvcnQsIE1TSSAwMAoJQ2FwYWJp
+bGl0aWVzOiBbNTBdIENhcGFiaWxpdHkgSUQgMHgxNSBbMDAwMF0KCUNhcGFiaWxpdGllczog
+WzEwMF0gRGV2aWNlIFNlcmlhbCBOdW1iZXIgYWQtNjUtOGMtNmEtMzYtMjMtMDQtMDAKCUNh
+cGFiaWxpdGllczogWzIwMF0gQWR2YW5jZWQgRXJyb3IgUmVwb3J0aW5nCglDYXBhYmlsaXRp
+ZXM6IFszMDBdIFZpcnR1YWwgQ2hhbm5lbAoJQ2FwYWJpbGl0aWVzOiBbNDAwXSBQb3dlciBC
+dWRnZXRpbmcgPD8+CglDYXBhYmlsaXRpZXM6IFs1MDBdIFZlbmRvciBTcGVjaWZpYyBJbmZv
+cm1hdGlvbjogSUQ9MTIzNCBSZXY9MSBMZW49MTAwIDw/PgoJQ2FwYWJpbGl0aWVzOiBbNjAw
+XSBWZW5kb3IgU3BlY2lmaWMgSW5mb3JtYXRpb246IElEPTgwODYgUmV2PTIgTGVuPTA0YyA8
+Pz4KCUNhcGFiaWxpdGllczogWzcwMF0gU2Vjb25kYXJ5IFBDSSBFeHByZXNzCglDYXBhYmls
+aXRpZXM6IFs4MDBdIExhdGVuY3kgVG9sZXJhbmNlIFJlcG9ydGluZwoJQ2FwYWJpbGl0aWVz
+OiBbYTAwXSBMMSBQTSBTdWJzdGF0ZXMKCUNhcGFiaWxpdGllczogW2IwMF0gUHJlY2lzaW9u
+IFRpbWUgTWVhc3VyZW1lbnQKCUtlcm5lbCBkcml2ZXIgaW4gdXNlOiBwY2llcG9ydAoKMDQ6
+MDAuMCBQQ0kgYnJpZGdlOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgMGIyNiAocmV2IDAz
+KSAocHJvZy1pZiAwMCBbTm9ybWFsIGRlY29kZV0pCglGbGFnczogYnVzIG1hc3RlciwgZmFz
+dCBkZXZzZWwsIGxhdGVuY3kgMCwgSVJRIDE2NSwgSU9NTVUgZ3JvdXAgMTYKCUJ1czogcHJp
+bWFyeT0wNCwgc2Vjb25kYXJ5PTA1LCBzdWJvcmRpbmF0ZT0wNSwgc2VjLWxhdGVuY3k9MAoJ
+SS9PIGJlaGluZCBicmlkZ2U6IDAwMDA0MDAwLTAwMDA0ZmZmIFtzaXplPTRLXQoJTWVtb3J5
+IGJlaGluZCBicmlkZ2U6IDc2MDAwMDAwLTc2MGZmZmZmIFtzaXplPTFNXQoJUHJlZmV0Y2hh
+YmxlIG1lbW9yeSBiZWhpbmQgYnJpZGdlOiAwMDAwMDA2MDAwMDAwMDAwLTAwMDAwMDYwMDAw
+ZmZmZmYgW3NpemU9MU1dCglDYXBhYmlsaXRpZXM6IFs4MF0gUG93ZXIgTWFuYWdlbWVudCB2
+ZXJzaW9uIDMKCUNhcGFiaWxpdGllczogWzg4XSBNU0k6IEVuYWJsZSsgQ291bnQ9MS8xIE1h
+c2thYmxlLSA2NGJpdCsKCUNhcGFiaWxpdGllczogW2FjXSBTdWJzeXN0ZW06IEludGVsIENv
+cnBvcmF0aW9uIERldmljZSAwMDAwCglDYXBhYmlsaXRpZXM6IFtjMF0gRXhwcmVzcyBEb3du
+c3RyZWFtIFBvcnQgKFNsb3QrKSwgTVNJIDAwCglDYXBhYmlsaXRpZXM6IFs1MF0gQ2FwYWJp
+bGl0eSBJRCAweDE1IFswMDAwXQoJQ2FwYWJpbGl0aWVzOiBbMTAwXSBEZXZpY2UgU2VyaWFs
+IE51bWJlciBhZC02NS04Yy02YS0zNi0yMy0wNC0wMAoJQ2FwYWJpbGl0aWVzOiBbMjAwXSBB
+ZHZhbmNlZCBFcnJvciBSZXBvcnRpbmcKCUNhcGFiaWxpdGllczogWzMwMF0gVmlydHVhbCBD
+aGFubmVsCglDYXBhYmlsaXRpZXM6IFs0MDBdIFBvd2VyIEJ1ZGdldGluZyA8Pz4KCUNhcGFi
+aWxpdGllczogWzUwMF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBJRD0xMjM0IFJl
+dj0xIExlbj0xMDAgPD8+CglDYXBhYmlsaXRpZXM6IFs2MDBdIFZlbmRvciBTcGVjaWZpYyBJ
+bmZvcm1hdGlvbjogSUQ9ODA4NiBSZXY9MiBMZW49MDRjIDw/PgoJQ2FwYWJpbGl0aWVzOiBb
+NzAwXSBTZWNvbmRhcnkgUENJIEV4cHJlc3MKCUNhcGFiaWxpdGllczogWzkwMF0gQWNjZXNz
+IENvbnRyb2wgU2VydmljZXMKCUNhcGFiaWxpdGllczogW2MwMF0gRGVzaWduYXRlZCBWZW5k
+b3ItU3BlY2lmaWM6IFZlbmRvcj04MDg2IElEPTAwMDYgUmV2PTAgTGVuPTE2IDw/PgoJS2Vy
+bmVsIGRyaXZlciBpbiB1c2U6IHBjaWVwb3J0CgowNDowMS4wIFBDSSBicmlkZ2U6IEludGVs
+IENvcnBvcmF0aW9uIERldmljZSAwYjI2IChyZXYgMDMpIChwcm9nLWlmIDAwIFtOb3JtYWwg
+ZGVjb2RlXSkKCUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJ
+UlEgMTY2LCBJT01NVSBncm91cCAxNwoJQnVzOiBwcmltYXJ5PTA0LCBzZWNvbmRhcnk9MDYs
+IHN1Ym9yZGluYXRlPTEyLCBzZWMtbGF0ZW5jeT0wCglJL08gYmVoaW5kIGJyaWRnZTogW2Rp
+c2FibGVkXQoJTWVtb3J5IGJlaGluZCBicmlkZ2U6IDc2MTAwMDAwLTdhMGZmZmZmIFtzaXpl
+PTY0TV0KCVByZWZldGNoYWJsZSBtZW1vcnkgYmVoaW5kIGJyaWRnZTogMDAwMDAwNjAwMDEw
+MDAwMC0wMDAwMDA2MDA5NWZmZmZmIFtzaXplPTE0OU1dCglDYXBhYmlsaXRpZXM6IFs4MF0g
+UG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCUNhcGFiaWxpdGllczogWzg4XSBNU0k6IEVu
+YWJsZSsgQ291bnQ9MS8xIE1hc2thYmxlLSA2NGJpdCsKCUNhcGFiaWxpdGllczogW2FjXSBT
+dWJzeXN0ZW06IEludGVsIENvcnBvcmF0aW9uIERldmljZSAwMDAwCglDYXBhYmlsaXRpZXM6
+IFtjMF0gRXhwcmVzcyBEb3duc3RyZWFtIFBvcnQgKFNsb3QrKSwgTVNJIDAwCglDYXBhYmls
+aXRpZXM6IFs1MF0gQ2FwYWJpbGl0eSBJRCAweDE1IFswMDAwXQoJQ2FwYWJpbGl0aWVzOiBb
+MTAwXSBEZXZpY2UgU2VyaWFsIE51bWJlciBhZC02NS04Yy02YS0zNi0yMy0wNC0wMAoJQ2Fw
+YWJpbGl0aWVzOiBbMjAwXSBBZHZhbmNlZCBFcnJvciBSZXBvcnRpbmcKCUNhcGFiaWxpdGll
+czogWzMwMF0gVmlydHVhbCBDaGFubmVsCglDYXBhYmlsaXRpZXM6IFs0MDBdIFBvd2VyIEJ1
+ZGdldGluZyA8Pz4KCUNhcGFiaWxpdGllczogWzUwMF0gVmVuZG9yIFNwZWNpZmljIEluZm9y
+bWF0aW9uOiBJRD0xMjM0IFJldj0xIExlbj0xMDAgPD8+CglDYXBhYmlsaXRpZXM6IFs2MDBd
+IFZlbmRvciBTcGVjaWZpYyBJbmZvcm1hdGlvbjogSUQ9ODA4NiBSZXY9MiBMZW49MDRjIDw/
+PgoJQ2FwYWJpbGl0aWVzOiBbNzAwXSBTZWNvbmRhcnkgUENJIEV4cHJlc3MKCUNhcGFiaWxp
+dGllczogWzkwMF0gQWNjZXNzIENvbnRyb2wgU2VydmljZXMKCUNhcGFiaWxpdGllczogW2Mw
+MF0gRGVzaWduYXRlZCBWZW5kb3ItU3BlY2lmaWM6IFZlbmRvcj04MDg2IElEPTAwMDYgUmV2
+PTAgTGVuPTE2IDw/PgoJS2VybmVsIGRyaXZlciBpbiB1c2U6IHBjaWVwb3J0CgowNDowMi4w
+IFBDSSBicmlkZ2U6IEludGVsIENvcnBvcmF0aW9uIERldmljZSAwYjI2IChyZXYgMDMpIChw
+cm9nLWlmIDAwIFtOb3JtYWwgZGVjb2RlXSkKCUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRl
+dnNlbCwgbGF0ZW5jeSAwLCBJUlEgMTY3LCBJT01NVSBncm91cCAxOAoJQnVzOiBwcmltYXJ5
+PTA0LCBzZWNvbmRhcnk9MTMsIHN1Ym9yZGluYXRlPTFmLCBzZWMtbGF0ZW5jeT0wCglJL08g
+YmVoaW5kIGJyaWRnZTogW2Rpc2FibGVkXQoJTWVtb3J5IGJlaGluZCBicmlkZ2U6IDdhMTAw
+MDAwLTdlMGZmZmZmIFtzaXplPTY0TV0KCVByZWZldGNoYWJsZSBtZW1vcnkgYmVoaW5kIGJy
+aWRnZTogMDAwMDAwNjAwOTYwMDAwMC0wMDAwMDA2MDEyYWZmZmZmIFtzaXplPTE0OU1dCglD
+YXBhYmlsaXRpZXM6IFs4MF0gUG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCUNhcGFiaWxp
+dGllczogWzg4XSBNU0k6IEVuYWJsZSsgQ291bnQ9MS8xIE1hc2thYmxlLSA2NGJpdCsKCUNh
+cGFiaWxpdGllczogW2FjXSBTdWJzeXN0ZW06IEludGVsIENvcnBvcmF0aW9uIERldmljZSAw
+MDAwCglDYXBhYmlsaXRpZXM6IFtjMF0gRXhwcmVzcyBEb3duc3RyZWFtIFBvcnQgKFNsb3Qr
+KSwgTVNJIDAwCglDYXBhYmlsaXRpZXM6IFs1MF0gQ2FwYWJpbGl0eSBJRCAweDE1IFswMDAw
+XQoJQ2FwYWJpbGl0aWVzOiBbMTAwXSBEZXZpY2UgU2VyaWFsIE51bWJlciBhZC02NS04Yy02
+YS0zNi0yMy0wNC0wMAoJQ2FwYWJpbGl0aWVzOiBbMjAwXSBBZHZhbmNlZCBFcnJvciBSZXBv
+cnRpbmcKCUNhcGFiaWxpdGllczogWzMwMF0gVmlydHVhbCBDaGFubmVsCglDYXBhYmlsaXRp
+ZXM6IFs0MDBdIFBvd2VyIEJ1ZGdldGluZyA8Pz4KCUNhcGFiaWxpdGllczogWzUwMF0gVmVu
+ZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBJRD0xMjM0IFJldj0xIExlbj0xMDAgPD8+CglD
+YXBhYmlsaXRpZXM6IFs2MDBdIFZlbmRvciBTcGVjaWZpYyBJbmZvcm1hdGlvbjogSUQ9ODA4
+NiBSZXY9MiBMZW49MDRjIDw/PgoJQ2FwYWJpbGl0aWVzOiBbNzAwXSBTZWNvbmRhcnkgUENJ
+IEV4cHJlc3MKCUNhcGFiaWxpdGllczogWzkwMF0gQWNjZXNzIENvbnRyb2wgU2VydmljZXMK
+CUNhcGFiaWxpdGllczogW2MwMF0gRGVzaWduYXRlZCBWZW5kb3ItU3BlY2lmaWM6IFZlbmRv
+cj04MDg2IElEPTAwMDYgUmV2PTAgTGVuPTE2IDw/PgoJS2VybmVsIGRyaXZlciBpbiB1c2U6
+IHBjaWVwb3J0CgowNDowMy4wIFBDSSBicmlkZ2U6IEludGVsIENvcnBvcmF0aW9uIERldmlj
+ZSAwYjI2IChyZXYgMDMpIChwcm9nLWlmIDAwIFtOb3JtYWwgZGVjb2RlXSkKCUZsYWdzOiBi
+dXMgbWFzdGVyLCBmYXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJUlEgMTY4LCBJT01NVSBncm91
+cCAxOQoJQnVzOiBwcmltYXJ5PTA0LCBzZWNvbmRhcnk9MjAsIHN1Ym9yZGluYXRlPTJiLCBz
+ZWMtbGF0ZW5jeT0wCglJL08gYmVoaW5kIGJyaWRnZTogW2Rpc2FibGVkXQoJTWVtb3J5IGJl
+aGluZCBicmlkZ2U6IDdlMTAwMDAwLTgxZmZmZmZmIFtzaXplPTYzTV0KCVByZWZldGNoYWJs
+ZSBtZW1vcnkgYmVoaW5kIGJyaWRnZTogMDAwMDAwNjAxMmIwMDAwMC0wMDAwMDA2MDFiZWZm
+ZmZmIFtzaXplPTE0OE1dCglDYXBhYmlsaXRpZXM6IFs4MF0gUG93ZXIgTWFuYWdlbWVudCB2
+ZXJzaW9uIDMKCUNhcGFiaWxpdGllczogWzg4XSBNU0k6IEVuYWJsZSsgQ291bnQ9MS8xIE1h
+c2thYmxlLSA2NGJpdCsKCUNhcGFiaWxpdGllczogW2FjXSBTdWJzeXN0ZW06IEludGVsIENv
+cnBvcmF0aW9uIERldmljZSAwMDAwCglDYXBhYmlsaXRpZXM6IFtjMF0gRXhwcmVzcyBEb3du
+c3RyZWFtIFBvcnQgKFNsb3QrKSwgTVNJIDAwCglDYXBhYmlsaXRpZXM6IFs1MF0gQ2FwYWJp
+bGl0eSBJRCAweDE1IFswMDAwXQoJQ2FwYWJpbGl0aWVzOiBbMTAwXSBEZXZpY2UgU2VyaWFs
+IE51bWJlciBhZC02NS04Yy02YS0zNi0yMy0wNC0wMAoJQ2FwYWJpbGl0aWVzOiBbMjAwXSBB
+ZHZhbmNlZCBFcnJvciBSZXBvcnRpbmcKCUNhcGFiaWxpdGllczogWzMwMF0gVmlydHVhbCBD
+aGFubmVsCglDYXBhYmlsaXRpZXM6IFs0MDBdIFBvd2VyIEJ1ZGdldGluZyA8Pz4KCUNhcGFi
+aWxpdGllczogWzUwMF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0aW9uOiBJRD0xMjM0IFJl
+dj0xIExlbj0xMDAgPD8+CglDYXBhYmlsaXRpZXM6IFs2MDBdIFZlbmRvciBTcGVjaWZpYyBJ
+bmZvcm1hdGlvbjogSUQ9ODA4NiBSZXY9MiBMZW49MDRjIDw/PgoJQ2FwYWJpbGl0aWVzOiBb
+NzAwXSBTZWNvbmRhcnkgUENJIEV4cHJlc3MKCUNhcGFiaWxpdGllczogWzkwMF0gQWNjZXNz
+IENvbnRyb2wgU2VydmljZXMKCUNhcGFiaWxpdGllczogW2MwMF0gRGVzaWduYXRlZCBWZW5k
+b3ItU3BlY2lmaWM6IFZlbmRvcj04MDg2IElEPTAwMDYgUmV2PTAgTGVuPTE2IDw/PgoJS2Vy
+bmVsIGRyaXZlciBpbiB1c2U6IHBjaWVwb3J0CgowNDowNC4wIFBDSSBicmlkZ2U6IEludGVs
+IENvcnBvcmF0aW9uIERldmljZSAwYjI2IChyZXYgMDMpIChwcm9nLWlmIDAwIFtOb3JtYWwg
+ZGVjb2RlXSkKCUZsYWdzOiBidXMgbWFzdGVyLCBmYXN0IGRldnNlbCwgbGF0ZW5jeSAwLCBJ
+UlEgMTY5LCBJT01NVSBncm91cCAyMAoJQnVzOiBwcmltYXJ5PTA0LCBzZWNvbmRhcnk9MmMs
+IHN1Ym9yZGluYXRlPTJjLCBzZWMtbGF0ZW5jeT0wCglJL08gYmVoaW5kIGJyaWRnZTogW2Rp
+c2FibGVkXQoJTWVtb3J5IGJlaGluZCBicmlkZ2U6IDgyMDAwMDAwLTgyMWZmZmZmIFtzaXpl
+PTJNXQoJUHJlZmV0Y2hhYmxlIG1lbW9yeSBiZWhpbmQgYnJpZGdlOiAwMDAwMDA2MDFiZjAw
+MDAwLTAwMDAwMDYwMWJmZmZmZmYgW3NpemU9MU1dCglDYXBhYmlsaXRpZXM6IFs4MF0gUG93
+ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCUNhcGFiaWxpdGllczogWzg4XSBNU0k6IEVuYWJs
+ZSsgQ291bnQ9MS8xIE1hc2thYmxlLSA2NGJpdCsKCUNhcGFiaWxpdGllczogW2FjXSBTdWJz
+eXN0ZW06IEludGVsIENvcnBvcmF0aW9uIERldmljZSAwMDAwCglDYXBhYmlsaXRpZXM6IFtj
+MF0gRXhwcmVzcyBEb3duc3RyZWFtIFBvcnQgKFNsb3QrKSwgTVNJIDAwCglDYXBhYmlsaXRp
+ZXM6IFs1MF0gQ2FwYWJpbGl0eSBJRCAweDE1IFswMDAwXQoJQ2FwYWJpbGl0aWVzOiBbMTAw
+XSBEZXZpY2UgU2VyaWFsIE51bWJlciBhZC02NS04Yy02YS0zNi0yMy0wNC0wMAoJQ2FwYWJp
+bGl0aWVzOiBbMjAwXSBBZHZhbmNlZCBFcnJvciBSZXBvcnRpbmcKCUNhcGFiaWxpdGllczog
+WzMwMF0gVmlydHVhbCBDaGFubmVsCglDYXBhYmlsaXRpZXM6IFs0MDBdIFBvd2VyIEJ1ZGdl
+dGluZyA8Pz4KCUNhcGFiaWxpdGllczogWzUwMF0gVmVuZG9yIFNwZWNpZmljIEluZm9ybWF0
+aW9uOiBJRD0xMjM0IFJldj0xIExlbj0xMDAgPD8+CglDYXBhYmlsaXRpZXM6IFs2MDBdIFZl
+bmRvciBTcGVjaWZpYyBJbmZvcm1hdGlvbjogSUQ9ODA4NiBSZXY9MiBMZW49MDRjIDw/PgoJ
+Q2FwYWJpbGl0aWVzOiBbNzAwXSBTZWNvbmRhcnkgUENJIEV4cHJlc3MKCUNhcGFiaWxpdGll
+czogWzkwMF0gQWNjZXNzIENvbnRyb2wgU2VydmljZXMKCUNhcGFiaWxpdGllczogW2MwMF0g
+RGVzaWduYXRlZCBWZW5kb3ItU3BlY2lmaWM6IFZlbmRvcj04MDg2IElEPTAwMDYgUmV2PTAg
+TGVuPTE2IDw/PgoJS2VybmVsIGRyaXZlciBpbiB1c2U6IHBjaWVwb3J0CgoyYzowMC4wIEV0
+aGVybmV0IGNvbnRyb2xsZXI6IEludGVsIENvcnBvcmF0aW9uIEV0aGVybmV0IENvbnRyb2xs
+ZXIgKDIpIEkyMjUtTE12UCAocmV2IDAzKQoJU3Vic3lzdGVtOiBIZXdsZXR0LVBhY2thcmQg
+Q29tcGFueSBEZXZpY2UgODdiOQoJRmxhZ3M6IGJ1cyBtYXN0ZXIsIGZhc3QgZGV2c2VsLCBs
+YXRlbmN5IDAsIElSUSAxNiwgSU9NTVUgZ3JvdXAgMjEKCU1lbW9yeSBhdCA4MjAwMDAwMCAo
+MzItYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT0xTV0KCU1lbW9yeSBhdCA4MjEwMDAw
+MCAoMzItYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT0xNktdCglDYXBhYmlsaXRpZXM6
+IFs0MF0gUG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCUNhcGFiaWxpdGllczogWzUwXSBN
+U0k6IEVuYWJsZS0gQ291bnQ9MS8xIE1hc2thYmxlKyA2NGJpdCsKCUNhcGFiaWxpdGllczog
+WzcwXSBNU0ktWDogRW5hYmxlKyBDb3VudD01IE1hc2tlZC0KCUNhcGFiaWxpdGllczogW2Ew
+XSBFeHByZXNzIEVuZHBvaW50LCBNU0kgMDAKCUNhcGFiaWxpdGllczogWzEwMF0gQWR2YW5j
+ZWQgRXJyb3IgUmVwb3J0aW5nCglDYXBhYmlsaXRpZXM6IFsxNDBdIERldmljZSBTZXJpYWwg
+TnVtYmVyIDg0LTNhLTViLWZmLWZmLTZjLTBkLWE1CglDYXBhYmlsaXRpZXM6IFsxYzBdIExh
+dGVuY3kgVG9sZXJhbmNlIFJlcG9ydGluZwoJQ2FwYWJpbGl0aWVzOiBbMWYwXSBQcmVjaXNp
+b24gVGltZSBNZWFzdXJlbWVudAoJQ2FwYWJpbGl0aWVzOiBbMWUwXSBMMSBQTSBTdWJzdGF0
+ZXMKCUtlcm5lbCBkcml2ZXIgaW4gdXNlOiBpZ2MKCUtlcm5lbCBtb2R1bGVzOiBpZ2MKCg==
 
-You mean with display connected it does not show up again?
 
-I think what is expected is that when you do
-
- # echo 1 > /sys/class/net/eth1/device/remove
-
-the network interface is removed and it is not expected to come back but
-I realized that when you have the DP connected the TCSS (Type-C
-SubsSystem) does not enter D3.
-
-So I wonder if you can run another test still?
-
-0. Remove the hack patch if not already.
-
-Steps 1-3 same as before.
-
-4. Disable runtime PM from the PCIe root ports:
-
-  # echo on > /sys/bus/pci/devices/0000:00:07.0/power/control
-  # echo on > /sys/bus/pci/devices/0000:00:07.1/power/control
-  # echo on > /sys/bus/pci/devices/0000:00:07.2/power/control
-  # echo on > /sys/bus/pci/devices/0000:00:07.3/power/control
-
-(or how many Thunderbolt PCIE root ports you have, disable it from all of them).
-
-5. De-authorize the PCIe tunnel
-
-  # echo 0 > /sys/bus/thunderbolt/devices/.../authorized
-
-6. Soft reboot
-
-Does this change anything or the behavior is the same?
+--------------bGctblQDjr0q89Y9c0rUEfT6--
