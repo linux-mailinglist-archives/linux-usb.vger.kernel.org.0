@@ -2,179 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE77365CA5D
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 00:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F3565CA81
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 00:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbjACXfj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 18:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S233856AbjACXqt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Jan 2023 18:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbjACXfc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 18:35:32 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A9A1659E
-        for <linux-usb@vger.kernel.org>; Tue,  3 Jan 2023 15:35:30 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id f34so47915877lfv.10
-        for <linux-usb@vger.kernel.org>; Tue, 03 Jan 2023 15:35:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R0uvymsPrpGAEh2BG1RLD0dqjUm8ZCLGS+gXm8386eY=;
-        b=HbM+7KVQBWYkGwSyHDDJwF3QRzIi3Ah0k5QjVzuEEmGnlYXJsCooNiQE9P7xijHOKs
-         BExioI0Ana0mbpWq3NcBftE0EgTQRybRgsf+a1k03OSoIkpPN6Zy2UO2Xnd6HChfEg/X
-         89t0CMX5NrKXMApK1pnIlrbT9t4h3mQ7sXptbxkRL/o2skXc6SMBbA3jI3GYy+DeledN
-         krz4AILKghp1B22uiSHnsyBra4nsVvKpZKD0KkWRygVQiNswC506OQv+ptsTUFcueoXz
-         2WouoFIJKXqWNSeOGK19kcp6RtJLrkMb8EulWOOw4fY3iC7NOn6Dl+n7uqZ6UeosvII8
-         TJ9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R0uvymsPrpGAEh2BG1RLD0dqjUm8ZCLGS+gXm8386eY=;
-        b=3irDQ6mLpC9j3Gl45GWzypxMwc6ykYbuJoWG6anMxbp8k8SJPnj+tCXwCXBn0koRtp
-         qQaHwRJadnaKIX2OD3dzb7tFQnM7MDRB8kht776nkA8b5kQjkMOQU3i5aQU4f2u0qvrx
-         bnsRI66+2JYfb/Hyj/GM+ErMR2v4OlhDCth0KtC9Ku92d4ZHYyuCO0Vja4wZJVXb4vOW
-         j9OAMK8ACmtyvJxML98ot9YvAig1qavPbiP2DPNV+YE1uonmMSZFYMYV6RS6YvnmYprx
-         OwOGRf+M5LiEFmjORI2so5z9hAxV+IK/vwJ8ybHEXs00qHl4rQl1CsYsE8Sps3raxrMC
-         WpEA==
-X-Gm-Message-State: AFqh2kq8/7s/Demtn52cFD0LCH3Ye5rDdS1BiON4/lIoK7aR9ntZhISi
-        +g8W/R2EWjrKWzyC54VY2Z6/Tw==
-X-Google-Smtp-Source: AMrXdXuWUOstb+6wkH9q+lI6gn2lg/hmvSWjds0SNBS4vzz8WVxEUOt+PJ81WQ4spuIcUGH5X0dYcw==
-X-Received: by 2002:a05:6512:3d9f:b0:4a4:68b7:f878 with SMTP id k31-20020a0565123d9f00b004a468b7f878mr19080201lfv.28.1672788930160;
-        Tue, 03 Jan 2023 15:35:30 -0800 (PST)
-Received: from Fecusia.local (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a45edc1de2sm4939801lfs.239.2023.01.03.15.35.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 15:35:29 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 04 Jan 2023 00:35:23 +0100
-Subject: [PATCH 7/7] usb: fotg210-udc: Implement VBUS session
+        with ESMTP id S229693AbjACXqr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 18:46:47 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C3FAE65;
+        Tue,  3 Jan 2023 15:46:46 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303NM1Ag015232;
+        Tue, 3 Jan 2023 23:45:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bqX0P8LAkS0qn7kAaiRMBmXDNABlm+TdaaE/onDLB+g=;
+ b=JC3J+JjzHaOU0LdltrzzwMCeADJSYLFTh1fPZO/8CWFy3YKTLIsOq4q7GCrJANiAglSp
+ YeCJfjtbMOKMUev+fkNF0qR8FqEgsdYnTpTbtembCGDSr8oJgIJT6w45fPwVgYJXRN9B
+ 4QXr4k6fFfo/vKTaO51qCrkMub7Ky7510O9Ers6Yi/IDou/jwIQVPneYYm5ZqbVyc+Xj
+ 5IfwDEFjcneILweu2DifDZJh9GHmq/VnqNpANgYRd3ZgS+hKb/cSJNzR5RXs6o1ycJ/X
+ lK59JBAP2N6gPsrvlBlGj9TQwDxwWq2r0pBlmtUCwE194IlwLeCsaIr08uKV4fzDAWRd Mw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvurdp2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 23:45:42 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 303NjfWH001230
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 3 Jan 2023 23:45:41 GMT
+Received: from [10.110.47.113] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 3 Jan 2023
+ 15:45:40 -0800
+Message-ID: <54f36fe7-c590-3d5c-58dc-c5a02c412487@quicinc.com>
+Date:   Tue, 3 Jan 2023 15:45:27 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230103-gemini-fotg210-usb-v1-7-f2670cb4a492@linaro.org>
-References: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
-In-Reply-To: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 04/14] sound: usb: card: Introduce USB SND vendor op
+ callbacks
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>, Oliver Neukum <oneukum@suse.com>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-5-quic_wcheng@quicinc.com>
+ <80f92635-6d14-8ff3-17ac-de2e5b977947@suse.com> <87lemqxpet.wl-tiwai@suse.de>
+ <ec632e64-2d9c-3f71-4fe7-e1c6acb81393@quicinc.com>
+ <465bb512-2ea3-ebfc-4b21-7b493f019fc3@suse.com> <87v8lnrde2.wl-tiwai@suse.de>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <87v8lnrde2.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 94uUE7f83JPt0O_oswNAVd_rJb-Y--0T
+X-Proofpoint-ORIG-GUID: 94uUE7f83JPt0O_oswNAVd_rJb-Y--0T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_07,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301030200
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Implement VBUS session handling for FOTG210. This is
-mainly used by the UDC driver which needs to call down to
-the FOTG210 core and enable/disable VBUS, as this needs to be
-handled outside of the HCD and UDC drivers, by platform
-specific glue code.
+Hi Oliver,
 
-The Gemini has a special bit in a system register to turn
-VBUS on and off so we implement this in the FOTG210 core.
+On 1/3/2023 4:49 AM, Takashi Iwai wrote:
+> On Tue, 03 Jan 2023 13:20:48 +0100,
+> Oliver Neukum wrote:
+>>
+>>
+>>
+>> On 30.12.22 08:10, Wesley Cheng wrote:
+>>
+>>> It may depend on how the offloading is implemented, but we do have a mechanism to force the audio stream off from the qc_usb_audio_offload. Regardless of if the UDEV is suspended first, or the USB backend, as long as we ensure that the offloading is disabled before entering suspend, I think that should be sufficient.
+>>
+>> You would presumably output garbage, if the UDEV is asleep but the backend is not.
+>>
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/usb/fotg210/fotg210-core.c | 29 +++++++++++++++++++++++++++++
- drivers/usb/fotg210/fotg210-udc.c  | 17 +++++++++++++++++
- drivers/usb/fotg210/fotg210.h      |  2 ++
- 3 files changed, 48 insertions(+)
+As long as the stream is halted, i.e. the audio DSP doesn't execute 
+further transfers on the bus, there shouldn't be any noise/static that 
+will continue to be outputted.  When I mentioned that we have a 
+mechanism to force for the offloading to be disabled to the audio DSP 
+side, it will no longer submit any audio data to the USB bus.
 
-diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
-index 013a1d0112fc..70d2ff5a2682 100644
---- a/drivers/usb/fotg210/fotg210-core.c
-+++ b/drivers/usb/fotg210/fotg210-core.c
-@@ -95,6 +95,35 @@ static int fotg210_gemini_init(struct fotg210 *fotg, struct resource *res,
- 	return 0;
- }
- 
-+/**
-+ * fotg210_vbus() - Called by gadget driver to enable/disable VBUS
-+ * @enable: true to enable VBUS, false to disable VBUS
-+ */
-+void fotg210_vbus(struct fotg210 *fotg, bool enable)
-+{
-+	u32 mask;
-+	u32 val;
-+	int ret;
-+
-+	switch (fotg->port) {
-+	case GEMINI_PORT_0:
-+		mask = GEMINI_MISC_USB0_VBUS_ON;
-+		val = enable ? GEMINI_MISC_USB0_VBUS_ON : 0;
-+		break;
-+	case GEMINI_PORT_1:
-+		mask = GEMINI_MISC_USB1_VBUS_ON;
-+		val = enable ? GEMINI_MISC_USB1_VBUS_ON : 0;
-+		break;
-+	default:
-+		return;
-+	}
-+	ret = regmap_update_bits(fotg->map, GEMINI_GLOBAL_MISC_CTRL, mask, val);
-+	if (ret)
-+		dev_err(fotg->dev, "failed to %s VBUS\n",
-+			enable ? "enable" : "disable");
-+	dev_info(fotg->dev, "%s: %s VBUS\n", __func__, enable ? "enable" : "disable");
-+}
-+
- static int fotg210_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index 4099e7453112..754429553f61 100644
---- a/drivers/usb/fotg210/fotg210-udc.c
-+++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -1082,9 +1082,26 @@ static int fotg210_udc_stop(struct usb_gadget *g)
- 	return 0;
- }
- 
-+/**
-+ * fotg210_vbus_session - Called by external transceiver to enable/disable udc
-+ * @_gadget: usb gadget
-+ * @is_active: 0 if should disable UDC VBUS, 1 if should enable
-+ *
-+ * Returns 0
-+ */
-+static int fotg210_vbus_session(struct usb_gadget *g, int is_active)
-+{
-+	struct fotg210_udc *fotg210 = gadget_to_fotg210(g);
-+
-+	/* Call down to core integration layer to drive or disable VBUS */
-+	fotg210_vbus(fotg210->fotg, is_active);
-+	return 0;
-+}
-+
- static const struct usb_gadget_ops fotg210_gadget_ops = {
- 	.udc_start		= fotg210_udc_start,
- 	.udc_stop		= fotg210_udc_stop,
-+	.vbus_session		= fotg210_vbus_session,
- };
- 
- /**
-diff --git a/drivers/usb/fotg210/fotg210.h b/drivers/usb/fotg210/fotg210.h
-index 4d0d4ae1a957..c44c0afe2956 100644
---- a/drivers/usb/fotg210/fotg210.h
-+++ b/drivers/usb/fotg210/fotg210.h
-@@ -17,6 +17,8 @@ struct fotg210 {
- 	enum gemini_port port;
- };
- 
-+void fotg210_vbus(struct fotg210 *fotg, bool enable);
-+
- #ifdef CONFIG_USB_FOTG210_HCD
- int fotg210_hcd_probe(struct platform_device *pdev, struct fotg210 *fotg);
- int fotg210_hcd_remove(struct platform_device *pdev);
+>>   
+>>> The reset_resume() path is fine.  Bus reset is going to cause a disconnect() callback in the offload driver, in which we already have the proper handling for ensuring the offload path is halted, and we reject any incoming stream start requests.
+>>
+>> How? If we go the reset_resume() code path, we find that usb-audio does not make
+>> a difference between regular resume() and reset_resume()
+> 
+> Note that, for USB audio, there is no much difference between resume()
+> and reset_resume(), especially about the PCM stream handling that is
+> the main target for the offload (the mixer isn't handled there).
+> And for the PCM, we just set the power state for UAC3, and that's
+> all.  All the rest is handled by the PCM core handler as usual.
+> 
 
--- 
-2.38.1
+Sorry, I was under the impression that the USB SND class driver didn't 
+register a reset_resume() callback, which Takashi helped clarify that it 
+does indeed do.  (if no callback is registered, then USB interface is 
+re-binded in the resume path)  However, it doesn't explicitly treat the 
+reset_resume differently than a normal resume.
+
+For the offload path, we don't need to do anything special either - if 
+we have ensured that the stream was stopped in the suspend path. (to be 
+added) It would be up to the userspace to restart the ASoC PCM stream, 
+which would cause another stream request enable QMI command handshake to 
+happen before any transfers would start.
+
+One thing that I could add to protect the situation where the USB ASoC 
+backend is resumed before UDEV, is to check the chip->system_suspend 
+state.  Normally, the offload driver needs to ensure the bus is in U0 
+before starting the audio stream, but it is done using runtime PM:
+
+static int enable_audio_stream(struct snd_usb_substream *subs,
+				snd_pcm_format_t pcm_format,
+				unsigned int channels, unsigned int cur_rate,
+				int datainterval)
+{
+...
+	pm_runtime_barrier(&chip->intf[0]->dev);
+	snd_usb_autoresume(chip);
+
+In case we're in the PM resume path, I don't believe PM runtime can be 
+triggered to resume a device.  In this case, the snd_usb_autoresume() 
+would return w/o ensuring the USB SND device is fully exited from PM 
+suspend.  Although, this situation would be a corner case, as userspace 
+entities (userspace ALSA) are going to be unfrozen after kernel devices 
+are resumed, so most likely there should be no request to enable the 
+audio stream if kernel devices are still resuming.
+
+I don't see an issue with the sequence of UDEV being resumed before USB 
+backend.  In this case, the USB bus is ready to go, and able to handle 
+stream enable requests.
+
+Thanks
+Wesley Cheng
