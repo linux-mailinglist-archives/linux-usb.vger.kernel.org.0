@@ -2,68 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D370865C53E
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 18:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C3165C545
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 18:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238298AbjACRm2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 12:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S233627AbjACRo3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Jan 2023 12:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjACRm0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 12:42:26 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433F3C4A
-        for <linux-usb@vger.kernel.org>; Tue,  3 Jan 2023 09:42:25 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id o8so18390218ilo.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Jan 2023 09:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SPDvhZ0E+hOADgQrqmkwdgK1yPO4Xou1kXlnqFtt01g=;
-        b=EAge6w5ZGRKB9REw8JTGWI3X+y6NFbFLA4CE16oprx2LDBAocRw7kt+gIOO8EwJ8Xh
-         Nu7M7XBLVpM+Cy2lG0rwHZyToFl76QRABNZe+cWQhJZWLQJXAwDky/V1pBvlz7Qqjiti
-         72Mw4YvDaD59xF9DkPjKArKfamDrpeKUc3MlQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SPDvhZ0E+hOADgQrqmkwdgK1yPO4Xou1kXlnqFtt01g=;
-        b=Z61GyVD5QHdXCKDhaoSrvMOTtiCOj8mK+VkD3sOqAL4zAxuLYHUnmFwr9ksoMlHGfg
-         3zaArWWagCDvdo3oiBhX0M0o20v1267JwPQPBTVLDOnCXPBwhZbA0pMZklVO2zK/iXO3
-         YjmsYuC31YAmTNTZSBeN3r0ZbHoeFC5j4en/ZIQ8Pgnt26ni1mi9rSiw1xaA3c5kN4fe
-         tfq3BOwJBi5xRh3m86UhAu7hxsS8y7hoSlVSJ9RE8p2TPOCl5Ka1av1IN0d1nQfA+WnD
-         TGQutr8YsdE0iCYK296bdqpQbm9AIL4rTb4YxNaH3PsmU3xahGIhrirSY0L9zONg4rR3
-         DrQQ==
-X-Gm-Message-State: AFqh2kp2yelmSgVe+kYnaY1dtnenZSMm+dpGsMV++c56fmPdBpDIp0bz
-        yVUeoOsUIxZcuzqhEgmBMZa6ig==
-X-Google-Smtp-Source: AMrXdXtVUcQIUZ2ljG4DSCmHOTMpzAcdwG1RqxZf8Z/PZEZhTzawDTPwIzAj5OqvwAYwVmdelSeFIg==
-X-Received: by 2002:a92:d10f:0:b0:305:dee9:bcc6 with SMTP id a15-20020a92d10f000000b00305dee9bcc6mr27345476ilb.17.1672767744507;
-        Tue, 03 Jan 2023 09:42:24 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id g14-20020a056e021a2e00b00304ae88ebebsm9792396ile.88.2023.01.03.09.42.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 09:42:24 -0800 (PST)
-Date:   Tue, 3 Jan 2023 17:42:23 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
- devices for DT nodes without 'vdd-supply'
-Message-ID: <Y7Ro/1idORXbhCnu@google.com>
-References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
- <Y6W00vQm3jfLflUJ@hovoldconsulting.com>
+        with ESMTP id S231240AbjACRo2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 12:44:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EB52A5;
+        Tue,  3 Jan 2023 09:44:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC29AB81037;
+        Tue,  3 Jan 2023 17:44:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D47C433D2;
+        Tue,  3 Jan 2023 17:44:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672767864;
+        bh=LckIA+Gz2HvlJFTUCOOcP66kxq0hG8yz1WKdpVjE/xw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rLEnW9wGp3Z6Q59S+JwrZph3YhZJJVqowPqSQECJuDE53pVqR/Sj0YqQz83zB2pUZ
+         ZbkfXfocDWExQhS3inMdUczLRARUe1uRPhv1pTUPdSRnG8TsIAUtUywxr3sr4YHHlw
+         lyxc4zcrcw9ngl/94/71H4KNflC5V3CAQIWzX9D+SXYgLoQgLiCtHHyUxMQf5VRkg+
+         +U+1wOq7+laGbKtBvXTanpclz8SXgPneLrrqey3/x/j26PvxByRzmp9y321SFi5dz4
+         WO5Xt28gURXGYgIhhCFMgvTjhUDWKbDu+Ub6HuavuP8YYAIPK/THmyS1asBEZ+2lNC
+         fMf8njjTLVF9w==
+Date:   Tue, 3 Jan 2023 17:44:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
+        robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [RFC PATCH 12/14] sound: soc: qcom: qusb6: Ensure PCM format is
+ supported by USB audio device
+Message-ID: <Y7RpcfWG5yrd6J3X@sirena.org.uk>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-13-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hij50yuqfbUKxTCY"
 Content-Disposition: inline
-In-Reply-To: <Y6W00vQm3jfLflUJ@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221223233200.26089-13-quic_wcheng@quicinc.com>
+X-Cookie: So many men
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,90 +63,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 03:01:54PM +0100, Johan Hovold wrote:
-> On Thu, Dec 22, 2022 at 02:26:44AM +0000, Matthias Kaehlcke wrote:
-> > The primary task of the onboard_usb_hub driver is to control the
-> > power of an onboard USB hub. The driver gets the regulator from the
-> > device tree property "vdd-supply" of the hub's DT node. Some boards
-> > have device tree nodes for USB hubs supported by this driver, but
-> > don't specify a "vdd-supply". This is not an error per se, it just
-> > means that the onboard hub driver can't be used for these hubs, so
-> > don't create platform devices for such nodes.
-> > 
-> > This change doesn't completely fix the reported regression. It
-> > should fix it for the RPi 3 B Plus and boards with similar hub
-> > configurations (compatible DT nodes without "vdd-supply"), boards
-> > that actually use the onboard hub driver could still be impacted
-> > by the race conditions discussed in that thread. Not creating the
-> > platform devices for nodes without "vdd-supply" is the right
-> > thing to do, independently from the race condition, which will
-> > be fixed in future patch.
-> > 
-> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-> > Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> > 
-> > Changes in v2:
-> > - don't create platform devices when "vdd-supply" is missing,
-> >   rather than returning an error from _find_onboard_hub()
-> > - check for "vdd-supply" not "vdd" (Johan)
-> 
-> Please try to remember to CC people providing feedback on your patches.
 
-Ack
+--hij50yuqfbUKxTCY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > - updated subject and commit message
-> > - added 'Link' tag (regzbot)
-> > 
-> >  drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> > 
-> > diff --git a/drivers/usb/misc/onboard_usb_hub_pdevs.c b/drivers/usb/misc/onboard_usb_hub_pdevs.c
-> > index ed22a18f4ab7..8cea53b0907e 100644
-> > --- a/drivers/usb/misc/onboard_usb_hub_pdevs.c
-> > +++ b/drivers/usb/misc/onboard_usb_hub_pdevs.c
-> > @@ -101,6 +101,19 @@ void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *p
-> >  			}
-> >  		}
-> >  
-> > +		/*
-> > +		 * The primary task of the onboard_usb_hub driver is to control
-> > +		 * the power of an USB onboard hub. Some boards have device tree
-> > +		 * nodes for USB hubs supported by this driver, but don't
-> > +		 * specify a "vdd-supply", which is needed by the driver. This is
-> > +		 * not a DT error per se, it just means that the onboard hub
-> > +		 * driver can't be used with these nodes, so don't create a
-> > +		 * a platform device for such a node.
-> > +		 */
-> > +		if (!of_get_property(np, "vdd-supply", NULL) &&
-> > +		    !of_get_property(npc, "vdd-supply", NULL))
-> > +			goto node_put;
-> 
-> So as I mentioned elsewhere, this doesn't look right. It is the
-> responsibility of the platform driver to manage its resources and it may
-> not even need a supply.
-> 
-> I see now that you have already matched on the compatible property above
-> so that you only create the platform device for the devices that (may)
-> need it.
-> 
-> It seems the assumptions that this driver was written under needs to be
-> revisited.
+On Fri, Dec 23, 2022 at 03:31:58PM -0800, Wesley Cheng wrote:
 
-The assumption was that the driver should always be used when the DT has
-nodes with the supported compatible strings. It turns out that is not
-entirely correct, in rare cases (like the RPi 3 B Plus) the nodes weren't
-added with the onboard_hub driver in mind and may lack DT properties that
-are needed by the driver.
+> Check for if the PCM format is supported during the hw_params callback.  If
+> the profile is not supported then the userspace ALSA entity will receive an
+> error, and can take further action.
 
-I see essentially two possible ways of dealing with DT nodes that don't
-have all the information to make the onboard_hub driver do something useful:
+Ideally we'd wire up constraints for this but that gets complicated with
+DPCM so it's probably disproportionate effort.  Otherwise other than the
+subject lines not using ASoC on this and the previous change I don't
+have any issues that other people didn't raise, but then most of the
+complication is in the USB bits.
 
-1) don't instantiate the driver when certain DT properties don't exist (the
-   approach of this patch)
+--hij50yuqfbUKxTCY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-2) instantiate the driver regardless. Not ideal, but such DTs should be
-   relatively rare (+ CONFIG_USB_ONBOARD_HUB needs to be enabled for
-   instantiation to happen), so maybe it's not a big deal
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO0aXAACgkQJNaLcl1U
+h9D1xQf+LwgGcwM55I9NHiwQ3ebZ4m7VhjDLgWvKR107h7Duq8GctdogaoB5LvTP
+O9xWQH1QhvotKZf1j+Wn0NoYxROayG9QPwht4tIGzQmAhgq72kfiSZ6IiETIW+IP
+K58dG61EXGWBLniqpXQNpxnqL1XeW9wHfSwuVOqN1Or0XoOCyjGupDURXP4Uau6z
+AJ5cGhqW3cd2xobybkD7asnAvDniZokvV0sreSFRYy4a/vNm4cVe5WRhibUh+S7K
+K7akWpFDvsOAobbQvGkEkeCvltQMkZxYbtm6av1vQBI6j7kQ5WXw9G72a2AX8VbR
+I8ILJBI6jfDXIjH8Fnc/L23TEnwfPw==
+=p0V6
+-----END PGP SIGNATURE-----
+
+--hij50yuqfbUKxTCY--
