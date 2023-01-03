@@ -2,134 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E6E65C387
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 17:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A19065C4D4
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 18:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237815AbjACQHK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 11:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S238404AbjACRNj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Jan 2023 12:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238038AbjACQGl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 11:06:41 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F88FCE5
-        for <linux-usb@vger.kernel.org>; Tue,  3 Jan 2023 08:06:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672762000; x=1704298000;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=x62o2ewofM0lBIzqM3l/3Rpf/5QtfI/0XLlh5FYkukA=;
-  b=bS9KOZez/1+4dlbahfZ7xm8i+hDcrQ9ZD2JZjC4JkTqZJvFoEzShKwb0
-   B13vNVCUQoYklTNum9J2jJwewp66k49VpUOZ5eznVD4pJeHijBiYlQr24
-   O+niWYyB6FyK9NZd1SunGYUyTeIJplIbHt3YGFnedkELPTAirPHLo+jeF
-   vV/3iFwrT8MkRO6WgmnG5aPibDPXX3e6jWuqlSjfwI9xvqf2H/b483n3B
-   yB0sxNVO/jaVZVnsTOFHlXb01rqtjwGIVP2MbW4ac3cq5I7DvbmrJqXFp
-   XzxWHzIJIp092oC7ACqR9NGJv4Li0nY5DB7UlWRerL5RmSZ9CvdR9R+yY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="321759198"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="321759198"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 08:06:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="648260216"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="648260216"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 03 Jan 2023 08:06:37 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 3B349F4; Tue,  3 Jan 2023 18:07:08 +0200 (EET)
-Date:   Tue, 3 Jan 2023 18:07:08 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-Cc:     linux-usb@vger.kernel.org,
-        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
-Subject: Re: Possible problem with thunderbolt 4
-Message-ID: <Y7RSrLYfG1r8b+Zj@black.fi.intel.com>
-References: <Y67RoYvbRC6OgfOq@black.fi.intel.com>
- <272a5f28-5733-3aa1-ff3e-57febd3b217f@gmx.at>
- <Y67X5JrnRxYN/pns@black.fi.intel.com>
- <00dbeaf9-4d2c-3e3a-fa39-4c232b3a68e6@gmx.at>
- <Y7K7zLoAQVyv0zD5@black.fi.intel.com>
- <011df027-5381-1e10-9c54-e0935ae549f9@gmx.at>
- <Y7ME7EwduIQE38+2@black.fi.intel.com>
- <a324ff2a-d014-83d2-4f30-b865db7c352b@gmx.at>
- <Y7QMlV82mtaApJwJ@black.fi.intel.com>
- <a8c1dd4b-7227-5ba2-97a4-a2dc3d561ea3@gmx.at>
+        with ESMTP id S238418AbjACRMq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 12:12:46 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2990DEF
+        for <linux-usb@vger.kernel.org>; Tue,  3 Jan 2023 09:12:25 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id y4so16921442iof.0
+        for <linux-usb@vger.kernel.org>; Tue, 03 Jan 2023 09:12:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=em3Ufd1K4FFk6wUY+M7YROP86iN6cIDpfsX/6JZ8LMs=;
+        b=IxtRL1xI/M7DHv6CuM2XNgJ63pduHqi4eG8on4E2MOZfzDFgtSQ7zMJJJBh990hFZh
+         WAkVgsQn71Z2e1DpUiHQwLMpfiHRniYn3qeCgE4Dw+j7gyxO7wsTBc19pQcUTmhVrx2d
+         /tz4xiyHI9iTo95NWoWI3W3QryAVA5l3HhbbA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=em3Ufd1K4FFk6wUY+M7YROP86iN6cIDpfsX/6JZ8LMs=;
+        b=TEs5fxylEbdosppESGeKK78sNlzehIJSJp7QRGZ1kJ4f1hXPy2Iu6XMyzAMMKwNGSg
+         EcLtGlc/ourtPBEsyjunvVcZ6jnOuvtfESbREGcaRuYY6nvAcSy/5CuBNDU8rgKY+LDb
+         YT5Kxb7+NpiEbsq5pOzJk6c5fjGNFwRdNwEobQnqr66j4NtocDdCzyHLD8y/GPkVdM8W
+         NVhjoLIOpAB8Xsb8E/Iuz69Jt01ywQOBZkfIIlLbBTAB05sA6UemtPXQhEdC4/0vNuVE
+         /1Ttr17yAxyqMshyM6pDXIJOnPb/JzV7GWOh4cAkMV5bd1Ai67SabAx3A7t0PSoztG/W
+         FTXQ==
+X-Gm-Message-State: AFqh2kpcY5YWCjI2t2yg/VUkCCu2PmUFvHGjNKGhFZeCaeDG6j6wpIkw
+        uSrnvXCDftn1z2wSLtrkvgzHHUqz4y1eKYyV
+X-Google-Smtp-Source: AMrXdXtO9WUhdiUZPUG/gevDvi+yxjJQcLLm7WRVJWiMFvJt5PBubVlHOmNols6A6ArtSfWGZcVXRQ==
+X-Received: by 2002:a5e:8d1a:0:b0:6e3:21fd:6783 with SMTP id m26-20020a5e8d1a000000b006e321fd6783mr27731823ioj.2.1672765945209;
+        Tue, 03 Jan 2023 09:12:25 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id x6-20020a056602160600b006e00556dc9esm11407972iow.16.2023.01.03.09.12.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 09:12:24 -0800 (PST)
+Date:   Tue, 3 Jan 2023 17:12:24 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
+ devices for DT nodes without 'vdd-supply'
+Message-ID: <Y7Rh+EkKKN5Gu8sz@google.com>
+References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a8c1dd4b-7227-5ba2-97a4-a2dc3d561ea3@gmx.at>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Thu, Dec 22, 2022 at 11:26:26AM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > The primary task of the onboard_usb_hub driver is to control the
+> > power of an onboard USB hub. The driver gets the regulator from the
+> > device tree property "vdd-supply" of the hub's DT node. Some boards
+> > have device tree nodes for USB hubs supported by this driver, but
+> > don't specify a "vdd-supply". This is not an error per se, it just
+> > means that the onboard hub driver can't be used for these hubs, so
+> > don't create platform devices for such nodes.
+> >
+> > This change doesn't completely fix the reported regression. It
+> > should fix it for the RPi 3 B Plus and boards with similar hub
+> > configurations (compatible DT nodes without "vdd-supply"), boards
+> > that actually use the onboard hub driver could still be impacted
+> > by the race conditions discussed in that thread. Not creating the
+> > platform devices for nodes without "vdd-supply" is the right
+> > thing to do, independently from the race condition, which will
+> > be fixed in future patch.
+> >
+> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
+> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> >
+> > Changes in v2:
+> > - don't create platform devices when "vdd-supply" is missing,
+> >   rather than returning an error from _find_onboard_hub()
+> > - check for "vdd-supply" not "vdd" (Johan)
+> > - updated subject and commit message
+> > - added 'Link' tag (regzbot)
+> >
+> >  drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> 
+> I'm a tad bit skeptical.
+> 
+> It somehow feels a bit too much like "inside knowledge" to add this
+> here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
+> entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
+> keep the absolute minimum amount of stuff in it and all of the details
+> be in the other file.
+> 
+> If this was the only issue though, I'd be tempted to let it slide. As
+> it is, I'm kinda worried that your patch will break Alexander Stein,
+> who should have been CCed (I've CCed him now) or Icenowy Zheng (also
+> CCed now). I believe those folks are using the USB hub driver
+> primarily to drive a reset GPIO. Looking at the example in the
+> bindings for one of them (genesys,gl850g.yaml), I even see that the
+> reset-gpio is specified but not a vdd-supply. I think you'll break
+> that?
 
-On Tue, Jan 03, 2023 at 01:14:09PM +0100, Christian Schaubschläger wrote:
-> >
-> > 0. Remove the hack patch if not already.
-> >
-> > Steps 1-3 same as before.
-> >
-> > 4. Disable runtime PM from the PCIe root ports:
-> >
-> >   # echo on > /sys/bus/pci/devices/0000:00:07.0/power/control
-> >   # echo on > /sys/bus/pci/devices/0000:00:07.1/power/control
-> >   # echo on > /sys/bus/pci/devices/0000:00:07.2/power/control
-> >   # echo on > /sys/bus/pci/devices/0000:00:07.3/power/control
-> >
-> > (or how many Thunderbolt PCIE root ports you have, disable it from all of them).
-> >
-> > 5. De-authorize the PCIe tunnel
-> >
-> >   # echo 0 > /sys/bus/thunderbolt/devices/.../authorized
-> >
-> > 6. Soft reboot
-> >
-> > Does this change anything or the behavior is the same?
-> No, that doesn't change anything; though I'm not sure how many
-> Thunderbolt PCIe root ports I have; I guess only one: 0000:00:07.0 -
-> please have a look into the attached lspci output.
-> 
-> dmesg after the above two steps:
-> 
-> [   91.655320] pcieport 0000:00:07.0: pciehp: Slot(3): Link Down
-> [   91.657353] pcieport 0000:00:07.0: pciehp: Slot(3): Card not present
-> [   91.659525] igc 0000:2c:00.0 eth1: PHC removed
-> [   91.786204] pcieport 0000:04:03.0: Unable to change power state from D3hot to D0, device inaccessible
-> [   91.788645] pcieport 0000:04:03.0: Runtime PM usage count underflow!
-> [   91.790766] pcieport 0000:04:02.0: Unable to change power state from D3hot to D0, device inaccessible
-> [   91.793156] pcieport 0000:04:02.0: Runtime PM usage count underflow!
-> [   91.795341] pcieport 0000:04:01.0: Unable to change power state from D3hot to D0, device inaccessible
-> [   91.797797] pcieport 0000:04:01.0: Runtime PM usage count underflow!
-> [   91.800031] pcieport 0000:04:00.0: Unable to change power state from D3hot to D0, device inaccessible
-> [   91.802671] pci_bus 0000:05: busn_res: [bus 05] is released
-> [   91.805004] pci 0000:04:00.0: Removing from iommu group 16
-> [   91.807261] pci_bus 0000:06: busn_res: [bus 06-12] is released
-> [   91.809582] pci 0000:04:01.0: Removing from iommu group 17
-> [   91.811925] pci_bus 0000:13: busn_res: [bus 13-1f] is released
-> [   91.814303] pci 0000:04:02.0: Removing from iommu group 18
-> [   91.816604] pci_bus 0000:20: busn_res: [bus 20-2b] is released
-> [   91.818985] pci 0000:04:03.0: Removing from iommu group 19
-> [   91.821412] pci 0000:2c:00.0: Removing from iommu group 21
-> [   91.823875] pci_bus 0000:2c: busn_res: [bus 2c] is released
-> [   91.826241] pci 0000:04:04.0: Removing from iommu group 20
-> [   91.828592] pci_bus 0000:04: busn_res: [bus 04-2c] is released
-> [   91.831018] pci 0000:03:00.0: Removing from iommu group 15
-> 
-> Still, no network interface after the reboot in the firmware...
+Thanks for pointing that out. My assumption was that the regulator is
+needed for the driver to do anything useful, but you are right, the
+reset GPIO alone could be used in combination with an always-on regulator
+to 'switch the hub on and off'.
 
-Okay you have only one Thunderbolt PCIe root port just as you correctly
-guessed (07.0). At this point I'm running out of ideas what to check or
-try. We have seen similar but only when there is no battery on the
-device which is not your case, I suppose. In this case the initial USB4
-link state is kind of "open" so it may come up or not.
+> In general, it feels like it should actually be fine to create the USB
+> hub driver even if vdd isn't supplied. Sure, it won't do a lot, but it
+> shouldn't actively hurt anything. You'll just be turning off and on
+> bogus regulators and burning a few CPU cycles. I guess the problem is
+> some race condition that you talk about in the commit message. I'd
+> rather see that fixed...
+
+Yes, the race conditions needs to be fixed as well, I didn't have enough
+time to write and test a patch before taking a longer break for the
+holidays, so I only sent out this (supposed) partial mitigation.
+
+> That being said, if we want to be more efficient and not burn CPU cycles
+> and memory in Stefan Wahren's case, maybe the USB hub driver itself could
+> return a canonical error value from its probe when it detects that it has
+> no useful job and then "onboard_usb_hub_pdevs" could just silently bail
+> out?
+
+_probe() could return an error, however onboard_hub_create_pdevs() can't
+rely on that, since the actual onboard_hub driver might not have been
+loaded yet when the function is called.
+
+It would be nice not to instantiate the pdev and onboard_hub USB instances
+if the DT node has neither a 'vdd-supply' nor 'reset-gpios'. If we aren't
+ok with doing that in onboard_hub_create_pdevs() then at least the 'raw'
+platform device would be created. onboard_hub_probe() could still
+bail if both properties are absent, _find_onboard_hub() would have to
+check it again to avoid the deferred probing 'loop' for the USB instances.
+
+Alternatively we could 'just' fix the race condition involving the 'attach
+work' and the onboard_hub driver is fully instantiated even on (certain)
+boards where it does nothing. It's relatively rare that USB hub nodes are
+specified in the DT (unless the intention is to use this driver) and
+CONFIG_USB_ONBOARD_HUB needs to be set for the instances to be created,
+so maybe creating the useless instances is not such a big deal.
