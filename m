@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F54A65CA65
+	by mail.lfdr.de (Postfix) with ESMTP id D9A2D65CA66
 	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 00:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238403AbjACXff (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 18:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S238269AbjACXfe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Jan 2023 18:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238297AbjACXfa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 18:35:30 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B518165AC
+        with ESMTP id S238221AbjACXf3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 18:35:29 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515911659E
         for <linux-usb@vger.kernel.org>; Tue,  3 Jan 2023 15:35:28 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id cf42so47956982lfb.1
+Received: by mail-lf1-x12b.google.com with SMTP id bf43so47969911lfb.6
         for <linux-usb@vger.kernel.org>; Tue, 03 Jan 2023 15:35:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BtRN+qVRV1KbBnVSqhsl2L1Dw52l5PTGL9dlg3vRmSg=;
-        b=L6pneSlfBV8hJroS5X7KCQsJcflcnd4ohQjKk25rbttOudOaeb8WzOjm86Y79S8dir
-         wqEXKvigPHHUl063jpj6Y38z3agdhfftVLTd0xib2fe7pppM+cjhsFHnZewG5BPIu+sN
-         Vh7vm9SrkiZEOGAAZAwXwo3seFAwO5plR1wYqtg7mvRiikmOVPSL9SaoXTtXUIgmdHu7
-         eBDc3wzFj2QA3UViFNklFifZ/Ntuy5cdCSfCbD7kVjaaUXdSOSKvM7dQBR63E0DQRmQW
-         uOvLMSAAFRqpFvx0VGEBdDWD13MsNITli4UWWvkbtAeNRawH6VzY6YJf9Pg1XGfqdK/j
-         Sl0Q==
+        bh=LfqK6qBFH8YFyjUi0V5Pk9BV6gkDIZNht4kUj3nmxsk=;
+        b=GsOXISdSRV97jTW19WaKqVcsFh59IOOCGNy41YNbhGo+zogwzgVgxTn2XYIFP5fy51
+         7OGzxjkJcgZ0iX9B24HlxuWH3BcnSk+RNZ7ss9XGYeF5GDkR0BxZaJcXAQ1Ty495VdZJ
+         nawju/K7S1pBGKMb472tZDFEUxVwuHZsypI24Fw+hvhNo18BYfgLC/861nJOupbDHt19
+         yHoOh9qBUeiEelUa00crBmI9VpIr2nlgE45Kr/mKET81/5Z5k3oyki3Gor2O8eZmQKWK
+         oAYvROqewlZPvxv02HMLdsLUp5p5zYIhbGt1dEVWoQ9ld7LmRFuKlka4IdT+QAFXchkR
+         JLfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BtRN+qVRV1KbBnVSqhsl2L1Dw52l5PTGL9dlg3vRmSg=;
-        b=C34CrdftUT6xIG8WscaaGihaChLiDdJU8n4c0PWX2GtUBph2ndOS28evrYCeAwOtn1
-         R2HBkiS9aIioUdqyv4Eq0Q9ZyzIGz2OrxUIm/HINBjruF4dTOpwkClCLM4IGDU7s2mQg
-         BbiLWuG0a6AzhBtRfjzJks6j/2ZBpAzmEb1CppCISj5o3C6RHXXpTW0fFHvl3fo6g5yQ
-         OO8vbhVv5dwwOr8MWytKsD8FRI3tt/OScdfQY1wsaJkG1Gau1lmPIyvu7loIKJayLCdQ
-         qa4usqaJB5VtnGn+F44/EtzoyKl2rzYgBbd9ykdx4RaJtlNW/0naTok4IzFCOQAem42n
-         y7yQ==
-X-Gm-Message-State: AFqh2kqv3NcNrvxdQMUAEBjHlHmXOLeCZlOhaIBvk0du1/0oq2+hLmnK
-        fa5NTJBT2Q0MPHqSXp7fkk7NrQ==
-X-Google-Smtp-Source: AMrXdXs2bS5QxeAPRgtcNR1L3O1x+4UzA3xGsphCQbmPF0U6qyLhfrjM1yHQng04wacz+B8EAg2dVg==
-X-Received: by 2002:a05:6512:31d1:b0:4b5:7925:8707 with SMTP id j17-20020a05651231d100b004b579258707mr15867129lfe.26.1672788926805;
-        Tue, 03 Jan 2023 15:35:26 -0800 (PST)
+        bh=LfqK6qBFH8YFyjUi0V5Pk9BV6gkDIZNht4kUj3nmxsk=;
+        b=jLNDPpTGK7NqUdM0vu3ZVBr1xf1akNaB1F/iN77NHJmTk2OyYO4c+dDe9JBxAsnrYi
+         vED7R4I8oJaNTh96MRisq5nbR6yWDfXlCXcRLU7Av5/j0HSq2WNyQk2enhGXmb1OL3+F
+         guNC9jpeR1ehSehx/tu/pgC32DfV+GEA4o7pJunm/+9dSSPrNI/fKqi0BlbOPE0iWEXI
+         PRnjKoefRmOSQOYBaa5Xhvzv7z/Y27+kK/FhnmtiWBti/txdHNWH/XzXxHP4onRIyUKO
+         zEM7pN0Gv3S4pFGJN5ssT2FqxI3lRt/A5Xcx40Plu6gIhD3Gihg1E86OUk27lPDnCxmE
+         dy2w==
+X-Gm-Message-State: AFqh2kpEF1acIEDz895PQjEKCjBd3U3vxe2x9pDU+IoUki06o1m1EDiG
+        MCKmQeI4eaLy/UQowfcxWpIb/Q==
+X-Google-Smtp-Source: AMrXdXvGQS/bswxpe0igHUGcViNfV0w61Poc5iqZnUfTxEjT7Iz2j6FvCTfduAeRyTbqU3inECNbNw==
+X-Received: by 2002:ac2:4bd3:0:b0:4b4:a460:c995 with SMTP id o19-20020ac24bd3000000b004b4a460c995mr18141753lfq.5.1672788927892;
+        Tue, 03 Jan 2023 15:35:27 -0800 (PST)
 Received: from Fecusia.local (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a45edc1de2sm4939801lfs.239.2023.01.03.15.35.25
+        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a45edc1de2sm4939801lfs.239.2023.01.03.15.35.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 15:35:26 -0800 (PST)
+        Tue, 03 Jan 2023 15:35:27 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 04 Jan 2023 00:35:20 +0100
-Subject: [PATCH 4/7] usb: fotg210: Move clock handling to core
+Date:   Wed, 04 Jan 2023 00:35:21 +0100
+Subject: [PATCH 5/7] usb: fotg210: Check role register in core
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230103-gemini-fotg210-usb-v1-4-f2670cb4a492@linaro.org>
+Message-Id: <20230103-gemini-fotg210-usb-v1-5-f2670cb4a492@linaro.org>
 References: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
 In-Reply-To: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -67,220 +67,65 @@ Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.11.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Grab the optional silicon block clock, prepare and enable it in
-the core before proceeding to prepare the host or peripheral
-driver. This saves duplicate code and also uses the simple
-devm_clk_get_optional_enabled() to do everything we really
-want to do.
+Read the role register and check that we are in host/peripheral
+mode and issue warnings if we're not in the right role when
+probing respective driver.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/usb/fotg210/fotg210-core.c |  5 +++++
- drivers/usb/fotg210/fotg210-hcd.c  | 33 ++-------------------------------
- drivers/usb/fotg210/fotg210-udc.c  | 30 +++---------------------------
- drivers/usb/fotg210/fotg210-udc.h  |  1 -
- drivers/usb/fotg210/fotg210.h      |  1 +
- 5 files changed, 11 insertions(+), 59 deletions(-)
+ drivers/usb/fotg210/fotg210-core.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
-index 4593120c02de..58d84747fb30 100644
+index 58d84747fb30..013a1d0112fc 100644
 --- a/drivers/usb/fotg210/fotg210-core.c
 +++ b/drivers/usb/fotg210/fotg210-core.c
-@@ -6,6 +6,7 @@
-  * driver.
-  */
- #include <linux/bitops.h>
-+#include <linux/clk.h>
- #include <linux/device.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
-@@ -109,6 +110,10 @@ static int fotg210_probe(struct platform_device *pdev)
- 	if (!fotg->base)
- 		return -ENOMEM;
+@@ -18,6 +18,11 @@
  
-+	fotg->pclk = devm_clk_get_optional_enabled(dev, "PCLK");
-+	if (IS_ERR(fotg->pclk))
-+		return PTR_ERR(fotg->pclk);
+ #include "fotg210.h"
+ 
++/* Role Register 0x80 */
++#define FOTG210_RR			0x80
++#define FOTG210_RR_ID			BIT(21) /* 1 = B-device, 0 = A-device */
++#define FOTG210_RR_CROLE		BIT(20) /* 1 = device, 0 = host */
 +
- 	mode = usb_get_dr_mode(dev);
+ /*
+  * Gemini-specific initialization function, only executed on the
+  * Gemini SoC using the global misc control register.
+@@ -95,6 +100,7 @@ static int fotg210_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	enum usb_dr_mode mode;
+ 	struct fotg210 *fotg;
++	u32 val;
+ 	int ret;
  
- 	if (of_device_is_compatible(dev->of_node, "cortina,gemini-usb")) {
-diff --git a/drivers/usb/fotg210/fotg210-hcd.c b/drivers/usb/fotg210/fotg210-hcd.c
-index 15ba5b1618e1..7bd1e8f3080d 100644
---- a/drivers/usb/fotg210/fotg210-hcd.c
-+++ b/drivers/usb/fotg210/fotg210-hcd.c
-@@ -33,7 +33,6 @@
- #include <linux/platform_device.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
--#include <linux/clk.h>
- 
- #include <asm/byteorder.h>
- #include <asm/irq.h>
-@@ -5594,44 +5593,22 @@ int fotg210_hcd_probe(struct platform_device *pdev, struct fotg210 *fotg)
- 	fotg210->fotg = fotg;
- 	fotg210->caps = hcd->regs;
- 
--	/* It's OK not to supply this clock */
--	fotg210->pclk = clk_get(dev, "PCLK");
--	if (!IS_ERR(fotg210->pclk)) {
--		retval = clk_prepare_enable(fotg210->pclk);
--		if (retval) {
--			dev_err(dev, "failed to enable PCLK\n");
--			goto failed_put_hcd;
--		}
--	} else if (PTR_ERR(fotg210->pclk) == -EPROBE_DEFER) {
--		/*
--		 * Percolate deferrals, for anything else,
--		 * just live without the clocking.
--		 */
--		retval = PTR_ERR(fotg210->pclk);
--		goto failed_dis_clk;
--	}
--
- 	retval = fotg210_setup(hcd);
- 	if (retval)
--		goto failed_dis_clk;
-+		goto failed_put_hcd;
- 
- 	fotg210_init(fotg210);
- 
- 	retval = usb_add_hcd(hcd, irq, IRQF_SHARED);
- 	if (retval) {
- 		dev_err(dev, "failed to add hcd with err %d\n", retval);
--		goto failed_dis_clk;
-+		goto failed_put_hcd;
- 	}
- 	device_wakeup_enable(hcd->self.controller);
- 	platform_set_drvdata(pdev, hcd);
- 
- 	return retval;
- 
--failed_dis_clk:
--	if (!IS_ERR(fotg210->pclk)) {
--		clk_disable_unprepare(fotg210->pclk);
--		clk_put(fotg210->pclk);
--	}
- failed_put_hcd:
- 	usb_put_hcd(hcd);
- fail_create_hcd:
-@@ -5647,12 +5624,6 @@ int fotg210_hcd_probe(struct platform_device *pdev, struct fotg210 *fotg)
- int fotg210_hcd_remove(struct platform_device *pdev)
- {
- 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
--	struct fotg210_hcd *fotg210 = hcd_to_fotg210(hcd);
--
--	if (!IS_ERR(fotg210->pclk)) {
--		clk_disable_unprepare(fotg210->pclk);
--		clk_put(fotg210->pclk);
--	}
- 
- 	usb_remove_hcd(hcd);
- 	usb_put_hcd(hcd);
-diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index 034193592a36..6a4b94d26951 100644
---- a/drivers/usb/fotg210/fotg210-udc.c
-+++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -15,7 +15,6 @@
- #include <linux/platform_device.h>
- #include <linux/usb/ch9.h>
- #include <linux/usb/gadget.h>
--#include <linux/clk.h>
- #include <linux/usb/otg.h>
- #include <linux/usb/phy.h>
- 
-@@ -1134,9 +1133,6 @@ int fotg210_udc_remove(struct platform_device *pdev)
- 	for (i = 0; i < FOTG210_MAX_NUM_EP; i++)
- 		kfree(fotg210->ep[i]);
- 
--	if (!IS_ERR(fotg210->pclk))
--		clk_disable_unprepare(fotg210->pclk);
--
- 	kfree(fotg210);
- 
- 	return 0;
-@@ -1164,34 +1160,17 @@ int fotg210_udc_probe(struct platform_device *pdev, struct fotg210 *fotg)
- 	fotg210->dev = dev;
- 	fotg210->fotg = fotg;
- 
--	/* It's OK not to supply this clock */
--	fotg210->pclk = devm_clk_get(dev, "PCLK");
--	if (!IS_ERR(fotg210->pclk)) {
--		ret = clk_prepare_enable(fotg210->pclk);
--		if (ret) {
--			dev_err(dev, "failed to enable PCLK\n");
--			goto err;
--		}
--	} else if (PTR_ERR(fotg210->pclk) == -EPROBE_DEFER) {
--		/*
--		 * Percolate deferrals, for anything else,
--		 * just live without the clocking.
--		 */
--		ret = -EPROBE_DEFER;
--		goto err;
--	}
--
- 	fotg210->phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 0);
- 	if (IS_ERR(fotg210->phy)) {
- 		ret = PTR_ERR(fotg210->phy);
- 		if (ret == -EPROBE_DEFER)
--			goto err_pclk;
-+			goto err_free;
- 		dev_info(dev, "no PHY found\n");
- 		fotg210->phy = NULL;
- 	} else {
- 		ret = usb_phy_init(fotg210->phy);
- 		if (ret)
--			goto err_pclk;
-+			goto err_free;
- 		dev_info(dev, "found and initialized PHY\n");
+ 	fotg = devm_kzalloc(dev, sizeof(*fotg), GFP_KERNEL);
+@@ -122,10 +128,16 @@ static int fotg210_probe(struct platform_device *pdev)
+ 			return ret;
  	}
  
-@@ -1286,11 +1265,8 @@ int fotg210_udc_probe(struct platform_device *pdev, struct fotg210 *fotg)
- err_alloc:
- 	for (i = 0; i < FOTG210_MAX_NUM_EP; i++)
- 		kfree(fotg210->ep[i]);
--err_pclk:
--	if (!IS_ERR(fotg210->pclk))
--		clk_disable_unprepare(fotg210->pclk);
+-	if (mode == USB_DR_MODE_PERIPHERAL)
++	val = readl(fotg->base + FOTG210_RR);
++	if (mode == USB_DR_MODE_PERIPHERAL) {
++		if (!(val & FOTG210_RR_CROLE))
++			dev_err(dev, "block not in device role\n");
+ 		ret = fotg210_udc_probe(pdev, fotg);
+-	else
++	} else {
++		if (val & FOTG210_RR_CROLE)
++			dev_err(dev, "block not in host role\n");
+ 		ret = fotg210_hcd_probe(pdev, fotg);
++	}
  
--err:
-+err_free:
- 	kfree(fotg210);
  	return ret;
  }
-diff --git a/drivers/usb/fotg210/fotg210-udc.h b/drivers/usb/fotg210/fotg210-udc.h
-index 20335a38a410..22b72caf498c 100644
---- a/drivers/usb/fotg210/fotg210-udc.h
-+++ b/drivers/usb/fotg210/fotg210-udc.h
-@@ -231,7 +231,6 @@ struct fotg210_ep {
- struct fotg210_udc {
- 	spinlock_t		lock; /* protect the struct */
- 	void __iomem		*reg;
--	struct clk		*pclk;
- 
- 	unsigned long		irq_trigger;
- 
-diff --git a/drivers/usb/fotg210/fotg210.h b/drivers/usb/fotg210/fotg210.h
-index 50436cc16538..4d0d4ae1a957 100644
---- a/drivers/usb/fotg210/fotg210.h
-+++ b/drivers/usb/fotg210/fotg210.h
-@@ -12,6 +12,7 @@ struct fotg210 {
- 	struct device *dev;
- 	struct resource *res;
- 	void __iomem *base;
-+	struct clk *pclk;
- 	struct regmap *map;
- 	enum gemini_port port;
- };
 
 -- 
 2.38.1
