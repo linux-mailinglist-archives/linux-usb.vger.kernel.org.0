@@ -2,107 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1AF65BD32
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 10:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B96365BD2C
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 10:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237128AbjACJbn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 04:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S237029AbjACJaT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Jan 2023 04:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjACJbk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 04:31:40 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1A2B2;
-        Tue,  3 Jan 2023 01:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672738300; x=1704274300;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q7GYie6ztkC/m0OEhrktbGz9gHldom1EYLxQR6sG4Ps=;
-  b=jWfu2WDXH0Vai4F48IH5z2786fbsPr+vHwhWTg7ftcyzVx3dEA53XeNT
-   2YT6aPzGdBPubQWpbvIKDH4b8Q0QbW5LaLfpdH2z6iqR34XRiT0YOUzPT
-   4IbdFmYw42/8vxJEqbftRvtrCmOIoJUAJ7a2gpgGBA5hm03JcJw7Rpk7u
-   B2pR8WEDkUEjzZQeIL/qaDfnbL06cEUOyIHeKWUOD/nAr7j6rVeTqWmqa
-   Ui22ereOXztZCbc8A+zrF/ENrWQuLUnwCJ7Bn9fbXb9vC39ScgbjyfLKa
-   DrGPR3xFJleelzZImQyuk/1lOIx93gnMlpXEMJzxIg8m0xdAX2V74AYkq
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="383921007"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="383921007"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 01:29:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="797131086"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="797131086"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 03 Jan 2023 01:29:24 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 03 Jan 2023 11:29:23 +0200
-Date:   Tue, 3 Jan 2023 11:29:23 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 2/2] usb: typec: intel_pmc_mux: Deduplicate ACPI
- matching in probe
-Message-ID: <Y7P1c4kZ3r2NrV6+@kuha.fi.intel.com>
-References: <20230102202933.15968-1-andriy.shevchenko@linux.intel.com>
- <20230102202933.15968-2-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S230380AbjACJaR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 04:30:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DAC5FB0;
+        Tue,  3 Jan 2023 01:30:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99A8F61225;
+        Tue,  3 Jan 2023 09:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EE160C433F1;
+        Tue,  3 Jan 2023 09:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672738216;
+        bh=Lrad1MM4W/2a1P4k2fvv9I/bnFCeaUnPA0mFcKiYI5I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uIAKQKYRzBIIQXcLRDcaSIXohu6uhjJoiNhZTWc9mBVIC6zZz+1fdr5nMH7aWlCEK
+         somFb44aaNkzT6wo1/LREtx2jI9ND7u2X9lxOZwtrq3MgDSeWuoQ9mp84OZ0fsCpwH
+         EHz0Gmmy3GG7zflcH2dz/j5joUrdtPJe0fEc5QD6+swnWrJbcpP8B0dboTMfH0ca6v
+         2nwiIj/iPL8CBjTyL9YtQNw199oeX9NnI8vX8442RVX9TgISmqtGCrDqL9PBly+ptC
+         rtjY6I82Cp6yeVYbk3drPWDd/gGSljQMriRP03JvVSIMhhDo4x0Y5jD9HSj2p8evlC
+         MuSOIuIUaa0IA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5DC5E5724B;
+        Tue,  3 Jan 2023 09:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230102202933.15968-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] usb: rndis_host: Secure rndis_query check against int
+ overflow
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167273821587.22243.5603167276916404325.git-patchwork-notify@kernel.org>
+Date:   Tue, 03 Jan 2023 09:30:15 +0000
+References: <20230103091710.81530-1-szymon.heidrich@gmail.com>
+In-Reply-To: <20230103091710.81530-1-szymon.heidrich@gmail.com>
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc:     davem@davemloft.ne, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 10:29:33PM +0200, Andy Shevchenko wrote:
-> There is no need to call acpi_dev_present() followed by
-> acpi_dev_get_first_match_dev() as they both do the same
-> with only difference in the returning value. Instead,
-> call the latter and check its result.
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Tue,  3 Jan 2023 10:17:09 +0100 you wrote:
+> Variables off and len typed as uint32 in rndis_query function
+> are controlled by incoming RNDIS response message thus their
+> value may be manipulated. Setting off to a unexpectetly large
+> value will cause the sum with len and 8 to overflow and pass
+> the implemented validation step. Consequently the response
+> pointer will be referring to a location past the expected
+> buffer boundaries allowing information leakage e.g. via
+> RNDIS_OID_802_3_PERMANENT_ADDRESS OID.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> [...]
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Here is the summary with links:
+  - usb: rndis_host: Secure rndis_query check against int overflow
+    https://git.kernel.org/netdev/net/c/c7dd13805f8b
 
-> ---
->  drivers/usb/typec/mux/intel_pmc_mux.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 87e2c9130607..34e4188a40ff 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -602,16 +602,15 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
->  	int ret;
->  
->  	for (dev_id = &iom_acpi_ids[0]; dev_id->id[0]; dev_id++) {
-> -		if (acpi_dev_present(dev_id->id, NULL, -1)) {
-> -			pmc->iom_port_status_offset = (u32)dev_id->driver_data;
-> -			adev = acpi_dev_get_first_match_dev(dev_id->id, NULL, -1);
-> +		adev = acpi_dev_get_first_match_dev(dev_id->id, NULL, -1);
-> +		if (adev)
->  			break;
-> -		}
->  	}
-> -
->  	if (!adev)
->  		return -ENODEV;
->  
-> +	pmc->iom_port_status_offset = (u32)dev_id->driver_data;
-> +
->  	INIT_LIST_HEAD(&resource_list);
->  	ret = acpi_dev_get_memory_resources(adev, &resource_list);
->  	if (ret < 0) {
-> -- 
-> 2.35.1
-
+You are awesome, thank you!
 -- 
-heikki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
