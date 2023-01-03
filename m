@@ -2,126 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651A565BBA3
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 09:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0476A65BBCB
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jan 2023 09:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236967AbjACIMV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 03:12:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
+        id S237031AbjACIQC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Jan 2023 03:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbjACIMS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 03:12:18 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB372AE66;
-        Tue,  3 Jan 2023 00:12:17 -0800 (PST)
+        with ESMTP id S237027AbjACIP5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 03:15:57 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD001273;
+        Tue,  3 Jan 2023 00:15:55 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ah1NjleaRpII6slUYpEtmaEUu2xaUE6+n00P+t87zjEGxURAazhCM5uKo1AQRZkwGXhaTk8IstOM/8XTOkPJbBcQetez9I7j7LGdH4/3lbOknaXlX5fhCEuVoxZeEt6/1cUr+LSnOdfa4wDzuL4pdLifxwsSfQG1h4vgXT7T0CT3RuiIgdIf1zxmqYGY6DVkl4VKEozh6TPAtZDhsWHzU7SBRUB5zY5+G677HNcAULigNSOPCAuPlepXH9+S1x77z2e7H7lPmwfpMQ6QECtBxBfMkAuClUzWgUIGa6CB33NWcRJQYYuMtna+YbhCtgMpR9LgZyCdY8HTggWCMroL+g==
+ b=Wt1ZXcALfrTKTfzaoKhyNI8YzHwn4WofY+5ow8F0O6no3u61zKi0NQn2QxY7sRroJ7zKdKbV9je5oyVOIHr+JbkYkuRCBMtqxgliSfUIOfi80ecbaHAfnBdf97MxHc8jwe5NzedPby9fm3dGRf7zHHhMFK75znmR+xdpHtZJ4T+yKTM9iGk/7K7swOb6jpqBsUELaXDxHrGGntxVbPAWeCX5Tm8FI3OG+VTfr3NIAqawS9qNhejhZG5jmasai9OKXVtc9CS/YZG6V2IpA5BdcIM55/4i+KjOn2lGbPKQt6I8bry7kf43Ft/1dnHrsjy8YsGMtdve/gnrGt3cQaduKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VkPrOFLaKSzWii7opxl3VJqOBiYOO86IMIObuzUemM8=;
- b=VHW5l9HjtxXdgZF8XFf2IB61dhIWiM0itcfzqvsukvGW2xJI2kUtAgnRK0ajCpM/aPCGhoh6uJZz91gQ0fHC9SLkd8+0EMb+7Hd7N46TEfwqqZR7f2R0IMErm7aT4OX5YikXunTSL9qwz0/Pjkm4dUwe3lm+KXc5xYErgspdsOpMe9SPRW7ecyKL34KklPq06ShOCHmOVl8C6I3qqfGBndPRVrnq/2bm+gOsGPH0W/wijdJDb5S8Zy5jrHerNzyZwSLbeSZVNRI7jxrkJ0c3WosKWN1RQXeLTa1DAhiV0YobPZQGYIDWtstZQUYYL+zYk/2dYJkzS0eNB/mTjYjZxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
+ bh=r2kWH0GfBGcoohxGBJ72vuFXou8+Y1tU8ziscxEROuM=;
+ b=l7nrXxkoyyzlfjiRY0HvUmIi9xVB6qK1On3re/8kWXJJqzxi5vT+a3JZQgVEOmryCGYtu4QivMg7fVIMh5nCGOd5Ag6A2CswMQnPjLKhUbPEsbtsgg5NxSACV7eRo3TxVl88NOSqFhhqL4zdTQmqcWqt39hJ8rG9rxnAh8FLIForxqn86hMcjpTWenlnZHluwX6sp++keWZAvE1ruGxLMp/KK6Q6auMt8kz7k2Z/dZg9xmtqPmZ0lxgJABu6658mwjkr0hxii20n5oRn7fEdzVqMHHM4Vwnc47BnKaZNqOXjGNVjCQWH+eWCrRhdujADuPLagxI5K+BqzNwmkNsPwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VkPrOFLaKSzWii7opxl3VJqOBiYOO86IMIObuzUemM8=;
- b=oGU5eAznuwXTBGQX7xGEwgGDZYXHsDqNXnrp59cbsEoqlbZdXzXt3L8jutxGl3YhcyTaHHrOM4WgV0OJtZY/HuzQ87kyrqwMz7UljsCY23clfl1mclXy/LF1wATiT2BHo57PgrW/S13hOj7BeJLvsNlKj58IsWoG+SHU+XJQ/qQdrzBatsN4c/0JlHHwl1ijUI172jdZo3F2j/MrX5mk4WO5esBT+CpsikR9d0lYzqFSJT1BxSofgUOnpfJnHAaic+GQ1v/DUMHuLvxMGj+ROd8rQfRc6hRt17iojZNSxFo8sW0ncdZX5k0ngKQ0hFauHNAs0F58mJyUPeMz5oitYA==
-Received: from DM4PR12MB5988.namprd12.prod.outlook.com (2603:10b6:8:6b::20) by
- MW3PR12MB4538.namprd12.prod.outlook.com (2603:10b6:303:55::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Tue, 3 Jan 2023 08:12:12 +0000
-Received: from DM4PR12MB5988.namprd12.prod.outlook.com
- ([fe80::ab92:c843:744d:1363]) by DM4PR12MB5988.namprd12.prod.outlook.com
- ([fe80::ab92:c843:744d:1363%4]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 08:12:12 +0000
+ bh=r2kWH0GfBGcoohxGBJ72vuFXou8+Y1tU8ziscxEROuM=;
+ b=dp3xWXcIyRaM4Lx6S8ReeMbssQp/POjmcmwuA04zyZ80QDOSIz7SOsUMEp+/aw2kqlN1fT9Wj5ndbAkreyjJurJWLDhU0TNopDT7/HgSAihOYrytHpZus9R2Dlcu17UoRS500hU992IRAwkyVuj58DmOyOmOG7vu7AlbGLUCeV7T1ypds4JV1sVB8we+osX7vN4pFnK7tmElkRgUnKFaZXnxH9KQVyzZY0QP4hRpRbxqkX/H/emxxqTIs90smbpGXXFsAxKmbra62M8NCnmY9NJsPfnAuJ/QeEC3YYoHEHt78KROiG5cC8iEzc+pUvmIegI0Bztlf97gqQ/P5qRNsQ==
+Received: from DM6PR08CA0027.namprd08.prod.outlook.com (2603:10b6:5:80::40) by
+ BY5PR12MB4292.namprd12.prod.outlook.com (2603:10b6:a03:212::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.18; Tue, 3 Jan
+ 2023 08:15:54 +0000
+Received: from DM6NAM11FT109.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:80:cafe::46) by DM6PR08CA0027.outlook.office365.com
+ (2603:10b6:5:80::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.19 via Frontend
+ Transport; Tue, 3 Jan 2023 08:15:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT109.mail.protection.outlook.com (10.13.173.178) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5966.18 via Frontend Transport; Tue, 3 Jan 2023 08:15:53 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 3 Jan 2023
+ 00:15:45 -0800
+Received: from 74ef364-lcelt.nvidia.com (10.126.231.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 3 Jan 2023 00:15:42 -0800
 From:   Haotien Hsu <haotienh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Sing-Han Chen <singhanc@nvidia.com>,
         Sanket Goswami <Sanket.Goswami@amd.com>,
         Wayne Chang <waynec@nvidia.com>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] ucsi_ccg: Refine the UCSI Interrupt handling
-Thread-Topic: [PATCH v2] ucsi_ccg: Refine the UCSI Interrupt handling
-Thread-Index: AQHZHxzNnRSsFCPYG0Gr27f1Ip3lFa6MTLiAgAALOAA=
-Date:   Tue, 3 Jan 2023 08:12:12 +0000
-Message-ID: <6a8b1143-7554-2474-e6b2-ccc4e9a369e6@nvidia.com>
-References: <20230103024023.235098-1-haotienh@nvidia.com>
- <Y7PZ81G1LI20eGeq@kroah.com>
-In-Reply-To: <Y7PZ81G1LI20eGeq@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5988:EE_|MW3PR12MB4538:EE_
-x-ms-office365-filtering-correlation-id: 6c6939bb-5d3f-4995-4976-08daed6237e2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BLG89wKoHXc1qsdN6VG+oxuk1gcf1dMDW+FPIDdP8Th44y0Pueonh/CmcGC2UjnY9iKxgBCJVpS1qFZV2vAZGvB3R4X4iBj6ElZqd8/0oTVL0McWayUNuRoDW+afHnZuqh44dmLbM2iVNyFBpfAlqpO2n/+kc9dDXmElMTccgKqTDz/+kmsoDv01cXheDjTCl/BddsB9tF2vJnsg+c19DzrwSGsQBLsMwyQUoiRPN06D3UgrplQsmp67rRTxMwKFehPCUNoepf3R35fl6ZK3I4V8Q2yeOttW4R5Kb4ECFCoJhKTOiFYhUS1rw8xq59JlVkJYQQlllgmUBCbxQ9H7qYgthNfY8nYo6tZhuW0X0baA9VH+v0m48sh7waziTeyG9IeC30YAe8FnI2BgmH4rLskHQ2hv2w+QtGgKjUuKaTvUWafBx7xpVMAyMJFxWCsN7xhvhQG59Y0f6JMySNDJJJS+5Ltg4oqsyuR+cawQmWH0vW9CQWN6PRcFL8C6LpCQ9eENzKp7yUfjvmCrRB7vZOCiiVsiqDVxmznbT/Htqpq6VNTXAPWpjY9GDJHpfvzArP3xtEXF5K0uSgkFbkPgmHrY6391HboDNyil2KkVfWC6d3OOgET24ag87I67DBbjgWp3qUF7QVHLiaaMqXn2zo5fKrLzM43w8l/yST5++4wGCph/xXlGgPStUdTbO7f+ioDIDi9G/83VkfKQSvp/3l27dOQWWaeZSausxV8YRMVS4zAl2nCE3IBdXC8He+3N
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5988.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(366004)(396003)(376002)(136003)(451199015)(4744005)(2906002)(8936002)(5660300002)(83380400001)(41300700001)(31696002)(86362001)(122000001)(36756003)(38100700002)(38070700005)(186003)(71200400001)(26005)(54906003)(6916009)(6512007)(316002)(31686004)(6486002)(478600001)(8676002)(6506007)(53546011)(66556008)(2616005)(66446008)(66476007)(64756008)(91956017)(4326008)(76116006)(66946007)(22166006)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bVRlTjhwSGdyeW9JNTlHc3AvZWE5c1RoUmlsbmV4K3B0c2ZKd2xSWWlpSlJm?=
- =?utf-8?B?K1ovaW9XanU0Y2xIaVF1TTdxTzFlSmRRRWcwd1pvVElJR1NaTEZTTk1lMUJz?=
- =?utf-8?B?U3RsMVlzR0RTaEVmVUR0MCtCK243c3VQdmRHaW9uMndxeDcycnl4b0NQNSs0?=
- =?utf-8?B?N1VQSWNVdFFyYk5aTUNkdGs3ajduNElLS2VtaDhhSlRjZkhZY21tSEhPUHk4?=
- =?utf-8?B?eGZpS0JyWjJIajgxeUt5ZXBrdnh3dXBSMUhGUEZqYlhUVzUwUndBb3gzcVM2?=
- =?utf-8?B?Q2wxNmxEZmlPSTNFQ0pvaVhodGVzemRLWVpUQkxaRk5IVjBNQjJNb2MyNS9r?=
- =?utf-8?B?K1p3NnRYOWRneHVsN3U1Y052d2JObzNtUVdCYjR6RjlhMit4ang2VHBGTFI0?=
- =?utf-8?B?c2wvN1kxMXRZM0hPNG0rK1NuWFRuN3E0eHpJWnZPY2lmbTFkMHBjd0UrRWVC?=
- =?utf-8?B?azJRQlpzdlViZWxVMkkvazFGTXpnV2dWOTgyRnBjcEg1RkJwTlFHM0w5cFdt?=
- =?utf-8?B?NU5Hd1o0bXFnWXg2ajJrL3ZxSTZNa24zQ0prVFdmeWFCTHBCRk51V3pIU2dn?=
- =?utf-8?B?cVhSdGR6V0VKMFgweDJ3QjNBS1JwbmNHRk9SZktrV0J4VHlRSFdMRlBKbXdK?=
- =?utf-8?B?RDlhM2NwSlZTYUtHUCtNVWx5TmI3MDIzQ08zZU1IZ1N0K0ZkNW5aaHVCMjN1?=
- =?utf-8?B?eXNDUDVzYzRzRStCMFR3YSsyYVhuVHZSNnllTWZUTHVuMTE3MEEwK2lYOGZH?=
- =?utf-8?B?eFBCbHM0WGF0UmNjcDNkNjJiYi9VZksvRi91MTNLRUw5aHBVWllseTgrUTVs?=
- =?utf-8?B?NlE5dHBVOWQxVmxuOGZoZEFwMzE3SHhudFJNOWV1bGZHNVNQYXNjSlArcVk5?=
- =?utf-8?B?bE1meTJHMWNrTDRCNjArMjF6WEJ2VGJ6UldVYVNmREZuN1BaVGE3cDFyNWpu?=
- =?utf-8?B?VjVyeVBWZVd2Um83NHlydm1tdFpwVUlRQ04wQndtTG5uK2ZCcFpQVGkySWxz?=
- =?utf-8?B?OXRLUy8rdTB5UjczdDBXQS9qZTZqWFh2b1pkRXRkUlFod20xYVg3ZmdYZVc3?=
- =?utf-8?B?NEpyaG5hK2gvdmVrclA0KzhnL0JFN3RxZUZ1enh3cHJENHBtRTA2Z25TYUU3?=
- =?utf-8?B?aWRsMGI5MHhwelNRaDRCZGFqNmg5Nk9INEVFNlpCYWtkWW92bmlLYURmWVA1?=
- =?utf-8?B?c01wSmRCTHRKSmpES2h0N3o3emlaZFZSNU41REhFd1hYcWtZVDdGL1NHdXZ4?=
- =?utf-8?B?RHJFM2h3S1ZpWnJhaGVrMzlxdndsMGRZeW5HTnZmcWY5WkNwYm56dGlXSVJ3?=
- =?utf-8?B?NWd2TDFDVHh2QjlBNXZUZkVaYUc2UkFuZDZZcHBWN1A5UkVLRjZka2NaRGFI?=
- =?utf-8?B?bW8wVDZGOWt5cUw5bk9jbUt1dUdpT0ZLNmRWV1NMZ2M4WWlCZG5ISCtqd1Rm?=
- =?utf-8?B?eFllaENzNEx2MEdnOWQ1WGZlTWRrazEvbkJ2YkRlcUU2R09BRFdaeS9zR2hJ?=
- =?utf-8?B?NndIRzNBUURjTjdtQW9ZMFJQZTZrLzhlRkMvUlhxUXlDamVXSUhna3hUeGYz?=
- =?utf-8?B?NXd6NzVBdUh6dXV1MlVnaGg0YVU5TzJSd3c3TG5zMFZlWk9OWHI1NXk3cldo?=
- =?utf-8?B?ekdMQjBTanV5RUsyVUJLZTBvSEc3WSsxZ21KTTV2Uy9acWMwTlVydGRiL3Fi?=
- =?utf-8?B?c3hmVGtOYU5BdkRQL1pWdE13MnRzS0pPOGxIVzhCMTQ5YWlXR1NFaVVhN29T?=
- =?utf-8?B?QlB6T3dkRE5XQ0ZmU1JHVnJIL0x0bTFDS3RscEhGeVVLbUEyMUo3bG5TcEZP?=
- =?utf-8?B?S2tMdWF2S1I4cHZUQ3F4ZU9DUlV6QUdld1hnZXA0SGRBMFZia3U5bmpRN1pw?=
- =?utf-8?B?NUZTUWxCNkpyWUc3azE3S1o4ZHJFcDROV2FaN2NISitJcWZ6WjFoL3pENmMr?=
- =?utf-8?B?Z3ZtemczTWFnNStUTDhqNDVCVU5PZTVnSnNBenR4N1hIaGRheUp1dlgxSUJ6?=
- =?utf-8?B?dXN0cm9zU0MxMnA3VEkwU2F4blhrekg4RmVvNVB1SGJCYjk2S3QrQkI1ODJF?=
- =?utf-8?B?VU1wYitKMG41dHNESTVoallmVjl5ckhlQWd4SEhXSXBUb210MFRFeUxwYjFX?=
- =?utf-8?Q?9jywUPrJSP5kQe1Mc2DSeeOq/?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0F5A7A2CA88C104C81030F2E96BE4673@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Haotien Hsu <haotienh@nvidia.com>
+Subject: [PATCH v3] ucsi_ccg: Refine the UCSI Interrupt handling
+Date:   Tue, 3 Jan 2023 16:15:31 +0800
+Message-ID: <20230103081531.423017-1-haotienh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT109:EE_|BY5PR12MB4292:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9a8f08c-25f5-4c1c-1c25-08daed62bb93
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 410LpM50hGbu8tQFf2cc7hX7Za34PJWakFl1NMTPGx8VWhG0bCoS2YPJ1lcka8ubdZtPRp1eGdsYbVX2ueCFFfBjoaNZF79y3Y3Agkv1YUnjeMm2k0ZVvobTDlkl3dBvEtLhXyYVuZfppQVUKzdydZXzH+4J/xFee/vQZTHKOs8BnIcip6Mqb304LUKbnu9XgC37mGcm8C8fQKltgqsv2+sMiQTg8W0BmuTMOb2f260x+/fXVP4sY8qJPXIvhrCBtfXi3VaNuvaJfWafyRQ+xsYhtUKZm8aF/tOcoVz0IfSWJO1Ex6cAPGvuzK0xDdG45fpg67P63tf7ksqSXkYBfNdNpQTfRKI212JzIK4giHqg+jVXBK5TLCVIvOHo2CIaRhCjX7nCWdij6h0ei3A5Ep1U4MqedMOQZZUkos77dG6a0nTlWIeaYBxWx+6B8AKI0FsrMyH+kILVDDj+pCjZf0PJMbX4WIY4VdOakrbYOpB/zLmiLVAcr8bhHTn/ay0pEXR1ig9x45tfNb0GNYygpZ7isDfmxkdJc2oenAZ/VxE7Vtuogca0Z6d/6JAFm4+P5Tt+9KgQoax/WkjsJwsu+S9kvjc576eu9l6C+UaNS8b8rY6RfqZRpFSBqz2wkMYSWPKsTCYB5lfmqQCDS1rqCf1nrUmXe4YwYUqdiE/Gl2Fc4HlHoLjB/oat+mwSrS2I+yok6ftoa8KbXfFklbo+eg==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199015)(46966006)(36840700001)(54906003)(110136005)(316002)(16526019)(36860700001)(70206006)(26005)(8936002)(82310400005)(8676002)(36756003)(4326008)(186003)(41300700001)(70586007)(86362001)(336012)(7696005)(426003)(107886003)(83380400001)(47076005)(1076003)(6666004)(2616005)(478600001)(7636003)(40480700001)(82740400003)(2906002)(356005)(5660300002)(22166006);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5988.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c6939bb-5d3f-4995-4976-08daed6237e2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2023 08:12:12.6345
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 08:15:53.4342
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OwKI96T6wsiZyuklnFLNojEQLuKsgt6mANDKCjflRMRZLJGEblKLVRT250HpzVSQwDlSuREp+pTJVEwWXtX+jg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4538
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9a8f08c-25f5-4c1c-1c25-08daed62bb93
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT109.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4292
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -132,23 +108,189 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gMS8zLzIzIDE1OjMyLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6DQo+IEV4dGVybmFsIGVt
-YWlsOiBVc2UgY2F1dGlvbiBvcGVuaW5nIGxpbmtzIG9yIGF0dGFjaG1lbnRzDQo+IA0KPiANCj4g
-T24gVHVlLCBKYW4gMDMsIDIwMjMgYXQgMTA6NDA6MjNBTSArMDgwMCwgSGFvdGllbiBIc3Ugd3Jv
-dGU6DQo+PiBGcm9tOiBTaW5nLUhhbiBDaGVuIDxzaW5naGFuY0BudmlkaWEuY29tPg0KPj4NCj4+
-IEZvciB0aGUgQ0NHeCwgd2hlbiB0aGUgT1BNIGZpZWxkIGluIHRoZSBJTlRSX1JFRyBpcyBjbGVh
-cmVkLCB0aGVuIHRoZQ0KPj4gQ0NJIGRhdGEgaW4gdGhlIFBQTSBpcyByZXNldC4NCj4+DQo+PiBU
-byBhbGlnbiB3aXRoIHRoZSBDQ0d4IFVDU0kgaW50ZXJmYWNlIGd1aWRlLCB0aGlzIHBhdGNoIHVw
-ZGF0ZXMgdGhlDQo+PiBkcml2ZXIgdG8gY29weSBDQ0kgYW5kIE1FU1NBR0VfSU4gYmVmb3JlIGNs
-ZWFyaW5nIFVDU0kgaW50ZXJydXB0Lg0KPj4gV2hlbiBhIG5ldyBjb21tYW5kIGlzIHNlbnQsIHRo
-ZSBkcml2ZXIgd2lsbCBjbGVhciB0aGUgb2xkIENDSSBhbmQNCj4+IE1FU1NBR0VfSU4gY29weS4N
-Cj4+DQo+PiBGaW5hbGx5LCBjbGVhciBVQ1NJX1JFQURfSU5UIGJlZm9yZSBjYWxsaW5nIGNvbXBs
-ZXRlKCkgdG8gZW5zdXJlIHRoYXQNCj4+IHRoZSB1Y3NpX2NjZ19zeW5jX3dyaXRlKCkgd291bGQg
-d2FpdCBmb3IgdGhlIGludGVycnVwdCBoYW5kbGluZyB0bw0KPj4gY29tcGxldGUuDQo+PiBJdCBw
-cmV2ZW50cyB0aGUgZHJpdmVyIGZyb20gcmVzZXR0aW5nIENDSSBwcmVtYXR1cmVseS4NCj4+DQo+
-PiBTaWduZWQtb2ZmLWJ5OiBTaW5nLUhhbiBDaGVuIDxzaW5naGFuY0BudmlkaWEuY29tPg0KPj4g
-U2lnbmVkLW9mZi1ieTogSGFvdGllbiBIc3UgPGhhb3RpZW5oQG52aWRpYS5jb20+DQo+PiBSZXBv
-cnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+IA0KPiBUaGUgdGVz
-dCByb2JvdCByZXBvcnRlZCB0aGlzIHdob2xlIGlzc3VlPyAgSWYgbm90LCBpdCBzaG91bGQgbm90
-IGJlDQo+IGhlcmUuDQo+IA0KPiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0KPiANClNvcnJ5IGZv
-ciBtaXN1c2luZyB0YWdzLg0K
+From: Sing-Han Chen <singhanc@nvidia.com>
+
+For the CCGx, when the OPM field in the INTR_REG is cleared, then the
+CCI data in the PPM is reset.
+
+To align with the CCGx UCSI interface guide, this patch updates the
+driver to copy CCI and MESSAGE_IN before clearing UCSI interrupt.
+When a new command is sent, the driver will clear the old CCI and
+MESSAGE_IN copy.
+
+Finally, clear UCSI_READ_INT before calling complete() to ensure that
+the ucsi_ccg_sync_write() would wait for the interrupt handling to
+complete.
+It prevents the driver from resetting CCI prematurely.
+
+Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+---
+V1->V2
+- Fix uninitialized symbol 'cci'
+v2->v3
+- Remove wrong Reported-by tags
+---
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 86 ++++++++++++++++++++++++++++---
+ 1 file changed, 79 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index eab3012e1b01..b35a3a97c9fb 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
+ 	bool checked;
+ } __packed;
+ 
++#define CCGX_MESSAGE_IN_MAX 4
++struct op_region {
++	u32 cci;
++	u32 message_in[CCGX_MESSAGE_IN_MAX];
++};
++
+ struct ucsi_ccg {
+ 	struct device *dev;
+ 	struct ucsi *ucsi;
+@@ -222,6 +228,9 @@ struct ucsi_ccg {
+ 	bool has_multiple_dp;
+ 	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
+ 	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
++
++	spinlock_t op_lock;
++	struct op_region op_data;
+ };
+ 
+ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+@@ -305,12 +314,57 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
+ 	return 0;
+ }
+ 
++static void ccg_op_region_read(struct ucsi_ccg *uc, unsigned int offset,
++		void *val, size_t val_len)
++{
++	struct op_region *data = &uc->op_data;
++
++	spin_lock(&uc->op_lock);
++	if (offset == UCSI_CCI)
++		memcpy(val, &data->cci, val_len);
++	else if (offset == UCSI_MESSAGE_IN)
++		memcpy(val, &data->message_in, val_len);
++	spin_unlock(&uc->op_lock);
++}
++
++static void ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
++{
++	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
++	struct op_region *data = &uc->op_data;
++	u32 message_in[CCGX_MESSAGE_IN_MAX];
++
++	if (UCSI_CCI_LENGTH(cci))
++		if (ccg_read(uc, reg, (void *)&message_in,
++					sizeof(message_in))) {
++			dev_err(uc->dev, "failed to read MESSAGE_IN\n");
++			return;
++		}
++
++	spin_lock(&uc->op_lock);
++	memcpy(&data->cci, &cci, sizeof(cci));
++	if (UCSI_CCI_LENGTH(cci))
++		memcpy(&data->message_in, &message_in, sizeof(message_in));
++	spin_unlock(&uc->op_lock);
++}
++
++static void ccg_op_region_clean(struct ucsi_ccg *uc)
++{
++	struct op_region *data = &uc->op_data;
++
++	spin_lock(&uc->op_lock);
++	memset(&data->cci, 0, sizeof(data->cci));
++	memset(&data->message_in, 0, sizeof(data->message_in));
++	spin_unlock(&uc->op_lock);
++}
++
+ static int ucsi_ccg_init(struct ucsi_ccg *uc)
+ {
+ 	unsigned int count = 10;
+ 	u8 data;
+ 	int status;
+ 
++	spin_lock_init(&uc->op_lock);
++
+ 	data = CCGX_RAB_UCSI_CONTROL_STOP;
+ 	status = ccg_write(uc, CCGX_RAB_UCSI_CONTROL, &data, sizeof(data));
+ 	if (status < 0)
+@@ -520,9 +574,13 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+ 	struct ucsi_capability *cap;
+ 	struct ucsi_altmode *alt;
+-	int ret;
++	int ret = 0;
++
++	if ((offset == UCSI_CCI) || (offset == UCSI_MESSAGE_IN))
++		ccg_op_region_read(uc, offset, val, val_len);
++	else
++		ret = ccg_read(uc, reg, val, val_len);
+ 
+-	ret = ccg_read(uc, reg, val, val_len);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -559,9 +617,13 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
+ 				const void *val, size_t val_len)
+ {
++	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+ 
+-	return ccg_write(ucsi_get_drvdata(ucsi), reg, val, val_len);
++	if (offset == UCSI_CONTROL)
++		ccg_op_region_clean(uc);
++
++	return ccg_write(uc, reg, val, val_len);
+ }
+ 
+ static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
+@@ -616,12 +678,17 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
+ 	struct ucsi_ccg *uc = data;
+ 	u8 intr_reg;
+ 	u32 cci;
+-	int ret;
++	int ret = 0;
+ 
+ 	ret = ccg_read(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+ 	if (ret)
+ 		return ret;
+ 
++	if (!intr_reg)
++		return IRQ_HANDLED;
++	else if (!(intr_reg & UCSI_READ_INT))
++		goto err_clear_irq;
++
+ 	ret = ccg_read(uc, reg, (void *)&cci, sizeof(cci));
+ 	if (ret)
+ 		goto err_clear_irq;
+@@ -629,13 +696,18 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
+ 	if (UCSI_CCI_CONNECTOR(cci))
+ 		ucsi_connector_change(uc->ucsi, UCSI_CCI_CONNECTOR(cci));
+ 
+-	if (test_bit(DEV_CMD_PENDING, &uc->flags) &&
+-	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
+-		complete(&uc->complete);
++	/* As per CCGx UCSI interface guide, copy CCI and MESSAGE_IN
++	 * to the OpRegion before clear the UCSI interrupt
++	 */
++	ccg_op_region_update(uc, cci);
+ 
+ err_clear_irq:
+ 	ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+ 
++	if (!ret && test_bit(DEV_CMD_PENDING, &uc->flags) &&
++	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
++		complete(&uc->complete);
++
+ 	return IRQ_HANDLED;
+ }
+ 
+-- 
+2.25.1
+
