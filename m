@@ -2,352 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CCA65DCCE
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 20:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C2865DCE5
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 20:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240129AbjADTe1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Jan 2023 14:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S240138AbjADThr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Jan 2023 14:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240141AbjADTeY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 14:34:24 -0500
-Received: from smtp-out-06.comm2000.it (smtp-out-06.comm2000.it [212.97.32.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293183D1C4
-        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 11:34:20 -0800 (PST)
-Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-06.comm2000.it (Postfix) with ESMTPSA id BF96F56117E;
-        Wed,  4 Jan 2023 20:34:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1672860857;
-        bh=WxAz2Qed4ATxT+fVofPAhNriVtLblaAjBDde7jBkYuU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=eNECv9zmU5R/ijXwIq3i6b0+uN9SfF+OGuIa7k2qq3xUUG9jOldiyILpIFvLnWI0y
-         HpnbD/KkjTJ5U8Ha9uuqgW559x4eM/dRpNayrbl3FPtnnTDAMGk8A3uvePHH1GLloj
-         Nxxd5a4nEpJpNlDr0DD9rK+MrclpSYrT6vORVEjiaJa9HhwovTsteEWXJAMx+nOebM
-         KdML4ouP/fr76gkxaivBZYuj1s783m1DtxZzFR6yrBegOGXA+goVM/MkKWSgdVbycP
-         N7WQWy7trznGuQ1+yIP73mW1jqJIRSI5zz1W4I5fHFq5PrzMULe4OkxRE/HIOO9ROX
-         +Ch5nutlN4JDg==
-Date:   Wed, 4 Jan 2023 20:33:58 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        "Jun Li (OSS)" <jun.li@oss.nxp.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        with ESMTP id S240177AbjADTho (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 14:37:44 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E9CBA2
+        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 11:37:39 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id h26so5731105ila.11
+        for <linux-usb@vger.kernel.org>; Wed, 04 Jan 2023 11:37:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nSO9SsKkFS645whoBmF42/Je9/xfQ2j7vkQAqK0RKMY=;
+        b=kq53WYymbNNRObAkxkyi8/aoPMrnrASRAmKR+fjFk2O3KaetpKGGv7ryYkhjKUfoSm
+         zy/oX8wqM6ZKQpNvkrmwJE64p01W937ZRZnW9b/DCvNtSd74/Y+Bgh6SGLpm45W2n92O
+         Va6ZvtBKQAOWtfYIzvgJh3ty8UeO4xgetRknc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nSO9SsKkFS645whoBmF42/Je9/xfQ2j7vkQAqK0RKMY=;
+        b=MncKBLUI3zGfgfJ7L6/W1YKzR/tPPiejXRlGvsDtQHfcPAfOigUzNDjKo4qJA52zxf
+         R84CyFPWDZtdRE/rBNZgk096uavCHwxY2I0QK3sWzdjqYDH9dhvE/E6yPJlxoddJZxGO
+         J34ZUJvnzuVxbCZj5pLq0YhsLCf8yYoeNvcBRUe8ONTsFLs4/90FC7aintwUzoZRsChd
+         QPPkiOAQ2STE8WFNOKVpMyB0LsFULgDc0iS0qYvoU9bswjancFrJ3DZ0+2+dgRafX3zl
+         scMbgwJ0E1PWJzUm9etPtnto8Z/+M/zmeAoKrkvMMifhg2orARKhxkSxhmQb/3le7Vjb
+         eIvg==
+X-Gm-Message-State: AFqh2kp24PePA2+2ts2svNagBb1d/Touvh3sJEK4x2Rw9JZS1sHTPh6v
+        T4EQU/GVptk7Q3Mmmfj+ygv1uQ==
+X-Google-Smtp-Source: AMrXdXstgyWSdSjbL8XY9C6fskus5zX1ACnnieCQ26fWlQDsxN0ig+ze1yeMHuNvtvAVzIZmBkiQqA==
+X-Received: by 2002:a92:c151:0:b0:303:6dda:6748 with SMTP id b17-20020a92c151000000b003036dda6748mr31975882ilh.1.1672861058658;
+        Wed, 04 Jan 2023 11:37:38 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id v17-20020a92ab11000000b0030bf7ae141esm9790673ilh.2.2023.01.04.11.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 11:37:38 -0800 (PST)
+Date:   Wed, 4 Jan 2023 19:37:37 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Doug Anderson <dianders@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "philippe.schenker@toradex.com" <philippe.schenker@toradex.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: USB runtime PM issues on i.MX6ULL
-Message-ID: <Y7XUpqrCULZpHDCl@francesco-nb.int.toradex.com>
-References: <Y1/TZqsqy/ZRVNqJ@francesco-nb.int.toradex.com>
- <PA4PR04MB9640863D2A1F38A10C8BDFDC89369@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <Y2F4tCMaB4x2fZck@francesco-nb.int.toradex.com>
- <PA4PR04MB9640FA4674C8B80A9FEA44DC89399@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <PA4PR04MB9640217920D3CD7A506FF9E389399@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <Y2Kv6IkOFc4W0Ebc@francesco-nb.int.toradex.com>
- <PA4PR04MB9640FC6466D5BC1588FC37F789389@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <PA4PR04MB9640BDD0B040765259B010E489EC9@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <Y6nBb4pq4+GD1DDB@francesco-nb.int.toradex.com>
- <PA4PR04MB9640EC2CF15B64C8AA36582389F49@PA4PR04MB9640.eurprd04.prod.outlook.com>
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
+ devices for DT nodes without 'vdd-supply'
+Message-ID: <Y7XVgfjLEDtWhMDB@google.com>
+References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
+ <Y7Rh+EkKKN5Gu8sz@google.com>
+ <10807929.5MRjnR8RnV@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PA4PR04MB9640EC2CF15B64C8AA36582389F49@PA4PR04MB9640.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <10807929.5MRjnR8RnV@steina-w>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 03:45:42AM +0000, Jun Li wrote:
-> > -----Original Message-----
-> > From: Francesco Dolcini <francesco@dolcini.it>
-> > Sent: Monday, December 26, 2022 11:45 PM
-> > To: Jun Li <jun.li@nxp.com>
-> > Cc: Francesco Dolcini <francesco@dolcini.it>; Jun Li (OSS)
-> > <jun.li@oss.nxp.com>; Peter Chen <peter.chen@kernel.org>;
-> > linux-usb@vger.kernel.org; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
-> > Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
-> > <linux-imx@nxp.com>; Felipe Balbi <balbi@kernel.org>;
-> > philippe.schenker@toradex.com; Francesco Dolcini
-> > <francesco.dolcini@toradex.com>; Xu Yang <xu.yang_2@nxp.com>
-> > Subject: Re: USB runtime PM issues on i.MX6ULL
-> > 
-> > On Mon, Dec 26, 2022 at 03:17:12AM +0000, Jun Li wrote:
-> > > > From: Jun Li
-> > > > Sent: Thursday, November 3, 2022 7:53 PM
-> > > > > From: Francesco Dolcini <francesco@dolcini.it>
-> > > > > Sent: Thursday, November 3, 2022 1:59 AM On Wed, Nov 02, 2022 at
-> > > > > 10:12:42AM +0000, Jun Li wrote:
-> > > > > > > > On Tue, Nov 01, 2022 at 03:10:46AM +0000, Jun Li wrote:
-> > > > > > > > > > On Mon, Oct 31, 2022 at 01:40:39PM +0000, Jun Li (OSS) wrote:
-> > > > > > > > > > > > I am debugging some unexpected USB behavior on a
-> > > > > > > > > > > > i.MX6ULL SOC, chipidea controller ("fsl,imx6ul-usb")
-> > > > > > > > > > > > and a fsl mxs usbphy ("fsl,imx6ul-usbphy").
-> > > > > > > > > > > >
-> > > > > > > > > > > > The HW design has 2 USB interface, the first one is
-> > > > > > > > > > > > dual-role, while the second one is a host port with
-> > > > > > > > > > > > NO way to re-read
-> > > > > the
-> > > > > > > > > > > > VBUS (USB_OTG2_VBUS is not really connected, there
-> > > > > > > > > > > > is just
-> > > > > a
-> > > > > > > > > > > > capacitor to GND).
-> > > > > > > > > > >
-> > > > > > > > > > > How is your USB_OTG1_VBUS status? Can you try to make
-> > > > > > > > > > > your USB_OTG1_VBUS pad has a valid VBUS voltage, then
-> > > > > > > > > > > run your Host only port test with runtime PM enabled?
-> > > > > > > > > >
-> > > > > > > > > > USB_OTG1_VBUS is tied to GND the same way as
-> > > > > > > > > > USB_OTG2_VBUS, not really straightforward to do such a test.
-> > > > > > > > >
-> > > > > > > > > iMX6ULL need at least one valid VBUS(either from OTG1 or
-> > > > > > > > > OTG2) as input to power the internal USB LDO if I understand
-> > correctly.
-> > > > > > > > This surprise me a little bit, since
-> > > > > > > >  - the i.MX6ULL datasheet prescribe to keep the VBUS
-> > > > > > > > disconnected
-> > > > if
-> > > > > > > >    unused
-> > > > > > >
-> > > > > > > I think "unused" here means you do not need/enable the port at
-> > all.
-> > > > > > >
-> > > > > > > >  - downstream NXP kernel seems to work fine ("seems" since
-> > > > > > > > we do
-> > > > have
-> > > > > > > >    some patches there, so I could be wrong)
-> > > > > > >
-> > > > > > > What do you mean by " downstream NXP kernel seems to work fine"?
-> > > > > > > The downstream kernel can work on your HW? But upstream kernel
-> > > > > > > driver does not?
-> > > > >
-> > > > > Correct, NXP downstream kernel is working fine, upstream kernel
-> > > > > requires runtime PM disabled to work correctly.
-> > > > >
-> > > > > > > >  - disabling runtime pm on upstream Linux kernel make it works
-> > > > > > > >    perfectly, so there is a way in SW to have this HW configuration
-> > > > > > > >    working.
-> > > > > > >
-> > > > > > > Again I want to make sure the both VBUS pads(OTG1 and OTG2)
-> > > > > > > voltage are always at 0v on your HW, can you double check and confirm?
-> > > > > > > I ask this again because such situation should cause the USB
-> > > > > > > port Cannot work at any cases, but your current status is:
-> > > > > > > only low power wakeup cannot work.
-> > > > > >
-> > > > > > Could you please check the voltage of pad of VDD_USB_CAP on your
-> > HW?
-> > > > >
-> > > > > I was about to clarify you this point, it's important and I forgot
-> > > > > about it, sorry about that!
-> > > > >
-> > > > > VDD_USB_CAP in our design is connected to a 3.0V external LDO,
-> > > > > voltage on both VBUS pads is 0V (FYI: this specific hardware
-> > > > > design was validated by NXP hardware engineers).
-> > > >
-> > > > Then the HW design should be fine.
-> > > > I need find time to try the upstream kernel on my iMX6ULL board to
-> > > > check this.
-> > >
-> > > My iMX6ULL EVK board cannot reproduce this issue with upstream kernel.
-> > >
-> > > Could you try to set the bits [7,3] of 0x020c8200(for 2nd USB
-> > > controller OTG2) to be value like 0x1000FC? This may be done at your
-> > > bootloader(uboot), so make sure those targets bits are set before
-> > > doing your test, or doing this with below change(not compiled or tested):
-> > >
-> > > diff --git a/drivers/usb/phy/phy-mxs-usb.c
-> > > b/drivers/usb/phy/phy-mxs-usb.c index d2836ef5d15c..e390ef534a7c
-> > > 100644
-> > > --- a/drivers/usb/phy/phy-mxs-usb.c
-> > > +++ b/drivers/usb/phy/phy-mxs-usb.c
-> > > @@ -89,6 +89,9 @@
-> > >  #define ANADIG_USB1_CHRG_DET_STAT_CHRG_DETECTED        BIT(1)
-> > >  #define ANADIG_USB1_CHRG_DET_STAT_PLUG_CONTACT BIT(0)
-> > >
-> > > +#define ANADIG_USB2_VBUS_DET_SET               0x204
-> > > +#define ANADIG_USB2_VBUS_DET_VBUS_OVERRIDE     GENMASK(7, 3)
-> > > +
-> > >  #define ANADIG_USB2_VBUS_DET_STAT              0x220
-> > >
-> > >  #define ANADIG_USB1_LOOPBACK_SET               0x1e4
-> > > @@ -288,6 +291,11 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
-> > >         if (ret)
-> > >                 goto disable_pll;
-> > >
-> > > +       if (mxs_phy->regmap_anatop && (mxs_phy->port_id == 1))
-> > > +               regmap_write(mxs_phy->regmap_anatop,
-> > > +                            ANADIG_USB2_VBUS_DET_SET,
-> > > +                            ANADIG_USB2_VBUS_DET_VBUS_OVERRIDE);
-> > > +
-> > >         /* Power up the PHY */
-> > >         writel(0, base + HW_USBPHY_PWD);
-> > 
-> > Hello,
-> > I tested your patch and it does not work. I therefore tested a slightly
-> > improved version that really ensure the right register value is written.
-> > 
-> > [    8.408564] port=0 reg=0x200 val=0x1000fc
-> > [    8.440235] port=1 reg=0x204 val=0x1000fc
-> > 
-> > but it does not work never the less. Unfortunately bits 7-3 are not documented,
-> > so I was not able to do much more.
-> > 
-> > 
-> > diff --git a/drivers/usb/phy/phy-mxs-usb.c
-> > b/drivers/usb/phy/phy-mxs-usb.c index d2836ef5d15c..3ff5489d679e 100644
-> > --- a/drivers/usb/phy/phy-mxs-usb.c
-> > +++ b/drivers/usb/phy/phy-mxs-usb.c
-> > @@ -89,6 +89,10 @@
-> >  #define ANADIG_USB1_CHRG_DET_STAT_CHRG_DETECTED        BIT(1)
-> >  #define ANADIG_USB1_CHRG_DET_STAT_PLUG_CONTACT BIT(0)
-> > 
-> > +#define ANADIG_USB1_VBUS_DET_SET               0x200
-> > +#define ANADIG_USB2_VBUS_DET_SET               0x204
-> > +#define ANADIG_USB1_VBUS_DET_VBUS_OVERRIDE     GENMASK(7, 3)
-> > +
-> >  #define ANADIG_USB2_VBUS_DET_STAT              0x220
-> > 
-> >  #define ANADIG_USB1_LOOPBACK_SET               0x1e4
-> > @@ -309,6 +313,7 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
-> >                 writel(BM_USBPHY_IP_FIX, base + HW_USBPHY_IP_SET);
-> > 
-> >         if (mxs_phy->regmap_anatop) {
-> > +               unsigned int val;
-> >                 unsigned int reg = mxs_phy->port_id ?
-> >                         ANADIG_USB1_CHRG_DETECT_SET :
-> >                         ANADIG_USB2_CHRG_DETECT_SET; @@ -319,6 +324,15 @@
-> > static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
-> >                 regmap_write(mxs_phy->regmap_anatop, reg,
-> >                              ANADIG_USB1_CHRG_DETECT_EN_B |
-> >                              ANADIG_USB1_CHRG_DETECT_CHK_CHRG_B);
-> > +
-> > +               reg = mxs_phy->port_id ?
-> > +                       ANADIG_USB2_VBUS_DET_SET :
-> > +                       ANADIG_USB1_VBUS_DET_SET;
-> > +
-> > +               regmap_set_bits(mxs_phy->regmap_anatop, reg,
-> > +                            ANADIG_USB1_VBUS_DET_VBUS_OVERRIDE);
-> > +               regmap_read(mxs_phy->regmap_anatop, reg, &val);
-> > +               printk("port=%d reg=0x%x val=0x%x\n", mxs_phy->port_id,
-> > + reg, val);
-> >         }
-> > 
-> >         mxs_phy_tx_init(mxs_phy);
-> > 
+On Wed, Jan 04, 2023 at 10:00:43AM +0100, Alexander Stein wrote:
+> Hi Matthias,
 > 
-> Thanks for try those, those bits are for vbus valid override,
-> You can verify if the override real works by checking the OTGSC
-> Registers(a few bits to show the BSV/ASV/AVV) via the debugfs
-> /sys/kernel/debug/usb/ci_hdrc.1/registers.
+> Am Dienstag, 3. Januar 2023, 18:12:24 CET schrieb Matthias Kaehlcke:
+> > On Thu, Dec 22, 2022 at 11:26:26AM -0800, Doug Anderson wrote:
+> > > Hi,
+> > > 
+> > > On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org> 
+> wrote:
+> > > > The primary task of the onboard_usb_hub driver is to control the
+> > > > power of an onboard USB hub. The driver gets the regulator from the
+> > > > device tree property "vdd-supply" of the hub's DT node. Some boards
+> > > > have device tree nodes for USB hubs supported by this driver, but
+> > > > don't specify a "vdd-supply". This is not an error per se, it just
+> > > > means that the onboard hub driver can't be used for these hubs, so
+> > > > don't create platform devices for such nodes.
+> > > > 
+> > > > This change doesn't completely fix the reported regression. It
+> > > > should fix it for the RPi 3 B Plus and boards with similar hub
+> > > > configurations (compatible DT nodes without "vdd-supply"), boards
+> > > > that actually use the onboard hub driver could still be impacted
+> > > > by the race conditions discussed in that thread. Not creating the
+> > > > platform devices for nodes without "vdd-supply" is the right
+> > > > thing to do, independently from the race condition, which will
+> > > > be fixed in future patch.
+> > > > 
+> > > > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > > > Link:
+> > > > https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com
+> > > > / Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > ---
+> > > > 
+> > > > Changes in v2:
+> > > > - don't create platform devices when "vdd-supply" is missing,
+> > > > 
+> > > >   rather than returning an error from _find_onboard_hub()
+> > > > 
+> > > > - check for "vdd-supply" not "vdd" (Johan)
+> > > > - updated subject and commit message
+> > > > - added 'Link' tag (regzbot)
+> > > > 
+> > > >  drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
+> > > >  1 file changed, 13 insertions(+)
+> > > 
+> > > I'm a tad bit skeptical.
+> > > 
+> > > It somehow feels a bit too much like "inside knowledge" to add this
+> > > here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
+> > > entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
+> > > keep the absolute minimum amount of stuff in it and all of the details
+> > > be in the other file.
+> > > 
+> > > If this was the only issue though, I'd be tempted to let it slide. As
+> > > it is, I'm kinda worried that your patch will break Alexander Stein,
+> > > who should have been CCed (I've CCed him now) or Icenowy Zheng (also
+> > > CCed now). I believe those folks are using the USB hub driver
+> > > primarily to drive a reset GPIO. Looking at the example in the
+> > > bindings for one of them (genesys,gl850g.yaml), I even see that the
+> > > reset-gpio is specified but not a vdd-supply. I think you'll break
+> > > that?
+> > 
+> > Thanks for pointing that out. My assumption was that the regulator is
+> > needed for the driver to do anything useful, but you are right, the
+> > reset GPIO alone could be used in combination with an always-on regulator
+> > to 'switch the hub on and off'.
+> > 
+> > > In general, it feels like it should actually be fine to create the USB
+> > > hub driver even if vdd isn't supplied. Sure, it won't do a lot, but it
+> > > shouldn't actively hurt anything. You'll just be turning off and on
+> > > bogus regulators and burning a few CPU cycles. I guess the problem is
+> > > some race condition that you talk about in the commit message. I'd
+> > > rather see that fixed...
+> > 
+> > Yes, the race conditions needs to be fixed as well, I didn't have enough
+> > time to write and test a patch before taking a longer break for the
+> > holidays, so I only sent out this (supposed) partial mitigation.
+> > 
+> > > That being said, if we want to be more efficient and not burn CPU cycles
+> > > and memory in Stefan Wahren's case, maybe the USB hub driver itself could
+> > > return a canonical error value from its probe when it detects that it has
+> > > no useful job and then "onboard_usb_hub_pdevs" could just silently bail
+> > > out?
+> > 
+> > _probe() could return an error, however onboard_hub_create_pdevs() can't
+> > rely on that, since the actual onboard_hub driver might not have been
+> > loaded yet when the function is called.
+> > 
+> > It would be nice not to instantiate the pdev and onboard_hub USB instances
+> > if the DT node has neither a 'vdd-supply' nor 'reset-gpios'. If we aren't
+> > ok with doing that in onboard_hub_create_pdevs() then at least the 'raw'
+> > platform device would be created. onboard_hub_probe() could still
+> > bail if both properties are absent, _find_onboard_hub() would have to
+> > check it again to avoid the deferred probing 'loop' for the USB instances.
 > 
-> echo on > /sys/bus/platform/devices/ci_hdrc.1/power/control
-> cat /sys/kernel/debug/usb/ci_hdrc.1/registers
+> I'm not really fond of checking for optional features like 'vdd-supply' and 
+> 'reset-gpios'. This issue will pop up again if some new optional feature is 
+> added again, e.g. power-domains.
+
+It's not just any optional feature, it needs to be involved in controlling
+power. I'm not super-exited about it either, but if we prefer not to
+instantiate the drivers for certain DT nodes (TBD if that's a preference), we
+need some sort of sentinel since the compatible string alone doesn't provide
+enough information.
+
+> > Alternatively we could 'just' fix the race condition involving the 'attach
+> > work' and the onboard_hub driver is fully instantiated even on (certain)
+> > boards where it does nothing. It's relatively rare that USB hub nodes are
+> > specified in the DT (unless the intention is to use this driver) and
+> > CONFIG_USB_ONBOARD_HUB needs to be set for the instances to be created,
+> > so maybe creating the useless instances is not such a big deal.
 > 
-> if the BSV/ASV/AVV are all set to be 1, means it works.
-> 
-> Enable runtime PM back:
-> echo auto > /sys/bus/platform/devices/ci_hdrc.1/power/control
-> then do your issue test.
+> IMHO creating a pdev shouldn't harm in any case. It's similar to having a DT 
+> node without a corresponding driver enabled or even existing.
 
-== Running Linux 6.0.16, WITH the patch shared on this email thread.
+If we only want a 'raw' pdev (no instantiation of the onboard hub platform and
+USB drivers) then a similar logic will be needed in the onboard hub driver(s).
 
-[    8.318987] port=0 reg=0x200 val=0x1000fc
-[    8.350386] port=1 reg=0x204 val=0x1000fc
+So if we don't want any logic checking that at least one power related property
+is defined then we have to accept that the onboard hub driver will be fully
+instantiated even when it effectively does nothing.
 
-# echo on > /sys/bus/platform/devices/ci_hdrc.1/power/control
+If we add logic to the driver it needs to be checked in both the platform and
+the USB driver (in the latter to avoid a deferred probe loop). It would be
+simpler to just skip the creation of the 'raw' platform device in the first
+place.
 
-# cat /sys/kernel/debug/usb/ci_hdrc.1/registers
-USBINTR reg: 00000037
-USBSTS reg: 000c0088
-USBMODE reg: 00005003
-USBCMD reg: 00010005
-PORTSC reg: 18601a85
-OTGSC reg: 00201720
+> Also adding USB devices to DT is something which is to be expected.
+> usb-device.yaml exists since 2020 and the txt version since 2016.
 
-And these the various valid bits - correct me if I'm wrong.
- - AVV is set
- - ASV is set
- - BSP is NOT set
+Yes it it perfectly legal, so we need to handle this case somehow, and we
+are currently discussing how to best do that :)
 
-[  268.421848] usb 1-1: reset high-speed USB device number 2 using ci_hdrc
-[  270.931732] usb 1-1: reset high-speed USB device number 2 using ci_hdrc
-...
+I still don't expect the combo of supported hub in the DT +
+CONFIG_USB_ONBOARD_HUB=y/m to become super-popular, which could be an
+argument for the option "just instantiate the drivers even if they do
+nothing". Not my favorite option, but probably not that bad either.
 
-and it's not working as already stated.
+> Unfortunately I'm not able to reproduce this issue on a different platform
+> where the same HUB but no reset-gpios is required. I also noticed that
+> onboard-usb-hub raises the error
+> > Failed to attach USB driver: -22
+> for each hub it is supposed to support.
 
+Interesting
 
+I also see the error with v6.2-rc1 but not a downstream v5.15 kernel which
+runs most of the time on my boards. It turns out that with v6.2-rc1 the 'bus'
+field of 'onboard_hub_usbdev_driver.drvwrap.driver' (passed to driver_attach())
+is NULL, which causes driver_attach() / bus_for_each_dev() to return -EINVAL.
 
-== WITHOUT any patch, plain v6.0.16 kernel:
+I did some testing (unbind/bind, unloading/reloading the driver) around the
+'attach work' independently from your report. I couldn't repro a situation
+where the onboard_hub USB devices aren't probed by the driver, which is what
+the 'attach work' is supposed to solve. At some point I observed issues with
+that in the past, which is why driver_attach() is called. The driver_attach()
+call was added to the onboard_hub series in early 2021, by that time I was
+probably testing with a v5.4 kernel, it's not unconceivable that the issue I
+saw back then is fixed in newer kernels.
 
-root@colibri-imx6ull-emmc-06906487:~# echo on > /sys/bus/platform/devices/ci_hdrc.1/power/control
-root@colibri-imx6ull-emmc-06906487:~# cat /sys/kernel/debug/usb/ci_hdrc.1/registers
-USBINTR reg: 00000037
-USBSTS reg: 00040088
-USBMODE reg: 00005003
-USBCMD reg: 00010005
-PORTSC reg: 18601a85
-OTGSC reg: 00200520
+With that I was already considering to remove the 'attach work', the error you
+reported reinforces that, since the driver_attach() call from the onboard_hub
+driver does nothing in more recent kernels due to 'bus' being NULL.
 
-And these the various valid bits - correct me if I'm wrong.
- - AVV is NOT set
- - ASV is set
- - BSP is NOT set
+Thanks
 
-
-> BTW, how is __mxs_phy_disconnect_line() impacting this issue
-> result on your HW? If not called, then the direct plug usb device
-> to the OTG2 port can work, but adding an external hub between still
-> cannot work?
-
-== Running Linux 6.0.16, WITH the patch shared on this email thread.
-
-With NO external HUB:
- - it does not work and it does not recover in any way
-
-With external HUB:
- - `reset high-speed USB` every 2 seconds, it stops as soon as I connect something to the USB HUB.
-
-
-
-== Running Linux 6.0.16, WITH the patch shared on this email thread
-
-with the following patch in addition
-
-diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-index 3e190638bcae..1a4ec039005b 100644
---- a/drivers/usb/phy/phy-mxs-usb.c
-+++ b/drivers/usb/phy/phy-mxs-usb.c
-@@ -424,7 +424,7 @@ static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
-        if (!mxs_phy->regmap_anatop)
-                return;
-
--       vbus_is_on = mxs_phy_get_vbus_status(mxs_phy);
-+       vbus_is_on = true; // mxs_phy_get_vbus_status(mxs_phy);
-
-        if (on && !vbus_is_on && !mxs_phy_is_otg_host(mxs_phy))
-                __mxs_phy_disconnect_line(mxs_phy, true);
-
-
-the behavior is greatly improved. It just works fine 95% of the time,
-but sometime, after doing multiple plug in/out it fails to recognize
-the device and it does not really recover. I never saw this behavior
-just disabling runtimepm that is our current workaround.
-
-Francesco
-
+Matthias
