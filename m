@@ -2,130 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A09365DD7E
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 21:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B89765DD98
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 21:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240230AbjADUPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Jan 2023 15:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
+        id S235421AbjADUWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Jan 2023 15:22:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240160AbjADUPH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 15:15:07 -0500
-X-Greylist: delayed 21672 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 12:14:58 PST
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107E83FCA5
-        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 12:14:57 -0800 (PST)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 6C7B412EAB5;
-        Wed,  4 Jan 2023 21:14:54 +0100 (CET)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1672863294; bh=Lq7zlPZcFNe2baH9AF+bB3hffcVCM2NkFVWqAt6Sa4I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tngv6bpX6mESPFvxz8X4BADUTJ9qGrjytGd4EwGQNH62p/xZNilz9cCPcLt8UILAG
-         8JihqUqldfDxRs6KXQZpaHnyufKya9RCBqewIbamgggLmUr1pzkHidK32O/6gZLMsA
-         R2jrHpANRpVUwmMF113RHBo9WiYQ5IHm5v9Tlt/f5dFRSTGoJ2OY+EMfnfXvv3OeF6
-         GSMpaxq5f+L1wiMVkJjEmPDtlir41dffwO0eYx4SHTC+ykbBOFL3U/5S+DQ2mONoN+
-         1WAB0JDw02cSaU0zPlLeF19MwQFuYgmCl8rx4JUSfaPSyezgNNykuHsEaIPdSMg9Yf
-         yJpdoBEcOATjw==
-Date:   Wed, 4 Jan 2023 21:14:53 +0100
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Disabling per-device autosuspend
-Message-ID: <20230104211453.4ea6f6cf@meshulam.tesarici.cz>
-In-Reply-To: <Y7XWB0GzEL5cv6lM@rowland.harvard.edu>
-References: <20230104151341.6f937c0c@meshulam.tesarici.cz>
-        <20230104164900.31a3243d@meshulam.tesarici.cz>
-        <Y7Wm1UVGMx8ZeqgD@rowland.harvard.edu>
-        <20230104174731.5527b1ed@meshulam.tesarici.cz>
-        <Y7WxltobCK0zQz9k@rowland.harvard.edu>
-        <20230104182750.1529bd78@meshulam.tesarici.cz>
-        <Y7XWB0GzEL5cv6lM@rowland.harvard.edu>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+        with ESMTP id S235460AbjADUW0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 15:22:26 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD8F33D45
+        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 12:22:24 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id p9so1796643iod.13
+        for <linux-usb@vger.kernel.org>; Wed, 04 Jan 2023 12:22:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9rZvl8+1gYwkdYRJIjwY/CuQIIJARDw0zn6scUesZko=;
+        b=Ab51jq4uLpXQ7JMNlgVg7xiThp4ID8vN8Rq+2aeRprZvCVs73I8rNbm0h5qQInJxIQ
+         HeKPTKAGgh6yFGUSBfCk6nCVI+zSYH+sJCAah7RhAk/WH7wyq/C/CBkRfAmyY6anrpoS
+         b2mmD0tS5DGeoG4JIRsjKPIlqjk5N0LCCrFms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9rZvl8+1gYwkdYRJIjwY/CuQIIJARDw0zn6scUesZko=;
+        b=PXIUKNiDA3KobyrTPpAvFrlBxeXV41H4Hod21dDCqq8RpxFrNxRoTnuwwJdpNP6V98
+         CqJBe7p2vd9oCXwDpv1iJDEzlSGRHfUVqJfLi4Ewjpea9inIYJw1NLXOm+bDCbII4oSo
+         z9gnI61WUCkb7p3JPvhtErvZj0bs3ZTNAdy6wZZSy/o7uHXcLzismGkYKl0oFoj0FnS2
+         P66JP/AH7sGIuHMbSvNWHDAOgMgBupwMhyl9Mx1m/DgtaTixn3rKsAp5MCAyn4qYLfDN
+         G61eWXi1f8/qwa4w0Jc8ZZreMev6c1NaYjjnb3wgASBZY2i8L4LOxL+bf7whTgP3qlDT
+         TLCg==
+X-Gm-Message-State: AFqh2kqUgBcvOjxe8+qcXRk48rjmw3na4Bev3d0ja0DAJ4xqmBnHVn3h
+        W4Q2rMoTA2EoYZAbHA2hsi9iNA==
+X-Google-Smtp-Source: AMrXdXuahbSA9M5OOU+OtHMSnbd2z4FaE5Z/RhTKQ1tFJhNGArlFjZdRnIMUpivN633+JN8ouZ+mMg==
+X-Received: by 2002:a05:6602:21d4:b0:6e9:7156:3b7a with SMTP id c20-20020a05660221d400b006e971563b7amr40648314ioc.3.1672863743927;
+        Wed, 04 Jan 2023 12:22:23 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id az36-20020a05663841a400b0039db6cffcbasm9390843jab.71.2023.01.04.12.22.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 12:22:23 -0800 (PST)
+Date:   Wed, 4 Jan 2023 20:22:23 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 10/11] usb: misc: onboard_usb_hub: add VIA LAB VL817Q7
+ hub support
+Message-ID: <Y7Xf/92iCHD5WhpA@google.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
+ <20221228100321.15949-11-linux.amoon@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221228100321.15949-11-linux.amoon@gmail.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 Jan 2023 14:39:51 -0500
-Alan Stern <stern@rowland.harvard.edu> wrote:
+Hi Andand,
 
-> On Wed, Jan 04, 2023 at 06:27:50PM +0100, Petr Tesa=C5=99=C3=ADk wrote:
-> > On Wed, 4 Jan 2023 12:04:22 -0500
-> > Alan Stern <stern@rowland.harvard.edu> wrote: =20
-> > > At this point the host sends a Get-Device-Status request to the devic=
-e=20
-> > > (not shown in the log).
-> > >=20
-> > >  [...] =20
-> > >=20
-> > > The fact that the host is retrying means that the status request got =
-an=20
-> > > error.  Unfortunately the log message doesn't say sort of error=20
-> > > occurred. =20
-> >=20
-> > OK, I see. The URB indicates success, but there is no data:
-> >=20
-> > 45	0.432232	host	1.50.0	USB	64	GET STATUS Request
-> > 46	0.432659	1.50.0	host	USB	64	GET STATUS Response
-> >=20
-> > Frame 46: 64 bytes on wire (512 bits), 64 bytes captured (512 bits) on =
-interface usbmon1, id 0
-> > USB URB
-> >     [Source: 1.50.0]
-> >     [Destination: host]
-> >     URB id: 0xffff98b4383c8d80
-> >     URB type: URB_COMPLETE ('C')
-> >     URB transfer type: URB_CONTROL (0x02)
-> >     Endpoint: 0x80, Direction: IN
-> >     Device: 50
-> >     URB bus id: 1
-> >     Device setup request: not relevant ('-')
-> >     Data: present ('\0')
-> >     URB sec: 1672851450
-> >     URB usec: 569060
-> >     URB status: Success (0)
-> >     URB length [bytes]: 0
-> >     Data length [bytes]: 0
-> > -------------------------^
-> > This should be 2, and the device should send a 16-bit status word. Hm.
-> >=20
-> >     [Request in: 45]
-> >     [Time from request: 0.000427000 seconds]
-> >     Unused Setup Header
-> >     Interval: 0
-> >     Start frame: 0
-> >     Copy of Transfer Flags: 0x00000200, Dir IN
-> >     Number of ISO descriptors: 0
-> >=20
-> > While I do agree that the Samsung phone download mode USB stack
-> > implementation is crappy, multiple models and many users are affected. I
-> > wonder what would be a sensible workaround in heimdall and/or libusb...
-> >=20
-> > Setting a global module parameter does not sound great. =20
->=20
-> Another option would be to create a short udev script that would write=20
-> "on" to the power/control attribute file (thereby turning autosuspend=20
-> off) whenever it sees a new USB device with the vendor and product IDs=20
-> of your phone.  That seems like a very practical solution.
+On Wed, Dec 28, 2022 at 10:03:19AM +0000, Anand Moon wrote:
+> VIA LAB VL817Q7 is a 4-port USB 3.1 hub that has a reset pin to
+> toggle and a 5.0V core supply exported though an integrated LDO is
+> available for powering it.
+> 
+> Add the support for this hub, for controlling the reset pin and the core
+> power supply.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+>  drivers/usb/misc/onboard_usb_hub.c | 2 ++
+>  drivers/usb/misc/onboard_usb_hub.h | 5 +++++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index 699050eb3f17..025572019d16 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -335,6 +335,7 @@ static struct platform_driver onboard_hub_driver = {
+>  #define VENDOR_ID_MICROCHIP	0x0424
+>  #define VENDOR_ID_REALTEK	0x0bda
+>  #define VENDOR_ID_TI		0x0451
+> +#define VENDOR_ID_VIA		0x2109
+>  
+>  /*
+>   * Returns the onboard_hub platform device that is associated with the USB
+> @@ -418,6 +419,7 @@ static const struct usb_device_id onboard_hub_id_table[] = {
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
+>  	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
+>  	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
+> +	{ USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817Q7 3.1 */
 
-Yes, that sounds good, because autosuspend is usually not set to zero.
-Thank you! FWIW it works for me, and I have also proposed this solution
-in the heimdall GitHub issue. They install their own udev rules file
-already, so the patch is a one-liner.
+The VL817Q7 is a single IC, however like the TI USB8041 or the RTS5414 it
+provides both a USB 3.1 and a USB 2.0 hub. You should also add an entry for
+the USB 2.0 hub here.
 
-BTW manufacturing broken USB devices in large quantities should become
-a crime and a federal felony... ;-)
 
-Petr T
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
+> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> index b32fad3a70f9..1fb3371ebdae 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.h
+> +++ b/drivers/usb/misc/onboard_usb_hub.h
+> @@ -26,6 +26,10 @@ static const struct onboard_hub_pdata genesys_gl850g_data = {
+>  	.reset_us = 3,
+>  };
+>  
+> +static const struct onboard_hub_pdata vialab_vl817q7_data = {
+> +	.reset_us = 3,
+> +};
+> +
+>  static const struct of_device_id onboard_hub_match[] = {
+>  	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
+>  	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+> @@ -37,6 +41,7 @@ static const struct of_device_id onboard_hub_match[] = {
+>  	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,5414", .data = &realtek_rts5411_data, },
+> +	{ .compatible = "vialab,usb2109", .data = &vialab_vl817q7_data, },
+
+ditto
+
+Actually you added the device id entry for the 3.1 hub and a compatible string
+of the 2.0 hub (or vice versa). Above the device id is 0x0817, here it is
+0x2109. Please add both USB 3.1 and 2.0 and make sure the device id and the USB
+version in the comment for the device id table match.
