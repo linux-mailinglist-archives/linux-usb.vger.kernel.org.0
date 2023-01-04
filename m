@@ -2,154 +2,266 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804DA65E016
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 23:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6367965E025
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 23:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240596AbjADWiC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Jan 2023 17:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S240630AbjADWkQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Jan 2023 17:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235579AbjADWiA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 17:38:00 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F5D3D1E3
-        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 14:37:58 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id z10so11944612ilq.8
-        for <linux-usb@vger.kernel.org>; Wed, 04 Jan 2023 14:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YcNoql4sxZAAG0Z9x382x27f16j/NJH8gvjDj7DBfeY=;
-        b=ohe7m4zraaZuCG6StlOr3NDElGbtNTt/AgB57cgRJ7fR/62RRKlU/4Kkq1hw+ths9X
-         H+IwFo9T4WLorbzXH15hXAuWYP0qA7UDgvG6zA0vgTCHsVQaPXB9tzFAp3rNEU/pjGFP
-         Aj6X4ML3gX7K7csd049yNiopXlnTHatPghoj0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YcNoql4sxZAAG0Z9x382x27f16j/NJH8gvjDj7DBfeY=;
-        b=2LKy/0hOLFM3FJi3YnmhELaTZLoX/rjP3AhpEp0wvsDlSSOaCl5vY58DC9RFRYTZVc
-         fPAGmOUJvpX+HJRuCRfDIBw6kJUgqewYL54VH1R0eVM3tV5inbO95sntewrx6JO7FGVf
-         gGQR/H2B4AhxlmXyaufm3kDkWRD0L71quZkiYQDjbk0pvMy50igih474o6oIGJv6U+qC
-         sYyFzBzRugDepgSUU2+q8acJBv9qTVjf+GF41yRYHoggZ8oHiKRG74L+/o2S/H2QhMfp
-         hqA16X3MN04+kmp34qA9DSMqtSQOi/Yu0WZfrVQSrc8XWK2ZTCU0dkWdMEFRiPt+0rSA
-         YsAA==
-X-Gm-Message-State: AFqh2kphTRo9D7hEutfduwMkrL11KTR/cxSb2IX/UvNMl0PJCtlmt+I7
-        gtXab6N+CPaIr16aZ1CYUtR7aw==
-X-Google-Smtp-Source: AMrXdXsnV5WKBO3y2D9jF6L7JkTbhKxnOGOhp02IPb09JTYoS/rGNOwzeyl6ujdBGNOViFzaAqfhkA==
-X-Received: by 2002:a05:6e02:b2c:b0:304:c95e:8c36 with SMTP id e12-20020a056e020b2c00b00304c95e8c36mr39114239ilu.14.1672871878123;
-        Wed, 04 Jan 2023 14:37:58 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id r22-20020a02b116000000b00363ec4dcaacsm11304062jah.22.2023.01.04.14.37.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 14:37:57 -0800 (PST)
-Date:   Wed, 4 Jan 2023 22:37:57 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
- VL817Q7 hub controller
-Message-ID: <Y7X/xadXIA2f9lHz@google.com>
-References: <20221228100321.15949-1-linux.amoon@gmail.com>
- <20221228100321.15949-9-linux.amoon@gmail.com>
+        with ESMTP id S235536AbjADWjz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 17:39:55 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56DE41036;
+        Wed,  4 Jan 2023 14:39:53 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304Lr1w8004709;
+        Wed, 4 Jan 2023 22:38:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PvgHZ++oCdiQinYipin27gvaecbZmAEzWRutKJOVX3M=;
+ b=YtB7Jw/dFK0o6jNWJGYZJImoKHqHOfUS9PqilzpUXkxJKBugq170pe6zuGcEpkd4SzlM
+ 5t6FzxesA9NmPMzJXVnCM3Slh9GoGTaLJjtSEI7VmizV6HwE6ZH39hn0kIR6S2FcLFMP
+ x/kg+tC7bYv7Zq7vIgn2Ne+Euowu4foGIa9sJZE8nNIgRp2TPVLzWicXtGwcHVWrU2zu
+ b5S7Ao+EzMz8dyyN6Q/RW98TkujcN88bC+WjpgTFX20a1p4AedzLed4Ra41Mv87Tjrfb
+ 2umcVpWeBye4Izf4Jxxchl+XR3k7jnI00nzoPvQxwVFee2QSZFZwtDk6ds9ScgIBGfmQ OQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsw32yhf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 22:38:56 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304Mcssx002166
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 4 Jan 2023 22:38:54 GMT
+Received: from [10.110.47.113] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 4 Jan 2023
+ 14:38:54 -0800
+Message-ID: <ee22783a-7c64-608f-7d7b-02fd2d4f2e81@quicinc.com>
+Date:   Wed, 4 Jan 2023 14:38:53 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221228100321.15949-9-linux.amoon@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 09/14] sound: usb: Introduce QC USB SND offloading
+ support
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-10-quic_wcheng@quicinc.com>
+ <87edscsv5p.wl-tiwai@suse.de>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <87edscsv5p.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -LNlQNIzroWBPk4dk30kS_5phwiMNb2T
+X-Proofpoint-ORIG-GUID: -LNlQNIzroWBPk4dk30kS_5phwiMNb2T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301040184
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 10:03:17AM +0000, Anand Moon wrote:
-> The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
-> features 4 downstream ports, an internal 5V regulator and has
-> external reset pin.
+Hi Takashi,
+
+On 1/2/2023 9:28 AM, Takashi Iwai wrote:
+> On Sat, 24 Dec 2022 00:31:55 +0100,
+> Wesley Cheng wrote:
+>>
+>> Several Qualcomm SoCs have a dedicated audio DSP, which has the ability to
+>> support USB sound devices.  This vendor driver will implement the required
+>> handshaking with the DSP, in order to pass along required resources that
+>> will be utilized by the DSP's USB SW.  The communication channel used for
+>> this handshaking will be using the QMI protocol.  Required resources
+>> include:
+>> - Allocated secondary event ring address
+>> - EP transfer ring address
+>> - Interrupter number
+>>
+>> The above information will allow for the audio DSP to execute USB transfers
+>> over the USB bus.  It will also be able to support devices that have an
+>> implicit feedback and sync endpoint as well.  Offloading these data
+>> transfers will allow the main/applications processor to enter lower CPU
+>> power modes, and sustain a longer duration in those modes.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > 
-> Add a device tree binding for its USB protocol part.
-> The internal LDO is not covered by this and can just be modelled
-> as a fixed regulator.
+> Hmm, this must be the main part that works to bypass the normal USB
+> packet handling in USB audio driver but hooks to the own offload one,
+> but there is no description how to take over and manage.
+> A missing "big picture" makes it difficult to understand and review.
 > 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
->  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+
+Technically, we are not taking over the functionality of the USB SND, as 
+we still want the normal path to be accessible in case there is an audio 
+profile/format that can't be supported by the audio DSP.  I can add some 
+more information on how this offload driver co-exists with the USB SND.
+
+> Also, since both drivers are asynchronous, we may need some proper
+> locking.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> new file mode 100644
-> index 000000000000..4ae995160fd5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Via labs VL817Q7 USB 3.1 hub controller
 
-nit: VIA Labs VL817-Q7
+Yes, I think locking is needed in some places.  Will add that in the 
+next revision.
 
-> +
-> +maintainers:
-> +  - Anand Moon <linux.amoon@gmail.com>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - vialab,usb2109
+> More on the code change:
+> 
+>> +static int snd_interval_refine_set(struct snd_interval *i, unsigned int val)
+>> +{
+>> +	struct snd_interval t;
+>> +
+>> +	t.empty = 0;
+>> +	t.min = t.max = val;
+>> +	t.openmin = t.openmax = 0;
+>> +	t.integer = 1;
+>> +	return snd_interval_refine(i, &t);
+>> +}
+>> +
+>> +static int _snd_pcm_hw_param_set(struct snd_pcm_hw_params *params,
+>> +				 snd_pcm_hw_param_t var, unsigned int val,
+>> +				 int dir)
+>> +{
+>> +	int changed;
+>> +
+>> +	if (hw_is_mask(var)) {
+>> +		struct snd_mask *m = hw_param_mask(params, var);
+>> +
+>> +		if (val == 0 && dir < 0) {
+>> +			changed = -EINVAL;
+>> +			snd_mask_none(m);
+>> +		} else {
+>> +			if (dir > 0)
+>> +				val++;
+>> +			else if (dir < 0)
+>> +				val--;
+>> +			changed = snd_mask_refine_set(
+>> +					hw_param_mask(params, var), val);
+>> +		}
+>> +	} else if (hw_is_interval(var)) {
+>> +		struct snd_interval *i = hw_param_interval(params, var);
+>> +
+>> +		if (val == 0 && dir < 0) {
+>> +			changed = -EINVAL;
+>> +			snd_interval_none(i);
+>> +		} else if (dir == 0)
+>> +			changed = snd_interval_refine_set(i, val);
+>> +		else {
+>> +			struct snd_interval t;
+>> +
+>> +			t.openmin = 1;
+>> +			t.openmax = 1;
+>> +			t.empty = 0;
+>> +			t.integer = 0;
+>> +			if (dir < 0) {
+>> +				t.min = val - 1;
+>> +				t.max = val;
+>> +			} else {
+>> +				t.min = val;
+>> +				t.max = val+1;
+>> +			}
+>> +			changed = snd_interval_refine(i, &t);
+>> +		}
+>> +	} else
+>> +		return -EINVAL;
+>> +	if (changed) {
+>> +		params->cmask |= 1 << var;
+>> +		params->rmask |= 1 << var;
+>> +	}
+>> +	return changed;
+>> +}
+> 
+> Those are taken from sound/core/oss/pcm_oss.c?  We may put to the
+> common PCM helper instead of duplication.
+> 
 
-This is not a valid compatible string as Johan already noted.
+Sure, I can do that.
 
-Besides that the VL817-Q7 provides both a 3.1 and a 2.0 USB hub, which
-are enumerated separately. Please also add a compatible string for the
-2.0 hub (assuming 0x2109 is the 3.1 hub).
+>> +static void disable_audio_stream(struct snd_usb_substream *subs)
+>> +{
+>> +	struct snd_usb_audio *chip = subs->stream->chip;
+>> +
+>> +	if (subs->data_endpoint || subs->sync_endpoint) {
+>> +		close_endpoints(chip, subs);
+>> +
+>> +		mutex_lock(&chip->mutex);
+>> +		subs->cur_audiofmt = NULL;
+>> +		mutex_unlock(&chip->mutex);
+>> +	}
+>> +
+>> +	snd_usb_autosuspend(chip);
+>> +}
+>> +
+>> +static int enable_audio_stream(struct snd_usb_substream *subs,
+>> +				snd_pcm_format_t pcm_format,
+>> +				unsigned int channels, unsigned int cur_rate,
+>> +				int datainterval)
+>> +{
+>> +	struct snd_usb_audio *chip = subs->stream->chip;
+>> +	struct snd_pcm_hw_params params;
+>> +	const struct audioformat *fmt;
+>> +	int ret;
+>> +
+>> +	_snd_pcm_hw_params_any(&params);
+>> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_FORMAT,
+>> +			pcm_format, 0);
+>> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_CHANNELS,
+>> +			channels, 0);
+>> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_RATE,
+>> +			cur_rate, 0);
+> 
+> What about other parameters like period / buffer sizes?
+> 
 
-> +
-> +  reg: true
-> +
-> +  reset-gpios:
-> +    description: GPIO controlling the RESET# pin.
-> +
-> +  vdd-supply:
-> +    description:
-> +      the regulator that provides 5.0V core power to the hub.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    usb {
-> +        dr_mode = "host";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        hub: hub@1 {
-> +            compatible = "vialab,usb2109"
-> +            reg = <1>;
-> +            reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
-> +        };
+I don't think we will need those parameters on the audio DSP.  The 
+"params" here is used to pass the pcm format into the qmi response.
 
-Please also add a node for the other hub and link the two nodes with
-each other through the 'peer-hub' property. See realtek,rts5411.yaml
-for reference.
+>> +struct qmi_uaudio_stream_req_msg_v01 {
+>> +	u8 enable;
+>> +	u32 usb_token;
+>> +	u8 audio_format_valid;
+>> +	u32 audio_format;
+>> +	u8 number_of_ch_valid;
+>> +	u32 number_of_ch;
+>> +	u8 bit_rate_valid;
+>> +	u32 bit_rate;
+>> +	u8 xfer_buff_size_valid;
+>> +	u32 xfer_buff_size;
+>> +	u8 service_interval_valid;
+>> +	u32 service_interval;
+>> +};
+> 
+> Are this and the other structs a part of DSP ABI?
+> Or is it a definition only used in kernel?  I'm asking because
+> __packed attribute is required for most of ABI definitions with
+> different field types.
+> 
+
+This would be in the kernel only.
+
+Thanks
+Wesley Cheng
