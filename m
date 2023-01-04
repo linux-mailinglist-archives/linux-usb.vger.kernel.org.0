@@ -2,47 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7930A65D786
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 16:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1701965D7E1
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 17:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbjADPtP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Jan 2023 10:49:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S235318AbjADQHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Jan 2023 11:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239544AbjADPtG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 10:49:06 -0500
-Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE155395C2
-        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 07:49:04 -0800 (PST)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 27A8912D540
-        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 16:49:02 +0100 (CET)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1672847342; bh=WoGXT9GVmTY+VSLibsg7xv0yQeCiIAGBsfe3lYiVgiY=;
-        h=Date:From:To:Subject:In-Reply-To:References:From;
-        b=omaDsVTbyhXXOumXQYiPqdtKr+Fg6WPxKu9kf0sa8tTT2pla+Bhyjja3OYrogglID
-         f0SthHTQep2sG0pp2e3NpKZGOlwq3rHlKiD5xrVeB0ZF4nWzRcetrjyTP+0qF3gAEj
-         FeAU/i49YtyeCAuNJqmqwgXP94R/gJZ3ICyg3jMEby0sMDQZVhhBH1suRWTGzLLNFa
-         mTfY4nJazyw4Q8bUq0sIvL3RCfKUmrjkqhypeUmWMnHAhaysX7t5/wVAiVD5uWod/B
-         nRCqvNtjeF1wxVaL+7WFLBTnxvIbJEnkQ1fKGP2i3TepEBUv2mHmtrDLYyKVv3V+oJ
-         QsnK5q8FNRxMA==
-Date:   Wed, 4 Jan 2023 16:49:00 +0100
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     <linux-usb@vger.kernel.org>
-Subject: Re: Disabling per-device autosuspend
-Message-ID: <20230104164900.31a3243d@meshulam.tesarici.cz>
-In-Reply-To: <20230104151341.6f937c0c@meshulam.tesarici.cz>
-References: <20230104151341.6f937c0c@meshulam.tesarici.cz>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+        with ESMTP id S239765AbjADQHl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 11:07:41 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87A41705F
+        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 08:07:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672848459; x=1704384459;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s+1nuf3C4WsLY+usiaLFtXuFHkZ7W98U28OQy5b2ud4=;
+  b=Deh8wDfXln9mp+cSYXRFxndfS+fUuePO/upUEZqdWjQ3b4alUKvlF1ax
+   xfndFohtONfGuLefAIE+B65PvHLd1cmdzPlPcqCTi4SnIMffMEOsPqy20
+   eiEp/HW6BJdH3/PJwAnDDiJO2lne6QLpjIJ6UDzqAqr5DNgV2WR41E9xn
+   Hvzqz8LlSpB3ZtavgmU6fMAOvnPGQazytIRCatZgOHUJIV16qxbdVNrc4
+   kWPoY8VqZXJIrg+SKWkMfZ40oSGFso3rva8WCLKCFKFwF0DwRfGDjNpD0
+   snF/XTeMX4vYfZkjVyu9XTy7ArXy1kVrxaOTG4URN5Kz2f/rB8BgdguDR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="309734430"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="309734430"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 08:07:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="797589217"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="797589217"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 04 Jan 2023 08:07:24 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 04 Jan 2023 18:07:23 +0200
+Date:   Wed, 4 Jan 2023 18:07:23 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: The "bus for gadgets" is preventing the use of multiple UDCs
+Message-ID: <Y7WkOwcNYl2mWyiW@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,23 +59,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 Jan 2023 15:13:41 +0100
-Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
+Hi,
 
-> Hi folks,
->=20
-> I'm struggling with autosuspend on my Samsung phone in download mode,
-> as it apparently breaks heimdall/libusb on my Tumbleweed system. Here's
-> what I'm seeing:
->=20
-> - My device is autosuspended, because it has been idle for long enough.
-> - cd /sys/bus/usb/devices/1-4/  # my device's port
-> - echo -1 > power/autosuspend
-> - The device is reset and gets a new device ID.
->   The current directory is no longer valid (becomes empty).
+Before the introduction of this bus it was possible to use configfs
+with multiple device controllers:
 
-On a second thought, this looks like the actual bug. I don't think
-we're supposed to see a disconnect+reconnect whenever a suspended USB
-device is resumed. Then again, I'm no expert on USB...
+        echo "dwc3.1.auto" > usb_gadget/g1/UDC
+        echo "dwc3.2.auto" > usb_gadget/g2/UDC
 
-Petr T
+But now only one UDC can be assigned. When I try to assign the second
+UDC for g2, I get this error:
+
+        Error: Driver 'configfs-gadget' is already registered, aborting...
+        UDC core: g2: driver registration failed: -16
+
+thanks,
+
+-- 
+heikki
