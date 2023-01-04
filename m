@@ -2,84 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBB565CB11
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 01:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48B365CDD6
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 08:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjADAqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Jan 2023 19:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S233557AbjADHry (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Jan 2023 02:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238797AbjADAqF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Jan 2023 19:46:05 -0500
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DDA14D1F;
-        Tue,  3 Jan 2023 16:46:04 -0800 (PST)
-Received: by mail-io1-f42.google.com with SMTP id 3so17434045iou.12;
-        Tue, 03 Jan 2023 16:46:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iYTjG8GCc5Aam78lNOykbDVzCxlEeNQJMUTyXaDxzn0=;
-        b=HCcAqPaTcAzSysoo+gPr9SXqQrvQOII/AYqyo5DzxglEZkawWiihT+Ul1T3akENur+
-         HqnWxTpjJVNxYENasTOuEftYr+0+QPSYLgcwCiV5aa0uLf4hsqndHMVasUIu5A/Jgiiz
-         V7/8y0A5A6Xf5eCJyLxKzjEyaPqMEoQ0pmUKdpQIiV9CvX1/zdaD161VJSjPZ0n6IZBp
-         GfWQQiWRHPKGNQ+NSRSdq34k1IiHSFNpMH7K56UlNK/RyBLsuOURM7UbIabuY9rnc8A3
-         msyMVRgqlHNNzWZzH16WI0CMVirBdFtfTdxzpbyFy6E6njucs5E2gFdU4qU5PdnuVQuH
-         kLAQ==
-X-Gm-Message-State: AFqh2kqPC75GyZFJlCnzYw5Y5+X89Ms1ghVT6nKiZQ+8l0p9ulXJ7aFr
-        KYA6qtAvk9D1vA2Z06R1+w==
-X-Google-Smtp-Source: AMrXdXsWV4asgKuRcEaeOGPIrP5ORSRvZkL1qGMk9WDOAYYyZwy5Wz4WwdbRmFrb2qwV+WobJ7PE3w==
-X-Received: by 2002:a5d:984a:0:b0:6bc:d715:b8fc with SMTP id p10-20020a5d984a000000b006bcd715b8fcmr37831242ios.11.1672793163313;
-        Tue, 03 Jan 2023 16:46:03 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id n12-20020a056638110c00b00389d6a02740sm10218240jal.157.2023.01.03.16.46.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 16:46:02 -0800 (PST)
-Received: (nullmailer pid 167203 invoked by uid 1000);
-        Wed, 04 Jan 2023 00:46:00 -0000
-Date:   Tue, 3 Jan 2023 18:46:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, linux-usb@vger.kernel.org,
-        alsa-devel@alsa-project.org, perex@perex.cz,
-        linux-kernel@vger.kernel.org, mathias.nyman@intel.com,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        quic_plai@quicinc.com, broonie@kernel.org, andersson@kernel.org,
-        quic_jackp@quicinc.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, tiwai@suse.com,
-        Thinh.Nguyen@synopsys.com, lgirdwood@gmail.com, agross@kernel.org,
-        bgoswami@quicinc.com, linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC PATCH 14/14] ASoC: dt-bindings: Update example for enabling
- USB offload on SM8250
-Message-ID: <167279315912.167137.6150924644437546616.robh@kernel.org>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-15-quic_wcheng@quicinc.com>
+        with ESMTP id S230487AbjADHrw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 02:47:52 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A1167CF;
+        Tue,  3 Jan 2023 23:47:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672818471; x=1704354471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6R09QmeYh3AUpWd1Fk6QvWgloEhaBRweABxyf0WRt2k=;
+  b=QH8wkcrfu42KG2Mcydut7Gwt1C7rQ1H+rKIf+QPpeIB8xLnWS+wRB3NC
+   oTy7m/CaNb4vDtil8B0JpCjbpkd2GxJ/q0KOxTyjR6LgraBvdiwluwpjF
+   f+Bey2oArHTw7H0QSVvzeFu4dKjjyW0yFEbzKqVMZ9ExPfvtcgsQonqe3
+   Gv9x9z/CkwVER6v7hhxSTd6yusulQ1RqfV+YR2TcWE+vJbNeuTb+X4drm
+   s+y/XIAhF749sw54GRmNtHYRuzWkJeKJd89ijUYDtDALCvx4cYcj4ycz0
+   8BRuh55oYu+gn0/qyvUcFObgvPT60atnPRn9JrEnP0Mg8zcO8fSXvhpEW
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="384161649"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="384161649"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 23:45:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="685672401"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="685672401"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 03 Jan 2023 23:45:31 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 97526162; Wed,  4 Jan 2023 09:46:03 +0200 (EET)
+Date:   Wed, 4 Jan 2023 09:46:03 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH v1 1/1] thunderbolt: Refactor tb_acpi_add_link()
+Message-ID: <Y7UuuzerRxPMJLpr@black.fi.intel.com>
+References: <20230102192404.88076-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221223233200.26089-15-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230102192404.88076-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Fri, 23 Dec 2022 15:32:00 -0800, Wesley Cheng wrote:
-> Add an example on enabling of USB offload for the Q6DSP.  The routing can
-> be done by the mixer, which can pass the multimedia stream to the USB
-> backend.
+On Mon, Jan 02, 2023 at 09:24:04PM +0200, Andy Shevchenko wrote:
+> Convert while loop into do-while with only a single call to
+> acpi_get_first_physical_node(). No functional change intended.
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  .../devicetree/bindings/sound/qcom,sm8250.yaml      | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
