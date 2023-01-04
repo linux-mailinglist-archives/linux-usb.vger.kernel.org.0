@@ -2,40 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B15F65DDBE
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 21:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 399FB65DDC9
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jan 2023 21:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbjADUhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Jan 2023 15:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S235485AbjADUnx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Jan 2023 15:43:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbjADUhw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 15:37:52 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 411871A820
-        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 12:37:51 -0800 (PST)
-Received: (qmail 481152 invoked by uid 1000); 4 Jan 2023 15:37:50 -0500
-Date:   Wed, 4 Jan 2023 15:37:50 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Disabling per-device autosuspend
-Message-ID: <Y7Xjnpt21ciK4SUX@rowland.harvard.edu>
-References: <20230104151341.6f937c0c@meshulam.tesarici.cz>
- <20230104164900.31a3243d@meshulam.tesarici.cz>
- <Y7Wm1UVGMx8ZeqgD@rowland.harvard.edu>
- <20230104174731.5527b1ed@meshulam.tesarici.cz>
- <Y7WxltobCK0zQz9k@rowland.harvard.edu>
- <20230104182750.1529bd78@meshulam.tesarici.cz>
- <Y7XWB0GzEL5cv6lM@rowland.harvard.edu>
- <20230104211453.4ea6f6cf@meshulam.tesarici.cz>
+        with ESMTP id S240077AbjADUno (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 15:43:44 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550321C91F
+        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 12:43:43 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id g20so18635112iob.2
+        for <linux-usb@vger.kernel.org>; Wed, 04 Jan 2023 12:43:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zzDMmEXzxG1ULGv7Igwk/tcQs7OZBwuRSi/GCqX5tJs=;
+        b=fG+SV3PTvqGzfsfjulBsw9IFbH1Lh7j5pqNuXgccsZGhTVPbJfwTasm8YyB9LIyF8Z
+         Y5WDtdHWREt6o8qCGCPLXIZC1ZXCQco+VDuznsE4tAWvB4YaNdRhxXVSwRAA/mZFX4wf
+         91WOlmBmoLKSoYqciyuB7OwpTJu+uX4Vr96+g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zzDMmEXzxG1ULGv7Igwk/tcQs7OZBwuRSi/GCqX5tJs=;
+        b=OYY6mjPnxVs6JTct/mddlR+egxDW3dds3ffmwQ8limcJc3sf4HE7KBPnpaNS28fa8U
+         yQWOOvIuW+lV1f6BXqNKttH6zfYa/GDSJFQ2MBm1/j4W91BXqRwJFI+0WpkGXULUIEOk
+         wrgK5UlUImA94o9pYdHgXaOkOJ2NF9LTs7Ju4WFR4YCAvHBc6PQeF+JiCSrmcMZALwro
+         8BVYcvN9VQZ6dSZ/rbBEfb7GVMWRVbE5RWpN6mapTL5AQLxTME/rR96D3ANzzWdyos/I
+         1nELWDxxowUnaXOSmwCm87tBXW7ruWA3apvgv+hPQCR+2RPTL4UmKsy3ZJYmRyHqXumi
+         1TNA==
+X-Gm-Message-State: AFqh2kqCAgTs+eJu4BX6Q+xbSNmQFmz8yIF0kerMfrpDO7RGwcK6tPjv
+        8xnW+yGw5al3PcEi4tjxNlz1lQ==
+X-Google-Smtp-Source: AMrXdXup99VfDxMtR3gJF40y40n/4S592gYF9ybWoEKl0M7Zvaf9GDg5BI+SbXzMQkTbswSnryzeNQ==
+X-Received: by 2002:a05:6602:154:b0:6e3:1cfe:4914 with SMTP id v20-20020a056602015400b006e31cfe4914mr28714496iot.21.1672865022723;
+        Wed, 04 Jan 2023 12:43:42 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id o16-20020a02b810000000b0039decb5b452sm6431840jam.65.2023.01.04.12.43.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 12:43:42 -0800 (PST)
+Date:   Wed, 4 Jan 2023 20:43:42 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 06/11] usb: misc: onboard_usb_hub: add Genesys Logic
+ GL3523-QFN76 hub support
+Message-ID: <Y7Xk/lPUshC+U8OQ@google.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
+ <20221228100321.15949-7-linux.amoon@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230104211453.4ea6f6cf@meshulam.tesarici.cz>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <20221228100321.15949-7-linux.amoon@gmail.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,27 +72,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 09:14:53PM +0100, Petr Tesařík wrote:
-> On Wed, 4 Jan 2023 14:39:51 -0500
-> Alan Stern <stern@rowland.harvard.edu> wrote:
-> 
-> > Another option would be to create a short udev script that would write 
-> > "on" to the power/control attribute file (thereby turning autosuspend 
-> > off) whenever it sees a new USB device with the vendor and product IDs 
-> > of your phone.  That seems like a very practical solution.
-> 
-> Yes, that sounds good, because autosuspend is usually not set to zero.
-> Thank you! FWIW it works for me, and I have also proposed this solution
-> in the heimdall GitHub issue. They install their own udev rules file
-> already, so the patch is a one-liner.
-> 
-> BTW manufacturing broken USB devices in large quantities should become
-> a crime and a federal felony... ;-)
+Hi Anand,
 
-Alas, a large fraction of the perpetrators are outside the US's 
-jurisdiction.
+On Wed, Dec 28, 2022 at 10:03:15AM +0000, Anand Moon wrote:
+> Genesys Logic GL3523-QFN76 is a 4-port USB 3.1 hub that has a reset pin to
+> toggle and a 5.0V core supply exported though an integrated LDO is
+> available for powering it.
+> 
+> Add the support for this hub, for controlling the reset pin and the core
+> power supply.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+>  drivers/usb/misc/onboard_usb_hub.c | 1 +
+>  drivers/usb/misc/onboard_usb_hub.h | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index c0e8e6f4ec0a..699050eb3f17 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -410,6 +410,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+>  static const struct usb_device_id onboard_hub_id_table[] = {
+>  	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G-OHG USB 2.0 */
+> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0620) }, /* Genesys Logic GL3523-QFN76 USB 3.1 */
 
-Anyway, congratulations on fixing your problem.  And in just a few 
-hours!
+Please drop the '-QFN76' suffix. The GL3523 comes in different packages, 'QFN76'
+is one of them, I'd expect the other packages to use the same product id.
 
-Alan Stern
+The GL3523 is a single IC, however like the TI USB8041 or the RTS5414 it
+provides both a USB 3.1 and a USB 2.0 hub. You should also add an entry for
+the USB 2.0 hub here.
+
+>  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> index 2ee1b0032d23..b32fad3a70f9 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.h
+> +++ b/drivers/usb/misc/onboard_usb_hub.h
+> @@ -32,6 +32,7 @@ static const struct of_device_id onboard_hub_match[] = {
+>  	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
+>  	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
+>  	{ .compatible = "genesys,usb5e3,610", .data = &genesys_gl850g_data, },
+> +	{ .compatible = "genesys,usb5e3,620", .data = &genesys_gl850g_data, },
+
+s/genesys,//
+
+This reuses the settings of the GL850G hub, which doesn't seem correct in
+this case. For the GL850G a (minimum) reset time of 3us is configured. The
+data sheet of the GL3523 says:
+
+  "The (internal) reset will be released after approximately 40 μS after
+   power good.
+
+   To fully control the reset process of GL3523, we suggest the reset time
+   applied in the external reset circuit should longer than that of the
+   internal reset circuit."
+
+Since it is 'approximately 40 μS' I'd say make the external reset 50 μS
+to be on the safe side, it's a very short time in any case.
+
+Please also add an entry for the USB 2.0 part of the IC.
+
+>  	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+>  	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
+> -- 
+> 2.38.1
+> 
