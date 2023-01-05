@@ -2,183 +2,272 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540A565F3CF
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 19:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7505365F4BA
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 20:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbjAESe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Jan 2023 13:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        id S234720AbjAETli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 14:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235524AbjAESet (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 13:34:49 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371475C1CB
-        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 10:34:48 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305Dgmvu007014;
-        Thu, 5 Jan 2023 18:34:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=zRAfcjfB3j/1Vhz5RNWQSt68qj6xNon9ZARNNRC32Ms=;
- b=RszHdL156+NjnPDFUJtemdTamPnYVmkFXqDe5e3eoH64vvPXcnunsYBgwryJVfSflBuG
- 6QkFVunwRa11PMi+vnd+I2Q/8o/niGP+o0blBOXNzSKBSE0RDRVHXDCHJq8zsfBatg+K
- uj6YGV9acaO8yD0hQGHRafncuQghEJ9kY27A30x3t9U8cJSPfmLkLe6f+lpB3d+BJ8ZP
- xQhXbNpQdaPLND/NsjN/9usKvxWy8pulaKAUOOlmmbDweeYMOrghtlyyeBuGZslDiyWE
- 0Dp8e4BcApbMXezOPj09TPelnSxAzUWwVFA4pXros9JBODyOjqFGRd30YKHZ9kUSyOSc PA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwvaph023-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 18:34:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 305IYhB6019753
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Jan 2023 18:34:43 GMT
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 5 Jan 2023 10:34:42 -0800
-Date:   Thu, 5 Jan 2023 10:34:41 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        with ESMTP id S235759AbjAETlb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 14:41:31 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D051EB
+        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 11:41:29 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id r72so20054081iod.5
+        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 11:41:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AAp7b9aWYIOFv5ofJ2cvMpeHOMIEjOtV0zrzZMylMOk=;
+        b=YJhNQJQD+rmuxYx6oNykQaRGKNRA5HoJJ3CSY/cgqeIb/hQ/3gGJe3azXq6kS6Tu7G
+         1AqFTea2R3C9n/UHasAunhBpA33zmXqElmKx7M/neBomxbz5n4hJfjkQMAw8+2F8ipAx
+         Q4ITxU+kTToTyG09tB/0SwjtOfei/nUEdR+O0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AAp7b9aWYIOFv5ofJ2cvMpeHOMIEjOtV0zrzZMylMOk=;
+        b=oZNkfFaHoCcEGtnS5R7tepk8UAcvI2/Px2jspJRamAo6ja6Rn27a8lMOHkE4/OKqPz
+         tRoHHHg+M/T8blBS0cVn+rVM4lMSPXtJc9/Jwuz8AK6ItI4tvDRjgIzJPB0nxjf2/CR2
+         ScJ/tTAX0Z8PLl0j8fj8gRC7+MrUHHYIp8MVQCLmunD+rHYRGQZRJzbGYsPy68rciI+Z
+         FlOUd/PwJ3EcZxh2aRuYpRLBtfG0WXzD/h0myZ+JdW5TX5ScNfDYz+1BavaMKMXPrsM1
+         tiDjvZiNU6NqvrKYo/X7Tc/Ek61sbOZml8Hkz8b1MSC2J73F7ttxFl6GslxjhFRVO63c
+         GrmA==
+X-Gm-Message-State: AFqh2kp4lsUBtnlMgTyuQnG5T27BaWwjEabAG5Kw6FnNNgm6zBwtfuwG
+        CxryUmnlGCOrFtGL0mzy5rXTupFDUIlqlsiZ
+X-Google-Smtp-Source: AMrXdXvbI2CJKGRtk496956WmiR+n7D5sNuahJxiR4HjC8uaujHfcntUpZpXxsYwcc8+ETuyzgRejg==
+X-Received: by 2002:a6b:ef0c:0:b0:6f3:c33e:a41 with SMTP id k12-20020a6bef0c000000b006f3c33e0a41mr29251605ioh.5.1672947688997;
+        Thu, 05 Jan 2023 11:41:28 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id z8-20020a92cb88000000b0030d6e5a28c6sm1680436ilo.60.2023.01.05.11.41.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 11:41:28 -0800 (PST)
+Date:   Thu, 5 Jan 2023 19:41:28 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Doug Anderson <dianders@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Fenglin Wu <quic_fenglinw@quicinc.com>
-Subject: Re: [PATCH v2] usb: ucsi: fix connector partner ucsi work issue
-Message-ID: <20230105183441.GD28337@jackp-linux.qualcomm.com>
-References: <1672897360-24257-1-git-send-email-quic_linyyuan@quicinc.com>
- <Y7a0C+DkI5Q6hq6O@kuha.fi.intel.com>
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
+ devices for DT nodes without 'vdd-supply'
+Message-ID: <Y7cn6PKzA0Xss0MN@google.com>
+References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
+ <Y7Rh+EkKKN5Gu8sz@google.com>
+ <10807929.5MRjnR8RnV@steina-w>
+ <Y7XVgfjLEDtWhMDB@google.com>
+ <15ba4d43-89a2-2a3e-645e-f5f26c9b77f0@i2se.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y7a0C+DkI5Q6hq6O@kuha.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4KxVhzwJ7gesVKQ-mDN41gfr4NMKHTOG
-X-Proofpoint-ORIG-GUID: 4KxVhzwJ7gesVKQ-mDN41gfr4NMKHTOG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_09,2023-01-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 clxscore=1011 mlxscore=0 impostorscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301050146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <15ba4d43-89a2-2a3e-645e-f5f26c9b77f0@i2se.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
-
-On Thu, Jan 05, 2023 at 01:27:07PM +0200, Heikki Krogerus wrote:
-> Hi,
+On Thu, Jan 05, 2023 at 08:50:17AM +0100, Stefan Wahren wrote:
+> Hi Matthias,
 > 
-> On Thu, Jan 05, 2023 at 01:42:40PM +0800, Linyu Yuan wrote:
-> > When a PPM client unregisters with UCSI framework, connector specific work
-> > queue is destroyed. However, a pending delayed work queued before may
-> > still exist. Once the delay timer expires and the work is scheduled,
-> > this can cause a system crash as the workqueue is destroyed already.
+> Am 04.01.23 um 20:37 schrieb Matthias Kaehlcke:
+> > On Wed, Jan 04, 2023 at 10:00:43AM +0100, Alexander Stein wrote:
+> > > Hi Matthias,
+> > > 
+> > > Am Dienstag, 3. Januar 2023, 18:12:24 CET schrieb Matthias Kaehlcke:
+> > > > On Thu, Dec 22, 2022 at 11:26:26AM -0800, Doug Anderson wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org>
+> > > wrote:
+> > > > > > The primary task of the onboard_usb_hub driver is to control the
+> > > > > > power of an onboard USB hub. The driver gets the regulator from the
+> > > > > > device tree property "vdd-supply" of the hub's DT node. Some boards
+> > > > > > have device tree nodes for USB hubs supported by this driver, but
+> > > > > > don't specify a "vdd-supply". This is not an error per se, it just
+> > > > > > means that the onboard hub driver can't be used for these hubs, so
+> > > > > > don't create platform devices for such nodes.
+> > > > > > 
+> > > > > > This change doesn't completely fix the reported regression. It
+> > > > > > should fix it for the RPi 3 B Plus and boards with similar hub
+> > > > > > configurations (compatible DT nodes without "vdd-supply"), boards
+> > > > > > that actually use the onboard hub driver could still be impacted
+> > > > > > by the race conditions discussed in that thread. Not creating the
+> > > > > > platform devices for nodes without "vdd-supply" is the right
+> > > > > > thing to do, independently from the race condition, which will
+> > > > > > be fixed in future patch.
+> > > > > > 
+> > > > > > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > > > > > Link:
+> > > > > > https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com
+> > > > > > / Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > > > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > > > ---
+> > > > > > 
+> > > > > > Changes in v2:
+> > > > > > - don't create platform devices when "vdd-supply" is missing,
+> > > > > > 
+> > > > > >    rather than returning an error from _find_onboard_hub()
+> > > > > > 
+> > > > > > - check for "vdd-supply" not "vdd" (Johan)
+> > > > > > - updated subject and commit message
+> > > > > > - added 'Link' tag (regzbot)
+> > > > > > 
+> > > > > >   drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
+> > > > > >   1 file changed, 13 insertions(+)
+> > > > > I'm a tad bit skeptical.
+> > > > > 
+> > > > > It somehow feels a bit too much like "inside knowledge" to add this
+> > > > > here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
+> > > > > entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
+> > > > > keep the absolute minimum amount of stuff in it and all of the details
+> > > > > be in the other file.
+> > > > > 
+> > > > > If this was the only issue though, I'd be tempted to let it slide. As
+> > > > > it is, I'm kinda worried that your patch will break Alexander Stein,
+> > > > > who should have been CCed (I've CCed him now) or Icenowy Zheng (also
+> > > > > CCed now). I believe those folks are using the USB hub driver
+> > > > > primarily to drive a reset GPIO. Looking at the example in the
+> > > > > bindings for one of them (genesys,gl850g.yaml), I even see that the
+> > > > > reset-gpio is specified but not a vdd-supply. I think you'll break
+> > > > > that?
+> > > > Thanks for pointing that out. My assumption was that the regulator is
+> > > > needed for the driver to do anything useful, but you are right, the
+> > > > reset GPIO alone could be used in combination with an always-on regulator
+> > > > to 'switch the hub on and off'.
+> > > > 
+> > > > > In general, it feels like it should actually be fine to create the USB
+> > > > > hub driver even if vdd isn't supplied. Sure, it won't do a lot, but it
+> > > > > shouldn't actively hurt anything. You'll just be turning off and on
+> > > > > bogus regulators and burning a few CPU cycles. I guess the problem is
+> > > > > some race condition that you talk about in the commit message. I'd
+> > > > > rather see that fixed...
+> > > > Yes, the race conditions needs to be fixed as well, I didn't have enough
+> > > > time to write and test a patch before taking a longer break for the
+> > > > holidays, so I only sent out this (supposed) partial mitigation.
+> > > > 
+> > > > > That being said, if we want to be more efficient and not burn CPU cycles
+> > > > > and memory in Stefan Wahren's case, maybe the USB hub driver itself could
+> > > > > return a canonical error value from its probe when it detects that it has
+> > > > > no useful job and then "onboard_usb_hub_pdevs" could just silently bail
+> > > > > out?
+> > > > _probe() could return an error, however onboard_hub_create_pdevs() can't
+> > > > rely on that, since the actual onboard_hub driver might not have been
+> > > > loaded yet when the function is called.
+> > > > 
+> > > > It would be nice not to instantiate the pdev and onboard_hub USB instances
+> > > > if the DT node has neither a 'vdd-supply' nor 'reset-gpios'. If we aren't
+> > > > ok with doing that in onboard_hub_create_pdevs() then at least the 'raw'
+> > > > platform device would be created. onboard_hub_probe() could still
+> > > > bail if both properties are absent, _find_onboard_hub() would have to
+> > > > check it again to avoid the deferred probing 'loop' for the USB instances.
+> > > I'm not really fond of checking for optional features like 'vdd-supply' and
+> > > 'reset-gpios'. This issue will pop up again if some new optional feature is
+> > > added again, e.g. power-domains.
+> > It's not just any optional feature, it needs to be involved in controlling
+> > power. I'm not super-exited about it either, but if we prefer not to
+> > instantiate the drivers for certain DT nodes (TBD if that's a preference), we
+> > need some sort of sentinel since the compatible string alone doesn't provide
+> > enough information.
+> > 
+> > > > Alternatively we could 'just' fix the race condition involving the 'attach
+> > > > work' and the onboard_hub driver is fully instantiated even on (certain)
+> > > > boards where it does nothing. It's relatively rare that USB hub nodes are
+> > > > specified in the DT (unless the intention is to use this driver) and
+> > > > CONFIG_USB_ONBOARD_HUB needs to be set for the instances to be created,
+> > > > so maybe creating the useless instances is not such a big deal.
+> > > IMHO creating a pdev shouldn't harm in any case. It's similar to having a DT
+> > > node without a corresponding driver enabled or even existing.
+> > If we only want a 'raw' pdev (no instantiation of the onboard hub platform and
+> > USB drivers) then a similar logic will be needed in the onboard hub driver(s).
+> > 
+> > So if we don't want any logic checking that at least one power related property
+> > is defined then we have to accept that the onboard hub driver will be fully
+> > instantiated even when it effectively does nothing.
+> > 
+> > If we add logic to the driver it needs to be checked in both the platform and
+> > the USB driver (in the latter to avoid a deferred probe loop). It would be
+> > simpler to just skip the creation of the 'raw' platform device in the first
+> > place.
+> > 
+> > > Also adding USB devices to DT is something which is to be expected.
+> > > usb-device.yaml exists since 2020 and the txt version since 2016.
+> > Yes it it perfectly legal, so we need to handle this case somehow, and we
+> > are currently discussing how to best do that :)
+> > 
+> > I still don't expect the combo of supported hub in the DT +
+> > CONFIG_USB_ONBOARD_HUB=y/m to become super-popular, which could be an
+> > argument for the option "just instantiate the drivers even if they do
+> > nothing". Not my favorite option, but probably not that bad either.
 > 
-> When the workqueue is destroyed it's also flushed, no? So how could
-> there be still something pending, delayed or not? Did you actually see
-> this happening?
+> i disagree in this point. The driver becomes more and more popular [1] and
+> this breaks arm64 for RPi 3B+ too. So it's only a question of time until
+> distributions run into this problem.
 
-Yes, we encountered this during a scenario in which our PPM firmware 
-is undergoing a reset which is handled by calling ucsi_unregister().
-The connectors' workqueues are destroyed but apparently the
-destroy_workqueue() does *not* seem to take care pending delayed items.
+There seems to be a misunderstanding, the above option doesn't break
+anything (as long as the attach race is fixed, which needs to be done
+anyway). It impacts boards that specify a hub in the DT but *don't*
+intend to use the driver (neither specify 'vdd-supply' nor 'reset-gpios').
+I expect the number of such boards to remain low, since a USB hub is
+usually not specified in the DT, unless the intention is to use the
+onboard_hub driver and a few other cases.
 
-	Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-	...
-	Call trace:
-	 __queue_work+0x1f4/0x550
-	 delayed_work_timer_fn+0x28/0x38
-	 call_timer_fn+0x3c/0x238
-	 expire_timers+0xcc/0x168
-	 __run_timers+0x194/0x1f8
-	 run_timer_softirq+0x2c/0x54
-	 _stext+0xec/0x3a8
-	 __irq_exit_rcu+0xa0/0xfc
-	 irq_exit_rcu+0x18/0x28
-	 el0_interrupt+0x5c/0x138
-	 __el0_irq_handler_common+0x20/0x30
-	 el0t_64_irq_handler+0x18/0x28
-	 el0t_64_irq+0x1a0/0x1a4
-	Code: eb16013f 54000300 aa1a03e0 9441be2a (f9400280) 
+There are two separate issues/questions:
 
-In particular this is happening for the ucsi_check_connection() which is
-the currently the only work item using a non-zero delay.  If we look
-closely at queue_delayed_work() we can see in that case it defers by
-using a separate timer:
+1) fix the attach race
 
-	static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
-					struct delayed_work *dwork, unsigned long delay)
-	{
-		struct timer_list *timer = &dwork->timer;
-		struct work_struct *work = &dwork->work;
+2) what to do with hubs for which the driver does nothing
 
-		<...snip...>
+ Possible options:
 
-		/*
-		 * If @delay is 0, queue @dwork->work immediately.  This is for
-		 * both optimization and correctness.  The earliest @timer can
-		 * expire is on the closest next tick and delayed_work users depend
-		 * on that there's no such delay when @delay is 0.
-		 */
-		if (!delay) {
-			__queue_work(cpu, wq, &dwork->work);
-			return;
-		}
+ a) instantiate the drivers regardless (current situation)
+ b) don't create 'raw' pdev if the DT node doesn't have certain properties
+    (a evolution of this patch)
+ c) don't create instantiate the onboard_hub pdev and USB devices if the
+    DT node doesn't have certain properties
 
-		dwork->wq = wq;
-		       ^^^^^^^^ wq gets saved here, but might be
-				destroyed before timer expires
-
-		dwork->cpu = cpu;
-		timer->expires = jiffies + delay;
-
-		if (unlikely(cpu != WORK_CPU_UNBOUND))
-			add_timer_on(timer, cpu);
-		else
-			add_timer(timer);
-	}
-
-In ucsi_unregister() we destroy the connector's wq, but there is a
-pending timer still for the ucsi_check_connection() item and upon
-expiry it tries to do the real __queue_work() call on a dangling 'wq'.
-
-> > Fix this by moving all partner related delayed work to connector instance
-> > and cancel all of them when ucsi_unregister() is called by PPM client.
+> I willing to help in debugging the real issue, but i need a little bit
+> guidance here.
 > 
-> I would love to be able to cancel these works, though not because of
-> driver removal - I'm more concerned about disconnections. The reason
-> why each task is a unique work is because it allows the driver to add
-> the same task to the queue as many times as needed, and that was
-> needed inorder to recover from some firmware issues. If there's only a
-> dedicated work per task like in your proposal, we can only schedule
-> the task once at a time, and that may lead into other issues.
-
-I see, queuing a task multiple times is a good reason to allocate the
-workers dynamically.  Then what we really need is a way to reliably
-cancel & reclaim any pending items that are sitting on their own timers,
-since they are otherwise unreachable via the 'wq'. 
-
-cancel_delayed_work(), cancel_delayed_work_sync(), flush_delayed_work()
-all require the handle to the delayed_work itself which we don't keep a
-reference to.
-
-Do you have any other suggestions for this?
-
-Thanks,
-Jack
+> [1] -
+> https://lore.kernel.org/linux-arm-kernel/2188024.ZfL8zNpBrT@steina-w/T/
+> 
+> > 
+> > > Unfortunately I'm not able to reproduce this issue on a different platform
+> > > where the same HUB but no reset-gpios is required. I also noticed that
+> > > onboard-usb-hub raises the error
+> > > > Failed to attach USB driver: -22
+> > > for each hub it is supposed to support.
+> > Interesting
+> > 
+> > I also see the error with v6.2-rc1 but not a downstream v5.15 kernel which
+> > runs most of the time on my boards. It turns out that with v6.2-rc1 the 'bus'
+> > field of 'onboard_hub_usbdev_driver.drvwrap.driver' (passed to driver_attach())
+> > is NULL, which causes driver_attach() / bus_for_each_dev() to return -EINVAL.
+> > 
+> > I did some testing (unbind/bind, unloading/reloading the driver) around the
+> > 'attach work' independently from your report. I couldn't repro a situation
+> > where the onboard_hub USB devices aren't probed by the driver, which is what
+> > the 'attach work' is supposed to solve. At some point I observed issues with
+> > that in the past, which is why driver_attach() is called. The driver_attach()
+> > call was added to the onboard_hub series in early 2021, by that time I was
+> > probably testing with a v5.4 kernel, it's not unconceivable that the issue I
+> > saw back then is fixed in newer kernels.
+> > 
+> > With that I was already considering to remove the 'attach work', the error you
+> > reported reinforces that, since the driver_attach() call from the onboard_hub
+> > driver does nothing in more recent kernels due to 'bus' being NULL.
+> > 
+> > Thanks
+> > 
+> > Matthias
