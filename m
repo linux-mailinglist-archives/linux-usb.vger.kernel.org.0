@@ -2,300 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743B065E851
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 10:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A4B65E96A
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 11:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbjAEJzM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Jan 2023 04:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S232294AbjAEK5B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 05:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjAEJzJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 04:55:09 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A03551F0
-        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 01:55:01 -0800 (PST)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230105095457epoutp0282447a9c16859051039bcc30f560e67c~3YQ2FSbuQ2604026040epoutp02H
-        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 09:54:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230105095457epoutp0282447a9c16859051039bcc30f560e67c~3YQ2FSbuQ2604026040epoutp02H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1672912497;
-        bh=W+SRy8MGtF/uWSoWNbLUIib5kCtd14JoSOOEgWQDy18=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=l3KOklbKgp3n+SFnu6cRDM337SwDOIpAwOFYV4+iNoLV0z4dhGciyJ1RwPtq5WiE0
-         ULTW77dtfKi1Ps60iRnFGsdB8oIJARaiuM1Zuq5d1Uzb+7kFjMO27s+4fHExnIwGBt
-         o635bfY/+eAG/ecZQxDwy0m/IfHclYRqLmIc+ofc=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230105095456epcas2p16340531e042f370d2aa756b83cdec060~3YQ1hkGO-1593215932epcas2p1O;
-        Thu,  5 Jan 2023 09:54:56 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.69]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Nnhf81JjLz4x9Pr; Thu,  5 Jan
-        2023 09:54:56 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        20.53.03803.07E96B36; Thu,  5 Jan 2023 18:54:56 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230105095455epcas2p3a630ad70db8a4782197f97213baddc83~3YQ0hOOJm2873928739epcas2p3s;
-        Thu,  5 Jan 2023 09:54:55 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230105095455epsmtrp1174e9c159ded0a10a8545bf314dce47a~3YQ0gi4GQ1535715357epsmtrp1O;
-        Thu,  5 Jan 2023 09:54:55 +0000 (GMT)
-X-AuditID: b6c32a45-23ffd70000020edb-ae-63b69e70f074
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        16.4B.02211.F6E96B36; Thu,  5 Jan 2023 18:54:55 +0900 (KST)
-Received: from KORCO118605 (unknown [10.229.18.192]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230105095455epsmtip15434e8f2dd3621cc4b9920327759d604~3YQ0WNK822374523745epsmtip1S;
-        Thu,  5 Jan 2023 09:54:55 +0000 (GMT)
-From:   =?utf-8?B?7KCV7J6s7ZuI?= <jh0801.jung@samsung.com>
-To:     "'Linyu Yuan'" <quic_linyyuan@quicinc.com>,
-        "'Felipe Balbi'" <balbi@kernel.org>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "'Thinh Nguyen'" <Thinh.Nguyen@synopsys.com>
-Cc:     "'open list:USB XHCI DRIVER'" <linux-usb@vger.kernel.org>,
-        "'open list'" <linux-kernel@vger.kernel.org>,
-        "'Seungchull Suh'" <sc.suh@samsung.com>,
-        "'Daehwan Jung'" <dh10.jung@samsung.com>
-In-Reply-To: <c4e01a0a-1c98-3103-2b91-2fe0ba8c3118@quicinc.com>
-Subject: RE: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
-Date:   Thu, 5 Jan 2023 18:54:55 +0900
-Message-ID: <000201d920eb$c3715c50$4a5414f0$@samsung.com>
+        with ESMTP id S231460AbjAEK5A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 05:57:00 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43DE50E62
+        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 02:56:58 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so1012714wms.2
+        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 02:56:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K9VZahBvTxY/9MJBnzviay36QEWwo3jW0XFOox6Ia0A=;
+        b=RhG7wkABz86kAAWTPkXstlLFTX/uUk6qY/Nvaa2kdOpWrerlB1y7LeSJlynyIIuNnt
+         pcs6YUnCVbYB3k+AL6znPerB3O36ko/FRhbiZ6/1TRvbk3y83N/Y/CVe+wve1tYWygAd
+         FeCiR07BWHC3L7oEJ0sBBRGy0IMgZwJ/yV+EE2GBtXU6nDVE4T4GGntmbvcdPjP+bQ80
+         w2Td5FCgrdl6TLjD3sICR/F20PNyT47r7mf9VKPXQ6lI/8agDJJTlWCW+vGy5Nd59zQh
+         GsI10ObsL4uCUnaxdS65ALxkr3gw/eTgocsRqAXNemQpCwyI1Cg8zO+k37XLqvS+tjF4
+         WK8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9VZahBvTxY/9MJBnzviay36QEWwo3jW0XFOox6Ia0A=;
+        b=c9xD8pYHJLFDAxia/LzFdDmBwxSLSNoVmB3FcmPNw3YRlsypiXZ16wwp5t0g4BWPX6
+         2915KXD3SdF5rq9MWwmJxH/3+37snop/cJv5Z54yFuvsHwL4kRIBl5mGv3W4wk3dSS1b
+         I2HKl97cQVya5X1ZcBPh/Ti2iQYY5Hdkr4jvMQWCKW+MG/VgpEBOIKUeJ2nFOONFvvrK
+         XLPfrF24g7veTagDt4jh8wXBSujTfB9E+08H1VX8HwFy35rxTBBZt+UHG7z++SfOrZ4N
+         TYbBNxKdGcY2ZxA+XlaFofIP0WeC8nCW5ZeJILPMPjyU5uP7Oe59Bwwfv/TF+y447M3d
+         GJ/A==
+X-Gm-Message-State: AFqh2koZKU3sdukf7oCU4jEu/ae2ue4TeFwvsORQglj1/QWtxuYBvQsR
+        qR7BCbcs9ZntRtyJItijExtMxw==
+X-Google-Smtp-Source: AMrXdXv8wpbouyeZjnTOPsEiyqNG81EFMf8XRbkvuKOZQLeLIOQYxl691SBvfLOzhZta5c2MBP0hpA==
+X-Received: by 2002:a05:600c:5121:b0:3d9:d1bc:310 with SMTP id o33-20020a05600c512100b003d9d1bc0310mr1338069wms.25.1672916217498;
+        Thu, 05 Jan 2023 02:56:57 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003d96c811d6dsm2082714wmq.30.2023.01.05.02.56.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 02:56:57 -0800 (PST)
+Message-ID: <4a816ade-dc15-b954-9846-bb8a8b58041b@linaro.org>
+Date:   Thu, 5 Jan 2023 10:56:56 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQHoaYWzl+91vPuYA9QqPKuxNdj5mgIxEgVOAi/I+n8Cu+PL3q44GoEQ
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmhW7BvG3JBvvfslsca3vCbnFnwTQm
-        i+bF69ksLu+aw2axaFkrs8W665sYLbru3mC0WLXgALsDh8emVZ1sHvvnrmH3mLinzqNvyypG
-        jy37PzN6fN4kF8AWlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk
-        4hOg65aZA3SPkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQvXS8v
-        tcTK0MDAyBSoMCE74+g564IzphX7uo4yNTBu0uxi5OSQEDCRmLvsJFMXIxeHkMAORomtV7+w
-        gCSEBD4xSjRv9oVIfGOUeL/nEDtMx4Orc9kgEnsZJd71PoVqf8kosfl+J2sXIwcHm4CFxNEZ
-        OiANIgK7gIq6vUFqmAUOMUqc/PmCESTBKWAv0d5yiBXEFhbwkFiycDWYzSKgIvG34TbYNl4B
-        S4kXzw4wQ9iCEidnPgE7j1lAW2LZwtfMEBcpSOz+dJQVYpmbRMv2LqgaEYnZnW3MIIslBBZy
-        SHyYfI0F5DgJAReJDRvjIXqFJV4d3wL1mZTEy/42KDtbYteGN1DzKyR6+pexQNjGErOetTOC
-        jGEW0JRYv0sfYqKyxJFbUFv5JDoO/2WHCPNKdLQJQTSqShxsvAk1RFriW+87xgmMSrOQ/DUL
-        yV+zkNw/C2HXAkaWVYxiqQXFuempxUYFhvCYTs7P3cQITqdarjsYJ7/9oHeIkYmDERjaHMxK
-        Irxl/duShXhTEiurUovy44tKc1KLDzGaAkN6IrOUaHI+MKHnlcQbmlgamJiZGZobmRqYK4nz
-        Bm2dnywkkJ5YkpqdmlqQWgTTx8TBKdXAJLR5hevpl7857t6wD5y13UtkyabLG98+v2Eg2lz1
-        7OCzGfvOGasGRVv8tFhtYzhtrd8MTXuJrZniameK5G+ohJwTnZlxW/F1vZ6pvLTtvY179W6K
-        bM7juDyRX63lW11q36vQmdKrK3Y83rl4c/yPfOHPgS8XRs1iuvVuhuPmFZtjz930mdYetodJ
-        qsJkr9XpyKwOQRvjzlU2d9vdXF55xgX96vrK81bLODVqYZmre+nNX/+jHBgjrkVwPtQrDTp4
-        b9rr9wwRfPIMXif+TZqRZ6n3KqDtan588OqIdQ9+xdaLb2ZlzIn3l5nHflt067aTwJz8hPfY
-        qr3rUyb2sW93mGiewpr3U2LrzoV71RMWKrEUZyQaajEXFScCAI9NpVYwBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJTjd/3rZkg0VnFCyOtT1ht7izYBqT
-        RfPi9WwWl3fNYbNYtKyV2WLd9U2MFl13bzBarFpwgN2Bw2PTqk42j/1z17B7TNxT59G3ZRWj
-        x5b9nxk9Pm+SC2CL4rJJSc3JLEst0rdL4Mq4t2kRa8Es04qzFz4xNjD+0Ohi5OSQEDCReHB1
-        LlsXIxeHkMBuRolrva9ZIRLSEjs7pzJB2MIS91uOsEIUPWeUeDjrHVAHBwebgIXE0Rk6IHER
-        gT2MErtuPmAHcZgFjjBKHLszA2ySkMBXRomWv+wgNqeAvUR7yyGwuLCAh8SShavBbBYBFYm/
-        DbfBangFLCVePDvADGELSpyc+YQFxGYW0JZ4evMpnL1s4WtmiOsUJHZ/Ogo2R0TATaJlexdU
-        jYjE7M425gmMwrOQjJqFZNQsJKNmIWlZwMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/
-        dxMjOMa0NHcwbl/1Qe8QIxMH4yFGCQ5mJRHesv5tyUK8KYmVValF+fFFpTmpxYcYpTlYlMR5
-        L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwmZ5aInpVP9Pokn0ef8DXWe4Ls8oZrL4F3vmwed32
-        R9O6dhTYZhy7zmPt3HI5/6/F/mu16YsKnIJntSuyb5moKHhvrvjp1vgzMtU8HmY7T9c8Wn9e
-        8NautsAYq4iwDY7HxD9dXdv2/WZcyTIhk6/KN9jWPp06e/aUqd19aQfvzDssGHOoI2m69z9V
-        xT4Jk2q1OQp/nGvlW1PcZ7pxntx47duhGIYo4RuJD1m/vN51pNKo0WLu4puTbZhmP+bea/ji
-        /mVX9qrGG+/27PD9ojCxdfaUJbnei1e4rzteoNuysvfCT14FhTqRkImyvFpMXflOj1S3RnN0
-        Hc3Vf1KlUJj+7oEtj3Yzi+NkphyJxfy1SizFGYmGWsxFxYkAN1vcWiADAAA=
-X-CMS-MailID: 20230105095455epcas2p3a630ad70db8a4782197f97213baddc83
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3
-References: <CGME20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3@epcas2p4.samsung.com>
-        <20230102050831.105499-1-jh0801.jung@samsung.com>
-        <af32e2f5-de45-38af-2b4f-47c1ac21ea9e@quicinc.com>
-        <c4e01a0a-1c98-3103-2b91-2fe0ba8c3118@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        PDS_BAD_THREAD_QP_64,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Add wakeup property
+Content-Language: en-US
+To:     Jun Nie <jun.nie@linaro.org>, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
+Cc:     sven@svenpeter.dev, shawn.guo@linaro.org
+References: <20230105075058.924680-1-jun.nie@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230105075058.924680-1-jun.nie@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 05/01/2023 07:50, Jun Nie wrote:
+> Add wakeup property description. People can enable it with adding
+> the property.
+> 
+> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> ---
+>   Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> index fef4acdc4773..348a715d61f4 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> @@ -23,6 +23,8 @@ properties:
+>     reg:
+>       maxItems: 1
+>   
+> +  wakeup-source: true
+> +
+>     interrupts:
+>       maxItems: 1
+>   
+> @@ -48,6 +50,7 @@ examples:
+>           tps6598x: tps6598x@38 {
+>               compatible = "ti,tps6598x";
+>               reg = <0x38>;
+> +            wakeup-source;
+>   
+>               interrupt-parent = <&msmgpio>;
+>               interrupts = <107 IRQ_TYPE_LEVEL_LOW>;
 
+LGTM
 
-> -----Original Message-----
-> From: Linyu Yuan =5Bmailto:quic_linyyuan=40quicinc.com=5D
-> Sent: Thursday, January 5, 2023 12:35 PM
-> To: JaeHun Jung; Felipe Balbi; Greg Kroah-Hartman; Thinh Nguyen
-> Cc: open list:USB XHCI DRIVER; open list; Seungchull Suh; Daehwan Jung
-> Subject: Re: =5BPATCH=5D usb: dwc3: Clear DWC3_EVENT_PENDING when count i=
-s 0
->=20
->=20
-> On 1/5/2023 11:29 AM, Linyu Yuan wrote:
-> > On 1/2/2023 1:08 PM, JaeHun Jung wrote:
-> >> Sometimes very rarely, The count is 0 and the DWC3 flag is set has
-> >> status.
-> >> It must not have these status. Because, It can make happen interrupt
-> >> storming status.
-> >
-> > could you help explain without clear the flag, how interrupt storming
-> > happen ?
-> >
-> > as your change didn't touch any hardware register, i don't know how it
-> > fix storming.
-> >
-H/W interrupts are still occur on IP.
-But. ISR doesn't handle it. Because of this
-=22if (evt->flags & DWC3_EVENT_PENDING)=22
-
-This is event values.
-(struct dwc3_event_buffer *) ev_buf =3D 0xFFFFFF883DBF1180 =3D kernel_size_=
-le_lo32+0xFFFFFF883B391180 -> (
-        (void *) buf =3D 0xFFFFFFC00DBDD000 =3D end+0x337D000 -> ,
-        (void *) cache =3D 0xFFFFFF8839F54080 =3D kernel_size_le_lo32+0xFFF=
-FFF88376F4080 -> ,
-        (unsigned int) length =3D 0x1000,
-        (unsigned int) lpos =3D 0x0,
-        (unsigned int) count =3D 0x0,
-        (unsigned int) flags =3D 0x00100001,
-        (dma_addr_t) dma =3D 0x00000008BD7D7000,
-
-*((struct dwc3_event_type *) 0xFFFFFF8839F54080) =3D (
-    is_devspec =3D 1,
-    type =3D 0,
-    reserved8_31 =3D 774)
-
-*((struct dwc3_event_devt  *) 0xFFFFFF8839F54080) =3D (
-    one_bit =3D 1,
-    device_event =3D 0,
-    type =3D 6, << DWC3_DEVICE_EVENT_SUSPEND
-    reserved15_12 =3D 0,
-    event_info =3D 3,
-    reserved31_25 =3D 0)
-
-Occurred interrupts are =22DWC3_DEVICE_EVENT_SUSPEND=22.
-If when =22count has 0=22 and DWC3_EVENT_PENDING are set at the same time t=
-han
- ISR and bottom thread couldn't handle next interrupt.
-We guessing connected with =22dwc3_gadget_process_pending_events()=22 funct=
-ion.
-But, We could not find reproduce way.
-
-
-> > storming from software layer ?
-> >
-> >> So, It have to clean up DWC3_EVENT_PENDING flags set when count is 0.
-> >> It means =22There are no interrupts to handle.=22.
-> >>
-> >> (struct dwc3_event_buffer *) ev_buf =3D 0xFFFFFF883DBF1180 (
-> >>     (void *) buf =3D 0xFFFFFFC00DBDD000 =3D end+0x337D000,
-> >>     (void *) cache =3D 0xFFFFFF8839F54080,
-> >>     (unsigned int) length =3D 0x1000,
-> >>     (unsigned int) lpos =3D 0x0,
-> >>     (unsigned int) count =3D 0x0,
-> >>     (unsigned int) flags =3D 0x00000001,
-> >>     (dma_addr_t) dma =3D 0x00000008BD7D7000,
-> >>     (struct dwc3 *) dwc =3D 0xFFFFFF8839CBC880,
-> >>     (u64) android_kabi_reserved1 =3D 0x0),
-> >>
-> >> (time =3D 47557628930999, irq =3D 165, fn =3D dwc3_interrupt, latency =
-=3D 0,
-> >> en =3D 1), (time =3D 47557628931268, irq =3D 165, fn =3D dwc3_interrup=
-t,
-> >> latency =3D 0, en =3D 3), (time =3D 47557628932383, irq =3D 165, fn =
-=3D
-> >> dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D 47557628932652, ir=
-q =3D
-> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D
-> >> 47557628933768, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
-=3D 1),
-> >> (time =3D 47557628934037, irq =3D 165, fn =3D dwc3_interrupt, latency =
-=3D 0,
-> >> en =3D 3), (time =3D 47557628935152, irq =3D 165, fn =3D dwc3_interrup=
-t,
-> >> latency =3D 0, en =3D 1), (time =3D 47557628935460, irq =3D 165, fn =
-=3D
-> >> dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D 47557628936575, ir=
-q =3D
-> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D
-> >> 47557628936845, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
-=3D 3),
-> >> (time =3D 47557628937960, irq =3D 165, fn =3D dwc3_interrupt, latency =
-=3D 0,
-> >> en =3D 1), (time =3D 47557628938229, irq =3D 165, fn =3D dwc3_interrup=
-t,
-> >> latency =3D 0, en =3D 3), (time =3D 47557628939345, irq =3D 165, fn =
-=3D
-> >> dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D 47557628939652, ir=
-q =3D
-> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D
-> >> 47557628940768, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
-=3D 1),
-> >> (time =3D 47557628941037, irq =3D 165, fn =3D dwc3_interrupt, latency =
-=3D 0,
-> >> en =3D 3), (time =3D 47557628942152, irq =3D 165, fn =3D dwc3_interrup=
-t,
-> >> latency =3D 0, en =3D 1), (time =3D 47557628942422, irq =3D 165, fn =
-=3D
-> >> dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D 47557628943537, ir=
-q =3D
-> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D
-> >> 47557628943806, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
-=3D 3),
-> >> (time =3D 47557628944922, irq =3D 165, fn =3D dwc3_interrupt, latency =
-=3D 0,
-> >> en =3D 1), (time =3D 47557628945229, irq =3D 165, fn =3D dwc3_interrup=
-t,
-> >> latency =3D 0, en =3D 3), (time =3D 47557628946345, irq =3D 165, fn =
-=3D
-> >> dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D 47557628946614, ir=
-q =3D
-> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D
-> >> 47557628947729, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
-=3D 1),
-> >> (time =3D 47557628947999, irq =3D 165, fn =3D dwc3_interrupt, latency =
-=3D 0,
-> >> en =3D 3),
-> >>
-> >> Signed-off-by: JaeHun Jung <jh0801.jung=40samsung.com>
-> >> ---
-> >>   drivers/usb/dwc3/gadget.c =7C 5 ++++-
-> >>   1 file changed, 4 insertions(+), 1 deletion(-) diff --git
-> >> a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c index
-> >> 789976567f9f..5d2d5a9b9915 100644
-> >> --- a/drivers/usb/dwc3/gadget.c
-> >> +++ b/drivers/usb/dwc3/gadget.c
-> >> =40=40 -4355,8 +4355,11 =40=40 static irqreturn_t dwc3_check_event_buf=
-(struct
-> >> dwc3_event_buffer *evt)
-> >>        * irq event handler completes before caching new event to
-> >> prevent
-> >>        * losing events.
-> >>        */
-> >> -    if (evt->flags & DWC3_EVENT_PENDING)
-> >> +    if (evt->flags & DWC3_EVENT_PENDING) =7B
-> >> +        if (=21evt->count)
-> >> +            evt->flags &=3D =7EDWC3_EVENT_PENDING;
-> >>           return IRQ_HANDLED;
-> >> +    =7D
-> >>         count =3D dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-> >>       count &=3D DWC3_GEVNTCOUNT_MASK;
-> >
-> > how about below change ?
-> >
-> >         count =3D dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-> >         count &=3D DWC3_GEVNTCOUNT_MASK;
-> > -       if (=21count)
-> > +       if (=21count) =7B
-> > +               evt->flags &=3D =7EDWC3_EVENT_PENDING;
-> >                 return IRQ_NONE;
-> > +       =7D
-> ignore my suggestion, add Thinh to comment.
-> >
-> >         evt->count =3D count;
-> >         evt->flags =7C=3D DWC3_EVENT_PENDING;
-> >
-
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
