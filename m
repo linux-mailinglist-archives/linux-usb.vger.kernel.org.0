@@ -2,156 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14FC65E643
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 08:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A6665E713
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 09:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjAEHvQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Jan 2023 02:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
+        id S229631AbjAEIvW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 03:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjAEHvO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 02:51:14 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77253E0E4
-        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 23:51:13 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id h192so19166295pgc.7
-        for <linux-usb@vger.kernel.org>; Wed, 04 Jan 2023 23:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6ohiE9fg/YmJyloLDZ4x/cahWGOvJ6DD66/fJFJqCKg=;
-        b=CAb0Q6uGKu6IOMmryDbj7OUjJ6wQNikYrhBGFjKs+IdgdnsCQgB1jYji6e4FvB2hib
-         BNqYy378sq00EZVxgL5CRhCv4olroZFbklBCnhvjg0bCNgYJ4bBHBigroP2m1/F1/c49
-         xtAC26swM8uc6DYHspV7zK9xDZwF3vv6Ax3NIZkarnrXOzRop2i4bTqgVnzJMCYEqLcW
-         rvPhQRSUZBwwNQHOj1NpXukENXI/V3RBexDf8UQyu8n/F0lhdD1PBoxWeT12S3y+cb8g
-         lHV088pT4w5X6oltYqZ6l6SzXN1F24a6tFNZ5xlUv13YAunfvQPalSSEVgPLWWYk/LlJ
-         d24g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ohiE9fg/YmJyloLDZ4x/cahWGOvJ6DD66/fJFJqCKg=;
-        b=SLYmPm6Heat4TwIzudFSikeVF+SGQDYEMxix6/4mvZ00JjcglXbFCL4QbyUmw4zKXD
-         KTLSELcv77QNSZSSCh4B2pTGVScyIwjTfhpWchuH/eEXjrXN6gU0m1JvKepA5pBeBE74
-         IYuYnPHtAEDKBbzR+XIqtRion1dmGJ8JfupleZvlCbzbtv7lVYfVSMlUlalMC1mzv3W2
-         3N32y4rAKyOcjAj9qqP3dJz/9pykiW4LZeLvwr5XGZQdvOROTQdfrGMgIYQyAMruxJug
-         ETd03WRGJRmcaz9jkoz9MFfzJ9nI+XBaBZ9jLtfgwdppeHkXNonfXePWfKjg50kFieng
-         fnRw==
-X-Gm-Message-State: AFqh2ko9Pypfwb2GqJitXyYXxPwXAdsmW8A+DA3OyMf6vDlqD/MB4Y/P
-        3gUNwSYoCEfmM05Dn+U5icM9zQ==
-X-Google-Smtp-Source: AMrXdXszN76bSIXwIGY/Qa3ikTZynfml5rZXe+3P+nK+pNyrNCvLuvtCV0bcoaDPCfNrEGQOv4IU5w==
-X-Received: by 2002:a62:e911:0:b0:581:579d:5c44 with SMTP id j17-20020a62e911000000b00581579d5c44mr31980759pfh.5.1672905073357;
-        Wed, 04 Jan 2023 23:51:13 -0800 (PST)
-Received: from niej-dt-7B47.. (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id g130-20020a625288000000b0056c2e497b02sm24513555pfb.173.2023.01.04.23.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 23:51:12 -0800 (PST)
-From:   Jun Nie <jun.nie@linaro.org>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org
-Cc:     sven@svenpeter.dev, shawn.guo@linaro.org,
-        bryan.odonoghue@linaro.org, Jun Nie <jun.nie@linaro.org>
-Subject: [PATCH 2/2] usb: typec: tipd: Support wakeup
-Date:   Thu,  5 Jan 2023 15:50:58 +0800
-Message-Id: <20230105075058.924680-2-jun.nie@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230105075058.924680-1-jun.nie@linaro.org>
-References: <20230105075058.924680-1-jun.nie@linaro.org>
+        with ESMTP id S231441AbjAEIvT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 03:51:19 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4CCC4D;
+        Thu,  5 Jan 2023 00:51:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672908678; x=1704444678;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=MdpIx0ME+Xfwg6tq/OLwhK9h6Pxxj28cKiqlNMlnOkE=;
+  b=NRba8lE6qjElCAhAfyd/l7wt1ZqsX7HXEKd87qcQMwbkZVjmPtrBzf0a
+   hlyhHwcmbZw2ncJdTUDmKF4OFHVs12Vp/YmOlSsHFWHzEfo3PEB1Eh3y7
+   13QG2HFyHA/O9x3sfXp4T0qb2b9JraZi0nXeHcOTx7TwN8BXNH2oO7z/v
+   c5KyTY5jqDQ1Jt9msM8K0kgMpQNlwUBuOtsOuHpd+rWm1k8zzh2h04lmz
+   P17q6WBT8GD7/oDZWNiD0ez1mI/hdZeTO38lsbabvoB2rcAAZgX9VdGww
+   tsxay9DN+6hASWEcdVBt8zCS9coCol3XhiCjAP//Womwz8cd1tzoWYq9s
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="319860922"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="319860922"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 00:51:18 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="655496263"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="655496263"
+Received: from khaunx-mobl1.ger.corp.intel.com ([10.252.35.181])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 00:51:12 -0800
+Date:   Thu, 5 Jan 2023 10:51:10 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        David Lin <dtwlin@gmail.com>, Johan Hovold <johan@kernel.org>,
+        Alex Elder <elder@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mmc@vger.kernel.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 07/10] tty: Convert ->dtr_rts() to take bool argument
+In-Reply-To: <09043f30-c516-e173-3836-5e5dd5f5c472@kernel.org>
+Message-ID: <2cb9b67e-9bb-4fb2-e974-17050457d3@linux.intel.com>
+References: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com> <20230104151531.73994-8-ilpo.jarvinen@linux.intel.com> <09043f30-c516-e173-3836-5e5dd5f5c472@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1066211675-1672908637=:1832"
+Content-ID: <4fbbebce-aab4-fa64-6a79-6d25c81fe3c@linux.intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable wakeup when pluging or unpluging USB cable. It is up to other
-components to hold system in active mode, such as display, so that
-user can receive the notification.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Jun Nie <jun.nie@linaro.org>
----
- drivers/usb/typec/tipd/core.c | 38 +++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+--8323329-1066211675-1672908637=:1832
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <207e8c25-d560-4d87-27a8-5f9cb52ce14@linux.intel.com>
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 46a4d8b128f0..485b90c13078 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -95,6 +95,7 @@ struct tps6598x {
- 	struct power_supply_desc psy_desc;
- 	enum power_supply_usb_type usb_type;
- 
-+	int wakeup;
- 	u16 pwr_status;
- };
- 
-@@ -846,6 +847,12 @@ static int tps6598x_probe(struct i2c_client *client)
- 	i2c_set_clientdata(client, tps);
- 	fwnode_handle_put(fwnode);
- 
-+	tps->wakeup = device_property_read_bool(tps->dev, "wakeup-source");
-+	if (tps->wakeup) {
-+		device_init_wakeup(&client->dev, true);
-+		enable_irq_wake(client->irq);
-+	}
-+
- 	return 0;
- 
- err_disconnect:
-@@ -870,6 +877,36 @@ static void tps6598x_remove(struct i2c_client *client)
- 	usb_role_switch_put(tps->role_sw);
- }
- 
-+static int __maybe_unused tps6598x_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct tps6598x *tps = i2c_get_clientdata(client);
-+
-+	if (tps->wakeup) {
-+		disable_irq(client->irq);
-+		enable_irq_wake(client->irq);
-+	}
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused tps6598x_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct tps6598x *tps = i2c_get_clientdata(client);
-+
-+	if (tps->wakeup) {
-+		disable_irq_wake(client->irq);
-+		enable_irq(client->irq);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops tps6598x_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(tps6598x_suspend, tps6598x_resume)
-+};
-+
- static const struct of_device_id tps6598x_of_match[] = {
- 	{ .compatible = "ti,tps6598x", },
- 	{ .compatible = "apple,cd321x", },
-@@ -886,6 +923,7 @@ MODULE_DEVICE_TABLE(i2c, tps6598x_id);
- static struct i2c_driver tps6598x_i2c_driver = {
- 	.driver = {
- 		.name = "tps6598x",
-+		.pm = &tps6598x_pm_ops,
- 		.of_match_table = tps6598x_of_match,
- 	},
- 	.probe_new = tps6598x_probe,
+On Thu, 5 Jan 2023, Jiri Slaby wrote:
+
+> On 04. 01. 23, 16:15, Ilpo Järvinen wrote:
+> > Convert the raise/on parameter in ->dtr_rts() to bool through the
+> > callchain. The parameter is used like bool. In USB serial, there
+> > remains a few implicit bool -> larger type conversions because some
+> > devices use u8 in their control messages.
+> 
+> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+> 
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> ...
+> > --- a/drivers/char/pcmcia/synclink_cs.c
+> > +++ b/drivers/char/pcmcia/synclink_cs.c
+> > @@ -378,7 +378,7 @@ static void async_mode(MGSLPC_INFO *info);
+> >   static void tx_timeout(struct timer_list *t);
+> >     static bool carrier_raised(struct tty_port *port);
+> > -static void dtr_rts(struct tty_port *port, int onoff);
+> > +static void dtr_rts(struct tty_port *port, bool onoff);
+> 
+> Not anything for this patch, but having this dubbed "onoff" instead of "on"
+> makes it really confusing.
+> 
+> > --- a/drivers/mmc/core/sdio_uart.c
+> > +++ b/drivers/mmc/core/sdio_uart.c
+> > @@ -548,14 +548,14 @@ static bool uart_carrier_raised(struct tty_port
+> > *tport)
+> >    *	adjusted during an open, close and hangup.
+> >    */
+> >   -static void uart_dtr_rts(struct tty_port *tport, int onoff)
+> > +static void uart_dtr_rts(struct tty_port *tport, bool onoff)
+> >   {
+> >   	struct sdio_uart_port *port =
+> >   			container_of(tport, struct sdio_uart_port, port);
+> >   	int ret = sdio_uart_claim_func(port);
+> >   	if (ret)
+> >   		return;
+> > -	if (onoff == 0)
+> > +	if (!onoff)
+> >   		sdio_uart_clear_mctrl(port, TIOCM_DTR | TIOCM_RTS);
+> >   	else
+> >   		sdio_uart_set_mctrl(port, TIOCM_DTR | TIOCM_RTS);
+> 
+> Especially here. What does "!onoff" mean? If it were:
+> 
+> if (on)
+>   sdio_uart_set_mctrl(port, TIOCM_DTR | TIOCM_RTS);
+> else
+>   sdio_uart_clear_mctrl(port, TIOCM_DTR | TIOCM_RTS);
+> 
+> it would be a lot more clear.
+> 
+> > --- a/drivers/tty/amiserial.c
+> > +++ b/drivers/tty/amiserial.c
+> > @@ -1459,7 +1459,7 @@ static bool amiga_carrier_raised(struct tty_port
+> > *port)
+> >   	return !(ciab.pra & SER_DCD);
+> >   }
+> >   -static void amiga_dtr_rts(struct tty_port *port, int raise)
+> > +static void amiga_dtr_rts(struct tty_port *port, bool raise)
+> 
+> Or "raise". That makes sense too and we call it as such in
+> tty_port_operations:
+> 
+> > --- a/include/linux/tty_port.h
+> > +++ b/include/linux/tty_port.h
+> ...
+> > @@ -32,7 +32,7 @@ struct tty_struct;
+> >    */
+> >   struct tty_port_operations {
+> >   	bool (*carrier_raised)(struct tty_port *port);
+> > -	void (*dtr_rts)(struct tty_port *port, int raise);
+> > +	void (*dtr_rts)(struct tty_port *port, bool raise);
+> >   	void (*shutdown)(struct tty_port *port);
+> >   	int (*activate)(struct tty_port *port, struct tty_struct *tty);
+> >   	void (*destruct)(struct tty_port *port);
+> 
+> Care to fix that up too?
+
+Sure. I noticed they were inconsistent but it didn't feel like changing 
+the name "while at it" would be good as this is long already. I think I'll 
+make another patch out of the name changes.
+
 -- 
-2.34.1
-
+ i.
+--8323329-1066211675-1672908637=:1832--
