@@ -2,84 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0007F65EF9D
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 16:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BC365EFED
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 16:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbjAEPD4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Jan 2023 10:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S231997AbjAEPXY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 10:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbjAEPDu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 10:03:50 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516C05470B;
-        Thu,  5 Jan 2023 07:03:48 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9E2A25C017F;
-        Thu,  5 Jan 2023 10:03:47 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 05 Jan 2023 10:03:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1672931027; x=1673017427; bh=hnKEwU7O73
-        Fx9OjQg0uhy4MKVIQ65nRSz3iDfcvUew4=; b=NdNLMsuXncl3ZcBuRKpmlGB7pe
-        fawM/kukjCK9fwgq14tVC6UgorHNHBHFxRPVEtyb5pqkQwHv5eBtXD3cbE1qFd3z
-        tBSuwL4CtttrPr9/bxIiIF+1K9/+2nf7ebp36QmwWB3B6SJFD+wcPCM6YnFqMpc/
-        QAm5R3y/KHNNB4GCekWpLyNK8A7eDj/201vH8vjlYy3io0DtfhK3NQKwluVBDRdJ
-        lm9FCUvRWLbxbvvXMrGR6yglrmcipVtVvQ6AaQDDdomFF8vrZX3KZxzLjJVRP7U/
-        0B1IhpHxez98+HtoJPVFsIXVMve8dI04UEuKp63fD1mU8Y0Jgu1lmQKVPi4Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672931027; x=1673017427; bh=hnKEwU7O73Fx9OjQg0uhy4MKVIQ6
-        5nRSz3iDfcvUew4=; b=W42z8JOZL+GZ6s2gnplyMAU4CISGHspBXgKR9bKKLekt
-        ttfMFFcpbYNgqTz81lO/XX6tRFr7JeuVTFHb2B0S+DJUw9JPaL7MSOKBgplXe4rH
-        P0nnKjxk+W59KGb8J+WAoSn0NchMWeLXg9ymp83JmQ5zg36nkfhCzLeTSkjQpqAm
-        fHa4W1JonT9D2cXUQGxjsA3GP3j1U6VJUr1D7TY93PCidTbZaxWArVDPJH5urmN9
-        FVjRQyvdk0KNNvAHbtb3H50EGjdv+Ih+DQkRhhiZp8sH0ZHdfJphRfCMefkotbS/
-        OddVd0BxCiGzwf3fTjle3V1va7OEspj2vzFS2cxYBA==
-X-ME-Sender: <xms:0ua2YxptTPPG5r8hgQ2jBDMB__IJgE8y5E-04AQ8qPbmN23zwYu2PQ>
-    <xme:0ua2YzrsfanKcHUlhZISFQwivpac6zWK6jqXJM49l5ktNEkbln9IyDhZBv2pnXPYe
-    3SbYv9QAj3AlMtbGRU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgdejfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:0ua2Y-MIslUJPgQvFIymozcDk48rIuxnJde-US8mqQwozei5MGyv3w>
-    <xmx:0ua2Y84m8cDV3VYg0CA0J73qkeWaT2LTN9wkDtEwzlXUxwdmDW5EVg>
-    <xmx:0ua2Yw5etnXnzmU6oCHOKcR-u0_aHbh1TX7Nh6LknWxLW_4AXYsKqg>
-    <xmx:0-a2Y9tMdzodeDAGNCDNj8UZlJ7Oivf1ZkPDGgBiauZ67vmMxuVm-w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AA6A3B60086; Thu,  5 Jan 2023 10:03:46 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <ec9aa771-ed7c-44e0-8e8d-f4e34f6f23ab@app.fastmail.com>
-In-Reply-To: <Y7bk4ktgGFUpxQLo@kroah.com>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-26-arnd@kernel.org> <Y7bk4ktgGFUpxQLo@kroah.com>
-Date:   Thu, 05 Jan 2023 16:03:26 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Daniel Mack" <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Alan Stern" <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 25/27] usb: remove ohci-tmio driver
-Content-Type: text/plain
+        with ESMTP id S234509AbjAEPXJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 10:23:09 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B7D288;
+        Thu,  5 Jan 2023 07:23:07 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 89348E0015;
+        Thu,  5 Jan 2023 15:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672932186;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Y7hEx4jCdi5gZ1clrt4nc1ulwGgfHk1FihM6F9ggSy4=;
+        b=G/qSdJ0ydV8Xr7/XCkRJgxtAvxWYqZr8MKEt1Hi93EBzvUUdqVbu28IIZlQDeEJ1MBQ2u5
+        Dzd0gKB9pavVblmFt7cuEyE3SDi4JsSKTddd5RwcP03y0W2HkgpFO1PwJiOi7WoEHDw6WS
+        /7tspGqfhXQq9BevoClufVtGuXi+119mZg9IoMjI+KYIlF8kWC0Hq/tO4Ei4cBon4Axq7+
+        kPB+QGdviuDD3z0sQsmjdJQRg/IpwvzwZA1pQZayhOuz6WcZ4ELSeFDiclrXBkhdg9KnPW
+        nbygepLIVF5ENUoKQRbVR+mnJrjtD76zwYOu5eiyNfD4ytNH75OEFimyL+qveQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v5 0/5] Add the Renesas USBF controller support
+Date:   Thu,  5 Jan 2023 16:22:52 +0100
+Message-Id: <20230105152257.310642-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,32 +59,120 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 5, 2023, at 15:55, Greg Kroah-Hartman wrote:
-> On Thu, Jan 05, 2023 at 02:46:20PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The TMIO MFD driver is getting removed, so its OHCI portion is not
->> used any more either.
->> 
->> Cc: Alan Stern <stern@rowland.harvard.edu>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: linux-usb@vger.kernel.org
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>  drivers/usb/host/ohci-hcd.c  |  18 --
->>  drivers/usb/host/ohci-tmio.c | 364 -----------------------------------
->>  2 files changed, 382 deletions(-)
->>  delete mode 100644 drivers/usb/host/ohci-tmio.c
->
-> I can take this through the USB tree, otherwise feel free to take it and
-> add:
->
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi,
 
-Thanks!
+This series add support for the Renesas USBF controller (USB Device
+Controller) available in the Renesas RZ/N1 SoC.
 
-I think it's easier to keep this together with the patches
-that use the linux/mfd/tmio.h header, so I can remove
-that file without getting build regressions in my tree.
+Based on previous iteration:
+  https://lore.kernel.org/lkml/20221213133302.218955-1-herve.codina@bootlin.com/
+Custom debug macros present in the controller driver source code
+have been replaced by dev_dbg() calls.
 
-    Arnd
+Best regards,
+Herve Codina
+
+Changes v4 -> v5:
+  - patch 1
+    Add 'Reviewed-by: Rob Herring <robh@kernel.org>'
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - patch 3
+    Remove custom TRACE() and TRACEEP() debug macros and
+    use directly dev_dbg() instead.
+
+  - patch 2, 4 and 5
+    No changes
+
+Changes v3 -> v4:
+  - v3 patches 1, 2, 3 and 4 removed
+
+  - Patch 1 (v3 patch 5)
+    Remove 'depends-on' property
+
+  - Patch 2 (v3 patch 6)
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - Patch 3 (v3 patch 7)
+    Fix warning raised by the kernel test robot
+
+  - Patch 4 (v3 patch 8)
+    Remove 'depends-on' property
+    add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - Patch 5 (v3 patch 9)
+    No changes
+
+Changes v2 -> v3:
+  - v2 Patches 1, 2 and 3 removed.
+
+  - Patches 1, 2, 3 and 4 (new patches)
+
+  - Patch 5 (v2 patch 4):
+    Add 'depends-on' property
+    Removed redundant 'binding' word
+
+  - Patch 6 (new patch)
+
+  - Patch 7 (v2 patch 5)
+    Removed h2mode checking. This check is no more needed and the API no more
+    available.
+
+  - Patch 8 (v2 patch 6)
+    Add 'depends-on' property
+
+  - Patch 9 (v2 patch 7)
+    Fix file name
+
+Changes v1 -> v2:
+  - Patch 1:
+    Rename r9a06g032_sysctrl_get_usb_h2mode to r9a06g032_sysctrl_get_usb_role
+    and return USB_ROLE_{HOST,DEVICE} or an error code.
+    Reword commit log
+
+  - Patches 2 and 3:
+    No changes. Some previous feedbacks still need to be taken into account
+      https://lore.kernel.org/all/20221107182642.05a09f2f@bootlin.com/
+      https://lore.kernel.org/all/20221107173614.474707d7@bootlin.com/
+
+  - Patch 4:
+    Rename file from renesas,usbf.yaml to renesas,rzn1-usbf.yaml.
+    Remove 'oneOf'.
+    Add blank line and line break.
+    Add 'power-domains'.
+    Reword commit log
+
+  - Patch 5:
+    Remove clocks handling (handled by runtime PM through the clock domain
+    pointed by power-domains).
+    Fix compilation warning raised by the 'kernel test robot'.
+
+  - Patch 6:
+    Add 'power-domains'
+
+  - Patch 7:
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+
+Herve Codina (5):
+  dt-bindings: usb: add the Renesas RZ/N1 USBF controller
+  soc: renesas: r9a06g032-sysctrl: Handle h2mode setting based on USBF
+    presence
+  usb: gadget: udc: add Renesas RZ/N1 USBF controller support
+  ARM: dts: r9a06g032: Add the USBF controller node
+  MAINTAINERS: add the Renesas RZ/N1 USBF controller entry
+
+ .../bindings/usb/renesas,rzn1-usbf.yaml       |   68 +
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |   12 +
+ drivers/clk/renesas/r9a06g032-clocks.c        |   28 +
+ drivers/usb/gadget/udc/Kconfig                |   11 +
+ drivers/usb/gadget/udc/Makefile               |    1 +
+ drivers/usb/gadget/udc/renesas_usbf.c         | 3406 +++++++++++++++++
+ 7 files changed, 3534 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.yaml
+ create mode 100644 drivers/usb/gadget/udc/renesas_usbf.c
+
+-- 
+2.38.1
+
