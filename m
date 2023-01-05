@@ -2,249 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F04665F556
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 21:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C146565F773
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 00:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235077AbjAEUpn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Jan 2023 15:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S236296AbjAEXDm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 18:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbjAEUpj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 15:45:39 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999D215FD7
-        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 12:45:38 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id m15so582723ilj.8
-        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 12:45:38 -0800 (PST)
+        with ESMTP id S236290AbjAEXDf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 18:03:35 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B9B671A9
+        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 15:03:34 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id 3so20380439iou.12
+        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 15:03:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BAvLXY6p3twtxyJimzUpT6xRmecbq2LwY4H4Ygwtajg=;
-        b=HDRXXliIfeT2qYcw8lOmiSUYv37fEYum+ARvE4aDgAD34qFU116uKMveGWjmlWNqBN
-         rA+LkQe771Bjd35Uri9iXYsZ1SJQBAuw6tKRT4V3/rZwQ6v7w2OX41mOhcRi0DytIwQl
-         4Hpnn4bBvGdT8paIBgIm2b4w/q8n4A/JJ1NVY=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4PKtGdnj7K1nIf21o9CBuILUH/eT3WWN8YJ/Zsofy54=;
+        b=e5xCzs9eHgOshb4PQlWO3g6CpcSTy9nAAbg6XfYg3NaRY9CT1M2YCGqM+0k2FbaRpp
+         Up/kNOGwIxauumMuFVspQksn2rzRNaML5ce917OqicRwWAe5uUD8XleQAmXpRZ/+bXTB
+         iAjBE1L+LjfhewIcoNlw8nYHwYIAfN7l4TpSE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BAvLXY6p3twtxyJimzUpT6xRmecbq2LwY4H4Ygwtajg=;
-        b=IMsfGafG1A+TDKHWRKK/+R/KWwJIbwUy8Ri4LUqk++uqvEDcA4XF4fd7leW8pQj7f9
-         unz3Eb3ADiQXcfmVu/xE17EwCax/6xZe01T3XTV2AyEfr24o36ZdBSiDdNYOiC5Nxo4V
-         ofsWkwzU0yaHFXq/wpsBaYTn4V2/2KWyzEOEnEmW9fKm18nMGjPLVYbgDqFVH8nXMAQC
-         xscaOPZFbPcAFBi1Lwz4bdtARMShfwkIjV9iQta8XZDpAln54ob92oNsA4GAWQpiGcmQ
-         QVJ6HiCg763Ou2zeN+cKwNCSXnXelGvpixXhMl1mgU/wiyBgP0aYf4VFosrZgDOGq4sP
-         Uoxw==
-X-Gm-Message-State: AFqh2koTTR1R0afWa6tKv8Dd5eXk5tLRQ9a+C9tuhujINkUIAYpdGg9I
-        B0+M6KH177fYermhfuEZVUp4lQ==
-X-Google-Smtp-Source: AMrXdXt/PgNWNydORcf+2krvErRLM74VeUYxMWBCGPM+PrZAz2f/USb45qNB+8QZ4YYeRKVWs80mrA==
-X-Received: by 2002:a05:6e02:108:b0:30c:5c54:c264 with SMTP id t8-20020a056e02010800b0030c5c54c264mr7703283ilm.13.1672951537864;
-        Thu, 05 Jan 2023 12:45:37 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4PKtGdnj7K1nIf21o9CBuILUH/eT3WWN8YJ/Zsofy54=;
+        b=QIIicM7rgok7o5tkla9nBNhzQ78llk77MH8oSzlSLGKY6OHG02oImlsY8HMXfybGJh
+         +jllUsq1Pe5v3Ennf+LuFeAKTgzh67SJO0nClcYcVqb9HOH2LygwACvzxxtsUegLL1Rj
+         i50x9Azw7Lcy91Or23/OMZN6z+0Kgk86VB3kgjEanFD8qc4d6PHppRmISscViTfTXwDx
+         1OPLfoBV85b82E/lnmiKC17vyVE6N/S+7kZ9Fhl/4ht0VOcsUz4hqroGk2tFZrEMp7Gt
+         H2PdLsBv9nKilD7aiqDItW6jWFctAeKs0SE8cR+ydxp+me5K7mlYTeKS5rcIButTZqps
+         Y3sQ==
+X-Gm-Message-State: AFqh2konuEuKLndQBjbG0HnIjG4GNiic9GwmIE3q3mCZN1aXzwrtpT/P
+        jSnYTJJoUguUivqmHC+1eeqzFA==
+X-Google-Smtp-Source: AMrXdXvNqpk0qaKFu47wsvMYKArFyeWpcODyizy2Chp8AcYgv1sUOHof5qWgWoKG6yV5Jr3xYuFB2Q==
+X-Received: by 2002:a05:6602:1785:b0:6e0:3930:244a with SMTP id y5-20020a056602178500b006e03930244amr34979590iox.9.1672959814020;
+        Thu, 05 Jan 2023 15:03:34 -0800 (PST)
 Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id h1-20020a92d841000000b002eb1137a774sm11781951ilq.59.2023.01.05.12.45.37
+        by smtp.gmail.com with UTF8SMTPSA id i7-20020a02ca47000000b003740de9fb65sm12164782jal.46.2023.01.05.15.03.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 12:45:37 -0800 (PST)
-Date:   Thu, 5 Jan 2023 20:45:37 +0000
+        Thu, 05 Jan 2023 15:03:33 -0800 (PST)
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Icenowy Zheng <uwu@icenowy.me>
-Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
- devices for DT nodes without 'vdd-supply'
-Message-ID: <Y7c28YYIsoB7kxuH@google.com>
-References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
- <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
- <Y7Rh+EkKKN5Gu8sz@google.com>
- <10807929.5MRjnR8RnV@steina-w>
- <Y7XVgfjLEDtWhMDB@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: [PATCH 1/2] usb: misc: onboard_hub: Invert driver registration order
+Date:   Thu,  5 Jan 2023 23:03:28 +0000
+Message-Id: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y7XVgfjLEDtWhMDB@google.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 07:37:37PM +0000, Matthias Kaehlcke wrote:
-> On Wed, Jan 04, 2023 at 10:00:43AM +0100, Alexander Stein wrote:
-> > Hi Matthias,
-> > 
-> > Am Dienstag, 3. Januar 2023, 18:12:24 CET schrieb Matthias Kaehlcke:
-> > > On Thu, Dec 22, 2022 at 11:26:26AM -0800, Doug Anderson wrote:
-> > > > Hi,
-> > > > 
-> > > > On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org> 
-> > wrote:
-> > > > > The primary task of the onboard_usb_hub driver is to control the
-> > > > > power of an onboard USB hub. The driver gets the regulator from the
-> > > > > device tree property "vdd-supply" of the hub's DT node. Some boards
-> > > > > have device tree nodes for USB hubs supported by this driver, but
-> > > > > don't specify a "vdd-supply". This is not an error per se, it just
-> > > > > means that the onboard hub driver can't be used for these hubs, so
-> > > > > don't create platform devices for such nodes.
-> > > > > 
-> > > > > This change doesn't completely fix the reported regression. It
-> > > > > should fix it for the RPi 3 B Plus and boards with similar hub
-> > > > > configurations (compatible DT nodes without "vdd-supply"), boards
-> > > > > that actually use the onboard hub driver could still be impacted
-> > > > > by the race conditions discussed in that thread. Not creating the
-> > > > > platform devices for nodes without "vdd-supply" is the right
-> > > > > thing to do, independently from the race condition, which will
-> > > > > be fixed in future patch.
-> > > > > 
-> > > > > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-> > > > > Link:
-> > > > > https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com
-> > > > > / Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> > > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > > > > ---
-> > > > > 
-> > > > > Changes in v2:
-> > > > > - don't create platform devices when "vdd-supply" is missing,
-> > > > > 
-> > > > >   rather than returning an error from _find_onboard_hub()
-> > > > > 
-> > > > > - check for "vdd-supply" not "vdd" (Johan)
-> > > > > - updated subject and commit message
-> > > > > - added 'Link' tag (regzbot)
-> > > > > 
-> > > > >  drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
-> > > > >  1 file changed, 13 insertions(+)
-> > > > 
-> > > > I'm a tad bit skeptical.
-> > > > 
-> > > > It somehow feels a bit too much like "inside knowledge" to add this
-> > > > here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
-> > > > entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
-> > > > keep the absolute minimum amount of stuff in it and all of the details
-> > > > be in the other file.
-> > > > 
-> > > > If this was the only issue though, I'd be tempted to let it slide. As
-> > > > it is, I'm kinda worried that your patch will break Alexander Stein,
-> > > > who should have been CCed (I've CCed him now) or Icenowy Zheng (also
-> > > > CCed now). I believe those folks are using the USB hub driver
-> > > > primarily to drive a reset GPIO. Looking at the example in the
-> > > > bindings for one of them (genesys,gl850g.yaml), I even see that the
-> > > > reset-gpio is specified but not a vdd-supply. I think you'll break
-> > > > that?
-> > > 
-> > > Thanks for pointing that out. My assumption was that the regulator is
-> > > needed for the driver to do anything useful, but you are right, the
-> > > reset GPIO alone could be used in combination with an always-on regulator
-> > > to 'switch the hub on and off'.
-> > > 
-> > > > In general, it feels like it should actually be fine to create the USB
-> > > > hub driver even if vdd isn't supplied. Sure, it won't do a lot, but it
-> > > > shouldn't actively hurt anything. You'll just be turning off and on
-> > > > bogus regulators and burning a few CPU cycles. I guess the problem is
-> > > > some race condition that you talk about in the commit message. I'd
-> > > > rather see that fixed...
-> > > 
-> > > Yes, the race conditions needs to be fixed as well, I didn't have enough
-> > > time to write and test a patch before taking a longer break for the
-> > > holidays, so I only sent out this (supposed) partial mitigation.
-> > > 
-> > > > That being said, if we want to be more efficient and not burn CPU cycles
-> > > > and memory in Stefan Wahren's case, maybe the USB hub driver itself could
-> > > > return a canonical error value from its probe when it detects that it has
-> > > > no useful job and then "onboard_usb_hub_pdevs" could just silently bail
-> > > > out?
-> > > 
-> > > _probe() could return an error, however onboard_hub_create_pdevs() can't
-> > > rely on that, since the actual onboard_hub driver might not have been
-> > > loaded yet when the function is called.
-> > > 
-> > > It would be nice not to instantiate the pdev and onboard_hub USB instances
-> > > if the DT node has neither a 'vdd-supply' nor 'reset-gpios'. If we aren't
-> > > ok with doing that in onboard_hub_create_pdevs() then at least the 'raw'
-> > > platform device would be created. onboard_hub_probe() could still
-> > > bail if both properties are absent, _find_onboard_hub() would have to
-> > > check it again to avoid the deferred probing 'loop' for the USB instances.
-> > 
-> > I'm not really fond of checking for optional features like 'vdd-supply' and 
-> > 'reset-gpios'. This issue will pop up again if some new optional feature is 
-> > added again, e.g. power-domains.
-> 
-> It's not just any optional feature, it needs to be involved in controlling
-> power. I'm not super-exited about it either, but if we prefer not to
-> instantiate the drivers for certain DT nodes (TBD if that's a preference), we
-> need some sort of sentinel since the compatible string alone doesn't provide
-> enough information.
-> 
-> > > Alternatively we could 'just' fix the race condition involving the 'attach
-> > > work' and the onboard_hub driver is fully instantiated even on (certain)
-> > > boards where it does nothing. It's relatively rare that USB hub nodes are
-> > > specified in the DT (unless the intention is to use this driver) and
-> > > CONFIG_USB_ONBOARD_HUB needs to be set for the instances to be created,
-> > > so maybe creating the useless instances is not such a big deal.
-> > 
-> > IMHO creating a pdev shouldn't harm in any case. It's similar to having a DT 
-> > node without a corresponding driver enabled or even existing.
-> 
-> If we only want a 'raw' pdev (no instantiation of the onboard hub platform and
-> USB drivers) then a similar logic will be needed in the onboard hub driver(s).
-> 
-> So if we don't want any logic checking that at least one power related property
-> is defined then we have to accept that the onboard hub driver will be fully
-> instantiated even when it effectively does nothing.
-> 
-> If we add logic to the driver it needs to be checked in both the platform and
-> the USB driver (in the latter to avoid a deferred probe loop). It would be
-> simpler to just skip the creation of the 'raw' platform device in the first
-> place.
-> 
-> > Also adding USB devices to DT is something which is to be expected.
-> > usb-device.yaml exists since 2020 and the txt version since 2016.
-> 
-> Yes it it perfectly legal, so we need to handle this case somehow, and we
-> are currently discussing how to best do that :)
-> 
-> I still don't expect the combo of supported hub in the DT +
-> CONFIG_USB_ONBOARD_HUB=y/m to become super-popular, which could be an
-> argument for the option "just instantiate the drivers even if they do
-> nothing". Not my favorite option, but probably not that bad either.
-> 
-> > Unfortunately I'm not able to reproduce this issue on a different platform
-> > where the same HUB but no reset-gpios is required. I also noticed that
-> > onboard-usb-hub raises the error
-> > > Failed to attach USB driver: -22
-> > for each hub it is supposed to support.
-> 
-> Interesting
-> 
-> I also see the error with v6.2-rc1 but not a downstream v5.15 kernel which
-> runs most of the time on my boards. It turns out that with v6.2-rc1 the 'bus'
-> field of 'onboard_hub_usbdev_driver.drvwrap.driver' (passed to driver_attach())
-> is NULL, which causes driver_attach() / bus_for_each_dev() to return -EINVAL.
-> 
-> I did some testing (unbind/bind, unloading/reloading the driver) around the
-> 'attach work' independently from your report. I couldn't repro a situation
-> where the onboard_hub USB devices aren't probed by the driver, which is what
-> the 'attach work' is supposed to solve. At some point I observed issues with
-> that in the past, which is why driver_attach() is called. The driver_attach()
-> call was added to the onboard_hub series in early 2021, by that time I was
-> probably testing with a v5.4 kernel, it's not unconceivable that the issue I
-> saw back then is fixed in newer kernels.
+The onboard_hub 'driver' consists of two drivers, a platform
+driver and a USB driver. Currently when the onboard hub driver
+is initialized it first registers the platform driver, then the
+USB driver. This results in a race condition when the 'attach'
+work is executed, which is scheduled when the platform device
+is probed. The purpose of fhe 'attach' work is to bind elegible
+USB hub devices to the onboard_hub USB driver. This fails if
+the work runs before the USB driver has been registered.
 
-I found a configuration with which the driver_attach() call is needed: for
-a hub that isn't power cycled on un/rebind (e.g. because it as an 'always-on'
-regulator and no reset GPIO) the USB devices aren't probed by the onboard_hub
-driver on rebind. I saw this with a test config for nested hubs, where the
-secondary hub isn't actually an onboard hub, but an external hub (with DT nodes
-to fake an onboard hub).
+Register the USB driver first, then the platform driver. This
+increases the chances that the onboard_hub USB devices are probed
+before their corresponding platform device, which the USB driver
+tries to locate in _probe(). The driver already handles this
+situation and defers probing if the onboard hub platform device
+doesn't exist yet.
 
-On an actual onboard config the hub would usually be power cycled, which
-should fix/mask the issue (the unbound USB devices 'disappear' on unbind
-and are freshly created on re-bind). The re-attach is probably not
-super-important for real world configs, but it would still be good to have
-this working for the odd/test cases.
+Cc: stable@vger.kernel.org
+Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+Link: https://lore.kernel.org/lkml/Y6W00vQm3jfLflUJ@hovoldconsulting.com/T/#m0d64295f017942fd988f7c53425db302d61952b4
+Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
+
+ drivers/usb/misc/onboard_usb_hub.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index 94e7966e199d..db0844b30bbd 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -433,13 +433,13 @@ static int __init onboard_hub_init(void)
+ {
+ 	int ret;
+ 
+-	ret = platform_driver_register(&onboard_hub_driver);
++	ret = usb_register_device_driver(&onboard_hub_usbdev_driver, THIS_MODULE);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = usb_register_device_driver(&onboard_hub_usbdev_driver, THIS_MODULE);
++	ret = platform_driver_register(&onboard_hub_driver);
+ 	if (ret)
+-		platform_driver_unregister(&onboard_hub_driver);
++		usb_deregister_device_driver(&onboard_hub_usbdev_driver);
+ 
+ 	return ret;
+ }
+-- 
+2.39.0.314.g84b9a713c41-goog
+
