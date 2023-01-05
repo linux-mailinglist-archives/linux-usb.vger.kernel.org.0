@@ -2,54 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021B765E4A0
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 05:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A52465E534
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jan 2023 06:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjAEETT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Jan 2023 23:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S229793AbjAEFmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 00:42:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjAEETE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Jan 2023 23:19:04 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8526B38BD;
-        Wed,  4 Jan 2023 20:19:03 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305438b1017380;
-        Thu, 5 Jan 2023 04:19:01 GMT
+        with ESMTP id S229690AbjAEFmu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 00:42:50 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E396640865
+        for <linux-usb@vger.kernel.org>; Wed,  4 Jan 2023 21:42:49 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3055UOjs008959;
+        Thu, 5 Jan 2023 05:42:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : mime-version : content-transfer-encoding :
  content-type; s=qcppdkim1;
- bh=EIz1r3weYrMpVmqjXDa8LiM8O69EPji0OVAxdkWrPQ8=;
- b=fz6oBuXvGxcUVee6K9EP3ykTL2dewleJny8cWgev8JT1YIRCLA5J8MlM885iGQ185BPW
- FEkXZTxqd8FNyIYfMToZUt7jTLRshAGbj+eDPZ8psPM8jMTE5AVWJr8TlV5lrDGPZYPy
- x5hkE1qJ3JtRZQWnbTXNiMhlhJtmZOz5DUSBASND49iwtI8E79YKUVO19G5ydzobzeQG
- OB8MNY/Ky6N8mgO8IidI0DDEWSHFxsgoIR9YgMB9E7LE9jk/sIR5D/mdwrGiXhKrKvZa
- 5kYeqvQEIo9uIlsBNxNWj65HhikyZLdBQxBq4nR/6T6fRgJZEdetF2ZLzfr/wm40AOTc Iw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvwugmd-1
+ bh=8Xpn1fGT+Dty0uuoroI4tKe26oJJtRdYDaQbGa9GLac=;
+ b=X6hBsdtrBi1rGsHY5MvrqG+hd/AnvtS5yiQ23KQ1UAmhMEMmvLElqopSbuU8Ho18OIjR
+ ijAshl/DqsyZlrjKwRmtW9tjgMRn8tFMbHaDCzO9d8mVPrnNmYlMAa7Uf9/zWYwEhVtl
+ Wy+R7bRM3R2mziOzzoZRp4r9+7ac3zb4Qw14z8lEsl98xJ1IjoHm8zM0Clr7Rqf3dcNE
+ QByUxulpEw7Yfqxnlevc+MfHyhOeH/gYM6B6sFaQMywgRbc1j6QS9pOgNgPrrXwVvYz9
+ oK3IZdE06+pc16jBuoFWXAppJof1FcdaMLROoHs6TBCGbs6D7+GJK68+ci01+/p/7UAm WA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvfbhpj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 04:19:00 +0000
+        Thu, 05 Jan 2023 05:42:47 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3054IxsZ032384
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3055gkrD002552
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Jan 2023 04:18:59 GMT
+        Thu, 5 Jan 2023 05:42:47 GMT
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 4 Jan 2023 20:18:57 -0800
+ 15.2.986.36; Wed, 4 Jan 2023 21:42:44 -0800
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
+CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
+        "Wesley Cheng" <quic_wcheng@quicinc.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
         Fenglin Wu <quic_fenglinw@quicinc.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH] usb: ucsi: fix connector partner ucsi work issue
-Date:   Thu, 5 Jan 2023 12:18:44 +0800
-Message-ID: <1672892324-12335-1-git-send-email-quic_linyyuan@quicinc.com>
+        "Linyu Yuan" <quic_linyyuan@quicinc.com>
+Subject: [PATCH v2] usb: ucsi: fix connector partner ucsi work issue
+Date:   Thu, 5 Jan 2023 13:42:40 +0800
+Message-ID: <1672897360-24257-1-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -59,35 +58,38 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xT8Vu7yHaFquU6cjgJfXrqhKPwzo3ZUz
-X-Proofpoint-ORIG-GUID: xT8Vu7yHaFquU6cjgJfXrqhKPwzo3ZUz
+X-Proofpoint-GUID: nU0aY3z9RDspPc2ph2I5jhNcoue-FQEt
+X-Proofpoint-ORIG-GUID: nU0aY3z9RDspPc2ph2I5jhNcoue-FQEt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- mlxlogscore=840 phishscore=0 clxscore=1011 malwarescore=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301050034
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ definitions=2023-01-05_01,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=974
+ spamscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 bulkscore=0 clxscore=1015 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301050046
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When ucsi unregister, it will destroy connector work queue, but a pending
-delay work may still exist, once delay timer expire, as work queue
-destroyed, it will cause system crash.
+When a PPM client unregisters with UCSI framework, connector specific work
+queue is destroyed. However, a pending delayed work queued before may
+still exist. Once the delay timer expires and the work is scheduled,
+this can cause a system crash as the workqueue is destroyed already.
 
-Move all partner related delay work to connector instance and cancel all
-of them when ucsi unregister happen.
+Fix this by moving all partner related delayed work to connector instance
+and cancel all of them when ucsi_unregister() is called by PPM client.
 
-Fixes: b9aa02c ("usb: typec: ucsi: Add polling mechanism for partner tasks like alt mode checking")
+Fixes: b9aa02ca39a4 ("usb: typec: ucsi: Add polling mechanism for partner tasks like alt mode checking")
 Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 ---
+v2: update commit description and remove cc stable list
+
  drivers/usb/typec/ucsi/ucsi.c | 61 +++++++++++++++++++++++++------------------
  drivers/usb/typec/ucsi/ucsi.h | 11 ++++++++
  2 files changed, 46 insertions(+), 26 deletions(-)
