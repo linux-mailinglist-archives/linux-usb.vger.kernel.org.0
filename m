@@ -2,120 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E627365FB96
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 07:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A4E65FC78
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 09:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjAFGsT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Jan 2023 01:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S231741AbjAFIKv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Jan 2023 03:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjAFGsR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 01:48:17 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EE96EC85
-        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 22:48:14 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id q2so631377ljp.6
-        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 22:48:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cXbXihXV6MI6wPU9ELSqbbiHv+KuaPURdjnGGvB+ZTA=;
-        b=cYMryEsQvFWnHfqF/NYykYbP8HFRy78QI1QVZQ7DZBobgJAYRNoW+a/87B90AxoXRa
-         AxnZ0haUClHj4xHrH0aaU6IANIqYgqj+U8F9db20zC/CbOdv12qcUZPhJ+18ZXIgt0Cn
-         /YZeWUnFzPg1tUyD4pTRfBlqNnUiTl0ERwPlSsctLIxWRFvM6hZHNRpv5Xir91RzHhib
-         d6m/T8Us8MQdfFlfoW2V/UvwOpgFMybsCNfrK+CgndNGC/5dQMIUo+3hE6qn3NrSI9Ot
-         xPT8QJSp8XpbjTut857FJ11o91LMSINEOGpV1+D11qfEE7WugiZUtXW46iGVGz+QT9SI
-         a1cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXbXihXV6MI6wPU9ELSqbbiHv+KuaPURdjnGGvB+ZTA=;
-        b=Duvl3VJghslZA7ymPygmFVE1HwtxltYR2oYWDC/HN8vwsPKX9XlQWVjYSxkeb6HbwN
-         x6v1EWuQRAnFJ40E4sMFFvNqQNOU0b+580fqfawZoT5Ts3S94LxunzNaKfPHPMtY1NC1
-         3J4L87SF9cxJqJZXrfjI16kBz5Pp5xoeRyh7BKJ0Aeu0HyiVddULL2sJCEIuFrhk+BGQ
-         9LKpZYpBFEwS/EhJ8AqWuwid9VjB+C2dZ2dIwz9NBPEfeAkTwZRXhr7sJGwQHPpnWAxY
-         HnTW5B4g2u8hOWyvX5IOe4pqNB5V1JaLr4XQaWrYOmSld3ZLrEycxc7TDCGV6jYX88A1
-         zDHw==
-X-Gm-Message-State: AFqh2koHCkezytHli/8OL3JetcFgOpgEPjD/BUb5k2WwFkKVde4XseRm
-        UMhnc7OZIFFTHyqiRvJQTgUaRjBQfASqQP7pgA1dxA==
-X-Google-Smtp-Source: AMrXdXvJgMr94Wo6/9butWn9yyjNDYyz5+lTRG/UM8O7dXWuk7sQFdwSnEx2/JhirmdBg/0HkQY+dDOG3HI1hKt3M9o=
-X-Received: by 2002:a05:651c:2001:b0:27f:ee4c:3c2d with SMTP id
- s1-20020a05651c200100b0027fee4c3c2dmr685128ljo.466.1672987692487; Thu, 05 Jan
- 2023 22:48:12 -0800 (PST)
+        with ESMTP id S229490AbjAFIK1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 03:10:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAF378E99;
+        Fri,  6 Jan 2023 00:10:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F33661D4C;
+        Fri,  6 Jan 2023 08:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44FA2C433D2;
+        Fri,  6 Jan 2023 08:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1672992621;
+        bh=lFl3l56T6EeKmFd7eKwb8kpBaqgT6RyrMDeq/Q/+4Hs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zhd2tDSE2dS6kqJ117QE2moXaS3KRy0sIGlRXifPKdSnsN+0KWeLyGd2mB/d7g8C1
+         OOPg8qAZkV7e1qXCwdGklizF4+r2RHlUPFQkxxvMnP0ioLJjIu9HvZ6fHDXfTTDMNt
+         SKfHmhBci+es9br3kqixq+QPn3/V/ktha/xNV0vM=
+Date:   Fri, 6 Jan 2023 09:10:18 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Haotien Hsu <haotienh@nvidia.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>,
+        Wayne Chang <waynec@nvidia.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] ucsi_ccg: Refine the UCSI Interrupt handling
+Message-ID: <Y7fXapwb5yJNbM3G@kroah.com>
+References: <20230103081531.423017-1-haotienh@nvidia.com>
 MIME-Version: 1.0
-References: <20230104091922.3959602-1-bhupesh.sharma@linaro.org>
- <20230104091922.3959602-3-bhupesh.sharma@linaro.org> <167288699633.3289770.7520350746366547570.robh@kernel.org>
-In-Reply-To: <167288699633.3289770.7520350746366547570.robh@kernel.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Fri, 6 Jan 2023 12:18:00 +0530
-Message-ID: <CAH=2Nty0+610LzrR9HG+31p-CF6DzoTF6yNhQZA2S=StkRVaCQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: soc: qcom: eud: Fix identation issues in
- the example
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-usb@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        quic_schowdhu@quicinc.com, linux-kernel@vger.kernel.org,
-        andersson@kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103081531.423017-1-haotienh@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 5 Jan 2023 at 08:24, Rob Herring <robh@kernel.org> wrote:
->
->
-> On Wed, 04 Jan 2023 14:49:22 +0530, Bhupesh Sharma wrote:
-> > As noted by Konrad while reviewing [1], the example
-> > node in the EUD yaml documentation has identation
-> > issues.
-> >
-> > So fix them.
-> >
-> > [1]. https://lore.kernel.org/linux-arm-msm/20221231131945.3286639-1-bhupesh.sharma@linaro.org
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml | 8 +++++---
-> >  1 file changed, 5 insertions(+), 3 deletions(-)
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,eud.example.dtb: eud@88e0000: reg: [[0, 143523840], [0, 8192], [0, 143532032], [0, 4096]] is too long
->         From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230104091922.3959602-3-bhupesh.sharma@linaro.org
->
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
+On Tue, Jan 03, 2023 at 04:15:31PM +0800, Haotien Hsu wrote:
+> From: Sing-Han Chen <singhanc@nvidia.com>
+> 
+> For the CCGx, when the OPM field in the INTR_REG is cleared, then the
+> CCI data in the PPM is reset.
+> 
+> To align with the CCGx UCSI interface guide, this patch updates the
+> driver to copy CCI and MESSAGE_IN before clearing UCSI interrupt.
+> When a new command is sent, the driver will clear the old CCI and
+> MESSAGE_IN copy.
+> 
+> Finally, clear UCSI_READ_INT before calling complete() to ensure that
+> the ucsi_ccg_sync_write() would wait for the interrupt handling to
+> complete.
+> It prevents the driver from resetting CCI prematurely.
+> 
+> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+> ---
+> V1->V2
+> - Fix uninitialized symbol 'cci'
+> v2->v3
+> - Remove wrong Reported-by tags
+> ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 86 ++++++++++++++++++++++++++++---
+>  1 file changed, 79 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index eab3012e1b01..b35a3a97c9fb 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
+>  	bool checked;
+>  } __packed;
+>  
+> +#define CCGX_MESSAGE_IN_MAX 4
+> +struct op_region {
+> +	u32 cci;
+> +	u32 message_in[CCGX_MESSAGE_IN_MAX];
+> +};
+> +
+>  struct ucsi_ccg {
+>  	struct device *dev;
+>  	struct ucsi *ucsi;
+> @@ -222,6 +228,9 @@ struct ucsi_ccg {
+>  	bool has_multiple_dp;
+>  	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
+>  	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
+> +
+> +	spinlock_t op_lock;
 
-Ok, let me try and fix this via v2.
+What does this lock protect?  Please document that so that we can verify
+if this really is a correct change _AND_ so we know what future changes
+need to take the lock or not.
 
-Thanks.
+> +	struct op_region op_data;
+>  };
+>  
+>  static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+> @@ -305,12 +314,57 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
+>  	return 0;
+>  }
+>  
+> +static void ccg_op_region_read(struct ucsi_ccg *uc, unsigned int offset,
+> +		void *val, size_t val_len)
+> +{
+> +	struct op_region *data = &uc->op_data;
+> +
+> +	spin_lock(&uc->op_lock);
+> +	if (offset == UCSI_CCI)
+> +		memcpy(val, &data->cci, val_len);
+> +	else if (offset == UCSI_MESSAGE_IN)
+> +		memcpy(val, &data->message_in, val_len);
+> +	spin_unlock(&uc->op_lock);
+> +}
+> +
+> +static void ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
+> +{
+> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
+> +	struct op_region *data = &uc->op_data;
+> +	u32 message_in[CCGX_MESSAGE_IN_MAX];
+> +
+> +	if (UCSI_CCI_LENGTH(cci))
+> +		if (ccg_read(uc, reg, (void *)&message_in,
+> +					sizeof(message_in))) {
+> +			dev_err(uc->dev, "failed to read MESSAGE_IN\n");
+
+What can userspace do with this error?  Will it be repeated a lot?
+
+thanks,
+
+greg k-h
