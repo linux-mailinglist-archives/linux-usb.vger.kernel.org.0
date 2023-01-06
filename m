@@ -2,191 +2,265 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0549365FF2A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 11:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F216600B0
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 13:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjAFKu3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Jan 2023 05:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S234352AbjAFM5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Jan 2023 07:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbjAFKuW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 05:50:22 -0500
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868BD6DB8D;
-        Fri,  6 Jan 2023 02:50:20 -0800 (PST)
-Received: by mail-pj1-f52.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so1296991pjj.4;
-        Fri, 06 Jan 2023 02:50:20 -0800 (PST)
+        with ESMTP id S234394AbjAFM4p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 07:56:45 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71D06C2B5
+        for <linux-usb@vger.kernel.org>; Fri,  6 Jan 2023 04:56:08 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id s9so1172170wru.13
+        for <linux-usb@vger.kernel.org>; Fri, 06 Jan 2023 04:56:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=71hsueaCtDriWXLU0P+tcfQEdhmXBsvOLwBjhBD5MkE=;
+        b=oeeYySaGlzQDEeYSaWZ0tli1QpWe2ABrviCD3ReNiAV8+h9c31KzRU1yk0YK3Z61vd
+         yDqhVC/IqUmwyCQjA40+zv9o9kUwc2yleEvrhR//l8v6RvU4TtcliDmuXKcoHhODeHVl
+         AeUovhw1LgEwiU0V3PzaGY4ckMIyU0pj1sP9DtCobbv5qbAnSuJDiT6a1aNn3ntNxegl
+         /NVsiVVJUMw6wrB1P+/W33xaMxKJ7B6drSqBp53gFPAXtIyI4jZ71cZQE1OQMVbWNr4E
+         +M/GN5TCFdzQLLR4l0qh/1AJgNPdu7GwpMN62yk67ZA5A88IHBuAow0a85JM80BlAfbZ
+         +brQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lRAlJPnsHvwo9+KYVt93sJxqGpThqmJEXZYgKf4vous=;
-        b=J5XLk1J7zJg+ZFA5q239CwxTwUVQ346vk6vQCPwoTay7Rf46O+9wgmoA6JIBoQ5aBD
-         zLn/w8caWm+C8pHli3V3KW2xRQbnBrc1JMPPG4CF3kE+FZOEZ3nkjIv0S0XKecxXh+vl
-         IOOBz+iGiL3tpwKMAMQ4Z2g6jaHYLJliK1mi6hvzFZLFwyfg8So9U+9Im2GO4VkEnuvW
-         22/ElRSHryi8SVZutRfo9yCemVS/9kyBMB43xWQiQwzHlqZshrhkck8gufhioEfMC32p
-         JkQG5XEUrw67VkxIExIQue6V7pyAN8+JrSgnOQF7ts+EBVkJv6n8iYXFV6dxP+v8v8gB
-         l+Ew==
-X-Gm-Message-State: AFqh2krKklZ4WbkbKYLlOveyvaLmTmm46TjjfBrOcafSDAjSbkf1rqOy
-        +srkHAI4kl/SU1Qh3FeVno4=
-X-Google-Smtp-Source: AMrXdXtUXYhEuTaGeA1+kPaRkyzwam/EhnGFQrOYqs3mfWmn9ZEjmO8GRSINAUVXTUyz1tzWTcpd8A==
-X-Received: by 2002:a17:902:d386:b0:192:68e8:c60c with SMTP id e6-20020a170902d38600b0019268e8c60cmr47799898pld.31.1673002220070;
-        Fri, 06 Jan 2023 02:50:20 -0800 (PST)
-Received: from milyway.. ([125.191.247.116])
-        by smtp.googlemail.com with ESMTPSA id e5-20020a17090301c500b00188fadb71ecsm732486plh.16.2023.01.06.02.50.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 02:50:19 -0800 (PST)
-From:   Leesoo Ahn <lsahn@ooseel.net>
-To:     lsahn@ooseel.net
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v4] usbnet: optimize usbnet_bh() to reduce CPU load
-Date:   Fri,  6 Jan 2023 19:49:49 +0900
-Message-Id: <20230106104950.22741-1-lsahn@ooseel.net>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=71hsueaCtDriWXLU0P+tcfQEdhmXBsvOLwBjhBD5MkE=;
+        b=WNq5P9KpM4zaLW7jGwuKbFcS0DJPGCQbsDYQtt2bFo9+bP13aoJFPA4q8DMLK8rahq
+         FfHwokgu8fbuYiG/5OIrHsJy6lcrRxbNtUwdj8OlSPWxdTThQ9VAZpmJjqzUAuVFYqTA
+         sj8VC8fpVbZ0ZPdyd6Rw8SSV/5ZdyG/L5mR+bvTx3LgLfAZF/qGmU8/UWoXWR3heXZ1U
+         t57vUL6q7pk4+IlJillHHU+DMRo9Hd7UTM02js+tFn8/N4jX0nnT7ij9oaWdVWTrZI34
+         Dy5NJ0lFCNVGrGDGThHKBaMGdLTeelj31nL9+IZKBQNqc3tLvgpp2MGse0On8WUEfVD0
+         4srA==
+X-Gm-Message-State: AFqh2kp3K9bNBB/rQTO1yjXj9kxZ0CdXLot8nVdnUMj+XwVthojJ6UR4
+        NMpoc0QHnc4GGsUQenPEZSQfCw==
+X-Google-Smtp-Source: AMrXdXslT7j+y1PheS8q/LGsk/fnqEhqbDslcbnFk4CGjJm9BxRAeCPpXvm0+8DOCa6EoLRPKNIgzA==
+X-Received: by 2002:adf:e8c1:0:b0:242:782c:f397 with SMTP id k1-20020adfe8c1000000b00242782cf397mr34527161wrn.25.1673009766841;
+        Fri, 06 Jan 2023 04:56:06 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t14-20020adfe44e000000b0028663fc8f4csm1110160wrm.30.2023.01.06.04.56.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 04:56:06 -0800 (PST)
+Message-ID: <74ecff7a-bc75-0514-6aa2-b1401b8d43b8@linaro.org>
+Date:   Fri, 6 Jan 2023 13:56:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/3] arm64: dts: mediatek: Introduce MT8195 LAPTOP and
+ IOT's USB configurations
+Content-Language: en-US
+To:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Bear Wang <bear.wang@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20230105092809.14214-1-macpaul.lin@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230105092809.14214-1-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current source pushes skb into dev-done queue by calling
-skb_dequeue_tail() and then pop it by skb_dequeue() to branch to
-rx_cleanup state for freeing urb/skb in usbnet_bh(). It takes extra CPU
-load, 2.21% (skb_queue_tail) as follows,
+On 05/01/2023 10:28, Macpaul Lin wrote:
+> Introduce the split MT8195 laptop and iot USB configurations.
+> The hardware specifications for LAPTOP devices is different from IOT
+> devices. The major differences include some hardware constrains for
+> dual-role switch for USB controllers in different configurations,
+> especially for power management and other control flows as well.
+> 
+> Here are some hardware specifiction differences listed:
+>   1. LAPTOP (Cherry Tomato boards) don't support USB gadget (device mode).
+>   2. IOT devices must support multiple gadget devices and host mode.
+>   3. Dual-role switch is not fully supported. Only USB PORT0 support
+>      dual-role switch.
+>   4. Power management is designed in primary and secondary dominator.
+>      For a dual-role port, the device controller is the primary controller
+>      for power management; while the host controller is the secondary.
+>      LAPTOP devices should remove device nodes for avoiding abnormal
+>      behavior.
+> 
+> This modifcation is to add USB configurations "mt8195-laptop-usb.dtsi"
+> for LAPTOP devices, and add "mt8195-iot-usb.dtsi" for IOT devices.
+> 
+> To remove common USB configurations for mt8195.dtsi and switch includes
+> dtsi these new files for the boards will come in next patch.
+> 
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+>  .../boot/dts/mediatek/mt8195-iot-usb.dtsi     | 122 ++++++++++++++++++
+>  .../boot/dts/mediatek/mt8195-laptop-usb.dtsi  | 102 +++++++++++++++
+>  2 files changed, 224 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-iot-usb.dtsi
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-laptop-usb.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-iot-usb.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-iot-usb.dtsi
+> new file mode 100644
+> index 000000000000..f9bd79542044
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195-iot-usb.dtsi
+> @@ -0,0 +1,122 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2022 MediaTek Inc.
+> + */
+> +
+> +#include "mt8195.dtsi"
+> +
+> +/ {
+> +	soc {
+> +		ssusb: ssusb@11200000 {
 
--   11.58%     0.26%  swapper          [k] usbnet_bh
-   - 11.32% usbnet_bh
-      - 6.43% skb_dequeue
-           6.34% _raw_spin_unlock_irqrestore
-      - 2.21% skb_queue_tail
-           2.19% _raw_spin_unlock_irqrestore
-      - 1.68% consume_skb
-         - 0.97% kfree_skbmem
-              0.80% kmem_cache_free
-           0.53% skb_release_data
+Node name: usb
 
-To reduce the extra CPU load use return values to call helper function
-usb_free_skb() to free the resources instead of calling skb_queue_tail()
-and skb_dequeue() for push and pop respectively.
+> +			compatible ="mediatek,mt8183-mtu3", "mediatek,mtu3";
+> +			reg = <0 0x11201000 0 0x2dff>,
+> +			      <0 0x11203e00 0 0x0100>;
+> +			reg-names = "mac", "ippc";
+> +			interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			phys = <&u2port0 PHY_TYPE_USB2>,
+> +			       <&u3port0 PHY_TYPE_USB3>;
+> +			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
+> +				 <&topckgen CLK_TOP_SSUSB_REF>,
+> +				 <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>;
+> +			clock-names = "sys_ck", "ref_ck", "mcu_ck";
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			status = "disabled";
+> +
+> +			xhci0: xhci@11200000 {
+> +				compatible = "mediatek,mt8195-xhci",
+> +					     "mediatek,mtk-xhci";
+> +				reg = <0 0x11200000 0 0x1000>;
+> +				reg-names = "mac";
+> +				interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH 0>;
+> +				assigned-clocks = <&topckgen CLK_TOP_USB_TOP>,
+> +						  <&topckgen CLK_TOP_SSUSB_XHCI>;
+> +				assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+> +							 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +				clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
+> +					 <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>,
+> +					 <&topckgen CLK_TOP_SSUSB_REF>,
+> +					 <&apmixedsys CLK_APMIXED_USB1PLL>;
+> +				clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+> +		xhci1: xhci1@11290000 {
 
--    7.87%     0.25%  swapper          [k] usbnet_bh
-   - 7.62% usbnet_bh
-      - 4.81% skb_dequeue
-           4.74% _raw_spin_unlock_irqrestore
-      - 1.75% consume_skb
-         - 0.98% kfree_skbmem
-              0.78% kmem_cache_free
-           0.58% skb_release_data
-        0.53% smsc95xx_rx_fixup
+Node names should be generic, so just "xhci"
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
----
-v4:
-  - Use usb_free_skb() helper function instead of goto label
+> +			compatible = "mediatek,mt8195-xhci",
+> +				     "mediatek,mtk-xhci";
+> +			reg = <0 0x11290000 0 0x1000>,
+> +			      <0 0x11293e00 0 0x0100>;
+> +			reg-names = "mac", "ippc";
+> +			interrupts = <GIC_SPI 530 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			phys = <&u2port1 PHY_TYPE_USB2>,
+> +			       <&u3port1 PHY_TYPE_USB3>;
+> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_1P>,
+> +					  <&topckgen CLK_TOP_SSUSB_XHCI_1P>;
+> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+> +						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_1P_BUS>,
+> +				 <&pericfg_ao CLK_PERI_AO_SSUSB_1P_XHCI>,
+> +				 <&topckgen CLK_TOP_SSUSB_P1_REF>,
+> +				 <&apmixedsys CLK_APMIXED_USB1PLL>;
+> +			clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
+> +			status = "disabled";
+> +		};
+> +
+> +		ssusb1: usb1@112a1000 {
 
-v3:
-  - Replace return values with proper -ERR values in rx_process()
-  https://lore.kernel.org/netdev/20221221075924.1141346-1-lsahn@ooseel.net/
+usb
 
-v2:
-  - Replace goto label with return statement to reduce goto entropy
-  - Add CPU load information by perf in commit message
-  https://lore.kernel.org/netdev/20221221044230.1012787-1-lsahn@ooseel.net/
+> +			compatible = "mediatek,mt8183-mtu3", "mediatek,mtu3";
+> +			reg = <0 0x112a1000 0 0x2dff>,
+> +				  <0 0x112a3e00 0 0x0100>;
+> +			reg-names = "mac", "ippc";
+> +			interrupts = <GIC_SPI 532 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			phys = <&u2port2 PHY_TYPE_USB2>;
+> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_2P>;
+> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>,
+> +				 <&topckgen CLK_TOP_SSUSB_P2_REF>,
+> +				 <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>;
+> +			clock-names = "sys_ck", "ref_ck", "mcu_ck";
+> +			mediatek,syscon-wakeup = <&pericfg 0x400 4>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			status = "disabled";
+> +
+> +			xhci2: xhci2@112a0000 {
 
-v1 at:
-  https://lore.kernel.org/netdev/20221217161851.829497-1-lsahn@ooseel.net/
+xhci
 
----
- drivers/net/usb/usbnet.c | 29 +++++++++++++++++------------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+> +				compatible = "mediatek,mt8195-xhci","mediatek,mtk-xhci";
+> +				reg = <0 0x112a0000 0 0x1000>;
+> +				reg-names = "mac";
+> +				interrupts-extended = <&gic GIC_SPI 533 IRQ_TYPE_LEVEL_HIGH 0>,
+> +					      <&pio 220 IRQ_TYPE_EDGE_FALLING>;
+> +				assigned-clocks = <&topckgen CLK_TOP_SSUSB_XHCI_2P>;
+> +				assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +				clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>;
+> +				clock-names = "sys_ck";
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+> +		xhci3: xhci3@112b0000 {
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index e4fbb4d86606..fc12b5c4241b 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -556,32 +556,30 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
- 
- /*-------------------------------------------------------------------------*/
- 
--static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
-+static inline int rx_process(struct usbnet *dev, struct sk_buff *skb)
- {
- 	if (dev->driver_info->rx_fixup &&
- 	    !dev->driver_info->rx_fixup (dev, skb)) {
- 		/* With RX_ASSEMBLE, rx_fixup() must update counters */
- 		if (!(dev->driver_info->flags & FLAG_RX_ASSEMBLE))
- 			dev->net->stats.rx_errors++;
--		goto done;
-+		return -EPROTO;
- 	}
- 	// else network stack removes extra byte if we forced a short packet
- 
- 	/* all data was already cloned from skb inside the driver */
- 	if (dev->driver_info->flags & FLAG_MULTI_PACKET)
--		goto done;
-+		return -EALREADY;
- 
- 	if (skb->len < ETH_HLEN) {
- 		dev->net->stats.rx_errors++;
- 		dev->net->stats.rx_length_errors++;
- 		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
--	} else {
--		usbnet_skb_return(dev, skb);
--		return;
-+		return -EPROTO;
- 	}
- 
--done:
--	skb_queue_tail(&dev->done, skb);
-+	usbnet_skb_return(dev, skb);
-+	return 0;
- }
- 
- /*-------------------------------------------------------------------------*/
-@@ -1515,6 +1513,14 @@ static int rx_alloc_submit(struct usbnet *dev, gfp_t flags)
- 	return ret;
- }
- 
-+static inline void usb_free_skb(struct sk_buff *skb)
-+{
-+	struct skb_data *entry = (struct skb_data *)skb->cb;
-+
-+	usb_free_urb(entry->urb);
-+	dev_kfree_skb(skb);
-+}
-+
- /*-------------------------------------------------------------------------*/
- 
- // tasklet (work deferred from completions, in_irq) or timer
-@@ -1529,15 +1535,14 @@ static void usbnet_bh (struct timer_list *t)
- 		entry = (struct skb_data *) skb->cb;
- 		switch (entry->state) {
- 		case rx_done:
--			entry->state = rx_cleanup;
--			rx_process (dev, skb);
-+			if (rx_process(dev, skb))
-+				usb_free_skb(skb);
- 			continue;
- 		case tx_done:
- 			kfree(entry->urb->sg);
- 			fallthrough;
- 		case rx_cleanup:
--			usb_free_urb (entry->urb);
--			dev_kfree_skb (skb);
-+			usb_free_skb(skb);
- 			continue;
- 		default:
- 			netdev_dbg(dev->net, "bogus skb state %d\n", entry->state);
--- 
-2.34.1
+xhci
+> +			compatible = "mediatek,mt8195-xhci",
+> +				     "mediatek,mtk-xhci";
+> +			reg = <0 0x112b0000 0 0x1000>,
+> +			      <0 0x112b3e00 0 0x0100>;
+> +			reg-names = "mac", "ippc";
+> +			interrupts = <GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			phys = <&u2port3 PHY_TYPE_USB2>;
+> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_3P>,
+> +					  <&topckgen CLK_TOP_SSUSB_XHCI_3P>;
+> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+> +						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>,
+> +				 <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>,
+> +				 <&topckgen CLK_TOP_SSUSB_P3_REF>;
+> +			clock-names = "sys_ck", "xhci_ck", "ref_ck";
+> +			mediatek,syscon-wakeup = <&pericfg 0x400 106>;
+> +			wakeup-source;
+> +			usb2-lpm-disable;
+> +			status = "disabled";
+> +		};
+
+
+Best regards,
+Krzysztof
 
