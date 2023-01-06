@@ -2,86 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AA065FB37
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 07:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E627365FB96
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 07:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjAFGKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Jan 2023 01:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S231725AbjAFGsT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Jan 2023 01:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjAFGKT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 01:10:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02226B588;
-        Thu,  5 Jan 2023 22:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78A1EB81C9C;
-        Fri,  6 Jan 2023 06:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 061F5C433F0;
-        Fri,  6 Jan 2023 06:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672985416;
-        bh=Cach64z5M0knxSqan5nA60Iv5LtmLstDsa9zAlDKzuY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LU2Hdk9hiORJsWSBKr4gKBiXFHaKtChgt8cXtlDFlJct4rbHK3M/8vOjdicf9dwdb
-         S6ZN5F26mH/I7kidcIHcc7aOFwrUQ0ZBxshX036Bg6Y62NhWRCZkzriCJ+Ha5/R4Ha
-         uU6kLt2q6tdWdAy8bQb2lpg+9M9xhryhYxJGssvUbWhONEErKAzAmfJMJ1jnnCE+Gg
-         4Sxx0jgAd3sXooL3VVLEwcHgDIrL+N84vXUXZh/ViZq3VEeOyo+WV+/Y/LWt7eBbF/
-         yQgk2FWBk0niPHNWwzfVdO4y5295be7kNjuvPWHSejEQCQ7iK3sx2lxyhiq+xK9YAw
-         4iUrQ3zhnk8XQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBA55E21EEB;
-        Fri,  6 Jan 2023 06:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229597AbjAFGsR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 01:48:17 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EE96EC85
+        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 22:48:14 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id q2so631377ljp.6
+        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 22:48:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cXbXihXV6MI6wPU9ELSqbbiHv+KuaPURdjnGGvB+ZTA=;
+        b=cYMryEsQvFWnHfqF/NYykYbP8HFRy78QI1QVZQ7DZBobgJAYRNoW+a/87B90AxoXRa
+         AxnZ0haUClHj4xHrH0aaU6IANIqYgqj+U8F9db20zC/CbOdv12qcUZPhJ+18ZXIgt0Cn
+         /YZeWUnFzPg1tUyD4pTRfBlqNnUiTl0ERwPlSsctLIxWRFvM6hZHNRpv5Xir91RzHhib
+         d6m/T8Us8MQdfFlfoW2V/UvwOpgFMybsCNfrK+CgndNGC/5dQMIUo+3hE6qn3NrSI9Ot
+         xPT8QJSp8XpbjTut857FJ11o91LMSINEOGpV1+D11qfEE7WugiZUtXW46iGVGz+QT9SI
+         a1cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cXbXihXV6MI6wPU9ELSqbbiHv+KuaPURdjnGGvB+ZTA=;
+        b=Duvl3VJghslZA7ymPygmFVE1HwtxltYR2oYWDC/HN8vwsPKX9XlQWVjYSxkeb6HbwN
+         x6v1EWuQRAnFJ40E4sMFFvNqQNOU0b+580fqfawZoT5Ts3S94LxunzNaKfPHPMtY1NC1
+         3J4L87SF9cxJqJZXrfjI16kBz5Pp5xoeRyh7BKJ0Aeu0HyiVddULL2sJCEIuFrhk+BGQ
+         9LKpZYpBFEwS/EhJ8AqWuwid9VjB+C2dZ2dIwz9NBPEfeAkTwZRXhr7sJGwQHPpnWAxY
+         HnTW5B4g2u8hOWyvX5IOe4pqNB5V1JaLr4XQaWrYOmSld3ZLrEycxc7TDCGV6jYX88A1
+         zDHw==
+X-Gm-Message-State: AFqh2koHCkezytHli/8OL3JetcFgOpgEPjD/BUb5k2WwFkKVde4XseRm
+        UMhnc7OZIFFTHyqiRvJQTgUaRjBQfASqQP7pgA1dxA==
+X-Google-Smtp-Source: AMrXdXvJgMr94Wo6/9butWn9yyjNDYyz5+lTRG/UM8O7dXWuk7sQFdwSnEx2/JhirmdBg/0HkQY+dDOG3HI1hKt3M9o=
+X-Received: by 2002:a05:651c:2001:b0:27f:ee4c:3c2d with SMTP id
+ s1-20020a05651c200100b0027fee4c3c2dmr685128ljo.466.1672987692487; Thu, 05 Jan
+ 2023 22:48:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: cdc_ether: add support for Thales Cinterion PLS62-W
- modem
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167298541589.969.4400590386173666162.git-patchwork-notify@kernel.org>
-Date:   Fri, 06 Jan 2023 06:10:15 +0000
-References: <20230105034249.10433-1-hui.wang@canonical.com>
-In-Reply-To: <20230105034249.10433-1-hui.wang@canonical.com>
-To:     Hui Wang <hui.wang@canonical.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        davem@davemloft.net, oliver@neukum.org, kuba@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230104091922.3959602-1-bhupesh.sharma@linaro.org>
+ <20230104091922.3959602-3-bhupesh.sharma@linaro.org> <167288699633.3289770.7520350746366547570.robh@kernel.org>
+In-Reply-To: <167288699633.3289770.7520350746366547570.robh@kernel.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Fri, 6 Jan 2023 12:18:00 +0530
+Message-ID: <CAH=2Nty0+610LzrR9HG+31p-CF6DzoTF6yNhQZA2S=StkRVaCQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: soc: qcom: eud: Fix identation issues in
+ the example
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-usb@vger.kernel.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_schowdhu@quicinc.com, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, devicetree@vger.kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+On Thu, 5 Jan 2023 at 08:24, Rob Herring <robh@kernel.org> wrote:
+>
+>
+> On Wed, 04 Jan 2023 14:49:22 +0530, Bhupesh Sharma wrote:
+> > As noted by Konrad while reviewing [1], the example
+> > node in the EUD yaml documentation has identation
+> > issues.
+> >
+> > So fix them.
+> >
+> > [1]. https://lore.kernel.org/linux-arm-msm/20221231131945.3286639-1-bhupesh.sharma@linaro.org
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> >
+>
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,eud.example.dtb: eud@88e0000: reg: [[0, 143523840], [0, 8192], [0, 143532032], [0, 4096]] is too long
+>         From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230104091922.3959602-3-bhupesh.sharma@linaro.org
+>
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Ok, let me try and fix this via v2.
 
-On Thu,  5 Jan 2023 11:42:49 +0800 you wrote:
-> This modem has 7 interfaces, 5 of them are serial interfaces and are
-> driven by cdc_acm, while 2 of them are wwan interfaces and are driven
-> by cdc_ether:
-> If 0: Abstract (modem)
-> If 1: Abstract (modem)
-> If 2: Abstract (modem)
-> If 3: Abstract (modem)
-> If 4: Abstract (modem)
-> If 5: Ethernet Networking
-> If 6: Ethernet Networking
-> 
-> [...]
-
-Here is the summary with links:
-  - net: usb: cdc_ether: add support for Thales Cinterion PLS62-W modem
-    https://git.kernel.org/netdev/net/c/eea8ce81fbb5
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks.
