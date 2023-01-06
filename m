@@ -2,191 +2,245 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E75265F771
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 00:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3440D65F892
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 02:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbjAEXDk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Jan 2023 18:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S236528AbjAFBGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 20:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236302AbjAEXDg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 18:03:36 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ED1676C0
-        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 15:03:35 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id n63so20373991iod.7
-        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 15:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DIcjgq7EV1t47RYy2g4kttoekM/X5riyLaeE0K4reIU=;
-        b=EiZIWN3/cZQxN8zkJGfY1CdZSallyOkhhJ7LnB6d5OXd1pFs+BjlMzijc5JFPAyDQc
-         AdnjopK2UShOVUD+11NscnTezseDtQ0Ly8pVk+YVEcQpVAELfbXGg+BmauUKTtgc2SAh
-         AdN9XLTCgFqBHJslPs32f9yqJ8jh+UsP/fK4U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DIcjgq7EV1t47RYy2g4kttoekM/X5riyLaeE0K4reIU=;
-        b=LX9i2PRHC8Syg17yV25rqDe7HfppwVjnyrh5TmWc/J/x2yNtj++mi3wRhnaY+H3xWo
-         BoblpdMa8s5Nu0kRGGuz7i24f6FLZFz6VDrxMFNyj9CUYT23BKKYyYf7GEZGFCaFbgGK
-         9gDkfz07TVs/IZzlhfyQEnaG7MuXF2n4TWLR905p1Xi6pX0iOI9FbMkLCEN5yAScoJ4O
-         V/IfMo7niJleqw/mBS9oMgiVIdtba8jp/g6PGw4GEX3sSkJtjyphsbXUnIED0FlKBVr0
-         vruzNprxKfXh49eR1GgvIp/ZSxWaJ+726R60+ObnuuYBZ6BtNsu0ssA2MFlGaI6vCkjq
-         KeuQ==
-X-Gm-Message-State: AFqh2krnP/52DHSDNnOtc6u7nZE0SQeCeV2EDDNZh+Sov6484MaK5pZu
-        aRRjy6w+ama+e4A04JyRMc3zvQ==
-X-Google-Smtp-Source: AMrXdXv5xv2bS65P/x03tj+fBkixYcHj2lZ3Be6erKfreJVudXc2F1+WLGr09SBXObNQ8fGwIGyy4A==
-X-Received: by 2002:a6b:8f82:0:b0:6eb:da60:be0b with SMTP id r124-20020a6b8f82000000b006ebda60be0bmr35981898iod.4.1672959814789;
-        Thu, 05 Jan 2023 15:03:34 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id h16-20020a056638339000b0035678e2e175sm11886577jav.50.2023.01.05.15.03.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 15:03:34 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Douglas Anderson <dianders@chromium.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the driver
-Date:   Thu,  5 Jan 2023 23:03:29 +0000
-Message-Id: <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
-References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+        with ESMTP id S236544AbjAFBGM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 20:06:12 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA36D51B;
+        Thu,  5 Jan 2023 17:06:11 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30609axQ028245;
+        Fri, 6 Jan 2023 01:05:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=kYVSJNudMGf4WCtGaw5oM38FQkHNvOOyFU+4JjDqiPY=;
+ b=UFxCby15Y3IPMuaE99FpQHRUnwjgrM/kgruNJOgRaiNtAxAvnOgZ/aaiDxo/zPriGkz8
+ dVO2xfvRob8VFUdvmjc0RrRuQ3o4L0pyHkrKI0tFQSsrlnJ+609PzYrQJJLkZ9OIPebA
+ DXrLn8JE1CvAfLxf6V7T2R9Fiqvc6BX4g6CmAHNBB8O5rsGpCVWVGTfFDqULWGi85ZXp
+ hE4wRdlyJO/VY/nwx9KHoZSMapkHM5xE3VxdQqOnze6gqKnTJ2B8uk37iPO+A4iXCqLc
+ fQNk0IY5GeC8PPPluhdZNW15P+PnSFVeUauaXdpK4p3iQMbXncl8bPxCs/2GwjIfff7X NA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwwfs9gh4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Jan 2023 01:05:46 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30615iL2023979
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 6 Jan 2023 01:05:44 GMT
+Received: from [10.110.47.113] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 5 Jan 2023
+ 17:05:44 -0800
+Message-ID: <178892ad-091e-1d95-d9d9-7270f19ef4ef@quicinc.com>
+Date:   Thu, 5 Jan 2023 17:05:43 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 00/14] Introduce QC USB SND audio offloading support
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <0991fdf5-a29d-6ef7-71ec-9b4d858ed1eb@linux.intel.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <0991fdf5-a29d-6ef7-71ec-9b4d858ed1eb@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mgJq0Ikhc-ZvYuN4zvBOJncOm2AaJxDX
+X-Proofpoint-ORIG-GUID: mgJq0Ikhc-ZvYuN4zvBOJncOm2AaJxDX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-05_14,2023-01-05_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301060006
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently each onboard_hub platform device owns an 'attach' work,
-which is scheduled when the device probes. With this deadlocks
-have been reported on a Raspberry Pi 3 B+ [1], which has nested
-onboard hubs.
+Hi Pierre,
 
-The flow of the deadlock is something like this (with the onboard_hub
-driver built as a module) [2]:
+On 1/4/2023 3:19 PM, Pierre-Louis Bossart wrote:
+> 
+> 
+> On 12/23/22 17:31, Wesley Cheng wrote:
+>> Several Qualcomm based chipsets can support USB audio offloading to a
+>> dedicated audio DSP, which can take over issuing transfers to the USB
+>> host controller.  The intention is to reduce the load on the main
+>> processors in the SoC, and allow them to be placed into lower power modes.
+> 
+> It would be nice to clarify what you want to offload
+> a) audio data transfers for isoc ports
+> b) control for e.g. volume settings (those go to endpoint 0 IIRC)
+> c) Both?
+> 
 
-- USB root hub is instantiated
-- core hub driver calls onboard_hub_create_pdevs(), which creates the
-  'raw' platform device for the 1st level hub
-- 1st level hub is probed by the core hub driver
-- core hub driver calls onboard_hub_create_pdevs(), which creates
-  the 'raw' platform device for the 2nd level hub
+Thanks for sharing your experience, and inputs!
 
-- onboard_hub platform driver is registered
-- platform device for 1st level hub is probed
-  - schedules 'attach' work
-- platform device for 2nd level hub is probed
-  - schedules 'attach' work
+It would be the audio related endpoints only, so ISOC and potentially 
+feedback ep.
 
-- onboard_hub USB driver is registered
-- device (and parent) lock of hub is held while the device is
-  re-probed with the onboard_hub driver
+> This has a lot of implications on the design. ASoC/DPCM is mainly
+> intended for audio data transfers, control is a separate problem with
+> configurations handled with register settings or bus-specific commands.
+> 
 
-- 'attach' work (running in another thread) calls driver_attach(), which
-   blocks on one of the hub device locks
+Control would still be handled by the main processor.
 
-- onboard_hub_destroy_pdevs() is called by the core hub driver when one
-  of the hubs is detached
-- destroying the pdevs invokes onboard_hub_remove(), which waits for the
-  'attach' work to complete
-  - waits forever, since the 'attach' work can't acquire the device lock
+>> There are several parts to this design:
+>>    1. Adding ASoC binding layer
+>>    2. Create a USB backend for Q6DSP
+>>    3. Introduce XHCI interrupter support
+>>    4. Create vendor ops for the USB SND driver
+>>
+>> Adding ASoC binding layer:
+>> soc-usb: Intention is to treat a USB port similar to a headphone jack.
+>> The port is always present on the device, but cable/pin status can be
+>> enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
+>> communicate with USB SND.
+>>
+>> Create a USB backend for Q6DSP:
+>> q6usb: Basic backend driver that will be responsible for maintaining the
+>> resources needed to initiate a playback stream using the Q6DSP.  Will
+>> be the entity that checks to make sure the connected USB audio device
+>> supports the requested PCM format.  If it does not, the PCM open call will
+>> fail, and userpsace ALSA can take action accordingly.
+>>
+>> Introduce XHCI interrupter support:
+>> XHCI HCD supports multiple interrupters, which allows for events to be routed
+>> to different event rings.  This is determined by "Interrupter Target" field
+>> specified in Section "6.4.1.1 Normal TRB" of the XHCI specification.
+>>
+>> Events in the offloading case will be routed to an event ring that is assigned
+>> to the audio DSP.
+>>
+>> Create vendor ops for the USB SND driver:
+>> qc_audio_offload: This particular driver has several components associated
+>> with it:
+>> - QMI stream request handler
+>> - XHCI interrupter and resource management
+>> - audio DSP memory management
+>>
+>> When the audio DSP wants to enable a playback stream, the request is first
+>> received by the ASoC platform sound card.  Depending on the selected route,
+>> ASoC will bring up the individual DAIs in the path.  The Q6USB backend DAI
+>> will send an AFE port start command (with enabling the USB playback path), and
+>> the audio DSP will handle the request accordingly.
+>>
+>> Part of the AFE USB port start handling will have an exchange of control
+>> messages using the QMI protocol.  The qc_audio_offload driver will populate the
+>> buffer information:
+>> - Event ring base address
+>> - EP transfer ring base address
+>>
+>> and pass it along to the audio DSP.  All endpoint management will now be handed
+>> over to the DSP, and the main processor is not involved in transfers.
+>>
+>> Overall, implementing this feature will still expose separate sound card and PCM
+>> devices for both the platorm card and USB audio device:
+>>   0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+>>                        SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+>>   1 [Audio          ]: USB-Audio - USB Audio
+>>                        Generic USB Audio at usb-xhci-hcd.1.auto-1.4, high speed
+>>
+>> This is to ensure that userspace ALSA entities can decide which route to take
+>> when executing the audio playback.  In the above, if card#1 is selected, then
+>> USB audio data will take the legacy path over the USB PCM drivers, etc...
+> 
+> You would still need some sort of mutual exclusion to make sure the isoc
+> endpoints are not used concurrently by the two cards. Relying on
+> userspace intelligence to enforce that exclusion is not safe IMHO.
+> 
 
-Use a single work struct for the driver instead of having a work struct
-per onboard hub platform driver instance. With that it isn't necessary
-to cancel the work in onboard_hub_remove(), which fixes the deadlock.
-The work is only cancelled when the driver is unloaded.
+Sure, I think we can make the USB card as being used if the offloading 
+path is currently being enabled.  Kernel could return an error to 
+userspace when this situation happens.
 
-[1] https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-[2] https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
+> Intel looked at this sort of offload support a while ago and our
+> directions were very different - for a variety of reasons USB offload is
+> enabled on Windows platforms but remains a TODO for Linux. Rather than
+> having two cards, you could have a single card and addition subdevices
+> that expose the paths through the DSP. The benefits were that there was
+> a single set of controls that userspace needed to know about, and volume
+> settings were the same no matter which path you used (legacy or
+> DSP-optimized paths). That's consistent with the directions to use 'Deep
+> Buffer' PCM paths for local playback, it's the same idea of reducing
+> power consumption with optimized routing.
+> 
 
-Cc: stable@vger.kernel.org
-Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-Link: https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
-Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+Volume control would still be done through the legacy path as mentioned 
+above.  For example, if a USB headset w/ a HID interface exposed (for 
+volume control) was connected, those HID events would be routed to 
+userspace to adjust volume accordingly on the main processor. (although 
+you're right about having separate controls still present - one for the 
+ASoC card and another for USB card)
 
- drivers/usb/misc/onboard_usb_hub.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+> Another point is that there may be cases where the DSP paths are not
+> available if the DSP memory and MCPS budget is exceeded. In those cases,
+> the DSP parts needs the ability to notify userspace that the legacy path
+> should be used.
 
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index db0844b30bbd..8bc4deb465f0 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -27,7 +27,10 @@
- 
- #include "onboard_usb_hub.h"
- 
-+static void onboard_hub_attach_usb_driver(struct work_struct *work);
-+
- static struct usb_device_driver onboard_hub_usbdev_driver;
-+static DECLARE_WORK(attach_usb_driver_work, onboard_hub_attach_usb_driver);
- 
- /************************** Platform driver **************************/
- 
-@@ -45,7 +48,6 @@ struct onboard_hub {
- 	bool is_powered_on;
- 	bool going_away;
- 	struct list_head udev_list;
--	struct work_struct attach_usb_driver_work;
- 	struct mutex lock;
- };
- 
-@@ -270,9 +272,15 @@ static int onboard_hub_probe(struct platform_device *pdev)
- 	 *
- 	 * This needs to be done deferred to avoid self-deadlocks on systems
- 	 * with nested onboard hubs.
-+	 *
-+	 * If the work is already running wait for it to complete, then
-+	 * schedule it again to ensure that the USB devices of this onboard
-+	 * hub instance are bound to the USB driver.
- 	 */
--	INIT_WORK(&hub->attach_usb_driver_work, onboard_hub_attach_usb_driver);
--	schedule_work(&hub->attach_usb_driver_work);
-+	while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
-+		msleep(10);
-+
-+	schedule_work(&attach_usb_driver_work);
- 
- 	return 0;
- }
-@@ -285,9 +293,6 @@ static int onboard_hub_remove(struct platform_device *pdev)
- 
- 	hub->going_away = true;
- 
--	if (&hub->attach_usb_driver_work != current_work())
--		cancel_work_sync(&hub->attach_usb_driver_work);
--
- 	mutex_lock(&hub->lock);
- 
- 	/* unbind the USB devices to avoid dangling references to this device */
-@@ -449,6 +454,8 @@ static void __exit onboard_hub_exit(void)
- {
- 	usb_deregister_device_driver(&onboard_hub_usbdev_driver);
- 	platform_driver_unregister(&onboard_hub_driver);
-+
-+	cancel_work_sync(&attach_usb_driver_work);
- }
- module_exit(onboard_hub_exit);
- 
--- 
-2.39.0.314.g84b9a713c41-goog
+If we ran into this scenario, the audio DSP AFE port start command would 
+fail, and this would be propagated to the userspace entity.  It could 
+then potentially re-route to the legacy/non-offload path.
 
+> 
+> Another case to handle is that some USB devices can handle way more data
+> than DSPs can chew, for example Pro audio boxes that can deal with 8ch
+> 192kHz will typically use the legacy paths. Some also handle specific
+> formats such as DSD over PCM. So it's quite likely that PCM devices for
+> card0 and card1 above do NOT expose support for the same formats, or put
+> differently that only a subset of the USB device capabilities are
+> handled through the DSP.
+
+Same as the above.  We have programmed the USB backend to support the 
+profiles that the audio DSP can handle.  I assume if there was any other 
+request, the userspace entity would fail the PCM open for that requested 
+profile.
+
+> 
+> And last, power optimizations with DSPs typically come from additional
+> latency helping put the SoC in low-power modes. That's not necessarily
+> ideal for all usages, e.g. for music recording and mixing I am not
+> convinced the DSP path would help at all.
+> 
+
+That's true.  At the same time, this feature is more for power related 
+benefits, not specifically for performance. (although we haven't seen 
+any performance related issues w/ this approach on the audio profiles 
+the DSP supports)  I think if its an audio profile that supports a high 
+sample rate and large number of channels, then the DSP wouldn't be able 
+to support it anyway, and userspace could still use the legacy path. 
+This would allow for those high-performance audio devices to not be 
+affected.
+
+Thanks
+Wesley Cheng
