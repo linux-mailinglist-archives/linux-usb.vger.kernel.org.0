@@ -2,213 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA656603FD
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 17:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D479F66040E
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 17:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbjAFQJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Jan 2023 11:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S235233AbjAFQNo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Jan 2023 11:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235047AbjAFQIz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 11:08:55 -0500
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F2776238;
-        Fri,  6 Jan 2023 08:08:30 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 306G861L1390823
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 6 Jan 2023 16:08:07 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 306G81XI2910658
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 6 Jan 2023 17:08:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1673021281; bh=EWbAkaWMwM+ddCnHHCeZvsK8g1GQ+twZTFv+8M5+ooQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:References:From;
-        b=X7BsuPAVtbKmrlvRies8ZcW7P9/S2WsMkCGJBA/T9jcJ7MZv9KOq2WXfq0AZoYaqx
-         4ri+RKhtLmqdA+iXXFDyhYg0CcIJGeM7D+K0vELMGscey/WaTaL2PM4yPtR7X3t2KD
-         8YnYn6p7l2Jk+uz9l3BA/+neh9SSUydkguz7oJVo=
-Received: (nullmailer pid 100763 invoked by uid 1000);
-        Fri, 06 Jan 2023 16:07:58 -0000
-From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To:     netdev@vger.kernel.org
-Cc:     Hayes Wang <hayeswang@realtek.com>, linux-usb@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Subject: [PATCH 2/2] cdc_ether: no need to blacklist any r8152 devices
-Date:   Fri,  6 Jan 2023 17:07:39 +0100
-Message-Id: <20230106160739.100708-3-bjorn@mork.no>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230106160739.100708-1-bjorn@mork.no>
-References: <20230106160739.100708-1-bjorn@mork.no>
+        with ESMTP id S235621AbjAFQNl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 11:13:41 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4208976212
+        for <linux-usb@vger.kernel.org>; Fri,  6 Jan 2023 08:13:40 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id d10so1174258ilc.12
+        for <linux-usb@vger.kernel.org>; Fri, 06 Jan 2023 08:13:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eXx0iBa6ViIHYuwColwZmoSS+/fQ6cQ84A5vNmlRsTI=;
+        b=nlcWyiDO7MGfoHvK4pgyUGDpHFFkPAczwmrqEeEsJRsTwZjdSWJtjVqYw9zLOC8C+u
+         cSf2j/RQPoaEOuRHj5KB6lNWm6TvnNI4UGY/QVggn8PGQjUgeafEWDIY7PoZo8+P1XcC
+         HDJpFarnU3SjaSCn4IA00U+BDwMax9Vnv5+a4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eXx0iBa6ViIHYuwColwZmoSS+/fQ6cQ84A5vNmlRsTI=;
+        b=SAKvpCX7Gdry8QNZVfYLwavHkldC7j5gHn1Ax1bJNUK4NE5HBDLk2SxMWvpdxEZLH4
+         d8/C8ozysVZEhV43AoWcYtA++U95C+8sP14Jyj+4cUNSplWpHtA8Uo1sSbEM21F03r5k
+         vf+Xa+uxHWkfEYelhk3HFuvW01Lqxr/1PWc7R6HDKP/abMi176PCnggg1lsldl9KgOnK
+         WSDX00QFY7viiNib0dxNX63EX3xglV/pK4eQjkKC/0M6XcN27A2luiWQ1XqKqiAsfwqh
+         9rGmqSx7brbq4r2rzF+PSiWfJYsRXCQqIZ5nzfKBKtk33bUlke8fFf6fgCgFYkUrIati
+         aL7w==
+X-Gm-Message-State: AFqh2kpayKOclM3fx9IBCBa3E942JTF8yB6zijajqXHfEe8hVQhGEijC
+        84PXN5xfT0uUq4D+0WmuqECbbA==
+X-Google-Smtp-Source: AMrXdXuj7LF9VtW5dlQvsWsu4WiPuQZugekoMZXaUNeIxPHYr71Ul0XbJbv9/eG4Ll/4PMjtHOunPg==
+X-Received: by 2002:a92:c151:0:b0:302:9dde:679d with SMTP id b17-20020a92c151000000b003029dde679dmr40362399ilh.17.1673021619603;
+        Fri, 06 Jan 2023 08:13:39 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id t17-20020a92c911000000b002fa9a1fc421sm478364ilp.45.2023.01.06.08.13.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 08:13:39 -0800 (PST)
+Date:   Fri, 6 Jan 2023 16:13:38 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: Re: [PATCH 1/2] usb: misc: onboard_hub: Invert driver registration
+ order
+Message-ID: <Y7hIsvAG3QWb/PmL@google.com>
+References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+ <Y7g/JA0KZukK+41g@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.7 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y7g/JA0KZukK+41g@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The r8152 driver does not need this anymore.
+On Fri, Jan 06, 2023 at 04:32:52PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Jan 05, 2023 at 11:03:28PM +0000, Matthias Kaehlcke wrote:
+> > The onboard_hub 'driver' consists of two drivers, a platform
+> > driver and a USB driver. Currently when the onboard hub driver
+> > is initialized it first registers the platform driver, then the
+> > USB driver. This results in a race condition when the 'attach'
+> > work is executed, which is scheduled when the platform device
+> > is probed. The purpose of fhe 'attach' work is to bind elegible
+> > USB hub devices to the onboard_hub USB driver. This fails if
+> > the work runs before the USB driver has been registered.
+> > 
+> > Register the USB driver first, then the platform driver. This
+> > increases the chances that the onboard_hub USB devices are probed
+> > before their corresponding platform device, which the USB driver
+> > tries to locate in _probe(). The driver already handles this
+> > situation and defers probing if the onboard hub platform device
+> > doesn't exist yet.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > Link: https://lore.kernel.org/lkml/Y6W00vQm3jfLflUJ@hovoldconsulting.com/T/#m0d64295f017942fd988f7c53425db302d61952b4
+> > Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > 
+> >  drivers/usb/misc/onboard_usb_hub.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> Does this superseed this thread:
+> 	Link: https://lore.kernel.org/r/20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid
 
-Dropping blacklist entries adds optional support for these
-devices in ECM mode.
+This series ("usb: misc: onboard_hub: Invert driver registration order"
+et al) fixes the race condition mentioned in the commit message
+of the other series ("usb: misc: onboard_usb_hub: Don't create platform
+devices for DT nodes without 'vdd-supply'" et al), plus another race
+that was reported later (this patch).
 
-The 8153 devices are handled by the r8153_ecm driver when
-in ECM mode, and must still be blacklisted here.
+> or is that also needed?
 
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
----
- drivers/net/usb/cdc_ether.c | 114 ------------------------------------
- 1 file changed, 114 deletions(-)
+This series is (mostly) independent from the other one, it should
+fix the issue that was reported for the RPi 3 B+. It can be landed
+even if the other one is abandonded.
 
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 8911cd2ed534..9568fe5612ca 100644
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -747,13 +747,6 @@ static const struct usb_device_id	products[] = {
- 	.driver_info = 0,
- },
- 
--/* Realtek RTL8152 Based USB 2.0 Ethernet Adapters */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(REALTEK_VENDOR_ID, 0x8152, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
- /* Realtek RTL8153 Based USB 3.0 Ethernet Adapters */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(REALTEK_VENDOR_ID, 0x8153, USB_CLASS_COMM,
-@@ -761,71 +754,6 @@ static const struct usb_device_id	products[] = {
- 	.driver_info = 0,
- },
- 
--/* Samsung USB Ethernet Adapters */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(SAMSUNG_VENDOR_ID, 0xa101, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--#if IS_ENABLED(CONFIG_USB_RTL8152)
--/* Linksys USB3GIGV1 Ethernet Adapter */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LINKSYS_VENDOR_ID, 0x0041, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--#endif
--
--/* Lenovo ThinkPad OneLink+ Dock (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3054, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* ThinkPad USB-C Dock (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3062, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* ThinkPad Thunderbolt 3 Dock (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3069, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* ThinkPad Thunderbolt 3 Dock Gen 2 (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3082, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* Lenovo Thinkpad USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x7205, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* Lenovo USB C to Ethernet Adapter (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x720c, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* Lenovo USB-C Travel Hub (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x7214, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
- /* Lenovo Powered USB-C Travel Hub (4X90S92381, based on Realtek RTL8153) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x721e, USB_CLASS_COMM,
-@@ -833,48 +761,6 @@ static const struct usb_device_id	products[] = {
- 	.driver_info = 0,
- },
- 
--/* ThinkPad USB-C Dock Gen 2 (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa387, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* NVIDIA Tegra USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(NVIDIA_VENDOR_ID, 0x09ff, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* Microsoft Surface 2 dock (based on Realtek RTL8152) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(MICROSOFT_VENDOR_ID, 0x07ab, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* Microsoft Surface Ethernet Adapter (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(MICROSOFT_VENDOR_ID, 0x07c6, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* Microsoft Surface Ethernet Adapter (based on Realtek RTL8153B) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(MICROSOFT_VENDOR_ID, 0x0927, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
--/* TP-LINK UE300 USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
--{
--	USB_DEVICE_AND_INTERFACE_INFO(TPLINK_VENDOR_ID, 0x0601, USB_CLASS_COMM,
--			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
--	.driver_info = 0,
--},
--
- /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
--- 
-2.30.2
+With this series the other one doesn't fix or mitigate any actual
+issue (AFAIK), it would only be an optimization (don't instantiate
+the onboard_hub drivers if they'd do nothing).
 
+> confused
+
+Sorry, hope this clarifies things a bit.
