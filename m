@@ -2,90 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F1E660318
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 16:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352A8660322
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 16:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbjAFP0L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Jan 2023 10:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S235111AbjAFP2j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Jan 2023 10:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235050AbjAFP0H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 10:26:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14FA5F46;
-        Fri,  6 Jan 2023 07:26:01 -0800 (PST)
+        with ESMTP id S235366AbjAFP2e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 10:28:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD8D6C283;
+        Fri,  6 Jan 2023 07:28:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EECCB81D9D;
-        Fri,  6 Jan 2023 15:26:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8563C433D2;
-        Fri,  6 Jan 2023 15:25:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BC736172C;
+        Fri,  6 Jan 2023 15:28:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECAC0C433D2;
+        Fri,  6 Jan 2023 15:28:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673018759;
-        bh=UQrBUx5gRtz1ipvUXMT2HCaI/siWBR2KN467L9f4LsE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pSix0cS4V5fmDqKl/JutLDVGFhiWubclswSrN6j6FiweSXJ7mhhsjdGHSgbFrAVQF
-         ZpNSJiU2BA9R6MCE6a1+g9QVk+ucOvR6fG6JlpfYviy4XnFqn1Kbz1cgw5C9fWSKlC
-         7P2gA/DvtqAgsAXt+CGS4sbU/JO12dZZCKN1Iv5o=
-Date:   Fri, 6 Jan 2023 16:25:55 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Jim Lin <jilin@nvidia.com>, thierry.reding@gmail.com,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v7 0/3] xhci: tegra: USB2 pad power controls
-Message-ID: <Y7g9g0CbCc6b+3EN@kroah.com>
-References: <20221111101813.32482-1-jilin@nvidia.com>
- <f2dbfe41-7164-dffa-8e9c-2d5b0f8fcae6@nvidia.com>
+        s=korg; t=1673018912;
+        bh=15nO7ikH9WcmjcSYjC3pbic2yBoSfe31epbJuYmddYE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DoIqPMDnsCYhQsnrxh7KXa4t4s2otZF4k/OBK3fUX97C3o9BxR8WmzBrmw5XYwenY
+         eIBv85fAMH2VPkuFX58sWysE8CglHL8OlZkaAHPtCWLXzFnV2BnCWM4HO0bj7IbZxK
+         LC3XxnNiV52GOtm5bL8SpWNnAK1MQ6Lf8RS62zz4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] USB: fix memory leak with using debugfs_lookup()
+Date:   Fri,  6 Jan 2023 16:28:28 +0100
+Message-Id: <20230106152828.3790902-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2dbfe41-7164-dffa-8e9c-2d5b0f8fcae6@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=875; i=gregkh@linuxfoundation.org; h=from:subject; bh=15nO7ikH9WcmjcSYjC3pbic2yBoSfe31epbJuYmddYE=; b=owGbwMvMwCRo6H6F97bub03G02pJDMk77KSOfHllqLrNJL7r/UfV65zRQZMD9CdEms1NXRp5cZe1 y7a8jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZhIfQTDPAWvyfaad8TXPfhq3/Quj9 tr7u1TvQzzzI2EF106cVP8o9GpdTWvol8kvmK6BQA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 02:56:51PM +0000, Jon Hunter wrote:
-> Hi Greg,
-> 
-> On 11/11/2022 10:18, Jim Lin wrote:
-> > 1. Export symbol on xhci_hub_control
-> > 2. Add hub_control to xhci_driver_overrides
-> > 3. Program USB2 pad PD controls during port connect/disconnect, port
-> > suspend/resume, and test mode, to reduce power consumption on
-> > disconnect or suspend.
-> > 
-> > Patch
-> > xhci: tegra: USB2 pad power controls
-> > depends on
-> > xhci: hub: export symbol on xhci_hub_control
-> > xhci: Add hub_control to xhci_driver_overrides
-> > 
-> > Jim Lin (3):
-> >    xhci: Add hub_control to xhci_driver_overrides
-> >    xhci: hub: export symbol on xhci_hub_control
-> >    xhci: tegra: USB2 pad power controls
-> > 
-> >   drivers/usb/host/xhci-hub.c   |   1 +
-> >   drivers/usb/host/xhci-tegra.c | 125 ++++++++++++++++++++++++++++++++++
-> >   drivers/usb/host/xhci.c       |   2 +
-> >   drivers/usb/host/xhci.h       |   2 +
-> >   4 files changed, 130 insertions(+)
-> > 
-> 
-> 
-> I have verified that this still applies cleanly on top of -next. Please let
-> us know if this can be queued up for Linux v6.3?
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  To make things simpler, just
+call debugfs_lookup_and_remove() instead which handles all of the logic at
+once.
 
-Normally for xhci stuff I want it to go through Mathias for things that
-are outside of just xhci-tegra.c.
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/core/usb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index 11b15d7b357a..a415206cab04 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -998,7 +998,7 @@ static void usb_debugfs_init(void)
+ 
+ static void usb_debugfs_cleanup(void)
+ {
+-	debugfs_remove(debugfs_lookup("devices", usb_debug_root));
++	debugfs_lookup_and_remove("devices", usb_debug_root);
+ }
+ 
+ /*
+-- 
+2.39.0
 
-greg k-h
