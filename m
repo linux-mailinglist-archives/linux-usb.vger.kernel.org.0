@@ -2,148 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A4E65FC78
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 09:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F68565FD53
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 10:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjAFIKv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Jan 2023 03:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S229724AbjAFJNr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Jan 2023 04:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjAFIK1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 03:10:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAF378E99;
-        Fri,  6 Jan 2023 00:10:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F33661D4C;
-        Fri,  6 Jan 2023 08:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44FA2C433D2;
-        Fri,  6 Jan 2023 08:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672992621;
-        bh=lFl3l56T6EeKmFd7eKwb8kpBaqgT6RyrMDeq/Q/+4Hs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zhd2tDSE2dS6kqJ117QE2moXaS3KRy0sIGlRXifPKdSnsN+0KWeLyGd2mB/d7g8C1
-         OOPg8qAZkV7e1qXCwdGklizF4+r2RHlUPFQkxxvMnP0ioLJjIu9HvZ6fHDXfTTDMNt
-         SKfHmhBci+es9br3kqixq+QPn3/V/ktha/xNV0vM=
-Date:   Fri, 6 Jan 2023 09:10:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>,
-        Wayne Chang <waynec@nvidia.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ucsi_ccg: Refine the UCSI Interrupt handling
-Message-ID: <Y7fXapwb5yJNbM3G@kroah.com>
-References: <20230103081531.423017-1-haotienh@nvidia.com>
+        with ESMTP id S232154AbjAFJNj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Jan 2023 04:13:39 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E621DDF6
+        for <linux-usb@vger.kernel.org>; Fri,  6 Jan 2023 01:13:36 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id ay40so639952wmb.2
+        for <linux-usb@vger.kernel.org>; Fri, 06 Jan 2023 01:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5OdyRKFST2UkrnFQxoJYi7XQRvXEY/YmDNSwtGSyDTY=;
+        b=jaIjZJ8WvQZJ6gpN09cWaQq02Y8TPrEBfFCbgTx+QgJd26vyPxTXMIQI9ATnUSVuk/
+         H9vMIIsnijhTum/ltk1BGF0VZRxmn59ZH9GOHC2xllg4Y9zS9U8Lg//VyB/0/zX6Z6hX
+         nGojXyiQ5buKmL9ZSANJJt1vi5ttb9hCAtklYLYZeiPjvLGi1ZC4nwtnKT1z3PoCGnnu
+         JCUKcxBt9uH4P9kbRgQgVInn9XrhxMKMTpdCuvJF8HW5PHlOpo2Zo1999OZbsr//ZXMh
+         TNY4K6MnQqCyRHTkZMfxf8FlIaiLKbKQYHF9N3kD3pzJ6H5Rp9yzzszbPJOQDb54tS1L
+         AE3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5OdyRKFST2UkrnFQxoJYi7XQRvXEY/YmDNSwtGSyDTY=;
+        b=mOjO63gP69j3iD2jEzhoY8IpYy4Au4HXKgZpXVylR2wASLwZnYi+mZo9auYNu5CR99
+         rE6JxjC2sVJkvEGUs+/FT5+zgtCl5SQEJOFY1eJGWiF0vSvKfXhRXF2D+CS1VJmUSfuo
+         c+Pm+6l5S4f61mSjwGwZf42wGDw0fxFy0spswIWeZauzQJIC3ctzLdeKWRYR/IhAnhak
+         m7+yiZNFUDh2YSJKuZ/vMbh5aHcFq7i6wDe3lPJ6KT1rpfoRFVy3Pse53WTg/BLb5T2l
+         unWYFNBqoBuCbTNXNDyCrw64ycbBgKpmHyLUGSkQedu/WwuPJq4KGrUg7Pe698pP0Tji
+         m3mg==
+X-Gm-Message-State: AFqh2kp9WBfY+hnpoDTByjQ8v4GQU3uHSrACftCPTMjQ6Xtp7hU/PAQb
+        CkVMrhgOErshGbgL/5c5Rh3WoA==
+X-Google-Smtp-Source: AMrXdXtIAHzHGFPUTck4jeORiekJikKX1pv3b1Tw1WmT0umvTTwZXhYfJh6tmIJQmZmvLp3lbqrciw==
+X-Received: by 2002:a1c:7c0f:0:b0:3d5:816e:2fb2 with SMTP id x15-20020a1c7c0f000000b003d5816e2fb2mr41639542wmc.14.1672996415396;
+        Fri, 06 Jan 2023 01:13:35 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j1-20020a05600c1c0100b003cfaae07f68sm6093133wms.17.2023.01.06.01.13.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 01:13:34 -0800 (PST)
+Message-ID: <fa0327b1-2180-1421-b448-a45ab0be9750@linaro.org>
+Date:   Fri, 6 Jan 2023 10:13:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103081531.423017-1-haotienh@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250
+ binding
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20230103150419.3923421-1-bhupesh.sharma@linaro.org>
+ <20230103150419.3923421-2-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103150419.3923421-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 04:15:31PM +0800, Haotien Hsu wrote:
-> From: Sing-Han Chen <singhanc@nvidia.com>
+On 03/01/2023 16:04, Bhupesh Sharma wrote:
+> Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
 > 
-> For the CCGx, when the OPM field in the INTR_REG is cleared, then the
-> CCI data in the PPM is reset.
+> On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
+> needs to be set first to 'enable' the eud module.
 > 
-> To align with the CCGx UCSI interface guide, this patch updates the
-> driver to copy CCI and MESSAGE_IN before clearing UCSI interrupt.
-> When a new command is sent, the driver will clear the old CCI and
-> MESSAGE_IN copy.
+
+Subject: drop second, redundant "binding".
+
+
+> So, update the dt-bindings to accommodate the third register
+> property required by the driver on these SoCs.
 > 
-> Finally, clear UCSI_READ_INT before calling complete() to ensure that
-> the ucsi_ccg_sync_write() would wait for the interrupt handling to
-> complete.
-> It prevents the driver from resetting CCI prematurely.
-> 
-> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+> Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
-> V1->V2
-> - Fix uninitialized symbol 'cci'
-> v2->v3
-> - Remove wrong Reported-by tags
-> ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 86 ++++++++++++++++++++++++++++---
->  1 file changed, 79 insertions(+), 7 deletions(-)
+>  .../devicetree/bindings/soc/qcom/qcom,eud.yaml         | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index eab3012e1b01..b35a3a97c9fb 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
->  	bool checked;
->  } __packed;
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+> index c98aab209bc5d..1dffe14868735 100644
+> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+> @@ -18,12 +18,22 @@ properties:
+>      items:
+>        - enum:
+>            - qcom,sc7280-eud
+> +          - qcom,sm6115-eud
+>        - const: qcom,eud
 >  
-> +#define CCGX_MESSAGE_IN_MAX 4
-> +struct op_region {
-> +	u32 cci;
-> +	u32 message_in[CCGX_MESSAGE_IN_MAX];
-> +};
-> +
->  struct ucsi_ccg {
->  	struct device *dev;
->  	struct ucsi *ucsi;
-> @@ -222,6 +228,9 @@ struct ucsi_ccg {
->  	bool has_multiple_dp;
->  	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
->  	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
-> +
-> +	spinlock_t op_lock;
+>    reg:
+> +    minItems: 2
+>      items:
+>        - description: EUD Base Register Region
+>        - description: EUD Mode Manager Register
+> +      - description: TCSR Check Register
 
-What does this lock protect?  Please document that so that we can verify
-if this really is a correct change _AND_ so we know what future changes
-need to take the lock or not.
+Is this valid also for sc7280? From commit description looks like not,
+so you should have allOf:if:then constraining the items per variant.
 
-> +	struct op_region op_data;
->  };
+> +
+> +  reg-names:
+> +    minItems: 2
+> +    items:
+> +      - const: eud-base
+> +      - const: eud-mode-mgr
+> +      - const: tcsr-check-base
 >  
->  static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
-> @@ -305,12 +314,57 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
->  	return 0;
->  }
->  
-> +static void ccg_op_region_read(struct ucsi_ccg *uc, unsigned int offset,
-> +		void *val, size_t val_len)
-> +{
-> +	struct op_region *data = &uc->op_data;
-> +
-> +	spin_lock(&uc->op_lock);
-> +	if (offset == UCSI_CCI)
-> +		memcpy(val, &data->cci, val_len);
-> +	else if (offset == UCSI_MESSAGE_IN)
-> +		memcpy(val, &data->message_in, val_len);
-> +	spin_unlock(&uc->op_lock);
-> +}
-> +
-> +static void ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
-> +{
-> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
-> +	struct op_region *data = &uc->op_data;
-> +	u32 message_in[CCGX_MESSAGE_IN_MAX];
-> +
-> +	if (UCSI_CCI_LENGTH(cci))
-> +		if (ccg_read(uc, reg, (void *)&message_in,
-> +					sizeof(message_in))) {
-> +			dev_err(uc->dev, "failed to read MESSAGE_IN\n");
+>    interrupts:
+>      description: EUD interrupt
 
-What can userspace do with this error?  Will it be repeated a lot?
+Best regards,
+Krzysztof
 
-thanks,
-
-greg k-h
