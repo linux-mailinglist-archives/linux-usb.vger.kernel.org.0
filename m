@@ -2,85 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9328F65F92C
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 02:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A9965F946
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jan 2023 02:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjAFBdv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Jan 2023 20:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S230074AbjAFBpR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Jan 2023 20:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjAFBds (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 20:33:48 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757DD18B32;
-        Thu,  5 Jan 2023 17:33:41 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30617lYa002491;
-        Fri, 6 Jan 2023 01:32:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=EPPJJquUmVF7Qc2Iy/gHw+vCbRk1oBfl7WGwMVHjjxw=;
- b=BqdXZR1xIWucXLvhoM9kyeLFMB0vlS/Xe3PU92pVOX/+BiPm9GqtVwOM3P7YNxnD7ObF
- 1vhcbCjKky9iiwYUvAaozfnopkY1+MR87tvnAe0KJaLSudWe7LKeMaNByIWg/bdRfOwa
- cTcVLXhrNP9Q6hg1b4xXdDnij9esIemBKNmqltdVNuS7OcURvZ0SZQh3cYuZfMM13gRN
- DCmvrv1XlsvqIqtBN5IB1a1M6oGnVgCo7NzdLzq2BYLFGTpqi+wd0sQ+3I515Ou0IAoF
- Gd7uoO5zExcPsqUoquYttblzp18wyVzyXr8lYXzRDfnKnhL1LanrDX23ilVh9yNUIJRy HQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mx9jfg1ua-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Jan 2023 01:32:50 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3061Wn5i031136
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 6 Jan 2023 01:32:49 GMT
-Received: from [10.110.47.113] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 5 Jan 2023
- 17:32:48 -0800
-Message-ID: <dd0bb92f-036e-3ba7-4c0a-9536ba0c179a@quicinc.com>
-Date:   Thu, 5 Jan 2023 17:32:47 -0800
+        with ESMTP id S229486AbjAFBpP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Jan 2023 20:45:15 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9203E32264
+        for <linux-usb@vger.kernel.org>; Thu,  5 Jan 2023 17:45:14 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id s22so212089ljp.5
+        for <linux-usb@vger.kernel.org>; Thu, 05 Jan 2023 17:45:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eo6Au0G3Kir1k6soEftFaIGSQxJPJXA0HZtGP6fqjD8=;
+        b=H0x6yGqQNDn/cOKPJVisflhd5HwSljldTw6Ha11o1L+UA7v3mfbW2A3BqZetBa1X63
+         xKKbXEbSItcDgN0oPSe5Sfszd9e1svWpCTs+YZgVHhgXnQSYWGbgUcC9T1db5wvJ8LHy
+         pZwRU8wmD9T8ivyH3a0jbjLBVXROWmdRCk4Yr84e2QWFov3AoP94ycluN6tNEEafIydS
+         V1tinkM7GQtJpvWDVQYeCFfV+17QCMYlRjX/ojFrMM6LkPnuco29MvoNib3wMttuD5MM
+         /vdMzYHgU1zU1qaeOtMtvoudCLozfZ9IqYeZofSTc/g5DQR73NQoNb0cvGyazJTm9Ym8
+         VnOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eo6Au0G3Kir1k6soEftFaIGSQxJPJXA0HZtGP6fqjD8=;
+        b=V7TtiW4PPds66EiPR1bofN55Lvl97MRG05M/J/YCjZ2ZcuQhmBZM7KmvhYuP3s7WYc
+         Lw7Jz1AKJaNTgF2hRfZce+K1HamXhaCFcfY8pvz/KwdYQ40k/RoInSwOgjAAnAVOZRtO
+         8tPCXJagwNPSIm8cgtV3tbWYu9Db8Qr47kpa25Cgxc9wCFpc+xKo0nMy5A4uFGYlkP1Y
+         o+JR+YaXHva8i/5YJHGotkek5uWD4r11LqRjoca4PmoDky/9HHgzrChTqtVWvjCKC6dR
+         LpsQeJSMmUBLkIieEPET9nA4h0d28iLYHCRhxxvc6tgz1qWmispXLVVA0GKyOfBKnC5W
+         FApA==
+X-Gm-Message-State: AFqh2krK0rk2erQukn2jxSWqRJoJ6bgfDbgkN7u5ZLaYdE69EalAS5Y7
+        yOvi/fHVQrTm9bta0QxL4JmH7iQjy+Z4/cZ+F/Ojkw==
+X-Google-Smtp-Source: AMrXdXuicmNVxBgzkhQL2j1AFOlDVjKAnFnaOTtDcQi+ULtJIGHNG+o18ue68tQqol6nYpK3WVFmySVC9Izhxar61BU=
+X-Received: by 2002:a2e:9c88:0:b0:27f:c33f:e732 with SMTP id
+ x8-20020a2e9c88000000b0027fc33fe732mr1481495lji.91.1672969512862; Thu, 05 Jan
+ 2023 17:45:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 02/14] ASoC: qcom: qdsp6: Introduce USB AFE port to
- q6dsp
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-3-quic_wcheng@quicinc.com>
- <5b4d657c-1acf-f90b-be64-3e36cca96686@linaro.org>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <5b4d657c-1acf-f90b-be64-3e36cca96686@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1gRGGqNwZdkAeANIiLhfXAm7SBUBRYkT
-X-Proofpoint-ORIG-GUID: 1gRGGqNwZdkAeANIiLhfXAm7SBUBRYkT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_14,2023-01-05_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- bulkscore=0 phishscore=0 spamscore=0 adultscore=0 suspectscore=0
- mlxlogscore=731 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301060009
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <20230105075058.924680-1-jun.nie@linaro.org> <20230105075058.924680-2-jun.nie@linaro.org>
+ <d0191001-d31e-1e65-0594-12dbb789392e@linaro.org>
+In-Reply-To: <d0191001-d31e-1e65-0594-12dbb789392e@linaro.org>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Fri, 6 Jan 2023 09:45:39 +0800
+Message-ID: <CABymUCMnBmGDjZtu2eHoRRBrsBT22JXfmYJWOXb3urUhgho+mQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: typec: tipd: Support wakeup
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, sven@svenpeter.dev,
+        shawn.guo@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,42 +71,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+Bryan O'Donoghue <bryan.odonoghue@linaro.org> =E4=BA=8E2023=E5=B9=B41=E6=9C=
+=885=E6=97=A5=E5=91=A8=E5=9B=9B 19:05=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 05/01/2023 07:50, Jun Nie wrote:
+> > Enable wakeup when pluging or unpluging USB cable. It is up to other
+> > components to hold system in active mode, such as display, so that
+> > user can receive the notification.
+> >
+> > Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> > ---
+> >   drivers/usb/typec/tipd/core.c | 38 ++++++++++++++++++++++++++++++++++=
++
+> >   1 file changed, 38 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/cor=
+e.c
+> > index 46a4d8b128f0..485b90c13078 100644
+> > --- a/drivers/usb/typec/tipd/core.c
+> > +++ b/drivers/usb/typec/tipd/core.c
+> > @@ -95,6 +95,7 @@ struct tps6598x {
+> >       struct power_supply_desc psy_desc;
+> >       enum power_supply_usb_type usb_type;
+> >
+> > +     int wakeup;
+> >       u16 pwr_status;
+> >   };
+> >
+> > @@ -846,6 +847,12 @@ static int tps6598x_probe(struct i2c_client *clien=
+t)
+> >       i2c_set_clientdata(client, tps);
+> >       fwnode_handle_put(fwnode);
+> >
+> > +     tps->wakeup =3D device_property_read_bool(tps->dev, "wakeup-sourc=
+e");
+> > +     if (tps->wakeup) {
+> > +             device_init_wakeup(&client->dev, true);
+> > +             enable_irq_wake(client->irq);
+> > +     }
+>
+> Does the ordering of device_init_wakeup() and enable_irq_wake() matter ?
+>
+> The sequence in drivers/usb/typec/tcpm/tcpci_maxim.c is
+> enable_irq_wake() and then device_init_wakeup() ?
 
-On 1/5/2023 10:09 AM, Krzysztof Kozlowski wrote:
-> On 24/12/2022 00:31, Wesley Cheng wrote:
->> The QC ADSP is able to support USB playback and capture, so that the
->> main application processor can be placed into lower CPU power modes.  This
->> adds the required AFE port configurations and port start command to start
->> an audio session.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   .../sound/qcom,q6dsp-lpass-ports.h            |   1 +
->>   sound/soc/qcom/qdsp6/q6afe-dai.c              |  47 +++++
->>   sound/soc/qcom/qdsp6/q6afe.c                  | 183 ++++++++++++++++++
->>   sound/soc/qcom/qdsp6/q6afe.h                  |  46 ++++-
->>   sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c      |  23 +++
->>   sound/soc/qcom/qdsp6/q6dsp-lpass-ports.h      |   1 +
->>   sound/soc/qcom/qdsp6/q6routing.c              |   8 +
->>   7 files changed, 308 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
->> index 9f7c5103bc82..746bc462bb2e 100644
->> --- a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
->> +++ b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
->> @@ -131,6 +131,7 @@
->>   #define RX_CODEC_DMA_RX_7	126
->>   #define QUINARY_MI2S_RX		127
->>   #define QUINARY_MI2S_TX		128
->> +#define USB_RX				129
->>   
->>   #define LPASS_CLK_ID_PRI_MI2S_IBIT	1
-> 
-> Bindings are separate patches. Please split.
-> 
+With reading related code, I believe it is better to put device_init_wakeup=
+()
+before enable_irq_wake() logically. Though it shall not matter in real worl=
+d.
 
-Thanks for catching this.  Will do.
+device_init_wakeup() register the wakeup source and setup sysfs etc, which
+is puerly software side infrastructure. enable_irq_wake() setup interrupt
+configuration, including software and hardware sides. I assume there is no
+suspend/resume process involves wakeup event before probe function finish
+in real world. If there is, device_init_wakeup() should come before before
+enable_irq_wake() strictly.
 
-Thanks
-Wesley Cheng
+- Jun
+
+>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
