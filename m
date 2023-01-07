@@ -2,62 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5275F660FAE
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Jan 2023 15:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963A0660FB4
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Jan 2023 16:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbjAGO7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 Jan 2023 09:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
+        id S232494AbjAGPBj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 7 Jan 2023 10:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjAGO7j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Jan 2023 09:59:39 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84A83AB36;
-        Sat,  7 Jan 2023 06:59:38 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id l184so4372440vsc.0;
-        Sat, 07 Jan 2023 06:59:38 -0800 (PST)
+        with ESMTP id S232493AbjAGPBL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Jan 2023 10:01:11 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4793A40C22;
+        Sat,  7 Jan 2023 07:01:09 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id a64so4350579vsc.2;
+        Sat, 07 Jan 2023 07:01:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ifhz4k4RvVQRROiBmQhqZMFI/gQRGOwvv+dCEJY7ups=;
-        b=oNN52TyIaEqppiUBzhnfEZ2EPtrjybrqfacMaGByapzK5ORfo4GNy2K0uM0Jt0J5SY
-         /Udu+x+3fMORcRP3u1ysg0nx9fg6tCBgCLy53p3VdwmQMH4KP9SwmcQBE/P2IWA091TF
-         Ta0AqgpXidUu3aKa1y54/eTg0vX19Dgwpc+kVLC21BcOCl/d05xJj7hMysgam7m0mKqr
-         jwP78g3VkOBvvQO0Eb8QYKjhYtpw7eXyodiEZYnFuru43NBNs4aTTJST6kqdkLntTiIW
-         cjWjhg0jKsxhGs4RON7ZBYsUmKU3Tc+rtl2/IM7wzmImdD8SYrrJnqPKhnk5LR1m7iJS
-         qQoQ==
+        bh=gN0b8GLZtqDqOVLUZ6Zz+XrKDlju/yDUolOd415APRo=;
+        b=QU7bsGI/KUKdsezLj8gIOhr4SscvGbhYdFzS79Pyqja+wu9tVXdvVc5yaA9WLbuXOV
+         7BLBouWGgQpp4/74pQRgtaHQiGD2vO9lIBPa2hw9shS06mbo4+am2+neXxovqRiP4zeX
+         atlXX5lM+jxxuRsmW2NnCPx91U/dZl4Cqe8dEz+1aTnShXdVypKoMXUZ54foEEmRbXMJ
+         O6HMz6X9u43TLQ1W6rsJi9civabMPlADgrR9hXD0TYQb+nqKOQCnkuOnIboJNwIro/mg
+         2zqWpu3q4LDGYl0Uyj/Epu+c7sXDrdg2cVNhLus7IR8m3A+OJqkk71TMbYLYoSSwJgWo
+         ZCEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ifhz4k4RvVQRROiBmQhqZMFI/gQRGOwvv+dCEJY7ups=;
-        b=iMu643XOsvADO8gxYRE40240T3wj1fO/vCusfY6MHNpkk1XG5K8dGqLoA1nlcnUSwU
-         bZ1swirAfBpEMWTNi8S6A7pnrhVieuXLZRmfCi93iW1tRmQmfkSVG2y3hQpka6uBU40l
-         HM6Yufb45pU7kS+Ba4ZGcqQSRkf2g8CPZuV5EYwI6MU/Mf+9n7FWID62jE8cX9E0UDTX
-         pk04ayuXgDVpOgDsulaJFY0fTkan/VJAnNnt8yQmI4+yLfII3qNN6dAmTAjmYp/MGd1t
-         u2feHZSZNgr5DYqZDcscz7juxWBgZtXHBkuXqubqoyIh8WHvgCKQIibYORQPSUrnjJUp
-         J53w==
-X-Gm-Message-State: AFqh2kp65wfQEQzyopLGLlLJ5fRdlO7C0VvWNFojd9fEFZzQTjdEb0Oj
-        bfqOnV4AfeHRE9GbsrWKiLvYd2G501QlI2PfScg=
-X-Google-Smtp-Source: AMrXdXuDChX+sgH5LBiE4Tvb58gSe0MpmgTJ7NVHsb4/MuSNW1o/09jLO6adWzht1g+B0vAN5g4RMvG89TTjIAA1Skc=
-X-Received: by 2002:a67:1703:0:b0:3ce:f9ed:ad70 with SMTP id
- 3-20020a671703000000b003cef9edad70mr384547vsx.76.1673103577869; Sat, 07 Jan
- 2023 06:59:37 -0800 (PST)
+        bh=gN0b8GLZtqDqOVLUZ6Zz+XrKDlju/yDUolOd415APRo=;
+        b=qjdPa6M9/etTnIBy7a9s7lZNLcaX0Ma5/Y3Mp6svrUNWY+vKujKXRqWcBlX7t/XG9J
+         hFBjJonaKlS9VEBAmYLTjHhhf3Lq3KrYfm2yZbcW0qTq07SxSCBWozLvi8sbQPxPKn2B
+         dS+gAZC7/5PPGzbw5fzBwu1/ZYWVCShsMz7n0Ky/1M+foI78cjziCFeDUM8aUgWWQEQF
+         lKAij3YeTF+vdkosA59UweDHcCLQYeF7JxqkfyP4qKzaDliX4wgnyofluCZPyiyRdzrV
+         CFayvmwiVgPXLuIVWxZQsgCioYRtXqsBO03Ca1rVGcOVsGKPitqnN4AQBx/1sCHkuAMC
+         LX4w==
+X-Gm-Message-State: AFqh2kqzAwonXOo8aBcwUiGNeJDXmhzrzQsOb+Jr8Y0W2mwDjftKcZow
+        ce6Z7TD1WrqPe9eGJYurUQ+Oe0ucPV2tOIX8/J0=
+X-Google-Smtp-Source: AMrXdXvWo3inc/U3YtP6hG72GMVCNJmeyWlS6d5m4UwsQ7/lePrxejZKskx/Z3RdHRkyL7EpoGcdGP+p4OV7hupKci0=
+X-Received: by 2002:a67:d991:0:b0:3ce:8b8f:b8f4 with SMTP id
+ u17-20020a67d991000000b003ce8b8fb8f4mr3297389vsj.46.1673103668099; Sat, 07
+ Jan 2023 07:01:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-11-linux.amoon@gmail.com>
- <Y7Xf/92iCHD5WhpA@google.com>
-In-Reply-To: <Y7Xf/92iCHD5WhpA@google.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-9-linux.amoon@gmail.com>
+ <Y7X/xadXIA2f9lHz@google.com>
+In-Reply-To: <Y7X/xadXIA2f9lHz@google.com>
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Sat, 7 Jan 2023 20:29:20 +0530
-Message-ID: <CANAwSgQijsKkjd6NJ7GMpph-cVpch6yXCdimyCjhQj5RKV_Cvw@mail.gmail.com>
-Subject: Re: [PATCH v1 10/11] usb: misc: onboard_usb_hub: add VIA LAB VL817Q7
- hub support
+Date:   Sat, 7 Jan 2023 20:30:51 +0530
+Message-ID: <CANAwSgSMrQ7v=7-CmnXC0VCerFB0nroDPHuWuCDWZD6Oct15TA@mail.gmail.com>
+Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
+ VL817Q7 hub controller
 To:     Matthias Kaehlcke <mka@chromium.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,100 +73,100 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi Matthias,
 
-Thanks for your review comments.
-
-On Thu, 5 Jan 2023 at 01:52, Matthias Kaehlcke <mka@chromium.org> wrote:
+On Thu, 5 Jan 2023 at 04:07, Matthias Kaehlcke <mka@chromium.org> wrote:
 >
-> Hi Andand,
->
-> On Wed, Dec 28, 2022 at 10:03:19AM +0000, Anand Moon wrote:
-> > VIA LAB VL817Q7 is a 4-port USB 3.1 hub that has a reset pin to
-> > toggle and a 5.0V core supply exported though an integrated LDO is
-> > available for powering it.
+> On Wed, Dec 28, 2022 at 10:03:17AM +0000, Anand Moon wrote:
+> > The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
+> > features 4 downstream ports, an internal 5V regulator and has
+> > external reset pin.
 > >
-> > Add the support for this hub, for controlling the reset pin and the core
-> > power supply.
+> > Add a device tree binding for its USB protocol part.
+> > The internal LDO is not covered by this and can just be modelled
+> > as a fixed regulator.
 > >
 > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 > > ---
-> >  drivers/usb/misc/onboard_usb_hub.c | 2 ++
-> >  drivers/usb/misc/onboard_usb_hub.h | 5 +++++
-> >  2 files changed, 7 insertions(+)
+> >  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
+> >  1 file changed, 47 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
 > >
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> > index 699050eb3f17..025572019d16 100644
-> > --- a/drivers/usb/misc/onboard_usb_hub.c
-> > +++ b/drivers/usb/misc/onboard_usb_hub.c
-> > @@ -335,6 +335,7 @@ static struct platform_driver onboard_hub_driver = {
-> >  #define VENDOR_ID_MICROCHIP  0x0424
-> >  #define VENDOR_ID_REALTEK    0x0bda
-> >  #define VENDOR_ID_TI         0x0451
-> > +#define VENDOR_ID_VIA                0x2109
-> >
-> >  /*
-> >   * Returns the onboard_hub platform device that is associated with the USB
-> > @@ -418,6 +419,7 @@ static const struct usb_device_id onboard_hub_id_table[] = {
-> >       { USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
-> >       { USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
-> >       { USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
-> > +     { USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817Q7 3.1 */
->
-> The VL817Q7 is a single IC, however like the TI USB8041 or the RTS5414 it
-> provides both a USB 3.1 and a USB 2.0 hub. You should also add an entry for
-> the USB 2.0 hub here.
->
-Ok,
-
->
-> >       {}
-> >  };
-> >  MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-> > index b32fad3a70f9..1fb3371ebdae 100644
-> > --- a/drivers/usb/misc/onboard_usb_hub.h
-> > +++ b/drivers/usb/misc/onboard_usb_hub.h
-> > @@ -26,6 +26,10 @@ static const struct onboard_hub_pdata genesys_gl850g_data = {
-> >       .reset_us = 3,
-> >  };
-> >
-> > +static const struct onboard_hub_pdata vialab_vl817q7_data = {
-> > +     .reset_us = 3,
-> > +};
+> > diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> > new file mode 100644
+> > index 000000000000..4ae995160fd5
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> > @@ -0,0 +1,47 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > > +
-> >  static const struct of_device_id onboard_hub_match[] = {
-> >       { .compatible = "usb424,2514", .data = &microchip_usb424_data, },
-> >       { .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
-> > @@ -37,6 +41,7 @@ static const struct of_device_id onboard_hub_match[] = {
-> >       { .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
-> >       { .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
-> >       { .compatible = "usbbda,5414", .data = &realtek_rts5411_data, },
-> > +     { .compatible = "vialab,usb2109", .data = &vialab_vl817q7_data, },
+> > +title: Via labs VL817Q7 USB 3.1 hub controller
 >
-> ditto
+> nit: VIA Labs VL817-Q7
 >
-> Actually you added the device id entry for the 3.1 hub and a compatible string
-> of the 2.0 hub (or vice versa). Above the device id is 0x0817, here it is
-> 0x2109. Please add both USB 3.1 and 2.0 and make sure the device id and the USB
-> version in the comment for the device id table match.
+Ok
+> > +
+> > +maintainers:
+> > +  - Anand Moon <linux.amoon@gmail.com>
+> > +
+> > +allOf:
+> > +  - $ref: usb-device.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - vialab,usb2109
+>
+> This is not a valid compatible string as Johan already noted.
+>
+> Besides that the VL817-Q7 provides both a 3.1 and a 2.0 USB hub, which
+> are enumerated separately. Please also add a compatible string for the
+> 2.0 hub (assuming 0x2109 is the 3.1 hub).
+>
+Yes, correct,
+actually, I would like to rename this file to vialab,vl817.yaml
+since vialab,vl817-q7 is used for USB 3.1 hub and vialab,vl817-q5 is
+used for USB 2.0 hub.
 
-Yes I messed up the compatible string
-On Odrodi C4
-alarm@odroid-c4:~$ lsusb -tv
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
-    ID 1d6b:0003 Linux Foundation 3.0 root hub
-    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
-        ID 2109:0817 VIA Labs, Inc.
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 480M
-    ID 1d6b:0002 Linux Foundation 2.0 root hub
-    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
-        ID 2109:2817 VIA Labs, Inc.
+[0] https://datasheet.lcsc.com/lcsc/1808111624_VIA-Tech-VL817-Q7-B0_C209756.pdf
 
-vendor ID is 0x2109 and the device ID is 0817,
-So I have fixed the compatible string as below.
-      compatible = "usb2109,2817";  /* USB 2.0 hub */
-      compatible = "usb2109,817";   /* USB 3.1 hub */
+> > +
+> > +  reg: true
+> > +
+> > +  reset-gpios:
+> > +    description: GPIO controlling the RESET# pin.
+> > +
+> > +  vdd-supply:
+> > +    description:
+> > +      the regulator that provides 5.0V core power to the hub.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    usb {
+> > +        dr_mode = "host";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        hub: hub@1 {
+> > +            compatible = "vialab,usb2109"
+> > +            reg = <1>;
+> > +            reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
+> > +        };
+>
+> Please also add a node for the other hub and link the two nodes with
+> each other through the 'peer-hub' property. See realtek,rts5411.yaml
+> for reference.
+
+Ok, I will update the example according,
 
 Thanks
 
-
--Anand
+-Anand.
