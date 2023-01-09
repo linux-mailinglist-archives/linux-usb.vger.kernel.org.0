@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201356622BF
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 11:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 901B1662305
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 11:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbjAIKP3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 05:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S237084AbjAIKTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 05:19:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237044AbjAIKO6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 05:14:58 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A937619292
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 02:14:06 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h16so7594201wrz.12
-        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 02:14:06 -0800 (PST)
+        with ESMTP id S236744AbjAIKTK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 05:19:10 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F2A1A204
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 02:17:52 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id co23so7626210wrb.4
+        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 02:17:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tKCQUhm58zZMU1+N1NXsPah3RLRpFdffVr/EsdddpFY=;
-        b=ckhYgBdaOObPp08TPqTFL7LDtCo3mvVO9nMROdG6iaHdh7Vmnz+KDmLvzMC3j+kXqr
-         bGl+hEV9Vx4GS9/U9JSTG38wjjZS3JttcgkWmogv3YYYCCKi3whX1IYfr7TPfQ3i9z4U
-         spe6stZTjC0IBRevcS/vLdR7NaZieS06dmJGsGI5YkG6Y+c84xvSw+T4dGP4pPavoLsx
-         vGRs7/m3UY8IhY/GTbaxsj2wDAPgGwFYxQrniEZsOZfksv0JiPdgBBOJYGI82gm8E+lb
-         HrQYOGsO7jVo9Oo9WMIT1YWSzGaQ7tSBLuEPOSLtk6jA6oS1LRDQ9jW3wxsSSouptbLx
-         4j2A==
+        bh=QO4Gj1e5UeqF5ymzTkto2ant13Qz/wNOziFjfJJ5vzg=;
+        b=pVfYlYO+VKGJORYYls3vGabFulZawg5dqFnJtBHR8uTVv5JChtzCdQMgKRrETBXTM4
+         v4CWRvXW1eytdJBxmasZ7Sl5z5keYMhl1Ud6Xo6tj97RK1aTBYzn4FvNcfwK9rw8oKYW
+         b/PmVC1Xs69AV59kl2eqZluYTehyxp2305OkXNmhkVER2FxUvd3G+um7sjnZ5+4PWjc7
+         fakhgs5AW3elM0/ox99LQogDiTVSiUr0avClhh3F40Jgb3f2oE6qCCSn/3kv/Y2nB1sj
+         qZvX3MMByPOmImfbNrYOqa8veVtN4nhPbVJlI4IvGdwgcRreeUBSuM3RvysYSmPanlV6
+         k8ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKCQUhm58zZMU1+N1NXsPah3RLRpFdffVr/EsdddpFY=;
-        b=CvwvKkpIJ/3KpqNtq28xK7mCgveMYMrn6Kw522wEmTU47D/+BHW33WxzT5NtndtCUh
-         Q22MAlg+O3AbIIBc88PcXmYlPvxvO6KQJpFIOz47xhY67BOhHu+YjiRoR/SrzBazmB0Z
-         WnPEzHCNU0Ijrvl2NOT6/1UzXozdEE90jTSuwSIYDIudxXS32c7OGUW1EnN2TUD1A/4N
-         RvNa7vcWSO74wD+1NaWRQkeeejJha+08OS7XejUXCoYdDwmbnabWoPpIgARGVlcC+mt6
-         zaFEL0uqmc8FuiolZyKup8L6Tfuc3J0rwXtUx1+ppuWW8iLtKkoDDjkG+vBUH+qn07b4
-         d+eQ==
-X-Gm-Message-State: AFqh2kpSgjBQ9rp8YAK855lRpWagEcMxggKuVGo9Ddf0R3mFpp8vfaBc
-        O6ViMGHC70wrXX/g0GFM0QnzRQ==
-X-Google-Smtp-Source: AMrXdXuppLG6yXIDwCzTHlmZxEUSt0/iBt0iREIXO/zIq2DPIPPsNImJeAsr6RgHanJAh5qw2Be6nA==
-X-Received: by 2002:a5d:6b4e:0:b0:2ba:e1d9:37e7 with SMTP id x14-20020a5d6b4e000000b002bae1d937e7mr6995164wrw.18.1673259245274;
-        Mon, 09 Jan 2023 02:14:05 -0800 (PST)
+        bh=QO4Gj1e5UeqF5ymzTkto2ant13Qz/wNOziFjfJJ5vzg=;
+        b=aFNktD+IyL50UIAOrAiTVqi5tZzT5bmFgOYU7mrUA2GXYDztGdfMSEEP9Da6xvxt0/
+         oaPhXNNZSw4eQAzvCsnO41o6k8bxRPE/6oCTsxEHnPwCU2Q+HAHJzedm76UubXftgkoW
+         8OWJ+e4UwjB/2UrwXioqAKKBvDN4UOiqql9KLKMi9hwY0/zAAHZiFtE8G9hySBcKJDEW
+         r1dx/PwU27+RCPQI6AubqiTDNRIHhZTYq5Db2UoIHLD6KxCywbIN9a3CNYoGGrJrtn51
+         5oG9G+MYrPWt0KPXLK+rzaLgpIBLu2EYPPQ7GPxRStxb61GAjXzY8P7zDUGAemM4ryxF
+         /UiA==
+X-Gm-Message-State: AFqh2krBs0m7WBeyVqW9bFwxBg9r+H/oSEGo2J8qvZ9vWIWkRS1mjIkd
+        n1ls9ni/H2TodLKTA7N/wRFdDA==
+X-Google-Smtp-Source: AMrXdXuLrABAqxvVUWFQdhUFNB2PSrOZj5r257i10/nxLYiRTkQE09v8CTUZ9sd+uDTOJvTVOWeOcw==
+X-Received: by 2002:a5d:618a:0:b0:2bc:5115:f072 with SMTP id j10-20020a5d618a000000b002bc5115f072mr1498743wru.50.1673259471158;
+        Mon, 09 Jan 2023 02:17:51 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i5-20020a5d55c5000000b002a6f329203esm8232130wrw.61.2023.01.09.02.14.03
+        by smtp.gmail.com with ESMTPSA id g8-20020a5d5408000000b0027973315213sm8156308wrv.89.2023.01.09.02.17.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 02:14:04 -0800 (PST)
-Message-ID: <3aa83ec3-228d-1add-5e4b-c100340b127e@linaro.org>
-Date:   Mon, 9 Jan 2023 11:14:03 +0100
+        Mon, 09 Jan 2023 02:17:50 -0800 (PST)
+Message-ID: <69cd735c-e9b6-7cc7-65d9-c02697797a73@linaro.org>
+Date:   Mon, 9 Jan 2023 11:17:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] dt-bindings usb: typec: rt1718s: Add binding for
- Richtek RT1718S
+Subject: Re: [PATCH 2/2] usb: typec: tcpci_rt1718s: Add Richtek RT1718S tcpci
+ driver
 Content-Language: en-US
 To:     gene_chen@richtek.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
@@ -63,8 +63,9 @@ To:     gene_chen@richtek.com, robh+dt@kernel.org,
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1673256674-25165-1-git-send-email-gene_chen@richtek.com>
+ <1673256674-25165-2-git-send-email-gene_chen@richtek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1673256674-25165-1-git-send-email-gene_chen@richtek.com>
+In-Reply-To: <1673256674-25165-2-git-send-email-gene_chen@richtek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,104 +81,276 @@ X-Mailing-List: linux-usb@vger.kernel.org
 On 09/01/2023 10:31, gene_chen@richtek.com wrote:
 > From: Gene Chen <gene_chen@richtek.com>
 > 
-
-Subject: drop second, redundant "binding for".
-
-> Add binding for Richtek RT1718s
+> Richtek RT1718S is highly integrated TCPC and Power Delivery (PD)
+> controller with IEC-ESD Protection on SBU/CC/DP/DM, USB2.0 Switch,
+> Charging Port Controller and Power-Path Control.
 > 
 > Signed-off-by: Gene Chen <gene_chen@richtek.com>
 > ---
->  .../devicetree/bindings/usb/richtek,rt1718s.yaml   | 98 ++++++++++++++++++++++
->  1 file changed, 98 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+>  drivers/usb/typec/tcpm/Kconfig         |   9 +
+>  drivers/usb/typec/tcpm/Makefile        |   1 +
+>  drivers/usb/typec/tcpm/tcpci_rt1718s.c | 349 +++++++++++++++++++++++++++++++++
+>  3 files changed, 359 insertions(+)
+>  create mode 100644 drivers/usb/typec/tcpm/tcpci_rt1718s.c
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> index e6b88ca..f0efb34 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -27,6 +27,15 @@ config TYPEC_RT1711H
+>  	  Type-C Port Controller Manager to provide USB PD and USB
+>  	  Type-C functionalities.
+>  
+> +config TYPEC_RT1718S
+> +	tristate "Richtek RT1718S Type-C chip driver"
+> +	depends on I2C
+> +	help
+> +	  Richtek RT1718S Type-C chip driver that works with
+> +	  Type-C Port Controller Manager to provide USB PD and USB
+> +	  Type-C functionalities.
+> +	  Additionally, it supports BC1.2 and power-path control.
+> +
+>  config TYPEC_MT6360
+>  	tristate "Mediatek MT6360 Type-C driver"
+>  	depends on MFD_MT6360
+> diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
+> index 906d9dc..db33ffc 100644
+> --- a/drivers/usb/typec/tcpm/Makefile
+> +++ b/drivers/usb/typec/tcpm/Makefile
+> @@ -5,6 +5,7 @@ obj-$(CONFIG_TYPEC_WCOVE)		+= typec_wcove.o
+>  typec_wcove-y				:= wcove.o
+>  obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
+>  obj-$(CONFIG_TYPEC_RT1711H)		+= tcpci_rt1711h.o
+> +obj-$(CONFIG_TYPEC_RT1718S)		+= tcpci_rt1718s.o
+>  obj-$(CONFIG_TYPEC_MT6360)		+= tcpci_mt6360.o
+>  obj-$(CONFIG_TYPEC_TCPCI_MT6370)	+= tcpci_mt6370.o
+>  obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1718s.c b/drivers/usb/typec/tcpm/tcpci_rt1718s.c
 > new file mode 100644
-> index 00000000..7797fc6
+> index 00000000..305b39c
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
-> @@ -0,0 +1,98 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/richtek,rt1718s.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-
-Drop quotes from both.
-
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1718s.c
+> @@ -0,0 +1,349 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020 richtek Inc.
+> + *
+> + * Author: ChiYuan Huang <cy_huang@richtek.com>
+> + */
 > +
-> +title: Richtek RT1718S Type-C Port Switch and Power Delivery controller
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/usb/tcpci.h>
+> +#include <linux/usb/tcpm.h>
+> +#include <linux/usb/pd_vdo.h>
 > +
-> +maintainers:
-> +  - Gene Chen <gene_chen@richtek.com>
+> +#define RT1718S_VID	0x29CF
+> +#define RT1718S_PID	0x1718
 > +
-> +description: |
-> +  The RT1718S is a USB Type-C controller that complies with the latest
-> +  USB Type-C and PD standards. It does the USB Type-C detection including attach
-> +  and orientation. It integrates the physical layer of the USB BMC power
-> +  delivery protocol to allow up to 100W of power. The BMC PD block enables full
-> +  support for alternative interfaces of the Type-C specification.
+> +#define RT1718S_P1PREFIX	0x00
+> +#define RT1718S_P1START		(RT1718S_P1PREFIX << 8)
+> +#define RT1718S_P1END		((RT1718S_P1PREFIX << 8) + 0xFF)
+> +#define RT1718S_P2PREFIX	0xF2
+> +#define RT1718S_P2START		(RT1718S_P2PREFIX << 8)
+> +#define RT1718S_P2END		((RT1718S_P2PREFIX << 8) + 0xFF)
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - richtek,rt1718s
+> +#define RT1718S_SYS_CTRL3	0xB0
+> +#define RT1718S_SWRESET_MASK	BIT(0)
 > +
-> +  reg:
-> +    maxItems: 1
+> +struct rt1718s_chip {
+> +	struct tcpci_data tdata;
+> +	struct tcpci *tcpci;
+> +	struct device *dev;
+> +	struct regulator *vbus;
+> +	bool src_en;
+> +};
 > +
-> +  interrupts:
-> +    maxItems: 1
+> +static bool rt1718s_is_readwrite_reg(struct device *dev, unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case RT1718S_P1START ... RT1718S_P1END:
+> +	fallthrough;
+> +	case RT1718S_P2START ... RT1718S_P2END:
+> +		return true;
+> +	}
 > +
-> +  wakeup-source:
-> +    description: enable IRQ remote wakeup, see power/wakeup-source.txt
-
-Drop description, you are copying generic description.
-
-> +    type: boolean
-
-Drop. Just wakeup-soource: true
-
+> +	return false;
+> +}
 > +
-> +  connector:
-> +    type: object
-> +    $ref: ../connector/usb-connector.yaml#
-
-Full path, so /schemas/usb/connector ....
-
-> +    description:
-> +      Properties for usb c connector.
-
-That's not accurate description. Everything in properties is a property,
-so no need to say that properties are properties.
-
-Actually this looks the same as existing rt1711, so please do not
-duplicate stuff. Especially, do not duplicate mistakes...
-
+> +static const struct regmap_config rt1718s_regmap_config = {
+> +	.reg_bits		= 16,
+> +	.val_bits		= 8,
 > +
-> +additionalProperties: false
+> +	.reg_format_endian	= REGMAP_ENDIAN_BIG,
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - connector
-> +  - interrupts
+> +	/* page 1(TCPC) : 0x00 ~ 0xff, page 2 : 0xf200 ~0xf2ff */
+> +	.max_register		= RT1718S_P2END,
+> +	.writeable_reg		= rt1718s_is_readwrite_reg,
+> +	.readable_reg		= rt1718s_is_readwrite_reg,
+> +};
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/usb/pd.h>
-> +    i2c0 {
+> +static int rt1718s_regmap_read(void *context, const void *reg, size_t reg_size,
+> +			      void *val, size_t val_size)
 
-i2c
+This is not a regmap read... Use true regmap or explain why you cannot
+use it.
 
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
+
+> +{
+> +	struct device *dev = context;
+> +	struct i2c_client *i2c = to_i2c_client(dev);
+> +	struct i2c_msg xfer[2];
+> +	int ret;
 > +
-> +      rt1718s@43 {
+> +	xfer[0].addr = i2c->addr;
+> +	xfer[0].flags = 0;
+> +	xfer[0].len = reg_size;
+> +	xfer[0].buf = (u8 *)reg;
+> +
+> +	if (*(u8 *)reg == RT1718S_P1PREFIX) {
+> +		xfer[0].len = 1,
+> +		xfer[0].buf = (u8 *)(reg + 1);
+> +	}
+> +
+> +	xfer[1].addr = i2c->addr;
+> +	xfer[1].flags = I2C_M_RD;
+> +	xfer[1].len = val_size;
+> +	xfer[1].buf = (u8 *)val;
+> +
+> +	ret = i2c_transfer(i2c->adapter, xfer, 2);
+> +	//pr_info("wtf i2c_read [0x%04x]:0x%02x\n", *(u16 *)(reg), *(u8 *)val);
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+That's not a code suitable for mainline submission.
+
+> +	if (ret < 0)
+> +		return ret;
+> +	else if (ret != 2)
+> +		return -EIO;
+> +
+> +	return 0;
+> +}
+> +
+> +static int rt1718s_regmap_write(void *context, const void *val, size_t val_size)
+> +{
+> +	struct device *dev = context;
+> +	struct i2c_client *i2c = to_i2c_client(dev);
+> +	struct i2c_msg xfer;
+> +	int ret;
+> +
+> +	xfer.addr = i2c->addr;
+> +	xfer.flags = 0;
+> +	xfer.len = val_size;
+> +	xfer.buf = (u8 *)val;
+> +
+> +	if (*(u8 *)val == RT1718S_P1PREFIX) {
+> +		xfer.len = val_size - 1;
+> +		xfer.buf = (u8 *)(val + 1);
+> +	}
+> +
+> +	ret = i2c_transfer(i2c->adapter, &xfer, 1);
+> +	//pr_info("wtf i2c_write [0x%04x]:0x%02x\n", *(u16 *)(val), *(u8 *)(val+2));
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret != 1)
+> +		return -EIO;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct regmap_bus rt1718s_regmap_bus = {
+> +	.read	= rt1718s_regmap_read,
+> +	.write	= rt1718s_regmap_write,
+> +};
+> +
+> +static const struct reg_sequence rt1718s_init_settings[] = {
+> +	/* config I2C timeout reset enable , and timeout to 200ms */
+> +	{ 0xBF, 0x8F, 0 },
+> +	/* config CC Detect Debounce : 250us (25*val us) */
+> +	{ 0xB1, 0x0A, 0 },
+> +	/* DRP Toggle Cycle : 76.8ms (51.2 + 6.4*val ms) */
+> +	{ 0xB2, 0x04, 0 },
+> +	/* DRP Duyt Ctrl : dcSRC: 331/1024 ((val+1)/1024) */
+> +	{ 0xB3, 0x4A, 0 },
+> +	{ 0xB4, 0x01, 0 },
+> +	/* Enable VCONN Current Limit function */
+> +	{ 0x8C, 0x41, 0 },
+> +	/* Enable cc open 40ms when pmic send vsysuv signal */
+> +	{ 0xCA, 0xB3, 0 },
+> +	/* Set GPIO2 push-pull, output-low */
+> +	{ 0xEE, 0x0C, 0},
+> +	/* bg en, low power en, vbus valid detect off, vbus present on, osc off */
+> +	{ 0xB8, 0x1A, 0},
+> +	/* Link GPIO2 source default vbus to TCPC command */
+> +	{ 0xEB, 0x08, 0},
+> +	/* Set GPIO2 vbus path */
+> +	{ 0xEC, 0x8E, 0 },
+> +	/* auto low power timer 2.5s, auto low power en, auto low power mode */
+> +	{ 0xF210, 0x35, 0 },
+> +	/* Set shipping mode off, AUTOIDLE on with timeout 96ms */
+> +	{ 0x8F, 0x7F, 0 },
+> +};
+> +
+> +static int rt1718s_init(struct tcpci *tcpci, struct tcpci_data *tdata)
+> +{
+> +	int ret;
+> +
+> +	ret = regmap_register_patch(tdata->regmap, rt1718s_init_settings,
+> +				    ARRAY_SIZE(rt1718s_init_settings));
+> +	pr_info("%s: [TCPC-] ret=%d\n", __func__, ret);
+> +	return ret;
+> +}
+> +
+> +static int rt1718s_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
+> +			    bool src, bool snk)
+> +{
+> +	struct rt1718s_chip *chip = container_of(tdata, struct rt1718s_chip, tdata);
+> +	int ret;
+> +
+> +	if (chip->src_en == src)
+> +		return 0;
+> +
+> +	if (src)
+> +		ret = regulator_enable(chip->vbus);
+> +	else
+> +		ret = regulator_disable(chip->vbus);
+> +
+> +	if (!ret)
+> +		chip->src_en = src;
+> +	return ret;
+> +}
+> +
+> +static irqreturn_t rt1718s_irq(int irq, void *dev_id)
+> +{
+> +	struct rt1718s_chip *chip = dev_id;
+> +
+> +	return tcpci_irq(chip->tcpci);
+> +}
+> +
+> +static int rt1718s_sw_reset(struct rt1718s_chip *chip)
+> +{
+> +	int ret;
+> +
+> +	ret = regmap_update_bits(chip->tdata.regmap, RT1718S_SYS_CTRL3,
+> +				 RT1718S_SWRESET_MASK, RT1718S_SWRESET_MASK);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Wait for IC to reset done*/
+> +	usleep_range(1000, 2000);
+> +
+
+This entire code is so close to rt1711, that it does not make much sense
+to keep two drivers. Please work on existing driver to improve it -
+clean it up, add regmap patch maybe also regmap fields. Then add rt1718
+support to it.
 
 
 Best regards,
