@@ -2,207 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7889066316C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 21:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91DD6631B6
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 21:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbjAIUYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 15:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S237506AbjAIUnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 15:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237515AbjAIUYg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 15:24:36 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5985E3A;
-        Mon,  9 Jan 2023 12:24:35 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309KIXWr026037;
-        Mon, 9 Jan 2023 20:24:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LLCj3LGRAZrmFeffHLVyUc3jXEZk+lrOrYUbp7dypIk=;
- b=LN442ifahNhEkthtzMH8B99mPu6BIl6NMDdl4iz23mGyqY4a40yA5hBEQN2mtQcyx9Xj
- 1jVIuzYHOHVzXupoTpBNGVPm8PwXsPZl6qRXYVpdra05dyR94cSXDoUl68Wd+F9tJaa8
- nPJPCdu2KdZ18se7xA7Xph8gxSEY764hVyHIsoibn1P8OL2qDK85N6u1g5sKOZbET63b
- kBpR78vSH/K6ylARWWBTB07YRNPHHfqCUI60Fbij2WFrtHxmmzXKlALppORfKP8J4zRe
- UMRt8YaBtjVAbRwGywS9lrZ2iGWOrLtdk1ZI4rVRBtImbNK5ypnvPp10iWQjzsp7PSxH fw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my21fuy8v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 20:24:12 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 309KOBX4017768
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 9 Jan 2023 20:24:11 GMT
-Received: from [10.110.66.166] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
- 12:24:08 -0800
-Message-ID: <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
-Date:   Mon, 9 Jan 2023 12:24:02 -0800
+        with ESMTP id S237085AbjAIUnN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 15:43:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C190A559FA;
+        Mon,  9 Jan 2023 12:43:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BE0F613E9;
+        Mon,  9 Jan 2023 20:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82420C433F0;
+        Mon,  9 Jan 2023 20:43:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673296990;
+        bh=8Le0HxyQ1hvS52eAoweCLxxf9X4TqmN17EpbgjPbkhQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kA3tlsjNZxtuRffwjcyWZjv9MwD9h8wHCPiHmolj/RHcDPDHnqYt6+ABAbYzB5RTR
+         YNkDS8gLFLoQrVaor8JNsPjY2AoxLFZC4WSX3vKL/8jTevgyJTwBKROMeJBls8vxs4
+         mdoKwp5lpylrBMRumvWRvLCcUZzEpwP6V4ivQpSefZEV1HnIVnDWOfSV36aJOMu32U
+         3FUHN8p+IQIBoEcIWGs2BGjKF+J5XOhLBQAKQVlsc9ENbKTcbvmbWSipUY+/LlZP/Z
+         z1oYbz0h4mWlvb21yxG1I7W0tEGvUsZrl/qbKx0x0nidSkScbYNzPzbNa+6lRSgHrs
+         swug+t0xVeVJQ==
+Received: by mail-vk1-f170.google.com with SMTP id t2so4584589vkk.9;
+        Mon, 09 Jan 2023 12:43:10 -0800 (PST)
+X-Gm-Message-State: AFqh2kr6pR8ugxpSyV5dtLD0kejb/sa0L1iuu34kLEg8T+T/VpDKbGV0
+        t3dV17T9AhYFZJU1RzLkpZVpU78PcxyacjAHtg==
+X-Google-Smtp-Source: AMrXdXtKHlPsJVq6VwhjeerV8r1su/+h8wjs3OgcrdF35UE0ccjT3YhB5F0EFrEaRdkuT2b6Ohu5yCwEU52xKhhJ7Bo=
+X-Received: by 2002:a1f:1c55:0:b0:3d5:d30f:81c2 with SMTP id
+ c82-20020a1f1c55000000b003d5d30f81c2mr3979357vkc.14.1673296989386; Mon, 09
+ Jan 2023 12:43:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
- support
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-8-quic_wcheng@quicinc.com>
- <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
- <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
- <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: vBXxt7hLQNCNiXx3Za6gRXDytqzy-VPJ
-X-Proofpoint-GUID: vBXxt7hLQNCNiXx3Za6gRXDytqzy-VPJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_14,2023-01-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
- clxscore=1015 adultscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301090143
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20221219191038.1973807-1-robh@kernel.org> <87edsua5q4.fsf@balbi.sh>
+ <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+ <878riy9ztm.fsf@balbi.sh> <20221223235712.h54lggnjjuu3weol@synopsys.com>
+ <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com>
+ <87o7rlffi7.fsf@balbi.sh> <CAL_Jsq+viP_aY3n378WC7WpxZFnsTc-vKjW9Ojvcy0Ef-z09Ng@mail.gmail.com>
+ <87k028g6ol.fsf@balbi.sh> <CAL_JsqKjrXsz6hak2rG3GMKaOot4azDWpYCOsQmdVtmszN1WQw@mail.gmail.com>
+ <20230109194004.yqaqslcwnqqywkr3@synopsys.com>
+In-Reply-To: <20230109194004.yqaqslcwnqqywkr3@synopsys.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 9 Jan 2023 14:42:57 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLE+v7LkDk_TG_=aT3mUeGb8eVnJmeKLz5w1XmfVPkHeQ@mail.gmail.com>
+Message-ID: <CAL_JsqLE+v7LkDk_TG_=aT3mUeGb8eVnJmeKLz5w1XmfVPkHeQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains property
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On Mon, Jan 9, 2023 at 1:40 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> On Tue, Jan 03, 2023, Rob Herring wrote:
+> > On Fri, Dec 30, 2022 at 11:09 AM Felipe Balbi <balbi@kernel.org> wrote:
+> > >
+> > >
+> > > Hi,
+> > >
+> > > Rob Herring <robh@kernel.org> writes:
+> > > >> >> > >> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
+> > > >> >> > >> >  1 file changed, 3 insertions(+)
+> > > >> >> > >> >
+> > > >> >> > >> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > >> >> > >> > index 6d78048c4613..bcefd1c2410a 100644
+> > > >> >> > >> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > >> >> > >> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > >> >> > >> > @@ -91,6 +91,9 @@ properties:
+> > > >> >> > >> >          - usb2-phy
+> > > >> >> > >> >          - usb3-phy
+> > > >> >> > >> >
+> > > >> >> > >> > +  power-domains:
+> > > >> >> > >> > +    maxItems: 1
+> > > >> >> > >>
+> > > >> >> > >> AFAICT this can be incorrect. Also, you could have Cc the dwc3
+> > > >> >> > >> maintainer to get comments.
+> > > >> >>
+> > > >> >> Felipe is correct. We have 2 power-domains: Core domain and PMU.
+> > > >> >
+> > > >> > Power management unit? Performance management unit?
+> > > >> >
+> > > >> > That doesn't change that the rk3399 is 1 and we're stuck with it. So I
+> > > >> > can say 1 or 2 domains, or we add the 2nd domain when someone needs
+> > > >> > it.
+> > > >>
+> > > >> Isn't the snps,dwc3.yaml document supposed to document dwc3's view of
+> > > >> the world? In that case, dwc3 expects 2 power domains. It just so
+> > > >> happens that in rk3399 they are fed from the same power supply, but
+> > > >> dwc3' still thinks there are two of them. No?
+> > > >
+> > > > Yes. That is how bindings *should* be. However, RK3399 defined one PD
+> > > > long ago and it's an ABI. So we are stuck with it. Everyone else put
+> > >
+> > > Are you confusing things, perhaps? DWC3, the block Synopsys licenses,
+> > > has, as Thinh confirmed, 2 internal power domains. How OEMs (TI, Intel,
+> > > Rockchip, Allwinner, etc) decide to integrate the IP into their systems
+> > > is something different. That is part of the (so-called)
+> > > wrapper. Different integrators will wrap Synopsys IP however they see
+> > > fit, as long as they can provide a suitable translation layer between
+> > > Synopsys own view of the world (its own interconnect implementation, of
+> > > which there are 3 to choose from, IIRC) and the rest of the SoC.
+> > >
+> > > Perhaps what RK3399 did was provide a single power domain at the wrapper
+> > > level that feeds both of DWC3's own power domains, but DWC3 itself still
+>
+> Just for some additional context/use case, the power to the PMU (power
+> management unit) must always be on. If the device supports hibernation,
+> in hibernation, the power supply to the core can be turned off.
 
-On 1/2/2023 8:38 AM, Mathias Nyman wrote:
-> On 29.12.2022 23.14, Wesley Cheng wrote:
->> Hi Mathias,
->>
->> On 12/28/2022 7:47 AM, Mathias Nyman wrote:
->>> On 24.12.2022 1.31, Wesley Cheng wrote:
->>>> Implement the XHCI operations for allocating and requesting for a 
->>>> secondary
->>>> interrupter.  The secondary interrupter can allow for events for a
->>>> particular endpoint to be routed to a separate event ring.  The event
->>>> routing is defined when submitting a transfer descriptor to the USB HW.
->>>> There is a specific field which denotes which interrupter ring to 
->>>> route the
->>>> event to when the transfer is completed.
->>>>
->>>> An example use case, such as audio packet offloading can utilize a 
->>>> separate
->>>> event ring, so that these events can be routed to a different processor
->>>> within the system.  The processor would be able to independently submit
->>>> transfers and handle its completions without intervention from the main
->>>> processor.
->>>>
->>>
->>> Adding support for more xHCI interrupters than just the primary one 
->>> make sense for
->>> both the offloading and virtualization cases.
->>>
->>> xHCI support for several interrupters was probably added to support 
->>> virtualization,
->>> to hand over usb devices to virtual machines and give them their own 
->>> event ring and
->>> MSI/MSI-X vector.
->>>
->>> In this offloading case you probably want to avoid xHC interrupts 
->>> from this device
->>> completely, making sure it doesn't wake up the main CPU unnecessarily.
->>>
->>> So is the idea here to let xhci driver set up the new interrupter, 
->>> its event ring,
->>> and the endpoint transfer rings. Then pass the address of the 
->>> endpoint transfer rings
->>> and the new event ring to the separate processor.
->>>
->>> This separate processor then both polls the event ring for new 
->>> events, sets its dequeue
->>> pointer, clears EHB bit, and queues new TRBs on the transfer ring.
->>>
->>> so xhci driver does not handle any events for the audio part, and no 
->>> audio data URBs
->>> are sent to usb core?
->>
->> Your entire description is correct.  To clarify, the interfaces which 
->> are non-audio will still be handled by the main processor.  For 
->> example, a USB headset can have a HID interface as well for volume 
->> control.  The HID interface will still be handled by the main 
->> processor, and events routed to the main event ring.
->>
->>>
->>> How about the control part?
->>> Is the control endpoint for this device still handled normally by usb 
->>> core/xhci?
->>>
->>
->> Control transfers are always handled on the main processor.  Only 
->> audio interface's endpoints.
-> 
-> Good to know, that means interrupter should be chosen per endpoint, not 
-> per device.
-> 
->>
->>> For the xhci parts I think we should start start by adding generic 
->>> support for several
->>> interrupters, then add parts needed for offloading.
->>
->> I can split up the patchsets to add interrupters first, then adding 
->> the offloading APIs in a separate patch.
-> 
-> 
-> I started looking at supporting secondary interrupters myself.
-> Let me work on that part a bit first. We have a bit different end goals.
-> I want to handle interrupts from a secondary interrupter, while this 
-> audio offload
-> really just wants to mask some interrupts.
-> 
+Things in an always-on PD may or may not be described in
+'power-domains', so from a DT perspective I would say 1 domain is
+perfectly valid here.
 
-I was looking at how we could possibly split up the XHCI secondary 
-interrupter, and offloading parts.  Since the XHCI secondary interrupter 
-is a feature that is defined in the XHCI spec (and we aren't doing 
-anything outside of what is defined), I was thinking of having a 
-separate XHCI driver (ie xhci-sec.c/h) that can be used to define all 
-APIs related to setting up the event ring and ring management. 
-(interrupt support can be added here)  This aligns a bit with what Alan 
-suggested, and removing the APIs in the USB HCD, since this is XHCI 
-specific stuff. ( 
-https://lore.kernel.org/linux-usb/Y6zwZOquZOTZfnvP@rowland.harvard.edu/ )
+I suppose the PMU could be in a PD which can be gated off, but any
+hibernation features would be lost.
 
-For the offloading part, I think this is a bit more dependent on how 
-different platforms implement it.  To use more of a generic approach 
-like how Albert suggested here:
+> > > has 2 power domains, that's not something rockchip can change without
+> > > risking the loss of support from Synopsys, as it would not be Synopsys
+> > > IP anymore.
+> >
+> > Again, none of this matters. I'm documenting what is already in use
+> > and an ABI, not what is correct. The time for correctness was when
+> > this binding was added.
+>
+> That's unfortunate. That makes this very difficult to maintain if we
+> can't rectify a mistake.
 
-https://patchwork.kernel.org/project/linux-usb/list/?series=704174
+Shrug. What's unfortunate is only a limited number of people can
+review bindings to be correct in this aspect. And I'm not one of them.
 
-Basically to give vendors the ability to define their own 
-sequences/callbacks, and from which the XHCI driver will call into. (if 
-needed)  These would need to be a separate set of XHCI drivers as well.
+We deal with this all the time already. It's just amplified when it is
+shared IP. Would I like less variation? Yes, but it's not a
+showstopper.
 
-Do you think this is a proper model for us to go with, so that we can 
-allow for vendors to easily add functionality?  Appreciate the inputs.
+> > To move forward, how about something like this:
+> >
+> > power-domains:
+> >   description: Really there are 2 PDs, but some implementations
+> > defined a single PD.
+> >   minItems: 1
+> >   items:
+> >     - description: core
+> >     - description: PMU
+> >
+> > We unfortunately can't constrain this to Rockchip in the schema
+> > because that specific information is in the parent node.
+> >
+> > (kind of crappy descriptions too, but that's the amount of information I have.)
+>
+> Can we omit mentioning min or maxItems? While it may not be desired,
+> it's not a hard requirement right? This can help avoid some confusion
+> with devicetree documentation and dwc3 databook.
 
-Thanks
-Wesley Cheng
+Why? Don't you want to catch someone defining 3 domains?
 
-
+Rob
