@@ -2,119 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F356629A3
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 16:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC836662A81
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 16:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbjAIPP3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 10:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S229979AbjAIPtL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 10:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237040AbjAIPOv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 10:14:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E244414D05;
-        Mon,  9 Jan 2023 07:13:57 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C78DE660036F;
-        Mon,  9 Jan 2023 15:13:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673277236;
-        bh=OeYfEBPCu7fJ1Kg0yM6/gC8R+9+zgNLojttt7HhxyLI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oQiqv5huad9LHUBf0CGIxLMsqCtsYrfsUR7kGCWr5AtfR3BTH20CFsO1Aj0SaNt0W
-         KGkbggcMOtua5QIykkC8nkJunPbyEAX/ONUiT2oHLxYoQWEUP43jXH5sZAuLEtdTHM
-         ixuY+g56jyCmHPzhgykZxkXiO1h2N01vkJZvi+ZddoMheoSwMho3smTm98K0wmPrp5
-         VhgnGqdPdm80L9pOOAtrWRAXDBhCeGOe4AjMuWcEh0u0QgxOOy27sBXeEFxLbA7Omg
-         kn3pIE7NaYSJfkhX3aXTi8bbZBoCvpo6A1bAwAw8CGn4+5iJfYeMz04YIvgSh0jCD+
-         TAhCTxfoWqYSA==
-Message-ID: <0ae6a31c-9a7b-ff05-08e1-eed96e672bd9@collabora.com>
-Date:   Mon, 9 Jan 2023 16:13:53 +0100
+        with ESMTP id S237332AbjAIPsj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 10:48:39 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3D241108E
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 07:48:35 -0800 (PST)
+Received: (qmail 638441 invoked by uid 1000); 9 Jan 2023 10:48:34 -0500
+Date:   Mon, 9 Jan 2023 10:48:34 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Juhyung Park <qkrwngud825@gmail.com>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        gregkh@linuxfoundation.org, zenghongling@kylinos.cn,
+        zhongling0719@126.com
+Subject: Re: [PATCH] Revert "usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS"
+Message-ID: <Y7w3UgeJHHcR7O6o@rowland.harvard.edu>
+References: <20230109115550.71688-1-qkrwngud825@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/3] arm64: dts: mediatek: Introduce MT8195 LAPTOP and
- IOT's USB configurations
-Content-Language: en-US
-To:     Macpaul Lin <macpaul.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Bear Wang <bear.wang@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20230105092809.14214-1-macpaul.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230105092809.14214-1-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109115550.71688-1-qkrwngud825@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 05/01/23 10:28, Macpaul Lin ha scritto:
-> Introduce the split MT8195 laptop and iot USB configurations.
-> The hardware specifications for LAPTOP devices is different from IOT
-> devices. The major differences include some hardware constrains for
-> dual-role switch for USB controllers in different configurations,
-> especially for power management and other control flows as well.
+On Mon, Jan 09, 2023 at 08:55:50PM +0900, Juhyung Park wrote:
+> This reverts commit e00b488e813f0f1ad9f778e771b7cd2fe2877023.
 > 
-> Here are some hardware specifiction differences listed:
->    1. LAPTOP (Cherry Tomato boards) don't support USB gadget (device mode).
->    2. IOT devices must support multiple gadget devices and host mode.
->    3. Dual-role switch is not fully supported. Only USB PORT0 support
->       dual-role switch.
->    4. Power management is designed in primary and secondary dominator.
->       For a dual-role port, the device controller is the primary controller
->       for power management; while the host controller is the secondary.
->       LAPTOP devices should remove device nodes for avoiding abnormal
->       behavior.
+> The commit e00b488e813f ("usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS")
+> blacklists UAS for the entire RTL9210 enclosures. Realtek's VendorId is 0x0bda
+> and RTL9210 enclosures reports 0x9210 for its ProductId.
 > 
-> This modifcation is to add USB configurations "mt8195-laptop-usb.dtsi"
-> for LAPTOP devices, and add "mt8195-iot-usb.dtsi" for IOT devices.
+> The RTL9210 controller was advertised with UAS since its release back in 2019
+> and was shipped with a lot of enclosure products with different firmware
+> combinations.
 > 
-> To remove common USB configurations for mt8195.dtsi and switch includes
-> dtsi these new files for the boards will come in next patch.
+> If UAS blacklisting is really required said product (Hiksemi USB3-FW), it
+> should be done without blacklisting the entire RTL9210 products.
+
+We cannot simply revert a patch if it fixes a problem for some devices.  
+The devices would then stop working and that would be a regression, 
+which is not allowed.
+
+It will be necessary to find some other way of solving this problem.  
+For example, a small piece of test code which can safely determine 
+whether the firmware can handle UAS.
+
+Alan Stern
+
+> Fixes: e00b488e813f ("usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS")
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Hongling Zeng <zenghongling@kylinos.cn>
+> Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 -------
+>  1 file changed, 7 deletions(-)
 > 
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-
-I'm mostly sure that there's no reason to split the two configurations.
-
-I agree in that Tomato doesn't support gadget mode on the Type-A port and I
-honestly don't currently know (and I'll test that later!) if it would be possible
-to act as gadget on any of the two Type-C ports.
-Of course I agree on the fact that a laptop acting as a gadget may not be useful,
-but that's not something that I want to judge, as someone may find a usecase.
-
-In any case, even if Tomato does *not* support gadget mode on *any* port at all,
-I wonder why we wouldn't be able to probe MTU3 (and correctly describe the SoC)
-on Chromebooks but only on MT8195-based IoT boards...
-...and in case there's any real issue, we can always force host mode (with a
-generic  devicetree property!) on the MTU3 on Tomato.
-
-Finally, if we're able to add MTU3 to Tomato boards, this means that we won't be
-seeing these two DTSI files and that USB nodes are still going to all lie in the
-main `mt8195.dtsi` file, without all this duplication that I'm seeing here.
-
-What do you think?
-
-Regards,
-Angelo
-
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index 251778d14e2d..c7b763d6d102 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -83,13 +83,6 @@ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_NO_REPORT_LUNS),
+>  
+> -/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
+> -UNUSUAL_DEV(0x0bda, 0x9210, 0x0000, 0x9999,
+> -		"Hiksemi",
+> -		"External HDD",
+> -		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> -		US_FL_IGNORE_UAS),
+> -
+>  /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
+>  UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
+>  		"Initio Corporation",
+> -- 
+> 2.39.0
+> 
