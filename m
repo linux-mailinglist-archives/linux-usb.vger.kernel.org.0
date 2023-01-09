@@ -2,260 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFD26626E8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 14:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1929666270E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 14:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjAINXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 08:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S230031AbjAINau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 08:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbjAINXD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 08:23:03 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AE130556;
-        Mon,  9 Jan 2023 05:22:09 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id gh17so20056050ejb.6;
-        Mon, 09 Jan 2023 05:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1MDwnDD3nW5yOt4mhzIl9JmPSktrB0k8aHrlXMshp4w=;
-        b=qNh+p4+aJT/V/bX9JkQ2menGwlM8aDmRaSG0eJ4DXUVf7B4RqCijR9ikm62wSngKQ0
-         /9izkkYTeGHPsNGc43MBuN8lezxP36mh7H2zEUkD5JI6mzKVtn+Vc3WZuhrJAdNrQTxZ
-         tLkNLMF1vY+s3wZtBbY5qV8KkqbZVerorxFMtp2to00JLd4R5d4dEaBCRtYD0llNyHYG
-         eE/S9w47aRBa4f0aWGqf9XrVdoDSN9kb88vS5socjktA4LQVmGYRzq2drJUusVkv6A4t
-         2NnZT9FGL8Nonrts1AoqDbTDXIkXdBiFNIYeBI16uUa8EMfaVvpxx632cpVFA4O9jOh4
-         Nvxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1MDwnDD3nW5yOt4mhzIl9JmPSktrB0k8aHrlXMshp4w=;
-        b=ApLJ3dDQvCPIjpiUDf8spA2q1CBmyXv64/Jz59wi532pm6Ubo51MYomxptBk+JpSd2
-         D73Z0cK1u8ktNeQV5vn9q4EQwYWopxjXS0M8A8Abtzhar8f2YtnVEfYtykfYU+wX3ibt
-         D/uomIECDMtoFlHMdNGsXpfxwjT0qWqLUCtSpO3z3L9HUUNEonko47mL9vc/lWCpD2oD
-         bhHOukyRhK3VRzDLFtheDfF+CLQNfqaxlJZcg8C9aZRhlCy+or+Cfhzk9ShHDiGAXuc/
-         fz/pLcJ07eNtmZu/YXy3DPfRKkTTsN3kVcH3tg2eITPtoclcDM3OKKQGJJTgo+71zv8G
-         qsjg==
-X-Gm-Message-State: AFqh2krU8r44Zgyz2WUuxCHEKW84Om3PFD8YAhljrmgjmWEexLeCJUFe
-        pJRp1zkl9SFGPnR79/f6X50=
-X-Google-Smtp-Source: AMrXdXur6DUh24+lIblJ9wKODHbFGYXrXBO0qgd2qhR5MNjVlt2v1Klbk/sMWQ5hd1qLNBczv+kfCQ==
-X-Received: by 2002:a17:906:b0d1:b0:82e:a57b:cc9b with SMTP id bk17-20020a170906b0d100b0082ea57bcc9bmr62114638ejb.24.1673270527777;
-        Mon, 09 Jan 2023 05:22:07 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id kx1-20020a170907774100b0084d368b1628sm2645825ejc.40.2023.01.09.05.22.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 05:22:06 -0800 (PST)
-Date:   Mon, 9 Jan 2023 14:22:04 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-phy@lists.infradead.org, waynec@nvidia.com,
-        Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH V5 1/6] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
- controller binding
-Message-ID: <Y7wU/PnbKl1ONQOL@orome>
-References: <20230106152858.49574-1-jonathanh@nvidia.com>
- <20230106152858.49574-2-jonathanh@nvidia.com>
- <b1485d8a-71ea-7b75-74ab-77eef595ae10@linaro.org>
+        with ESMTP id S229642AbjAINas (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 08:30:48 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3DE17889;
+        Mon,  9 Jan 2023 05:30:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673271047; x=1704807047;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Hj0mYbVVN5STNln4AyVYIO3TneQGXOfu1lbQnYSSKrs=;
+  b=OK5SK/ow3mpYirJz3EsI3+c1BUnId2QVy0IUBVsAXxyt2ltfXOBVfw2r
+   4gfJJEyrWkyuYm5TtSW8IZQzo2VctnJISD2J9LR+T9Z+y8PSJUuCMb4V1
+   Rw4IxrkjUOqxURsyST+mBwzNayxE5Z68ze4lSL0UgY635OH2FZJWdHjmE
+   24FUSF809ovrupONoGooQXGcox0ZknPDZ8ODhDnCNWUDzngp3eTkkYo8l
+   VO8IIALM1Zraqn4agcpp5alGZndfgyIn7XvMm/dD7QWCBsNCw2N+IRcra
+   gucJI03z+RQEnRIJiXng0V7fB9NxH/AALHpxGY7BZRHdETWt8AoOcVir3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="320571828"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="320571828"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 05:30:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="658593157"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="658593157"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jan 2023 05:30:44 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pEsEd-0006pe-25;
+        Mon, 09 Jan 2023 13:30:43 +0000
+Date:   Mon, 09 Jan 2023 21:29:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     speakup@linux-speakup.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 543b9b2fe10b2e12b8d773af65314d322f91e479
+Message-ID: <63bc16ce.IBWX7dhtPEB7dLIq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SuVUDtOGOz2zxr1+"
-Content-Disposition: inline
-In-Reply-To: <b1485d8a-71ea-7b75-74ab-77eef595ae10@linaro.org>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 543b9b2fe10b2e12b8d773af65314d322f91e479  Add linux-next specific files for 20230109
 
---SuVUDtOGOz2zxr1+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Error/Warning: (recently discovered and may have been fixed)
 
-On Sun, Jan 08, 2023 at 04:21:24PM +0100, Krzysztof Kozlowski wrote:
-> On 06/01/2023 16:28, Jon Hunter wrote:
-> > From: Wayne Chang <waynec@nvidia.com>
-> >=20
-> > Add device-tree binding documentation for the XUSB host controller pres=
-ent
-> > on Tegra234 SoC. This controller supports the USB 3.1 specification.
-> >=20
-> > Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> > ---
-> > V4 -> V5: No changes
-> > V3 -> V4: minor update to the power-domain description
-> > V2 -> V3: nothing has changed
-> > V1 -> V2: address the issue on phy-names property
-> >=20
-> >  .../bindings/usb/nvidia,tegra234-xusb.yaml    | 158 ++++++++++++++++++
-> >  1 file changed, 158 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra2=
-34-xusb.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb=
-=2Eyaml b/Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
-> > new file mode 100644
-> > index 000000000000..190a23c72963
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
-> > @@ -0,0 +1,158 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/nvidia,tegra234-xusb.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: NVIDIA Tegra234 xHCI controller
-> > +
-> > +maintainers:
-> > +  - Thierry Reding <thierry.reding@gmail.com>
-> > +  - Jon Hunter <jonathanh@nvidia.com>
-> > +
-> > +description: The Tegra xHCI controller supports both USB2 and USB3 int=
-erfaces
->=20
-> Line ends after "description:"
->=20
-> > +  exposed by the Tegra XUSB pad controller.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: nvidia,tegra234-xusb
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: base and length of the xHCI host registers
->=20
-> Just "xHCI host registers". Same in other places.
->=20
-> > +      - description: base and length of the XUSB FPCI registers
-> > +      - description: base and length of the XUSB bar2 registers
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: hcd
-> > +      - const: fpci
-> > +      - const: bar2
-> > +
-> > +  interrupts:
-> > +    items:
-> > +      - description: xHCI host interrupt
-> > +      - description: mailbox interrupt
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: XUSB host clock
-> > +      - description: XUSB Falcon source clock
-> > +      - description: XUSB SuperSpeed clock
-> > +      - description: XUSB SuperSpeed source clock
-> > +      - description: XUSB HighSpeed clock source
-> > +      - description: XUSB FullSpeed clock source
-> > +      - description: USB PLL
-> > +      - description: reference clock
-> > +      - description: I/O PLL
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: xusb_host
-> > +      - const: xusb_falcon_src
-> > +      - const: xusb_ss
-> > +      - const: xusb_ss_src
-> > +      - const: xusb_hs_src
-> > +      - const: xusb_fs_src
-> > +      - const: pll_u_480m
-> > +      - const: clk_m
-> > +      - const: pll_e
-> > +
-> > +  interconnects:
-> > +    items:
-> > +      - description: read client
-> > +      - description: write client
-> > +
-> > +  interconnect-names:
-> > +    items:
-> > +      - const: dma-mem # read
-> > +      - const: write
-> > +
-> > +  iommus:
-> > +    maxItems: 1
-> > +
-> > +  nvidia,xusb-padctl:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description: phandle to the XUSB pad controller that is used to co=
-nfigure
-> > +      the USB pads used by the XHCI controller
-> > +
-> > +  phys:
-> > +    minItems: 1
-> > +    maxItems: 8
-> > +
-> > +  phy-names:
-> > +    minItems: 1
-> > +    maxItems: 8
-> > +    items:
-> > +      enum:
-> > +        - usb2-0
-> > +        - usb2-1
-> > +        - usb2-2
-> > +        - usb2-3
-> > +        - usb3-0
-> > +        - usb3-1
-> > +        - usb3-2
-> > +        - usb3-3
->=20
-> Why do you have so many optional phys? In what case you would put there
-> usb2-0 and usb3-3 together? Or even 8 phys at the same time? IOW, what
-> are the differences between them and why one controller would be
-> connected once to usb3-2 and once to usb3-3 phy? And once to both?
+aarch64-linux-ld: ID map text too big or misaligned
+drivers/gpu/drm/ttm/ttm_bo_util.c:364:32: error: implicit declaration of function 'vmap'; did you mean 'kmap'? [-Werror=implicit-function-declaration]
+drivers/gpu/drm/ttm/ttm_bo_util.c:429:17: error: implicit declaration of function 'vunmap'; did you mean 'kunmap'? [-Werror=implicit-function-declaration]
 
-This controller has up to four ports, each of which can be wired to a
-USB connector. Furthermore, each port is composed of a USB3 port and a
-USB2 companion port. You can technically have USB3-only ports, though
-I'm not sure if that's actually supported, USB3/2 combo ports (the
-typical case) and USB2-only ports.
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-So that's why we have four USB3 PHYs, each controlling the physical
-layer of one USB3 port and four USB2 PHYs, each of which can be bound to
-one of the USB3 PHYs to make a composite USB3/2 port.
+drivers/accessibility/speakup/main.c:1290:26: sparse: sparse: obsolete array initializer, use C99 syntax
+drivers/i2c/busses/i2c-qcom-geni.c:1028:28: sparse: sparse: symbol 'i2c_master_hub' was not declared. Should it be static?
+drivers/nvmem/imx-ocotp.c:599:21: sparse: sparse: symbol 'imx_ocotp_layout' was not declared. Should it be static?
+drivers/nvmem/layouts/sl28vpd.c:143:21: sparse: sparse: symbol 'sl28vpd_layout' was not declared. Should it be static?
+drivers/soc/qcom/ramp_controller.c:235:27: sparse: sparse: symbol 'msm8976_cfg_dfs_sid' was not declared. Should it be static?
+drivers/soc/qcom/ramp_controller.c:246:27: sparse: sparse: symbol 'msm8976_cfg_link_sid' was not declared. Should it be static?
+drivers/soc/qcom/ramp_controller.c:250:27: sparse: sparse: symbol 'msm8976_cfg_lmh_sid' was not declared. Should it be static?
+drivers/soc/qcom/ramp_controller.c:256:27: sparse: sparse: symbol 'msm8976_cfg_ramp_en' was not declared. Should it be static?
+drivers/soc/qcom/ramp_controller.c:262:27: sparse: sparse: symbol 'msm8976_cfg_ramp_dis' was not declared. Should it be static?
+drivers/usb/misc/sisusbvga/sisusbvga.c:528:9: sparse: sparse: incorrect type in assignment (different base types)
 
-Thierry
+Error/Warning ids grouped by kconfigs:
 
---SuVUDtOGOz2zxr1+
-Content-Type: application/pgp-signature; name="signature.asc"
+gcc_recent_errors
+|-- arm64-allyesconfig
+|   `-- aarch64-linux-ld:ID-map-text-too-big-or-misaligned
+|-- arm64-randconfig-s041-20230108
+|   |-- drivers-accessibility-speakup-main.c:sparse:sparse:obsolete-array-initializer-use-C99-syntax
+|   |-- drivers-i2c-busses-i2c-qcom-geni.c:sparse:sparse:symbol-i2c_master_hub-was-not-declared.-Should-it-be-static
+|   `-- drivers-nvmem-imx-ocotp.c:sparse:sparse:symbol-imx_ocotp_layout-was-not-declared.-Should-it-be-static
+|-- m68k-randconfig-s033-20230108
+|   |-- drivers-nvmem-layouts-sl28vpd.c:sparse:sparse:symbol-sl28vpd_layout-was-not-declared.-Should-it-be-static
+|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_dfs_sid-was-not-declared.-Should-it-be-static
+|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_link_sid-was-not-declared.-Should-it-be-static
+|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_lmh_sid-was-not-declared.-Should-it-be-static
+|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_ramp_dis-was-not-declared.-Should-it-be-static
+|   `-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_ramp_en-was-not-declared.-Should-it-be-static
+|-- mips-allyesconfig
+|   |-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vmap
+|   `-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vunmap
+|-- mips-buildonly-randconfig-r004-20230109
+|   |-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vmap
+|   `-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vunmap
+`-- s390-randconfig-s053-20230108
+    |-- drivers-accessibility-speakup-main.c:sparse:sparse:obsolete-array-initializer-use-C99-syntax
+    |-- drivers-usb-misc-sisusbvga-sisusbvga.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-int-usertype-address-got-restricted-__le32-usertype
+    |-- drivers-usb-misc-sisusbvga-sisusbvga.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-int-usertype-data-got-restricted-__le32-usertype
+    `-- drivers-usb-misc-sisusbvga-sisusbvga.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-short-header-got-restricted-__le16-usertype
 
------BEGIN PGP SIGNATURE-----
+elapsed time: 723m
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmO8FPwACgkQ3SOs138+
-s6F3oQ//aFty4MFzKCch7MvkzZst6tOgRd5/RlX2ktzssojr4yGtCbzUgZgIh9Lq
-ecII59F8dc633pEq1NLcTxb3R/HBy1NZLQw/RJ14G7/nqu3FpVN2rur4ce2SyPRx
-7NbJcd0B1lhP79xclKImvtd6/Z+sHhqpwC6rSCxWI9jVNGI7fkFGXGqcpov7Mrbp
-N0rgjKDY3VyTgc+4Vo3IUSYyua6NFYfKmNREpjhv0yNM+9r0LICN9r//kN/SnQVo
-ovWlBbiMo182F4+VAOINEsvZc2iTclvK4kiz1t8BRwN90sCrTAlMyjVjvM3I3fLX
-RPBZl9UEVRsoJ8BkvoJt7mBkskbKnp1dK2JeHGlmKqiWR5c6PRPmFqh3XlfcqzDC
-slPVsbGVfqdBI5R7HPrmcs4bqIZ5WKaFEZ1UUHPFYg/x9PaRNEJmbu/GDg2O0I2N
-aPT2cPasvwvMXOkwhnXOT+NJzx+I+Ciqp/mHr/QIs1qD2EGjSd708xCvVt+4EW3W
-vcW7WGNuoiFN3rmGoZQxj8bm7zn4YoAXLZKghPivCl5XoPievLGGm1b/CXr/u8Df
-EGA7aC/bM8iiUice5vtnfvnvWVZ5tKL1jmla+i1gfdFiN0DUF/qHwjDS3Dw9xQlk
-EbpdtCDKd6vsNOV8xIvyg3edZi2cBaU0ZnRDZdNc4mq9z1I9CXc=
-=5qW4
------END PGP SIGNATURE-----
+configs tested: 87
+configs skipped: 2
 
---SuVUDtOGOz2zxr1+--
+gcc tested configs:
+x86_64                            allnoconfig
+i386                                defconfig
+x86_64                              defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64               randconfig-a011-20230109
+x86_64               randconfig-a013-20230109
+s390                                defconfig
+x86_64               randconfig-a012-20230109
+i386                          randconfig-a014
+x86_64                               rhel-8.3
+m68k                             allyesconfig
+i386                          randconfig-a012
+s390                             allyesconfig
+x86_64                           rhel-8.3-bpf
+arc                     haps_hs_smp_defconfig
+x86_64                           rhel-8.3-syz
+ia64                             allmodconfig
+i386                             allyesconfig
+i386                          randconfig-a016
+m68k                             allmodconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+arm                                 defconfig
+x86_64                          rhel-8.3-func
+sh                         apsh4a3a_defconfig
+x86_64               randconfig-a014-20230109
+x86_64                           allyesconfig
+arc                              allyesconfig
+x86_64               randconfig-a016-20230109
+powerpc                   motionpro_defconfig
+alpha                            allyesconfig
+x86_64               randconfig-a015-20230109
+x86_64                    rhel-8.3-kselftests
+powerpc                           allnoconfig
+riscv                randconfig-r042-20230109
+s390                 randconfig-r044-20230109
+mips                             allyesconfig
+arm                  randconfig-r046-20230108
+arc                  randconfig-r043-20230108
+powerpc                          allmodconfig
+arc                  randconfig-r043-20230109
+arm64                            allyesconfig
+arm                              allyesconfig
+sh                               allmodconfig
+mips                         cobalt_defconfig
+arm64                            alldefconfig
+powerpc                      makalu_defconfig
+mips                  maltasmvp_eva_defconfig
+arm                          iop32x_defconfig
+powerpc                      mgcoge_defconfig
+nios2                               defconfig
+arm                           corgi_defconfig
+powerpc                     taishan_defconfig
+parisc                           allyesconfig
+
+clang tested configs:
+i386                 randconfig-a004-20230109
+i386                 randconfig-a002-20230109
+i386                 randconfig-a003-20230109
+i386                 randconfig-a001-20230109
+x86_64                          rhel-8.3-rust
+i386                 randconfig-a005-20230109
+i386                 randconfig-a006-20230109
+hexagon              randconfig-r045-20230109
+arm                  randconfig-r046-20230109
+x86_64               randconfig-a003-20230109
+i386                          randconfig-a013
+x86_64               randconfig-a002-20230109
+arm                      tct_hammer_defconfig
+arm                       mainstone_defconfig
+hexagon              randconfig-r041-20230108
+powerpc                 mpc832x_mds_defconfig
+i386                          randconfig-a011
+x86_64               randconfig-a004-20230109
+hexagon              randconfig-r041-20230109
+x86_64               randconfig-a005-20230109
+i386                          randconfig-a015
+x86_64               randconfig-a001-20230109
+x86_64               randconfig-a006-20230109
+hexagon              randconfig-r045-20230108
+s390                 randconfig-r044-20230108
+riscv                randconfig-r042-20230108
+arm                            mmp2_defconfig
+powerpc                        fsp2_defconfig
+arm                           spitz_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
