@@ -2,78 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA178661F28
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 08:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E983661F3E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 08:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbjAIHXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 02:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
+        id S236440AbjAIHag (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 02:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbjAIHWz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 02:22:55 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C6339596;
-        Sun,  8 Jan 2023 23:22:50 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTP Server V5.0(16481:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Mon, 09 Jan 2023 15:22:27 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 9 Jan
- 2023 15:22:26 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Mon, 9 Jan 2023 15:22:26 +0800
-Date:   Mon, 9 Jan 2023 15:22:26 +0800
-From:   ChiYuan Huang <cy_huang@richtek.com>
-To:     ChiYuan Huang <u0084500@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>, <linux@roeck-us.net>,
-        <heikki.krogerus@linux.intel.com>, <matthias.bgg@gmail.com>,
-        <tommyyl.chen@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <gene_chen@richtek.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: typec: tcpm: Fix altmode re-registration causes
- sysfs create fail
-Message-ID: <20230109072226.GA15975@linuxcarl2.richtek.com>
-References: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
- <Y5rsdo/SGHJM4UKG@kroah.com>
- <CADiBU3-iVLQf6Q5SzOB_pMCs2PGcFuWryjpDn5Qvz41WQ6C2RA@mail.gmail.com>
- <Y5sIZ3zC6o4ARDEn@kroah.com>
- <20230109014123.GA27423@linuxcarl2.richtek.com>
- <Y7u2Yi+UeqMcVhad@kroah.com>
- <CADiBU39yh9k=BWOmQ_-T3oO1nRQ6nHVjf4H+YRpjb3Mv_3tc0w@mail.gmail.com>
-MIME-Version: 1.0
+        with ESMTP id S233151AbjAIHaV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 02:30:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1908C1275A;
+        Sun,  8 Jan 2023 23:30:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DA941CE0EA2;
+        Mon,  9 Jan 2023 07:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 15AE3C433D2;
+        Mon,  9 Jan 2023 07:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673249417;
+        bh=ZCUEoA+q5Y84FmkEwkCc0/nI1EnWj90AeV4mz06wEPw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EJtDcDS834gb+MQJViYN6J1w5bmWGQXT4EzMDPi+kZRL243D+uMqGGg61S6jAi/qf
+         py4bF3OXFNnZxJhK6ImjDlQimeNmlKpunkmuLLBssfXx1V344Km2iyhHdICnDBg/YS
+         501ZTs6m6bToAje3zcKCloVHkBc8Lni+Pq2rnlGMGCOUFBMKcaUP+a+/ptxQuffmGH
+         S9NvaECoi+YimZmcKjsk9jXW+1EV64C17m9E5T78XRoW6dnZiAPZc4ZeeV1W/nVEUe
+         qAlhjeBHdpmbVZUruM6jbheUmvP58uyRB3myG+svWpeN7u/TyNS5DPYPCFPHPCAmQ6
+         y6kBnwZMLTRUA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02FE7E4D005;
+        Mon,  9 Jan 2023 07:30:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADiBU39yh9k=BWOmQ_-T3oO1nRQ6nHVjf4H+YRpjb3Mv_3tc0w@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next v4] usbnet: optimize usbnet_bh() to reduce CPU load
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167324941700.24554.6732820998527805542.git-patchwork-notify@kernel.org>
+Date:   Mon, 09 Jan 2023 07:30:17 +0000
+References: <20230106104950.22741-1-lsahn@ooseel.net>
+In-Reply-To: <20230106104950.22741-1-lsahn@ooseel.net>
+To:     Leesoo Ahn <lsahn@ooseel.net>
+Cc:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 02:46:34PM +0800, ChiYuan Huang wrote:
-> Greg KH <gregkh@linuxfoundation.org> 於 2023年1月9日 週一 下午2:38寫道：
-> >
-> > On Mon, Jan 09, 2023 at 09:41:23AM +0800, ChiYuan Huang wrote:
-> > > ************* Email Confidentiality Notice ********************
-> > >
-> > > The information contained in this e-mail message (including any attachments) may be confidential, proprietary, privileged, or otherwise exempt from disclosure under applicable laws. It is intended to be conveyed only to the designated recipient(s). Any use, dissemination, distribution, printing, retaining or copying of this e-mail (including its attachments) by unintended recipient(s) is strictly prohibited and may be unlawful. If you are not an intended recipient of this e-mail, or believe that you have received this e-mail in error, please notify the sender immediately (by replying to this e-mail), delete any and all copies of this e-mail (including any attachments) from your system, and do not disclose the content of this e-mail to any other person. Thank you!
-> >
-> > Now deleted.
-> >
-> > For obvious reasons, this wording is not compatible with kernel
-> > development :(
-> 
-> I'm sorry about that. Let me check with MIS..............
-This one seems work.
+Hello:
 
-https://www.lkml.org/lkml/2023/1/9/73
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri,  6 Jan 2023 19:49:49 +0900 you wrote:
+> The current source pushes skb into dev-done queue by calling
+> skb_dequeue_tail() and then pop it by skb_dequeue() to branch to
+> rx_cleanup state for freeing urb/skb in usbnet_bh(). It takes extra CPU
+> load, 2.21% (skb_queue_tail) as follows,
+> 
+> -   11.58%     0.26%  swapper          [k] usbnet_bh
+>    - 11.32% usbnet_bh
+>       - 6.43% skb_dequeue
+>            6.34% _raw_spin_unlock_irqrestore
+>       - 2.21% skb_queue_tail
+>            2.19% _raw_spin_unlock_irqrestore
+>       - 1.68% consume_skb
+>          - 0.97% kfree_skbmem
+>               0.80% kmem_cache_free
+>            0.53% skb_release_data
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v4] usbnet: optimize usbnet_bh() to reduce CPU load
+    https://git.kernel.org/netdev/net-next/c/fb59bf28cd63
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
