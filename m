@@ -2,226 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D9E662D02
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 18:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F973662DB0
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 18:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237177AbjAIRkc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 12:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S236365AbjAIRwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 12:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237011AbjAIRkb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 12:40:31 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DD18FC0
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 09:40:29 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id y205so341854iof.0
-        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 09:40:29 -0800 (PST)
+        with ESMTP id S237327AbjAIRwc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 12:52:32 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75258718B9;
+        Mon,  9 Jan 2023 09:48:54 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id i185so9476218vsc.6;
+        Mon, 09 Jan 2023 09:48:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DACwT/eplpec0VqeUF7jWlh6DDiVed+jRgRCtq4aYtk=;
-        b=WCZTKsJCMmBFAICZAZVnIaAbEXxQjY0G27DlvsynIhaAAuHy9EOQFfFMZOmR125MDt
-         S3gDorg8Sy901aExHvenx3cxSBSUaJurFxbQolzbH7F/zX0sGEYXD9JrDEcOEmndRKlc
-         IO0AZdzhKKJ3AcN95DAJb7I41PRf78YTcknAw=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jdV2vwGnOEmlhv8n7U93QPrw3soIxglDsMqqZoAGNCs=;
+        b=OvViZphfr5738vJta/xF70K51WoKQjxplA5/RJo/AcybHvHZvOUTOU7+LAMoYwF4u2
+         ie9ciq6sqY9Ob/ZMFTTQDMoSVXymbBeob6u+51pohUsru/rYxZaPMynfqEmAGSur41kD
+         bxCbP8x+nMSayS1W8GGTy6p54I/KV+X3oQrVwIdzDbTNCe1U+PsJp5ErptBT0L6aIaWt
+         1b1Hsyzqf0rUU2a0DzrvkJOS2gatasS6ig+OSKak3e81prvLOlx9VL4+v6ETNd537Rp5
+         XGFV01P0QgiebzdQGPGyibWvcAiaJHoFEWbmVgm8r7nPr+uJMP+uqaGbsBaRSfFi78tS
+         dmxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DACwT/eplpec0VqeUF7jWlh6DDiVed+jRgRCtq4aYtk=;
-        b=u9NHHH4mwYWGs2dMuDXNxyeJZQ5wE64vFWirK/AuxZt5OB31hyHhOpihRb3JUGLXhH
-         EH6NhOv9GBuMqOleUUyUE8SEL0WnMq7bp6miIELmsLLWG5jAQKtp7P815JPrq+Cyregf
-         lTVSNTdsKIblXo9g+wVSjhbuAIjamNa/aizqa+sLv/qNCmIF6LJINIc1ZHLIAfR2/G+S
-         L66XL0xnJGz91LMCgs7rKRAeNDgQggXapZtS8MfWmRxh8dtVKHyvAjxlLoylXXWZrl4P
-         za9iMi9eQzKXOMhoXMIkbaERTGkCFTJqInLy2Ml7cn4R+DX3+UuAi/UbP4Tkm04ej+fs
-         BBUg==
-X-Gm-Message-State: AFqh2kr7q0F93S3eMD+ZxLUjHFYZUwOjsXPqa6moZLnd4qluYchINya0
-        f2k9bGUV9S8Hy1Ps8e054UIi8A==
-X-Google-Smtp-Source: AMrXdXuADas8+CJG83rybN+UF/B7rB04yYuHA9uG+FqSxO2HzilWovlvZGupFuLVMAMSXdQpJWpeZA==
-X-Received: by 2002:a6b:b2c8:0:b0:6e2:a51:83dd with SMTP id b191-20020a6bb2c8000000b006e20a5183ddmr40659310iof.21.1673286029148;
-        Mon, 09 Jan 2023 09:40:29 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id h9-20020a05660208c900b006eba8966048sm3442499ioz.54.2023.01.09.09.40.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 09:40:28 -0800 (PST)
-Date:   Mon, 9 Jan 2023 17:40:28 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Douglas Anderson <dianders@chromium.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
- driver
-Message-ID: <Y7xRjDAgI3UO8Xuv@google.com>
-References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
- <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
- <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
- <a5a32db9-21a1-1734-1c4f-88b9431d7aa8@i2se.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jdV2vwGnOEmlhv8n7U93QPrw3soIxglDsMqqZoAGNCs=;
+        b=DfDVE4lPJ+yDjSeZB8atCjIIZjsg66F0Fx6G7aFSN49sadcuRh5HWhHCcbwf5XFdn3
+         z8zF1fg/ZVFXk1lJa2r1spblwn3F0SVASy7TrBogaNmp5Au8Cfi4jQ5haarXYITG4RyJ
+         uDOqUfpRnC8VORWAMPWlPbsVIba+O1KzJRRPhxVgkwur3xNtu4E7KT8psDx2hUCfw/sL
+         jdgXenX5BI19WCCim2LzBepJxPOhlw10VYZKQNKrIrBtsWEvBsy0z2s393bIUL1YxyCo
+         q43DaR3P85Xc5AN7wo5vXUchorurR4IXoJKSjjQrQJLOgVFhFFOLDQxaL+g4MNqEJ7Tt
+         gp3Q==
+X-Gm-Message-State: AFqh2kont9pYdOyAdit/e7qKshydfztufczPmxaX1TyYecra/z61TIyg
+        SNrcJAbLqPd1RQieJiX/1PKUDQEvSLdzPHDRv/w=
+X-Google-Smtp-Source: AMrXdXvBp1DINcXOCvLmPxiDkUAxnf/FP+Y6732tNVN6rP/zqZs1L1FGyO5PAdWj/z0iT8oGfYrhW/1lEXVhB44r4Cs=
+X-Received: by 2002:a67:5c03:0:b0:3ce:a7c5:3757 with SMTP id
+ q3-20020a675c03000000b003cea7c53757mr3875326vsb.63.1673286516391; Mon, 09 Jan
+ 2023 09:48:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a5a32db9-21a1-1734-1c4f-88b9431d7aa8@i2se.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-2-linux.amoon@gmail.com>
+ <ef20a7dfa027f1a5a24a515e347af10c06a4da85.camel@icenowy.me>
+ <CANAwSgSJ1SQXUovgM6FHUozr46C_CogLaAD4gf4ANNHXoav6ag@mail.gmail.com>
+ <Y7YDwJX6aqa8vbQK@google.com> <CANAwSgTVnQXGoOfuxmwT7zCMJMY0Hw+uyQx126kNPL2WKGR8Hg@mail.gmail.com>
+ <Y7xA0nO53cBRetz4@google.com>
+In-Reply-To: <Y7xA0nO53cBRetz4@google.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Mon, 9 Jan 2023 23:18:19 +0530
+Message-ID: <CANAwSgR1ymx_2QK5Mi_1eS+LbTa2-SdQ+1dQ4hfrwNDLU_DsAg@mail.gmail.com>
+Subject: Re: [PATCH v1 01/11] dt-bindings: usb: Add device id for Genesys
+ Logic hub controller
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Icenowy Zheng <uwu@icenowy.me>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 11:47:13AM +0100, Stefan Wahren wrote:
-> Am 07.01.23 um 18:23 schrieb Stefan Wahren:
+Hi Matthias,
+
+On Mon, 9 Jan 2023 at 21:59, Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> On Sat, Jan 07, 2023 at 08:31:23PM +0530, Anand Moon wrote:
 > > Hi Matthias,
-> > 
-> > Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
-> > > Currently each onboard_hub platform device owns an 'attach' work,
-> > > which is scheduled when the device probes. With this deadlocks
-> > > have been reported on a Raspberry Pi 3 B+ [1], which has nested
-> > > onboard hubs.
-> > > 
-> > > The flow of the deadlock is something like this (with the onboard_hub
-> > > driver built as a module) [2]:
-> > > 
-> > > - USB root hub is instantiated
-> > > - core hub driver calls onboard_hub_create_pdevs(), which creates the
-> > >    'raw' platform device for the 1st level hub
-> > > - 1st level hub is probed by the core hub driver
-> > > - core hub driver calls onboard_hub_create_pdevs(), which creates
-> > >    the 'raw' platform device for the 2nd level hub
-> > > 
-> > > - onboard_hub platform driver is registered
-> > > - platform device for 1st level hub is probed
-> > >    - schedules 'attach' work
-> > > - platform device for 2nd level hub is probed
-> > >    - schedules 'attach' work
-> > > 
-> > > - onboard_hub USB driver is registered
-> > > - device (and parent) lock of hub is held while the device is
-> > >    re-probed with the onboard_hub driver
-> > > 
-> > > - 'attach' work (running in another thread) calls driver_attach(), which
-> > >     blocks on one of the hub device locks
-> > > 
-> > > - onboard_hub_destroy_pdevs() is called by the core hub driver when one
-> > >    of the hubs is detached
-> > > - destroying the pdevs invokes onboard_hub_remove(), which waits for the
-> > >    'attach' work to complete
-> > >    - waits forever, since the 'attach' work can't acquire the device
-> > > lock
-> > > 
-> > > Use a single work struct for the driver instead of having a work struct
-> > > per onboard hub platform driver instance. With that it isn't necessary
-> > > to cancel the work in onboard_hub_remove(), which fixes the deadlock.
-> > > The work is only cancelled when the driver is unloaded.
-> > 
-> > i applied both patches for this series on top of v6.1
-> > (multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
+> >
+> > Thanks for the review comments
+> >
+> > On Thu, 5 Jan 2023 at 04:25, Matthias Kaehlcke <mka@chromium.org> wrote=
+:
+> > >
+> > > On Wed, Dec 28, 2022 at 03:59:17PM +0530, Anand Moon wrote:
+> > > > Hi Icenowy,
+> > > >
+> > > > Thanks for the review comments
+> > > >
+> > > > On Wed, 28 Dec 2022 at 15:38, Icenowy Zheng <uwu@icenowy.me> wrote:
+> > > > >
+> > > > > =E5=9C=A8 2022-12-28=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:03 +0=
+000=EF=BC=8CAnand Moon=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > > Add usb hub device id for Genesys Logic, Inc. GL852G-OHG Hub US=
+B 2.0
+> > > > > > root hub and Genesys Logic, Inc. GL3523-QFN76 USB 3.1 root hub.
+> > >
+> > > nit: QFN 76 is one of the package options of the GL3523, I expect thi=
+s
+> > > binding to be applicable as well for other GL3523 variants, so I'd su=
+ggest
+> > > to drop the suffix. Not sure what 'OHG' stands for, the Genesys websi=
+te
+> > > only lists a GL852G hub with different package types (none of them 'O=
+HG'),
+> > > so I'd say drop the suffix unless it is known that 'OHG' variant uses
+> > > a different product id than other GL852G variants
+> > >
+> >
+> > Yes, I will be sure to do this reference, I just picked these from the
+> > board schematics.
+> >
+> > > > > >
+> > > > > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > > > > > ---
+> > > > > >  Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 2 =
+++
+> > > > > >  1 file changed, 2 insertions(+)
+> > > > > >
+> > > > > > diff --git
+> > > > > > a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > > > b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > > > index a9f831448cca..db009f3ef438 100644
+> > > > > > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > > > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > > > @@ -16,6 +16,8 @@ properties:
+> > > > > >    compatible:
+> > > > > >      enum:
+> > > > > >        - usb5e3,608
+> > > > > > +      - genesys,usb5e3,610
+> > > > > > +      - genesys,usb5e3,620
+> > > > >
+> > > > > I don't think genesys, is needed here because usb5e3 means USB VI=
+D
+> > > > > 0x05e3, which is already linked to Genesys Logic.
+> > > > >
+> > > >
+> > > > Ok, I added this as genesys, is it part of the manufacturer or vend=
+or name
+> > > > which is most commonly used for adding vendor-specific compatible s=
+trings.
+> > >
+> > > That doesn't follow the generic USB binding, please drop 'genesys,'.
+> > >
+> >
+> > Yes, I will drop this in the next version.
+> >
+> > > > > In addition, the control logic of these two hubs are needed to be
+> > > > > verified.
+> > > >
+> > > > We were using gpio-hog to reset the USB hub, so now switch to USB o=
+nboard hub
+> > > >
+> > > > >
+> > > > > And what's the status of the companion hub of the USB3 hub? Is it
+> > > > > really a USB3-only hub, or is its USB2 part just equal to another=
+ USB3
+> > > > > hub?
+> > > > >
+> > > > usb5e3,610 is USB 2.0 port hub present on Odroid C1 and Odroid C2 b=
+oard
+> > > >
+> > > > usb5e3,620 is USB 3.1 port hub present on Odroid N2.
+> > >
+> > > Like Icenowy I would expect the GL3523 to provide also a 2.0 hub.
+> > >
+> > > What is the output of 'lsusb' on the Odroid N2?
+> >
+> > alarm@odroid-n2:~$ lsusb -tv
+> > /:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/1p, 5000M
+> >     ID 1d6b:0003 Linux Foundation 3.0 root hub
+> >     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
+> >         ID 05e3:0620 Genesys Logic, Inc. GL3523 Hub
+> > /:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/2p, 480M
+> >     ID 1d6b:0002 Linux Foundation 2.0 root hub
+> >     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+> >         ID 05e3:0610 Genesys Logic, Inc. Hub
+>
+> Thanks. So it looks like 0x0610 is the product id of the USB 2.0 portion
+> of the GL3523. From this patch it seems the GL852G uses the same product
+> id?
 
-Thanks for testing.
+Yes, it looks correct as per the lsusb output
 
-> here is the hung task output:
-> 
-> [  243.682193] INFO: task kworker/1:0:18 blocked for more than 122 seconds.
-> [  243.682222]       Not tainted 6.1.0-00002-gaa61d98d165b #2
-> [  243.682233] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> this message.
-> [  243.682242] task:kworker/1:0     state:D stack:0     pid:18 ppid:2     
-> flags:0x00000000
-> [  243.682267] Workqueue: events onboard_hub_attach_usb_driver
-> [onboard_usb_hub]
-> [  243.682317]  __schedule from schedule+0x4c/0xe0
-> [  243.682345]  schedule from schedule_preempt_disabled+0xc/0x10
-> [  243.682367]  schedule_preempt_disabled from
-> __mutex_lock.constprop.0+0x244/0x804
-> [  243.682394]  __mutex_lock.constprop.0 from __driver_attach+0x7c/0x188
-> [  243.682421]  __driver_attach from bus_for_each_dev+0x70/0xb0
-> [  243.682449]  bus_for_each_dev from onboard_hub_attach_usb_driver+0xc/0x28
-> [onboard_usb_hub]
-> [  243.682494]  onboard_hub_attach_usb_driver [onboard_usb_hub] from
-> process_one_work+0x1ec/0x4d0
-> [  243.682534]  process_one_work from worker_thread+0x50/0x540
-> [  243.682559]  worker_thread from kthread+0xd0/0xec
-> [  243.682582]  kthread from ret_from_fork+0x14/0x2c
-> [  243.682600] Exception stack(0xf086dfb0 to 0xf086dff8)
-> [  243.682615] dfa0:                                     00000000 00000000
-> 00000000 00000000
-> [  243.682631] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000
-> 00000000 00000000
-> [  243.682646] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [  243.682692] INFO: task kworker/1:2:82 blocked for more than 122 seconds.
-> [  243.682703]       Not tainted 6.1.0-00002-gaa61d98d165b #2
-> [  243.682713] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> this message.
-> [  243.682721] task:kworker/1:2     state:D stack:0     pid:82 ppid:2     
-> flags:0x00000000
-> [  243.682741] Workqueue: events_power_efficient hub_init_func2
-> [  243.682764]  __schedule from schedule+0x4c/0xe0
-> [  243.682785]  schedule from schedule_preempt_disabled+0xc/0x10
-> [  243.682808]  schedule_preempt_disabled from
-> __mutex_lock.constprop.0+0x244/0x804
-> [  243.682833]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
-> [  243.682859]  hub_activate from process_one_work+0x1ec/0x4d0
-> [  243.682883]  process_one_work from worker_thread+0x50/0x540
-> [  243.682907]  worker_thread from kthread+0xd0/0xec
-> [  243.682927]  kthread from ret_from_fork+0x14/0x2c
-> [  243.682944] Exception stack(0xf1509fb0 to 0xf1509ff8)
-> [  243.682958] 9fa0:                                     00000000 00000000
-> 00000000 00000000
-> [  243.682974] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
-> 00000000 00000000
-> [  243.682988] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [  243.683023] INFO: task kworker/1:4:257 blocked for more than 122 seconds.
-> [  243.683034]       Not tainted 6.1.0-00002-gaa61d98d165b #2
-> [  243.683043] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> this message.
-> [  243.683051] task:kworker/1:4     state:D stack:0     pid:257 ppid:2     
-> flags:0x00000000
-> [  243.683071] Workqueue: events_power_efficient hub_init_func2
-> [  243.683092]  __schedule from schedule+0x4c/0xe0
-> [  243.683113]  schedule from schedule_preempt_disabled+0xc/0x10
-> [  243.683135]  schedule_preempt_disabled from
-> __mutex_lock.constprop.0+0x244/0x804
-> [  243.683160]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
-> [  243.683184]  hub_activate from process_one_work+0x1ec/0x4d0
-> [  243.683209]  process_one_work from worker_thread+0x50/0x540
-> [  243.683233]  worker_thread from kthread+0xd0/0xec
-> [  243.683253]  kthread from ret_from_fork+0x14/0x2c
-> [  243.683270] Exception stack(0xf09d9fb0 to 0xf09d9ff8)
-> [  243.683283] 9fa0:                                     00000000 00000000
-> 00000000 00000000
-> [  243.683299] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
-> 00000000 00000000
-> [  243.683313] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-
-Does commenting the following help:
-
-  while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
-      msleep(10);
-
-?
-
-I'm wondering if the loop is actually needed. The idea behind it was:
-
-The currently running work might not take into account the USB devices
-of the hub that is currently probed, which should probe shortly after
-the hub was powered on.
-
-The 'attach' work is only needed for USB devices that were previously
-detached through device_release_driver() in onboard_hub_remove(). These
-USB device objects only persist in the kernel if the hub is not powered
-off by onboard_hub_remove() (powering the hub off should be the usual
-case).
-
-If onboard_hub_probe() is invoked and the USB device objects persisted,
-then an already running 'attach' work should take them into account. If
-they didn't persist the running work might miss them, but that wouldn't
-be a problem since the newly created USB devices don't need to be
-explicitly attached (since they weren't detached previously).
+Thanks
+-Anand
