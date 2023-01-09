@@ -2,216 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1929666270E
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 14:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C6366277B
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 14:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjAINau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 08:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S236646AbjAINoq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 08:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjAINas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 08:30:48 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3DE17889;
-        Mon,  9 Jan 2023 05:30:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673271047; x=1704807047;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Hj0mYbVVN5STNln4AyVYIO3TneQGXOfu1lbQnYSSKrs=;
-  b=OK5SK/ow3mpYirJz3EsI3+c1BUnId2QVy0IUBVsAXxyt2ltfXOBVfw2r
-   4gfJJEyrWkyuYm5TtSW8IZQzo2VctnJISD2J9LR+T9Z+y8PSJUuCMb4V1
-   Rw4IxrkjUOqxURsyST+mBwzNayxE5Z68ze4lSL0UgY635OH2FZJWdHjmE
-   24FUSF809ovrupONoGooQXGcox0ZknPDZ8ODhDnCNWUDzngp3eTkkYo8l
-   VO8IIALM1Zraqn4agcpp5alGZndfgyIn7XvMm/dD7QWCBsNCw2N+IRcra
-   gucJI03z+RQEnRIJiXng0V7fB9NxH/AALHpxGY7BZRHdETWt8AoOcVir3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="320571828"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="320571828"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 05:30:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="658593157"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="658593157"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jan 2023 05:30:44 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pEsEd-0006pe-25;
-        Mon, 09 Jan 2023 13:30:43 +0000
-Date:   Mon, 09 Jan 2023 21:29:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     speakup@linux-speakup.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 543b9b2fe10b2e12b8d773af65314d322f91e479
-Message-ID: <63bc16ce.IBWX7dhtPEB7dLIq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S237271AbjAINiK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 08:38:10 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D3E2628
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 05:35:55 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id c82so1247342ybf.6
+        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 05:35:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qnppp6O9rdKqbwFnY5I7NEyC+PLI49fpb8XjPx9K9kY=;
+        b=X5KBMlY+l3uEKb3KlAV/VkLeIZQlibfQI7xC0OEIMJWiX1pzgdPRkFkUDfldoqejWP
+         qx3CpUdKYQJE9qqkyYEgYRUJMr/qXageQlaPEuyS9VYuQgL5KWNdWEa7NpUsSY38jb35
+         kpsJLNys+M8NNRoeLVFcOhtSKnkC7yA3/qIkNNyINYnszPTRYMZmtjeu4fHqk98mBdlp
+         j2kbOVve4XGndCbLypd4+p3QK1xG0dxBrG3FmZkq/hPKjzULYboVBM6l9imslaIyZmNW
+         J5w/fiIT35b/v3j64NyNZeo4qNF2MkgGdZNyFoOF/2rfcv3v0ScaukX2Uz4/pBnxuzVQ
+         d8/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qnppp6O9rdKqbwFnY5I7NEyC+PLI49fpb8XjPx9K9kY=;
+        b=EQ5wdBFEFlkUIH06GdapoKZII79UDSn5GU6FXtBkG2FhQFSz1tvWVE0ZtoY3JH4G3s
+         jeU0fMk1/DQc1uoEe+X4pZyfBnzvP8dCl6RqSXCPSnBNAm8fqIqcvrpDuxdfnuW+keL3
+         NoiQW0tX+o08EnTkeq4M+iVlzRBRYRpdEXfrZVBCEqWm8zNmg5XqGns98FmDciB9Gsi3
+         HqhqmvFiO2IQ+qcCo/Ew966jlFOuADqQtJQa4/ywghbKCD+Cik2i36z2IWHJDEFgkTLE
+         Qwd6kiICz2cShrlbL80xuLCQpJVTDrCdE5QGheW0Fpc6unN2A9vmyKFEjIBXTD8pbhpZ
+         XWGw==
+X-Gm-Message-State: AFqh2kpYzNh7ICf/dz+RyBZ9nrl9GagjEfrR2COfhUb2H6NR2D6PshIx
+        tYkuD5yHhu3F6SWCxKAY3cMOReJUQVVRWie9XbXZzg==
+X-Google-Smtp-Source: AMrXdXt+flubROOHapYHT2FaRO7FxPa9Na5CMrvvqi4lErIiX3EJ1CN07iHonh9qeMFuiACLFZuGrIn3WqgqO1jsWJs=
+X-Received: by 2002:a25:911:0:b0:7bf:fd02:6dbb with SMTP id
+ 17-20020a250911000000b007bffd026dbbmr55958ybj.341.1673271342147; Mon, 09 Jan
+ 2023 05:35:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230101220149.3035048-1-bero@baylibre.com> <20230101220149.3035048-5-bero@baylibre.com>
+In-Reply-To: <20230101220149.3035048-5-bero@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 9 Jan 2023 14:35:30 +0100
+Message-ID: <CACRpkdY-VqM_mzgJ=n9fEtFJD64EBie1EQF+8Bk5iLE68mCnSA@mail.gmail.com>
+Subject: Re: [PATCH v7 4/7] dt-bindings: pinctrl: add bindings for Mediatek
+ MT8365 SoC
+To:     =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        matthias.bgg@gmail.com, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org,
+        angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 543b9b2fe10b2e12b8d773af65314d322f91e479  Add linux-next specific files for 20230109
+On Sun, Jan 1, 2023 at 11:01 PM Bernhard Rosenkr=C3=A4nzer <bero@baylibre.c=
+om> wrote:
 
-Error/Warning: (recently discovered and may have been fixed)
+> Add devicetree bindings for Mediatek MT8365 pinctrl driver.
+>
+> Signed-off-by: Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com>
 
-aarch64-linux-ld: ID map text too big or misaligned
-drivers/gpu/drm/ttm/ttm_bo_util.c:364:32: error: implicit declaration of function 'vmap'; did you mean 'kmap'? [-Werror=implicit-function-declaration]
-drivers/gpu/drm/ttm/ttm_bo_util.c:429:17: error: implicit declaration of function 'vunmap'; did you mean 'kunmap'? [-Werror=implicit-function-declaration]
+Looks good to me, do you want me to just apply this one patch to the
+pin control tree?
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-drivers/accessibility/speakup/main.c:1290:26: sparse: sparse: obsolete array initializer, use C99 syntax
-drivers/i2c/busses/i2c-qcom-geni.c:1028:28: sparse: sparse: symbol 'i2c_master_hub' was not declared. Should it be static?
-drivers/nvmem/imx-ocotp.c:599:21: sparse: sparse: symbol 'imx_ocotp_layout' was not declared. Should it be static?
-drivers/nvmem/layouts/sl28vpd.c:143:21: sparse: sparse: symbol 'sl28vpd_layout' was not declared. Should it be static?
-drivers/soc/qcom/ramp_controller.c:235:27: sparse: sparse: symbol 'msm8976_cfg_dfs_sid' was not declared. Should it be static?
-drivers/soc/qcom/ramp_controller.c:246:27: sparse: sparse: symbol 'msm8976_cfg_link_sid' was not declared. Should it be static?
-drivers/soc/qcom/ramp_controller.c:250:27: sparse: sparse: symbol 'msm8976_cfg_lmh_sid' was not declared. Should it be static?
-drivers/soc/qcom/ramp_controller.c:256:27: sparse: sparse: symbol 'msm8976_cfg_ramp_en' was not declared. Should it be static?
-drivers/soc/qcom/ramp_controller.c:262:27: sparse: sparse: symbol 'msm8976_cfg_ramp_dis' was not declared. Should it be static?
-drivers/usb/misc/sisusbvga/sisusbvga.c:528:9: sparse: sparse: incorrect type in assignment (different base types)
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm64-allyesconfig
-|   `-- aarch64-linux-ld:ID-map-text-too-big-or-misaligned
-|-- arm64-randconfig-s041-20230108
-|   |-- drivers-accessibility-speakup-main.c:sparse:sparse:obsolete-array-initializer-use-C99-syntax
-|   |-- drivers-i2c-busses-i2c-qcom-geni.c:sparse:sparse:symbol-i2c_master_hub-was-not-declared.-Should-it-be-static
-|   `-- drivers-nvmem-imx-ocotp.c:sparse:sparse:symbol-imx_ocotp_layout-was-not-declared.-Should-it-be-static
-|-- m68k-randconfig-s033-20230108
-|   |-- drivers-nvmem-layouts-sl28vpd.c:sparse:sparse:symbol-sl28vpd_layout-was-not-declared.-Should-it-be-static
-|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_dfs_sid-was-not-declared.-Should-it-be-static
-|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_link_sid-was-not-declared.-Should-it-be-static
-|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_lmh_sid-was-not-declared.-Should-it-be-static
-|   |-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_ramp_dis-was-not-declared.-Should-it-be-static
-|   `-- drivers-soc-qcom-ramp_controller.c:sparse:sparse:symbol-msm8976_cfg_ramp_en-was-not-declared.-Should-it-be-static
-|-- mips-allyesconfig
-|   |-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vmap
-|   `-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vunmap
-|-- mips-buildonly-randconfig-r004-20230109
-|   |-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vmap
-|   `-- drivers-gpu-drm-ttm-ttm_bo_util.c:error:implicit-declaration-of-function-vunmap
-`-- s390-randconfig-s053-20230108
-    |-- drivers-accessibility-speakup-main.c:sparse:sparse:obsolete-array-initializer-use-C99-syntax
-    |-- drivers-usb-misc-sisusbvga-sisusbvga.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-int-usertype-address-got-restricted-__le32-usertype
-    |-- drivers-usb-misc-sisusbvga-sisusbvga.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-int-usertype-data-got-restricted-__le32-usertype
-    `-- drivers-usb-misc-sisusbvga-sisusbvga.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-short-header-got-restricted-__le16-usertype
-
-elapsed time: 723m
-
-configs tested: 87
-configs skipped: 2
-
-gcc tested configs:
-x86_64                            allnoconfig
-i386                                defconfig
-x86_64                              defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64               randconfig-a011-20230109
-x86_64               randconfig-a013-20230109
-s390                                defconfig
-x86_64               randconfig-a012-20230109
-i386                          randconfig-a014
-x86_64                               rhel-8.3
-m68k                             allyesconfig
-i386                          randconfig-a012
-s390                             allyesconfig
-x86_64                           rhel-8.3-bpf
-arc                     haps_hs_smp_defconfig
-x86_64                           rhel-8.3-syz
-ia64                             allmodconfig
-i386                             allyesconfig
-i386                          randconfig-a016
-m68k                             allmodconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-sh                         apsh4a3a_defconfig
-x86_64               randconfig-a014-20230109
-x86_64                           allyesconfig
-arc                              allyesconfig
-x86_64               randconfig-a016-20230109
-powerpc                   motionpro_defconfig
-alpha                            allyesconfig
-x86_64               randconfig-a015-20230109
-x86_64                    rhel-8.3-kselftests
-powerpc                           allnoconfig
-riscv                randconfig-r042-20230109
-s390                 randconfig-r044-20230109
-mips                             allyesconfig
-arm                  randconfig-r046-20230108
-arc                  randconfig-r043-20230108
-powerpc                          allmodconfig
-arc                  randconfig-r043-20230109
-arm64                            allyesconfig
-arm                              allyesconfig
-sh                               allmodconfig
-mips                         cobalt_defconfig
-arm64                            alldefconfig
-powerpc                      makalu_defconfig
-mips                  maltasmvp_eva_defconfig
-arm                          iop32x_defconfig
-powerpc                      mgcoge_defconfig
-nios2                               defconfig
-arm                           corgi_defconfig
-powerpc                     taishan_defconfig
-parisc                           allyesconfig
-
-clang tested configs:
-i386                 randconfig-a004-20230109
-i386                 randconfig-a002-20230109
-i386                 randconfig-a003-20230109
-i386                 randconfig-a001-20230109
-x86_64                          rhel-8.3-rust
-i386                 randconfig-a005-20230109
-i386                 randconfig-a006-20230109
-hexagon              randconfig-r045-20230109
-arm                  randconfig-r046-20230109
-x86_64               randconfig-a003-20230109
-i386                          randconfig-a013
-x86_64               randconfig-a002-20230109
-arm                      tct_hammer_defconfig
-arm                       mainstone_defconfig
-hexagon              randconfig-r041-20230108
-powerpc                 mpc832x_mds_defconfig
-i386                          randconfig-a011
-x86_64               randconfig-a004-20230109
-hexagon              randconfig-r041-20230109
-x86_64               randconfig-a005-20230109
-i386                          randconfig-a015
-x86_64               randconfig-a001-20230109
-x86_64               randconfig-a006-20230109
-hexagon              randconfig-r045-20230108
-s390                 randconfig-r044-20230108
-riscv                randconfig-r042-20230108
-arm                            mmp2_defconfig
-powerpc                        fsp2_defconfig
-arm                           spitz_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours,
+Linus Walleij
