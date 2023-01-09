@@ -2,90 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA646661F71
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 08:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9627B661FF5
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 09:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbjAIHuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 02:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S236540AbjAII1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 03:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbjAIHuS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 02:50:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A434E13D22;
-        Sun,  8 Jan 2023 23:50:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B30D60EEE;
-        Mon,  9 Jan 2023 07:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 958C5C433F1;
-        Mon,  9 Jan 2023 07:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673250616;
-        bh=KMU3USBLJiUqc0o+ccLoYu/1Idu2u/gFbF5Orb4wo00=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pn8j01jMOOy0xM++9msby+0i2T4M9h9uBZtzWRPLnfHtR04DT0h+/1+VIPJHBGzzD
-         vOapuRksHN+/yQB+AJRFkAonrjim8orUNCEiKk9dqjClJBo1QC5WCiby3HmB9Ly+1G
-         KKxLyR/dhuV4Xtu2kRUTcDMM4UhUP3c9aWiLYo5+fgoVL8mXvycr1WBIbD6VKSDLRg
-         hTyEJvjPE/GYY7nGQf0keyGhw8noe0JUZSdlshwdNvlNdREk71lN8/cSpqq0MMK1Z2
-         5crlCh4QySATVPLLvpCUs5+qdpZZuUSiDDitNv9je5gYR7GhVadVVhpWUnUuXcXYpm
-         1kz2CyW0Qbzzw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 64CE7E4D005;
-        Mon,  9 Jan 2023 07:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S236517AbjAII1T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 03:27:19 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32826573;
+        Mon,  9 Jan 2023 00:27:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673252837; x=1704788837;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=g1VnRHklLqjppg92qJLKB39oj5YFDePuqVevtrB3EZQ=;
+  b=eUR3AcJr46VNG/BZPLKNpgA+JBxI7jYTvQvNQr1IusZOGRnH25CdH5zs
+   wwNpzXwLR59NlLhd16aXAylThR/C+L3lou6lbktKB1wA2Jqp0gU+arAhW
+   953N61t7kOxeg0zFJ3XsIor6grN+Y6qJXoaVlt8rHN6mW8V/6BSpfQRdz
+   fBrv4A7ErJa5Xg3Mgu8MR6Id4ySeyvHH1nYlY7RdJkyTxAapoQQ3uw9qH
+   gbZIfp3HG0sPdLNaiSMD99eTfMwCpghYnztllMDl3jTY76Oay4IhDeuSC
+   0CxisuibnbZquUgoydWG2LGyqhzwu8mvxf9TOtxTXWf+fx68tNlVHP7bk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="320523137"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="320523137"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 00:27:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="719857265"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="719857265"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Jan 2023 00:27:15 -0800
+Message-ID: <30fefd03-0ead-8980-ff5f-5e8a95e74c8a@linux.intel.com>
+Date:   Mon, 9 Jan 2023 10:28:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/2] r8152: allow firmwares with NCM support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167325061640.1839.15796258098196650486.git-patchwork-notify@kernel.org>
-Date:   Mon, 09 Jan 2023 07:50:16 +0000
-References: <20230106160739.100708-1-bjorn@mork.no>
-In-Reply-To: <20230106160739.100708-1-bjorn@mork.no>
-To:     =?utf-8?b?QmrDuHJuIE1vcmsgPGJqb3JuQG1vcmsubm8+?=@ci.codeaurora.org
-Cc:     netdev@vger.kernel.org, hayeswang@realtek.com,
-        linux-usb@vger.kernel.org, oliver@neukum.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Cc:     Jim Lin <jilin@nvidia.com>, thierry.reding@gmail.com,
+        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20221111101813.32482-1-jilin@nvidia.com>
+ <f2dbfe41-7164-dffa-8e9c-2d5b0f8fcae6@nvidia.com>
+ <Y7g9g0CbCc6b+3EN@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v7 0/3] xhci: tegra: USB2 pad power controls
+In-Reply-To: <Y7g9g0CbCc6b+3EN@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri,  6 Jan 2023 17:07:37 +0100 you wrote:
-> Some device and firmware combinations with NCM support will
-> end up using the cdc_ncm driver by default.  This is sub-
-> optimal for the same reasons we've previously accepted the
-> blacklist hack in cdc_ether.
+On 6.1.2023 17.25, Greg KH wrote:
+> On Fri, Jan 06, 2023 at 02:56:51PM +0000, Jon Hunter wrote:
+>> Hi Greg,
+>>
+>> On 11/11/2022 10:18, Jim Lin wrote:
+>>> 1. Export symbol on xhci_hub_control
+>>> 2. Add hub_control to xhci_driver_overrides
+>>> 3. Program USB2 pad PD controls during port connect/disconnect, port
+>>> suspend/resume, and test mode, to reduce power consumption on
+>>> disconnect or suspend.
+>>>
+>>> Patch
+>>> xhci: tegra: USB2 pad power controls
+>>> depends on
+>>> xhci: hub: export symbol on xhci_hub_control
+>>> xhci: Add hub_control to xhci_driver_overrides
+>>>
+>>> Jim Lin (3):
+>>>     xhci: Add hub_control to xhci_driver_overrides
+>>>     xhci: hub: export symbol on xhci_hub_control
+>>>     xhci: tegra: USB2 pad power controls
+>>>
+>>>    drivers/usb/host/xhci-hub.c   |   1 +
+>>>    drivers/usb/host/xhci-tegra.c | 125 ++++++++++++++++++++++++++++++++++
+>>>    drivers/usb/host/xhci.c       |   2 +
+>>>    drivers/usb/host/xhci.h       |   2 +
+>>>    4 files changed, 130 insertions(+)
+>>>
+>>
+>>
+>> I have verified that this still applies cleanly on top of -next. Please let
+>> us know if this can be queued up for Linux v6.3?
 > 
-> The recent support for subclassing the generic USB device
-> driver allows us to create a very slim driver with the same
-> functionality.  This patch set uses that to implement a
-> device specific configuration default which is independent
-> of any USB interface drivers.  This means that it works
-> equally whether the device initially ends up in NCM or ECM
-> mode, without depending on any code in the respective class
-> drivers.
+> Normally for xhci stuff I want it to go through Mathias for things that
+> are outside of just xhci-tegra.c.
+
+Looks good to me, can be picked up directly
+Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+
+Or I can add this to the series going to usb-next if that is preferred.
+
+Thanks
+Mathias
+
+
 > 
-> [...]
-
-Here is the summary with links:
-  - [1/2] r8152: add USB device driver for config selection
-    https://git.kernel.org/netdev/net-next/c/ec51fbd1b8a2
-  - [2/2] cdc_ether: no need to blacklist any r8152 devices
-    https://git.kernel.org/netdev/net-next/c/69649ef84053
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> thanks,
+> 
+> greg k-h
 
