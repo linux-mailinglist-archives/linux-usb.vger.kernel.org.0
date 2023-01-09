@@ -2,282 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A22662542
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 13:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF68662556
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 13:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbjAIMQp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 07:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S237193AbjAIMTL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 07:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbjAIMQn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 07:16:43 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364611AA39
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 04:16:42 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id hw16so7696656ejc.10
-        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 04:16:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bVDTHlYijFpTRIXjP7v3QEksgiva+IQkj5ycOT6O9No=;
-        b=aB6Ly53hIM11MQ0L3KtDLpIZJqfaVWl6OxZnDj2NaJ8bL4uRxGK5Du0N9xGb7ts/AU
-         FY+3f9y8ckkHHOHkMgpyGC3UU5aAUzulowgRy6VaLR4D1ds19Rn81tqRbc91yJNvgl5M
-         6xQrc2gxiMBG5q3KxSw9D8zmjVtpKituQSo2ICZ9trojhcn0tEkGERP34PLEU0h9atVO
-         ZVSxXoMNtyFA7fdTgi2dUG3VJVmPGlrp8e8kAL5vIE0aG/mg8fg44eyTMp71290ARZGP
-         7y+jtYfM2yUSXOZ+ejlXKXnK/eGLIqj59d2I9AWMawWfaGLYG1iMexypeD452VVV1735
-         aCGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bVDTHlYijFpTRIXjP7v3QEksgiva+IQkj5ycOT6O9No=;
-        b=53hvJ6XwlBulVM6zBz4lVGNATRoKKwHbYoL3z9rqottoLjMqq68n2moX3Vd02um1f8
-         Ufej0sVFUSdgGMVjW6SGHEkxw2xh5fOYCMwi4Vx5s6ohTrttiqhruFBRVEl4h9JiBPkV
-         XYOI/TYoHskZsWOCTBHTerBBgvU60/oT07ldUJZqlySuibSuuCfYuU8kKNa+RaOraRTm
-         DM5z4uBMFjR9//WYvZVEKTwN4euhcL//GqBlGX06LiCJgedB6kyoIWGv47XmA1IwYKZh
-         xCb+yxQleyfs1qg9Bm9mahk4ZNQDfS1NrHt8GSi3+rQXvRrTsr8jmXLqfiWU09/CAnZN
-         ps2w==
-X-Gm-Message-State: AFqh2kq6+RCYzSwp9y+rnRVNJOH6pWPlU/gWiZ+o9MnQiwup34vHH+mb
-        gg0P0XTIImANYiVZhPbwL34Gi3Wwz0bp6a5XCBA=
-X-Google-Smtp-Source: AMrXdXsb+rkdbaetHIUs3ZvyMgz00uEcSi2g55FH65WXayj60Pu/3CZvJJjYUcEUcCKjO/Bzj0AHm0R/C+Vx4iodYB0=
-X-Received: by 2002:a17:906:4703:b0:7c1:4665:ddb7 with SMTP id
- y3-20020a170906470300b007c14665ddb7mr6533988ejq.365.1673266600694; Mon, 09
- Jan 2023 04:16:40 -0800 (PST)
+        with ESMTP id S237011AbjAIMTG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 07:19:06 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AA11ADB9
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 04:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
+        t=1673266723; bh=9tO87Mrq7vkjNh935wZs0PnmuuWYv0aXlAv2v/ZMANs=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=SzFpsCB2ftZfhf/gVuz7XFLAq1+OO2/UAMLbz0Yq11rDDYqrRdJFKN2U9bF6o0ZlG
+         B+wKru8q77wIE+mW9mEwVsKSVuIrYfECBmfB1yrqXltikceuEHfbGYp/lTZrWcE2+p
+         EZQq02M0b/gRij3B2zrxNAHMgU1QlQAte6D5TiZUMwVghZp8I4gqxBZZa8Rh3KZQZK
+         8HaqYpuN63GjsF5ppW043aH2mgX3DpZU74/Ql4ef14QyMbp1v4PgYAzsx0ZBuETSB6
+         JoA1AbvdzUS6vrnpoNgJFirODcuv0CIM2SVaFQ5nbHSdZ4ZJcK12+BjIW11WL/oR+y
+         voXKG2CYxxpuA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([81.189.232.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MS3mt-1pMOIj3ypv-00TQTk; Mon, 09
+ Jan 2023 13:18:43 +0100
+Message-ID: <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
+Date:   Mon, 9 Jan 2023 13:17:30 +0100
 MIME-Version: 1.0
-References: <20230109115550.71688-1-qkrwngud825@gmail.com> <a8c19717-dcd5-74b6-be4b-57616ea88ab0@suse.com>
-In-Reply-To: <a8c19717-dcd5-74b6-be4b-57616ea88ab0@suse.com>
-From:   Juhyung Park <qkrwngud825@gmail.com>
-Date:   Mon, 9 Jan 2023 21:16:29 +0900
-Message-ID: <CAD14+f3f56pCp-8OVq5nUX=RdTU8r93bn5NbQYL-HckgcxO+sg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS"
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        zenghongling@kylinos.cn, zhongling0719@126.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Possible problem with thunderbolt 4
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
+References: <Y67X5JrnRxYN/pns@black.fi.intel.com>
+ <00dbeaf9-4d2c-3e3a-fa39-4c232b3a68e6@gmx.at>
+ <Y7K7zLoAQVyv0zD5@black.fi.intel.com>
+ <011df027-5381-1e10-9c54-e0935ae549f9@gmx.at>
+ <Y7ME7EwduIQE38+2@black.fi.intel.com>
+ <a324ff2a-d014-83d2-4f30-b865db7c352b@gmx.at>
+ <Y7QMlV82mtaApJwJ@black.fi.intel.com>
+ <a8c1dd4b-7227-5ba2-97a4-a2dc3d561ea3@gmx.at>
+ <Y7RSrLYfG1r8b+Zj@black.fi.intel.com>
+ <86a6b7ca-4302-00fe-97f6-d48ebb5e6171@gmx.at>
+ <Y7UzCY6ujQ2qtoq5@black.fi.intel.com>
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+In-Reply-To: <Y7UzCY6ujQ2qtoq5@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Nm+uC9q8dIDIVcxlVzsRcszsA6w0W4dxN1tFEjOC1yCemzeSOV2
+ FjFXs6pRcuYWPsGI+0fDvRCyIoPu70Oq66G4kvwwGr7zpbPIQaNknNnTcas+tQewdDxd6Va
+ TiHA+/M8QWYLcW5rzvnH2N83sgzRsoEhR9z1Aw3BEydYXQmlmKDvuwu2WaFpuKo/NnEPI9i
+ b++XVoi7cfMFswAyhsKgA==
+UI-OutboundReport: notjunk:1;M01:P0:a1J5o8fh1AA=;DjbfG1OCZayhPuCuUkF111mBJrp
+ opaHWHxKqOCnNFFmXURuaa8nBofe079Nu/UvEv0jzJzpU7x3fGlx6lDP8MRWAc4U95Jxe6Gla
+ 4Vrh2KHv3iMdDC0t4mNvOguVQ1CTUKS1HeXzWNmIpdvuCDE32SsP67pBBVZMw3iiYdXLFVzS3
+ wNAuhQN7UhnDz3jKSNPue6kKS9E7qifmjUsRgOygZ01xsTTtZcIdeL+Up6PC0lwnd7vclO+u8
+ KmIt+P7zsye/NlrkdsAxvqDOE/1tntd35jB86NpKkYYO4+TKywIiUOJclBtFUcYBbwmInEaI+
+ iDFKgOMmGSzGet0K0iKvmpJciSPBIE9BpTuvEutEFY4mQK4OLkAM9gpCeXSHp6aYvY1Xa/3FX
+ gWpX7Au0Yzyz9jO8tOX2Na4vPoZHMZZzREyMH8XyG95DMjtCsfXrB8QRFuwjVP6NaxaiFMGUJ
+ b+AjOl++XqLSro8jYkU8OfwPqn9VcwVPcaxOjrkPhO7uninMd8wPZmpUNgBzZXIL/B92nbKlu
+ AWlFEbBZkYfBGXEkoRDlB57fIMcGa3n1zW3FUwO6+gyiawNjrZ5eHbrK/6lgotS+SAVHrsr5P
+ Jk2HKpKHnXV7jlVReV3DGdxuEixToXEOZBTyebu4yhYiPI/kiot8BvpouwBTKJVcH1vgCperg
+ k51koqErRaVa3mqq1mr8T1tVkFPOC8nSiwivznZ3023QzycDoLBvKvEJkM8DhuldckNeKUhNN
+ 2nloM0hNSEevka2ZP+Ld4/HlH6O2PxkADc3ZjrLubYg0jo9+zTntHffQ4GNe9VakJVscM+/YY
+ Tk9kbWRfgGxEp3vlORC2B++xNitwjY6hQ/57zKu/5YsQ13dFIBA5zgeHXfIOEI4S1TB6567ZD
+ EMGIvqCEYQ4T3c4t6eL/d5kG6ttIrea0IM7OIOFRQNHtwP2GYzyBaM/P5+u5cCrmqesxPIv8+
+ adqOpg==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Oliver,
+Hello again,
 
-On Mon, Jan 9, 2023 at 9:02 PM Oliver Neukum <oneukum@suse.com> wrote:
->
->
->
-> On 09.01.23 12:55, Juhyung Park wrote:
-> > This reverts commit e00b488e813f0f1ad9f778e771b7cd2fe2877023.
-> >
-> > The commit e00b488e813f ("usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS")
-> > blacklists UAS for the entire RTL9210 enclosures. Realtek's VendorId is 0x0bda
-> > and RTL9210 enclosures reports 0x9210 for its ProductId.
-> >
-> > The RTL9210 controller was advertised with UAS since its release back in 2019
-> > and was shipped with a lot of enclosure products with different firmware
-> > combinations.
-> >
-> > If UAS blacklisting is really required said product (Hiksemi USB3-FW), it
-> > should be done without blacklisting the entire RTL9210 products.
->
-> Hi,
->
-> I see this the issue. Do you have an idea how to limit the scope.
+>> Earlier you said that with Windows 11 the behaviour might be the same
+>> as in Linux. I'll try that next week (out of office until then). If
+>> Win 11 indeed has the same problem, then I guess someone at HP or
+>> wherever will address this sooner or later. I mean, the requirement
+>> for a working network device/stack after a reboot from an OS is not
+>> that unusual I'd say...
+> I agree. If it turns out that Windows 11 works wrt. this (please check
+> that it is using Windows "inbox" driver for TBT) then we need to figure
+> out what it is doing differently.
 
-Unfortunately, no.
+So today I've installed Windows 11 22H2 on the EliteBook, and I can report this:
 
-This might be the ugly case where, if a proper workaround could be
-found (if the original report is valid at all), it may change the code
-logic itself with some if branch rather than just unusual_uas.h.
+* The thunderbolt controller is run by a driver from Microsoft (in the Win 11 device manager it's no longer called "Thunderbolt Controller", but "USB4 Host Router".
+* I think there isn't even a thunderbolt driver from Intel for Windows 11 - at least on the HP support site for the EliteBook they don't have one (but they do have an Intel driver for Windows 10).
+* And regarding functionality: after rebooting Windows 11, the network device is visible in the firmware, and working fine...
 
-With my RTL9210 enclosure, using multiple different firmware versions
-still reports the same bcdDevice.
+Any more test I could make?
 
-Note that, despite Hongling reporting that Windows doesn't use UAS in
-https://lore.kernel.org/all/fbeffee7-3ac5-4798-14b0-724e0ed01947@126.com/
-, Windows uses it on mine and respectively trim works.
+Thanks,
+Christian
 
->
-> Hongling Zeng, do you have an idea, respectively if not, could
-> you provide "lsusb -v" for the defective device?
->
-
-Hongling didn't respond to Greg when he asked the same question back
-in November: https://lore.kernel.org/all/Y29RtXGcey6V9iTY@kroah.com/
-
-Anyways, here's my lsusb -v output. Hope it helps:
-Bus 004 Device 002: ID 0bda:9210 Realtek Semiconductor Corp. RTL9210
-M.2 NVME Adapter
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               3.20
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0         9
-  idVendor           0x0bda Realtek Semiconductor Corp.
-  idProduct          0x9210 RTL9210 M.2 NVME Adapter
-  bcdDevice           20.01
-  iManufacturer           1 Realtek
-  iProduct                2 RTL9210
-  iSerial                 3 012345678906
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0079
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              896mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     80 Bulk-Only
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       1
-      bNumEndpoints           4
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     98
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-        MaxStreams             32
-        Data-in pipe (0x03)
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-        MaxStreams             32
-        Data-out pipe (0x04)
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-        MaxStreams             32
-        Status pipe (0x02)
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst               0
-        Command pipe (0x01)
-Binary Object Store Descriptor:
-  bLength                 5
-  bDescriptorType        15
-  wTotalLength       0x003e
-  bNumDeviceCaps          4
-  USB 2.0 Extension Device Capability:
-    bLength                 7
-    bDescriptorType        16
-    bDevCapabilityType      2
-    bmAttributes   0x00000006
-      BESL Link Power Management (LPM) Supported
-  SuperSpeed USB Device Capability:
-    bLength                10
-    bDescriptorType        16
-    bDevCapabilityType      3
-    bmAttributes         0x00
-    wSpeedsSupported   0x000e
-      Device can operate at Full Speed (12Mbps)
-      Device can operate at High Speed (480Mbps)
-      Device can operate at SuperSpeed (5Gbps)
-    bFunctionalitySupport   1
-      Lowest fully-functional device speed is Full Speed (12Mbps)
-    bU1DevExitLat          10 micro seconds
-    bU2DevExitLat        2047 micro seconds
-  SuperSpeedPlus USB Device Capability:
-    bLength                20
-    bDescriptorType        16
-    bDevCapabilityType     10
-    bmAttributes         0x00000001
-      Sublink Speed Attribute count 1
-      Sublink Speed ID count 0
-    wFunctionalitySupport   0x1100
-    bmSublinkSpeedAttr[0]   0x000a4030
-      Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
-    bmSublinkSpeedAttr[1]   0x000a40b0
-      Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
-  Container ID Device Capability:
-    bLength                20
-    bDescriptorType        16
-    bDevCapabilityType      4
-    bReserved               0
-    ContainerID             {03020100-0504-0706-0002-020200020202}
-Device Status:     0x0000
-  (Bus Powered)
-
-
->         Regards
->                 Oliver
