@@ -2,197 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D06B66314E
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 21:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7889066316C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 21:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237529AbjAIUTr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 15:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S237642AbjAIUYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 15:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbjAIUTR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 15:19:17 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C1934D5B;
-        Mon,  9 Jan 2023 12:19:15 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MfYHW-1oZJ8B2UkC-00fwYV; Mon, 09 Jan 2023 21:19:03 +0100
-Message-ID: <09d76f45-9dfe-19a0-33ec-badaac280772@i2se.com>
-Date:   Mon, 9 Jan 2023 21:19:02 +0100
+        with ESMTP id S237515AbjAIUYg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 15:24:36 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5985E3A;
+        Mon,  9 Jan 2023 12:24:35 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309KIXWr026037;
+        Mon, 9 Jan 2023 20:24:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LLCj3LGRAZrmFeffHLVyUc3jXEZk+lrOrYUbp7dypIk=;
+ b=LN442ifahNhEkthtzMH8B99mPu6BIl6NMDdl4iz23mGyqY4a40yA5hBEQN2mtQcyx9Xj
+ 1jVIuzYHOHVzXupoTpBNGVPm8PwXsPZl6qRXYVpdra05dyR94cSXDoUl68Wd+F9tJaa8
+ nPJPCdu2KdZ18se7xA7Xph8gxSEY764hVyHIsoibn1P8OL2qDK85N6u1g5sKOZbET63b
+ kBpR78vSH/K6ylARWWBTB07YRNPHHfqCUI60Fbij2WFrtHxmmzXKlALppORfKP8J4zRe
+ UMRt8YaBtjVAbRwGywS9lrZ2iGWOrLtdk1ZI4rVRBtImbNK5ypnvPp10iWQjzsp7PSxH fw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my21fuy8v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 20:24:12 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 309KOBX4017768
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 9 Jan 2023 20:24:11 GMT
+Received: from [10.110.66.166] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
+ 12:24:08 -0800
+Message-ID: <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
+Date:   Mon, 9 Jan 2023 12:24:02 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
- driver
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Douglas Anderson <dianders@chromium.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
- <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
- <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
- <a5a32db9-21a1-1734-1c4f-88b9431d7aa8@i2se.com> <Y7xRjDAgI3UO8Xuv@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
+ support
 Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <Y7xRjDAgI3UO8Xuv@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-8-quic_wcheng@quicinc.com>
+ <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
+ <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
+ <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:8fVqNUrQuoY97iqfAMNpGZm04anZZNms9TcTmwFD1iOPW1aikC9
- B5+n4AhII3gxiZQynPBodjLnIRNy92oH2B5c0sd+r5SyAzZSMswLThCluIkA8oryntJdARl
- xuL1TUxDjupEZJ3Z0h5Tq2giK985lxjl9DctW/Ikpsm7t2E7gb6DjhU6PbBiJWrau8q9GNQ
- puMOWlN5lBUuZjNLpAD5A==
-UI-OutboundReport: notjunk:1;M01:P0:TntHzEeApJ8=;Fmr8AJgxW8SpO09Rq8RNDNnlsDb
- Jmi4LyzEQN3RW4K66wYz9O9cpzyIBOWoOnS6xwYeiReo1B0c+bfU1Ql/K4dlPXO/Dev+CdkEO
- z9uKqE4I/xzn93OtjkCa1ibq8nbKw/J/g6zoaxPKKJ66lY8o8Kzn8JNZJG78OW8G5ARnwqhyq
- fqDsrsOM+AH5l7NevMVt4PxOp2Q7krZ+Ig83UPbvpUOlO4lNKYiy1HNV/pjmHlQSTaqTvju7n
- Y3IiBpENjFM32dba/dEsjbG9QFQpdiCnprpfikhINMUX+6wL2SiVowWsQu57yh61F5Uh3TNOl
- dq2l7tQv3b3QSRaboYtkt1SSKE/UesNHsXY8zH/TUPg951Sm6T+qSQUnRKK+up3GZp32WPXMr
- GTWXN5QXuS/W7pFeZE3g3DioQi6No4fox+dG0sDxPJDK8Ot75n3olauAWJ3DluA3p+4mlY5Eg
- mw2zXd5O7p8OH6dcnjnyIjLCGa/vCThNnjxaH/8HVKPFxrbQMHLkaqwbiHyz8eFFYikOP3G2m
- uLHGcHOwyuclJHbwr7onjuEYDRgUO33vqDoDd/iI4hp3uL43h7LF3tqhrembQSqJwicUMiQJC
- gIHltgV7UXf04STjRMfjVukXjfBVUxIxGyO2rjm83Ilc6EwFtHUj4ip+aFI8tvYCNjA55HERQ
- /wWH8vO/62mspsyvrkXZRwy2tYkCUxBhmMGu+Oxlcw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vBXxt7hLQNCNiXx3Za6gRXDytqzy-VPJ
+X-Proofpoint-GUID: vBXxt7hLQNCNiXx3Za6gRXDytqzy-VPJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_14,2023-01-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1015 adultscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301090143
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matthias,
+Hi Mathias,
 
-Am 09.01.23 um 18:40 schrieb Matthias Kaehlcke:
-> On Sun, Jan 08, 2023 at 11:47:13AM +0100, Stefan Wahren wrote:
->> Am 07.01.23 um 18:23 schrieb Stefan Wahren:
->>> Hi Matthias,
->>>
->>> Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
->>>> Currently each onboard_hub platform device owns an 'attach' work,
->>>> which is scheduled when the device probes. With this deadlocks
->>>> have been reported on a Raspberry Pi 3 B+ [1], which has nested
->>>> onboard hubs.
->>>>
->>>> The flow of the deadlock is something like this (with the onboard_hub
->>>> driver built as a module) [2]:
->>>>
->>>> - USB root hub is instantiated
->>>> - core hub driver calls onboard_hub_create_pdevs(), which creates the
->>>>     'raw' platform device for the 1st level hub
->>>> - 1st level hub is probed by the core hub driver
->>>> - core hub driver calls onboard_hub_create_pdevs(), which creates
->>>>     the 'raw' platform device for the 2nd level hub
->>>>
->>>> - onboard_hub platform driver is registered
->>>> - platform device for 1st level hub is probed
->>>>     - schedules 'attach' work
->>>> - platform device for 2nd level hub is probed
->>>>     - schedules 'attach' work
->>>>
->>>> - onboard_hub USB driver is registered
->>>> - device (and parent) lock of hub is held while the device is
->>>>     re-probed with the onboard_hub driver
->>>>
->>>> - 'attach' work (running in another thread) calls driver_attach(), which
->>>>      blocks on one of the hub device locks
->>>>
->>>> - onboard_hub_destroy_pdevs() is called by the core hub driver when one
->>>>     of the hubs is detached
->>>> - destroying the pdevs invokes onboard_hub_remove(), which waits for the
->>>>     'attach' work to complete
->>>>     - waits forever, since the 'attach' work can't acquire the device
->>>> lock
->>>>
->>>> Use a single work struct for the driver instead of having a work struct
->>>> per onboard hub platform driver instance. With that it isn't necessary
->>>> to cancel the work in onboard_hub_remove(), which fixes the deadlock.
->>>> The work is only cancelled when the driver is unloaded.
->>> i applied both patches for this series on top of v6.1
->>> (multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
-> Thanks for testing.
->
->> here is the hung task output:
+On 1/2/2023 8:38 AM, Mathias Nyman wrote:
+> On 29.12.2022 23.14, Wesley Cheng wrote:
+>> Hi Mathias,
 >>
->> [  243.682193] INFO: task kworker/1:0:18 blocked for more than 122 seconds.
->> [  243.682222]       Not tainted 6.1.0-00002-gaa61d98d165b #2
->> [  243.682233] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
->> this message.
->> [  243.682242] task:kworker/1:0     state:D stack:0     pid:18 ppid:2
->> flags:0x00000000
->> [  243.682267] Workqueue: events onboard_hub_attach_usb_driver
->> [onboard_usb_hub]
->> [  243.682317]  __schedule from schedule+0x4c/0xe0
->> [  243.682345]  schedule from schedule_preempt_disabled+0xc/0x10
->> [  243.682367]  schedule_preempt_disabled from
->> __mutex_lock.constprop.0+0x244/0x804
->> [  243.682394]  __mutex_lock.constprop.0 from __driver_attach+0x7c/0x188
->> [  243.682421]  __driver_attach from bus_for_each_dev+0x70/0xb0
->> [  243.682449]  bus_for_each_dev from onboard_hub_attach_usb_driver+0xc/0x28
->> [onboard_usb_hub]
->> [  243.682494]  onboard_hub_attach_usb_driver [onboard_usb_hub] from
->> process_one_work+0x1ec/0x4d0
->> [  243.682534]  process_one_work from worker_thread+0x50/0x540
->> [  243.682559]  worker_thread from kthread+0xd0/0xec
->> [  243.682582]  kthread from ret_from_fork+0x14/0x2c
->> [  243.682600] Exception stack(0xf086dfb0 to 0xf086dff8)
->> [  243.682615] dfa0:                                     00000000 00000000
->> 00000000 00000000
->> [  243.682631] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000
->> 00000000 00000000
->> [  243.682646] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
->> [  243.682692] INFO: task kworker/1:2:82 blocked for more than 122 seconds.
->> [  243.682703]       Not tainted 6.1.0-00002-gaa61d98d165b #2
->> [  243.682713] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
->> this message.
->> [  243.682721] task:kworker/1:2     state:D stack:0     pid:82 ppid:2
->> flags:0x00000000
->> [  243.682741] Workqueue: events_power_efficient hub_init_func2
->> [  243.682764]  __schedule from schedule+0x4c/0xe0
->> [  243.682785]  schedule from schedule_preempt_disabled+0xc/0x10
->> [  243.682808]  schedule_preempt_disabled from
->> __mutex_lock.constprop.0+0x244/0x804
->> [  243.682833]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
->> [  243.682859]  hub_activate from process_one_work+0x1ec/0x4d0
->> [  243.682883]  process_one_work from worker_thread+0x50/0x540
->> [  243.682907]  worker_thread from kthread+0xd0/0xec
->> [  243.682927]  kthread from ret_from_fork+0x14/0x2c
->> [  243.682944] Exception stack(0xf1509fb0 to 0xf1509ff8)
->> [  243.682958] 9fa0:                                     00000000 00000000
->> 00000000 00000000
->> [  243.682974] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
->> 00000000 00000000
->> [  243.682988] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
->> [  243.683023] INFO: task kworker/1:4:257 blocked for more than 122 seconds.
->> [  243.683034]       Not tainted 6.1.0-00002-gaa61d98d165b #2
->> [  243.683043] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
->> this message.
->> [  243.683051] task:kworker/1:4     state:D stack:0     pid:257 ppid:2
->> flags:0x00000000
->> [  243.683071] Workqueue: events_power_efficient hub_init_func2
->> [  243.683092]  __schedule from schedule+0x4c/0xe0
->> [  243.683113]  schedule from schedule_preempt_disabled+0xc/0x10
->> [  243.683135]  schedule_preempt_disabled from
->> __mutex_lock.constprop.0+0x244/0x804
->> [  243.683160]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
->> [  243.683184]  hub_activate from process_one_work+0x1ec/0x4d0
->> [  243.683209]  process_one_work from worker_thread+0x50/0x540
->> [  243.683233]  worker_thread from kthread+0xd0/0xec
->> [  243.683253]  kthread from ret_from_fork+0x14/0x2c
->> [  243.683270] Exception stack(0xf09d9fb0 to 0xf09d9ff8)
->> [  243.683283] 9fa0:                                     00000000 00000000
->> 00000000 00000000
->> [  243.683299] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
->> 00000000 00000000
->> [  243.683313] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> Does commenting the following help:
->
->    while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
->        msleep(10);
->
-> ?
-Yes, it does. I restarted the board multiple times and it never hang :-)
+>> On 12/28/2022 7:47 AM, Mathias Nyman wrote:
+>>> On 24.12.2022 1.31, Wesley Cheng wrote:
+>>>> Implement the XHCI operations for allocating and requesting for a 
+>>>> secondary
+>>>> interrupter.  The secondary interrupter can allow for events for a
+>>>> particular endpoint to be routed to a separate event ring.  The event
+>>>> routing is defined when submitting a transfer descriptor to the USB HW.
+>>>> There is a specific field which denotes which interrupter ring to 
+>>>> route the
+>>>> event to when the transfer is completed.
+>>>>
+>>>> An example use case, such as audio packet offloading can utilize a 
+>>>> separate
+>>>> event ring, so that these events can be routed to a different processor
+>>>> within the system.  The processor would be able to independently submit
+>>>> transfers and handle its completions without intervention from the main
+>>>> processor.
+>>>>
+>>>
+>>> Adding support for more xHCI interrupters than just the primary one 
+>>> make sense for
+>>> both the offloading and virtualization cases.
+>>>
+>>> xHCI support for several interrupters was probably added to support 
+>>> virtualization,
+>>> to hand over usb devices to virtual machines and give them their own 
+>>> event ring and
+>>> MSI/MSI-X vector.
+>>>
+>>> In this offloading case you probably want to avoid xHC interrupts 
+>>> from this device
+>>> completely, making sure it doesn't wake up the main CPU unnecessarily.
+>>>
+>>> So is the idea here to let xhci driver set up the new interrupter, 
+>>> its event ring,
+>>> and the endpoint transfer rings. Then pass the address of the 
+>>> endpoint transfer rings
+>>> and the new event ring to the separate processor.
+>>>
+>>> This separate processor then both polls the event ring for new 
+>>> events, sets its dequeue
+>>> pointer, clears EHB bit, and queues new TRBs on the transfer ring.
+>>>
+>>> so xhci driver does not handle any events for the audio part, and no 
+>>> audio data URBs
+>>> are sent to usb core?
+>>
+>> Your entire description is correct.  To clarify, the interfaces which 
+>> are non-audio will still be handled by the main processor.  For 
+>> example, a USB headset can have a HID interface as well for volume 
+>> control.  The HID interface will still be handled by the main 
+>> processor, and events routed to the main event ring.
+>>
+>>>
+>>> How about the control part?
+>>> Is the control endpoint for this device still handled normally by usb 
+>>> core/xhci?
+>>>
+>>
+>> Control transfers are always handled on the main processor.  Only 
+>> audio interface's endpoints.
+> 
+> Good to know, that means interrupter should be chosen per endpoint, not 
+> per device.
+> 
+>>
+>>> For the xhci parts I think we should start start by adding generic 
+>>> support for several
+>>> interrupters, then add parts needed for offloading.
+>>
+>> I can split up the patchsets to add interrupters first, then adding 
+>> the offloading APIs in a separate patch.
+> 
+> 
+> I started looking at supporting secondary interrupters myself.
+> Let me work on that part a bit first. We have a bit different end goals.
+> I want to handle interrupts from a secondary interrupter, while this 
+> audio offload
+> really just wants to mask some interrupts.
+> 
+
+I was looking at how we could possibly split up the XHCI secondary 
+interrupter, and offloading parts.  Since the XHCI secondary interrupter 
+is a feature that is defined in the XHCI spec (and we aren't doing 
+anything outside of what is defined), I was thinking of having a 
+separate XHCI driver (ie xhci-sec.c/h) that can be used to define all 
+APIs related to setting up the event ring and ring management. 
+(interrupt support can be added here)  This aligns a bit with what Alan 
+suggested, and removing the APIs in the USB HCD, since this is XHCI 
+specific stuff. ( 
+https://lore.kernel.org/linux-usb/Y6zwZOquZOTZfnvP@rowland.harvard.edu/ )
+
+For the offloading part, I think this is a bit more dependent on how 
+different platforms implement it.  To use more of a generic approach 
+like how Albert suggested here:
+
+https://patchwork.kernel.org/project/linux-usb/list/?series=704174
+
+Basically to give vendors the ability to define their own 
+sequences/callbacks, and from which the XHCI driver will call into. (if 
+needed)  These would need to be a separate set of XHCI drivers as well.
+
+Do you think this is a proper model for us to go with, so that we can 
+allow for vendors to easily add functionality?  Appreciate the inputs.
+
+Thanks
+Wesley Cheng
+
+
