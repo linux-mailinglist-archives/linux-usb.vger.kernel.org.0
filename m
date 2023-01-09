@@ -2,209 +2,399 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15416625DB
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 13:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B476626C3
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 14:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbjAIMva (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 07:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S236634AbjAINTz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 08:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbjAIMum (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 07:50:42 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C33BDD
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 04:50:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673268617; x=1704804617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=WyfkvVc8vtWBAhLnYGyACRlYW+3FZK91L0y69LAg220=;
-  b=PEK4thpzaqwENQvTK9G8jGHlFpYP88YYXbk4NM9rCvhM6XziZt8e5vO2
-   s6rc/hBKSLppquDjMDDcagoN0NjK4cINq4PrXpOQDUiudMaOdni/bCf+7
-   fF6OTCKPkcN9ataoyu8jOoosG4E8UYBCgdU6siFg0cBSH9ly9Mcq+2uHK
-   MZcc00vux1Im9CrOvhbWBWU4lq9YEHAm2yvUn0csJXYTVgRzmnbrcS0tB
-   zlrYB3O5iW6QY42fzbbeSgTg3xizk6IPwTZkWDvw/tHjDFjos2lBOrItw
-   VERZajNlveZRVOR++FboyNzqgd6T5LIfykQEcKymn02kzM/Rzfcm7+0eN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="321566751"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="321566751"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 04:50:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="780676246"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="780676246"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 09 Jan 2023 04:50:05 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 4A477F4; Mon,  9 Jan 2023 14:50:38 +0200 (EET)
-Date:   Mon, 9 Jan 2023 14:50:38 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-Cc:     linux-usb@vger.kernel.org,
-        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
-Subject: Re: Possible problem with thunderbolt 4
-Message-ID: <Y7wNnrlEWMOV4Cj/@black.fi.intel.com>
-References: <Y7K7zLoAQVyv0zD5@black.fi.intel.com>
- <011df027-5381-1e10-9c54-e0935ae549f9@gmx.at>
- <Y7ME7EwduIQE38+2@black.fi.intel.com>
- <a324ff2a-d014-83d2-4f30-b865db7c352b@gmx.at>
- <Y7QMlV82mtaApJwJ@black.fi.intel.com>
- <a8c1dd4b-7227-5ba2-97a4-a2dc3d561ea3@gmx.at>
- <Y7RSrLYfG1r8b+Zj@black.fi.intel.com>
- <86a6b7ca-4302-00fe-97f6-d48ebb5e6171@gmx.at>
- <Y7UzCY6ujQ2qtoq5@black.fi.intel.com>
- <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
+        with ESMTP id S237122AbjAINTN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 08:19:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576F7175A2
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 05:19:09 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pEs3O-0003P1-LO; Mon, 09 Jan 2023 14:19:06 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pEs3O-0005J9-0X; Mon, 09 Jan 2023 14:19:06 +0100
+Date:   Mon, 9 Jan 2023 14:19:05 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     gregkh@linuxfoundation.org, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@pengutronix.de,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH v2 5/5] usb: uvc: use v4l2_fill_fmtdesc instead of open
+ coded format name
+Message-ID: <20230109131905.GA19093@pengutronix.de>
+References: <20221215224514.2344656-1-m.grzeschik@pengutronix.de>
+ <20221215224514.2344656-6-m.grzeschik@pengutronix.de>
+ <Y6ug9yUIFysMtajx@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="C7zPtVaVf+AK4Oqc"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y6ug9yUIFysMtajx@pendragon.ideasonboard.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-On Mon, Jan 09, 2023 at 01:17:30PM +0100, Christian Schaubschläger wrote:
-> Hello again,
-> 
-> >> Earlier you said that with Windows 11 the behaviour might be the same
-> >> as in Linux. I'll try that next week (out of office until then). If
-> >> Win 11 indeed has the same problem, then I guess someone at HP or
-> >> wherever will address this sooner or later. I mean, the requirement
-> >> for a working network device/stack after a reboot from an OS is not
-> >> that unusual I'd say...
-> > I agree. If it turns out that Windows 11 works wrt. this (please check
-> > that it is using Windows "inbox" driver for TBT) then we need to figure
-> > out what it is doing differently.
-> 
-> So today I've installed Windows 11 22H2 on the EliteBook, and I can report this:
-> 
-> * The thunderbolt controller is run by a driver from Microsoft (in the Win 11 device manager it's no longer called "Thunderbolt Controller", but "USB4 Host Router".
-> * I think there isn't even a thunderbolt driver from Intel for Windows 11 - at least on the HP support site for the EliteBook they don't have one (but they do have an Intel driver for Windows 10).
+--C7zPtVaVf+AK4Oqc
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, Windows 11 has "native" support so there is no need for a vendor
-driver.
+Hi Laurent,
 
-> * And regarding functionality: after rebooting Windows 11, the network device is visible in the firmware, and working fine...
-> 
-> Any more test I could make?
+Thank you for the review.
 
-Okay it could be that Windows CM is doing something during the reboot,
-like resetting the ports. Can you try the below hack patch and see if
-that makes it work the same in Linux?
+On Wed, Dec 28, 2022 at 03:50:47AM +0200, Laurent Pinchart wrote:
+>On Thu, Dec 15, 2022 at 11:45:14PM +0100, Michael Grzeschik wrote:
+>> Since we have the helper function v4l2_fill_fmtdesc, we can use this to
+>> get the corresponding descriptive string for the pixelformat and set the
+>> compressed flag. This patch is removing the redundant name field in
+>> uvc_format_desc and makes use of v4l2_fill_fmtdesc instead.
+>
+>I really like that.
+>
+>> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>
+>> ---
+>> v1 -> v2: - added reviewed and tested tags
+>> ---
+>>  drivers/media/common/uvc.c             | 37 --------------------------
+>>  drivers/media/usb/uvc/uvc_driver.c     |  8 +++++-
+>>  drivers/usb/gadget/function/uvc_v4l2.c |  6 +----
+>>  include/linux/usb/uvc.h                |  1 -
+>>  4 files changed, 8 insertions(+), 44 deletions(-)
+>>
+>> diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
+>> index a9d587490de8d5..ab2637b9b39b2a 100644
+>> --- a/drivers/media/common/uvc.c
+>> +++ b/drivers/media/common/uvc.c
+>> @@ -13,187 +13,150 @@
+>>
+>>  static const struct uvc_format_desc uvc_fmts[] =3D {
+>>  	{
+>> -		.name		=3D "YUV 4:2:2 (YUYV)",
+>>  		.guid		=3D UVC_GUID_FORMAT_YUY2,
+>>  		.fcc		=3D V4L2_PIX_FMT_YUYV,
+>>  	},
+>>  	{
+>> -		.name		=3D "YUV 4:2:2 (YUYV)",
+>>  		.guid		=3D UVC_GUID_FORMAT_YUY2_ISIGHT,
+>>  		.fcc		=3D V4L2_PIX_FMT_YUYV,
+>>  	},
+>>  	{
+>> -		.name		=3D "YUV 4:2:0 (NV12)",
+>>  		.guid		=3D UVC_GUID_FORMAT_NV12,
+>>  		.fcc		=3D V4L2_PIX_FMT_NV12,
+>>  	},
+>>  	{
+>> -		.name		=3D "MJPEG",
+>>  		.guid		=3D UVC_GUID_FORMAT_MJPEG,
+>>  		.fcc		=3D V4L2_PIX_FMT_MJPEG,
+>>  	},
+>>  	{
+>> -		.name		=3D "YVU 4:2:0 (YV12)",
+>>  		.guid		=3D UVC_GUID_FORMAT_YV12,
+>>  		.fcc		=3D V4L2_PIX_FMT_YVU420,
+>>  	},
+>>  	{
+>> -		.name		=3D "YUV 4:2:0 (I420)",
+>>  		.guid		=3D UVC_GUID_FORMAT_I420,
+>>  		.fcc		=3D V4L2_PIX_FMT_YUV420,
+>>  	},
+>>  	{
+>> -		.name		=3D "YUV 4:2:0 (M420)",
+>>  		.guid		=3D UVC_GUID_FORMAT_M420,
+>>  		.fcc		=3D V4L2_PIX_FMT_M420,
+>>  	},
+>>  	{
+>> -		.name		=3D "YUV 4:2:2 (UYVY)",
+>>  		.guid		=3D UVC_GUID_FORMAT_UYVY,
+>>  		.fcc		=3D V4L2_PIX_FMT_UYVY,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 8-bit (Y800)",
+>>  		.guid		=3D UVC_GUID_FORMAT_Y800,
+>>  		.fcc		=3D V4L2_PIX_FMT_GREY,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 8-bit (Y8  )",
+>>  		.guid		=3D UVC_GUID_FORMAT_Y8,
+>>  		.fcc		=3D V4L2_PIX_FMT_GREY,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 8-bit (D3DFMT_L8)",
+>>  		.guid		=3D UVC_GUID_FORMAT_D3DFMT_L8,
+>>  		.fcc		=3D V4L2_PIX_FMT_GREY,
+>>  	},
+>>  	{
+>> -		.name		=3D "IR 8-bit (L8_IR)",
+>>  		.guid		=3D UVC_GUID_FORMAT_KSMEDIA_L8_IR,
+>>  		.fcc		=3D V4L2_PIX_FMT_GREY,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 10-bit (Y10 )",
+>>  		.guid		=3D UVC_GUID_FORMAT_Y10,
+>>  		.fcc		=3D V4L2_PIX_FMT_Y10,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 12-bit (Y12 )",
+>>  		.guid		=3D UVC_GUID_FORMAT_Y12,
+>>  		.fcc		=3D V4L2_PIX_FMT_Y12,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 16-bit (Y16 )",
+>>  		.guid		=3D UVC_GUID_FORMAT_Y16,
+>>  		.fcc		=3D V4L2_PIX_FMT_Y16,
+>>  	},
+>>  	{
+>> -		.name		=3D "BGGR Bayer (BY8 )",
+>>  		.guid		=3D UVC_GUID_FORMAT_BY8,
+>>  		.fcc		=3D V4L2_PIX_FMT_SBGGR8,
+>>  	},
+>>  	{
+>> -		.name		=3D "BGGR Bayer (BA81)",
+>>  		.guid		=3D UVC_GUID_FORMAT_BA81,
+>>  		.fcc		=3D V4L2_PIX_FMT_SBGGR8,
+>>  	},
+>>  	{
+>> -		.name		=3D "GBRG Bayer (GBRG)",
+>>  		.guid		=3D UVC_GUID_FORMAT_GBRG,
+>>  		.fcc		=3D V4L2_PIX_FMT_SGBRG8,
+>>  	},
+>>  	{
+>> -		.name		=3D "GRBG Bayer (GRBG)",
+>>  		.guid		=3D UVC_GUID_FORMAT_GRBG,
+>>  		.fcc		=3D V4L2_PIX_FMT_SGRBG8,
+>>  	},
+>>  	{
+>> -		.name		=3D "RGGB Bayer (RGGB)",
+>>  		.guid		=3D UVC_GUID_FORMAT_RGGB,
+>>  		.fcc		=3D V4L2_PIX_FMT_SRGGB8,
+>>  	},
+>>  	{
+>> -		.name		=3D "RGB565",
+>>  		.guid		=3D UVC_GUID_FORMAT_RGBP,
+>>  		.fcc		=3D V4L2_PIX_FMT_RGB565,
+>>  	},
+>>  	{
+>> -		.name		=3D "BGR 8:8:8 (BGR3)",
+>>  		.guid		=3D UVC_GUID_FORMAT_BGR3,
+>>  		.fcc		=3D V4L2_PIX_FMT_BGR24,
+>>  	},
+>>  	{
+>> -		.name		=3D "H.264",
+>>  		.guid		=3D UVC_GUID_FORMAT_H264,
+>>  		.fcc		=3D V4L2_PIX_FMT_H264,
+>>  	},
+>>  	{
+>> -		.name		=3D "H.265",
+>>  		.guid		=3D UVC_GUID_FORMAT_H265,
+>>  		.fcc		=3D V4L2_PIX_FMT_HEVC,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 8 L/R (Y8I)",
+>>  		.guid		=3D UVC_GUID_FORMAT_Y8I,
+>>  		.fcc		=3D V4L2_PIX_FMT_Y8I,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 12 L/R (Y12I)",
+>>  		.guid		=3D UVC_GUID_FORMAT_Y12I,
+>>  		.fcc		=3D V4L2_PIX_FMT_Y12I,
+>>  	},
+>>  	{
+>> -		.name		=3D "Depth data 16-bit (Z16)",
+>>  		.guid		=3D UVC_GUID_FORMAT_Z16,
+>>  		.fcc		=3D V4L2_PIX_FMT_Z16,
+>>  	},
+>>  	{
+>> -		.name		=3D "Bayer 10-bit (SRGGB10P)",
+>>  		.guid		=3D UVC_GUID_FORMAT_RW10,
+>>  		.fcc		=3D V4L2_PIX_FMT_SRGGB10P,
+>>  	},
+>>  	{
+>> -		.name		=3D "Bayer 16-bit (SBGGR16)",
+>>  		.guid		=3D UVC_GUID_FORMAT_BG16,
+>>  		.fcc		=3D V4L2_PIX_FMT_SBGGR16,
+>>  	},
+>>  	{
+>> -		.name		=3D "Bayer 16-bit (SGBRG16)",
+>>  		.guid		=3D UVC_GUID_FORMAT_GB16,
+>>  		.fcc		=3D V4L2_PIX_FMT_SGBRG16,
+>>  	},
+>>  	{
+>> -		.name		=3D "Bayer 16-bit (SRGGB16)",
+>>  		.guid		=3D UVC_GUID_FORMAT_RG16,
+>>  		.fcc		=3D V4L2_PIX_FMT_SRGGB16,
+>>  	},
+>>  	{
+>> -		.name		=3D "Bayer 16-bit (SGRBG16)",
+>>  		.guid		=3D UVC_GUID_FORMAT_GR16,
+>>  		.fcc		=3D V4L2_PIX_FMT_SGRBG16,
+>>  	},
+>>  	{
+>> -		.name		=3D "Depth data 16-bit (Z16)",
+>>  		.guid		=3D UVC_GUID_FORMAT_INVZ,
+>>  		.fcc		=3D V4L2_PIX_FMT_Z16,
+>>  	},
+>>  	{
+>> -		.name		=3D "Greyscale 10-bit (Y10 )",
+>>  		.guid		=3D UVC_GUID_FORMAT_INVI,
+>>  		.fcc		=3D V4L2_PIX_FMT_Y10,
+>>  	},
+>>  	{
+>> -		.name		=3D "IR:Depth 26-bit (INZI)",
+>>  		.guid		=3D UVC_GUID_FORMAT_INZI,
+>>  		.fcc		=3D V4L2_PIX_FMT_INZI,
+>>  	},
+>>  	{
+>> -		.name		=3D "4-bit Depth Confidence (Packed)",
+>>  		.guid		=3D UVC_GUID_FORMAT_CNF4,
+>>  		.fcc		=3D V4L2_PIX_FMT_CNF4,
+>>  	},
+>>  	{
+>> -		.name		=3D "HEVC",
+>>  		.guid		=3D UVC_GUID_FORMAT_HEVC,
+>>  		.fcc		=3D V4L2_PIX_FMT_HEVC,
+>>  	},
+>> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/=
+uvc_driver.c
+>> index 12b6ad0966d94a..af92e730bde7c7 100644
+>> --- a/drivers/media/usb/uvc/uvc_driver.c
+>> +++ b/drivers/media/usb/uvc/uvc_driver.c
+>> @@ -251,7 +251,13 @@ static int uvc_parse_format(struct uvc_device *dev,
+>>  		fmtdesc =3D uvc_format_by_guid(&buffer[5]);
+>>
+>>  		if (fmtdesc !=3D NULL) {
+>> -			strscpy(format->name, fmtdesc->name,
+>> +			struct v4l2_fmtdesc fmt;
+>> +
+>> +			fmt.pixelformat =3D fmtdesc->fcc;
+>> +
+>> +			v4l2_fill_fmtdesc(&fmt);
+>> +
+>> +			strscpy(format->name, fmt.description,
+>>  				sizeof(format->name));
+>>  			format->fcc =3D fmtdesc->fcc;
+>>  		} else {
+>
+>I've just sent "[PATCH v1] media: uvcvideo: Remove format descriptions"
+>which drops usage of the name in the uvcvideo driver without having to
+>call v4l2_fill_fmtdesc(). With that merged, changes to uvc_driver.c can
+>be dropped in this patch.
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 1711dc19b1e2..584d839c7943 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1977,22 +1977,24 @@ static void tb_stop(struct tb *tb)
- {
- 	struct tb_cm *tcm = tb_priv(tb);
- 	struct tb_tunnel *tunnel;
-+	struct tb_port *port;
- 	struct tb_tunnel *n;
- 
- 	cancel_delayed_work(&tcm->remove_work);
- 	/* tunnels are only present after everything has been initialized */
- 	list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list) {
--		/*
--		 * DMA tunnels require the driver to be functional so we
--		 * tear them down. Other protocol tunnels can be left
--		 * intact.
--		 */
--		if (tb_tunnel_is_dma(tunnel))
--			tb_tunnel_deactivate(tunnel);
-+		tb_tunnel_deactivate(tunnel);
- 		tb_tunnel_free(tunnel);
- 	}
--	tb_switch_remove(tb->root_switch);
-+
- 	tcm->hotplug_active = false; /* signal tb_handle_hotplug to quit */
-+
-+	tb_switch_for_each_port(tb->root_switch, port) {
-+		if (tb_port_is_null(port))
-+			usb4_port_reset(port);
-+	}
-+
-+	tb_switch_remove(tb->root_switch);
- }
- 
- static int tb_scan_finalize_switch(struct device *dev, void *data)
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 3095c206ea8a..c4cf8eee6771 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1243,6 +1243,7 @@ void usb4_switch_remove_ports(struct tb_switch *sw);
- 
- int usb4_port_unlock(struct tb_port *port);
- int usb4_port_hotplug_enable(struct tb_port *port);
-+int usb4_port_reset(struct tb_port *port);
- int usb4_port_configure(struct tb_port *port);
- void usb4_port_unconfigure(struct tb_port *port);
- int usb4_port_configure_xdomain(struct tb_port *port, struct tb_xdomain *xd);
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 4ecbe811ea43..8797a7c0316e 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -384,6 +384,7 @@ struct tb_regs_port_header {
- #define PORT_CS_18_WODS				BIT(17)
- #define PORT_CS_18_WOU4S			BIT(18)
- #define PORT_CS_19				0x13
-+#define PORT_CS_19_DPR				BIT(0)
- #define PORT_CS_19_PC				BIT(3)
- #define PORT_CS_19_PID				BIT(4)
- #define PORT_CS_19_WOC				BIT(16)
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index b4fbc692ffc3..6a632ace4530 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -1111,6 +1111,39 @@ int usb4_port_hotplug_enable(struct tb_port *port)
- 	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
- }
- 
-+int usb4_port_reset(struct tb_port *port)
-+{
-+	int ret;
-+	u32 val;
-+
-+	if (!port->cap_usb4)
-+		return -EINVAL;
-+
-+	ret = tb_port_read(port, &val, TB_CFG_PORT,
-+			   port->cap_usb4 + PORT_CS_19, 1);
-+	if (ret)
-+		return ret;
-+
-+	val |= PORT_CS_19_DPR;
-+
-+	ret = tb_port_write(port, &val, TB_CFG_PORT,
-+			    port->cap_usb4 + PORT_CS_19, 1);
-+	if (ret)
-+		return ret;
-+
-+	msleep(10);
-+
-+	ret = tb_port_read(port, &val, TB_CFG_PORT,
-+			   port->cap_usb4 + PORT_CS_19, 1);
-+	if (ret)
-+		return ret;
-+
-+	val &= ~PORT_CS_19_DPR;
-+
-+	return tb_port_write(port, &val, TB_CFG_PORT,
-+			     port->cap_usb4 + PORT_CS_19, 1);
-+}
-+
- static int usb4_port_set_configured(struct tb_port *port, bool configured)
- {
- 	int ret;
+Right.
+
+>
+>> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
+/function/uvc_v4l2.c
+>> index 21e573e628f4e7..6e46fa1695f212 100644
+>> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+>> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+>> @@ -374,14 +374,10 @@ uvc_v4l2_enum_format(struct file *file, void *fh, =
+struct v4l2_fmtdesc *f)
+>>  	if (!uformat)
+>>  		return -EINVAL;
+>>
+>> -	if (uformat->type !=3D UVCG_UNCOMPRESSED)
+>> -		f->flags |=3D V4L2_FMT_FLAG_COMPRESSED;
+>> -
+>>  	fmtdesc =3D to_uvc_format(uformat);
+>>  	f->pixelformat =3D fmtdesc->fcc;
+>>
+>> -	strscpy(f->description, fmtdesc->name, sizeof(f->description));
+>> -	f->description[strlen(fmtdesc->name) - 1] =3D 0;
+>> +	v4l2_fill_fmtdesc(f);
+>
+>
+>v4l_fill_fmtdesc() is actually called by v4l_enum_fmt() after calling
+>the driver's .vidioc_enum_fmt_vid_out() operation, so you don't have to
+>call it manually here.
+>
+>By dropping the manual calls to v4l_fill_fmtdesc(), you can also drop
+>patch 4/5 in the series.
+
+This is a good point. I have dropped patch 4/5 in the stack.
+
+>This creates a dependency between the patch I've just sent and this
+>series. As I don't want to introduce any further delay, I'll create a
+>stable branch based on v6.2-rc1 as soon as my patch gets reviewed, you
+>you can then base the next version of this series on top of it. An
+>alternative would be to merge this series through the media tree if Greg
+>is OK with that.
+
+I found your v3 patch. I sure can rebase my work on your patch if your
+stable branch is available.
+
+>>  	return 0;
+>>  }
+>> diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
+>> index 227a03f252a5c0..e407a7b8a91c70 100644
+>> --- a/include/linux/usb/uvc.h
+>> +++ b/include/linux/usb/uvc.h
+>> @@ -146,7 +146,6 @@
+>>  	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+>>
+>>  struct uvc_format_desc {
+>> -	char *name;
+>>  	u8 guid[16];
+>>  	u32 fcc;
+>>  };
+>
+>--=20
+>Regards,
+>
+>Laurent Pinchart
+>
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--C7zPtVaVf+AK4Oqc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmO8FEcACgkQC+njFXoe
+LGRjKBAAjPydgpJ+LBIyft6V0cb3jINh43VyMhmyIh4RpfbxinSXEqoMr4KhFmCw
+un2ku7Igo8kxCFjG4BsdxkxFE6X4SBKbNfiXa4ezE7KR1lEQ/5DR1t8vuBGSxUaX
+Ua/3mlk1ZR0EOAdIrS2zwRTsQseebgQKHgy9vVQbdle5dnFJce0Dfs3siTA6ZXFT
+/dKgCEszP6OIYUWHdPJ0ygDPWnJmWe9Sp5/CtQ7ZqaFOTbr8xHasC7v1WBBC5hSF
+v4YIF5uc8c5+JAYKqtCfTpuY+kEa8BZMcY3qihUYvddIXcH7PAGbIDluPC8o9ev9
+BIJ5/pCgBfS8jZwbGyBfslBNJgCv5vGceuUa+Hs/TVxkdaTxjhK1m1dl8CW9kRtX
+8hmqo8j1t2iZD9Cc/4qH7nXTYEzt/9T1Jr55MorirNhATMQj5ASLvEDvTUei3iF0
+0heBtunYaCIBQKtKIm53sPXCpTKpM0HfBfJBa7CiFpVKN+6f1Kwr8roXWlB6rh1A
+TVh9JXc4X8esurrSlIn/QNKAUjHApICvnih6YpSe39ehLxbu2iYXj8LjvzGTis8h
+E/7bSZM90boIXscefQNE7bF1Oz+xmYQNTnIjscZcJnLjpRde4L8ufxV2m5+XkMUz
+dM9AFvJNv/Ez1fgp99D4Knx8I/f0A42BGnN+jU9MRiCDAE6xGfM=
+=PR4X
+-----END PGP SIGNATURE-----
+
+--C7zPtVaVf+AK4Oqc--
