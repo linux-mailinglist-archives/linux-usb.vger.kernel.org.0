@@ -2,242 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3526C6624A1
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 12:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17956624C6
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 12:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbjAILtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 06:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S236984AbjAILzU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 06:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234368AbjAILt1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 06:49:27 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B75013D60
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 03:49:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673264966; x=1704800966;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MyT8DzZBuWTjWsl38FkbYi1v3myJ+zfDYwTYHUNHk4g=;
-  b=F5DVy/6I0zJrwRozg3Y5lBFMfrX/wvRpHN4wC6K+XJE30BX66lTYALZq
-   yTR7x8n8tottIkEa2MNEXpjMiwStV4U/ihXWwe4I4u9joBTEBONw6Jnlt
-   Dy4zQ0km3XswVDymOxrv7Dtu4lE96xOshHIjER0+DKtmA+ksAtxfQUZVw
-   XWcqAEHsG1XT9sXz6MB0MdBvjCYvljXDViyOlgcFcsxgzeMpjLkS8M5T9
-   SrScOuae2tRibsj1qEF7Jc+Mq/7Ql63Yk3ikVFetIiwh+z40+4ijJDj5B
-   DzY6rIfg4FHPS2EM6r1sevJWJmGqr/EOSosnV5IuFJf4VFt3c+IcouKRD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="385154917"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="385154917"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 03:49:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="798997523"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="798997523"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 09 Jan 2023 03:49:23 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 09 Jan 2023 13:49:22 +0200
-Date:   Mon, 9 Jan 2023 13:49:22 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        with ESMTP id S236787AbjAILy7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 06:54:59 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE95B1929C;
+        Mon,  9 Jan 2023 03:54:55 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309BUVkZ023385;
+        Mon, 9 Jan 2023 11:54:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=PBPdY4IJkDIfvn2rZwzmbEvNO2pA4TyuBazLMOpk+fQ=;
+ b=q7EM0F11DR+KYoh0SGZjYyazUNLFvlVg342X1W9JmwPhe+OJ3UavgxVxeo07ix4/tJMb
+ K7LoK+v2lWK4xrIGDHKFAihuGgD4x1Fh5TMD9F497xQcZHx50ZwmGlSly3KPOKsNfBqN
+ EmMqdsSJ5tfm1oSamji19gzXKd8fcgiOz5G5aaDrp+MTEU+WEXArNheqrx0SYwLPBsT2
+ LUG0l1G17KQiErJYP01tDkuwB7kBBTImZHp6p0I07bzaj8qSIigZBfR8lY6alwIkGOdp
+ R2yJ7MtYcWhilTfWGhPCJ87kBhBsc3YJsI2EvLzeyls180uYNfYyYEVYqgih+uXFDwKW Dg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mycxb9vh6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 09 Jan 2023 11:54:50 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 309AbxJh000715;
+        Mon, 9 Jan 2023 11:54:50 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2048.outbound.protection.outlook.com [104.47.73.48])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3mxy63v4wa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 09 Jan 2023 11:54:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F0lNWBtqwCmx8Fk8LVqaOEQWJx/CzkCMiqvvhY+/t+9J6HGQD0Mhav3KUZsjzCu0H5oEqocu0N/tSWKIWIW8byWuRLkIfobQ5woAuRdJ7vTWzTRJoi6ZxI5ZfY6KIQQjSIdfaP6pYF0+D4X5d/eilKMQ9OEvZ0ucdu/1s/o0dBjuBCbFMWEgv/S6G2TEZGUIivR8Z3w2OGF2DCAXqBLA/pb515tcu72/xSZTfqtcLKclQ8bZwzJnDUno9EZgoUoMevY/f7+vid+EmBfBoI6M3wlwpWXeSJ7KEiYj1HMav7AopTlVUE2GqSH7UY76v1Vr55wiMkm0GKZdzEyhAQFeIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PBPdY4IJkDIfvn2rZwzmbEvNO2pA4TyuBazLMOpk+fQ=;
+ b=f6XzclL3rgItWj19pMqh+IONCEuCH02rVFxqYgE3D1PI7NCjlvX7+HLSpF+PXXxfvqajz4qDGQV9IQdGjGMJhBQU85H856VOA/lP4Wy8lDtS+VDLTxdYn5UWaWvNovGSy+mESgQDFi6OodfSNVopOcki+M06lsThXhiJgXX5nDr1mgsqClSJWcFSmI8zWUwuujDXDDCYtCEIpRd8zlIEFnkMCms73IOn7Ic7wcsvhhxeWSlEqIdSiZzOTB5BSqfqoWzNFDfcE8NrsrTHgPQ5F1Wz9btfrMqgoOhhmC7ILBEhT966Aq9ZyryPY3tQoE01TE9qhJHL1bj+XUYosh5yNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PBPdY4IJkDIfvn2rZwzmbEvNO2pA4TyuBazLMOpk+fQ=;
+ b=L4JpzBfwGFYBbI2dPMHOUxaw7/Kg3QtZzvEASi2gUbECvHznNivougHT4U9CiXYk60ih/dMZ6E7g/I1MM19IQhKhkLbEawfT5pdMVixFYsRsuiKCnBINizWkynfNeKtXqREd7An/ngnCCDKApTdNEvlOeAAvsexGBKnzxUb7Ruw=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by CH0PR10MB5258.namprd10.prod.outlook.com (2603:10b6:610:c9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.10; Mon, 9 Jan
+ 2023 11:54:48 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::b30f:e3aa:6ba:5c8d]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::b30f:e3aa:6ba:5c8d%5]) with mapi id 15.20.6002.009; Mon, 9 Jan 2023
+ 11:54:48 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Allen Webb <allenwebb@google.com>,
+        Nick Alcock <nick.alcock@oracle.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Wesley Cheng <quic_wcheng@quicinc.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Fenglin Wu <quic_fenglinw@quicinc.com>
-Subject: Re: [PATCH v2] usb: ucsi: fix connector partner ucsi work issue
-Message-ID: <Y7v/Qk+dyDYyCGT4@kuha.fi.intel.com>
-References: <1672897360-24257-1-git-send-email-quic_linyyuan@quicinc.com>
- <Y7a0C+DkI5Q6hq6O@kuha.fi.intel.com>
- <20230105183441.GD28337@jackp-linux.qualcomm.com>
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
+References: <20221219191855.2010466-1-allenwebb@google.com>
+        <20221219204619.2205248-1-allenwebb@google.com>
+        <20221219204619.2205248-3-allenwebb@google.com>
+        <Y6FaUynXTrYD6OYT@kroah.com>
+        <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
+        <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
+        <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
+        <Y6IDOwxOxZpsdtiu@bombadil.infradead.org>
+Emacs:  featuring the world's first municipal garbage collector!
+Date:   Mon, 09 Jan 2023 11:54:43 +0000
+In-Reply-To: <Y6IDOwxOxZpsdtiu@bombadil.infradead.org> (Luis Chamberlain's
+        message of "Tue, 20 Dec 2022 10:47:23 -0800")
+Message-ID: <87cz7nsz24.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0209.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a5::16) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105183441.GD28337@jackp-linux.qualcomm.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|CH0PR10MB5258:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f74a879-2c02-4bb2-3192-08daf2384e9f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Q3otplNdA50MFte46N14yKCx4ssgQetJ55HUo3XGTqMtLp7ScGaYxkQZBOOl9OY4q7IyD59R2T8tSSmskrh4lVl4bPp0F/TrtC9xa5TRXkpnaZu/8ksaXeI4bSG/rHxBjpUSEX24YHLpisqMomg7eFtx637gYlAGY+9f07kUpJn+WXLcV/jZF4dk6m3Gr7NqyCg7WkS7imq4ERZmtQ1Ty+zyzx3zDFR059E/f6G3c3LJ9JRfXM92pn9DwkIT7stn2aJXVHdKOx5daVI5QSXnylvUQQ3hSSZha7+z8m19VBEr3nwW8AUc9ESDeBwLxB17XQldm8byxioIuDhV1ELGJfjCLWSch2+9aM+VVQyjQgZwrJExGC0kyxwuEgy2er3mzWc0Vw04Xp4ylcoE+RTVV7LeT0jJchaDeVBB4OPeSRH4DsTAmJsbkpKimHlmJ3+sp2IDKxERATFVh5S0n80+p3sOiABYlAdz2/jT25rXroRk7OP7eP1FMIbaK6aV4skBUbUQfYCj/SQkmoUX2X8HnkBPjsrEUYyjkbtE1Cfs4Bb5/ZjLJ2XeRkKVC9oExUMBcjlGSu2XHwqoS+j18tr6gL9KyPYIFbFAUzYT7AvvGIzjtCJyc1OvjPjR1Bya/KnIPL51w94o+g5rgkl8mTKoAQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(39860400002)(396003)(376002)(136003)(451199015)(66899015)(36756003)(86362001)(2906002)(8676002)(8936002)(66946007)(66556008)(4326008)(66476007)(44832011)(6916009)(5660300002)(7416002)(83380400001)(38100700002)(478600001)(316002)(54906003)(6486002)(41300700001)(6512007)(186003)(9686003)(6506007)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g8oR8f+2kETmRB5lY1st7AxVAlgo4MXOz3EY8DlTukq4Ak4WAqTDoat/kOTb?=
+ =?us-ascii?Q?1F7MW8z04ixGl06hAvqIAPUHVxiJYTZmT0DzVZVXaDzZDWRejJIq6jDq9/xr?=
+ =?us-ascii?Q?KSi5wGB6QB3xFos6uLk191SKcbkfHVJNnns3n9cs/CILab1nsUpzTxXvoPXb?=
+ =?us-ascii?Q?bqPHutZtrndYBF99JF31fPHJVRyCd2iUpg+1q1dO8C1F2UMh6AcxY7qp5sic?=
+ =?us-ascii?Q?84M7mb8a6RoTBycYGWmlW8ajYvAulRo7dWy+m+gh65//1bpoCAWJPRt5GwbA?=
+ =?us-ascii?Q?fr3hw8GVKIkbWPRxboFO//MZweurYbu2HCrOTT9+mid9XsqbwrT3+93Cg8IK?=
+ =?us-ascii?Q?Ize6qsurqHbqX14TateEXlUr8tViw6I7cztbzn76RGPQJ/An+bxW6qgT79HG?=
+ =?us-ascii?Q?cen6mrGWF6WkLrWNTMA2LYrZ2UIbjz2ya+4nHhOXMFMUMMKqr5m0Gzh4w+Le?=
+ =?us-ascii?Q?lVtLTwXCCe6jsokxN2BQoQn/Monu9m4xe7y5ZIF2CZ0iy54TQPHiNFYpfjZI?=
+ =?us-ascii?Q?f5zL0V1yPZ/UOYkqWKRVCyX4DRORA6uU33MK36iXamNwTlXpAAqo8knKUJ0X?=
+ =?us-ascii?Q?p5suM5wK6iNh3r1u1uxSyiT18Gnov+yKTDiKyCo2Rsm2oyPCSURa8nW5bTtp?=
+ =?us-ascii?Q?yal/t7KRvPP6Yn7DxDRPvlTQXCtH21fx1cBB1LrP2WmOmE6efU1aEzWmxLmt?=
+ =?us-ascii?Q?f7duSKEbT05UzbtoH1y/QI2kwdug1xr0/8usRdX7R84qA0nt+cRdRcb+vaZ9?=
+ =?us-ascii?Q?+6sJD3zmprIQlnFG5jZFcWMLDbaMfoK6aasRBDGY+NjDwAjw5Bm34ga1wL+i?=
+ =?us-ascii?Q?OsFfmeMpmuSEkM6njr+AL9DBGGQ4JjNkW+iBnr3nWmhkGXH35cp6I0sn5yES?=
+ =?us-ascii?Q?G2ueWoCVfsX+fQEb26aHxw2uL0cVOjyuFHDXTQA3HcUBruSM2sJ7mt23L7DC?=
+ =?us-ascii?Q?O7+prwaSscCDy8wSVcthO6VMssQfsa9so75TLEEP83m8+Y0HzvsWdjOwnQUn?=
+ =?us-ascii?Q?uY6I2wY3ULM1MW/0YpxnCNN+EuB2dhHKL8toydElo3H/wd0OrRyDdaucxOXO?=
+ =?us-ascii?Q?FXWhKqDm+SKYyUtgCPKlnnnvIzrFqYzsqBOXXrmCcoi5PzE081FimNk3/kQG?=
+ =?us-ascii?Q?mqZtJIX5bTaYuirQ6fjktcfLpBxK3oTFeMeKFllTUL5vosk/llqonXMZ52iF?=
+ =?us-ascii?Q?9HoTEuTxXImsuXRsUNYtVi5wVn6Qws5J6oVo7HcPFGjIyNChic1jVJ8x9DF/?=
+ =?us-ascii?Q?Hx3l25X1S9op717j65Jdtx23WgVTc32bNY+LYkE8VKWmEUplf9cyA2xYtJzj?=
+ =?us-ascii?Q?hNjVOtBW2c4I4rLJgB+fYFyYcLKE4xktUrtuYrMBkdc+jEY0A72UYt6TR5cu?=
+ =?us-ascii?Q?sV7GkUnjZtiOcLZopjySK3o8EPHlWrUrIfFQmfXSFz1g4rpznYcrSxPUf/E1?=
+ =?us-ascii?Q?JpVD8qYKsCmmY6MDqK5Ycqum7ABd9sOSqSQGbNvw5uaOQrVaVx2G5k8jTYkr?=
+ =?us-ascii?Q?eAqeZ9+6AdcOhdpnFwHgpZ9Iz+RGSS3JAtzjf/7ru1EoEBh1GzAX3Yupsmai?=
+ =?us-ascii?Q?+9jeHvaEhQAyLUwHPEZg4jMjUYyLc6QzQdsj9qDlAZ/UaZZX5bUPK4uJhyaN?=
+ =?us-ascii?Q?RQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: GIz+c5MrKGgZ+qKTmVXKB1UBE8jEBtMBWWwDLWrpyw2Upud/7/WqxyREwsxEZIlRneuhDtNFH3m2RYjd9ehcvNq7FABm6ao/TMfA24oheo3tgTUSfbb5lSyeUgZkTvMa7DMPtpqIQhZIOz0GZVumoAKElX2zeXE5pDZhQPCuf2z5kiJPQ7hjfEmMBuPNVS4we2XXzmo6ZjR0BBrGRnszNNn/dfKUAS0ZFdfCe7ZUvEEhiup1joyH+P5og6hSDOZjDmrpY4VRcFaRoLXUTpqZFYUzxI9tlHMtVbklp64XMhsNDRjNBBV2F1Ah+iY+YoTYXz8UaM0OqxE1Vt/VwbcgoQyhOw+SZ7+RXqgToCHIVIw/1YUMK/8Jun3Rdi7QYyazfO6S0nxS/OD4LypsXUQGCnyksb6UEHocnZ2dd9HcXTBT7LmhBlvpRDwNseho/mtKNBwNHL/hjiWpxe2BJACuiRaUSqXBBfsNUyPiSf/Xj2ntw3KPQZpgyJa4SRT7gkv/KgoLzrsvqgvl2TcLphmGkHDxs4YILKYRIaqln6FNkgzkd4m/inL+tES3fAlE02Gh3jb0RDtabXL+rPAA19rOS18tSi357je+MnKY7XrgG+XG2p6QRO4vbwNbxMDW7FSKztQqhLYH+CKl7AA6worUsaJUHqKMgmR0ZSI1SZL6F/oLF+sLXB8M1DTEzZ6sprk6WOrrZildMTs4I/LnYC5zP4dyjH0kYg5WHI4gH/hYLq1wQUDH7LfSopwP6Q5FjMtbORO/9ApTn5PT5JlRe76mYrJUUbkMCf/IWJd/IWI0cjUgQZ/UfYEhVS95Uyp1i5w8wUBqvivII8MxKtU42LcHl4KioIXRZG3oVZaepw6b4Oz2OUT8c7SKEl2d47BxdJoFXflhM0mJDBVb9RxPnS5QAg==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f74a879-2c02-4bb2-3192-08daf2384e9f
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 11:54:47.9524
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ckBn359WYP4+3KGc+nXZwEFY8JS+57e5bd+sDg2MSjd82vanAZsH+8gakxKizBzuJAt5flPbPn91+RxqW9gXJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5258
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_05,2023-01-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=615 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090085
+X-Proofpoint-GUID: yW36OEsOiDRnYcTcHhfWitIia6SfmOXo
+X-Proofpoint-ORIG-GUID: yW36OEsOiDRnYcTcHhfWitIia6SfmOXo
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 20 Dec 2022, Luis Chamberlain uttered the following:
+>> It also raises the question how many modules have device tables, but
+>> do not call MODULE_DEVICE_TABLE since they are only ever built-in.
+>> Maybe there should be some build time enforcement mechanism to make
+>> sure that these are consistent.
+>
+> Definitely, Nick Alcock is doing some related work where the semantics
+> of built-in modules needs to be clearer, he for instance is now removing
+> a few MODULE_() macros for things which *are never* modules, and this is
+> because after commit 8b41fc4454e ("kbuild: create modules.builtin
+> without Makefile.modbuiltin or tristate.conf") we rely on the module
+> license tag to generate the modules.builtin file. Without that commit
+> we end up traversing the source tree twice. Nick's work builds on
+> that work and futher clarifies these semantics by adding tooling which
+> complains when something which is *never* capable of being a module
+> uses module macros. The macro you are extending, MODULE_DEVICE_TABLE(),
+> today is a no-op for built-in, but you are adding support to extend it
+> for built-in stuff. Nick's work will help with clarifying symbol locality
+> and so he may be interested in your association for the data in
+> MODULE_DEVICE_TABLE and how you associate to a respective would-be
+> module. His work is useful for making tracing more accurate with respect
+> to symbol associations, so the data in MODULE_DEVICE_TABLE() may be
+> useful as well to him.
 
-On Thu, Jan 05, 2023 at 10:34:41AM -0800, Jack Pham wrote:
-> On Thu, Jan 05, 2023 at 01:27:07PM +0200, Heikki Krogerus wrote:
-> > On Thu, Jan 05, 2023 at 01:42:40PM +0800, Linyu Yuan wrote:
-> > > When a PPM client unregisters with UCSI framework, connector specific work
-> > > queue is destroyed. However, a pending delayed work queued before may
-> > > still exist. Once the delay timer expires and the work is scheduled,
-> > > this can cause a system crash as the workqueue is destroyed already.
-> > 
-> > When the workqueue is destroyed it's also flushed, no? So how could
-> > there be still something pending, delayed or not? Did you actually see
-> > this happening?
-> 
-> Yes, we encountered this during a scenario in which our PPM firmware 
-> is undergoing a reset which is handled by calling ucsi_unregister().
-> The connectors' workqueues are destroyed but apparently the
-> destroy_workqueue() does *not* seem to take care pending delayed items.
-> 
-> 	Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> 	...
-> 	Call trace:
-> 	 __queue_work+0x1f4/0x550
-> 	 delayed_work_timer_fn+0x28/0x38
-> 	 call_timer_fn+0x3c/0x238
-> 	 expire_timers+0xcc/0x168
-> 	 __run_timers+0x194/0x1f8
-> 	 run_timer_softirq+0x2c/0x54
-> 	 _stext+0xec/0x3a8
-> 	 __irq_exit_rcu+0xa0/0xfc
-> 	 irq_exit_rcu+0x18/0x28
-> 	 el0_interrupt+0x5c/0x138
-> 	 __el0_irq_handler_common+0x20/0x30
-> 	 el0t_64_irq_handler+0x18/0x28
-> 	 el0t_64_irq+0x1a0/0x1a4
-> 	Code: eb16013f 54000300 aa1a03e0 9441be2a (f9400280) 
-> 
-> In particular this is happening for the ucsi_check_connection() which is
-> the currently the only work item using a non-zero delay.  If we look
-> closely at queue_delayed_work() we can see in that case it defers by
-> using a separate timer:
-> 
-> 	static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
-> 					struct delayed_work *dwork, unsigned long delay)
-> 	{
-> 		struct timer_list *timer = &dwork->timer;
-> 		struct work_struct *work = &dwork->work;
-> 
-> 		<...snip...>
-> 
-> 		/*
-> 		 * If @delay is 0, queue @dwork->work immediately.  This is for
-> 		 * both optimization and correctness.  The earliest @timer can
-> 		 * expire is on the closest next tick and delayed_work users depend
-> 		 * on that there's no such delay when @delay is 0.
-> 		 */
-> 		if (!delay) {
-> 			__queue_work(cpu, wq, &dwork->work);
-> 			return;
-> 		}
-> 
-> 		dwork->wq = wq;
-> 		       ^^^^^^^^ wq gets saved here, but might be
-> 				destroyed before timer expires
-> 
-> 		dwork->cpu = cpu;
-> 		timer->expires = jiffies + delay;
-> 
-> 		if (unlikely(cpu != WORK_CPU_UNBOUND))
-> 			add_timer_on(timer, cpu);
-> 		else
-> 			add_timer(timer);
-> 	}
-> 
-> In ucsi_unregister() we destroy the connector's wq, but there is a
-> pending timer still for the ucsi_check_connection() item and upon
-> expiry it tries to do the real __queue_work() call on a dangling 'wq'.
+The kallmodsyms module info (and, thus, modules.builtin) and
+MODULE_DEVICE_TABLE do seem interestingly related. I wonder if we can in
+future reuse at least the module names so we can save a few KiB more
+space... (in this case, the canonical copy should probably be the one in
+kallmodsyms, because that lets kallmodsyms reuse strings where modules
+and their source file have similar names. Something for the future...)
 
-Okay.
+> You folks may want to Cc each other on your patches.
 
-> > > Fix this by moving all partner related delayed work to connector instance
-> > > and cancel all of them when ucsi_unregister() is called by PPM client.
-> > 
-> > I would love to be able to cancel these works, though not because of
-> > driver removal - I'm more concerned about disconnections. The reason
-> > why each task is a unique work is because it allows the driver to add
-> > the same task to the queue as many times as needed, and that was
-> > needed inorder to recover from some firmware issues. If there's only a
-> > dedicated work per task like in your proposal, we can only schedule
-> > the task once at a time, and that may lead into other issues.
-> 
-> I see, queuing a task multiple times is a good reason to allocate the
-> workers dynamically.  Then what we really need is a way to reliably
-> cancel & reclaim any pending items that are sitting on their own timers,
-> since they are otherwise unreachable via the 'wq'. 
-> 
-> cancel_delayed_work(), cancel_delayed_work_sync(), flush_delayed_work()
-> all require the handle to the delayed_work itself which we don't keep a
-> reference to.
-> 
-> Do you have any other suggestions for this?
+I'd welcome that.
 
-How about separate list for the works?
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 8695eb2c6227e..d5cf7573a2cfa 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -187,6 +187,7 @@ EXPORT_SYMBOL_GPL(ucsi_send_command);
- 
- struct ucsi_work {
-        struct delayed_work work;
-+       struct list_head node;
-        unsigned long delay;
-        unsigned int count;
-        struct ucsi_connector *con;
-@@ -202,6 +203,7 @@ static void ucsi_poll_worker(struct work_struct *work)
-        mutex_lock(&con->lock);
- 
-        if (!con->partner) {
-+               list_del(&uwork->node);
-                mutex_unlock(&con->lock);
-                kfree(uwork);
-                return;
-@@ -209,10 +211,12 @@ static void ucsi_poll_worker(struct work_struct *work)
- 
-        ret = uwork->cb(con);
- 
--       if (uwork->count-- && (ret == -EBUSY || ret == -ETIMEDOUT))
-+       if (uwork->count-- && (ret == -EBUSY || ret == -ETIMEDOUT)) {
-                queue_delayed_work(con->wq, &uwork->work, uwork->delay);
--       else
-+       } else {
-+               list_del(&uwork->node);
-                kfree(uwork);
-+       }
- 
-        mutex_unlock(&con->lock);
- }
-@@ -236,6 +240,7 @@ static int ucsi_partner_task(struct ucsi_connector *con,
-        uwork->con = con;
-        uwork->cb = cb;
- 
-+       list_add_tail(&uwork->node, &con->works);
-        queue_delayed_work(con->wq, &uwork->work, delay);
- 
-        return 0;
-@@ -1056,6 +1061,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
-        INIT_WORK(&con->work, ucsi_handle_connector_change);
-        init_completion(&con->complete);
-        mutex_init(&con->lock);
-+       INIT_LIST_HEAD(&con->works);
-        con->num = index + 1;
-        con->ucsi = ucsi;
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 8361e1cfc8eba..dcb792eeedb94 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -325,6 +325,7 @@ struct ucsi_connector {
-        struct work_struct work;
-        struct completion complete;
-        struct workqueue_struct *wq;
-+       struct list_head works;
- 
-        struct typec_port *port;
-        struct typec_partner *partner;
-
-
-Something like that. Then just walk through the list and cancel each
-work in it before destroying the wq. Would that work?
-
-thanks,
+btw, do you want another kallmodsyms patch series from me just arranging
+to drop fewer MODULE_ entries from non-modules (just MODULE_LICENSE) or
+would this be considered noise for now? (Are we deadlocked on each
+other, or are you still looking at the last series I sent, which I think
+was v10 in late November?)
 
 -- 
-heikki
+NULL && (void)
