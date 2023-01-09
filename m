@@ -2,196 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543FB6622B9
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 11:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201356622BF
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 11:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236861AbjAIKOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 05:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S236645AbjAIKP3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 05:15:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236831AbjAIKOH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 05:14:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB31B1C1;
-        Mon,  9 Jan 2023 02:13:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FF4560FC1;
-        Mon,  9 Jan 2023 10:13:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1258FC433D2;
-        Mon,  9 Jan 2023 10:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673259212;
-        bh=pvqVDoJZCa0ZOaavtmQbruLzVu9U05hJ2hV/NAI13Qw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lEs48J/cW6Rt4gv7+9VTuxBSiG1DFLqbRoDIUst0m6CC9WqhK7cFM5Yx2i7OqY5Rf
-         eb2ng1ub9H/Amdrilz0pjEpvcXPZZm7d0E8StYkffl3jV/wT1TpfHnTDrNLQDMDgmR
-         Il2uPg0Um5RR4Kay4uNRCkcf8oqU1slVdUVYqlOHQ5YgaBpGXfvK8+oWYu+Wewe4Rk
-         RQar24Dwi4vbIEbCegrbbFRfKD81IBWnZxEB+7cO6aFxPoChIDja2lYLRunRddny32
-         cih+IYSpI8r8mF5wJm05NihUbNai0QFUlFyJ54/BjvMn5h741QyIZnMXU2atGZBM6B
-         YZxY86c8R61tw==
-Date:   Mon, 9 Jan 2023 18:13:21 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     Peter Chen <hzpeterchen@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "rogerq@kernel.org" <rogerq@kernel.org>,
-        "a-govindraju@ti.com" <a-govindraju@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdns3: remove fetched trb from cache before
- dequeuing
-Message-ID: <20230109101321.GA94204@nchen-desktop>
-References: <20221115100039.441295-1-pawell@cadence.com>
- <CAL411-o4BETLPd-V_4yR6foXbES=72-P4tq-fQ_W_p0P_3ZqEw@mail.gmail.com>
- <BYAPR07MB5381AE961B59046ECB615C65DD069@BYAPR07MB5381.namprd07.prod.outlook.com>
- <CAL411-rFz5Dde4F_uWbksxJG2uqbD7VsU2GG1JQ0mU3LpbeoUA@mail.gmail.com>
- <BYAPR07MB5381157D62415BFFBD328C5ADDFE9@BYAPR07MB5381.namprd07.prod.outlook.com>
+        with ESMTP id S237044AbjAIKO6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 05:14:58 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A937619292
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 02:14:06 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id h16so7594201wrz.12
+        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 02:14:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tKCQUhm58zZMU1+N1NXsPah3RLRpFdffVr/EsdddpFY=;
+        b=ckhYgBdaOObPp08TPqTFL7LDtCo3mvVO9nMROdG6iaHdh7Vmnz+KDmLvzMC3j+kXqr
+         bGl+hEV9Vx4GS9/U9JSTG38wjjZS3JttcgkWmogv3YYYCCKi3whX1IYfr7TPfQ3i9z4U
+         spe6stZTjC0IBRevcS/vLdR7NaZieS06dmJGsGI5YkG6Y+c84xvSw+T4dGP4pPavoLsx
+         vGRs7/m3UY8IhY/GTbaxsj2wDAPgGwFYxQrniEZsOZfksv0JiPdgBBOJYGI82gm8E+lb
+         HrQYOGsO7jVo9Oo9WMIT1YWSzGaQ7tSBLuEPOSLtk6jA6oS1LRDQ9jW3wxsSSouptbLx
+         4j2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tKCQUhm58zZMU1+N1NXsPah3RLRpFdffVr/EsdddpFY=;
+        b=CvwvKkpIJ/3KpqNtq28xK7mCgveMYMrn6Kw522wEmTU47D/+BHW33WxzT5NtndtCUh
+         Q22MAlg+O3AbIIBc88PcXmYlPvxvO6KQJpFIOz47xhY67BOhHu+YjiRoR/SrzBazmB0Z
+         WnPEzHCNU0Ijrvl2NOT6/1UzXozdEE90jTSuwSIYDIudxXS32c7OGUW1EnN2TUD1A/4N
+         RvNa7vcWSO74wD+1NaWRQkeeejJha+08OS7XejUXCoYdDwmbnabWoPpIgARGVlcC+mt6
+         zaFEL0uqmc8FuiolZyKup8L6Tfuc3J0rwXtUx1+ppuWW8iLtKkoDDjkG+vBUH+qn07b4
+         d+eQ==
+X-Gm-Message-State: AFqh2kpSgjBQ9rp8YAK855lRpWagEcMxggKuVGo9Ddf0R3mFpp8vfaBc
+        O6ViMGHC70wrXX/g0GFM0QnzRQ==
+X-Google-Smtp-Source: AMrXdXuppLG6yXIDwCzTHlmZxEUSt0/iBt0iREIXO/zIq2DPIPPsNImJeAsr6RgHanJAh5qw2Be6nA==
+X-Received: by 2002:a5d:6b4e:0:b0:2ba:e1d9:37e7 with SMTP id x14-20020a5d6b4e000000b002bae1d937e7mr6995164wrw.18.1673259245274;
+        Mon, 09 Jan 2023 02:14:05 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i5-20020a5d55c5000000b002a6f329203esm8232130wrw.61.2023.01.09.02.14.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 02:14:04 -0800 (PST)
+Message-ID: <3aa83ec3-228d-1add-5e4b-c100340b127e@linaro.org>
+Date:   Mon, 9 Jan 2023 11:14:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BYAPR07MB5381157D62415BFFBD328C5ADDFE9@BYAPR07MB5381.namprd07.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] dt-bindings usb: typec: rt1718s: Add binding for
+ Richtek RT1718S
+Content-Language: en-US
+To:     gene_chen@richtek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1673256674-25165-1-git-send-email-gene_chen@richtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1673256674-25165-1-git-send-email-gene_chen@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-01-09 05:38:31, Pawel Laszczak wrote:
-> >
-> >On Thu, Nov 17, 2022 at 8:27 PM Pawel Laszczak <pawell@cadence.com>
-> >wrote:
-> >>
-> >> >
-> >> >On Tue, Nov 15, 2022 at 6:01 PM Pawel Laszczak <pawell@cadence.com>
-> >> >wrote:
-> >> >>
-> >> >> After doorbell DMA fetches the TRB. If during dequeuing request
-> >> >> driver changes NORMAL TRB to LINK TRB but doesn't delete it from
-> >> >> controller cache then controller will handle cached TRB and packet can be
-> >lost.
-> >> >>
-> >> >> The example scenario for this issue looks like:
-> >> >> 1. queue request - set doorbell
-> >> >> 2. dequeue request
-> >> >> 3. send OUT data packet from host
-> >> >> 4. Device will accept this packet which is unexpected 5. queue new
-> >> >> request - set doorbell 6. Device lost the expected packet.
-> >> >>
-> >> >> By setting DFLUSH controller clears DRDY bit and stop DMA transfer.
-> >> >>
-> >> >> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-> >> >> cc: <stable@vger.kernel.org>
-> >> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >> >> ---
-> >> >>  drivers/usb/cdns3/cdns3-gadget.c | 12 ++++++++++++
-> >> >>  1 file changed, 12 insertions(+)
-> >> >>
-> >> >> diff --git a/drivers/usb/cdns3/cdns3-gadget.c
-> >> >> b/drivers/usb/cdns3/cdns3-gadget.c
-> >> >> index 5adcb349718c..ccfaebca6faa 100644
-> >> >> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> >> >> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> >> >> @@ -2614,6 +2614,7 @@ int cdns3_gadget_ep_dequeue(struct usb_ep
-> >*ep,
-> >> >>         u8 req_on_hw_ring = 0;
-> >> >>         unsigned long flags;
-> >> >>         int ret = 0;
-> >> >> +       int val;
-> >> >>
-> >> >>         if (!ep || !request || !ep->desc)
-> >> >>                 return -EINVAL;
-> >> >> @@ -2649,6 +2650,13 @@ int cdns3_gadget_ep_dequeue(struct usb_ep
-> >> >*ep,
-> >> >>
-> >> >>         /* Update ring only if removed request is on pending_req_list list */
-> >> >>         if (req_on_hw_ring && link_trb) {
-> >> >> +               /* Stop DMA */
-> >> >> +               writel(EP_CMD_DFLUSH, &priv_dev->regs->ep_cmd);
-> >> >> +
-> >> >> +               /* wait for DFLUSH cleared */
-> >> >> +               readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
-> >> >> +                                         !(val & EP_CMD_DFLUSH),
-> >> >> + 1, 1000);
-> >> >> +
-> >> >>                 link_trb->buffer = cpu_to_le32(TRB_BUFFER(priv_ep-
-> >> >>trb_pool_dma +
-> >> >>                         ((priv_req->end_trb + 1) * TRB_SIZE)));
-> >> >>                 link_trb->control =
-> >> >> cpu_to_le32((le32_to_cpu(link_trb->control) & TRB_CYCLE) | @@
-> >> >>-2660,6
-> >> >> +2668,10 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
-> >> >>
-> >> >>         cdns3_gadget_giveback(priv_ep, priv_req, -ECONNRESET);
-> >> >>
-> >> >> +       req = cdns3_next_request(&priv_ep->pending_req_list);
-> >> >> +       if (req)
-> >> >> +               cdns3_rearm_transfer(priv_ep, 1);
-> >> >> +
-> >> >
-> >> >Why the above changes are needed?
-> >> >
-> >>
-> >> Do you mean the last line or this patch?
-> >>
-> >> Last line:
-> >> DMA is stopped, so driver arm the queued transfers
-> >>
-> >
-> >Sorry, I have been very busy recently, so the response may not be in time.
-> >I mean why it needs to re-arm the transfers after DMA is stopped?
-> 
-> Because driver can have queued more transfers. Only one of them are
-> dequeued. In the vast majority of the rest request will be removed in the
-> next steps, but there can be case in which we have queued e.g. 10 usb requests
-> and only one of them will be removed. In such case the driver can stuck.
-> To avoid this driver, rearm the endpoint if there are other transfer
-> in transfer ring.
+On 09/01/2023 10:31, gene_chen@richtek.com wrote:
+> From: Gene Chen <gene_chen@richtek.com>
 > 
 
-Since this logic (re-arm the pending request) is different with current
-one, please test it well to avoid other use cases. After you have fully
-tested, feel free to add my ack:
+Subject: drop second, redundant "binding for".
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
-
-Peter
-
-> Regards,
-> Pawel
+> Add binding for Richtek RT1718s
 > 
-> >
-> >
-> >> If you means this patch:
-> >> Issue was detected by customer test. I don’t know whether it was only
-> >> test or the real application.
-> >>
-> >> The problem happens because user application queued the transfer
-> >> (endpoint has been armed), so controller fetch the TRB.
-> >> When user application removed this request the TRB was still processed
-> >> by controller. If at that time the host will send data packet then
-> >> controller will accept it, but it shouldn't because the usb_request
-> >> associated with TRB cached by controller was removed.
-> >> To force the controller to drop this TRB DFLUSH is required.
-> >>
-> >> Pawel
-> >>
-> >> >
-> >> >>  not_found:
-> >> >>         spin_unlock_irqrestore(&priv_dev->lock, flags);
-> >> >>         return ret;
-> >> >> --
-> >> >> 2.25.1
-> >> >>
+> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> ---
+>  .../devicetree/bindings/usb/richtek,rt1718s.yaml   | 98 ++++++++++++++++++++++
+>  1 file changed, 98 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+> new file mode 100644
+> index 00000000..7797fc6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+> @@ -0,0 +1,98 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/richtek,rt1718s.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 
--- 
+Drop quotes from both.
 
-Thanks,
-Peter Chen
+> +
+> +title: Richtek RT1718S Type-C Port Switch and Power Delivery controller
+> +
+> +maintainers:
+> +  - Gene Chen <gene_chen@richtek.com>
+> +
+> +description: |
+> +  The RT1718S is a USB Type-C controller that complies with the latest
+> +  USB Type-C and PD standards. It does the USB Type-C detection including attach
+> +  and orientation. It integrates the physical layer of the USB BMC power
+> +  delivery protocol to allow up to 100W of power. The BMC PD block enables full
+> +  support for alternative interfaces of the Type-C specification.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - richtek,rt1718s
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  wakeup-source:
+> +    description: enable IRQ remote wakeup, see power/wakeup-source.txt
+
+Drop description, you are copying generic description.
+
+> +    type: boolean
+
+Drop. Just wakeup-soource: true
+
+> +
+> +  connector:
+> +    type: object
+> +    $ref: ../connector/usb-connector.yaml#
+
+Full path, so /schemas/usb/connector ....
+
+> +    description:
+> +      Properties for usb c connector.
+
+That's not accurate description. Everything in properties is a property,
+so no need to say that properties are properties.
+
+Actually this looks the same as existing rt1711, so please do not
+duplicate stuff. Especially, do not duplicate mistakes...
+
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - connector
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/usb/pd.h>
+> +    i2c0 {
+
+i2c
+
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      rt1718s@43 {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+Best regards,
+Krzysztof
+
