@@ -2,203 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66929663132
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 21:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D06B66314E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 21:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbjAIUQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 15:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        id S237529AbjAIUTr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 15:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236699AbjAIUP5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 15:15:57 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 873FA1006
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 12:15:52 -0800 (PST)
-Received: (qmail 648577 invoked by uid 1000); 9 Jan 2023 15:15:51 -0500
-Date:   Mon, 9 Jan 2023 15:15:51 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com>,
-        WeitaoWang-oc@zhaoxin.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, khalid.masum.92@gmail.com,
-        kishon@ti.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in __usb_hcd_giveback_urb (2)
-Message-ID: <Y7x19w/sEvQyfi9C@rowland.harvard.edu>
-References: <0000000000002fc8dc05ef267a9f@google.com>
- <Y49h3MX8iXEO/na+@rowland.harvard.edu>
- <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
- <Y5IhgenNzQXzbWqT@rowland.harvard.edu>
- <8e60fa70-15f5-e438-cb49-d3d2281bc975@suse.com>
+        with ESMTP id S237486AbjAIUTR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 15:19:17 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C1934D5B;
+        Mon,  9 Jan 2023 12:19:15 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MfYHW-1oZJ8B2UkC-00fwYV; Mon, 09 Jan 2023 21:19:03 +0100
+Message-ID: <09d76f45-9dfe-19a0-33ec-badaac280772@i2se.com>
+Date:   Mon, 9 Jan 2023 21:19:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e60fa70-15f5-e438-cb49-d3d2281bc975@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
+ driver
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+ <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
+ <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
+ <a5a32db9-21a1-1734-1c4f-88b9431d7aa8@i2se.com> <Y7xRjDAgI3UO8Xuv@google.com>
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <Y7xRjDAgI3UO8Xuv@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:8fVqNUrQuoY97iqfAMNpGZm04anZZNms9TcTmwFD1iOPW1aikC9
+ B5+n4AhII3gxiZQynPBodjLnIRNy92oH2B5c0sd+r5SyAzZSMswLThCluIkA8oryntJdARl
+ xuL1TUxDjupEZJ3Z0h5Tq2giK985lxjl9DctW/Ikpsm7t2E7gb6DjhU6PbBiJWrau8q9GNQ
+ puMOWlN5lBUuZjNLpAD5A==
+UI-OutboundReport: notjunk:1;M01:P0:TntHzEeApJ8=;Fmr8AJgxW8SpO09Rq8RNDNnlsDb
+ Jmi4LyzEQN3RW4K66wYz9O9cpzyIBOWoOnS6xwYeiReo1B0c+bfU1Ql/K4dlPXO/Dev+CdkEO
+ z9uKqE4I/xzn93OtjkCa1ibq8nbKw/J/g6zoaxPKKJ66lY8o8Kzn8JNZJG78OW8G5ARnwqhyq
+ fqDsrsOM+AH5l7NevMVt4PxOp2Q7krZ+Ig83UPbvpUOlO4lNKYiy1HNV/pjmHlQSTaqTvju7n
+ Y3IiBpENjFM32dba/dEsjbG9QFQpdiCnprpfikhINMUX+6wL2SiVowWsQu57yh61F5Uh3TNOl
+ dq2l7tQv3b3QSRaboYtkt1SSKE/UesNHsXY8zH/TUPg951Sm6T+qSQUnRKK+up3GZp32WPXMr
+ GTWXN5QXuS/W7pFeZE3g3DioQi6No4fox+dG0sDxPJDK8Ot75n3olauAWJ3DluA3p+4mlY5Eg
+ mw2zXd5O7p8OH6dcnjnyIjLCGa/vCThNnjxaH/8HVKPFxrbQMHLkaqwbiHyz8eFFYikOP3G2m
+ uLHGcHOwyuclJHbwr7onjuEYDRgUO33vqDoDd/iI4hp3uL43h7LF3tqhrembQSqJwicUMiQJC
+ gIHltgV7UXf04STjRMfjVukXjfBVUxIxGyO2rjm83Ilc6EwFtHUj4ip+aFI8tvYCNjA55HERQ
+ /wWH8vO/62mspsyvrkXZRwy2tYkCUxBhmMGu+Oxlcw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Returning to an old discussion...
+Hi Matthias,
 
-On Mon, Dec 12, 2022 at 01:29:24PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 08.12.22 18:40, Alan Stern wrote:
-> > On Thu, Dec 08, 2022 at 03:36:45PM +0100, Oliver Neukum wrote:
-> > > On 06.12.22 16:38, Alan Stern wrote:
-> 
-> > It's hard to tell what's really going on.  Looking at
-> > xpad_stop_output(), you see that it doesn't do anything if xpad->type is
-> > XTYPE_UNKNOWN.  Is that what happened here?
-> 
-> The output anchor in xpad was used. So I have to answer that in the negative.
-> > I can't figure out where the underlying race is.  Maybe it's not
-> > directly connected with anchors after all.
-> > 
-> > > As far as I can tell the order we decrease use_count is correct. But:
-> > > 
-> > > 6ec4147e7bdbd (Hans de Goede             2013-10-09 17:01:41 +0200 1674)        usb_anchor_resume_wakeups(anchor);
-> > > 94dfd7edfd5c9 (Ming Lei                  2013-07-03 22:53:07 +0800 1675)        atomic_dec(&urb->use_count);
-> > > 
-> > > Do we need to guarantee memory ordering here?
-> > 
-> > I don't think we need to do anything more.  usb_kill_urb() is careful to
-> > wait for completion handlers to finish, and we already have
-> 
-> By checking use_count
-> 
-> > smp_mb__after_atomic() barriers in the appropriate places to ensure
-> > proper memory ordering.
-> 
-> Do we? Looking at __usb_hcd_giveback_urb():
-> 
->         usb_unanchor_urb(urb);
-> 
-> This is an implicit memory barrier
-> 
->         if (likely(status == 0))
->                 usb_led_activity(USB_LED_EVENT_HOST);
-> 
->         /* pass ownership to the completion handler */
->         urb->status = status;
->         /*
->          * This function can be called in task context inside another remote
->          * coverage collection section, but kcov doesn't support that kind of
->          * recursion yet. Only collect coverage in softirq context for now.
->          */
->         kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
->         urb->complete(urb);
->         kcov_remote_stop_softirq();
-> 
->         usb_anchor_resume_wakeups(anchor);
->         atomic_dec(&urb->use_count);
->         /*
->          * Order the write of urb->use_count above before the read
->          * of urb->reject below.  Pairs with the memory barriers in
->          * usb_kill_urb() and usb_poison_urb().
->          */
->         smp_mb__after_atomic();
-> 
-> That is the latest time use_count can go to zero.
-> But what is the earliest time the CPU could reorder setting use_count to zero?
-> Try as I might the last certain memory barrier I can find in this function
-> is usb_unanchor_urb().
-> That means another CPU can complete usb_kill_urb() before usb_anchor_resume_wakeups()
-> runs.
-> 
->         usb_anchor_resume_wakeups(anchor);
-> 
-> I think we need a memory barrier here, too.
-> 
->         atomic_dec(&urb->use_count);
-
-Please comment on the proposed patch below.
-
-Alan Stern
-
-
-Index: usb-devel/drivers/usb/core/hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hcd.c
-+++ usb-devel/drivers/usb/core/hcd.c
-@@ -1563,13 +1563,19 @@ int usb_hcd_submit_urb (struct urb *urb,
- 		usbmon_urb_submit_error(&hcd->self, urb, status);
- 		urb->hcpriv = NULL;
- 		INIT_LIST_HEAD(&urb->urb_list);
--		atomic_dec(&urb->use_count);
- 		/*
--		 * Order the write of urb->use_count above before the read
--		 * of urb->reject below.  Pairs with the memory barriers in
--		 * usb_kill_urb() and usb_poison_urb().
-+		 * urb->use_count acts like a refcount, so decrementing it to
-+		 * 0 must be ordered after earlier accesses (pairs with the
-+		 * implicit control dependencies in the wait conditions of
-+		 * usb_kill_urb() and usb_poison_urb()).  Also, the decrement
-+		 * must be ordered before the read of urb->reject below
-+		 * (pairs with the memory barriers in those same routines).
-+		 *
-+		 * Get the effect of full memory barriers before and after
-+		 * the decrement by using atomic_dec_return() instead of a
-+		 * simple atomic_dec().
- 		 */
--		smp_mb__after_atomic();
-+		atomic_dec_return(&urb->use_count);
- 
- 		atomic_dec(&urb->dev->urbnum);
- 		if (atomic_read(&urb->reject))
-@@ -1672,13 +1678,19 @@ static void __usb_hcd_giveback_urb(struc
- 	kcov_remote_stop_softirq();
- 
- 	usb_anchor_resume_wakeups(anchor);
--	atomic_dec(&urb->use_count);
- 	/*
--	 * Order the write of urb->use_count above before the read
--	 * of urb->reject below.  Pairs with the memory barriers in
--	 * usb_kill_urb() and usb_poison_urb().
-+	 * urb->use_count acts like a refcount, so decrementing it to
-+	 * 0 must be ordered after earlier accesses (pairs with the
-+	 * implicit control dependencies in the wait conditions of
-+	 * usb_kill_urb() and usb_poison_urb()).  Also, the decrement
-+	 * must be ordered before the read of urb->reject below
-+	 * (pairs with the memory barriers in those same routines).
-+	 *
-+	 * Get the effect of full memory barriers before and after
-+	 * the decrement by using atomic_dec_return() instead of a
-+	 * simple atomic_dec().
- 	 */
--	smp_mb__after_atomic();
-+	atomic_dec_return(&urb->use_count);
- 
- 	if (unlikely(atomic_read(&urb->reject)))
- 		wake_up(&usb_kill_urb_queue);
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -726,6 +726,10 @@ void usb_kill_urb(struct urb *urb)
- 
- 	usb_hcd_unlink_urb(urb, -ENOENT);
- 	wait_event(usb_kill_urb_queue, atomic_read(&urb->use_count) == 0);
-+	/*
-+	 * The test of urb->use_count creates a control dependency
-+	 * ordering the wait_event() call against any later writes.
-+	 */
- 
- 	atomic_dec(&urb->reject);
- }
-@@ -776,6 +780,10 @@ void usb_poison_urb(struct urb *urb)
- 
- 	usb_hcd_unlink_urb(urb, -ENOENT);
- 	wait_event(usb_kill_urb_queue, atomic_read(&urb->use_count) == 0);
-+	/*
-+	 * The test of urb->use_count creates a control dependency
-+	 * ordering the wait_event() call against any later writes.
-+	 */
- }
- EXPORT_SYMBOL_GPL(usb_poison_urb);
- 
+Am 09.01.23 um 18:40 schrieb Matthias Kaehlcke:
+> On Sun, Jan 08, 2023 at 11:47:13AM +0100, Stefan Wahren wrote:
+>> Am 07.01.23 um 18:23 schrieb Stefan Wahren:
+>>> Hi Matthias,
+>>>
+>>> Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
+>>>> Currently each onboard_hub platform device owns an 'attach' work,
+>>>> which is scheduled when the device probes. With this deadlocks
+>>>> have been reported on a Raspberry Pi 3 B+ [1], which has nested
+>>>> onboard hubs.
+>>>>
+>>>> The flow of the deadlock is something like this (with the onboard_hub
+>>>> driver built as a module) [2]:
+>>>>
+>>>> - USB root hub is instantiated
+>>>> - core hub driver calls onboard_hub_create_pdevs(), which creates the
+>>>>     'raw' platform device for the 1st level hub
+>>>> - 1st level hub is probed by the core hub driver
+>>>> - core hub driver calls onboard_hub_create_pdevs(), which creates
+>>>>     the 'raw' platform device for the 2nd level hub
+>>>>
+>>>> - onboard_hub platform driver is registered
+>>>> - platform device for 1st level hub is probed
+>>>>     - schedules 'attach' work
+>>>> - platform device for 2nd level hub is probed
+>>>>     - schedules 'attach' work
+>>>>
+>>>> - onboard_hub USB driver is registered
+>>>> - device (and parent) lock of hub is held while the device is
+>>>>     re-probed with the onboard_hub driver
+>>>>
+>>>> - 'attach' work (running in another thread) calls driver_attach(), which
+>>>>      blocks on one of the hub device locks
+>>>>
+>>>> - onboard_hub_destroy_pdevs() is called by the core hub driver when one
+>>>>     of the hubs is detached
+>>>> - destroying the pdevs invokes onboard_hub_remove(), which waits for the
+>>>>     'attach' work to complete
+>>>>     - waits forever, since the 'attach' work can't acquire the device
+>>>> lock
+>>>>
+>>>> Use a single work struct for the driver instead of having a work struct
+>>>> per onboard hub platform driver instance. With that it isn't necessary
+>>>> to cancel the work in onboard_hub_remove(), which fixes the deadlock.
+>>>> The work is only cancelled when the driver is unloaded.
+>>> i applied both patches for this series on top of v6.1
+>>> (multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
+> Thanks for testing.
+>
+>> here is the hung task output:
+>>
+>> [  243.682193] INFO: task kworker/1:0:18 blocked for more than 122 seconds.
+>> [  243.682222]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+>> [  243.682233] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>> this message.
+>> [  243.682242] task:kworker/1:0     state:D stack:0     pid:18 ppid:2
+>> flags:0x00000000
+>> [  243.682267] Workqueue: events onboard_hub_attach_usb_driver
+>> [onboard_usb_hub]
+>> [  243.682317]  __schedule from schedule+0x4c/0xe0
+>> [  243.682345]  schedule from schedule_preempt_disabled+0xc/0x10
+>> [  243.682367]  schedule_preempt_disabled from
+>> __mutex_lock.constprop.0+0x244/0x804
+>> [  243.682394]  __mutex_lock.constprop.0 from __driver_attach+0x7c/0x188
+>> [  243.682421]  __driver_attach from bus_for_each_dev+0x70/0xb0
+>> [  243.682449]  bus_for_each_dev from onboard_hub_attach_usb_driver+0xc/0x28
+>> [onboard_usb_hub]
+>> [  243.682494]  onboard_hub_attach_usb_driver [onboard_usb_hub] from
+>> process_one_work+0x1ec/0x4d0
+>> [  243.682534]  process_one_work from worker_thread+0x50/0x540
+>> [  243.682559]  worker_thread from kthread+0xd0/0xec
+>> [  243.682582]  kthread from ret_from_fork+0x14/0x2c
+>> [  243.682600] Exception stack(0xf086dfb0 to 0xf086dff8)
+>> [  243.682615] dfa0:                                     00000000 00000000
+>> 00000000 00000000
+>> [  243.682631] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000
+>> 00000000 00000000
+>> [  243.682646] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+>> [  243.682692] INFO: task kworker/1:2:82 blocked for more than 122 seconds.
+>> [  243.682703]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+>> [  243.682713] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>> this message.
+>> [  243.682721] task:kworker/1:2     state:D stack:0     pid:82 ppid:2
+>> flags:0x00000000
+>> [  243.682741] Workqueue: events_power_efficient hub_init_func2
+>> [  243.682764]  __schedule from schedule+0x4c/0xe0
+>> [  243.682785]  schedule from schedule_preempt_disabled+0xc/0x10
+>> [  243.682808]  schedule_preempt_disabled from
+>> __mutex_lock.constprop.0+0x244/0x804
+>> [  243.682833]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
+>> [  243.682859]  hub_activate from process_one_work+0x1ec/0x4d0
+>> [  243.682883]  process_one_work from worker_thread+0x50/0x540
+>> [  243.682907]  worker_thread from kthread+0xd0/0xec
+>> [  243.682927]  kthread from ret_from_fork+0x14/0x2c
+>> [  243.682944] Exception stack(0xf1509fb0 to 0xf1509ff8)
+>> [  243.682958] 9fa0:                                     00000000 00000000
+>> 00000000 00000000
+>> [  243.682974] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
+>> 00000000 00000000
+>> [  243.682988] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+>> [  243.683023] INFO: task kworker/1:4:257 blocked for more than 122 seconds.
+>> [  243.683034]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+>> [  243.683043] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>> this message.
+>> [  243.683051] task:kworker/1:4     state:D stack:0     pid:257 ppid:2
+>> flags:0x00000000
+>> [  243.683071] Workqueue: events_power_efficient hub_init_func2
+>> [  243.683092]  __schedule from schedule+0x4c/0xe0
+>> [  243.683113]  schedule from schedule_preempt_disabled+0xc/0x10
+>> [  243.683135]  schedule_preempt_disabled from
+>> __mutex_lock.constprop.0+0x244/0x804
+>> [  243.683160]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
+>> [  243.683184]  hub_activate from process_one_work+0x1ec/0x4d0
+>> [  243.683209]  process_one_work from worker_thread+0x50/0x540
+>> [  243.683233]  worker_thread from kthread+0xd0/0xec
+>> [  243.683253]  kthread from ret_from_fork+0x14/0x2c
+>> [  243.683270] Exception stack(0xf09d9fb0 to 0xf09d9ff8)
+>> [  243.683283] 9fa0:                                     00000000 00000000
+>> 00000000 00000000
+>> [  243.683299] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
+>> 00000000 00000000
+>> [  243.683313] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> Does commenting the following help:
+>
+>    while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
+>        msleep(10);
+>
+> ?
+Yes, it does. I restarted the board multiple times and it never hang :-)
