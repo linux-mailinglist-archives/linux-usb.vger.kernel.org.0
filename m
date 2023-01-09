@@ -2,55 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B476626C3
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 14:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFD26626E8
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 14:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbjAINTz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 08:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
+        id S233699AbjAINXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 08:23:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237122AbjAINTN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 08:19:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576F7175A2
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 05:19:09 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1pEs3O-0003P1-LO; Mon, 09 Jan 2023 14:19:06 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1pEs3O-0005J9-0X; Mon, 09 Jan 2023 14:19:06 +0100
-Date:   Mon, 9 Jan 2023 14:19:05 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     gregkh@linuxfoundation.org, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@pengutronix.de,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v2 5/5] usb: uvc: use v4l2_fill_fmtdesc instead of open
- coded format name
-Message-ID: <20230109131905.GA19093@pengutronix.de>
-References: <20221215224514.2344656-1-m.grzeschik@pengutronix.de>
- <20221215224514.2344656-6-m.grzeschik@pengutronix.de>
- <Y6ug9yUIFysMtajx@pendragon.ideasonboard.com>
+        with ESMTP id S232648AbjAINXD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 08:23:03 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AE130556;
+        Mon,  9 Jan 2023 05:22:09 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id gh17so20056050ejb.6;
+        Mon, 09 Jan 2023 05:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1MDwnDD3nW5yOt4mhzIl9JmPSktrB0k8aHrlXMshp4w=;
+        b=qNh+p4+aJT/V/bX9JkQ2menGwlM8aDmRaSG0eJ4DXUVf7B4RqCijR9ikm62wSngKQ0
+         /9izkkYTeGHPsNGc43MBuN8lezxP36mh7H2zEUkD5JI6mzKVtn+Vc3WZuhrJAdNrQTxZ
+         tLkNLMF1vY+s3wZtBbY5qV8KkqbZVerorxFMtp2to00JLd4R5d4dEaBCRtYD0llNyHYG
+         eE/S9w47aRBa4f0aWGqf9XrVdoDSN9kb88vS5socjktA4LQVmGYRzq2drJUusVkv6A4t
+         2NnZT9FGL8Nonrts1AoqDbTDXIkXdBiFNIYeBI16uUa8EMfaVvpxx632cpVFA4O9jOh4
+         Nvxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1MDwnDD3nW5yOt4mhzIl9JmPSktrB0k8aHrlXMshp4w=;
+        b=ApLJ3dDQvCPIjpiUDf8spA2q1CBmyXv64/Jz59wi532pm6Ubo51MYomxptBk+JpSd2
+         D73Z0cK1u8ktNeQV5vn9q4EQwYWopxjXS0M8A8Abtzhar8f2YtnVEfYtykfYU+wX3ibt
+         D/uomIECDMtoFlHMdNGsXpfxwjT0qWqLUCtSpO3z3L9HUUNEonko47mL9vc/lWCpD2oD
+         bhHOukyRhK3VRzDLFtheDfF+CLQNfqaxlJZcg8C9aZRhlCy+or+Cfhzk9ShHDiGAXuc/
+         fz/pLcJ07eNtmZu/YXy3DPfRKkTTsN3kVcH3tg2eITPtoclcDM3OKKQGJJTgo+71zv8G
+         qsjg==
+X-Gm-Message-State: AFqh2krU8r44Zgyz2WUuxCHEKW84Om3PFD8YAhljrmgjmWEexLeCJUFe
+        pJRp1zkl9SFGPnR79/f6X50=
+X-Google-Smtp-Source: AMrXdXur6DUh24+lIblJ9wKODHbFGYXrXBO0qgd2qhR5MNjVlt2v1Klbk/sMWQ5hd1qLNBczv+kfCQ==
+X-Received: by 2002:a17:906:b0d1:b0:82e:a57b:cc9b with SMTP id bk17-20020a170906b0d100b0082ea57bcc9bmr62114638ejb.24.1673270527777;
+        Mon, 09 Jan 2023 05:22:07 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id kx1-20020a170907774100b0084d368b1628sm2645825ejc.40.2023.01.09.05.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 05:22:06 -0800 (PST)
+Date:   Mon, 9 Jan 2023 14:22:04 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-phy@lists.infradead.org, waynec@nvidia.com,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH V5 1/6] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
+Message-ID: <Y7wU/PnbKl1ONQOL@orome>
+References: <20230106152858.49574-1-jonathanh@nvidia.com>
+ <20230106152858.49574-2-jonathanh@nvidia.com>
+ <b1485d8a-71ea-7b75-74ab-77eef595ae10@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="C7zPtVaVf+AK4Oqc"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="SuVUDtOGOz2zxr1+"
 Content-Disposition: inline
-In-Reply-To: <Y6ug9yUIFysMtajx@pendragon.ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b1485d8a-71ea-7b75-74ab-77eef595ae10@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,343 +83,179 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---C7zPtVaVf+AK4Oqc
-Content-Type: text/plain; charset=us-ascii; format=flowed
+--SuVUDtOGOz2zxr1+
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Laurent,
+On Sun, Jan 08, 2023 at 04:21:24PM +0100, Krzysztof Kozlowski wrote:
+> On 06/01/2023 16:28, Jon Hunter wrote:
+> > From: Wayne Chang <waynec@nvidia.com>
+> >=20
+> > Add device-tree binding documentation for the XUSB host controller pres=
+ent
+> > on Tegra234 SoC. This controller supports the USB 3.1 specification.
+> >=20
+> > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > Signed-off-by: Thierry Reding <treding@nvidia.com>
+> > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> > ---
+> > V4 -> V5: No changes
+> > V3 -> V4: minor update to the power-domain description
+> > V2 -> V3: nothing has changed
+> > V1 -> V2: address the issue on phy-names property
+> >=20
+> >  .../bindings/usb/nvidia,tegra234-xusb.yaml    | 158 ++++++++++++++++++
+> >  1 file changed, 158 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra2=
+34-xusb.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb=
+=2Eyaml b/Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> > new file mode 100644
+> > index 000000000000..190a23c72963
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> > @@ -0,0 +1,158 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/nvidia,tegra234-xusb.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: NVIDIA Tegra234 xHCI controller
+> > +
+> > +maintainers:
+> > +  - Thierry Reding <thierry.reding@gmail.com>
+> > +  - Jon Hunter <jonathanh@nvidia.com>
+> > +
+> > +description: The Tegra xHCI controller supports both USB2 and USB3 int=
+erfaces
+>=20
+> Line ends after "description:"
+>=20
+> > +  exposed by the Tegra XUSB pad controller.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: nvidia,tegra234-xusb
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: base and length of the xHCI host registers
+>=20
+> Just "xHCI host registers". Same in other places.
+>=20
+> > +      - description: base and length of the XUSB FPCI registers
+> > +      - description: base and length of the XUSB bar2 registers
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: hcd
+> > +      - const: fpci
+> > +      - const: bar2
+> > +
+> > +  interrupts:
+> > +    items:
+> > +      - description: xHCI host interrupt
+> > +      - description: mailbox interrupt
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: XUSB host clock
+> > +      - description: XUSB Falcon source clock
+> > +      - description: XUSB SuperSpeed clock
+> > +      - description: XUSB SuperSpeed source clock
+> > +      - description: XUSB HighSpeed clock source
+> > +      - description: XUSB FullSpeed clock source
+> > +      - description: USB PLL
+> > +      - description: reference clock
+> > +      - description: I/O PLL
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: xusb_host
+> > +      - const: xusb_falcon_src
+> > +      - const: xusb_ss
+> > +      - const: xusb_ss_src
+> > +      - const: xusb_hs_src
+> > +      - const: xusb_fs_src
+> > +      - const: pll_u_480m
+> > +      - const: clk_m
+> > +      - const: pll_e
+> > +
+> > +  interconnects:
+> > +    items:
+> > +      - description: read client
+> > +      - description: write client
+> > +
+> > +  interconnect-names:
+> > +    items:
+> > +      - const: dma-mem # read
+> > +      - const: write
+> > +
+> > +  iommus:
+> > +    maxItems: 1
+> > +
+> > +  nvidia,xusb-padctl:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description: phandle to the XUSB pad controller that is used to co=
+nfigure
+> > +      the USB pads used by the XHCI controller
+> > +
+> > +  phys:
+> > +    minItems: 1
+> > +    maxItems: 8
+> > +
+> > +  phy-names:
+> > +    minItems: 1
+> > +    maxItems: 8
+> > +    items:
+> > +      enum:
+> > +        - usb2-0
+> > +        - usb2-1
+> > +        - usb2-2
+> > +        - usb2-3
+> > +        - usb3-0
+> > +        - usb3-1
+> > +        - usb3-2
+> > +        - usb3-3
+>=20
+> Why do you have so many optional phys? In what case you would put there
+> usb2-0 and usb3-3 together? Or even 8 phys at the same time? IOW, what
+> are the differences between them and why one controller would be
+> connected once to usb3-2 and once to usb3-3 phy? And once to both?
 
-Thank you for the review.
+This controller has up to four ports, each of which can be wired to a
+USB connector. Furthermore, each port is composed of a USB3 port and a
+USB2 companion port. You can technically have USB3-only ports, though
+I'm not sure if that's actually supported, USB3/2 combo ports (the
+typical case) and USB2-only ports.
 
-On Wed, Dec 28, 2022 at 03:50:47AM +0200, Laurent Pinchart wrote:
->On Thu, Dec 15, 2022 at 11:45:14PM +0100, Michael Grzeschik wrote:
->> Since we have the helper function v4l2_fill_fmtdesc, we can use this to
->> get the corresponding descriptive string for the pixelformat and set the
->> compressed flag. This patch is removing the redundant name field in
->> uvc_format_desc and makes use of v4l2_fill_fmtdesc instead.
->
->I really like that.
->
->> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
->> Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>
->> ---
->> v1 -> v2: - added reviewed and tested tags
->> ---
->>  drivers/media/common/uvc.c             | 37 --------------------------
->>  drivers/media/usb/uvc/uvc_driver.c     |  8 +++++-
->>  drivers/usb/gadget/function/uvc_v4l2.c |  6 +----
->>  include/linux/usb/uvc.h                |  1 -
->>  4 files changed, 8 insertions(+), 44 deletions(-)
->>
->> diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
->> index a9d587490de8d5..ab2637b9b39b2a 100644
->> --- a/drivers/media/common/uvc.c
->> +++ b/drivers/media/common/uvc.c
->> @@ -13,187 +13,150 @@
->>
->>  static const struct uvc_format_desc uvc_fmts[] =3D {
->>  	{
->> -		.name		=3D "YUV 4:2:2 (YUYV)",
->>  		.guid		=3D UVC_GUID_FORMAT_YUY2,
->>  		.fcc		=3D V4L2_PIX_FMT_YUYV,
->>  	},
->>  	{
->> -		.name		=3D "YUV 4:2:2 (YUYV)",
->>  		.guid		=3D UVC_GUID_FORMAT_YUY2_ISIGHT,
->>  		.fcc		=3D V4L2_PIX_FMT_YUYV,
->>  	},
->>  	{
->> -		.name		=3D "YUV 4:2:0 (NV12)",
->>  		.guid		=3D UVC_GUID_FORMAT_NV12,
->>  		.fcc		=3D V4L2_PIX_FMT_NV12,
->>  	},
->>  	{
->> -		.name		=3D "MJPEG",
->>  		.guid		=3D UVC_GUID_FORMAT_MJPEG,
->>  		.fcc		=3D V4L2_PIX_FMT_MJPEG,
->>  	},
->>  	{
->> -		.name		=3D "YVU 4:2:0 (YV12)",
->>  		.guid		=3D UVC_GUID_FORMAT_YV12,
->>  		.fcc		=3D V4L2_PIX_FMT_YVU420,
->>  	},
->>  	{
->> -		.name		=3D "YUV 4:2:0 (I420)",
->>  		.guid		=3D UVC_GUID_FORMAT_I420,
->>  		.fcc		=3D V4L2_PIX_FMT_YUV420,
->>  	},
->>  	{
->> -		.name		=3D "YUV 4:2:0 (M420)",
->>  		.guid		=3D UVC_GUID_FORMAT_M420,
->>  		.fcc		=3D V4L2_PIX_FMT_M420,
->>  	},
->>  	{
->> -		.name		=3D "YUV 4:2:2 (UYVY)",
->>  		.guid		=3D UVC_GUID_FORMAT_UYVY,
->>  		.fcc		=3D V4L2_PIX_FMT_UYVY,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 8-bit (Y800)",
->>  		.guid		=3D UVC_GUID_FORMAT_Y800,
->>  		.fcc		=3D V4L2_PIX_FMT_GREY,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 8-bit (Y8  )",
->>  		.guid		=3D UVC_GUID_FORMAT_Y8,
->>  		.fcc		=3D V4L2_PIX_FMT_GREY,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 8-bit (D3DFMT_L8)",
->>  		.guid		=3D UVC_GUID_FORMAT_D3DFMT_L8,
->>  		.fcc		=3D V4L2_PIX_FMT_GREY,
->>  	},
->>  	{
->> -		.name		=3D "IR 8-bit (L8_IR)",
->>  		.guid		=3D UVC_GUID_FORMAT_KSMEDIA_L8_IR,
->>  		.fcc		=3D V4L2_PIX_FMT_GREY,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 10-bit (Y10 )",
->>  		.guid		=3D UVC_GUID_FORMAT_Y10,
->>  		.fcc		=3D V4L2_PIX_FMT_Y10,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 12-bit (Y12 )",
->>  		.guid		=3D UVC_GUID_FORMAT_Y12,
->>  		.fcc		=3D V4L2_PIX_FMT_Y12,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 16-bit (Y16 )",
->>  		.guid		=3D UVC_GUID_FORMAT_Y16,
->>  		.fcc		=3D V4L2_PIX_FMT_Y16,
->>  	},
->>  	{
->> -		.name		=3D "BGGR Bayer (BY8 )",
->>  		.guid		=3D UVC_GUID_FORMAT_BY8,
->>  		.fcc		=3D V4L2_PIX_FMT_SBGGR8,
->>  	},
->>  	{
->> -		.name		=3D "BGGR Bayer (BA81)",
->>  		.guid		=3D UVC_GUID_FORMAT_BA81,
->>  		.fcc		=3D V4L2_PIX_FMT_SBGGR8,
->>  	},
->>  	{
->> -		.name		=3D "GBRG Bayer (GBRG)",
->>  		.guid		=3D UVC_GUID_FORMAT_GBRG,
->>  		.fcc		=3D V4L2_PIX_FMT_SGBRG8,
->>  	},
->>  	{
->> -		.name		=3D "GRBG Bayer (GRBG)",
->>  		.guid		=3D UVC_GUID_FORMAT_GRBG,
->>  		.fcc		=3D V4L2_PIX_FMT_SGRBG8,
->>  	},
->>  	{
->> -		.name		=3D "RGGB Bayer (RGGB)",
->>  		.guid		=3D UVC_GUID_FORMAT_RGGB,
->>  		.fcc		=3D V4L2_PIX_FMT_SRGGB8,
->>  	},
->>  	{
->> -		.name		=3D "RGB565",
->>  		.guid		=3D UVC_GUID_FORMAT_RGBP,
->>  		.fcc		=3D V4L2_PIX_FMT_RGB565,
->>  	},
->>  	{
->> -		.name		=3D "BGR 8:8:8 (BGR3)",
->>  		.guid		=3D UVC_GUID_FORMAT_BGR3,
->>  		.fcc		=3D V4L2_PIX_FMT_BGR24,
->>  	},
->>  	{
->> -		.name		=3D "H.264",
->>  		.guid		=3D UVC_GUID_FORMAT_H264,
->>  		.fcc		=3D V4L2_PIX_FMT_H264,
->>  	},
->>  	{
->> -		.name		=3D "H.265",
->>  		.guid		=3D UVC_GUID_FORMAT_H265,
->>  		.fcc		=3D V4L2_PIX_FMT_HEVC,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 8 L/R (Y8I)",
->>  		.guid		=3D UVC_GUID_FORMAT_Y8I,
->>  		.fcc		=3D V4L2_PIX_FMT_Y8I,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 12 L/R (Y12I)",
->>  		.guid		=3D UVC_GUID_FORMAT_Y12I,
->>  		.fcc		=3D V4L2_PIX_FMT_Y12I,
->>  	},
->>  	{
->> -		.name		=3D "Depth data 16-bit (Z16)",
->>  		.guid		=3D UVC_GUID_FORMAT_Z16,
->>  		.fcc		=3D V4L2_PIX_FMT_Z16,
->>  	},
->>  	{
->> -		.name		=3D "Bayer 10-bit (SRGGB10P)",
->>  		.guid		=3D UVC_GUID_FORMAT_RW10,
->>  		.fcc		=3D V4L2_PIX_FMT_SRGGB10P,
->>  	},
->>  	{
->> -		.name		=3D "Bayer 16-bit (SBGGR16)",
->>  		.guid		=3D UVC_GUID_FORMAT_BG16,
->>  		.fcc		=3D V4L2_PIX_FMT_SBGGR16,
->>  	},
->>  	{
->> -		.name		=3D "Bayer 16-bit (SGBRG16)",
->>  		.guid		=3D UVC_GUID_FORMAT_GB16,
->>  		.fcc		=3D V4L2_PIX_FMT_SGBRG16,
->>  	},
->>  	{
->> -		.name		=3D "Bayer 16-bit (SRGGB16)",
->>  		.guid		=3D UVC_GUID_FORMAT_RG16,
->>  		.fcc		=3D V4L2_PIX_FMT_SRGGB16,
->>  	},
->>  	{
->> -		.name		=3D "Bayer 16-bit (SGRBG16)",
->>  		.guid		=3D UVC_GUID_FORMAT_GR16,
->>  		.fcc		=3D V4L2_PIX_FMT_SGRBG16,
->>  	},
->>  	{
->> -		.name		=3D "Depth data 16-bit (Z16)",
->>  		.guid		=3D UVC_GUID_FORMAT_INVZ,
->>  		.fcc		=3D V4L2_PIX_FMT_Z16,
->>  	},
->>  	{
->> -		.name		=3D "Greyscale 10-bit (Y10 )",
->>  		.guid		=3D UVC_GUID_FORMAT_INVI,
->>  		.fcc		=3D V4L2_PIX_FMT_Y10,
->>  	},
->>  	{
->> -		.name		=3D "IR:Depth 26-bit (INZI)",
->>  		.guid		=3D UVC_GUID_FORMAT_INZI,
->>  		.fcc		=3D V4L2_PIX_FMT_INZI,
->>  	},
->>  	{
->> -		.name		=3D "4-bit Depth Confidence (Packed)",
->>  		.guid		=3D UVC_GUID_FORMAT_CNF4,
->>  		.fcc		=3D V4L2_PIX_FMT_CNF4,
->>  	},
->>  	{
->> -		.name		=3D "HEVC",
->>  		.guid		=3D UVC_GUID_FORMAT_HEVC,
->>  		.fcc		=3D V4L2_PIX_FMT_HEVC,
->>  	},
->> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/=
-uvc_driver.c
->> index 12b6ad0966d94a..af92e730bde7c7 100644
->> --- a/drivers/media/usb/uvc/uvc_driver.c
->> +++ b/drivers/media/usb/uvc/uvc_driver.c
->> @@ -251,7 +251,13 @@ static int uvc_parse_format(struct uvc_device *dev,
->>  		fmtdesc =3D uvc_format_by_guid(&buffer[5]);
->>
->>  		if (fmtdesc !=3D NULL) {
->> -			strscpy(format->name, fmtdesc->name,
->> +			struct v4l2_fmtdesc fmt;
->> +
->> +			fmt.pixelformat =3D fmtdesc->fcc;
->> +
->> +			v4l2_fill_fmtdesc(&fmt);
->> +
->> +			strscpy(format->name, fmt.description,
->>  				sizeof(format->name));
->>  			format->fcc =3D fmtdesc->fcc;
->>  		} else {
->
->I've just sent "[PATCH v1] media: uvcvideo: Remove format descriptions"
->which drops usage of the name in the uvcvideo driver without having to
->call v4l2_fill_fmtdesc(). With that merged, changes to uvc_driver.c can
->be dropped in this patch.
+So that's why we have four USB3 PHYs, each controlling the physical
+layer of one USB3 port and four USB2 PHYs, each of which can be bound to
+one of the USB3 PHYs to make a composite USB3/2 port.
 
-Right.
+Thierry
 
->
->> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
-/function/uvc_v4l2.c
->> index 21e573e628f4e7..6e46fa1695f212 100644
->> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->> @@ -374,14 +374,10 @@ uvc_v4l2_enum_format(struct file *file, void *fh, =
-struct v4l2_fmtdesc *f)
->>  	if (!uformat)
->>  		return -EINVAL;
->>
->> -	if (uformat->type !=3D UVCG_UNCOMPRESSED)
->> -		f->flags |=3D V4L2_FMT_FLAG_COMPRESSED;
->> -
->>  	fmtdesc =3D to_uvc_format(uformat);
->>  	f->pixelformat =3D fmtdesc->fcc;
->>
->> -	strscpy(f->description, fmtdesc->name, sizeof(f->description));
->> -	f->description[strlen(fmtdesc->name) - 1] =3D 0;
->> +	v4l2_fill_fmtdesc(f);
->
->
->v4l_fill_fmtdesc() is actually called by v4l_enum_fmt() after calling
->the driver's .vidioc_enum_fmt_vid_out() operation, so you don't have to
->call it manually here.
->
->By dropping the manual calls to v4l_fill_fmtdesc(), you can also drop
->patch 4/5 in the series.
-
-This is a good point. I have dropped patch 4/5 in the stack.
-
->This creates a dependency between the patch I've just sent and this
->series. As I don't want to introduce any further delay, I'll create a
->stable branch based on v6.2-rc1 as soon as my patch gets reviewed, you
->you can then base the next version of this series on top of it. An
->alternative would be to merge this series through the media tree if Greg
->is OK with that.
-
-I found your v3 patch. I sure can rebase my work on your patch if your
-stable branch is available.
-
->>  	return 0;
->>  }
->> diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
->> index 227a03f252a5c0..e407a7b8a91c70 100644
->> --- a/include/linux/usb/uvc.h
->> +++ b/include/linux/usb/uvc.h
->> @@ -146,7 +146,6 @@
->>  	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
->>
->>  struct uvc_format_desc {
->> -	char *name;
->>  	u8 guid[16];
->>  	u32 fcc;
->>  };
->
->--=20
->Regards,
->
->Laurent Pinchart
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---C7zPtVaVf+AK4Oqc
+--SuVUDtOGOz2zxr1+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmO8FEcACgkQC+njFXoe
-LGRjKBAAjPydgpJ+LBIyft6V0cb3jINh43VyMhmyIh4RpfbxinSXEqoMr4KhFmCw
-un2ku7Igo8kxCFjG4BsdxkxFE6X4SBKbNfiXa4ezE7KR1lEQ/5DR1t8vuBGSxUaX
-Ua/3mlk1ZR0EOAdIrS2zwRTsQseebgQKHgy9vVQbdle5dnFJce0Dfs3siTA6ZXFT
-/dKgCEszP6OIYUWHdPJ0ygDPWnJmWe9Sp5/CtQ7ZqaFOTbr8xHasC7v1WBBC5hSF
-v4YIF5uc8c5+JAYKqtCfTpuY+kEa8BZMcY3qihUYvddIXcH7PAGbIDluPC8o9ev9
-BIJ5/pCgBfS8jZwbGyBfslBNJgCv5vGceuUa+Hs/TVxkdaTxjhK1m1dl8CW9kRtX
-8hmqo8j1t2iZD9Cc/4qH7nXTYEzt/9T1Jr55MorirNhATMQj5ASLvEDvTUei3iF0
-0heBtunYaCIBQKtKIm53sPXCpTKpM0HfBfJBa7CiFpVKN+6f1Kwr8roXWlB6rh1A
-TVh9JXc4X8esurrSlIn/QNKAUjHApICvnih6YpSe39ehLxbu2iYXj8LjvzGTis8h
-E/7bSZM90boIXscefQNE7bF1Oz+xmYQNTnIjscZcJnLjpRde4L8ufxV2m5+XkMUz
-dM9AFvJNv/Ez1fgp99D4Knx8I/f0A42BGnN+jU9MRiCDAE6xGfM=
-=PR4X
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmO8FPwACgkQ3SOs138+
+s6F3oQ//aFty4MFzKCch7MvkzZst6tOgRd5/RlX2ktzssojr4yGtCbzUgZgIh9Lq
+ecII59F8dc633pEq1NLcTxb3R/HBy1NZLQw/RJ14G7/nqu3FpVN2rur4ce2SyPRx
+7NbJcd0B1lhP79xclKImvtd6/Z+sHhqpwC6rSCxWI9jVNGI7fkFGXGqcpov7Mrbp
+N0rgjKDY3VyTgc+4Vo3IUSYyua6NFYfKmNREpjhv0yNM+9r0LICN9r//kN/SnQVo
+ovWlBbiMo182F4+VAOINEsvZc2iTclvK4kiz1t8BRwN90sCrTAlMyjVjvM3I3fLX
+RPBZl9UEVRsoJ8BkvoJt7mBkskbKnp1dK2JeHGlmKqiWR5c6PRPmFqh3XlfcqzDC
+slPVsbGVfqdBI5R7HPrmcs4bqIZ5WKaFEZ1UUHPFYg/x9PaRNEJmbu/GDg2O0I2N
+aPT2cPasvwvMXOkwhnXOT+NJzx+I+Ciqp/mHr/QIs1qD2EGjSd708xCvVt+4EW3W
+vcW7WGNuoiFN3rmGoZQxj8bm7zn4YoAXLZKghPivCl5XoPievLGGm1b/CXr/u8Df
+EGA7aC/bM8iiUice5vtnfvnvWVZ5tKL1jmla+i1gfdFiN0DUF/qHwjDS3Dw9xQlk
+EbpdtCDKd6vsNOV8xIvyg3edZi2cBaU0ZnRDZdNc4mq9z1I9CXc=
+=5qW4
 -----END PGP SIGNATURE-----
 
---C7zPtVaVf+AK4Oqc--
+--SuVUDtOGOz2zxr1+--
