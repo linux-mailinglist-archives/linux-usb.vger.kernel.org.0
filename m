@@ -2,356 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE48662A8D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 16:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C08C662B13
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jan 2023 17:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbjAIPwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 10:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
+        id S229469AbjAIQWa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 11:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjAIPwr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 10:52:47 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8879D1AD;
-        Mon,  9 Jan 2023 07:52:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (85-76-142-108-nat.elisa-mobile.fi [85.76.142.108])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B82F4802;
-        Mon,  9 Jan 2023 16:52:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673279565;
-        bh=f8IglWJsws8e3vOgRC8WahlAI8MAoIfWwTGqWj766UQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qvU2R2+QSyuKHUq58hCjkLBHRH1TLzHQcj2UCsjD3ss2F2g0uaQnwENhCi5AVRb2D
-         gcxKYjRTtP4t/P5dKin+6mKBkjiPQFUMfUEvXU4V4NXygB6KfupKvHdQOwELvbVIqN
-         u9WWOso6qxwg3C5RH+QRNP4oPVio98JMreel4P+4=
-Date:   Mon, 9 Jan 2023 17:52:40 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     gregkh@linuxfoundation.org, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@pengutronix.de,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v2 5/5] usb: uvc: use v4l2_fill_fmtdesc instead of open
- coded format name
-Message-ID: <Y7w4SJrOcMOhxcED@pendragon.ideasonboard.com>
-References: <20221215224514.2344656-1-m.grzeschik@pengutronix.de>
- <20221215224514.2344656-6-m.grzeschik@pengutronix.de>
- <Y6ug9yUIFysMtajx@pendragon.ideasonboard.com>
- <20230109131905.GA19093@pengutronix.de>
+        with ESMTP id S233336AbjAIQWY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 11:22:24 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE27D10E
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 08:22:22 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id u8so5049614ilq.13
+        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 08:22:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QndtQI2o6re4w2RYBTL5OxpJzOImlGMaOEhW7Zae+9M=;
+        b=WzIC8fjcuKllwFvHeuf6Di+xuXmcnowMUee2CyNGyq0I/0wOGnCTTRvF5sSSvke2Cs
+         4qRkRkwjl3GBA4HOmgvJeKtRjDXkA3JzOz/OEDoLac79cmbXHbwG/+UBN5F5al78wP/3
+         r/DXvZ9glcboYLdmKO3AaU/yoJhdPQV031X9Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QndtQI2o6re4w2RYBTL5OxpJzOImlGMaOEhW7Zae+9M=;
+        b=IeudXtqtuoVrJIRneM5o0AXgpwKfMvYdqJ77VgLtjFD8Vu0nPTUCsfOuPsQaqqruGD
+         GBcJY31J7nTmpP9no2ZeQ9wi9gk7wylQ8qpMBTH0ifbNLbQ/g20aM4HeQOeKM+NWA0WG
+         63+YWNzOZPOp0i/jRfIwQFUGw78O00lvejv+uPS0VmvniaX0bzsq3Bn077ciyS2yN9CS
+         vt3WlqiLux6CdjRXsN/0ZtSNYiWh3nxz5OZNuo/7NoJJqF9gNeTezv56NMTwphPYswV1
+         PsstkrnT4A4bx4dKWwko7nLKGIFJJVjbl1K8is+GNhvJ40sjTBDkd4cbrhBlLEBhwtwd
+         N7aQ==
+X-Gm-Message-State: AFqh2kqX161KEV2kZ/OCiG705EpPOcAEL9C2zTUE8KARKp95uy5mOz+8
+        ZC+FdB5TGbE7w6L38AAvQlsvvQ==
+X-Google-Smtp-Source: AMrXdXvHvRaI4beu0Y1w/VI0e+6oiYx7N6DNui5fQPfvHVuMFL1KdHzU42J6VSGBQscfH3Iqbeibfg==
+X-Received: by 2002:a05:6e02:1d89:b0:30d:7cf4:5d5a with SMTP id h9-20020a056e021d8900b0030d7cf45d5amr15522385ila.23.1673281341493;
+        Mon, 09 Jan 2023 08:22:21 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id y1-20020a92c981000000b0030392271239sm2828271iln.8.2023.01.09.08.22.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 08:22:21 -0800 (PST)
+Date:   Mon, 9 Jan 2023 16:22:20 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 06/11] usb: misc: onboard_usb_hub: add Genesys Logic
+ GL3523-QFN76 hub support
+Message-ID: <Y7w/PGMrjHFAjHNH@google.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
+ <20221228100321.15949-7-linux.amoon@gmail.com>
+ <Y7Xk/lPUshC+U8OQ@google.com>
+ <CANAwSgTySFm3o-9JcTTiKMHN-8w510DKNFKKxwz3PjA6DDQwHQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230109131905.GA19093@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANAwSgTySFm3o-9JcTTiKMHN-8w510DKNFKKxwz3PjA6DDQwHQ@mail.gmail.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
-
-On Mon, Jan 09, 2023 at 02:19:05PM +0100, Michael Grzeschik wrote:
-> On Wed, Dec 28, 2022 at 03:50:47AM +0200, Laurent Pinchart wrote:
-> > On Thu, Dec 15, 2022 at 11:45:14PM +0100, Michael Grzeschik wrote:
-> >> Since we have the helper function v4l2_fill_fmtdesc, we can use this to
-> >> get the corresponding descriptive string for the pixelformat and set the
-> >> compressed flag. This patch is removing the redundant name field in
-> >> uvc_format_desc and makes use of v4l2_fill_fmtdesc instead.
-> >
-> > I really like that.
-> >
-> >> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-> >> Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
-> >> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> >>
-> >> ---
-> >> v1 -> v2: - added reviewed and tested tags
-> >> ---
-> >>  drivers/media/common/uvc.c             | 37 --------------------------
-> >>  drivers/media/usb/uvc/uvc_driver.c     |  8 +++++-
-> >>  drivers/usb/gadget/function/uvc_v4l2.c |  6 +----
-> >>  include/linux/usb/uvc.h                |  1 -
-> >>  4 files changed, 8 insertions(+), 44 deletions(-)
-> >>
-> >> diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
-> >> index a9d587490de8d5..ab2637b9b39b2a 100644
-> >> --- a/drivers/media/common/uvc.c
-> >> +++ b/drivers/media/common/uvc.c
-> >> @@ -13,187 +13,150 @@
-> >>
-> >>  static const struct uvc_format_desc uvc_fmts[] = {
-> >>  	{
-> >> -		.name		= "YUV 4:2:2 (YUYV)",
-> >>  		.guid		= UVC_GUID_FORMAT_YUY2,
-> >>  		.fcc		= V4L2_PIX_FMT_YUYV,
-> >>  	},
-> >>  	{
-> >> -		.name		= "YUV 4:2:2 (YUYV)",
-> >>  		.guid		= UVC_GUID_FORMAT_YUY2_ISIGHT,
-> >>  		.fcc		= V4L2_PIX_FMT_YUYV,
-> >>  	},
-> >>  	{
-> >> -		.name		= "YUV 4:2:0 (NV12)",
-> >>  		.guid		= UVC_GUID_FORMAT_NV12,
-> >>  		.fcc		= V4L2_PIX_FMT_NV12,
-> >>  	},
-> >>  	{
-> >> -		.name		= "MJPEG",
-> >>  		.guid		= UVC_GUID_FORMAT_MJPEG,
-> >>  		.fcc		= V4L2_PIX_FMT_MJPEG,
-> >>  	},
-> >>  	{
-> >> -		.name		= "YVU 4:2:0 (YV12)",
-> >>  		.guid		= UVC_GUID_FORMAT_YV12,
-> >>  		.fcc		= V4L2_PIX_FMT_YVU420,
-> >>  	},
-> >>  	{
-> >> -		.name		= "YUV 4:2:0 (I420)",
-> >>  		.guid		= UVC_GUID_FORMAT_I420,
-> >>  		.fcc		= V4L2_PIX_FMT_YUV420,
-> >>  	},
-> >>  	{
-> >> -		.name		= "YUV 4:2:0 (M420)",
-> >>  		.guid		= UVC_GUID_FORMAT_M420,
-> >>  		.fcc		= V4L2_PIX_FMT_M420,
-> >>  	},
-> >>  	{
-> >> -		.name		= "YUV 4:2:2 (UYVY)",
-> >>  		.guid		= UVC_GUID_FORMAT_UYVY,
-> >>  		.fcc		= V4L2_PIX_FMT_UYVY,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 8-bit (Y800)",
-> >>  		.guid		= UVC_GUID_FORMAT_Y800,
-> >>  		.fcc		= V4L2_PIX_FMT_GREY,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 8-bit (Y8  )",
-> >>  		.guid		= UVC_GUID_FORMAT_Y8,
-> >>  		.fcc		= V4L2_PIX_FMT_GREY,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 8-bit (D3DFMT_L8)",
-> >>  		.guid		= UVC_GUID_FORMAT_D3DFMT_L8,
-> >>  		.fcc		= V4L2_PIX_FMT_GREY,
-> >>  	},
-> >>  	{
-> >> -		.name		= "IR 8-bit (L8_IR)",
-> >>  		.guid		= UVC_GUID_FORMAT_KSMEDIA_L8_IR,
-> >>  		.fcc		= V4L2_PIX_FMT_GREY,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 10-bit (Y10 )",
-> >>  		.guid		= UVC_GUID_FORMAT_Y10,
-> >>  		.fcc		= V4L2_PIX_FMT_Y10,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 12-bit (Y12 )",
-> >>  		.guid		= UVC_GUID_FORMAT_Y12,
-> >>  		.fcc		= V4L2_PIX_FMT_Y12,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 16-bit (Y16 )",
-> >>  		.guid		= UVC_GUID_FORMAT_Y16,
-> >>  		.fcc		= V4L2_PIX_FMT_Y16,
-> >>  	},
-> >>  	{
-> >> -		.name		= "BGGR Bayer (BY8 )",
-> >>  		.guid		= UVC_GUID_FORMAT_BY8,
-> >>  		.fcc		= V4L2_PIX_FMT_SBGGR8,
-> >>  	},
-> >>  	{
-> >> -		.name		= "BGGR Bayer (BA81)",
-> >>  		.guid		= UVC_GUID_FORMAT_BA81,
-> >>  		.fcc		= V4L2_PIX_FMT_SBGGR8,
-> >>  	},
-> >>  	{
-> >> -		.name		= "GBRG Bayer (GBRG)",
-> >>  		.guid		= UVC_GUID_FORMAT_GBRG,
-> >>  		.fcc		= V4L2_PIX_FMT_SGBRG8,
-> >>  	},
-> >>  	{
-> >> -		.name		= "GRBG Bayer (GRBG)",
-> >>  		.guid		= UVC_GUID_FORMAT_GRBG,
-> >>  		.fcc		= V4L2_PIX_FMT_SGRBG8,
-> >>  	},
-> >>  	{
-> >> -		.name		= "RGGB Bayer (RGGB)",
-> >>  		.guid		= UVC_GUID_FORMAT_RGGB,
-> >>  		.fcc		= V4L2_PIX_FMT_SRGGB8,
-> >>  	},
-> >>  	{
-> >> -		.name		= "RGB565",
-> >>  		.guid		= UVC_GUID_FORMAT_RGBP,
-> >>  		.fcc		= V4L2_PIX_FMT_RGB565,
-> >>  	},
-> >>  	{
-> >> -		.name		= "BGR 8:8:8 (BGR3)",
-> >>  		.guid		= UVC_GUID_FORMAT_BGR3,
-> >>  		.fcc		= V4L2_PIX_FMT_BGR24,
-> >>  	},
-> >>  	{
-> >> -		.name		= "H.264",
-> >>  		.guid		= UVC_GUID_FORMAT_H264,
-> >>  		.fcc		= V4L2_PIX_FMT_H264,
-> >>  	},
-> >>  	{
-> >> -		.name		= "H.265",
-> >>  		.guid		= UVC_GUID_FORMAT_H265,
-> >>  		.fcc		= V4L2_PIX_FMT_HEVC,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 8 L/R (Y8I)",
-> >>  		.guid		= UVC_GUID_FORMAT_Y8I,
-> >>  		.fcc		= V4L2_PIX_FMT_Y8I,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 12 L/R (Y12I)",
-> >>  		.guid		= UVC_GUID_FORMAT_Y12I,
-> >>  		.fcc		= V4L2_PIX_FMT_Y12I,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Depth data 16-bit (Z16)",
-> >>  		.guid		= UVC_GUID_FORMAT_Z16,
-> >>  		.fcc		= V4L2_PIX_FMT_Z16,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Bayer 10-bit (SRGGB10P)",
-> >>  		.guid		= UVC_GUID_FORMAT_RW10,
-> >>  		.fcc		= V4L2_PIX_FMT_SRGGB10P,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Bayer 16-bit (SBGGR16)",
-> >>  		.guid		= UVC_GUID_FORMAT_BG16,
-> >>  		.fcc		= V4L2_PIX_FMT_SBGGR16,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Bayer 16-bit (SGBRG16)",
-> >>  		.guid		= UVC_GUID_FORMAT_GB16,
-> >>  		.fcc		= V4L2_PIX_FMT_SGBRG16,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Bayer 16-bit (SRGGB16)",
-> >>  		.guid		= UVC_GUID_FORMAT_RG16,
-> >>  		.fcc		= V4L2_PIX_FMT_SRGGB16,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Bayer 16-bit (SGRBG16)",
-> >>  		.guid		= UVC_GUID_FORMAT_GR16,
-> >>  		.fcc		= V4L2_PIX_FMT_SGRBG16,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Depth data 16-bit (Z16)",
-> >>  		.guid		= UVC_GUID_FORMAT_INVZ,
-> >>  		.fcc		= V4L2_PIX_FMT_Z16,
-> >>  	},
-> >>  	{
-> >> -		.name		= "Greyscale 10-bit (Y10 )",
-> >>  		.guid		= UVC_GUID_FORMAT_INVI,
-> >>  		.fcc		= V4L2_PIX_FMT_Y10,
-> >>  	},
-> >>  	{
-> >> -		.name		= "IR:Depth 26-bit (INZI)",
-> >>  		.guid		= UVC_GUID_FORMAT_INZI,
-> >>  		.fcc		= V4L2_PIX_FMT_INZI,
-> >>  	},
-> >>  	{
-> >> -		.name		= "4-bit Depth Confidence (Packed)",
-> >>  		.guid		= UVC_GUID_FORMAT_CNF4,
-> >>  		.fcc		= V4L2_PIX_FMT_CNF4,
-> >>  	},
-> >>  	{
-> >> -		.name		= "HEVC",
-> >>  		.guid		= UVC_GUID_FORMAT_HEVC,
-> >>  		.fcc		= V4L2_PIX_FMT_HEVC,
-> >>  	},
-> >> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> >> index 12b6ad0966d94a..af92e730bde7c7 100644
-> >> --- a/drivers/media/usb/uvc/uvc_driver.c
-> >> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> >> @@ -251,7 +251,13 @@ static int uvc_parse_format(struct uvc_device *dev,
-> >>  		fmtdesc = uvc_format_by_guid(&buffer[5]);
-> >>
-> >>  		if (fmtdesc != NULL) {
-> >> -			strscpy(format->name, fmtdesc->name,
-> >> +			struct v4l2_fmtdesc fmt;
-> >> +
-> >> +			fmt.pixelformat = fmtdesc->fcc;
-> >> +
-> >> +			v4l2_fill_fmtdesc(&fmt);
-> >> +
-> >> +			strscpy(format->name, fmt.description,
-> >>  				sizeof(format->name));
-> >>  			format->fcc = fmtdesc->fcc;
-> >>  		} else {
-> >
-> > I've just sent "[PATCH v1] media: uvcvideo: Remove format descriptions"
-> > which drops usage of the name in the uvcvideo driver without having to
-> > call v4l2_fill_fmtdesc(). With that merged, changes to uvc_driver.c can
-> > be dropped in this patch.
+On Sat, Jan 07, 2023 at 08:28:11PM +0530, Anand Moon wrote:
+> Hi Matthias,
 > 
-> Right.
+> Thanks for your review comments,
 > 
-> >> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> >> index 21e573e628f4e7..6e46fa1695f212 100644
-> >> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> >> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> >> @@ -374,14 +374,10 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
-> >>  	if (!uformat)
-> >>  		return -EINVAL;
-> >>
-> >> -	if (uformat->type != UVCG_UNCOMPRESSED)
-> >> -		f->flags |= V4L2_FMT_FLAG_COMPRESSED;
-> >> -
-> >>  	fmtdesc = to_uvc_format(uformat);
-> >>  	f->pixelformat = fmtdesc->fcc;
-> >>
-> >> -	strscpy(f->description, fmtdesc->name, sizeof(f->description));
-> >> -	f->description[strlen(fmtdesc->name) - 1] = 0;
-> >> +	v4l2_fill_fmtdesc(f);
+> On Thu, 5 Jan 2023 at 02:13, Matthias Kaehlcke <mka@chromium.org> wrote:
 > >
+> > Hi Anand,
 > >
-> > v4l_fill_fmtdesc() is actually called by v4l_enum_fmt() after calling
-> > the driver's .vidioc_enum_fmt_vid_out() operation, so you don't have to
-> > call it manually here.
+> > On Wed, Dec 28, 2022 at 10:03:15AM +0000, Anand Moon wrote:
+> > > Genesys Logic GL3523-QFN76 is a 4-port USB 3.1 hub that has a reset pin to
+> > > toggle and a 5.0V core supply exported though an integrated LDO is
+> > > available for powering it.
+> > >
+> > > Add the support for this hub, for controlling the reset pin and the core
+> > > power supply.
+> > >
+> > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > > ---
+> > >  drivers/usb/misc/onboard_usb_hub.c | 1 +
+> > >  drivers/usb/misc/onboard_usb_hub.h | 1 +
+> > >  2 files changed, 2 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> > > index c0e8e6f4ec0a..699050eb3f17 100644
+> > > --- a/drivers/usb/misc/onboard_usb_hub.c
+> > > +++ b/drivers/usb/misc/onboard_usb_hub.c
+> > > @@ -410,6 +410,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+> > >  static const struct usb_device_id onboard_hub_id_table[] = {
+> > >       { USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+> > >       { USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G-OHG USB 2.0 */
+> > > +     { USB_DEVICE(VENDOR_ID_GENESYS, 0x0620) }, /* Genesys Logic GL3523-QFN76 USB 3.1 */
 > >
-> > By dropping the manual calls to v4l_fill_fmtdesc(), you can also drop
-> > patch 4/5 in the series.
+> > Please drop the '-QFN76' suffix. The GL3523 comes in different packages, 'QFN76'
+> > is one of them, I'd expect the other packages to use the same product id.
+> >
+> > The GL3523 is a single IC, however like the TI USB8041 or the RTS5414 it
+> > provides both a USB 3.1 and a USB 2.0 hub. You should also add an entry for
+> > the USB 2.0 hub here.
+> >
 > 
-> This is a good point. I have dropped patch 4/5 in the stack.
+> Ok,
 > 
-> > This creates a dependency between the patch I've just sent and this
-> > series. As I don't want to introduce any further delay, I'll create a
-> > stable branch based on v6.2-rc1 as soon as my patch gets reviewed, you
-> > you can then base the next version of this series on top of it. An
-> > alternative would be to merge this series through the media tree if Greg
-> > is OK with that.
+> > >       { USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+> > >       { USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+> > >       { USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+> > > diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> > > index 2ee1b0032d23..b32fad3a70f9 100644
+> > > --- a/drivers/usb/misc/onboard_usb_hub.h
+> > > +++ b/drivers/usb/misc/onboard_usb_hub.h
+> > > @@ -32,6 +32,7 @@ static const struct of_device_id onboard_hub_match[] = {
+> > >       { .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
+> > >       { .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
+> > >       { .compatible = "genesys,usb5e3,610", .data = &genesys_gl850g_data, },
+> > > +     { .compatible = "genesys,usb5e3,620", .data = &genesys_gl850g_data, },
+> >
+> > s/genesys,//
+> >
+> > This reuses the settings of the GL850G hub, which doesn't seem correct in
+> > this case. For the GL850G a (minimum) reset time of 3us is configured. The
+> > data sheet of the GL3523 says:
+> >
+> >   "The (internal) reset will be released after approximately 40 μS after
+> >    power good.
+> >
+> >    To fully control the reset process of GL3523, we suggest the reset time
+> >    applied in the external reset circuit should longer than that of the
+> >    internal reset circuit."
+> >
+> > Since it is 'approximately 40 μS' I'd say make the external reset 50 μS
+> > to be on the safe side, it's a very short time in any case.
+> >
 > 
-> I found your v3 patch. I sure can rebase my work on your patch if your
-> stable branch is available.
+> Thanks for this input will update this in the next version.
+> 
+> > Please also add an entry for the USB 2.0 part of the IC.
+> 
+> alarm@odroid-n2:~$ lsusb -tv
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+>     ID 1d6b:0003 Linux Foundation 3.0 root hub
+>     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+>         ID 05e3:0620 Genesys Logic, Inc. GL3523 Hub
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 480M
+>     ID 1d6b:0002 Linux Foundation 2.0 root hub
+>     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+>         ID 05e3:0610 Genesys Logic, Inc. Hub
+> 
+> So earlier patch adds support for this device ID.
 
-Could you review the uvcvideo patch ? I will then add your Reviewed-by
-tag and create a stable branch.
+Do I understand correctly that 0x0610 is the product id of both the
+GL852G [1] and the USB 2 part of the GL3523 (the above 'lsusb'
+output)?
 
-> >>  	return 0;
-> >>  }
-> >> diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-> >> index 227a03f252a5c0..e407a7b8a91c70 100644
-> >> --- a/include/linux/usb/uvc.h
-> >> +++ b/include/linux/usb/uvc.h
-> >> @@ -146,7 +146,6 @@
-> >>  	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> >>
-> >>  struct uvc_format_desc {
-> >> -	char *name;
-> >>  	u8 guid[16];
-> >>  	u32 fcc;
-> >>  };
-
--- 
-Regards,
-
-Laurent Pinchart
+[1] https://patchwork.kernel.org/project/linux-usb/patch/20221228100321.15949-2-linux.amoon@gmail.com/
