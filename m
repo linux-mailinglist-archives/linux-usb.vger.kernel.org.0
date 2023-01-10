@@ -2,725 +2,618 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B35C66421D
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 14:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEEB664307
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 15:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjAJNmm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 08:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        id S233392AbjAJOSy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 09:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238720AbjAJN3C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 08:29:02 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB78FB8B;
-        Tue, 10 Jan 2023 05:28:59 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S238695AbjAJOSh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 09:18:37 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899643BEAB;
+        Tue, 10 Jan 2023 06:18:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CC79B6602D78;
-        Tue, 10 Jan 2023 13:28:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673357338;
-        bh=RyRkQnSVVEtpNd18gW/LaE8EGKeWYyApQGbJSPEmz6U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oaZRAsdsC+kyX5QaYn4Vo8TwWGPzCqZ28UyDcGUm35CDCaD6FdarHn1tlaWTu35yD
-         46vwnE2ALvogtfIXkEwkHbXMpIWXulzAcsUKqb6W/4J7Gju68er0hiKyr+UCFECHGZ
-         iCRFuh/1GG5VVmAZvSNycj+t7kzsJ/9wzTDO1lnU1KY87KTUn2EEKHQdcx5pxi/hAc
-         NIESgsrJs2l6oRqfiE6eWjge3jExNSMEEXKSqQVcdhylItamgEG3ZZG04P17hNYpHS
-         4iKe9tcKZ1MkOEkbZj1+ocAj+tqgjWZFAQNaM/n0Ohn/MM5ncp1pgAtY/o9YJQpVSL
-         biTwRMtZnOibQ==
-Message-ID: <e1c43612-3f36-8213-c515-9fac11b184ff@collabora.com>
-Date:   Tue, 10 Jan 2023 14:28:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] usb: gadget: add WebUSB landing page support
-To:     =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <Y7G797A2CIF1Ys/t@jo-einhundert>
- <ca67837b-ef00-b314-2050-3274db8c8fc5@collabora.com>
- <CAMUOyH2M5V7wcdz_xNHkC0LeXVLRtzBoTyA7nEGynnUqnn09mQ@mail.gmail.com>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <CAMUOyH2M5V7wcdz_xNHkC0LeXVLRtzBoTyA7nEGynnUqnn09mQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0FE8E4EE1F;
+        Tue, 10 Jan 2023 14:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673360313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kWu7oIm1nzfAExWf5ofJIqlURK7dxrIy/GsYwHxdOfc=;
+        b=bxd+mkvi1vpLiAWRw5iqQoP9B4o2LQAD4gBTrz1Jj7YIFApiw52Ve0X9VduIBp7kie6Ddm
+        IcndcfTF8WwqsdFsPCAY1rtmirGnlKesuqtihOeBZbUnhPGBbmtnczlQtRBvL/BPMnybGM
+        DSGCiMD8djdqarPVa0nhUUAWSWfAzTQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673360313;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kWu7oIm1nzfAExWf5ofJIqlURK7dxrIy/GsYwHxdOfc=;
+        b=gFKRSRXJtJtCevldaOvfBfbDEd+ACHZC8z06mfNKmViHVHjFiRC+2t5TJJw9ZatZV+NrtN
+        JsNLZUUNWYFQQvBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CEED21358A;
+        Tue, 10 Jan 2023 14:18:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2xukMbhzvWP4WAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 10 Jan 2023 14:18:32 +0000
+Date:   Tue, 10 Jan 2023 15:18:32 +0100
+Message-ID: <87lema8ocn.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Hyunwoo Kim <imv4bel@gmail.com>
+Cc:     mchehab@kernel.org, kernel@tuxforce.de,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        cai.huoqing@linux.dev, tiwai@suse.de
+Subject: Re: [PATCH v3 0/4] Fix multiple race condition vulnerabilities in dvb-core and device driver
+In-Reply-To: <20221117045925.14297-1-imv4bel@gmail.com>
+References: <20221117045925.14297-1-imv4bel@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jó,
-
-W dniu 10.01.2023 o 00:19, Jó Ágila Bitsch pisze:
-> Hi Andrzej,
+On Thu, 17 Nov 2022 05:59:21 +0100,
+Hyunwoo Kim wrote:
 > 
->>> The specification allows USB gadgets to announce an URL to landing
->>> page and describes a Javascript interface for websites to interact
->>> with the USB gadget, if the user allows it. It is currently
->>> supported by Chromium-based browsers, such as Chrome, Edge and
->>> Opera on all major operating systems including Linux.
->>>
->>
->> I envision an "evil" scenario, where you don't own your USB device any more.
->> Instead you are required to pay a subscription to keep accessing it
->> because its driver is somewhere on the net. I purposedly have put
->> evil in quotes, because such a scenario might be considered preferred
->> by some people. Maybe there are advantages, too, like not having to worry
->> about correct drivers. Anyway, the kernel is about mechanism, not policy,
->> so I'm probably in no position to judge such things.
+> Dear,
 > 
-> Unfortunately, the "evil" devices you envision very much already exist.
-> 
-> When I was still working at university in the early 2010s, we were
-> working with a mobile EEG headset (>1000USD) with a USB receiver
-> dongle that would present itself as a USB HID device, but the
-> transferred frames would be AES encrypted, with the key based on a
-> proprietary transformation of the serial number of the device. At
-> first the library that decoded it was available as a binary blob for a
-> one-time payment, where you paid a hefty premium if you wanted access
-> to the raw readings. Later the manufacturer changed their business
-> model to subscription based, where the data had to flow through their
-> cloud service - with a recurring license fee. I don't know what
-> happened afterwards, as I left university.
-> This all was implemented based on libusb back then before people even
-> thought of WebUSB.
-> 
-
-Thanks for honestly acknowledging their existence. It confirms that
-what I expressed was not a "conspiracy theory", but a "conspiracy
-practice" :D
-
-> I'm sure there are other examples.
-> 
-> So, "evil" devices are already real and don't depend on WebUSB. The
-> motivating example "Web Drivers" from the specs
-> (https://wicg.github.io/webusb/#app-drivers) might potentially lead to
-> companies asking for subscription fees for their Web Driver, but as
-> long as there is no strong encryption in place, everyone would be free
-> to write an alternative driver. The mechanisms would not at all
-> preclude you from writing your own kernel or userspace driver using
-> e.g. libusb. A kernel driver would block access from the browser
-> though, as the browser cannot detach the kernel driver. (No such
-> command is currently defined in WebUSB.)  The JS implementation might
-> even guide you to understand aspects of the protocol used.
-> 
-> Citing from the motivating example in the design specs
-> (https://wicg.github.io/webusb/#app-updates-and-diagnostics):
-> 
->> The landing page provides a way for the device manufacturer to direct the user to the right part of their website for help with their device.
-> 
-> The landing page mechanism in WebUSB improves discoverability for
-> devices, as Chrome and also lsusb directly point you to a webpage,
-> where the manufacturer or firmware producer can give more information
-> about the device. This webpage does not necessarily need to use a
-> WebUSB JS driver itself to access the device, but might just as well
-> point you to some git repository, where the hardware design and
-> firmware source are available
-
-I'm wondering why e.g. Firefox does not implement this? Chicken-and-egg
-dilemma (no OS support at kernel level, so let's refrain from using it,
-but then there's too few users, so let's not add OS support - this
-circular depencency can be broken by applying your patch) or something
-else?
-
-> 
-> For what it's worth, the pick-up of WebUSB I've seen has been mostly
-> in the maker scene with arduino, micro:bit and similar embedded
-> devices, where devices provide at least two interfaces: One for the OS
-> to claim and one for the Browser to claim.
-> 
-> Anyways, my biased opinion is that I would very much like a device to
-> tell me where I can find support documentation, updates and help also
-> when the device only implements standard interfaces that have kernel
-> drivers. I don't think that this URL will lead to more devices you can
-> only access with a subscription.
-> 
->> Please see below.
-> 
-> Thanks for your excellent feedback. I answered inline.
-> 
->>> This patch adds optional support for Linux-based USB gadgets
->>> wishing to expose such a landing page.
->>>
->>> During device enumeration, a host recognizes that the announced
->>> USB version is at least 2.01, which means, that there are BOS
->>> descriptors available. The device than announces WebUSB support
->>> using a platform device capability. This includes a vendor code
->>> under which the landing page URL can be retrieved using a
->>> vendor-specific request.
->>>
->>> Previously, the BOS descriptors would unconditionally include an
->>> LPM related descriptor, as BOS descriptors were only ever sent
->>> when the device was LPM capable. As this is no longer the case,
->>> this patch puts this descriptor behind a lpm_capable condition.
->>>
->>> Usage is modeled after os_desc descriptors:
->>> echo 1 > webusb/use
->>> echo "https://www.kernel.org" > webusb/landingPage
->>>
->>> lsusb will report the device with the following lines:
->>>     Platform Device Capability:
->>>       bLength                24
->>>       bDescriptorType        16
->>>       bDevCapabilityType      5
->>>       bReserved               0
->>>       PlatformCapabilityUUID    {3408b638-09a9-47a0-8bfd-a0768815b665}
->>>         WebUSB:
->>>           bcdVersion    1.00
->>>           bVendorCode      0
->>>           iLandingPage     1 https://www.kernel.org
->>>
->>> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
->>> ---
->>> v2 -> V3: improved commit message to include additional condition in desc_bos as per comment
->>>          by Alan Stern
->>> V1 -> V2: cleaned up coding style, made URL scheme comparison case insensitive, addressed review
->>>             comments by Alan Stern
->>> V0 -> V1: use sysfs_emit instead of sprintf and use lock in webusb_bcdVersion_store, addressed review
->>>          comments by Christophe JAILLET
->>>
->>>    Documentation/ABI/testing/configfs-usb-gadget |  13 ++
->>>    drivers/usb/gadget/composite.c                |  95 ++++++++++--
->>>    drivers/usb/gadget/configfs.c                 | 145 ++++++++++++++++++
->>>    include/linux/usb/composite.h                 |   6 +
->>>    include/uapi/linux/usb/ch9.h                  |  33 ++++
->>>    5 files changed, 282 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget b/Documentation/ABI/testing/configfs-usb-gadget
->>> index b7943aa7e997..8399e0f0ed1c 100644
->>> --- a/Documentation/ABI/testing/configfs-usb-gadget
->>> +++ b/Documentation/ABI/testing/configfs-usb-gadget
->>> @@ -143,3 +143,16 @@ Description:
->>>                qw_sign         an identifier to be reported as "OS String"
->>>                                proper
->>>                =============   ===============================================
->>> +
->>> +What:                /config/usb-gadget/gadget/webusb
->>> +Date:                Dec 2022
->>> +KernelVersion:       6.2
->>> +Description:
->>> +             This group contains "WebUSB" extension handling attributes.
->>> +
->>> +             =============   ===============================================
->>> +             use             flag turning "WebUSB" support on/off
->>> +             bcdVersion      bcd WebUSB specification version number
->>> +             b_vendor_code   one-byte value used for custom per-device
->>> +             landing_page    UTF-8 encoded URL of the device's landing page
->>> +             =============   ===============================================
->>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
->>> index 403563c06477..9b209e69442d 100644
->>> --- a/drivers/usb/gadget/composite.c
->>> +++ b/drivers/usb/gadget/composite.c
->>> @@ -14,6 +14,7 @@
->>>    #include <linux/device.h>
->>>    #include <linux/utsname.h>
->>>    #include <linux/bitfield.h>
->>> +#include <linux/uuid.h>
->>>
->>>    #include <linux/usb/composite.h>
->>>    #include <linux/usb/otg.h>
->>> @@ -713,14 +714,16 @@ static int bos_desc(struct usb_composite_dev *cdev)
->>>         * A SuperSpeed device shall include the USB2.0 extension descriptor
->>>         * and shall support LPM when operating in USB2.0 HS mode.
->>>         */
->>> -     usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
->>> -     bos->bNumDeviceCaps++;
->>> -     le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
->>> -     usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
->>> -     usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
->>> -     usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
->>> -     usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
->>> -                                         USB_BESL_SUPPORT | besl);
->>> +     if (cdev->gadget->lpm_capable) {
->>> +             usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
->>> +             bos->bNumDeviceCaps++;
->>> +             le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
->>> +             usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
->>> +             usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
->>> +             usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
->>> +             usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
->>> +                                                     USB_BESL_SUPPORT | besl);
->>> +     }
->>>
->>>        /*
->>>         * The Superspeed USB Capability descriptor shall be implemented by all
->>> @@ -821,6 +824,40 @@ static int bos_desc(struct usb_composite_dev *cdev)
->>>                }
->>>        }
->>>
->>> +     /*
->>> +      * Following the specifaction at:
->>> +      * https://wicg.github.io/webusb/#webusb-platform-capability-descriptor
->>> +      */
->>> +     if (cdev->use_webusb) {
->>> +             struct usb_webusb_cap_descriptor *webusb_cap;
->>> +             /*
->>> +              * little endian PlatformCapablityUUID for WebUSB:
->>> +              * 3408b638-09a9-47a0-8bfd-a0768815b665
->>> +              */
->>> +             uuid_t webusb_uuid = UUID_INIT(0x38b60834, 0xa909, 0xa047, 0x8b, 0xfd, 0xa0, 0x76,
->>> +                                             0x88, 0x15, 0xb6, 0x65);
->>> +
->>> +             webusb_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
->>> +             bos->bNumDeviceCaps++;
->>> +
->>> +             le16_add_cpu(&bos->wTotalLength, USB_DT_WEBUSB_SIZE);
->>> +             webusb_cap->bLength = USB_DT_WEBUSB_SIZE;
->>> +             webusb_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
->>> +             webusb_cap->bDevCapabilityType = USB_PLAT_DEV_CAP_TYPE;
->>> +             webusb_cap->bReserved = 0;
->>> +             export_uuid(webusb_cap->UUID, &webusb_uuid);
->>> +             if (cdev->bcd_webusb_version != 0)
->>> +                     webusb_cap->bcdVersion = cpu_to_le16(cdev->bcd_webusb_version);
->>> +             else
->>> +                     webusb_cap->bcdVersion = cpu_to_le16(0x0100);
->>> +
->>> +             webusb_cap->bVendorCode = cdev->b_webusb_vendor_code;
->>> +             if (strnlen(cdev->landing_page, sizeof(cdev->landing_page)) > 0)
->>> +                     webusb_cap->iLandingPage = 1;
->>> +             else
->>> +                     webusb_cap->iLandingPage = 0;
->>> +     }
->>> +
->>>        return le16_to_cpu(bos->wTotalLength);
->>>    }
->>>
->>> @@ -1744,7 +1781,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
->>>                                        cdev->desc.bcdUSB = cpu_to_le16(0x0210);
->>>                                }
->>>                        } else {
->>> -                             if (gadget->lpm_capable)
->>> +                             if (gadget->lpm_capable || cdev->use_webusb)
->>>                                        cdev->desc.bcdUSB = cpu_to_le16(0x0201);
->>>                                else
->>>                                        cdev->desc.bcdUSB = cpu_to_le16(0x0200);
->>> @@ -1779,7 +1816,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
->>>                        break;
->>>                case USB_DT_BOS:
->>>                        if (gadget_is_superspeed(gadget) ||
->>> -                         gadget->lpm_capable) {
->>> +                         gadget->lpm_capable || cdev->use_webusb) {
->>>                                value = bos_desc(cdev);
->>>                                value = min(w_length, (u16) value);
->>>                        }
->>> @@ -2013,6 +2050,44 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
->>>                        goto check_value;
->>>                }
->>>
->>> +             /*
->>> +              * webusb descriptor handling, following:
->>> +              * https://wicg.github.io/webusb/#device-requests
->>> +              */
->>> +             if (cdev->use_webusb &&
->>> +                 (ctrl->bRequestType & USB_TYPE_VENDOR) &&
->>> +                 ctrl->wIndex == /* WEBUSB_GET_URL*/ 2 &&
->>> +                 ctrl->bRequest == cdev->b_webusb_vendor_code) {
->>> +                     /*
->>> +                      * specification of the url descriptor in WebUSB:
->>> +                      * https://wicg.github.io/webusb/#webusb-descriptors
->>> +                      */
->>> +                     u8              *buf;
->>> +                     unsigned int    landing_page_length;
->>> +
->>> +                     buf = cdev->req->buf;
->>> +                     buf[1] = /* WEBUSB_URL*/ 3;
->>
->> Why not #define WEBUSB_URL?
-> 
-> in a previous iteration, I had that exact #define in place, right
-> above. However, another reviewer found it pointless. Maybe I should
-> instead put the define into include/uapi/linux/usb/ch9.h
-> 
-
-Hmm. ch9.h had been called ch9.h for a reason. It corresponded to Chapter 9 of
-the USB spec. Adding to it something that by design is outside the spec might
-not be what we want. But I don't know.
-
->>
->>> +
->>> +                     landing_page_length = strnlen(cdev->landing_page, 252);
->>> +                     if (strncasecmp("https://", cdev->landing_page, 8) == 0) {
->>
->> Maybe it's me, but it would be easier for me to understand why the "8" if the
->> comparison was in reverse order of arguments, like this:
->>
->> strncasecmp(cdev->landing_page, "https://", 8)
-> 
-> I agree, this makes the 8 clearer.
-> 
->> because we want the entirety of "https://" compared, not its substring, so the
->> limit kind of applies to the landing_page in the first place.
->> Maybe the "8" (and "7" below) can be #define'd, too?
-> 
-> depends on the name, but maybe something like
-> 
-> #define WEBUSB_PREFIX_HTTPS "https://"
-> #define WEBUSB_PREFIX_HTTPS_LENGTH 8
-> #define WEBUSB_PREFIX_HTTPS_SCHEME_ID 0x01
-> 
-> would work defined with the struct in include/uapi/linux/usb/ch9.h
-> 
->>
->>> +                             buf[2] = 0x01;
->>
->> What is this magic 0x01?
-> 
-> The field is specified in
-> https://wicg.github.io/webusb/#url-descriptor and would be the
-> WEBUSB_PREFIX_HTTPS_SCHEME_ID from above.
-> But yes, I should #define this.
-> 
->>
->>> +                             memcpy(buf+3, cdev->landing_page+8, landing_page_length-8);
->>
->> spaces around arithmetic operators?
-> 
-> will do
+> This patch set is a security patch for various race condition vulnerabilities that occur
+> in 'dvb-core' and 'ttusb_dec', a dvb-based device driver.
 > 
 > 
->>> +                             buf[0] = landing_page_length - 8 + 3;
->>> +                     } else if (strncasecmp("http://", cdev->landing_page, 7) == 0) {
->>> +                             buf[2] = 0x00;
->>
->> Magic 0x00?
+> # 1. media: dvb-core: Fix use-after-free due to race condition occurring in dvb_frontend
+> This is a security patch for a race condition that occurs in the dvb_frontend system of dvb-core.
 > 
-> This would then be WEBUSB_PREFIX_HTTP_SCHEME_ID
+> The race condition that occurs here will occur with _any_ device driver using dvb_frontend.
 > 
->>
->>> +                             memcpy(buf+3, cdev->landing_page+7, landing_page_length-7);
->>> +                             buf[0] = landing_page_length - 7 + 3;
->>> +                     } else {
->>> +                             buf[2] = 0xFF;
->>
->> Magic 0xFF? (plus I'd expect lowercase hex digits).
+> The race conditions that occur in dvb_frontend are as follows
+> (Description is based on drivers/media/usb/as102/as102_drv.c using dvb_frontend):
+> ```
+>                 cpu0                                                cpu1
+>        1. open()
+>           dvb_frontend_open()
+>           dvb_frontend_get()    // kref : 3
 > 
-> This would then be WEBUSB_PREFIX_NONE_SCHEME_ID
 > 
->> There's "URL Prefixes" table in 4.3.1 URL Descriptor. Why not define
->> URL_PREFIX_HTTP/HTTPS/NONE?
+>                                                              2. as102_usb_disconnect()
+>                                                                 as102_dvb_unregister()
+>                                                                 dvb_unregister_frontend()
+>                                                                     dvb_frontend_put()    // kref : 2
+>                                                                 dvb_frontend_detach()
+>                                                                     dvb_frontend_put()    // kref : 1
+>        3. close()
+>           __fput()
+>           dvb_frontend_release()
+>           dvb_frontend_put()    // kref : 0
+>           dvb_frontend_free()
+>           __dvb_frontend_free()
+>           dvb_free_device()
+>           kfree (dvbdev->fops);
+>           ...
+>           fops_put(file->f_op);    // UAF!!
+> ```
+> UAF occurs in the following order: '.probe -> open() -> .disconnect -> close()'.
 > 
-> will do
+> The root cause of this is that wake_up() for dvbdev->wait_queue is implemented in the
+> dvb_frontend_release() function, but wait_event() is not implemented in the dvb_frontend_stop() function.
 > 
->>> +                             memcpy(buf+3, cdev->landing_page, landing_page_length);
->>> +                             buf[0] = landing_page_length + 3;
->>> +                     }
->>> +
->>> +                     value = buf[0];
->>> +
->>> +                     goto check_value;
->>> +             }
->>> +
->>>                VDBG(cdev,
->>>                        "non-core control req%02x.%02x v%04x i%04x l%d\n",
->>>                        ctrl->bRequestType, ctrl->bRequest,
->>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
->>> index 96121d1c8df4..2b7f01a9efff 100644
->>> --- a/drivers/usb/gadget/configfs.c
->>> +++ b/drivers/usb/gadget/configfs.c
->>> @@ -39,6 +39,7 @@ struct gadget_info {
->>>        struct config_group configs_group;
->>>        struct config_group strings_group;
->>>        struct config_group os_desc_group;
->>> +     struct config_group webusb_group;
->>>
->>>        struct mutex lock;
->>>        struct usb_gadget_strings *gstrings[MAX_USB_STRING_LANGS + 1];
->>> @@ -50,6 +51,11 @@ struct gadget_info {
->>>        bool use_os_desc;
->>>        char b_vendor_code;
->>>        char qw_sign[OS_STRING_QW_SIGN_LEN];
->>> +     bool use_webusb;
->>> +     u16 bcd_webusb_version;
->>> +     u8 b_webusb_vendor_code;
->>> +     char landing_page[255];
->>
->> A #define for the size?
+> The KASAN log caused by this is as follows:
+> ```
+> [   60.754938] ==================================================================
+> [   60.754942] BUG: KASAN: use-after-free in __fput+0xa55/0xaf0
+> [   60.754945] Read of size 8 at addr ffff888134ddf000 by task as102_test/2139
 > 
-> will do
+> [   60.754949] CPU: 3 PID: 2139 Comm: as102_test Not tainted 6.1.0-rc2+ #16
+> [   60.754951] Hardware name: Gigabyte Technology Co., Ltd. B460MDS3H/B460M DS3H, BIOS F3 05/27/2020
+> [   60.754953] Call Trace:
+> [   60.754954]  <TASK>
+> [   60.754956]  dump_stack_lvl+0x49/0x63
+> [   60.754958]  print_report+0x177/0x46e
+> [   60.754962]  ? kasan_complete_mode_report_info+0x7c/0x210
+> [   60.754965]  ? __fput+0xa55/0xaf0
+> [   60.754970]  kasan_report+0xb0/0x140
+> [   60.754976]  ? __fput+0xa55/0xaf0
+> [   60.754979]  __asan_report_load8_noabort+0x14/0x20
+> [   60.754982]  __fput+0xa55/0xaf0
+> [   60.754985]  ____fput+0xe/0x20
+> [   60.754987]  task_work_run+0x153/0x240
+> [   60.754991]  ? task_work_cancel+0x20/0x20
+> [   60.754994]  ? fput+0xab/0x140
+> [   60.754997]  exit_to_user_mode_prepare+0x18f/0x1a0
+> [   60.754999]  syscall_exit_to_user_mode+0x26/0x50
+> [   60.755003]  do_syscall_64+0x69/0x90
+> [   60.755005]  ? do_syscall_64+0x69/0x90
+> [   60.755008]  ? debug_smp_processor_id+0x17/0x20
+> [   60.755010]  ? fpregs_assert_state_consistent+0x52/0xc0
+> [   60.755013]  ? exit_to_user_mode_prepare+0x49/0x1a0
+> [   60.755015]  ? irqentry_exit_to_user_mode+0x9/0x20
+> [   60.755018]  ? irqentry_exit+0x3b/0x50
+> [   60.755021]  ? sysvec_apic_timer_interrupt+0x57/0xc0
+> [   60.755024]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   60.755027] RIP: 0033:0x4537eb
+> [   60.755029] Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c 24 0c e8 c3 a8 02 00 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 11 a9 02 00 8b 44
+> [   60.755031] RSP: 002b:00007ff8c1c001a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+> [   60.755034] RAX: 0000000000000000 RBX: 00007ff8c1c00640 RCX: 00000000004537eb
+> [   60.755036] RDX: 0000000000000000 RSI: 00007ff8bc000b70 RDI: 0000000000000003
+> [   60.755038] RBP: 00007ff8c1c001d0 R08: 0000000000000000 R09: 0000000000000000
+> [   60.755040] R10: 000000000000000a R11: 0000000000000293 R12: 00007ff8c1c00640
+> [   60.755042] R13: 0000000000000000 R14: 000000000041b290 R15: 00007ff8c1400000
+> [   60.755044]  </TASK>
 > 
->>
->>> +
->>>        spinlock_t spinlock;
->>>        bool unbind;
->>>    };
->>> @@ -780,6 +786,131 @@ static void gadget_strings_attr_release(struct config_item *item)
->>>    USB_CONFIG_STRING_RW_OPS(gadget_strings);
->>>    USB_CONFIG_STRINGS_LANG(gadget_strings, gadget_info);
->>>
->>> +static inline struct gadget_info *webusb_item_to_gadget_info(
->>> +             struct config_item *item)
->>> +{
->>> +     return container_of(to_config_group(item),
->>> +                     struct gadget_info, webusb_group);
->>> +}
->>> +
->>> +static ssize_t webusb_use_show(struct config_item *item, char *page)
->>> +{
->>> +     return sysfs_emit(page, "%d\n",
->>> +                     webusb_item_to_gadget_info(item)->use_webusb);
->>> +}
->>> +
->>> +static ssize_t webusb_use_store(struct config_item *item, const char *page,
->>> +                              size_t len)
->>> +{
->>> +     struct gadget_info *gi = webusb_item_to_gadget_info(item);
->>> +     int ret;
->>> +     bool use;
->>> +
->>> +     mutex_lock(&gi->lock);
->>> +     ret = kstrtobool(page, &use);
->>> +     if (!ret) {
->>> +             gi->use_webusb = use;
->>> +             ret = len;
->>> +     }
->>> +     mutex_unlock(&gi->lock);
->>> +
->>> +     return ret;
->>> +}
->>> +
->>> +static ssize_t webusb_bcdVersion_show(struct config_item *item, char *page)
->>> +{
->>> +     return sysfs_emit(page, "0x%04x\n",
->>> +                                     webusb_item_to_gadget_info(item)->bcd_webusb_version);
->>> +}
->>> +
->>> +static ssize_t webusb_bcdVersion_store(struct config_item *item,
->>> +             const char *page, size_t len)
->>> +{
->>> +     struct gadget_info *gi = webusb_item_to_gadget_info(item);
->>> +     u16 bcdVersion;
->>> +     int ret;
->>> +
->>> +     mutex_lock(&gi->lock);
->>> +     ret = kstrtou16(page, 0, &bcdVersion);
->>> +     if (ret)
->>> +             goto out;
->>> +     ret = is_valid_bcd(bcdVersion);
->>> +     if (ret)
->>> +             goto out;
->>> +
->>> +     gi->bcd_webusb_version = bcdVersion;
->>> +     ret = len;
->>> +
->>> +out:
->>> +     mutex_unlock(&gi->lock);
->>> +
->>> +     return ret;
->>> +}
->>> +
->>> +static ssize_t webusb_bVendorCode_show(struct config_item *item, char *page)
->>> +{
->>> +     return sysfs_emit(page, "0x%02x\n",
->>> +                     webusb_item_to_gadget_info(item)->b_webusb_vendor_code);
->>> +}
->>> +
->>> +static ssize_t webusb_bVendorCode_store(struct config_item *item,
->>> +                                        const char *page, size_t len)
->>> +{
->>> +     struct gadget_info *gi = webusb_item_to_gadget_info(item);
->>> +     int ret;
->>> +     u8 b_vendor_code;
->>> +
->>> +     mutex_lock(&gi->lock);
->>> +     ret = kstrtou8(page, 0, &b_vendor_code);
->>> +     if (!ret) {
->>> +             gi->b_webusb_vendor_code = b_vendor_code;
->>> +             ret = len;
->>> +     }
->>> +     mutex_unlock(&gi->lock);
->>> +
->>> +     return ret;
->>> +}
->>> +
->>> +static ssize_t webusb_landingPage_show(struct config_item *item, char *page)
->>> +{
->>> +     return sysfs_emit(page, "%s\n", webusb_item_to_gadget_info(item)->landing_page);
->>> +}
->>> +
->>> +static ssize_t webusb_landingPage_store(struct config_item *item, const char *page,
->>> +                                  size_t len)
->>> +{
->>> +     struct gadget_info *gi = webusb_item_to_gadget_info(item);
->>> +     int l;
->>> +
->>> +     l = min(len, sizeof(gi->landing_page));
->>> +     if (page[l - 1] == '\n')
->>> +             --l;
->>> +
->>> +     mutex_lock(&gi->lock);
->>> +     memcpy(gi->landing_page, page, l);
->>> +     mutex_unlock(&gi->lock);
->>> +
->>> +     return len;
->>> +}
->>> +
->>> +CONFIGFS_ATTR(webusb_, use);
->>> +CONFIGFS_ATTR(webusb_, bVendorCode);
->>> +CONFIGFS_ATTR(webusb_, bcdVersion);
->>> +CONFIGFS_ATTR(webusb_, landingPage);
->>> +
->>> +static struct configfs_attribute *webusb_attrs[] = {
->>> +     &webusb_attr_use,
->>> +     &webusb_attr_bcdVersion,
->>> +     &webusb_attr_bVendorCode,
->>> +     &webusb_attr_landingPage,
->>> +     NULL,
->>> +};
->>> +
->>> +static struct config_item_type webusb_type = {
->>> +     .ct_attrs       = webusb_attrs,
->>> +     .ct_owner       = THIS_MODULE,
->>> +};
->>> +
->>>    static inline struct gadget_info *os_desc_item_to_gadget_info(
->>>                struct config_item *item)
->>>    {
->>> @@ -1341,6 +1472,16 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
->>>                gi->cdev.desc.iSerialNumber = s[USB_GADGET_SERIAL_IDX].id;
->>>        }
->>>
->>> +     if (gi->use_webusb) {
->>> +             cdev->use_webusb = true;
->>> +             cdev->bcd_webusb_version = gi->bcd_webusb_version;
->>> +             cdev->b_webusb_vendor_code = gi->b_webusb_vendor_code;
->>> +             memcpy(cdev->landing_page, gi->landing_page,
->>> +                             strnlen(gi->landing_page,
->>> +                                             min(sizeof(cdev->landing_page),
->>> +                                                     sizeof(gi->landing_page))));
->>
->> checkpatch now allows 100 colums. Plus strnlen() looks indented too far to the
->> right.
+> [   60.755047] Allocated by task 2114:
+> [   60.755049]  kasan_save_stack+0x26/0x50
+> [   60.755052]  kasan_set_track+0x25/0x40
+> [   60.755054]  kasan_save_alloc_info+0x1e/0x30
+> [   60.755056]  __kasan_kmalloc+0xb4/0xc0
+> [   60.755058]  __kmalloc_node_track_caller+0x66/0x160
+> [   60.755061]  kmemdup+0x23/0x50
+> [   60.755063]  dvb_register_device+0x1cd/0x15c0 [dvb_core]
+> [   60.755070]  dvb_register_frontend+0x3cb/0x630 [dvb_core]
+> [   60.755078]  as102_dvb_register+0x335/0x4d0 [dvb_as102]
+> [   60.755083]  as102_usb_probe.cold+0x680/0x6eb [dvb_as102]
+> [   60.755087]  usb_probe_interface+0x266/0x740
+> [   60.755089]  really_probe+0x1fa/0xa80
+> [   60.755092]  __driver_probe_device+0x2cb/0x490
+> [   60.755094]  driver_probe_device+0x4e/0x140
+> [   60.755096]  __driver_attach+0x1a3/0x520
+> [   60.755098]  bus_for_each_dev+0x11e/0x1c0
+> [   60.755100]  driver_attach+0x3d/0x60
+> [   60.755102]  bus_add_driver+0x449/0x5a0
+> [   60.755103]  driver_register+0x219/0x390
+> [   60.755105]  usb_register_driver+0x228/0x400
+> [   60.755107]  0xffffffffc04c8023
+> [   60.755110]  do_one_initcall+0x97/0x310
+> [   60.755113]  do_init_module+0x19a/0x630
+> [   60.755115]  load_module+0x6ca4/0x7d90
+> [   60.755117]  __do_sys_finit_module+0x134/0x1d0
+> [   60.755119]  __x64_sys_finit_module+0x72/0xb0
+> [   60.755121]  do_syscall_64+0x59/0x90
+> [   60.755123]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 > 
-> I will check this.
+> [   60.755126] Freed by task 2139:
+> [   60.755128]  kasan_save_stack+0x26/0x50
+> [   60.755130]  kasan_set_track+0x25/0x40
+> [   60.755132]  kasan_save_free_info+0x2e/0x50
+> [   60.755134]  ____kasan_slab_free+0x174/0x1e0
+> [   60.755136]  __kasan_slab_free+0x12/0x20
+> [   60.755138]  slab_free_freelist_hook+0xd0/0x1a0
+> [   60.755140]  __kmem_cache_free+0x193/0x2c0
+> [   60.755143]  kfree+0x79/0x120
+> [   60.755145]  dvb_free_device+0x38/0x60 [dvb_core]
+> [   60.755151]  dvb_frontend_put.cold+0xa6/0x15a [dvb_core]
+> [   60.755160]  dvb_frontend_release.cold+0xc7/0xf6 [dvb_core]
+> [   60.755167]  __fput+0x2ce/0xaf0
+> [   60.755169]  ____fput+0xe/0x20
+> [   60.755171]  task_work_run+0x153/0x240
+> [   60.755173]  exit_to_user_mode_prepare+0x18f/0x1a0
+> [   60.755175]  syscall_exit_to_user_mode+0x26/0x50
+> [   60.755177]  do_syscall_64+0x69/0x90
+> [   60.755179]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> ```
 > 
->>
->> The sizeofs are both 255. Are they ever expected to be different? Maybe not?
->> Then a #defined constant ensures they are equal. Then there's no need to find
->> a minimum among equal values.
+> Also, UAF can occur for driver-specfic structures (such as 'struct XXX_dev'):
+> ```
+>                 cpu0                                                cpu1
+>        1. open()
+>           dvb_frontend_open()
+>                                                              2. as102_usb_disconnect()
+>                                                                 kref_put(&as102_dev->kref, as102_usb_release);    // kref : 0
+>                                                                 as102_usb_release()
+>                                                                 kfree(as102_dev);
+>        3. close()
+>           dvb_frontend_release()
+>           mutex_lock(&fe->dvb->mdev_lock);    // UAF
+> ```
 > 
-> Technically, if the url has the empty scheme, it can only be 252 bytes
-> long, since the maximum descriptor length is 255 because bLength is a
-> single byte, but 3 bytes are in the header of this descriptor, leaving
-> 252 for the string.
-
-But you use sizeof() rather than strlen(). And the "landing_page" members
-are defined as 255-element arrays of chars, so both sizeof() invocations
-will yield 255, no?
-
-Andrzej
-
+> The KASAN log caused by this is as follows:
+> ```
+> [   82.144178] ==================================================================
+> [   82.144182] BUG: KASAN: use-after-free in mutex_lock+0x81/0xe0
+> [   82.144189] Write of size 8 at addr ffff888121b6a168 by task as102_test/2356
 > 
-> However, if the landing page scheme is "https://", the maximum length
-> of this string could actually be 255 - 3 /*header*/ + 8 /* the length
-> of the prefix, which is stripped */ => 260 bytes.
+> [   82.144193] CPU: 12 PID: 2356 Comm: as102_test Not tainted 6.1.0-rc2+ #16
+> [   82.144196] Hardware name: Gigabyte Technology Co., Ltd. B460MDS3H/B460M DS3H, BIOS F3 05/27/2020
+> [   82.144198] Call Trace:
+> [   82.144200]  <TASK>
+> [   82.144201]  dump_stack_lvl+0x49/0x63
+> [   82.144205]  print_report+0x177/0x46e
+> [   82.144208]  ? kasan_complete_mode_report_info+0x7c/0x210
+> [   82.144212]  ? mutex_lock+0x81/0xe0
+> [   82.144215]  kasan_report+0xb0/0x140
+> [   82.144218]  ? mutex_lock+0x81/0xe0
+> [   82.144222]  kasan_check_range+0x3a/0x1d0
+> [   82.144224]  __kasan_check_write+0x14/0x20
+> [   82.144226]  mutex_lock+0x81/0xe0
+> [   82.144229]  ? __mutex_lock_slowpath+0x20/0x20
+> [   82.144234]  dvb_frontend_release.cold+0x178/0x4d2 [dvb_core]
+> [   82.144246]  __fput+0x2ce/0xaf0
+> [   82.144250]  ____fput+0xe/0x20
+> [   82.144253]  task_work_run+0x153/0x240
+> [   82.144257]  ? task_work_cancel+0x20/0x20
+> [   82.144260]  ? fput+0xab/0x140
+> [   82.144263]  exit_to_user_mode_prepare+0x18f/0x1a0
+> [   82.144266]  syscall_exit_to_user_mode+0x26/0x50
+> [   82.144270]  do_syscall_64+0x69/0x90
+> [   82.144273]  ? debug_smp_processor_id+0x17/0x20
+> [   82.144275]  ? fpregs_assert_state_consistent+0x52/0xc0
+> [   82.144279]  ? exit_to_user_mode_prepare+0x49/0x1a0
+> [   82.144281]  ? irqentry_exit_to_user_mode+0x9/0x20
+> [   82.144284]  ? irqentry_exit+0x3b/0x50
+> [   82.144287]  ? sysvec_apic_timer_interrupt+0x57/0xc0
+> [   82.144290]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   82.144293] RIP: 0033:0x4537eb
+> [   82.144296] Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c 24 0c e8 c3 a8 02 00 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 11 a9 02 00 8b 44
+> [   82.144298] RSP: 002b:00007fc7600001a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+> [   82.144302] RAX: 0000000000000000 RBX: 00007fc760000640 RCX: 00000000004537eb
+> [   82.144304] RDX: 0000000000000000 RSI: 00007fc758000b70 RDI: 0000000000000003
+> [   82.144306] RBP: 00007fc7600001d0 R08: 0000000000000000 R09: 0000000000000000
+> [   82.144308] R10: 000000000000000a R11: 0000000000000293 R12: 00007fc760000640
+> [   82.144310] R13: 0000000000000000 R14: 000000000041b290 R15: 00007fc75f800000
+> [   82.144313]  </TASK>
 > 
-> I need to rework the validation here a bit. I would like to avoid for
-> userspace to explicitly set the scheme constants directly, as just
-> piping in the string seems so much more ergonomic.
+> [   82.144315] Allocated by task 2225:
+> [   82.144317]  kasan_save_stack+0x26/0x50
+> [   82.144320]  kasan_set_track+0x25/0x40
+> [   82.144322]  kasan_save_alloc_info+0x1e/0x30
+> [   82.144325]  __kasan_kmalloc+0xb4/0xc0
+> [   82.144327]  kmalloc_trace+0x4a/0xb0
+> [   82.144329]  as102_usb_probe.cold+0x58/0x6eb [dvb_as102]
+> [   82.144335]  usb_probe_interface+0x266/0x740
+> [   82.144338]  really_probe+0x1fa/0xa80
+> [   82.144341]  __driver_probe_device+0x2cb/0x490
+> [   82.144343]  driver_probe_device+0x4e/0x140
+> [   82.144345]  __driver_attach+0x1a3/0x520
+> [   82.144347]  bus_for_each_dev+0x11e/0x1c0
+> [   82.144348]  driver_attach+0x3d/0x60
+> [   82.144350]  bus_add_driver+0x449/0x5a0
+> [   82.144352]  driver_register+0x219/0x390
+> [   82.144354]  usb_register_driver+0x228/0x400
+> [   82.144356]  0xffffffffc0655023
+> [   82.144358]  do_one_initcall+0x97/0x310
+> [   82.144361]  do_init_module+0x19a/0x630
+> [   82.144363]  load_module+0x6ca4/0x7d90
+> [   82.144365]  __do_sys_finit_module+0x134/0x1d0
+> [   82.144367]  __x64_sys_finit_module+0x72/0xb0
+> [   82.144369]  do_syscall_64+0x59/0x90
+> [   82.144371]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 > 
->>
->> Regards,
->>
->> Andrzej
+> [   82.144374] Freed by task 158:
+> [   82.144376]  kasan_save_stack+0x26/0x50
+> [   82.144378]  kasan_set_track+0x25/0x40
+> [   82.144380]  kasan_save_free_info+0x2e/0x50
+> [   82.144382]  ____kasan_slab_free+0x174/0x1e0
+> [   82.144384]  __kasan_slab_free+0x12/0x20
+> [   82.144386]  slab_free_freelist_hook+0xd0/0x1a0
+> [   82.144388]  __kmem_cache_free+0x193/0x2c0
+> [   82.144391]  kfree+0x79/0x120
+> [   82.144393]  as102_usb_release+0x5d/0x75 [dvb_as102]
+> [   82.144397]  as102_usb_disconnect+0x125/0x176 [dvb_as102]
+> [   82.144400]  usb_unbind_interface+0x187/0x7c0
+> [   82.144402]  device_remove+0x117/0x170
+> [   82.144404]  device_release_driver_internal+0x418/0x660
+> [   82.144407]  device_release_driver+0x12/0x20
+> [   82.144409]  bus_remove_device+0x28f/0x540
+> [   82.144410]  device_del+0x501/0xc30
+> [   82.144413]  usb_disable_device+0x2a5/0x660
+> [   82.144415]  usb_disconnect.cold+0x1f9/0x620
+> [   82.144417]  hub_event+0x16d3/0x3d20
+> [   82.144420]  process_one_work+0x778/0x11c0
+> [   82.144422]  worker_thread+0x544/0x1180
+> [   82.144424]  kthread+0x280/0x320
+> [   82.144426]  ret_from_fork+0x1f/0x30
+> ```
 > 
-> Thanks a lot for your review!
 > 
-> I hope my response to your initial concerns was not too long and windy.
+> # 2. media: dvb-core: Fix use-after-free due to race condition occurring in dvb_net
+> This is a security patch for a race condition that occurs in the dvb_net system of dvb-core.
 > 
-> I will post an updated version of my patch within the next few days.
+> The race condition that occurs here will occur with _any_ device driver using dvb_net.
+> 
+> The race condition that occurs in dvb_net is:
+> ```
+>                 cpu0                                                          cpu1
+>        1. .disconnect()
+>           dvb_net_release()
+>           dvbnet->exit = 1;
+>           if (dvbnet->dvbdev->users < 1)  // improper reference counting
+>                                                                        2. open()
+>                                                                           dvb_device_open()
+>                                                                           down_read(&minor_rwsem);
+>                                                                           dvb_generic_open()
+>                                                                           dvbdev->users--;	// race condition
+>                                                                           up_read(&minor_rwsem);
+>        3. dvb_unregister_device()
+>           dvb_remove_device()
+>           down_write(&minor_rwsem);
+>           dvb_minors[dvbdev->minor] = NULL;
+>           up_write(&minor_rwsem);
+>           dvb_free_device()
+>           kfree (dvbdev->fops);
+>                                                                        4. close(fd)
+>                                                                           __x64_sys_close()
+>                                                                           close_fd()
+>                                                                           filp_close()
+>                                                                           retval = filp->f_op->flush(filp, id);    // UAF
+> ```
+> After the 'if (dvbnet->dvbdev->users < 1)' conditional of dvb_net_release() passes,
+> 'dvbdev->users--;' of dvb_generic_open() is executed, improper reference counting occurs.
+> 
+> The root cause of this is that you use the dvb_device_open() function,
+> which does not implement a conditional statement that checks 'dvbnet->exit'.
+> 
+> The KASAN log caused by this is as follows:
+> ```
+> [  952.372616] ==================================================================
+> [  952.372639] BUG: KASAN: use-after-free in filp_close+0x119/0x140
+> [  952.372667] Read of size 8 at addr ffff888118abec78 by task dvb_net_test/2522
+> 
+> [  952.372690] CPU: 3 PID: 2522 Comm: dvb_net_test Not tainted 6.1.0-rc2+ #16
+> [  952.372707] Hardware name: Gigabyte Technology Co., Ltd. B460MDS3H/B460M DS3H, BIOS F3 05/27/2020
+> [  952.372718] Call Trace:
+> [  952.372727]  <TASK>
+> [  952.372736]  dump_stack_lvl+0x49/0x63
+> [  952.372754]  print_report+0x177/0x46e
+> [  952.372775]  ? kasan_complete_mode_report_info+0x7c/0x210
+> [  952.372791]  ? filp_close+0x119/0x140
+> [  952.372810]  kasan_report+0xb0/0x140
+> [  952.372830]  ? filp_close+0x119/0x140
+> [  952.372850]  __asan_report_load8_noabort+0x14/0x20
+> [  952.372865]  filp_close+0x119/0x140
+> [  952.372883]  close_fd+0x75/0x90
+> [  952.372897]  __x64_sys_close+0x30/0x80
+> [  952.372915]  do_syscall_64+0x59/0x90
+> [  952.372930]  ? fpregs_assert_state_consistent+0x52/0xc0
+> [  952.372950]  ? exit_to_user_mode_prepare+0x49/0x1a0
+> [  952.372965]  ? syscall_exit_to_user_mode+0x26/0x50
+> [  952.372984]  ? do_syscall_64+0x69/0x90
+> [  952.373000]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [  952.373016] RIP: 0033:0x4537eb
+> [  952.373031] Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c 24 0c e8 c3 a8 02 00 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 11 a9 02 00 8b 44
+> [  952.373046] RSP: 002b:00007f98078001a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+> [  952.373066] RAX: ffffffffffffffda RBX: 00007f9807800640 RCX: 00000000004537eb
+> [  952.373078] RDX: 0000000000000000 RSI: 00007f9800000b70 RDI: 0000000000000003
+> [  952.373089] RBP: 00007f98078001d0 R08: 0000000000000000 R09: 0000000000000000
+> [  952.373100] R10: 00007f9807800180 R11: 0000000000000293 R12: 00007f9807800640
+> [  952.373111] R13: 0000000000000000 R14: 000000000041b290 R15: 00007f9807000000
+> [  952.373130]  </TASK>
+> 
+> [  952.373145] Allocated by task 592:
+> [  952.373155]  kasan_save_stack+0x26/0x50
+> [  952.373171]  kasan_set_track+0x25/0x40
+> [  952.373185]  kasan_save_alloc_info+0x1e/0x30
+> [  952.373195]  __kasan_kmalloc+0xb4/0xc0
+> [  952.373212]  __kmalloc_node_track_caller+0x66/0x160
+> [  952.373233]  kmemdup+0x23/0x50
+> [  952.373250]  dvb_register_device+0x1cd/0x15c0 [dvb_core]
+> [  952.373301]  dvb_net_init+0xc7/0x100 [dvb_core]
+> [  952.373348]  ttusb_dec_probe.cold+0x14de/0x1f1e [ttusb_dec]
+> [  952.373373]  usb_probe_interface+0x266/0x740
+> [  952.373388]  really_probe+0x1fa/0xa80
+> [  952.373400]  __driver_probe_device+0x2cb/0x490
+> [  952.373412]  driver_probe_device+0x4e/0x140
+> [  952.373424]  __device_attach_driver+0x197/0x2b0
+> [  952.373437]  bus_for_each_drv+0x129/0x1c0
+> [  952.373447]  __device_attach+0x2ad/0x4f0
+> [  952.373459]  device_initial_probe+0x13/0x20
+> [  952.373470]  bus_probe_device+0x198/0x240
+> [  952.373481]  device_add+0xa1b/0x1cc0
+> [  952.373491]  usb_set_configuration+0x9ca/0x17f0
+> [  952.373502]  usb_generic_driver_probe+0x86/0xb0
+> [  952.373513]  usb_probe_device+0xa7/0x260
+> [  952.373524]  really_probe+0x1fa/0xa80
+> [  952.373535]  __driver_probe_device+0x2cb/0x490
+> [  952.373547]  driver_probe_device+0x4e/0x140
+> [  952.373558]  __device_attach_driver+0x197/0x2b0
+> [  952.373570]  bus_for_each_drv+0x129/0x1c0
+> [  952.373580]  __device_attach+0x2ad/0x4f0
+> [  952.373591]  device_initial_probe+0x13/0x20
+> [  952.373603]  bus_probe_device+0x198/0x240
+> [  952.373614]  device_add+0xa1b/0x1cc0
+> [  952.373623]  usb_new_device.cold+0x462/0xc46
+> [  952.373637]  hub_event+0x1d23/0x3d20
+> [  952.373652]  process_one_work+0x778/0x11c0
+> [  952.373664]  worker_thread+0x544/0x1180
+> [  952.373676]  kthread+0x280/0x320
+> [  952.373686]  ret_from_fork+0x1f/0x30
+> 
+> [  952.373707] Freed by task 592:
+> [  952.373717]  kasan_save_stack+0x26/0x50
+> [  952.373731]  kasan_set_track+0x25/0x40
+> [  952.373744]  kasan_save_free_info+0x2e/0x50
+> [  952.373754]  ____kasan_slab_free+0x174/0x1e0
+> [  952.373767]  __kasan_slab_free+0x12/0x20
+> [  952.373780]  slab_free_freelist_hook+0xd0/0x1a0
+> [  952.373793]  __kmem_cache_free+0x193/0x2c0
+> [  952.373805]  kfree+0x79/0x120
+> [  952.373817]  dvb_free_device.part.0+0x33/0x70 [dvb_core]
+> [  952.373858]  dvb_unregister_device+0x40/0x54 [dvb_core]
+> [  952.373905]  dvb_net_release+0x264/0x316 [dvb_core]
+> [  952.373952]  ttusb_dec_disconnect+0x391/0x4e1 [ttusb_dec]
+> [  952.373973]  usb_unbind_interface+0x187/0x7c0
+> [  952.373986]  device_remove+0x117/0x170
+> [  952.373997]  device_release_driver_internal+0x418/0x660
+> [  952.374010]  device_release_driver+0x12/0x20
+> [  952.374022]  bus_remove_device+0x28f/0x540
+> [  952.374032]  device_del+0x501/0xc30
+> [  952.374047]  usb_disable_device+0x2a5/0x660
+> [  952.374058]  usb_disconnect.cold+0x1f9/0x620
+> [  952.374070]  hub_event+0x16d3/0x3d20
+> [  952.374084]  process_one_work+0x778/0x11c0
+> [  952.374096]  worker_thread+0x544/0x1180
+> [  952.374107]  kthread+0x280/0x320
+> [  952.374117]  ret_from_fork+0x1f/0x30
+> ```
+> 
+> 
+> # 3. media: dvb-core: Fix use-after-free due to race condition occurring in dvb_register_device()
+> This is a security patch for a race condition that occurs in the dvb_register_device() function.
+> 
+> This race condition can occur _anywhere_ the dvb_register_device() function is called:
+> dvb_demux, dvb_dvr, dvb_frontend, dvb_net, etc.
+> 
+> The race condition flow is as follows (dvb_net is used as an example):
+> ``````
+>                 cpu0                                                cpu1
+>        1. open()
+>           dvb_device_open()
+> 
+>        2. close()
+>           __fput()
+>           dvb_net_close()
+>                                                              3. .disconnect()
+>                                                                 dvb_net_release()
+>                                                                 dvb_unregister_device()
+>                                                                 dvb_free_device()
+>                                                                 kfree (dvbdev->fops);
+>        4. ...
+>           fops_put(file->f_op);    // UAF!!
+> ```
+> UAF occurs in '.probe -> open() -> close() -> .disconnect' flow.
+> 
+> The root cause of this is that fops used as an argument of replace_fops() in dvb_device_open()
+> are kfree()d in the .disconnect flow.
+> It's not common for fops used in replace_fops() to be dynamically allocated and kfree()d like this.
+> 
+> The KASAN log caused by this is as follows:
+> ```
+> [   67.857811] ==================================================================
+> [   67.857830] BUG: KASAN: use-after-free in __fput+0xa55/0xaf0
+> [   67.857855] Read of size 8 at addr ffff88810f7dfc00 by task dvb_net_fput/2152
+> 
+> [   67.857879] CPU: 15 PID: 2152 Comm: dvb_net_fput Not tainted 6.1.0-rc2+ #17
+> [   67.857896] Hardware name: Gigabyte Technology Co., Ltd. B460MDS3H/B460M DS3H, BIOS F3 05/27/2020
+> [   67.857907] Call Trace:
+> [   67.857917]  <TASK>
+> [   67.857928]  dump_stack_lvl+0x49/0x63
+> [   67.857947]  print_report+0x177/0x46e
+> [   67.857967]  ? kasan_complete_mode_report_info+0x7c/0x210
+> [   67.857984]  ? __fput+0xa55/0xaf0
+> [   67.858001]  kasan_report+0xb0/0x140
+> [   67.858021]  ? __fput+0xa55/0xaf0
+> [   67.858039]  __asan_report_load8_noabort+0x14/0x20
+> [   67.858053]  __fput+0xa55/0xaf0
+> [   67.858072]  ____fput+0xe/0x20
+> [   67.858087]  task_work_run+0x153/0x240
+> [   67.858108]  ? task_work_cancel+0x20/0x20
+> [   67.858127]  ? fput+0xab/0x140
+> [   67.858144]  exit_to_user_mode_prepare+0x18f/0x1a0
+> [   67.858160]  syscall_exit_to_user_mode+0x26/0x50
+> [   67.858179]  do_syscall_64+0x69/0x90
+> [   67.858194]  ? exit_to_user_mode_prepare+0x49/0x1a0
+> [   67.858208]  ? irqentry_exit_to_user_mode+0x9/0x20
+> [   67.858226]  ? irqentry_exit+0x3b/0x50
+> [   67.858243]  ? exc_page_fault+0x72/0xf0
+> [   67.858262]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   67.858278] RIP: 0033:0x4537eb
+> [   67.858294] Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c 24 0c e8 c3 a8 02 00 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 11 a9 02 00 8b 44
+> [   67.858309] RSP: 002b:00007f607be001a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+> [   67.858330] RAX: 0000000000000000 RBX: 00007f607be00640 RCX: 00000000004537eb
+> [   67.858343] RDX: 0000000000000000 RSI: 00007f6074000b70 RDI: 0000000000000003
+> [   67.858353] RBP: 00007f607be001d0 R08: 0000000000000000 R09: 0000000000000000
+> [   67.858364] R10: 00007f607be00180 R11: 0000000000000293 R12: 00007f607be00640
+> [   67.858375] R13: 0000000000000000 R14: 000000000041b2a0 R15: 00007f607b600000
+> [   67.858392]  </TASK>
+> 
+> [   67.858407] Allocated by task 2125:
+> [   67.858417]  kasan_save_stack+0x26/0x50
+> [   67.858433]  kasan_set_track+0x25/0x40
+> [   67.858447]  kasan_save_alloc_info+0x1e/0x30
+> [   67.858456]  __kasan_kmalloc+0xb4/0xc0
+> [   67.858469]  __kmalloc_node_track_caller+0x66/0x160
+> [   67.858483]  kmemdup+0x23/0x50
+> [   67.858495]  dvb_register_device+0x1cd/0x15c0 [dvb_core]
+> [   67.858543]  dvb_net_init+0xe1/0x120 [dvb_core]
+> [   67.858591]  ttusb_dec_probe.cold+0x14de/0x1f1e [ttusb_dec]
+> [   67.858615]  usb_probe_interface+0x266/0x740
+> [   67.858629]  really_probe+0x1fa/0xa80
+> [   67.858642]  __driver_probe_device+0x2cb/0x490
+> [   67.858654]  driver_probe_device+0x4e/0x140
+> [   67.858666]  __driver_attach+0x1a3/0x520
+> [   67.858677]  bus_for_each_dev+0x11e/0x1c0
+> [   67.858688]  driver_attach+0x3d/0x60
+> [   67.858699]  bus_add_driver+0x449/0x5a0
+> [   67.858710]  driver_register+0x219/0x390
+> [   67.858722]  usb_register_driver+0x228/0x400
+> [   67.858733]  0xffffffffc0506023
+> [   67.858744]  do_one_initcall+0x97/0x310
+> [   67.858758]  do_init_module+0x19a/0x630
+> [   67.858770]  load_module+0x6ca4/0x7d90
+> [   67.858781]  __do_sys_finit_module+0x134/0x1d0
+> [   67.858792]  __x64_sys_finit_module+0x72/0xb0
+> [   67.858803]  do_syscall_64+0x59/0x90
+> [   67.858815]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> [   67.858834] Freed by task 666:
+> [   67.858843]  kasan_save_stack+0x26/0x50
+> [   67.858857]  kasan_set_track+0x25/0x40
+> [   67.858870]  kasan_save_free_info+0x2e/0x50
+> [   67.858880]  ____kasan_slab_free+0x174/0x1e0
+> [   67.858893]  __kasan_slab_free+0x12/0x20
+> [   67.858907]  slab_free_freelist_hook+0xd0/0x1a0
+> [   67.858919]  __kmem_cache_free+0x193/0x2c0
+> [   67.858932]  kfree+0x79/0x120
+> [   67.858944]  dvb_free_device.part.0+0x33/0x70 [dvb_core]
+> [   67.858984]  dvb_unregister_device+0x40/0x54 [dvb_core]
+> [   67.859032]  dvb_net_release+0x267/0x319 [dvb_core]
+> [   67.859080]  ttusb_dec_disconnect+0x391/0x4e1 [ttusb_dec]
+> [   67.859102]  usb_unbind_interface+0x187/0x7c0
+> [   67.859115]  device_remove+0x117/0x170
+> [   67.859126]  device_release_driver_internal+0x418/0x660
+> [   67.859139]  device_release_driver+0x12/0x20
+> [   67.859150]  bus_remove_device+0x28f/0x540
+> [   67.859161]  device_del+0x501/0xc30
+> [   67.859176]  usb_disable_device+0x2a5/0x660
+> [   67.859187]  usb_disconnect.cold+0x1f9/0x620
+> [   67.859200]  hub_event+0x16d3/0x3d20
+> [   67.859215]  process_one_work+0x778/0x11c0
+> [   67.859228]  worker_thread+0x544/0x1180
+> [   67.859239]  kthread+0x280/0x320
+> [   67.859249]  ret_from_fork+0x1f/0x30
+> ```
+> 
+> 
+> # 4. media: ttusb-dec: Fix memory leak in ttusb_dec_exit_dvb()
+> This is a patch for a memory leak that occurs in the ttusb_dec_exit_dvb() function.
+> 
+> Because ttusb_dec_exit_dvb() does not call dvb_frontend_detach(),
+> several fe related structures are not kfree()d.
+> 
+> Users can trigger a memory leak just by repeating connecting and disconnecting
+> the ttusb_dec device.
+> 
+> 
+> Finally, most of these patches are similar to this one, the security patch for
+> CVE-2022-41218 that I reported:
+> https://lore.kernel.org/linux-media/20221031100245.23702-1-tiwai@suse.de/
+> 
 > 
 > Regards,
-> Jó
-> 
-> 
->>
->>> +     }
->>> +
->>>        if (gi->use_os_desc) {
->>>                cdev->use_os_string = true;
->>>                cdev->b_vendor_code = gi->b_vendor_code;
->>> @@ -1605,6 +1746,10 @@ static struct config_group *gadgets_make(
->>>                        &os_desc_type);
->>>        configfs_add_default_group(&gi->os_desc_group, &gi->group);
->>>
->>> +     config_group_init_type_name(&gi->webusb_group, "webusb",
->>> +                     &webusb_type);
->>> +     configfs_add_default_group(&gi->webusb_group, &gi->group);
->>> +
->>>        gi->composite.bind = configfs_do_nothing;
->>>        gi->composite.unbind = configfs_do_nothing;
->>>        gi->composite.suspend = NULL;
->>> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
->>> index 43ac3fa760db..eb6fac5bbcde 100644
->>> --- a/include/linux/usb/composite.h
->>> +++ b/include/linux/usb/composite.h
->>> @@ -474,6 +474,12 @@ struct usb_composite_dev {
->>>        struct usb_configuration        *os_desc_config;
->>>        unsigned int                    use_os_string:1;
->>>
->>> +     /* WebUSB */
->>> +     u16                             bcd_webusb_version;
->>> +     u8                              b_webusb_vendor_code;
->>> +     char                            landing_page[255];
->>> +     unsigned int                    use_webusb:1;
->>> +
->>>        /* private: */
->>>        /* internals */
->>>        unsigned int                    suspended:1;
->>> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
->>> index 31fcfa084e63..3a36550297bc 100644
->>> --- a/include/uapi/linux/usb/ch9.h
->>> +++ b/include/uapi/linux/usb/ch9.h
->>> @@ -947,6 +947,39 @@ struct usb_ss_container_id_descriptor {
->>>
->>>    #define USB_DT_USB_SS_CONTN_ID_SIZE 20
->>>
->>> +/*
->>> + * Platform Device Capability descriptor: Defines platform specific device
->>> + * capabilities
->>> + */
->>> +#define      USB_PLAT_DEV_CAP_TYPE   5
->>> +struct usb_plat_dev_cap_descriptor {
->>> +     __u8  bLength;
->>> +     __u8  bDescriptorType;
->>> +     __u8  bDevCapabilityType;
->>> +     __u8  bReserved;
->>> +     __u8  UUID[16];
->>> +} __attribute__((packed));
->>> +
->>> +#define USB_DT_USB_PLAT_DEV_CAP_SIZE 20
->>> +
->>> +/*
->>> + * WebUSB Platform Capability descriptor: A device announces support for the
->>> + * WebUSB command set by including the following Platform Descriptor in its
->>> + * Binary Object Store
->>> + * https://wicg.github.io/webusb/#webusb-platform-capability-descriptor
->>> + */
->>> +struct usb_webusb_cap_descriptor {
->>> +     __u8  bLength;
->>> +     __u8  bDescriptorType;
->>> +     __u8  bDevCapabilityType;
->>> +     __u8  bReserved;
->>> +     __u8  UUID[16];
->>> +     __u16 bcdVersion;
->>> +     __u8  bVendorCode;
->>> +     __u8  iLandingPage;
->>> +} __attribute__((packed));
->>> +#define USB_DT_WEBUSB_SIZE   (USB_DT_USB_PLAT_DEV_CAP_SIZE + 4)
->>> +
->>>    /*
->>>     * SuperSpeed Plus USB Capability descriptor: Defines the set of
->>>     * SuperSpeed Plus USB specific device level capabilities
->>
+> Hyunwoo Kim
 
+Are those issues still seen with the latest 6.2-rc kernel?
+I'm asking because there have been a few fixes in dvb-core to deal
+with some UAFs.
+
+BTW, Mauro, the issues are tagged with several CVE's:
+CVE-2022-45884, CVE-2022-45886, CVE-2022-45885, CVE-2022-45887.
+
+
+thanks,
+
+Takashi
