@@ -2,177 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213B0663663
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 01:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DA3663685
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 02:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbjAJArG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 19:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S229615AbjAJBHR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 20:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235128AbjAJArF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 19:47:05 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4270186E5
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 16:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673311624; x=1704847624;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KYhALTlU/X6tHLgZ+LbFBVom0Lhmss01TcXDJ3SzEus=;
-  b=Swi0r8iydZkyosiSgBeIyb+ENaNkvrFn9D6DF6MN14EqBQdAC6oWfXMj
-   LiJHFPjm29jE+OCbqh9V8Y+yNK/8HZa0t8ZP1tBiiiKp5+PU9YWeXc0cl
-   bVRNaHBocBunGYRrrvFBrc4c7NwuZAkcxu1s1Je945C2qy570YZfHxl7c
-   Q4p6jIRZw4VdGAMTE8wKVcuavwhA59pSPPciYWu36qwVOtNsUCAR2lCJ+
-   OPTCnwIOByOgI6WXa+xDgOpQIUBWD75aTLPRmPz7xQfRozWcWZqU6Qab/
-   DUxuBFVa/j8B+XZ890x0hCZgUP9Uq1UWzvYjoCGInGKj6B+pMLxsjUhV4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="323094137"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="323094137"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 16:47:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="830806903"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="830806903"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 09 Jan 2023 16:47:02 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pF2n8-0007Pi-0T;
-        Tue, 10 Jan 2023 00:47:02 +0000
-Date:   Tue, 10 Jan 2023 08:46:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:rndis-removal] BUILD SUCCESS
- 5eb127bb9741c1480aff95ffa4e1bd4cd9b5b16d
-Message-ID: <63bcb576.7oGcu373mnD+aGwe%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229543AbjAJBHQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 20:07:16 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0276CB0E
+        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 17:07:15 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id p9so5391063iod.13
+        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 17:07:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=W125sPn+8wBy0FyBRg+kOOWV1bQbHFxqGG0xZrDFLRI=;
+        b=Jk1pzHwJRwpVAuHVNiRwDUvE3ZYpG7NTHiabA1vQ2XDS5EvvuIu1HmZYGRwtJB58OF
+         0Rv+0uU4GgnKc52HKOklGhY7RoXGqGrT9wwJ2rCL7fdmcNlTz2qsV4W4/J+JNMEHd8Lp
+         fpGLbgJ9uo5U2vwnmMxELNpDzXvq4xdL+TszY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W125sPn+8wBy0FyBRg+kOOWV1bQbHFxqGG0xZrDFLRI=;
+        b=ksUgctzZA6VhsgYDTLO+ZQeyZ3eXJIi028aSHDz6TRyHD9kWD0AgXu+2M9CitymoiW
+         kWDxmkZIweAkswxY+SKYu50a44ceGFhPwGNlr6sVZyOz3ZupEk6vHHnQa4wpYpKYHa+N
+         7kC5N8gh4NAk8SpFA2fuSFUYVHake/we1QJCElXqOJHkBsQnjAAUxYqBU8UPrVwJGG+V
+         zU9bX+OhjJShMrgkbvSr1y8Z/KNwQPO1yY0bcnQy9qRzFIkSy99MlOD2fdMbCaUa9hZR
+         LWzsB3x44O/9QApGsUTR1g03lt7JiZYtsQSyHctqXR5nAjOuGfLoJ4AQyr+aZbSQHSw7
+         dWIg==
+X-Gm-Message-State: AFqh2kqzLABd19FGP2wzCJMvOev8clZRBEWP3jxMtHXNSgW5RxFC3Lp7
+        j8l/l9GNPzd4YZT0XfZUDZlLPKRDXmeWxwsX
+X-Google-Smtp-Source: AMrXdXuYbgNJ6mADF471Nr47FVpIY+Yg01yjyOr0iwAlSvIm1iAaNTuWmauc0IjlKS/3ygcgMOC81w==
+X-Received: by 2002:a5e:db42:0:b0:6e2:dc1e:527b with SMTP id r2-20020a5edb42000000b006e2dc1e527bmr40263547iop.19.1673312834308;
+        Mon, 09 Jan 2023 17:07:14 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id x12-20020a026f0c000000b0039e60720706sm3088317jab.25.2023.01.09.17.07.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 17:07:13 -0800 (PST)
+Date:   Tue, 10 Jan 2023 01:07:13 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
+ driver
+Message-ID: <Y7y6Qf0QhEJDp37Y@google.com>
+References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+ <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
+ <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
+ <a5a32db9-21a1-1734-1c4f-88b9431d7aa8@i2se.com>
+ <Y7xRjDAgI3UO8Xuv@google.com>
+ <09d76f45-9dfe-19a0-33ec-badaac280772@i2se.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <09d76f45-9dfe-19a0-33ec-badaac280772@i2se.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
-branch HEAD: 5eb127bb9741c1480aff95ffa4e1bd4cd9b5b16d  USB: disable all RNDIS protocol drivers
+On Mon, Jan 09, 2023 at 09:19:02PM +0100, Stefan Wahren wrote:
+> Hi Matthias,
+> 
+> Am 09.01.23 um 18:40 schrieb Matthias Kaehlcke:
+> > On Sun, Jan 08, 2023 at 11:47:13AM +0100, Stefan Wahren wrote:
+> > > Am 07.01.23 um 18:23 schrieb Stefan Wahren:
+> > > > Hi Matthias,
+> > > > 
+> > > > Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
+> > > > > Currently each onboard_hub platform device owns an 'attach' work,
+> > > > > which is scheduled when the device probes. With this deadlocks
+> > > > > have been reported on a Raspberry Pi 3 B+ [1], which has nested
+> > > > > onboard hubs.
+> > > > > 
+> > > > > The flow of the deadlock is something like this (with the onboard_hub
+> > > > > driver built as a module) [2]:
+> > > > > 
+> > > > > - USB root hub is instantiated
+> > > > > - core hub driver calls onboard_hub_create_pdevs(), which creates the
+> > > > >     'raw' platform device for the 1st level hub
+> > > > > - 1st level hub is probed by the core hub driver
+> > > > > - core hub driver calls onboard_hub_create_pdevs(), which creates
+> > > > >     the 'raw' platform device for the 2nd level hub
+> > > > > 
+> > > > > - onboard_hub platform driver is registered
+> > > > > - platform device for 1st level hub is probed
+> > > > >     - schedules 'attach' work
+> > > > > - platform device for 2nd level hub is probed
+> > > > >     - schedules 'attach' work
+> > > > > 
+> > > > > - onboard_hub USB driver is registered
+> > > > > - device (and parent) lock of hub is held while the device is
+> > > > >     re-probed with the onboard_hub driver
+> > > > > 
+> > > > > - 'attach' work (running in another thread) calls driver_attach(), which
+> > > > >      blocks on one of the hub device locks
+> > > > > 
+> > > > > - onboard_hub_destroy_pdevs() is called by the core hub driver when one
+> > > > >     of the hubs is detached
+> > > > > - destroying the pdevs invokes onboard_hub_remove(), which waits for the
+> > > > >     'attach' work to complete
+> > > > >     - waits forever, since the 'attach' work can't acquire the device
+> > > > > lock
+> > > > > 
+> > > > > Use a single work struct for the driver instead of having a work struct
+> > > > > per onboard hub platform driver instance. With that it isn't necessary
+> > > > > to cancel the work in onboard_hub_remove(), which fixes the deadlock.
+> > > > > The work is only cancelled when the driver is unloaded.
+> > > > i applied both patches for this series on top of v6.1
+> > > > (multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
+> > Thanks for testing.
+> > 
+> > > here is the hung task output:
+> > > 
+> > > [  243.682193] INFO: task kworker/1:0:18 blocked for more than 122 seconds.
+> > > [  243.682222]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+> > > [  243.682233] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+> > > this message.
+> > > [  243.682242] task:kworker/1:0     state:D stack:0     pid:18 ppid:2
+> > > flags:0x00000000
+> > > [  243.682267] Workqueue: events onboard_hub_attach_usb_driver
+> > > [onboard_usb_hub]
+> > > [  243.682317]  __schedule from schedule+0x4c/0xe0
+> > > [  243.682345]  schedule from schedule_preempt_disabled+0xc/0x10
+> > > [  243.682367]  schedule_preempt_disabled from
+> > > __mutex_lock.constprop.0+0x244/0x804
+> > > [  243.682394]  __mutex_lock.constprop.0 from __driver_attach+0x7c/0x188
+> > > [  243.682421]  __driver_attach from bus_for_each_dev+0x70/0xb0
+> > > [  243.682449]  bus_for_each_dev from onboard_hub_attach_usb_driver+0xc/0x28
+> > > [onboard_usb_hub]
+> > > [  243.682494]  onboard_hub_attach_usb_driver [onboard_usb_hub] from
+> > > process_one_work+0x1ec/0x4d0
+> > > [  243.682534]  process_one_work from worker_thread+0x50/0x540
+> > > [  243.682559]  worker_thread from kthread+0xd0/0xec
+> > > [  243.682582]  kthread from ret_from_fork+0x14/0x2c
+> > > [  243.682600] Exception stack(0xf086dfb0 to 0xf086dff8)
+> > > [  243.682615] dfa0:                                     00000000 00000000
+> > > 00000000 00000000
+> > > [  243.682631] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000
+> > > 00000000 00000000
+> > > [  243.682646] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> > > [  243.682692] INFO: task kworker/1:2:82 blocked for more than 122 seconds.
+> > > [  243.682703]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+> > > [  243.682713] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+> > > this message.
+> > > [  243.682721] task:kworker/1:2     state:D stack:0     pid:82 ppid:2
+> > > flags:0x00000000
+> > > [  243.682741] Workqueue: events_power_efficient hub_init_func2
+> > > [  243.682764]  __schedule from schedule+0x4c/0xe0
+> > > [  243.682785]  schedule from schedule_preempt_disabled+0xc/0x10
+> > > [  243.682808]  schedule_preempt_disabled from
+> > > __mutex_lock.constprop.0+0x244/0x804
+> > > [  243.682833]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
+> > > [  243.682859]  hub_activate from process_one_work+0x1ec/0x4d0
+> > > [  243.682883]  process_one_work from worker_thread+0x50/0x540
+> > > [  243.682907]  worker_thread from kthread+0xd0/0xec
+> > > [  243.682927]  kthread from ret_from_fork+0x14/0x2c
+> > > [  243.682944] Exception stack(0xf1509fb0 to 0xf1509ff8)
+> > > [  243.682958] 9fa0:                                     00000000 00000000
+> > > 00000000 00000000
+> > > [  243.682974] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
+> > > 00000000 00000000
+> > > [  243.682988] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> > > [  243.683023] INFO: task kworker/1:4:257 blocked for more than 122 seconds.
+> > > [  243.683034]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+> > > [  243.683043] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+> > > this message.
+> > > [  243.683051] task:kworker/1:4     state:D stack:0     pid:257 ppid:2
+> > > flags:0x00000000
+> > > [  243.683071] Workqueue: events_power_efficient hub_init_func2
+> > > [  243.683092]  __schedule from schedule+0x4c/0xe0
+> > > [  243.683113]  schedule from schedule_preempt_disabled+0xc/0x10
+> > > [  243.683135]  schedule_preempt_disabled from
+> > > __mutex_lock.constprop.0+0x244/0x804
+> > > [  243.683160]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
+> > > [  243.683184]  hub_activate from process_one_work+0x1ec/0x4d0
+> > > [  243.683209]  process_one_work from worker_thread+0x50/0x540
+> > > [  243.683233]  worker_thread from kthread+0xd0/0xec
+> > > [  243.683253]  kthread from ret_from_fork+0x14/0x2c
+> > > [  243.683270] Exception stack(0xf09d9fb0 to 0xf09d9ff8)
+> > > [  243.683283] 9fa0:                                     00000000 00000000
+> > > 00000000 00000000
+> > > [  243.683299] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
+> > > 00000000 00000000
+> > > [  243.683313] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> > Does commenting the following help:
+> > 
+> >    while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
+> >        msleep(10);
+> > 
+> > ?
+> Yes, it does. I restarted the board multiple times and it never hang :-)
 
-elapsed time: 728m
+Thanks again for testing!
 
-configs tested: 96
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                            allnoconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                                 defconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-s390                                defconfig
-s390                             allmodconfig
-sh                               allmodconfig
-s390                             allyesconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-x86_64                              defconfig
-ia64                             allmodconfig
-i386                 randconfig-a014-20230109
-i386                                defconfig
-i386                 randconfig-a011-20230109
-x86_64                               rhel-8.3
-i386                 randconfig-a013-20230109
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a012-20230109
-x86_64                          rhel-8.3-func
-i386                 randconfig-a016-20230109
-i386                 randconfig-a015-20230109
-arm                                 defconfig
-x86_64               randconfig-a011-20230109
-x86_64                           allyesconfig
-x86_64               randconfig-a013-20230109
-x86_64               randconfig-a012-20230109
-x86_64               randconfig-a014-20230109
-x86_64               randconfig-a016-20230109
-x86_64               randconfig-a015-20230109
-x86_64                           rhel-8.3-bpf
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                             allyesconfig
-riscv                randconfig-r042-20230109
-arm                  randconfig-r046-20230108
-arc                  randconfig-r043-20230108
-arc                  randconfig-r043-20230109
-s390                 randconfig-r044-20230109
-sh                   rts7751r2dplus_defconfig
-xtensa                              defconfig
-ia64                                defconfig
-i386                          randconfig-c001
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-loongarch                           defconfig
-loongarch                         allnoconfig
-loongarch                        allmodconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arm                             pxa_defconfig
-arc                           tb10x_defconfig
-arm                              allmodconfig
-arm                       multi_v4t_defconfig
-arc                    vdk_hs38_smp_defconfig
-
-clang tested configs:
-i386                 randconfig-a004-20230109
-i386                 randconfig-a002-20230109
-i386                 randconfig-a003-20230109
-i386                 randconfig-a001-20230109
-i386                 randconfig-a006-20230109
-i386                 randconfig-a005-20230109
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r045-20230109
-arm                  randconfig-r046-20230109
-riscv                randconfig-r042-20230108
-hexagon              randconfig-r041-20230108
-hexagon              randconfig-r041-20230109
-hexagon              randconfig-r045-20230108
-s390                 randconfig-r044-20230108
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-mips                     loongson1c_defconfig
-mips                      maltaaprp_defconfig
-x86_64               randconfig-a001-20230109
-x86_64               randconfig-a002-20230109
-x86_64               randconfig-a004-20230109
-x86_64               randconfig-a003-20230109
-x86_64               randconfig-a006-20230109
-x86_64               randconfig-a005-20230109
-powerpc               mpc834x_itxgp_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I'll post a version without that loop, which shouldn't be needed as per the
+rationale in my previous mail.
