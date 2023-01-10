@@ -2,70 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CB7664778
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 18:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C25664856
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 19:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbjAJRdF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 12:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S234655AbjAJSLK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 13:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234313AbjAJRc7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 12:32:59 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89015B15B
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 09:32:58 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id 3so6416532iou.12
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 09:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2WglFD8vrQmflspPOJQOiyJdpFr/DrUWVK6xL71FE/s=;
-        b=h+Jx3Wt1+stYfeew4k9Zc6l0xTu35n7g5OprwCCJHzoJNIyN8fWJMBNXBnMzFjBym2
-         QSPQfAAN5DNE7nmx7jsgQjJ9CvMYrYxpOYmeOTJRcgU3Q7N0ZGPssAgf4y1hJ2IfqIlv
-         dMRyZxY9GssiBFrOVwzCvZvgbJufTbMvAOR68=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2WglFD8vrQmflspPOJQOiyJdpFr/DrUWVK6xL71FE/s=;
-        b=tVrnJP6tAH/TZ2zvGg10nM3c5nD9fHGKFDzmcQmO2luhYPb1IOybbWkGcmiRCaqLqJ
-         EuEVXGb7Yhz578Eqs7Qc+5SPbfAg24P6JQ/qXIBo1UMCqbTg4UHUrp1osUMKLDSVP7/y
-         lBDIKpaBCbz/d3viVtGqD5ZIX7nsqHRET7i4a85Lb4GAtaWC7EfF7QkTo6+oXExNd6gu
-         MZqqEf8DcVfpOqJqTp0MZTviL5QstFxUJTkaMwK0n3hWEGNgtRMtZK+MyMDP8K1qY17Q
-         Cj7R60unRW/325zfZ+VOdMgKNoa/CD+0qt0XgzglXBG+AtjO3pEseC5z0S3cvqy1stZn
-         QHeA==
-X-Gm-Message-State: AFqh2kpGTkoY//viai9YUZXGDZ2AeDrFTFC4bY+RpKWGVAnYRod1HDVO
-        q3yvtj2TSu8Wa75T71wqX/ayOg==
-X-Google-Smtp-Source: AMrXdXvCag/yv2jYixjCgU1I2FqjFssXU34NC/8jslwPn/DflH79Q2heRz5OtoWlxIMyifOOys6Qbg==
-X-Received: by 2002:a5e:a817:0:b0:6ec:c7a1:d597 with SMTP id c23-20020a5ea817000000b006ecc7a1d597mr49886778ioa.2.1673371978057;
-        Tue, 10 Jan 2023 09:32:58 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id l131-20020a6b3e89000000b006ccc36c963fsm4342016ioa.43.2023.01.10.09.32.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 09:32:57 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
+        with ESMTP id S238934AbjAJSKP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 13:10:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF06C57
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 10:08:16 -0800 (PST)
+Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1pFJ2c-0002VQ-CO; Tue, 10 Jan 2023 19:08:06 +0100
+From:   Lucas Stach <l.stach@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Icenowy Zheng <uwu@icenowy.me>, stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: [PATCH v2 2/2] usb: misc: onboard_hub: Move 'attach' work to the driver
-Date:   Tue, 10 Jan 2023 17:32:53 +0000
-Message-Id: <20230110172954.v2.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230110172954.v2.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
-References: <20230110172954.v2.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, patchwork-lst@pengutronix.de
+Subject: [PATCH resend] dt-bindings: usb: dwc3-imx8mp: add power domain property
+Date:   Tue, 10 Jan 2023 19:08:04 +0100
+Message-Id: <20230110180804.594462-1-l.stach@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,132 +46,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently each onboard_hub platform device owns an 'attach' work,
-which is scheduled when the device probes. With this deadlocks
-have been reported on a Raspberry Pi 3 B+ [1], which has nested
-onboard hubs.
+The USB controllers in the i.MX8MP are located inside the HSIO
+power domain. Add the power-domains property to the DT binding
+to be able to describe the hardware properly.
 
-The flow of the deadlock is something like this (with the onboard_hub
-driver built as a module) [2]:
-
-- USB root hub is instantiated
-- core hub driver calls onboard_hub_create_pdevs(), which creates the
-  'raw' platform device for the 1st level hub
-- 1st level hub is probed by the core hub driver
-- core hub driver calls onboard_hub_create_pdevs(), which creates
-  the 'raw' platform device for the 2nd level hub
-
-- onboard_hub platform driver is registered
-- platform device for 1st level hub is probed
-  - schedules 'attach' work
-- platform device for 2nd level hub is probed
-  - schedules 'attach' work
-
-- onboard_hub USB driver is registered
-- device (and parent) lock of hub is held while the device is
-  re-probed with the onboard_hub driver
-
-- 'attach' work (running in another thread) calls driver_attach(), which
-   blocks on one of the hub device locks
-
-- onboard_hub_destroy_pdevs() is called by the core hub driver when one
-  of the hubs is detached
-- destroying the pdevs invokes onboard_hub_remove(), which waits for the
-  'attach' work to complete
-  - waits forever, since the 'attach' work can't acquire the device lock
-
-Use a single work struct for the driver instead of having a work struct
-per onboard hub platform driver instance. With that it isn't necessary
-to cancel the work in onboard_hub_remove(), which fixes the deadlock.
-The work is only cancelled when the driver is unloaded.
-
-[1] https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-[2] https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
-
-Cc: stable@vger.kernel.org
-Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-Link: https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
-Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
-Changes in v2:
-- drop loop in onboard_hub_probe() to wait for an already running
-  'attach' work to finish. The loop can cause deadlocks and is not
-  needed.
+ Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Rationale for why the loop in onboard_hub_probe() isn't needed:
-
-The idea behind the loop was: The currently running work might not take
-into account the USB devices of the hub that is currently probed, which
-should probe shortly after the hub was powered on.
-
-The 'attach' work is only needed for USB devices that were previously
-detached through device_release_driver() in onboard_hub_remove(). These
-USB device objects only persist in the kernel if the hub is not powered
-off (or put into reset) by onboard_hub_remove().
-
-If onboard_hub_probe() is invoked and the USB device objects persisted,
-then an already running 'attach' work should take them into account. If
-they didn't persist the running work might miss them, but that wouldn't
-be a problem since the newly created USB devices don't need to be
-explicitly attached because they weren't detached previously.
-
- drivers/usb/misc/onboard_usb_hub.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index db0844b30bbd..969c4c4f2ae9 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -27,7 +27,10 @@
+diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
+index 01ab0f922ae8..3fb4feb6d3d9 100644
+--- a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
+@@ -71,6 +71,9 @@ properties:
+     description:
+       Power pad (PWR) polarity is active low.
  
- #include "onboard_usb_hub.h"
- 
-+static void onboard_hub_attach_usb_driver(struct work_struct *work);
++  power-domains:
++    maxItems: 1
 +
- static struct usb_device_driver onboard_hub_usbdev_driver;
-+static DECLARE_WORK(attach_usb_driver_work, onboard_hub_attach_usb_driver);
+ # Required child node:
  
- /************************** Platform driver **************************/
+ patternProperties:
+@@ -87,12 +90,14 @@ required:
+   - clocks
+   - clock-names
+   - interrupts
++  - power-domains
  
-@@ -45,7 +48,6 @@ struct onboard_hub {
- 	bool is_powered_on;
- 	bool going_away;
- 	struct list_head udev_list;
--	struct work_struct attach_usb_driver_work;
- 	struct mutex lock;
- };
+ additionalProperties: false
  
-@@ -271,8 +273,7 @@ static int onboard_hub_probe(struct platform_device *pdev)
- 	 * This needs to be done deferred to avoid self-deadlocks on systems
- 	 * with nested onboard hubs.
- 	 */
--	INIT_WORK(&hub->attach_usb_driver_work, onboard_hub_attach_usb_driver);
--	schedule_work(&hub->attach_usb_driver_work);
-+	schedule_work(&attach_usb_driver_work);
- 
- 	return 0;
- }
-@@ -285,9 +286,6 @@ static int onboard_hub_remove(struct platform_device *pdev)
- 
- 	hub->going_away = true;
- 
--	if (&hub->attach_usb_driver_work != current_work())
--		cancel_work_sync(&hub->attach_usb_driver_work);
--
- 	mutex_lock(&hub->lock);
- 
- 	/* unbind the USB devices to avoid dangling references to this device */
-@@ -449,6 +447,8 @@ static void __exit onboard_hub_exit(void)
- {
- 	usb_deregister_device_driver(&onboard_hub_usbdev_driver);
- 	platform_driver_unregister(&onboard_hub_driver);
-+
-+	cancel_work_sync(&attach_usb_driver_work);
- }
- module_exit(onboard_hub_exit);
- 
+ examples:
+   - |
+     #include <dt-bindings/clock/imx8mp-clock.h>
++    #include <dt-bindings/power/imx8mp-power.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     usb3_0: usb@32f10100 {
+       compatible = "fsl,imx8mp-dwc3";
+@@ -102,6 +107,7 @@ examples:
+                <&clk IMX8MP_CLK_USB_ROOT>;
+       clock-names = "hsio", "suspend";
+       interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
++      power-domains = <&hsio_blk_ctrl IMX8MP_HSIOBLK_PD_USB>;
+       #address-cells = <1>;
+       #size-cells = <1>;
+       dma-ranges = <0x40000000 0x40000000 0xc0000000>;
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.30.2
 
