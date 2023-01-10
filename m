@@ -2,205 +2,327 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734A6663F7C
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 12:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DB5663FB1
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 13:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238248AbjAJLs6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 06:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S238226AbjAJMDE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 07:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238265AbjAJLsX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 06:48:23 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216FC56886;
-        Tue, 10 Jan 2023 03:48:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PuB3WO3HQ4qbjAL9s4MWcrd0eP7qfpvCUbTZ0FuuQ+7g6BkJJsMUEMC7kz9iIjm9wWCEk304UXTrz/o/tXc+4mFgXoQ5v0KWARChDNCPuveuPPXdCAeJqnXEqzjQdCS4M5vR3TH8d7JoIZpsuECww9x+iZ+DUNwMFWrL5hd2uROUHGgZ25hkTAXwvNJizpRnsvvBVtLJfDMFtowVzjXaJI5T8aouw+eTensXU/oVcPWvtZnXL130FrlbTj5aamvOvJQP9Oz1hPwXYoiES80DyimMnaJ8ZsI7siIIrkbrRNWYu6tVNDxwu8LGME5vTCiiFRRQ/mW93epHsZV8bbp/oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w1FY9QfXzPtA3fzb8X/oXli48iMyPOHEBZuoEBUtrt4=;
- b=N8QWWNU6fuNYaWFTIKNwhRQnona5v18NKJtpNfuM+UYdHyEQLdsw6hWgUZuvCgbBSbHt4wwiakdTzsP9plE4kwxIXJNc3diJ+i5688h7vokL0KepILiXQKtjv6zq1HXgHrknr4tTHcGgzRlI5dB508uBllgiAuV16u3B8Ti6DSd6etmHsJPCy7K6f+Ummq8XLiqkxk7XYW8XsCmM55nj77Qwwvujsd9lWDxd1zi5H+itAVl4YWYm9WJh4EmdFd7mcnkQsSswtpwC4+rk+HqhCq2189SJzja+Mvj/e1ySMgqM7XXaEU7zB+wOwHRY9jEcSMG6vcIg5vSbRgINOTDxqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w1FY9QfXzPtA3fzb8X/oXli48iMyPOHEBZuoEBUtrt4=;
- b=H4JW72u4k21SZdJPsQP956oioYmQJsQlUJbl2l33+HODwrK8rIe55VyQai8e7faYJtkj90/mVWZV8je9VGJ/wee+o//xRXnTdkSDRJEMvNLJIQzYew23SW64ZDXyk5EAJLVY+HlGeQ+ter2mZumeZkQqlshm6fuYuNf0UvwlpCwpPIsjTR3thLuzdXU7NyXdBbAnlsZmw+EdOauzm/LeRQKo4eIgU1iQCKyU7hoIK2stXsaJyZo6hFMUvy3CKWuJSczoEhxCTClG7ihO82tGssKwvjW171PXpipgj8QvPbOM5PSSTL0Clu1zBY1fGGhJLxvVUyv1abxK1HnPhz6txQ==
-Received: from DM4PR12MB5988.namprd12.prod.outlook.com (2603:10b6:8:6b::20) by
- DS7PR12MB8291.namprd12.prod.outlook.com (2603:10b6:8:e2::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5986.18; Tue, 10 Jan 2023 11:48:10 +0000
-Received: from DM4PR12MB5988.namprd12.prod.outlook.com
- ([fe80::ab92:c843:744d:1363]) by DM4PR12MB5988.namprd12.prod.outlook.com
- ([fe80::ab92:c843:744d:1363%3]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 11:48:10 +0000
-From:   Haotien Hsu <haotienh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>,
-        Wayne Chang <waynec@nvidia.com>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] ucsi_ccg: Refine the UCSI Interrupt handling
-Thread-Topic: [PATCH v3] ucsi_ccg: Refine the UCSI Interrupt handling
-Thread-Index: AQHZH0uaxHEnso5S902rUVzbM3XOUq6RDgkAgAaGMYA=
-Date:   Tue, 10 Jan 2023 11:48:10 +0000
-Message-ID: <9fe65be9-d0d8-0201-0dcf-8dd940991d92@nvidia.com>
-References: <20230103081531.423017-1-haotienh@nvidia.com>
- <Y7fXapwb5yJNbM3G@kroah.com>
-In-Reply-To: <Y7fXapwb5yJNbM3G@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5988:EE_|DS7PR12MB8291:EE_
-x-ms-office365-filtering-correlation-id: baf8904b-2124-47d6-660a-08daf3008c20
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 30qZVdsDNL1yYpJ0wzJWvsNf00fhbTTDEhnsvedopiVxOzYAfvTZVLBxF2HhE/ISW9DdPB7qrjZNnApk1CXIiql1xkFX/aZFF9wRiStBM+0Eei3hSfRLGSfitCeIxCeVwDxKn7T6V+K9kRzepERleDMIkrmNeUbn/nVBN0VTwUC6h/Y65ujJUgsvxNo2TX0IBaWj4j8G9+H1LxABtWutvaGu0CiA+0FoSBDPTHJKsnyXKbCIfKWEoAqtyz7ojFQVzOb3OGgAESSMvSAePgdOfRtKLQ+IDV7LpLbf9UdQG4TXJ1I852O6gs8MdxaHF54zTkn3fo6RO1jZrKn7QSVxrv4ix8wA23HB24OSIlLMZwoIFn13wTTaC6sI+yZ/7WeMj/nXtO5XAX7Bc8HbGajs2o1qHQ1Yu6xc+Yu0pP/R0PMmrpZsXBqn4ODPU5X3lQY31L0uYMdJ/15G6Q2HdXEFmbzLchTBV2jy0HEj5UexwxO7ruIPcuyeEiLjF01yk1Pj0J8t7QhFMAdBOXDd55wmelq1eFCLBudKHQq+WPvb8dw7/ZaV7fikBDfId5ga4z9jUls5LZuXght7ihpfqoYOzrqD6h9EH9sIShuGNMy6iiEzzuuwcbA/MMYe/tXQAGPifou3Cbslv5mi2rmF3JjsYVDo+yf8mqN0/SvUSpTzjjtFB/ZJ+iB0VFe0v3+n1gg1P68KTqsRFLMmrxzCQStJhGaT18RtQGEbZXVpEaKPEdw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5988.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(39860400002)(366004)(396003)(451199015)(41300700001)(54906003)(64756008)(316002)(6916009)(76116006)(2616005)(66446008)(36756003)(8676002)(66476007)(4326008)(66556008)(66946007)(86362001)(91956017)(31696002)(38070700005)(5660300002)(122000001)(83380400001)(38100700002)(8936002)(2906002)(6506007)(71200400001)(53546011)(31686004)(6486002)(6512007)(186003)(478600001)(26005)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VnVqdEtMK0Nqa1hHbHBRTHZhaWJoYXdjaEpYcUpOSHJmVU5DZ2M0azMxc2Ra?=
- =?utf-8?B?WWhrZUJyUTdJS2hyOXVPdlF2aERKRzBtQUZ4b3VRMjBpQWpGb3loMlhUT3lZ?=
- =?utf-8?B?cktJZnlzSXlVVUFDSjhMbjlKdk5ZdjhlYXJxNUFRMzZQTGlLaUt4Y3ovUzJW?=
- =?utf-8?B?TEtBV0pQbS8xV3BSL0hqaVU2VWhQSWMvemsxOUlWYVp0ZWxGZHUxaE1LN3Nk?=
- =?utf-8?B?V1lMSWhxRlBJQ2M2Q2FTaWpKUzNWWExDc2xkbHJIOWVGQ0FHV1Q0K0MrR0hC?=
- =?utf-8?B?K3FwOXpJRi9SWFJ4Z1Vsck5na2MwdFZPRkUrdGZTRHczcjZ4bkw3bGNreEtJ?=
- =?utf-8?B?L29vejhmVlNxMXlFQkZhZnVqSEs1V1JheCtRRmR6eDZUVWhEUWR4QThOdi85?=
- =?utf-8?B?ZTE0RGxJaUxpNGFwWlF2b2FvRFBmZzkwU05SZmFTK2I2cFh2cDZhOHpoNFNs?=
- =?utf-8?B?eGhObWdIbnQwQkltcFBvWndvLzFmOHVLRktkYzRRb2Rrc2FUWFYvTGEwY2ZW?=
- =?utf-8?B?dk5hWDgvNW55R21Fa3NSQitGOXgvWTFtMDcxblQ5M0lzTDR1d0RqOG5JdXcv?=
- =?utf-8?B?Qy82NmRSM1RUcE1yMENrakdqWExRL2puSDFKYUd0aUhFczdSSVQraTd3aUlv?=
- =?utf-8?B?VEFFOXhseGk0YXhEaXlSeEFFZFhPYXNueUs1UW5LMHZ0QVlUQmVXYW5nODZM?=
- =?utf-8?B?N2lJaU1WN041Tmd3YU1ia0ZINVMrTzRYcG5SVFVLVDRHR0dRbnpzaG5BL0pZ?=
- =?utf-8?B?ZHlleG5IajZWaTVFRXJOem1GdW80SytQN0JiblNMd0EvRjR6bGRQY29FdTdi?=
- =?utf-8?B?VEZ2WFBsaDh3N1hoUlREZ2hBWWw1ak5kZXVZUVlndTFMc2U4ejR4aGI2cnhN?=
- =?utf-8?B?WlQ2ZEdoU1duNk9ZbTFpVEI3dUt1RHdDWmJ5YjVQckdTN1hFVnZKWXhaZ0Z0?=
- =?utf-8?B?VHB4UDhVNjl0QWZXOFgrYm84ditTWlREMzkrUitoM1FVNjNhRkxCMnJMeHpQ?=
- =?utf-8?B?RWk1RWtFNW9acUpuUEtyTWw3Z3YzcnFHWEJSTnczOUFEODlwUFFrTWREZGlS?=
- =?utf-8?B?Wk1JYk1pajlDREFwL1lLdnJMRlNuKzdJMDh4N2lnVlREOUYxMXEzNjV5Q2lx?=
- =?utf-8?B?bzFLYlpGVzVEUTFmdm5oMXlOOHpiVHo3TEp0dW9OblFISCtEcE1Hd1orbHl3?=
- =?utf-8?B?ZEVPaUwyRDlDamladStXNEdwL05sK3ZLcVhhOEdvNE5DMmI5bjE0ek45MnNx?=
- =?utf-8?B?SjVsQ2QwN2FCa25yeTJhVGpIcDM3ZmNVL000TzEzRjEraDJkNDduRmw3ZUx5?=
- =?utf-8?B?THA1NkVHNlFJVzhoeERIN09PU3NLOVNLVjAyc1hUem1ldEc5ZkdZb2ZLZCsv?=
- =?utf-8?B?bVc0cnR3UXMvL1FZN2JSSUNNYTN3Zk9QbUE4RlVMUFQwOVhaclIvRU10dmVl?=
- =?utf-8?B?Wk40NUwrZ0NwRGkzN1grZDdCeTJlc0J3ZGU2dHViWVFNU0prTTZqUXZMQncx?=
- =?utf-8?B?ejlmZ1MrSWxEeFZiV29JTDc2OFA0L29HSmhrdWdRMjBwaGFOYmU0bXhocEsy?=
- =?utf-8?B?VTNidldPMFBIZjZGQXMyTTJzSThwQW5BRmRBR0MvMEpVbC9TOXloa1VjSG03?=
- =?utf-8?B?TUtVTUZ5WGdJQmlTSWsrdUp4bjJUcjFQM281M1RrN21Yb3lKYUhZUjhkUFZ6?=
- =?utf-8?B?UUhGeXI0K2dGbVVZS09CRXdIcGlvU1N2ZlNQcUM5Y252NVVyelZNdUppcjVK?=
- =?utf-8?B?enlWRHg2UDhNN1RueVJNUUxEeXpzZWVoNkZrTGc2MU44bEs3Uk9MSkcrTGpR?=
- =?utf-8?B?UjI5emVPNlVZQS8xVHdaSXdITXVlYlFFNVduTW04Z0dheVQxdE16WE5wM01G?=
- =?utf-8?B?T3k4Wi92bHAwelNIWER2UjcwODd4NmNzZ1dsRTJZbmNYYnpXSFhERGQzNVlG?=
- =?utf-8?B?TXBDYmZCcXlQMDlNTm9CTWVBY2ZIbUF5ZkN3RkVlREVnelJNdkxpMUh3NEJt?=
- =?utf-8?B?OEpubVM4d3k0L3ZrUGNmc1plM2xVb0JOZVVuOG5wZUFMODVIZW9WZlEwaDZS?=
- =?utf-8?B?TnBSYU1XazBhUjZ5VzhJMjNBdTVVbzBwL2RldllWNXAxSlFBeUNUei9SczFF?=
- =?utf-8?Q?dH8Z7LgWTd6Zk4MYigZgJC3NR?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <61C4BEB9D738F84898F28DD87A35562A@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S238153AbjAJMDB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 07:03:01 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C241BE98;
+        Tue, 10 Jan 2023 04:02:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673352179; x=1704888179;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Bs/QxT4h0CrR67dsOJolQlUz/QoNMMNB9GCwsyLDTrY=;
+  b=LeSJaBIoVLXGiUZ6L4qZFCW9Bper4U6NHi5ixjxSFBfIGvsPEi+tF2lS
+   Yb40/odlgX1WqLOFIEF2m/JgrznW5mfDNz85+NJMJE6W6iwxl/g7aM6Pb
+   BOUh6FH9FL6iJ7doXnXwB9ud8TounDEc1l5EU88eWUhjEsAKwY8Q4OrEy
+   yFT+AbfbMtNB//HVQSlweWtGaDDKpwisUPTg5tGLCBODPnwjozngjReYK
+   /Hjj0fcrKG+f6qP1E39kC6YGm5Th8sPX/rlWUlgIBWnBk1mtNsKk4/z5K
+   8UdiQzyOkOUxm0WCgwTkEuUGMzdszxhael9FtkhpnnPRAckLNayfBfdYs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="350349976"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="350349976"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 04:02:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="799406770"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="799406770"
+Received: from gbocanex-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.115])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 04:02:53 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?q?Samuel=20Iglesias=20Gons=C3=A1lvez?= 
+        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 01/13] tty: Cleanup tty_port_set_initialized() bool parameter
+Date:   Tue, 10 Jan 2023 14:02:14 +0200
+Message-Id: <20230110120226.14972-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230110120226.14972-1-ilpo.jarvinen@linux.intel.com>
+References: <20230110120226.14972-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5988.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: baf8904b-2124-47d6-660a-08daf3008c20
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 11:48:10.2360
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EnsxuIhP32sC9jioS/iDvx0r6iOMpskTvqTJl/nWVwB5yVtng4McrVVhQ18MHLW5cZMZpscPNxPunG6I5ZPa6A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8291
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gMS82LzIzIDE2OjEwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6DQo+IEV4dGVybmFsIGVt
-YWlsOiBVc2UgY2F1dGlvbiBvcGVuaW5nIGxpbmtzIG9yIGF0dGFjaG1lbnRzDQo+IA0KPiANCj4g
-T24gVHVlLCBKYW4gMDMsIDIwMjMgYXQgMDQ6MTU6MzFQTSArMDgwMCwgSGFvdGllbiBIc3Ugd3Jv
-dGU6DQo+PiBGcm9tOiBTaW5nLUhhbiBDaGVuIDxzaW5naGFuY0BudmlkaWEuY29tPg0KPj4NCj4+
-IEZvciB0aGUgQ0NHeCwgd2hlbiB0aGUgT1BNIGZpZWxkIGluIHRoZSBJTlRSX1JFRyBpcyBjbGVh
-cmVkLCB0aGVuIHRoZQ0KPj4gQ0NJIGRhdGEgaW4gdGhlIFBQTSBpcyByZXNldC4NCj4+DQo+PiBU
-byBhbGlnbiB3aXRoIHRoZSBDQ0d4IFVDU0kgaW50ZXJmYWNlIGd1aWRlLCB0aGlzIHBhdGNoIHVw
-ZGF0ZXMgdGhlDQo+PiBkcml2ZXIgdG8gY29weSBDQ0kgYW5kIE1FU1NBR0VfSU4gYmVmb3JlIGNs
-ZWFyaW5nIFVDU0kgaW50ZXJydXB0Lg0KPj4gV2hlbiBhIG5ldyBjb21tYW5kIGlzIHNlbnQsIHRo
-ZSBkcml2ZXIgd2lsbCBjbGVhciB0aGUgb2xkIENDSSBhbmQNCj4+IE1FU1NBR0VfSU4gY29weS4N
-Cj4+DQo+PiBGaW5hbGx5LCBjbGVhciBVQ1NJX1JFQURfSU5UIGJlZm9yZSBjYWxsaW5nIGNvbXBs
-ZXRlKCkgdG8gZW5zdXJlIHRoYXQNCj4+IHRoZSB1Y3NpX2NjZ19zeW5jX3dyaXRlKCkgd291bGQg
-d2FpdCBmb3IgdGhlIGludGVycnVwdCBoYW5kbGluZyB0bw0KPj4gY29tcGxldGUuDQo+PiBJdCBw
-cmV2ZW50cyB0aGUgZHJpdmVyIGZyb20gcmVzZXR0aW5nIENDSSBwcmVtYXR1cmVseS4NCj4+DQo+
-PiBTaWduZWQtb2ZmLWJ5OiBTaW5nLUhhbiBDaGVuIDxzaW5naGFuY0BudmlkaWEuY29tPg0KPj4g
-U2lnbmVkLW9mZi1ieTogSGFvdGllbiBIc3UgPGhhb3RpZW5oQG52aWRpYS5jb20+DQo+PiAtLS0N
-Cj4+IFYxLT5WMg0KPj4gLSBGaXggdW5pbml0aWFsaXplZCBzeW1ib2wgJ2NjaScNCj4+IHYyLT52
-Mw0KPj4gLSBSZW1vdmUgd3JvbmcgUmVwb3J0ZWQtYnkgdGFncw0KPj4gLS0tDQo+PiAgIGRyaXZl
-cnMvdXNiL3R5cGVjL3Vjc2kvdWNzaV9jY2cuYyB8IDg2ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKystLS0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDc5IGluc2VydGlvbnMoKyksIDcgZGVsZXRp
-b25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3R5cGVjL3Vjc2kvdWNzaV9j
-Y2cuYyBiL2RyaXZlcnMvdXNiL3R5cGVjL3Vjc2kvdWNzaV9jY2cuYw0KPj4gaW5kZXggZWFiMzAx
-MmUxYjAxLi5iMzVhM2E5N2M5ZmIgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL3VzYi90eXBlYy91
-Y3NpL3Vjc2lfY2NnLmMNCj4+ICsrKyBiL2RyaXZlcnMvdXNiL3R5cGVjL3Vjc2kvdWNzaV9jY2cu
-Yw0KPj4gQEAgLTE5Miw2ICsxOTIsMTIgQEAgc3RydWN0IHVjc2lfY2NnX2FsdG1vZGUgew0KPj4g
-ICAgICAgIGJvb2wgY2hlY2tlZDsNCj4+ICAgfSBfX3BhY2tlZDsNCj4+DQo+PiArI2RlZmluZSBD
-Q0dYX01FU1NBR0VfSU5fTUFYIDQNCj4+ICtzdHJ1Y3Qgb3BfcmVnaW9uIHsNCj4+ICsgICAgIHUz
-MiBjY2k7DQo+PiArICAgICB1MzIgbWVzc2FnZV9pbltDQ0dYX01FU1NBR0VfSU5fTUFYXTsNCj4+
-ICt9Ow0KPj4gKw0KPj4gICBzdHJ1Y3QgdWNzaV9jY2cgew0KPj4gICAgICAgIHN0cnVjdCBkZXZp
-Y2UgKmRldjsNCj4+ICAgICAgICBzdHJ1Y3QgdWNzaSAqdWNzaTsNCj4+IEBAIC0yMjIsNiArMjI4
-LDkgQEAgc3RydWN0IHVjc2lfY2NnIHsNCj4+ICAgICAgICBib29sIGhhc19tdWx0aXBsZV9kcDsN
-Cj4+ICAgICAgICBzdHJ1Y3QgdWNzaV9jY2dfYWx0bW9kZSBvcmlnW1VDU0lfTUFYX0FMVE1PREVT
-XTsNCj4+ICAgICAgICBzdHJ1Y3QgdWNzaV9jY2dfYWx0bW9kZSB1cGRhdGVkW1VDU0lfTUFYX0FM
-VE1PREVTXTsNCj4+ICsNCj4+ICsgICAgIHNwaW5sb2NrX3Qgb3BfbG9jazsNCj4gDQo+IFdoYXQg
-ZG9lcyB0aGlzIGxvY2sgcHJvdGVjdD8gIFBsZWFzZSBkb2N1bWVudCB0aGF0IHNvIHRoYXQgd2Ug
-Y2FuIHZlcmlmeQ0KPiBpZiB0aGlzIHJlYWxseSBpcyBhIGNvcnJlY3QgY2hhbmdlIF9BTkRfIHNv
-IHdlIGtub3cgd2hhdCBmdXR1cmUgY2hhbmdlcw0KPiBuZWVkIHRvIHRha2UgdGhlIGxvY2sgb3Ig
-bm90Lg0KPiANCg0KLyogVGhpcyBzcGlubG9jayBwcm90ZWN0cyBvcF9kYXRhIHdoaWNoIGluY2x1
-ZGVzIENDSSBhbmQgTUVTU0FHRV9JTiB0aGF0DQogICogd2lsbCBiZSB1cGRhdGVkIGluIElTUiAq
-Lw0Kc3BpbmxvY2tfdCBvcF9sb2NrOw0KDQpJIHdpbGwgYWRkIHRoaXMgY29tbWVudCBpbnRvIHY0
-Lg0KDQo+PiArICAgICBzdHJ1Y3Qgb3BfcmVnaW9uIG9wX2RhdGE7DQo+PiAgIH07DQo+Pg0KPj4g
-ICBzdGF0aWMgaW50IGNjZ19yZWFkKHN0cnVjdCB1Y3NpX2NjZyAqdWMsIHUxNiByYWIsIHU4ICpk
-YXRhLCB1MzIgbGVuKQ0KPj4gQEAgLTMwNSwxMiArMzE0LDU3IEBAIHN0YXRpYyBpbnQgY2NnX3dy
-aXRlKHN0cnVjdCB1Y3NpX2NjZyAqdWMsIHUxNiByYWIsIGNvbnN0IHU4ICpkYXRhLCB1MzIgbGVu
-KQ0KPj4gICAgICAgIHJldHVybiAwOw0KPj4gICB9DQo+Pg0KPj4gK3N0YXRpYyB2b2lkIGNjZ19v
-cF9yZWdpb25fcmVhZChzdHJ1Y3QgdWNzaV9jY2cgKnVjLCB1bnNpZ25lZCBpbnQgb2Zmc2V0LA0K
-Pj4gKyAgICAgICAgICAgICB2b2lkICp2YWwsIHNpemVfdCB2YWxfbGVuKQ0KPj4gK3sNCj4+ICsg
-ICAgIHN0cnVjdCBvcF9yZWdpb24gKmRhdGEgPSAmdWMtPm9wX2RhdGE7DQo+PiArDQo+PiArICAg
-ICBzcGluX2xvY2soJnVjLT5vcF9sb2NrKTsNCj4+ICsgICAgIGlmIChvZmZzZXQgPT0gVUNTSV9D
-Q0kpDQo+PiArICAgICAgICAgICAgIG1lbWNweSh2YWwsICZkYXRhLT5jY2ksIHZhbF9sZW4pOw0K
-Pj4gKyAgICAgZWxzZSBpZiAob2Zmc2V0ID09IFVDU0lfTUVTU0FHRV9JTikNCj4+ICsgICAgICAg
-ICAgICAgbWVtY3B5KHZhbCwgJmRhdGEtPm1lc3NhZ2VfaW4sIHZhbF9sZW4pOw0KPj4gKyAgICAg
-c3Bpbl91bmxvY2soJnVjLT5vcF9sb2NrKTsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIHZvaWQg
-Y2NnX29wX3JlZ2lvbl91cGRhdGUoc3RydWN0IHVjc2lfY2NnICp1YywgdTMyIGNjaSkNCj4+ICt7
-DQo+PiArICAgICB1MTYgcmVnID0gQ0NHWF9SQUJfVUNTSV9EQVRBX0JMT0NLKFVDU0lfTUVTU0FH
-RV9JTik7DQo+PiArICAgICBzdHJ1Y3Qgb3BfcmVnaW9uICpkYXRhID0gJnVjLT5vcF9kYXRhOw0K
-Pj4gKyAgICAgdTMyIG1lc3NhZ2VfaW5bQ0NHWF9NRVNTQUdFX0lOX01BWF07DQo+PiArDQo+PiAr
-ICAgICBpZiAoVUNTSV9DQ0lfTEVOR1RIKGNjaSkpDQo+PiArICAgICAgICAgICAgIGlmIChjY2df
-cmVhZCh1YywgcmVnLCAodm9pZCAqKSZtZXNzYWdlX2luLA0KPj4gKyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBzaXplb2YobWVzc2FnZV9pbikpKSB7DQo+PiArICAgICAgICAg
-ICAgICAgICAgICAgZGV2X2Vycih1Yy0+ZGV2LCAiZmFpbGVkIHRvIHJlYWQgTUVTU0FHRV9JTlxu
-Iik7DQo+IA0KPiBXaGF0IGNhbiB1c2Vyc3BhY2UgZG8gd2l0aCB0aGlzIGVycm9yPyAgV2lsbCBp
-dCBiZSByZXBlYXRlZCBhIGxvdD8NCj4gDQoNCklmIGRyaXZlciBpcyBva2F5IHRvIHJlYWQgQ0NJ
-IGJ1dCBmYWlsZWQgdG8gcmVhZCBNRVNTQUdFX0lOLCBpdCdzIGFuDQpjcml0aWNhbCBlcnJvciBp
-biBDQ0d4IGFuZCBpbiB0aGlzIHNpdHVhdGlvbiwgdGhpcyBsb2cgY291bGQgcmVwZWF0IGEgbG90
-Lg0KV2UgZG9uJ3Qgc2VlbSB0byBoYXZlIGEgZ29vZCB3YXkgdG8gaGVscCB0aGlzIHNpdHVhdGlv
-biBmcm9tIHVzZXJzcGFjZS4NCg0KSW4gb3VyIGNhc2UsIHRoZSBmYWlsdXJlIG9uIGNjZ19yZWFk
-KCkgaXMgbW9zdGx5IGJlY2F1c2Ugb2YgdGhlIEkyQw0KaXNzdWUuIFdoZW4gdGhlcmUgaXMgYW4g
-STJDIGlzc3VlIGJldHdlZW4gQ0NHeCAmIFRlZ3JhLCB0aGUgZmFpbHVyZSBpcw0KbW9yZSBsaWtl
-bHkgaGFwcGVuaW5nIGluIHRoZSBlYXJsaWVyIHN0YWdlIChlLmcuLCBJTlRSIHJlYWQgb3IgQ0NJ
-IHJlYWQpLg0KDQpQbGVhc2UgbGV0IG1lIGtub3cgaWYgeW91IGhhdmUgbW9yZSBxdWVzdGlvbnMg
-YW5kIGNvbmNlcm5zLg0KDQo+IHRoYW5rcywNCj4gDQo+IGdyZWcgay1oDQo+IA0KDQo=
+Make callers pass true/false consistently for bool val.
+
+Reviewed-by: Samuel Iglesias Gonsalvez <siglesias@igalia.com>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/char/pcmcia/synclink_cs.c | 4 ++--
+ drivers/ipack/devices/ipoctal.c   | 4 ++--
+ drivers/s390/char/con3215.c       | 4 ++--
+ drivers/tty/amiserial.c           | 4 ++--
+ drivers/tty/moxa.c                | 2 +-
+ drivers/tty/mxser.c               | 2 +-
+ drivers/tty/n_gsm.c               | 4 ++--
+ drivers/tty/serial/serial_core.c  | 6 +++---
+ drivers/tty/synclink_gt.c         | 4 ++--
+ drivers/tty/tty_port.c            | 4 ++--
+ drivers/usb/serial/console.c      | 2 +-
+ 11 files changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index b2735be81ab2..baa46e8a094b 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -1309,7 +1309,7 @@ static int startup(MGSLPC_INFO * info, struct tty_struct *tty)
+ 	if (tty)
+ 		clear_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 1);
++	tty_port_set_initialized(&info->port, true);
+ 
+ 	return 0;
+ }
+@@ -1359,7 +1359,7 @@ static void shutdown(MGSLPC_INFO * info, struct tty_struct *tty)
+ 	if (tty)
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 0);
++	tty_port_set_initialized(&info->port, false);
+ }
+ 
+ static void mgslpc_program_hw(MGSLPC_INFO *info, struct tty_struct *tty)
+diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
+index fc00274070b6..103fce0c49e6 100644
+--- a/drivers/ipack/devices/ipoctal.c
++++ b/drivers/ipack/devices/ipoctal.c
+@@ -647,7 +647,7 @@ static void ipoctal_hangup(struct tty_struct *tty)
+ 	tty_port_hangup(&channel->tty_port);
+ 
+ 	ipoctal_reset_channel(channel);
+-	tty_port_set_initialized(&channel->tty_port, 0);
++	tty_port_set_initialized(&channel->tty_port, false);
+ 	wake_up_interruptible(&channel->tty_port.open_wait);
+ }
+ 
+@@ -659,7 +659,7 @@ static void ipoctal_shutdown(struct tty_struct *tty)
+ 		return;
+ 
+ 	ipoctal_reset_channel(channel);
+-	tty_port_set_initialized(&channel->tty_port, 0);
++	tty_port_set_initialized(&channel->tty_port, false);
+ }
+ 
+ static void ipoctal_cleanup(struct tty_struct *tty)
+diff --git a/drivers/s390/char/con3215.c b/drivers/s390/char/con3215.c
+index 72ba83c1bc79..0b05cd76b7d0 100644
+--- a/drivers/s390/char/con3215.c
++++ b/drivers/s390/char/con3215.c
+@@ -629,7 +629,7 @@ static int raw3215_startup(struct raw3215_info *raw)
+ 	if (tty_port_initialized(&raw->port))
+ 		return 0;
+ 	raw->line_pos = 0;
+-	tty_port_set_initialized(&raw->port, 1);
++	tty_port_set_initialized(&raw->port, true);
+ 	spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+ 	raw3215_try_io(raw);
+ 	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+@@ -659,7 +659,7 @@ static void raw3215_shutdown(struct raw3215_info *raw)
+ 		spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+ 		remove_wait_queue(&raw->empty_wait, &wait);
+ 		set_current_state(TASK_RUNNING);
+-		tty_port_set_initialized(&raw->port, 1);
++		tty_port_set_initialized(&raw->port, true);
+ 	}
+ 	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+ }
+diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+index f52266766df9..f8cdce1626cb 100644
+--- a/drivers/tty/amiserial.c
++++ b/drivers/tty/amiserial.c
+@@ -502,7 +502,7 @@ static int startup(struct tty_struct *tty, struct serial_state *info)
+ 	 */
+ 	change_speed(tty, info, NULL);
+ 
+-	tty_port_set_initialized(port, 1);
++	tty_port_set_initialized(port, true);
+ 	local_irq_restore(flags);
+ 	return 0;
+ 
+@@ -556,7 +556,7 @@ static void shutdown(struct tty_struct *tty, struct serial_state *info)
+ 
+ 	set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->tport, 0);
++	tty_port_set_initialized(&info->tport, false);
+ 	local_irq_restore(flags);
+ }
+ 
+diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+index 35b6fddf0341..bc474f3c3f8f 100644
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -1484,7 +1484,7 @@ static int moxa_open(struct tty_struct *tty, struct file *filp)
+ 		MoxaPortLineCtrl(ch, 1, 1);
+ 		MoxaPortEnable(ch);
+ 		MoxaSetFifo(ch, ch->type == PORT_16550A);
+-		tty_port_set_initialized(&ch->port, 1);
++		tty_port_set_initialized(&ch->port, true);
+ 	}
+ 	mutex_unlock(&ch->port.mutex);
+ 	mutex_unlock(&moxa_openlock);
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 2436e0b10f9a..2926a831727d 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -1063,7 +1063,7 @@ static int mxser_set_serial_info(struct tty_struct *tty,
+ 	} else {
+ 		retval = mxser_activate(port, tty);
+ 		if (retval == 0)
+-			tty_port_set_initialized(port, 1);
++			tty_port_set_initialized(port, true);
+ 	}
+ 	mutex_unlock(&port->mutex);
+ 	return retval;
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index daf12132deb1..631539c17d85 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2059,7 +2059,7 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 		tty_port_tty_hangup(&dlci->port, false);
+ 		gsm_dlci_clear_queues(dlci->gsm, dlci);
+ 		/* Ensure that gsmtty_open() can return. */
+-		tty_port_set_initialized(&dlci->port, 0);
++		tty_port_set_initialized(&dlci->port, false);
+ 		wake_up_interruptible(&dlci->port.open_wait);
+ 	} else
+ 		dlci->gsm->dead = true;
+@@ -3880,7 +3880,7 @@ static int gsmtty_open(struct tty_struct *tty, struct file *filp)
+ 	dlci->modem_rx = 0;
+ 	/* We could in theory open and close before we wait - eg if we get
+ 	   a DM straight back. This is ok as that will have caused a hangup */
+-	tty_port_set_initialized(port, 1);
++	tty_port_set_initialized(port, true);
+ 	/* Start sending off SABM messages */
+ 	if (gsm->initiator)
+ 		gsm_dlci_begin_open(dlci);
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index b9fbbee598b8..e049c760b738 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -290,7 +290,7 @@ static void uart_shutdown(struct tty_struct *tty, struct uart_state *state)
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+ 	if (tty_port_initialized(port)) {
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 
+ 		/*
+ 		 * Turn off DTR and RTS early.
+@@ -2347,7 +2347,7 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
+ 		unsigned int mctrl;
+ 
+ 		tty_port_set_suspended(port, 1);
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 
+ 		spin_lock_irq(&uport->lock);
+ 		ops->stop_tx(uport);
+@@ -2458,7 +2458,7 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
+ 					uart_rs485_config(uport);
+ 				ops->start_tx(uport);
+ 				spin_unlock_irq(&uport->lock);
+-				tty_port_set_initialized(port, 1);
++				tty_port_set_initialized(port, true);
+ 			} else {
+ 				/*
+ 				 * Failed to resume - maybe hardware went away?
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 72b76cdde534..2b96bf0ecafb 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -2354,7 +2354,7 @@ static int startup(struct slgt_info *info)
+ 	if (info->port.tty)
+ 		clear_bit(TTY_IO_ERROR, &info->port.tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 1);
++	tty_port_set_initialized(&info->port, true);
+ 
+ 	return 0;
+ }
+@@ -2401,7 +2401,7 @@ static void shutdown(struct slgt_info *info)
+ 	if (info->port.tty)
+ 		set_bit(TTY_IO_ERROR, &info->port.tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 0);
++	tty_port_set_initialized(&info->port, false);
+ }
+ 
+ static void program_hw(struct slgt_info *info)
+diff --git a/drivers/tty/tty_port.c b/drivers/tty/tty_port.c
+index dce08a6d7b5e..0c00d5bd6c88 100644
+--- a/drivers/tty/tty_port.c
++++ b/drivers/tty/tty_port.c
+@@ -367,7 +367,7 @@ static void tty_port_shutdown(struct tty_port *port, struct tty_struct *tty)
+ 		goto out;
+ 
+ 	if (tty_port_initialized(port)) {
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 		/*
+ 		 * Drop DTR/RTS if HUPCL is set. This causes any attached
+ 		 * modem to hang up the line.
+@@ -788,7 +788,7 @@ int tty_port_open(struct tty_port *port, struct tty_struct *tty,
+ 				return retval;
+ 			}
+ 		}
+-		tty_port_set_initialized(port, 1);
++		tty_port_set_initialized(port, true);
+ 	}
+ 	mutex_unlock(&port->mutex);
+ 	return tty_port_block_til_ready(port, tty, filp);
+diff --git a/drivers/usb/serial/console.c b/drivers/usb/serial/console.c
+index da19a5fa414f..c3ea3a46ed76 100644
+--- a/drivers/usb/serial/console.c
++++ b/drivers/usb/serial/console.c
+@@ -169,7 +169,7 @@ static int usb_console_setup(struct console *co, char *options)
+ 			tty_save_termios(tty);
+ 			tty_kref_put(tty);
+ 		}
+-		tty_port_set_initialized(&port->port, 1);
++		tty_port_set_initialized(&port->port, true);
+ 	}
+ 	/* Now that any required fake tty operations are completed restore
+ 	 * the tty port count */
+-- 
+2.30.2
+
