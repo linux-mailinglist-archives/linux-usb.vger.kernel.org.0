@@ -2,149 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0DF6649A6
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 19:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5051664CC2
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 20:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239190AbjAJSXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 13:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S232678AbjAJTqg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 14:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239201AbjAJSXI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 13:23:08 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD471DDCE
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 10:21:09 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id s127so13176943vsb.5
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 10:21:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LhqMrGa+5XAAvhdm/qvpg845MSH/5HVvI+D0qxBhnAg=;
-        b=crr5n8812Ux90csqTMCY/9ikO5dYLT3PeVDNtY+owxJs8/cjRLyN1GSEJqAArFKTYb
-         agQgQUwTuvIk9IQJxSP3rIKMlMQQlzgZEm4UGHvaULonPAeeMu73bl3cW6yHbKm/gHnT
-         VqwKyMPjuXBIPRtGhzahm/OC2GLvx+fTbDdII7YqlezLFaEA3Z5yaoD48lRrA6tBlvo+
-         0yxanczW/1ondR9hgf5yumrJMu5vbWR3VjOvdhSx4UFkpxn0npAqkikgciwgs8Gc6Bo+
-         1CXEuVECVkCIhYvgGqzVj79z+0RpAb8DXUwEvEymg6QjPG5b8GCmPVOQaTDukOJjmKOZ
-         uG0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LhqMrGa+5XAAvhdm/qvpg845MSH/5HVvI+D0qxBhnAg=;
-        b=5zP5egIxB5LkvZ+/b1GLrixNyzq7Dm0hrJj0kNV8KBu1FzrObk6RTuGeaxP9/FkV46
-         vkNkPoR5oUT1qariIKCSWUxlRShXnf0oj/Eql6SkzfQ/kJeMzB3dBaOhAt5gV9Z2IGyl
-         8RfNcG4yZOUDNx7Wi+gAIwOf8SBSshH0aXQ7qBHLcg+rFyusZ0q6W56e3VBDi1AEEexK
-         cBdU6yZGiMt+qdEWsRI511XatYnr51m/xRjkQQEJS9/MvZdetawaKP+kcGLMfcNXvWyY
-         03WelwxfzTacrLKXVkiPJW94L2pV6+HkFm0lZh9cZmEHUtB4jI4ftXGjyXOAqoq4PuTX
-         ju9g==
-X-Gm-Message-State: AFqh2kr+1v694bgPbnmgSwDa4YvCqBIPiGszjKlEcLrOuvc8wngEl+HV
-        Za6Jrwvovu0h4cOznOXE27esuDUcc+zd/e9FAs8JJw==
-X-Google-Smtp-Source: AMrXdXulHZB8SHI/FLgkZGq1+rQO1MVRnWBVjyA9v3ohzuwYh+ownssImMjB38Pe8P3yocbk2Q10H0Wvk/BKaCPzyt8=
-X-Received: by 2002:a05:6102:94e:b0:3b5:1de3:19fa with SMTP id
- a14-20020a056102094e00b003b51de319famr8349620vsi.35.1673374867880; Tue, 10
- Jan 2023 10:21:07 -0800 (PST)
+        with ESMTP id S232214AbjAJTqf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 14:46:35 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C343D9EC;
+        Tue, 10 Jan 2023 11:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673379994; x=1704915994;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=KqQe3X8R2+M4ca8Y3nt3MFKKLU33LTTi3NG9IoqqMpY=;
+  b=YCLK7wPX/YybJccre6Tdprp7RuVNpQyGfDG4+VCqNbXt7nRG0Kn/Wqxn
+   9rwB2tCceIueG7xZ1K8CJ5HyEOOUlkkfyteVxvIz/0c6BhtN8oCdCT/Ro
+   AB7HcVFsVlbGm/YLyiPH9oVDhxXN0eutnTwsyhGZZ+im668hwS4Arrzn+
+   k2wcO2KVxcxtnmNWaz6T681WGEqJhSwgVtxMSB4JfVi6eO4H6O0mhDlMS
+   tC4kDCJfWu7geKlR/5rvBy5O3qtj27NoTIPqILcA/cEqXHXf2XGIawrLa
+   7N3aMVTgJd2g231Xxo2rbkqmPGkQSon4cvKLa4f5MhoNw88uYcHyPMbR4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385550319"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="385550319"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 11:46:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="831113342"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="831113342"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2023 11:46:28 -0800
+Message-ID: <cefcc5c6-6a91-c737-252a-edf596f77473@linux.intel.com>
+Date:   Tue, 10 Jan 2023 21:47:47 +0200
 MIME-Version: 1.0
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-3-allenwebb@google.com>
- <Y6FaUynXTrYD6OYT@kroah.com> <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
- <Y6H6/U0w96Z4kpDn@bombadil.infradead.org> <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
- <Y6IDOwxOxZpsdtiu@bombadil.infradead.org> <87cz7nsz24.fsf@esperi.org.uk>
-In-Reply-To: <87cz7nsz24.fsf@esperi.org.uk>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Tue, 10 Jan 2023 12:20:56 -0600
-Message-ID: <CAJzde05oSJuxSz1dBjxXppu39kcbNvZt1tP6QRxkHAqy94c-9w@mail.gmail.com>
-Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-8-quic_wcheng@quicinc.com>
+ <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
+ <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
+ <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
+ <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
+ support
+In-Reply-To: <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 5:54 AM Nick Alcock <nick.alcock@oracle.com> wrote:
->
-> On 20 Dec 2022, Luis Chamberlain uttered the following:
-> >> It also raises the question how many modules have device tables, but
-> >> do not call MODULE_DEVICE_TABLE since they are only ever built-in.
-> >> Maybe there should be some build time enforcement mechanism to make
-> >> sure that these are consistent.
-> >
-> > Definitely, Nick Alcock is doing some related work where the semantics
-> > of built-in modules needs to be clearer, he for instance is now removing
-> > a few MODULE_() macros for things which *are never* modules, and this is
-> > because after commit 8b41fc4454e ("kbuild: create modules.builtin
-> > without Makefile.modbuiltin or tristate.conf") we rely on the module
-> > license tag to generate the modules.builtin file. Without that commit
-> > we end up traversing the source tree twice. Nick's work builds on
-> > that work and futher clarifies these semantics by adding tooling which
-> > complains when something which is *never* capable of being a module
-> > uses module macros. The macro you are extending, MODULE_DEVICE_TABLE(),
-> > today is a no-op for built-in, but you are adding support to extend it
-> > for built-in stuff. Nick's work will help with clarifying symbol locality
-> > and so he may be interested in your association for the data in
-> > MODULE_DEVICE_TABLE and how you associate to a respective would-be
-> > module. His work is useful for making tracing more accurate with respect
-> > to symbol associations, so the data in MODULE_DEVICE_TABLE() may be
-> > useful as well to him.
->
-> The kallmodsyms module info (and, thus, modules.builtin) and
-> MODULE_DEVICE_TABLE do seem interestingly related. I wonder if we can in
-> future reuse at least the module names so we can save a few KiB more
-> space... (in this case, the canonical copy should probably be the one in
-> kallmodsyms, because that lets kallmodsyms reuse strings where modules
-> and their source file have similar names. Something for the future...)
+On 9.1.2023 22.24, Wesley Cheng wrote:
+> Hi Mathias,
+> 
+> On 1/2/2023 8:38 AM, Mathias Nyman wrote:
+>> On 29.12.2022 23.14, Wesley Cheng wrote:
+>>> Hi Mathias,
+>>>
+>>> On 12/28/2022 7:47 AM, Mathias Nyman wrote:
+>>>> On 24.12.2022 1.31, Wesley Cheng wrote:
+>>>>> Implement the XHCI operations for allocating and requesting for a secondary
+>>>>> interrupter.  The secondary interrupter can allow for events for a
+>>>>> particular endpoint to be routed to a separate event ring.  The event
+>>>>> routing is defined when submitting a transfer descriptor to the USB HW.
+>>>>> There is a specific field which denotes which interrupter ring to route the
+>>>>> event to when the transfer is completed.
+>>>>>
+>>>>> An example use case, such as audio packet offloading can utilize a separate
+>>>>> event ring, so that these events can be routed to a different processor
+>>>>> within the system.  The processor would be able to independently submit
+>>>>> transfers and handle its completions without intervention from the main
+>>>>> processor.
+>>>>>
+>>>>
+>>>> Adding support for more xHCI interrupters than just the primary one make sense for
+>>>> both the offloading and virtualization cases.
+>>>>
+>>>> xHCI support for several interrupters was probably added to support virtualization,
+>>>> to hand over usb devices to virtual machines and give them their own event ring and
+>>>> MSI/MSI-X vector.
+>>>>
+>>>> In this offloading case you probably want to avoid xHC interrupts from this device
+>>>> completely, making sure it doesn't wake up the main CPU unnecessarily.
+>>>>
+>>>> So is the idea here to let xhci driver set up the new interrupter, its event ring,
+>>>> and the endpoint transfer rings. Then pass the address of the endpoint transfer rings
+>>>> and the new event ring to the separate processor.
+>>>>
+>>>> This separate processor then both polls the event ring for new events, sets its dequeue
+>>>> pointer, clears EHB bit, and queues new TRBs on the transfer ring.
+>>>>
+>>>> so xhci driver does not handle any events for the audio part, and no audio data URBs
+>>>> are sent to usb core?
+>>>
+>>> Your entire description is correct.  To clarify, the interfaces which are non-audio will still be handled by the main processor.  For example, a USB headset can have a HID interface as well for volume control.  The HID interface will still be handled by the main processor, and events routed to the main event ring.
+>>>
+>>>>
+>>>> How about the control part?
+>>>> Is the control endpoint for this device still handled normally by usb core/xhci?
+>>>>
+>>>
+>>> Control transfers are always handled on the main processor.  Only audio interface's endpoints.
+>>
+>> Good to know, that means interrupter should be chosen per endpoint, not per device.
+>>
+>>>
+>>>> For the xhci parts I think we should start start by adding generic support for several
+>>>> interrupters, then add parts needed for offloading.
+>>>
+>> I can split up the patchsets to add interrupters first, then adding the offloading APIs in a separate patch.
+>>
+>>
+>> I started looking at supporting secondary interrupters myself.
+>> Let me work on that part a bit first. We have a bit different end goals.
+>> I want to handle interrupts from a secondary interrupter, while this audio offload
+>> really just wants to mask some interrupts.
+>>
+> 
+> I was looking at how we could possibly split up the XHCI secondary interrupter, and offloading parts.  Since the XHCI secondary interrupter is a feature that is defined in the XHCI spec (and we aren't doing anything outside of what is defined), I was thinking of having a separate XHCI driver (ie xhci-sec.c/h) that can be used to define all APIs related to setting up the event ring and ring management. (interrupt support can be added here)  This aligns a bit with what Alan suggested, and removing the APIs in the USB HCD, since this is XHCI specific stuff. ( https://lore.kernel.org/linux-usb/Y6zwZOquZOTZfnvP@rowland.harvard.edu/ )
 
-It appeared to me like the symbols added for MODULE_DEVICE_TABLE are
-only needed temporarily and could be stripped as part of the final
-linking step. This would make space less of a concern, but extern
-variables don't support the visibility attribute and in the build I am
-using the space difference is less than 1MB out of 613MB for the
-uncompressed kernel.
+Already started working on the interrupter, that part fits well into current driver.
 
->
-> > You folks may want to Cc each other on your patches.
->
-> I'd welcome that.
->
-> btw, do you want another kallmodsyms patch series from me just arranging
-> to drop fewer MODULE_ entries from non-modules (just MODULE_LICENSE) or
-> would this be considered noise for now? (Are we deadlocked on each
-> other, or are you still looking at the last series I sent, which I think
-> was v10 in late November?)
+Code (untested, will be randomly rebased etc) can be found in my feature_interrupters branch:
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git feature_interrupters
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
 
-For now I just need MODULE_DEVICE_TABLE to stick around for USB and
-thunderbolt related modules (including built-in modules), so if you
-aren't removing it for any then I don't think we are blocking each
-other.
+First step turns current event ring into a primary interrupter.
+last patch is a test implementation for creating and freeing new secondary interrupters.
 
-Longer term it makes sense to have MODULE_DEVICE_TABLE for any module
-that makes use of a subsystem that had the authorized attribute. While
-this is currently just USB/thunderbolt it could expand in the future,
-but there are subsystems where it is likely to make no difference.
+> 
+> For the offloading part, I think this is a bit more dependent on how different platforms implement it.  To use more of a generic approach like how Albert suggested here:
+> 
+> https://patchwork.kernel.org/project/linux-usb/list/?series=704174
+> 
+> Basically to give vendors the ability to define their own sequences/callbacks, and from which the XHCI driver will call into. (if needed)  These would need to be a separate set of XHCI drivers as well.
+> 
+> Do you think this is a proper model for us to go with, so that we can allow for vendors to easily add functionality?  Appreciate the inputs.
 
-We might have a tiny amount of redundancy in our patch sets because
-there are some cases of invalid MODULE_DEVICE_TABLE entries I fixed in
-my patch series, but that could be dropped. These have the potential
-for conflicts / blocking each other, but it should be easy to resolve
-them if I change my fixes to a removal of the MODULE_DEVICE_TABLE
-entries.
+I'm not convinced that overriding different xhci memory allocation functions is the best solution.
+I think xhci driver will need to know which endpoints are offloaded.
+maybe usb class driver could register an "offloader" with xhci for a usb device.
 
->
-> --
-> NULL && (void)
+Trying to figure out what this xhci offload API would look like.
+The dsp needs at least dma address of an event ring, and offloaded endpoint rings.
+Is there anything else that the dsp would directly need to take care of, or can
+we just export some xhci functions for starting/stopping endpoints, and update event deq?
+
+Thanks
+-Mathias
+
