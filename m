@@ -2,217 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DA3663685
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 02:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406B8663704
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 02:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjAJBHR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Jan 2023 20:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S235477AbjAJB4b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Jan 2023 20:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjAJBHQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 20:07:16 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0276CB0E
-        for <linux-usb@vger.kernel.org>; Mon,  9 Jan 2023 17:07:15 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id p9so5391063iod.13
-        for <linux-usb@vger.kernel.org>; Mon, 09 Jan 2023 17:07:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=W125sPn+8wBy0FyBRg+kOOWV1bQbHFxqGG0xZrDFLRI=;
-        b=Jk1pzHwJRwpVAuHVNiRwDUvE3ZYpG7NTHiabA1vQ2XDS5EvvuIu1HmZYGRwtJB58OF
-         0Rv+0uU4GgnKc52HKOklGhY7RoXGqGrT9wwJ2rCL7fdmcNlTz2qsV4W4/J+JNMEHd8Lp
-         fpGLbgJ9uo5U2vwnmMxELNpDzXvq4xdL+TszY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W125sPn+8wBy0FyBRg+kOOWV1bQbHFxqGG0xZrDFLRI=;
-        b=ksUgctzZA6VhsgYDTLO+ZQeyZ3eXJIi028aSHDz6TRyHD9kWD0AgXu+2M9CitymoiW
-         kWDxmkZIweAkswxY+SKYu50a44ceGFhPwGNlr6sVZyOz3ZupEk6vHHnQa4wpYpKYHa+N
-         7kC5N8gh4NAk8SpFA2fuSFUYVHake/we1QJCElXqOJHkBsQnjAAUxYqBU8UPrVwJGG+V
-         zU9bX+OhjJShMrgkbvSr1y8Z/KNwQPO1yY0bcnQy9qRzFIkSy99MlOD2fdMbCaUa9hZR
-         LWzsB3x44O/9QApGsUTR1g03lt7JiZYtsQSyHctqXR5nAjOuGfLoJ4AQyr+aZbSQHSw7
-         dWIg==
-X-Gm-Message-State: AFqh2kqzLABd19FGP2wzCJMvOev8clZRBEWP3jxMtHXNSgW5RxFC3Lp7
-        j8l/l9GNPzd4YZT0XfZUDZlLPKRDXmeWxwsX
-X-Google-Smtp-Source: AMrXdXuYbgNJ6mADF471Nr47FVpIY+Yg01yjyOr0iwAlSvIm1iAaNTuWmauc0IjlKS/3ygcgMOC81w==
-X-Received: by 2002:a5e:db42:0:b0:6e2:dc1e:527b with SMTP id r2-20020a5edb42000000b006e2dc1e527bmr40263547iop.19.1673312834308;
-        Mon, 09 Jan 2023 17:07:14 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id x12-20020a026f0c000000b0039e60720706sm3088317jab.25.2023.01.09.17.07.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 17:07:13 -0800 (PST)
-Date:   Tue, 10 Jan 2023 01:07:13 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Douglas Anderson <dianders@chromium.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
- driver
-Message-ID: <Y7y6Qf0QhEJDp37Y@google.com>
-References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
- <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
- <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
- <a5a32db9-21a1-1734-1c4f-88b9431d7aa8@i2se.com>
- <Y7xRjDAgI3UO8Xuv@google.com>
- <09d76f45-9dfe-19a0-33ec-badaac280772@i2se.com>
+        with ESMTP id S230341AbjAJB40 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Jan 2023 20:56:26 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19432D2D8;
+        Mon,  9 Jan 2023 17:56:26 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A1Ue7P029134;
+        Tue, 10 Jan 2023 01:56:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=K41dXphpJl5lWuXve0H2T3lxhFZjPY5J3f2Yve3svd4=;
+ b=Z0sj3QZHY/3xJxA6uVQSWDtwesbsWUbYksCGv/WArcEAIS3IvlkPR7LeavEUZLDNg78B
+ 5t/gRccm5HRTzNc689rwDIVWHD5GSE23f0koItDbzICQHxy2fGo32BJQMbE169t94Pxv
+ VLWjRFjepF1x8be1UqNNo/paaPWFPLUDhtv0ChkL9kUTJW5VYZ05aN6f9Hw6Zxv3WJlu
+ 6FrHI1su8HCBSvrEd2ApwvM1D34s6HqNbsr9oigqu8ANXoRZUm8j34sYoxbbP6ycZgbh
+ 7gZ2C5g2OGBLugR1vG1eEU4Cj3YIZRVNzDVDI5T14V6M+HjppV0OmgC15hgt0OgocT8F nw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mxxeqvp8d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 01:56:19 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30A1uIQ9009594
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 01:56:18 GMT
+Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
+ 17:56:16 -0800
+Message-ID: <e7217471-5b08-eee6-fba8-06e879118d77@quicinc.com>
+Date:   Tue, 10 Jan 2023 09:56:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     =?UTF-8?B?7KCV7J6s7ZuI?= <jh0801.jung@samsung.com>,
+        'Felipe Balbi' <balbi@kernel.org>,
+        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        "'open list:USB XHCI DRIVER'" <linux-usb@vger.kernel.org>,
+        'open list' <linux-kernel@vger.kernel.org>,
+        'Seungchull Suh' <sc.suh@samsung.com>,
+        'Daehwan Jung' <dh10.jung@samsung.com>
+References: <CGME20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3@epcas2p4.samsung.com>
+ <20230102050831.105499-1-jh0801.jung@samsung.com>
+ <af32e2f5-de45-38af-2b4f-47c1ac21ea9e@quicinc.com>
+ <c4e01a0a-1c98-3103-2b91-2fe0ba8c3118@quicinc.com>
+ <000201d920eb$c3715c50$4a5414f0$@samsung.com>
+ <0bbd2355-2290-17c7-6860-d8b25930aed6@quicinc.com>
+ <20230109182813.sle5h34wdgglnlph@synopsys.com>
+Content-Language: en-US
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <20230109182813.sle5h34wdgglnlph@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <09d76f45-9dfe-19a0-33ec-badaac280772@i2se.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: rc8PRA6hXtUV75Uc_6OjjjN0NBlKcy3z
+X-Proofpoint-GUID: rc8PRA6hXtUV75Uc_6OjjjN0NBlKcy3z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_16,2023-01-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=290 mlxscore=0
+ suspectscore=0 adultscore=0 spamscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301100010
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 09:19:02PM +0100, Stefan Wahren wrote:
-> Hi Matthias,
-> 
-> Am 09.01.23 um 18:40 schrieb Matthias Kaehlcke:
-> > On Sun, Jan 08, 2023 at 11:47:13AM +0100, Stefan Wahren wrote:
-> > > Am 07.01.23 um 18:23 schrieb Stefan Wahren:
-> > > > Hi Matthias,
-> > > > 
-> > > > Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
-> > > > > Currently each onboard_hub platform device owns an 'attach' work,
-> > > > > which is scheduled when the device probes. With this deadlocks
-> > > > > have been reported on a Raspberry Pi 3 B+ [1], which has nested
-> > > > > onboard hubs.
-> > > > > 
-> > > > > The flow of the deadlock is something like this (with the onboard_hub
-> > > > > driver built as a module) [2]:
-> > > > > 
-> > > > > - USB root hub is instantiated
-> > > > > - core hub driver calls onboard_hub_create_pdevs(), which creates the
-> > > > >     'raw' platform device for the 1st level hub
-> > > > > - 1st level hub is probed by the core hub driver
-> > > > > - core hub driver calls onboard_hub_create_pdevs(), which creates
-> > > > >     the 'raw' platform device for the 2nd level hub
-> > > > > 
-> > > > > - onboard_hub platform driver is registered
-> > > > > - platform device for 1st level hub is probed
-> > > > >     - schedules 'attach' work
-> > > > > - platform device for 2nd level hub is probed
-> > > > >     - schedules 'attach' work
-> > > > > 
-> > > > > - onboard_hub USB driver is registered
-> > > > > - device (and parent) lock of hub is held while the device is
-> > > > >     re-probed with the onboard_hub driver
-> > > > > 
-> > > > > - 'attach' work (running in another thread) calls driver_attach(), which
-> > > > >      blocks on one of the hub device locks
-> > > > > 
-> > > > > - onboard_hub_destroy_pdevs() is called by the core hub driver when one
-> > > > >     of the hubs is detached
-> > > > > - destroying the pdevs invokes onboard_hub_remove(), which waits for the
-> > > > >     'attach' work to complete
-> > > > >     - waits forever, since the 'attach' work can't acquire the device
-> > > > > lock
-> > > > > 
-> > > > > Use a single work struct for the driver instead of having a work struct
-> > > > > per onboard hub platform driver instance. With that it isn't necessary
-> > > > > to cancel the work in onboard_hub_remove(), which fixes the deadlock.
-> > > > > The work is only cancelled when the driver is unloaded.
-> > > > i applied both patches for this series on top of v6.1
-> > > > (multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
-> > Thanks for testing.
-> > 
-> > > here is the hung task output:
-> > > 
-> > > [  243.682193] INFO: task kworker/1:0:18 blocked for more than 122 seconds.
-> > > [  243.682222]       Not tainted 6.1.0-00002-gaa61d98d165b #2
-> > > [  243.682233] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> > > this message.
-> > > [  243.682242] task:kworker/1:0     state:D stack:0     pid:18 ppid:2
-> > > flags:0x00000000
-> > > [  243.682267] Workqueue: events onboard_hub_attach_usb_driver
-> > > [onboard_usb_hub]
-> > > [  243.682317]  __schedule from schedule+0x4c/0xe0
-> > > [  243.682345]  schedule from schedule_preempt_disabled+0xc/0x10
-> > > [  243.682367]  schedule_preempt_disabled from
-> > > __mutex_lock.constprop.0+0x244/0x804
-> > > [  243.682394]  __mutex_lock.constprop.0 from __driver_attach+0x7c/0x188
-> > > [  243.682421]  __driver_attach from bus_for_each_dev+0x70/0xb0
-> > > [  243.682449]  bus_for_each_dev from onboard_hub_attach_usb_driver+0xc/0x28
-> > > [onboard_usb_hub]
-> > > [  243.682494]  onboard_hub_attach_usb_driver [onboard_usb_hub] from
-> > > process_one_work+0x1ec/0x4d0
-> > > [  243.682534]  process_one_work from worker_thread+0x50/0x540
-> > > [  243.682559]  worker_thread from kthread+0xd0/0xec
-> > > [  243.682582]  kthread from ret_from_fork+0x14/0x2c
-> > > [  243.682600] Exception stack(0xf086dfb0 to 0xf086dff8)
-> > > [  243.682615] dfa0:                                     00000000 00000000
-> > > 00000000 00000000
-> > > [  243.682631] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000
-> > > 00000000 00000000
-> > > [  243.682646] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> > > [  243.682692] INFO: task kworker/1:2:82 blocked for more than 122 seconds.
-> > > [  243.682703]       Not tainted 6.1.0-00002-gaa61d98d165b #2
-> > > [  243.682713] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> > > this message.
-> > > [  243.682721] task:kworker/1:2     state:D stack:0     pid:82 ppid:2
-> > > flags:0x00000000
-> > > [  243.682741] Workqueue: events_power_efficient hub_init_func2
-> > > [  243.682764]  __schedule from schedule+0x4c/0xe0
-> > > [  243.682785]  schedule from schedule_preempt_disabled+0xc/0x10
-> > > [  243.682808]  schedule_preempt_disabled from
-> > > __mutex_lock.constprop.0+0x244/0x804
-> > > [  243.682833]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
-> > > [  243.682859]  hub_activate from process_one_work+0x1ec/0x4d0
-> > > [  243.682883]  process_one_work from worker_thread+0x50/0x540
-> > > [  243.682907]  worker_thread from kthread+0xd0/0xec
-> > > [  243.682927]  kthread from ret_from_fork+0x14/0x2c
-> > > [  243.682944] Exception stack(0xf1509fb0 to 0xf1509ff8)
-> > > [  243.682958] 9fa0:                                     00000000 00000000
-> > > 00000000 00000000
-> > > [  243.682974] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
-> > > 00000000 00000000
-> > > [  243.682988] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> > > [  243.683023] INFO: task kworker/1:4:257 blocked for more than 122 seconds.
-> > > [  243.683034]       Not tainted 6.1.0-00002-gaa61d98d165b #2
-> > > [  243.683043] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> > > this message.
-> > > [  243.683051] task:kworker/1:4     state:D stack:0     pid:257 ppid:2
-> > > flags:0x00000000
-> > > [  243.683071] Workqueue: events_power_efficient hub_init_func2
-> > > [  243.683092]  __schedule from schedule+0x4c/0xe0
-> > > [  243.683113]  schedule from schedule_preempt_disabled+0xc/0x10
-> > > [  243.683135]  schedule_preempt_disabled from
-> > > __mutex_lock.constprop.0+0x244/0x804
-> > > [  243.683160]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
-> > > [  243.683184]  hub_activate from process_one_work+0x1ec/0x4d0
-> > > [  243.683209]  process_one_work from worker_thread+0x50/0x540
-> > > [  243.683233]  worker_thread from kthread+0xd0/0xec
-> > > [  243.683253]  kthread from ret_from_fork+0x14/0x2c
-> > > [  243.683270] Exception stack(0xf09d9fb0 to 0xf09d9ff8)
-> > > [  243.683283] 9fa0:                                     00000000 00000000
-> > > 00000000 00000000
-> > > [  243.683299] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
-> > > 00000000 00000000
-> > > [  243.683313] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> > Does commenting the following help:
-> > 
-> >    while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
-> >        msleep(10);
-> > 
-> > ?
-> Yes, it does. I restarted the board multiple times and it never hang :-)
 
-Thanks again for testing!
+On 1/10/2023 2:28 AM, Thinh Nguyen wrote:
+> On Fri, Jan 06, 2023, Linyu Yuan wrote:
+>> On 1/5/2023 5:54 PM, 정재훈 wrote:
+>>>> -----Original Message-----
+>>>> From: Linyu Yuan [mailto:quic_linyyuan@quicinc.com]
+>>>> Sent: Thursday, January 5, 2023 12:35 PM
+>>>> To: JaeHun Jung; Felipe Balbi; Greg Kroah-Hartman; Thinh Nguyen
+>>>> Cc: open list:USB XHCI DRIVER; open list; Seungchull Suh; Daehwan Jung
+>>>> Subject: Re: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
+>>>>
+>>>>
+>>>> On 1/5/2023 11:29 AM, Linyu Yuan wrote:
+>>>>> On 1/2/2023 1:08 PM, JaeHun Jung wrote:
+>>>>>> Sometimes very rarely, The count is 0 and the DWC3 flag is set has
+>>>>>> status.
+>>>>>> It must not have these status. Because, It can make happen interrupt
+>>>>>> storming status.
+>>>>> could you help explain without clear the flag, how interrupt storming
+>>>>> happen ?
+>>>>>
+>>>>> as your change didn't touch any hardware register, i don't know how it
+>>>>> fix storming.
+>>>>>
+>>> H/W interrupts are still occur on IP.
+>> I guess we should fix it from IP layer.
+>>
+> How are you certain the problem is from IP layer?
 
-I'll post a version without that loop, which shouldn't be needed as per the
-rationale in my previous mail.
+I think all IRQ is from DWC3 controller IP. if it is not IP layer, could 
+you share how to prevent from SW layer ?
+
+seem IRQ can happen when event count is zero ,  why this can happen ? 
+does it mean event count register is not trust ?
+
+>
+>> but when checking DWC3_EVENT_PENDING flag, it will auto clear in dwc3 thread
+>> irq handler.
+>>
+>> there is one possible root cause is it cleared only after irq enabled in
+>> dwc3_process_event_buf(),
+>>
+>> we should move unmask irq operation at end of this function.
+>>
+> This interrupt storm can happen because we clear the evt->flags _after_
+> we unmask the interrupt. This was done to prevent false interrupt from
+> delay interrupt deassertion, which can be a problem for legacy pci
+> interrupt.
+thanks for explain, i didn't know that.
+>
+> see 7441b273388b ("usb: dwc3: gadget: Fix event pending check")
+>
+> The change JaeHun Jung did should be fine.
+agree.
+> BR,
+> Thinh
