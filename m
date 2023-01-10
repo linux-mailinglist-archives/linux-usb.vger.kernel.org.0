@@ -2,184 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DB8663A0F
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 08:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E09663ACD
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jan 2023 09:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjAJHjB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 02:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S230413AbjAJIUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 03:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjAJHjA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 02:39:00 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53234B7FA;
-        Mon,  9 Jan 2023 23:38:59 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A6VVYl011032;
-        Tue, 10 Jan 2023 07:38:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lTiwQq5Gs+SI/4MvX5Bq85cOXgmAC3wTYakfebrOWtI=;
- b=W4cg6LwKkcj3p/pArF83TUoyLxlxuZA4a/Ee9+O75oewPcvWg2EkqST/5RwY/UWHYUDJ
- DNL0AQ/+FnSGvPMIuOAL8gTGWANQeTzNZo9x+4yyU2jxvXjlIUm/xuQ1rByKf3EzJn/2
- VUNXyNwfQdmnAgGBRhT97do/79aPsb2kmJkRfA1T+262MYsAbVAmpWqZDhF2yjDZIPlK
- Ic2PVlsijvK9zLyXqr2WmhsQ89Ps89FvWi7+tA1HjmMEbFLZw6x990UZyBnX1d7yEmAu
- cipnLexuQC0H9d7/erFs+IP6u8AyECXNFq55m/G+F1wYAA5h+osevIpZRYDYPitxyn// 1w== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n0ssh92gn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 07:38:51 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30A7coFi009663
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 07:38:50 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
- 23:38:48 -0800
-Message-ID: <f35f0636-5b3f-9002-77f3-a3c2c53be973@quicinc.com>
-Date:   Tue, 10 Jan 2023 15:38:46 +0800
+        with ESMTP id S229749AbjAJIUF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 03:20:05 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF51B42E04;
+        Tue, 10 Jan 2023 00:19:59 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.14])
+        by gateway (Coremail) with SMTP id _____8AxW+qsH71jprEAAA--.2135S3;
+        Tue, 10 Jan 2023 16:19:56 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.14])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxTuSiH71jGUoXAA--.5900S2;
+        Tue, 10 Jan 2023 16:19:54 +0800 (CST)
+From:   yangyinglu <yangyinglu@loongson.cn>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        yangyinglu <yangyinglu@loongson.cn>
+Subject: [PATCH v1] usb: handle warm-reset port requests on hub_init
+Date:   Tue, 10 Jan 2023 16:19:38 +0800
+Message-Id: <20230110081938.30308-1-yangyinglu@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     =?UTF-8?B?7KCV7J6s7ZuI?= <jh0801.jung@samsung.com>,
-        'Felipe Balbi' <balbi@kernel.org>,
-        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        "'open list:USB XHCI DRIVER'" <linux-usb@vger.kernel.org>,
-        'open list' <linux-kernel@vger.kernel.org>,
-        'Seungchull Suh' <sc.suh@samsung.com>,
-        'Daehwan Jung' <dh10.jung@samsung.com>
-References: <CGME20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3@epcas2p4.samsung.com>
- <20230102050831.105499-1-jh0801.jung@samsung.com>
- <af32e2f5-de45-38af-2b4f-47c1ac21ea9e@quicinc.com>
- <c4e01a0a-1c98-3103-2b91-2fe0ba8c3118@quicinc.com>
- <000201d920eb$c3715c50$4a5414f0$@samsung.com>
- <0bbd2355-2290-17c7-6860-d8b25930aed6@quicinc.com>
- <20230109182813.sle5h34wdgglnlph@synopsys.com>
- <e7217471-5b08-eee6-fba8-06e879118d77@quicinc.com>
- <20230110025310.nowjnrmo3oag76xd@synopsys.com>
- <4ced9c3e-c7b5-e0a0-88ec-1ac383d893a2@quicinc.com>
- <bfcfac21-3df7-7f47-576b-0717f2bab393@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <bfcfac21-3df7-7f47-576b-0717f2bab393@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sJdFNHP4R6s1usUgWTgioC9KwzIuDHlb
-X-Proofpoint-ORIG-GUID: sJdFNHP4R6s1usUgWTgioC9KwzIuDHlb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_02,2023-01-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 spamscore=0 clxscore=1015 suspectscore=0
- adultscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxlogscore=455
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301100048
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-CM-TRANSID: AQAAf8DxTuSiH71jGUoXAA--.5900S2
+X-CM-SenderInfo: 51dqw5xlqjz3o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Gw47GryxZFy3GF1xJr43Wrg_yoW3Arg_Ca
+        4UWayxur1SyF17uryqv34FvFW0ka9IvFykZFZxtwsxXr4j9rs2yryxZr9Yvw17ZrWUur9x
+        Aa1DWry5uF48ujkaLaAFLSUrUUUUYb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        C7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
+        w2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
+        kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        CVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+USB-C storage device not detected on USB 3.0 host when
+plugged in after boot, so need to warm-reset port
 
-On 1/10/2023 11:13 AM, Linyu Yuan wrote:
->
-> On 1/10/2023 11:05 AM, Linyu Yuan wrote:
->>
->> On 1/10/2023 10:53 AM, Thinh Nguyen wrote:
->>> On Tue, Jan 10, 2023, Linyu Yuan wrote:
->>>> On 1/10/2023 2:28 AM, Thinh Nguyen wrote:
->>>>> On Fri, Jan 06, 2023, Linyu Yuan wrote:
->>>>>> On 1/5/2023 5:54 PM, 정재훈 wrote:
->>>>>>>> -----Original Message-----
->>>>>>>> From: Linyu Yuan [mailto:quic_linyyuan@quicinc.com]
->>>>>>>> Sent: Thursday, January 5, 2023 12:35 PM
->>>>>>>> To: JaeHun Jung; Felipe Balbi; Greg Kroah-Hartman; Thinh Nguyen
->>>>>>>> Cc: open list:USB XHCI DRIVER; open list; Seungchull Suh; 
->>>>>>>> Daehwan Jung
->>>>>>>> Subject: Re: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when 
->>>>>>>> count is 0
->>>>>>>>
->>>>>>>>
->>>>>>>> On 1/5/2023 11:29 AM, Linyu Yuan wrote:
->>>>>>>>> On 1/2/2023 1:08 PM, JaeHun Jung wrote:
->>>>>>>>>> Sometimes very rarely, The count is 0 and the DWC3 flag is 
->>>>>>>>>> set has
->>>>>>>>>> status.
->>>>>>>>>> It must not have these status. Because, It can make happen 
->>>>>>>>>> interrupt
->>>>>>>>>> storming status.
->>>>>>>>> could you help explain without clear the flag, how interrupt 
->>>>>>>>> storming
->>>>>>>>> happen ?
->>>>>>>>>
->>>>>>>>> as your change didn't touch any hardware register, i don't 
->>>>>>>>> know how it
->>>>>>>>> fix storming.
->>>>>>>>>
->>>>>>> H/W interrupts are still occur on IP.
->>>>>> I guess we should fix it from IP layer.
->>>>>>
->>>>> How are you certain the problem is from IP layer?
->>>> I think all IRQ is from DWC3 controller IP. if it is not IP layer, 
->>>> could you
->>>> share how to prevent from SW layer ?
->>>>
->>>> seem IRQ can happen when event count is zero ,  why this can happen 
->>>> ? does
->>>> it mean event count register is not trust ?
->>> When the interrupt is unmasked, the controller will generate interrupts
->>> as events are received. Normally, the flag checking for pending event
->>> should be cleared before unmasking the interrupt, but we clear it after
->>> to account for possible false interrupt due to the nature of legacy pci
->>> interrupt. This exposes a gap where the interrupts can come but the 
->>> flag
->>> isn't cleared. While it should be rare and shouldn't be too much of a
->>> problem, we can avoid this scenario with some additional checks.
->>>
->>>>>> but when checking DWC3_EVENT_PENDING flag, it will auto clear in 
->>>>>> dwc3 thread
->>>>>> irq handler.
->>>>>>
->>>>>> there is one possible root cause is it cleared only after irq 
->>>>>> enabled in
->>>>>> dwc3_process_event_buf(),
->>>>>>
->>>>>> we should move unmask irq operation at end of this function.
->>>>>>
->>>>> This interrupt storm can happen because we clear the evt->flags 
->>>>> _after_
->>>>> we unmask the interrupt. This was done to prevent false interrupt 
->>>>> from
->>>>> delay interrupt deassertion, which can be a problem for legacy pci
->>>>> interrupt.
->>>> thanks for explain, i didn't know that.
->>>>> see 7441b273388b ("usb: dwc3: gadget: Fix event pending check")
->>>>>
->>>>> The change JaeHun Jung did should be fine.
->>>> agree.
->>> The change may still need some additional check as suggested in my
->>> response:
->>> https://lore.kernel.org/linux-usb/20230109190914.3blihjfjdcszazdd@synopsys.com/T/#m7b907aa6da4023cb20fa00a57813d31fd84e081f 
->>>
->>  do you think we need to read event count before checking 
->> DWC3_EVENT_PENDING  ?
-> sorry for this noise, may be i have a little understanding of the 
-> legcy pci issue now.
-one more question, is it legacy PCIe device still exist in real world ? 
-and any VID/PID info ?
->>>
->>> BR,
->>> Thinh
+Signed-off-by: yangyinglu <yangyinglu@loongson.cn>
+---
+ drivers/usb/core/hub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 77e73fc8d673..bd4496b80c2d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1159,7 +1159,7 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 		}
+ 
+ 		/* Make sure a warm-reset request is handled by port_event */
+-		if (type == HUB_RESUME &&
++		if ((type == HUB_RESUME || type == HUB_INIT2) &&
+ 		    hub_port_warm_reset_required(hub, port1, portstatus))
+ 			set_bit(port1, hub->event_bits);
+ 
+-- 
+2.20.1
+
