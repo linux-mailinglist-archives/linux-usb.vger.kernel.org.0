@@ -2,199 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502C46654DF
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 07:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECB66654FB
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 08:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjAKGvs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 01:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
+        id S231330AbjAKHFJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 02:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjAKGvp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 01:51:45 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2128.outbound.protection.outlook.com [40.107.92.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFF5F3C;
-        Tue, 10 Jan 2023 22:51:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jmof/iZIDirGeaR9roY+CTkSv8C9a+EO1ePR1p7RwsMamtX/k382tuEqIkCHwkChi9lKQBBUy1Hy+dxLzhIMKRx9iqfAs9eOWh/gyyuTAN/BhZAQcEcg/BpMgxrb/2Y9EY8yFyc8/z7uWFIyxjqQsef/fZCrYVhkq3F8qs9ZpWP8udiUvTyZftf/VNLQrhMoO0IcDCgUC+ZRhz4I2ayk6VmLuSvTTYwyyg2A2X+MDwQgVLi77fN+8rcjGe1pp600a1vAByVIzSwr/vLjJMwj+6/T/BGXOMozHuCaOdhflAm9LUQQSRpT8vpoChopE142AIE9dHbDM9Z1YklMcbCrvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=om26t3Ueiey9H2rV3vbCzTVJEZutbaR4nfV8Chp5Xl0=;
- b=Ua0nP9Ir4k97GOqUDDHbfpTazuikowbSqgqqHKWRtPuPr3YHsiahYyzqrYoX/Vw/XjlrZDnbbuzihtuPykcR78H6QWYYpNeg2GKNPMG8fpFDZh2vQsXoN5/8uy8Fa/q8cSVKRb4h/DMUDoMU9fd5nC1Q/53v30HEOwzhkiAdcF+WwcjYDfAuHGhkGAxLw0813msYIfY3IL6LHXFuXPJHtWUoX8dFI4CrHESfsWmrFirTPSfdHFzpX0xaqpGsZNhbyqClUG6lLiIayHKsVj2Yls4jFlnTVaHSADGTZ6r3ZHQJ+MgTJ9OqBRfUWw7Q/bGCx/w+78aCzBTFpQ8b+qK2mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=om26t3Ueiey9H2rV3vbCzTVJEZutbaR4nfV8Chp5Xl0=;
- b=V0eRHeMFYQZTjWnFXADmDojPhUxNxggyIktEfcf0lgcle5jG/RyFZqgEOZcaUqZ7e0D4NkKOHdFx2cG+6cS/9JR+Cb6E+RT5ZHdZUWux0HsKxeYWU4DQb2kVS8EnqtRFJp6gGDpwSeY+tXqpNeEl95ZW5qSIXarpCFLBS16mNVo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13) by
- MW4PR01MB6227.prod.exchangelabs.com (2603:10b6:303:73::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5986.18; Wed, 11 Jan 2023 06:51:39 +0000
-Received: from SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c]) by SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c%3]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 06:51:39 +0000
-From:   Chanh Nguyen <chanh@os.amperecomputing.com>
-To:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Li <frank.li@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-Cc:     Chanh Nguyen <chanh@os.amperecomputing.com>
-Subject: [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget driver names
-Date:   Wed, 11 Jan 2023 13:51:05 +0700
-Message-Id: <20230111065105.29205-1-chanh@os.amperecomputing.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR0101CA0029.apcprd01.prod.exchangelabs.com
- (2603:1096:404:8000::15) To SN6PR01MB4973.prod.exchangelabs.com
- (2603:10b6:805:c4::13)
+        with ESMTP id S229956AbjAKHFG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 02:05:06 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758369584
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 23:05:04 -0800 (PST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 583D23F5DD
+        for <linux-usb@vger.kernel.org>; Wed, 11 Jan 2023 07:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1673420700;
+        bh=gi72aY1DlVU3picdZhHkv2z+u2P81TiekouM7JWEQCE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=IYs+Zjz1aNhWY7usPRvveKgtrV5SftE1qzNsCDOrliIP+LFx2Ko24BbeDPAer/pev
+         zUCPGwyvkSsF7AjhTvv6cnmPQwkCUuk2s6sH3fHsTHNWTiZb2f8Jlt7rVHR0fS9TL+
+         bVI0a9ZLZd0Y3zecYuv0HUL7fUATwsR83DpMDVU/78nr50lssei22Zq0IA2hhKXdG9
+         sdBcT6hNcBtf/kV1BenWBrrUhBbazGCsa2OnQjiAUwPE0o7fxyi1lyCOWQaO2S73Sp
+         udi8gbnlRt0Zk9FD9YjTouSpQYEeHbD78uuAuNA+8RxvMXqpWuvV3JCvM/jBKoCDVZ
+         6rK92V5BnWsgQ==
+Received: by mail-pf1-f197.google.com with SMTP id cw8-20020a056a00450800b0058a3508303eso2910105pfb.13
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 23:05:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gi72aY1DlVU3picdZhHkv2z+u2P81TiekouM7JWEQCE=;
+        b=E59DMt70TloNS4YkbGbflyNuYFPGGuAoArpHoK95Z5NvJ3IgYjrzmebqypl12jGaXg
+         hRuBR2UAfxdiVyuN7DpniggMibv/pJS0K6vkvwf/1VoTYfdYarZrbZr4RJmj/Og+nf1N
+         TIXsVjoMstcmyjor1uPR7nir0Zd9ASkQ2H2MdNbuEvo535/CN7gB/u5UD7AyWystwPx1
+         +nPy9+8QSzI9JVOKG5hmFRFPbcRXneAhqeIlubLowunF7dEvjXE4zcsmK5W88L8G/xF5
+         9L5ZAgyZG7EQ6ASXtp7D59uedbJQVPRl0DuhiIxlkh5ufmpTab22JjS4aBafpjTgQ52w
+         tiRA==
+X-Gm-Message-State: AFqh2kr0ASwDXoulQRGFmDuoyQaZtPgo+t+FNCrsG9yso7WpU17UOX9E
+        1l4q5miDXEL5raraXwoKbO0g1HHTW4zzF413G9lMzx1uHwXbgbO53EPnIp1kvOvZPEH616Dect2
+        4tylXvq0BvPKIuYazFMk9dwdbSZ6t6uHoyZ9+kcO8t5kvUES0EFqb4Q==
+X-Received: by 2002:a63:d050:0:b0:484:55ce:2577 with SMTP id s16-20020a63d050000000b0048455ce2577mr3634239pgi.172.1673420698791;
+        Tue, 10 Jan 2023 23:04:58 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXunCBGBXUEqW3ABN38bY/IFoGVtl65JjufpI/koQ1K5VS+zWb6gRO1SlpLihN8lmXNXmTsXHmcF+4aBm0ieEnQ=
+X-Received: by 2002:a63:d050:0:b0:484:55ce:2577 with SMTP id
+ s16-20020a63d050000000b0048455ce2577mr3634238pgi.172.1673420698421; Tue, 10
+ Jan 2023 23:04:58 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4973:EE_|MW4PR01MB6227:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc3a3f07-0a24-459a-6e5b-08daf3a049e7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0xUBr0ZB8sCvEK41ceBosfh72ULqexIDw4XVJDJzT95xf/ylR4QtLHWWomZMO88x6xUI8gwDkS59BCAwXoXaGwMruilV2q1c7Duokubsd95FLC3FAibIXnlsdfZ8GiRJO6RNiOojb3PLcOKXCYPsya3z4ZOc1FVVOq0qJQ1AKRhkQeUV1Pd/mT6yOAy9zJOTEEm+YWfFydSqS4KxUX6mgRWVFsOBEXwIiu85u/BhXHNyrCjCAstQgpWa0hMNhM8F2x012OdPCAFsMJDbg9FsR8CnUnLNxlzaDDYXvFecqLYshsHEYDVsc5eHRyAhtpxOoP6VPtkjyZfJ/YLhlgzync3z8M9xCDRqHUIr1ZitWd9VXKyuBOV9PEffi0M9BIKy4jitg01Pfr36MJmCmscEf5Rn5MUSP8R8IUiIXHFfcONBJGJYn5VWkr4knUwdTx6D9xycLXU9rK+38v2L47CTxgMP8IC6OamQHFt2R0mBKRhx6msMeRWHsAJ6nqi9GuDGB/wzkc/7dA6hzu4CMZadRi1pB9ay0QuUWPCh5REqFmPlo+J3zP7Kd4l8FsNSvgbUGNKFQMH5D7B4KEpLmne3Q3mHhlh4nhXUWzEa3icJyl9QOIPiuTUqjs/uFJpC934z3GLlTTVt0MugZrO4hJAiFQlCtz7Hd92TqRCtKyb592mjWYbDuce1Roc7G/ozHpdjDLM7DfJuZFTvcNhF9OTheA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4973.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(366004)(376002)(39850400004)(451199015)(186003)(26005)(6666004)(8936002)(107886003)(6486002)(6512007)(6506007)(1076003)(2616005)(66946007)(5660300002)(66556008)(52116002)(66476007)(7416002)(921005)(316002)(4326008)(86362001)(38350700002)(38100700002)(478600001)(8676002)(41300700001)(110136005)(83380400001)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pn7YFhgmSTnZFTpJKLLQBeDE9kM02qvfb0qvtAMrTac9OD/Ku7ee7hz++MAx?=
- =?us-ascii?Q?PZkMHjDEjVsKGeSRLAhVGg9b1Z54UHfhRJXbsug57e1x6IBs7E2igK+TcNU2?=
- =?us-ascii?Q?V/Ln3wCt13bNQnEAQDMDrrxRmEKiJOqvvblZ06Q3KITcruHr66sYOfIEyDon?=
- =?us-ascii?Q?SUwNGjyRY68LdRB5pKzNprZmLr1ZVBZV4bB4EDJKWndxUeJiXFPHuhZRG14l?=
- =?us-ascii?Q?aDr5aZvI7cqRmho5ib5n/LiHFjVL1X5LcLqu2B1fCbXTwlMwHSLTd9OOBCwU?=
- =?us-ascii?Q?EY/+Pxm4ZdcEWE8bC42Eqv5m7N9Czxh9l16e0xZQu84KoFlt82shV+JRDScT?=
- =?us-ascii?Q?Z237RhtRg9qAMR0597aaD7BNV2sAXA1GWJEctqu6bZzi8sQ9obX0wMliw6sM?=
- =?us-ascii?Q?aiLhp7zmU0lNGnF1g1u4/iCWhYA+kqaH3KjZOj0VsVpdMVkroQh09Nziyr3s?=
- =?us-ascii?Q?xm3Bgs56zUfqyA7pgqu7YxI1fuXJUDc7YkRAgGb9sxpvxcJc8m3mW9OKrHUC?=
- =?us-ascii?Q?b3vPxqfnBNYqD65vgSG5cGAderLd8OU3t35Vtm78A9nqIuR1ZV5VHoG/82VE?=
- =?us-ascii?Q?y1vCjaKfVh65HNJHDJlgSJB7YBZM0COKl/17xl7zlqIff1J+XAKKWiEjLZVt?=
- =?us-ascii?Q?7FPr4SczrsKbJBalUpGl1oin4EriTfqFFAmG0chflOqp+kc3eaALPe3hgM+A?=
- =?us-ascii?Q?RnLu8eVzvGtfWw1mLizSmI1dgcL9KxevupqZbX/zHbvrEIabSlKoH7GYQLeP?=
- =?us-ascii?Q?iuc5EedIpNMClc0Mmci/cy1Vlfu5s01hBvF0wXmasZXzxTjnCw0NFwGPZyUA?=
- =?us-ascii?Q?pMGaXkKXl6vlgFgdjBDBGlV+eQxQyEYNY+1n9w9fZhYSJ8jfiWbIO9dnIa5g?=
- =?us-ascii?Q?LCTPnLw0O6Ku+Avmrc0lHi1yphv+kCXg1PBRhJrcnUrSAA57z1l7NSlirMVN?=
- =?us-ascii?Q?qBJT1hr31/EdGuTmbr/XlWXv2Js9z08jcq2UXQvLJ8javE5NdWGTVZnw64Tz?=
- =?us-ascii?Q?VhP95CMTQj8Lw7a6Q62ew9DI8NmjFC2NcS2xgUW5hhcHFu9zARsV0IYRfxXC?=
- =?us-ascii?Q?SF7jOggWKu+zRehSV6153dPxOQBrB5aXlB9PIp/M1WO3/g1gdWsQt1qv220v?=
- =?us-ascii?Q?eJSNEJViT7q+JqjTqlRlo7ndXPs6VsniWAPheTodGXYYaOrw9+8nZ4mlargr?=
- =?us-ascii?Q?5WLOwsLtjvF7XaI6W1vdstMrzml7a/S4odBoIVSDIZEFPlRzsuNWLwugJCMJ?=
- =?us-ascii?Q?diyRGExz0tLEbgfBfKmcNOC8Twwczekf5cqFxSDLu09Aac2ATJ8efKodVa7d?=
- =?us-ascii?Q?UYXbqqDnWDIPwg8MFtqucIqkUAcdb/Q4dGHn3/iOpdCzf+W418ZARr6Rbkgw?=
- =?us-ascii?Q?J0XKGmIHUCUV+nnev6V0BGynL4O632RptsZwdi2obNobhmAepF78kaYnbp9G?=
- =?us-ascii?Q?Z7CoBGXaphJzL4aaRGGb9z/fKDfc8bA8qQOd2NjSq5RjlYCEENZoP6/RAaze?=
- =?us-ascii?Q?m8iaon3wK4aMJ8DAE8EAlajakQFa0VOW/tzGv4BfrdT+hAEYyXBk+NeDdBF7?=
- =?us-ascii?Q?gn33uG02c/fSfBs3iN3eKJekC7HzK3A06Zghhx3qOwpYB1fMuGr0UfOr+Z/j?=
- =?us-ascii?Q?CCBqIPZorM9bxrOqQZVRzFw=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc3a3f07-0a24-459a-6e5b-08daf3a049e7
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4973.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 06:51:39.0473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oNNzUb/fwxluSkgL+Ogz3OoGRunETpJpvMari/gySpwe+bDn1vgPlJB8DeqTN8OrlSalm89yWhc70HMmB0HNf4MLpVq89VXvVmRBGOVmY2BhewYRHvRTXasISA5vfb/h
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6227
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230110081938.30308-1-yangyinglu@loongson.cn>
+ <CAAd53p6eUNJf7aNkiXcTKAfhL_cM1Ki7JnW7s4oP7BeFQkP6ag@mail.gmail.com> <e684e8d7-6fc9-3331-868c-6cc4122f2cef@loongson.cn>
+In-Reply-To: <e684e8d7-6fc9-3331-868c-6cc4122f2cef@loongson.cn>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 11 Jan 2023 15:04:47 +0800
+Message-ID: <CAAd53p7_dQc0z_2Bw29xxnxMx6rSdJE7hj-MvH3HszSyE0uWCQ@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: handle warm-reset port requests on hub_init
+To:     yangyinglu <yangyinglu@loongson.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is unable to use configfs to attach more than one gadget. When
-attaching the second gadget, it always fails and the kernel message
-prints out:
+Hi yangyinglu,
 
-Error: Driver 'configfs-gadget' is already registered, aborting...
-UDC core: g1: driver registration failed: -16
+On Wed, Jan 11, 2023 at 11:32 AM yangyinglu <yangyinglu@loongson.cn> wrote:
+>
+>
+>
+> =E5=9C=A8 2023/1/11 =E4=B8=8A=E5=8D=8810:33, Kai-Heng Feng =E5=86=99=E9=
+=81=93:
+> > Hi yangyinglu,
+> >
+> > On Tue, Jan 10, 2023 at 4:20 PM yangyinglu <yangyinglu@loongson.cn> wro=
+te:
+> >>
+> >> USB-C storage device not detected on USB 3.0 host when
+> >> plugged in after boot, so need to warm-reset port
+> >
+> > Is it possible to enable USB dyndbg, plug a USB 3.0 device, then paste
+> > the relevant dmesg here? Thanks!
+> >
+> > Kai-Heng
+>
+>   hi,
+>      After entering the system, directly plug and unplug the USB flash
+> disk. usb control is  etron Technology Inc.The log is as follows:
+>   [   10.354484] radeon 0000:04:00.0: vgaarb: changed VGA decodes:
+> olddecodes=3Dio+mem,decodes=3Dnone:owns=3Dnone
+>   [   10.484794] bridge: filtering via arp/ip/ip6tables is no longer
+> available by default. Update your scripts to load br_netfilter if you
+> need this.
+>   [   10.506968] tun: Universal TUN/TAP device driver, 1.6
+>   [   10.514128] virbr0: port 1(virbr0-nic) entered blocking state
+>   [   10.519858] virbr0: port 1(virbr0-nic) entered disabled state
+>   [   10.525646] device virbr0-nic entered promiscuous mode
+>   [   10.666536] virbr0: port 1(virbr0-nic) entered blocking state
+>   [   10.672268] virbr0: port 1(virbr0-nic) entered listening state
+>   [   10.748564] virbr0: port 1(virbr0-nic) entered disabled state
+>
+>   Loongnix GNU/Linux 20 Release 3 loongson-pc ttyS0
+>
+>
+>   loongson-pc login: [  147.701011] usb usb4-port1: Cannot enable. Maybe
+> the USB cable is bad?
+>   [  151.793206] usb usb4-port1: Cannot enable. Maybe the USB cable is ba=
+d?
+>   [  151.799726] usb usb4-port1: attempt power cycle
+>   [  157.465465] usb usb4-port1: Cannot enable. Maybe the USB cable is ba=
+d?
+>   [  161.557649] usb usb4-port1: Cannot enable. Maybe the USB cable is ba=
+d?
+>   [  161.564167] usb usb4-port1: unable to enumerate USB device
+>   [  165.641834] usb usb4-port1: Cannot enable. Maybe the USB cable is ba=
+d?
 
-This commit fixes the problem by using the gadget name as a suffix
-to each configfs_gadget's driver name, thus making the names
-distinct.
+Is it possible to enable USB dyndbg by adding kernel parameter
+"usbcore.dyndbg" so we can see the portsc?
 
-Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+Kai-Heng
 
----
-Changes in v3:
-  - Use the gadget name as a unique suffix instead     [Andrzej]
-  - Remove the driver.name allocation by template        [Chanh]
-  - Update commit message                                [Chanh]
-
-Changes in v2:
-  - Replace scnprintf() by kasprintf() to simplify the code [CJ]
-  - Move the clean up code from gadgets_drop() to
-    gadget_info_attr_release()                        [Frank Li]
-  - Correct the resource free up in gadges_make()   [Alan Stern]
-  - Remove the unnecessary variable in gadgets_make()    [Chanh]
-  - Fixes minor grammar issue in commit message          [Chanh]
----
- drivers/usb/gadget/configfs.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 96121d1c8df4..0853536cbf2e 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -393,6 +393,7 @@ static void gadget_info_attr_release(struct config_item *item)
- 	WARN_ON(!list_empty(&gi->string_list));
- 	WARN_ON(!list_empty(&gi->available_func));
- 	kfree(gi->composite.gadget_driver.function);
-+	kfree(gi->composite.gadget_driver.driver.name);
- 	kfree(gi);
- }
- 
-@@ -1572,7 +1573,6 @@ static const struct usb_gadget_driver configfs_driver_template = {
- 	.max_speed	= USB_SPEED_SUPER_PLUS,
- 	.driver = {
- 		.owner          = THIS_MODULE,
--		.name		= "configfs-gadget",
- 	},
- 	.match_existing_only = 1,
- };
-@@ -1623,13 +1623,21 @@ static struct config_group *gadgets_make(
- 
- 	gi->composite.gadget_driver = configfs_driver_template;
- 
-+	gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
-+							    "configfs-gadget.%s", name);
-+	if (!gi->composite.gadget_driver.driver.name)
-+		goto err;
-+
- 	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
- 	gi->composite.name = gi->composite.gadget_driver.function;
- 
- 	if (!gi->composite.gadget_driver.function)
--		goto err;
-+		goto out_free_driver_name;
- 
- 	return &gi->group;
-+
-+out_free_driver_name:
-+	kfree(gi->composite.gadget_driver.driver.name);
- err:
- 	kfree(gi);
- 	return ERR_PTR(-ENOMEM);
--- 
-2.17.1
-
+>
+> >
+> >>
+> >> Signed-off-by: yangyinglu <yangyinglu@loongson.cn>
+> >> ---
+> >>   drivers/usb/core/hub.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> >> index 77e73fc8d673..bd4496b80c2d 100644
+> >> --- a/drivers/usb/core/hub.c
+> >> +++ b/drivers/usb/core/hub.c
+> >> @@ -1159,7 +1159,7 @@ static void hub_activate(struct usb_hub *hub, en=
+um hub_activation_type type)
+> >>                  }
+> >>
+> >>                  /* Make sure a warm-reset request is handled by port_=
+event */
+> >> -               if (type =3D=3D HUB_RESUME &&
+> >> +               if ((type =3D=3D HUB_RESUME || type =3D=3D HUB_INIT2) =
+&&
+> >>                      hub_port_warm_reset_required(hub, port1, portstat=
+us))
+> >>                          set_bit(port1, hub->event_bits);
+> >>
+> >> --
+> >> 2.20.1
+> >>
+>
