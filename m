@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432C2665189
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 03:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A99966518C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 03:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjAKCME (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 21:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S234960AbjAKCMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 21:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbjAKCMB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 21:12:01 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52204DD7
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:11:59 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id b12so9555704pgj.6
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:11:59 -0800 (PST)
+        with ESMTP id S232021AbjAKCMn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 21:12:43 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906A1D102
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:12:42 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id h7-20020a17090aa88700b00225f3e4c992so18489459pjq.1
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:12:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0cwyEc6KQYmQnChy+BikWZp8lFg76+cm/UHIItp73H0=;
-        b=Fdbdt5jP7KyPgvW4FZTiLdDjkV4nJa2aeCGEKY/q4hT1iS67KiEisH/90DxltiO5xa
-         pu+3Vssbv+0WrkUm3+zirN1u3RkcbNYulzgvsV7pmmE8+YFVfIVQxWcRXGJln/cgHa+M
-         UTeWx7l735ZmdRMksrya1PjnX6fa05mtxEow47JN35hBMlnQDV+YWlU2QBkvtugl+Irj
-         NXvR8xjzaogFA2iJceuoyOYQL3T6EQBPGhsYlLZMcQVIM+SxOiFKVpqMIhN1iljOpD+V
-         kVGrZMEZOERXAxHI+GNpkEe4MQEt7LMTH383fd6hX8yKQ4+Zse6cQG6szVct++bp8rV9
-         fAJQ==
+        bh=irVeOhn1a5BJ5XA0SQi4wtUBmDMjtpLuPHDNe0+Ec60=;
+        b=RqZBJHmo7cc9H+guxiqP2NX8/GQ8JClOF8pN+9RtpdWT1LbdrPxz4IacjBbU0PcjYt
+         wDaAW6hmD277UmLUy/2Hm+hTc/iQnFcqMY4S++Pq7u+SmFyxYPVzDJpA/5S3GjsniwH9
+         dV7OLk1Am5qzV5vgzVM6OVlTolKHGBrk6eXc4jkhFADrt25K6FfrmE9paBWKRWKi+cia
+         NAS2/GObFO4psH8um4kHhpZuAIjSMAo6Wt9Z+8h5JLVAHnnAwoa5GB2FU/m/nflsxRA5
+         rWqIAU4/h5D6kUOmxmzPOV64eurU2Vo3vS+Jmrg1pAP5Noy+rPYdrO3Vu1X6xMkZ557A
+         hmRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0cwyEc6KQYmQnChy+BikWZp8lFg76+cm/UHIItp73H0=;
-        b=wmbZBIDdthVou1yw+87xbqYIowAHoOdUWW+ia3vKNiMJQJuaIDcf5gKBOX3adL6o69
-         QDLY7OdgssY+wcm03M1zRmYXHtp8c+AiNfrt5USIkbTZqpJSmbyXIIv+OsuW3Y9cryNh
-         cr4Dbo6SXKbqsZdyQpn/UfrHByDWpHQUtomPjG6thmA+qf/CjMQ7blMVhG5neBbV2UzN
-         7LZX543YaTnRryOnHtHYYpco01d+EBsEaSIzRcGTLc79gFfDw2acvAb1AyGSmvLh8hYP
-         L3ihCDUczhTb5Ox0yPQ2zirex39yhUOt0f5EOmp4iK0Qhoc2LxAaeTdsgFvimzO8s76T
-         kjZg==
-X-Gm-Message-State: AFqh2kpLK1eyeCOWNwQPBZrkHopi3X8pIkvH+I4XPMVCP8RTUXbckTOB
-        Qra2S8rnrAiHWGe+3xk/wYORjQ==
-X-Google-Smtp-Source: AMrXdXuY4iQkwYRiuSdnjut0GKerpiZ1VUcDECyng7hoJCpwhLI2o5D089+OJU4YAqqI8hhBz9dVCg==
-X-Received: by 2002:a05:6a00:368a:b0:581:bfac:7a52 with SMTP id dw10-20020a056a00368a00b00581bfac7a52mr169277pfb.1.1673403118438;
-        Tue, 10 Jan 2023 18:11:58 -0800 (PST)
+        bh=irVeOhn1a5BJ5XA0SQi4wtUBmDMjtpLuPHDNe0+Ec60=;
+        b=Y91iFM4vg3IMc0/Xqu4YYeaVKH+JjMedj2Vg3/3WPw9mW1Qt7w0m8zlIoRLeYDj5pm
+         R3K19Ni3ejErH7d5dWSf6vtL2MV87NO4UpLKs8XG8JZZZP5tvKPbNn1oJhrhMnAaxiBp
+         c4jH2Jmgo7m8+jmtnk5JjSJkFDzLccQ3zAk+zSHa/3xdC/AnQzxki1jhu2+Rs6FiqJd1
+         pOpe+x8el14FYCZwUQ/aZVT8YOvntdbQLdgNKu960C0GccWDQb2dff18u7hRBOtqHp+V
+         jLf3/jRIWD0EU6GpVRWCuSVNzw0nOIgfA4zcjJwQpI+nS338/f6XOc63QwqXKzd23tnc
+         S56Q==
+X-Gm-Message-State: AFqh2kq6JlTfpKVf7knj3XgmBhakqTPmSouhLdFoy7TufI+nObD76Uhw
+        FRcRI2N/gAbgYMzw3EYfcNt4dmuD9SW+gmpD
+X-Google-Smtp-Source: AMrXdXsEVn2qTlKmP6JJUfhl6nqQZ6QlxNOmOSAQSZc5kHcdh34HBugnFRueVQPoQfUH25ZW5v0rfA==
+X-Received: by 2002:a17:902:b10e:b0:191:4367:7fde with SMTP id q14-20020a170902b10e00b0019143677fdemr226996plr.0.1673403161675;
+        Tue, 10 Jan 2023 18:12:41 -0800 (PST)
 Received: from google.com ([2620:15c:9d:2:6a48:569f:20c1:dc8])
-        by smtp.gmail.com with ESMTPSA id r5-20020aa79ec5000000b00589605fb0a1sm4145795pfq.96.2023.01.10.18.11.56
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b001932a9e4f2csm5657256pls.255.2023.01.10.18.12.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 18:11:56 -0800 (PST)
-Date:   Tue, 10 Jan 2023 18:11:51 -0800
+        Tue, 10 Jan 2023 18:12:40 -0800 (PST)
+Date:   Tue, 10 Jan 2023 18:12:35 -0800
 From:   Benson Leung <bleung@google.com>
 To:     Prashant Malani <pmalani@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -58,19 +58,20 @@ Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         Guillaume Ranquet <granquet@baylibre.com>,
         Macpaul Lin <macpaul.lin@mediatek.com>,
         Pablo Sun <pablo.sun@mediatek.com>
-Subject: Re: [PATCH 1/3] usb: typec: altmodes/displayport: Add pin assignment
- helper
-Message-ID: <Y74a53YFeYECjvH4@google.com>
+Subject: Re: [PATCH 2/3] usb: typec: altmodes/displayport: Fix pin assignment
+ calculation
+Message-ID: <Y74bEyUOT3mrAY+I@google.com>
 References: <20230111020546.3384569-1-pmalani@chromium.org>
+ <20230111020546.3384569-2-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i4a3Me6WxQZxPfMJ"
+        protocol="application/pgp-signature"; boundary="H3XDtXqWAjLUxnxA"
 Content-Disposition: inline
-In-Reply-To: <20230111020546.3384569-1-pmalani@chromium.org>
+In-Reply-To: <20230111020546.3384569-2-pmalani@chromium.org>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,18 +80,19 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---i4a3Me6WxQZxPfMJ
+--H3XDtXqWAjLUxnxA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 11, 2023 at 02:05:41AM +0000, Prashant Malani wrote:
-> The code to extract a peripheral's currently supported Pin Assignments
-> is repeated in a couple of locations. Factor it out into a separate
-> function.
+On Wed, Jan 11, 2023 at 02:05:42AM +0000, Prashant Malani wrote:
+> Commit c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin
+> assignment for UFP receptacles") fixed the pin assignment calculation
+> to take into account whether the peripheral was a plug or a receptacle.
 >=20
-> This will also make it easier to add fixes (we only need to update 1
-> location instead of 2).
+> But the "pin_assignments" sysfs logic was not updated. Address this by
+> using the macros introduced in the aforementioned commit in the sysfs
+> logic too.
 >=20
 > Fixes: c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin assig=
 nment for UFP receptacles")
@@ -102,67 +104,26 @@ Reviewed-by: Benson Leung <bleung@chromium.org>
 
 
 > ---
->=20
-> While this patch doesn't fix anything, it is required by the actual
-> fix (which is Patch 2/3 in this series). So, I've add the "Fixes" tag
-> and "Cc stable" tag to ensure that both patches are picked.
->=20
-> If this is the incorrect approach and there is a better way, my
-> apologies, and please let me know the appropriate process.
->=20
->  drivers/usb/typec/altmodes/displayport.c | 22 ++++++++++++++--------
->  1 file changed, 14 insertions(+), 8 deletions(-)
+>  drivers/usb/typec/altmodes/displayport.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >=20
 > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
 /altmodes/displayport.c
-> index 06fb4732f8cd..f9d4a7648bc9 100644
+> index f9d4a7648bc9..c0d65c93cefe 100644
 > --- a/drivers/usb/typec/altmodes/displayport.c
 > +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -420,6 +420,18 @@ static const char * const pin_assignments[] =3D {
->  	[DP_PIN_ASSIGN_F] =3D "F",
->  };
+> @@ -427,9 +427,9 @@ static const char * const pin_assignments[] =3D {
+>  static u8 get_current_pin_assignments(struct dp_altmode *dp)
+>  {
+>  	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
+> -		return DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +		return DP_CAP_PIN_ASSIGN_DFP_D(dp->alt->vdo);
+>  	else
+> -		return DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +		return DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo);
+>  }
 > =20
-> +/*
-> + * Helper function to extract a peripheral's currently supported
-> + * Pin Assignments from its DisplayPort alternate mode state.
-> + */
-> +static u8 get_current_pin_assignments(struct dp_altmode *dp)
-> +{
-> +	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
-> +		return DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
-> +	else
-> +		return DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
-> +}
-> +
 >  static ssize_t
->  pin_assignment_store(struct device *dev, struct device_attribute *attr,
->  		     const char *buf, size_t size)
-> @@ -446,10 +458,7 @@ pin_assignment_store(struct device *dev, struct devi=
-ce_attribute *attr,
->  		goto out_unlock;
->  	}
-> =20
-> -	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
-> -		assignments =3D DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
-> -	else
-> -		assignments =3D DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
-> +	assignments =3D get_current_pin_assignments(dp);
-> =20
->  	if (!(DP_CONF_GET_PIN_ASSIGN(conf) & assignments)) {
->  		ret =3D -EINVAL;
-> @@ -486,10 +495,7 @@ static ssize_t pin_assignment_show(struct device *de=
-v,
-> =20
->  	cur =3D get_count_order(DP_CONF_GET_PIN_ASSIGN(dp->data.conf));
-> =20
-> -	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
-> -		assignments =3D DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
-> -	else
-> -		assignments =3D DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
-> +	assignments =3D get_current_pin_assignments(dp);
-> =20
->  	for (i =3D 0; assignments; assignments >>=3D 1, i++) {
->  		if (assignments & 1) {
 > --=20
 > 2.39.0.314.g84b9a713c41-goog
 >=20
@@ -176,15 +137,15 @@ bleung@google.com
 Chromium OS Project
 bleung@chromium.org
 
---i4a3Me6WxQZxPfMJ
+--H3XDtXqWAjLUxnxA
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY74a5wAKCRBzbaomhzOw
-wq6cAP4jo9IaJb1NAWY9AIAvx8SZWPbNPw0K6Dg+oEggzndGzQD+ODFeM45PMrtK
-MQlrDSGenORZzmeqrJzQvANdlDmQNwg=
-=r9k1
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY74bEwAKCRBzbaomhzOw
+wh4+APwJLOrut48PsUp3KdWO6i0ZWSEbCPvHJvr5NOu69xx+MgEAneRgoN+BIzhp
+qyspS5trJHRIAs3eO2MXCdpL0L7OAQk=
+=/0xh
 -----END PGP SIGNATURE-----
 
---i4a3Me6WxQZxPfMJ--
+--H3XDtXqWAjLUxnxA--
