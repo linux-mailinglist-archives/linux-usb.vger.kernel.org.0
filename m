@@ -2,105 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D1B665180
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 03:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 432C2665189
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 03:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235409AbjAKCGU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 21:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S231233AbjAKCME (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 21:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235003AbjAKCGH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 21:06:07 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54391200F
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:06:07 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id q64so14351602pjq.4
-        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:06:07 -0800 (PST)
+        with ESMTP id S232658AbjAKCMB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 21:12:01 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52204DD7
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:11:59 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id b12so9555704pgj.6
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jan 2023 18:11:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aBFAbmggijOhKjLzf9il6pua2012DvMDyGgeIBZj5ls=;
-        b=m2MFXy1xICKP7wXEyoTOm7zW0ptblveblZ8XnwBpeo2AKBwPeFD5jmjnjHS6MtgLnx
-         KyKFP2HmIFuQmtQYccuYE92XM+qfF/VMEIgI4zwELU1woAYUZ7poA9Qb1r92ssWmC6wV
-         ur7+Sh2GggjJFj+4LcSt6TetHYyIJ8lb2nBSQ=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0cwyEc6KQYmQnChy+BikWZp8lFg76+cm/UHIItp73H0=;
+        b=Fdbdt5jP7KyPgvW4FZTiLdDjkV4nJa2aeCGEKY/q4hT1iS67KiEisH/90DxltiO5xa
+         pu+3Vssbv+0WrkUm3+zirN1u3RkcbNYulzgvsV7pmmE8+YFVfIVQxWcRXGJln/cgHa+M
+         UTeWx7l735ZmdRMksrya1PjnX6fa05mtxEow47JN35hBMlnQDV+YWlU2QBkvtugl+Irj
+         NXvR8xjzaogFA2iJceuoyOYQL3T6EQBPGhsYlLZMcQVIM+SxOiFKVpqMIhN1iljOpD+V
+         kVGrZMEZOERXAxHI+GNpkEe4MQEt7LMTH383fd6hX8yKQ4+Zse6cQG6szVct++bp8rV9
+         fAJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aBFAbmggijOhKjLzf9il6pua2012DvMDyGgeIBZj5ls=;
-        b=QZp+P8FhpKC2PzV7z+YmyE5D4KZglNWHSgyXYGYJFhMsk6kgEtwUUX9p1BUVF12zAd
-         bXcYBtNA+2mEMUEjUW7UMvHV3KdC8eFUiXc7PSK1UjL1LJWxWPpblq/hm4Eb7eM+gBhG
-         zY9L8txrkPeWX8/N0jPGdhheQPs3ocpKuXjdDfPaZrfQfyB8nLoHaCg5Ge0LWMfJiMO3
-         w6VnIQh2vIksLC6ZX+24O2DHNoCN+jx+ORALJsjJLiOEalqFjjNfCj0fR2T45/jH3wFK
-         hQZatvXsZ+POhrb3fsV5A9DoQTk6L0JlHGVhoxRHcjngFwuV91TjGMgKU2GUATJhUT/C
-         O9aw==
-X-Gm-Message-State: AFqh2krmz1Ps4W1UzCWQiAqJTqV2qF9EOZWRkcHvAnOJHd5kLIzqPwEi
-        wGFsLfC4Eg5CFBa0lTGxWW1QVA==
-X-Google-Smtp-Source: AMrXdXuCj84I+jhx/wOedwvaeYXtbs0dOplLvj21ewxSfXqBwZfxqQmziQeUa4iUXnqxygc9yO9fOQ==
-X-Received: by 2002:a05:6a20:b285:b0:af:ec0f:f6b5 with SMTP id ei5-20020a056a20b28500b000afec0ff6b5mr72803915pzb.11.1673402766884;
-        Tue, 10 Jan 2023 18:06:06 -0800 (PST)
-Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id z6-20020a656646000000b00477a442d450sm7336738pgv.16.2023.01.10.18.06.06
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0cwyEc6KQYmQnChy+BikWZp8lFg76+cm/UHIItp73H0=;
+        b=wmbZBIDdthVou1yw+87xbqYIowAHoOdUWW+ia3vKNiMJQJuaIDcf5gKBOX3adL6o69
+         QDLY7OdgssY+wcm03M1zRmYXHtp8c+AiNfrt5USIkbTZqpJSmbyXIIv+OsuW3Y9cryNh
+         cr4Dbo6SXKbqsZdyQpn/UfrHByDWpHQUtomPjG6thmA+qf/CjMQ7blMVhG5neBbV2UzN
+         7LZX543YaTnRryOnHtHYYpco01d+EBsEaSIzRcGTLc79gFfDw2acvAb1AyGSmvLh8hYP
+         L3ihCDUczhTb5Ox0yPQ2zirex39yhUOt0f5EOmp4iK0Qhoc2LxAaeTdsgFvimzO8s76T
+         kjZg==
+X-Gm-Message-State: AFqh2kpLK1eyeCOWNwQPBZrkHopi3X8pIkvH+I4XPMVCP8RTUXbckTOB
+        Qra2S8rnrAiHWGe+3xk/wYORjQ==
+X-Google-Smtp-Source: AMrXdXuY4iQkwYRiuSdnjut0GKerpiZ1VUcDECyng7hoJCpwhLI2o5D089+OJU4YAqqI8hhBz9dVCg==
+X-Received: by 2002:a05:6a00:368a:b0:581:bfac:7a52 with SMTP id dw10-20020a056a00368a00b00581bfac7a52mr169277pfb.1.1673403118438;
+        Tue, 10 Jan 2023 18:11:58 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:6a48:569f:20c1:dc8])
+        by smtp.gmail.com with ESMTPSA id r5-20020aa79ec5000000b00589605fb0a1sm4145795pfq.96.2023.01.10.18.11.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 18:06:06 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, Prashant Malani <pmalani@chromium.org>,
+        Tue, 10 Jan 2023 18:11:56 -0800 (PST)
+Date:   Tue, 10 Jan 2023 18:11:51 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, stable@vger.kernel.org,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guillaume Ranquet <granquet@baylibre.com>,
         Macpaul Lin <macpaul.lin@mediatek.com>,
         Pablo Sun <pablo.sun@mediatek.com>
-Subject: [PATCH 3/3] usb: typec: altmodes/displayport: Use proper macro for pin assignment check
-Date:   Wed, 11 Jan 2023 02:05:43 +0000
-Message-Id: <20230111020546.3384569-3-pmalani@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230111020546.3384569-1-pmalani@chromium.org>
+Subject: Re: [PATCH 1/3] usb: typec: altmodes/displayport: Add pin assignment
+ helper
+Message-ID: <Y74a53YFeYECjvH4@google.com>
 References: <20230111020546.3384569-1-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="i4a3Me6WxQZxPfMJ"
+Content-Disposition: inline
+In-Reply-To: <20230111020546.3384569-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-While looking at the DP configuration VDO to determine the peripheral
-configuration, the spec (Table 8-5: DisplayPort Configurations, VESA
-DisplayPort Alt Mode Standard v2.0) lists the options as "UFP_U as a DP
-Source/Sink Device".
 
-So, use the correct macro while performing this check. Effectively it's
-the same as the existing code, but the proposed macro describes the
-state a little better.
+--i4a3Me6WxQZxPfMJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No functional changes introduced.
+On Wed, Jan 11, 2023 at 02:05:41AM +0000, Prashant Malani wrote:
+> The code to extract a peripheral's currently supported Pin Assignments
+> is repeated in a couple of locations. Factor it out into a separate
+> function.
+>=20
+> This will also make it easier to add fixes (we only need to update 1
+> location instead of 2).
+>=20
+> Fixes: c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin assig=
+nment for UFP receptacles")
+> Cc: stable@vger.kernel.org
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- drivers/usb/typec/altmodes/displayport.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index c0d65c93cefe..746bfbf3d557 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -426,7 +426,7 @@ static const char * const pin_assignments[] = {
-  */
- static u8 get_current_pin_assignments(struct dp_altmode *dp)
- {
--	if (DP_CONF_CURRENTLY(dp->data.conf) == DP_CONF_DFP_D)
-+	if (DP_CONF_CURRENTLY(dp->data.conf) == DP_CONF_UFP_U_AS_DFP_D)
- 		return DP_CAP_PIN_ASSIGN_DFP_D(dp->alt->vdo);
- 	else
- 		return DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo);
--- 
-2.39.0.314.g84b9a713c41-goog
 
+> ---
+>=20
+> While this patch doesn't fix anything, it is required by the actual
+> fix (which is Patch 2/3 in this series). So, I've add the "Fixes" tag
+> and "Cc stable" tag to ensure that both patches are picked.
+>=20
+> If this is the incorrect approach and there is a better way, my
+> apologies, and please let me know the appropriate process.
+>=20
+>  drivers/usb/typec/altmodes/displayport.c | 22 ++++++++++++++--------
+>  1 file changed, 14 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
+/altmodes/displayport.c
+> index 06fb4732f8cd..f9d4a7648bc9 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -420,6 +420,18 @@ static const char * const pin_assignments[] =3D {
+>  	[DP_PIN_ASSIGN_F] =3D "F",
+>  };
+> =20
+> +/*
+> + * Helper function to extract a peripheral's currently supported
+> + * Pin Assignments from its DisplayPort alternate mode state.
+> + */
+> +static u8 get_current_pin_assignments(struct dp_altmode *dp)
+> +{
+> +	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
+> +		return DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +	else
+> +		return DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +}
+> +
+>  static ssize_t
+>  pin_assignment_store(struct device *dev, struct device_attribute *attr,
+>  		     const char *buf, size_t size)
+> @@ -446,10 +458,7 @@ pin_assignment_store(struct device *dev, struct devi=
+ce_attribute *attr,
+>  		goto out_unlock;
+>  	}
+> =20
+> -	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
+> -		assignments =3D DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
+> -	else
+> -		assignments =3D DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +	assignments =3D get_current_pin_assignments(dp);
+> =20
+>  	if (!(DP_CONF_GET_PIN_ASSIGN(conf) & assignments)) {
+>  		ret =3D -EINVAL;
+> @@ -486,10 +495,7 @@ static ssize_t pin_assignment_show(struct device *de=
+v,
+> =20
+>  	cur =3D get_count_order(DP_CONF_GET_PIN_ASSIGN(dp->data.conf));
+> =20
+> -	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
+> -		assignments =3D DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
+> -	else
+> -		assignments =3D DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +	assignments =3D get_current_pin_assignments(dp);
+> =20
+>  	for (i =3D 0; assignments; assignments >>=3D 1, i++) {
+>  		if (assignments & 1) {
+> --=20
+> 2.39.0.314.g84b9a713c41-goog
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--i4a3Me6WxQZxPfMJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY74a5wAKCRBzbaomhzOw
+wq6cAP4jo9IaJb1NAWY9AIAvx8SZWPbNPw0K6Dg+oEggzndGzQD+ODFeM45PMrtK
+MQlrDSGenORZzmeqrJzQvANdlDmQNwg=
+=r9k1
+-----END PGP SIGNATURE-----
+
+--i4a3Me6WxQZxPfMJ--
