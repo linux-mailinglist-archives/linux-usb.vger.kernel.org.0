@@ -2,150 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFCD665B3B
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 13:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8DC665B76
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 13:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbjAKMTk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 07:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S234084AbjAKMet (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 07:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbjAKMTg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 07:19:36 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 04:19:35 PST
-Received: from esa1.mentor.iphmx.com (esa1.mentor.iphmx.com [68.232.129.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338599FE4;
-        Wed, 11 Jan 2023 04:19:34 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.96,315,1665475200"; 
-   d="scan'208";a="96576786"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa1.mentor.iphmx.com with ESMTP; 11 Jan 2023 04:18:32 -0800
-IronPort-SDR: Cv8xFRVl5CkzZ6EtQkmL327DUwxQGE0JRibk5G0CPeUGRjT/Wt7oiQ0+bd3x4OqwJUAE8fItCq
- 29O57XzIIF4Y46Dx3DRkThDzs3q1bLTVRS0mPIJfyzeaUzQQPyggQpUvIlITEn5dZ+1OV7ohuR
- txHXY5an+/J16xFUZRDOInkM6xB7BMCV3GJ1rkFD9a/yeCNJ/EdAtwZdd0jHa/7iWmR4o7dOrb
- QYlFc+n/nortnbTllFzAcPIWPLYirEyovL2EWtgEXVzlRp6eMsNv/joHIcKRKaPv7+Eas3wCOO
- vQU=
-From:   <bhuvanesh_surachari@mentor.com>
-CC:     <gregkh@linuxfoundation.org>,
-        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
-        John Keeping <john@metanate.com>,
-        "Linyu Yuan" <quic_linyyuan@quicinc.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Dan Carpenter" <error27@gmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: f_fs: Make sure to unregister gadget item in unbind
-Date:   Wed, 11 Jan 2023 17:47:17 +0530
-Message-ID: <20230111121719.5258-1-bhuvanesh_surachari@mentor.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S232120AbjAKMeo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 07:34:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEFD12613;
+        Wed, 11 Jan 2023 04:34:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D5261CD8;
+        Wed, 11 Jan 2023 12:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B26C433F0;
+        Wed, 11 Jan 2023 12:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673440482;
+        bh=8ECPtl95jMrSYLYK0fQjZE4iX607dsXxBcoAptHSDRk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F+WPq2If4Vxd4uFQRjL2LkRRf9V8pa09IzqQRBW1tQo12YsZ1tw3NnSEdj9rdOG24
+         PlCE940j1Xm70AovSQjfwjaDDjU4jllNsj+2/T2FJ+xuUK4kBbks+hXC9XM2NrDpAx
+         GkYicY+nCOlqpN3y4fxSE+L6XAx0BM4IfXvweS2eE86TUtape8hhIHhCRO5cFGxpr/
+         JgjCveVG/zIMVxMJqsZ3Utrc+is98aUhzP09TtW5wCbk1KgWabOxtcqzLvXaFhkSr+
+         EDXqcOQnVTHpAdbyBw2cG64blL2y1hSKYqaiIGyfC+rOBco0FxTU45nRspsjwWgIFb
+         FtTn4Xzb8jzOg==
+Date:   Wed, 11 Jan 2023 18:04:38 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v2 05/16] driver core: make struct device_type.uevent()
+ take a const *
+Message-ID: <Y76s3tgPkfGhUzEr@matsya>
+References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
+ <20230111113018.459199-6-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111113018.459199-6-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+On 11-01-23, 12:30, Greg Kroah-Hartman wrote:
+> The uevent() callback in struct device_type should not be modifying the
+> device that is passed into it, so mark it as a const * and propagate the
+> function signature changes out into all relevant subsystems that use
+> this callback.
 
-In functionfs_unbind() the FFS_FL_BOUND flag was cleared before
-calling ffs_data_put() which was preventing the execution of function
-unregister_gadget_item().
-This was leading to Kernel panic due to NULL pointer dereference as
-below:
-Unable to handle kernel NULL pointer dereference at virtual address 00000020
-Mem abort info:
-  Exception class = DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgd = ffff80062cb6a000
-[0000000000000020] *pgd=000000066c966003, *pud=000000067a170003, *pmd=0000000000000000
-Internal error: Oops: 96000006 [#1] PREEMPT SMP
-tftp nf_nat nf_conntrack_tftp nf_conntrack adv7180 optee tee quota_v2 quota_tree max20010_regulator aesi adc_inc input_inc cpufreq_dt thermal_sys ravb snd_soc_rcar snd_aloop snd_soc_skeleton ravb_mdio snd_soc_generic_card
-tp pps_core sbrrc spidev spi_sh_msiof evdev boottime gpio_inc i2c_dev usb8251x_firmware ipv6 autofs4 [last unloaded: atmel_mxt_ts]
-Process swapper/1 (pid: 0, stack limit = 0xffff000008e30000)
-CPU: 1 PID: 0 Comm: swapper/1 Tainted: G         C      4.14.295-ltsi-08448-g8e327c2d87fb #1
-Hardware name: RBCM A-IVI2 CCS1.1 B board based on r8a7796 (DT)
-pc : usb_ep_queue+0xe0/0x110 [udc_core]
-lr : eth_start_xmit+0x280/0x30c [u_ether]
-sp : ffff00000800bde0 pstate : 80000145
-x29: ffff00000800bde0 x28: 0000000000000006
-x27: 0000000000000140 x26: ffff8005fbb7a518
-x25: ffff80063b2c98a8 x24: ffff80063a6f73b8
-x23: ffff80063b2c98a0 x22: ffff8005fbb7a518
-x21: ffff80063b2c9000 x20: ffff80063a6f73b8
-x19: ffff8005fbb7a558 x18: 000000000049a1dc
-x17: 000000365edd6f88 x16: ffff000008204254
-x15: 0000000000000000 x14: 0000000000000400
-x13: 0000000000000400 x12: 0000000000000000
-x11: 0101010101010101 x10: 0000000000000000
-x9 : 0000000000000484 x8 : ffff8005d9a44214
-x7 : 0000000000000000 x6 : ffff8005d9a44210
-x5 : ffff8005d9a44210 x4 : 0000000000000214
-x3 : 0000000000000001 x2 : 0000000001080020
-x1 : ffff8005fbb7a518 x0 : 0000000000000000
-Call trace:
- usb_ep_queue+0xe0/0x110 [udc_core]
- eth_start_xmit+0x280/0x30c [u_ether]
- ncm_tx_tasklet+0x3c/0x50 [usb_f_ncm]
- tasklet_action+0xa0/0x104
- __do_softirq+0x260/0x3b8
- irq_exit+0x7c/0xd8
- __handle_domain_irq+0x78/0xac
- gic_handle_irq+0x68/0xa8
- el1_irq+0xb4/0x12c
- cpuidle_enter_state+0x1b4/0x2d4
- cpuidle_enter+0x18/0x20
- call_cpuidle+0x34/0x38
- do_idle+0x158/0x1a8
- cpu_startup_entry+0x20/0x30
- secondary_start_kernel+0x10c/0x118
-Code: 95e9c147 17ffffe3 f9400a80 aa1603e1 (f9401003)
----[ end trace ffcd984d149a0f4e ]---
-Kernel panic - not syncing: Fatal exception in interrupt
-SMP: stopping secondary CPUs
-Kernel Offset: disabled
-CPU features: 0x21002004
-Memory Limit: 3968 MB
-Rebooting in 3 seconds..
+Acked-by: Vinod Koul <vkoul@kernel.org>
 
-Hence clear the FFS_FL_BOUND flag after checking using
-test_and_clear_bit() in function ffs_closed() which ensures calling
-of unregister_gadget_item().
-
-Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
----
- drivers/usb/gadget/function/f_fs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 73dc10a77cde..8bed3c800dff 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1895,7 +1895,6 @@ static void functionfs_unbind(struct ffs_data *ffs)
- 		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
- 		ffs->ep0req = NULL;
- 		ffs->gadget = NULL;
--		clear_bit(FFS_FL_BOUND, &ffs->flags);
- 		ffs_data_put(ffs);
- 	}
- }
-@@ -3847,7 +3846,7 @@ static void ffs_closed(struct ffs_data *ffs)
- 	ci = opts->func_inst.group.cg_item.ci_parent->ci_parent;
- 	ffs_dev_unlock();
- 
--	if (test_bit(FFS_FL_BOUND, &ffs->flags))
-+	if (test_and_clear_bit(FFS_FL_BOUND, &ffs->flags))
- 		unregister_gadget_item(ci);
- 	return;
- done:
 -- 
-2.17.1
-
+~Vinod
