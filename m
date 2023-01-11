@@ -2,260 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B285665221
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 04:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DB166526C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 04:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjAKDMs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 22:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S230376AbjAKDcz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 22:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjAKDMr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 22:12:47 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95466DF25;
-        Tue, 10 Jan 2023 19:12:44 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B1bMCo020464;
-        Wed, 11 Jan 2023 03:11:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=fzOpVmaEgBnJzMqcOhijtm34iXCdOIxV6hFIOMpSFmo=;
- b=QOQS0KKLhfRQjH1UQ7EZHTAUylVbbeko1P2kP9tL13YDqRUg4hsEufk87iCkknTgCGap
- JtjsFuMtiDxiw6QZdrAgMHuzbNwturxYBbivOGBfo3UdSIkyKGlMRgeagQ8uDyGIWITP
- E+d9N8XNKUz2tVoja748VrN0s5sHqvdNchvlqKF4eXx99u6y1jwyz/z/HlWSgNWooCYp
- Gs2QmFQyJYfSdAar6fKl4guqrKFczhAbAzGlOLd4Y6adjJbuCFTEemReONDjfDhqU+ff
- iZK4cF+NU8hOYfODSRxHhrTHi+voTYZJaGY7ldiqNgL0aCtgbdFcFFpPDtNXod1D9Ud/ Tw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1km2g4m1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 03:11:44 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30B3Bhbp007089
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 03:11:43 GMT
-Received: from [10.110.66.166] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 19:11:41 -0800
-Message-ID: <23037fab-1a9e-66c1-8e90-d94b213c8c7d@quicinc.com>
-Date:   Tue, 10 Jan 2023 19:11:42 -0800
+        with ESMTP id S235867AbjAKDcP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 22:32:15 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C152063CF;
+        Tue, 10 Jan 2023 19:32:03 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.14])
+        by gateway (Coremail) with SMTP id _____8Cxe+qyLb5jU+IAAA--.2627S3;
+        Wed, 11 Jan 2023 11:32:02 +0800 (CST)
+Received: from [10.180.13.14] (unknown [10.180.13.14])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxQuWxLb5jQ7wXAA--.7809S3;
+        Wed, 11 Jan 2023 11:32:01 +0800 (CST)
+Subject: Re: [PATCH v1] usb: handle warm-reset port requests on hub_init
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, yangyinglu@loongson.cn
+References: <20230110081938.30308-1-yangyinglu@loongson.cn>
+ <CAAd53p6eUNJf7aNkiXcTKAfhL_cM1Ki7JnW7s4oP7BeFQkP6ag@mail.gmail.com>
+From:   yangyinglu <yangyinglu@loongson.cn>
+Message-ID: <e684e8d7-6fc9-3331-868c-6cc4122f2cef@loongson.cn>
+Date:   Wed, 11 Jan 2023 11:32:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
- support
+In-Reply-To: <CAAd53p6eUNJf7aNkiXcTKAfhL_cM1Ki7JnW7s4oP7BeFQkP6ag@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
-        Albert Wang <albertccwang@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-8-quic_wcheng@quicinc.com>
- <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
- <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
- <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
- <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
- <cefcc5c6-6a91-c737-252a-edf596f77473@linux.intel.com>
- <23a2b82e-4f4f-66e2-2c60-3613ffe7912f@quicinc.com>
-In-Reply-To: <23a2b82e-4f4f-66e2-2c60-3613ffe7912f@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: m_O4S12OuUZxEyOKxH4w0RkGGFAerNZZ
-X-Proofpoint-GUID: m_O4S12OuUZxEyOKxH4w0RkGGFAerNZZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_10,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 adultscore=0 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301110022
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxQuWxLb5jQ7wXAA--.7809S3
+X-CM-SenderInfo: 51dqw5xlqjz3o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Kw47Cry7Ar48JF1kAFW5Jrb_yoW5JFWfpF
+        47G3Z3trWDG3WjkasIkw18W3Z8X3ySyay3GFW093s093s8u3Z0y3Z3Wa4FgayUAryfJayY
+        vw18Krs7JFZrGaDanT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8v_M3UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
 
-On 1/10/2023 12:03 PM, Wesley Cheng wrote:
-> Hi Mathias,
+
+在 2023/1/11 上午10:33, Kai-Heng Feng 写道:
+> Hi yangyinglu,
 > 
-> On 1/10/2023 11:47 AM, Mathias Nyman wrote:
->> On 9.1.2023 22.24, Wesley Cheng wrote:
->>> Hi Mathias,
->>>
->>> On 1/2/2023 8:38 AM, Mathias Nyman wrote:
->>>> On 29.12.2022 23.14, Wesley Cheng wrote:
->>>>> Hi Mathias,
->>>>>
->>>>> On 12/28/2022 7:47 AM, Mathias Nyman wrote:
->>>>>> On 24.12.2022 1.31, Wesley Cheng wrote:
->>>>>>> Implement the XHCI operations for allocating and requesting for a 
->>>>>>> secondary
->>>>>>> interrupter.  The secondary interrupter can allow for events for a
->>>>>>> particular endpoint to be routed to a separate event ring.  The 
->>>>>>> event
->>>>>>> routing is defined when submitting a transfer descriptor to the 
->>>>>>> USB HW.
->>>>>>> There is a specific field which denotes which interrupter ring to 
->>>>>>> route the
->>>>>>> event to when the transfer is completed.
->>>>>>>
->>>>>>> An example use case, such as audio packet offloading can utilize 
->>>>>>> a separate
->>>>>>> event ring, so that these events can be routed to a different 
->>>>>>> processor
->>>>>>> within the system.  The processor would be able to independently 
->>>>>>> submit
->>>>>>> transfers and handle its completions without intervention from 
->>>>>>> the main
->>>>>>> processor.
->>>>>>>
->>>>>>
->>>>>> Adding support for more xHCI interrupters than just the primary 
->>>>>> one make sense for
->>>>>> both the offloading and virtualization cases.
->>>>>>
->>>>>> xHCI support for several interrupters was probably added to 
->>>>>> support virtualization,
->>>>>> to hand over usb devices to virtual machines and give them their 
->>>>>> own event ring and
->>>>>> MSI/MSI-X vector.
->>>>>>
->>>>>> In this offloading case you probably want to avoid xHC interrupts 
->>>>>> from this device
->>>>>> completely, making sure it doesn't wake up the main CPU 
->>>>>> unnecessarily.
->>>>>>
->>>>>> So is the idea here to let xhci driver set up the new interrupter, 
->>>>>> its event ring,
->>>>>> and the endpoint transfer rings. Then pass the address of the 
->>>>>> endpoint transfer rings
->>>>>> and the new event ring to the separate processor.
->>>>>>
->>>>>> This separate processor then both polls the event ring for new 
->>>>>> events, sets its dequeue
->>>>>> pointer, clears EHB bit, and queues new TRBs on the transfer ring.
->>>>>>
->>>>>> so xhci driver does not handle any events for the audio part, and 
->>>>>> no audio data URBs
->>>>>> are sent to usb core?
->>>>>
->>>>> Your entire description is correct.  To clarify, the interfaces 
->>>>> which are non-audio will still be handled by the main processor. 
->>>>> For example, a USB headset can have a HID interface as well for 
->>>>> volume control.  The HID interface will still be handled by the 
->>>>> main processor, and events routed to the main event ring.
->>>>>
->>>>>>
->>>>>> How about the control part?
->>>>>> Is the control endpoint for this device still handled normally by 
->>>>>> usb core/xhci?
->>>>>>
->>>>>
->>>>> Control transfers are always handled on the main processor.  Only 
->>>>> audio interface's endpoints.
->>>>
->>>> Good to know, that means interrupter should be chosen per endpoint, 
->>>> not per device.
->>>>
->>>>>
->>>>>> For the xhci parts I think we should start start by adding generic 
->>>>>> support for several
->>>>>> interrupters, then add parts needed for offloading.
->>>>>
->>>> I can split up the patchsets to add interrupters first, then adding 
->>>> the offloading APIs in a separate patch.
->>>>
->>>>
->>>> I started looking at supporting secondary interrupters myself.
->>>> Let me work on that part a bit first. We have a bit different end 
->>>> goals.
->>>> I want to handle interrupts from a secondary interrupter, while this 
->>>> audio offload
->>>> really just wants to mask some interrupts.
->>>>
->>>
->>> I was looking at how we could possibly split up the XHCI secondary 
->>> interrupter, and offloading parts.  Since the XHCI secondary 
->>> interrupter is a feature that is defined in the XHCI spec (and we 
->>> aren't doing anything outside of what is defined), I was thinking of 
->>> having a separate XHCI driver (ie xhci-sec.c/h) that can be used to 
->>> define all APIs related to setting up the event ring and ring 
->>> management. (interrupt support can be added here)  This aligns a bit 
->>> with what Alan suggested, and removing the APIs in the USB HCD, since 
->>> this is XHCI specific stuff. ( 
->>> https://lore.kernel.org/linux-usb/Y6zwZOquZOTZfnvP@rowland.harvard.edu/ 
->>> )
+> On Tue, Jan 10, 2023 at 4:20 PM yangyinglu <yangyinglu@loongson.cn> wrote:
 >>
->> Already started working on the interrupter, that part fits well into 
->> current driver.
->>
->> Code (untested, will be randomly rebased etc) can be found in my 
->> feature_interrupters branch:
->> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git 
->> feature_interrupters
->> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
->>
+>> USB-C storage device not detected on USB 3.0 host when
+>> plugged in after boot, so need to warm-reset port
 > 
-> Oh perfect, let me take a look.  Thanks for this!
+> Is it possible to enable USB dyndbg, plug a USB 3.0 device, then paste
+> the relevant dmesg here? Thanks!
 > 
+> Kai-Heng
 
-I actually tried to see if I could get our audio offloading to work with 
-your current series.  (I understand its still work in progress)  I did 
-have to make some changes to expose the APIs to our class driver, but I 
-wanted to let you know about one of the issues I saw when developing my 
-implementation, because I am seeing the same behavior w/ yours. (and 
-there's a discrepancy w/ what's stated in the XHCI spec :))
+  hi,
+     After entering the system, directly plug and unplug the USB flash 
+disk. usb control is  etron Technology Inc.The log is as follows:
+  [   10.354484] radeon 0000:04:00.0: vgaarb: changed VGA decodes: 
+olddecodes=io+mem,decodes=none:owns=none
+  [   10.484794] bridge: filtering via arp/ip/ip6tables is no longer 
+available by default. Update your scripts to load br_netfilter if you 
+need this.
+  [   10.506968] tun: Universal TUN/TAP device driver, 1.6
+  [   10.514128] virbr0: port 1(virbr0-nic) entered blocking state
+  [   10.519858] virbr0: port 1(virbr0-nic) entered disabled state
+  [   10.525646] device virbr0-nic entered promiscuous mode
+  [   10.666536] virbr0: port 1(virbr0-nic) entered blocking state
+  [   10.672268] virbr0: port 1(virbr0-nic) entered listening state
+  [   10.748564] virbr0: port 1(virbr0-nic) entered disabled state
 
-So the reason why my initial submission did the event ring allocation 
-and set up before the run/stop bit was set, is that I found that when 
-writing to the ir_set->erst_base in this scenario (for the secondary 
-interrupter), it lead to a SMMU fault from the DWC3 controller.  One 
-thing I noticed, was that the SMMU fault address was the lower 32 bits 
-of the segment table base address allocated.  The XHCI driver utilizes 
-the xhci_write_64() api which first writes the lower 32 bits then the 
-upper 32 bits.  The XHCI spec states that:
+  Loongnix GNU/Linux 20 Release 3 loongson-pc ttyS0
 
-Table 5-41: Event Ring Segment Table Base Address Register Bit 
-Definitions (ERSTBA)
 
-"Event Ring Segment Table Base Address Register – RW. Default = ‘0’. 
-This field defines the
-high order bits of the start address of the Event Ring Segment Table.
-Writing this register sets the Event Ring State Machine:EREP Advancement 
-to the Start state.
-Refer to Figure 4-12 for more information.
-**For Secondary Interrupters: This field may be modified at any time.**"
+  loongson-pc login: [  147.701011] usb usb4-port1: Cannot enable. Maybe 
+the USB cable is bad?
+  [  151.793206] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
+  [  151.799726] usb usb4-port1: attempt power cycle
+  [  157.465465] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
+  [  161.557649] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
+  [  161.564167] usb usb4-port1: unable to enumerate USB device
+  [  165.641834] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
 
-I'm not sure if this is an issue with the specific controller we're 
-using, so maybe I will wait until you can give this a try on your set 
-up.  However, it doesn't seem to be true that we can write the ERSTBA 
-any time we want to.  My assumption is that once I made the lower 32 bit 
-write, the controller attempted to enable the Event Ring State machine 
-(Figure 4-12), and this led to a SMMU fault, since the upper 64 bits 
-haven't been written.  I also did some bit banging manually as well 
-(using devmem) and any time I write to the secondary ring ERSTBA 
-register it generates a fault. (before any offloading has started)
+> 
+>>
+>> Signed-off-by: yangyinglu <yangyinglu@loongson.cn>
+>> ---
+>>   drivers/usb/core/hub.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index 77e73fc8d673..bd4496b80c2d 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -1159,7 +1159,7 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+>>                  }
+>>
+>>                  /* Make sure a warm-reset request is handled by port_event */
+>> -               if (type == HUB_RESUME &&
+>> +               if ((type == HUB_RESUME || type == HUB_INIT2) &&
+>>                      hub_port_warm_reset_required(hub, port1, portstatus))
+>>                          set_bit(port1, hub->event_bits);
+>>
+>> --
+>> 2.20.1
+>>
 
-Thanks
-Wesley Cheng
