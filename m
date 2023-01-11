@@ -2,167 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF81D665F14
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 16:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09090666109
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 17:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234761AbjAKP3G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 10:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
+        id S235576AbjAKQzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 11:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbjAKP21 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 10:28:27 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC0A2DE7;
-        Wed, 11 Jan 2023 07:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=l91yn5XMBlf8IaSq4NhkMOOy2mQCGvI9lWUFKT2jjXQ=; b=nPVJt
-        QatnKO+VXI55OnkOzNniPKp8gCUDmjozgtlTc4xcc9I13TENiQz+zubbQJIo10MPxbVTIlgQ9IhBC
-        eSFtWLL9WmfzsYMYR4WnRMMzITwgmxtlNLLu/9jlsb4H9/7V+lIhV79TpdUMQ/MfhCvry0l7piI2v
-        m5fU02IY47XpYZQxXQ9/DDzfiWaqL9Zyn0bLeJt2MQi7Qp8iCv3oMEIzLZZ0kJAh1v5lokrzb4fL7
-        BWA7KhXdQW1nbLgc7k+DIGe/Jh6ZBOgH3I7uyHVE66EfwosiWWLbJWahbxBFr6DwzASETpQ+u2WcX
-        duuoiFYzQQmWbXBvZeVlL5T6mqaFQ==;
-Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1pFd1O-0000kh-Ct;
-        Wed, 11 Jan 2023 15:28:10 +0000
-Date:   Wed, 11 Jan 2023 15:28:09 +0000
-From:   John Keeping <john@metanate.com>
-To:     bhuvanesh_surachari@mentor.com
-Cc:     gregkh@linuxfoundation.org, Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dan Carpenter <error27@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: f_fs: Make sure to unregister gadget item in unbind
-Message-ID: <Y77ViYYXj561yxd3@donbot>
-References: <20230111121719.5258-1-bhuvanesh_surachari@mentor.com>
+        with ESMTP id S235533AbjAKQyo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 11:54:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8842F175BF;
+        Wed, 11 Jan 2023 08:54:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 155F161D9C;
+        Wed, 11 Jan 2023 16:54:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC4BC433D2;
+        Wed, 11 Jan 2023 16:54:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673456082;
+        bh=mXESQehV0wt8kRi6/+LpO/EWbusEEZr0NKPtbWhQXkk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NZ2n4T9WAfM31GVkMr0U+OYQ1Le0CO4szDFcbo43kBez/1J9qnZ9YKq8esW75ezAZ
+         8JfUAS86yxHZ9RhJ0V0pNmj/VY/ORz9S6fCeFssGIrcuF1Xfq9yUTkn3I4Is0Wx2Mc
+         NFzsNx9oyDWOwe61DNPL38/EqDVkfCeFJN2jUfno83iUYhu70LDJ+1tw4eGExWbpbY
+         EOSUDeG+tMj/l65lE9dJr/seo+5C+OIm0cRJdutUZSTltGuxSufv6PYLoSM27KZI6v
+         4KVn8oRKJo1GTkXYra54pA1zq+/IHJ9a5qCkOem0Z3aiYG9t9YXNKYj154cUDU8BE7
+         E8CK13X7gSsBA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pFeN6-0003YU-Rv; Wed, 11 Jan 2023 17:54:41 +0100
+Date:   Wed, 11 Jan 2023 17:54:40 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Samuel Iglesias =?utf-8?Q?Gons=C3=A1lvez?= 
+        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        David Lin <dtwlin@gmail.com>, Alex Elder <elder@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 11/13] tty/serial: Call ->dtr_rts() parameter active
+ consistently
+Message-ID: <Y77p0P9YaCwPArxv@hovoldconsulting.com>
+References: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com>
+ <20230111142331.34518-12-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230111121719.5258-1-bhuvanesh_surachari@mentor.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230111142331.34518-12-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 05:47:17PM +0530, bhuvanesh_surachari@mentor.com wrote:
-> From: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+On Wed, Jan 11, 2023 at 04:23:29PM +0200, Ilpo Järvinen wrote:
+> Convert various parameter names for ->dtr_rts() and related functions
+> from onoff, on, and raise to active.
 > 
-> In functionfs_unbind() the FFS_FL_BOUND flag was cleared before
-> calling ffs_data_put() which was preventing the execution of function
-> unregister_gadget_item().
-> This was leading to Kernel panic due to NULL pointer dereference as
-> below:
-> Unable to handle kernel NULL pointer dereference at virtual address 00000020
-> Mem abort info:
->   Exception class = DABT (current EL), IL = 32 bits
->   SET = 0, FnV = 0
->   EA = 0, S1PTW = 0
-> Data abort info:
->   ISV = 0, ISS = 0x00000006
->   CM = 0, WnR = 0
-> user pgtable: 4k pages, 48-bit VAs, pgd = ffff80062cb6a000
-> [0000000000000020] *pgd=000000066c966003, *pud=000000067a170003, *pmd=0000000000000000
-> Internal error: Oops: 96000006 [#1] PREEMPT SMP
-> tftp nf_nat nf_conntrack_tftp nf_conntrack adv7180 optee tee quota_v2 quota_tree max20010_regulator aesi adc_inc input_inc cpufreq_dt thermal_sys ravb snd_soc_rcar snd_aloop snd_soc_skeleton ravb_mdio snd_soc_generic_card
-> tp pps_core sbrrc spidev spi_sh_msiof evdev boottime gpio_inc i2c_dev usb8251x_firmware ipv6 autofs4 [last unloaded: atmel_mxt_ts]
-> Process swapper/1 (pid: 0, stack limit = 0xffff000008e30000)
-> CPU: 1 PID: 0 Comm: swapper/1 Tainted: G         C      4.14.295-ltsi-08448-g8e327c2d87fb #1
-> Hardware name: RBCM A-IVI2 CCS1.1 B board based on r8a7796 (DT)
-> pc : usb_ep_queue+0xe0/0x110 [udc_core]
-> lr : eth_start_xmit+0x280/0x30c [u_ether]
-> sp : ffff00000800bde0 pstate : 80000145
-> x29: ffff00000800bde0 x28: 0000000000000006
-> x27: 0000000000000140 x26: ffff8005fbb7a518
-> x25: ffff80063b2c98a8 x24: ffff80063a6f73b8
-> x23: ffff80063b2c98a0 x22: ffff8005fbb7a518
-> x21: ffff80063b2c9000 x20: ffff80063a6f73b8
-> x19: ffff8005fbb7a558 x18: 000000000049a1dc
-> x17: 000000365edd6f88 x16: ffff000008204254
-> x15: 0000000000000000 x14: 0000000000000400
-> x13: 0000000000000400 x12: 0000000000000000
-> x11: 0101010101010101 x10: 0000000000000000
-> x9 : 0000000000000484 x8 : ffff8005d9a44214
-> x7 : 0000000000000000 x6 : ffff8005d9a44210
-> x5 : ffff8005d9a44210 x4 : 0000000000000214
-> x3 : 0000000000000001 x2 : 0000000001080020
-> x1 : ffff8005fbb7a518 x0 : 0000000000000000
-> Call trace:
->  usb_ep_queue+0xe0/0x110 [udc_core]
->  eth_start_xmit+0x280/0x30c [u_ether]
->  ncm_tx_tasklet+0x3c/0x50 [usb_f_ncm]
->  tasklet_action+0xa0/0x104
->  __do_softirq+0x260/0x3b8
->  irq_exit+0x7c/0xd8
->  __handle_domain_irq+0x78/0xac
->  gic_handle_irq+0x68/0xa8
->  el1_irq+0xb4/0x12c
->  cpuidle_enter_state+0x1b4/0x2d4
->  cpuidle_enter+0x18/0x20
->  call_cpuidle+0x34/0x38
->  do_idle+0x158/0x1a8
->  cpu_startup_entry+0x20/0x30
->  secondary_start_kernel+0x10c/0x118
-> Code: 95e9c147 17ffffe3 f9400a80 aa1603e1 (f9401003)
-> ---[ end trace ffcd984d149a0f4e ]---
-> Kernel panic - not syncing: Fatal exception in interrupt
-> SMP: stopping secondary CPUs
-> Kernel Offset: disabled
-> CPU features: 0x21002004
-> Memory Limit: 3968 MB
-> Rebooting in 3 seconds..
-
-I don't understand this - that looks like a networking gadget which is
-not FFS.  How does an issue in the FFS function affect the underlying
-UDC for a totally different gadget function?
-
-> Hence clear the FFS_FL_BOUND flag after checking using
-> test_and_clear_bit() in function ffs_closed() which ensures calling
-> of unregister_gadget_item().
-> 
-> Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->  drivers/usb/gadget/function/f_fs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 73dc10a77cde..8bed3c800dff 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1895,7 +1895,6 @@ static void functionfs_unbind(struct ffs_data *ffs)
->  		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
->  		ffs->ep0req = NULL;
->  		ffs->gadget = NULL;
-> -		clear_bit(FFS_FL_BOUND, &ffs->flags);
->  		ffs_data_put(ffs);
->  	}
->  }
-> @@ -3847,7 +3846,7 @@ static void ffs_closed(struct ffs_data *ffs)
->  	ci = opts->func_inst.group.cg_item.ci_parent->ci_parent;
->  	ffs_dev_unlock();
->  
-> -	if (test_bit(FFS_FL_BOUND, &ffs->flags))
-> +	if (test_and_clear_bit(FFS_FL_BOUND, &ffs->flags))
+>  drivers/char/pcmcia/synclink_cs.c | 6 +++---
+>  drivers/mmc/core/sdio_uart.c      | 6 +++---
+>  drivers/staging/greybus/uart.c    | 4 ++--
+>  drivers/tty/amiserial.c           | 4 ++--
+>  drivers/tty/hvc/hvc_console.h     | 2 +-
+>  drivers/tty/hvc/hvc_iucv.c        | 6 +++---
+>  drivers/tty/mxser.c               | 4 ++--
+>  drivers/tty/n_gsm.c               | 4 ++--
+>  drivers/tty/serial/serial_core.c  | 8 ++++----
+>  drivers/tty/synclink_gt.c         | 4 ++--
+>  include/linux/tty_port.h          | 4 ++--
+>  include/linux/usb/serial.h        | 2 +-
+>  12 files changed, 27 insertions(+), 27 deletions(-)
 
-If you're clearing the FFS_FL_BOUND flag here, then doesn't the name of
-the flag need to change as it's no longer tracking what it claims to
-(and indeed this is effectively unconditional if the flag can't be
-cleared anywhere else).
+> diff --git a/include/linux/tty_port.h b/include/linux/tty_port.h
+> index c44e489de0ff..edf685a24f7c 100644
+> --- a/include/linux/tty_port.h
+> +++ b/include/linux/tty_port.h
+> @@ -16,7 +16,7 @@ struct tty_struct;
+>  /**
+>   * struct tty_port_operations -- operations on tty_port
+>   * @carrier_raised: return true if the carrier is raised on @port
+> - * @dtr_rts: raise the DTR line if @raise is true, otherwise lower DTR
+> + * @dtr_rts: raise the DTR line if @active is true, otherwise lower DTR
+>   * @shutdown: called when the last close completes or a hangup finishes IFF the
+>   *	port was initialized. Do not use to free resources. Turn off the device
+>   *	only. Called under the port mutex to serialize against @activate and
+> @@ -32,7 +32,7 @@ struct tty_struct;
+>   */
+>  struct tty_port_operations {
+>  	bool (*carrier_raised)(struct tty_port *port);
+> -	void (*dtr_rts)(struct tty_port *port, bool raise);
+> +	void (*dtr_rts)(struct tty_port *port, bool active);
+>  	void (*shutdown)(struct tty_port *port);
+>  	int (*activate)(struct tty_port *port, struct tty_struct *tty);
+>  	void (*destruct)(struct tty_port *port);
+> diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
+> index bad343c5e8a7..33afd9f3ebbe 100644
+> --- a/include/linux/usb/serial.h
+> +++ b/include/linux/usb/serial.h
+> @@ -292,7 +292,7 @@ struct usb_serial_driver {
+>  			struct serial_icounter_struct *icount);
+>  	/* Called by the tty layer for port level work. There may or may not
+>  	   be an attached tty at this point */
+> -	void (*dtr_rts)(struct usb_serial_port *port, bool on);
+> +	void (*dtr_rts)(struct usb_serial_port *port, bool active);
 
->  		unregister_gadget_item(ci);
->  	return;
->  done:
-> -- 
-> 2.17.1
-> 
+This is not a tty_port callback so this change does not belong in this
+patch.
+
+>  	bool (*carrier_raised)(struct usb_serial_port *port);
+>  	/* Called by the usb serial hooks to allow the user to rework the
+>  	   termios state */
+
+Johan
