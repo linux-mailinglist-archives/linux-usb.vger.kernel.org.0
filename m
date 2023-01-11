@@ -2,225 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC8B665AE1
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 12:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFCD665B3B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 13:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238902AbjAKL6N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 06:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S233569AbjAKMTk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 07:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236329AbjAKL5b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 06:57:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAFA5FAA;
-        Wed, 11 Jan 2023 03:50:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CFFCB81B8D;
-        Wed, 11 Jan 2023 11:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FE6AC433D2;
-        Wed, 11 Jan 2023 11:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673437828;
-        bh=ee90ZrdxFbeWGNSMRr1VURdeCwSTryoyYgek0eDL43U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ux9y0zsReAjEza05MKHtM99Oo6HV0AlBIcKbjqhk0Sdu0kERz3ZrU1pdvSmZd9jKp
-         k+y3U+ZUgDdbHMHa3JgdaPTGOMNqeI6ACPHMdPJ22gpRvjUeCWCYjM91aT8U1Llxoj
-         QFI4iOnz4DtuijqA9rKpiDnWwp2+K0jYCfZ8voAcoguGLJghxXY7U2GXEIk6idHOd+
-         gVGSEP9bjHsYzJzeX3oOLB27xVWD3FK/0R9UF1usKjrN2w9qkcneozn93br8ae8scX
-         afwqdqESHuEQ9rQmkman8KOYqgij4A593O4qR3mWFfMNDzHF3KBIfD8RFnbmm7xvWX
-         Mfb/EbO9h+cdw==
-Date:   Wed, 11 Jan 2023 12:50:26 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2 05/16] driver core: make struct device_type.uevent()
- take a const *
-Message-ID: <Y76igjXSaG4tB1KJ@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>, Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
- <20230111113018.459199-6-gregkh@linuxfoundation.org>
+        with ESMTP id S236094AbjAKMTg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 07:19:36 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 04:19:35 PST
+Received: from esa1.mentor.iphmx.com (esa1.mentor.iphmx.com [68.232.129.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338599FE4;
+        Wed, 11 Jan 2023 04:19:34 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,315,1665475200"; 
+   d="scan'208";a="96576786"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa1.mentor.iphmx.com with ESMTP; 11 Jan 2023 04:18:32 -0800
+IronPort-SDR: Cv8xFRVl5CkzZ6EtQkmL327DUwxQGE0JRibk5G0CPeUGRjT/Wt7oiQ0+bd3x4OqwJUAE8fItCq
+ 29O57XzIIF4Y46Dx3DRkThDzs3q1bLTVRS0mPIJfyzeaUzQQPyggQpUvIlITEn5dZ+1OV7ohuR
+ txHXY5an+/J16xFUZRDOInkM6xB7BMCV3GJ1rkFD9a/yeCNJ/EdAtwZdd0jHa/7iWmR4o7dOrb
+ QYlFc+n/nortnbTllFzAcPIWPLYirEyovL2EWtgEXVzlRp6eMsNv/joHIcKRKaPv7+Eas3wCOO
+ vQU=
+From:   <bhuvanesh_surachari@mentor.com>
+CC:     <gregkh@linuxfoundation.org>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        John Keeping <john@metanate.com>,
+        "Linyu Yuan" <quic_linyyuan@quicinc.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Dan Carpenter" <error27@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] usb: f_fs: Make sure to unregister gadget item in unbind
+Date:   Wed, 11 Jan 2023 17:47:17 +0530
+Message-ID: <20230111121719.5258-1-bhuvanesh_surachari@mentor.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eatOmASNmMfu/WLi"
-Content-Disposition: inline
-In-Reply-To: <20230111113018.459199-6-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
 
---eatOmASNmMfu/WLi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In functionfs_unbind() the FFS_FL_BOUND flag was cleared before
+calling ffs_data_put() which was preventing the execution of function
+unregister_gadget_item().
+This was leading to Kernel panic due to NULL pointer dereference as
+below:
+Unable to handle kernel NULL pointer dereference at virtual address 00000020
+Mem abort info:
+  Exception class = DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgd = ffff80062cb6a000
+[0000000000000020] *pgd=000000066c966003, *pud=000000067a170003, *pmd=0000000000000000
+Internal error: Oops: 96000006 [#1] PREEMPT SMP
+tftp nf_nat nf_conntrack_tftp nf_conntrack adv7180 optee tee quota_v2 quota_tree max20010_regulator aesi adc_inc input_inc cpufreq_dt thermal_sys ravb snd_soc_rcar snd_aloop snd_soc_skeleton ravb_mdio snd_soc_generic_card
+tp pps_core sbrrc spidev spi_sh_msiof evdev boottime gpio_inc i2c_dev usb8251x_firmware ipv6 autofs4 [last unloaded: atmel_mxt_ts]
+Process swapper/1 (pid: 0, stack limit = 0xffff000008e30000)
+CPU: 1 PID: 0 Comm: swapper/1 Tainted: G         C      4.14.295-ltsi-08448-g8e327c2d87fb #1
+Hardware name: RBCM A-IVI2 CCS1.1 B board based on r8a7796 (DT)
+pc : usb_ep_queue+0xe0/0x110 [udc_core]
+lr : eth_start_xmit+0x280/0x30c [u_ether]
+sp : ffff00000800bde0 pstate : 80000145
+x29: ffff00000800bde0 x28: 0000000000000006
+x27: 0000000000000140 x26: ffff8005fbb7a518
+x25: ffff80063b2c98a8 x24: ffff80063a6f73b8
+x23: ffff80063b2c98a0 x22: ffff8005fbb7a518
+x21: ffff80063b2c9000 x20: ffff80063a6f73b8
+x19: ffff8005fbb7a558 x18: 000000000049a1dc
+x17: 000000365edd6f88 x16: ffff000008204254
+x15: 0000000000000000 x14: 0000000000000400
+x13: 0000000000000400 x12: 0000000000000000
+x11: 0101010101010101 x10: 0000000000000000
+x9 : 0000000000000484 x8 : ffff8005d9a44214
+x7 : 0000000000000000 x6 : ffff8005d9a44210
+x5 : ffff8005d9a44210 x4 : 0000000000000214
+x3 : 0000000000000001 x2 : 0000000001080020
+x1 : ffff8005fbb7a518 x0 : 0000000000000000
+Call trace:
+ usb_ep_queue+0xe0/0x110 [udc_core]
+ eth_start_xmit+0x280/0x30c [u_ether]
+ ncm_tx_tasklet+0x3c/0x50 [usb_f_ncm]
+ tasklet_action+0xa0/0x104
+ __do_softirq+0x260/0x3b8
+ irq_exit+0x7c/0xd8
+ __handle_domain_irq+0x78/0xac
+ gic_handle_irq+0x68/0xa8
+ el1_irq+0xb4/0x12c
+ cpuidle_enter_state+0x1b4/0x2d4
+ cpuidle_enter+0x18/0x20
+ call_cpuidle+0x34/0x38
+ do_idle+0x158/0x1a8
+ cpu_startup_entry+0x20/0x30
+ secondary_start_kernel+0x10c/0x118
+Code: 95e9c147 17ffffe3 f9400a80 aa1603e1 (f9401003)
+---[ end trace ffcd984d149a0f4e ]---
+Kernel panic - not syncing: Fatal exception in interrupt
+SMP: stopping secondary CPUs
+Kernel Offset: disabled
+CPU features: 0x21002004
+Memory Limit: 3968 MB
+Rebooting in 3 seconds..
 
-On Wed, Jan 11, 2023 at 12:30:07PM +0100, Greg Kroah-Hartman wrote:
-> The uevent() callback in struct device_type should not be modifying the
-> device that is passed into it, so mark it as a const * and propagate the
-> function signature changes out into all relevant subsystems that use
-> this callback.
->=20
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-> Cc: Wolfram Sang <wsa@kernel.org>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Sean Young <sean@mess.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Maximilian Luz <luzmaximilian@gmail.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Cc: Sanyog Kale <sanyog.r.kale@intel.com>
-> Cc: Andreas Noever <andreas.noever@gmail.com>
-> Cc: Michael Jamet <michael.jamet@intel.com>
-> Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
-> Cc: Jiri Slaby <jirislaby@kernel.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: Chaitanya Kulkarni <kch@nvidia.com>
-> Cc: Ming Lei <ming.lei@redhat.com>
-> Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Won Chung <wonchung@google.com>
-> Cc: alsa-devel@alsa-project.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-acpi@vger.kernel.org
-> Cc: linux-block@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-i3c@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux1394-devel@lists.sourceforge.net
-> Cc: platform-driver-x86@vger.kernel.org
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com> # for Thunder=
-bolt
-> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hence clear the FFS_FL_BOUND flag after checking using
+test_and_clear_bit() in function ffs_closed() which ensures calling
+of unregister_gadget_item().
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+---
+ drivers/usb/gadget/function/f_fs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 73dc10a77cde..8bed3c800dff 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1895,7 +1895,6 @@ static void functionfs_unbind(struct ffs_data *ffs)
+ 		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
+ 		ffs->ep0req = NULL;
+ 		ffs->gadget = NULL;
+-		clear_bit(FFS_FL_BOUND, &ffs->flags);
+ 		ffs_data_put(ffs);
+ 	}
+ }
+@@ -3847,7 +3846,7 @@ static void ffs_closed(struct ffs_data *ffs)
+ 	ci = opts->func_inst.group.cg_item.ci_parent->ci_parent;
+ 	ffs_dev_unlock();
+ 
+-	if (test_bit(FFS_FL_BOUND, &ffs->flags))
++	if (test_and_clear_bit(FFS_FL_BOUND, &ffs->flags))
+ 		unregister_gadget_item(ci);
+ 	return;
+ done:
+-- 
+2.17.1
 
---eatOmASNmMfu/WLi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmO+on4ACgkQFA3kzBSg
-Kbar9Q/+PJ2u9B6sH0kIrC6oEnXoKAsfZZ5U75pl6ls0qQDtMNBd4jnNQ220OhTa
-3pKYq76YstsF8WPELZjVaJiHnzs1kkB/HblIzzTLIMuOjq4jtGJqUhr4HZ1Jh3Or
-aVm0zykl99om05o9YHGq1SNKWVUlm7EOnU48snB4WbcWEoF+M46TVT2JXpwn+fn5
-rFvfrYUhqwuUj3FqI0/aynOj3SNv1yMFJCoyAOzO+EBJ+iC+uHfm54OGdCsCBhE1
-O1yOluZULN9KLANZJZwrI0syoa85Lf3WYi9C/hGSgJ2pWxBCi4JqrkGUVPNeBvQv
-RmjpLLZTDzkSWn1FOUC6TgAL6xBco04oHD/v9IhKoZLnfYx/1EG9K6j/wHBzhlkB
-otHCRJbah0YHXkzb0sBFIZxMZJoIXvWrPUeN3LrOj9aF21ysk33o+ExAv6a9eN58
-CQzM8GvIYCVx6/qKM0h9zOo9pyHbay0o7hkHAGggsdljr7zY/wUAoRs9e8IGYcES
-T3ZLU4ADXxgXrm96VYxxrrxOTme/uJHHypU1e7G7Wq9MfAAuFLFilPjLPea/HldQ
-UK8M9Hs/nX22KKtQPWoZkEGAKyV6gbo39HU4xsYH6BdzYVFpH8mzFCYpvxYkoS+v
-URGDgDt+jgb0d30Galr88Mpkhuz1+CRO5R3dVQiioc6bbecfCbI=
-=wUgU
------END PGP SIGNATURE-----
-
---eatOmASNmMfu/WLi--
