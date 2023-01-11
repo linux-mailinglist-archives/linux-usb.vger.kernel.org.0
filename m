@@ -2,473 +2,326 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A0E665D8C
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 15:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67DC665DA8
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 15:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbjAKOS6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 09:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S238828AbjAKOYC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 09:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238950AbjAKOS3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 09:18:29 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2098.outbound.protection.outlook.com [40.107.114.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4BFAD6;
-        Wed, 11 Jan 2023 06:18:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eCK9aQETpPLQaa9fYGAzd5df/zGDIn+dqTaZ7Lii3uuXSRLXJ7H5NvD9OA5blooN9AXnHRuebrM/pmZiEqpBnDESRCsA+zLh75A5bBfU4Qyu5xP8SAQ6depE4EScoCXhB4Re+jx9Uopa+0sYuKqjLdyME4pOn+/8mBOBb5gfK4rdWjp1W2W+BnlRfB7qZTWI/eDPDQGxMWF+pnJrEj+Se6H6k3bYBSRs1E1y84XRQyJN7HUWwdBkHJ48yPE0wvRtN+V96heuYsNV+3pwhJrJr4i610sjSwtRuSVVyf33GP83aSkX3EYvj0/KmcS9vCPHr55r4S4SpPm3pYukybC5xA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IsnC9aJSAqfThPRpHjTe3T1Co84/t6fAY2l5loDar1U=;
- b=d2WBHl6CB5/hDStZzJYgljPz/hqqR0VbUaeeqt3Stpzlajy6RCwGo7vsuyYaMDj2s4l5Ps6X/dJZmF/TrF5V3ebYqtTG7zmSkGfDlHykTd/CbqSlsDiNnhG0zWbu5LUck91Op2XyJHg/YKwsD68ZyuZAaFO8K/Su2B/cN1RMrPcqLN7kO6nAmj3F8Fy/RsfA/ltFnI59fpwVbbfnrSIg7trr0i3xhzntU1hPdi6kSxVEpYS8gWJJhrzv6u1PVKQg8tieAl+oy/CT9S0qftsvMEhNIsVzPAFeuZHEPeZSyBOEPJXD2VppZQESapnaOvzholIcqfsfRoIPYxfI/+WPmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IsnC9aJSAqfThPRpHjTe3T1Co84/t6fAY2l5loDar1U=;
- b=kYu4vMhoa1vHF+qv+1U9NOy0vUe7feGPPVOaWymY5x/mCO6sE4Egj/UuxavoAciwqSpkB7cKYyUIZEoGM1Scs9s1iAUKb0+jLso0NTVJPPBldvZwUu8iOAuOrB2+t/+v3MxIlhn7I/7gLiKjDlKmtta6OZa2pynqMoo/iszr5Uw=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB8341.jpnprd01.prod.outlook.com (2603:1096:400:15c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 14:18:21 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e%3]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 14:18:21 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S229476AbjAKOX4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 09:23:56 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B35015F38;
+        Wed, 11 Jan 2023 06:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673447035; x=1704983035;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Bs/QxT4h0CrR67dsOJolQlUz/QoNMMNB9GCwsyLDTrY=;
+  b=X+RjQDN1vS4PrQA+D4kupwIjOYW3lpxeOOcn7w2/vFe5o2MXy3lxh4s7
+   3Ocq8WtB00FrGLx484N0ScAZvOdQfC7v/1hSwKlqNYI3lspc00sTo66WK
+   NhKZgHPiIZYlIPrQdgSUWf9EXFHvhbZ+KuDk9iau56usI4hFysmdu9zo5
+   7HNJ0VAgM+aDH/mACUrhGIkLrRwBGBsvG72e4wJ3Zuk5yon6qS6Rzu9LR
+   UR5TcmYuJ/iFmWSXKH8PtHlt+bg8JKtQwFTEfcYNFSlwZsxB/oSxP/Jy2
+   uEE3MMuQXXmUZmSAeeJYhisLAfExvvFXLazzCQEJFEbHsW0eaX51R36ec
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303793453"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="303793453"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:23:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607381795"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="607381795"
+Received: from mihaiana-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.222.62])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:23:46 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 02/16] dt-bindings: usb: Add RZ/V2M USB3DRD binding
-Thread-Topic: [PATCH 02/16] dt-bindings: usb: Add RZ/V2M USB3DRD binding
-Thread-Index: AQHZDk8gBgnbtRuyh02a6fh4PZaBEq5r4faAgAADFWCAABTCgIAtb+2g
-Date:   Wed, 11 Jan 2023 14:18:21 +0000
-Message-ID: <OS0PR01MB59220583B9C8BC4E6E1EDEA186FC9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20221212172804.1277751-1-biju.das.jz@bp.renesas.com>
- <20221212172804.1277751-3-biju.das.jz@bp.renesas.com>
- <20221213142921.GA958810-robh@kernel.org>
- <OS0PR01MB59224764F969310126DB202186E39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20221213155441.GA1483198-robh@kernel.org>
-In-Reply-To: <20221213155441.GA1483198-robh@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB8341:EE_
-x-ms-office365-filtering-correlation-id: c094b2af-21bc-4771-0cc1-08daf3deb172
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zU+V2xYLy1y6MRKLHRymESfViQjZZYutvzeG21xpK208EEh9q4HaCToLzGMUfNpn6FxMPh18DKcQheMngqkm7N2QrpSVuVnJ52Tsfy3/yS3rfx8Yn54pP78uHMYMVL0zDZtLV3YBqFMigG43H43HsnaikN/rIZxvszct+6y0pfdZpo4p7D8nhaW+d/Yn6iskppFc4JNbONECtkDKZuf1UTUTW6WI4RTJxSqY9iodnOXqJsX0A4aNP5KRuEBUcJvbBvNwQ8XoghlzX4rUUQoK2oj9hru/+Pe7QBaJfdxJ9ivBVkOG2/i3dJnIfMkTUY8PD0JpaJ0NgSBwSSne6bD7UhzOYCBM9NHV4LHgRMJF2Fln442UYdTHE4chZm6FVL3Z9JSpuWGuOVHwW7qImwZYI40EaqmKM3lGcv/VC1Bo5EA6vEfzu5xBG2NgUKhjLaTizCMaLMQAGXvq2OyKkQhX49X6qTnwXSMnRg9NkB594rJZfFpePM94xkEhVo4PEbQ14igRAHa5KN9sDz20lSKVwZfHDW8OkU6xJQI5fZxW3bYqZpyu2+CysAMaSJwmsIEjpS1IBloLdryc3KOi9GvYjVQ4/yDwFqHlRofaFRygx5Hs88cn10575LvGGIuatT12pg8Q7kBJsNI4o/4Ck+PIjKE3YMHw+hFuGaPQwfi8F9RZAZ2RW/+YwOMv9mWNoL6GQNlN5IWi3xNR8yeQAuCSZsM4ln5pFF4Z3Kms3HRY3vc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(39860400002)(366004)(376002)(396003)(451199015)(8676002)(52536014)(66946007)(41300700001)(2906002)(8936002)(5660300002)(6916009)(76116006)(66446008)(66476007)(64756008)(316002)(66556008)(7696005)(71200400001)(54906003)(478600001)(53546011)(6506007)(33656002)(4326008)(55016003)(9686003)(26005)(186003)(83380400001)(86362001)(38070700005)(38100700002)(122000001)(32563001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8fchOKeYXbcwUNLaD69yhP8sv7e6lo1uBbRzMlJRKAMIKY0YDVGiwl4M/OUT?=
- =?us-ascii?Q?b5X7LZJrd9tvKAvSALXrpy2lOyaA7+49hpKGQYmYAzrie2KDzq5TlYP5jyfR?=
- =?us-ascii?Q?AGOicGXHdL27FEzgJ8nY88XYzdi839L4PQNOWRxYGXzB15nYUiBBr6UVDBde?=
- =?us-ascii?Q?IC5SGzqnZqfYaXfaqEIAC7vEOZZwAJKgOfBAr1p9zo6MgnstZo10UJ0ey7Pl?=
- =?us-ascii?Q?7TZLac9OMVw/0fTnfUBjk/8dnoBgZa8Ub2gzan1xpdwACobM9FtsQvEjI6rz?=
- =?us-ascii?Q?DO23W3BhaYZI+BX67LODAOXywZvKUD7OfS8Pt+7qo+C08DwVwx0srHjwb+Bj?=
- =?us-ascii?Q?fUGOx6LispE7oJELPo3hqfGYjMHzfzzfkkuGtvkDECKR7+DT8YUzjXri54Vl?=
- =?us-ascii?Q?RPiUoGCC2dEOHb+HquDayqepRlkH7FdsiFM89atMgY6gVUVTNuV5Ts+vpzDu?=
- =?us-ascii?Q?LDFttMGiuHu4EOx838TkpbIB8JDMZin5zDXrqWSwpyqo3L2bSqkZrfVtDq+P?=
- =?us-ascii?Q?0QQvN6f+TXd/kH/1MEsQafrewe5vSF1DOOQGMzg46SzddNlRvQoWrPXancVk?=
- =?us-ascii?Q?QHsUYWh/haiLdOAkUg157EKxdMviihbrWQ+lur1CeRrbf9207eDHygzQXbrC?=
- =?us-ascii?Q?saIhEt2SAPa3c+HlDumpVj4azvKybIhRE/AOR2QM97Jg5V+/JWc3d8AEGRm6?=
- =?us-ascii?Q?O2yQgwlkV2jI5LC6ll2Flrn3szfYrJPTeEndrZtzXCU2bCQVrXm2TuBA/4fm?=
- =?us-ascii?Q?Da8O4e1gR+vTlQmTE3WdebqxowkGKqC2Ev1HNxldBXHDb9mhU08MfLOnU6Pd?=
- =?us-ascii?Q?+0CpH6mohirP9tDexqxil3ZsKVu4cTRqzD+W0lOH8M0hVet3cOpGYkLuTE0o?=
- =?us-ascii?Q?QDURD3bIIWoppP1iUaQEOOqyLS2CbCW/eq/2ij0AD8GlzQ8X6KidgDiqnVlU?=
- =?us-ascii?Q?eDOslbOsmsCnH9MWPJEfOhgQG2x0K7NwA3IBv6CbFUT9avyFmLRHHLcB1ejf?=
- =?us-ascii?Q?Nn9eEZ4aIQu3/k3rNO6RuldFn7AmJpATyqe2rLClwm28viXOqs4HMFg92CKT?=
- =?us-ascii?Q?cMd5bioqWlybbKJLKOdNc3ZE2LgWuHZRVMPlPKXBL3c1X5W3LMZjMXLpUkIr?=
- =?us-ascii?Q?tVS8PZ/AUhNfUgPTxNegEd1BSBjg3UYpCGGRZ+rm7l0CEJOVVrY+eBzjMNhx?=
- =?us-ascii?Q?q0QD/JzBc4INV952srMGkambwH588KGDLfL3ii/RvYlY86nSe+7QbAnBrUKb?=
- =?us-ascii?Q?XdgJAQswDBtmGKLdM3yvDFM+Z92udgPOw5BLXg2Nt7f2rmLFl5zVR8Hm+AUy?=
- =?us-ascii?Q?CHi54vn2PeJm1f/YDp1/Kr9PA35PCgvJyPORlkQJf7KLLsEd6aoX3eT6LO7t?=
- =?us-ascii?Q?E67sGhXThkF3Cj07FroiHFbkW+PHLC6Ig0ppG9Z7gfJUdXwzf7/IOO10Nfex?=
- =?us-ascii?Q?aL5SFLYyWXNQ9QAiOvJlUN4iBOj8ccmFOnF6Jk8xwHrmaCC64YfZEauzniA0?=
- =?us-ascii?Q?R4pK5DHOw83BGxi8sIsYIgkohG3ksx24zR6/M54KBPjOdCOxBLLaDXSl38he?=
- =?us-ascii?Q?fCY3MmcdHI6fBEm5uLKaaFC42ogZEzP7Da2gKybT96UgBs2mbOndjyzwnLFQ?=
- =?us-ascii?Q?Sw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?q?Samuel=20Iglesias=20Gons=C3=A1lvez?= 
+        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 01/13] tty: Cleanup tty_port_set_initialized() bool parameter
+Date:   Wed, 11 Jan 2023 16:23:19 +0200
+Message-Id: <20230111142331.34518-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com>
+References: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c094b2af-21bc-4771-0cc1-08daf3deb172
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2023 14:18:21.1364
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lmOMpX+UR62ovKgph36x56x/hOIgqGY1UPv7nTc7S+qNXExvgQXAzeFUWDz1stLCvjGL8PMwL63MtSgh0cwh1V6h6f0XyO3PzkGc49vil/A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8341
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Make callers pass true/false consistently for bool val.
 
+Reviewed-by: Samuel Iglesias Gonsalvez <siglesias@igalia.com>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/char/pcmcia/synclink_cs.c | 4 ++--
+ drivers/ipack/devices/ipoctal.c   | 4 ++--
+ drivers/s390/char/con3215.c       | 4 ++--
+ drivers/tty/amiserial.c           | 4 ++--
+ drivers/tty/moxa.c                | 2 +-
+ drivers/tty/mxser.c               | 2 +-
+ drivers/tty/n_gsm.c               | 4 ++--
+ drivers/tty/serial/serial_core.c  | 6 +++---
+ drivers/tty/synclink_gt.c         | 4 ++--
+ drivers/tty/tty_port.c            | 4 ++--
+ drivers/usb/serial/console.c      | 2 +-
+ 11 files changed, 20 insertions(+), 20 deletions(-)
 
-> -----Original Message-----
-> From: Rob Herring <robh@kernel.org>
-> Sent: 13 December 2022 15:55
-> To: Biju Das <biju.das.jz@bp.renesas.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Greg Kroah-
-> Hartman <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org;
-> devicetree@vger.kernel.org; Geert Uytterhoeven <geert+renesas@glider.be>;
-> Fabrizio Castro <fabrizio.castro.jz@renesas.com>; linux-renesas-
-> soc@vger.kernel.org
-> Subject: Re: [PATCH 02/16] dt-bindings: usb: Add RZ/V2M USB3DRD binding
->=20
-> On Tue, Dec 13, 2022 at 03:01:34PM +0000, Biju Das wrote:
-> > Hi Rob,
-> >
-> > > Subject: Re: [PATCH 02/16] dt-bindings: usb: Add RZ/V2M USB3DRD
-> > > binding
-> > >
-> > > On Mon, Dec 12, 2022 at 05:27:50PM +0000, Biju Das wrote:
-> > > > Add device tree bindings for the RZ/V2{M, MA} USB3DRD module.
-> > > >
-> > > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > > ---
-> > > >  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 123
-> ++++++++++++++++++
-> > > >  1 file changed, 123 insertions(+)  create mode 100644
-> > > > Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-> > > >
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-> > > > b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..0c473c3398b3
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.
-> > > > +++ yaml
-> > > > @@ -0,0 +1,123 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML
-> > > > +1.2
-> > > > +---
-> > > > +
-> > > > +title: Renesas RZ/V2M USB 3.1 DRD controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Biju Das <biju.das.jz@bp.renesas.com>
-> > > > +
-> > > > +description: |
-> > > > +  The RZ/V2{M, MA} USB3.1 DRD module supports the following
-> > > > +functions
-> > > > +  * Role swapping function by the ID pin of the Micro-AB
-> > > > +receptacle
-> > > > +  * Battery Charging Specification Revision 1.2
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    items:
-> > > > +      - enum:
-> > > > +          - renesas,r9a09g011-usb3drd  # RZ/V2M
-> > > > +          - renesas,r9a09g055-usb3drd  # RZ/V2MA
-> > > > +      - const: renesas,rzv2m-usb3drd
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  clocks:
-> > > > +    items:
-> > > > +      - description: Peripheral AXI clock
-> > > > +      - description: APB clock
-> > > > +
-> > > > +  clock-names:
-> > > > +    items:
-> > > > +      - const: peri_axi
-> > > > +      - const: apb
-> > > > +
-> > > > +  power-domains:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  resets:
-> > > > +    items:
-> > > > +      - description: DRD reset
-> > > > +      - description: Peripheral reset
-> > > > +
-> > > > +  reset-names:
-> > > > +    items:
-> > > > +      - const: drd_reset
-> > > > +      - const: aresetn_p
-> > > > +
-> > > > +  ranges: true
-> > > > +
-> > > > +  '#address-cells':
-> > > > +    enum: [ 1, 2 ]
-> > > > +
-> > > > +  '#size-cells':
-> > > > +    enum: [ 1, 2 ]
-> > > > +
-> > > > +  usb3peri:
-> > > > +    $ref: /schemas/usb/renesas,usb3-peri.yaml
-> > > > +
-> > > > +patternProperties:
-> > > > +  "^usb@[0-9a-f]+$":
-> > > > +    type: object
-> > > > +    $ref: renesas,usb-xhci.yaml#
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > > +  - clocks
-> > > > +  - clock-names
-> > > > +  - power-domains
-> > > > +  - resets
-> > > > +  - reset-names
-> > > > +
-> > > > +additionalProperties: false
-> > > > +
-> > > > +examples:
-> > > > +  - |
-> > > > +    #include <dt-bindings/clock/r9a09g011-cpg.h>
-> > > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > > +
-> > > > +    usb3drd: usb@85070000 {
-> > > > +        compatible =3D "renesas,r9a09g011-usb3drd", "renesas,rzv2m=
--
-> > > usb3drd";
-> > > > +        reg =3D <0x85070000 0x1000>;
-> > > > +        clocks =3D <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
-> > > > +                 <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-> > > > +        clock-names =3D "peri_axi", "apb";
-> > > > +        power-domains =3D <&cpg>;
-> > > > +        resets =3D <&cpg R9A09G011_USB_DRD_RESET>,
-> > > > +                 <&cpg R9A09G011_USB_ARESETN_P>;
-> > > > +        reset-names =3D "drd_reset", "aresetn_p";
-> > > > +        ranges;
-> > > > +        #address-cells =3D <1>;
-> > > > +        #size-cells =3D <1>;
-> > > > +
-> > > > +        usb3host: usb@85060000 {
-> > > > +           compatible =3D "renesas,r9a09g011-xhci",
-> > > > +                        "renesas,rzv2m-xhci";
-> > > > +           reg =3D <0x85060000 0x2000>;
-> > > > +           interrupts =3D <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
-> > > > +           clocks =3D <&cpg CPG_MOD R9A09G011_USB_ACLK_H>,
-> > > > +                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-> > > > +           clock-names =3D "host_axi", "reg";
-> > > > +           power-domains =3D <&cpg>;
-> > > > +           resets =3D <&cpg R9A09G011_USB_ARESETN_H>;
-> > > > +        };
-> > > > +
-> > > > +        usb3peri: usb3peri {
-> > > > +           compatible =3D "renesas,r9a09g011-usb3-peri",
-> > > > +                        "renesas,rzv2m-usb3-peri";
-> > > > +           interrupts =3D <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>,
-> > > > +                        <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>,
-> > > > +                        <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>,
-> > > > +                        <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>;
-> > > > +           interrupt-names =3D "all_p", "drd", "bc", "gpi";
-> > > > +           clocks =3D <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
-> > > > +                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-> > > > +           clock-names =3D "aclk", "reg";
-> > > > +           power-domains =3D <&cpg>;
-> > > > +           resets =3D <&cpg R9A09G011_USB_ARESETN_P>;
-> > > > +        };
-> > >
-> > > The USB device ctrlr doesn't have registers? It looks to me like
-> > > you've created 3 nodes for instantiating drivers rather that because
-> > > you have 3 separate h/w blocks. Either you should split this to 2
-> > > independent nodes or move usb3peri resources to the parent node.
-> > > That would only be interrupts because everything else is already ther=
-e.
-> >
-> > Address map of USB device controller is 0x85070000-0x85070400 Address
-> > map of USB3 DRD is 0x85070400-0x850704FF
->=20
-> Then your DT should reflect that with 'reg' in usb3peri.
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index b2735be81ab2..baa46e8a094b 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -1309,7 +1309,7 @@ static int startup(MGSLPC_INFO * info, struct tty_struct *tty)
+ 	if (tty)
+ 		clear_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 1);
++	tty_port_set_initialized(&info->port, true);
+ 
+ 	return 0;
+ }
+@@ -1359,7 +1359,7 @@ static void shutdown(MGSLPC_INFO * info, struct tty_struct *tty)
+ 	if (tty)
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 0);
++	tty_port_set_initialized(&info->port, false);
+ }
+ 
+ static void mgslpc_program_hw(MGSLPC_INFO *info, struct tty_struct *tty)
+diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
+index fc00274070b6..103fce0c49e6 100644
+--- a/drivers/ipack/devices/ipoctal.c
++++ b/drivers/ipack/devices/ipoctal.c
+@@ -647,7 +647,7 @@ static void ipoctal_hangup(struct tty_struct *tty)
+ 	tty_port_hangup(&channel->tty_port);
+ 
+ 	ipoctal_reset_channel(channel);
+-	tty_port_set_initialized(&channel->tty_port, 0);
++	tty_port_set_initialized(&channel->tty_port, false);
+ 	wake_up_interruptible(&channel->tty_port.open_wait);
+ }
+ 
+@@ -659,7 +659,7 @@ static void ipoctal_shutdown(struct tty_struct *tty)
+ 		return;
+ 
+ 	ipoctal_reset_channel(channel);
+-	tty_port_set_initialized(&channel->tty_port, 0);
++	tty_port_set_initialized(&channel->tty_port, false);
+ }
+ 
+ static void ipoctal_cleanup(struct tty_struct *tty)
+diff --git a/drivers/s390/char/con3215.c b/drivers/s390/char/con3215.c
+index 72ba83c1bc79..0b05cd76b7d0 100644
+--- a/drivers/s390/char/con3215.c
++++ b/drivers/s390/char/con3215.c
+@@ -629,7 +629,7 @@ static int raw3215_startup(struct raw3215_info *raw)
+ 	if (tty_port_initialized(&raw->port))
+ 		return 0;
+ 	raw->line_pos = 0;
+-	tty_port_set_initialized(&raw->port, 1);
++	tty_port_set_initialized(&raw->port, true);
+ 	spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+ 	raw3215_try_io(raw);
+ 	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+@@ -659,7 +659,7 @@ static void raw3215_shutdown(struct raw3215_info *raw)
+ 		spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+ 		remove_wait_queue(&raw->empty_wait, &wait);
+ 		set_current_state(TASK_RUNNING);
+-		tty_port_set_initialized(&raw->port, 1);
++		tty_port_set_initialized(&raw->port, true);
+ 	}
+ 	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+ }
+diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+index f52266766df9..f8cdce1626cb 100644
+--- a/drivers/tty/amiserial.c
++++ b/drivers/tty/amiserial.c
+@@ -502,7 +502,7 @@ static int startup(struct tty_struct *tty, struct serial_state *info)
+ 	 */
+ 	change_speed(tty, info, NULL);
+ 
+-	tty_port_set_initialized(port, 1);
++	tty_port_set_initialized(port, true);
+ 	local_irq_restore(flags);
+ 	return 0;
+ 
+@@ -556,7 +556,7 @@ static void shutdown(struct tty_struct *tty, struct serial_state *info)
+ 
+ 	set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->tport, 0);
++	tty_port_set_initialized(&info->tport, false);
+ 	local_irq_restore(flags);
+ }
+ 
+diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+index 35b6fddf0341..bc474f3c3f8f 100644
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -1484,7 +1484,7 @@ static int moxa_open(struct tty_struct *tty, struct file *filp)
+ 		MoxaPortLineCtrl(ch, 1, 1);
+ 		MoxaPortEnable(ch);
+ 		MoxaSetFifo(ch, ch->type == PORT_16550A);
+-		tty_port_set_initialized(&ch->port, 1);
++		tty_port_set_initialized(&ch->port, true);
+ 	}
+ 	mutex_unlock(&ch->port.mutex);
+ 	mutex_unlock(&moxa_openlock);
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 2436e0b10f9a..2926a831727d 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -1063,7 +1063,7 @@ static int mxser_set_serial_info(struct tty_struct *tty,
+ 	} else {
+ 		retval = mxser_activate(port, tty);
+ 		if (retval == 0)
+-			tty_port_set_initialized(port, 1);
++			tty_port_set_initialized(port, true);
+ 	}
+ 	mutex_unlock(&port->mutex);
+ 	return retval;
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index daf12132deb1..631539c17d85 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2059,7 +2059,7 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 		tty_port_tty_hangup(&dlci->port, false);
+ 		gsm_dlci_clear_queues(dlci->gsm, dlci);
+ 		/* Ensure that gsmtty_open() can return. */
+-		tty_port_set_initialized(&dlci->port, 0);
++		tty_port_set_initialized(&dlci->port, false);
+ 		wake_up_interruptible(&dlci->port.open_wait);
+ 	} else
+ 		dlci->gsm->dead = true;
+@@ -3880,7 +3880,7 @@ static int gsmtty_open(struct tty_struct *tty, struct file *filp)
+ 	dlci->modem_rx = 0;
+ 	/* We could in theory open and close before we wait - eg if we get
+ 	   a DM straight back. This is ok as that will have caused a hangup */
+-	tty_port_set_initialized(port, 1);
++	tty_port_set_initialized(port, true);
+ 	/* Start sending off SABM messages */
+ 	if (gsm->initiator)
+ 		gsm_dlci_begin_open(dlci);
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index b9fbbee598b8..e049c760b738 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -290,7 +290,7 @@ static void uart_shutdown(struct tty_struct *tty, struct uart_state *state)
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+ 	if (tty_port_initialized(port)) {
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 
+ 		/*
+ 		 * Turn off DTR and RTS early.
+@@ -2347,7 +2347,7 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
+ 		unsigned int mctrl;
+ 
+ 		tty_port_set_suspended(port, 1);
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 
+ 		spin_lock_irq(&uport->lock);
+ 		ops->stop_tx(uport);
+@@ -2458,7 +2458,7 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
+ 					uart_rs485_config(uport);
+ 				ops->start_tx(uport);
+ 				spin_unlock_irq(&uport->lock);
+-				tty_port_set_initialized(port, 1);
++				tty_port_set_initialized(port, true);
+ 			} else {
+ 				/*
+ 				 * Failed to resume - maybe hardware went away?
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 72b76cdde534..2b96bf0ecafb 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -2354,7 +2354,7 @@ static int startup(struct slgt_info *info)
+ 	if (info->port.tty)
+ 		clear_bit(TTY_IO_ERROR, &info->port.tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 1);
++	tty_port_set_initialized(&info->port, true);
+ 
+ 	return 0;
+ }
+@@ -2401,7 +2401,7 @@ static void shutdown(struct slgt_info *info)
+ 	if (info->port.tty)
+ 		set_bit(TTY_IO_ERROR, &info->port.tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 0);
++	tty_port_set_initialized(&info->port, false);
+ }
+ 
+ static void program_hw(struct slgt_info *info)
+diff --git a/drivers/tty/tty_port.c b/drivers/tty/tty_port.c
+index dce08a6d7b5e..0c00d5bd6c88 100644
+--- a/drivers/tty/tty_port.c
++++ b/drivers/tty/tty_port.c
+@@ -367,7 +367,7 @@ static void tty_port_shutdown(struct tty_port *port, struct tty_struct *tty)
+ 		goto out;
+ 
+ 	if (tty_port_initialized(port)) {
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 		/*
+ 		 * Drop DTR/RTS if HUPCL is set. This causes any attached
+ 		 * modem to hang up the line.
+@@ -788,7 +788,7 @@ int tty_port_open(struct tty_port *port, struct tty_struct *tty,
+ 				return retval;
+ 			}
+ 		}
+-		tty_port_set_initialized(port, 1);
++		tty_port_set_initialized(port, true);
+ 	}
+ 	mutex_unlock(&port->mutex);
+ 	return tty_port_block_til_ready(port, tty, filp);
+diff --git a/drivers/usb/serial/console.c b/drivers/usb/serial/console.c
+index da19a5fa414f..c3ea3a46ed76 100644
+--- a/drivers/usb/serial/console.c
++++ b/drivers/usb/serial/console.c
+@@ -169,7 +169,7 @@ static int usb_console_setup(struct console *co, char *options)
+ 			tty_save_termios(tty);
+ 			tty_kref_put(tty);
+ 		}
+-		tty_port_set_initialized(&port->port, 1);
++		tty_port_set_initialized(&port->port, true);
+ 	}
+ 	/* Now that any required fake tty operations are completed restore
+ 	 * the tty port count */
+-- 
+2.30.2
 
-OK will add 'reg' in usb3peri.
-
->=20
-> Why does the device ctrlr have a DRD interrupt?
-
-OK, Will move DRD related interrupts from device ctrlr to here.
-I have prototyped this as below [1]. Please correct me if you have differen=
-t opinion.
-
->=20
-> > The advantage of the current split is that,
-> >
-> > 1) With this model, I can use USB3 storage device for booting and
-> > mounting rootFS as XHCI driver is built-in and USB3 device ctrlr is
-> usually module.
->=20
-> Sounds like a Linux problem. What does that have to do with the binding?
-
-Ya, Both host and device operation depends upon DRD block. We need to do
-Host or device reset release + setting host or device operation in DRD bloc=
-k
-before accessing its registers.
-
->=20
-> >
-> > 2) To reuse the usb device controller code as much as possible.
-> >
-> > If I create 2 independent nodes, then there will be more exported
-> > API's between USB3 peri and USB3 drd driver.
->=20
-> Why if that's a common split, then doesn't Linux have a defined interface=
-?
-
-If I just create 2 independent nodes for host and device, then I get kernel=
- crash
-The reason is , Without reset release and setting host operation in DRD blo=
-ck
-We are accessing host registers. The only way to avoid kernel crash is by d=
-oing
-a hack.
-ie, Io remap of that DRD register, configure for host operation and then ac=
-cess
-host registers.
-
->=20
-> There is no reason you can spawn 2 drivers from 1 DT node if that's what =
-you
-> need. Describe h/w blocks, not nodes for drivers. Sometimes the h/w isn't
-> partitioned just like Linux would like. That's a Linux problem, not
-> something to 'fix' in DT.
-
-I will send next version based on [1], please correct me if you have other =
-suggestion.
-
-Cheers,
-Biju
-
-[1]
-properties:
-  compatible:
-    items:
-      - enum:
-          - renesas,r9a09g011-usb3drd  # RZ/V2M
-          - renesas,r9a09g055-usb3drd  # RZ/V2MA
-      - const: renesas,rzv2m-usb3drd
-
-  reg:
-    maxItems: 1
-
-  interrupts:
-    items:
-      - description: Dual Role Device (DRD)
-      - description: Battery Charging
-      - description: Global Purpose Input
-
-  interrupt-names:
-    items:
-      - const: drd
-      - const: bc
-      - const: gpi
-
-  clocks:
-    items:
-      - description: Peripheral AXI clock
-      - description: APB clock
-
-  clock-names:
-    items:
-      - const: axi
-      - const: reg
-
-  power-domains:
-    maxItems: 1
-
-  resets:
-    maxItems: 1
-
-  ranges: true
-
-  '#address-cells':
-    enum: [ 1, 2 ]
-
-  '#size-cells':
-    enum: [ 1, 2 ]
-
-patternProperties:
-  "^usb3peri@[0-9a-f]+$":
-    type: object
-    $ref: /schemas/usb/renesas,usb3-peri.yaml
-
-  "^usb@[0-9a-f]+$":
-    type: object
-    $ref: renesas,usb-xhci.yaml#
-
-required:
-  - compatible
-  - reg
-  - interrupts
-  - interrupt-names
-  - clocks
-  - clock-names
-  - power-domains
-  - resets
-
-additionalProperties: false
-
-examples:
-  - |
-    #include <dt-bindings/clock/r9a09g011-cpg.h>
-    #include <dt-bindings/interrupt-controller/arm-gic.h>
-
-    usb3drd: usb@85070400 {
-        compatible =3D "renesas,r9a09g011-usb3drd", "renesas,rzv2m-usb3drd"=
-;
-        reg =3D <0x85070400 0x100>;
-        interrupts =3D <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>,
-                     <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>,
-                     <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>;
-        interrupt-names =3D "drd", "bc", "gpi";
-        clocks =3D <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
-                 <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-        clock-names =3D "axi", "reg";
-        power-domains =3D <&cpg>;
-        resets =3D <&cpg R9A09G011_USB_DRD_RESET>;
-        ranges;
-        #address-cells =3D <1>;
-        #size-cells =3D <1>;
-
-        usb3host: usb@85060000 {
-           compatible =3D "renesas,r9a09g011-xhci",
-                        "renesas,rzv2m-xhci";
-           reg =3D <0x85060000 0x2000>;
-           interrupts =3D <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
-           clocks =3D <&cpg CPG_MOD R9A09G011_USB_ACLK_H>,
-                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-           clock-names =3D "axi", "reg";
-           power-domains =3D <&cpg>;
-           resets =3D <&cpg R9A09G011_USB_ARESETN_H>;
-        };
-
-        usb3peri: usb3peri@85070000 {
-           compatible =3D "renesas,r9a09g011-usb3-peri",
-                        "renesas,rzv2m-usb3-peri";
-           reg =3D <0x85070000 0x400>;
-           interrupts =3D <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
-           clocks =3D <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
-                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-           clock-names =3D "axi", "reg";
-           power-domains =3D <&cpg>;
-           resets =3D <&cpg R9A09G011_USB_ARESETN_P>;
-        };
-    };
