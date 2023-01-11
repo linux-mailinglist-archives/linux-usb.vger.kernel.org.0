@@ -2,159 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EED665131
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 02:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD87665148
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 02:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjAKBqP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Jan 2023 20:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S233578AbjAKBxl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Jan 2023 20:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjAKBqN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 20:46:13 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21EEF5C;
-        Tue, 10 Jan 2023 17:46:11 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B1CNDe020383;
-        Wed, 11 Jan 2023 01:46:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pvmm7Rctkc89Z25cuocd6Le1fJsQDZZv5dJqf9CDfPU=;
- b=gblG6qcaQmQhsCObzPMofNcqPxTpKKut0PDl/giRKZVpRPAw7J/Ynq67CMZbbGGU1xm2
- aZdaJ83o/EqqHxdhhtHtjSzKHMBP2uSnsybkHyhc/xsp4Xwxcbj4Smobt3RaGT3Fzvtc
- cUUxU9qSJzUhT8wCI5RSbj3OKF7Mjrh9PbsPpLNTU/kkLKGTVccFtjh8np4IODBUsWwp
- 0YjR5bJNzNJRy+qnD/5Zyw9AriCR6Uo5QoCiX+2ddp6rftR061BtbKZiOJxCp9OrOvI5
- aT2j7S0AtNV00EP246bVxaPgJw0lZPYnItHJlp5ROUOReYOhkrdj7EMWbytnqnWc8OJe aQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1k5k01rk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 01:45:59 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30B1jw3t012279
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 01:45:58 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 17:45:56 -0800
-Message-ID: <826538ae-d27a-fc03-c8dc-94b53c8a44cf@quicinc.com>
-Date:   Wed, 11 Jan 2023 09:45:54 +0800
+        with ESMTP id S231455AbjAKBxk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Jan 2023 20:53:40 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3628AC3A;
+        Tue, 10 Jan 2023 17:53:39 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDF2BFEC;
+        Tue, 10 Jan 2023 17:54:20 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C6333F67D;
+        Tue, 10 Jan 2023 17:53:36 -0800 (PST)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bin Liu <b-liu@ti.com>
+Cc:     Icenowy Zheng <uwu@icenowy.me>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, soc@kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v5 00/11] ARM: suniv: USB and two new boards support
+Date:   Wed, 11 Jan 2023 01:53:21 +0000
+Message-Id: <20230111015332.172021-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     =?UTF-8?B?7KCV7J6s7ZuI?= <jh0801.jung@samsung.com>,
-        'Felipe Balbi' <balbi@kernel.org>,
-        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        "'open list:USB XHCI DRIVER'" <linux-usb@vger.kernel.org>,
-        'open list' <linux-kernel@vger.kernel.org>,
-        'Seungchull Suh' <sc.suh@samsung.com>,
-        'Daehwan Jung' <dh10.jung@samsung.com>
-References: <af32e2f5-de45-38af-2b4f-47c1ac21ea9e@quicinc.com>
- <c4e01a0a-1c98-3103-2b91-2fe0ba8c3118@quicinc.com>
- <000201d920eb$c3715c50$4a5414f0$@samsung.com>
- <0bbd2355-2290-17c7-6860-d8b25930aed6@quicinc.com>
- <20230109182813.sle5h34wdgglnlph@synopsys.com>
- <e7217471-5b08-eee6-fba8-06e879118d77@quicinc.com>
- <20230110025310.nowjnrmo3oag76xd@synopsys.com>
- <4ced9c3e-c7b5-e0a0-88ec-1ac383d893a2@quicinc.com>
- <bfcfac21-3df7-7f47-576b-0717f2bab393@quicinc.com>
- <f35f0636-5b3f-9002-77f3-a3c2c53be973@quicinc.com>
- <20230111000021.r2bd5gnfwlbxzxd3@synopsys.com>
-Content-Language: en-US
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <20230111000021.r2bd5gnfwlbxzxd3@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2sJN10Tyalrs1LVqe076jvcQhpYHQmar
-X-Proofpoint-GUID: 2sJN10Tyalrs1LVqe076jvcQhpYHQmar
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_10,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 malwarescore=0 spamscore=1
- priorityscore=1501 suspectscore=0 adultscore=0 mlxlogscore=203
- clxscore=1015 bulkscore=0 mlxscore=1 phishscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301110010
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
-On 1/11/2023 8:00 AM, Thinh Nguyen wrote:
->
->> one more question, is it legacy PCIe device still exist in real world ? and
->> any VID/PID info ?
-> Currently, all dwc3 PCIe devices are affected. Some setups are more
+this is mostly a rebase of the former v4 series.
+It is based on top of v6.2-rc1, and builds cleanly there. For passing
+make dtbs_check, the PHY binding patch, part of a separate series[1], is
+needed. For USB functionality, patch 2/3 from there is needed as well.
 
+I put a tree with both series combined here:
+https://github.com/apritzel/linux/commits/f1c100s-usb-v5
 
-if non PCIe device have no such issue, can we do some improvement for it ?
+There were no changes to the actual patches, this is just a resend since
+the series missed the previous merge window.
 
-like new flag or static key/jump label to improve interrupt handler ?
+Cheers,
+Andre
 
+[1] https://lore.kernel.org/linux-phy/20230109012223.4079299-1-andre.przywara@arm.com/
 
-> noticeable than others. The dwc3 driver is implemented to probe platform
-> devices. So, dwc3 PCIe devices are wrapped as platform devices for the
-> dwc3 driver. Since we're going through the platform device code path,
-> the pci layer falls back to using legacy interrupt instead of MSI (last
-> I check awhile ago).
->
-> A little more detail on this problem:
-> PCIe legacy interrupt will emulate interrupt line by sending an
-> interrupt assert and deassert messages. After the interrupt assert
-> message is sent, interrupts are continuously generated until the
-> deassert message is sent. If there's a register write to unmask/mask
-> interrupt or clearing events falls in between these messages, then there
-> may be a race.
->
-> Let's say we don't have event pending check, this can happen:
->
-> Normal scenario
-> ---------------
->      event_count += n # controller generates new events
->    interrupt asserts
->      write(mask irq)
->      event_count -= n # dwc3 clears events
->    interrupt deasserts
->      write(unmask irq)
->
->
-> Race scenario
-> -------------
->      event_count += n # new events
->    interrupt asserts
->      write(mask irq)
->      event_count -= n # clear events
->      event_count += n # more events come and hard irq handler gets called
-> 		     # again as interrupt is generated, but cached
-> 		     # events haven't been handled. This breaks
-> 		     # serialization and causes lost events.
->      write(mask irq)
->
->      event_count -= n # clear events
->    interrupt deasserts
->      write(unmask irq) # events handled
+================
+This patchset introduces support for F1C100s' USB, and the SourceParts
+PopStick and Lctech Pi boards.
 
+The DT binding and driver support for SUNIV USB MUSB device are added, in
+addition to DT changes to the DTSI and Lichee Nano DT. New DTs are added
+for the SourceParts PopStick v1.1 and Lctech Pi boards.
 
-if mask irq is not working, the race will happen like this, thanks for 
-explanation.
+Changelog v4 ... v5:
+- Rebase on top to v6.2-rc1
+
+Changelog v3 ... v4:
+- Dropped the PHY patches, they go via a different tree and need a
+  different base
+- rebased on top of linux-sunxi/sunxi/for-next (provides H616 USB)
+- musb DT binding: use enum
+- musb cleanup: use musb_hdrc_config config pointer directly
+- musb cleanup: use const where possible
+- drop partitions from Popstick DTS file
+- clarify Popstick has a USB type-A *plug*
+- add tags
+
+Changelog v2 ... v3:
+- remove redundant "Device Tree Bindings" suffix in DT binding doc title
+- add BSD license to binding doc file (as per checkpatch)
+- fix some commit message title prefixes
+- use proper plural spelling for usb0_id_det-gpios
+- popstick.dts: Reorder otg_sram node reference alphabetically
+- popstick.dts: Add regulator- prefix to 3.3V regulator node name
+- popstick.dts: Fix status, compatible and reg property order
+- popstick.dts: Drop unneeded mmc0 and spi0 aliases
+- add patch to clean up sunxi MUSB driver
+- add Acks and Reviewed-by's
+
+Changelog v1 ... v2:
+- USB PHY binding: clarify the relation with other phy-sun4i-usb bindings
+- Add Popstick binding and .dts patches
 
 
->
-> For MSI, this won't be a problem because it's edge-triggered and the way
-> it sends interrupt is different.
->
-> BR,
-> Thinh
+Andre Przywara (4):
+  usb: musb: sunxi: Introduce config struct
+  dt-bindings: vendor-prefixes: add Lctech name
+  dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
+  ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
+
+Icenowy Zheng (7):
+  dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
+  usb: musb: sunxi: add support for the F1C100s MUSB controller
+  ARM: dts: suniv: add USB-related device nodes
+  ARM: dts: suniv: licheepi-nano: enable USB
+  dt-bindings: vendor-prefixes: add Source Parts
+  dt-binding: arm: sunxi: add compatible strings for PopStick v1.1
+  ARM: dts: suniv: add device tree for PopStick v1.1
+
+ .../devicetree/bindings/arm/sunxi.yaml        | 13 +++
+ .../usb/allwinner,sun4i-a10-musb.yaml         | 10 +-
+ .../devicetree/bindings/vendor-prefixes.yaml  |  4 +
+ arch/arm/boot/dts/Makefile                    |  4 +-
+ .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 +++
+ arch/arm/boot/dts/suniv-f1c100s.dtsi          | 32 ++++++
+ arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 ++++++++++++++
+ .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 81 +++++++++++++++
+ drivers/usb/musb/sunxi.c                      | 99 +++++++++++++------
+ 9 files changed, 301 insertions(+), 34 deletions(-)
+ create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
+ create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+prerequisite-patch-id: 7734c0032dcc073e59f0217ee47ff023f0b47bcf
+-- 
+2.25.1
+
