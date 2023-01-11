@@ -2,52 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B832B6653E9
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 06:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80596653F4
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 06:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjAKFlt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 00:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
+        id S235391AbjAKFoL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 00:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbjAKFkq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 00:40:46 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4EFD2D8;
-        Tue, 10 Jan 2023 21:37:50 -0800 (PST)
-X-UUID: 1259a47a917211ed945fc101203acc17-20230111
+        with ESMTP id S238177AbjAKFnk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 00:43:40 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A48262B;
+        Tue, 10 Jan 2023 21:41:18 -0800 (PST)
+X-UUID: 8df0620e917211eda06fc9ecc4dadd91-20230111
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=jmUDVA531EfhlhgEaWFvf3IPw/DwzgIiiNRd/7sJBRk=;
-        b=kUOY0+oY2EKxgnlf2CuaqwDI8FyverLbbE4nSEeI4asnv0m0rCDK8ZbX5sqBoHvbc+Ve1sWYkbSwPXea+/WVNSCl2+HvjSsWUghfggynSlgd1hI+mOnPuEszqGZMqkBMQqlQdYem9JSSqpWAGS+UqvKpAbmYxPd2VyMDqocgD+U=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=iSRMa3URb6no/Wd7CjkH5X93Fu9KW1GnRk2pSZR1Mr0=;
+        b=ePZsRTtO7y9a1Fy2XjBM7NjRXNsaxYTY/jIl2BU7FV31xgjskLleRGdAXeT3enkISpXhZeu/U6q4K0W6kw4bEnFDk91DVu0AKRvPUJdOp6os+JurLRIvEPXL8nmUEaAmC1ZvUyG7rdknuvOcrE44C4zBPUa9s0ang59kdJunqW8=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:4b08ca5a-4480-4f6b-8d22-128d24bb6394,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:543e81c,CLOUDID:fb874f54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: 1259a47a917211ed945fc101203acc17-20230111
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.17,REQID:0550e88a-fcce-43b8-b394-7f27a3e12a82,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.17,REQID:0550e88a-fcce-43b8-b394-7f27a3e12a82,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:543e81c,CLOUDID:736779f5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:230111134112683MJ67Y,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|102,
+        TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:
+        0,OSI:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-BVR: 0,NGT
+X-UUID: 8df0620e917211eda06fc9ecc4dadd91-20230111
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <macpaul.lin@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1370506586; Wed, 11 Jan 2023 13:37:43 +0800
+        with ESMTP id 1391024548; Wed, 11 Jan 2023 13:41:11 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 11 Jan 2023 13:37:42 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 11 Jan 2023 13:41:09 +0800
 Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 11 Jan 2023 13:37:42 +0800
-Message-ID: <7851a7a2-a2bc-c460-a53a-52a8f94e3969@mediatek.com>
-Date:   Wed, 11 Jan 2023 13:37:41 +0800
+ Transport; Wed, 11 Jan 2023 13:41:09 +0800
+Message-ID: <add7a0ed-b676-142f-dea4-3a024a85a72c@mediatek.com>
+Date:   Wed, 11 Jan 2023 13:41:07 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 1/3] arm64: dts: mediatek: Introduce MT8195 LAPTOP and
- IOT's USB configurations
+Subject: Re: [PATCH 3/3] arm64: dts: mediatek: enable USB device port for
+ mt8195-demo board
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -64,14 +68,15 @@ CC:     Bear Wang <bear.wang@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
         <yow-shin.liou@mediatek.com>, <ben.lok@mediatek.com>
 References: <20230105092809.14214-1-macpaul.lin@mediatek.com>
- <0ae6a31c-9a7b-ff05-08e1-eed96e672bd9@collabora.com>
+ <20230105092809.14214-3-macpaul.lin@mediatek.com>
+ <fb2a4f7d-f35a-2c48-ad31-3138a4fae247@linaro.org>
 From:   Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <0ae6a31c-9a7b-ff05-08e1-eed96e672bd9@collabora.com>
+In-Reply-To: <fb2a4f7d-f35a-2c48-ad31-3138a4fae247@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,86 +86,66 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 1/9/23 23:13, AngeloGioacchino Del Regno wrote:
-> Il 05/01/23 10:28, Macpaul Lin ha scritto:
->> Introduce the split MT8195 laptop and iot USB configurations.
->> The hardware specifications for LAPTOP devices is different from IOT
->> devices. The major differences include some hardware constrains for
->> dual-role switch for USB controllers in different configurations,
->> especially for power management and other control flows as well.
+On 1/6/23 20:56, Krzysztof Kozlowski wrote:
+> On 05/01/2023 10:28, Macpaul Lin wrote:
+>> 1. Enable USB device port (USB port0).
+>> 2. Enable u2 speed for other USB HOST (USB port1/2/3).
+>> 3. Configure mt6360 (TYPEC) related pinctrls.
 >>
->> Here are some hardware specifiction differences listed:
->>    1. LAPTOP (Cherry Tomato boards) don't support USB gadget (device 
->> mode).
->>    2. IOT devices must support multiple gadget devices and host mode.
->>    3. Dual-role switch is not fully supported. Only USB PORT0 support
->>       dual-role switch.
->>    4. Power management is designed in primary and secondary dominator.
->>       For a dual-role port, the device controller is the primary 
->> controller
->>       for power management; while the host controller is the secondary.
->>       LAPTOP devices should remove device nodes for avoiding abnormal
->>       behavior.
->>
->> This modifcation is to add USB configurations "mt8195-laptop-usb.dtsi"
->> for LAPTOP devices, and add "mt8195-iot-usb.dtsi" for IOT devices.
->>
->> To remove common USB configurations for mt8195.dtsi and switch includes
->> dtsi these new files for the boards will come in next patch.
+>> Note: Full dual-role switch capability requires TYPEC MUX driver and dts
+>> update will be send in separate patches.
 >>
 >> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 51 ++++++++++++++++++++
+>>   1 file changed, 51 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+>> index 07a864cb8b54..207bb5f4c58f 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+>> @@ -12,6 +12,7 @@
+>>   #include <dt-bindings/input/input.h>
+>>   #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
+>>   #include <dt-bindings/regulator/mediatek,mt6360-regulator.h>
+>> +#include <dt-bindings/usb/pd.h>
+>>   
+>>   / {
+>>   	model = "MediaTek MT8195 demo board";
+>> @@ -380,6 +381,22 @@
+>>   		};
+>>   	};
+>>   
+>> +	mt6360_pins: mt6360-pins {
+>> +		pins {
+>> +			pinmux = <PINMUX_GPIO100__FUNC_GPIO100>,
+>> +				 <PINMUX_GPIO101__FUNC_GPIO101>;
+>> +			input-enable;
+>> +			bias-pull-up;
+>> +		};
+>> +	};
+>> +
+>> +	u3_p0_vbus: u3_p0vbusdefault {
 > 
-> I'm mostly sure that there's no reason to split the two configurations.
->
-> I agree in that Tomato doesn't support gadget mode on the Type-A port and I
-> honestly don't currently know (and I'll test that later!) if it would be 
-> possible
-> to act as gadget on any of the two Type-C ports.
-> Of course I agree on the fact that a laptop acting as a gadget may not 
-> be useful,
-> but that's not something that I want to judge, as someone may find a 
-> usecase.
+> No underscores in node names. Also does not look correct naming. Please
+> run `make dtbs_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+Thanks for the suggest.
+I'm trying to request IT to setup for the environment for supporting 
+"make dtbs_check". This should be fix in next patch.
+
+>> +		pins_cmd_dat {
 > 
-> In any case, even if Tomato does *not* support gadget mode on *any* port 
-> at all,
-> I wonder why we wouldn't be able to probe MTU3 (and correctly describe 
-> the SoC)
-> on Chromebooks but only on MT8195-based IoT boards...
-> ...and in case there's any real issue, we can always force host mode 
-> (with a
-> generic  devicetree property!) on the MTU3 on Tomato.
-
-We are sorry it cannot be achieved by even setting "force host mode" to 
-usb device node. At least, it cannot be done on MT8195.
-
-The basic reason is the power requirements for USB host on a LAPTOP are 
-different from those on an IoT device.
-
-The main cause is low power management. The hardware of each device port 
-is different on MT8195. Even the bit fields definition in registers were 
-different.
-
-Some details such as sequence need to be coordinated with the SPM 
-firmware. When a device hardware is involved in runtime PM, function 
-like remote wakeup and other suspend/resume behavior will be abnormal 
-for a LAPTOP device. If we split the dtsi for different devices, people 
-can choose different configuration in SPM firmware in coreboot or in 
-TF-A to meet the requirement. Hence we'd better not to get more messy 
-code in Linux driver.
-
-> Finally, if we're able to add MTU3 to Tomato boards, this means that we 
-> won't be
-> seeing these two DTSI files and that USB nodes are still going to all 
-> lie in the
-> main `mt8195.dtsi` file, without all this duplication that I'm seeing here.
-> 
-> What do you think?
-> 
-> Regards,
-> Angelo
+> Same problem.
 > 
 
-Thanks for the suggestion, we hope the next platform in the future could 
-avoid this issue and reduce some duplicate dts.
+Got it.
 
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Thanks!
 Macpaul Lin
