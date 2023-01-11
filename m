@@ -2,87 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BCF66584A
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 10:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4804665900
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 11:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbjAKJzw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 04:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        id S236012AbjAKK1S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 05:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbjAKJzT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 04:55:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384091AD89;
-        Wed, 11 Jan 2023 01:52:15 -0800 (PST)
+        with ESMTP id S236508AbjAKK1L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 05:27:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AB525D1;
+        Wed, 11 Jan 2023 02:27:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24F1061B9A;
-        Wed, 11 Jan 2023 09:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 827F6C433EF;
-        Wed, 11 Jan 2023 09:52:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673430733;
-        bh=hkuo7qNDuli+lY95kty3I8u2gv4csLJIhFbudWsHe44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hlUjMxfxt0z7KP7jhGBcW0mbvluD21ZU5AMs1exGjhcHCcNtCt2tujvNtHoCc84RR
-         AZrGEOSQj9OQpn95tznKo4sX8isYo7p8QwqWycSgsIcnfk+WGrTzY3MMLiTZ8IqXpg
-         6a9zIgsqx4b3HroVDVYyjIDs5L+hk4EDNJSkmWUw=
-Date:   Wed, 11 Jan 2023 10:52:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y76Gyhbb8aNGPh+I@kroah.com>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
- <Y34mpkqds3NEZclU@black.fi.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0A3F61941;
+        Wed, 11 Jan 2023 10:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501D1C43392;
+        Wed, 11 Jan 2023 10:27:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673432825;
+        bh=h8TxIxPqDFkhpYbcLfoV6BQoG0WhTrglcCMN9K0uJt8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=N6AM/R958N4u18XHrq8UNFqyP70G0+gFwMjnQ7yqMsG47nguqfl6pW+209xvjJbjo
+         rbyiV1w6ouyXKlZ7pR08EkBzODxgmNUTobWEUTrURUNmsiM/RuXCO9kxLqze0HyhcR
+         S6C/niQFotI+kRCFg/uXnEq6zKAWOBRw0nS0DWmyZjAkNvygext7RU932qc4NbjrQS
+         KV0HgZHWYoLzmXVOUeoidM1prvbzJLc7G6Y56qtqNpZx4XmtMUCyuFD3A2CAvUgequ
+         zGm3mij0lsMIAscKAhWH2v20gJAspQzMm0kSukOEDurAvSSWc71hsGMCkJQLn4kfXu
+         IsWN6cuZdIQww==
+Received: by mail-lf1-f42.google.com with SMTP id bt23so22774660lfb.5;
+        Wed, 11 Jan 2023 02:27:05 -0800 (PST)
+X-Gm-Message-State: AFqh2krQ8TFnT+Z/YleYZcefXtraDE3YjVmnsLc3pWlSuq4zzep5cC78
+        A1BxxR70hX9Bv4y1rCjJBVyBNhgrk+YYDgSS260=
+X-Google-Smtp-Source: AMrXdXsLArq0Wo9nCQp1TG2fDBNEKyKeOcVuKtJtKzZgvOKKPRl44qz6sy8RasrBp5p6S+z6L6lslWMdW/csV0WAiDQ=
+X-Received: by 2002:a05:6512:15a3:b0:4bc:bdf5:f163 with SMTP id
+ bp35-20020a05651215a300b004bcbdf5f163mr3731265lfb.583.1673432823315; Wed, 11
+ Jan 2023 02:27:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y34mpkqds3NEZclU@black.fi.intel.com>
+References: <63bc16ce.IBWX7dhtPEB7dLIq%lkp@intel.com> <CAMj1kXGAf7ikEU5jLoik0xrOde0xBg0yJkOo5=PtEtNXoUxMXA@mail.gmail.com>
+In-Reply-To: <CAMj1kXGAf7ikEU5jLoik0xrOde0xBg0yJkOo5=PtEtNXoUxMXA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 11 Jan 2023 11:26:52 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXH1GHmhc=SZDRFV2GOpncnn1rmbr8AZhiS8iDc6u+1ATQ@mail.gmail.com>
+Message-ID: <CAMj1kXH1GHmhc=SZDRFV2GOpncnn1rmbr8AZhiS8iDc6u+1ATQ@mail.gmail.com>
+Subject: Re: [linux-next:master] BUILD REGRESSION 543b9b2fe10b2e12b8d773af65314d322f91e479
+To:     kernel test robot <lkp@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        speakup@linux-speakup.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -92,35 +64,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 03:56:54PM +0200, Mika Westerberg wrote:
-> On Wed, Nov 23, 2022 at 01:25:21PM +0100, Greg Kroah-Hartman wrote:
-> > The uevent() callback in struct device_type should not be modifying the
-> > device that is passed into it, so mark it as a const * and propagate the
-> > function signature changes out into all relevant subsystems that use
-> > this callback.
-> > 
-> > Cc: Jens Axboe <axboe@kernel.dk>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Len Brown <lenb@kernel.org>
-> > Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-> > Cc: Wolfram Sang <wsa@kernel.org>
-> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Cc: Sean Young <sean@mess.org>
-> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Cc: Maximilian Luz <luzmaximilian@gmail.com>
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Mark Gross <markgross@kernel.org>
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> > Cc: Sanyog Kale <sanyog.r.kale@intel.com>
-> > Cc: Andreas Noever <andreas.noever@gmail.com>
-> > Cc: Michael Jamet <michael.jamet@intel.com>
-> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com> # for Thunderbolt
+On Mon, 9 Jan 2023 at 15:38, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Mon, 9 Jan 2023 at 14:31, kernel test robot <lkp@intel.com> wrote:
+> >
+> > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > branch HEAD: 543b9b2fe10b2e12b8d773af65314d322f91e479  Add linux-next specific files for 20230109
+> >
+> > Error/Warning: (recently discovered and may have been fixed)
+> >
+> > aarch64-linux-ld: ID map text too big or misaligned
+>
+> This is caused by linker veneers ('stubs') that are emitted into the
+> ID map text section:
+>
+>  *(.idmap.text)
+>  .idmap.text    0xffffffc018c04000       0x38 arch/arm64/kernel/hyp-stub.o
+>  .idmap.text    0xffffffc018c04038       0x28 arch/arm64/kernel/sleep.o
+>                 0xffffffc018c04038                cpu_resume
+>  .idmap.text    0xffffffc018c04060       0x38 arch/arm64/kernel/cpu-reset.o
+>                 0xffffffc018c04060                cpu_soft_restart
+>  .idmap.text    0xffffffc018c04098      0x468 arch/arm64/kernel/head.o
+>                 0xffffffc018c04098                init_kernel_el
+>                 0xffffffc018c04290                secondary_holding_pen
+>                 0xffffffc018c042c8                secondary_entry
+>                 0xffffffc018c043c4                __enable_mmu
+>                 0xffffffc018c0440c                __cpu_secondary_check52bitva
+>  .idmap.text    0xffffffc018c04500      0x3c4 arch/arm64/mm/proc.o
+>                 0xffffffc018c04500                cpu_do_resume
+>                 0xffffffc018c045a8                idmap_cpu_replace_ttbr1
+>                 0xffffffc018c045d4                idmap_kpti_install_ng_mappings
+>                 0xffffffc018c047bc                __cpu_setup
+>  *fill*         0xffffffc018c048c4        0x4
+>  .idmap.text.stub
+>                 0xffffffc018c048c8     0xf7c8 linker stubs
+>                 0xffffffc018c1c8c8                __idmap_text_end = .
+>
+> It seems unlikely that the entire .idmap.text.stub section is
+> dedicated to veneers for code in .idmap.text, and the linker probably
+> dumps them here because the next output section is non-executable.
+>
 
-Thanks for the review.
+
+I bisected this to
+
+commit 5e5ff73c2e5863f93fc5fd78d178cd8f2af12464
+Author: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Date:   Mon Oct 17 20:04:50 2022 +0530
+
+    asm-generic/io: Add _RET_IP_ to MMIO trace for more accurate debug info
+
+which seems entirely unrelated, but looks like it may be causing the
+number of direct calls (and therefore the number of trampolines) to
+increase, causing the ID map to blow up like it does.
