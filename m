@@ -2,154 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CFD665805
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 10:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D816C665808
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jan 2023 10:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbjAKJsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Jan 2023 04:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S238573AbjAKJtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Jan 2023 04:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjAKJri (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 04:47:38 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4621AE6C;
-        Wed, 11 Jan 2023 01:46:27 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S238827AbjAKJsM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Jan 2023 04:48:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9A011A29;
+        Wed, 11 Jan 2023 01:46:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E5EFB6602D92;
-        Wed, 11 Jan 2023 09:46:25 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673430386;
-        bh=ZJwlsBY464BplGHr72r5hWWc6BG/4HDq2NZ3M0JCMaA=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=IAui+3e0mTVabAj1AMfgOOBhqwNvOsQsae3YSUIgGpMWejhgZTaRIkjfgRa5cS9ok
-         La2f8A4zz4Dl2pCXDrwu+A0kxoOFEGH4vN0SVJIv576bedSN3RWmjUrJibsWfT6kH0
-         miVr9PBmn/cy8MRr6i+osK7uJ04z0JQNaDZ/PtK+5PLYD+Q0w90MVc/U1lDPfA1W32
-         UW3MGlvFNn2wslFMLhet2vMdXISdzzp2j4ClE5LWAx56COH6NcxQ0pxl7v5jTG5+I2
-         SnEAu22bsFNiRb0yQIG5aGDAhpmd5+22rUQyGDb3S4zsvIMnJ+LPdken9GSepfGkBK
-         d0eMVZrV17dLg==
-Message-ID: <4e98a5ee-96a1-eb98-8529-68f36c3cb7fa@collabora.com>
-Date:   Wed, 11 Jan 2023 10:46:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget driver
- names
-To:     Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Li <frank.li@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A319D61B96;
+        Wed, 11 Jan 2023 09:46:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A035C433A8;
+        Wed, 11 Jan 2023 09:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673430418;
+        bh=q0MTQbhS4MjxtbLiLzvG2UgbCXEINak0W4RxzYpWLNI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V2m3LQPz8klAo5lmv1lQnnS32RnpBjVnoIKlTX3SjDR1cz7SnWI2FoA6TzpQi58zc
+         cbIsfcZkcKAjQse33rc5b9J3K44+9PFwfLXbD375VhsfSt9ciFKVqIOtH8i6e4qyTR
+         jU1UyZW8M4dMLqbERhxH5Tp0aNoAnIQ48zo2IVaE=
+Date:   Wed, 11 Jan 2023 10:46:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Alistar Popple <alistair@popple.id.au>,
+        Eddie James <eajames@linux.ibm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-References: <20230111065105.29205-1-chanh@os.amperecomputing.com>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20230111065105.29205-1-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Won Chung <wonchung@google.com>, linux-block@vger.kernel.org,
+        linux-cxl@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/5] driver core: make struct device_type.devnode() take
+ a const *
+Message-ID: <Y76FjzouxRSfgiIC@kroah.com>
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-4-gregkh@linuxfoundation.org>
+ <637e733838b5f_12cdff29466@dwillia2-xfh.jf.intel.com.notmuch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <637e733838b5f_12cdff29466@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, Nov 23, 2022 at 11:23:36AM -0800, Dan Williams wrote:
+> Greg Kroah-Hartman wrote:
+> > The devnode() callback in struct device_type should not be modifying the
+> > device that is passed into it, so mark it as a const * and propagate the
+> > function signature changes out into all relevant subsystems that use
+> > this callback.
+> > 
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Cc: Alison Schofield <alison.schofield@intel.com>
+> > Cc: Vishal Verma <vishal.l.verma@intel.com>
+> > Cc: Ira Weiny <ira.weiny@intel.com>
+> > Cc: Ben Widawsky <bwidawsk@kernel.org>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: Jeremy Kerr <jk@ozlabs.org>
+> > Cc: Joel Stanley <joel@jms.id.au>
+> > Cc: Alistar Popple <alistair@popple.id.au>
+> > Cc: Eddie James <eajames@linux.ibm.com>
+> > Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> > Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> > Cc: Won Chung <wonchung@google.com>
+> > Cc: linux-block@vger.kernel.org
+> > Cc: linux-cxl@vger.kernel.org
+> > Cc: linux-fsi@lists.ozlabs.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> [..]
+> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> > index 20ce488a7754..6ae8d0bdc61b 100644
+> > --- a/drivers/cxl/core/memdev.c
+> > +++ b/drivers/cxl/core/memdev.c
+> > @@ -27,7 +27,7 @@ static void cxl_memdev_release(struct device *dev)
+> >  	kfree(cxlmd);
+> >  }
+> >  
+> > -static char *cxl_memdev_devnode(struct device *dev, umode_t *mode, kuid_t *uid,
+> > +static char *cxl_memdev_devnode(const struct device *dev, umode_t *mode, kuid_t *uid,
+> >  				kgid_t *gid)
+> >  {
+> >  	return kasprintf(GFP_KERNEL, "cxl/%s", dev_name(dev));
+> 
+> For the CXL bit:
+> 
+> Acked-by: Dan Williams <dan.j.williams@intel.com>
 
-W dniu 11.01.2023 o 07:51, Chanh Nguyen pisze:
-> It is unable to use configfs to attach more than one gadget. When
-> attaching the second gadget, it always fails and the kernel message
-> prints out:
-> 
-> Error: Driver 'configfs-gadget' is already registered, aborting...
-> UDC core: g1: driver registration failed: -16
-> 
-> This commit fixes the problem by using the gadget name as a suffix
-> to each configfs_gadget's driver name, thus making the names
-> distinct.
-> 
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
-> 
-> ---
-> Changes in v3:
->    - Use the gadget name as a unique suffix instead     [Andrzej]
->    - Remove the driver.name allocation by template        [Chanh]
->    - Update commit message                                [Chanh]
-> 
-> Changes in v2:
->    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
->    - Move the clean up code from gadgets_drop() to
->      gadget_info_attr_release()                        [Frank Li]
->    - Correct the resource free up in gadges_make()   [Alan Stern]
->    - Remove the unnecessary variable in gadgets_make()    [Chanh]
->    - Fixes minor grammar issue in commit message          [Chanh]
-> ---
->   drivers/usb/gadget/configfs.c | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 96121d1c8df4..0853536cbf2e 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -393,6 +393,7 @@ static void gadget_info_attr_release(struct config_item *item)
->   	WARN_ON(!list_empty(&gi->string_list));
->   	WARN_ON(!list_empty(&gi->available_func));
->   	kfree(gi->composite.gadget_driver.function);
-> +	kfree(gi->composite.gadget_driver.driver.name);
->   	kfree(gi);
->   }
->   
-> @@ -1572,7 +1573,6 @@ static const struct usb_gadget_driver configfs_driver_template = {
->   	.max_speed	= USB_SPEED_SUPER_PLUS,
->   	.driver = {
->   		.owner          = THIS_MODULE,
-> -		.name		= "configfs-gadget",
->   	},
->   	.match_existing_only = 1,
->   };
-> @@ -1623,13 +1623,21 @@ static struct config_group *gadgets_make(
->   
->   	gi->composite.gadget_driver = configfs_driver_template;
->   
-> +	gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
-> +							    "configfs-gadget.%s", name);
-
-This line is 88 chars long, which means you're taking advantage of checkpatch
-allowing 100 columns nowadays. That's absolutely fine. If you collapse the above
-two lines into one, the combined length is exactly 100 chars, so you might
-just as well use a single line. In any case (collapsed or not) you can add my
-
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-
-> +	if (!gi->composite.gadget_driver.driver.name)
-> +		goto err;
-> +
->   	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->   	gi->composite.name = gi->composite.gadget_driver.function;
->   
->   	if (!gi->composite.gadget_driver.function)
-> -		goto err;
-> +		goto out_free_driver_name;
->   
->   	return &gi->group;
-> +
-> +out_free_driver_name:
-> +	kfree(gi->composite.gadget_driver.driver.name);
->   err:
->   	kfree(gi);
->   	return ERR_PTR(-ENOMEM);
-
+Thanks for the review!
