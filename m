@@ -2,52 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC86667E1B
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 19:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E05667E4C
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 19:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240137AbjALSZk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Jan 2023 13:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S240532AbjALSnR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Jan 2023 13:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234657AbjALSYs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 13:24:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DDD728BC;
-        Thu, 12 Jan 2023 09:59:24 -0800 (PST)
+        with ESMTP id S232226AbjALSmm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 13:42:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986327825F
+        for <linux-usb@vger.kernel.org>; Thu, 12 Jan 2023 10:15:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 129C4B81EE6;
-        Thu, 12 Jan 2023 17:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9F9C433EF;
-        Thu, 12 Jan 2023 17:59:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6647AB81F02
+        for <linux-usb@vger.kernel.org>; Thu, 12 Jan 2023 18:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F433C433D2;
+        Thu, 12 Jan 2023 18:15:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673546361;
-        bh=5yOeBifgHvnIKA0Pfcw2MGNhJhycBSIeJ80Fy30rcY4=;
+        s=k20201202; t=1673547323;
+        bh=qPDSt8i6uFp2NJYu2QUTYE6IloLYkwRsTgE9Cu+vYVU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gMW00NxLgFKvkc8KoKzZRB16R4IXCPmXQ+YD0jc0NIRfLXy8r+WftxBNpNW9oT3zf
-         /VK61Wu7z3dFYYm/nR3XqKOp1uemwQhoeVvb7DithKgT9uNiQIakyV/VZjJhNhrR8C
-         Qdiq6YwemyvlzJ6ip6/Nm6L7HtBnxHXP8vQlFeaNdVZhlA9VroMAlxzsfMfsdXg+qr
-         +c6H/YQ1cxEEPn4/4OL1E9JH0WCvGY4sxp8pjQMsJxFjc269K9eF3XQunV1kILZJL2
-         L4CkMuo1FbcInGri4KG2D2+U24DVATNNBlBHtQw4yP9wMeIxrtSaJgCoyC1+vf9Dg7
-         2pMfj1Ixr9kcg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pG1rN-0005hJ-MQ; Thu, 12 Jan 2023 18:59:29 +0100
-Date:   Thu, 12 Jan 2023 18:59:29 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel EC200U modem
-Message-ID: <Y8BKgcoBuDT9DIeZ@hovoldconsulting.com>
-References: <20221228113847.8550-1-ali.mirghasemi1376@gmail.com>
- <Y8A8yZXqg0usMEk8@hovoldconsulting.com>
- <CAHBoX=aDQ67BoG9vd+0Ndw-KL+RDN5ZrAjwgFwWuyKcvWEWb3w@mail.gmail.com>
+        b=YBkQZ1TpWGHdwX+KRY/mhEu4C9Cy23MjpcZZeW4e5cSLr/x9f+cY7UAIYPBuptR7E
+         Gs7bpZUq/ZsHaoX3YAClVcCF6gJyaj1KKe9HHEuTD6qPcOgpBOxtkSb1BBI66EPsb7
+         OkbCDWhC/dTXaXn7KZ6i8ynRyo1FsOWqGSJWn/tImp75VBxqMzHqSalQAeTRfGiUyK
+         MxKB5cfKhfUI30msSrFiUicFGJoBlIHxelBfWlextyPGsddbIeCLeq9o0iDkKc5Nmt
+         o4SClrgE8sQB5MVOWKFds0JVNgKsIx+MS52yxNDZ3OBSVQ30CZMb+B6sQuu6eEkrgk
+         fcw00hwQ8TpYw==
+Date:   Thu, 12 Jan 2023 23:44:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Shang XiaoJing <shangxiaojing@huawei.com>
+Cc:     vincent.sunplus@gmail.com, kishon@ti.com,
+        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
+Subject: Re: [PATCH] phy: usb: sunplus: Fix potential null-ptr-deref in
+ sp_usb_phy_probe()
+Message-ID: <Y8BOF2hrH+dJDBYg@matsya>
+References: <20221125021222.25687-1-shangxiaojing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHBoX=aDQ67BoG9vd+0Ndw-KL+RDN5ZrAjwgFwWuyKcvWEWb3w@mail.gmail.com>
+In-Reply-To: <20221125021222.25687-1-shangxiaojing@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,31 +53,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 09:26:43PM +0330, Ali Mirghasemi wrote:
->  AP: Application Processor
-> CP: Coprocesso
+On 25-11-22, 10:12, Shang XiaoJing wrote:
+> sp_usb_phy_probe() will call platform_get_resource_byname() that may fail
+> and return NULL. devm_ioremap() will use usbphy->moon4_res_mem->start as
+> input, which may causes null-ptr-deref. Check the ret value of
+> platform_get_resource_byname() to avoid the null-ptr-deref.
 
-So how would these be used?
+Applied, thanks
 
-> MOS: could'nt find real words, but it use for debug modem
-
-Ok, thanks. Apparently, I've seen this in one patch before.
-
-> Do I need to send new mail with an edited patch?
-
-No, that's fine, I've already applied the patch. It's just for my
-understanding.
-
-> On Thu, Jan 12, 2023 at 8:30 PM Johan Hovold <johan@kernel.org> wrote:
-> 
-> > On Wed, Dec 28, 2022 at 03:08:47PM +0330, Ali Mirghasemi wrote:
-> > > Add support for EC200U modem
-> > >
-> > > 0x0901: EC200U - AT + AP + CP + NMEA + DIAG + MOS
-
-> > And for my enlightenment, could you spell out what AP, CP and MOS stands
-> > for (or what they are used for)?
-> >
-> > Now applied.
-
-Johan
+-- 
+~Vinod
