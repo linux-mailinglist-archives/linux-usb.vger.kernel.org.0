@@ -2,69 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86E0666F46
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 11:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3310666F77
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 11:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbjALKP0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Jan 2023 05:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S236639AbjALKZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Jan 2023 05:25:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236952AbjALKNm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 05:13:42 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFCD33D69;
-        Thu, 12 Jan 2023 02:12:27 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 66E7F5C00FF;
-        Thu, 12 Jan 2023 05:12:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 12 Jan 2023 05:12:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1673518344; x=
-        1673604744; bh=vEhta7zMZrchbjHApsTWQNVEwRZyW+Qr5Tm1UgjUS68=; b=S
-        /cdkq7wd6o/lMcnkf0KzrxSckHt8rkcmgQ/7bjXsCCNu2wzJehxZZiYVCtdHlOux
-        b8BGjlNV8lLg/2uyWXuRnZoT1DkepLgH6K71+CKU6lg1tZNSnxD4swoPEHZNN0dW
-        AWbTNZfm0EQCBiQ3sMxRPxkx+bYZRbsh8Muf032sbyYjDFkGNMlF4aodoQOzOdGC
-        XM81nJSYZMXdYnbhI1s6J7sL1YITcmS/g3SE9aDJyaBFmDM4uWObODbvfYsmPnLk
-        Re3E8mJX6Z10tOILlkCVEj+IyuLnq7kp07LFmQkpg0VPboyCaDBHtdLgXdT3837g
-        W6Hwk/Ltc0TDiq6N4MoCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673518344; x=
-        1673604744; bh=vEhta7zMZrchbjHApsTWQNVEwRZyW+Qr5Tm1UgjUS68=; b=I
-        lC3zCD38qxnJMOfi/LxaGEZbv8L542ffFDUM/e/hNEwyFNW0lISQeSc9qwRCBT1X
-        xaiUIaWwaOcnRAPHg3xxKOtz8Olsm2MOfE06FjM23BrSMMgR+6X23pRs9rKVBIzS
-        hn8st4/DL+u3p5ZnXMLhxhtGWQi0vCmWrO5ryuHBs5VrwQQ+CmacoJeGkEedVZ1Z
-        IF2+xL9r6XSy6tAwdYMjhUuLCyJ65Oi/gd8xVoaxEjrRxDP6H89abA+bsk2InuIZ
-        oy/a9FgoySYSlT//wN4csVDM1kmFv6DogVuyNNHshafDzc8aISVUIUvKduDnBN6w
-        16S3Buj9r7iWu1tn4RuSA==
-X-ME-Sender: <xms:CN2_Y1Zf9ugX6PoAuPFmSkaJlDxDIRQ040dMQOPEOkxkbnZvy4HKXA>
-    <xme:CN2_Y8b3y0ms7Jaid71Nj8QidSSn-sHFLEajFBuxI4zxC0ABB64450gFBxC_8wwRF
-    9NP0qsgljWveA>
-X-ME-Received: <xmr:CN2_Y3-7XMJ9YFJ3z5Ha_hy9cCskGa-EWJjEbMBcTwwvg3ZRPLVExpWm2oI2YdwM2kkQJKlIbS9LzJHx7F6ONmvSaSNZFCjSRYL3Kg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdduvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeevve
-    etgfevjeffffevleeuhfejfeegueevfeetudejudefudetjedttdehueffnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:CN2_Yzpb51HchpD8N9XvcI61SLVuaZ8Qa7m33SHXytDqGr3Bo-U13g>
-    <xmx:CN2_Ywq4M10qlLZrTtvWpJMNSgKS9iz0QjQ6D09m7Br1VC4YMaNGyA>
-    <xmx:CN2_Y5T0fPyfAy881qb2nX5PcWdBgRkJbM7OeGM41VQQYgqyqqfLew>
-    <xmx:CN2_Y-a98dfR5giMhqiLZaWDNahtmJAbtNAAyKA7L_C4J7cycKbH5Q>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Jan 2023 05:12:23 -0500 (EST)
-Date:   Thu, 12 Jan 2023 11:12:21 +0100
-From:   Greg KH <greg@kroah.com>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+        with ESMTP id S229898AbjALKY7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 05:24:59 -0500
+Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13237DFCE;
+        Thu, 12 Jan 2023 02:19:25 -0800 (PST)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
+        (authenticated bits=0)
+        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30CAJ5Eu1796351
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Thu, 12 Jan 2023 10:19:06 GMT
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30CAIxeI3819203
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Thu, 12 Jan 2023 11:18:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1673518739; bh=wqU5ha1OSQ1hfmy33dTKyNWeg14ALwqaL7TIDyceZC0=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=oLNX6Efk3ClKtapi1SA0FPMsbvhzOO4BinQRNYu/xphRklxN3U/vuZlbPOYuedDK6
+         EaRYaJ9x2oq2iAyYVRnIrfYl/7HLMCGrU70quvPwj/7Ez4nEivQ6JLeKBouXZRmtNE
+         qtt7qkZ0buw6Qzd+z9znOQV427Osf4AsWSjindq4=
+Received: (nullmailer pid 181416 invoked by uid 1000);
+        Thu, 12 Jan 2023 10:18:59 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Greg KH <greg@kroah.com>
 Cc:     Jakub Kicinski <kuba@kernel.org>,
         Andre Przywara <andre.przywara@arm.com>,
         Paolo Abeni <pabeni@redhat.com>,
@@ -72,17 +41,21 @@ Cc:     Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH net-next] r8152; preserve device list format
-Message-ID: <Y7/dBXrI2QkiBFlW@kroah.com>
+Organization: m
 References: <87k01s6tkr.fsf@miraculix.mork.no>
- <20230112100100.180708-1-bjorn@mork.no>
+        <20230112100100.180708-1-bjorn@mork.no> <Y7/dBXrI2QkiBFlW@kroah.com>
+Date:   Thu, 12 Jan 2023 11:18:59 +0100
+In-Reply-To: <Y7/dBXrI2QkiBFlW@kroah.com> (Greg KH's message of "Thu, 12 Jan
+        2023 11:12:21 +0100")
+Message-ID: <87cz7k6ooc.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230112100100.180708-1-bjorn@mork.no>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.7 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,30 +63,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 11:01:00AM +0100, Bjørn Mork wrote:
-> This is a partial revert of commit ec51fbd1b8a2 ("r8152:
-> add USB device driver for config selection")
-> 
-> Keep a simplified version of the REALTEK_USB_DEVICE macro
-> to avoid unnecessary reformatting of the device list. This
-> makes new device ID additions apply cleanly across driver
-> versions.
-> 
-> Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-> Signed-off-by: Bjørn Mork <bjorn@mork.no>
-> ---
-> The patch in
-> https://lore.kernel.org/lkml/20230111133228.190801-1-andre.przywara@arm.com/
-> will apply cleanly on top of this.
-> 
-> This fix will also prevent a lot of stable backporting hassle.
+Greg KH <greg@kroah.com> writes:
+> On Thu, Jan 12, 2023 at 11:01:00AM +0100, Bj=C3=B8rn Mork wrote:
+>> This is a partial revert of commit ec51fbd1b8a2 ("r8152:
+>> add USB device driver for config selection")
+>>=20
+>> Keep a simplified version of the REALTEK_USB_DEVICE macro
+>> to avoid unnecessary reformatting of the device list. This
+>> makes new device ID additions apply cleanly across driver
+>> versions.
+>>=20
+>> Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+>> Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+>> ---
+>> The patch in
+>> https://lore.kernel.org/lkml/20230111133228.190801-1-andre.przywara@arm.=
+com/
+>> will apply cleanly on top of this.
+>>=20
+>> This fix will also prevent a lot of stable backporting hassle.
+>
+> No need for this, just backport the original change to older kernels and
+> all will be fine.
+>
+> Don't live with stuff you don't want to because of stable kernels,
+> that's not how this whole process works at all :)
 
-No need for this, just backport the original change to older kernels and
-all will be fine.
+OK, thanks.  Will prepare a patch for stable instead then.
 
-Don't live with stuff you don't want to because of stable kernels,
-that's not how this whole process works at all :)
+But I guess the original patch is unacceptable for stable as-is? It
+changes how Linux react to these devces, and includes a completely new
+USB device driver (i.e not interface driver).
 
-thanks,
 
-greg k-h
+Bj=C3=B8rn
