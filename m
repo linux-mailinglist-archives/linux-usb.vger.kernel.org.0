@@ -2,51 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1E0667CD6
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 18:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B97E667D45
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 19:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235533AbjALRoi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Jan 2023 12:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S240095AbjALSCe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Jan 2023 13:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240345AbjALRoO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 12:44:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BDE718A6;
-        Thu, 12 Jan 2023 09:03:04 -0800 (PST)
+        with ESMTP id S240124AbjALSBs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 13:01:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7FE1A041;
+        Thu, 12 Jan 2023 09:23:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13451B81ED9;
-        Thu, 12 Jan 2023 17:03:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB20FC433EF;
-        Thu, 12 Jan 2023 17:03:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8CC0FCE1EE8;
+        Thu, 12 Jan 2023 17:23:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093B4C433EF;
+        Thu, 12 Jan 2023 17:23:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673542981;
-        bh=vXMxe8Lys61OG4HEhooEd7XMUn0HYqZGcKqpMKIc+yc=;
+        s=k20201202; t=1673544218;
+        bh=vH/o83cLSYXUJQUG47sGbRqM7Nxy9CAYi6BHrDZBWlA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sEmDJtMaHXDcx7z27pzFdlq6Dr/UhDqk1VYHEw7aofW022EaHBu54AAreRtWeIfop
-         mXEHxfBm57MUdjxj/5FfTeESU7KQJ5jXacvNtdIaO809s5bZpsK4P9pnUeGU56k7Sx
-         PNLTpMxLYa/u/g0+yke/pbKxjP1YVLjieBQAKf4z0WsO+NQmOU8fUI99OOM/8FwBRc
-         0FzfhzKOEdTf2/GVwcBYxh7sgHhVjgigRwl7ujI/ArqkbRUndtaX/CJDCZCv3qY05P
-         NCc4aZ385L+Uvnk+NEYiG5YOd0sjlZhyJv/WgY8yVjro+dH4EnW18uKrB56GJpHH7F
-         WAUVxeNRhP0yQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pG0yr-0006jV-E0; Thu, 12 Jan 2023 18:03:09 +0100
-Date:   Thu, 12 Jan 2023 18:03:09 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Michael Adler <michael.adler@siemens.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/1] USB: serial: cp210x: add SCALANCE LPE-9000 device id
-Message-ID: <Y8A9TWhDEN2pm42Q@hovoldconsulting.com>
-References: <20230103134850.53229-1-michael.adler@siemens.com>
- <20230103134850.53229-2-michael.adler@siemens.com>
+        b=hZ+Jedez7BxP2mTRuDnQdP3mNtC/bxyFrDTbOs66BKDtb6MwUmi1QCmZ+/laKH260
+         2/JyF7uV6SVzRFqfw/HJZetMmMYbOSZNw268G3b5aD04QYktTCuQG2RYt/Li46Dpv6
+         UiX9zb5HOUS0THNE9/o91Nb3CDUDdGcKrKyFK0nl40L1bOQ1kVViUUHwcOdH3NvwRn
+         J0R1KG1ddm8Z5OCdcXuK9OqijZZLDQ58mrhJixS0FXdw+DZ/byVAphbfNYIcMIoQbi
+         HCaKPOUKzZt5yjyBfltLFEM1q/O5FGXuzDlcDtfgd1PqqnW9NpMao33E5SZctbAV5E
+         JkyDRQjNnkirw==
+Date:   Thu, 12 Jan 2023 22:53:34 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        jonathanh@nvidia.com, thierry.reding@gmail.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
+        jckuo@nvidia.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 10/13] phy: tegra: xusb: Disable trk clk when not in
+ use
+Message-ID: <Y8BCFhDuy1gzFrX6@matsya>
+References: <20221114124053.1873316-1-waynec@nvidia.com>
+ <20221114124053.1873316-11-waynec@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103134850.53229-2-michael.adler@siemens.com>
+In-Reply-To: <20221114124053.1873316-11-waynec@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,12 +61,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 02:48:50PM +0100, Michael Adler wrote:
-> Added the USB serial console device ID for Siemens SCALANCE LPE-9000
-> which have a USB port for their serial console.
+On 14-11-22, 20:40, Wayne Chang wrote:
+> Pad tracking is a one-time calibration for Tegra186 and Tegra194.
+> Clk should be disabled after calibration.
 > 
-> Signed-off-by: Michael Adler <michael.adler@siemens.com>
+> Disable clk after calibration.
+> While at it add 100us delay for HW recording the calibration value.
 
-Applied, thanks!
+Applied, thanks
 
-Johan
+-- 
+~Vinod
