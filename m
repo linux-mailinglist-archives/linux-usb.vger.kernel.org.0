@@ -2,48 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E05667E4C
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 19:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B46668351
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 21:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240532AbjALSnR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Jan 2023 13:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S232677AbjALUHd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Jan 2023 15:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbjALSmm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 13:42:42 -0500
+        with ESMTP id S241389AbjALUDw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 15:03:52 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986327825F
-        for <linux-usb@vger.kernel.org>; Thu, 12 Jan 2023 10:15:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4252713E2A;
+        Thu, 12 Jan 2023 12:01:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6647AB81F02
-        for <linux-usb@vger.kernel.org>; Thu, 12 Jan 2023 18:15:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F433C433D2;
-        Thu, 12 Jan 2023 18:15:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0FBDB81E62;
+        Thu, 12 Jan 2023 20:01:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28061C433D2;
+        Thu, 12 Jan 2023 20:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673547323;
-        bh=qPDSt8i6uFp2NJYu2QUTYE6IloLYkwRsTgE9Cu+vYVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YBkQZ1TpWGHdwX+KRY/mhEu4C9Cy23MjpcZZeW4e5cSLr/x9f+cY7UAIYPBuptR7E
-         Gs7bpZUq/ZsHaoX3YAClVcCF6gJyaj1KKe9HHEuTD6qPcOgpBOxtkSb1BBI66EPsb7
-         OkbCDWhC/dTXaXn7KZ6i8ynRyo1FsOWqGSJWn/tImp75VBxqMzHqSalQAeTRfGiUyK
-         MxKB5cfKhfUI30msSrFiUicFGJoBlIHxelBfWlextyPGsddbIeCLeq9o0iDkKc5Nmt
-         o4SClrgE8sQB5MVOWKFds0JVNgKsIx+MS52yxNDZ3OBSVQ30CZMb+B6sQuu6eEkrgk
-         fcw00hwQ8TpYw==
-Date:   Thu, 12 Jan 2023 23:44:47 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Shang XiaoJing <shangxiaojing@huawei.com>
-Cc:     vincent.sunplus@gmail.com, kishon@ti.com,
-        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH] phy: usb: sunplus: Fix potential null-ptr-deref in
- sp_usb_phy_probe()
-Message-ID: <Y8BOF2hrH+dJDBYg@matsya>
-References: <20221125021222.25687-1-shangxiaojing@huawei.com>
+        s=k20201202; t=1673553688;
+        bh=DjplknG/Og42vIVzT/q7FbntQdQMbrnKJqFFsTyhjNM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=EUafdQGi6kPVntwFcsX8dQ++eMfDpAt4hRufXGYp4rn3498p9O5an8Dtzb32f8VZO
+         /0dwxqLx9EiZWyrofGYjXdGydKTREAjzdQvusJ0Ow7D4V0fv83WO6VIMOVK93JIW2S
+         WKNFKVIBv7VwC+kTD5h1WgF5etFBp2YPn8S3ZXmT1Seav9nsmaQ1vhNBslaNNmcYRn
+         zsCLB4TmasZgZxWFa1UpanGfaUnDdJStrP+pk1HardQUH3NiBxgoCCXTezH0ic2ZBw
+         6otuSPV9m9aONvZu3dzL7IfHqeZgMZCL4VALktP1HibdXNi78cOSWjN0jogQQsvptF
+         31XhLFJQie5QQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, stern@rowland.harvard.edu,
+        alexandre.belloni@bootlin.com, brgl@bgdev.pl,
+        damien.lemoal@opensource.wdc.com, dmitry.torokhov@gmail.com,
+        linux@dominikbrodowski.net, balbi@kernel.org,
+        gregkh@linuxfoundation.org, deller@gmx.de, perex@perex.cz,
+        jingoohan1@gmail.com, lee@kernel.org, kernel@wantstofly.org,
+        lgirdwood@gmail.com, linus.walleij@linaro.org,
+        marek.vasut@gmail.com, mkpetch@internode.on.net,
+        miquel.raynal@bootlin.com, lost.distance@yahoo.com,
+        philipp.zabel@gmail.com, linux@armlinux.org.uk, sre@kernel.org,
+        slapin@ossfans.org, s.shtylyov@omp.ru, sudipm.mukherjee@gmail.com,
+        tiwai@suse.com, ulf.hansson@linaro.org, vigneshr@ti.com,
+        viresh.kumar@linaro.org, wsa+renesas@sang-engineering.com,
+        linux-pm@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
+References: <20230105134622.254560-1-arnd@kernel.org>
+Subject: Re: (subset) [PATCH v2 00/27] ARM: pxa: remove all unused boards&drivers
+Message-Id: <167355367885.2500964.3629822486060649314.b4-ty@kernel.org>
+Date:   Thu, 12 Jan 2023 20:01:18 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125021222.25687-1-shangxiaojing@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-8b3d1
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,13 +75,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25-11-22, 10:12, Shang XiaoJing wrote:
-> sp_usb_phy_probe() will call platform_get_resource_byname() that may fail
-> and return NULL. devm_ioremap() will use usbphy->moon4_res_mem->start as
-> input, which may causes null-ptr-deref. Check the ret value of
-> platform_get_resource_byname() to avoid the null-ptr-deref.
+On Thu, 05 Jan 2023 14:45:55 +0100, Arnd Bergmann wrote:
+> Most of the legacy PXA board files were marked as unused in linux-5.19 and
+> can get removed in linux-6.3. There is support for pxa250/pxa270/pxa300
+> using devicetree already, which supports a number of boards, but progress
+> on converting the remaining ones has stalled over the past few years.
+> 
+> The two boards that are left in the tree for now are the three 'sharpsl'
+> variants (spitz/akita/borzoi) and the 'gumstix' family of machines.
+> Both of these are supported by qemu, which can be helpful for completing
+> the DT conversion.
+> 
+> [...]
 
-Applied, thanks
+Applied to
 
--- 
-~Vinod
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[14/27] ASoC: PXA: make SND_PXA2XX_SOC_AC97 user-selectable
+        commit: 5eab9265759e2fb042aa452931c3d06ab7ab8dae
+[15/27] ASoC: pxa: remove unused board support
+        (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
