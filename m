@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23548667AAC
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 17:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030AF667AD2
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 17:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbjALQXD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Jan 2023 11:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S239619AbjALQaV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Jan 2023 11:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjALQWX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 11:22:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB8E55B0;
-        Thu, 12 Jan 2023 08:19:35 -0800 (PST)
+        with ESMTP id S239134AbjALQ3i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 11:29:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8A5C7;
+        Thu, 12 Jan 2023 08:28:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE76A62071;
-        Thu, 12 Jan 2023 16:19:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58166C433EF;
-        Thu, 12 Jan 2023 16:19:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E28862098;
+        Thu, 12 Jan 2023 16:28:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE0DC433EF;
+        Thu, 12 Jan 2023 16:28:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673540374;
-        bh=KIhE0X/TCSZ5yljv2IhM8/pMTZ0UticyVsF8g70H148=;
+        s=k20201202; t=1673540912;
+        bh=mgGlQQkkF/t6/ak4py3g5m7hSWgslBssdBClAa1/QXA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lLMVgh0Qy8MTdtsLGUGUgtTJ5xr/F5yp7nJdu0pKLXw3oAEYRAsoQq9BxUmi8VTIM
-         74FAK81RdQ/jaiNhYcgHtWBGY9hssnYq9x/1I/8Uw2wdpkQzYxHUv2QskitQeYzu8l
-         UgT5qh/2WOQ0mLBbqtfxDgDgBWlaWqFj5dzOZrpLHrb10CfO2enHMo3eMaVn6yBz5q
-         RMaj+sntLqdwz5Z4dNoG+1jux4M0BBnAy1e3QIL7Mvqi3iAGbdesXTLKlMbBLuAgw7
-         gxTuilJFD0et/FW24g0gL6BFgq2BOKh5vJmBE3l+f+Fwx/UDMBtSNm8dcmPidbYSgT
-         E4hnVu0hwubHA==
+        b=Ohcq9U27rhWzab5QejLSfxkHl4i3R1RavkqVjlrpGeftAByssGHJO7IcclMj0eymk
+         NFi8i2F85+2bNtm21ARdqXzOxPmF/bX6qZhUD63pRUqb7ggpX4RuMkupSyEg8jcwS2
+         6ps3xsS6oybgZHWRYvWJzlyChdoHQ4KHQtCXmEVzvjyTJlUnt9CN/JBwzMTO3rFx1a
+         YgtBnNcXsDlBk2rAnn9eZZpOWpOZ3kfE0de2dOXp3kpCrRSB4EV7kh/w30FN7dcF+h
+         A7dxECyqGxWuUu8ozutNjAceSvd4djFPvbFOw1N/v11Opy19otS5hZpK/0q6+DBe5s
+         NeWh9HNAOi7Ww==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1pG0In-0003Nw-34; Thu, 12 Jan 2023 17:19:41 +0100
-Date:   Thu, 12 Jan 2023 17:19:41 +0100
+        id 1pG0RU-0003YK-8l; Thu, 12 Jan 2023 17:28:40 +0100
+Date:   Thu, 12 Jan 2023 17:28:40 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Duke =?utf-8?B?WGluKOi+m+WuieaWhyk=?= <duke_xinanwen@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jerry.meng@quectel.com,
-        duke.xin@quectel.com
-Subject: Re: [PATCH] USB: serial: option: add Quectel EM05CN modem
-Message-ID: <Y8AzHUc4R9M/mK2L@hovoldconsulting.com>
-References: <20221214043546.10339-1-duke_xinanwen@163.com>
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     bjorn@mork.no, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Matthew Garrett <mgarrett@aurora.tech>
+Subject: Re: [PATCH V2 1/3] USB: serial: option: Add generic MDM9207
+ configurations
+Message-ID: <Y8A1OCqtqdSVQPf9@hovoldconsulting.com>
+References: <20221226234751.444917-1-mjg59@srcf.ucam.org>
+ <20221226234751.444917-2-mjg59@srcf.ucam.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221214043546.10339-1-duke_xinanwen@163.com>
+In-Reply-To: <20221226234751.444917-2-mjg59@srcf.ucam.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,74 +57,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 08:35:46PM -0800, Duke Xin(辛安文) wrote:
-> Add support for the following Quectel EM05CN composition:
-> 
-> 0x0312: AT + MBIM + DIAG + NMEA + MODEM
-> 
-> usb-devices output:
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0312 Rev= 3.18
-> S:  Manufacturer=Quectel
-> S:  Product=Quectel EM05-CN
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 1 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 2 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 2 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: Duke Xin(辛安文) <duke_xinanwen@163.com>
+On Mon, Dec 26, 2022 at 03:47:49PM -0800, Matthew Garrett wrote:
+> The Orbic Speed RC400L presents as a generic MDM9207 device that supports
+> multiple configurations. Add support for the two that expose a set of serial
+> ports.
+
+Would you mind including the output of usb-devices for this device here
+for completeness?
+
+> Signed-off-by: Matthew Garrett <mgarrett@aurora.tech>
 > ---
->  drivers/usb/serial/option.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/usb/serial/option.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index dee79c7d82d5..a35842be0ca0 100644
+> index dee79c7d82d5..5025810db8c9 100644
 > --- a/drivers/usb/serial/option.c
 > +++ b/drivers/usb/serial/option.c
-> @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
->  #define QUECTEL_PRODUCT_EM05G			0x030a
->  #define QUECTEL_PRODUCT_EM060K			0x030b
->  #define QUECTEL_PRODUCT_EM05G_SG		0x0311
-> +#define QUECTEL_PRODUCT_EM05CN                0x0312
+> @@ -1119,6 +1119,12 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x0023)}, /* ONYX 3G device */
+>  	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x9000), /* SIMCom SIM5218 */
+>  	  .driver_info = NCTRL(0) | NCTRL(1) | NCTRL(2) | NCTRL(3) | RSVD(4) },
+> +	/* Qualcomm MDM9207 - 0: DIAG, 1: modem, 2: AT, 3: NMEA, 4: adb, 5: QMI */
 
-Please use tabs for indenting the values and make sure they line up with
-the surrounding ones.
+We typically just include the port layout in the commit message (along
+with usb-devices output). Then you can move the device comment to the
+end of the USB_DEVICE() line (cf. ONYX 3G device above).
 
->  #define QUECTEL_PRODUCT_EM12			0x0512
->  #define QUECTEL_PRODUCT_RM500Q			0x0800
->  #define QUECTEL_PRODUCT_RM520N			0x0801
-> @@ -1163,6 +1164,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(6) | ZLP },
->  	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_SG, 0xff),
->  	  .driver_info = RSVD(6) | ZLP },
-> +	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05CN, 0xff),
-> +	  .driver_info = RSVD(6) | ZLP },
-
-Based on the usb-devices output above you have no interface #6 so this
-should not be needed, right?
-
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
+> +	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0xf601),
+> +	  .driver_info = RSVD(4) | RSVD(5) },
+> +	/* Qualcomm MDM9207 - 0,1: RNDIS, 2: DIAG, 3: modem, 4: AT, 5: NMEA, 6: adb */
+> +	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0xf622),
+> +	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+>  	/* Quectel products using Qualcomm vendor ID */
+>  	{ USB_DEVICE(QUALCOMM_VENDOR_ID, QUECTEL_PRODUCT_UC15)},
+>  	{ USB_DEVICE(QUALCOMM_VENDOR_ID, QUECTEL_PRODUCT_UC20),
 
 Johan
