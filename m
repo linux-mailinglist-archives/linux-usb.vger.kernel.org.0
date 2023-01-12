@@ -2,106 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83E0667D56
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 19:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0085E667D67
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 19:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjALSDx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Jan 2023 13:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S240334AbjALSFH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Jan 2023 13:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240172AbjALSCg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 13:02:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFA65277F
-        for <linux-usb@vger.kernel.org>; Thu, 12 Jan 2023 09:25:55 -0800 (PST)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1pG1Kr-0000MD-Uv; Thu, 12 Jan 2023 18:25:54 +0100
-Message-ID: <c7c34f0c-5403-c85d-f092-09b0ca5ae9d2@pengutronix.de>
-Date:   Thu, 12 Jan 2023 18:25:53 +0100
+        with ESMTP id S240260AbjALSDm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 13:03:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833075D6B1;
+        Thu, 12 Jan 2023 09:28:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FB9B620B9;
+        Thu, 12 Jan 2023 17:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4AACC433EF;
+        Thu, 12 Jan 2023 17:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673544481;
+        bh=wFw13Nu3ncr/oEbKb/ffo480FdbGpZHX50m/K4RKsJ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=otwY419mR0l7/xe7g8iyDAjV/R9ilQUPc/X2xlbE+X9bFvOR90xTdup+DBJXKDNUd
+         I9gH4MqF7VdzcHLhaFwa5jBUZp9tE4EdyXgMZ5zpatnevh2kTrifK1EJgdze3suCNC
+         MA5tspzwWjx+wQ7thH0xho8y7mwGUHyrFdj+/cPg1YhxU+j16MrC9n9b0IbK97mQYi
+         7Dym9tTFXk4jZlqpjqMWfmvxgD4x86St7rFP/jdjt64qLSUm2IOCfQbtcPYUNmYaVx
+         Wr0qFeOyg5HRyqNCofeEGGfIaZgIQWae7wZfUpsa7YFeJEvOgAGCP655AgDDt6l4Vm
+         QILylIPLnNwJA==
+Date:   Thu, 12 Jan 2023 22:57:57 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
+        waynec@nvidia.com
+Subject: Re: [PATCH V6 4/6] phy: tegra: xusb: Disable trk clk when not in use
+Message-ID: <Y8BDHVIeKJjVcLng@matsya>
+References: <20230111110450.24617-1-jonathanh@nvidia.com>
+ <20230111110450.24617-5-jonathanh@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] usb: phy: generic: make vcc regulator optional
-Content-Language: en-US
-To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-References: <20221012132754.292151-1-s.hauer@pengutronix.de>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20221012132754.292151-1-s.hauer@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111110450.24617-5-jonathanh@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12.10.22 15:27, Sascha Hauer wrote:
-> phy-generic uses the existance of the property "vcc-supply" to see if a
-> regulator is optional or not. Use devm_regulator_get_optional() instead
-> which exists for this purpose. Using devm_regulator_get_optional()
-> avoids "supply vcc not found, using dummy regulator" messages.
-
-Gentle ping.
-
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  drivers/usb/phy/phy-generic.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
+On 11-01-23, 11:04, Jon Hunter wrote:
+> From: Wayne Chang <waynec@nvidia.com>
 > 
-> diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
-> index 34b9f81401871..92d3e067067c6 100644
-> --- a/drivers/usb/phy/phy-generic.c
-> +++ b/drivers/usb/phy/phy-generic.c
-> @@ -209,7 +209,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
->  	int err = 0;
->  
->  	u32 clk_rate = 0;
-> -	bool needs_vcc = false, needs_clk = false;
-> +	bool needs_clk = false;
->  
->  	if (dev->of_node) {
->  		struct device_node *node = dev->of_node;
-> @@ -217,7 +217,6 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
->  		if (of_property_read_u32(node, "clock-frequency", &clk_rate))
->  			clk_rate = 0;
->  
-> -		needs_vcc = of_property_read_bool(node, "vcc-supply");
->  		needs_clk = of_property_read_bool(node, "clocks");
->  	}
->  	nop->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
-> @@ -260,13 +259,10 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
->  		}
->  	}
->  
-> -	nop->vcc = devm_regulator_get(dev, "vcc");
-> -	if (IS_ERR(nop->vcc)) {
-> -		dev_dbg(dev, "Error getting vcc regulator: %ld\n",
-> -					PTR_ERR(nop->vcc));
-> -		if (needs_vcc)
-> -			return -EPROBE_DEFER;
-> -	}
-> +	nop->vcc = devm_regulator_get_optional(dev, "vcc");
-> +	if (IS_ERR(nop->vcc) && PTR_ERR(nop->vcc) != -ENODEV)
-> +		return dev_err_probe(dev, PTR_ERR(nop->vcc),
-> +				     "could not get vcc regulator\n");
->  
->  	nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
->  	if (PTR_ERR(nop->vbus_draw) == -ENODEV)
+> Pad tracking is a one-time calibration for Tegra186 and Tegra194.
+> Clk should be disabled after calibration.
+> 
+> Disable clk after calibration.
+> While at it add 100us delay for HW recording the calibration value.
+
+I have applied these two, somehow replied to an older thread..
+
+Sorry for the noise
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
+~Vinod
