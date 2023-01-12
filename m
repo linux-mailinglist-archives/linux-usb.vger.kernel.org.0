@@ -2,107 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886E166731A
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 14:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD8A667370
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jan 2023 14:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjALNYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Jan 2023 08:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
+        id S234671AbjALNmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Jan 2023 08:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjALNYj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 08:24:39 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E903AAB1;
-        Thu, 12 Jan 2023 05:24:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673529878; x=1705065878;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0+lriPcXh6VMXAhZsuIZVfsY1OyEBUI9UJKk/Tq6maM=;
-  b=DGnNOZtHH+cf/gE/KmylyYYQsztA3dt98TugtI9iux0BiIDliHFUvWaF
-   5zaHWOuydiiESJdjCHr6oxPCzgP+vse+kp4ZHno9lmfGVlhUKU8RmMS6b
-   9hieZasVHDm1boSIEXoYLLZdKICKNbdUEqpdzSoEkGCxV6Gjid4rkGLmt
-   KThiZbq4C0QMqbI3uyA5cjg20pMjXC0sd5b5LPg/D68+l4nbjvnAh2aEG
-   FaH2INZlAHq+2sBmIEN7z5H2CuZN/DUCA29pvqEJ/aBcnY6AUl2DF1W2/
-   wp9wQXUTwrPagylViEYPTF2X8LFRL7hJkrG9apduo03RuUFDYUMEVTWfH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="311525713"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="311525713"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 05:24:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="800208558"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="800208558"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Jan 2023 05:24:34 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Jan 2023 15:24:33 +0200
-Date:   Thu, 12 Jan 2023 15:24:33 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-Subject: Re: [PATCH 3/3] usb: typec: altmodes/displayport: Use proper macro
- for pin assignment check
-Message-ID: <Y8AKEZzbxyYaYjg1@kuha.fi.intel.com>
-References: <20230111020546.3384569-1-pmalani@chromium.org>
- <20230111020546.3384569-3-pmalani@chromium.org>
+        with ESMTP id S233993AbjALNmK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Jan 2023 08:42:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD5B4915D;
+        Thu, 12 Jan 2023 05:40:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09B17B81E6C;
+        Thu, 12 Jan 2023 13:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8F95DC433F0;
+        Thu, 12 Jan 2023 13:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673530816;
+        bh=Qe/jbMn0nBHOwzU6t6oqDN4NnfrQ1M68uu6858CdlOY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WPpNA4xWaKGmpdyjnmOd9lTGO24iATjUrPc+5y+STNAqReI1MdPcGTrA48IeiF5cc
+         tHwGf4/cPGolj2DGyktxmJF0eyhrSi2L8/nNTkr2bczI3G/bPokfqyN1CHqyXWV2NS
+         OrGsRmu7yAxHBownRukIKYaHHCDOEKsoNT8bhK5IVf4EFlxMrOjkD5llA4KfqDK0Lc
+         WD868a2qMkk69Ry+F/G05bfVzVbxh0WHMseUPcEXEwced+fc+AFaL1mV0yZtpFsEhj
+         6+f6gzinwdFzSak8hQJjivUTFWVi5cm70gqrOAVe2VH1J9o9vlCn8lzbHgpcwg/IYy
+         HzMmmDemtjBcQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E2AAC395D4;
+        Thu, 12 Jan 2023 13:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111020546.3384569-3-pmalani@chromium.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] r8152: add vendor/device ID pair for Microsoft
+ Devkit
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167353081644.12757.14928786482494775013.git-patchwork-notify@kernel.org>
+Date:   Thu, 12 Jan 2023 13:40:16 +0000
+References: <20230111133228.190801-1-andre.przywara@arm.com>
+In-Reply-To: <20230111133228.190801-1-andre.przywara@arm.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 02:05:43AM +0000, Prashant Malani wrote:
-> While looking at the DP configuration VDO to determine the peripheral
-> configuration, the spec (Table 8-5: DisplayPort Configurations, VESA
-> DisplayPort Alt Mode Standard v2.0) lists the options as "UFP_U as a DP
-> Source/Sink Device".
-> 
-> So, use the correct macro while performing this check. Effectively it's
-> the same as the existing code, but the proposed macro describes the
-> state a little better.
-> 
-> No functional changes introduced.
-> 
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+Hello:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 11 Jan 2023 13:32:28 +0000 you wrote:
+> The Microsoft Devkit 2023 is a an ARM64 based machine featuring a
+> Realtek 8153 USB3.0-to-GBit Ethernet adapter. As in their other
+> machines, Microsoft uses a custom USB device ID.
 > 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index c0d65c93cefe..746bfbf3d557 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -426,7 +426,7 @@ static const char * const pin_assignments[] = {
->   */
->  static u8 get_current_pin_assignments(struct dp_altmode *dp)
->  {
-> -	if (DP_CONF_CURRENTLY(dp->data.conf) == DP_CONF_DFP_D)
-> +	if (DP_CONF_CURRENTLY(dp->data.conf) == DP_CONF_UFP_U_AS_DFP_D)
->  		return DP_CAP_PIN_ASSIGN_DFP_D(dp->alt->vdo);
->  	else
->  		return DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo);
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
+> Add the respective ID values to the driver. This makes Ethernet work on
+> the MS Devkit device. The chip has been visually confirmed to be a
+> RTL8153.
+> 
+> [...]
 
+Here is the summary with links:
+  - [net-next] r8152: add vendor/device ID pair for Microsoft Devkit
+    https://git.kernel.org/netdev/net/c/be53771c87f4
+
+You are awesome, thank you!
 -- 
-heikki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
