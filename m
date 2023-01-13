@@ -2,89 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3117669ABD
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 15:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEEB669C02
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 16:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjAMOmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Jan 2023 09:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
+        id S229602AbjAMP0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Jan 2023 10:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjAMOmN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 09:42:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FB110B65
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 06:33:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAB2BB820C9
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 14:33:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BE61C433F1
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 14:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673620383;
-        bh=6qTYs8Bg0gZ4WlY29OyjFHHFkvukMQLfnWQuy0dj/sU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=YL0FYSeA/G2Mun1sP//CXaE66RQPUKbgjLSTz6ZOqMI9UvcpmA/C+lHSPv2ZSq9N6
-         S8bbdaBfSmp+t/cM9W2l7oVFowPKgnW4jhc9A6vpBtrldTzbuFucaQsTuiP2kewriH
-         fuyo/Pby2PWf3slcrlqb7MVtGqUouZxdFQISCGxbzL2L2+aETR3+Y6bWyphVjsqU+L
-         zogGiXnZsmI+sFsr6HmFVu771gvAghhaZ2BNRzq7KUTEBlLakTQT5BeH5ni8i8buVT
-         xN8hzcpYlU5xLvY+tO8DwyTQ6sfAQF3eObWrHjj6tshCPF2WTy0XT3paoGqnoc/+Uv
-         +rPzJnf1q9v8A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 67AEDC43143; Fri, 13 Jan 2023 14:33:03 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
- CometLake platform
-Date:   Fri, 13 Jan 2023 14:33:03 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-216728-208809-aZd0TEX8QB@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
-References: <bug-216728-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230071AbjAMP0P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 10:26:15 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288F47278D;
+        Fri, 13 Jan 2023 07:18:56 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id n8so17958266oih.0;
+        Fri, 13 Jan 2023 07:18:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ieDDnBbNB9JJsaMwpNzXJlERKk1wwpqLtOrBhJRfGpo=;
+        b=IZra8qjrcHr3eLbPGF9QPAUCfQ/039Fts8ql1H2MrriLwt0C+pWfFHzqSsotqYsAkf
+         ZGo295nFFgvvEGxogSV2+JT7dob+NPjhG6hSRVsSZStYXkIyyc7dRVaEMIjGOPDCY9UK
+         O66HdNI62tmqqgNk4dw9CPXy91TGjtJr2fqRjuM7anMwV5/cU60RP24hQt89WtTVNqD6
+         qm59rGQO/Vh2r/WPj3KKafL7EkljDSCZrJJCFgAedT0SCouSgdjtS6bWTso0aNsabsX3
+         OemNwBFGDatZgl2lLsDvvKLMAj/NRVfdqPyDzT0KS1DNd7eaaeYFdj7LiY8ZZyIznUot
+         XpvQ==
+X-Gm-Message-State: AFqh2kpj4Uo7mbYOiA4tQZeNtkdhNKVxyY6iHmSGExsuQsB6IR7DIX8d
+        9wfsKuz4lP2bsRMc5dSsNQ==
+X-Google-Smtp-Source: AMrXdXvKjUuXqtnMP8HRUWF6KklExF2oSAG2rWu9CjnEqT3LUV2kOArvIgWmH2DzIBq+esFLR8R2ag==
+X-Received: by 2002:a05:6808:996:b0:364:c003:e1ba with SMTP id a22-20020a056808099600b00364c003e1bamr517132oic.46.1673623135307;
+        Fri, 13 Jan 2023 07:18:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w11-20020a0568080d4b00b0035c422bb303sm9298016oik.19.2023.01.13.07.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 07:18:54 -0800 (PST)
+Received: (nullmailer pid 2206759 invoked by uid 1000);
+        Fri, 13 Jan 2023 15:18:53 -0000
+Date:   Fri, 13 Jan 2023 09:18:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: remove arch/sh
+Message-ID: <20230113151853.GA2184281-robh@kernel.org>
+References: <20230113062339.1909087-1-hch@lst.de>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113062339.1909087-1-hch@lst.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
+On Fri, Jan 13, 2023 at 07:23:17AM +0100, Christoph Hellwig wrote:
+> Hi all,
+> 
+> arch/sh has been a long drag because it supports a lot of SOCs, and most
+> of them haven't even been converted to device tree infrastructure.  These
+> SOCs are generally obsolete as well, and all of the support has been barely
+> maintained for almost 10 years, and not at all for more than 1 year.
+> 
+> Drop arch/sh and everything that depends on it.
+> 
+> Diffstat:
+>  Documentation/sh/booting.rst                             |   12 
+>  Documentation/sh/features.rst                            |    3 
+>  Documentation/sh/index.rst                               |   56 
+>  Documentation/sh/new-machine.rst                         |  277 -
+>  Documentation/sh/register-banks.rst                      |   40 
 
---- Comment #22 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Created attachment 303594
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303594&action=3Dedit
-Use pci_dev_wait() to check if the xHCI is reponsive after the link is
-activated
+Can you please also remove:
 
-Can you try the attached patch? It seems that sometimes it takes longer than
-the additional 100ms (up to seconds) for the xHCI to become responsive after
-the PCIe link has been trained. This fixes the issue on the Dell Come Lake
-based system at least.
+Documentation/devicetree/bindings/mtd/flctl-nand.txt
+Documentation/devicetree/bindings/interrupt-controller/jcore,aic.txt
+Documentation/devicetree/bindings/spi/jcore,spi.txt
+Documentation/devicetree/bindings/timer/jcore,pit.txt
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Rob
