@@ -2,126 +2,415 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588526693E2
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 11:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EAC669630
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 12:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbjAMKSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Jan 2023 05:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
+        id S241163AbjAMLyI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Jan 2023 06:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240196AbjAMKRg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 05:17:36 -0500
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340E7183A1;
-        Fri, 13 Jan 2023 02:17:30 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30DAGrIm1867629
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 13 Jan 2023 10:16:54 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30DAGlEi020267
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 13 Jan 2023 11:16:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1673605008; bh=UwgL4KMt3pjnoZk+tNr+CMFYAZq3Cr7X+xqZUA7Ufo0=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=SeoVtk2B2QVOHm8ZcMEo7om8ODX+yJXE7uRF+ratRhcaUxrRmWqUhHUHucsKKZZ8d
-         Z3QTE59AJzj80KDct7UX7pmOmPsnz371cimLbixMvl29ArvU5/LSZ9ZHBR1piPATpn
-         hIJtdH8o5mQFKy/V1NmtB+nUb5yGWghn3Z5ZybWY=
-Received: (nullmailer pid 210628 invoked by uid 1000);
-        Fri, 13 Jan 2023 10:16:47 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Greg KH <greg@kroah.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] r8152; preserve device list format
-Organization: m
-References: <87k01s6tkr.fsf@miraculix.mork.no>
-        <20230112100100.180708-1-bjorn@mork.no> <Y7/dBXrI2QkiBFlW@kroah.com>
-        <87cz7k6ooc.fsf@miraculix.mork.no> <878ri86o6j.fsf@miraculix.mork.no>
-        <Y7/ir/zcJQUVec72@kroah.com>
-Date:   Fri, 13 Jan 2023 11:16:47 +0100
-In-Reply-To: <Y7/ir/zcJQUVec72@kroah.com> (Greg KH's message of "Thu, 12 Jan
-        2023 11:36:31 +0100")
-Message-ID: <874jsu68og.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S239906AbjAMLwb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 06:52:31 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2679248287
+        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 03:50:26 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso24166504pjf.1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 03:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rFVgmIxrk90lFoGOEgFIcDPxsYDGEz86NTdN/MqEtyo=;
+        b=JzTEkcGLA1mIEarXE1ZY5wQgCcFZWI1nv4isKxRQRxq1jL1YylOUINiCYtACUPYXGG
+         m06aiSvNrQP6lfWXHn2o6Xj3x5kNTQT0e/NSB5xbCjpM90GKx4Xmbcn0vkjyJu1Dm5JZ
+         aDKVi1Seq0JwhR78QDA8HKuWsDhatGXxtxLNlulHzYfwzE3fjQ0wdGsp/5mao6GAd7E8
+         xVm7W0YUKsNmXk1zIth6NWlRHArMhv/oatDDXOU+Rj5RXLCx4azLxyDbdvU2P/s4CHJ4
+         0mWINPLff0/BL/qYYQwWE1fDevbXlS/lGLhq0IY2+WbPJSs8kMZg6sXBfULTs7uE0L/0
+         ME9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rFVgmIxrk90lFoGOEgFIcDPxsYDGEz86NTdN/MqEtyo=;
+        b=5kaY6LUld6q/DHtd5F6MeV/iRO3gkr3K2pLMhop0kJNrjy3LhsG+EKRRPlpCSzp2nN
+         E5xajekzN+QEFfRFbrJcgGxFctpBzA4rW11tWZqo3lgB+Oxx8AExzsPBOWOOQcUo+jim
+         N5oa6SDkl/ZeHrxtS2Vwxh+f/i2xkEER4HalTycjZp2kXu4iA9GwOb/KV36y1Ppbl84y
+         R9a14PBsh/l7K1en6sduHhmOeFAW/Vnh6TtwDTDIARXjY27MPMPqPZy02BkzJ3z85hyV
+         xL3aRxF3jWR8D5/ro+C3tbwGaCK4EZevVM+DKtzPVTDl6ps74YwoomJznhKZJ2s81KBv
+         9x6g==
+X-Gm-Message-State: AFqh2kpzJTeL8nPnW4/0/mh+QlIAbm8829Oetv2BZDwUeUMIMsakcWLQ
+        i8KuDw5CEUEpdNPwEgol6EqBwcHyl4h/BHLiAlSqTA==
+X-Google-Smtp-Source: AMrXdXslNT0rcFozWtTrkBiy6JjJ0BfYiTZwNT6w5uemM3FDcYmR6mYw4qWxce+goOSgxUjRwE9wqRT3vqMgfUVrhMk=
+X-Received: by 2002:a17:90a:7d01:b0:228:edb0:1493 with SMTP id
+ g1-20020a17090a7d0100b00228edb01493mr946253pjl.164.1673610625407; Fri, 13 Jan
+ 2023 03:50:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com> <20230111142331.34518-12-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20230111142331.34518-12-ilpo.jarvinen@linux.intel.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 13 Jan 2023 12:49:48 +0100
+Message-ID: <CAPDyKFod1xTqrhr7NXpJUr1-2ymd-3zP9HcHD8daafG_tpnADQ@mail.gmail.com>
+Subject: Re: [PATCH v3 11/13] tty/serial: Call ->dtr_rts() parameter active consistently
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?Q?Samuel_Iglesias_Gons=C3=A1lvez?= <siglesias@igalia.com>,
+        Rodolfo Giometti <giometti@enneenne.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Lin <dtwlin@gmail.com>,
+        Alex Elder <elder@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.7 at canardo
-X-Virus-Status: Clean
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg KH <greg@kroah.com> writes:
-> On Thu, Jan 12, 2023 at 11:29:40AM +0100, Bj=C3=B8rn Mork wrote:
->> Bj=C3=B8rn Mork <bjorn@mork.no> writes:
->> > Greg KH <greg@kroah.com> writes:
->> >
->> >> No need for this, just backport the original change to older kernels =
-and
->> >> all will be fine.
->> >>
->> >> Don't live with stuff you don't want to because of stable kernels,
->> >> that's not how this whole process works at all :)
->> >
->> > OK, thanks.  Will prepare a patch for stable instead then.
->> >
->> > But I guess the original patch is unacceptable for stable as-is? It
->> > changes how Linux react to these devces, and includes a completely new
->> > USB device driver (i.e not interface driver).
->>=20
->> Doh!  I gotta start thinking before I send email.  Will start right
->> after sending this one ;-)
->>=20
->> We cannot backport the device-id table change to stable without taking
->> the rest of the patch. The strategy used by the old driver needs two
->> entries per device ID, which is why the macro was there.
->>=20
->> So the question is: Can commit ec51fbd1b8a2 ("r8152: add USB device
->> driver for config selection") be accepted in stable?
->>=20
->> ( Direct link for convenience since it's not yet in mainline:
->> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/comm=
-it/drivers/net/usb/r8152.c?id=3Dec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
->> )
->>=20
->> This is not within the rules as I read them, but it's your call...
+On Wed, 11 Jan 2023 at 15:24, Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
 >
-> Ah, yeah, that's simple enough, I'd take it if you send it to me :)
+> Convert various parameter names for ->dtr_rts() and related functions
+> from onoff, on, and raise to active.
+>
+> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
-Great!
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
 
-There is no point backporting to anything older than v5.15 since the
-patch depend on significant driver changes between v5.10 and v5.15.  The
-good news is that those changes also modified the macro in question so
-any device ID patch for v5.10 or older will have to be fixed up in any
-case.  So we don't lose anything by ignoring the older longterm kernels
-here.
+Kind regards
+Uffe
 
-IIUC the special netdev stable rules are gone.  But if this is going to
-stable, then I believe it still has to go to "net" first.
-
-David/Jakub - Would you please pick
-
-  ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-  69649ef84053 ("cdc_ether: no need to blacklist any r8152 devices")
-
-from net-next to net?  With a "CC: stable" preferably.  Or do you prefer
-some other solution?
-
-
-
-Bj=C3=B8rn
+> ---
+>  drivers/char/pcmcia/synclink_cs.c | 6 +++---
+>  drivers/mmc/core/sdio_uart.c      | 6 +++---
+>  drivers/staging/greybus/uart.c    | 4 ++--
+>  drivers/tty/amiserial.c           | 4 ++--
+>  drivers/tty/hvc/hvc_console.h     | 2 +-
+>  drivers/tty/hvc/hvc_iucv.c        | 6 +++---
+>  drivers/tty/mxser.c               | 4 ++--
+>  drivers/tty/n_gsm.c               | 4 ++--
+>  drivers/tty/serial/serial_core.c  | 8 ++++----
+>  drivers/tty/synclink_gt.c         | 4 ++--
+>  include/linux/tty_port.h          | 4 ++--
+>  include/linux/usb/serial.h        | 2 +-
+>  12 files changed, 27 insertions(+), 27 deletions(-)
+>
+> diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/sync=
+link_cs.c
+> index 46a0b586d234..1577eba6fe0e 100644
+> --- a/drivers/char/pcmcia/synclink_cs.c
+> +++ b/drivers/char/pcmcia/synclink_cs.c
+> @@ -378,7 +378,7 @@ static void async_mode(MGSLPC_INFO *info);
+>  static void tx_timeout(struct timer_list *t);
+>
+>  static bool carrier_raised(struct tty_port *port);
+> -static void dtr_rts(struct tty_port *port, bool onoff);
+> +static void dtr_rts(struct tty_port *port, bool active);
+>
+>  #if SYNCLINK_GENERIC_HDLC
+>  #define dev_to_port(D) (dev_to_hdlc(D)->priv)
+> @@ -2442,13 +2442,13 @@ static bool carrier_raised(struct tty_port *port)
+>         return info->serial_signals & SerialSignal_DCD;
+>  }
+>
+> -static void dtr_rts(struct tty_port *port, bool onoff)
+> +static void dtr_rts(struct tty_port *port, bool active)
+>  {
+>         MGSLPC_INFO *info =3D container_of(port, MGSLPC_INFO, port);
+>         unsigned long flags;
+>
+>         spin_lock_irqsave(&info->lock, flags);
+> -       if (onoff)
+> +       if (active)
+>                 info->serial_signals |=3D SerialSignal_RTS | SerialSignal=
+_DTR;
+>         else
+>                 info->serial_signals &=3D ~(SerialSignal_RTS | SerialSign=
+al_DTR);
+> diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
+> index c6b4b2b2a4b2..50536fe59f1a 100644
+> --- a/drivers/mmc/core/sdio_uart.c
+> +++ b/drivers/mmc/core/sdio_uart.c
+> @@ -542,20 +542,20 @@ static bool uart_carrier_raised(struct tty_port *tp=
+ort)
+>  /**
+>   *     uart_dtr_rts            -        port helper to set uart signals
+>   *     @tport: tty port to be updated
+> - *     @onoff: set to turn on DTR/RTS
+> + *     @active: set to turn on DTR/RTS
+>   *
+>   *     Called by the tty port helpers when the modem signals need to be
+>   *     adjusted during an open, close and hangup.
+>   */
+>
+> -static void uart_dtr_rts(struct tty_port *tport, bool onoff)
+> +static void uart_dtr_rts(struct tty_port *tport, bool active)
+>  {
+>         struct sdio_uart_port *port =3D
+>                         container_of(tport, struct sdio_uart_port, port);
+>         int ret =3D sdio_uart_claim_func(port);
+>         if (ret)
+>                 return;
+> -       if (!onoff)
+> +       if (!active)
+>                 sdio_uart_clear_mctrl(port, TIOCM_DTR | TIOCM_RTS);
+>         else
+>                 sdio_uart_set_mctrl(port, TIOCM_DTR | TIOCM_RTS);
+> diff --git a/drivers/staging/greybus/uart.c b/drivers/staging/greybus/uar=
+t.c
+> index 92d49740d5a4..20a34599859f 100644
+> --- a/drivers/staging/greybus/uart.c
+> +++ b/drivers/staging/greybus/uart.c
+> @@ -701,7 +701,7 @@ static int gb_tty_ioctl(struct tty_struct *tty, unsig=
+ned int cmd,
+>         return -ENOIOCTLCMD;
+>  }
+>
+> -static void gb_tty_dtr_rts(struct tty_port *port, bool on)
+> +static void gb_tty_dtr_rts(struct tty_port *port, bool active)
+>  {
+>         struct gb_tty *gb_tty;
+>         u8 newctrl;
+> @@ -709,7 +709,7 @@ static void gb_tty_dtr_rts(struct tty_port *port, boo=
+l on)
+>         gb_tty =3D container_of(port, struct gb_tty, port);
+>         newctrl =3D gb_tty->ctrlout;
+>
+> -       if (on)
+> +       if (active)
+>                 newctrl |=3D (GB_UART_CTRL_DTR | GB_UART_CTRL_RTS);
+>         else
+>                 newctrl &=3D ~(GB_UART_CTRL_DTR | GB_UART_CTRL_RTS);
+> diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+> index 29d4c554f6b8..d7515d61659e 100644
+> --- a/drivers/tty/amiserial.c
+> +++ b/drivers/tty/amiserial.c
+> @@ -1459,13 +1459,13 @@ static bool amiga_carrier_raised(struct tty_port =
+*port)
+>         return !(ciab.pra & SER_DCD);
+>  }
+>
+> -static void amiga_dtr_rts(struct tty_port *port, bool raise)
+> +static void amiga_dtr_rts(struct tty_port *port, bool active)
+>  {
+>         struct serial_state *info =3D container_of(port, struct serial_st=
+ate,
+>                         tport);
+>         unsigned long flags;
+>
+> -       if (raise)
+> +       if (active)
+>                 info->MCR |=3D SER_DTR|SER_RTS;
+>         else
+>                 info->MCR &=3D ~(SER_DTR|SER_RTS);
+> diff --git a/drivers/tty/hvc/hvc_console.h b/drivers/tty/hvc/hvc_console.=
+h
+> index 6d3428bf868f..9668f821db01 100644
+> --- a/drivers/tty/hvc/hvc_console.h
+> +++ b/drivers/tty/hvc/hvc_console.h
+> @@ -66,7 +66,7 @@ struct hv_ops {
+>         int (*tiocmset)(struct hvc_struct *hp, unsigned int set, unsigned=
+ int clear);
+>
+>         /* Callbacks to handle tty ports */
+> -       void (*dtr_rts)(struct hvc_struct *hp, bool raise);
+> +       void (*dtr_rts)(struct hvc_struct *hp, bool active);
+>  };
+>
+>  /* Register a vterm and a slot index for use as a console (console_init)=
+ */
+> diff --git a/drivers/tty/hvc/hvc_iucv.c b/drivers/tty/hvc/hvc_iucv.c
+> index fe862a6882d6..543f35ddf523 100644
+> --- a/drivers/tty/hvc/hvc_iucv.c
+> +++ b/drivers/tty/hvc/hvc_iucv.c
+> @@ -658,13 +658,13 @@ static void hvc_iucv_notifier_hangup(struct hvc_str=
+uct *hp, int id)
+>  /**
+>   * hvc_iucv_dtr_rts() - HVC notifier for handling DTR/RTS
+>   * @hp:                Pointer the HVC device (struct hvc_struct)
+> - * @raise:     True to raise or false to lower DTR/RTS lines
+> + * @active:    True to raise or false to lower DTR/RTS lines
+>   *
+>   * This routine notifies the HVC back-end to raise or lower DTR/RTS
+>   * lines.  Raising DTR/RTS is ignored.  Lowering DTR/RTS indicates to
+>   * drop the IUCV connection (similar to hang up the modem).
+>   */
+> -static void hvc_iucv_dtr_rts(struct hvc_struct *hp, bool raise)
+> +static void hvc_iucv_dtr_rts(struct hvc_struct *hp, bool active)
+>  {
+>         struct hvc_iucv_private *priv;
+>         struct iucv_path        *path;
+> @@ -672,7 +672,7 @@ static void hvc_iucv_dtr_rts(struct hvc_struct *hp, b=
+ool raise)
+>         /* Raising the DTR/RTS is ignored as IUCV connections can be
+>          * established at any times.
+>          */
+> -       if (raise)
+> +       if (active)
+>                 return;
+>
+>         priv =3D hvc_iucv_get_private(hp->vtermno);
+> diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+> index d4fb11e39bb1..ef3116e87975 100644
+> --- a/drivers/tty/mxser.c
+> +++ b/drivers/tty/mxser.c
+> @@ -465,7 +465,7 @@ static bool mxser_carrier_raised(struct tty_port *por=
+t)
+>         return inb(mp->ioaddr + UART_MSR) & UART_MSR_DCD;
+>  }
+>
+> -static void mxser_dtr_rts(struct tty_port *port, bool on)
+> +static void mxser_dtr_rts(struct tty_port *port, bool active)
+>  {
+>         struct mxser_port *mp =3D container_of(port, struct mxser_port, p=
+ort);
+>         unsigned long flags;
+> @@ -473,7 +473,7 @@ static void mxser_dtr_rts(struct tty_port *port, bool=
+ on)
+>
+>         spin_lock_irqsave(&mp->slock, flags);
+>         mcr =3D inb(mp->ioaddr + UART_MCR);
+> -       if (on)
+> +       if (active)
+>                 mcr |=3D UART_MCR_DTR | UART_MCR_RTS;
+>         else
+>                 mcr &=3D ~(UART_MCR_DTR | UART_MCR_RTS);
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 8dd0d6441c42..4f29b00f2645 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -3792,11 +3792,11 @@ static bool gsm_carrier_raised(struct tty_port *p=
+ort)
+>         return dlci->modem_rx & TIOCM_CD;
+>  }
+>
+> -static void gsm_dtr_rts(struct tty_port *port, bool onoff)
+> +static void gsm_dtr_rts(struct tty_port *port, bool active)
+>  {
+>         struct gsm_dlci *dlci =3D container_of(port, struct gsm_dlci, por=
+t);
+>         unsigned int modem_tx =3D dlci->modem_tx;
+> -       if (onoff)
+> +       if (active)
+>                 modem_tx |=3D TIOCM_DTR | TIOCM_RTS;
+>         else
+>                 modem_tx &=3D ~(TIOCM_DTR | TIOCM_RTS);
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial=
+_core.c
+> index b8fff667d4f0..da4e4e8a2b50 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -169,9 +169,9 @@ uart_update_mctrl(struct uart_port *port, unsigned in=
+t set, unsigned int clear)
+>  #define uart_set_mctrl(port, set)      uart_update_mctrl(port, set, 0)
+>  #define uart_clear_mctrl(port, clear)  uart_update_mctrl(port, 0, clear)
+>
+> -static void uart_port_dtr_rts(struct uart_port *uport, bool raise)
+> +static void uart_port_dtr_rts(struct uart_port *uport, bool active)
+>  {
+> -       if (raise)
+> +       if (active)
+>                 uart_set_mctrl(uport, TIOCM_DTR | TIOCM_RTS);
+>         else
+>                 uart_clear_mctrl(uport, TIOCM_DTR | TIOCM_RTS);
+> @@ -1885,7 +1885,7 @@ static bool uart_carrier_raised(struct tty_port *po=
+rt)
+>         return mctrl & TIOCM_CAR;
+>  }
+>
+> -static void uart_dtr_rts(struct tty_port *port, bool raise)
+> +static void uart_dtr_rts(struct tty_port *port, bool active)
+>  {
+>         struct uart_state *state =3D container_of(port, struct uart_state=
+, port);
+>         struct uart_port *uport;
+> @@ -1893,7 +1893,7 @@ static void uart_dtr_rts(struct tty_port *port, boo=
+l raise)
+>         uport =3D uart_port_ref(state);
+>         if (!uport)
+>                 return;
+> -       uart_port_dtr_rts(uport, raise);
+> +       uart_port_dtr_rts(uport, active);
+>         uart_port_deref(uport);
+>  }
+>
+> diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+> index 2b786265ce7b..33f258d6fef9 100644
+> --- a/drivers/tty/synclink_gt.c
+> +++ b/drivers/tty/synclink_gt.c
+> @@ -3138,13 +3138,13 @@ static bool carrier_raised(struct tty_port *port)
+>         return info->signals & SerialSignal_DCD;
+>  }
+>
+> -static void dtr_rts(struct tty_port *port, bool on)
+> +static void dtr_rts(struct tty_port *port, bool active)
+>  {
+>         unsigned long flags;
+>         struct slgt_info *info =3D container_of(port, struct slgt_info, p=
+ort);
+>
+>         spin_lock_irqsave(&info->lock,flags);
+> -       if (on)
+> +       if (active)
+>                 info->signals |=3D SerialSignal_RTS | SerialSignal_DTR;
+>         else
+>                 info->signals &=3D ~(SerialSignal_RTS | SerialSignal_DTR)=
+;
+> diff --git a/include/linux/tty_port.h b/include/linux/tty_port.h
+> index c44e489de0ff..edf685a24f7c 100644
+> --- a/include/linux/tty_port.h
+> +++ b/include/linux/tty_port.h
+> @@ -16,7 +16,7 @@ struct tty_struct;
+>  /**
+>   * struct tty_port_operations -- operations on tty_port
+>   * @carrier_raised: return true if the carrier is raised on @port
+> - * @dtr_rts: raise the DTR line if @raise is true, otherwise lower DTR
+> + * @dtr_rts: raise the DTR line if @active is true, otherwise lower DTR
+>   * @shutdown: called when the last close completes or a hangup finishes =
+IFF the
+>   *     port was initialized. Do not use to free resources. Turn off the =
+device
+>   *     only. Called under the port mutex to serialize against @activate =
+and
+> @@ -32,7 +32,7 @@ struct tty_struct;
+>   */
+>  struct tty_port_operations {
+>         bool (*carrier_raised)(struct tty_port *port);
+> -       void (*dtr_rts)(struct tty_port *port, bool raise);
+> +       void (*dtr_rts)(struct tty_port *port, bool active);
+>         void (*shutdown)(struct tty_port *port);
+>         int (*activate)(struct tty_port *port, struct tty_struct *tty);
+>         void (*destruct)(struct tty_port *port);
+> diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
+> index bad343c5e8a7..33afd9f3ebbe 100644
+> --- a/include/linux/usb/serial.h
+> +++ b/include/linux/usb/serial.h
+> @@ -292,7 +292,7 @@ struct usb_serial_driver {
+>                         struct serial_icounter_struct *icount);
+>         /* Called by the tty layer for port level work. There may or may =
+not
+>            be an attached tty at this point */
+> -       void (*dtr_rts)(struct usb_serial_port *port, bool on);
+> +       void (*dtr_rts)(struct usb_serial_port *port, bool active);
+>         bool (*carrier_raised)(struct usb_serial_port *port);
+>         /* Called by the usb serial hooks to allow the user to rework the
+>            termios state */
+> --
+> 2.30.2
+>
