@@ -2,107 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC846668D3E
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 07:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 631DC668E30
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 07:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241242AbjAMG32 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Jan 2023 01:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S233394AbjAMGn4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Jan 2023 01:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240857AbjAMG1P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 01:27:15 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4926B19F;
-        Thu, 12 Jan 2023 22:25:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=V1vQGE3XW96qQp3ejFsm70w3mnOS9+pWBLCZirkv1tk=; b=2+SiOyCvTzvDZZCeuwWrAYwhzj
-        EWAQESOIDtQymDuYM0T7JpVes3xvB7NFWQ+KmJV1uAOpOiRJUBjTMIMZUpzF2ix6MOt0hGo62CWng
-        diwLKN81u+WjRqFmLkwMZ873sIws+XMLCIUxrN4I7r+ZaeFve8swojZ2Nb8EGuKmlXeIEB1nRyph2
-        AGmxrxbCZm5edKIVp4yRI47qeIEa85kNn0gl7iBuYuEaOtP2HtGe1Lkv6xia/XchQLm3DtxOaVah4
-        5sBY0LpYQziGvInjmbVYYVxDsXL3Jm0yMz0PJd+Su5dRSgTKQwyncOI0wCWZmAu3ILcI2jS/gxiK0
-        qG4NqsbA==;
-Received: from [2001:4bb8:181:656b:9509:7d20:8d39:f895] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGDUo-000m9z-Df; Fri, 13 Jan 2023 06:24:59 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: [PATCH 22/22] drivers: platform: remove early_platform_cleanup
-Date:   Fri, 13 Jan 2023 07:23:39 +0100
-Message-Id: <20230113062339.1909087-23-hch@lst.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230113062339.1909087-1-hch@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de>
+        with ESMTP id S232506AbjAMGnX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 01:43:23 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 765A373E32;
+        Thu, 12 Jan 2023 22:28:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
+        Content-Type; bh=uPYXk20dhcXxUbNyen9JGOilTLkC5bvmHftpJb0glco=;
+        b=abxPTDqREhziA6nMHLcm3sMZ0nOMAaI2SBUc0OSnWbt5i1pg9DdZaWLyWizqb+
+        WnKmhMXlBkx4y4UyDj0mGnZ+dRYmQ+YyQy4LsRftqTAvg44uD3/iW4mvZaDYSKJU
+        EU4/3WGzpvFnsene48qFgfLOfEXOaTjiWW+HaSo/1mnFs=
+Received: from ubuntu.localdomain (unknown [220.180.239.55])
+        by zwqz-smtp-mta-g0-2 (Coremail) with SMTP id _____wB32pjh+cBjKVrVAA--.13469S2;
+        Fri, 13 Jan 2023 14:27:47 +0800 (CST)
+From:   =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
+        <duke_xinanwen@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jerry.meng@quectel.com, duke.xin@quectel.com,
+        =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
+        <duke_xinanwen@163.com>
+Subject: [PATCH] USB: serial: option: add Quectel EM05CN modem
+Date:   Thu, 12 Jan 2023 22:27:39 -0800
+Message-Id: <20230113062739.2970-1-duke_xinanwen@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wB32pjh+cBjKVrVAA--.13469S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxury5Gw47CrW3Gw4ktryUtrb_yoWrZw4xpa
+        18AaySvFyrXF1293ZxCr1xuFWrKan7Wr47C3ZrZr4fXFZ3Ars7tr1UArZ2qrnF9r4FyF40
+        q398C3yxGFykJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR_gAnUUUUU=
+X-Originating-IP: [220.180.239.55]
+X-CM-SenderInfo: 5gxnvsp0lqt0xzhqqiywtou0bp/1tbiVwX1e1etptKdMgAAs9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This weak stub was only overriden by the now remove sh architecture.
+The EM05CN modem has 2 USB configurations that are configurable via the AT
+command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
+the following interfaces, respectively:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+"MBIM"  : AT + MBIM + DIAG + NMEA  + MODEM
+"RMNET" : AT + DIAG + NMEA + Modem + QMI
+
+The detailed description of the USB configuration for each mode as follows:
+
+MBIM Mode
+--------------
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0310 Rev= 3.18
+S:  Manufacturer=Quectel
+S:  Product=Quectel EM05-CN
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 1 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 2 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+RMNET Mode
+--------------
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0310 Rev= 3.18
+S:  Manufacturer=Quectel
+S:  Product=Quectel EM05-CN
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: Duke Xin(辛安文) <duke_xinanwen@163.com>
 ---
- drivers/base/platform.c         | 4 ----
- include/linux/platform_device.h | 3 ---
- 2 files changed, 7 deletions(-)
+ drivers/usb/serial/option.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 968f3d71eeab2e..eb3feabf6c2f53 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -1506,14 +1506,10 @@ struct device *platform_find_device_by_driver(struct device *start,
- }
- EXPORT_SYMBOL_GPL(platform_find_device_by_driver);
- 
--void __weak __init early_platform_cleanup(void) { }
--
- int __init platform_bus_init(void)
- {
- 	int error;
- 
--	early_platform_cleanup();
--
- 	error = device_register(&platform_bus);
- 	if (error) {
- 		put_device(&platform_bus);
-diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-index 894939a74dd20f..86692f730e3a12 100644
---- a/include/linux/platform_device.h
-+++ b/include/linux/platform_device.h
-@@ -352,7 +352,4 @@ extern int platform_pm_restore(struct device *dev);
- #define USE_PLATFORM_PM_SLEEP_OPS
- #endif
- 
--/* For now only SuperH uses it */
--void early_platform_cleanup(void);
--
- #endif /* _PLATFORM_DEVICE_H_ */
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index dee79c7d82d5..c3f2f59a53c4 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -255,6 +255,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EP06			0x0306
+ #define QUECTEL_PRODUCT_EM05G			0x030a
+ #define QUECTEL_PRODUCT_EM060K			0x030b
++#define QUECTEL_PRODUCT_EM05CN_SG		0x0310
+ #define QUECTEL_PRODUCT_EM05G_SG		0x0311
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
+@@ -1163,6 +1164,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(6) | ZLP },
+ 	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_SG, 0xff),
+ 	  .driver_info = RSVD(6) | ZLP },
++	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05CN_SG, 0xff),
++	  .driver_info = RSVD(6) | ZLP },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
 -- 
-2.39.0
+2.25.1
 
