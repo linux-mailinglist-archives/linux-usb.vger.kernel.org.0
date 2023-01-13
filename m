@@ -2,100 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D54669A31
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 15:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3117669ABD
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 15:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjAMObg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Jan 2023 09:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S229526AbjAMOmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Jan 2023 09:42:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjAMOaq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 09:30:46 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBC5848EE
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id e129so10540408iof.3
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=MK7e6Vy0okniHu3Q9+oSRGxZAwtfUcCw709gjtpmGqYm4W84IZvw4tBwf/JeD4Sz6H
-         3KURCQ1q7FJNLx+GLRWt1AGelsjK5K90b9GlN0sKUA6ZUg/qpGAmzhVkYIMi1e8GW14O
-         cFtXxDW3U7HKPR1h1QucXhqmNKCsZMoObgInYsIcK9GV+Q1SmTW3TNFPjIiYngs//Zw8
-         0a/3E2iFbnIOhj7mPg7o55ip5AqJcSu4cmOrbMNeUEYXVxQDLd1kY3ucGjxruvrrHS7M
-         XetQgLqP0j8VlFQPDJPkXr0ojEVpUsKfNGxzo9W4EnGlfHoCwYlTt4oOdX6QabpPSrPy
-         sowg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=Xif0DNUoBoAzQU+KsQJmVOFI0lw74DbSNRti3WpMKe//6WY10OuVGNHSpgNznvLt6Z
-         KWje/8g8dxoDh1PKlACcpBQJ6Ge02TH36Xj/9diEDQRwqlWok9s5KUgfiA6UQz9/ak3k
-         TNPHnUfXBNbojlWllCy553QCYdoqO4htieqUuzgbHpiSjGLi6aOpShOZe5OegDBHGVXN
-         i0DZQzj4AIM8qPqFWMviuC7rwgy3tm9NjWHZwRYF6ZbPMJhpVx790WBIE1kQfvLMmRXU
-         UbyGcXMKtjLA8KS27nJO7E4oOiMajFYIZAc9DJFONNY9vkir9uPcgCqdVt9dRQOOt0s7
-         78Sw==
-X-Gm-Message-State: AFqh2kq8WQbmSCRwr5XoJ5oQBgDdkrYxfFTbQ8Tc584BRNTT4TLNbpkd
-        S2dphJVE4agCbfKT11Sj7Se3wJ+SgijT51qdnTo=
-X-Google-Smtp-Source: AMrXdXshiBnmfviu9GpNb0RTPGnCcyaimsk+bKcdbNGmrDubcSeViaijlgxCq2yePIP/Xii+kaUmkoerHpw3FkTn4/M=
-X-Received: by 2002:a6b:7f08:0:b0:6e2:ec05:87c8 with SMTP id
- l8-20020a6b7f08000000b006e2ec0587c8mr6674474ioq.144.1673619821627; Fri, 13
- Jan 2023 06:23:41 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6e02:1282:b0:30d:c36b:403c with HTTP; Fri, 13 Jan 2023
- 06:23:41 -0800 (PST)
-Reply-To: hitnodeby23@yahoo.com
-From:   Hinda Itno Deby <atidigahcyril@gmail.com>
-Date:   Fri, 13 Jan 2023 06:23:41 -0800
-Message-ID: <CALHvQ-i=c6i56KKAWCU6YHCKu56RytXe0C3_h_MOPvHa0vgPTw@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
+        with ESMTP id S229739AbjAMOmN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 09:42:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FB110B65
+        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 06:33:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAB2BB820C9
+        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 14:33:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BE61C433F1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 14:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673620383;
+        bh=6qTYs8Bg0gZ4WlY29OyjFHHFkvukMQLfnWQuy0dj/sU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=YL0FYSeA/G2Mun1sP//CXaE66RQPUKbgjLSTz6ZOqMI9UvcpmA/C+lHSPv2ZSq9N6
+         S8bbdaBfSmp+t/cM9W2l7oVFowPKgnW4jhc9A6vpBtrldTzbuFucaQsTuiP2kewriH
+         fuyo/Pby2PWf3slcrlqb7MVtGqUouZxdFQISCGxbzL2L2+aETR3+Y6bWyphVjsqU+L
+         zogGiXnZsmI+sFsr6HmFVu771gvAghhaZ2BNRzq7KUTEBlLakTQT5BeH5ni8i8buVT
+         xN8hzcpYlU5xLvY+tO8DwyTQ6sfAQF3eObWrHjj6tshCPF2WTy0XT3paoGqnoc/+Uv
+         +rPzJnf1q9v8A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 67AEDC43143; Fri, 13 Jan 2023 14:33:03 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
+ CometLake platform
+Date:   Fri, 13 Jan 2023 14:33:03 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-216728-208809-aZd0TEX8QB@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
+References: <bug-216728-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d2f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [hitnodeby23[at]yahoo.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [atidigahcyril[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.6 URG_BIZ Contains urgent matter
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-My name is Hinda Itno Deby Please I want us to discuss Urgent Business
-Proposal, if you are interested kindly reply to me so i can give you
-all the details.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
-Thanks and God Bless You.
-Ms Hinda Itno Deby
+--- Comment #22 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+Created attachment 303594
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303594&action=3Dedit
+Use pci_dev_wait() to check if the xHCI is reponsive after the link is
+activated
+
+Can you try the attached patch? It seems that sometimes it takes longer than
+the additional 100ms (up to seconds) for the xHCI to become responsive after
+the PCIe link has been trained. This fixes the issue on the Dell Come Lake
+based system at least.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
