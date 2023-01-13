@@ -2,112 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B3866A2A4
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 20:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010F166A3B6
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jan 2023 20:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjAMTFj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Jan 2023 14:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S230252AbjAMTyQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Jan 2023 14:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjAMTFe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 14:05:34 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5580F544F5;
-        Fri, 13 Jan 2023 11:05:33 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pGPMg-003M27-Uf; Fri, 13 Jan 2023 20:05:22 +0100
-Received: from p57ae5361.dip0.t-ipconnect.de ([87.174.83.97] helo=[192.168.178.35])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pGPMg-000Hn8-Jc; Fri, 13 Jan 2023 20:05:22 +0100
-Message-ID: <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
-Date:   Fri, 13 Jan 2023 20:05:20 +0100
+        with ESMTP id S230048AbjAMTyO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 14:54:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB9F87932;
+        Fri, 13 Jan 2023 11:54:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 20FCFCE20C2;
+        Fri, 13 Jan 2023 19:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6553C433EF;
+        Fri, 13 Jan 2023 19:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673639650;
+        bh=o/jt4K1pvhBiN+jx25cKLJjAvfIhQnIB1JmYnMtWFc0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bNP5c8f4aTCQD81HSgG75FoQJyMLmrSyhC/YNRNGbEHwD0SsWjm3yFN2KJPaJClMl
+         94cLmSemCH6fUri3EM0YX90m0e6cLwKmCjiYC8H98h0UlIRo1re/dMxtAq8tLcTiA7
+         IaBn/rjnxaoD60jNknefdfvf6Gf+NrrpfrfRTrn97aPJ4fPUyw3yYuqiHszzi5qjp7
+         sywRilHJEh8W1PBk6y49rku2oikDsvKPcMb5gIRSXYY0J1cbwFWcqAiy3FG9JQbnYI
+         JXAox9U/jXLWAe1Fh+nNqQpEXQs/rm1GLIg7mIYBnmYcDCFVIMQuvf/YY27Afq6v/8
+         q2A5xykM8KGPQ==
+Date:   Fri, 13 Jan 2023 11:54:08 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Cc:     Greg KH <greg@kroah.com>, Andre Przywara <andre.przywara@arm.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] r8152; preserve device list format
+Message-ID: <20230113115408.741150b8@kernel.org>
+In-Reply-To: <874jsu68og.fsf@miraculix.mork.no>
+References: <87k01s6tkr.fsf@miraculix.mork.no>
+        <20230112100100.180708-1-bjorn@mork.no>
+        <Y7/dBXrI2QkiBFlW@kroah.com>
+        <87cz7k6ooc.fsf@miraculix.mork.no>
+        <878ri86o6j.fsf@miraculix.mork.no>
+        <Y7/ir/zcJQUVec72@kroah.com>
+        <874jsu68og.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     Rob Landley <rob@landley.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
- <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
- <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.174.83.97
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob!
+On Fri, 13 Jan 2023 11:16:47 +0100 Bj=C3=B8rn Mork wrote:
+> There is no point backporting to anything older than v5.15 since the
+> patch depend on significant driver changes between v5.10 and v5.15.  The
+> good news is that those changes also modified the macro in question so
+> any device ID patch for v5.10 or older will have to be fixed up in any
+> case.  So we don't lose anything by ignoring the older longterm kernels
+> here.
+>=20
+> IIUC the special netdev stable rules are gone.  But if this is going to
+> stable, then I believe it still has to go to "net" first.
+>=20
+> David/Jakub - Would you please pick
+>=20
+>   ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+>   69649ef84053 ("cdc_ether: no need to blacklist any r8152 devices")
+>=20
+> from net-next to net?  With a "CC: stable" preferably.  Or do you prefer
+> some other solution?
 
-On 1/13/23 20:11, Rob Landley wrote:
->> I actually would be willing to do it but I'm a bit hesitant as I'm not 100%
->> sure my skills are sufficient. Maybe if someone can assist me?
-> 
-> My skills aren't sufficient and I dunno how much time I have, but I can
-> certainly assist. I test sh4 regularlyish and it's in the list of architectures
-> I ship binaries and tiny VM images for, just refreshed tuesday:
-> 
-> https://landley.net/toybox/downloads/binaries/0.8.9/
-> https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
-> 
-> (The sh2eb isn't a VM, it's a physical board I have here...)
-> 
-> There is definitely interest in this architecture. I'm aware Rich hasn't been
-> the most responsive maintainer. (I'm told he's on vacation with his family at
-> the moment, according to the text I got about this issue from the J-core
-> hardware guys in Japan.)
+Well.. we already shipped the patch from this thread as is to Linus.
+Greg will be able to take be53771c87f4 into stable directly, with=20
+no dependencies.
 
-Well, maybe we can just give it a try together ...
+And now the refactoring won't cherry-pick cleanly :(
+Maybe let's leave it be?
 
-> The main reason we haven't converted everything to device tree is we only have
-> access to test hardware for a subset of the boards. Pruning the list of
-> supported boards and converting the rest to device tree might make sense. We can
-> always add/convert boards back later...
-
-There is a patch by Yoshinori Sato which adds device tree support to SH. Maybe we
-can revive it.
-
-Adrian
-
--- 
-  .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-
+I'll keep in mind that Greg is okay with taking this sort of
+refactoring in in the future. I made an unnecessary commotion here.
