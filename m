@@ -2,134 +2,309 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4063366A6ED
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jan 2023 00:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8810566AA61
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jan 2023 10:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjAMXUU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Jan 2023 18:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S229920AbjANJXf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Jan 2023 04:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjAMXUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Jan 2023 18:20:18 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652BA8CD03
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 15:20:12 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-15ed38a9b04so5272252fac.8
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jan 2023 15:20:12 -0800 (PST)
+        with ESMTP id S229741AbjANJXe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Jan 2023 04:23:34 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590B5BBB
+        for <linux-usb@vger.kernel.org>; Sat, 14 Jan 2023 01:23:32 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id r7-20020a25c107000000b006ff55ac0ee7so25440384ybf.15
+        for <linux-usb@vger.kernel.org>; Sat, 14 Jan 2023 01:23:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TQ9PrP3iNHpghVpkywhiMHcSFTwXN8kLEUSP7zNfGWk=;
-        b=HEeiDnUeOlaMmzrHg6LtTWNe2KIF6Q5d6PASMOjvpBnFNwlXnpxtBoyLsjdUSiFic5
-         Zy4GrupmECG1CN3m99XRInimzLkAyFlnAC1yFwr9ZV5WqZ8Mxia0axE41+SyDlpGZHOF
-         b9/hPmk9ZzrDZTerjRuPw9aOBuwmuFZgGCgGCyi5DNv5BOgrp6hpzWbx8PiSSS3PCS6S
-         UoJjpLq7r0mXx6nv8CL2PCVxH6W+Fc0fSdqCoguiOJxRwovXLajxMhMVOFQITRvWQd2L
-         +x8hdq/wHJdMhQD25h3cEnBEwX4srdIbxyBywCRXQlXO+4KVbgaam+X20emmeoxJCckb
-         5wPw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Rpvv8QTlCvX0ce4P9NdbIIZUZ16fQDB1rK9Grm+aNvc=;
+        b=e7sUy9B65d5isCQdh6b+/iCcQs2pLL/SFkmuflaI0z4dARc/jjfa3/UBIYsS2WlLRw
+         Zar11jT+yxSL03gcWsA9fE7IfDeyTmM5BmLh/lSCAXOVF8DtUq6tnS7DlM70aAd2wiS/
+         21dVzZ8+Heve3LV43a+/p8S47DJtBFWhwV0TpPTuJlauOwx2n2+gP66S0g+WRxuqZPS0
+         VjnIMxO8ppQ9K21APbSLFLrusR6l6T350W1gUVW1w2AyDjg59MkVmTNtkfivAt41AfRL
+         PSASFGMZQ4eEk1Z2p7xJ9ciD+84okt8tmuUM5s2W+nH3Cc4ZFxBEDUra3c/XmVRZWZKD
+         ur+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TQ9PrP3iNHpghVpkywhiMHcSFTwXN8kLEUSP7zNfGWk=;
-        b=WCtNG8jSaO13XaZzte/oLs/+1Y8y2t9dj8k9RntG6Su8FPI5wdbiLXzfsqWLsSKbbJ
-         UPrbneIHgx9InlB1DhR8zpirvNcIx6hiRL5QVRWzS7gczmOB+8v14sZTcf2ORIrgEh7e
-         5xHS3SIVjUeSPcbWG7itzoKKRjsba3QIIfi+AAnVtEkI8RGK2D9h1OuFg2BDqpZyjZmE
-         BDUGi0u+GvrBiimVCzNXQ+BDgTusl27a+Am3fDMXDf3Waou60THebCSUASEOXkZgH5If
-         3Ra0jAmuN3u5LMDWOlIaZxC2RKR5wPLZn6E4TZFcCzeqCi4KjYgoqds9n9vk1IWCAwBP
-         f4sA==
-X-Gm-Message-State: AFqh2koP93Vhc7KzXskYPXFGDR8I2JoWpWWuWqON/YpU0hPIHItUsfXH
-        uy8HohziRYB0b6pjqaRzekl0Z8GpKGgySHZHqbg=
-X-Google-Smtp-Source: AMrXdXu9HHEo/oiUtz2RMFCVU9bzsQZjZJ6cJq7QQE+EgrBS53y1RWYqF/4GpGuzhXIiUysKwMTRjQ==
-X-Received: by 2002:a05:6871:4090:b0:155:cb39:7325 with SMTP id kz16-20020a056871409000b00155cb397325mr16579350oab.6.1673652012126;
-        Fri, 13 Jan 2023 15:20:12 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056870738d00b0013ae39d0575sm11411907oam.15.2023.01.13.15.20.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 15:20:11 -0800 (PST)
-Message-ID: <38200b53-c743-4396-6603-7274f4a29c86@landley.net>
-Date:   Fri, 13 Jan 2023 17:32:20 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
- <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
- <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
- <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rpvv8QTlCvX0ce4P9NdbIIZUZ16fQDB1rK9Grm+aNvc=;
+        b=thB2bNtI6UDbwpTFQJVd6aTalvhgPIRQyrPHvlwjp3ULHBuLXsFP7cet1cvXrBRYf9
+         WTUzzLZqwwDvqSFz9v3OM3CfufqyVhmDSZoO/AgVrikAjLrIRK7VktatY3/+NlxEayOq
+         GiFgXON5Z+tfR3cemj3Iv9XPXDPo4JVbeaJRMn9S6r2+Kb/poSBxnJ2b785vt2XcjbQ1
+         111fMkZ0kWaMBO0T5hhebFRsXP2AJP140tLY6vbwh9Ogm6KlQyq/jzN7VVcLTiLwtfac
+         NGQg7GSI2faCP0uWUN0d1YnbBSIO9ZOXBDYQi6oiW9kaoSSkPaduvpZ+nJqd6lmJ/mmJ
+         bl2Q==
+X-Gm-Message-State: AFqh2koc5IHXKcbuTu63/TZlvyhRAULa2sGPAU8BuB6CKaeK7VU2okRE
+        QIH3A+4dwSePGMDk1PpBR+QJ29US9rU=
+X-Google-Smtp-Source: AMrXdXul+s7qU27iC9wdmHBDpy21JM9B3Qg8B8hfxBVH1YgYGj0pYORd4JpoV2ZIreNWVlg7X0b/PZ4TpZM=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:d726:232e:7cc0:6434])
+ (user=badhri job=sendgmr) by 2002:a5b:44a:0:b0:71e:d3d1:953 with SMTP id
+ s10-20020a5b044a000000b0071ed3d10953mr11141691ybp.214.1673688212135; Sat, 14
+ Jan 2023 01:23:32 -0800 (PST)
+Date:   Sat, 14 Jan 2023 01:23:26 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230114092328.1907406-1-badhri@google.com>
+Subject: [PATCH v12 1/3] usb: typec: tcpm: Add callbacks to mitigate wakeups
+ due to contaminant
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/13/23 13:05, John Paul Adrian Glaubitz wrote:
-> Hi Rob!
-> 
-> On 1/13/23 20:11, Rob Landley wrote:
->> There is definitely interest in this architecture. I'm aware Rich hasn't been
->> the most responsive maintainer. (I'm told he's on vacation with his family at
->> the moment, according to the text I got about this issue from the J-core
->> hardware guys in Japan.)
-> 
-> Well, maybe we can just give it a try together ...
+On some of the TCPC implementations, when the Type-C port is exposed
+to contaminants, such as water, TCPC stops toggling while reporting OPEN
+either by the time TCPM reads CC pin status or during CC debounce
+window. This causes TCPM to be stuck in TOGGLING state. If TCPM is made
+to restart toggling, the behavior recurs causing redundant CPU wakeups
+till the USB-C port is free of contaminant.
 
-Jeff Dionne said he'd make himself available to answer hardware questions. (He
-said he maintained some Linux ports 20 years ago, but isn't current with Linux
-plumbing. Last month he was digging through the guts of vxworks, and the project
-before that was some sort of BSD I think?)
+[206199.287817] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[206199.640337] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[206199.985789] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
 
-I _do_ maintain Linux patches, I just generally don't bother to repost them
-endlessly. Here's my "on top of 6.1" stack for example, each of which links to
-at least one time it was posted to linux-kernel:
+(or)
 
-https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/linux-patches/
+[ 7853.867577] Start toggling
+[ 7853.889921] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[ 7855.698765] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[ 7855.698790] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[ 7855.698826] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+[ 7855.703559] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
+[ 7855.856555] CC1: 0 -> 0, CC2: 5 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
+[ 7855.856581] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[ 7855.856613] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 170 ms [rev3 NONE_AMS]
+[ 7856.027744] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 170 ms]
+[ 7856.181949] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[ 7856.187896] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[ 7857.645630] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[ 7857.647291] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[ 7857.647298] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[ 7857.647310] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+[ 7857.808106] CC1: 0 -> 0, CC2: 5 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
+[ 7857.808123] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[ 7857.808150] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 170 ms [rev3 NONE_AMS]
+[ 7857.978727] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 170 ms]
 
->> The main reason we haven't converted everything to device tree is we only have
->> access to test hardware for a subset of the boards. Pruning the list of
->> supported boards and converting the rest to device tree might make sense. We can
->> always add/convert boards back later...
-> 
-> There is a patch by Yoshinori Sato which adds device tree support to SH. Maybe we
-> can revive it.
+To mitigate redundant TCPM wakeups, TCPCs which do have the needed hardware
+can implement the check_contaminant callback which is invoked by TCPM
+to evaluate for presence of contaminant. Lower level TCPC driver can
+restart toggling through TCPM_PORT_CLEAN event when the driver detects
+that USB-C port is free of contaminant. check_contaminant callback also
+passes the disconnect_while_debounce flag which when true denotes that
+the CC pins transitioned to OPEN state during the CC debounce window.
 
-The turtle board is device tree and has been since it was merged. The
-infrastructure is there, the question is converting over boards and testing
-them, or deciding to prune them. Did Sato-san convert many boards? (I'm not
-finding his patch via google...)
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+Changes since v11:
+* None.
+Changes since v10:
+* Fall back to default state if enabling toggling fails when
+* exiting CHECK_CONTAMINANT state
+Changes since v9:
+* Invoke tcpm_start_toggling before transitioning to TOGGLING from
+* CHECK_CONTAMINANT.
+Changes since v7:
+* None. Skipped versions by mistake.
+Changes since v6:
+* folded the debounce logic into tcpm state machine and removed tcpm
+* state export.
+* Added a helper to determine whether the port is in toggling state.
+* Excluded CHECK_CONTAMINANT from tcpm_log.
+Changes since v5:
+* Updated commit message. Removed change id.
+Changes since v4:
+* None
+Changes since v3:
+* None
+Changes since V2:
+* Offloaded tcpm from maintaining disconnect_while_debouncing logic
+* to lower level maxim tcpc driver based on feedback.
+---
+ drivers/usb/typec/tcpm/tcpm.c | 55 ++++++++++++++++++++++++++++++++++-
+ include/linux/usb/tcpm.h      |  8 +++++
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 
-> Adrian
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 904c7b4ce2f0..c624747f32df 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -36,6 +36,7 @@
+ #define FOREACH_STATE(S)			\
+ 	S(INVALID_STATE),			\
+ 	S(TOGGLING),			\
++	S(CHECK_CONTAMINANT),			\
+ 	S(SRC_UNATTACHED),			\
+ 	S(SRC_ATTACH_WAIT),			\
+ 	S(SRC_ATTACHED),			\
+@@ -249,6 +250,7 @@ enum frs_typec_current {
+ #define TCPM_RESET_EVENT	BIT(2)
+ #define TCPM_FRS_EVENT		BIT(3)
+ #define TCPM_SOURCING_VBUS	BIT(4)
++#define TCPM_PORT_CLEAN		BIT(5)
+ 
+ #define LOG_BUFFER_ENTRIES	1024
+ #define LOG_BUFFER_ENTRY_SIZE	128
+@@ -483,6 +485,13 @@ struct tcpm_port {
+ 	 * SNK_READY for non-pd link.
+ 	 */
+ 	bool slow_charger_loop;
++
++	/*
++	 * When true indicates that the lower level drivers indicate potential presence
++	 * of contaminant in the connector pins based on the tcpm state machine
++	 * transitions.
++	 */
++	bool potential_contaminant;
+ #ifdef CONFIG_DEBUG_FS
+ 	struct dentry *dentry;
+ 	struct mutex logbuffer_lock;	/* log buffer access lock */
+@@ -647,7 +656,7 @@ static void tcpm_log(struct tcpm_port *port, const char *fmt, ...)
+ 	/* Do not log while disconnected and unattached */
+ 	if (tcpm_port_is_disconnected(port) &&
+ 	    (port->state == SRC_UNATTACHED || port->state == SNK_UNATTACHED ||
+-	     port->state == TOGGLING))
++	     port->state == TOGGLING || port->state == CHECK_CONTAMINANT))
+ 		return;
+ 
+ 	va_start(args, fmt);
+@@ -3904,15 +3913,28 @@ static void run_state_machine(struct tcpm_port *port)
+ 	unsigned int msecs;
+ 	enum tcpm_state upcoming_state;
+ 
++	if (port->tcpc->check_contaminant && port->state != CHECK_CONTAMINANT)
++		port->potential_contaminant = ((port->enter_state == SRC_ATTACH_WAIT &&
++						port->state == SRC_UNATTACHED) ||
++					       (port->enter_state == SNK_ATTACH_WAIT &&
++						port->state == SNK_UNATTACHED));
++
+ 	port->enter_state = port->state;
+ 	switch (port->state) {
+ 	case TOGGLING:
+ 		break;
++	case CHECK_CONTAMINANT:
++		port->tcpc->check_contaminant(port->tcpc);
++		break;
+ 	/* SRC states */
+ 	case SRC_UNATTACHED:
+ 		if (!port->non_pd_role_swap)
+ 			tcpm_swap_complete(port, -ENOTCONN);
+ 		tcpm_src_detach(port);
++		if (port->potential_contaminant) {
++			tcpm_set_state(port, CHECK_CONTAMINANT, 0);
++			break;
++		}
+ 		if (tcpm_start_toggling(port, tcpm_rp_cc(port))) {
+ 			tcpm_set_state(port, TOGGLING, 0);
+ 			break;
+@@ -4150,6 +4172,10 @@ static void run_state_machine(struct tcpm_port *port)
+ 			tcpm_swap_complete(port, -ENOTCONN);
+ 		tcpm_pps_complete(port, -ENOTCONN);
+ 		tcpm_snk_detach(port);
++		if (port->potential_contaminant) {
++			tcpm_set_state(port, CHECK_CONTAMINANT, 0);
++			break;
++		}
+ 		if (tcpm_start_toggling(port, TYPEC_CC_RD)) {
+ 			tcpm_set_state(port, TOGGLING, 0);
+ 			break;
+@@ -4926,6 +4952,9 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+ 		else if (tcpm_port_is_sink(port))
+ 			tcpm_set_state(port, SNK_ATTACH_WAIT, 0);
+ 		break;
++	case CHECK_CONTAMINANT:
++		/* Wait for Toggling to be resumed */
++		break;
+ 	case SRC_UNATTACHED:
+ 	case ACC_UNATTACHED:
+ 		if (tcpm_port_is_debug(port) || tcpm_port_is_audio(port) ||
+@@ -5425,6 +5454,15 @@ static void tcpm_pd_event_handler(struct kthread_work *work)
+ 			port->vbus_source = true;
+ 			_tcpm_pd_vbus_on(port);
+ 		}
++		if (events & TCPM_PORT_CLEAN) {
++			tcpm_log(port, "port clean");
++			if (port->state == CHECK_CONTAMINANT) {
++				if (tcpm_start_toggling(port, tcpm_rp_cc(port)))
++					tcpm_set_state(port, TOGGLING, 0);
++				else
++					tcpm_set_state(port, tcpm_default_state(port), 0);
++			}
++		}
+ 
+ 		spin_lock(&port->pd_event_lock);
+ 	}
+@@ -5477,6 +5515,21 @@ void tcpm_sourcing_vbus(struct tcpm_port *port)
+ }
+ EXPORT_SYMBOL_GPL(tcpm_sourcing_vbus);
+ 
++void tcpm_port_clean(struct tcpm_port *port)
++{
++	spin_lock(&port->pd_event_lock);
++	port->pd_events |= TCPM_PORT_CLEAN;
++	spin_unlock(&port->pd_event_lock);
++	kthread_queue_work(port->wq, &port->event_work);
++}
++EXPORT_SYMBOL_GPL(tcpm_port_clean);
++
++bool tcpm_port_is_toggling(struct tcpm_port *port)
++{
++	return port->port_type == TYPEC_PORT_DRP && port->state == TOGGLING;
++}
++EXPORT_SYMBOL_GPL(tcpm_port_is_toggling);
++
+ static void tcpm_enable_frs_work(struct kthread_work *work)
+ {
+ 	struct tcpm_port *port = container_of(work, struct tcpm_port, enable_frs);
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index bffc8d3e14ad..ab7ca872950b 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -114,6 +114,11 @@ enum tcpm_transmit_type {
+  *              Optional; The USB Communications Capable bit indicates if port
+  *              partner is capable of communication over the USB data lines
+  *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
++ * @check_contaminant:
++ *		Optional; The callback is called when CC pins report open status
++ *		at the end of the deboumce period or when the port is still
++ *		toggling. Chip level drivers are expected to check for contaminant
++ *		and call tcpm_clean_port when the port is clean.
+  */
+ struct tcpc_dev {
+ 	struct fwnode_handle *fwnode;
+@@ -148,6 +153,7 @@ struct tcpc_dev {
+ 						 bool pps_active, u32 requested_vbus_voltage);
+ 	bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+ 	void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
++	void (*check_contaminant)(struct tcpc_dev *dev);
+ };
+ 
+ struct tcpm_port;
+@@ -165,5 +171,7 @@ void tcpm_pd_transmit_complete(struct tcpm_port *port,
+ 			       enum tcpm_transmit_status status);
+ void tcpm_pd_hard_reset(struct tcpm_port *port);
+ void tcpm_tcpc_reset(struct tcpm_port *port);
++void tcpm_port_clean(struct tcpm_port *port);
++bool tcpm_port_is_toggling(struct tcpm_port *port);
+ 
+ #endif /* __LINUX_USB_TCPM_H */
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-Rob
