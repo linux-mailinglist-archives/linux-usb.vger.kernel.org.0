@@ -2,239 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65E066B0CC
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Jan 2023 12:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CE566B1E2
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Jan 2023 16:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjAOLne (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Jan 2023 06:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S230333AbjAOPLu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Jan 2023 10:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbjAOLmv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Jan 2023 06:42:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176BA10AA8;
-        Sun, 15 Jan 2023 03:42:44 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30FBfXt5003350;
-        Sun, 15 Jan 2023 11:42:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=qPkuLNMWVHRK6gEpWulWA7qnoMAcZ84rwLQjRjM1uyg=;
- b=lqqt5XL8glftliMxOksFT8JwzBlE98x23d4q6vxOPcuha5GxJipRKI49MIp752UlYl+0
- oB8L8DakZpBnh30GZkawtiKvGldGu1Es6YBsSBOAHOHlFCaT8zMZzfnSlJGPDQATqtHa
- ylP93lAyVt9qHOrvPhhIe78yUeAEpUFJoUUPnHuFy9FYHZfi8e5l3Al9UHXLKsSOeAtS
- aUZtOmIDgvHQTdBspzSrWrSSBLTqJpeU/xP27TI4wssnDMgReC0PGEGONHSrFiLVWIBe
- 3aFt87XD+a5d2yZYRRuIS96p8QxQYXD/jbFDEFv/gH2gurvZEbk9jCYS3HpBeNMRG2ux xQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3j3nhv3p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 Jan 2023 11:42:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30FBgVse020083
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 Jan 2023 11:42:31 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sun, 15 Jan 2023 03:42:25 -0800
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
-        <quic_harshq@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [RFC v4 5/5] arm: dts: msm: Add multiport controller node for usb
-Date:   Sun, 15 Jan 2023 17:11:46 +0530
-Message-ID: <20230115114146.12628-6-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230115114146.12628-1-quic_kriskura@quicinc.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
-MIME-Version: 1.0
+        with ESMTP id S231136AbjAOPLr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Jan 2023 10:11:47 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1161ECDFB;
+        Sun, 15 Jan 2023 07:11:46 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id v15-20020a9d69cf000000b006709b5a534aso14870384oto.11;
+        Sun, 15 Jan 2023 07:11:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1SvPkdrRqclnIiQLKFR8JacZ9XIaTQnycEJaLqb6Sc4=;
+        b=qnuHVtPiwMQQiC8xy38c1DnYwaOeAewRelfYXiiwBHePwg25+ubx7xHAmwn2K1wQpW
+         I/x69nnRycUif3oEtuje59YCbjXArQWnK6Cdk3VGwKxTbila+BiVpmZN1HF5BpStjBki
+         wtrl0S+ckROQ58OlCaLlBjtck/BIUM7y+Qs2CbncGQymrjlgMy04eQvAo12JVLNTVKu/
+         T9SjRe65Pa0qM7FiCYcDpA4nF3J9bsxIlOWBG0+ofDAqMrxnEgSJMwD5KF7CGNmD+NIX
+         2t5AxzjmmBoo2l9F1BttLf3OsjwJgLohM9TFyXzKh5Oxb8wBQw813e6LPF82PXavrun2
+         8CPA==
+X-Gm-Message-State: AFqh2kpkiPSsfTSbHBnD3tE16/p3ac+jWWN6p5ltaULQ1Ap5Vfuu+T82
+        3yYdFxPrQcwB2VFhqiwl1Q==
+X-Google-Smtp-Source: AMrXdXsh6dWqsMlGqRqeH89BB+VTpx1Pk6bCOFikeZ/Yr6Ctmk10iCTGB8c1G6BR+K7Vku/zamfzHQ==
+X-Received: by 2002:a9d:6353:0:b0:684:eca3:fa4a with SMTP id y19-20020a9d6353000000b00684eca3fa4amr774789otk.31.1673795505175;
+        Sun, 15 Jan 2023 07:11:45 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bm10-20020a056830374a00b0066e868dbc2esm13603695otb.46.2023.01.15.07.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 07:11:44 -0800 (PST)
+Received: (nullmailer pid 2300324 invoked by uid 1000);
+        Sun, 15 Jan 2023 15:11:43 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TUbNRbbSkE1QCaJbpvMeV_IpSDiooxC_
-X-Proofpoint-ORIG-GUID: TUbNRbbSkE1QCaJbpvMeV_IpSDiooxC_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-15_07,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 bulkscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- clxscore=1015 mlxscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301150089
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_pkondeti@quicinc.com, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        quic_harshq@quicinc.com, Philipp Zabel <p.zabel@pengutronix.de>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+In-Reply-To: <20230115114146.12628-2-quic_kriskura@quicinc.com>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-2-quic_kriskura@quicinc.com>
+Message-Id: <167379535756.2296593.3352224696296396152.robh@kernel.org>
+Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
+ properties
+Date:   Sun, 15 Jan 2023 09:11:43 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add USB and DWC3 node for teritiary port of SC8280 along
-with multiport IRQ's and phy's.
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 49 +++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi   | 60 ++++++++++++++++++++++++
- 2 files changed, 109 insertions(+)
+On Sun, 15 Jan 2023 17:11:42 +0530, Krishna Kurapati wrote:
+> Add bindings to indicate properties required to support multiport
+> on Snps Dwc3 controller.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
+>  1 file changed, 47 insertions(+), 6 deletions(-)
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-index 84cb6f3eeb56..f9eb854c3444 100644
---- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-@@ -422,6 +422,20 @@ &usb_1_qmpphy {
- 	status = "okay";
- };
- 
-+&usb_2 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb2_en_state>,
-+			<&usb3_en_state>,
-+			<&usb4_en_state>,
-+			<&usb5_en_state>;
-+};
-+
-+&usb_2_dwc3 {
-+	dr_mode = "host";
-+};
-+
- &usb_2_hsphy0 {
- 	vdda-pll-supply = <&vreg_l5a>;
- 	vdda18-supply = <&vreg_l7g>;
-@@ -472,6 +486,41 @@ &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
- 
-+/* PINCTRL */
-+&pm8450c_gpios {
-+	usb2_en_state: usb2-en-state {
-+		pins = "gpio9";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-+
-+&pm8450e_gpios {
-+	usb3_en_state: usb3-en-state {
-+		pins = "gpio5";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-+
-+&pm8450g_gpios {
-+	usb4_en_state: usb4-en-state {
-+		pins = "gpio5";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+
-+	usb5_en_state: usb5-en-state {
-+		pins = "gpio9";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-+
- /* PINCTRL */
- 
- &tlmm {
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 109c9d2b684d..e9866ab5c6e2 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1969,6 +1969,66 @@ usb_1_dwc3: usb@a800000 {
- 			};
- 		};
- 
-+		usb_2: usb@a4f8800 {
-+			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
-+			reg = <0 0x0a4f8800 0 0x400>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
-+				 <&gcc GCC_USB30_MP_MASTER_CLK>,
-+				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
-+				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
-+				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-+				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
-+				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
-+			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
-+				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
-+
-+			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-+					  <&gcc GCC_USB30_MP_MASTER_CLK>;
-+			assigned-clock-rates = <19200000>, <200000000>;
-+
-+			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
-+						<&pdc 126 IRQ_TYPE_EDGE_RISING>,
-+						<&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interrupt-names = "dp_hs_phy_irq", "dm_hs_phy_irq",
-+						"ss_phy_irq";
-+
-+			power-domains = <&gcc USB30_MP_GDSC>;
-+
-+			resets = <&gcc GCC_USB30_MP_BCR>;
-+
-+			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
-+					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
-+			interconnect-names = "usb-ddr", "apps-usb";
-+
-+			required-opps = <&rpmhpd_opp_nom>;
-+
-+			status = "disabled";
-+
-+			usb_2_dwc3: usb@a400000 {
-+				compatible = "snps,dwc3";
-+				reg = <0 0x0a400000 0 0xcd00>;
-+				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-+				iommus = <&apps_smmu 0x800 0x0>;
-+				num-ports = <4>;
-+				num-ss-ports = <2>;
-+				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
-+					<&usb_2_hsphy1>, <&usb_2_qmpphy1>,
-+					<&usb_2_hsphy2>,
-+					<&usb_2_hsphy3>;
-+				phy-names = "usb2-phy_port0", "usb3-phy_port0",
-+						"usb2-phy_port1", "usb3-phy_port1",
-+						"usb2-phy_port2",
-+						"usb2-phy_port3";
-+			};
-+		};
-+
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sc8280xp-pdc", "qcom,pdc";
- 			reg = <0 0x0b220000 0 0x30000>, <0 0x17c000f0 0 0x60>;
--- 
-2.39.0
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230115114146.12628-2-quic_kriskura@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
