@@ -2,172 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6263366C929
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 17:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FF866CC1B
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 18:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbjAPQqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Jan 2023 11:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S234596AbjAPRW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Jan 2023 12:22:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjAPQqC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 11:46:02 -0500
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F004321953;
-        Mon, 16 Jan 2023 08:34:03 -0800 (PST)
-Received: by mail-oi1-f177.google.com with SMTP id r9so13046778oie.13;
-        Mon, 16 Jan 2023 08:34:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4huBua94elx+S0dnn6JlkXQ/ae6vTMdKSQQftNSDjjg=;
-        b=N1aMt2OFN7Z1vwIzuCvhMANebQkZxqn+SF2aPY8lRC3x3RxOSfPxZminZrU7SAzEOs
-         4SatWiHPEZs0hk37jEMUdnfoZpBAwANEpHDQvqpoRAAHIs54GrDg5GprogvlGj+/zWGe
-         Hk9q+CSavrCz37eqHP/vCHeWClqa6T2Hw80RItkOEsq7tA6BIabgZH7RRvDPPOhMWgzV
-         9LF+dxJFXFHXKNsf8d9O56ZV5sUWWpJVVrNj8EZzSF6gkkJ7boGO8yMPenO7d+05cgOd
-         E7ikUo64WcGOuvHOvrB2/YO3ypRS20+ja1Uc6rvNV0mMmuq2KTpjddPB3waHQBqgRakc
-         NJJg==
-X-Gm-Message-State: AFqh2kqcpWHEXVKBgh9gOap0y/+PpMYtrnnRIzU9itftBYMdVTgjWut/
-        9OR28LSz+3ySZaRq4MnNZg==
-X-Google-Smtp-Source: AMrXdXvijm6IULxGaKfPRggOh9kVhDpjnGY/kyDVbaab+Gai7JUFuW7J/tR5M+GetLrDA+kg+eZ8ew==
-X-Received: by 2002:aca:180a:0:b0:364:5934:1126 with SMTP id h10-20020aca180a000000b0036459341126mr10460258oih.45.1673886843098;
-        Mon, 16 Jan 2023 08:34:03 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bi38-20020a05680818a600b00353fe4fb4casm13107743oib.48.2023.01.16.08.34.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:34:02 -0800 (PST)
-Received: (nullmailer pid 602566 invoked by uid 1000);
-        Mon, 16 Jan 2023 16:34:01 -0000
-Date:   Mon, 16 Jan 2023 10:34:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com
-Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
- properties
-Message-ID: <20230116163401.GA2371990-robh@kernel.org>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-2-quic_kriskura@quicinc.com>
+        with ESMTP id S234525AbjAPRVF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 12:21:05 -0500
+Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB82236B2F
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jan 2023 08:59:37 -0800 (PST)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id HSpYp9eFIPm6CHSpapjexz; Mon, 16 Jan 2023 17:59:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1673888375; bh=SPfx/5k7n0wtVog2S606bstMmr2jYb0o5FKThwo52A0=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=IbudbFQTPLWfmigsHEZwYLA3nABiVsejccOdY7fcY6M27gJ5jar5qO3x0Qr0und6p
+         nEymgrDXfo3rkxMdWcyqEpwrhd/cor8xyZknBMkPceAMi2r0ZzUpoV4sRyPwTe4Xui
+         j/XPp53BPCt8JeEUae7GfmrJocGcY8iDm6RYgZtXrOe+sYgf3kJ7TZSfr+/b+lFgHF
+         l98sP8ooNQDBifCFV74u2bjRg3OVC0FjV4rrkEywxS95QpDPztbQUYBHL+aOgadNUk
+         Ppy0D70WGRwb6QFAZD0YUH7PzMAgMu0LcbOGIiGXJvcqsshItlZL7QkL2QYczsr48h
+         CCOVSzyiSTs8g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1673888375; bh=SPfx/5k7n0wtVog2S606bstMmr2jYb0o5FKThwo52A0=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=IbudbFQTPLWfmigsHEZwYLA3nABiVsejccOdY7fcY6M27gJ5jar5qO3x0Qr0und6p
+         nEymgrDXfo3rkxMdWcyqEpwrhd/cor8xyZknBMkPceAMi2r0ZzUpoV4sRyPwTe4Xui
+         j/XPp53BPCt8JeEUae7GfmrJocGcY8iDm6RYgZtXrOe+sYgf3kJ7TZSfr+/b+lFgHF
+         l98sP8ooNQDBifCFV74u2bjRg3OVC0FjV4rrkEywxS95QpDPztbQUYBHL+aOgadNUk
+         Ppy0D70WGRwb6QFAZD0YUH7PzMAgMu0LcbOGIiGXJvcqsshItlZL7QkL2QYczsr48h
+         CCOVSzyiSTs8g==
+Date:   Mon, 16 Jan 2023 17:59:32 +0100
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Jimmy Hu <hhhuuu@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 2/7] usb: xhci: Check endpoint is valid before
+ dereferencing it
+Message-ID: <Y8WCdG5YSpX/Seit@lenoch>
+References: <20230116142216.1141605-1-mathias.nyman@linux.intel.com>
+ <20230116142216.1141605-3-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230115114146.12628-2-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230116142216.1141605-3-mathias.nyman@linux.intel.com>
+X-CMAE-Envelope: MS4wfNGNgg6blrY9hAaPrC36bdIaV6b8EG123WQCVnhgz0yc++oMA6S4zf+CxledjQQ7mOVZ2pvVQ2Tjo0vjK0hCZDxtiArD67LTm5f51C5Hj3MBVdbSF+Q+
+ GJ7ocdnu2J5DwpXCaq6aD5c/5BOiaYSFY4nBN1okn5WICCWJnEwH3gY/ssz0urhK3PE6hPnHE6iEvhbEFWG6jnUlvP6lQrzfWlgJoWiQQwozhv5Z45XziCO7
+ 7UlLr1e9qdvgUUik1rrL0uWY2MRyQnmhrnMkZFlyG6ICCjM1WoHGXJkmhBQ7Gc2wT4XFDKVMCiBtjACWSKzjuQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 05:11:42PM +0530, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Snps Dwc3 controller.
+Hi Mathias,
+
+On Mon, Jan 16, 2023 at 04:22:11PM +0200, Mathias Nyman wrote:
+> From: Jimmy Hu <hhhuuu@google.com>
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> When the host controller is not responding, all URBs queued to all
+> endpoints need to be killed. This can cause a kernel panic if we
+> dereference an invalid endpoint.
+> 
+> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
+> checking if the endpoint is valid before dereferencing it.
+
+I'm a bit confused this goes in and even to stable. Let me quote your
+own analysis from
+Message-ID: <0fe978ed-8269-9774-1c40-f8a98c17e838@linux.intel.com>
+On Thu, Dec 22, 2022 at 03:18:53PM +0200, Mathias Nyman wrote:
+> I think root cause is that freeing xhci->devs[i] and including rings isn't
+> protected by the lock, this happens in xhci_free_virt_device() called by
+> xhci_free_dev(), which in turn may be called by usbcore at any time
+> 
+> So xhci->devs[i] might just suddenly disappear
+> 
+> Patch just checks more often if xhci->devs[i] is valid, between every endpoint.
+> So the race between xhci_free_virt_device() and xhci_kill_endpoint_urbs()
+> doesn't trigger null pointer deref as easily.
+
+I believe the above is correct and even Jimmy was unable to verify your
+later patch (3rd in this serie), which brings a question how could be this
+patch tested. It just burns a bug a bit deeper and I do not think it is the
+right approach.
+
+	ladis
+
+> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
+> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+> 
+> [233311.853964] pc : xhci_hc_died+0x10c/0x270
+> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
+> 
+> [233311.854077] Call trace:
+> [233311.854085]  xhci_hc_died+0x10c/0x270
+> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
+> [233311.854105]  call_timer_fn+0x50/0x2d4
+> [233311.854112]  expire_timers+0xac/0x2e4
+> [233311.854118]  run_timer_softirq+0x300/0xabc
+> [233311.854127]  __do_softirq+0x148/0x528
+> [233311.854135]  irq_exit+0x194/0x1a8
+> [233311.854143]  __handle_domain_irq+0x164/0x1d0
+> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
+> [233311.854156]  el1_irq+0xfc/0x1a8
+> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
+> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
+> [233311.854194]  do_idle+0x594/0x6ac
+> [233311.854201]  cpu_startup_entry+0x7c/0x80
+> [233311.854209]  secondary_start_kernel+0x170/0x198
+> 
+> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
->  1 file changed, 47 insertions(+), 6 deletions(-)
+>  drivers/usb/host/xhci-ring.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 6d78048c4613..3ea051beb2f8 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -81,15 +81,26 @@ properties:
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index ddc30037f9ce..f5b0e1ce22af 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>  	struct xhci_virt_ep *ep;
+>  	struct xhci_ring *ring;
 >  
->    phys:
->      minItems: 1
-> -    maxItems: 2
-> +    maxItems: 8
->  
->    phy-names:
->      minItems: 1
-> -    maxItems: 2
-> -    items:
-> -      enum:
-> -        - usb2-phy
-> -        - usb3-phy
-> +    maxItems: 8
-> +    oneOf:
-> +    - items:
-> +        enum:
-> +          - usb2-phy
-> +          - usb3-phy
-> +    - items:
-> +        enum:
-> +          - usb2-phy_port0
-> +          - usb2-phy_port1
-> +          - usb2-phy_port2
-> +          - usb2-phy_port3
-> +          - usb3-phy_port0
-> +          - usb3-phy_port1
-> +          - usb3-phy_port2
-> +          - usb3-phy_port3
-
-usbN-portM
-
->  
->    resets:
->      minItems: 1
-> @@ -360,6 +371,22 @@ properties:
->      description:
->        Enable USB remote wakeup.
->  
-> +  num-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This property indicates the number of ports present on the target that
-> +      are to be serviced by the DWC3 controller.
-> +    minimum: 1
-> +    maximum: 4
+> -	ep = &xhci->devs[slot_id]->eps[ep_index];
+> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
+> +	if (!ep)
+> +		return;
 > +
-> +  num-ss-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This property indicates the number of SS capable ports present on the
-> +      target that are to be serviced by the DWC3 controller.
-> +    minimum: 1
-> +    maximum: 4
-
-This information is redundant. 'phy-names' tells you how many ports of 
-each.
-
-> +
->  unevaluatedProperties: false
->  
->  required:
-> @@ -388,4 +415,18 @@ examples:
->        snps,dis_u2_susphy_quirk;
->        snps,dis_enblslpm_quirk;
->      };
-> +  - |
-> +    usb@4a000000 {
-> +      compatible = "snps,dwc3";
-> +      reg = <0x4a000000 0xcfff>;
-> +      interrupts = <0 92 4>;
-> +      clocks = <&clk 1>, <&clk 2>, <&clk 3>;
-> +      clock-names = "bus_early", "ref", "suspend";
-> +      num-ports = <2>;
-> +      num-ss-ports = <1>;
-> +      phys = <&usb2_phy0>, <&usb3_phy0>, <&usb2_phy1>;
-> +      phy-names = "usb2-phy_port0", "usb3-phy_port0", "usb2-phy_port1";
-> +      snps,dis_u2_susphy_quirk;
-> +      snps,dis_enblslpm_quirk;
-> +    };
-
-Does a different number of phys really need its own example?
-
-Rob
+>  	if ((ep->ep_state & EP_HAS_STREAMS) ||
+>  			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
+>  		int stream_id;
+> -- 
+> 2.25.1
