@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEC766BDBD
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 13:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BEF66C0C6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 15:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjAPMXL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Jan 2023 07:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S231799AbjAPOEY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Jan 2023 09:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjAPMXK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 07:23:10 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95401C311;
-        Mon, 16 Jan 2023 04:23:09 -0800 (PST)
+        with ESMTP id S231852AbjAPODl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 09:03:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E1522DDD;
+        Mon, 16 Jan 2023 06:02:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D0076CE0E92;
-        Mon, 16 Jan 2023 12:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCE94C433D2;
-        Mon, 16 Jan 2023 12:23:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673871786;
-        bh=JD4Qw+kGTk0vftDI4C/ZwHu7LD0az0ArFsgdGux842c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UDV2BYgRj4F1t3bjP3wvuSd0FfjtPMH92dqO+GS82leFLJzFff3c9x8cLPiCMHZbi
-         t8Ve7YnuYNa0r/rplQK2iDeHGPeajwP3u6yrJcWS660c20lJJSu5uemMwAaVieyHY5
-         ZV2otSM4QnGHnlLpdtTsri7enP6Jt1ZuN4Yd9DLU=
-Date:   Mon, 16 Jan 2023 13:23:03 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Jim Lin <jilin@nvidia.com>, thierry.reding@gmail.com,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v7 0/3] xhci: tegra: USB2 pad power controls
-Message-ID: <Y8VBpxoI88ASPCaV@kroah.com>
-References: <20221111101813.32482-1-jilin@nvidia.com>
- <f2dbfe41-7164-dffa-8e9c-2d5b0f8fcae6@nvidia.com>
- <Y7g9g0CbCc6b+3EN@kroah.com>
- <30fefd03-0ead-8980-ff5f-5e8a95e74c8a@linux.intel.com>
- <acf995cc-f3c2-c410-dc6b-b5d3b5cd0970@nvidia.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 195F960FD4;
+        Mon, 16 Jan 2023 14:02:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A942C433EF;
+        Mon, 16 Jan 2023 14:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673877772;
+        bh=jMRHxHdq1QhiQ06HFdAzk5pUhUEEHqamDP94hK7sxw4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CGVGSyYnR2yBiMSNbPMQjJu5ZfW7orhlbvGdZKMpgFHGwkvF65qktdpihZ1QBbA7y
+         pMdkTydOfhHB9hgZLGZK4vUKYdc1pFp8dmTV6l8UL3ZdQPT8WWd/ZNkFophepLJ/aO
+         0+axvUkbCdRZoIWXdQGgJImUj+8EmZtJ0Qim8SCLzWcjYD0vhwsj7D+F7b9ZErAa22
+         oYQXP8JcRPvuEd3omFY01t4igu6AREiSN/xdrrdgBFAXUoZvJnW0NnIlUkotCWKLkh
+         8JiVwx5nAwG94KeSEABAPOdr0HnJrPjKFLCDOCafMGZxIsH3+SbuCVKnV7XGWr3gYX
+         6QQhXtEuTTPbA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hui Wang <hui.wang@canonical.com>, Jiri Pirko <jiri@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, oliver@neukum.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 17/53] net: usb: cdc_ether: add support for Thales Cinterion PLS62-W modem
+Date:   Mon, 16 Jan 2023 09:01:17 -0500
+Message-Id: <20230116140154.114951-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230116140154.114951-1-sashal@kernel.org>
+References: <20230116140154.114951-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <acf995cc-f3c2-c410-dc6b-b5d3b5cd0970@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,56 +57,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:50:19AM +0000, Jon Hunter wrote:
-> 
-> On 09/01/2023 08:28, Mathias Nyman wrote:
-> > On 6.1.2023 17.25, Greg KH wrote:
-> > > On Fri, Jan 06, 2023 at 02:56:51PM +0000, Jon Hunter wrote:
-> > > > Hi Greg,
-> > > > 
-> > > > On 11/11/2022 10:18, Jim Lin wrote:
-> > > > > 1. Export symbol on xhci_hub_control
-> > > > > 2. Add hub_control to xhci_driver_overrides
-> > > > > 3. Program USB2 pad PD controls during port connect/disconnect, port
-> > > > > suspend/resume, and test mode, to reduce power consumption on
-> > > > > disconnect or suspend.
-> > > > > 
-> > > > > Patch
-> > > > > xhci: tegra: USB2 pad power controls
-> > > > > depends on
-> > > > > xhci: hub: export symbol on xhci_hub_control
-> > > > > xhci: Add hub_control to xhci_driver_overrides
-> > > > > 
-> > > > > Jim Lin (3):
-> > > > >     xhci: Add hub_control to xhci_driver_overrides
-> > > > >     xhci: hub: export symbol on xhci_hub_control
-> > > > >     xhci: tegra: USB2 pad power controls
-> > > > > 
-> > > > >    drivers/usb/host/xhci-hub.c   |   1 +
-> > > > >    drivers/usb/host/xhci-tegra.c | 125
-> > > > > ++++++++++++++++++++++++++++++++++
-> > > > >    drivers/usb/host/xhci.c       |   2 +
-> > > > >    drivers/usb/host/xhci.h       |   2 +
-> > > > >    4 files changed, 130 insertions(+)
-> > > > > 
-> > > > 
-> > > > 
-> > > > I have verified that this still applies cleanly on top of -next.
-> > > > Please let
-> > > > us know if this can be queued up for Linux v6.3?
-> > > 
-> > > Normally for xhci stuff I want it to go through Mathias for things that
-> > > are outside of just xhci-tegra.c.
-> > 
-> > Looks good to me, can be picked up directly
-> > Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > 
-> > Or I can add this to the series going to usb-next if that is preferred.
-> 
-> 
-> I did not see this in -next yet.
-> 
-> Mathias, are you able to pick this up?
+From: Hui Wang <hui.wang@canonical.com>
 
-I will when I catch up with linux-usb patches this week, sorry for the
-delay, too many fires this early in the year...
+[ Upstream commit eea8ce81fbb544e3caad1a1c876ba1af467b3d3c ]
+
+This modem has 7 interfaces, 5 of them are serial interfaces and are
+driven by cdc_acm, while 2 of them are wwan interfaces and are driven
+by cdc_ether:
+If 0: Abstract (modem)
+If 1: Abstract (modem)
+If 2: Abstract (modem)
+If 3: Abstract (modem)
+If 4: Abstract (modem)
+If 5: Ethernet Networking
+If 6: Ethernet Networking
+
+Without this change, the 2 network interfaces will be named to usb0
+and usb1, our QA think the names are confusing and filed a bug on it.
+
+After applying this change, the name will be wwan0 and wwan1, and
+they could work well with modem manager.
+
+Signed-off-by: Hui Wang <hui.wang@canonical.com>
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+Link: https://lore.kernel.org/r/20230105034249.10433-1-hui.wang@canonical.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/cdc_ether.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index e11f70911acc..fb5f59d0d55d 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -1001,6 +1001,12 @@ static const struct usb_device_id	products[] = {
+ 				      USB_CDC_SUBCLASS_ETHERNET,
+ 				      USB_CDC_PROTO_NONE),
+ 	.driver_info = (unsigned long)&wwan_info,
++}, {
++	/* Cinterion PLS62-W modem by GEMALTO/THALES */
++	USB_DEVICE_AND_INTERFACE_INFO(0x1e2d, 0x005b, USB_CLASS_COMM,
++				      USB_CDC_SUBCLASS_ETHERNET,
++				      USB_CDC_PROTO_NONE),
++	.driver_info = (unsigned long)&wwan_info,
+ }, {
+ 	/* Cinterion PLS83/PLS63 modem by GEMALTO/THALES */
+ 	USB_DEVICE_AND_INTERFACE_INFO(0x1e2d, 0x0069, USB_CLASS_COMM,
+-- 
+2.35.1
+
