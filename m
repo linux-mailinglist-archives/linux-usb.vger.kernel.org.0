@@ -2,125 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0DC66B89A
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 09:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC6D66B8C5
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 09:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbjAPIBx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Jan 2023 03:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S232335AbjAPIGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Jan 2023 03:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbjAPIBR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 03:01:17 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB1651205D;
-        Mon, 16 Jan 2023 00:00:52 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 30G806AA0003786, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 30G806AA0003786
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 16 Jan 2023 16:00:06 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Mon, 16 Jan 2023 16:00:06 +0800
-Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 16 Jan
- 2023 16:00:05 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>, <bjorn@mork.no>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next] r8152: avoid to change cfg for all devices
-Date:   Mon, 16 Jan 2023 15:59:51 +0800
-Message-ID: <20230116075951.1988-1-hayeswang@realtek.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S232204AbjAPIGO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 03:06:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041C51449F;
+        Mon, 16 Jan 2023 00:04:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A489EB80D52;
+        Mon, 16 Jan 2023 08:04:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59004C433EF;
+        Mon, 16 Jan 2023 08:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673856249;
+        bh=vlGBHwtLoXaueQt3amdQXXyo8la0rtzvu7Fd/pdvFGY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tYQUCQNVUy0YsnxDqyRtt1HctYkD2y14FAE9JIpRMH2CrORxSNBqd6vsU/CVkm+7j
+         4kSoGjxNtyQGg5PWzXyTtaVK2NgDDW761GYk9BbP9HY57R9myHIl83T6DnX6u2FgmY
+         R8+37fWVaF64cAg4CDolBPR8k7e5GCS2seiVbyAFeZSmiBKQYCcjlbZsjPOm0U8ry9
+         +Vw+6tw9mkn/xHFg/J8VfAaOgVNlrF52I5TqCkmqQRj+1jfpJ/f6ZanaWd5Dra28zy
+         rzy/3hOLf1Pi54dt2pbk76O8QX9WRbDH5wav2s34QjPuInYTQbrSxIhl8aWo8Rld2X
+         SVqWWp+woh7tw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pHKTj-0000a1-Q6; Mon, 16 Jan 2023 09:04:27 +0100
+Date:   Mon, 16 Jan 2023 09:04:27 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     clabbe@baylibre.com, gregkh@linuxfoundation.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] usb: serial: add support for CH348
+Message-ID: <Y8UFC/1vH/Y9PeBN@hovoldconsulting.com>
+References: <0fa6e2b8-0585-87a3-f255-5301774a6d9d@ixit.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.22.228.98]
-X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 01/16/2023 07:09:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzEvMTYgpFekyCAwNjowMDowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0fa6e2b8-0585-87a3-f255-5301774a6d9d@ixit.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The rtl8152_cfgselector_probe() should set the USB configuration to the
-vendor mode only for the devices which the driver (r8152) supports.
-Otherwise, no driver would be used for such devices.
+[ Please fix your mailer which generates broken Reply-To headers:
 
-Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+	Reply-To: 20230106135338.643951-2-clabbe@baylibre.com
+]
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 66e70b5f8417..24be9449e4fc 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9500,9 +9500,8 @@ static int rtl_fw_init(struct r8152 *tp)
- 	return 0;
- }
- 
--u8 rtl8152_get_version(struct usb_interface *intf)
-+static u8 __rtl_get_hw_ver(struct usb_device *udev)
- {
--	struct usb_device *udev = interface_to_usbdev(intf);
- 	u32 ocp_data = 0;
- 	__le32 *tmp;
- 	u8 version;
-@@ -9571,10 +9570,19 @@ u8 rtl8152_get_version(struct usb_interface *intf)
- 		break;
- 	default:
- 		version = RTL_VER_UNKNOWN;
--		dev_info(&intf->dev, "Unknown version 0x%04x\n", ocp_data);
-+		dev_info(&udev->dev, "Unknown version 0x%04x\n", ocp_data);
- 		break;
- 	}
- 
-+	return version;
-+}
-+
-+u8 rtl8152_get_version(struct usb_interface *intf)
-+{
-+	u8 version;
-+
-+	version = __rtl_get_hw_ver(interface_to_usbdev(intf));
-+
- 	dev_dbg(&intf->dev, "Detected version 0x%04x\n", version);
- 
- 	return version;
-@@ -9869,6 +9877,12 @@ static int rtl8152_cfgselector_probe(struct usb_device *udev)
- 	struct usb_host_config *c;
- 	int i, num_configs;
- 
-+	/* Swtich the device to vendor mode, if and only if the vendor mode
-+	 * driver supports it.
-+	 */
-+	if (__rtl_get_hw_ver(udev) == RTL_VER_UNKNOWN)
-+		return 0;
-+
- 	/* The vendor mode is not always config #1, so to find it out. */
- 	c = udev->config;
- 	num_configs = udev->descriptor.bNumConfigurations;
--- 
-2.38.1
+On Sat, Jan 14, 2023 at 10:05:18PM +0100, David Heidelberg wrote:
+> Acked-by: David Heidelberg <david@ixit.cz>
+> 
+>  > +    int i;
+>  > +
+>  > +    for (i = 1; i < CH348_MAXPORT; ++i) {
+> 
+> One nitpick; it would be nice to have a "for" loop from C99+.
 
+No, I prefer this as it stands (and we only have about 80 instances of
+such fancy stuff outside of tooling it seems).
+
+Johan
