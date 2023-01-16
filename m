@@ -2,78 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F7666B874
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 08:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0DC66B89A
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 09:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbjAPHxS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Jan 2023 02:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S232141AbjAPIBx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Jan 2023 03:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbjAPHxO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 02:53:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6FD10433;
-        Sun, 15 Jan 2023 23:53:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC41B80D68;
-        Mon, 16 Jan 2023 07:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3777C433EF;
-        Mon, 16 Jan 2023 07:53:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673855591;
-        bh=8fJTeCgaIyhz3apariHUwPsx0DvhzauvDCZWpNrI0GE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jm0MfEXTfUYs0r05tOmPh6oABd+ZW3mWMra5B/2HhiiW18s9yGIZLSRGygF71bCWc
-         0endRI6Iqy3pt3D937emDfQERHQf2Z4MauAcP3x4ajlAwkgd5iXLoZXYwHHCqvP5WF
-         bM+G7Fa9yVYtn6rUDRqDyUHppyWNDyR6UVpun/W9USVvV+qKfvU1FNvc9Q3gXyry0+
-         Qp2X9h7i36TYSKlskJ/6e1vIoWKUimYv64qvtdKMUECbOcgYkgb9Nmbt5VJ3e5UuWD
-         1ivVf3NFLJEJDHVDpFkfmZWIXquloGrh2wcU25yKZDlElJa9EbukoBKDvDLLjRZUnJ
-         nvb8Gp9J5TzEA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pHKJ6-0000LU-HY; Mon, 16 Jan 2023 08:53:29 +0100
-Date:   Mon, 16 Jan 2023 08:53:28 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Duke =?utf-8?B?WGluKOi+m+WuieaWhyk=?= <duke_xinanwen@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jerry.meng@quectel.com,
-        duke.xin@quectel.com
-Subject: Re: [PATCH v3] USB: serial: option: add Quectel EM05CN (SG) modem
-Message-ID: <Y8UCeOZovGzr+cK8@hovoldconsulting.com>
-References: <20230116020727.19685-1-duke_xinanwen@163.com>
+        with ESMTP id S232200AbjAPIBR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 03:01:17 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB1651205D;
+        Mon, 16 Jan 2023 00:00:52 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 30G806AA0003786, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 30G806AA0003786
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 16 Jan 2023 16:00:06 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Mon, 16 Jan 2023 16:00:06 +0800
+Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 16 Jan
+ 2023 16:00:05 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>, <bjorn@mork.no>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net-next] r8152: avoid to change cfg for all devices
+Date:   Mon, 16 Jan 2023 15:59:51 +0800
+Message-ID: <20230116075951.1988-1-hayeswang@realtek.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230116020727.19685-1-duke_xinanwen@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.22.228.98]
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 01/16/2023 07:09:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzEvMTYgpFekyCAwNjowMDowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 06:07:27PM -0800, Duke Xin(辛安文) wrote:
-> The EM05CN (SG) modem has 2 USB configurations that are configurable via the AT
-> command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
-> the following interfaces, respectively:
-> 
-> "MBIM"  : AT + MBIM + DIAG + NMEA  + MODEM
-> "RMNET" : AT + DIAG + NMEA + Modem + QMI
-> 
-> The detailed description of the USB configuration for each mode as follows:
+The rtl8152_cfgselector_probe() should set the USB configuration to the
+vendor mode only for the devices which the driver (r8152) supports.
+Otherwise, no driver would be used for such devices.
 
-> Signed-off-by: Duke Xin(辛安文) <duke_xinanwen@163.com>
-> ---
+Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+ drivers/net/usb/r8152.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-Thanks for the update. Patch itself looks good, but you forgot to
-include a short changelog here below the --- line.
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 66e70b5f8417..24be9449e4fc 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -9500,9 +9500,8 @@ static int rtl_fw_init(struct r8152 *tp)
+ 	return 0;
+ }
+ 
+-u8 rtl8152_get_version(struct usb_interface *intf)
++static u8 __rtl_get_hw_ver(struct usb_device *udev)
+ {
+-	struct usb_device *udev = interface_to_usbdev(intf);
+ 	u32 ocp_data = 0;
+ 	__le32 *tmp;
+ 	u8 version;
+@@ -9571,10 +9570,19 @@ u8 rtl8152_get_version(struct usb_interface *intf)
+ 		break;
+ 	default:
+ 		version = RTL_VER_UNKNOWN;
+-		dev_info(&intf->dev, "Unknown version 0x%04x\n", ocp_data);
++		dev_info(&udev->dev, "Unknown version 0x%04x\n", ocp_data);
+ 		break;
+ 	}
+ 
++	return version;
++}
++
++u8 rtl8152_get_version(struct usb_interface *intf)
++{
++	u8 version;
++
++	version = __rtl_get_hw_ver(interface_to_usbdev(intf));
++
+ 	dev_dbg(&intf->dev, "Detected version 0x%04x\n", version);
+ 
+ 	return version;
+@@ -9869,6 +9877,12 @@ static int rtl8152_cfgselector_probe(struct usb_device *udev)
+ 	struct usb_host_config *c;
+ 	int i, num_configs;
+ 
++	/* Swtich the device to vendor mode, if and only if the vendor mode
++	 * driver supports it.
++	 */
++	if (__rtl_get_hw_ver(udev) == RTL_VER_UNKNOWN)
++		return 0;
++
+ 	/* The vendor mode is not always config #1, so to find it out. */
+ 	c = udev->config;
+ 	num_configs = udev->descriptor.bNumConfigurations;
+-- 
+2.38.1
 
-I've applied both v3 patches now so no need to send a v4 for this, but
-please try to remember this for your future contributions.
-
-Johan
