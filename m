@@ -2,95 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E4B66C18C
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 15:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF1166C27C
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 15:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbjAPOM5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Jan 2023 09:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S230402AbjAPOoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Jan 2023 09:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbjAPOMB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 09:12:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A5F22DEC;
-        Mon, 16 Jan 2023 06:04:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73DB660FD0;
-        Mon, 16 Jan 2023 14:04:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB79C433D2;
-        Mon, 16 Jan 2023 14:04:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673877876;
-        bh=EV15u9dLOl8nZ4UOKjvDAxinL5mqmY/cCdKHyrLrq+s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cj3ghVatvd4iuyi29LbeiZjT+56wkx6uZOyfXzkpPI5ntFqvz3bW4F8un5RddBg6O
-         OPkSORexQ2KC/zhkfL1PZ8k9SZB629lxLRminAS51FhAdC7Z1MQC+diJ0iFCUO3sKT
-         EbkXMyeWubAwFzkT20R0w/Vs+pTaw7r5fCcL9sHRe4xHSDf2F1tfEiymL9SxaNqDUp
-         ByhmvWWGgc6ybWWo3zrFGz1sf3pv9MG6sfMwypV8/d5/UywmvLZPEzd8f70H8VeM8Z
-         bpDJ0nxt9WJWYmBZYsvEQgiI1SmSv2sQ22B7lMuRipSTfWK+Wt+kiW5NEBpc2IPjHF
-         urktmolxkVe3w==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, hayeswang@realtek.com,
-        jflf_kernel@gmx.com, svenva@chromium.org, dober6023@gmail.com,
-        wsa+renesas@sang-engineering.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 20/24] r8152: add vendor/device ID pair for Microsoft Devkit
-Date:   Mon, 16 Jan 2023 09:03:55 -0500
-Message-Id: <20230116140359.115716-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230116140359.115716-1-sashal@kernel.org>
-References: <20230116140359.115716-1-sashal@kernel.org>
+        with ESMTP id S230127AbjAPOn1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 09:43:27 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EE2265B7
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jan 2023 06:21:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673878863; x=1705414863;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5X/KWOvmd9+vKnA+vdGE75aS753J+ioQjo998SDmI5I=;
+  b=gmdZe6gHNyNzBUC9D1UzSB4T/6oV0UlV67uQZHEy5vqvoa1hBDPDLw8u
+   AAs3DM/ZK8Xd2XQaq6SnirMwPU/PqZRBG2oRDwfhXCiGPoTDqo/VUXbHN
+   /dmJhKDveU3syD6PIWv6lxcABcUR0MyQE+mzSH48XzbTKTsJpYr8L2Fg2
+   UNQk65b8N+jwYVw9CGhpF7eoo0a1dpeEZlsCylb+Kd9W85Sqi8yTqltlx
+   eKxLqyGeZ5R3AHgfqEyfckN7urbAC7QPgf4Oj4XEzDjuNRmcj0jfwP27T
+   /AwTmV2sbmx+/v97AsthePFcM4okfUf6Zd0XvKPZwQHaIFK8DbTxeinP1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="312322914"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="312322914"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 06:21:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="987817159"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="987817159"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Jan 2023 06:21:00 -0800
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/7] usb and xhci fixes for usb-linus
+Date:   Mon, 16 Jan 2023 16:22:09 +0200
+Message-Id: <20230116142216.1141605-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+Hi Greg
 
-[ Upstream commit be53771c87f4e322a9835d3faa9cd73a4ecdec5b ]
+A few fixes for usb-linus.
 
-The Microsoft Devkit 2023 is a an ARM64 based machine featuring a
-Realtek 8153 USB3.0-to-GBit Ethernet adapter. As in their other
-machines, Microsoft uses a custom USB device ID.
+Biggest change is checking from ACPI tables if OS needs to disable
+USB3 U1/U2 LPM states for a port, even if both the host and device
+supports LPM.
+This can be the case if the system uses a USB3 U1/U2 incapable retimer
+for a port.
 
-Add the respective ID values to the driver. This makes Ethernet work on
-the MS Devkit device. The chip has been visually confirmed to be a
-RTL8153.
+This touches usb-acpi code in usb core.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Link: https://lore.kernel.org/r/20230111133228.190801-1-andre.przywara@arm.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/r8152.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks
+-Mathias
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 109c288d8b47..cf6941b1d280 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9809,6 +9809,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab),
- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6),
- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927),
-+	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e),
- 	REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3054),
+Jimmy Hu (1):
+  usb: xhci: Check endpoint is valid before dereferencing it
+
+Mathias Nyman (5):
+  xhci: Fix null pointer dereference when host dies
+  xhci: Add update_hub_device override for PCI xHCI hosts
+  xhci: Add a flag to disable USB3 lpm on a xhci root port level.
+  usb: acpi: add helper to check port lpm capability using acpi _DSM
+  xhci: Detect lpm incapable xHC USB3 roothub ports from ACPI tables
+
+Ricardo Ribalda (1):
+  xhci-pci: set the dma max_seg_size
+
+ drivers/usb/core/usb-acpi.c  | 65 ++++++++++++++++++++++++++++++++++++
+ drivers/usb/host/xhci-pci.c  | 45 +++++++++++++++++++++++++
+ drivers/usb/host/xhci-ring.c |  5 ++-
+ drivers/usb/host/xhci.c      | 18 +++++++++-
+ drivers/usb/host/xhci.h      |  5 +++
+ include/linux/usb.h          |  3 ++
+ 6 files changed, 139 insertions(+), 2 deletions(-)
+
 -- 
-2.35.1
+2.25.1
 
