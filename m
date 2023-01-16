@@ -2,92 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6A266B962
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 09:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C14E66BA59
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jan 2023 10:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjAPIwe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Jan 2023 03:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S232063AbjAPJaA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Jan 2023 04:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjAPIw0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 03:52:26 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646044A1;
-        Mon, 16 Jan 2023 00:52:24 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pHLDw-0003Fv-T9; Mon, 16 Jan 2023 09:52:12 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pHLDw-000TdQ-Lf; Mon, 16 Jan 2023 09:52:12 +0100
-Message-ID: <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-Date:   Mon, 16 Jan 2023 09:52:10 +0100
+        with ESMTP id S232116AbjAPJ3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Jan 2023 04:29:17 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFBF16ADE
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jan 2023 01:29:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673861356; x=1705397356;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qsJJc9BF2WoGaIKpMhgXcwwzyKIXtD6MP0d1O8L+JGA=;
+  b=MstSH+F0sfs1K1KIKj0rU1Z7F1gYnMMvmW70vl8lv/lQy1aV9Ksjs3Ia
+   OyWQs+ZW2FCIGIdgEz9krUxCAfFv8+9c2bD8flP85FvBAtM2Ryi42kQ04
+   ADbHPnatOMviiIQYpdRd6/LuVLAjvIGKRRCjLXzZMKtnwYGnTmlyyrh3o
+   DK0dwSvr+agXMp1otmTRMxtBJ+fSb+O6RvzSv7m//4U7V3JIyr9ewOzCT
+   /OzCKKaedc923uxxQFwsMM/lIQecvaGuwlf8OGckhVj8O3LjO7kAKhRMy
+   e0HEXo68w5iWwtIpHGOFoUGN0R3ek+RerHRPX0oJyNn8HGDVSiZYfSEmA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="351672159"
+X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
+   d="scan'208";a="351672159"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 01:29:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="747661097"
+X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
+   d="scan'208";a="747661097"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Jan 2023 01:29:11 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 95899130; Mon, 16 Jan 2023 11:29:45 +0200 (EET)
+Date:   Mon, 16 Jan 2023 11:29:45 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 fixes for v6.2-rc5
+Message-ID: <Y8UZCZV92voYDxv0@black.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: remove arch/sh
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
-Content-Language: en-US
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <20230116071306.GA15848@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Christoph!
+Hi Greg,
 
-On 1/16/23 08:13, Christoph Hellwig wrote:
-> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
->> I'm still maintaining and using this port in Debian.
->>
->> It's a bit disappointing that people keep hammering on it. It works fine for me.
-> 
-> What platforms do you (or your users) use it on?
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-We have had a discussion between multiple people invested in the SuperH port and
-I have decided to volunteer as a co-maintainer of the port to support Rich Felker
-when he isn't available.
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-Adrian
+are available in the Git repository at:
 
--- 
-  .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.2-rc5
 
+for you to fetch changes up to 84ee211c83212f4d35b56e0603acdcc41f860f1b:
+
+  thunderbolt: Disable XDomain lane 1 only in software connection manager (2023-01-09 10:44:43 +0200)
+
+----------------------------------------------------------------
+thunderbolt: Fixes for v6.2-rc5
+
+This includes fixes for:
+
+  - on-board retimer scan return value
+  - runtime PM during tb_retimer_scan()
+  - USB3 link rate calculation
+  - XDomain lane bonding.
+
+All these have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Mika Westerberg (3):
+      thunderbolt: Do not call PM runtime functions in tb_retimer_scan()
+      thunderbolt: Use correct function to calculate maximum USB3 link rate
+      thunderbolt: Disable XDomain lane 1 only in software connection manager
+
+Utkarsh Patel (1):
+      thunderbolt: Do not report errors if on-board retimers are found
+
+ drivers/thunderbolt/retimer.c | 20 ++++----------------
+ drivers/thunderbolt/tb.c      | 20 +++++++++++++++-----
+ drivers/thunderbolt/tunnel.c  |  2 +-
+ drivers/thunderbolt/xdomain.c | 17 ++++++++++++-----
+ 4 files changed, 32 insertions(+), 27 deletions(-)
