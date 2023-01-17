@@ -2,153 +2,327 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A0466D957
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 10:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BB766D962
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 10:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236455AbjAQJID (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 04:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S236472AbjAQJLp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 04:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbjAQJHi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 04:07:38 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2040.outbound.protection.outlook.com [40.107.8.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF5B3456F;
-        Tue, 17 Jan 2023 01:02:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UfYNUT55GlNXKIKHxvTux7XGqCiVv2/yjk96jOsd2DTYjxD/mU1jHNKxFazJDSN1bKf474tBqZ+fnKjGp/F79iCgl/Babh5YC0JzUuhR/kLOn3RvsPAj6EKh9IWCtRdj+Lt07jCgzhN5B5j+291hYijjXfxvZzmP/MyzEAawAdMVx0FZcs8CtCWA+Fs/o0j5nbnBqxg/eQooN6l6qw6ZUAz6bGRw3GAZErS8X/0+YqNH3mW+lGbZvIV3WpB2PTenVfwEPiNkjRmlmts14308L1SkXqPHGGeUiErQiterHmNTpvAeASTDrraRjimiois5MHbmZIgMytjsiYpiyu+cZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5Y89HW+XsXy3meuXU9FFdTcaVOOuQdw4KjiQurTy/rI=;
- b=Ck+OgKMGWP4UdEMZwm+0nSQugM/paAvUnwBZAq15aFqLAIsxdwy6EaWPzYIsxD0dznSg2FcXO2UUyNo4hPQlayJ+1vLlHUy5sC6PEk/RZUn6aMlo88tge3AZKi0OWrKAY2KxdiGc93jULToN2mMN5/nOSjkeeibyXuX+PJqXEleW2gvwQybQ1COrPTWGiG0QPCAvY3rC0lXS/+/0Do7iM+E3Yx8uRPhKLTwdINRL8IldudL+5SEuyjPk0FisKIbJvHg/xCH2lTzqzzuMG6C5rZBPwIPI1bXFGsNSxpRfWd7U6QB9+J7ij9kxLOVOi/KbS7NWaNJh4elWDEhOCWt1Iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5Y89HW+XsXy3meuXU9FFdTcaVOOuQdw4KjiQurTy/rI=;
- b=S7r8ueLUmz3RZtnGftm/HXaDxhlfT4Mci+aZKRdWi92D61OaBwzcFExIzQnWcJE5PsmBrAtIUj/X1EgOHU4wJLtHUmTJuECbdG9uTtVcDAE3k0PUzlFw1aIyzD2wFxY30lvOV4lweDoypLisQ2Nzy6BWz0Nlclm/al6E0HiYlfTK/yNBbcWdtNjbfh/IYdTZGKScezaqQVfvFwLSk/agfNkwpf0qwSml6tmdqPQ1SKguFlGcSWPfGT77PYcxzrrY6mJG+aVROgn/uEoKhjcWqlqoY6znPJkvpFlsUM3DyseYYESmts/mzN338BQdOzg8mGL2VYoEN8Hajw4kO8laPg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DB9PR04MB9259.eurprd04.prod.outlook.com (2603:10a6:10:371::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Tue, 17 Jan
- 2023 09:02:02 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b%5]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 09:02:01 +0000
-Message-ID: <3c191200-4834-e5f7-9c52-ffd1e2b8ac0c@suse.com>
-Date:   Tue, 17 Jan 2023 10:01:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] usb-storage: apply IGNORE_UAS only for HIKSEMI MD202
- on RTL9210
-Content-Language: en-US
-To:     Juhyung Park <qkrwngud825@gmail.com>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, zenghongling@kylinos.cn,
-        zhongling0719@126.com, stable@vger.kernel.org
-References: <20230117085154.123301-1-qkrwngud825@gmail.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20230117085154.123301-1-qkrwngud825@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0002.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::7) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S236179AbjAQJLW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 04:11:22 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E933D3B3DA;
+        Tue, 17 Jan 2023 01:05:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673946310; x=1705482310;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Bs/QxT4h0CrR67dsOJolQlUz/QoNMMNB9GCwsyLDTrY=;
+  b=VrHeGQoBL9yrTb7lJ8tGxzTqrcmFvYuTgqRtd2GJgDDecxT6rkLR1Jao
+   qzGSRwbRnc6jNnDnUQAkErOKmKBKne4d5u34dbKRiY+j2vvEhX3mxu1iz
+   MDJIAyqvIXBZE6Ok+Nmd6fX6olNEx3IE6GhtUlmzYeF48kBzMPgZibLog
+   +FCVXpBadTaZEGMyIc1IgLpVCq99YLYmCz+Kqb6ybjvnGy07sGft+2mIl
+   Es5dEf4k3el3hTCvB5XivOyyC3yqx6CVyUYeg5zK2JQkeOeGriM3cwqbE
+   XXr/K9+6vi1Pm/crLOsnRkLT6uyvZK3F83ZIaUF56XGG/vLcg0yxGRbr0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="324700937"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="324700937"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 01:04:34 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="783174010"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="783174010"
+Received: from tronach-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.40.3])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 01:04:26 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Rodolfo Giometti <giometti@enneenne.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 01/12] tty: Cleanup tty_port_set_initialized() bool parameter
+Date:   Tue, 17 Jan 2023 11:03:47 +0200
+Message-Id: <20230117090358.4796-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230117090358.4796-1-ilpo.jarvinen@linux.intel.com>
+References: <20230117090358.4796-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DB9PR04MB9259:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e81841b-8d2d-4d53-e175-08daf8697f37
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2MnjjSXYGbk27Yxp75Kr5kAA3Vongj01GZRQishgwJaXATf1dSyz2ixBPhUZrNvLr9mTkltd2yfFi0btA5xYTDboWLw2pR42m8m+m40LgJjTuLPs2OBSIwp4GWp53W/Ny3ddR1rbd3koIh4+sH1RQgy58uxJrcCiiTTu9D1ULoP6xrI+75GLAuCwjOd5hhS9kogtGqXJIBuRFcrMsNeQKJjvmT3/veMz6bN5BlMJReleWwYtiDlsprVPQSJ5DWQ6f4WcXEAk8XMgJoSoJumL/NOhdvEsFsooDGDDM7EGYgjFWUvaqLPl1shDWzHVvptD0oOu1Uk8kbtSaXXsN9nVRO0JoohcEWL4mdWdhg2ScWmv1qxVcNIl6u3qv2xlNgiQ2XRYfDS/E5Xkp4TDHtwOII2MA5giDgZr7eSnSME9oaPJjEaSzyFbZMy7cPtUmHaK7qGpIzwFWhINnikdnqAbGxoEHBystO/UXVt6y6RH9p+iHUdBdZ27fyXTNyl8EIt8OquEvktppY2/XmbtutDLPv9bwerJltrXJy6BNXpCqvbsvVMOzul+gCVZ6yleJciU9RfEPzwqmnjQdT/GB/pQphvPJsFFHmAKuiZClsd7SCxAS+5pLba+CIBn8+bbX8cAT8ICIvvKAbNL4LaoK1kAfs6xLpqTz5Ab0EEzUOSBE/ZCjctqWovk5wVUy9x+XOeP7uOM7Psv3FGzmpLwzkI6CK1bcmF1n+lNTvJv1dFYV7BR4yKFRcypmHprCPsJ7XwErOlKWsyw9woUetd73bKgAg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(376002)(39860400002)(396003)(346002)(451199015)(66556008)(6512007)(66946007)(186003)(66476007)(4326008)(83380400001)(2616005)(8936002)(53546011)(8676002)(316002)(2906002)(5660300002)(41300700001)(86362001)(31696002)(36756003)(478600001)(6486002)(966005)(38100700002)(31686004)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWpSWUxMODY5S1VFaWFKS3Z5ck5rN2xCR0RKb0p2YitCVnpnTjlDWVB6SG1p?=
- =?utf-8?B?RmNiQlVaZ0RCOTA5YkI0Y3pPRFd1VlpHbmJFbUs0amRFUHZEakYyMHJzTHg0?=
- =?utf-8?B?ZnZ1bSs3dGxKaURONnhFNTlrQzZtRG4zeFZ1M0Z4cndRckhDR0RQSkNZRFZH?=
- =?utf-8?B?RW5Ga3BsOTNOanVLdFVxTmcyRm5DZUl4dEdxWDBZZXdPRm45NElFNmVKV3JX?=
- =?utf-8?B?dncyWHZqT0o2RG9GWC9oNEMwMW82cFBIMkF5RGZaQ1F1YTdsVUhWRDlnemp1?=
- =?utf-8?B?TzVNeFBNZ2wzeUpYMEdlRnVnUVlwRlEvUVY0YWl4RW5vNktxL2o2M0Q1ZHZB?=
- =?utf-8?B?SDNtcUtUQVNNNHZEY0ZINzNRWDlhT21pUjFoN1NxSkc5b215akhyWHdid2d4?=
- =?utf-8?B?UzVHU0w3Q2lhTzBqeEd2b0Vla2FVc3JZZWo4L0EwejZNRHpKY282aWJkTkF1?=
- =?utf-8?B?dzZuQnBIVDJUTUUwYUNRZUx3Z1N4ZUN2dTFKSVA1TmdZdEFEY2JEYkRhOENl?=
- =?utf-8?B?bmN1L1JCcGlXVjhWekhtMzBxZS9wYUFWM1dDaXRwZDFZTGpVakM5d0pmWVlH?=
- =?utf-8?B?RzJqRDF5ZXlzQU9MWTNLT1pFd2RuYmpQc0VudHFJYjZnOTY0Qi8zUnR5VVNK?=
- =?utf-8?B?YVhldEF3Tk5PZTdJanM3NWpBSW16cjFwYVlRc2c5MjF4MUl2OEM0Nmt0bFNu?=
- =?utf-8?B?aCtJc0g2WUwxbDFpL3VGRmZuVGVpN3o2aDRKYXhla1d2Wm5DcWtray90ek1W?=
- =?utf-8?B?VEZtc0lXMmdmMURZOTBnWVBibDVTc1dLcHpycGJFWXg1TlBmL0FjOXNrbWxU?=
- =?utf-8?B?WHhsTEhqdHNlaFBoZnFSWllzK1JXL1NNQnNZUDc0WmJqWUpNaVg0T3lOOU5J?=
- =?utf-8?B?TFlKd3R0c1VZOWluWGtMckJqNG1pcCtvQnlXQ1I3UE01QkM2aDZpUWtvM0RC?=
- =?utf-8?B?WEFiS3dXdTkrS0l2dHZjTjVFbTAyUlUzeVQwNGNDRUlkOFBudmJkcFI2MW1R?=
- =?utf-8?B?TmxEMHQ3SG9mY0doZmFUSzR6WWFQUnZ3MVFTNDNuY09SamowTlFnUkNLb3J5?=
- =?utf-8?B?Qkw1K1h6SzVWM05VQ096bE1TNlBhejQyME9uQkNaa1VpWDgrTEI1bmVRdzYz?=
- =?utf-8?B?enZtY0FWODZBY1FaRlVHTU4wK3lZcDV3VXo4dzZaNmNVcXhmZ0ZIdGR2R3hr?=
- =?utf-8?B?TWlGa25wMlRaUjFuVHdsYXlwczhXU3NRd3pjVmZEeHJrbCtocXgxcm5BaFFT?=
- =?utf-8?B?RHRVcFo1dUZFNVoxNEFiK3dzSVZWUkYvRTd3WUR5d1NnN2tMS2k2RGhvOEdC?=
- =?utf-8?B?WnB5WVhoUElNMmQ0YWZJWnhVUGJLbk9jREU1TEFyN3ZHZStzcTZhV2xidjRn?=
- =?utf-8?B?eDkyWjZSRnFqSkNCUW1qNmdmT3ZQVExFOWRHa2hDSS9YUmg2WW8yS1VBVmc2?=
- =?utf-8?B?MFU5SmJFbk9SemRYYjZzMVp1NE1KZFFwckNqZzhyR21tVVBtc0RRL25xbVQ5?=
- =?utf-8?B?dW9EVlZpRDQ4bWlDRlJBdnB2UUVRTEIyY210T1c3RXloWkZBZFdpSmhIUDBv?=
- =?utf-8?B?ajZuVnZVV09SNXFFK05xb1VvMUwweU1CM2RNM3lBUVdUVmRGVzRrVVRaUUh6?=
- =?utf-8?B?dWdlenRuQ0xhMitUaGRWVTZMZVQvdjdXb251bm1uUTNWUHI2dzIwdmlKakFi?=
- =?utf-8?B?MzZUbHlaVzA5VnNhM0NMRnRLYzlwUGI4MXNyRFBiWmNSQTZEeXRGek5GYTRi?=
- =?utf-8?B?a1ZHZzlwR0hkRitianoyU2pYK0N6NXQrd3RhRldGM1RYTDJkWXQ0Zy85ZGVj?=
- =?utf-8?B?SVZVRG5oZ2NxeDdMYVVzSmNpOElnNm9FcWt6THh4enhuek5zRC8rbjNMVzdQ?=
- =?utf-8?B?cTlweHZUQ1Q1bUFTam51MHRzVzk3NkNiZW0rUDVTTEJ2RXZWV1Qrd1ppZHRY?=
- =?utf-8?B?bStoR3JQRFhqZzV0dlFEQm5LSnRReXBCYkpQWTBMNm9LZENjU3Z0V2E5Yy9D?=
- =?utf-8?B?SlRKQk9LNmo2TGt4K0NLR0t1L3hZL3owbmhmMllHQlNac1FwRzBLcW51SG5l?=
- =?utf-8?B?WTJLOGZKZWpwU2dFQkNEZWdweko2SmtGaCtEdjNJRTZBZ3FSdmVWeTJvdTc2?=
- =?utf-8?B?bTBlNy9yLzI2aXNBeU0xVzBWc0hWOGhtVjdQVlY2UDFaczVsbXNJY3EzcFQz?=
- =?utf-8?Q?LqbK7O/f2U3gdh8VvFfIjv0tckUTBGKLO6AYS+AdRUlw?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e81841b-8d2d-4d53-e175-08daf8697f37
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 09:02:01.8312
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qFJJPudOoHnkUXaSI8ryJDeC+medgUJvjm5Z6WA2XFFtoRXqjGYVfGb++qpNT5TdwJ/dATt37xpIgmPgkPOfWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9259
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Make callers pass true/false consistently for bool val.
 
+Reviewed-by: Samuel Iglesias Gonsalvez <siglesias@igalia.com>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/char/pcmcia/synclink_cs.c | 4 ++--
+ drivers/ipack/devices/ipoctal.c   | 4 ++--
+ drivers/s390/char/con3215.c       | 4 ++--
+ drivers/tty/amiserial.c           | 4 ++--
+ drivers/tty/moxa.c                | 2 +-
+ drivers/tty/mxser.c               | 2 +-
+ drivers/tty/n_gsm.c               | 4 ++--
+ drivers/tty/serial/serial_core.c  | 6 +++---
+ drivers/tty/synclink_gt.c         | 4 ++--
+ drivers/tty/tty_port.c            | 4 ++--
+ drivers/usb/serial/console.c      | 2 +-
+ 11 files changed, 20 insertions(+), 20 deletions(-)
 
-On 17.01.23 09:51, Juhyung Park wrote:
-> The commit e00b488e813f ("usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS")
-> blacklists UAS for all of RTL9210 enclosures.
-> 
-> The RTL9210 controller was advertised with UAS since its release back in
-> 2019 and was shipped with a lot of enclosure products with different
-> firmware combinations.
-> 
-> Blacklist UAS only for HIKSEMI MD202.
-> 
-> This should hopefully be replaced with more robust method than just
-> comparing strings.  But with limited information [1] provided thus far
-> (dmesg when the device is plugged in, which includes manufacturer and
-> product, but no lsusb -v to compare against), this is the best we can do
-> for now.
-> 
-> [1] https://lore.kernel.org/all/20230109115550.71688-1-qkrwngud825@gmail.com
-> 
-> Fixes: e00b488e813f ("usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS")
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Hongling Zeng <zenghongling@kylinos.cn>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index b2735be81ab2..baa46e8a094b 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -1309,7 +1309,7 @@ static int startup(MGSLPC_INFO * info, struct tty_struct *tty)
+ 	if (tty)
+ 		clear_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 1);
++	tty_port_set_initialized(&info->port, true);
+ 
+ 	return 0;
+ }
+@@ -1359,7 +1359,7 @@ static void shutdown(MGSLPC_INFO * info, struct tty_struct *tty)
+ 	if (tty)
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 0);
++	tty_port_set_initialized(&info->port, false);
+ }
+ 
+ static void mgslpc_program_hw(MGSLPC_INFO *info, struct tty_struct *tty)
+diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
+index fc00274070b6..103fce0c49e6 100644
+--- a/drivers/ipack/devices/ipoctal.c
++++ b/drivers/ipack/devices/ipoctal.c
+@@ -647,7 +647,7 @@ static void ipoctal_hangup(struct tty_struct *tty)
+ 	tty_port_hangup(&channel->tty_port);
+ 
+ 	ipoctal_reset_channel(channel);
+-	tty_port_set_initialized(&channel->tty_port, 0);
++	tty_port_set_initialized(&channel->tty_port, false);
+ 	wake_up_interruptible(&channel->tty_port.open_wait);
+ }
+ 
+@@ -659,7 +659,7 @@ static void ipoctal_shutdown(struct tty_struct *tty)
+ 		return;
+ 
+ 	ipoctal_reset_channel(channel);
+-	tty_port_set_initialized(&channel->tty_port, 0);
++	tty_port_set_initialized(&channel->tty_port, false);
+ }
+ 
+ static void ipoctal_cleanup(struct tty_struct *tty)
+diff --git a/drivers/s390/char/con3215.c b/drivers/s390/char/con3215.c
+index 72ba83c1bc79..0b05cd76b7d0 100644
+--- a/drivers/s390/char/con3215.c
++++ b/drivers/s390/char/con3215.c
+@@ -629,7 +629,7 @@ static int raw3215_startup(struct raw3215_info *raw)
+ 	if (tty_port_initialized(&raw->port))
+ 		return 0;
+ 	raw->line_pos = 0;
+-	tty_port_set_initialized(&raw->port, 1);
++	tty_port_set_initialized(&raw->port, true);
+ 	spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+ 	raw3215_try_io(raw);
+ 	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+@@ -659,7 +659,7 @@ static void raw3215_shutdown(struct raw3215_info *raw)
+ 		spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+ 		remove_wait_queue(&raw->empty_wait, &wait);
+ 		set_current_state(TASK_RUNNING);
+-		tty_port_set_initialized(&raw->port, 1);
++		tty_port_set_initialized(&raw->port, true);
+ 	}
+ 	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+ }
+diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+index f52266766df9..f8cdce1626cb 100644
+--- a/drivers/tty/amiserial.c
++++ b/drivers/tty/amiserial.c
+@@ -502,7 +502,7 @@ static int startup(struct tty_struct *tty, struct serial_state *info)
+ 	 */
+ 	change_speed(tty, info, NULL);
+ 
+-	tty_port_set_initialized(port, 1);
++	tty_port_set_initialized(port, true);
+ 	local_irq_restore(flags);
+ 	return 0;
+ 
+@@ -556,7 +556,7 @@ static void shutdown(struct tty_struct *tty, struct serial_state *info)
+ 
+ 	set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+-	tty_port_set_initialized(&info->tport, 0);
++	tty_port_set_initialized(&info->tport, false);
+ 	local_irq_restore(flags);
+ }
+ 
+diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+index 35b6fddf0341..bc474f3c3f8f 100644
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -1484,7 +1484,7 @@ static int moxa_open(struct tty_struct *tty, struct file *filp)
+ 		MoxaPortLineCtrl(ch, 1, 1);
+ 		MoxaPortEnable(ch);
+ 		MoxaSetFifo(ch, ch->type == PORT_16550A);
+-		tty_port_set_initialized(&ch->port, 1);
++		tty_port_set_initialized(&ch->port, true);
+ 	}
+ 	mutex_unlock(&ch->port.mutex);
+ 	mutex_unlock(&moxa_openlock);
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 2436e0b10f9a..2926a831727d 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -1063,7 +1063,7 @@ static int mxser_set_serial_info(struct tty_struct *tty,
+ 	} else {
+ 		retval = mxser_activate(port, tty);
+ 		if (retval == 0)
+-			tty_port_set_initialized(port, 1);
++			tty_port_set_initialized(port, true);
+ 	}
+ 	mutex_unlock(&port->mutex);
+ 	return retval;
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index daf12132deb1..631539c17d85 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2059,7 +2059,7 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 		tty_port_tty_hangup(&dlci->port, false);
+ 		gsm_dlci_clear_queues(dlci->gsm, dlci);
+ 		/* Ensure that gsmtty_open() can return. */
+-		tty_port_set_initialized(&dlci->port, 0);
++		tty_port_set_initialized(&dlci->port, false);
+ 		wake_up_interruptible(&dlci->port.open_wait);
+ 	} else
+ 		dlci->gsm->dead = true;
+@@ -3880,7 +3880,7 @@ static int gsmtty_open(struct tty_struct *tty, struct file *filp)
+ 	dlci->modem_rx = 0;
+ 	/* We could in theory open and close before we wait - eg if we get
+ 	   a DM straight back. This is ok as that will have caused a hangup */
+-	tty_port_set_initialized(port, 1);
++	tty_port_set_initialized(port, true);
+ 	/* Start sending off SABM messages */
+ 	if (gsm->initiator)
+ 		gsm_dlci_begin_open(dlci);
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index b9fbbee598b8..e049c760b738 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -290,7 +290,7 @@ static void uart_shutdown(struct tty_struct *tty, struct uart_state *state)
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+ 
+ 	if (tty_port_initialized(port)) {
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 
+ 		/*
+ 		 * Turn off DTR and RTS early.
+@@ -2347,7 +2347,7 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
+ 		unsigned int mctrl;
+ 
+ 		tty_port_set_suspended(port, 1);
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 
+ 		spin_lock_irq(&uport->lock);
+ 		ops->stop_tx(uport);
+@@ -2458,7 +2458,7 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
+ 					uart_rs485_config(uport);
+ 				ops->start_tx(uport);
+ 				spin_unlock_irq(&uport->lock);
+-				tty_port_set_initialized(port, 1);
++				tty_port_set_initialized(port, true);
+ 			} else {
+ 				/*
+ 				 * Failed to resume - maybe hardware went away?
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 72b76cdde534..2b96bf0ecafb 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -2354,7 +2354,7 @@ static int startup(struct slgt_info *info)
+ 	if (info->port.tty)
+ 		clear_bit(TTY_IO_ERROR, &info->port.tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 1);
++	tty_port_set_initialized(&info->port, true);
+ 
+ 	return 0;
+ }
+@@ -2401,7 +2401,7 @@ static void shutdown(struct slgt_info *info)
+ 	if (info->port.tty)
+ 		set_bit(TTY_IO_ERROR, &info->port.tty->flags);
+ 
+-	tty_port_set_initialized(&info->port, 0);
++	tty_port_set_initialized(&info->port, false);
+ }
+ 
+ static void program_hw(struct slgt_info *info)
+diff --git a/drivers/tty/tty_port.c b/drivers/tty/tty_port.c
+index dce08a6d7b5e..0c00d5bd6c88 100644
+--- a/drivers/tty/tty_port.c
++++ b/drivers/tty/tty_port.c
+@@ -367,7 +367,7 @@ static void tty_port_shutdown(struct tty_port *port, struct tty_struct *tty)
+ 		goto out;
+ 
+ 	if (tty_port_initialized(port)) {
+-		tty_port_set_initialized(port, 0);
++		tty_port_set_initialized(port, false);
+ 		/*
+ 		 * Drop DTR/RTS if HUPCL is set. This causes any attached
+ 		 * modem to hang up the line.
+@@ -788,7 +788,7 @@ int tty_port_open(struct tty_port *port, struct tty_struct *tty,
+ 				return retval;
+ 			}
+ 		}
+-		tty_port_set_initialized(port, 1);
++		tty_port_set_initialized(port, true);
+ 	}
+ 	mutex_unlock(&port->mutex);
+ 	return tty_port_block_til_ready(port, tty, filp);
+diff --git a/drivers/usb/serial/console.c b/drivers/usb/serial/console.c
+index da19a5fa414f..c3ea3a46ed76 100644
+--- a/drivers/usb/serial/console.c
++++ b/drivers/usb/serial/console.c
+@@ -169,7 +169,7 @@ static int usb_console_setup(struct console *co, char *options)
+ 			tty_save_termios(tty);
+ 			tty_kref_put(tty);
+ 		}
+-		tty_port_set_initialized(&port->port, 1);
++		tty_port_set_initialized(&port->port, true);
+ 	}
+ 	/* Now that any required fake tty operations are completed restore
+ 	 * the tty port count */
+-- 
+2.30.2
+
