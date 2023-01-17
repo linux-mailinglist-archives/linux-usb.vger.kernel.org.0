@@ -2,206 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64A966E5E6
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 19:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A7266E785
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 21:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbjAQSXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 13:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
+        id S232422AbjAQUKy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 15:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjAQSUb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 13:20:31 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCE05C0F5;
-        Tue, 17 Jan 2023 09:56:59 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so8573722otf.8;
-        Tue, 17 Jan 2023 09:56:59 -0800 (PST)
+        with ESMTP id S234631AbjAQUHS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 15:07:18 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5349745216
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-142b72a728fso32972917fac.9
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=7UFMvbpKkJyjWVLlq6ctk0nXiLL3RrLgvGqk+/g8pD0wAzMEFNodkoMNXxSPAzvJye
+         T4nqVDpRCF5Pkw4fe0ROrd1BjE8DZbycDcUSRlgnihtqJaZkkqELJ7TzEZYyPHojRNxM
+         MBh6YZCgcmJgLXwboxe3bvrjmez4qHhfCRIxGuc2G0+QOOJ/eKT38XBZ7MfSSmNLVm7z
+         gDt6C3Ymsnj+eKLcMZ0dj5q2KFKnZutgcY/1C6+IgeLmT5DwAU4QsUhG6TCQdnlD6nEb
+         fYtWfawIuB6wYahQA/cq89ISwAR2GZXbrrCFpCVxRJqHc9Mn337ID3jg/QgfKjbyHIu6
+         BObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=65Gekgr8R32c2O/eU3xbaPl1FoUqCeO8TUOCrXdg/ss=;
-        b=yDOvY8lPigD4v/AjMuIAKI4i9q6CZ1JV5uWiM+W9t4nfS8WM1nR6IF2WSZTYBWD1fm
-         E51vMItFAFE3G2AtjMHQEnO/EsLx4od/GzIJxFzeulcD879QtgzYg3rEvlwAxiyi5LgU
-         MyTLz1BkFI6v5ww5qfcPkBTT5HBSIA0Bg/Gxzkvv/9TpGfP6CD9mB6fh6Vv8X65vvsYg
-         M2AVeGOMND+1Ip9uDERHBEK9SKxXh+g0a6koVmvz8h4BlKWnUwQMGRqEqQgC1v/5NJ4E
-         Kmcb/X8I9KAn3xlcVHAXl3dyLmkwCyZnpbGBX/wgHImB5vtR4qAEs+0qeROWI+/f083p
-         zf0w==
-X-Gm-Message-State: AFqh2koayQ0DTPw1cVEFXjTW65jYe/XCXrXtI18tvwtfDyCdGiAtaMhG
-        qgOBcp5HXUGI7lRCQ91elw==
-X-Google-Smtp-Source: AMrXdXuorlkUKc8aeolXvCd1bFLHz0KynukT6/3yjkUch+obkJ1YmHBZjafb3WHY2tsFzDNShft/HA==
-X-Received: by 2002:a05:6830:1652:b0:686:4382:13aa with SMTP id h18-20020a056830165200b00686438213aamr1965161otr.32.1673978218257;
-        Tue, 17 Jan 2023 09:56:58 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f8-20020a9d5e88000000b00684c9c77754sm1389376otl.69.2023.01.17.09.56.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 09:56:57 -0800 (PST)
-Received: (nullmailer pid 3314301 invoked by uid 1000);
-        Tue, 17 Jan 2023 17:56:57 -0000
-Date:   Tue, 17 Jan 2023 11:56:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-Message-ID: <20230117175657.GA3275060-robh@kernel.org>
-References: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=qr3gz3AANDM+YpDfkgYC9yvG22osXxP24l+KHhACmHvbzCGtE0O/JEIHYV/fsgOR+H
+         qgnlYBiouXNDouhpR5YFKEo/E0E/qw3nHLOlFz2j3JH44QcMYowxkaxr0lzRa3rIJ6cc
+         /mzsRrXnwgx4wEENINDd9fn+8X9VFPHXeJyvATn6ql/dbFlMvEad1o0JbA0xqD4R+PMy
+         ADt42NU+slj4aUWxvyQBPurAvpU8uHb5Ie/3dA3uZcS2zh3d+DIZnRVo0UeZ0yPu4Jez
+         TMBebf8CPpJp5yGK1DwDqOUeOhRgGAVw8a9uh9VYo8HGQL59ZDVVmu3ueFDIOjXCBfU1
+         UJcw==
+X-Gm-Message-State: AFqh2kp3YG3Sq+B/j9CtBLrF/zkbO6v2Z1CRPLd9VbwEIcedQ6o1cDWE
+        BJIT8d3rLRWt2iVRwsLuLUdibA==
+X-Google-Smtp-Source: AMrXdXsgzCxMhqm+bb3il7EsJjEv0NbGPCzT1qf9VREFYRxVllxrk/YEzaFAyrBdtefAaDgGfnk/UQ==
+X-Received: by 2002:a05:6870:c190:b0:15e:cfca:b312 with SMTP id h16-20020a056870c19000b0015ecfcab312mr2807015oad.52.1673982083592;
+        Tue, 17 Jan 2023 11:01:23 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05687080d200b0012763819bcasm16664335oab.50.2023.01.17.11.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:01:22 -0800 (PST)
+Message-ID: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
+Date:   Tue, 17 Jan 2023 13:13:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <20230116071306.GA15848@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 08:11:14PM -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+On 1/16/23 01:13, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
+>> I'm still maintaining and using this port in Debian.
+>>
+>> It's a bit disappointing that people keep hammering on it. It works fine for me.
 > 
-> Introduce a binding for GPIO-based mux hardware used for connecting,
-> disconnecting and switching orientation of the SBU lines in USB Type-C
-> applications.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - Expanded the example to indicate how this fits with the TCPM
-> - Updated maintainer email address.
-> 
->  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 110 ++++++++++++++++++
->  1 file changed, 110 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> new file mode 100644
-> index 000000000000..bf4b1d016e1f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> @@ -0,0 +1,110 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/gpio-sbu-mux.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: GPIO-based SBU mux
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +description:
-> +  In USB Type-C applications the SBU lines needs to be connected, disconnected
-> +  and swapped depending on the altmode and orientation. This binding describes
-> +  a family of hardware solutions which switches between these modes using GPIO
-> +  signals.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - onnn,fsusb43l10x
-> +          - pericom,pi3usb102
-> +      - const: gpio-sbu-mux
-> +
-> +  enable-gpios:
-> +    description: Switch enable GPIO
-> +
-> +  select-gpios:
-> +    description: Orientation select
-> +
-> +  vcc-supply:
-> +    description: power supply
-> +
-> +  mode-switch:
-> +    description: Flag the port as possible handle of altmode switching
-> +    type: boolean
-> +
-> +  orientation-switch:
-> +    description: Flag the port as possible handler of orientation switching
-> +    type: boolean
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      A port node to link the SBU mux to a TypeC controller for the purpose of
-> +      handling altmode muxing and orientation switching.
-> +
-> +required:
-> +  - compatible
-> +  - enable-gpios
-> +  - select-gpios
-> +  - mode-switch
-> +  - orientation-switch
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    tcpm {
-> +        connector {
-> +            compatible = "usb-c-connector";
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    tcpm_hs_out: endpoint {
-> +                        remote-endpoint = <&usb_hs_phy_in>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +                    tcpm_ss_out: endpoint {
-> +                        remote-endpoint = <&usb_ss_phy_in>;
-> +                    };
-> +                };
-> +
-> +                port@2 {
-> +                    reg = <2>;
-> +                    tcpm_sbu_out: endpoint {
-> +                        remote-endpoint = <&sbu_mux_in>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +    sbu-mux {
-> +        compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-> +
-> +        enable-gpios = <&tlmm 101 GPIO_ACTIVE_LOW>;
-> +        select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-> +
-> +        mode-switch;
-> +        orientation-switch;
-> +
-> +        port {
-> +            sbu_mux_in: endpoint {
-> +                remote-endpoint = <&tcpm_sbu_out>;
-> +            };
+> What platforms do you (or your users) use it on?
 
-Don't you need a connection to whatever drives SBU? Maybe your case is 
-fixed because the phy does the DP/USB muxing? But the binding needs to 
-support the worst case which I guess would be all the muxing/switching 
-is done by separate board level components.
+3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
+sh4 emulator.
+
+I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
+different kinds of boards running it here). There's an existing mmu version of
+j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
+released yet, I have yet to get that to run Linux because the mmu code would
+need adapting, but the most recent customer projects were on the existing nommu
+SOC, as was last year's ASIC work via sky130.
+
+My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
+little blue one is... sh4a I think? (It can run the same userspace, I haven't
+replaced that board's kernel since I got it, I think it's the type Glaubitz is
+using? It's mostly in case he had an issue I couldn't reproduce on different
+hardware, or if I spill something on my N40.)
+
+I also have a physical sh2 board on the shelf which I haven't touched in years
+(used to comparison test during j2 development, and then the j2 boards replaced it).
+
+I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
+really convenient: neither of my physical boards boot from SD card so replacing
+the kernel requires reflashing soldered in flash. (They'll net mount userspace
+but I haven't gotten either bootloader to net-boot a kernel.)
+
+I include sh4 in the my mkroot builds each toybox release, I have a ~300 line
+bash script that builds bootable toybox systems for a dozen-ish architectures,
+including building a kernel configured to run under qemu:
+
+  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+
+And I ship the resulting bootable system images, most recent release is at:
+
+  https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
+
+As described at:
+
+  http://landley.net/toybox/faq.html#mkroot
+
+Various people in Japan have more hardware, but I haven't made it physically
+back there since 2020. (My residency card expired during the pandemic.)
 
 Rob
