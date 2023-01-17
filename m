@@ -2,113 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAF366D8EA
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 09:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8064A66D940
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 10:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbjAQI7E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 03:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S236429AbjAQJFr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 04:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235916AbjAQI6N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 03:58:13 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBD4302AB
-        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 00:57:07 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id vw16so10566406ejc.12
-        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 00:57:07 -0800 (PST)
+        with ESMTP id S236486AbjAQJDo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 04:03:44 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB48193DA
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 01:00:48 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id 18so44060268edw.7
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 01:00:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Ic+1LtgNqBpfDdN0NuZpI4PQ3wUx0Qq4q2LLgSCdQQ=;
-        b=i0r+uaSPW2GT/Q78IzAIDU72szwwZFWe4KVqhBtWx0LBIPPl2xC0aoDIf+S9brqaNB
-         L62W7enU/bTpp4moG7iT/l73SiVjf+nq6VizSTev+h1GyO2uDTqMRT7VWMEkGRUb5eGZ
-         dUe84T2WeQ9lkb/3whKUoRMFFhMCOGc+yzaqfcbt3yPiMFw39La3IFWAYwFfypHo001J
-         0lOmDuoc9IJjLuyx30jdSrjDuEsgMrdvWJmABM61+K/zPhSIZn/gXmYRsB4FO2iBzJZf
-         c+i2rsPw6r1Jx1GVZkUW+gfotYypmDxTVOWQsF67c3hehC/hNvYaseyycOgiMLTOBL7X
-         Tw8g==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NI10LlWiYdeHfpEZqL1lmcR2D8Sybx5E4NUlJpcgjew=;
+        b=XS5fKglsTiB4ZIZCzQvCug0TIDpUBthNqixzvIOcvguQ7BXf0GrcAiM/5+CvqLYpUk
+         dU0emxiG+dUOWFv1+SYHDKL5r5AyFOi0IK4cdQhIdSJgW1GSnrS61KLf8Mk7jp4X0fK6
+         AqEqWXU8exKabBiC+6HclRVjRHV+XuZZArELrptHRp/9acH4tiBpOAFYlYglHOSW5Eyh
+         0dTq1y+n8GdG/YewKpuuN7inMQGQgx0janOAvn6AVMgXeRnZbbPpOjMBdeIuVNzA/RW4
+         VnlCr7dWrllKBFD4w+zl797c40wvWmyZZt5nBesA9OiOFZWNxo3LoQfIzK05AYnb5X9K
+         1RWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Ic+1LtgNqBpfDdN0NuZpI4PQ3wUx0Qq4q2LLgSCdQQ=;
-        b=mYy1dYf1hiQRtDxmI7r+xSakTwlgkYkG7duGPv4nQyLWHa2uFY8DBic1H/hfeUM+x5
-         SXF4Jp/TdXfBbHnSm0M2KV5ms5TJsZMHClDDuRR5BueKnzd0At8/5diDBFiU2ebwSOdy
-         e9Nrb0nx+NqleAJlGaJ15Q/S71BlwZu6Mrvt+7CTB5itEPFV/nBFWVRoJ/t6/HXMpDoL
-         OXLJI7WoBYXj8mX1579Ftv3F5vG6lZnV7KWjRZslzWgpmBeMK03GQ9d6rczem+us7r5C
-         OliMfO6tGNr+7d6h2cY0bsvCSLm04f9ynBXbbpWNfnC9Mbp8aR93oheyxQ8l2+V2efxN
-         8SQQ==
-X-Gm-Message-State: AFqh2koGfFhuvJ9YEkz1umbDkdSgh5ev2eKDabzkXVP/jb3bfyCzwKX0
-        oeBH6R2a0cwTeRFuyAJ1rebrMcgv+9/QV+SBCKo=
-X-Google-Smtp-Source: AMrXdXsUdvhbljgvRW3uNh8kZSQLP7IhFvUAqBWD1wqVtDyehlGS6OYTVu01v24YxxtiaSaer1pBBTu5wwN8JflrjFk=
-X-Received: by 2002:a17:906:f28b:b0:86e:c124:c995 with SMTP id
- gu11-20020a170906f28b00b0086ec124c995mr122149ejb.310.1673945825768; Tue, 17
- Jan 2023 00:57:05 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NI10LlWiYdeHfpEZqL1lmcR2D8Sybx5E4NUlJpcgjew=;
+        b=x2cL/Z4JbaYkMtUysrhnYP/VKFn9JCuTpNjadu5irEItUcwmvcAZ3dXgQ4Qk7odJQ8
+         Ad9pQjD9mqWUOvwXAsaAsxSKRv/g7ciw2qrAnyxiw0kOE7S8RlNNKxMYDN34jWvoxgCv
+         zgw6y1ZgVaXDQFRkm4s3XLcgvLp0O01cVhYIvopJD7b7ruaWHP5ofQdBLtHSNWhflhsC
+         BghZ11RDAfAGCROID3/SOqNaaDearCj280azo8FwH2EThHqbAEhsufgOyMLqls1cQhnl
+         7dMwzkz/C54cg1e0zPwo5KvQhY5f6Rt8194tPciImwv3Gcqg0xl03kgFb6ZjhsHI0Tm8
+         MNtQ==
+X-Gm-Message-State: AFqh2kqH9A712c6Wriy9P0BZH5WDSYFYAi4GZWVjIXl+Swxja0lmmin3
+        AHf4upnDlCTyWk0Wky0r+0I4cQS+lic6mKwT63g=
+X-Google-Smtp-Source: AMrXdXtvQirzyWEcqZmMCecCeNH0NMpXjl0VddRInqPLZG+w5uxky9e8b2rN33zcOvlxXQ8YtEHTyuMMzgiOUmYpu7A=
+X-Received: by 2002:a05:6402:1002:b0:49a:1676:4280 with SMTP id
+ c2-20020a056402100200b0049a16764280mr233814edu.16.1673946046406; Tue, 17 Jan
+ 2023 01:00:46 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6f02:c3a0:b0:46:4530:87f1 with HTTP; Tue, 17 Jan 2023
- 00:57:05 -0800 (PST)
-Reply-To: da263657@gmail.com
-From:   Zaid Taghlaoui <mrkbeamans@gmail.com>
-Date:   Tue, 17 Jan 2023 00:57:05 -0800
-Message-ID: <CAO97YhhgferMvkms5hT=vv+29y_43Es+15djKi=aVXkKXS+cTA@mail.gmail.com>
-Subject: Re: Investment Inquiry
-To:     undisclosed-recipients:;
+References: <2mw02fh6hzd-2mw3w8xfngq@nsmail7.0.0--kylin--1>
+ <CAD14+f1p3j3WJUYshneH7A38b8JsiXjtScESB2uOQ-ZyBi57tg@mail.gmail.com>
+ <CAD14+f1ebzviMF-pi0ryKU8cRPWp2BqV2dwiXOFjeM30eqrwOg@mail.gmail.com>
+ <CAD14+f3De+0oPaq0hOo0D+siTvZDNnBXg7Qg6fKNDh63zVh8Lg@mail.gmail.com>
+ <111d7b42-5e85-58f5-0645-66749e754673@suse.com> <CAD14+f3nHd3tSFwfpLkFfQOAAg8w9soRTf7F53Bj_UsCmN9+ow@mail.gmail.com>
+ <d01fed62-dacd-b3a8-c138-73f6093f58ff@suse.com>
+In-Reply-To: <d01fed62-dacd-b3a8-c138-73f6093f58ff@suse.com>
+From:   Juhyung Park <qkrwngud825@gmail.com>
+Date:   Tue, 17 Jan 2023 18:00:34 +0900
+Message-ID: <CAD14+f2+U7ap_YCu+Cq8+UNxz--OxcEZE_oiJWqU7n8---u2JQ@mail.gmail.com>
+Subject: Re: [PATCH] Revert "usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS"
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     =?UTF-8?B?5pu+57qi546y?= <zenghongling@kylinos.cn>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        gregkh <gregkh@linuxfoundation.org>,
+        stern <stern@rowland.harvard.edu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62f listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [da263657[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrkbeamans[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good day,
+Hi Oliver,
 
-With all due respect ,we are private investment, Loan, Instruments and
-petroleum facilitators/agents with affiliations to Ultra High Net
-Worth Individuals/angel investors who are currently offering soft
-loans to individuals & corporate bodies. We offer Loan, Project
-Financing, Instrument for trading such as SBLC/LC/BG etc for real.
-PLEASE INDICATE AREA OF INTEREST.
+On Tue, Jan 17, 2023 at 5:34 PM Oliver Neukum <oneukum@suse.com> wrote:
+>
+>
+>
+> On 17.01.23 09:18, Juhyung Park wrote:
+>
+> Hi,
+>
+> > I'm not sure if this is worthy enough to write in the commit message,
+> > let me know what you think.
+> > Maybe link the relevant lore.kernel.org discussions directly into the
+> > commit message?
+>
+> By any means. The patch is the best you can do. I see and appreciate it.
+> It is still ugly. Yet, if there is no better way, so be it. But this
+> needs an extensive justification in the change log.
+> Please rather be wordier than you think necessary than too short.
+>
+> I'll ack it.
 
-If you have a good background in any of these sectors with the intent
-to expand operations or start a project you deem viable, then kindly
-email for further discussions.
+Thanks again for your input.
 
-Do reply if you have a need for our investment facility for further discussion.
+I've posted v2 here:
+https://lore.kernel.org/all/20230117085154.123301-1-qkrwngud825@gmail.com/
 
-I look forward to future business cooperation.
+I've added cc to stable as well, forgot that for v1.
 
-Kind Regard,
+Thanks, regards.
 
-Zaid Taghlaoui
+>
+>         Regards
+>                 Oliver
+>
