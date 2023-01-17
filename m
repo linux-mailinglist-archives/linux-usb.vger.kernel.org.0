@@ -2,36 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA0166E2F8
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 17:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AAC66E337
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 17:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjAQQBs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 11:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S231955AbjAQQOo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 11:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjAQQBq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 11:01:46 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BC80930B30
-        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 08:01:43 -0800 (PST)
-Received: (qmail 170339 invoked by uid 1000); 17 Jan 2023 11:01:42 -0500
-Date:   Tue, 17 Jan 2023 11:01:42 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
+        with ESMTP id S230502AbjAQQOm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 11:14:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475C13E62C;
+        Tue, 17 Jan 2023 08:14:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7415B81889;
+        Tue, 17 Jan 2023 16:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D661C433EF;
+        Tue, 17 Jan 2023 16:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673972078;
+        bh=+onl2tpFkqXG6O+TgImNUgWo6QrOd0ZCO4JWbyipcO0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vke+Xo1PYfQ4YRIsSQ1G/z6dWmbesojPwzwgjZ11fPCScwrdIaWyb2CSGO7d+ICRs
+         S9/ZPcaQNNdsrS58Zj+SSULmWgUI+vZMaIowMuC2UCXIg/OSljUsOxICo4gWHuT//+
+         21pQh50ChDM6xpvjPwbmvXT3/XJYdWHv/rPFvO4w=
+Date:   Tue, 17 Jan 2023 17:14:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Subject: Re: [RFC] USB: core: Add wireless_status sysfs attribute
-Message-ID: <Y8bGZuMAvMRCTDQB@rowland.harvard.edu>
+Message-ID: <Y8bJbM0+XcT6MRq9@kroah.com>
 References: <d9f8b9413c10fcf067658979d16a4f5c7abe69e7.camel@hadess.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <d9f8b9413c10fcf067658979d16a4f5c7abe69e7.camel@hadess.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,48 +60,42 @@ On Tue, Jan 17, 2023 at 04:17:23PM +0100, Bastien Nocera wrote:
 > Longer version:
 > I started working on implementing support for some wireless headsets
 > that use USB receivers to communicate to the headset itself.
-> 
+
+Would this also include wireless keyboard/mice recievers?
+
+Why is "wireless" somehow a special attribute that userspace needs to
+know about?
+
 > The USB receivers have multiple interfaces, and independent drivers for
 > each, as is wont to do for USB devices. There's usually a HID interface
 > to do the custom stuff (LEDs, battery status, connection status, etc.)
 > and a standard audio class interface.
-> 
+
+This probably should be an interface attribute (as Alan points out), as
+it's not a device attribute (think about updating the firmware for one
+of these, that's on an interface for the reciever you plugged in, not on
+the other end of the wireless connection...)
+
 > Those drivers don't know anything about each other, and getting them to
 > talk to each other would be rather complicated. Additionally the audio
 > interface is still somewhat functional when the headset is
 > disconnected.
-> 
+
+Those drivers shouldn't know about each other, that's up to userspace to
+group and control if needed.  No kernel interactions should be needed.
+
 > In the end, I came up with this new sysfs attribute that would make it
 > possible for user-space (PulseAudio or Pipewire) to know whether the
 > receiver is plugged in or not.
-> 
+
+Again, should be an interface attribute, if at all.
+
 > That allows user-space to not show the battery information for the
 > device (rather than 0 percent), not offer the headset as an output, and
 > potentially automatically switch to it when the headset is powered on.
-> 
-> The question is whether this should be a USB sysfs attribute, or one at
-> the base driver level. Example implementation of the USB sysfs
-> attribute itself below.
 
-Do you know of any non-USB devices using the receiver/emitter approach?
+Same for a keyboard/mouse, right?
 
-> I have a patch for a USB API as well, but I'm having some problems
-> creating deferred work on a soft irq.
-> 
-> Cheers
-> 
-> ----
-> Add a wireless_status sysfs attribute to USB devices to keep track of
-> whether a USB device that uses a receiver/emitter combo has its
-> emitter connected or disconnected.
-> 
-> By default, the USB device will declare not to use a receiver/emitter.
+thanks,
 
-How do you plan to tell which devices do use a receiver/emitter?  Is 
-this something the drivers already knowo about?
-
-Is it conceivable that a single device might have more than one 
-receiver?  If so, should the attribute belong to an interface rather 
-than to the USB device?
-
-Alan Stern
+greg k-h
