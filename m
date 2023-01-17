@@ -2,112 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8C466DDEF
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 13:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4385666DEA1
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 14:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbjAQMpJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 07:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
+        id S236416AbjAQNTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 08:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236398AbjAQMpI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 07:45:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F502BF32;
-        Tue, 17 Jan 2023 04:45:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5315D6133A;
-        Tue, 17 Jan 2023 12:45:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F61C433EF;
-        Tue, 17 Jan 2023 12:45:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673959506;
-        bh=QALQSOse3Nfpa+1ORQP8HnNqmt7biFKVAgM8Dnwoe/4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Do53J3cGvms9ZFZKFD2D9mMVrVk2KbnyqYQ/pA85YH19sgia+wuE8AmGmxsZ8nURO
-         6sngua+aapDGngh1biAStRsGui6CcxHfRWsPc0Td0UHfBjs6IabBnsY0Tqt9ihp3FI
-         ZTMbH8L6oWqN7BGIU4I1W9xEKjgrNC0hP3FRAc6ibSKUxRGnn0C8gU73ki3kWi+NvI
-         dnjnECx5X6RISrPgGrnhvpjJxrT82o7ytVAzwqQhmaBMHT2rNa0eP/O1Zw6zwWL7Hm
-         2SG07TamJUhyjDFb52nySYlrwb/wrXno4DG6gW/N5JEtmABQvJ5+OW+tjcWiX57xTr
-         YuQSd9TWlmuNw==
-Date:   Tue, 17 Jan 2023 13:45:05 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>
-cc:     Hans de Goede <hdegoede@redhat.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        David Rheinsberg <david.rheinsberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 0/8] HID: remove some unneeded exported symbols from
- hid.h
-In-Reply-To: <20221222-hid-v1-0-f4a6c35487a5@weissschuh.net>
-Message-ID: <nycvar.YFH.7.76.2301171344500.1734@cbobk.fhfr.pm>
-References: <20221222-hid-v1-0-f4a6c35487a5@weissschuh.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S237183AbjAQNSv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 08:18:51 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BB738EA5
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 05:18:49 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4dabfe825b4so148690647b3.16
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 05:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:mime-version
+         :message-id:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gmQkSSw2R+/QTRROI20PCtYQmTwF6TMo3+FLq2700ts=;
+        b=GbmqkYnrRNDoQKSWqXCvUO9yQ+cTyxZzkqHOp5TJFVcL6ZehuQ3O+5cyWFzFTc6SFb
+         cV/ov89Omo4BytREE08YxKfzQu47AVmJIxYDTmhwgu5sp94+1xPV+8jCB4gUDF1dYtKM
+         qp+bhl+Q3duDsph+vpBQMj24+z2PccGRy502Hfz9nVeYOgZKAn2+txMlXNXwpGY99P8k
+         uqicligFUdX8z3GAFKpbCt5Rkf77Lsm0qR1vHzEYq7f1Fs67yldsHyb3CCEiNXhJJeaF
+         CfiMYyLvV2yeKuus8GYVM8lNRdoIKJID7+RZDs3i1riEJtEXls/atn8KsOdIloxR+YnV
+         Wmkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:mime-version
+         :message-id:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gmQkSSw2R+/QTRROI20PCtYQmTwF6TMo3+FLq2700ts=;
+        b=Rvz421MfB8uQP84ZiQTqVGD1KqCeK7Ic0PZ69d4LYnWDgMFPWFAl4IYgHF+fWRuPw4
+         VHx9HKa2h+sA/ZThkRCRRRvfD0UGEy1mnja8gJRltd1KidKp9vN1rjBb+tsTvT+fY27F
+         YwIxt66mCkvRwDIJAFhQXY1bNkyQaGcm5sjQOGOwYDe7t/3NUDVo7ki1q5F0xbPcefCq
+         Ah/HgTQH+z5DxWrO5QhtRFRDCSyRswPVYpFxkCiztfE1MLgGD+n9pznBRGdkRIXOw1p6
+         tqMPIcZEpAEwLskEWe3p+8WtTf3XkQyrTVklfZEdelhkiPqJm2sctrW7nCjNVFugkMDA
+         rEnQ==
+X-Gm-Message-State: AFqh2kq7hf4W1xB+QNZjOnALNOmG3R2LMt4v76sKovuSuWaq92gDRPj9
+        fr5Hg8qyFLWWdXngD9kvkPrU60L7
+X-Google-Smtp-Source: AMrXdXvMybh7TlNIa7mXNxDtQqYcZZTNfEn2XzG2HKIJssak/L6EArgovOc8FPnnKPVOtfowjxD3itwc
+X-Received: from athina.mtv.corp.google.com ([2620:15c:211:200:9e58:2d3e:9f76:f099])
+ (user=maze job=sendgmr) by 2002:a25:41cd:0:b0:75c:55f:b0d4 with SMTP id
+ o196-20020a2541cd000000b0075c055fb0d4mr380688yba.13.1673961528294; Tue, 17
+ Jan 2023 05:18:48 -0800 (PST)
+Date:   Tue, 17 Jan 2023 05:18:39 -0800
+Message-Id: <20230117131839.1138208-1-maze@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Subject: [PATCH] usb: gadget: f_ncm: fix potential NULL ptr deref in ncm_bitrate()
+From:   "=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>
+To:     "=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <zenczykowski@gmail.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Carlos Llamas <cmllamas@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 22 Dec 2022, Thomas Weißschuh wrote:
+In Google internal bug 265639009 we've received an (as yet) unreproducible
+crash report from an aarch64 GKI 5.10.149-android13 running device.
 
-> Small cleanup to get rid of exports of the lowlevel hid drivers and to make
-> them const.
-> 
-> To: Hans de Goede <hdegoede@redhat.com>
-> To: Jiri Kosina <jikos@kernel.org>
-> To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> To: David Rheinsberg <david.rheinsberg@gmail.com>
-> To: Marcel Holtmann <marcel@holtmann.org>
-> To: Johan Hedberg <johan.hedberg@gmail.com>
-> To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-> To: "David S. Miller" <davem@davemloft.net>
-> To: Eric Dumazet <edumazet@google.com>
-> To: Jakub Kicinski <kuba@kernel.org>
-> To: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-bluetooth@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> 
-> ---
-> Thomas Weißschuh (8):
->       HID: letsketch: Use hid_is_usb()
->       HID: usbhid: Make hid_is_usb() non-inline
->       HID: Remove unused function hid_is_using_ll_driver()
->       HID: Unexport struct usb_hid_driver
->       HID: Unexport struct uhid_hid_driver
->       HID: Unexport struct hidp_hid_driver
->       HID: Unexport struct i2c_hid_ll_driver
->       HID: Make lowlevel driver structs const
-> 
->  drivers/hid/hid-letsketch.c        |  2 +-
->  drivers/hid/i2c-hid/i2c-hid-core.c |  3 +--
->  drivers/hid/uhid.c                 |  3 +--
->  drivers/hid/usbhid/hid-core.c      |  9 +++++++--
->  include/linux/hid.h                | 18 ++----------------
->  net/bluetooth/hidp/core.c          |  3 +--
->  6 files changed, 13 insertions(+), 25 deletions(-)
+AFAICT the source code is at:
+  https://android.googlesource.com/kernel/common/+/refs/tags/ASB-2022-12-05=
+_13-5.10
 
-Applied to hid.git#for-6.3/hid-core. Thanks,
+The call stack is:
+  ncm_close() -> ncm_notify() -> ncm_do_notify()
+with the crash at:
+  ncm_do_notify+0x98/0x270
+Code: 79000d0b b9000a6c f940012a f9400269 (b9405d4b)
 
--- 
-Jiri Kosina
-SUSE Labs
+Which I believe disassembles to (I don't know ARM assembly, but it looks sa=
+ne enough to me...):
+
+  // halfword (16-bit) store presumably to event->wLength (at offset 6 of s=
+truct usb_cdc_notification)
+  0B 0D 00 79    strh w11, [x8, #6]
+
+  // word (32-bit) store presumably to req->Length (at offset 8 of struct u=
+sb_request)
+  6C 0A 00 B9    str  w12, [x19, #8]
+
+  // x10 (NULL) was read here from offset 0 of valid pointer x9
+  // IMHO we're reading 'cdev->gadget' and getting NULL
+  // gadget is indeed at offset 0 of struct usb_composite_dev
+  2A 01 40 F9    ldr  x10, [x9]
+
+  // loading req->buf pointer, which is at offset 0 of struct usb_request
+  69 02 40 F9    ldr  x9, [x19]
+
+  // x10 is null, crash, appears to be attempt to read cdev->gadget->max_sp=
+eed
+  4B 5D 40 B9    ldr  w11, [x10, #0x5c]
+
+which seems to line up with ncm_do_notify() case NCM_NOTIFY_SPEED code frag=
+ment:
+
+  event->wLength =3D cpu_to_le16(8);
+  req->length =3D NCM_STATUS_BYTECOUNT;
+
+  /* SPEED_CHANGE data is up/down speeds in bits/sec */
+  data =3D req->buf + sizeof *event;
+  data[0] =3D cpu_to_le32(ncm_bitrate(cdev->gadget));
+
+My analysis of registers and NULL ptr deref crash offset
+  (Unable to handle kernel NULL pointer dereference at virtual address 0000=
+00000000005c)
+heavily suggests that the crash is due to 'cdev->gadget' being NULL when ex=
+ecuting:
+  data[0] =3D cpu_to_le32(ncm_bitrate(cdev->gadget));
+which calls:
+  ncm_bitrate(NULL)
+which then calls:
+  gadget_is_superspeed(NULL)
+which reads
+  ((struct usb_gadget *)NULL)->max_speed
+and hits a panic.
+
+AFAICT, if I'm counting right, the offset of max_speed is indeed 0x5C.
+(remember there's a GKI KABI reservation of 16 bytes in struct work_struct)
+
+It's not at all clear to me how this is all supposed to work...
+but returning 0 seems much better than panic-ing...
+
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Lorenzo Colitti <lorenzo@google.com>
+Cc: Carlos Llamas <cmllamas@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Maciej =C5=BBenczykowski <maze@google.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/funct=
+ion/f_ncm.c
+index c36bcfa0e9b4..424bb3b666db 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -83,7 +83,9 @@ static inline struct f_ncm *func_to_ncm(struct usb_functi=
+on *f)
+ /* peak (theoretical) bulk transfer rate in bits-per-second */
+ static inline unsigned ncm_bitrate(struct usb_gadget *g)
+ {
+-	if (gadget_is_superspeed(g) && g->speed >=3D USB_SPEED_SUPER_PLUS)
++	if (!g)
++		return 0;
++	else if (gadget_is_superspeed(g) && g->speed >=3D USB_SPEED_SUPER_PLUS)
+ 		return 4250000000U;
+ 	else if (gadget_is_superspeed(g) && g->speed =3D=3D USB_SPEED_SUPER)
+ 		return 3750000000U;
+--=20
+2.39.0.314.g84b9a713c41-goog
 
