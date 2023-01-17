@@ -2,168 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4385666DEA1
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 14:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D86666DF49
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 14:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236416AbjAQNTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 08:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S229753AbjAQNtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 08:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237183AbjAQNSv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 08:18:51 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BB738EA5
-        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 05:18:49 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4dabfe825b4so148690647b3.16
-        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 05:18:49 -0800 (PST)
+        with ESMTP id S231321AbjAQNtO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 08:49:14 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4185A360B9
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 05:49:13 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so4743673wmb.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 05:49:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gmQkSSw2R+/QTRROI20PCtYQmTwF6TMo3+FLq2700ts=;
-        b=GbmqkYnrRNDoQKSWqXCvUO9yQ+cTyxZzkqHOp5TJFVcL6ZehuQ3O+5cyWFzFTc6SFb
-         cV/ov89Omo4BytREE08YxKfzQu47AVmJIxYDTmhwgu5sp94+1xPV+8jCB4gUDF1dYtKM
-         qp+bhl+Q3duDsph+vpBQMj24+z2PccGRy502Hfz9nVeYOgZKAn2+txMlXNXwpGY99P8k
-         uqicligFUdX8z3GAFKpbCt5Rkf77Lsm0qR1vHzEYq7f1Fs67yldsHyb3CCEiNXhJJeaF
-         CfiMYyLvV2yeKuus8GYVM8lNRdoIKJID7+RZDs3i1riEJtEXls/atn8KsOdIloxR+YnV
-         Wmkw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:to:from:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vgjmjcKuXP3RoqqniCwReaFJ8sbKhLTf3w6njJyfS3U=;
+        b=ecY8MvSoQ8WaCJQVXClFyQcsZwg1Ij+M47VnehIjTzJM5Fyno8OXmBJFjn40Y+J4YR
+         B82e/l/mSewmDiPoO3pkK943pBc94P0kwfEcQv67xdHc3x5Nh/rGWITBoA7hBbJyE5B9
+         xBzNYVbh3e3kVM7q1jvnMC3XTsAwhgwXsQ4tfrzUVTcdH13XKVpQxn2pp3TYoisP4/1I
+         jp7dECxY3UAyKQ/kRZ8OlUe936VNNenpwIG1wYm5frQI95+K8oTNTJYY0o8LQHh9k24y
+         E3EqLBbu2L3rUua2WufaWxyV2Yll5fFEmLwp5Lhjh437XyeC/KkOR/R+pNN+4bbp8s1K
+         TAEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gmQkSSw2R+/QTRROI20PCtYQmTwF6TMo3+FLq2700ts=;
-        b=Rvz421MfB8uQP84ZiQTqVGD1KqCeK7Ic0PZ69d4LYnWDgMFPWFAl4IYgHF+fWRuPw4
-         VHx9HKa2h+sA/ZThkRCRRRvfD0UGEy1mnja8gJRltd1KidKp9vN1rjBb+tsTvT+fY27F
-         YwIxt66mCkvRwDIJAFhQXY1bNkyQaGcm5sjQOGOwYDe7t/3NUDVo7ki1q5F0xbPcefCq
-         Ah/HgTQH+z5DxWrO5QhtRFRDCSyRswPVYpFxkCiztfE1MLgGD+n9pznBRGdkRIXOw1p6
-         tqMPIcZEpAEwLskEWe3p+8WtTf3XkQyrTVklfZEdelhkiPqJm2sctrW7nCjNVFugkMDA
-         rEnQ==
-X-Gm-Message-State: AFqh2kq7hf4W1xB+QNZjOnALNOmG3R2LMt4v76sKovuSuWaq92gDRPj9
-        fr5Hg8qyFLWWdXngD9kvkPrU60L7
-X-Google-Smtp-Source: AMrXdXvMybh7TlNIa7mXNxDtQqYcZZTNfEn2XzG2HKIJssak/L6EArgovOc8FPnnKPVOtfowjxD3itwc
-X-Received: from athina.mtv.corp.google.com ([2620:15c:211:200:9e58:2d3e:9f76:f099])
- (user=maze job=sendgmr) by 2002:a25:41cd:0:b0:75c:55f:b0d4 with SMTP id
- o196-20020a2541cd000000b0075c055fb0d4mr380688yba.13.1673961528294; Tue, 17
- Jan 2023 05:18:48 -0800 (PST)
-Date:   Tue, 17 Jan 2023 05:18:39 -0800
-Message-Id: <20230117131839.1138208-1-maze@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH] usb: gadget: f_ncm: fix potential NULL ptr deref in ncm_bitrate()
-From:   "=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>
-To:     "=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <zenczykowski@gmail.com>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        "=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        Carlos Llamas <cmllamas@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=content-transfer-encoding:subject:to:from:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vgjmjcKuXP3RoqqniCwReaFJ8sbKhLTf3w6njJyfS3U=;
+        b=k8O7UuIoGlffqqHExTDTvLaQjLweFUmIAdaXKGFKTWFSbczP0gdnesbT+MNcFwILU6
+         NRvKzL0rs2QA1BAuKPMniFSGnkWBg8VuoCPc6/xCyHvcxQE33jBeSYbTi3lYGIC378+r
+         unoTFt83KSU+Auvn1uaROOOyyDKFEPnJcp6DyB80r6tEIzC/yj8ajnRqMDnKTasyGa7r
+         s35U/39LwXSnR1pkrq6tu+tij7Q835KmqWURkp8QOLBY+BygSg20hkIhx0lnIY5kBUHx
+         7XVlFc5DzIDFTp6CT1QF3OQ2u3H7JSiFGW/KDo6duAVaJcijjIIvg0GYnGtw5a1Eo5tZ
+         Ka6A==
+X-Gm-Message-State: AFqh2krQl7Nsq/os8SRa0dTI/TC9deWKm02wSsmFyBu81Q5d//QAcpej
+        m6kDNsxsft5UX8NA/4cn3n9FsCWtAtc=
+X-Google-Smtp-Source: AMrXdXsNXyRVA0yADmlzeKRnTgMGPsOCbsnp8CcpytzIqQ99WfjQ+fJ6ulooOq3ym9w9Om2YJUJR0g==
+X-Received: by 2002:a1c:f40a:0:b0:3c6:e62e:2e74 with SMTP id z10-20020a1cf40a000000b003c6e62e2e74mr11917533wma.15.1673963351545;
+        Tue, 17 Jan 2023 05:49:11 -0800 (PST)
+Received: from DESKTOP-53HLT22 ([39.42.178.198])
+        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm36725563wmb.47.2023.01.17.05.49.10
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Tue, 17 Jan 2023 05:49:10 -0800 (PST)
+Message-ID: <63c6a756.050a0220.4febd.4ab6@mx.google.com>
+Date:   Tue, 17 Jan 2023 05:49:10 -0800 (PST)
+X-Google-Original-Date: 17 Jan 2023 08:50:46 -0500
+MIME-Version: 1.0
+From:   archiefederico530@gmail.com
+To:     linux-usb@vger.kernel.org
+Subject: Any Drawings for Estimate?
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In Google internal bug 265639009 we've received an (as yet) unreproducible
-crash report from an aarch64 GKI 5.10.149-android13 running device.
-
-AFAICT the source code is at:
-  https://android.googlesource.com/kernel/common/+/refs/tags/ASB-2022-12-05=
-_13-5.10
-
-The call stack is:
-  ncm_close() -> ncm_notify() -> ncm_do_notify()
-with the crash at:
-  ncm_do_notify+0x98/0x270
-Code: 79000d0b b9000a6c f940012a f9400269 (b9405d4b)
-
-Which I believe disassembles to (I don't know ARM assembly, but it looks sa=
-ne enough to me...):
-
-  // halfword (16-bit) store presumably to event->wLength (at offset 6 of s=
-truct usb_cdc_notification)
-  0B 0D 00 79    strh w11, [x8, #6]
-
-  // word (32-bit) store presumably to req->Length (at offset 8 of struct u=
-sb_request)
-  6C 0A 00 B9    str  w12, [x19, #8]
-
-  // x10 (NULL) was read here from offset 0 of valid pointer x9
-  // IMHO we're reading 'cdev->gadget' and getting NULL
-  // gadget is indeed at offset 0 of struct usb_composite_dev
-  2A 01 40 F9    ldr  x10, [x9]
-
-  // loading req->buf pointer, which is at offset 0 of struct usb_request
-  69 02 40 F9    ldr  x9, [x19]
-
-  // x10 is null, crash, appears to be attempt to read cdev->gadget->max_sp=
-eed
-  4B 5D 40 B9    ldr  w11, [x10, #0x5c]
-
-which seems to line up with ncm_do_notify() case NCM_NOTIFY_SPEED code frag=
-ment:
-
-  event->wLength =3D cpu_to_le16(8);
-  req->length =3D NCM_STATUS_BYTECOUNT;
-
-  /* SPEED_CHANGE data is up/down speeds in bits/sec */
-  data =3D req->buf + sizeof *event;
-  data[0] =3D cpu_to_le32(ncm_bitrate(cdev->gadget));
-
-My analysis of registers and NULL ptr deref crash offset
-  (Unable to handle kernel NULL pointer dereference at virtual address 0000=
-00000000005c)
-heavily suggests that the crash is due to 'cdev->gadget' being NULL when ex=
-ecuting:
-  data[0] =3D cpu_to_le32(ncm_bitrate(cdev->gadget));
-which calls:
-  ncm_bitrate(NULL)
-which then calls:
-  gadget_is_superspeed(NULL)
-which reads
-  ((struct usb_gadget *)NULL)->max_speed
-and hits a panic.
-
-AFAICT, if I'm counting right, the offset of max_speed is indeed 0x5C.
-(remember there's a GKI KABI reservation of 16 bytes in struct work_struct)
-
-It's not at all clear to me how this is all supposed to work...
-but returning 0 seems much better than panic-ing...
-
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Cc: Carlos Llamas <cmllamas@google.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Maciej =C5=BBenczykowski <maze@google.com>
----
- drivers/usb/gadget/function/f_ncm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/funct=
-ion/f_ncm.c
-index c36bcfa0e9b4..424bb3b666db 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -83,7 +83,9 @@ static inline struct f_ncm *func_to_ncm(struct usb_functi=
-on *f)
- /* peak (theoretical) bulk transfer rate in bits-per-second */
- static inline unsigned ncm_bitrate(struct usb_gadget *g)
- {
--	if (gadget_is_superspeed(g) && g->speed >=3D USB_SPEED_SUPER_PLUS)
-+	if (!g)
-+		return 0;
-+	else if (gadget_is_superspeed(g) && g->speed >=3D USB_SPEED_SUPER_PLUS)
- 		return 4250000000U;
- 	else if (gadget_is_superspeed(g) && g->speed =3D=3D USB_SPEED_SUPER)
- 		return 3750000000U;
---=20
-2.39.0.314.g84b9a713c41-goog
+=0D=0AHi,=0D=0A=0D=0ADo you have any estimating projects for us=0D=0A=
+=0D=0AIf you are holding a project, please send over the plans in=
+ PDF format for getting a firm quote on your project.=0D=0A=0D=0A=
+Let me know if you have any questions or if you would like to see=
+ some samples.=0D=0A=0D=0AWe will be happy to answer any question=
+s you have. Thank you=0D=0A=0D=0ARegards,=0D=0AArchie Federico=0D=0A=
+Crossland Estimation, INC
 
