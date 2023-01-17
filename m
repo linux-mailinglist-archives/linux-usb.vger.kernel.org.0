@@ -2,164 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21282670E36
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 00:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7EE670E80
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 01:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjAQXxg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 18:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S229483AbjARATH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 19:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjAQXwD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 18:52:03 -0500
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C79C3C06;
-        Tue, 17 Jan 2023 15:05:18 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-15f64f2791dso3394544fac.7;
-        Tue, 17 Jan 2023 15:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4AE2HZs9Ij2bBJhhAjrwEjzLChQl9bR57MnvWzA7x6U=;
-        b=DW8ifSPAga42dfR5FsmeN7ktP7xrF85FXw0C/+Pm5lDatitnt6M1CQj7M2iuNxfpn/
-         8Lqyqdz46gcYI65b7HEV2rZB0b9w18a0Vu2j5uxJKOihSIilp5BJI4J3to3fBGZBSOAg
-         qKZTbOqyIEM6sy28abPqdGt+yArW2Z23B5BMGrPIlI9/cDODcnnJxtAxcNyDFXPVHMXf
-         R48P+80RHdZ3pZH8azCzarSBYjkryNQm8JI66tMAqXqouswoKpLIWF/td2aT/9AEdW3K
-         k98TjNYTCV9B45cWKs661R8TJB1gnbsipfyvYuHwtR9zJJna1byThoO89hC/942uN+q5
-         JvyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4AE2HZs9Ij2bBJhhAjrwEjzLChQl9bR57MnvWzA7x6U=;
-        b=ogHjxdw00pH0qCHxnMLOIltJ8mCiNnU8fNmWeTnGvigU1FH8jkLdHPZQnaB/Fd4ChI
-         SifxelPWB5EeYHTMSukqZ/46ZsxDldDR6R9TllqiZuW5OiQHq5XPdBaDsUnp7vkNUhKL
-         yxHRIg/OtjIg6MRi1GUup/h7RZkb+Vzen2aWcKcyj/7tQM/BKayN/hMH7BEbghR9PZCB
-         d8YkJll5S70FWYpjo0mXJWRH1HQr9pOvhjIg37ISkbPjxrWL2uSa01ndzD6A1y0HNQak
-         VZW2oMKaUD2t6YVj+8osHAFxKetb5Juan78c1SLrCXy5sXZBTjglphOFUT0M7r1warR3
-         f21A==
-X-Gm-Message-State: AFqh2kqzkwhCoWttu0aDFYnd7dc/dPDMZ9YAT8rw3IVZ4VfBsWXQKT68
-        Tf5IPqvpLCIPXhloVistR3jg/3wBgNw=
-X-Google-Smtp-Source: AMrXdXtHuS2LexOqaSnPiZkh1ICiW0LO3fAy28p2lWPRYUg8JIB1z86k++pUvGweLF5SJ5SaQKIaNA==
-X-Received: by 2002:a05:6870:5386:b0:15f:385c:720c with SMTP id h6-20020a056870538600b0015f385c720cmr3233662oan.30.1673996717252;
-        Tue, 17 Jan 2023 15:05:17 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cm18-20020a056870b61200b0012b298699dbsm17151555oab.1.2023.01.17.15.05.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 15:05:16 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c9ce648e-e63e-8a47-03c6-7c7e30d8dbc7@roeck-us.net>
-Date:   Tue, 17 Jan 2023 15:05:12 -0800
-MIME-Version: 1.0
+        with ESMTP id S229447AbjARASX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 19:18:23 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2067.outbound.protection.outlook.com [40.107.94.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4DF51C66;
+        Tue, 17 Jan 2023 15:34:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JFKyNuxUiA0mHeyyYutx8HOwU9M72tuERrc9aQS/2E0XdZMXJnVDHYuJfTDUQkl+x8uLNFARGuFVEF4cIjM8nBTUGARGElHHGpzV7/3uNgjA7thxQ+OXCUetSgvkF46yh/hOHO2VXNwjzLot7sblfuteW/okablS8LZReJ+Nn9LpD/fJnLI14fwWIT0/K2C4UUvIH7M2QmR9+vOgjD4Y8zhf1kggKBiRFgTd7mOcjk9hKc55Cf1seujQqXDKttqWAF7rHAJYYqEaAnII8rHgIQ2MML32D5D3R6ZQJCmPSdYA7PgP5QeJP6XxKfNlxQ42yfrdddWv98nms9BaQIZGmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7XDiE9IBvTjFZ9k1oUx1mwJGbcXOCri6vz4KGXjYYMo=;
+ b=ArR5Ruyu84h0yPbD/b6uGw9+YkYh5SljfjhOv52r9Af1oSpHvJ5R8qgX8rIphF+kOjnTIs60B9cxsJaDgcWzxmRnqV5T3hUCR9Okk4eeRWmd0vzmbNAPiw/nG6vVLej95p1IL7RG78elvRrB23eKkVhruFaCRCkj9J0svtq/oalmzbp64d1dkftnqqGR9kDvwtuMptDPsVrOH/MBM8DVX8tW7FzYghj76+yWnYxW1gcyoMe1St8tN6ze46GaW7bXn4UwXRb8LD3ZEW9fS9H9xs0ulro+Ja+pCyGjmUgFuzEN7XCMXgfywAw/PbpJe4rDv7n7tjZnEc4dBwKMe8WCtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7XDiE9IBvTjFZ9k1oUx1mwJGbcXOCri6vz4KGXjYYMo=;
+ b=ZL9t8gZ0AsgKuSuqqWG6FAtnMWmCdXbIcOBoSz/ysrZEGrBFj9zt/S2sPSLruUV/ukD0EWuAWqPUzkEbq/ZclMHQgVbBNm8feQt6Q2CXKB4YzfdMOEnQjJ3Ksq0OuZ9g062ZtqAy/eZi21XNO44piCpi6ntSAGezRTa6WqlSqMK/AHntSRArrKGAzo/2WY4NpGTS9tkEK+p5UktU6J2Whx2hh9mL1HiQRuayeJMsJiQHLV8JHtp5c/f4CCX2MdtlcwXB8LHJm9GLfjsrjmBlYb3cvSeROwaDEdnctKzR7iZBMVs0nzyya5v00S0KZJWFiv+BDVhBXuMl1SS64hQzYg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ MN6PR12MB8513.namprd12.prod.outlook.com (2603:10b6:208:472::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 17 Jan
+ 2023 23:33:53 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f1be:5d:f297:e2f]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f1be:5d:f297:e2f%7]) with mapi id 15.20.6002.013; Tue, 17 Jan 2023
+ 23:33:53 +0000
+Message-ID: <11349701-f82f-3a7f-61ef-11f1585958c3@nvidia.com>
+Date:   Tue, 17 Jan 2023 23:29:25 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: remove arch/sh
+Subject: Re: [PATCH V4 3/5] usb: typec: ucsi_ccg: Replace ccgx to well-known
+ regex
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Landley <rob@landley.net>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
- <CAMuHMdUJm5QvzH8hvqwvn9O6qSbzNOapabjw5nh9DJd0F55Zdg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAMuHMdUJm5QvzH8hvqwvn9O6qSbzNOapabjw5nh9DJd0F55Zdg@mail.gmail.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wayne Chang <waynec@nvidia.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20230116155045.100780-1-jonathanh@nvidia.com>
+ <20230116155045.100780-4-jonathanh@nvidia.com>
+ <Y8aOaH+ALBvjm/rH@kuha.fi.intel.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <Y8aOaH+ALBvjm/rH@kuha.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO2P265CA0487.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:13a::12) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|MN6PR12MB8513:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15a126cb-d6fb-425d-a56f-08daf8e34b4a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bgfag+tkQ2Lu+JM6IvOuO6GN0vvWe0QDQIS9S6Z4Mb+cZCZK9SRuVZr5xTUOyX85IEPHRbtsNglwxxjZLQ6QklchA9drSF4EcNCoIvqO3+GlGynBEeHJo/uLywnsPSurTRepYVZo5uabWQAoxtJWkZLRXiAdYCIAMQ/PLXtA4auHYOrFt+thk4jB8/X6KcEE9mzWDV84MYRtawFoYYVZCTm0tb7AlELVx/C84m5GCZQxi/PVnkvdFxYGMwLJuLsMe/nzUHL0Yunu3x6nNgLdAJREOsPTy8Rz1w9TJNHvHhm33H2SSarbNevL09a5TtONErtmIe8lgO/GyvClBqNsQV601778142EalwU5lyc3xm3W0k4/V9V0+/Eo9jURkQPqnNZxG4FLnE0xpRn40xM1r0UJTGrwGn4Fti+u/7/Ceo67610m+A8W7EAt2nCNfPCtK7pRlZeRPRzUHCACFKsKyBefGM+WiPzuaZd8g5+x1tTbAkQrdNHxfOFDmvu0VnANEOPZPz1QGj0f8uk0PxFe04halpcRWjacejt28JpSNuwp4uJ/LQ2ng9RgvGiGLScFLWG4mXSaGAqTM3Fi4stJ76OEAjim1O44E2xFP4rhCtmGmIkL3SDX6/cvZQSIQapwFnEinAz/5+leSQaVYTkH/U9jQj2nPUuCfwqtYPYripsomcsEpeFSbbJBxrr/uCsfPTiuvBTaG7DrON+62MqJNGWA3d7EuUySYKPHGGaBH4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(39860400002)(396003)(136003)(346002)(451199015)(53546011)(2906002)(6506007)(6486002)(6666004)(26005)(6512007)(478600001)(186003)(55236004)(31686004)(6916009)(36756003)(316002)(66946007)(66476007)(8676002)(2616005)(66556008)(41300700001)(4326008)(8936002)(83380400001)(38100700002)(54906003)(5660300002)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?blllVElIL2lpRHBLK0JPa0cvUVFvdjZsY1oyMkE0LzlOaHp5VjFCQVlUVndG?=
+ =?utf-8?B?dFpLRVZiOUU2Z0hKMUUxTG51K0g2SkEzOEZ0L0hKZ1J4R1hjL0xNb24xMm5p?=
+ =?utf-8?B?SUdldktzSFFPUU8wRWo2aXEwL0VEQ21lcXdndDZlR213L2FtSUQrRTkwWm9I?=
+ =?utf-8?B?eWhHWiszMFFKS0FJcWVqVlRSVlo4WW5SczBtcFFkbkJTNWdWTWdpU3VKLzdn?=
+ =?utf-8?B?dVhYZXN1UXU0bjExck9NTmJOSXRQWnNVV1ZJQmxkYkFWUXZtWUkxM3lGS0VU?=
+ =?utf-8?B?VEN3eHRyN1lFalBEMUN5eWM5Wi9hdzNsL1l3M21HT0pma01UcjJZQVVJU3hu?=
+ =?utf-8?B?cTBXbVBDYXdJYkkyc0pkR1ZiamRFa2dEUWdKNnExQ1BIYlJyQWxBZ281QVg4?=
+ =?utf-8?B?Q3Jua3JicmdyemlzOEM4djZhV1NMK2NpZStjak1neGg3eXhUNklTQjhiYU5B?=
+ =?utf-8?B?cjlKbFp2N3pCdVpyVWxIL3Q2a0ZvZkJmUEZyTDVVbXNWbjNKTlZ1a0RaOGlT?=
+ =?utf-8?B?WDNKN2NUTml1N0V2d3hUSW9pTzBVOWs5ZUp6blQzbGRKRFRqTS9XL1FEOGlM?=
+ =?utf-8?B?WDFETU1yTEtReS9samF6bjMxbE03MVk0dXRXZW9MazBKa0xSOEU3RU1CbVNS?=
+ =?utf-8?B?NXVCMDJQVHZKTkNpRURHSlFTVjB4WjNvaE03UXZDR1ZhdDkraGN5L2M2UUJW?=
+ =?utf-8?B?MHNqRkp3N1FPMkpzU2F6OGg4dnl2b1BXb1ZhdWhESEIrOWIrazVlN2phekcv?=
+ =?utf-8?B?NnNqbFJtME93OEYzMGRqVnlnUE1jWEtKbWVtQUFjV3FjWmRyTXdFYi9HVlpx?=
+ =?utf-8?B?NDdoTXluUWZCS3hKOXFaL0s4QmhQckEwSXlaMjRaUC9jUFJhaGpPQnNnL2Vl?=
+ =?utf-8?B?MXhzMElTcXpRUEViUjYrVi82bkZxUDJiZVFYY2twUWNCUU1ZTkI5Sjd4aG9v?=
+ =?utf-8?B?MmtaUEFvSDI2SmhXbStVN1I5VWMrcmhMMkV2SjF1aFdNRTRwNnIxbTlUV1pq?=
+ =?utf-8?B?bk9jcTZBLytNKzIySHptdGxHN2VzRGdlQWJQM29IcWRWd25LbG1DMCtIb3c0?=
+ =?utf-8?B?d1ZCR2oxbG9VVzFKUEhrelEyaTc4VFhhc0l3QmJkckVqTittOGxIdlM3Q201?=
+ =?utf-8?B?SU1pdnM4L0doSjEyTnhDUWtBN2k0WHpyc1RkK1pCT0c0UzlUUUlSYng5UTBJ?=
+ =?utf-8?B?dFk1ekpKUVpkSm1IdU5KSmdYSkxBdG9tSDNxNlEwRmlhbDVOSVRuQjZRYVU2?=
+ =?utf-8?B?ZUhmMklXK3FpU2Y5ZXZod3htM0Z0SENZc3JCOWJ0Y2xMVW55M1R6bFdZWm1z?=
+ =?utf-8?B?b2ZJTWUxNHo3NkY5UlIxL3k2c3d1QWtVU01lY3ViSTRDRjdGdldXLytrbDlx?=
+ =?utf-8?B?MHNQMFZHczFWcFZaMTEyWXFxZEZhUEEwZTArU3pUZzV6R2tOZGlPeklSbitw?=
+ =?utf-8?B?Y2ZpMExtTXhIR3doTm1wd0NzV1A0QU9INnM3enRBT1dBSXBxNysvNmtsa250?=
+ =?utf-8?B?M3ErbGpvNzBZa3p0T09PdHNtUEFXM0xlUjBPOWhqdFFaZkFRT3ZuMUxkYVVm?=
+ =?utf-8?B?MC9VOE8xZG1pU0lPZnhVTmM1Z0xpRHVIb2l4cGJMWnpTOFBIdEg1OG52Wm1h?=
+ =?utf-8?B?bXpWcHNRb01BSXUwenVpWU9hUmpvQ2p2SVdyZFN6WWczUGxJTjY5a3YzQnNt?=
+ =?utf-8?B?WkJ2bEVWOGVXVENmaHI1ZXQvWmRmdGtXbEl0UitUOTFjNXZvVmdKMWNQZjZD?=
+ =?utf-8?B?Z0lwQ3FzajRQcm16bVRFRFFOWnprNXEwRzAwRGFueG5Lcm10SVRyL0NBRDJo?=
+ =?utf-8?B?SURvSldCYmpZREVQOE5rMU5QNUVab2hsdEhMTjUvU1JGQXorU3VPTTcxQVZE?=
+ =?utf-8?B?NGt4WTViWXJEV2VlUzVXRi9jY1pjbVpWcEFoNnlYc3g4OThvRWUvQms2ZXJQ?=
+ =?utf-8?B?VFlPZFMrSEZVUEowazhaeG1UaEJGQjNhYmY5KzQ3NTFpZkNuTUZKa2hSSjFt?=
+ =?utf-8?B?dkJGR2NpN3QvTEtHdjAvb0RTMHJ2VVdMbXZKY2lSajNRb2hqTFJRcUNMUHF6?=
+ =?utf-8?B?KytkNG9NeWV5bFpWalZpRWhacitVZmhiTUdDVk44aXo5K21qTm9pbU9Jb3Vy?=
+ =?utf-8?Q?hFtB6G+M/00+TAJFcrRN+77xR?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15a126cb-d6fb-425d-a56f-08daf8e34b4a
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 23:33:53.6430
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: spoFi1bm+UHEOIqCigiiIk74DEKb7Yo+zr8GQ1EYemzhL1s3lM7BYunxMSL8DIceX+OJxJtHCgvucj3oejeLIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8513
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/17/23 12:26, Geert Uytterhoeven wrote:
-> Hi Rob,
-> 
-> On Tue, Jan 17, 2023 at 8:01 PM Rob Landley <rob@landley.net> wrote:
->> On 1/16/23 01:13, Christoph Hellwig wrote:
->>> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
->>>> I'm still maintaining and using this port in Debian.
->>>>
->>>> It's a bit disappointing that people keep hammering on it. It works fine for me.
->>>
->>> What platforms do you (or your users) use it on?
->>
->> 3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
->> sh4 emulator.
->>
->> I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
->> different kinds of boards running it here). There's an existing mmu version of
->> j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
->> released yet, I have yet to get that to run Linux because the mmu code would
->> need adapting, but the most recent customer projects were on the existing nommu
->> SOC, as was last year's ASIC work via sky130.
-> 
-> J4 still vaporware?
-> 
->> My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
->> little blue one is... sh4a I think? (It can run the same userspace, I haven't
->> replaced that board's kernel since I got it, I think it's the type Glaubitz is
->> using? It's mostly in case he had an issue I couldn't reproduce on different
->> hardware, or if I spill something on my N40.)
->>
->> I also have a physical sh2 board on the shelf which I haven't touched in years
->> (used to comparison test during j2 development, and then the j2 boards replaced it).
->>
->> I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
->> really convenient: neither of my physical boards boot from SD card so replacing
->> the kernel requires reflashing soldered in flash. (They'll net mount userspace
->> but I haven't gotten either bootloader to net-boot a kernel.)
-> 
-> On my landisk (with boots from CompactFLASH), I boot the original 2.6.22
-> kernel, and use kexec to boot-test each and every renesas-drivers
-> release.  Note that this requires both the original 2.6.22 kernel
-> and matching kexec-tools.  Apparently both upstreamed kernel and
-> kexec-tools support for SH are different, and incompatible with each
-> other, so you cannot kexec from a contemporary kernel.
-> I tried working my way up from 2.6.22, but gave up around 2.6.29.
-> Probably I should do this with r2d and qemu instead ;-)
-> 
-> Both r2d and landisk are SH7751.
-> 
-> Probably SH7722/'23'24 (e.g. Migo-R and Ecovec boards) are also
-> worth keeping.  Most on-SoC blocks have drivers with DT support,
-> as they are shared with ARM.  So the hardest part is clock and
-> interrupt-controller support.
-> Unfortunately I no longer have access to the (remote) Migo-R.
-> 
 
-Since there are people around with real hardware .... is sh in big endian mode
-(sheb) real ? Its qemu support is quite limited; most PCI devices don't work
-due to endianness issues. It would be interesting to know if this works better
-with real hardware.
+On 17/01/2023 12:02, Heikki Krogerus wrote:
+> On Mon, Jan 16, 2023 at 03:50:43PM +0000, Jon Hunter wrote:
+>> From: Wayne Chang <waynec@nvidia.com>
+>>
+>> ccgx is refer to the cypress cypd4226 typec controller.
+>> Replace ccgx to well-known regex "cypress".
+>>
+>> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+>> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+>> ---
+>> V2 -> V4: nothing has changed
+>> V1 -> V2: new change added for adding cypress,firmware-build
+>>
+>>   drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+>> index 4bc31ed8e5bc..d6114fb8d5a9 100644
+>> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+>> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+>> @@ -1357,7 +1357,7 @@ static int ucsi_ccg_probe(struct i2c_client *client)
+>>   	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
+>>   
+>>   	/* Only fail FW flashing when FW build information is not provided */
+>> -	status = device_property_read_u16(dev, "ccgx,firmware-build",
+>> +	status = device_property_read_u16(dev, "cypress,firmware-build",
+>>   					  &uc->fw_build);
+> 
+> You need to first add that property to
+> drivers/i2c/busses/i2c-nvidia-gpu.c.
 
-Thanks,
-Guenter
 
+Looking at this some more, I wonder if we need to keep 
+'ccgx,firmware-build' as a fallback for AMD? It is not clear to me if 
+they implement this property or not. Let me know what you think. I will 
+still update the i2c-nvidia-gpu driver. 	
+
+Thanks
+Jon
+
+-- 
+nvpublic
