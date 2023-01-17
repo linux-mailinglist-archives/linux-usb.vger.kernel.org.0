@@ -2,166 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3FD66E555
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 18:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64A966E5E6
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 19:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjAQRxY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 12:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
+        id S232674AbjAQSXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 13:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjAQRvW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 12:51:22 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32D84E514
-        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 09:40:55 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id g10so22881802wmo.1
-        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 09:40:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jqO/4CUlcaKUI+N6KnEcGa9fUpEwBq1b3sCSTWRwANE=;
-        b=CCYflS9OWadCGythNwcsIH095kmmg1EaF7VVyr3LZSCyaKTDrrlj3ybj6DQ7bVEyBS
-         7/51F6N85JybrK21y0Wn6GBmbFycAEKJpXjgBybirdVkomE/i6NdK3r6lBBPei9lK9Rr
-         aE69iCuPNVk3BAvctOxIkjOuuiqSjebXYJviPfKBjfkRdLpCTnyzPaBqVW+Jh2Tf2mth
-         Wx+W2tjF4NIutdq4kqC6VHISOCWHkvgjscW01EI+7EeNrbx9Sl7ridat1QkfYx4o4zFd
-         lmLfbi6DK7GjWwyG+j250ygKeqSJfTedbBrAXpvRuZzuB3eMGZE2Tof1GHrN1H3g9A2A
-         JQmA==
+        with ESMTP id S232120AbjAQSUb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 13:20:31 -0500
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCE05C0F5;
+        Tue, 17 Jan 2023 09:56:59 -0800 (PST)
+Received: by mail-ot1-f51.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so8573722otf.8;
+        Tue, 17 Jan 2023 09:56:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jqO/4CUlcaKUI+N6KnEcGa9fUpEwBq1b3sCSTWRwANE=;
-        b=oTZyFIs7ihkuvVvd2zU0Bsq41Y6bXDUpyZTTjkw1DoPFSIq79o2dzu5OJxKbQAg34K
-         HD0yivkPAD5ukeQ1aYOGNxYOJhqTJ9NbarPy3cP3BxScveWX/8AxVJccElxzw9wQfkkI
-         2dG2OJdW0WUpb+zJXr5Y+xO/kFSASttPjrJHn1uLtubLbj5dH9ooj4t++zHszCKnWKOz
-         33CctdUIBrmZZdi3hoeKrlm3b8kNGPzu2drYdGRLTNNTaKQvSwMt8oqHjmpl2evQs6X/
-         27KquTv9UYMQ4RAA//1AVY2POhB8uThytYoTnrG0+nrHmKzOGpMtg2ZvViYX60Anzo/F
-         aX1g==
-X-Gm-Message-State: AFqh2koaBuJZKG0TkmkhxxMEyTgc7QXl2heX2LU1VGaiz9jqJ5gtvKTZ
-        XN9FiwIz0XU7lVrOCJyW6ZqP5g==
-X-Google-Smtp-Source: AMrXdXtPJ0H4IQzPRAtiAcVDL7dHFldlWsjygqlFx59R1RpfJof8pcsnd2i8Yi932s8YHd3dxkXsEA==
-X-Received: by 2002:a05:600c:3acd:b0:3cf:5583:8b3f with SMTP id d13-20020a05600c3acd00b003cf55838b3fmr3867429wms.20.1673977254391;
-        Tue, 17 Jan 2023 09:40:54 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003d974076f13sm40187828wmo.3.2023.01.17.09.40.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 09:40:53 -0800 (PST)
-Message-ID: <00d0e406-034f-d634-4475-a6c84a4928ac@linaro.org>
-Date:   Tue, 17 Jan 2023 18:40:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V4 1/5] dt-bindings: usb: Add binding for Cypress cypd4226
- I2C driver
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=65Gekgr8R32c2O/eU3xbaPl1FoUqCeO8TUOCrXdg/ss=;
+        b=yDOvY8lPigD4v/AjMuIAKI4i9q6CZ1JV5uWiM+W9t4nfS8WM1nR6IF2WSZTYBWD1fm
+         E51vMItFAFE3G2AtjMHQEnO/EsLx4od/GzIJxFzeulcD879QtgzYg3rEvlwAxiyi5LgU
+         MyTLz1BkFI6v5ww5qfcPkBTT5HBSIA0Bg/Gxzkvv/9TpGfP6CD9mB6fh6Vv8X65vvsYg
+         M2AVeGOMND+1Ip9uDERHBEK9SKxXh+g0a6koVmvz8h4BlKWnUwQMGRqEqQgC1v/5NJ4E
+         Kmcb/X8I9KAn3xlcVHAXl3dyLmkwCyZnpbGBX/wgHImB5vtR4qAEs+0qeROWI+/f083p
+         zf0w==
+X-Gm-Message-State: AFqh2koayQ0DTPw1cVEFXjTW65jYe/XCXrXtI18tvwtfDyCdGiAtaMhG
+        qgOBcp5HXUGI7lRCQ91elw==
+X-Google-Smtp-Source: AMrXdXuorlkUKc8aeolXvCd1bFLHz0KynukT6/3yjkUch+obkJ1YmHBZjafb3WHY2tsFzDNShft/HA==
+X-Received: by 2002:a05:6830:1652:b0:686:4382:13aa with SMTP id h18-20020a056830165200b00686438213aamr1965161otr.32.1673978218257;
+        Tue, 17 Jan 2023 09:56:58 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f8-20020a9d5e88000000b00684c9c77754sm1389376otl.69.2023.01.17.09.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 09:56:57 -0800 (PST)
+Received: (nullmailer pid 3314301 invoked by uid 1000);
+        Tue, 17 Jan 2023 17:56:57 -0000
+Date:   Tue, 17 Jan 2023 11:56:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Wayne Chang <waynec@nvidia.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20230116155045.100780-1-jonathanh@nvidia.com>
- <20230116155045.100780-2-jonathanh@nvidia.com>
- <de5cb562-e45e-aed4-508f-2d23f114a01e@linaro.org>
- <dbb0cc82-4b15-b99c-bfbe-0f6af8f2e8dc@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dbb0cc82-4b15-b99c-bfbe-0f6af8f2e8dc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+Message-ID: <20230117175657.GA3275060-robh@kernel.org>
+References: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17/01/2023 18:16, Jon Hunter wrote:
+On Thu, Jan 12, 2023 at 08:11:14PM -0800, Bjorn Andersson wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
 > 
-> On 16/01/2023 19:03, Krzysztof Kozlowski wrote:
->> On 16/01/2023 16:50, Jon Hunter wrote:
->>> From: Wayne Chang <waynec@nvidia.com>
->>>
->>> add device-tree binding documentation for Cypress cypd4226 type-C
->>> controller's I2C interface. It is a standard i2c slave with GPIO
->>> input as IRQ interface.
->>>
->>> Signed-off-by: Wayne Chang <waynec@nvidia.com>
->>> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
->>> ---
->>> V3 -> V4: no changes
->>> V2 -> V3: fix additionalProperties warning on new schema
->>> V1 -> V2: based on the review comments. Fix some addressed issues on
->>>
->>>   .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
->>>   1 file changed, 86 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
->>> new file mode 100644
->>> index 000000000000..5ac28ab4e7a1
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
->>> @@ -0,0 +1,86 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Cypress cypd4226 UCSI I2C Type-C Controller
->>> +
->>> +maintainers:
->>> +  - Wayne Chang <waynec@nvidia.com>
->>> +
->>> +description: |
->>> +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface type-C
->>> +  controller.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: cypress,cypd4226
->>> +
->>> +  '#address-cells':
->>> +    const: 1
->>> +
->>> +  '#size-cells':
->>> +    const: 0
->>> +
->>> +  reg:
->>> +    const: 0x08
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  cypress,firmware-build:
->>> +    enum:
->>> +      - nv
->>> +      - gn
->>> +    description: |
->>> +      the name of the CCGx firmware built for product series.
->>> +      should be set one of following:
->>> +      - "nv" for the RTX product series
->>> +      - "gn" for the Jetson product series
->>
->> This is a friendly reminder during the review process.
->>
->> It seems my previous comments were not fully addressed. Maybe my
->> feedback got lost between the quotes, maybe you just forgot to apply it.
->> Please go back to the previous discussion and either implement all
->> requested changes or keep discussing them.
+> Introduce a binding for GPIO-based mux hardware used for connecting,
+> disconnecting and switching orientation of the SBU lines in USB Type-C
+> applications.
 > 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
 > 
-> Thanks. Apologies for this. I will sort this out in the next revision.
+> Changes since v1:
+> - Expanded the example to indicate how this fits with the TCPM
+> - Updated maintainer email address.
+> 
+>  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 110 ++++++++++++++++++
+>  1 file changed, 110 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> new file mode 100644
+> index 000000000000..bf4b1d016e1f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> @@ -0,0 +1,110 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/gpio-sbu-mux.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: GPIO-based SBU mux
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +
+> +description:
+> +  In USB Type-C applications the SBU lines needs to be connected, disconnected
+> +  and swapped depending on the altmode and orientation. This binding describes
+> +  a family of hardware solutions which switches between these modes using GPIO
+> +  signals.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - onnn,fsusb43l10x
+> +          - pericom,pi3usb102
+> +      - const: gpio-sbu-mux
+> +
+> +  enable-gpios:
+> +    description: Switch enable GPIO
+> +
+> +  select-gpios:
+> +    description: Orientation select
+> +
+> +  vcc-supply:
+> +    description: power supply
+> +
+> +  mode-switch:
+> +    description: Flag the port as possible handle of altmode switching
+> +    type: boolean
+> +
+> +  orientation-switch:
+> +    description: Flag the port as possible handler of orientation switching
+> +    type: boolean
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description:
+> +      A port node to link the SBU mux to a TypeC controller for the purpose of
+> +      handling altmode muxing and orientation switching.
+> +
+> +required:
+> +  - compatible
+> +  - enable-gpios
+> +  - select-gpios
+> +  - mode-switch
+> +  - orientation-switch
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    tcpm {
+> +        connector {
+> +            compatible = "usb-c-connector";
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                    reg = <0>;
+> +                    tcpm_hs_out: endpoint {
+> +                        remote-endpoint = <&usb_hs_phy_in>;
+> +                    };
+> +                };
+> +
+> +                port@1 {
+> +                    reg = <1>;
+> +                    tcpm_ss_out: endpoint {
+> +                        remote-endpoint = <&usb_ss_phy_in>;
+> +                    };
+> +                };
+> +
+> +                port@2 {
+> +                    reg = <2>;
+> +                    tcpm_sbu_out: endpoint {
+> +                        remote-endpoint = <&sbu_mux_in>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +    sbu-mux {
+> +        compatible = "pericom,pi3usb102", "gpio-sbu-mux";
+> +
+> +        enable-gpios = <&tlmm 101 GPIO_ACTIVE_LOW>;
+> +        select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
+> +
+> +        mode-switch;
+> +        orientation-switch;
+> +
+> +        port {
+> +            sbu_mux_in: endpoint {
+> +                remote-endpoint = <&tcpm_sbu_out>;
+> +            };
 
-These could have been comments from Rob about this property.
+Don't you need a connection to whatever drives SBU? Maybe your case is 
+fixed because the phy does the DP/USB muxing? But the binding needs to 
+support the worst case which I guess would be all the muxing/switching 
+is done by separate board level components.
 
-Best regards,
-Krzysztof
-
+Rob
