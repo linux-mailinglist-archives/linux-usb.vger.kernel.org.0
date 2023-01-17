@@ -2,53 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3905266DBE9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 12:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2CF66DBFC
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 12:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236550AbjAQLKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 06:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S235843AbjAQLOC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 06:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236460AbjAQLKT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 06:10:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEE55274;
-        Tue, 17 Jan 2023 03:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26AE2612A0;
-        Tue, 17 Jan 2023 11:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80DF1C433F1;
-        Tue, 17 Jan 2023 11:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673953816;
-        bh=IsdZ8Fg3+12nH6+CtutQzxt4C2PLALmAN9RkPs5rCHs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Mx45UPDAz7ybWFeEz5r6rVmZen8vAwt+EF7W5bhnqaYIncNK0OqoBv0+/hnmHyDSG
-         VltcQwmKtal88iuvq3QqUKhXyLrc4g6JLjyJSsCaU7rtQIdhz3yEkbnngmDaOVrIq0
-         YioSltPvy6jehuGcCP4tZrAMKR9if56z4I7D51C3dQkn2I/z3nlBXdE26EeunBMB15
-         +7SAe/8bO8ldTe6PBNa8ft/s/neeg0DIr8lPUnY0k77XfITdhJMWAs7gHA6NCIgumk
-         Lvk6DHuFB/yCtupieba0WzCNoNvEhoa8KDYzN46diYbjfmO4jMmWWI9kyXHb8R6RL3
-         SmKzY1BBUcURA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 627AEC43159;
-        Tue, 17 Jan 2023 11:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S236755AbjAQLND (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 06:13:03 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395093456F
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 03:12:51 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so4429545wmb.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jan 2023 03:12:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bBL+3z7FwRu66kVqmwrvKHKciT56qaxXPVTQkVCDYt8=;
+        b=KjtJ8nG+uqmSz8f9E6FB/XyUef5RrwLssFDnC/XT5FlJ0NHoYHT4j006ESqIa+FNop
+         nT+gAmGKKG6pBSOgURdT7gdzlFhCSogb9WJ5lUqqNkRdTIdx5fpVmKcvD5gK8IJnwZq8
+         ccfpRXxas7C10rHmX2cBmJJRCOQ6ckNFHbw+vUeicI6/sdsqxhkrEwEN9r3OIYTXCu8V
+         h9HYhV7o3uWDfts6jx+YX0qBMuPYTHVC7UulzZEz8aew0skOItz2QzuvGNT+ChgYVeyk
+         QcCdtN+1iqFw1jZCGixqu+sUog7bFoKpdJiZTpq7ZyLffE8zUEjyGJihvt3bMQ7W9syA
+         cBzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bBL+3z7FwRu66kVqmwrvKHKciT56qaxXPVTQkVCDYt8=;
+        b=ZUiYpIOb4IPdwYuiEdJM5msQd28W7q1NbpOvZ67/2sUrFU/PUGx8XxNoG5/sv1HK69
+         nbmxBBonEpBWh+QPZElirJTu5EjmVhKu2pDgvmbKq8oVmojJ5glRfW2c4Ql+VVk9secA
+         BvncJPU7r1dr09Ox69pdj2HiK6aZWF+YsgkfCSnprjsEMUzgGnxq5B3EonN107JJIJaV
+         /ZF/6HrSSvdKnSLvmWI4SWCkOqhpwcYWSxIHZfUExqHoAevEbVxaM4EBfIIS0VIABbEZ
+         ASrZVXoZ1M0nKCJ7EoU8i5o/l3BH/VIr+dgBHWSv/fvlCrc2/KqRjA4vI0FiSpBBRRuB
+         2BOg==
+X-Gm-Message-State: AFqh2koyfPRRVGR+PmSIAghL/OjnJCP1+73UmGcV/BbQls9ZEMrnFhuh
+        FkZwqUuhuq8Td8/FdXM7GU2u0A==
+X-Google-Smtp-Source: AMrXdXs71rRTTNnxoWaaJ+6Z5xjRQ6G3SYq885C7J5gYeSzqJwN1qsu/urj6k4aS1qlXPB0jUR4Mkg==
+X-Received: by 2002:a1c:7514:0:b0:3d9:f559:1f7e with SMTP id o20-20020a1c7514000000b003d9f5591f7emr11398160wmc.20.1673953969834;
+        Tue, 17 Jan 2023 03:12:49 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id v8-20020a05600c444800b003c21ba7d7d6sm40016037wmn.44.2023.01.17.03.12.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 03:12:48 -0800 (PST)
+Message-ID: <232ed345-aea1-5e68-5fca-9a93c3896acb@linaro.org>
+Date:   Tue, 17 Jan 2023 12:12:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: sr9700: Handle negative len
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167395381639.12891.10619571705736269049.git-patchwork-notify@kernel.org>
-Date:   Tue, 17 Jan 2023 11:10:16 +0000
-References: <20230114182326.30479-1-szymon.heidrich@gmail.com>
-In-Reply-To: <20230114182326.30479-1-szymon.heidrich@gmail.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V4 1/5] dt-bindings: usb: tegra-xudc: Add dma-coherent for
+ Tegra194
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20230116145452.91442-1-jonathanh@nvidia.com>
+ <20230116145452.91442-2-jonathanh@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230116145452.91442-2-jonathanh@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,28 +79,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sat, 14 Jan 2023 19:23:26 +0100 you wrote:
-> Packet len computed as difference of length word extracted from
-> skb data and four may result in a negative value. In such case
-> processing of the buffer should be interrupted rather than
-> setting sr_skb->len to an unexpectedly large value (due to cast
-> from signed to unsigned integer) and passing sr_skb to
-> usbnet_skb_return.
+On 16/01/2023 15:54, Jon Hunter wrote:
+> DMA operations for XUSB device controller are coherent for Tegra194 and
+> so update the device-tree binding to add this property.
 > 
-> [...]
+> Fixes: 394b012a422d ("dt-bindings: usb: tegra-xudc: Add Tegra194 XUSB controller support")
+> 
 
-Here is the summary with links:
-  - net: usb: sr9700: Handle negative len
-    https://git.kernel.org/netdev/net/c/ecf7cf8efb59
+No blank lines between the tags.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If this is a fix, you need to describe the observed issue or bug. Commit
+suggests this is just adding some missing piece, so not a fix for a bug.
 
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml   | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> index f6cb19efd98b..4ef88d38fa3a 100644
+> --- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> @@ -112,6 +112,8 @@ properties:
+>    hvdd-usb-supply:
+>      description: USB controller power supply. Must supply 3.3 V.
+>  
+> +  dma-coherent: true
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -164,6 +166,16 @@ allOf:
+>          clock-names:
+>            maxItems: 4
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra194-xudc
+> +    then:
+> +      required:
+> +        - dma-coherent
+> +
+>  additionalProperties: false
+>  
+>  examples:
+
+Best regards,
+Krzysztof
 
