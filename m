@@ -2,89 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB23E66D951
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 10:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A0466D957
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jan 2023 10:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236453AbjAQJH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 04:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
+        id S236455AbjAQJID (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 04:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236386AbjAQJHB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 04:07:01 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7077E3253F;
-        Tue, 17 Jan 2023 01:01:57 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H8ss9j015150;
-        Tue, 17 Jan 2023 09:01:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=y53Qn37kMzi9Fhc62GXAcreyZwbb55uF4YIqNoU/oFs=;
- b=NQQX7wcrhlQTSk0+HHdQI/t3/9lmobkzjkCIS/8yIWhx+/6daPeM2HW+RFqqxv5B5kNm
- jqd7XzzV1XG0eoGIf/VZ6cTAYpTEftlTUaBVJT2IaIp+Jfx5DRsfdrKUqghommtyrVS9
- HRFlZd4ABeXTqLsJTL76p845+w2uOjGrT8synpdUDv8AHjsVZFXPpL5i763hbRB6A+3d
- S2u6OO+W0pm6cNX+ZWH+4u0kZGus9tz7ZTINw/JwVTy5uK6Zwx+/jovHcAvl5iu1hYvw
- gVTLQoxNBENM+qbBZeTzVWZjeq9tg20hu5miDFwHlYV3549/f+K+gGNO6JQLVjezGKv6 WA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5pbm88g5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 09:01:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30H91lPi011467
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 09:01:47 GMT
-Received: from [10.216.62.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
- 2023 01:01:41 -0800
-Message-ID: <4eb26a54-148b-942f-01c6-64e66541de8b@quicinc.com>
-Date:   Tue, 17 Jan 2023 14:31:38 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
- properties
+        with ESMTP id S236381AbjAQJHi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 04:07:38 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2040.outbound.protection.outlook.com [40.107.8.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF5B3456F;
+        Tue, 17 Jan 2023 01:02:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UfYNUT55GlNXKIKHxvTux7XGqCiVv2/yjk96jOsd2DTYjxD/mU1jHNKxFazJDSN1bKf474tBqZ+fnKjGp/F79iCgl/Babh5YC0JzUuhR/kLOn3RvsPAj6EKh9IWCtRdj+Lt07jCgzhN5B5j+291hYijjXfxvZzmP/MyzEAawAdMVx0FZcs8CtCWA+Fs/o0j5nbnBqxg/eQooN6l6qw6ZUAz6bGRw3GAZErS8X/0+YqNH3mW+lGbZvIV3WpB2PTenVfwEPiNkjRmlmts14308L1SkXqPHGGeUiErQiterHmNTpvAeASTDrraRjimiois5MHbmZIgMytjsiYpiyu+cZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5Y89HW+XsXy3meuXU9FFdTcaVOOuQdw4KjiQurTy/rI=;
+ b=Ck+OgKMGWP4UdEMZwm+0nSQugM/paAvUnwBZAq15aFqLAIsxdwy6EaWPzYIsxD0dznSg2FcXO2UUyNo4hPQlayJ+1vLlHUy5sC6PEk/RZUn6aMlo88tge3AZKi0OWrKAY2KxdiGc93jULToN2mMN5/nOSjkeeibyXuX+PJqXEleW2gvwQybQ1COrPTWGiG0QPCAvY3rC0lXS/+/0Do7iM+E3Yx8uRPhKLTwdINRL8IldudL+5SEuyjPk0FisKIbJvHg/xCH2lTzqzzuMG6C5rZBPwIPI1bXFGsNSxpRfWd7U6QB9+J7ij9kxLOVOi/KbS7NWaNJh4elWDEhOCWt1Iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5Y89HW+XsXy3meuXU9FFdTcaVOOuQdw4KjiQurTy/rI=;
+ b=S7r8ueLUmz3RZtnGftm/HXaDxhlfT4Mci+aZKRdWi92D61OaBwzcFExIzQnWcJE5PsmBrAtIUj/X1EgOHU4wJLtHUmTJuECbdG9uTtVcDAE3k0PUzlFw1aIyzD2wFxY30lvOV4lweDoypLisQ2Nzy6BWz0Nlclm/al6E0HiYlfTK/yNBbcWdtNjbfh/IYdTZGKScezaqQVfvFwLSk/agfNkwpf0qwSml6tmdqPQ1SKguFlGcSWPfGT77PYcxzrrY6mJG+aVROgn/uEoKhjcWqlqoY6znPJkvpFlsUM3DyseYYESmts/mzN338BQdOzg8mGL2VYoEN8Hajw4kO8laPg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by DB9PR04MB9259.eurprd04.prod.outlook.com (2603:10a6:10:371::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Tue, 17 Jan
+ 2023 09:02:02 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::8d51:14ac:adfd:2d9b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::8d51:14ac:adfd:2d9b%5]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
+ 09:02:01 +0000
+Message-ID: <3c191200-4834-e5f7-9c52-ffd1e2b8ac0c@suse.com>
+Date:   Tue, 17 Jan 2023 10:01:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] usb-storage: apply IGNORE_UAS only for HIKSEMI MD202
+ on RTL9210
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-2-quic_kriskura@quicinc.com>
- <20230116163401.GA2371990-robh@kernel.org>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230116163401.GA2371990-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Juhyung Park <qkrwngud825@gmail.com>, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, gregkh@linuxfoundation.org
+Cc:     stern@rowland.harvard.edu, zenghongling@kylinos.cn,
+        zhongling0719@126.com, stable@vger.kernel.org
+References: <20230117085154.123301-1-qkrwngud825@gmail.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20230117085154.123301-1-qkrwngud825@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YvWsNEaZzIa9SDxjuaJaoWCx5FHsxqGw
-X-Proofpoint-GUID: YvWsNEaZzIa9SDxjuaJaoWCx5FHsxqGw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_04,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=687
- mlxscore=0 priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170075
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-ClientProxiedBy: FR0P281CA0002.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:15::7) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DB9PR04MB9259:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e81841b-8d2d-4d53-e175-08daf8697f37
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2MnjjSXYGbk27Yxp75Kr5kAA3Vongj01GZRQishgwJaXATf1dSyz2ixBPhUZrNvLr9mTkltd2yfFi0btA5xYTDboWLw2pR42m8m+m40LgJjTuLPs2OBSIwp4GWp53W/Ny3ddR1rbd3koIh4+sH1RQgy58uxJrcCiiTTu9D1ULoP6xrI+75GLAuCwjOd5hhS9kogtGqXJIBuRFcrMsNeQKJjvmT3/veMz6bN5BlMJReleWwYtiDlsprVPQSJ5DWQ6f4WcXEAk8XMgJoSoJumL/NOhdvEsFsooDGDDM7EGYgjFWUvaqLPl1shDWzHVvptD0oOu1Uk8kbtSaXXsN9nVRO0JoohcEWL4mdWdhg2ScWmv1qxVcNIl6u3qv2xlNgiQ2XRYfDS/E5Xkp4TDHtwOII2MA5giDgZr7eSnSME9oaPJjEaSzyFbZMy7cPtUmHaK7qGpIzwFWhINnikdnqAbGxoEHBystO/UXVt6y6RH9p+iHUdBdZ27fyXTNyl8EIt8OquEvktppY2/XmbtutDLPv9bwerJltrXJy6BNXpCqvbsvVMOzul+gCVZ6yleJciU9RfEPzwqmnjQdT/GB/pQphvPJsFFHmAKuiZClsd7SCxAS+5pLba+CIBn8+bbX8cAT8ICIvvKAbNL4LaoK1kAfs6xLpqTz5Ab0EEzUOSBE/ZCjctqWovk5wVUy9x+XOeP7uOM7Psv3FGzmpLwzkI6CK1bcmF1n+lNTvJv1dFYV7BR4yKFRcypmHprCPsJ7XwErOlKWsyw9woUetd73bKgAg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(376002)(39860400002)(396003)(346002)(451199015)(66556008)(6512007)(66946007)(186003)(66476007)(4326008)(83380400001)(2616005)(8936002)(53546011)(8676002)(316002)(2906002)(5660300002)(41300700001)(86362001)(31696002)(36756003)(478600001)(6486002)(966005)(38100700002)(31686004)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWpSWUxMODY5S1VFaWFKS3Z5ck5rN2xCR0RKb0p2YitCVnpnTjlDWVB6SG1p?=
+ =?utf-8?B?RmNiQlVaZ0RCOTA5YkI0Y3pPRFd1VlpHbmJFbUs0amRFUHZEakYyMHJzTHg0?=
+ =?utf-8?B?ZnZ1bSs3dGxKaURONnhFNTlrQzZtRG4zeFZ1M0Z4cndRckhDR0RQSkNZRFZH?=
+ =?utf-8?B?RW5Ga3BsOTNOanVLdFVxTmcyRm5DZUl4dEdxWDBZZXdPRm45NElFNmVKV3JX?=
+ =?utf-8?B?dncyWHZqT0o2RG9GWC9oNEMwMW82cFBIMkF5RGZaQ1F1YTdsVUhWRDlnemp1?=
+ =?utf-8?B?TzVNeFBNZ2wzeUpYMEdlRnVnUVlwRlEvUVY0YWl4RW5vNktxL2o2M0Q1ZHZB?=
+ =?utf-8?B?SDNtcUtUQVNNNHZEY0ZINzNRWDlhT21pUjFoN1NxSkc5b215akhyWHdid2d4?=
+ =?utf-8?B?UzVHU0w3Q2lhTzBqeEd2b0Vla2FVc3JZZWo4L0EwejZNRHpKY282aWJkTkF1?=
+ =?utf-8?B?dzZuQnBIVDJUTUUwYUNRZUx3Z1N4ZUN2dTFKSVA1TmdZdEFEY2JEYkRhOENl?=
+ =?utf-8?B?bmN1L1JCcGlXVjhWekhtMzBxZS9wYUFWM1dDaXRwZDFZTGpVakM5d0pmWVlH?=
+ =?utf-8?B?RzJqRDF5ZXlzQU9MWTNLT1pFd2RuYmpQc0VudHFJYjZnOTY0Qi8zUnR5VVNK?=
+ =?utf-8?B?YVhldEF3Tk5PZTdJanM3NWpBSW16cjFwYVlRc2c5MjF4MUl2OEM0Nmt0bFNu?=
+ =?utf-8?B?aCtJc0g2WUwxbDFpL3VGRmZuVGVpN3o2aDRKYXhla1d2Wm5DcWtray90ek1W?=
+ =?utf-8?B?VEZtc0lXMmdmMURZOTBnWVBibDVTc1dLcHpycGJFWXg1TlBmL0FjOXNrbWxU?=
+ =?utf-8?B?WHhsTEhqdHNlaFBoZnFSWllzK1JXL1NNQnNZUDc0WmJqWUpNaVg0T3lOOU5J?=
+ =?utf-8?B?TFlKd3R0c1VZOWluWGtMckJqNG1pcCtvQnlXQ1I3UE01QkM2aDZpUWtvM0RC?=
+ =?utf-8?B?WEFiS3dXdTkrS0l2dHZjTjVFbTAyUlUzeVQwNGNDRUlkOFBudmJkcFI2MW1R?=
+ =?utf-8?B?TmxEMHQ3SG9mY0doZmFUSzR6WWFQUnZ3MVFTNDNuY09SamowTlFnUkNLb3J5?=
+ =?utf-8?B?Qkw1K1h6SzVWM05VQ096bE1TNlBhejQyME9uQkNaa1VpWDgrTEI1bmVRdzYz?=
+ =?utf-8?B?enZtY0FWODZBY1FaRlVHTU4wK3lZcDV3VXo4dzZaNmNVcXhmZ0ZIdGR2R3hr?=
+ =?utf-8?B?TWlGa25wMlRaUjFuVHdsYXlwczhXU3NRd3pjVmZEeHJrbCtocXgxcm5BaFFT?=
+ =?utf-8?B?RHRVcFo1dUZFNVoxNEFiK3dzSVZWUkYvRTd3WUR5d1NnN2tMS2k2RGhvOEdC?=
+ =?utf-8?B?WnB5WVhoUElNMmQ0YWZJWnhVUGJLbk9jREU1TEFyN3ZHZStzcTZhV2xidjRn?=
+ =?utf-8?B?eDkyWjZSRnFqSkNCUW1qNmdmT3ZQVExFOWRHa2hDSS9YUmg2WW8yS1VBVmc2?=
+ =?utf-8?B?MFU5SmJFbk9SemRYYjZzMVp1NE1KZFFwckNqZzhyR21tVVBtc0RRL25xbVQ5?=
+ =?utf-8?B?dW9EVlZpRDQ4bWlDRlJBdnB2UUVRTEIyY210T1c3RXloWkZBZFdpSmhIUDBv?=
+ =?utf-8?B?ajZuVnZVV09SNXFFK05xb1VvMUwweU1CM2RNM3lBUVdUVmRGVzRrVVRaUUh6?=
+ =?utf-8?B?dWdlenRuQ0xhMitUaGRWVTZMZVQvdjdXb251bm1uUTNWUHI2dzIwdmlKakFi?=
+ =?utf-8?B?MzZUbHlaVzA5VnNhM0NMRnRLYzlwUGI4MXNyRFBiWmNSQTZEeXRGek5GYTRi?=
+ =?utf-8?B?a1ZHZzlwR0hkRitianoyU2pYK0N6NXQrd3RhRldGM1RYTDJkWXQ0Zy85ZGVj?=
+ =?utf-8?B?SVZVRG5oZ2NxeDdMYVVzSmNpOElnNm9FcWt6THh4enhuek5zRC8rbjNMVzdQ?=
+ =?utf-8?B?cTlweHZUQ1Q1bUFTam51MHRzVzk3NkNiZW0rUDVTTEJ2RXZWV1Qrd1ppZHRY?=
+ =?utf-8?B?bStoR3JQRFhqZzV0dlFEQm5LSnRReXBCYkpQWTBMNm9LZENjU3Z0V2E5Yy9D?=
+ =?utf-8?B?SlRKQk9LNmo2TGt4K0NLR0t1L3hZL3owbmhmMllHQlNac1FwRzBLcW51SG5l?=
+ =?utf-8?B?WTJLOGZKZWpwU2dFQkNEZWdweko2SmtGaCtEdjNJRTZBZ3FSdmVWeTJvdTc2?=
+ =?utf-8?B?bTBlNy9yLzI2aXNBeU0xVzBWc0hWOGhtVjdQVlY2UDFaczVsbXNJY3EzcFQz?=
+ =?utf-8?Q?LqbK7O/f2U3gdh8VvFfIjv0tckUTBGKLO6AYS+AdRUlw?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e81841b-8d2d-4d53-e175-08daf8697f37
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 09:02:01.8312
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qFJJPudOoHnkUXaSI8ryJDeC+medgUJvjm5Z6WA2XFFtoRXqjGYVfGb++qpNT5TdwJ/dATt37xpIgmPgkPOfWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9259
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,168 +128,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 1/16/2023 10:04 PM, Rob Herring wrote:
-> On Sun, Jan 15, 2023 at 05:11:42PM +0530, Krishna Kurapati wrote:
->> Add bindings to indicate properties required to support multiport
->> on Snps Dwc3 controller.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
->>   1 file changed, 47 insertions(+), 6 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> index 6d78048c4613..3ea051beb2f8 100644
->> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> @@ -81,15 +81,26 @@ properties:
->>   
->>     phys:
->>       minItems: 1
->> -    maxItems: 2
->> +    maxItems: 8
->>   
->>     phy-names:
->>       minItems: 1
->> -    maxItems: 2
->> -    items:
->> -      enum:
->> -        - usb2-phy
->> -        - usb3-phy
->> +    maxItems: 8
->> +    oneOf:
->> +    - items:
->> +        enum:
->> +          - usb2-phy
->> +          - usb3-phy
->> +    - items:
->> +        enum:
->> +          - usb2-phy_port0
->> +          - usb2-phy_port1
->> +          - usb2-phy_port2
->> +          - usb2-phy_port3
->> +          - usb3-phy_port0
->> +          - usb3-phy_port1
->> +          - usb3-phy_port2
->> +          - usb3-phy_port3
+On 17.01.23 09:51, Juhyung Park wrote:
+> The commit e00b488e813f ("usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS")
+> blacklists UAS for all of RTL9210 enclosures.
 > 
-> usbN-portM
+> The RTL9210 controller was advertised with UAS since its release back in
+> 2019 and was shipped with a lot of enclosure products with different
+> firmware combinations.
 > 
->>   
->>     resets:
->>       minItems: 1
->> @@ -360,6 +371,22 @@ properties:
->>       description:
->>         Enable USB remote wakeup.
->>   
->> +  num-ports:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      This property indicates the number of ports present on the target that
->> +      are to be serviced by the DWC3 controller.
->> +    minimum: 1
->> +    maximum: 4
->> +
->> +  num-ss-ports:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      This property indicates the number of SS capable ports present on the
->> +      target that are to be serviced by the DWC3 controller.
->> +    minimum: 1
->> +    maximum: 4
+> Blacklist UAS only for HIKSEMI MD202.
 > 
-> This information is redundant. 'phy-names' tells you how many ports of
-> each.
+> This should hopefully be replaced with more robust method than just
+> comparing strings.  But with limited information [1] provided thus far
+> (dmesg when the device is plugged in, which includes manufacturer and
+> product, but no lsusb -v to compare against), this is the best we can do
+> for now.
 > 
-Hi Rob,
-
-  Thanks for the review. The reason I wanted to introduce two more 
-variables is to get info on number of ports  and ss-capable ports 
-present on hardware whether or not the user provides them in DTSI file.
-
-In the code there are two types of per port / per phy operations:
-a) Modifying GUSB2PFYCFG and GUSB3PIPECTL registers per phy.
-b) Generic Phy operations - per phy.
-
-In today's code, if someone doesn't mention the SSPHY in DTSI, 
-dwc->usb3_generic_phy will be NULL and any call to phy operations will 
-just bail out. And irrespective of whether we provide SS Phy in DTSI or 
-not, we still configure GUSB3PIPECTL register.
-
-Consider the following cases:
-
-1. There are 3 ports and 2 of them are SS capable and all phy's are 
-mentioned in DTSI.
-
-phy-names= "usb2-port0", "usb3-port0", "usb2-port1", "usb3-port1", 
-"usb2-port2"
-
-When we count them in the driver, we get num ports as 3 (presuming 
-num-ports = num of hs ports) and num-ss-ports = 2.
-
-Since there is no ambiguity in which all ports to configure, we can 
-modify GUSB2PHYCFG registers for all 3 HS Phy's and GUSB3PIPECTL for 
-both SS Phy's.
-This is a proper scenario.
-
-2. If the user skips providing SS Phy on Port-0, then:
-
-phy-names= "usb2-port0", "usb2-port1", "usb3-port1", "usb2-port2"
-
-If we count the phys, we end up getting num-ports=3 and num-ss-ports=1.
-
-Since in the driver code, we are not keeping track of which ports are SS 
-capable and which ones are not, we end up configuring
-GUSB2PIPECTL(port-0) instead of port-1  as the num-ss-ports is "1" which 
-is incorrect.
-
-3. If the user skips providing one complete port, in this case port-1 is 
-skipped, then:
-
-phy-names= "usb2-port0", "usb3-port0", "usb2-port2"
-
-If we count the phys, we end up getting num-ports=2 and num-ss-ports=1.
-
-Since in the driver code, we are not keeping track of which ports are SS 
-capable and which ones are not, we end up configuring 
-GUSB2PHYCFG(port-0) and GUSB2PHYCFG(port-1) instead of port-2 which is 
-incorrect.
-
-To avoid these scenarios, if we can get the exact number of SS Ports and 
-Ports in total present on the HW, we can configure all the registers 
-whether the phy's are provided in DTSI or not. (This is of no harm I 
-believe as it still works in today's code)
-
-Incase the 2nd and 3rd scenarios are not allowed and user *MUST* declare 
-all the phy's in the DTSI, then I can go ahead and remove these 
-properties and count them in the driver code.
-
-Thanks,
-Krishna,
-
->> +
->>   unevaluatedProperties: false
->>   
->>   required:
->> @@ -388,4 +415,18 @@ examples:
->>         snps,dis_u2_susphy_quirk;
->>         snps,dis_enblslpm_quirk;
->>       };
->> +  - |
->> +    usb@4a000000 {
->> +      compatible = "snps,dwc3";
->> +      reg = <0x4a000000 0xcfff>;
->> +      interrupts = <0 92 4>;
->> +      clocks = <&clk 1>, <&clk 2>, <&clk 3>;
->> +      clock-names = "bus_early", "ref", "suspend";
->> +      num-ports = <2>;
->> +      num-ss-ports = <1>;
->> +      phys = <&usb2_phy0>, <&usb3_phy0>, <&usb2_phy1>;
->> +      phy-names = "usb2-phy_port0", "usb3-phy_port0", "usb2-phy_port1";
->> +      snps,dis_u2_susphy_quirk;
->> +      snps,dis_enblslpm_quirk;
->> +    };
+> [1] https://lore.kernel.org/all/20230109115550.71688-1-qkrwngud825@gmail.com
 > 
-> Does a different number of phys really need its own example?
-> 
-> Rob
+> Fixes: e00b488e813f ("usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS")
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Hongling Zeng <zenghongling@kylinos.cn>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
+Acked-by: Oliver Neukum <oneukum@suse.com>
