@@ -2,151 +2,255 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F7C6726E4
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 19:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2823A6726E8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 19:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjARS3A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 13:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
+        id S230321AbjARS3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 13:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjARS24 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 13:28:56 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FA7113E3;
-        Wed, 18 Jan 2023 10:28:55 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id jr10so23232933qtb.7;
-        Wed, 18 Jan 2023 10:28:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m6+hopJKlcYVjWue00VkVDFjPrjXwNY80RsgV+H7s3k=;
-        b=3UCJo9oDRK+zvaNyNHHNbXjKGSAgrfcfUj/Uz4yPm56IaIlgxQv5el0QKqc4SGtvOv
-         zzFLhzYYI9sGROEKG40rOBDkF4MnisI1A2z1m+38/AaD9lJH7Ku2b1/zYCabCJUpnNNu
-         KuYIjCkU9+YqG6/k5a4+fT+DYd/JLD9YO3v+o5BE+RXtdViIR0o8SGzz7nLIeaXrjTWz
-         QXfyMea8bzTPQ6K+zrYNDNTTmWUx9AgVrpaGu0/prCtwkp8nFYJe6NOGSiXCr6DfGkjW
-         HYGd2YVo07u6dcqTTWIT9qHhIh3IAdFH7USLPwNrobdlv3PaVNFfoStoBFJiyFAkKLCr
-         OcsA==
-X-Gm-Message-State: AFqh2krIAzMz/4sIWdZPCboBDANEuWUVTgsNymi2JqAG8FKZzPfI6hAR
-        D9qLGTIpmff1ScqRZrxaA619TuZyj1WTKLUk
-X-Google-Smtp-Source: AMrXdXsTWIPihbbkeIVwRFkH1BG2PkiVfAKrtt5W2CMXq+ymezGSNRY6XyPDsA3E49/dpN5CuDoPbA==
-X-Received: by 2002:ac8:738a:0:b0:3b6:4615:6d0e with SMTP id t10-20020ac8738a000000b003b646156d0emr6622972qtp.3.1674066534312;
-        Wed, 18 Jan 2023 10:28:54 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id w25-20020ac86b19000000b003b63c08a888sm2977623qts.4.2023.01.18.10.28.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 10:28:53 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id 20so20137890ybl.0;
-        Wed, 18 Jan 2023 10:28:53 -0800 (PST)
-X-Received: by 2002:a25:d88c:0:b0:77a:b5f3:d0ac with SMTP id
- p134-20020a25d88c000000b0077ab5f3d0acmr833623ybg.202.1674066532773; Wed, 18
- Jan 2023 10:28:52 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1674036164.git.geert+renesas@glider.be> <cd685d8e4d6754c384acfc1796065d539a2c3ea8.1674036164.git.geert+renesas@glider.be>
- <CAL_JsqJS2JTZ1BxMbG_2zgzu5xtxMFPqjxc_vUjuZp3k1xUmaQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqJS2JTZ1BxMbG_2zgzu5xtxMFPqjxc_vUjuZp3k1xUmaQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 18 Jan 2023 19:28:40 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXGsmNjYy-ofmuHLkr8yaDEzy+SGnhtbmc_2ezbEKAMjw@mail.gmail.com>
-Message-ID: <CAMuHMdXGsmNjYy-ofmuHLkr8yaDEzy+SGnhtbmc_2ezbEKAMjw@mail.gmail.com>
-Subject: Re: [PATCH 7/7] usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
-To:     Rob Herring <robh@kernel.org>
-Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        with ESMTP id S229961AbjARS3J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 13:29:09 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB1359E79;
+        Wed, 18 Jan 2023 10:29:01 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IHg6bS013728;
+        Wed, 18 Jan 2023 18:28:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=K6RnYaC9os1/AgBOVSj1FBigm09xZ4fPj05eIv8QjcA=;
+ b=SDbfdD0eTbFyKZKJHCLfsbHliBiPveW2+BGPS1ILlrH53PTxCbvHcPfWonNIxpu+1lxg
+ 455T/8iMV2MR7Y9QS6rKX/5GBDb/aT8nup0WoXOPr+mmcytbpyDF983vGiSmImIVE0QD
+ AJ99OklKNfac76Ed1XSgs+DBTlJimtwtA7KOhdoHTuzkcuwcSI4Y9XwyjknbTXQPEOso
+ Adz01duLpljUpTDoRl6hWmO+eOL0VBM+9sxThsCREVBqQ0kknhlv7JkYvPzgrWyGbzgp
+ 1SZT5qbUSUTpOCHH6XBRFQsNmp7v9dL6xCfqbRbouxV8pHllbNjChNI1bokAX0+Geq1h FA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5nkqc49f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 18:28:50 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30IISnE3023209
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 18:28:49 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 18 Jan 2023 10:28:48 -0800
+Date:   Wed, 18 Jan 2023 10:28:47 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>
+Subject: Re: [RFC v4 5/5] arm: dts: msm: Add multiport controller node for usb
+Message-ID: <20230118182847.GB3353734@hu-bjorande-lv.qualcomm.com>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-6-quic_kriskura@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230115114146.12628-6-quic_kriskura@quicinc.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: l1WAh5tnavTAwMLsEoXobI0kpZ7ZX7Hn
+X-Proofpoint-ORIG-GUID: l1WAh5tnavTAwMLsEoXobI0kpZ7ZX7Hn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301180155
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+On Sun, Jan 15, 2023 at 05:11:46PM +0530, Krishna Kurapati wrote:
+> Add USB and DWC3 node for teritiary port of SC8280 along
+> with multiport IRQ's and phy's.
+> 
 
-On Wed, Jan 18, 2023 at 6:30 PM Rob Herring <robh@kernel.org> wrote:
-> On Wed, Jan 18, 2023 at 4:15 AM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> > Use the new devm_of_phy_optional_get() helper instead of open-coding the
-> > same operation.
-> >
-> > This lets us drop several checks for IS_ERR(), as phy_power_{on,off}()
-> > handle NULL parameters fine.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> >  drivers/usb/host/ohci-exynos.c | 24 +++++++-----------------
-> >  1 file changed, 7 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-> > index 8d7977fd5d3bd502..8dd9c3b2411c383f 100644
-> > --- a/drivers/usb/host/ohci-exynos.c
-> > +++ b/drivers/usb/host/ohci-exynos.c
-> > @@ -69,19 +69,12 @@ static int exynos_ohci_get_phy(struct device *dev,
-> >                         return -EINVAL;
-> >                 }
-> >
-> > -               phy = devm_of_phy_get(dev, child, NULL);
-> > +               phy = devm_of_phy_optional_get(dev, child, NULL);
-> >                 exynos_ohci->phy[phy_number] = phy;
-> >                 if (IS_ERR(phy)) {
-> > -                       ret = PTR_ERR(phy);
-> > -                       if (ret == -EPROBE_DEFER) {
-> > -                               of_node_put(child);
-> > -                               return ret;
-> > -                       } else if (ret != -ENOSYS && ret != -ENODEV) {
-> > -                               dev_err(dev,
-> > -                                       "Error retrieving usb2 phy: %d\n", ret);
-> > -                               of_node_put(child);
-> > -                               return ret;
-> > -                       }
-> > +                       of_node_put(child);
-> > +                       return dev_err_probe(dev, PTR_ERR(phy),
-> > +                                            "Error retrieving usb2 phy\n");
->
-> Optional is really the only reason for the caller to decide whether to
-> print an error message or not. If we have both flavors of 'get', then
-> really the 'get' functions should print an error message.
+Very nice.
 
-In case of a real error, both should print an error message, right?
+Please make the subject prefix "arm64: dts: qcom: sc8280xp:", to match
+other changes in the sc8280xp.dtsi.
 
-Anyway, I understand that's a three step operation:
-  1. Introduce and convert to the _optional variant,
-  2. Add error printing to callees.
-  3. Remove error printing from callers.
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 49 +++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi   | 60 ++++++++++++++++++++++++
+>  2 files changed, 109 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> index 84cb6f3eeb56..f9eb854c3444 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> @@ -422,6 +422,20 @@ &usb_1_qmpphy {
+>  	status = "okay";
+>  };
+>  
+> +&usb_2 {
+> +	status = "okay";
 
-Gr{oetje,eeting}s,
+Please the status property last in the node.
 
-                        Geert
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&usb2_en_state>,
+> +			<&usb3_en_state>,
+> +			<&usb4_en_state>,
+> +			<&usb5_en_state>;
+> +};
+> +
+> +&usb_2_dwc3 {
+> +	dr_mode = "host";
+> +};
+> +
+>  &usb_2_hsphy0 {
+>  	vdda-pll-supply = <&vreg_l5a>;
+>  	vdda18-supply = <&vreg_l7g>;
+> @@ -472,6 +486,41 @@ &xo_board_clk {
+>  	clock-frequency = <38400000>;
+>  };
+>  
+> +/* PINCTRL */
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+No need to repeat this comment, its purpose is to indicate that nodes
+above are sorted alphabetically and pinctrl-related nodes are kept here
+at the end of the file. Please place your nodes below the existing /*
+PINCTRL */ comment below.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Bjorn
+
+> +&pm8450c_gpios {
+> +	usb2_en_state: usb2-en-state {
+> +		pins = "gpio9";
+> +		function = "normal";
+> +		output-high;
+> +		power-source = <0>;
+> +	};
+> +};
+> +
+> +&pm8450e_gpios {
+> +	usb3_en_state: usb3-en-state {
+> +		pins = "gpio5";
+> +		function = "normal";
+> +		output-high;
+> +		power-source = <0>;
+> +	};
+> +};
+> +
+> +&pm8450g_gpios {
+> +	usb4_en_state: usb4-en-state {
+> +		pins = "gpio5";
+> +		function = "normal";
+> +		output-high;
+> +		power-source = <0>;
+> +	};
+> +
+> +	usb5_en_state: usb5-en-state {
+> +		pins = "gpio9";
+> +		function = "normal";
+> +		output-high;
+> +		power-source = <0>;
+> +	};
+> +};
+> +
+>  /* PINCTRL */
+>  
+>  &tlmm {
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 109c9d2b684d..e9866ab5c6e2 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1969,6 +1969,66 @@ usb_1_dwc3: usb@a800000 {
+>  			};
+>  		};
+>  
+> +		usb_2: usb@a4f8800 {
+> +			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
+> +			reg = <0 0x0a4f8800 0 0x400>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
+> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
+> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
+> +			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
+> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_MP_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
+> +						<&pdc 126 IRQ_TYPE_EDGE_RISING>,
+> +						<&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			interrupt-names = "dp_hs_phy_irq", "dm_hs_phy_irq",
+> +						"ss_phy_irq";
+> +
+> +			power-domains = <&gcc USB30_MP_GDSC>;
+> +
+> +			resets = <&gcc GCC_USB30_MP_BCR>;
+> +
+> +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
+> +			interconnect-names = "usb-ddr", "apps-usb";
+> +
+> +			required-opps = <&rpmhpd_opp_nom>;
+> +
+> +			status = "disabled";
+> +
+> +			usb_2_dwc3: usb@a400000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0 0x0a400000 0 0xcd00>;
+> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+> +				iommus = <&apps_smmu 0x800 0x0>;
+> +				num-ports = <4>;
+> +				num-ss-ports = <2>;
+> +				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
+> +					<&usb_2_hsphy1>, <&usb_2_qmpphy1>,
+> +					<&usb_2_hsphy2>,
+> +					<&usb_2_hsphy3>;
+> +				phy-names = "usb2-phy_port0", "usb3-phy_port0",
+> +						"usb2-phy_port1", "usb3-phy_port1",
+> +						"usb2-phy_port2",
+> +						"usb2-phy_port3";
+> +			};
+> +		};
+> +
+>  		pdc: interrupt-controller@b220000 {
+>  			compatible = "qcom,sc8280xp-pdc", "qcom,pdc";
+>  			reg = <0 0x0b220000 0 0x30000>, <0 0x17c000f0 0 0x60>;
+> -- 
+> 2.39.0
+> 
