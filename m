@@ -2,103 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF30671826
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 10:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EF467188F
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 11:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjARJuX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 04:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S230087AbjARKIc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 05:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjARJuD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 04:50:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75F82BEF1;
-        Wed, 18 Jan 2023 01:01:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96BF56172E;
-        Wed, 18 Jan 2023 09:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67AAC433D2;
-        Wed, 18 Jan 2023 09:01:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674032512;
-        bh=THV3Tcy6xKn4dLWFPpXMkIx/yzhzy/uhRugjcM+mCQw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eswJ/MjCDwkZofaT5ikZ6b7HXSzTGPGjVmvXuXARnnmJmyEg+aEoKMaGOSrFFiS8L
-         v8y93xxX2kFQna/QY9FLaTkKb2d/SQpJEDL0sRI0DU8NnHCbAao2QCwL3i5jb2Y7iE
-         H5BPi2/U/Lzy1pylzBgcegIPSIqEgvsre2wQG0qvpThEcS1/P4Q7JrSTT+eU8v7SI3
-         dySnY1foDWK63HYK+e3CTe23vWKf3cVbO5gHs0Be4gMHsvOgjBLVRlpZv626fTe8tK
-         vxmzIOlT/k7QLqaXZN8LxYf2zj1GWgDyq2x77/OczYehLnU6B8JrLMS2UQw6a2F+Hg
-         x+T0Yvf4f1G/g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Kushagra Verma <kushagra765@outlook.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: fix extcon dependency
-Date:   Wed, 18 Jan 2023 10:01:41 +0100
-Message-Id: <20230118090147.2126563-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        with ESMTP id S230121AbjARKHx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 05:07:53 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4DB656D6;
+        Wed, 18 Jan 2023 01:13:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674033202; x=1705569202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HX0zyAQncS5vJj7zoni+iRi+Vpv7/c6EyhwOr9hb9OE=;
+  b=MPZHkIZlGcw0OOrVn+FQkQRobP1KWdDYpsM9L9qdwfl32KvNq8PMvJmA
+   mdlHIPjN5lteovrxhoEKtYtihe+f/vWo0w0KddIuGgJ8l8mJ3ddv5gr39
+   JVnpVphulAqSzK1XwGHZxqDQS+WIxgY/0YO/ljCsrENuI9Kkdn2MHEWXb
+   vwmonFDJsd0ZxETizRVIpczO8dPG93T1F/2vDiIxElWMfDyfK1f9+NO5l
+   yT2qDev08KIjmTKed7m/vb2rEv09T2NhXFktAn6aEppEk68n+mOsHsfsP
+   2sR0LgRWMj/XVOL36NVbuvWtey0JnixotngqGJRDR/tOCD73aqPj8kVi3
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="304619727"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="304619727"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:13:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="802108498"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="802108498"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 18 Jan 2023 01:13:14 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Jan 2023 11:13:13 +0200
+Date:   Wed, 18 Jan 2023 11:13:13 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wayne Chang <waynec@nvidia.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V4 3/5] usb: typec: ucsi_ccg: Replace ccgx to well-known
+ regex
+Message-ID: <Y8e4KXMh+bi6Gj7r@kuha.fi.intel.com>
+References: <20230116155045.100780-1-jonathanh@nvidia.com>
+ <20230116155045.100780-4-jonathanh@nvidia.com>
+ <Y8aOaH+ALBvjm/rH@kuha.fi.intel.com>
+ <11349701-f82f-3a7f-61ef-11f1585958c3@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11349701-f82f-3a7f-61ef-11f1585958c3@nvidia.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Jan 17, 2023 at 11:29:25PM +0000, Jon Hunter wrote:
+> 
+> On 17/01/2023 12:02, Heikki Krogerus wrote:
+> > On Mon, Jan 16, 2023 at 03:50:43PM +0000, Jon Hunter wrote:
+> > > From: Wayne Chang <waynec@nvidia.com>
+> > > 
+> > > ccgx is refer to the cypress cypd4226 typec controller.
+> > > Replace ccgx to well-known regex "cypress".
+> > > 
+> > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> > > ---
+> > > V2 -> V4: nothing has changed
+> > > V1 -> V2: new change added for adding cypress,firmware-build
+> > > 
+> > >   drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> > > index 4bc31ed8e5bc..d6114fb8d5a9 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> > > @@ -1357,7 +1357,7 @@ static int ucsi_ccg_probe(struct i2c_client *client)
+> > >   	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
+> > >   	/* Only fail FW flashing when FW build information is not provided */
+> > > -	status = device_property_read_u16(dev, "ccgx,firmware-build",
+> > > +	status = device_property_read_u16(dev, "cypress,firmware-build",
+> > >   					  &uc->fw_build);
+> > 
+> > You need to first add that property to
+> > drivers/i2c/busses/i2c-nvidia-gpu.c.
+> 
+> 
+> Looking at this some more, I wonder if we need to keep 'ccgx,firmware-build'
+> as a fallback for AMD? It is not clear to me if they implement this property
+> or not. Let me know what you think. I will still update the i2c-nvidia-gpu
+> driver. 	
 
-The dwc3 core support now links against the extcon subsystem,
-so it cannot be built-in when extcon is a loadable module:
+AMD needs to answer to that one. Sanket, do you have that device
+property ("ccgx,firmware-build") in your ACPI tables (as _DSD device
+property) for this device?
 
-arm-linux-gnueabi-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_extcon':
-core.c:(.text+0x572): undefined reference to `extcon_get_edev_by_phandle'
-arm-linux-gnueabi-ld: core.c:(.text+0x596): undefined reference to `extcon_get_extcon_dev'
-arm-linux-gnueabi-ld: core.c:(.text+0x5ea): undefined reference to `extcon_find_edev_by_node'
+thanks,
 
-There was already a Kconfig dependency in the dual-role support,
-but this is now needed for the entire dwc3 driver.
-
-It is still possible to build dwc3 without extcon, but this
-prevents it from being set to built-in when extcon is a loadable
-module.
-
-Fixes: d182c2e1bc92 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/dwc3/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index b2f72b0e75c6..be954a9abbe0 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -3,6 +3,7 @@
- config USB_DWC3
- 	tristate "DesignWare USB3 DRD Core Support"
- 	depends on (USB || USB_GADGET) && HAS_DMA
-+	depends on (EXTCON || EXTCON=n)
- 	select USB_XHCI_PLATFORM if USB_XHCI_HCD
- 	select USB_ROLE_SWITCH if USB_DWC3_DUAL_ROLE
- 	help
-@@ -44,7 +45,6 @@ config USB_DWC3_GADGET
- config USB_DWC3_DUAL_ROLE
- 	bool "Dual Role mode"
- 	depends on ((USB=y || USB=USB_DWC3) && (USB_GADGET=y || USB_GADGET=USB_DWC3))
--	depends on (EXTCON=y || EXTCON=USB_DWC3)
- 	help
- 	  This is the default mode of working of DWC3 controller where
- 	  both host and gadget features are enabled.
 -- 
-2.39.0
-
+heikki
