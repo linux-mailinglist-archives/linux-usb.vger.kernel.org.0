@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1651E67171C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 10:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF30671826
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 10:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjARJIQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 04:08:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S230077AbjARJuX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 04:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjARJHO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 04:07:14 -0500
+        with ESMTP id S230453AbjARJuD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 04:50:03 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5171E46165;
-        Wed, 18 Jan 2023 00:27:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75F82BEF1;
+        Wed, 18 Jan 2023 01:01:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F12C6170A;
-        Wed, 18 Jan 2023 08:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051CAC433F2;
-        Wed, 18 Jan 2023 08:27:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96BF56172E;
+        Wed, 18 Jan 2023 09:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67AAC433D2;
+        Wed, 18 Jan 2023 09:01:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674030471;
-        bh=WbTFsa9uUp/GVGY/40OGOerWX8P64wmwxJdpH4/nltI=;
+        s=k20201202; t=1674032512;
+        bh=THV3Tcy6xKn4dLWFPpXMkIx/yzhzy/uhRugjcM+mCQw=;
         h=From:To:Cc:Subject:Date:From;
-        b=V7aUlMB1fk/MekJXOCCs0PVc7h7kscdLWolw8c0WI1wa+OsKN/p6yxqVXnzGJ8JHS
-         Uoycpu4Jp3BQQEZKAaEgSK/Q6UY+ktGlvOuFG/Szp1NpTdSQsyX7UCo4e7qfon2KGu
-         78vDDd0SXYGxCealFCqVG/uKwJf0pL+FpTSO1tqZQ4m6X3UdHE68ub0TuHWg1/BhIe
-         JLdfMCz5kuK9g70CWen7N6kMbwi0mH4D8+U2nH8hvx/MLye9I3kqaBjCd/zAjR1X2i
-         7lePDAf9uc90kD3v246r28DG1lKoxbDLWXL4366Xlgwya8yB2y3jL9aiJC1xKsT+GU
-         YvfU7u9dsED8A==
+        b=eswJ/MjCDwkZofaT5ikZ6b7HXSzTGPGjVmvXuXARnnmJmyEg+aEoKMaGOSrFFiS8L
+         v8y93xxX2kFQna/QY9FLaTkKb2d/SQpJEDL0sRI0DU8NnHCbAao2QCwL3i5jb2Y7iE
+         H5BPi2/U/Lzy1pylzBgcegIPSIqEgvsre2wQG0qvpThEcS1/P4Q7JrSTT+eU8v7SI3
+         dySnY1foDWK63HYK+e3CTe23vWKf3cVbO5gHs0Be4gMHsvOgjBLVRlpZv626fTe8tK
+         vxmzIOlT/k7QLqaXZN8LxYf2zj1GWgDyq2x77/OczYehLnU6B8JrLMS2UQw6a2F+Hg
+         x+T0Yvf4f1G/g==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>,
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: ohci-omap: avoid unused-variable warning
-Date:   Wed, 18 Jan 2023 09:27:34 +0100
-Message-Id: <20230118082746.391542-1-arnd@kernel.org>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Kushagra Verma <kushagra765@outlook.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: fix extcon dependency
+Date:   Wed, 18 Jan 2023 10:01:41 +0100
+Message-Id: <20230118090147.2126563-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,65 +58,47 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The dead code removal has led to 'need_transceiver' not being
-used at all when OTG support is disabled:
+The dwc3 core support now links against the extcon subsystem,
+so it cannot be built-in when extcon is a loadable module:
 
-drivers/usb/host/ohci-omap.c: In function 'ohci_omap_reset':
-drivers/usb/host/ohci-omap.c:99:33: error: unused variable 'need_transceiver' [-Werror=unused-variable]
-   99 |         int                     need_transceiver = (config->otg != 0);
+arm-linux-gnueabi-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_extcon':
+core.c:(.text+0x572): undefined reference to `extcon_get_edev_by_phandle'
+arm-linux-gnueabi-ld: core.c:(.text+0x596): undefined reference to `extcon_get_extcon_dev'
+arm-linux-gnueabi-ld: core.c:(.text+0x5ea): undefined reference to `extcon_find_edev_by_node'
 
-Change the #ifdef check into an IS_ENABLED() check to make the
-code more readable and let the compiler see where it is used.
+There was already a Kconfig dependency in the dual-role support,
+but this is now needed for the entire dwc3 driver.
 
-Fixes: 8825acd7cc8a ("ARM: omap1: remove dead code")
+It is still possible to build dwc3 without extcon, but this
+prevents it from being set to built-in when extcon is a loadable
+module.
+
+Fixes: d182c2e1bc92 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-The patch that caused the issue is in the boardfile-removal branch
-of the soc tree. I would just add the patch there.
----
- drivers/usb/host/ohci-omap.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/usb/dwc3/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
-index 3d57b9454a27..78088cd46908 100644
---- a/drivers/usb/host/ohci-omap.c
-+++ b/drivers/usb/host/ohci-omap.c
-@@ -67,8 +67,6 @@ static void omap_ohci_clock_power(struct ohci_omap_priv *priv, int on)
- 	}
- }
- 
--#ifdef	CONFIG_USB_OTG
--
- static void start_hnp(struct ohci_hcd *ohci)
- {
- 	struct usb_hcd *hcd = ohci_to_hcd(ohci);
-@@ -87,8 +85,6 @@ static void start_hnp(struct ohci_hcd *ohci)
- 	local_irq_restore(flags);
- }
- 
--#endif
--
- /*-------------------------------------------------------------------------*/
- 
- static int ohci_omap_reset(struct usb_hcd *hcd)
-@@ -111,8 +107,7 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
- 	if (config->ocpi_enable)
- 		config->ocpi_enable();
- 
--#ifdef	CONFIG_USB_OTG
--	if (need_transceiver) {
-+	if (IS_ENABLED(CONFIG_USB_OTG) && need_transceiver) {
- 		hcd->usb_phy = usb_get_phy(USB_PHY_TYPE_USB2);
- 		if (!IS_ERR_OR_NULL(hcd->usb_phy)) {
- 			int	status = otg_set_host(hcd->usb_phy->otg,
-@@ -129,7 +124,6 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
- 		hcd->skip_phy_initialization = 1;
- 		ohci->start_hnp = start_hnp;
- 	}
--#endif
- 
- 	omap_ohci_clock_power(priv, 1);
- 
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index b2f72b0e75c6..be954a9abbe0 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -3,6 +3,7 @@
+ config USB_DWC3
+ 	tristate "DesignWare USB3 DRD Core Support"
+ 	depends on (USB || USB_GADGET) && HAS_DMA
++	depends on (EXTCON || EXTCON=n)
+ 	select USB_XHCI_PLATFORM if USB_XHCI_HCD
+ 	select USB_ROLE_SWITCH if USB_DWC3_DUAL_ROLE
+ 	help
+@@ -44,7 +45,6 @@ config USB_DWC3_GADGET
+ config USB_DWC3_DUAL_ROLE
+ 	bool "Dual Role mode"
+ 	depends on ((USB=y || USB=USB_DWC3) && (USB_GADGET=y || USB_GADGET=USB_DWC3))
+-	depends on (EXTCON=y || EXTCON=USB_DWC3)
+ 	help
+ 	  This is the default mode of working of DWC3 controller where
+ 	  both host and gadget features are enabled.
 -- 
 2.39.0
 
