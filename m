@@ -2,97 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E346D6726CF
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 19:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F7C6726E4
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 19:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjARS0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 13:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S230184AbjARS3A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 13:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjARS0e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 13:26:34 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3851854217
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 10:26:33 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4a2f8ad29d5so479946007b3.8
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 10:26:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=833qF7g8LvqhqpatlwuROZztNoyMIiISRypz9Ugf/c0=;
-        b=fW4W7Rj79IsrBXfq/8IyPW5hmnLVrANmQQurZBfP66+XEKzxsdPvQyznrjaydZ3Rme
-         JVVQoE0xuV7m+0cl2I3Xhc7L72rKm35GAd73eeemoJJt1671F3L+IFUP7lxBD8eBWg9F
-         gOn0ZsOILw46H9fiQOHvewyqTdeSDnyHkjvWM=
+        with ESMTP id S229758AbjARS24 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 13:28:56 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FA7113E3;
+        Wed, 18 Jan 2023 10:28:55 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id jr10so23232933qtb.7;
+        Wed, 18 Jan 2023 10:28:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=833qF7g8LvqhqpatlwuROZztNoyMIiISRypz9Ugf/c0=;
-        b=oKblL6eir7HKSs8Rz4PgfjvVvB/n5gDguugHqUe1S92D0wmkaE5P8yUHr8Tq2H8Raa
-         Fvfsu4O30xhF2BqrW4d30mbqgpIfjU+GO9plOstW1yMKvnLfeKaXzIPiKy+GtY0a3Das
-         wbML/r3Lv0hKcnLSfqy1nM+RAMPhPbVvzA/H4kYPkUsz8iu9n/2Ho2vK25kg840bRIN+
-         TvuROP+NvDQLxHam64nuSz3Bpjtwjeu2RRzsnhk/6vOL63HSb0dYMcv8/d0D1NC9Jku+
-         dPBRd4piT0LKTV52qSduEdWs5pYWvs17+iqVu/0Tvr9T5Tv1qNyyhSy1yHbI2y0XqwO1
-         QAdA==
-X-Gm-Message-State: AFqh2ko4/a2ocEps+d1x55ASSAGJwIZ6daWmvwdgFJqpEyYmOv9B1IfP
-        HgnRJR4xls+BOFKXmgme1MoYS03Kj6teK/+b/HG6WczpZjLNjfgk
-X-Google-Smtp-Source: AMrXdXvKMwvUyxaaa6SVXjJaCVv6vG8DoqKnn6zsV3pbWofoZQgF2Ozt9hB0EmH+XPmWBMdp9JBR9sS5yO/h46HMe0c=
-X-Received: by 2002:a81:848c:0:b0:4e3:a9b2:55d0 with SMTP id
- u134-20020a81848c000000b004e3a9b255d0mr1172136ywf.197.1674066392438; Wed, 18
- Jan 2023 10:26:32 -0800 (PST)
+        bh=m6+hopJKlcYVjWue00VkVDFjPrjXwNY80RsgV+H7s3k=;
+        b=3UCJo9oDRK+zvaNyNHHNbXjKGSAgrfcfUj/Uz4yPm56IaIlgxQv5el0QKqc4SGtvOv
+         zzFLhzYYI9sGROEKG40rOBDkF4MnisI1A2z1m+38/AaD9lJH7Ku2b1/zYCabCJUpnNNu
+         KuYIjCkU9+YqG6/k5a4+fT+DYd/JLD9YO3v+o5BE+RXtdViIR0o8SGzz7nLIeaXrjTWz
+         QXfyMea8bzTPQ6K+zrYNDNTTmWUx9AgVrpaGu0/prCtwkp8nFYJe6NOGSiXCr6DfGkjW
+         HYGd2YVo07u6dcqTTWIT9qHhIh3IAdFH7USLPwNrobdlv3PaVNFfoStoBFJiyFAkKLCr
+         OcsA==
+X-Gm-Message-State: AFqh2krIAzMz/4sIWdZPCboBDANEuWUVTgsNymi2JqAG8FKZzPfI6hAR
+        D9qLGTIpmff1ScqRZrxaA619TuZyj1WTKLUk
+X-Google-Smtp-Source: AMrXdXsTWIPihbbkeIVwRFkH1BG2PkiVfAKrtt5W2CMXq+ymezGSNRY6XyPDsA3E49/dpN5CuDoPbA==
+X-Received: by 2002:ac8:738a:0:b0:3b6:4615:6d0e with SMTP id t10-20020ac8738a000000b003b646156d0emr6622972qtp.3.1674066534312;
+        Wed, 18 Jan 2023 10:28:54 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id w25-20020ac86b19000000b003b63c08a888sm2977623qts.4.2023.01.18.10.28.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 10:28:53 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id 20so20137890ybl.0;
+        Wed, 18 Jan 2023 10:28:53 -0800 (PST)
+X-Received: by 2002:a25:d88c:0:b0:77a:b5f3:d0ac with SMTP id
+ p134-20020a25d88c000000b0077ab5f3d0acmr833623ybg.202.1674066532773; Wed, 18
+ Jan 2023 10:28:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118031514.1278139-1-pmalani@chromium.org> <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
-In-Reply-To: <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 18 Jan 2023 10:26:21 -0800
-Message-ID: <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org
+References: <cover.1674036164.git.geert+renesas@glider.be> <cd685d8e4d6754c384acfc1796065d539a2c3ea8.1674036164.git.geert+renesas@glider.be>
+ <CAL_JsqJS2JTZ1BxMbG_2zgzu5xtxMFPqjxc_vUjuZp3k1xUmaQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqJS2JTZ1BxMbG_2zgzu5xtxMFPqjxc_vUjuZp3k1xUmaQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 18 Jan 2023 19:28:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXGsmNjYy-ofmuHLkr8yaDEzy+SGnhtbmc_2ezbEKAMjw@mail.gmail.com>
+Message-ID: <CAMuHMdXGsmNjYy-ofmuHLkr8yaDEzy+SGnhtbmc_2ezbEKAMjw@mail.gmail.com>
+Subject: Re: [PATCH 7/7] usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
+To:     Rob Herring <robh@kernel.org>
+Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Hi Rob,
 
-Thanks for reviewing the patch.
-
-On Wed, Jan 18, 2023 at 1:39 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Wed, Jan 18, 2023 at 6:30 PM Rob Herring <robh@kernel.org> wrote:
+> On Wed, Jan 18, 2023 at 4:15 AM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
+> > Use the new devm_of_phy_optional_get() helper instead of open-coding the
+> > same operation.
+> >
+> > This lets us drop several checks for IS_ERR(), as phy_power_{on,off}()
+> > handle NULL parameters fine.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> >  drivers/usb/host/ohci-exynos.c | 24 +++++++-----------------
+> >  1 file changed, 7 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+> > index 8d7977fd5d3bd502..8dd9c3b2411c383f 100644
+> > --- a/drivers/usb/host/ohci-exynos.c
+> > +++ b/drivers/usb/host/ohci-exynos.c
+> > @@ -69,19 +69,12 @@ static int exynos_ohci_get_phy(struct device *dev,
+> >                         return -EINVAL;
+> >                 }
+> >
+> > -               phy = devm_of_phy_get(dev, child, NULL);
+> > +               phy = devm_of_phy_optional_get(dev, child, NULL);
+> >                 exynos_ohci->phy[phy_number] = phy;
+> >                 if (IS_ERR(phy)) {
+> > -                       ret = PTR_ERR(phy);
+> > -                       if (ret == -EPROBE_DEFER) {
+> > -                               of_node_put(child);
+> > -                               return ret;
+> > -                       } else if (ret != -ENOSYS && ret != -ENODEV) {
+> > -                               dev_err(dev,
+> > -                                       "Error retrieving usb2 phy: %d\n", ret);
+> > -                               of_node_put(child);
+> > -                               return ret;
+> > -                       }
+> > +                       of_node_put(child);
+> > +                       return dev_err_probe(dev, PTR_ERR(phy),
+> > +                                            "Error retrieving usb2 phy\n");
 >
-> On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
-> > Update the altmode "active" state when we receive Acks for Enter and
-> > Exit Mode commands. Having the right state is necessary to change Pin
-> > Assignments using the 'pin_assignment" sysfs file.
->
-> The idea was that the port drivers take care of this, not the altmode
-> drivers.
+> Optional is really the only reason for the caller to decide whether to
+> print an error message or not. If we have both flavors of 'get', then
+> really the 'get' functions should print an error message.
 
-For the port's typec_altmode struct, that makes sense.
-Should the port driver be taking care of the state for the partner's altmode
-too, i.e "/sys/class/typec/port1-partner/port1-partner.0/active" ?
+In case of a real error, both should print an error message, right?
 
-It seemed like the port driver should be forwarding the VDMs without snooping
-the header, or IOW, it should let the altmode driver parse the VDMs (which it's
-doing in this case) and manage the partner altmode state.
+Anyway, I understand that's a three step operation:
+  1. Introduce and convert to the _optional variant,
+  2. Add error printing to callees.
+  3. Remove error printing from callers.
 
-"pin_assignment_store" seems to only work if the partner's altmode
-"active" bit is set to active [1]
+Gr{oetje,eeting}s,
 
-FWIW, I think we can make the typec_altmode_update_active() calls from
-our (cros-ec-typec) port driver too, but displayport.c is parsing the header
-anyway, so it seemed repetitive. Just wanted to clarify the intention here.
+                        Geert
 
-BR,
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/altmodes/displayport.c#n474
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
