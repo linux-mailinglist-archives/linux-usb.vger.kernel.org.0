@@ -2,127 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412C2671B07
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 12:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62031671C26
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 13:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjARLpD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 06:45:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
+        id S230306AbjARMeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 07:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjARLnv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 06:43:51 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD955D7E5
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 03:02:21 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-15027746720so35049317fac.13
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 03:02:21 -0800 (PST)
+        with ESMTP id S230332AbjARMdt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 07:33:49 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CCF2411A;
+        Wed, 18 Jan 2023 03:55:29 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id j185so4311102vsc.13;
+        Wed, 18 Jan 2023 03:55:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KuI0iwHsMdHgi9UUhJbv/FF6Zx1hDWv0kF6EEdUlD2I=;
-        b=5PCGooyhPIEuUA8LfHpgz2E1NSo9q7mSLwwd+kP7a2WQx5oIObawC1SZ8b3GjlhI6w
-         k+aUwf08xYT06HES1GVAUttTfmtlU/+2mUQ+E6nwI3mvpykPVqpS3CT4T1OK8Y7wh8Lh
-         OxdivEq+CnvHPuPDLKxMirSIFn7kanNvD0azdCBrxVrZC626tljgU09Q5NwDlRdCl5Pm
-         h30BKW+O6Gpe2j8vZBVS7nQX0CZx9F+vnTsIKQmfF0oeOZkgBCg3IFGxtjTVee8Llq3v
-         VTgrTzM1eGIkuy0knsusfqmXW3O1e3iUrjIXv4sd1h2zvdReBrfi+vZn6Ejf/45OptwH
-         w5QQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uFwEIEOiSaW9hXN4k5YwZLmqm93pKj/xVyynsfLQsUA=;
+        b=R0kiAqJYRSp/UTQPUDyGlM8oim8OrtDNUFJ/VlCzx/Xz4ZdBcong/DY/nekEOAdtzM
+         CLy/t1aqHPjL/uJQ/6UxMuJeW60mzLgWwDh3uoUmrVidKcel2SUYy7Fi/8mAWrclK+lL
+         QeEgNCtgZ/f3je+Ds1lpR3Cc9qf6AoHP45CFGBx8gMCVTPx7o2MJgBbA3tsy8a4ywpTI
+         ir2+Hmy4s6s2FBFNsUHTkce82EOHqXSZkdskCfGSwfnyMRX1419R/Mg4+5z/VP9VE0wk
+         JIQyOGYUTaaBpEzB57nMeLemi4zy93VSIX8cVse8V00WmdgaL6mms/wKjnasesQBub6R
+         Vqlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KuI0iwHsMdHgi9UUhJbv/FF6Zx1hDWv0kF6EEdUlD2I=;
-        b=gn1/XFnmKBlVtyjID9Z2rF2Mc1TkLA0bZfmnZdrizDtIh0T2PE6hrN9BpUSPO6CyRa
-         /At7+7oeKY+ArhIub2Obxn3ZBviDu7b9JGhDwQWkL2PqSdJGv3/OTko9lZCnSHtAh9MT
-         rN7pe7pgtQKjLBY/1W3EFVdbkfEbnZ1j3HtnJv8yL1ZQBqxETlX2QC3zZVI+Ge9rGjbV
-         UARdzkQycL6HYDr2ELpFsCdRreCAc73wPO+9LjdgC03Ny7ZsqOYJ6SPwtM6cmhtH+GR/
-         LBXZ1EV9G9PnOu7zqyyOYm0SbGMfA1+XzMOieV1nq761Fqx/AUZz6nP4012N1QGlxT09
-         rKyQ==
-X-Gm-Message-State: AFqh2korFZwfntfYgVDM831M84J2BYXlbFhPTom+HBALvnLsH03qW3fR
-        MJMAzE/AHRWMBPNlSpEXQnGMDw==
-X-Google-Smtp-Source: AMrXdXvlrp1Ed3XBrrhA3zCnrQ6Rbb/wKmg6UrVk+wIslhGo+AMwXBPpNO4DwySZY2+3rtlEwlTN+A==
-X-Received: by 2002:a05:6870:c190:b0:15e:cc77:1e6d with SMTP id h16-20020a056870c19000b0015ecc771e6dmr4364085oad.13.1674039741194;
-        Wed, 18 Jan 2023 03:02:21 -0800 (PST)
-Received: from ?IPV6:2607:fb91:120e:1c84:8038:3fff:fe9f:cbb4? ([2607:fb91:120e:1c84:8038:3fff:fe9f:cbb4])
-        by smtp.gmail.com with ESMTPSA id e19-20020a056871045300b001442fada152sm18099522oag.46.2023.01.18.03.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 03:02:20 -0800 (PST)
-Message-ID: <efa6a8aa-466e-cfaa-0113-b85002af008e@landley.net>
-Date:   Wed, 18 Jan 2023 05:14:36 -0600
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uFwEIEOiSaW9hXN4k5YwZLmqm93pKj/xVyynsfLQsUA=;
+        b=WqIvbw+dpMZ+PvfoZauDDxvJwontdo6b602Xnwx8O3EpTH6/iHjUSwRKA+lzONZNfv
+         IqDZXpDqVMDDnCr1EDDu6EXGrHlc0+0K8w3ssKnWccKP3lKKNfOvEKnrjBJJ5BI6JRZd
+         gJQneW1/DUq3VK7IyprySLhiv5Z65vbXLCvxZQiglF2XLWRY4jg0SjLtQSXsYmb2cFQM
+         g3iVWvzJC7Nwevb/hBazEGZE2iAfgITyccdWg8U0J8SwTxfIZ2XamAkHXA7xi3gZbP03
+         mQ0yYzFJDKi6qP3nWBN15a72o6fjNtW9p04S57wjfnhkPO+NwsXLRIoXMqzIfMVKWW8F
+         Kr8g==
+X-Gm-Message-State: AFqh2kpVGrtCJGAORFt2gKpZq3Mj9tj0bANuNNKAzqRMjzDrYQqMRQK9
+        tDxcwxqO1PAZPPbZNz+cWjTEJr3BdC5znPirDaI=
+X-Google-Smtp-Source: AMrXdXskNkq+CbqgiO87f6+YCzqH7CO6djk3enoyI29WdSBF6Z/zFZS74ORoGWFWatnmI3x1aSC6mTW4xu2ljMf6pow=
+X-Received: by 2002:a67:e14a:0:b0:3d3:f10a:4f56 with SMTP id
+ o10-20020a67e14a000000b003d3f10a4f56mr891572vsl.10.1674042928915; Wed, 18 Jan
+ 2023 03:55:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
- <CAMuHMdUJm5QvzH8hvqwvn9O6qSbzNOapabjw5nh9DJd0F55Zdg@mail.gmail.com>
- <7329212f-b1a0-41eb-99b3-a56eb1d23138@landley.net>
- <CAMuHMdXo3iR2C=CAaXO5tBRCncnQAAMR6BMPLOm_nBpFAeVhrA@mail.gmail.com>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <CAMuHMdXo3iR2C=CAaXO5tBRCncnQAAMR6BMPLOm_nBpFAeVhrA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230118044418.875-1-linux.amoon@gmail.com> <20230118044418.875-7-linux.amoon@gmail.com>
+ <2c17eaa5-ee93-58c5-a35a-8366eb4cfc36@linaro.org>
+In-Reply-To: <2c17eaa5-ee93-58c5-a35a-8366eb4cfc36@linaro.org>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Wed, 18 Jan 2023 17:25:14 +0530
+Message-ID: <CANAwSgRJ6Tek7NxSfsExkrWrQ94Ro8mmitoWm3wfrg7NKbO+Lw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/9] dt-bindings: usb: Add binding for Via lab VL817
+ hub controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-amlogic@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/18/23 01:46, Geert Uytterhoeven wrote:
-> Again, I think you're talking about something different.
-> Does kexec work for you?
+Hi Krzysztof,
 
-Sorry, got woken up several hours early by sirens and flashy lights this morning
-(duplex on the corner caught fire, Austin has a LOT of emergency vehicles), been
-a bit underclocked all day.
+Thanks for your review comments.
 
-No, I haven't tried kexec on sh4. I'll add it to the todo heap.
+On Wed, 18 Jan 2023 at 13:49, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 18/01/2023 05:44, Anand Moon wrote:
+> > The VIA Lab VL817 is a USB 3.1 Gen 1 hub and USB 2.0 hub
+> > controller that features 4 downstream ports and 1 otg, with
+> > an internal 5V regulator and has external reset pin.
+>
+> Subject: drop second/last, redundant "binding for". The "dt-bindings"
+> prefix is already stating that these are bindings.
+>
+Ok
+> >
+> > Add a device tree binding for its USB protocol part.
+> > The internal LDO is not covered by this and can just be modelled
+> > as a fixed regulator.
+> >
+> > Add combo of USB 2.0 and USB 3.0 root hub using peer-hub.
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > v2 - fix the compatible string and fix the $id
+> >    - update the commit message.
+> >    - update the example for use peer-hub node because it
+> >      combo of USB 2.0 and USB 3.0 hub.
+> >    - rename the yaml file from vialab,vl817q7.yaml to vialab,vl817.yaml
+> >      as q7 suffix is ued for USB 3.1 and q5 suffix is used for USB 2.0.
+> > ---
+> >  .../devicetree/bindings/usb/vialab,vl817.yaml | 69 +++++++++++++++++++
+> >  1 file changed, 69 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+> > new file mode 100644
+> > index 000000000000..5f9771e22058
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/vialab,vl817.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Via labs VL817 USB 3.1 hub controller
+> > +
+> > +maintainers:
+> > +  - Anand Moon <linux.amoon@gmail.com>
+> > +
+> > +allOf:
+> > +  - $ref: usb-device.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+>
+> Drop items
+>
+Ok,
+> > +      - enum:
+> > +          - usb2109,2817
+> > +          - usb2109,817
+> > +
+> > +  reg: true
+> > +
+> > +  reset-gpios:
+> > +    description: GPIO controlling the RESET# pin.
+>
+> maxItems
+>
+Ok,
+> > +
+> > +  vdd-supply:
+> > +    description:
+> > +      phandle to the regulator that provides power to the hub.
+> > +
+> > +  peer-hub:
+> > +    $ref: '/schemas/types.yaml#/definitions/phandle'
+>
+> Drop quotes
+>
+Ok,
+> > +    description:
+> > +      phandle to the peer hub on the controller.
+> > +
+> > +required:
+> > +  - peer-hub
+> > +  - compatible
+> > +  - reg
+>
+> Keep same order as in properties: part.
+>
+Ok
+> > +
+>
+> Best regards,
+> Krzysztof
+>
 
->> > I tried working my way up from 2.6.22, but gave up around 2.6.29.
->> > Probably I should do this with r2d and qemu instead ;-)
->>
->> I have current running there. I've had current running there for years. Config
->> attached...
->>
->> > Both r2d and landisk are SH7751.
->>
->> Cool. Shouldn't be hard to get landisk running current then.
-> 
-> Current kernels work fine on landisk with an old Debian userspace
-> on CF.  The 8139cp driver is a bit flaky: last time I tried nfsroot,
-> that didn't work well.
+I will update these in the next version.
 
-I've never had luck with NFS, I was using NBD. Hadn't noticed the flake but
-haven't stress tested it too hard either?
 
-Mostly new userspace is what I'm testing...
 
-Rob
+-Anand
