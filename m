@@ -2,183 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62031671C26
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 13:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0ED671C8C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 13:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjARMeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 07:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        id S231151AbjARMvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 07:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjARMdt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 07:33:49 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CCF2411A;
-        Wed, 18 Jan 2023 03:55:29 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id j185so4311102vsc.13;
-        Wed, 18 Jan 2023 03:55:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uFwEIEOiSaW9hXN4k5YwZLmqm93pKj/xVyynsfLQsUA=;
-        b=R0kiAqJYRSp/UTQPUDyGlM8oim8OrtDNUFJ/VlCzx/Xz4ZdBcong/DY/nekEOAdtzM
-         CLy/t1aqHPjL/uJQ/6UxMuJeW60mzLgWwDh3uoUmrVidKcel2SUYy7Fi/8mAWrclK+lL
-         QeEgNCtgZ/f3je+Ds1lpR3Cc9qf6AoHP45CFGBx8gMCVTPx7o2MJgBbA3tsy8a4ywpTI
-         ir2+Hmy4s6s2FBFNsUHTkce82EOHqXSZkdskCfGSwfnyMRX1419R/Mg4+5z/VP9VE0wk
-         JIQyOGYUTaaBpEzB57nMeLemi4zy93VSIX8cVse8V00WmdgaL6mms/wKjnasesQBub6R
-         Vqlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uFwEIEOiSaW9hXN4k5YwZLmqm93pKj/xVyynsfLQsUA=;
-        b=WqIvbw+dpMZ+PvfoZauDDxvJwontdo6b602Xnwx8O3EpTH6/iHjUSwRKA+lzONZNfv
-         IqDZXpDqVMDDnCr1EDDu6EXGrHlc0+0K8w3ssKnWccKP3lKKNfOvEKnrjBJJ5BI6JRZd
-         gJQneW1/DUq3VK7IyprySLhiv5Z65vbXLCvxZQiglF2XLWRY4jg0SjLtQSXsYmb2cFQM
-         g3iVWvzJC7Nwevb/hBazEGZE2iAfgITyccdWg8U0J8SwTxfIZ2XamAkHXA7xi3gZbP03
-         mQ0yYzFJDKi6qP3nWBN15a72o6fjNtW9p04S57wjfnhkPO+NwsXLRIoXMqzIfMVKWW8F
-         Kr8g==
-X-Gm-Message-State: AFqh2kpVGrtCJGAORFt2gKpZq3Mj9tj0bANuNNKAzqRMjzDrYQqMRQK9
-        tDxcwxqO1PAZPPbZNz+cWjTEJr3BdC5znPirDaI=
-X-Google-Smtp-Source: AMrXdXskNkq+CbqgiO87f6+YCzqH7CO6djk3enoyI29WdSBF6Z/zFZS74ORoGWFWatnmI3x1aSC6mTW4xu2ljMf6pow=
-X-Received: by 2002:a67:e14a:0:b0:3d3:f10a:4f56 with SMTP id
- o10-20020a67e14a000000b003d3f10a4f56mr891572vsl.10.1674042928915; Wed, 18 Jan
- 2023 03:55:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118044418.875-1-linux.amoon@gmail.com> <20230118044418.875-7-linux.amoon@gmail.com>
- <2c17eaa5-ee93-58c5-a35a-8366eb4cfc36@linaro.org>
-In-Reply-To: <2c17eaa5-ee93-58c5-a35a-8366eb4cfc36@linaro.org>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 18 Jan 2023 17:25:14 +0530
-Message-ID: <CANAwSgRJ6Tek7NxSfsExkrWrQ94Ro8mmitoWm3wfrg7NKbO+Lw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] dt-bindings: usb: Add binding for Via lab VL817
- hub controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S230511AbjARMum (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 07:50:42 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CBA148612;
+        Wed, 18 Jan 2023 04:11:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 754C11477;
+        Wed, 18 Jan 2023 04:12:12 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C0B73F71A;
+        Wed, 18 Jan 2023 04:11:28 -0800 (PST)
+Date:   Wed, 18 Jan 2023 12:11:24 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Bin Liu <b-liu@ti.com>, devicetree@vger.kernel.org
+Cc:     Icenowy Zheng <uwu@icenowy.me>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        soc@kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v5 00/11] ARM: suniv: USB and two new boards support
+Message-ID: <20230118121124.7ff25929@donnerap.cambridge.arm.com>
+In-Reply-To: <20230111015332.172021-1-andre.przywara@arm.com>
+References: <20230111015332.172021-1-andre.przywara@arm.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, 11 Jan 2023 01:53:21 +0000
+Andre Przywara <andre.przywara@arm.com> wrote:
 
-Thanks for your review comments.
+Hi,
 
-On Wed, 18 Jan 2023 at 13:49, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 18/01/2023 05:44, Anand Moon wrote:
-> > The VIA Lab VL817 is a USB 3.1 Gen 1 hub and USB 2.0 hub
-> > controller that features 4 downstream ports and 1 otg, with
-> > an internal 5V regulator and has external reset pin.
->
-> Subject: drop second/last, redundant "binding for". The "dt-bindings"
-> prefix is already stating that these are bindings.
->
-Ok
-> >
-> > Add a device tree binding for its USB protocol part.
-> > The internal LDO is not covered by this and can just be modelled
-> > as a fixed regulator.
-> >
-> > Add combo of USB 2.0 and USB 3.0 root hub using peer-hub.
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > v2 - fix the compatible string and fix the $id
-> >    - update the commit message.
-> >    - update the example for use peer-hub node because it
-> >      combo of USB 2.0 and USB 3.0 hub.
-> >    - rename the yaml file from vialab,vl817q7.yaml to vialab,vl817.yaml
-> >      as q7 suffix is ued for USB 3.1 and q5 suffix is used for USB 2.0.
-> > ---
-> >  .../devicetree/bindings/usb/vialab,vl817.yaml | 69 +++++++++++++++++++
-> >  1 file changed, 69 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-> > new file mode 100644
-> > index 000000000000..5f9771e22058
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-> > @@ -0,0 +1,69 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/vialab,vl817.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Via labs VL817 USB 3.1 hub controller
-> > +
-> > +maintainers:
-> > +  - Anand Moon <linux.amoon@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: usb-device.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
->
-> Drop items
->
-Ok,
-> > +      - enum:
-> > +          - usb2109,2817
-> > +          - usb2109,817
-> > +
-> > +  reg: true
-> > +
-> > +  reset-gpios:
-> > +    description: GPIO controlling the RESET# pin.
->
-> maxItems
->
-Ok,
-> > +
-> > +  vdd-supply:
-> > +    description:
-> > +      phandle to the regulator that provides power to the hub.
-> > +
-> > +  peer-hub:
-> > +    $ref: '/schemas/types.yaml#/definitions/phandle'
->
-> Drop quotes
->
-Ok,
-> > +    description:
-> > +      phandle to the peer hub on the controller.
-> > +
-> > +required:
-> > +  - peer-hub
-> > +  - compatible
-> > +  - reg
->
-> Keep same order as in properties: part.
->
-Ok
-> > +
->
-> Best regards,
-> Krzysztof
->
+> this is mostly a rebase of the former v4 series.
+> It is based on top of v6.2-rc1, and builds cleanly there. For passing
+> make dtbs_check, the PHY binding patch, part of a separate series[1], is
+> needed. For USB functionality, patch 2/3 from there is needed as well.
 
-I will update these in the next version.
+This series has now been taken by Vinod and is available in linux-next
+since at least Friday.
 
+> I put a tree with both series combined here:
+> https://github.com/apritzel/linux/commits/f1c100s-usb-v5
+> 
+> There were no changes to the actual patches, this is just a resend since
+> the series missed the previous merge window.
 
+Is there anything I can do to move this series forward? If I see this
+correctly, this just misses a review of patch v5 03/11 "usb: musb: sunxi:
+Introduce config struct". I addressed Jernej's comments on this already in v4.
 
--Anand
+Cheers,
+Andre
+
+> [1] https://lore.kernel.org/linux-phy/20230109012223.4079299-1-andre.przywara@arm.com/
+> 
+> ================
+> This patchset introduces support for F1C100s' USB, and the SourceParts
+> PopStick and Lctech Pi boards.
+> 
+> The DT binding and driver support for SUNIV USB MUSB device are added, in
+> addition to DT changes to the DTSI and Lichee Nano DT. New DTs are added
+> for the SourceParts PopStick v1.1 and Lctech Pi boards.
+> 
+> Changelog v4 ... v5:
+> - Rebase on top to v6.2-rc1
+> 
+> Changelog v3 ... v4:
+> - Dropped the PHY patches, they go via a different tree and need a
+>   different base
+> - rebased on top of linux-sunxi/sunxi/for-next (provides H616 USB)
+> - musb DT binding: use enum
+> - musb cleanup: use musb_hdrc_config config pointer directly
+> - musb cleanup: use const where possible
+> - drop partitions from Popstick DTS file
+> - clarify Popstick has a USB type-A *plug*
+> - add tags
+> 
+> Changelog v2 ... v3:
+> - remove redundant "Device Tree Bindings" suffix in DT binding doc title
+> - add BSD license to binding doc file (as per checkpatch)
+> - fix some commit message title prefixes
+> - use proper plural spelling for usb0_id_det-gpios
+> - popstick.dts: Reorder otg_sram node reference alphabetically
+> - popstick.dts: Add regulator- prefix to 3.3V regulator node name
+> - popstick.dts: Fix status, compatible and reg property order
+> - popstick.dts: Drop unneeded mmc0 and spi0 aliases
+> - add patch to clean up sunxi MUSB driver
+> - add Acks and Reviewed-by's
+> 
+> Changelog v1 ... v2:
+> - USB PHY binding: clarify the relation with other phy-sun4i-usb bindings
+> - Add Popstick binding and .dts patches
+> 
+> 
+> Andre Przywara (4):
+>   usb: musb: sunxi: Introduce config struct
+>   dt-bindings: vendor-prefixes: add Lctech name
+>   dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
+>   ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
+> 
+> Icenowy Zheng (7):
+>   dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
+>   usb: musb: sunxi: add support for the F1C100s MUSB controller
+>   ARM: dts: suniv: add USB-related device nodes
+>   ARM: dts: suniv: licheepi-nano: enable USB
+>   dt-bindings: vendor-prefixes: add Source Parts
+>   dt-binding: arm: sunxi: add compatible strings for PopStick v1.1
+>   ARM: dts: suniv: add device tree for PopStick v1.1
+> 
+>  .../devicetree/bindings/arm/sunxi.yaml        | 13 +++
+>  .../usb/allwinner,sun4i-a10-musb.yaml         | 10 +-
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  4 +
+>  arch/arm/boot/dts/Makefile                    |  4 +-
+>  .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 +++
+>  arch/arm/boot/dts/suniv-f1c100s.dtsi          | 32 ++++++
+>  arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 ++++++++++++++
+>  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 81 +++++++++++++++
+>  drivers/usb/musb/sunxi.c                      | 99 +++++++++++++------
+>  9 files changed, 301 insertions(+), 34 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
+>  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+> 
+> 
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> prerequisite-patch-id: 7734c0032dcc073e59f0217ee47ff023f0b47bcf
+
