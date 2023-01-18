@@ -2,86 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7F96724C0
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 18:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 469D36724EA
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 18:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjARRWa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 12:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S230318AbjARRaI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 12:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbjARRWU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 12:22:20 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795834B48A
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 09:22:12 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id u8so17338903ilq.13
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 09:22:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YHkgikre77EHT3/g6r0NFQCicXfNDncfTKLPLwU0O5Q=;
-        b=mQVPzVOy2HAK3snoqJ5SuOs+TGigKX0JzcM1I1ffephUlCut6a4watbrK58DAtqW+O
-         P2HRiFijPyWn9GdB6MvCLt9VxuyXmA/G1XQkqssjC+2RJwT2f8A6EGONwN81bkZx5bmp
-         +zQylD+L4yXp6WDODprc2dRr9Q2DFYgySgNMg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YHkgikre77EHT3/g6r0NFQCicXfNDncfTKLPLwU0O5Q=;
-        b=zsIwEtfXdMCWTGV/R1PLs6whbSKxS/MFyXO32eLmw5vBpvctHnG+im9KDqmV59WGor
-         1lSvIMp++RoRl9PEfsPAz7rSucPUV96uWH6Mz0DIXF2ijDTWF4xUfTU76IsWwLGRk6R5
-         egDI/RXEWLR8VJOEBqrHlJBotPG+gMvXxqD3PPxYMvuqFadZq0y4/Tzn5fEGNXfi2mZu
-         R3FTJQrkcOBw75MTqVD+57XohMvzo+fYr+Km0zLegRbrTh4bSyFQqrXh8bAdyffTKw24
-         IIsZGr1hhdv/UhTPpSDkJAxupTfSiMNoXAIBQ98sQncrpdjR8nYNxRZbcyQMcxss1+/I
-         uKqw==
-X-Gm-Message-State: AFqh2krXRFwPNIZVwq+6GkMEvmFZiAF4/QNPjd8y1sB9a/6HfTwsznMP
-        nTSHf4OYw77vpoMiJhPvV9UObQ==
-X-Google-Smtp-Source: AMrXdXtMjhW5fHNPeVRbpUj2TtE21JZN3FT5gzC4TId5LfCuRZEk9efrLRfrVPrpMeR7hh+KOEpAZQ==
-X-Received: by 2002:a05:6e02:1d86:b0:30d:c671:48c5 with SMTP id h6-20020a056e021d8600b0030dc67148c5mr8273983ila.16.1674062531845;
-        Wed, 18 Jan 2023 09:22:11 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id z1-20020a027a41000000b003760a908bfasm10644139jad.169.2023.01.18.09.22.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 09:22:11 -0800 (PST)
-Date:   Wed, 18 Jan 2023 17:22:11 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 8/9] usb: misc: onboard_usb_hub: add VIA LAB VL817 hub
- support
-Message-ID: <Y8gqw3G0z25zG69K@google.com>
-References: <20230118044418.875-1-linux.amoon@gmail.com>
- <20230118044418.875-9-linux.amoon@gmail.com>
+        with ESMTP id S230234AbjARRaF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 12:30:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59334B48A;
+        Wed, 18 Jan 2023 09:30:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91137B81E10;
+        Wed, 18 Jan 2023 17:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338BAC433A4;
+        Wed, 18 Jan 2023 17:30:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674063001;
+        bh=LJBBjaAlYSvJUenRlMga+U5BeXpvxpPKZDlIdLU45BM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hmf7+UL3leNPuzaxevidcCvupd2U7btIwH65IYNeVK7+1tInAv0y6fqv1vgPkzep7
+         DyRue47yqkzKNVh0krE4rlL1/CHgs3zHDmDmimMHjaZDt33MsbXp1Hfu05ucqSSE+a
+         CbDfENE2O3Fsh3QvctXD57v+Uctul0fERTTCuITLF4u2+kr3YJ746l1vQZa3cHPGSI
+         F+2psrUUlGAgm4I9P0vps036wG9js74HMbiDXteMc0Li3hPAnx7wCQjY+/b1KCIifu
+         mJxQ0xxn2v1XNmVHViwADBw/l7fyyG9erBtL+43vPEph8mMeigFsVQlHt47qPdCoS9
+         PVISFo1zgYvRA==
+Received: by mail-vs1-f51.google.com with SMTP id i185so36512278vsc.6;
+        Wed, 18 Jan 2023 09:30:01 -0800 (PST)
+X-Gm-Message-State: AFqh2kojPi1Ak0AqksCOmq/fH08kJOzZI38LRlC7OwdtGv1hBz2tzlA1
+        SEB6iih48dEEIsi9ASvpVrGzn5NEflpt0OHWUw==
+X-Google-Smtp-Source: AMrXdXvA04SHBWGhGf3XXxnkZl7P9uuv143vKfDpn1n+lFrctNTF4MekqF065Hz/TnnvGNkDVJvaFJeZyLyDD//XymY=
+X-Received: by 2002:a67:eb86:0:b0:3b1:4b76:5b44 with SMTP id
+ e6-20020a67eb86000000b003b14b765b44mr1025285vso.53.1674062999762; Wed, 18 Jan
+ 2023 09:29:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230118044418.875-9-linux.amoon@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.1674036164.git.geert+renesas@glider.be> <cd685d8e4d6754c384acfc1796065d539a2c3ea8.1674036164.git.geert+renesas@glider.be>
+In-Reply-To: <cd685d8e4d6754c384acfc1796065d539a2c3ea8.1674036164.git.geert+renesas@glider.be>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 18 Jan 2023 11:29:48 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJS2JTZ1BxMbG_2zgzu5xtxMFPqjxc_vUjuZp3k1xUmaQ@mail.gmail.com>
+Message-ID: <CAL_JsqJS2JTZ1BxMbG_2zgzu5xtxMFPqjxc_vUjuZp3k1xUmaQ@mail.gmail.com>
+Subject: Re: [PATCH 7/7] usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 04:44:16AM +0000, Anand Moon wrote:
-> VIA LAB VL817 is a 4-port USB 3.1 hub and USB 2.0 root hub
-> that has a reset pin to toggle and a 5.0V core supply exported
-> though an integrated LDO is available for powering it.
-> 
-> Add the support for this hub, for controlling the reset pin and
-> the core power supply.
-> 
-> Add USB device id's for USB 2.0 and USB 3.0 root hub.
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+On Wed, Jan 18, 2023 at 4:15 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> Use the new devm_of_phy_optional_get() helper instead of open-coding the
+> same operation.
+>
+> This lets us drop several checks for IS_ERR(), as phy_power_{on,off}()
+> handle NULL parameters fine.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/usb/host/ohci-exynos.c | 24 +++++++-----------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+> index 8d7977fd5d3bd502..8dd9c3b2411c383f 100644
+> --- a/drivers/usb/host/ohci-exynos.c
+> +++ b/drivers/usb/host/ohci-exynos.c
+> @@ -69,19 +69,12 @@ static int exynos_ohci_get_phy(struct device *dev,
+>                         return -EINVAL;
+>                 }
+>
+> -               phy = devm_of_phy_get(dev, child, NULL);
+> +               phy = devm_of_phy_optional_get(dev, child, NULL);
+>                 exynos_ohci->phy[phy_number] = phy;
+>                 if (IS_ERR(phy)) {
+> -                       ret = PTR_ERR(phy);
+> -                       if (ret == -EPROBE_DEFER) {
+> -                               of_node_put(child);
+> -                               return ret;
+> -                       } else if (ret != -ENOSYS && ret != -ENODEV) {
+> -                               dev_err(dev,
+> -                                       "Error retrieving usb2 phy: %d\n", ret);
+> -                               of_node_put(child);
+> -                               return ret;
+> -                       }
+> +                       of_node_put(child);
+> +                       return dev_err_probe(dev, PTR_ERR(phy),
+> +                                            "Error retrieving usb2 phy\n");
 
-Acked-by: Matthias Kaehlcke <mka@chromium.org>
+Optional is really the only reason for the caller to decide whether to
+print an error message or not. If we have both flavors of 'get', then
+really the 'get' functions should print an error message.
+
+Rob
