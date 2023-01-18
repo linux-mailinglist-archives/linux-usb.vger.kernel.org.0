@@ -2,66 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EF467188F
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 11:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022C067190C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 11:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjARKIc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 05:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S229545AbjARKgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 05:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjARKHx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 05:07:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4DB656D6;
-        Wed, 18 Jan 2023 01:13:22 -0800 (PST)
+        with ESMTP id S229732AbjARKdO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 05:33:14 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8128385A;
+        Wed, 18 Jan 2023 01:40:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674033202; x=1705569202;
+  t=1674034801; x=1705570801;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HX0zyAQncS5vJj7zoni+iRi+Vpv7/c6EyhwOr9hb9OE=;
-  b=MPZHkIZlGcw0OOrVn+FQkQRobP1KWdDYpsM9L9qdwfl32KvNq8PMvJmA
-   mdlHIPjN5lteovrxhoEKtYtihe+f/vWo0w0KddIuGgJ8l8mJ3ddv5gr39
-   JVnpVphulAqSzK1XwGHZxqDQS+WIxgY/0YO/ljCsrENuI9Kkdn2MHEWXb
-   vwmonFDJsd0ZxETizRVIpczO8dPG93T1F/2vDiIxElWMfDyfK1f9+NO5l
-   yT2qDev08KIjmTKed7m/vb2rEv09T2NhXFktAn6aEppEk68n+mOsHsfsP
-   2sR0LgRWMj/XVOL36NVbuvWtey0JnixotngqGJRDR/tOCD73aqPj8kVi3
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="304619727"
+  bh=Dim/XHdZNOWgoQEmO/2DDcF5rOun4Mijg9kltai7M+A=;
+  b=CLZgMcab6anhctRCx8aH3DanqI9LA5BgnpmJMtcwrViPtefrAS3iQ3ot
+   WZgBR3JtYjwnwLMmOvmvrHziMhvxFrJ8FryGnDo2kTmwxYVCzBzx27FTm
+   lUGXwrcqExwnS06XEs0SeG9YpwdPLUCv939CmpPS6kD33M+kYMJc92CW+
+   CW4s+3Xl5LsOowulxPn2HfdQ4vPNrtGGj7cEpKZaRlgpNbZ5DpwxIs6o4
+   B1XOLt4d194kx0dgI/wcBmV0lEl96wozMZpkpkpZK6czS0Hu73A6Exgwy
+   9vtRq3u5/VHJZBt8SSlaelyFvozTeq53vHu53cWU4QQ2b8dBWsH24HLmX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="305317435"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="304619727"
+   d="scan'208";a="305317435"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:13:17 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:39:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="802108498"
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="802120538"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="802108498"
+   d="scan'208";a="802120538"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Jan 2023 01:13:14 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Jan 2023 11:13:13 +0200
-Date:   Wed, 18 Jan 2023 11:13:13 +0200
+  by fmsmga001.fm.intel.com with SMTP; 18 Jan 2023 01:39:47 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Jan 2023 11:39:46 +0200
+Date:   Wed, 18 Jan 2023 11:39:46 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wayne Chang <waynec@nvidia.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH V4 3/5] usb: typec: ucsi_ccg: Replace ccgx to well-known
- regex
-Message-ID: <Y8e4KXMh+bi6Gj7r@kuha.fi.intel.com>
-References: <20230116155045.100780-1-jonathanh@nvidia.com>
- <20230116155045.100780-4-jonathanh@nvidia.com>
- <Y8aOaH+ALBvjm/rH@kuha.fi.intel.com>
- <11349701-f82f-3a7f-61ef-11f1585958c3@nvidia.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
+Message-ID: <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
+References: <20230118031514.1278139-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <11349701-f82f-3a7f-61ef-11f1585958c3@nvidia.com>
+In-Reply-To: <20230118031514.1278139-1-pmalani@chromium.org>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +60,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:29:25PM +0000, Jon Hunter wrote:
-> 
-> On 17/01/2023 12:02, Heikki Krogerus wrote:
-> > On Mon, Jan 16, 2023 at 03:50:43PM +0000, Jon Hunter wrote:
-> > > From: Wayne Chang <waynec@nvidia.com>
-> > > 
-> > > ccgx is refer to the cypress cypd4226 typec controller.
-> > > Replace ccgx to well-known regex "cypress".
-> > > 
-> > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> > > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> > > ---
-> > > V2 -> V4: nothing has changed
-> > > V1 -> V2: new change added for adding cypress,firmware-build
-> > > 
-> > >   drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > > index 4bc31ed8e5bc..d6114fb8d5a9 100644
-> > > --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > > +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > > @@ -1357,7 +1357,7 @@ static int ucsi_ccg_probe(struct i2c_client *client)
-> > >   	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
-> > >   	/* Only fail FW flashing when FW build information is not provided */
-> > > -	status = device_property_read_u16(dev, "ccgx,firmware-build",
-> > > +	status = device_property_read_u16(dev, "cypress,firmware-build",
-> > >   					  &uc->fw_build);
-> > 
-> > You need to first add that property to
-> > drivers/i2c/busses/i2c-nvidia-gpu.c.
-> 
-> 
-> Looking at this some more, I wonder if we need to keep 'ccgx,firmware-build'
-> as a fallback for AMD? It is not clear to me if they implement this property
-> or not. Let me know what you think. I will still update the i2c-nvidia-gpu
-> driver. 	
+On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
+> Update the altmode "active" state when we receive Acks for Enter and
+> Exit Mode commands. Having the right state is necessary to change Pin
+> Assignments using the 'pin_assignment" sysfs file.
 
-AMD needs to answer to that one. Sanket, do you have that device
-property ("ccgx,firmware-build") in your ACPI tables (as _DSD device
-property) for this device?
+The idea was that the port drivers take care of this, not the altmode
+drivers.
 
 thanks,
+
+> Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+> Cc: stable@vger.kernel.org
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>  drivers/usb/typec/altmodes/displayport.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 06fb4732f8cd..bc1c556944d6 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -277,9 +277,11 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+>  	case CMDT_RSP_ACK:
+>  		switch (cmd) {
+>  		case CMD_ENTER_MODE:
+> +			typec_altmode_update_active(alt, true);
+>  			dp->state = DP_STATE_UPDATE;
+>  			break;
+>  		case CMD_EXIT_MODE:
+> +			typec_altmode_update_active(alt, false);
+>  			dp->data.status = 0;
+>  			dp->data.conf = 0;
+>  			break;
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 
 -- 
 heikki
