@@ -2,55 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022C067190C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 11:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB516719AE
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 11:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjARKgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 05:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S229834AbjARKxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 05:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjARKdO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 05:33:14 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8128385A;
-        Wed, 18 Jan 2023 01:40:00 -0800 (PST)
+        with ESMTP id S230464AbjARKu7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 05:50:59 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8398767A;
+        Wed, 18 Jan 2023 02:00:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674034801; x=1705570801;
+  t=1674036016; x=1705572016;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Dim/XHdZNOWgoQEmO/2DDcF5rOun4Mijg9kltai7M+A=;
-  b=CLZgMcab6anhctRCx8aH3DanqI9LA5BgnpmJMtcwrViPtefrAS3iQ3ot
-   WZgBR3JtYjwnwLMmOvmvrHziMhvxFrJ8FryGnDo2kTmwxYVCzBzx27FTm
-   lUGXwrcqExwnS06XEs0SeG9YpwdPLUCv939CmpPS6kD33M+kYMJc92CW+
-   CW4s+3Xl5LsOowulxPn2HfdQ4vPNrtGGj7cEpKZaRlgpNbZ5DpwxIs6o4
-   B1XOLt4d194kx0dgI/wcBmV0lEl96wozMZpkpkpZK6czS0Hu73A6Exgwy
-   9vtRq3u5/VHJZBt8SSlaelyFvozTeq53vHu53cWU4QQ2b8dBWsH24HLmX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="305317435"
+  bh=2tZ5Rth2ZJQZY5dRVVWiCqjV6zPqTwq9vKdXrQkoDvQ=;
+  b=H6N/EYWVc9oEpTjEy4Rt7lmdhxkjH1efcXnacvNvt9anv7bMyPXQd61L
+   g8tY+XDK8nddZN2j6aeMvdhzC9PgPSnAMxonXYu+pCgg9n1G7dRmB0HPO
+   YCQGhfWByygG8i339RgQPfFVErYDqaqUw9pnT2qOP41awTeyF0p4DDqxm
+   +frmoQj9ES9EDxCB8vBODV5ErCkYKrKCIuP5Yt7MJq3MkoP+U+qTPx2hW
+   Ae9Ad3Fe46A1KfrlEHTm3+LDBS5lWtvYuyzELCHykq7gjyjjFVSlSNVXr
+   Us9MUQcu9fvfcJpqivB00eLZ7v1bFUfxzpfdhxEM0NWH0TJHlmQyDGe1V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="411184688"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="305317435"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:39:49 -0800
+   d="scan'208";a="411184688"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 02:00:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="802120538"
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="723027824"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="802120538"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Jan 2023 01:39:47 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Jan 2023 11:39:46 +0200
-Date:   Wed, 18 Jan 2023 11:39:46 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
-Message-ID: <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
-References: <20230118031514.1278139-1-pmalani@chromium.org>
+   d="scan'208";a="723027824"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2023 02:00:13 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pI5Ep-00B6xD-1h;
+        Wed, 18 Jan 2023 12:00:11 +0200
+Date:   Wed, 18 Jan 2023 12:00:11 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kushagra Verma <kushagra765@outlook.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: fix extcon dependency
+Message-ID: <Y8fDK58AgUotnUw+@smile.fi.intel.com>
+References: <20230118090147.2126563-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118031514.1278139-1-pmalani@chromium.org>
+In-Reply-To: <20230118090147.2126563-1-arnd@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -60,42 +70,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
-> Update the altmode "active" state when we receive Acks for Enter and
-> Exit Mode commands. Having the right state is necessary to change Pin
-> Assignments using the 'pin_assignment" sysfs file.
-
-The idea was that the port drivers take care of this, not the altmode
-drivers.
-
-thanks,
-
-> Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-> Cc: stable@vger.kernel.org
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 2 ++
->  1 file changed, 2 insertions(+)
+On Wed, Jan 18, 2023 at 10:01:41AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 06fb4732f8cd..bc1c556944d6 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -277,9 +277,11 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
->  	case CMDT_RSP_ACK:
->  		switch (cmd) {
->  		case CMD_ENTER_MODE:
-> +			typec_altmode_update_active(alt, true);
->  			dp->state = DP_STATE_UPDATE;
->  			break;
->  		case CMD_EXIT_MODE:
-> +			typec_altmode_update_active(alt, false);
->  			dp->data.status = 0;
->  			dp->data.conf = 0;
->  			break;
+> The dwc3 core support now links against the extcon subsystem,
+> so it cannot be built-in when extcon is a loadable module:
+> 
+> arm-linux-gnueabi-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_extcon':
+> core.c:(.text+0x572): undefined reference to `extcon_get_edev_by_phandle'
+> arm-linux-gnueabi-ld: core.c:(.text+0x596): undefined reference to `extcon_get_extcon_dev'
+> arm-linux-gnueabi-ld: core.c:(.text+0x5ea): undefined reference to `extcon_find_edev_by_node'
+> 
+> There was already a Kconfig dependency in the dual-role support,
+> but this is now needed for the entire dwc3 driver.
+> 
+> It is still possible to build dwc3 without extcon, but this
+> prevents it from being set to built-in when extcon is a loadable
+> module.
+
+Thank you for fixing this!
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Fixes: d182c2e1bc92 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/usb/dwc3/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> index b2f72b0e75c6..be954a9abbe0 100644
+> --- a/drivers/usb/dwc3/Kconfig
+> +++ b/drivers/usb/dwc3/Kconfig
+> @@ -3,6 +3,7 @@
+>  config USB_DWC3
+>  	tristate "DesignWare USB3 DRD Core Support"
+>  	depends on (USB || USB_GADGET) && HAS_DMA
+> +	depends on (EXTCON || EXTCON=n)
+>  	select USB_XHCI_PLATFORM if USB_XHCI_HCD
+>  	select USB_ROLE_SWITCH if USB_DWC3_DUAL_ROLE
+>  	help
+> @@ -44,7 +45,6 @@ config USB_DWC3_GADGET
+>  config USB_DWC3_DUAL_ROLE
+>  	bool "Dual Role mode"
+>  	depends on ((USB=y || USB=USB_DWC3) && (USB_GADGET=y || USB_GADGET=USB_DWC3))
+> -	depends on (EXTCON=y || EXTCON=USB_DWC3)
+>  	help
+>  	  This is the default mode of working of DWC3 controller where
+>  	  both host and gadget features are enabled.
 > -- 
-> 2.39.0.314.g84b9a713c41-goog
+> 2.39.0
+> 
 
 -- 
-heikki
+With Best Regards,
+Andy Shevchenko
+
+
