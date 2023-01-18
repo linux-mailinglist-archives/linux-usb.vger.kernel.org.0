@@ -2,66 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137A96712B3
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 05:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FBA6712B9
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 05:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjAREol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Jan 2023 23:44:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S229627AbjAREpM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Jan 2023 23:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjAREok (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 23:44:40 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8405140B;
-        Tue, 17 Jan 2023 20:44:40 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 200so19081947pfx.7;
-        Tue, 17 Jan 2023 20:44:40 -0800 (PST)
+        with ESMTP id S229667AbjAREpA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Jan 2023 23:45:00 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9878654B3E;
+        Tue, 17 Jan 2023 20:44:58 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 141so23667206pgc.0;
+        Tue, 17 Jan 2023 20:44:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e0lxoOUkcJ/KOLZdzC6xz5CbicZbR5gNovvjCwKsceY=;
-        b=FlNH3KI/EFjf8IyzwPj+igW93Y54628YVdmx3JyIHJYM1z+hoiIughWE8487BLc0VY
-         LaoGu1ukTP5MqqXtUNtGgyvgUjtDxOXaDOeAxDiEu4XI4Buyaa4dANpe8I0X4DDckE3x
-         DX2YxL129EW71ig7VuDmKLBFAwqbg3zFqaf5bUEKk1d7noYuk9wJwcHbFeqaKopbpM8f
-         n7HDnt9fZF01dx+G+QT6Dp6JMrpj0orQd15Hadu8rdodgyWbjrAyT2Wl5kGm+WlHFVei
-         HL1qYXq8pNVCsGSvrAtF5zXu26BLNFmzTjleFxu7I3DktoMagyOht/6OTBRdeM1/MWet
-         bfaw==
+        bh=D62QMVerlbHiyJGnbiMPg5OFumoXXbcE1NYnWS92Nek=;
+        b=YnwAJLYYmNrSJ2611D8WOEipldiLlKr60N05t7pGUjMqmf/PaOVcD+iBQ/bEdKOGuK
+         Aznvm7XYmCkQNTrBzKwF1SqJRuIWi6i3zbCKL3UOOOymZ2ruJYhTeJqwcRECp7kGHL7d
+         DI4VR2JmcSEDpYKFERHE4BJumSUntUJkuA+9tFf34Pj5nS91b7eQv0Dgo/+1suXw/AQd
+         NPyUZByJZq0f2mcsSqBGDwcD0cSBeBJZaGQKTJ83jCyCTU/tMA5RJGXg4lMZa426XsJk
+         wYinfYfa0HKImcaD3Qyqr6aqNS6D4mvxFqWwYSfJFIL2Bv9UhxAHUKi3VRspIi7ll9aR
+         DzUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e0lxoOUkcJ/KOLZdzC6xz5CbicZbR5gNovvjCwKsceY=;
-        b=BHWEX46fYZfi8dYBiz07zwx/1AXiOT2MVYb5JAgpAQ59/esUl6bRo92E0bNizaUbxV
-         To76+Cxi2fB6Cd9q9CFwoYfQ/Rtg2TxjgQ2hcJg6OnGZud8L9xO1e13NPJGeTQfFq4Kb
-         4DAMLtO7yUaCBc6pW9OfegVXMEdh9sJFubHzJpwuPtjgY9L/cknQwMdqAIpuTBn7MfVn
-         gRS2KmeLwyemgaJiKKEHNOj3ieaMqMVirh9At88NmEVWdcYCQVPiojJ7vU2OyXbQqiil
-         COBwl74JgiKTn7UJJ9qMZ0s5IijgAo7albeWPTykpoW+8JN7acNEov2vvKLfqMwXGcWX
-         AUbg==
-X-Gm-Message-State: AFqh2koMAjIGHO7sSLa0kMFdGdsXm/tb1R3ly0I0RpAdTUTEARW7JSUx
-        bVmj0nCbHfKYUs9rnr7Nqak=
-X-Google-Smtp-Source: AMrXdXvOoNZdQWYRFluUn/i5J9UWfSkZ+dDlHuOWGVCAiPsCvv3B6oS9bmvepzllVx8YzzuiuTp0Ew==
-X-Received: by 2002:a62:3684:0:b0:574:3cde:385a with SMTP id d126-20020a623684000000b005743cde385amr5917372pfa.32.1674017079488;
-        Tue, 17 Jan 2023 20:44:39 -0800 (PST)
+        bh=D62QMVerlbHiyJGnbiMPg5OFumoXXbcE1NYnWS92Nek=;
+        b=JDPFo4g/Iu1Op4thv7yNVTsmbzouCJn653pAZSz8qPKERyWLl5KHVvFYUQ+vzf6yM6
+         tT0v1qjH5sAnFuj8ovBVmENRmQ76gm9uvYfbyCpkJwqWRC6qc3BzwvI5nCjFWNFiwD3W
+         2eiZCKRVaSBylO5sbcd444YygoK+LLSEpzC6LgDa0tZ64zKFGxEDCaQlvp9Jy8bV3XmM
+         dsOyZob5XZeIeBY4aptPobwiiCGumSLSSU+H25blX2GAEhhzRbrNXOl2569RCGQvOChC
+         sNhdFZdBehOIEbzvbXmRNy03d7siaTvti7Ayi/JiRrBwv/UHAhJqMenNz4vV2q5dTBUE
+         BYOA==
+X-Gm-Message-State: AFqh2koYne3ALRuLUo/D/AVqglGhp7MJtb435285AVkPO1FzrOiT7a66
+        fNZ5ZSNE53MCFnkwXguHsf0=
+X-Google-Smtp-Source: AMrXdXsh+fX6wFVwZRY4xo68oRaBk9FmudTk1cSnjbhf23RkmY4pHCEDgfNQy57E+IP8NNuYjT4XgQ==
+X-Received: by 2002:a62:1507:0:b0:581:6069:5c00 with SMTP id 7-20020a621507000000b0058160695c00mr6413991pfv.28.1674017098355;
+        Tue, 17 Jan 2023 20:44:58 -0800 (PST)
 Received: from localhost.localdomain ([45.112.3.15])
-        by smtp.gmail.com with ESMTPSA id i1-20020a056a00004100b00581a156b920sm8682770pfk.132.2023.01.17.20.44.35
+        by smtp.gmail.com with ESMTPSA id i1-20020a056a00004100b00581a156b920sm8682770pfk.132.2023.01.17.20.44.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 20:44:39 -0800 (PST)
+        Tue, 17 Jan 2023 20:44:57 -0800 (PST)
 From:   Anand Moon <linux.amoon@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Icenowy Zheng <uwu@icenowy.me>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-amlogic@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/9] dt-bindings: usb: Add device id for Genesys Logic hub controller
-Date:   Wed, 18 Jan 2023 04:44:09 +0000
-Message-Id: <20230118044418.875-2-linux.amoon@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 4/9] usb: misc: onboard_usb_hub: add Genesys Logic GL852G hub support
+Date:   Wed, 18 Jan 2023 04:44:12 +0000
+Message-Id: <20230118044418.875-5-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230118044418.875-1-linux.amoon@gmail.com>
 References: <20230118044418.875-1-linux.amoon@gmail.com>
@@ -77,30 +74,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add usb hub device id for Genesys Logic, Inc. GL852G Hub USB 2.0
-root hub.
+Genesys Logic GL852G is a 4-port USB 2.0 STT hub that has a reset pin to
+toggle and a 5.0V core supply exported though an integrated LDO is
+available for powering it.
+
+Add the support for this hub, for controlling the reset pin and the core
+power supply.
 
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v2: - drop the vendor name from compatible string.
-    - drop the -OTG and -QFN76 suffix from commit message.
-    - drop the GL3523 USB 3.1 root hub device id.
+v2: - fix the compatible string
+    - drop the -OHG suffix from commit message.
+    - Add reset delay.
 ---
- Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/misc/onboard_usb_hub.c | 1 +
+ drivers/usb/misc/onboard_usb_hub.h | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-index a9f831448cca..cc4cf92b70d1 100644
---- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-+++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-@@ -16,6 +16,7 @@ properties:
-   compatible:
-     enum:
-       - usb5e3,608
-+      - usb5e3,610
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index 94e7966e199d..9bf59792fb94 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -409,6 +409,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
  
-   reg: true
+ static const struct usb_device_id onboard_hub_id_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
++	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+index 62129a6a1ba5..163fc07abf25 100644
+--- a/drivers/usb/misc/onboard_usb_hub.h
++++ b/drivers/usb/misc/onboard_usb_hub.h
+@@ -26,11 +26,16 @@ static const struct onboard_hub_pdata genesys_gl850g_data = {
+ 	.reset_us = 3,
+ };
  
++static const struct onboard_hub_pdata genesys_gl852g_data = {
++	.reset_us = 50,
++};
++
+ static const struct of_device_id onboard_hub_match[] = {
+ 	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
+ 	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+ 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
+ 	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
++	{ .compatible = "usb5e3,610", .data = &genesys_gl852g_data, },
+ 	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
+ 	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+ 	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
 -- 
 2.38.1
 
