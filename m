@@ -2,148 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0ED671C8C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 13:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA25671FD9
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 15:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjARMvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 07:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
+        id S229749AbjAROkN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 09:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjARMum (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 07:50:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CBA148612;
-        Wed, 18 Jan 2023 04:11:33 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 754C11477;
-        Wed, 18 Jan 2023 04:12:12 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C0B73F71A;
-        Wed, 18 Jan 2023 04:11:28 -0800 (PST)
-Date:   Wed, 18 Jan 2023 12:11:24 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bin Liu <b-liu@ti.com>, devicetree@vger.kernel.org
-Cc:     Icenowy Zheng <uwu@icenowy.me>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        soc@kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 00/11] ARM: suniv: USB and two new boards support
-Message-ID: <20230118121124.7ff25929@donnerap.cambridge.arm.com>
-In-Reply-To: <20230111015332.172021-1-andre.przywara@arm.com>
-References: <20230111015332.172021-1-andre.przywara@arm.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        with ESMTP id S231151AbjAROjl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 09:39:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7009418B06;
+        Wed, 18 Jan 2023 06:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 155C361842;
+        Wed, 18 Jan 2023 14:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 752DFC4339C;
+        Wed, 18 Jan 2023 14:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674052217;
+        bh=CBGsf02SRTiLNhRyXP4NFFsNWoN1o5BXvck1WnKrXpY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SmgbMy/HCiBLBtcueTOfmEo4O4uREjyyYuCw0f+1IdxvO1tpf9VaQeGrc9B45Ef1v
+         9OKwFvcot81/95hjjC1d0/km6HoAkDgegW4Cfa0i6Qa57K0A/w4E14I2CYzxBEaNh9
+         2AD5ToICIk0U7CwfVLK8F9KzZZz68doO69fzKAVoUNgsqeYefVrv3v90ckAdHCnA7J
+         UDjUcdm10YYmFMSvq7JMoncMFWCRvPC4oswGAnCBJwZ8XpbAC1m1PIBnNh0gk/Htnn
+         JHpYjDzg3mgmtrNMvqU6zuKOvUMtyMZxrDGVwV8hKstmq7XaIx9l8xXu6U4kmmhAeb
+         mQ8X4V8oSuJrQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60785C5C7C4;
+        Wed, 18 Jan 2023 14:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] r8152: avoid to change cfg for all devices
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167405221739.16594.5372337991173989926.git-patchwork-notify@kernel.org>
+Date:   Wed, 18 Jan 2023 14:30:17 +0000
+References: <20230117030344.4581-396-nic_swsd@realtek.com>
+In-Reply-To: <20230117030344.4581-396-nic_swsd@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, bjorn@mork.no
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 11 Jan 2023 01:53:21 +0000
-Andre Przywara <andre.przywara@arm.com> wrote:
+Hello:
 
-Hi,
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> this is mostly a rebase of the former v4 series.
-> It is based on top of v6.2-rc1, and builds cleanly there. For passing
-> make dtbs_check, the PHY binding patch, part of a separate series[1], is
-> needed. For USB functionality, patch 2/3 from there is needed as well.
+On Tue, 17 Jan 2023 11:03:44 +0800 you wrote:
+> The rtl8152_cfgselector_probe() should set the USB configuration to the
+> vendor mode only for the devices which the driver (r8152) supports.
+> Otherwise, no driver would be used for such devices.
+> 
+> Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> 
+> [...]
 
-This series has now been taken by Vinod and is available in linux-next
-since at least Friday.
+Here is the summary with links:
+  - [net-next,v2] r8152: avoid to change cfg for all devices
+    https://git.kernel.org/netdev/net-next/c/0d4cda805a18
 
-> I put a tree with both series combined here:
-> https://github.com/apritzel/linux/commits/f1c100s-usb-v5
-> 
-> There were no changes to the actual patches, this is just a resend since
-> the series missed the previous merge window.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Is there anything I can do to move this series forward? If I see this
-correctly, this just misses a review of patch v5 03/11 "usb: musb: sunxi:
-Introduce config struct". I addressed Jernej's comments on this already in v4.
-
-Cheers,
-Andre
-
-> [1] https://lore.kernel.org/linux-phy/20230109012223.4079299-1-andre.przywara@arm.com/
-> 
-> ================
-> This patchset introduces support for F1C100s' USB, and the SourceParts
-> PopStick and Lctech Pi boards.
-> 
-> The DT binding and driver support for SUNIV USB MUSB device are added, in
-> addition to DT changes to the DTSI and Lichee Nano DT. New DTs are added
-> for the SourceParts PopStick v1.1 and Lctech Pi boards.
-> 
-> Changelog v4 ... v5:
-> - Rebase on top to v6.2-rc1
-> 
-> Changelog v3 ... v4:
-> - Dropped the PHY patches, they go via a different tree and need a
->   different base
-> - rebased on top of linux-sunxi/sunxi/for-next (provides H616 USB)
-> - musb DT binding: use enum
-> - musb cleanup: use musb_hdrc_config config pointer directly
-> - musb cleanup: use const where possible
-> - drop partitions from Popstick DTS file
-> - clarify Popstick has a USB type-A *plug*
-> - add tags
-> 
-> Changelog v2 ... v3:
-> - remove redundant "Device Tree Bindings" suffix in DT binding doc title
-> - add BSD license to binding doc file (as per checkpatch)
-> - fix some commit message title prefixes
-> - use proper plural spelling for usb0_id_det-gpios
-> - popstick.dts: Reorder otg_sram node reference alphabetically
-> - popstick.dts: Add regulator- prefix to 3.3V regulator node name
-> - popstick.dts: Fix status, compatible and reg property order
-> - popstick.dts: Drop unneeded mmc0 and spi0 aliases
-> - add patch to clean up sunxi MUSB driver
-> - add Acks and Reviewed-by's
-> 
-> Changelog v1 ... v2:
-> - USB PHY binding: clarify the relation with other phy-sun4i-usb bindings
-> - Add Popstick binding and .dts patches
-> 
-> 
-> Andre Przywara (4):
->   usb: musb: sunxi: Introduce config struct
->   dt-bindings: vendor-prefixes: add Lctech name
->   dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
->   ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
-> 
-> Icenowy Zheng (7):
->   dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
->   usb: musb: sunxi: add support for the F1C100s MUSB controller
->   ARM: dts: suniv: add USB-related device nodes
->   ARM: dts: suniv: licheepi-nano: enable USB
->   dt-bindings: vendor-prefixes: add Source Parts
->   dt-binding: arm: sunxi: add compatible strings for PopStick v1.1
->   ARM: dts: suniv: add device tree for PopStick v1.1
-> 
->  .../devicetree/bindings/arm/sunxi.yaml        | 13 +++
->  .../usb/allwinner,sun4i-a10-musb.yaml         | 10 +-
->  .../devicetree/bindings/vendor-prefixes.yaml  |  4 +
->  arch/arm/boot/dts/Makefile                    |  4 +-
->  .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 +++
->  arch/arm/boot/dts/suniv-f1c100s.dtsi          | 32 ++++++
->  arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 ++++++++++++++
->  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 81 +++++++++++++++
->  drivers/usb/musb/sunxi.c                      | 99 +++++++++++++------
->  9 files changed, 301 insertions(+), 34 deletions(-)
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> 
-> 
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-> prerequisite-patch-id: 7734c0032dcc073e59f0217ee47ff023f0b47bcf
 
