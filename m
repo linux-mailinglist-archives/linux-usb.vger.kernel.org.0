@@ -2,78 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E056716D3
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 10:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1651E67171C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 10:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjARJAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 04:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S230061AbjARJIQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 04:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjARI7m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 03:59:42 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F45611F0
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 00:19:28 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id b7so7081928wrt.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 00:19:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6JEKWwonctGpIYQyBgQI4ckxGQ2LgFs9BvZSmjtP02g=;
-        b=fpeFIu5SCiWtEqzPdjMpQQnizSO5gHn6+T9L7i5dI4vq1TwgPoyO+Mxc+G27U2jGEl
-         uV3+vDLrYYQ0pKO+ekeTkzFqUzbdFZUB6yGM718pxmjsW2V8dk8dv/0zM6lu4/vPfBdf
-         sWO/UtTk2hA0lONjcHhDSUK8R0CmJGti2Qw2LVjztthaM+/IVeiKjAu6J+zktnrqAwml
-         Tf7PPxd7YlGEuIYs0oGVAm+Uq1aZz0ZtsXTCd8mwh84w86bS3PzcDTn+A10dEbifl/+A
-         CLMwomuVhrhQ1jX+CMv6TcIBO/JF6dlANR9gkSunl8P2A+FALJ2D2//M6NwoCC9ninaS
-         +F6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6JEKWwonctGpIYQyBgQI4ckxGQ2LgFs9BvZSmjtP02g=;
-        b=QzAgjSWbDh7hpMbQYFjFe0SoH0Ay8ocPFMdJmNLG2PW3xAdprSVwfAsbB1/QXyUd2+
-         g3TnQLxpB1uQW8mbidot6dG9Ngn2/896hdqaVOhF3Y8Yk5xj+ZE1YJu4NnZReVf++ohd
-         dswDBCWVhGsvj56G13lmZnNKi/9Up8+HzCs9sAUKvUNUdeKjGqqBr7sUVhsUR2JnrWkt
-         wiHc+qxMR9kjnz8E7DiWIL200Ky8U4R/aSkoGDKbkh81k89cDHhly8NlKw0HSiJB3X4t
-         6gCWrh/CBmWiGRruQz0kBQFz2sC7MzjQ7Ht23OWBL7Axvd8NLU0kpPOuQSXtzTP8JWR1
-         6Lkg==
-X-Gm-Message-State: AFqh2kqteQ8sLDUgchYOh0u/GKZJOKwYWqLGt5cC6KtSlxC804ZTYaRK
-        OdxSlQWwhdGVN/71V7wwt5F+iaoAO/um9a1O
-X-Google-Smtp-Source: AMrXdXtxvx6Qk2yzHCCoZTw0Gh6jNnIwwmM6YD/JTJFYkSjAFXi/y1n5cO2P1+elzl5fykTlk+PbJQ==
-X-Received: by 2002:a5d:50c9:0:b0:2b4:790e:32f3 with SMTP id f9-20020a5d50c9000000b002b4790e32f3mr4986316wrt.68.1674029967087;
-        Wed, 18 Jan 2023 00:19:27 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e7-20020a056000120700b00241dd5de644sm30685430wrx.97.2023.01.18.00.19.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 00:19:26 -0800 (PST)
-Message-ID: <2c17eaa5-ee93-58c5-a35a-8366eb4cfc36@linaro.org>
-Date:   Wed, 18 Jan 2023 09:19:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 6/9] dt-bindings: usb: Add binding for Via lab VL817
- hub controller
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>,
+        with ESMTP id S230070AbjARJHO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 04:07:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5171E46165;
+        Wed, 18 Jan 2023 00:27:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F12C6170A;
+        Wed, 18 Jan 2023 08:27:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051CAC433F2;
+        Wed, 18 Jan 2023 08:27:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674030471;
+        bh=WbTFsa9uUp/GVGY/40OGOerWX8P64wmwxJdpH4/nltI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V7aUlMB1fk/MekJXOCCs0PVc7h7kscdLWolw8c0WI1wa+OsKN/p6yxqVXnzGJ8JHS
+         Uoycpu4Jp3BQQEZKAaEgSK/Q6UY+ktGlvOuFG/Szp1NpTdSQsyX7UCo4e7qfon2KGu
+         78vDDd0SXYGxCealFCqVG/uKwJf0pL+FpTSO1tqZQ4m6X3UdHE68ub0TuHWg1/BhIe
+         JLdfMCz5kuK9g70CWen7N6kMbwi0mH4D8+U2nH8hvx/MLye9I3kqaBjCd/zAjR1X2i
+         7lePDAf9uc90kD3v246r28DG1lKoxbDLWXL4366Xlgwya8yB2y3jL9aiJC1xKsT+GU
+         YvfU7u9dsED8A==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-amlogic@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230118044418.875-1-linux.amoon@gmail.com>
- <20230118044418.875-7-linux.amoon@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118044418.875-7-linux.amoon@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: ohci-omap: avoid unused-variable warning
+Date:   Wed, 18 Jan 2023 09:27:34 +0100
+Message-Id: <20230118082746.391542-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,93 +56,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/01/2023 05:44, Anand Moon wrote:
-> The VIA Lab VL817 is a USB 3.1 Gen 1 hub and USB 2.0 hub
-> controller that features 4 downstream ports and 1 otg, with
-> an internal 5V regulator and has external reset pin.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Subject: drop second/last, redundant "binding for". The "dt-bindings"
-prefix is already stating that these are bindings.
+The dead code removal has led to 'need_transceiver' not being
+used at all when OTG support is disabled:
 
-> 
-> Add a device tree binding for its USB protocol part.
-> The internal LDO is not covered by this and can just be modelled
-> as a fixed regulator.
-> 
-> Add combo of USB 2.0 and USB 3.0 root hub using peer-hub.
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
-> v2 - fix the compatible string and fix the $id
->    - update the commit message.
->    - update the example for use peer-hub node because it
->      combo of USB 2.0 and USB 3.0 hub.
->    - rename the yaml file from vialab,vl817q7.yaml to vialab,vl817.yaml
->      as q7 suffix is ued for USB 3.1 and q5 suffix is used for USB 2.0.
-> ---
->  .../devicetree/bindings/usb/vialab,vl817.yaml | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-> new file mode 100644
-> index 000000000000..5f9771e22058
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/vialab,vl817.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Via labs VL817 USB 3.1 hub controller
-> +
-> +maintainers:
-> +  - Anand Moon <linux.amoon@gmail.com>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
+drivers/usb/host/ohci-omap.c: In function 'ohci_omap_reset':
+drivers/usb/host/ohci-omap.c:99:33: error: unused variable 'need_transceiver' [-Werror=unused-variable]
+   99 |         int                     need_transceiver = (config->otg != 0);
 
-Drop items
+Change the #ifdef check into an IS_ENABLED() check to make the
+code more readable and let the compiler see where it is used.
 
-> +      - enum:
-> +          - usb2109,2817
-> +          - usb2109,817
-> +
-> +  reg: true
-> +
-> +  reset-gpios:
-> +    description: GPIO controlling the RESET# pin.
+Fixes: 8825acd7cc8a ("ARM: omap1: remove dead code")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+The patch that caused the issue is in the boardfile-removal branch
+of the soc tree. I would just add the patch there.
+---
+ drivers/usb/host/ohci-omap.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-maxItems
-
-> +
-> +  vdd-supply:
-> +    description:
-> +      phandle to the regulator that provides power to the hub.
-> +
-> +  peer-hub:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle'
-
-Drop quotes
-
-> +    description:
-> +      phandle to the peer hub on the controller.
-> +
-> +required:
-> +  - peer-hub
-> +  - compatible
-> +  - reg
-
-Keep same order as in properties: part.
-
-> +
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+index 3d57b9454a27..78088cd46908 100644
+--- a/drivers/usb/host/ohci-omap.c
++++ b/drivers/usb/host/ohci-omap.c
+@@ -67,8 +67,6 @@ static void omap_ohci_clock_power(struct ohci_omap_priv *priv, int on)
+ 	}
+ }
+ 
+-#ifdef	CONFIG_USB_OTG
+-
+ static void start_hnp(struct ohci_hcd *ohci)
+ {
+ 	struct usb_hcd *hcd = ohci_to_hcd(ohci);
+@@ -87,8 +85,6 @@ static void start_hnp(struct ohci_hcd *ohci)
+ 	local_irq_restore(flags);
+ }
+ 
+-#endif
+-
+ /*-------------------------------------------------------------------------*/
+ 
+ static int ohci_omap_reset(struct usb_hcd *hcd)
+@@ -111,8 +107,7 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+ 	if (config->ocpi_enable)
+ 		config->ocpi_enable();
+ 
+-#ifdef	CONFIG_USB_OTG
+-	if (need_transceiver) {
++	if (IS_ENABLED(CONFIG_USB_OTG) && need_transceiver) {
+ 		hcd->usb_phy = usb_get_phy(USB_PHY_TYPE_USB2);
+ 		if (!IS_ERR_OR_NULL(hcd->usb_phy)) {
+ 			int	status = otg_set_host(hcd->usb_phy->otg,
+@@ -129,7 +124,6 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+ 		hcd->skip_phy_initialization = 1;
+ 		ohci->start_hnp = start_hnp;
+ 	}
+-#endif
+ 
+ 	omap_ohci_clock_power(priv, 1);
+ 
+-- 
+2.39.0
 
