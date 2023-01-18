@@ -2,254 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146B1672872
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 20:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011AF6728BA
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 20:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjARTbl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 14:31:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S229787AbjARTt3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 14:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjARTbM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 14:31:12 -0500
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282CA5528C;
-        Wed, 18 Jan 2023 11:31:04 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1322d768ba7so70983fac.5;
-        Wed, 18 Jan 2023 11:31:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=my6ZdLv862wYg9TxuhtKrEA+XZxlWplWgg57C2nOybM=;
-        b=3W0gbLgGOTLrnd0diGGd4nnZbcVSDE2Vnc0SOo24K1mXzqblWJ5bK+2oe/11tqBpVB
-         1ymHvmcQa8CniU9veO//4JcEBragnBJSUPZxPaGXIHXgRXFnjzPeU7SC/7aQAt/DFuKU
-         /TyBwEU1XL8MUWi3dQpsKckz5mJVqLCsCGkEnZTN7J+SSNYdQX0rjRjcfR2qDOW3My97
-         PHJhm/1Uq/uTrAydC3g5S1ZfN5QWpSmUDtU/vdnBOym5cCcRkjU3q5Znn0IisueSK9Yj
-         LGpKPL9A5AUsOoZ/XUERyeCzISfbHhunsoWfyW2UM3w0LrbqYjVSxtltwGQnewzWXdvf
-         3KZQ==
-X-Gm-Message-State: AFqh2krkaVw3+jixIgDHesBHqsv8ety3nEq4M+XjMMnXpQoPhGLNCU+K
-        3HzyyIRvCUDoV1ujZ1B6gA==
-X-Google-Smtp-Source: AMrXdXuTYP5x9FCt8KmW/4bqFsCXQmRSADl5rnPcURlrjiznG1eL4rfMkjqN8aHngMRnog6MAtQkNA==
-X-Received: by 2002:a05:6870:7997:b0:15b:9fb0:864c with SMTP id he23-20020a056870799700b0015b9fb0864cmr4818573oab.19.1674070263292;
-        Wed, 18 Jan 2023 11:31:03 -0800 (PST)
-Received: from robh_at_kernel.org ([4.31.143.193])
-        by smtp.gmail.com with ESMTPSA id eq2-20020a056870a90200b0014fb4bdc746sm18709458oab.8.2023.01.18.11.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 11:31:02 -0800 (PST)
-Received: (nullmailer pid 673667 invoked by uid 1000);
-        Wed, 18 Jan 2023 19:31:01 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Johan Jonker <jbx6244@gmail.com>,
-        linux-rockchip@lists.infradead.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its own schema
-Date:   Wed, 18 Jan 2023 13:30:56 -0600
-Message-Id: <20230118193056.673514-2-robh@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230118193056.673514-1-robh@kernel.org>
-References: <20230118193056.673514-1-robh@kernel.org>
+        with ESMTP id S229476AbjARTt2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 14:49:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE74B589BB;
+        Wed, 18 Jan 2023 11:49:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABD34B81EC4;
+        Wed, 18 Jan 2023 19:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2EBC433D2;
+        Wed, 18 Jan 2023 19:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674071363;
+        bh=K9VHfqO8vnfOpGdnzgN383P6tlz0U6lpjZAgw4IA3to=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kbOI3g4szAhkbjyPLWIrMcmWNNwFJ0g35IV5pexIYtnRQzmpc6XLoxO3dWPHZa4Zb
+         E48U15W3+cSWmi6hg+WMzMljLBW7pwCAM04xaJPDceliuUTfFeXfsH9kUAunhCoTr9
+         +bdAEvIjTYB5y73gnxe836ayYwyUeU0B9WLrC5DjWSOtRdEns4yK3vTsZsp21SF0fX
+         2iPX55g9IADXlVGJEdA7Nm5f9y2+aEySxxq6wHzFKSixbrz3GmCUld00KyFRtbxBoD
+         kJrh7tYKMgulqDnN16gxiBmgJ8CzlRWgSm2T9aZnl0F9TDvvA0gmph2XCY4gE57Ekc
+         oAjAYQ8ACtIwA==
+Received: by mail-vs1-f50.google.com with SMTP id v127so32559692vsb.12;
+        Wed, 18 Jan 2023 11:49:23 -0800 (PST)
+X-Gm-Message-State: AFqh2kpjgBNw8ErnbvvYa1+I7SvCa03undQ6MZqzl+88BYMV02iyCvYI
+        xAuTWGtVidgTyAVz8VzLuVOQtFRWjD+KwyfOkg==
+X-Google-Smtp-Source: AMrXdXuCIq0Ww65rdCS464DY9dHcawHDeCICiNnnkYP7sB4H6h1MeXyWffA52VxKBtwikHq5ZggppMVlMdvTHaeZRZE=
+X-Received: by 2002:a67:ef8a:0:b0:3d0:b955:e0af with SMTP id
+ r10-20020a67ef8a000000b003d0b955e0afmr1201488vsp.26.1674071362247; Wed, 18
+ Jan 2023 11:49:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <cover.1674036164.git.geert+renesas@glider.be> <cd685d8e4d6754c384acfc1796065d539a2c3ea8.1674036164.git.geert+renesas@glider.be>
+ <CAL_JsqJS2JTZ1BxMbG_2zgzu5xtxMFPqjxc_vUjuZp3k1xUmaQ@mail.gmail.com> <CAMuHMdXGsmNjYy-ofmuHLkr8yaDEzy+SGnhtbmc_2ezbEKAMjw@mail.gmail.com>
+In-Reply-To: <CAMuHMdXGsmNjYy-ofmuHLkr8yaDEzy+SGnhtbmc_2ezbEKAMjw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 18 Jan 2023 13:49:10 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJWEzb_hxi0_sSj-5F0q4A9UcJEhwcSArWT6eAffpeqHA@mail.gmail.com>
+Message-ID: <CAL_JsqJWEzb_hxi0_sSj-5F0q4A9UcJEhwcSArWT6eAffpeqHA@mail.gmail.com>
+Subject: Re: [PATCH 7/7] usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK3399
-uses the discouraged parent wrapper node and child 'generic' DWC3 node.
-The intent was to modify the RK3399 DTs to use a single node, but the DT
-changes were rejected for ABI reasons. However, the schema was accepted
-as-is.
+On Wed, Jan 18, 2023 at 12:28 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Rob,
+>
+> On Wed, Jan 18, 2023 at 6:30 PM Rob Herring <robh@kernel.org> wrote:
+> > On Wed, Jan 18, 2023 at 4:15 AM Geert Uytterhoeven
+> > <geert+renesas@glider.be> wrote:
+> > > Use the new devm_of_phy_optional_get() helper instead of open-coding the
+> > > same operation.
+> > >
+> > > This lets us drop several checks for IS_ERR(), as phy_power_{on,off}()
+> > > handle NULL parameters fine.
+> > >
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > ---
+> > >  drivers/usb/host/ohci-exynos.c | 24 +++++++-----------------
+> > >  1 file changed, 7 insertions(+), 17 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+> > > index 8d7977fd5d3bd502..8dd9c3b2411c383f 100644
+> > > --- a/drivers/usb/host/ohci-exynos.c
+> > > +++ b/drivers/usb/host/ohci-exynos.c
+> > > @@ -69,19 +69,12 @@ static int exynos_ohci_get_phy(struct device *dev,
+> > >                         return -EINVAL;
+> > >                 }
+> > >
+> > > -               phy = devm_of_phy_get(dev, child, NULL);
+> > > +               phy = devm_of_phy_optional_get(dev, child, NULL);
+> > >                 exynos_ohci->phy[phy_number] = phy;
+> > >                 if (IS_ERR(phy)) {
+> > > -                       ret = PTR_ERR(phy);
+> > > -                       if (ret == -EPROBE_DEFER) {
+> > > -                               of_node_put(child);
+> > > -                               return ret;
+> > > -                       } else if (ret != -ENOSYS && ret != -ENODEV) {
+> > > -                               dev_err(dev,
+> > > -                                       "Error retrieving usb2 phy: %d\n", ret);
+> > > -                               of_node_put(child);
+> > > -                               return ret;
+> > > -                       }
+> > > +                       of_node_put(child);
+> > > +                       return dev_err_probe(dev, PTR_ERR(phy),
+> > > +                                            "Error retrieving usb2 phy\n");
+> >
+> > Optional is really the only reason for the caller to decide whether to
+> > print an error message or not. If we have both flavors of 'get', then
+> > really the 'get' functions should print an error message.
+>
+> In case of a real error, both should print an error message, right?
+>
+> Anyway, I understand that's a three step operation:
+>   1. Introduce and convert to the _optional variant,
+>   2. Add error printing to callees.
+>   3. Remove error printing from callers.
 
-To fix this, we need to move the RK3399 binding to its own schema file.
-The RK3328 and RK3568 bindings are correct and use a single node.
+I think you only need 2 out of 3 steps depending on the situation. In
+this case, you can add error printing in the _optional variant when
+you introduce it and then convert callers to it.
 
-Cc: Johan Jonker <jbx6244@gmail.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/usb/rockchip,dwc3.yaml           |  10 +-
- .../bindings/usb/rockchip,rk3399-dwc3.yaml    | 115 ++++++++++++++++++
- 2 files changed, 119 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
+Where we already have an optional variant, then you need steps 2 and 3.
 
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-index b3798d94d2fd..edb130c780e4 100644
---- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-@@ -29,7 +29,6 @@ select:
-       contains:
-         enum:
-           - rockchip,rk3328-dwc3
--          - rockchip,rk3399-dwc3
-           - rockchip,rk3568-dwc3
-   required:
-     - compatible
-@@ -39,7 +38,6 @@ properties:
-     items:
-       - enum:
-           - rockchip,rk3328-dwc3
--          - rockchip,rk3399-dwc3
-           - rockchip,rk3568-dwc3
-       - const: snps,dwc3
- 
-@@ -90,7 +88,7 @@ required:
- 
- examples:
-   - |
--    #include <dt-bindings/clock/rk3399-cru.h>
-+    #include <dt-bindings/clock/rk3328-cru.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
-     bus {
-@@ -98,11 +96,11 @@ examples:
-       #size-cells = <2>;
- 
-       usbdrd3_0: usb@fe800000 {
--        compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
-+        compatible = "rockchip,rk3328-dwc3", "snps,dwc3";
-         reg = <0x0 0xfe800000 0x0 0x100000>;
-         interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
--        clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
--                 <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_GRF>;
-+        clocks = <&cru SCLK_USB3OTG_REF>, <&cru SCLK_USB3OTG_SUSPEND>,
-+                <&cru ACLK_USB3OTG>;
-         clock-names = "ref_clk", "suspend_clk",
-                       "bus_clk", "grf_clk";
-         dr_mode = "otg";
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
-new file mode 100644
-index 000000000000..e39a8a3a7ab3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
-@@ -0,0 +1,115 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/rockchip,rk3399-dwc3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip RK3399 SuperSpeed DWC3 USB SoC controller
-+
-+maintainers:
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+properties:
-+  compatible:
-+    const: rockchip,rk3399-dwc3
-+
-+  '#address-cells':
-+    const: 2
-+
-+  '#size-cells':
-+    const: 2
-+
-+  ranges: true
-+
-+  clocks:
-+    items:
-+      - description:
-+          Controller reference clock, must to be 24 MHz
-+      - description:
-+          Controller suspend clock, must to be 24 MHz or 32 KHz
-+      - description:
-+          Master/Core clock, must to be >= 62.5 MHz for SS
-+          operation and >= 30MHz for HS operation
-+      - description:
-+          USB3 aclk peri
-+      - description:
-+          USB3 aclk
-+      - description:
-+          Controller grf clock
-+
-+  clock-names:
-+    items:
-+      - const: ref_clk
-+      - const: suspend_clk
-+      - const: bus_clk
-+      - const: aclk_usb3_rksoc_axi_perf
-+      - const: aclk_usb3
-+      - const: grf_clk
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    const: usb3-otg
-+
-+patternProperties:
-+  '^usb@':
-+    $ref: snps,dwc3.yaml#
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#address-cells'
-+  - '#size-cells'
-+  - ranges
-+  - clocks
-+  - clock-names
-+  - resets
-+  - reset-names
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/rk3399-cru.h>
-+    #include <dt-bindings/power/rk3399-power.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    bus {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        usb {
-+            compatible = "rockchip,rk3399-dwc3";
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+            ranges;
-+            clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
-+              <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_RKSOC_AXI_PERF>,
-+              <&cru ACLK_USB3>, <&cru ACLK_USB3_GRF>;
-+            clock-names = "ref_clk", "suspend_clk",
-+                    "bus_clk", "aclk_usb3_rksoc_axi_perf",
-+                    "aclk_usb3", "grf_clk";
-+            resets = <&cru SRST_A_USB3_OTG0>;
-+            reset-names = "usb3-otg";
-+
-+            usb@fe800000 {
-+                compatible = "snps,dwc3";
-+                reg = <0x0 0xfe800000 0x0 0x100000>;
-+                interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH 0>;
-+                clocks = <&cru SCLK_USB3OTG0_REF>, <&cru ACLK_USB3OTG0>,
-+                  <&cru SCLK_USB3OTG0_SUSPEND>;
-+                clock-names = "ref", "bus_early", "suspend";
-+                dr_mode = "otg";
-+                phys = <&u2phy0_otg>, <&tcphy0_usb3>;
-+                phy-names = "usb2-phy", "usb3-phy";
-+                phy_type = "utmi_wide";
-+                snps,dis_enblslpm_quirk;
-+                snps,dis-u2-freeclk-exists-quirk;
-+                snps,dis_u2_susphy_quirk;
-+                snps,dis-del-phy-power-chg-quirk;
-+                snps,dis-tx-ipgap-linecheck-quirk;
-+                power-domains = <&power RK3399_PD_USB3>;
-+            };
-+        };
-+    };
-+...
--- 
-2.39.0
-
+Rob
