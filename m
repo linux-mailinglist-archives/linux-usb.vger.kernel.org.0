@@ -2,87 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673FC67245A
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 18:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C94A6724B2
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jan 2023 18:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjARRBY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Jan 2023 12:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        id S230348AbjARRTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Jan 2023 12:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjARRBQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 12:01:16 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 333AD4AA5C
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 09:01:15 -0800 (PST)
-Received: (qmail 214419 invoked by uid 1000); 18 Jan 2023 12:01:13 -0500
-Date:   Wed, 18 Jan 2023 12:01:13 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 7/7] usb: host: ohci-exynos: Convert to
- devm_of_phy_optional_get()
-Message-ID: <Y8gl2bLxqWwXPMfS@rowland.harvard.edu>
-References: <cover.1674036164.git.geert+renesas@glider.be>
- <cd685d8e4d6754c384acfc1796065d539a2c3ea8.1674036164.git.geert+renesas@glider.be>
- <Y8gb8l18XzYOPhoD@rowland.harvard.edu>
- <CAMuHMdUsULA0PM26Y8WL2bGiBHGAGADS6eYLUp0CDVgm4N5kow@mail.gmail.com>
+        with ESMTP id S231151AbjARRS5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Jan 2023 12:18:57 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09ADB589A6
+        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 09:18:55 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id f8so11269484ilj.5
+        for <linux-usb@vger.kernel.org>; Wed, 18 Jan 2023 09:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kUweEJsz1I+VstJe9YX0p17oDZgJR4Ui31/RYAe6tw=;
+        b=FmE67VsAO0nj0Y4Qun6+he/g7nukglQR4r0mw+iUu2AfdP7RFN1Ut6i2nObVZJHCw+
+         +DWRgzY9EgGEGKlXdejzp4ViO8lK/92r6ZSIpio58q5PfPfcGN75NBt5QP5OfniCWW3C
+         uo+Yxz3hnS+frF2Ota62uYi+xnd9FpkdoPsDE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9kUweEJsz1I+VstJe9YX0p17oDZgJR4Ui31/RYAe6tw=;
+        b=TjGaCeo70VA8DPxKeDNGkMQ1S7GjPI4k5nPh7TH26n7M6BKMGHQeqQmaAzmU9FqiDV
+         uOiIG1TDTGlgSqt/cHDp1UH/2clSxwVh6rXryJvCsS6LY87XwzAAwVnexvI3l6uT/HIu
+         S40Z+anPHgLScVUyF4pAPlvRuvgirHLHMslJvgSF1/291Vy3a7Jv+wdaHsoIt920EJ85
+         dC9GP0mg2cZKnbzIHKXBjrVL5rfcElLM6wOlapr+RY4gDSY5e01Ddg7VR3JNkkMiZNIR
+         ElB9X8wfKhpyKSBP32+Qig1IycFmtUEYxiFy/GV2O3zV0dNOSSt8iTYHDLu5HFdvQ8dW
+         T3WQ==
+X-Gm-Message-State: AFqh2kr21jQwlqkLuckh2ncUN+lEfwVMeRqYeXrIxMOFwx3Mh5eS38gy
+        oXQFCanFmvyGOc5Fd8p+/Y/HGw==
+X-Google-Smtp-Source: AMrXdXsHSHwWMRi7BEYSROOq8YpKIH8Ioxk083DipSTSjeRYtjmqTkFnhcMejKTCDWCDR0eCkrlO0g==
+X-Received: by 2002:a05:6e02:de6:b0:30e:f36a:f24e with SMTP id m6-20020a056e020de600b0030ef36af24emr5125952ilj.11.1674062334964;
+        Wed, 18 Jan 2023 09:18:54 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id m3-20020a923f03000000b00300b9b7d594sm10059003ila.20.2023.01.18.09.18.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 09:18:54 -0800 (PST)
+Date:   Wed, 18 Jan 2023 17:18:53 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] usb: misc: onboard_usb_hub: add Genesys Logic
+ GL852G hub support
+Message-ID: <Y8gp/Q9kpFLjQSiv@google.com>
+References: <20230118044418.875-1-linux.amoon@gmail.com>
+ <20230118044418.875-5-linux.amoon@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdUsULA0PM26Y8WL2bGiBHGAGADS6eYLUp0CDVgm4N5kow@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230118044418.875-5-linux.amoon@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 05:50:00PM +0100, Geert Uytterhoeven wrote:
-> Hi Alan,
+On Wed, Jan 18, 2023 at 04:44:12AM +0000, Anand Moon wrote:
+> Genesys Logic GL852G is a 4-port USB 2.0 STT hub that has a reset pin to
+> toggle and a 5.0V core supply exported though an integrated LDO is
+> available for powering it.
 > 
-> On Wed, Jan 18, 2023 at 5:26 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > On Wed, Jan 18, 2023 at 11:15:20AM +0100, Geert Uytterhoeven wrote:
-> > > Use the new devm_of_phy_optional_get() helper instead of open-coding the
-> > > same operation.
-> > >
-> > > This lets us drop several checks for IS_ERR(), as phy_power_{on,off}()
-> > > handle NULL parameters fine.
-> >
-> > The patch ignores a possible -ENOSYS error return.  Is it known that
-> > this will never happen?
+> Add the support for this hub, for controlling the reset pin and the core
+> power supply.
 > 
-> While some phy_*() dummies in include/linux/phy/phy.h do return -ENOSYS
-> if CONFIG_GENERIC_PHY is not enabled, devm_of_phy_optional_get()
-> returns NULL in that case, so I think this cannot happen.
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 
-You could mention that in the patch description.  Apart from this one 
-issue:
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-Alan Stern
+Acked-by: Matthias Kaehlcke <mka@chromium.org>
