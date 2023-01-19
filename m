@@ -2,46 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CCD674C63
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 06:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2348674C8B
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 06:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjATFaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 00:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
+        id S231189AbjATFhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 00:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjATF2y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 00:28:54 -0500
+        with ESMTP id S231132AbjATFgi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 00:36:38 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA76F30F;
-        Thu, 19 Jan 2023 21:23:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EAF6A321;
+        Thu, 19 Jan 2023 21:33:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 694C1B8253F;
-        Thu, 19 Jan 2023 15:14:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C25C433F0;
-        Thu, 19 Jan 2023 15:14:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9151B81FA3;
+        Thu, 19 Jan 2023 15:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AAFC433EF;
+        Thu, 19 Jan 2023 15:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674141266;
-        bh=KByIy1N1vj4CdqmgezrljbyOU02A64Fc2TZq8HcGIZE=;
+        s=korg; t=1674142014;
+        bh=useU+uANukMgpidI0uVpvCQvU70XlFR37MZovPoK+Ig=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JfRYYOLTiNZsG4JqSKVVaQTf8dHEsTYGASqmmiTHEw6jG+5IFhBclAYcP5LpjB/3M
-         lA5xpV3SHIquMIrAgg5hNdxDvLVgVo68+SnIcK5DP7RZoH5Lp2M7PR2F4u69Kmw343
-         tKh501dxrNf29DOQqAR8W7qx3cNzNVc7oIGH4Q68=
-Date:   Thu, 19 Jan 2023 16:14:23 +0100
+        b=R3GsC2omAofoWLQLlGR0sdipno0JMDjcRNwAIugS62ibq7Xb/46rxGtnDBVpQUCst
+         YkyUNd9sSM3a7j1EN7wA+EWIANWbQtaOO1XpwbCMnaw2OJGpWMnOZX3YoCche8bkKU
+         cPe9g73+HifAjk8p04a/nM2Ni+UmX8sEXHUbuQYs=
+Date:   Thu, 19 Jan 2023 16:26:51 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] usb: acpi: Switch to use acpi_evaluate_dsm_typed()
-Message-ID: <Y8leT6LXyy20eyyh@kroah.com>
-References: <20230118080419.20880-1-andriy.shevchenko@linux.intel.com>
- <Y8lBczJAXR4Hjl93@kroah.com>
- <Y8lVmOL5T2EUVkgr@smile.fi.intel.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: Re: [PATCH V3 2/2] usb: gadget: u_ether: Don't warn in
+ gether_setup_name_default()
+Message-ID: <Y8lhOxIwz6dZlNnz@kroah.com>
+References: <20230119102547.26698-1-jonathanh@nvidia.com>
+ <20230119102547.26698-2-jonathanh@nvidia.com>
+ <Y8kfdm9juBi58bnj@kroah.com>
+ <e0e3fb48-1c7a-f012-5308-4897bab01dfc@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8lVmOL5T2EUVkgr@smile.fi.intel.com>
+In-Reply-To: <e0e3fb48-1c7a-f012-5308-4897bab01dfc@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,20 +53,43 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 04:37:12PM +0200, Andy Shevchenko wrote:
-> On Thu, Jan 19, 2023 at 02:11:15PM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Jan 18, 2023 at 10:04:19AM +0200, Andy Shevchenko wrote:
-> > > The acpi_evaluate_dsm_typed() provides a way to check the type of the
-> > > object evaluated by _DSM call. Use it instead of open coded variant.
+On Thu, Jan 19, 2023 at 01:38:15PM +0000, Jon Hunter wrote:
+> 
+> On 19/01/2023 10:46, Greg Kroah-Hartman wrote:
 > 
 > ...
 > 
-> > Fails to apply to my tree :(
+> > In looking at this further, you are right, the structures are not
+> > initialized properly yet.
+> > 
+> > So move these to a different function entirely, they should be in
+> > gether_register_netdev() instead, after the device is registered with
+> > the system.
 > 
-> It seems it's against usb-linus as Mathias' original patch is there.
+> 
+> I wonder if this is even necessary. Looking at gether_register_netdev() it
+> already has ...
+> 
+>  status = register_netdev(net);
+>  if (status < 0) {
+>          dev_dbg(&g->dev, "register_netdev failed, %d\n", status);
+>          return status;
+>  } else {
+>          INFO(dev, "HOST MAC %pM\n", dev->host_mac);
+>          INFO(dev, "MAC %pM\n", dev->dev_mac);
 
-Ah, then that can wait until it merges into my usb-next branch.  Can you
-resend it in a week or so when that happens?
+Those need to be moved to be dev_info() and then I'll stop complaining :)
+Or dev_dbg() if you want to make it debug only.
+
+>          ...
+>  }
+> 
+> 
+> Any objection to just removing completely from gether_setup_name_default()?
+
+Nope!
+
+Remove them and change the above lines and then all should be good.
 
 thanks,
 
