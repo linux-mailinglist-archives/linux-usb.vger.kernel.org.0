@@ -2,164 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFA5673A98
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jan 2023 14:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227E9673C6F
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jan 2023 15:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjASNms (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Jan 2023 08:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S231674AbjASOlG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Jan 2023 09:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjASNmq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Jan 2023 08:42:46 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5D366EC4;
-        Thu, 19 Jan 2023 05:42:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QjJhV588s+5DkaT8gYCw3zdVQBThohpfd1QS+dXHCPks8NF56ed26lxl6H6+vh4YD+BTM1+BrpiLV3lwJEcE7zXzq8gwiXd2fQjrdQ5mOoW8BlYNbUsi6RcDRDbHINhaoCOmse5QqNmO8E29zhwl9YCgD2+D0lDT/Wfpff5SNmgWYluM1mWzjK1i/RqM3z0DswzVIcppDLeG//fm6GQyuVJQdck8kgiFg9l8u60CRi1Z1D9Csh8uUeWUtXFispRGTk6Sj3CGSzoXlgqTCJtJovk4SIe7oe80U2GJwnWAUrvbMxL0b7f8nJ7GU+v36marpmLJmyHBXbYzzsLHzIpZUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TMYxtjqP+ASVF8iKNJUPD+IE0DhWZi5Qag6m9JWv+3U=;
- b=BXxvHKYjs6QXZ97a71Sy5G+goycK9iZ3lU3vWixTXMUP1STszWzvFH44dfjX14fF18j2K9DT5aCJRWFjgeg3XFMF1AV8mIxHG3Tg6XFDqnOSrly7cz3e6cM6FwjZlJFjxX8LTpgOzmASM5SH/j+fqZlsXo65gliIzZOoEVOi3sES/xJmXmOyq4bH8QixvM67WIUzuLh/kCwSlp9IYCETva34ngW9NqX3gpcXuBhw7bBm0wYQbbEDPMSvKx57oN8nrYXmcUrzK268vBNy20DY8brKaTkgRaPe0dE9M0j70zmVDIfo3oD/K5O44eFCVapOQ5xrTMmdXgQHVoImxsZj3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TMYxtjqP+ASVF8iKNJUPD+IE0DhWZi5Qag6m9JWv+3U=;
- b=dsluiopzmWiCKiVNlMRp0WuabTG0NyRsBJRlUts+auh36NdRl60NK+S+DDg+sXK2i6oxQ9FfnsJd4dQbrjLvz7B15bHwScgudLQQsXSUNt6k9I/8r+mUxpf8cqc4jucSsjLlLpHbmyij8wMplBc9VMM7uDwD5FSjt4kHIiy0bP+PWDBHICT5dPaeYyYV/6LOuff8SA8LcvvZy4yI7w7SCydwj7t9D5mE8+Z48DOhaLbC69qsY8b+9UcFMtDcOk8R1AjJcZXWq0HkvsRS88Fvj6vb4jCyqcUa+AQJ5yhQtwhJpxIjVBt3+oA7cANjMXzSt1Z+eyTAJ/n3CuwoaVz5dA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- SJ0PR12MB5405.namprd12.prod.outlook.com (2603:10b6:a03:3af::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.26; Thu, 19 Jan
- 2023 13:42:43 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::f1be:5d:f297:e2f]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::f1be:5d:f297:e2f%7]) with mapi id 15.20.6002.013; Thu, 19 Jan 2023
- 13:42:43 +0000
-Message-ID: <e0e3fb48-1c7a-f012-5308-4897bab01dfc@nvidia.com>
-Date:   Thu, 19 Jan 2023 13:38:15 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V3 2/2] usb: gadget: u_ether: Don't warn in
- gether_setup_name_default()
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-References: <20230119102547.26698-1-jonathanh@nvidia.com>
- <20230119102547.26698-2-jonathanh@nvidia.com> <Y8kfdm9juBi58bnj@kroah.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <Y8kfdm9juBi58bnj@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0215.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a5::22) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        with ESMTP id S231777AbjASOkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Jan 2023 09:40:10 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B6A67974
+        for <linux-usb@vger.kernel.org>; Thu, 19 Jan 2023 06:39:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
+        t=1674139156; bh=tII4KgQVDHv8aIPFSz1AQlhY05ZkeX4hFZhDFjQXMQM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=dslH0K+ynxVIPvXj2hMDK8P0Z2ahWrAbmY0Ai3eG0Aq/t/NYgtM+PPR2qy3kHDw9T
+         dp0RgGjsyQqRxnx0i2kOLYgeJ4xOPadXVPZtQrYkcnGSmXIvcfr3jbtjugdzD7Cj2K
+         a3uQLUWRRT+lkjumWg+8MfRLO6iO+kDqKoz582R3UT0CGsdu1czQLgaFcVFQXrNhfy
+         hz36CN7ycS0+coYc3jJWIWppgzA3MNbU1jcNWdjIhcPH+X4L6EmtGHqiPBjPquBS7M
+         CetCuexG3DECq6+qMfDzDAAstJS7EEETWxEnfW+Q1/aHT9DGfENdmy9SooNeGjrInq
+         9xpjFgbqszAwA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([81.189.232.75]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MHoRA-1pXNNi2VBW-00EwiG; Thu, 19
+ Jan 2023 15:39:16 +0100
+Message-ID: <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
+Date:   Thu, 19 Jan 2023 15:37:52 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|SJ0PR12MB5405:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a6f6fda-837b-4351-9882-08dafa230a7f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cU7sgmaGwQy3xX5MP/Vp8oQMi8f7111DgPnyZlSWsVR7UZJHN+QkwVj89w6ZsHWqYgW3tuJFfCzqlzgexVxvBA79smJ6ElAAuK05eReO8lBRAY1Q3qWY0P3RvyWbwzlwLpUa7tiNEoFR0W+El1qQi5EEr+gFLqJIFZhvrslP1f+3ARtQQqdXvDJTS5370KUOpLZRwn4Rg3+s3wK3plS3f8j8rhmwMkPEkVoP4kW02m2G2n7AUlHut3b1z7Wh7Z6vQckGioFyJDurCPtSfMAQW9WsQFZB6KVX3ToiYgO2KJbFOyRj6jqpgmVshCAWkTDl23TU4wHRPHhQXIs20wk2zbMO4WdBSbcrfUB1x92KdFSPEDruWpcYcrL8mEjysHHbzaVMlHToXTdG45hztzQGKwzb9AAxucpFRfu1hrfwFcaOPQpfsy+g9tycQze2ig6U36njz6m9p/CsmWiIzJBu1INjFGZ62IZceLjOJ+lndSlCgKeCM0LTtaFFI5q7s/uHnw80xtPhXu78eSEGtDr+dUqICoQGeEXPGvmaB+/qJg/Gqi++AU6CKD00rpaUJOkI+tU6W/PIaPTxP144/u2UVEJdhGj3xh0hqOp5l50+euTBZ+OP1TzsoW/uF9ynzQ1s5Y6ZVJa5WHR2z/1kk5Xa6KGiemJKKesoVNr+PhlZf6ClRCCd62n8PAZbKmsQBlII1Rn22N5MAJUFWb5Ljf0s937Smzz3fVcy8fa48YqXsNs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199015)(86362001)(55236004)(53546011)(6506007)(31696002)(6486002)(478600001)(6666004)(36756003)(8936002)(5660300002)(316002)(38100700002)(4744005)(6916009)(66946007)(66556008)(66476007)(4326008)(8676002)(41300700001)(26005)(186003)(6512007)(2616005)(2906002)(66899015)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWpUZmYvVUYzRGpjRGZhRDlzV2NUczhGZXI2dHFITlFzRUZiMitIbFNmK0hV?=
- =?utf-8?B?UWVJSkQzWUl4U2g4cHh2NGZUejkxa1h3elNkNXQyY0dabVlvQ2ZBVFYxZnBo?=
- =?utf-8?B?QnhBbm1mVDErREV5azhuYUw1bmF0bmRmL3owYkxiUHhzbHR4NXhQdnhWdEFV?=
- =?utf-8?B?YjlNYWxJaWJDQXNtZ3QvZU1PMXJ0cnNGa1Y4Y0JwMnh3RWlaZXpJWmh0SnNL?=
- =?utf-8?B?amh2TFJPdElNZnRHdjBlTzQ1ZWtPZXlqbXN5TTJORUt2UnJIWEZnb1FlMFow?=
- =?utf-8?B?OVBGZWhKZmZEbnZoY2Zqa1NiRFZPejYrVG83YVBvc2NzUGlMbGJuZU1CYXJY?=
- =?utf-8?B?M3hpdjd5K09HeWVNWWIrVlhJTWkwOVFPaFY3Ykp2V2dZUFlQVzR0UEhPc0JU?=
- =?utf-8?B?UnZNWm9LRjZEamp2L0NQYWxENGtpN0pDYUgzV0NyZkp2WW5TaGdzZW5jaGpv?=
- =?utf-8?B?cnJPYzZTNnF6em5uYXlmR0dHcElUZHJiRjZVQm1BaU4vVjJjMW9LT3g2QUdX?=
- =?utf-8?B?Wi9zNHlRWVR0Uk10Q09yY054bjVidTFSZVBZdGZVOEJiRTQ3MDMxalFRYnIw?=
- =?utf-8?B?aWlBV1B1bGZxdC9QRVJaNmdaZ2h1K0xJbUp2cEU3Zk5CUmdQUCtpcUZmZC9D?=
- =?utf-8?B?M28ybWlRT3R3WXNJalZoVmt4VjNsTktuM3lSektxWWk2ZGZnV1JUN3h4ekpQ?=
- =?utf-8?B?YVJpa2hzdzFFUEZ4eTl5L09TdVJmeGQrQ1pkKy9xQTNKREYrVFc4bzJnbUxX?=
- =?utf-8?B?T2Q0YkVnVHRPRUswN0QzVTJGUXRsNlJ6NmtaY1BkRmxOQ0cvQ1lFajg4WGgv?=
- =?utf-8?B?N3RlQWd4d0J5UGFQWkZ0RUpUNWtES2kvbmVBb21yMTl2WXRoRmhaaXRKWnVa?=
- =?utf-8?B?TGtValNVNTVEWVJDc2o5am9SVnU0ZVNZVTB0Q3ZQMVU4UmFoYTc2c1YySWJ3?=
- =?utf-8?B?MXhmNTNoRVVnL1V2ZitqSzVGbi9PZ2swOHo1d0l5WTdDbXFnOGZjMjRRc3NC?=
- =?utf-8?B?TFl5Zy9lK0tSYTRybzBWV25Pbnc1cVZZRVlndk4yS2pFeSs1ZktCQWFONHZ4?=
- =?utf-8?B?TDN0RWc0bzdsVlhNWW1QYWg2SC9sRzBsdU1SNGo1dnVTYmpCQTRvYkpNMzRW?=
- =?utf-8?B?emxqNEhRMUpvVWlKRGlmZGVGZFhTRzRMSTVMT0tTODZid0dxek8zQ2ZsNlp6?=
- =?utf-8?B?NlI1ZVc2RzZhbUQ5d0Z4VEVBR29wMHZBb2EvMmVzd0o4M05WSWNUNmVOWnNi?=
- =?utf-8?B?VlR1eVFVeU5oUWxPMjRKbW9xV2VvS2QwcWcyVlBpKzhpak5NZ2s2MXY3OFB5?=
- =?utf-8?B?aGs3NC9wSGFvLzY0MlA4aXVQZFFpZi94MTkwcEYzRU5BNzh0Rmw0UFM1d28x?=
- =?utf-8?B?RmxUdFVXKy9MSnAvaldVaHlPZzI5TFkzdGZDM2Y1RUVXRzlERldySE9sa1B1?=
- =?utf-8?B?S2pKSXVkMjQ0MTBkVm1wYkx4ZXFNMkNjMnJUTnJEWjI5dGR0ZGlGd1NOaG5k?=
- =?utf-8?B?eERzdUZsbkhORE9JZFdNVEJHQjcyWnlnN01sRXF4RkhsZVNyZGt4ZDVuRzZP?=
- =?utf-8?B?WE9va2tiWlpsN2gvS2lQcHR1SkpVVzZYamRad2lzUXgycXJ5TmgwUEluZnph?=
- =?utf-8?B?N21ERXFRRzlESU84N2dSbXZEdFNBd2I3QnVFcVRMOVBaNUJpb29ZOEJjS0lv?=
- =?utf-8?B?V0huNFJuaVo4d2ZmRkwwbE45UjUzYTdGelErR0p2d1VTYU8vMkxnK1hEUEpm?=
- =?utf-8?B?WS9pUGNBeTZuQ0N6dFRqUnZYZ2xqQ2I2NDR2RFVmM1kwUGwvUkxRV0FSbzgy?=
- =?utf-8?B?bFRpU3JaUngyeGExVTY2Q0piOEh2QVZqNjV4dVg3dGhFTWtIQ3BGUVVCdllI?=
- =?utf-8?B?RmE3ZWU2QTRHbHVOVHAwQkc3NHg0TFhKaFJvQTRScFkxdEFpbUh2OEVaWXpo?=
- =?utf-8?B?L3N1cVZXWXFsZzJwdWU5SFh0QS9LZ3hXMGF3L0pueVovaHdpclJWcnJ2Ym5O?=
- =?utf-8?B?TFlia3ltTVRJMXJ0QUN2MnRUYmU1bGdCeUltQ2dIcDFBcmdSRGZ6dE9HcktZ?=
- =?utf-8?B?UnNDbWtmWmwxazl6cTFHTUdKeWJ4RGdqUDhodFNHcEg0YjRPZUhRdkNzYU9Q?=
- =?utf-8?B?T3N0MTErU2E2Zm1GZ0hKZVZoSXlBNFNqK3h2Sy9xTUtnMFpXN2t1Zy9kNStp?=
- =?utf-8?B?Unc9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a6f6fda-837b-4351-9882-08dafa230a7f
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 13:42:43.5623
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 170puEyT/jSCVypGXe+x5DRIm/kXQKa7hi1gY6RGpgUYReYqX3A1SM8d2M35cm3bYG6GuoJmx0RVcyJtceiLJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5405
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Possible problem with thunderbolt 4
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
+References: <Y7RSrLYfG1r8b+Zj@black.fi.intel.com>
+ <86a6b7ca-4302-00fe-97f6-d48ebb5e6171@gmx.at>
+ <Y7UzCY6ujQ2qtoq5@black.fi.intel.com>
+ <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
+ <Y7wNnrlEWMOV4Cj/@black.fi.intel.com>
+ <0f862f75-9805-f5d0-ef89-0b77d0ae8778@gmx.at>
+ <Y72AbwKFd9snjZrJ@black.fi.intel.com>
+ <3ccb150b-dbd9-c9d0-0e8c-8c169f0d8faf@gmx.at>
+ <Y76TS54PJpmseZs3@black.fi.intel.com>
+ <8c2da730-ba9b-6ec7-d493-1a6a2ce54622@gmx.at>
+ <Y8kXFFrue7l7DKf3@black.fi.intel.com>
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+In-Reply-To: <Y8kXFFrue7l7DKf3@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:NHoMIxFeQYJROrLP74TtdchqMIJhD7b/3aE8ghU8IZEqngDNaOO
+ wpfOO8CBcnOfCVlvmGybLT614/TDlOiOyORQV8KQ0ANYeiZHyKBO85LCaKSZN+9pxhEaRnd
+ M3nrZSXiNlJtobO758plisbIA/EFXouhQtgEr99laQ21eLvX+lHzdnIlvSWycygeGAzj5YQ
+ QP05Y2C1RhofDjNSUagjA==
+UI-OutboundReport: notjunk:1;M01:P0:06kRRVftPNU=;0IlJgq1wOF/s53912Yzv7QjqWAY
+ N4GTO+06dlMU1L02DWHCdlYG2kh8t/R/rfL6e5v7FyyPN9oQpxwfZDmUpXoe9rkmK2gtvLA2c
+ JWCuASzvGktACO8pn37aeCmlx2iuXqE/p4jTXDjG8WaESccPbzMRBG4T8DyKG+Hwmwks7vBWW
+ kloDNhvhaDVj757g4nM0vEHgBKMDo0cDIgxa/yHt25pwhLjFgdw8shS3nlEYbJyREc66WrEGw
+ 8u079OPJNjHLrXsMWOi0zPAZG22jaQmpW9N75Kr/PCsncwp1TodltBpOwKhkGoTmjtOpOh4Qm
+ 8VBd3bkbn3UQYmRl1vf6yDq5HUv8FhtE8UI7/5nAPFilZB6dttpPXpv8ozR3IKpqAy+oYvl7R
+ Q6qrVPAlX/3sOrvLWAJLDVdFxk0nk4xZUW1CocHXUXB+RsS0Y3to64tDFiiqOoHl2G/19f45q
+ aaalHcIIk5K73pFnl07ebCkk9hrYWXsgUQ9J1wxf2bKl+3ypFQekkkV51KRfv1Qk5DOehPsPj
+ EoYn82z3eguUT229rmsQ6os+O7LK4rc+GyTv8jx6HHrU0MAr2vQpGtCoXS5eTnTcgHVSzngN3
+ h+qBAPXgm34FEmmWm3z5Hvbv60D0tdyeMue7EvC+YRHALjf9A1R1lWd33HHNaYG1JbE3X4AbG
+ wXHWoXWHjMPURWUut0cil7L638CHVSJLcl1P4ZCMMYaYcy6hUDDp6NWx61r4s16bGvxQQs38u
+ D9vpxIh0wTJXTj9ZS58MZhRi9p/H819MtIKrtXSnxnUOQIB2qWvtw1/705jTVv72umnN9fxFs
+ zNCxFX4jFv2I6hSR4572750SzMcWLi3xjwvLnhrJcyIybuCNIO6IbsZuzgZzAbu0a9hcoQR8D
+ XVL9QenmZZ7TatDAdMC6RB6PO2Ig9oDMpxtKnSTvgyUY5CLnAy+ZOO57kRU+ZNM3oaDLOf5jg
+ csaTNg==
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
+>> 8beb71759cc8fddd937cadf9ec482e524d4f0f1c is the first fixed commit
+>> commit 8beb71759cc8fddd937cadf9ec482e524d4f0f1c
+>> Author: Pierre Gondois <pierre.gondois@arm.com>
+>> Date:=C2=A0=C2=A0 Wed May 18 11:08:58 2022 +0200
+>>
+>> =C2=A0=C2=A0=C2=A0 ACPI: bus: Set CPPC _OSC bits for all and when CPPC_=
+LIB is supported
+>> =C2=A0=C2=A0 =C2=A0
+>> =C2=A0=C2=A0=C2=A0 [ Upstream commit 72f2ecb7ece7c1d89758d4929d98e95d95=
+fe7199 ]
+>> =C2=A0=C2=A0 =C2=A0
+>> =C2=A0=C2=A0=C2=A0 The _OSC method allows the OS and firmware to commun=
+icate about
+>> =C2=A0=C2=A0=C2=A0 supported features/capabitlities. It also allows the=
+ OS to take
+>> =C2=A0=C2=A0=C2=A0 control of some features.
+>> =C2=A0=C2=A0 =C2=A0
+>> =C2=A0=C2=A0=C2=A0 In ACPI 6.4, s6.2.11.2 Platform-Wide OSPM Capabiliti=
+es, the CPPC
+>> =C2=A0=C2=A0=C2=A0 (resp. v2) bit should be set by the OS if it 'suppor=
+ts controlling
+>> =C2=A0=C2=A0=C2=A0 processor performance via the interfaces described i=
+n the _CPC
+>> =C2=A0=C2=A0=C2=A0 object'.
+>> =C2=A0=C2=A0 =C2=A0
+>> =C2=A0=C2=A0=C2=A0 The OS supports CPPC and parses the _CPC object only=
+ if
+>> =C2=A0=C2=A0=C2=A0 CONFIG_ACPI_CPPC_LIB is set. Replace the x86 specifi=
+c
+>> =C2=A0=C2=A0=C2=A0 boot_cpu_has(X86_FEATURE_HWP) dynamic check with an =
+arch
+>> =C2=A0=C2=A0=C2=A0 generic CONFIG_ACPI_CPPC_LIB build-time check.
+>> =C2=A0=C2=A0 =C2=A0
+>> =C2=A0=C2=A0=C2=A0 Note:
+>> =C2=A0=C2=A0=C2=A0 CONFIG_X86_INTEL_PSTATE selects CONFIG_ACPI_CPPC_LIB=
+.
+>> =C2=A0=C2=A0 =C2=A0
+>> =C2=A0=C2=A0=C2=A0 Signed-off-by: Pierre Gondois <pierre.gondois@arm.co=
+m>
+>> =C2=A0=C2=A0=C2=A0 Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+>> =C2=A0=C2=A0=C2=A0 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@i=
+ntel.com>
+>> =C2=A0=C2=A0=C2=A0 Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>
+>> =C2=A0drivers/acpi/bus.c | 16 ++++++++--------
+>> =C2=A01 file changed, 8 insertions(+), 8 deletions(-)
+>>
+>> I've no idea why this solves the issue on the Lenovo, and obviously it =
+doesn't solve it on the HP, but maybe this rings a bell somewhere? (Note: =
+in my woking kernel config (on the Lenovo) I have neither CONFIG_X86_INTEL=
+_PSTATE nor CONFIG_ACPI_CPPC_LIB set...)
+> Can you check if with this commit reverted does Thunderbolt use software
+> or firmware connection manager? (You can see this in the logs when
+> thunderbolt.dyndbg=3D+p is in the command line).
+>
+You're right! With this commit reverted it uses the software connection ma=
+nager, with the commit applied it uses the firmware connection manager.
+>> Previously you said you'd talk with your Windows folks about this; any
+>> news from there?
+> I've talked to them and still in talks with the UEFI folks but the
+> current undestanding is that Windows does not do anything special when
+> the system is rebooted (so equal to what Linux does). There is one
+> "development" system in Israel lab that should be pretty similar to what
+> the HP system of yours is but the person who was going to try to
+> reproduce is in sick leave now.
+Ok...
 
-On 19/01/2023 10:46, Greg Kroah-Hartman wrote:
+Regards,
+Christian
 
-...
-
-> In looking at this further, you are right, the structures are not
-> initialized properly yet.
-> 
-> So move these to a different function entirely, they should be in
-> gether_register_netdev() instead, after the device is registered with
-> the system.
-
-
-I wonder if this is even necessary. Looking at gether_register_netdev() 
-it already has ...
-
-  status = register_netdev(net);
-  if (status < 0) {
-          dev_dbg(&g->dev, "register_netdev failed, %d\n", status);
-          return status;
-  } else {
-          INFO(dev, "HOST MAC %pM\n", dev->host_mac);
-          INFO(dev, "MAC %pM\n", dev->dev_mac);
-          ...
-  }
-
-
-Any objection to just removing completely from 
-gether_setup_name_default()? If we move to
-gether_register_netdev() then I believe we also have to deal with 
-gether_register_netdev().
-
-Jon
-
--- 
-nvpublic
