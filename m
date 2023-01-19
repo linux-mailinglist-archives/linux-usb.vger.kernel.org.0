@@ -2,115 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A8E6732BD
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jan 2023 08:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774CB673454
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jan 2023 10:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjASHni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Jan 2023 02:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S229593AbjASJ0S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Jan 2023 04:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjASHmr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Jan 2023 02:42:47 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAA45654DB;
-        Wed, 18 Jan 2023 23:42:35 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 30J7gG4k9008303, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 30J7gG4k9008303
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 19 Jan 2023 15:42:16 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 19 Jan 2023 15:42:17 +0800
-Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 19 Jan
- 2023 15:42:16 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next 2/2] r8152: reduce the control transfer of rtl8152_get_version()
-Date:   Thu, 19 Jan 2023 15:40:43 +0800
-Message-ID: <20230119074043.10021-399-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230119074043.10021-397-nic_swsd@realtek.com>
-References: <20230119074043.10021-397-nic_swsd@realtek.com>
+        with ESMTP id S229459AbjASJ0P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Jan 2023 04:26:15 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F84B6EAE;
+        Thu, 19 Jan 2023 01:26:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674120374; x=1705656374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QtNpUIEDSN85Lq8EgyeZ2aGyZiOiIaS380BR/yFoStQ=;
+  b=fFPrbTv5dsaM//UFAdGO/+KOXoxyiSmjbE9x1AHj3TBRQ+63KoY1VSa7
+   0b1JVvyCVGFwegmQPavcgZr8h2+DkfrXstVpJimZWbFn0BL/lqUryPSvS
+   8RP8y9I0GXGho3kItqE6j3dORkgG3/JgoJWOJw1aTFLpNh5FHXk23oCe6
+   +jRsOW9t8VAuR90S+NROF8hTPNZmICx8KatWib7hA5cU3vSZGEI/mQUxT
+   SpJewOpzvzG2PJkKEXw6FMUn1irNhQ/JvfW6/Sp2rLLKU9Gbbp7eYMR3T
+   iB7TteOSTwSHxfYQXVuAFqqqE0kmfzAuNd3QhzVIZaM7MfDASYU4Wdbwa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322924983"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="322924983"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 01:26:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="802564865"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="802564865"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 19 Jan 2023 01:26:11 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 19 Jan 2023 11:26:11 +0200
+Date:   Thu, 19 Jan 2023 11:26:11 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
+Message-ID: <Y8kMsw/wT35KN7VK@kuha.fi.intel.com>
+References: <20230118031514.1278139-1-pmalani@chromium.org>
+ <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
+ <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.22.228.98]
-X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 01/19/2023 07:27:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzEvMTkgpFekyCAwNjowMDowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reduce the control transfer by moving calling rtl8152_get_version() in
-rtl8152_probe(). This could prevent from calling rtl8152_get_version()
-for unnecessary situations. For example, after setting config #2 for the
-device, there are two interfaces and rtl8152_probe() may be called
-twice. However, we don't need to call rtl8152_get_version() for this
-situation.
+Hi Prashant,
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+On Wed, Jan 18, 2023 at 10:26:21AM -0800, Prashant Malani wrote:
+> Hi Heikki,
+> 
+> Thanks for reviewing the patch.
+> 
+> On Wed, Jan 18, 2023 at 1:39 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
+> > > Update the altmode "active" state when we receive Acks for Enter and
+> > > Exit Mode commands. Having the right state is necessary to change Pin
+> > > Assignments using the 'pin_assignment" sysfs file.
+> >
+> > The idea was that the port drivers take care of this, not the altmode
+> > drivers.
+> 
+> For the port's typec_altmode struct, that makes sense.
+> Should the port driver be taking care of the state for the partner's altmode
+> too, i.e "/sys/class/typec/port1-partner/port1-partner.0/active" ?
+> 
+> It seemed like the port driver should be forwarding the VDMs without snooping
+> the header, or IOW, it should let the altmode driver parse the VDMs (which it's
+> doing in this case) and manage the partner altmode state.
+> 
+> "pin_assignment_store" seems to only work if the partner's altmode
+> "active" bit is set to active [1]
+> 
+> FWIW, I think we can make the typec_altmode_update_active() calls from
+> our (cros-ec-typec) port driver too, but displayport.c is parsing the header
+> anyway, so it seemed repetitive. Just wanted to clarify the intention here.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 6e5e12d90d47..decb5ba56a25 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9581,20 +9581,21 @@ static int rtl8152_probe(struct usb_interface *intf,
- 			 const struct usb_device_id *id)
- {
- 	struct usb_device *udev = interface_to_usbdev(intf);
--	u8 version = rtl8152_get_version(intf);
- 	struct r8152 *tp;
- 	struct net_device *netdev;
-+	u8 version;
- 	int ret;
- 
--	if (version == RTL_VER_UNKNOWN)
--		return -ENODEV;
--
- 	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
- 		return -ENODEV;
- 
- 	if (!rtl_check_vendor_ok(intf))
- 		return -ENODEV;
- 
-+	version = rtl8152_get_version(intf);
-+	if (version == RTL_VER_UNKNOWN)
-+		return -ENODEV;
-+
- 	usb_reset_device(udev);
- 	netdev = alloc_etherdev(sizeof(struct r8152));
- 	if (!netdev) {
+The alt modes may have been entered even if there are no drivers for
+them, if for example the PD controller handles the mode entry. In
+those cases the port driver needs to update the active state of the
+partner alt mode.
+
+Since the port drivers have to handle that in some cases, for the sake
+of consistency I thought that they might as well take care of it in
+every case.
+
+On the other hand, it should be safe to do it in both the port driver
+and the altmode driver.
+
+If you prefer that the altmode drivers always do this, I'm not against
+it. But in that case could you patch tcpm.c while at it - in the same
+series:
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 904c7b4ce2f0c..0f5a9d4db105a 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+                        }
+                        break;
+                case CMD_ENTER_MODE:
+-                       if (adev && pdev) {
+-                               typec_altmode_update_active(pdev, true);
++                       if (adev && pdev)
+                                *adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
+-                       }
+                        return 0;
+                case CMD_EXIT_MODE:
+                        if (adev && pdev) {
+-                               typec_altmode_update_active(pdev, false);
+                                /* Back to USB Operation */
+                                *adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
+                                return 0;
+
+That's the only driver that will definitely always requires the
+altmode drivers, so perhaps it would be good to drop the calls
+from it at the same time.
+
+thanks,
+
 -- 
-2.38.1
-
+heikki
