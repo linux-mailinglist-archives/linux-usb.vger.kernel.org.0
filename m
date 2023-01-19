@@ -2,251 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A768567433E
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jan 2023 21:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791AD6745ED
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jan 2023 23:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjASUDx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Jan 2023 15:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S229907AbjASWZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Jan 2023 17:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjASUDv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Jan 2023 15:03:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB08290B15;
-        Thu, 19 Jan 2023 12:03:49 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JHeR6x000812;
-        Thu, 19 Jan 2023 20:03:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=kqsfrCofkojjYRgbFGRrK0ilf0g+pMVDNT2ugpmAgrQ=;
- b=J+JkQlCWv2hnRZSH+Th+vMCmV+Vf/U+3c6/OuEgFfYrcF3r0yIX8mBDc6Z9oDRPdtPL8
- +VjLO/CP3fBG0TeUJHBNa1T0CzEjJA9VTgGaUiTqqByDYLxnn8bjOXLjCFYYuH8XRj2W
- Fk5lFCbskgFGLdw6k+LjU6WRj3Tokj0sn3sOkM2AOGwp6yMrxFiFBwel4EHZDpi0t4pe
- Q+r7haMZ/LPjnfp98I45wjMWsdZwEZ5eYv7Z3x6OYY5VfB/DBeqmMxl5UMHaT/FDFa92
- FWDCYt7bwui+YGDlDdhWotJ66w9xuLYTa/Yux+P1XL6mnVWd6jT3ZrF/78xRsUp8wEWE Bg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6r59av07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 20:03:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30JK3i98009730
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 20:03:44 GMT
-Received: from [10.110.55.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
- 2023 12:03:43 -0800
-Message-ID: <f541c943-bdf9-f6bd-1826-0aa5a81088ef@quicinc.com>
-Date:   Thu, 19 Jan 2023 12:03:19 -0800
+        with ESMTP id S230099AbjASWXP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Jan 2023 17:23:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92179A315E
+        for <linux-usb@vger.kernel.org>; Thu, 19 Jan 2023 14:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674166189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+ff4/fM1Rwa33ese55sqMMOd49L0hptdds7eOn22FU4=;
+        b=ilUwcv/3fbhFCBSi1YBmcy/Uzpbgrrj8qAXOkiJ3KTgAs2Drb+urFSl7tbWGsN2gw2qHzi
+        EHtbLygkDL0p4x+TfHNH1rq/GtYPMjVQ12Wx/STNOF556TeSKqH8LuP3y5b4k/eqlTsRyw
+        Z8xe8oP8LsiqODrJoiAagc5MRnk77BE=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-543-ilcTmtQ8PTOxk1VUqGQJCQ-1; Thu, 19 Jan 2023 17:09:48 -0500
+X-MC-Unique: ilcTmtQ8PTOxk1VUqGQJCQ-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-14bb44ca7d1so1581650fac.14
+        for <linux-usb@vger.kernel.org>; Thu, 19 Jan 2023 14:09:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ff4/fM1Rwa33ese55sqMMOd49L0hptdds7eOn22FU4=;
+        b=HJvyQXGkgcMqN953M5Z+dO4Wv+t4RAusRKP5W1u10tNPvTqhRsbk+137Dakfh7AcZk
+         ilYXBmJtba10aFRCRdb98oaFsqSAKicylWHGYX0LUbEPXej8OeWyeXZaf+xkOfCRuljT
+         iHEQpKIyW1WN+heOU0+Bmi5sBpBktUuOqvrDvVJ2GLQA9VlJqb42C5+s0wJDLARu/79w
+         gjzZHnEkjqh4oocZ7tcLR3A79uqKMjjYG6g7Y658TxUetdUSYLAwdyxrwTLcs5/L78WZ
+         06ULmbBAI0fIc20R1z2SI4CEQX4yDekWl+4aTSTJvlxSnxXmF7gL2/FbYRylzfQ4XS/3
+         spkg==
+X-Gm-Message-State: AFqh2kr2dqLHYZFeO12hcnh/soNtWO1R7fenpfySirt62PUYjxDjIcvP
+        3a2kqy2V1VTU2CS7onD9zqfqZ6+VZO53gXpvO0hVfHeormVctoli7kQlJXJtK+txFHrvC4pMLXE
+        CQHl91u+lPZLy7wVbv+CV
+X-Received: by 2002:a4a:d0d9:0:b0:4f1:e491:c80 with SMTP id u25-20020a4ad0d9000000b004f1e4910c80mr5791426oor.2.1674166185955;
+        Thu, 19 Jan 2023 14:09:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvlAQBfJLXrG96Zlvh4RQ4nJMWJGwuMHVJbfbGn3ATiL7GJVtY7vgPjw4l7UMHrH0mXI2RnVg==
+X-Received: by 2002:a4a:d0d9:0:b0:4f1:e491:c80 with SMTP id u25-20020a4ad0d9000000b004f1e4910c80mr5791404oor.2.1674166185697;
+        Thu, 19 Jan 2023 14:09:45 -0800 (PST)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id p20-20020a4ae154000000b004d1d34f0267sm2490659oot.40.2023.01.19.14.09.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 14:09:45 -0800 (PST)
+Date:   Thu, 19 Jan 2023 16:09:42 -0600
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com
+Subject: Re: [RFC v4 2/5] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+Message-ID: <20230119220942.ja5gbo3t3fl63gpy@halaney-x13s>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-3-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 4/5] usb: dwc3: Add function suspend and function
- wakeup support
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1673992507-7823-1-git-send-email-quic_eserrao@quicinc.com>
- <1673992507-7823-5-git-send-email-quic_eserrao@quicinc.com>
- <20230119021838.luuiwe5n6npf3kaj@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230119021838.luuiwe5n6npf3kaj@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Unl46F9WtiOONfd6eut7m0D5fGKaOKHc
-X-Proofpoint-GUID: Unl46F9WtiOONfd6eut7m0D5fGKaOKHc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_13,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- mlxscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 bulkscore=0
- suspectscore=0 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301190168
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230115114146.12628-3-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sun, Jan 15, 2023 at 05:11:43PM +0530, Krishna Kurapati wrote:
+> Currently the DWC3 driver supports only single port controller
+> which requires at most one HS and one SS PHY.
+> 
+> But the DWC3 USB controller can be connected to multiple ports and
+> each port can have their own PHYs. Each port of the multiport
+> controller can either be HS+SS capable or HS only capable
+> Proper quantification of them is required to modify GUSB2PHYCFG
+> and GUSB3PIPECTL registers appropriately.
+> 
+> Add support for detecting, obtaining and configuring phy's supported
+> by a multiport controller and limit the max number of ports
+> supported to 4.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c | 304 +++++++++++++++++++++++++++++-----------
+>  drivers/usb/dwc3/core.h |  15 +-
+>  drivers/usb/dwc3/drd.c  |  14 +-
+>  3 files changed, 244 insertions(+), 89 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 476b63618511..7e0a9a598dfd 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+
+<snip>
+
+> @@ -1575,6 +1690,21 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>  	dwc->dis_split_quirk = device_property_read_bool(dev,
+>  				"snps,dis-split-quirk");
+>  
+> +
+> +	/*
+> +	 * If no mulitport properties are defined, default
+> +	 * the port count to '1'.
+> +	 */
+> +	ret = device_property_read_u32(dev, "num-ports",
+> +				&dwc->num_ports);
+> +	if (ret)
+> +		dwc->num_ports = 1;
+> +
+> +	ret = device_property_read_u32(dev, "num-ss-ports",
+> +				&dwc->num_ss_ports);
+> +	if (ret)
+> +		dwc->num_ss_ports = 1;
+
+By using this DT property instead of using the number of each phy type you
+find you can get into situations where you're writing DWC3_GUSB2PHYCFG, etc,
+when there's no phy to go along with it.
+
+I ran into this when testing on sa8540p-ride, which only uses one of the
+ports on the multiport controller. I didn't enable the other phys (not
+sure if that was smart or not) and overrode phy-names/phys, but did not
+override num-ports/num-ss-ports, which resulted in that. Nothing bad
+happened on a quick test.. but I thought I'd highlight that as another
+downside of decoupling this value from the number of phys you grab.
+
+Here's a patch enabling sa8540p-ride, I'd love if you'd add it to the
+series (probably needs clean up after review, and will definitely need
+alteration after you update the dt-binding again). If not I'll continue
+to test/review so please CC me!:
 
 
-On 1/18/2023 6:18 PM, Thinh Nguyen wrote:
-> On Tue, Jan 17, 2023, Elson Roy Serrao wrote:
->> USB host sends function suspend and function resume notifications to
->> the interface through SET_FEATURE/CLEAR_FEATURE setup packets.
->> Add support to handle these packets by delegating the requests to
->> composite layer. Also add support to handle function wake notification
->> requests to exit from function suspend state.
->>
->> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->> ---
->>   drivers/usb/dwc3/core.h   |  1 +
->>   drivers/usb/dwc3/debug.h  |  2 ++
->>   drivers/usb/dwc3/ep0.c    | 12 ++++--------
->>   drivers/usb/dwc3/gadget.c | 36 +++++++++++++++++++++++++++++++++++-
->>   4 files changed, 42 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index 53ded08..5cda645 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -526,6 +526,7 @@
->>   #define DWC3_DGCMD_SET_ENDPOINT_NRDY	0x0c
->>   #define DWC3_DGCMD_SET_ENDPOINT_PRIME	0x0d
->>   #define DWC3_DGCMD_RUN_SOC_BUS_LOOPBACK	0x10
->> +#define DWC3_DGCMD_DEV_NOTIFICATION	0x07
->>   
->>   #define DWC3_DGCMD_STATUS(n)		(((n) >> 12) & 0x0F)
->>   #define DWC3_DGCMD_CMDACT		BIT(10)
->> diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
->> index 48b44b8..0897d9d 100644
->> --- a/drivers/usb/dwc3/debug.h
->> +++ b/drivers/usb/dwc3/debug.h
->> @@ -72,6 +72,8 @@ dwc3_gadget_generic_cmd_string(u8 cmd)
->>   		return "Set Endpoint Prime";
->>   	case DWC3_DGCMD_RUN_SOC_BUS_LOOPBACK:
->>   		return "Run SoC Bus Loopback Test";
->> +	case DWC3_DGCMD_DEV_NOTIFICATION:
->> +		return "Device Notification";
->>   	default:
->>   		return "UNKNOWN";
->>   	}
->> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->> index 0c1203d..e05c2b9 100644
->> --- a/drivers/usb/dwc3/ep0.c
->> +++ b/drivers/usb/dwc3/ep0.c
->> @@ -30,6 +30,8 @@
->>   static void __dwc3_ep0_do_control_status(struct dwc3 *dwc, struct dwc3_ep *dep);
->>   static void __dwc3_ep0_do_control_data(struct dwc3 *dwc,
->>   		struct dwc3_ep *dep, struct dwc3_request *req);
->> +static int dwc3_ep0_delegate_req(struct dwc3 *dwc,
->> +				 struct usb_ctrlrequest *ctrl);
->>   
->>   static void dwc3_ep0_prepare_one_trb(struct dwc3_ep *dep,
->>   		dma_addr_t buf_dma, u32 len, u32 type, bool chain)
->> @@ -367,7 +369,7 @@ static int dwc3_ep0_handle_status(struct dwc3 *dwc,
->>   		 * Function Remote Wake Capable	D0
->>   		 * Function Remote Wakeup	D1
->>   		 */
->> -		break;
->> +		return dwc3_ep0_delegate_req(dwc, ctrl);
->>   
->>   	case USB_RECIP_ENDPOINT:
->>   		dep = dwc3_wIndex_to_dep(dwc, ctrl->wIndex);
->> @@ -514,13 +516,7 @@ static int dwc3_ep0_handle_intf(struct dwc3 *dwc,
->>   
->>   	switch (wValue) {
->>   	case USB_INTRF_FUNC_SUSPEND:
->> -		/*
->> -		 * REVISIT: Ideally we would enable some low power mode here,
->> -		 * however it's unclear what we should be doing here.
->> -		 *
->> -		 * For now, we're not doing anything, just making sure we return
->> -		 * 0 so USB Command Verifier tests pass without any errors.
->> -		 */
->> +		ret = dwc3_ep0_delegate_req(dwc, ctrl);
->>   		break;
->>   	default:
->>   		ret = -EINVAL;
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index db4b438..1c958c4 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2346,7 +2346,7 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async)
->>   		return 0;
->>   
->>   	/* poll until Link State changes to ON */
->> -	retries = 20000;
->> +	retries = 30000;
-> 
-> This seems like a fix that needs to be splitted to a separate change.
-> read_poll_timeout_atomic() would be useful here (as a separate/unrelated
-> change for status polling).
-> 
-Done.
+From dcb27d07f079194ebd7efe1c9bec64da78beb290 Mon Sep 17 00:00:00 2001
+From: Andrew Halaney <ahalaney@redhat.com>
+Date: Thu, 19 Jan 2023 14:53:38 -0600
+Subject: [PATCH] arm64: dts: qcom: sa8540p-ride: Enable usb_2
+Content-type: text/plain
 
->>   
->>   	while (retries--) {
->>   		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
->> @@ -2383,6 +2383,39 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
->>   	return ret;
->>   }
->>   
->> +static void dwc3_resume_gadget(struct dwc3 *dwc);
->> +
->> +static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int interface_id)
->> +{
->> +	struct  dwc3		*dwc = gadget_to_dwc(g);
->> +	unsigned long		flags;
->> +	int			ret;
->> +
->> +	spin_lock_irqsave(&dwc->lock, flags);
->> +	/*
->> +	 * If the link is in LPM, first bring the link to U0
-> 
-> Reword LMP -> low power.
-> 
-Sure.
+There is now support for the multiport USB controller this uses
+so enable it.
 
->> +	 * before triggering function remote wakeup.
->> +	 */
->> +	if (dwc->link_state == DWC3_LINK_STATE_U3) {
->> +		ret = __dwc3_gadget_wakeup(dwc, false);
->> +		if (ret) {
->> +			spin_unlock_irqrestore(&dwc->lock, flags);
->> +			return -EINVAL;
->> +		}
->> +		dwc3_resume_gadget(dwc);
->> +		dwc->link_state = DWC3_LINK_STATE_U0;
->> +	}
->> +
->> +	ret = dwc3_send_gadget_generic_command(dwc, DWC3_DGCMD_DEV_NOTIFICATION,
->> +					       0x1 | (interface_id << 4));
-> 
-> Create a macro for 0x1. Something like DWC3_DGCMDPAR_DN_FUNC_WAKE. Also,
-> create an macro for interface selection. Maybe
-> DWC3_DGCMDPAR_INTF_SEL(interface_id).
-> 
-Sure.
+The board only has a single port hooked up (despite it being wired up to
+the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+which by default on boot is selected to mux properly. Grab the gpio
+controlling that and ensure it stays in the right position so USB 2.0
+continues to be routed from the external port to the SoC.
 
->> +	if (ret)
->> +		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
->> +
->> +	spin_unlock_irqrestore(&dwc->lock, flags);
->> +
->> +	return ret;
->> +}
->> +
->>   static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
->>   		int is_selfpowered)
->>   {
->> @@ -3012,6 +3045,7 @@ static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
->>   static const struct usb_gadget_ops dwc3_gadget_ops = {
->>   	.get_frame		= dwc3_gadget_get_frame,
->>   	.wakeup			= dwc3_gadget_wakeup,
->> +	.func_wakeup		= dwc3_gadget_func_wakeup,
->>   	.set_selfpowered	= dwc3_gadget_set_selfpowered,
->>   	.pullup			= dwc3_gadget_pullup,
->>   	.udc_start		= dwc3_gadget_start,
->> -- 
->> 2.7.4
->>
-> 
-> Thanks,
-> Thinh
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 24 +++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+index 97957f3baa64..56d4f43faa1e 100644
+--- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+@@ -246,6 +246,21 @@ &usb_0_qmpphy {
+ 	status = "okay";
+ };
+ 
++&usb_2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&usb2_en_state>;
++
++	status = "okay";
++};
++
++&usb_2_dwc3 {
++	dr_mode = "host";
++	num-ports = <1>;
++	num-ss-ports = <1>;
++	phy-names = "usb2-phy", "usb3-phy";
++	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
++};
++
+ &usb_2_hsphy0 {
+ 	vdda-pll-supply = <&vreg_l5a>;
+ 	vdda18-supply = <&vreg_l7g>;
+@@ -313,4 +328,13 @@ wake-pins {
+ 			bias-pull-up;
+ 		};
+ 	};
++
++	usb2_en_state: usb2-en-state {
++		/* TS3USB221A USB2.0 mux select */
++		pins = "gpio24";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++		output-low;
++	};
+ };
+-- 
+2.39.0
+
+
+
