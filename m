@@ -2,187 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508346761B1
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jan 2023 00:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6580C6761AC
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jan 2023 00:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjATXmH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 18:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
+        id S229761AbjATXkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 18:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjATXmG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 18:42:06 -0500
-X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 Jan 2023 15:42:04 PST
-Received: from lithium.sammserver.com (lithium.sammserver.com [168.119.122.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7221E9C7
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 15:42:04 -0800 (PST)
-Received: from mail.sammserver.com (sammserver.wg [10.32.40.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by lithium.sammserver.com (Postfix) with ESMTPS id 9810A31181CC;
-        Sat, 21 Jan 2023 00:40:32 +0100 (CET)
-Received: from fastboi.localdomain (fastboi.wg [10.32.40.5])
-        by mail.sammserver.com (Postfix) with ESMTP id 3F4F4167D6;
-        Sat, 21 Jan 2023 00:40:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cavoj.net; s=email;
-        t=1674258032; bh=tAHRLgm6IhHni12DXtcuIH0/yjW4BrhLDM/lawo+0EA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jqbsdKQ9qcr6kphxR0PRE4gPARTOCOtb1pNBcbGIxl+BQVC3GrMR/fG7L4HUlheYw
-         xGuOhX9xgnVCY0EwqhgbE+o1fM5yKLrPKfblcMqx7DpGpzxpV2wn5ijz1GfDFLWUJC
-         g1pomQ3gR+DHe+GrGgS5T2s4tIRIbcu7VDdiCe0E=
-Received: by fastboi.localdomain (Postfix, from userid 1000)
-        id 2C6DF14214F0; Sat, 21 Jan 2023 00:40:31 +0100 (CET)
-From:   =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>
-To:     heikki.krogerus@linux.intel.com
-Cc:     linux-usb@vger.kernel.org, samuel@cavoj.net
-Subject: [PATCH] usb: typec: ucsi: introduce read_explicit operation
-Date:   Sat, 21 Jan 2023 00:39:21 +0100
-Message-Id: <20230120233920.752245-1-samuel@cavoj.net>
-X-Mailer: git-send-email 2.39.0
+        with ESMTP id S229722AbjATXkV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 18:40:21 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B907ED69;
+        Fri, 20 Jan 2023 15:40:15 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id v5so8540440edc.3;
+        Fri, 20 Jan 2023 15:40:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YlFQs5uK1REKCJrhOvImfAktaMDFYnGI105SvemPmlY=;
+        b=RRiBdw8uKBYsQzBGG11bH8QpnGKO+OrOgFZgbwJ0LEsEIPHcP7NIdCOplfvqJq8Gcn
+         IDtizdX6lIF3alkc+hWGOqX8r13i2qRyNZp9JDHxXCaqxMbK9x5OKjof6i4tFgOSr3r5
+         tjuYBJAMeg/FMtfXejJCJ9r6vFrvi65I7Itw6TiKTUVIyLJegXEgLmgksKWfK+PqzEsi
+         H9P7nID/+0DuRX9/GhZ2wmEOfsmc0xKQsQrdu1EA/dnpRuFBVRaPndkx4OiPgtazlxEn
+         VdJXWiQveKeHn4g4HKUvrrTXj7UwfzR9tISQR/41dRU/sSQfgY1fuiSQQE0ogA67JIO/
+         uUUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YlFQs5uK1REKCJrhOvImfAktaMDFYnGI105SvemPmlY=;
+        b=BORCqbLvsxnYN9NJ+5cH+jyyR4sfGNUuorW+FIDsk0X4gjGHnkhZKXgUdL7QFw4qL0
+         PayXEwDFi9ErJ8Oa4hqEG6waXcP7Aa8BuMTKaiP/68BGRqjUuKHmq4jq7Bc2GnEs8ZvA
+         LkPinfVsxDEeogexzPxIPkRELgbIx1sywJNcQNl+pn9WeGm2Ps2d/PTxenwn2j0KVh0o
+         46VKqpOy6Ycljh7LXmI4so3FyTw4ehikAsmLx77KPRwDCBnBVUIgiMJPzsNYv+3cR3OW
+         /r4oxprsJx/wNGVR9OMl2uTAlrxM4R7N8UuEJOYxBfJTIH1rBkYghiWzH6z/sdijyQvZ
+         t9qw==
+X-Gm-Message-State: AFqh2kotMapyYq4Iawv5Wij9h+kiimWD6QMZVJh1SJK1EZJblGppTBi9
+        mCGz4aT4H7URrTnfhMU6FZwRZucMfrY=
+X-Google-Smtp-Source: AMrXdXuVuW4WzQPRX+Id1GCwSM7qs0K6dzLXuAUos1Todbd5RBeS68VoXDFF+todOBUIwUvJl8vzWQ==
+X-Received: by 2002:aa7:c44d:0:b0:46c:b919:997f with SMTP id n13-20020aa7c44d000000b0046cb919997fmr7738082edr.17.1674258014332;
+        Fri, 20 Jan 2023 15:40:14 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id ec49-20020a0564020d7100b0049e249c0e56sm7066080edb.56.2023.01.20.15.40.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 15:40:13 -0800 (PST)
+Message-ID: <be193659-e97f-23b9-b89c-d02205705db6@gmail.com>
+Date:   Sat, 21 Jan 2023 00:40:12 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to
+ its own schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230118193056.673514-1-robh@kernel.org>
+ <20230118193056.673514-2-robh@kernel.org>
+ <4eca2695-cb73-eaad-4c8a-82dec923825e@gmail.com>
+ <CAL_JsqKqiRbBJErkh2Hch+XZyLggGyjYo1rvKWPhxb99pA8mAA@mail.gmail.com>
+Content-Language: en-US
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <CAL_JsqKqiRbBJErkh2Hch+XZyLggGyjYo1rvKWPhxb99pA8mAA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On some ACPI platforms (namely the ASUS Zenbook UM325) the _DSM method must
-not be called after a notification is received but instead the mailbox
-should be read immediately from RAM. This is because the ACPI interrupt
-handler destroys the CCI in ERAM after copying to system memory, and when
-_DSM is later called to perform a second copy, it retrieves a garbage
-value.
 
-Instead, the _DSM(read) method should only be called when necessary, i.e.
-for polling the state after reset and for retrieving the version. Other
-reads should not call _DSM and only peek into the RAM region.
 
-For platforms other than ACPI, the read_explicit op uses the same
-implementation as read.
+On 1/20/23 21:30, Rob Herring wrote:
+> On Wed, Jan 18, 2023 at 3:05 PM Johan Jonker <jbx6244@gmail.com> wrote:
+>>
+>> Hi,
+>>
+>> Some alignment at the examples and the unknown extcon property.
+>>
+>> usb@fe800000: 'extcon' does not match any of the regexes
+> 
+> Does that go in the wrapper or dwc3 node?:
+> 
+> arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: usb@fe800000:
+> usb@fe800000: Unevaluated properties are not allowed ('extcon' was
+> unexpected)
+>         From schema:
+> /home/rob/proj/linux-dt/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
+> 
 
-Link: https://lore.kernel.org/linux-usb/20210823180626.tb6m7h5tp6adhvt2@fastboi.localdomain/
-Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
----
- drivers/usb/typec/ucsi/ucsi.c         |  9 +++++----
- drivers/usb/typec/ucsi/ucsi.h         |  3 +++
- drivers/usb/typec/ucsi/ucsi_acpi.c    | 11 +++++++++++
- drivers/usb/typec/ucsi/ucsi_ccg.c     |  1 +
- drivers/usb/typec/ucsi/ucsi_stm32g0.c |  1 +
- 5 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index eabe519013e7..39ee3b63d07d 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -883,7 +883,7 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
- 			goto out;
- 		}
- 
--		ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
-+		ret = ucsi->ops->read_explicit(ucsi, UCSI_CCI, &cci, sizeof(cci));
- 		if (ret)
- 			goto out;
- 
-@@ -1347,7 +1347,8 @@ struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops)
- {
- 	struct ucsi *ucsi;
- 
--	if (!ops || !ops->read || !ops->sync_write || !ops->async_write)
-+	if (!ops || !ops->read || !ops->read_explicit || !ops->sync_write ||
-+	    !ops->async_write)
- 		return ERR_PTR(-EINVAL);
- 
- 	ucsi = kzalloc(sizeof(*ucsi), GFP_KERNEL);
-@@ -1382,8 +1383,8 @@ int ucsi_register(struct ucsi *ucsi)
- {
- 	int ret;
- 
--	ret = ucsi->ops->read(ucsi, UCSI_VERSION, &ucsi->version,
--			      sizeof(ucsi->version));
-+	ret = ucsi->ops->read_explicit(ucsi, UCSI_VERSION, &ucsi->version,
-+				       sizeof(ucsi->version));
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index c968474ee547..8361e1cfc8eb 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -37,6 +37,7 @@ struct ucsi_altmode;
- /**
-  * struct ucsi_operations - UCSI I/O operations
-  * @read: Read operation
-+ * @read_explicit: Read operation with explicit poll if applicable
-  * @sync_write: Blocking write operation
-  * @async_write: Non-blocking write operation
-  * @update_altmodes: Squashes duplicate DP altmodes
-@@ -48,6 +49,8 @@ struct ucsi_altmode;
- struct ucsi_operations {
- 	int (*read)(struct ucsi *ucsi, unsigned int offset,
- 		    void *val, size_t val_len);
-+	int (*read_explicit)(struct ucsi *ucsi, unsigned int offset,
-+			     void *val, size_t val_len);
- 	int (*sync_write)(struct ucsi *ucsi, unsigned int offset,
- 			  const void *val, size_t val_len);
- 	int (*async_write)(struct ucsi *ucsi, unsigned int offset,
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index ce0c8ef80c04..6b3475ed4874 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -45,6 +45,16 @@ static int ucsi_acpi_read(struct ucsi *ucsi, unsigned int offset,
- 			  void *val, size_t val_len)
- {
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-+
-+	memcpy(val, ua->base + offset, val_len);
-+
-+	return 0;
-+}
-+
-+static int ucsi_acpi_read_explicit(struct ucsi *ucsi, unsigned int offset,
-+				   void *val, size_t val_len)
-+{
-+	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
- 	int ret;
- 
- 	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-@@ -89,6 +99,7 @@ static int ucsi_acpi_sync_write(struct ucsi *ucsi, unsigned int offset,
- 
- static const struct ucsi_operations ucsi_acpi_ops = {
- 	.read = ucsi_acpi_read,
-+	.read_explicit = ucsi_acpi_read_explicit,
- 	.sync_write = ucsi_acpi_sync_write,
- 	.async_write = ucsi_acpi_async_write
- };
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 46441f1477f2..d00c262f334f 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -605,6 +605,7 @@ static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
- 
- static const struct ucsi_operations ucsi_ccg_ops = {
- 	.read = ucsi_ccg_read,
-+	.read_explicit = ucsi_ccg_read,
- 	.sync_write = ucsi_ccg_sync_write,
- 	.async_write = ucsi_ccg_async_write,
- 	.update_altmodes = ucsi_ccg_update_altmodes
-diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-index 93fead0096b7..008fa7a3533c 100644
---- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-+++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-@@ -437,6 +437,7 @@ static irqreturn_t ucsi_stm32g0_irq_handler(int irq, void *data)
- 
- static const struct ucsi_operations ucsi_stm32g0_ops = {
- 	.read = ucsi_stm32g0_read,
-+	.read_explicit = ucsi_stm32g0_read,
- 	.sync_write = ucsi_stm32g0_sync_write,
- 	.async_write = ucsi_stm32g0_async_write,
- };
--- 
-2.39.0
+> That's the dwc3 node, but the majority are in the wrapper node, so I'm
+> going with the majority and leaving this one.
 
+In wrapper code for rk33899 in dwc3-of-simple.c I don't see no extcon activity I think.
+
+In core there's recently made some changes:
+https://github.com/torvalds/linux/blame/master/drivers/usb/dwc3/core.c#L1710
+
+usb: dwc3: Don't switch OTG -> peripheral if extcon is present 
+https://lore.kernel.org/all/20221017233510.53336-1-andriy.shevchenko@linux.intel.com/
+
+Binding status update for that is unknown for me.
+Do whatever suites you best.
+
+Johan
+> Rob
