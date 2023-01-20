@@ -2,295 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3456752DB
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 11:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B85675356
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 12:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjATK5k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 05:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S229524AbjATLUx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 06:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjATK5j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 05:57:39 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34C55926F;
-        Fri, 20 Jan 2023 02:57:33 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so3368358wmc.1;
-        Fri, 20 Jan 2023 02:57:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S4Ii5e3QdaHgpxzco45qunbaAsydDjGix7Dw3cejJFE=;
-        b=OYGLgKKAs+7hc4uUd1Uf2kfWjTFqH2Zb5Xbi1J1UsILPq94D8oG4U7cfSr/S52avoX
-         oBylfZWRcfYClOXugMVosVjLw+t/o5g7T3xXx0LDP9NQnfiqH3fB4fX5c+OxNwZaOsSN
-         MkuJULfjLA+z2ZYHeSfQFjsk3TBfuMW06NJPhyAtGFSQY57hfrlu3vRdchgTH050dsHz
-         sh7Y2c21IEXtQdP0JhzcQR7WX6f5eSsIv4J939SutiLKmUCKFRPCPmPfjqk6Jm0L0IcG
-         7GvsAn6TUCf5p4EgoXedkeylOvPko6kngHSXu6Agfo37TVUqQy9dJQBz4TZaK/ZOSJYU
-         nqsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S4Ii5e3QdaHgpxzco45qunbaAsydDjGix7Dw3cejJFE=;
-        b=GP0Je2MDpcB7Lq3XVUftcc9KE1uuQ6ANHQbvljmcuiFllTl7DTtRsNsvlcqAQSkeok
-         ueZfgH3YPRb63qAHpMknD1e4Cx98l2okceAw72YSV4qUjWPKKrwzdOCKoQRHV+D65bfr
-         e3NSA4FKfoFrZZoUxZy8jp9xHp6Nkq14JJo42qVxHzdIH6RjekYklJTsQs5x8edVFt1E
-         G0+/58UkZVX7xLauwO3YB2E9AaEfviY/RkNLBhB4C7uM7+34dfkp8ErL6SkzzElIx3mW
-         B2WoLff8U75mmEWJesoBGS/fLhSAwzhZqXvXGhRptpmcYtmpG2kdKa4UYG06x5S1dNuI
-         V+iw==
-X-Gm-Message-State: AFqh2ko8XX6XC8XzgxgIo293ce9m8FK4kcaOJJY2Mf/7bMxVvKa+bySf
-        GBybDIifMAJTEkn+nYF5SbU=
-X-Google-Smtp-Source: AMrXdXsZQTWcELo0E+WRaY2YZ2jzNC5vg23Fh18wO4KIPz84swiOfZhhsA8iMB2Y/TyA96Pbq+Uv8A==
-X-Received: by 2002:a05:600c:2292:b0:3d3:50b9:b1a1 with SMTP id 18-20020a05600c229200b003d350b9b1a1mr22130930wmf.1.1674212251959;
-        Fri, 20 Jan 2023 02:57:31 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b003d9aa76dc6asm2703107wmq.0.2023.01.20.02.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 02:57:31 -0800 (PST)
-Message-ID: <18e6d30d-15ee-3d88-e9d3-f8dad6034760@gmail.com>
-Date:   Fri, 20 Jan 2023 11:57:29 +0100
+        with ESMTP id S229471AbjATLUx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 06:20:53 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D64DCDE3
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 03:20:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
+        t=1674213644; bh=KHtQaHegBJkPK61zCaHRsr32rVEkOy4oVVYnqL4LRKk=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=e4nLpXmNvJi9VMzP2jegl3/lBmuy4ZXdy+XqpRuTqhG+7Rn7Vlad9JTRanh82vdkj
+         57oxZ0sYdMFTEjVAF/N43yKcZG9Y1+kYP50ktUi69K4c0xMnMBsHIJO5rt+kb/m+yE
+         2N0xqhg+fgcQ8hOfVl3Pi9SFXQALpLKfXB57K0+wqTkszNKNSbrs3M4bIYRzeI40lC
+         yPKZs+v7xM2Z+8G/eHBHnRsKa/D705+9UOZY8xUEzbZQzWjA2grtqNzQtgaN7vFr6R
+         shrj7EgvmhCWxjvqLpmTsHUKxkqQxikuqWkr2ndi/lAf6szm8IQsDwQj89RMSeYg5+
+         +JXV+v6YCQ4bw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([81.189.232.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M26vB-1pGtVN0ixF-002YX9; Fri, 20
+ Jan 2023 12:20:44 +0100
+Message-ID: <6edd3033-b22b-a293-82e8-10594526ab44@gmx.at>
+Date:   Fri, 20 Jan 2023 12:19:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
+Subject: Re: Possible problem with thunderbolt 4
 Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
-        linus.walleij@linaro.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
-        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
-References: <20230101220149.3035048-1-bero@baylibre.com>
- <20230101220149.3035048-8-bero@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v7 7/7] arm64: dts: mediatek: Initial mt8365-evk support
-In-Reply-To: <20230101220149.3035048-8-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
+References: <Y7UzCY6ujQ2qtoq5@black.fi.intel.com>
+ <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
+ <Y7wNnrlEWMOV4Cj/@black.fi.intel.com>
+ <0f862f75-9805-f5d0-ef89-0b77d0ae8778@gmx.at>
+ <Y72AbwKFd9snjZrJ@black.fi.intel.com>
+ <3ccb150b-dbd9-c9d0-0e8c-8c169f0d8faf@gmx.at>
+ <Y76TS54PJpmseZs3@black.fi.intel.com>
+ <8c2da730-ba9b-6ec7-d493-1a6a2ce54622@gmx.at>
+ <Y8kXFFrue7l7DKf3@black.fi.intel.com>
+ <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
+ <Y8ppf5HHTOaDfGLq@black.fi.intel.com>
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+In-Reply-To: <Y8ppf5HHTOaDfGLq@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:zN+gNilndbhpzX2pqk7EdciNaalbo6oeYfk0IqqkrzWHn1FVXv+
+ fjRG1ctV1a/jylRac4CSUK0iLGV7LVfa/bwtvQ4crxxdGbdu/Ueir4OwCBkGkCtZcToqsPd
+ R8MWZEWIcTzYYQzcpXMuImvdmsFYjm/45mrGfDHyXW1Jnv4aSTr6Du7PKQL0lPEsnGwmSXv
+ wDNVGzXYJvM4i1GSR2G7Q==
+UI-OutboundReport: notjunk:1;M01:P0:gaK9K1N3kho=;zmU35TbC9TPKT5dbmbahHKnDHOo
+ b2ElxVfK86fPsU03690CRmLlSMvI2ZgrSyMyvj1LQSuUmmrfXyOSQZYWU9N6kvnA5YztO2wa/
+ dgCmqq/jc+7hPu0NyaDDjwlqIdRKqTLDhzLLqJlJ646igZVemLre/4kc+MHBldfsBjag46jtg
+ cdiKpDThEIP0MHgmxeX2QpEdHLP4Ww7/ym0qA3G8NCVpMZGbOdTzgK5FYe6Ol4Yn9pIsOfqOo
+ H3wtIQlx2ArGeovm12iAPE8g9MfObM9AureHwciLu7T5KQDHC7Jn0jJ4EGyj22NnHnJIoz2Np
+ 2my4p1ZIZDO3sO3JHEtvgTSDVi01BZwDIsYNiyjHpfi9ON9YfOFNlhKolvAUsthZygd2vFxZa
+ 6OJfBLSOLlIv/MWxSgyQU1oY+3o+jZXJ+iIIzMejBBgt77HaDAs4agl4d/Wd+5a9BHDUfKwq2
+ kzdzpC2lOyG7KZGp56iofAfb/gFfOOox7Ss43J2qQFrlmLdbIO3n1W442Jp3BJMSHsYnzbkKY
+ 3+HKRzTzFxV2UTbzpsvuB5WORT1eoAUyWlmnL5xSlTYb7gJa5taYAH3U/C2hDe1e2c5483Pz9
+ SnGTHH5+dfnuPs3IcKJ6UXqnSoCm+xDoD2e94XiRfZxanydtCLAq4yVDclHixugEdbMvu68sc
+ BJnZghHz3IPDP45FvDbXIjCknad/40FCg3MFgto0odjKydYAHSPT8BC0XlM3haAgz0f4AaJqt
+ AzwuJNRJyno5JBVHFKrbpQowadWZPDyXJiKSo06WEWHS4Zz5qCpAAgFISJjBI/dPkZJHl4xjP
+ PxiXlN+QD72ogKY42oqOcOx33uziPJDjK59JNcQOZgxYQswAk1ZfyHnbzHMHeAGuvzH5AxFTV
+ pvqyztKuBejnAdxOlWZw7x128t2Ajy2l6HUHgxgbevezGeMetb1VINUjGVvV8fRtvRMJsFEHa
+ zlKVE9uOpodshsfK0wMC4XfYU9w=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
+>> You're right! With this commit reverted it uses the software connection=
+ manager, with the commit applied it uses the firmware connection manager.
+> Hmm, so reverting this commit enables software connection manager and
+> makes the Lenovo system work? Are you sure? that's completely opposite
+> how the HP system behaves ;-)
 
+No, with the software CM active it does _not_ work! The patch introduced i=
+n 5.18.11 somehow prevents the software CM to be used...
 
-On 01/01/2023 23:01, Bernhard Rosenkränzer wrote:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> This adds minimal support for the Mediatek 8365 SOC and the EVK reference
-> board, allowing the board to boot to initramfs with serial port I/O.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> [bero@baylibre.com: Removed parts depending on drivers that aren't upstream yet, cleanups, add CPU cache layout, add systimer, fix GIC]
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/Makefile       |   1 +
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 169 +++++++++
->   arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 378 ++++++++++++++++++++
->   3 files changed, 548 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index 813e735c5b96d..d78523c5a7dd6 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -47,4 +47,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r2.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r3.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> new file mode 100644
-> index 0000000000000..275ea3a0e7085
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-[...]
-> +		apdma: dma-controller@11000280 {
-> +			compatible = "mediatek,mt8365-uart-dma", "mediatek,mt6577-uart-dma";
-> +			reg = <0 0x11000280 0 0x80>,
-> +			      <0 0x11000300 0 0x80>,
-> +			      <0 0x11000380 0 0x80>,
-> +			      <0 0x11000400 0 0x80>,
-> +			      <0 0x11000580 0 0x80>,
-> +			      <0 0x11000600 0 0x80>;
-> +			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 46 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 47 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 48 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 52 IRQ_TYPE_LEVEL_LOW>;
-> +			dma-requests = <6>;
-> +			clocks = <&infracfg CLK_IFR_AP_DMA>;
-> +			clock-names = "apdma";
-> +			#dma-cells = <1>;
-> +		};
-> +
-> +		uart0: serial@11002000 {
-> +			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
+5.18.9, without the comit:
 
-Unfortunately we are missing this compatible in the binding description.
+bash-5.0# uname -r
+5.18.9-superschaf-uefi-bisect
+bash-5.0# dmesg |grep manager
+[=C2=A0=C2=A0=C2=A0 2.028144] thunderbolt 0000:00:0d.2: using software con=
+nection manager
+[=C2=A0=C2=A0=C2=A0 2.220380] thunderbolt 0000:00:0d.3: using software con=
+nection manager
 
-> +			reg = <0 0x11002000 0 0x1000>;
-> +			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART0>;
-> +			clock-names = "baud", "bus";
-> +			dmas = <&apdma 0>, <&apdma 1>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		uart1: serial@11003000 {
-> +			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
-> +			reg = <0 0x11003000 0 0x1000>;
-> +			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART1>;
-> +			clock-names = "baud", "bus";
-> +			dmas = <&apdma 2>, <&apdma 3>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		uart2: serial@11004000 {
-> +			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
-> +			reg = <0 0x11004000 0 0x1000>;
-> +			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART2>;
-> +			clock-names = "baud", "bus";
-> +			dmas = <&apdma 4>, <&apdma 5>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		pwm: pwm@11006000 {
-> +			compatible = "mediatek,mt8365-pwm";
-> +			reg = <0 0x11006000 0 0x1000>;
-> +			#pwm-cells = <2>;
-> +			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&infracfg CLK_IFR_PWM_HCLK>,
-> +				 <&infracfg CLK_IFR_PWM>,
-> +				 <&infracfg CLK_IFR_PWM1>,
-> +				 <&infracfg CLK_IFR_PWM2>,
-> +				 <&infracfg CLK_IFR_PWM3>;
-> +			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
-> +		};
-> +
-> +		spi: spi@1100a000 {
-> +			compatible = "mediatek,mt8365-spi", "mediatek,mt7622-spi";
-> +			reg = <0 0x1100a000 0 0x100>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&topckgen CLK_TOP_UNIVPLL2_D4>,
-> +				 <&topckgen CLK_TOP_SPI_SEL>,
-> +				 <&infracfg CLK_IFR_SPI0>;
-> +			clock-names = "parent-clk", "sel-clk", "spi-clk";
-> +			status = "disabled";
-> +		};
-> +
-> +		ssusb: usb@11201000 {
-> +			compatible = "mediatek,mt8365-mtu3", "mediatek,mtu3";
+and 5.18.11, including the commit:
 
-Same here.
+bash-5.0# uname -r
+5.18.11-superschaf-uefi-bisect
+bash-5.0# dmesg | grep manager
+[=C2=A0=C2=A0=C2=A0 1.827993] thunderbolt 0000:00:0d.2: using firmware con=
+nection manager
+[=C2=A0=C2=A0=C2=A0 2.113706] thunderbolt 0000:00:0d.3: using firmware con=
+nection manager
 
-> +			reg = <0 0x11201000 0 0x2e00>, <0 0x11203e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_LOW>;
-> +			phys = <&u2port0 PHY_TYPE_USB2>,
-> +			       <&u2port1 PHY_TYPE_USB2>;
-> +			clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-> +				 <&infracfg CLK_IFR_SSUSB_REF>,
-> +				 <&infracfg CLK_IFR_SSUSB_SYS>,
-> +				 <&infracfg CLK_IFR_ICUSB>;
-> +			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			status = "disabled";
-> +
-> +			usb_host: usb@11200000 {
-> +				compatible = "mediatek,mt8365-xhci", "mediatek,mtk-xhci";
-
-Same here.
-
-> +				reg = <0 0x11200000 0 0x1000>;
-> +				reg-names = "mac";
-> +				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_LOW>;
-> +				clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-> +					 <&infracfg CLK_IFR_SSUSB_REF>,
-> +					 <&infracfg CLK_IFR_SSUSB_SYS>,
-> +					 <&infracfg CLK_IFR_ICUSB>,
-> +					 <&infracfg CLK_IFR_SSUSB_XHCI>;
-> +				clock-names = "sys_ck", "ref_ck", "mcu_ck",
-> +					      "dma_ck", "xhci_ck";
-> +				status = "disabled";
-> +			};
-> +		};
-> +
-> +		u3phy: phy@11cc0000 {
-> +			compatible = "mediatek,mt8365-tphy", "mediatek,generic-tphy-v2";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			#phy-cells = <1>;
-> +			ranges;
-> +
-> +			u2port0: usb-phy@11cc0000 {
-> +				reg = <0 0x11cc0000 0 0x400>;
-> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
-> +				clock-names = "ref", "da_ref";
-> +				#phy-cells = <1>;
-> +			};
-> +
-> +			u2port1: usb-phy@11cc1000 {
-> +				reg = <0 0x11cc1000 0 0x400>;
-> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
-> +				clock-names = "ref", "da_ref";
-> +				#phy-cells = <1>;
-> +			};
-> +		};
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupt-parent = <&gic>;
-> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +
-> +	system_clk: dummy13m {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <13000000>;
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	systimer: timer@10017000 {
-> +		compatible = "mediatek,mt6795-systimer";
-
-Why don't we use a compatible like
-"mediatek,mt8365-systimer", "mediatek,mt6795-systimer";
-
-We would need to add this to the binding description as well.
-
-I leave it up to you, but I'd advise to start with a minimal working DT which 
-includes only the bindings that are already merged. Then we can take the new 
-devices like mtu3, xhci, spidev or i2c later once they are ready.
+On the HP the software CM is used always (unless I run a kernel with CONFI=
+G_USB4=3Dn).
 
 Regards,
-Matthias
+Christian
+
