@@ -2,119 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE336674FAB
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 09:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D33E675082
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 10:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjATIqO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 03:46:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S230024AbjATJRE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 04:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjATIqN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 03:46:13 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CAB8534B;
-        Fri, 20 Jan 2023 00:46:12 -0800 (PST)
+        with ESMTP id S229980AbjATJRD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 04:17:03 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E5B8F6F3;
+        Fri, 20 Jan 2023 01:16:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674204372; x=1705740372;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=tk8qj1rZrJvPEgK6EDY0l3oMB6o9yW6VyS0SSpwW99k=;
-  b=VTkgQmIAbYv6v65ti0IaJt2jyolf0KYDh/K0yQO/Wbmwcw//M3tIBVuT
-   Ozp35OnOKwpbxMhfelcaWj6XFZ7RPa1C4CtZZG14nGEKiunZZ2V/SXnMt
-   5ZImuyOyh9w/zlkpV1R5V4IT7ptCx1ND58BZvvqHw0cn8hqTNVZauvIgV
-   1A0WAxMggvi+Twxb/8RB3ItKsVBtosPkOSV//r4c5dva2ufqqrhmmmEjn
-   uughwgQgpPxH6u0ErJWm8BDbXlgqr/fpdNxy16/wYy6j1jq1EDu51BTUw
-   r4cf/BvT/Y343E6gNGA9wmYSLZ97gOTKRJXhsRUgUq7QjlwoYAy/uSNyj
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,231,1669100400"; 
-   d="scan'208";a="196667348"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 01:46:11 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 20 Jan 2023 01:46:10 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 20 Jan 2023 01:46:05 -0700
-Message-ID: <08d8b47f8acc1fc51da2eee7eab3a55f0f678907.camel@microchip.com>
-Subject: Re: [PATCH 3/7] net: lan966x: Convert to devm_of_phy_optional_get()
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        "Russell King" <linux@armlinux.org.uk>
-CC:     <netdev@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>
-Date:   Fri, 20 Jan 2023 09:46:05 +0100
-In-Reply-To: <a8673e0ed97d41721bb9718d3338fa6957a7f0f7.1674036164.git.geert+renesas@glider.be>
-References: <cover.1674036164.git.geert+renesas@glider.be>
-         <a8673e0ed97d41721bb9718d3338fa6957a7f0f7.1674036164.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.3 
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674206203; x=1705742203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r/1tiYxPstme1YYSjB4HLjWOG3ITg0Qj8zbeObqH0Nw=;
+  b=cI8SJdEklAc5w1ocZNAYUZZ40CbNq6rRfoEjV2ZpR5vQY/xN8F9kSQMW
+   noEDj77o2JeegfEd1Rd71M1X/AO1us5dnkURHJ/WERFp52vp8xE5DBkMu
+   LDsabtCs2iDfs9IgbkOYcoPpF9nOEiKB537S/TrnFh+z+37ycqi1leBfE
+   Yj7FRl3XFTzPC+A24NbDOJ6uvsY9/GRaFw3aiSZoCUUgAPlb9YwHSue+D
+   GzsNVPihFht93NNfNU55W3N7dKrwLN79bsIAVQUbQ1Mmh0e/MYYM/fTMX
+   9oXG2A3/fFkU/c4lFYcPwIcRfAD6Ylb3/aCxmtvE9sDAzt0woi5V9NU4/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305214952"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="305214952"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:16:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="803014429"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="803014429"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2023 01:16:41 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 20 Jan 2023 11:16:40 +0200
+Date:   Fri, 20 Jan 2023 11:16:40 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
+Message-ID: <Y8pb+BTd7VJqwLzq@kuha.fi.intel.com>
+References: <20230118031514.1278139-1-pmalani@chromium.org>
+ <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
+ <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
+ <Y8kMsw/wT35KN7VK@kuha.fi.intel.com>
+ <CACeCKaceu1KCPtpavBn23qyM29Eacxhm6L9SN78ZQxdzRCOk6Q@mail.gmail.com>
+ <CACeCKaea_ZtzUZNAHMaDU9ff_BBs6sF_DqqMnkFcW_=_txVL4w@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKaea_ZtzUZNAHMaDU9ff_BBs6sF_DqqMnkFcW_=_txVL4w@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgR2VlcnQsCgpUaGlzIGxvb2tzIGdvb2QgdG8gbWUuCgpCUgpTdGVlbgoKUmV2aWV3ZWQtYnk6
-IFN0ZWVuIEhlZ2VsdW5kIDxTdGVlbi5IZWdlbHVuZEBtaWNyb2NoaXAuY29tPgoKT24gV2VkLCAy
-MDIzLTAxLTE4IGF0IDExOjE1ICswMTAwLCBHZWVydCBVeXR0ZXJob2V2ZW4gd3JvdGU6Cj4gRVhU
-RVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVz
-cyB5b3Uga25vdyB0aGUKPiBjb250ZW50IGlzIHNhZmUKPiAKPiBVc2UgdGhlIG5ldyBkZXZtX29m
-X3BoeV9vcHRpb25hbF9nZXQoKSBoZWxwZXIgaW5zdGVhZCBvZiBvcGVuLWNvZGluZyB0aGUKPiBz
-YW1lIG9wZXJhdGlvbi4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBHZWVydCBVeXR0ZXJob2V2ZW4gPGdl
-ZXJ0K3JlbmVzYXNAZ2xpZGVyLmJlPgo+IC0tLQo+IMKgZHJpdmVycy9uZXQvZXRoZXJuZXQvbWlj
-cm9jaGlwL2xhbjk2NngvbGFuOTY2eF9tYWluLmMgfCA1ICsrLS0tCj4gwqAxIGZpbGUgY2hhbmdl
-ZCwgMiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL25ldC9ldGhlcm5ldC9taWNyb2NoaXAvbGFuOTY2eC9sYW45NjZ4X21haW4uYwo+IGIvZHJp
-dmVycy9uZXQvZXRoZXJuZXQvbWljcm9jaGlwL2xhbjk2NngvbGFuOTY2eF9tYWluLmMKPiBpbmRl
-eCBjYWRkZTIwNTA1YmEwNjg5Li5kNjRhNTI1Y2RjOWVhMThiIDEwMDY0NAo+IC0tLSBhL2RyaXZl
-cnMvbmV0L2V0aGVybmV0L21pY3JvY2hpcC9sYW45NjZ4L2xhbjk2NnhfbWFpbi5jCj4gKysrIGIv
-ZHJpdmVycy9uZXQvZXRoZXJuZXQvbWljcm9jaGlwL2xhbjk2NngvbGFuOTY2eF9tYWluLmMKPiBA
-QCAtMTE0Nyw5ICsxMTQ3LDggQEAgc3RhdGljIGludCBsYW45NjZ4X3Byb2JlKHN0cnVjdCBwbGF0
-Zm9ybV9kZXZpY2UgKnBkZXYpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGxhbjk2
-NngtPnBvcnRzW3BdLT5jb25maWcucG9ydG1vZGUgPSBwaHlfbW9kZTsKPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgbGFuOTY2eC0+cG9ydHNbcF0tPmZ3bm9kZSA9IGZ3bm9kZV9oYW5k
-bGVfZ2V0KHBvcnRucCk7Cj4gCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VyZGVz
-ID0gZGV2bV9vZl9waHlfZ2V0KGxhbjk2NngtPmRldiwgdG9fb2Zfbm9kZShwb3J0bnApLAo+IE5V
-TEwpOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChQVFJfRVJSKHNlcmRlcykg
-PT0gLUVOT0RFVikKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgc2VyZGVzID0gTlVMTDsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZXJkZXMg
-PSBkZXZtX29mX3BoeV9vcHRpb25hbF9nZXQobGFuOTY2eC0+ZGV2LAo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdG9fb2Zfbm9kZShwb3J0bnApLCBOVUxMKTsKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKElTX0VSUihzZXJkZXMpKSB7Cj4gwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlcnIgPSBQVFJfRVJS
-KHNlcmRlcyk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBnb3RvIGNsZWFudXBfcG9ydHM7Cj4gLS0KPiAyLjM0LjEKPiAKCg==
+On Thu, Jan 19, 2023 at 02:12:20AM -0800, Prashant Malani wrote:
+> On Thu, Jan 19, 2023 at 1:55 AM Prashant Malani <pmalani@chromium.org> wrote:
+> >
+> > On Thu, Jan 19, 2023 at 1:26 AM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > Hi Prashant,
+> > >
+> > > On Wed, Jan 18, 2023 at 10:26:21AM -0800, Prashant Malani wrote:
+> > > > Hi Heikki,
+> > > >
+> > > > Thanks for reviewing the patch.
+> > > >
+> > > > On Wed, Jan 18, 2023 at 1:39 AM Heikki Krogerus
+> > > > <heikki.krogerus@linux.intel.com> wrote:
+> > > > >
+> > > > > On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
+> > > > FWIW, I think we can make the typec_altmode_update_active() calls from
+> > > > our (cros-ec-typec) port driver too, but displayport.c is parsing the header
+> > > > anyway, so it seemed repetitive. Just wanted to clarify the intention here.
+> > >
+> > > The alt modes may have been entered even if there are no drivers for
+> > > them, if for example the PD controller handles the mode entry. In
+> > > those cases the port driver needs to update the active state of the
+> > > partner alt mode.
+> >
+> > Ack. Thanks for explaining the rationale here.
+> >
+> > >
+> > > Since the port drivers have to handle that in some cases, for the sake
+> > > of consistency I thought that they might as well take care of it in
+> > > every case.
+> > >
+> > > On the other hand, it should be safe to do it in both the port driver
+> > > and the altmode driver.
+> > >
+> > > If you prefer that the altmode drivers always do this, I'm not against
+> > > it. But in that case could you patch tcpm.c while at it - in the same
+> > > series:
+> >
+> > Sure, I will send out a v2 with the below diff as Patch 2/2 (I will mark you as
+> > "Suggested-by" but as always LMK if you prefer another way to
+> > denote attribution).
+> >
+> > >
+> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > > index 904c7b4ce2f0c..0f5a9d4db105a 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > @@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+> > >                         }
+> > >                         break;
+> > >                 case CMD_ENTER_MODE:
+> > > -                       if (adev && pdev) {
+> > > -                               typec_altmode_update_active(pdev, true);
+> > > +                       if (adev && pdev)
+> > >                                 *adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
+> > > -                       }
+> > >                         return 0;
+> > >                 case CMD_EXIT_MODE:
+> > >                         if (adev && pdev) {
+> > > -                               typec_altmode_update_active(pdev, false);
+> > >                                 /* Back to USB Operation */
+> > >                                 *adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
+> > >                                 return 0;
+> > >
+> > > That's the only driver that will definitely always requires the
+> > > altmode drivers, so perhaps it would be good to drop the calls
+> > > from it at the same time.
+> 
+> On 2nd thought, would it be safe to drop the calls in tcpm.c ? Following
+> on from your PD controller example above, TCPM might be updating
+> the active state for an altmode which doesn't have an altmode driver
+> registered? Or does it only send out ENTER_MODE for alt modes
+> which have an altmode driver?
+> 
+> (Sorry if this is obvious to TCPM users, but I wanted to confirm before
+> proceeding with a v2).
 
+It's not be possible to enter a mode with tcpm.c unless there is
+a driver for the altmode currently. Something has to take care of the
+altmode, and if that something is not the altmode driver it would need
+to be the user space. Right now we don't have an interface for that.
+
+In any case, if there's no driver for the altmode, then the partner
+altmode "active" file should not be visible.
+
+thanks,
+
+-- 
+heikki
