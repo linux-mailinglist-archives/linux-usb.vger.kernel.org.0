@@ -2,107 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29259675F35
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 22:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8D7675F5C
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 22:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjATVAH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 16:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S229999AbjATVBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 16:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjATVAG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 16:00:06 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCBB8BA8F
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 13:00:04 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id 5so1082197plo.3
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 13:00:04 -0800 (PST)
+        with ESMTP id S230003AbjATVBk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 16:01:40 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E11D0D9F;
+        Fri, 20 Jan 2023 13:01:30 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-15eec491b40so7581786fac.12;
+        Fri, 20 Jan 2023 13:01:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oi0gtjhsP7zp5xSW3Z3RoqoJbUiEEOmd4JoTvK9TkE0=;
-        b=fg/1GeHrMIY8TGrldd/OZ4ISLqmrvplDrY+W9latQq+0WVyUBB+O194ZQd3Pgdap5J
-         P6TdL322sMvyymyQwP8qddbMEe1ZtmHrlAsvz8vO8NFPTYRDvlhfo8irRWvYrGKgF/UN
-         wUVmkk3yfKmCsADg/cisRcGkI2gAVDaslIdKw=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzxFb+aFw9dMe/wk/hf1HHuZk2skArzCTCkEveNnq0Y=;
+        b=RK02qnuhT9xrm8TAay/cPuUlLF277sLsDVBJNhe8xouAf5eVDshELJRJAmJVbcFZ74
+         r2VO0iURi3Nkxs1E/M1Si3sz33anY5FowsTfp73Za62QKe5sEs0Swx2HlsLldZ1OK1k1
+         mrB20tu+53zhzMzCk6rdFPME7+YAcdFFUNqK7KS0cmeFas7hcw89MlFMJ7s5FjzKEkqQ
+         VyhMXIDYfbZ1vD9QqVRqcUQTUn2ZiLVSj5LmSA8vJ75/N48teP+PaByFkqTITDxXXoDZ
+         xtUNeMNeIyF43zHi6MqTJsrZsp26aTirMGGMuH/nYtB9ZqFt4lesIO9B8gBPN2LlxD/g
+         ti6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oi0gtjhsP7zp5xSW3Z3RoqoJbUiEEOmd4JoTvK9TkE0=;
-        b=tNpyLxfL9Kg6cssyo/AwA6kBgxOkHRq2u5jR7Qiaz97U2CReNg4Mz53/AOcAqaM7A7
-         siXp0a1JHzZvUzcqcGPbElKi54EmSxfGsbworbBaBdbrcdcRNurSA5fo3VnaqMI99WFE
-         8uPdK1Fdpmodepv+IWDkkMe6pOcdspUAIiArGrDPz+lxtXZ7BdNQXHkMxLJ/8dpUMP88
-         CPsdrGNCJ8mnYPmCxzY1vaPcyHPqJ7kR2oBBPtlvHepKkfTFDAKVTsbQ3gSALeDjUpMj
-         0MWFfNcXDj6KJnW889iIkKC7lgQPWysK9vDrgZ1OqvR9+6dNGXYDpN+oRsHJ88VtIm5Q
-         QY2g==
-X-Gm-Message-State: AFqh2kqjWc1RXJ/EunuRmfA2FhCCHYJzq1K9cqFg9uvWTho1W3mE3wHs
-        uL0oGYynivVXI+GfaGPJBuEEPA==
-X-Google-Smtp-Source: AMrXdXsEiftQhUUKdZowWRfYE7CzV0G4etW5wYZ1PTNLMA0OOLMxzhhYiEHcknDcmuT6G9xFRzdPog==
-X-Received: by 2002:a17:902:720a:b0:193:25b6:71bc with SMTP id ba10-20020a170902720a00b0019325b671bcmr18561161plb.25.1674248404393;
-        Fri, 20 Jan 2023 13:00:04 -0800 (PST)
-Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id n11-20020a170902e54b00b0018c7a5e052asm27248336plf.225.2023.01.20.13.00.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 13:00:04 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, Prashant Malani <pmalani@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 2/2] usb: typec: tcpm: Remove altmode active state updates
-Date:   Fri, 20 Jan 2023 20:58:28 +0000
-Message-Id: <20230120205827.740900-2-pmalani@chromium.org>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-In-Reply-To: <20230120205827.740900-1-pmalani@chromium.org>
-References: <20230120205827.740900-1-pmalani@chromium.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tzxFb+aFw9dMe/wk/hf1HHuZk2skArzCTCkEveNnq0Y=;
+        b=U3r2Rg5KHKpUEXaKmddDrnkqN8uSKsCfz94SOH3eC5amC2BCzpjQssIUpw8G5PTMh+
+         twuizZRzNwhVAlB5FpxKcf4TLUt8irAz+KWLJ2G0hcZAt+lmawZjORdELcNBHk0pJZVj
+         I0Nb2X6UuaoaiNRZioQ+Ekc1X/9M4niS9kloxW0zmyQP9R0pdRCgekUVk1veKM7QLn91
+         WU+Iz6kdwVK8Hrps7E16vILaVTiAZoSUxiA7T8ZhF37wKp95QwAPsGsfFC9AztLw/ly7
+         /odVxUznOsrwUBxz8d2YofBAXdMOHDOliRH0EQo3KczpFWcFNn8HwYeKi6rQMTAWcsG9
+         bqSw==
+X-Gm-Message-State: AFqh2koGgjbJFGZMr6rs93L0rSnKgdKmWSGTB3GUFwGsMgjoN9cfhCbU
+        VexyZk6WN32fzNnGCbX3WG8=
+X-Google-Smtp-Source: AMrXdXtpzhoecJ2VPe8CZMMM7U8ejY9UZ1OenWXxmur5mXn46QWt/ey8t+PnpNj6z6Q3zTXAR+TPwg==
+X-Received: by 2002:a05:6870:7b8c:b0:158:3ed8:b8d with SMTP id jf12-20020a0568707b8c00b001583ed80b8dmr20054361oab.38.1674248488725;
+        Fri, 20 Jan 2023 13:01:28 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y34-20020a05687045a200b00143ae7d4ccesm8717369oao.45.2023.01.20.13.01.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 13:01:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7cfdc0fe-4911-74c8-a961-d5ea3f8b599c@roeck-us.net>
+Date:   Fri, 20 Jan 2023 13:01:26 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] usb: typec: altmodes/displayport: Update active
+ state
+Content-Language: en-US
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+References: <20230120205827.740900-1-pmalani@chromium.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230120205827.740900-1-pmalani@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since the "active" state for partner altmodes is now being taken care of
-by the altmode driver itself (specifically, DisplayPort altmode), we
-no longer need to do so from the port driver. So remove the calls to
-typec_altmode_update_active() from TCPM.
+On 1/20/23 12:58, Prashant Malani wrote:
+> Update the altmode "active" state when we receive Acks for Enter and
+> Exit Mode commands. Having the right state is necessary to change Pin
+> Assignments using the 'pin_assignment" sysfs file.
+> 
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Benson Leung <bleung@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Changes since v1:
-- Patch first introduced in v2.
-
- drivers/usb/typec/tcpm/tcpm.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 904c7b4ce2f0..0f5a9d4db105 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 			}
- 			break;
- 		case CMD_ENTER_MODE:
--			if (adev && pdev) {
--				typec_altmode_update_active(pdev, true);
-+			if (adev && pdev)
- 				*adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
--			}
- 			return 0;
- 		case CMD_EXIT_MODE:
- 			if (adev && pdev) {
--				typec_altmode_update_active(pdev, false);
- 				/* Back to USB Operation */
- 				*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
- 				return 0;
--- 
-2.39.0.246.g2a6d74b583-goog
+> ---
+> 
+> Changes since v1:
+> - Dropped the Fixes and Cc: stable tags; given the discussion in [1]
+>    I no longer think this constitutes a fix.
+> - Added Reviewed-by tag from Benson.
+> 
+> [1] https://lore.kernel.org/linux-usb/20230118031514.1278139-1-pmalani@chromium.org/
+> 
+>   drivers/usb/typec/altmodes/displayport.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 06fb4732f8cd..bc1c556944d6 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -277,9 +277,11 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+>   	case CMDT_RSP_ACK:
+>   		switch (cmd) {
+>   		case CMD_ENTER_MODE:
+> +			typec_altmode_update_active(alt, true);
+>   			dp->state = DP_STATE_UPDATE;
+>   			break;
+>   		case CMD_EXIT_MODE:
+> +			typec_altmode_update_active(alt, false);
+>   			dp->data.status = 0;
+>   			dp->data.conf = 0;
+>   			break;
 
