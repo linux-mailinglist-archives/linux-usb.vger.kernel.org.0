@@ -2,61 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC03675154
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 10:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FE0675226
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 11:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjATJh7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 04:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S229631AbjATKNx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 05:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjATJh4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 04:37:56 -0500
+        with ESMTP id S229570AbjATKNw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 05:13:52 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B7946D7E;
-        Fri, 20 Jan 2023 01:37:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB4C9F3AA
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 02:13:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674207475; x=1705743475;
+  t=1674209630; x=1705745630;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XVVkBMYnQRqLirM24LyyrxLMNLI4qCGB0Gu2kS3dLM4=;
-  b=M52d6Gc+IVRvBzNdygT9zvtCT2kvVBruTCvQq/Y7t3MK6F3HhQPurZMf
-   qabG+PqoukkCVgj3ehQlEg4V6FNZydEu8WgrWG+/SWmrn7j12hhqtdDY5
-   kV7QcB6LcmV265AAp1iYBOAJqMYGkzlO16GqdYjUNE4+OmMmupnctjKiu
-   h+zF/LEDlMMgWfUhLOgUN1up5AsB/Vz7VIdB1S/i8ZqC9rk9keXF22w7g
-   BwJKVSWcZcPzZpPvyaE280L4u99ZEhhMyesIhKd8OUyTLu9VI9W3q1g0V
-   rKUCA7fLqFrta+MMQxOBRpKmPALT2gyUVwnaksvvR6Njs45gjCnIJ1c+3
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=IT6x0RsIv+yVzaDlREB9ZNGbQCkFODj7pZqeMdqlBcQ=;
+  b=hKK7p/LIivGtUWdZvBNjQ+CDozuBhWUsu2imtBdBv8ThJGk+88XjPFip
+   FZev2cP6LEYEoPQIZRWsWn3S2J8NJZ/p6ZMWMW2ICXSKqle/cWUMHJI9e
+   5l1iAqu8oSBXmOAi6yYw7drDVgo4WPfrc9z8cqy7+UrHhrML5YfeqbT6Q
+   msWusVRQ5u1LOVNoQu+F3uOMYIy2YJfSzokc6ywnou1e6cnxLYcLmi38j
+   ejkSaklt/o3GZLx1hHSe9PYgRKpziTnmKtLJYAZKOHDST1qDgXnb2JFsa
+   LBuZm+jCU/IHyh7P8Gq9nrtWieQ7oxa9G2zW/X9m1/9jHKti1iMaedhxm
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="411775923"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="411780157"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="411775923"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:37:53 -0800
+   d="scan'208";a="411780157"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 02:13:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="803019701"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="638114038"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="803019701"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2023 01:37:50 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 20 Jan 2023 11:37:49 +0200
-Date:   Fri, 20 Jan 2023 11:37:49 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Wayne Chang <waynec@nvidia.com>
-Subject: Re: [PATCH V6 4/6] i2c: nvidia-gpu: Remove ccgx,firmware-build
- property
-Message-ID: <Y8pg7ZN1sbOBJbaf@kuha.fi.intel.com>
-References: <20230119121639.226729-1-jonathanh@nvidia.com>
- <20230119121639.226729-5-jonathanh@nvidia.com>
+   d="scan'208";a="638114038"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 02:13:48 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 89162368; Fri, 20 Jan 2023 12:14:23 +0200 (EET)
+Date:   Fri, 20 Jan 2023 12:14:23 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+Cc:     linux-usb@vger.kernel.org,
+        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
+Subject: Re: Possible problem with thunderbolt 4
+Message-ID: <Y8ppf5HHTOaDfGLq@black.fi.intel.com>
+References: <Y7UzCY6ujQ2qtoq5@black.fi.intel.com>
+ <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
+ <Y7wNnrlEWMOV4Cj/@black.fi.intel.com>
+ <0f862f75-9805-f5d0-ef89-0b77d0ae8778@gmx.at>
+ <Y72AbwKFd9snjZrJ@black.fi.intel.com>
+ <3ccb150b-dbd9-c9d0-0e8c-8c169f0d8faf@gmx.at>
+ <Y76TS54PJpmseZs3@black.fi.intel.com>
+ <8c2da730-ba9b-6ec7-d493-1a6a2ce54622@gmx.at>
+ <Y8kXFFrue7l7DKf3@black.fi.intel.com>
+ <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230119121639.226729-5-jonathanh@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -66,41 +72,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 12:16:37PM +0000, Jon Hunter wrote:
-> From: Wayne Chang <waynec@nvidia.com>
-> 
-> Now the Cypress CCG driver has been updated to support the
-> 'firmware-name' property to align with device-tree, remove the
-> 'ccgx,firmware-build' property as this is no longer needed.
-> 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
-> V6: no changes
-> V5: Added this patch from V3
-> 
->  drivers/i2c/busses/i2c-nvidia-gpu.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> index 6d81ea530a83..a8b99e7f6262 100644
-> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> @@ -259,8 +259,7 @@ static const struct pci_device_id gpu_i2c_ids[] = {
->  MODULE_DEVICE_TABLE(pci, gpu_i2c_ids);
->  
->  static const struct property_entry ccgx_props[] = {
-> -	/* Use FW built for NVIDIA (nv) only */
-> -	PROPERTY_ENTRY_U16("ccgx,firmware-build", ('n' << 8) | 'v'),
-> +	/* Use FW built for NVIDIA GPU only */
->  	PROPERTY_ENTRY_STRING("firmware-name", "nvidia,gpu"),
->  	{ }
->  };
+On Thu, Jan 19, 2023 at 03:37:52PM +0100, Christian Schaubschläger wrote:
+> Hi,
+> >> 8beb71759cc8fddd937cadf9ec482e524d4f0f1c is the first fixed commit
+> >> commit 8beb71759cc8fddd937cadf9ec482e524d4f0f1c
+> >> Author: Pierre Gondois <pierre.gondois@arm.com>
+> >> Date:   Wed May 18 11:08:58 2022 +0200
+> >>
+> >>     ACPI: bus: Set CPPC _OSC bits for all and when CPPC_LIB is supported
+> >>     
+> >>     [ Upstream commit 72f2ecb7ece7c1d89758d4929d98e95d95fe7199 ]
+> >>     
+> >>     The _OSC method allows the OS and firmware to communicate about
+> >>     supported features/capabitlities. It also allows the OS to take
+> >>     control of some features.
+> >>     
+> >>     In ACPI 6.4, s6.2.11.2 Platform-Wide OSPM Capabilities, the CPPC
+> >>     (resp. v2) bit should be set by the OS if it 'supports controlling
+> >>     processor performance via the interfaces described in the _CPC
+> >>     object'.
+> >>     
+> >>     The OS supports CPPC and parses the _CPC object only if
+> >>     CONFIG_ACPI_CPPC_LIB is set. Replace the x86 specific
+> >>     boot_cpu_has(X86_FEATURE_HWP) dynamic check with an arch
+> >>     generic CONFIG_ACPI_CPPC_LIB build-time check.
+> >>     
+> >>     Note:
+> >>     CONFIG_X86_INTEL_PSTATE selects CONFIG_ACPI_CPPC_LIB.
+> >>     
+> >>     Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> >>     Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> >>     Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>     Signed-off-by: Sasha Levin <sashal@kernel.org>
+> >>
+> >>  drivers/acpi/bus.c | 16 ++++++++--------
+> >>  1 file changed, 8 insertions(+), 8 deletions(-)
+> >>
+> >> I've no idea why this solves the issue on the Lenovo, and obviously it doesn't solve it on the HP, but maybe this rings a bell somewhere? (Note: in my woking kernel config (on the Lenovo) I have neither CONFIG_X86_INTEL_PSTATE nor CONFIG_ACPI_CPPC_LIB set...)
+> > Can you check if with this commit reverted does Thunderbolt use software
+> > or firmware connection manager? (You can see this in the logs when
+> > thunderbolt.dyndbg=+p is in the command line).
+> >
+> You're right! With this commit reverted it uses the software connection manager, with the commit applied it uses the firmware connection manager.
 
-This patch is fine, and it's in the right place, but you need to
-squash 5/6 into 3/6.
-
-thanks,
-
--- 
-heikki
+Hmm, so reverting this commit enables software connection manager and
+makes the Lenovo system work? Are you sure? that's completely opposite
+how the HP system behaves ;-)
