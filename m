@@ -2,109 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF3A67545A
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 13:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB8A67553A
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 14:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjATM1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 07:27:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S229770AbjATNGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 08:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjATM1V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 07:27:21 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F0A10248
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 04:27:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674217640; x=1705753640;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5VdKSyrLI22qvLxHYOjlAhoHrjNfPY3ulYWIXZo9AaQ=;
-  b=gPtNL06KNBsF8t3EX4Lu/oLzfUDY7C4Vyi4YzjpsO5UKGrCJXhwzmVWm
-   50N9JKnJl7TEJyzUaLY3coN1w7LJc28UcXXuVLa9u9UHhNjoD6VM0aShk
-   M7qGrCseiw1eUEcqitprRBBGRCQPtxgBTwKleOyE8IieB1Tlgu2DhZOrb
-   TVoXK/gbTYA1ZIsD2iaxTbA0yl1Ln2BLKQpl6ZMvImTfhK2qmbdtCAGSe
-   nv6i/fn0sBHLhSWBPaNbmlPIDnp1OkeeBy41+B6smgzckpC43fUpJAG/p
-   VKo+V6XIdgOt/2/fWwmVhrcZfdh8GhOY5R7YPuuvC4CkuQyqz7TbycC+2
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28559595"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 13:27:18 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 20 Jan 2023 13:27:18 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 20 Jan 2023 13:27:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674217638; x=1705753638;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5VdKSyrLI22qvLxHYOjlAhoHrjNfPY3ulYWIXZo9AaQ=;
-  b=h37srFfVoBDMh1mEPStXw9qgs/7tcd5pjLYKU6WwQHQxAZgYT6zxJKZO
-   yWU/ojYgxRM2OE+9muuGHs+4MgFkWr/ricdTVQrO7Le6TyFDA00Amznb9
-   iGkERfHFsfJTCr1hN+QvhGI27YfCpmNaSRsJcBHDljBeTazTboSVW+dDc
-   Ek/7iiaa+/tKV2EWg6s8UWAPbwHIsXzHzQrxHRnGJKxbzKjsk7rurghWG
-   jcX8UOXrBMD5fHBRuNQCtWES0baFiNxnWj76wsJfw1ZWUawJi6fx1LPPc
-   MMa+R+E/uZSZIIJvspmuWhM1GKvNDIsnh4bHRNUbAEdfb5ZoFL5w13//f
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28559594"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 20 Jan 2023 13:27:18 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S229626AbjATNGd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 08:06:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B5BCE06;
+        Fri, 20 Jan 2023 05:06:32 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 564C0280056;
-        Fri, 20 Jan 2023 13:27:18 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ramneek Mehresh <ramneek.mehresh@freescale.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 1/1] usb: host: ehci-fsl: Fix module alias
-Date:   Fri, 20 Jan 2023 13:27:14 +0100
-Message-Id: <20230120122714.3848784-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CADAD660230B;
+        Fri, 20 Jan 2023 13:06:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674219991;
+        bh=Q5x2AtmYaA0fgZ4jp//x0TyHgSicTqhcPO5/1kpTO4w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CmsJPrUv5BhTSOordLZ4nQ1PesnxSdh3BQ4Tu+d2hpQH1h+WV91YkA6dN6CN6eAgf
+         0rvZ9f1X+ipOJxujYxzItFTDlYCNpXgg0T6hZmeJvicxv6PpGtNcd9C9h6usKmc5Gq
+         5CBJfki6cEB7oME4uujjbuFfyB3hPI0RXkP99B+muAlS89oXR44/yKpPfgBBmiViqp
+         lwkYeV451Gxe9rMSgKxUz607+/Cp03e/CXrPVPH2/UwfuVU0Iwu6/6XsEuKjUDoFx/
+         0gb+Ly6vVbLvv1/Irxx5ZRSY7/MpGLi0+H28PxHT9HAVOgZJzs+5Tpn84yqvb4acVQ
+         PvB1JjTj93S5g==
+Message-ID: <4d277d1e-f06a-07ad-f2c3-f910880a40d7@collabora.com>
+Date:   Fri, 20 Jan 2023 14:06:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] usb: mtu3: fix the failure of qmu stop
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>
+References: <20230119033322.21426-1-chunfeng.yun@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230119033322.21426-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit ca07e1c1e4a6 ("drivers:usb:fsl:Make fsl ehci drv an independent
-driver module") changed DRV_NAME which was used for MODULE_ALIAS as well.
-Starting from this the module alias didn't match the platform device
-name created in fsl-mph-dr-of.c
-Change DRV_NAME to match the driver name for host mode in fsl-mph-dr-of.
-This is needed for module autoloading on ls1021a.
+Il 19/01/23 04:33, Chunfeng Yun ha scritto:
+> This happens when do stress test of uvc stream on/off which will
+> enable/disable endpoints. uvc has four tx requests, and may disable
+> endpoint between queue tx requests as following:
+>      enable ep --> start qmu
+>      queue tx request0
+>      queue tx request1
+>      queue tx request2 --> resume qmu
+>      disable ep --> stop qmu may fail [1]
+>      queue tx request3 --> will resume qmu, may cause qmu can't work
+>                            when enable ep next time [2]
+> 
+> [1]: when the tx fifo has some data to transmit, and
+>      try to stop qmu (stop ep) meanwhile resume qmu (queue tx request),
+>      it may cause stop qmu timeout, then can be fixed by flushing fifo
+>      when stop qmu.
+> [2]: it resumes qmu again, shall stop qmu again.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Reported-by: Min Guo <min.guo@mediatek.com>
 
-Fixes: ca07e1c1e4a6 ("drivers:usb:fsl:Make fsl ehci drv an independent driver module")
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- drivers/usb/host/ehci-fsl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-index 3d21946e8822a..92ec655fd09b6 100644
---- a/drivers/usb/host/ehci-fsl.c
-+++ b/drivers/usb/host/ehci-fsl.c
-@@ -29,7 +29,7 @@
- #include "ehci-fsl.h"
- 
- #define DRIVER_DESC "Freescale EHCI Host controller driver"
--#define DRV_NAME "ehci-fsl"
-+#define DRV_NAME "fsl-ehci"
- 
- static struct hc_driver __read_mostly fsl_ehci_hc_driver;
- 
--- 
-2.34.1
 
