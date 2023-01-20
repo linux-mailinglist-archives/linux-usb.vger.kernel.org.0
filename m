@@ -2,80 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B85675356
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 12:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0121467536B
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 12:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjATLUx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 06:20:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
+        id S229570AbjATL3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 06:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjATLUx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 06:20:53 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D64DCDE3
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 03:20:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
-        t=1674213644; bh=KHtQaHegBJkPK61zCaHRsr32rVEkOy4oVVYnqL4LRKk=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=e4nLpXmNvJi9VMzP2jegl3/lBmuy4ZXdy+XqpRuTqhG+7Rn7Vlad9JTRanh82vdkj
-         57oxZ0sYdMFTEjVAF/N43yKcZG9Y1+kYP50ktUi69K4c0xMnMBsHIJO5rt+kb/m+yE
-         2N0xqhg+fgcQ8hOfVl3Pi9SFXQALpLKfXB57K0+wqTkszNKNSbrs3M4bIYRzeI40lC
-         yPKZs+v7xM2Z+8G/eHBHnRsKa/D705+9UOZY8xUEzbZQzWjA2grtqNzQtgaN7vFr6R
-         shrj7EgvmhCWxjvqLpmTsHUKxkqQxikuqWkr2ndi/lAf6szm8IQsDwQj89RMSeYg5+
-         +JXV+v6YCQ4bw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.70] ([81.189.232.75]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M26vB-1pGtVN0ixF-002YX9; Fri, 20
- Jan 2023 12:20:44 +0100
-Message-ID: <6edd3033-b22b-a293-82e8-10594526ab44@gmx.at>
-Date:   Fri, 20 Jan 2023 12:19:18 +0100
+        with ESMTP id S229561AbjATL3p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 06:29:45 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711E7E1
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 03:29:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674214183; x=1705750183;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hEhMLxEXikuiIYkOQb8uElMrW6BjefBIAP1pVBWL1W0=;
+  b=mPOiD+NpjTe1XQ1u9TlhgtRrgWoQdOCZdzZPFGL9E7NGew4oQDb/r0ge
+   1kSifymf4DHF9MW1IKRijG2oTBFOiMJkikP6yJNfLY8r9Ueff6JtuRPcg
+   s3RfzovpWK5OjIMCaZRAEUO2NQiMBOIOvujJ15qZfoRFG9u7g+kSFQz/8
+   mqRevxiWwe4gxgOyK70MbMBSFkpCKdHts9USPYbYsBbS5149VRDvuvAs/
+   YWY3T5ZG7YSupj/1YF16GaWFiM0pg8/FjiGJJNh3IdLuCg9jNp1b+4o29
+   fLuLpzJUYFMV/WlMm42sEmYRkqHPRa9Ew9nfPCj4lhnq8q+O+Uis6mCF4
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
+   d="scan'208";a="28557946"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 12:29:41 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 20 Jan 2023 12:29:41 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 20 Jan 2023 12:29:41 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674214181; x=1705750181;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hEhMLxEXikuiIYkOQb8uElMrW6BjefBIAP1pVBWL1W0=;
+  b=c7enzixg2VJE5j878HvvruCRTMiTr0hLzILHbWLY4YKyQFf22/RQ0ScF
+   EFt7lr7IPUa1lV/VxRIAJdgHoDJ+W6OAM+pn0tqX48pykRc7HOcUcASB9
+   ynWDH4C6Phtd+TkPOmcdY+8Ev+SfLBRMNfQ4KfZl7IepoYsmnso1XWn+J
+   fPWwLc7qMVKhjkFimcZZZZfeg2A/LePopY1sWow2Q7xUg/oMWsKF6iYR8
+   Ocz/u4KQUF+57pA6bZQZXufunQ0sUju1TQJEjc4GFxobQ5qMVizYl3u+k
+   YE429ofquNrdi1lexzh29HPBjXZwvHdqs9Zc9dg6O6065Jg0J5kxeNpVn
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
+   d="scan'208";a="28557945"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 20 Jan 2023 12:29:41 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id BE0F1280056;
+        Fri, 20 Jan 2023 12:29:41 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Darren Stevens <darren@stevens-zone.net>
+Subject: fsl-mph-dr-of: module autoload regression for ehci-fsl
+Date:   Fri, 20 Jan 2023 12:29:42 +0100
+Message-ID: <2791418.Y6S9NjorxK@steina-w>
+Organization: TQ-Systems GmbH
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Possible problem with thunderbolt 4
-Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org,
-        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
-References: <Y7UzCY6ujQ2qtoq5@black.fi.intel.com>
- <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
- <Y7wNnrlEWMOV4Cj/@black.fi.intel.com>
- <0f862f75-9805-f5d0-ef89-0b77d0ae8778@gmx.at>
- <Y72AbwKFd9snjZrJ@black.fi.intel.com>
- <3ccb150b-dbd9-c9d0-0e8c-8c169f0d8faf@gmx.at>
- <Y76TS54PJpmseZs3@black.fi.intel.com>
- <8c2da730-ba9b-6ec7-d493-1a6a2ce54622@gmx.at>
- <Y8kXFFrue7l7DKf3@black.fi.intel.com>
- <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
- <Y8ppf5HHTOaDfGLq@black.fi.intel.com>
-From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-In-Reply-To: <Y8ppf5HHTOaDfGLq@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zN+gNilndbhpzX2pqk7EdciNaalbo6oeYfk0IqqkrzWHn1FVXv+
- fjRG1ctV1a/jylRac4CSUK0iLGV7LVfa/bwtvQ4crxxdGbdu/Ueir4OwCBkGkCtZcToqsPd
- R8MWZEWIcTzYYQzcpXMuImvdmsFYjm/45mrGfDHyXW1Jnv4aSTr6Du7PKQL0lPEsnGwmSXv
- wDNVGzXYJvM4i1GSR2G7Q==
-UI-OutboundReport: notjunk:1;M01:P0:gaK9K1N3kho=;zmU35TbC9TPKT5dbmbahHKnDHOo
- b2ElxVfK86fPsU03690CRmLlSMvI2ZgrSyMyvj1LQSuUmmrfXyOSQZYWU9N6kvnA5YztO2wa/
- dgCmqq/jc+7hPu0NyaDDjwlqIdRKqTLDhzLLqJlJ646igZVemLre/4kc+MHBldfsBjag46jtg
- cdiKpDThEIP0MHgmxeX2QpEdHLP4Ww7/ym0qA3G8NCVpMZGbOdTzgK5FYe6Ol4Yn9pIsOfqOo
- H3wtIQlx2ArGeovm12iAPE8g9MfObM9AureHwciLu7T5KQDHC7Jn0jJ4EGyj22NnHnJIoz2Np
- 2my4p1ZIZDO3sO3JHEtvgTSDVi01BZwDIsYNiyjHpfi9ON9YfOFNlhKolvAUsthZygd2vFxZa
- 6OJfBLSOLlIv/MWxSgyQU1oY+3o+jZXJ+iIIzMejBBgt77HaDAs4agl4d/Wd+5a9BHDUfKwq2
- kzdzpC2lOyG7KZGp56iofAfb/gFfOOox7Ss43J2qQFrlmLdbIO3n1W442Jp3BJMSHsYnzbkKY
- 3+HKRzTzFxV2UTbzpsvuB5WORT1eoAUyWlmnL5xSlTYb7gJa5taYAH3U/C2hDe1e2c5483Pz9
- SnGTHH5+dfnuPs3IcKJ6UXqnSoCm+xDoD2e94XiRfZxanydtCLAq4yVDclHixugEdbMvu68sc
- BJnZghHz3IPDP45FvDbXIjCknad/40FCg3MFgto0odjKydYAHSPT8BC0XlM3haAgz0f4AaJqt
- AzwuJNRJyno5JBVHFKrbpQowadWZPDyXJiKSo06WEWHS4Zz5qCpAAgFISJjBI/dPkZJHl4xjP
- PxiXlN+QD72ogKY42oqOcOx33uziPJDjK59JNcQOZgxYQswAk1ZfyHnbzHMHeAGuvzH5AxFTV
- pvqyztKuBejnAdxOlWZw7x128t2Ajy2l6HUHgxgbevezGeMetb1VINUjGVvV8fRtvRMJsFEHa
- zlKVE9uOpodshsfK0wMC4XfYU9w=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,38 +78,55 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
->> You're right! With this commit reverted it uses the software connection=
- manager, with the commit applied it uses the firmware connection manager.
-> Hmm, so reverting this commit enables software connection manager and
-> makes the Lenovo system work? Are you sure? that's completely opposite
-> how the HP system behaves ;-)
 
-No, with the software CM active it does _not_ work! The patch introduced i=
-n 5.18.11 somehow prevents the software CM to be used...
+I just noticed that the following commit introduced a regression 
+> bb160ee61c04f ("drivers/usb/host/ehci-fsl: Fix interrupt setup in host 
+mode.")
+in a way that the modalias of the created fsl-ehci platform device has 
+changed. As of 6.2.0-rc4-next-20230117 I have the following modaliases:
+$ cat /sys/bus/platform/devices/8600000.usb/modalias 
+of:NusbT(null)Cfsl-usb2-dr-v2.5Cfsl-usb2-dr
+$ cat /sys/bus/platform/devices/fsl-ehci.0/modalias 
+of:NusbT(null)Cfsl-usb2-dr-v2.5Cfsl-usb2-dr
 
-5.18.9, without the comit:
+8600000.usb is usb2 node from arch/arm/boot/dts/ls1021a.dtsi, it's modalias is 
+okay and to be expected. But the modalias from the seconds one is wrong, it 
+should be 'fsl-ehci' for host mode (see dr_mode_data in fsl-mph-dr-of.c).
 
-bash-5.0# uname -r
-5.18.9-superschaf-uefi-bisect
-bash-5.0# dmesg |grep manager
-[=C2=A0=C2=A0=C2=A0 2.028144] thunderbolt 0000:00:0d.2: using software con=
-nection manager
-[=C2=A0=C2=A0=C2=A0 2.220380] thunderbolt 0000:00:0d.3: using software con=
-nection manager
+I guess the actual reason is the now set of_node on the new platform device.
 
-and 5.18.11, including the commit:
+If I revert the following two patches (bb160ee61c04f alone would result in IRQ 
+parsing error)
+a1a2b7125e107 ("of/platform: Drop static setup of IRQ resource from DT core")
+bb160ee61c04f ("drivers/usb/host/ehci-fsl: Fix interrupt setup in host mode.")
 
-bash-5.0# uname -r
-5.18.11-superschaf-uefi-bisect
-bash-5.0# dmesg | grep manager
-[=C2=A0=C2=A0=C2=A0 1.827993] thunderbolt 0000:00:0d.2: using firmware con=
-nection manager
-[=C2=A0=C2=A0=C2=A0 2.113706] thunderbolt 0000:00:0d.3: using firmware con=
-nection manager
+I get the following modaliases
+$ cat /sys/bus/platform/devices/8600000.usb/modalias 
+of:NusbT(null)Cfsl-usb2-dr-v2.5Cfsl-usb2-dr
+$ cat /sys/bus/platform/devices/fsl-ehci.0/modalias 
+platform:fsl-ehci
 
-On the HP the software CM is used always (unless I run a kernel with CONFI=
-G_USB4=3Dn).
+This is what I would expect. Module autoloading still does not work, but this 
+is due to a wrong MODULE_ALIAS in ehci-fsl.c. The following change fixes this
+---8<---
+diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+index 3d21946e8822a..92ec655fd09b6 100644
+--- a/drivers/usb/host/ehci-fsl.c
++++ b/drivers/usb/host/ehci-fsl.c
+@@ -29,7 +29,7 @@
+ #include "ehci-fsl.h"
+ 
+ #define DRIVER_DESC "Freescale EHCI Host controller driver"
+-#define DRV_NAME "ehci-fsl"
++#define DRV_NAME "fsl-ehci"
+ 
+ static struct hc_driver __read_mostly fsl_ehci_hc_driver;
+---8<---
 
-Regards,
-Christian
+I'll send a patch for this.
+
+Best regards,
+Alexander
+
+
 
