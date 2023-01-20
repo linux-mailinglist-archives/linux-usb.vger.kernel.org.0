@@ -2,77 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADC7675622
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 14:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14DA6756DC
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 15:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjATNxl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 08:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S231220AbjATOTp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 09:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjATNxk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 08:53:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90C4BF8A9
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 05:53:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4246A61F5E
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 13:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF27C433EF;
-        Fri, 20 Jan 2023 13:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674222817;
-        bh=pgCw9qlbNyoh3KfBY+dkPadvtlgHDM8rStaMIBJg3Ro=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k5op9vM6kqNcD9JmSzReuzTG7yWPmr55yx9R8ySivKOdLLz1/WL8y5WiS8GKZiKq5
-         vpdKOTXuP0Y9uudSlcSNLK2ewiCe2LRLgHCFS2+4BpwqsZdvE9k0QAOyHw+PaWVmIv
-         5E1ufeLewkUWl/ehbaLx+GYPIL8e2Iu8DKIuQces=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@kernel.org>, Christoph Jung <jung@codemercs.com>
-Subject: [PATCH] USB: misc: iowarrior: fix up header size for USB_DEVICE_ID_CODEMERCS_IOW100
-Date:   Fri, 20 Jan 2023 14:53:30 +0100
-Message-Id: <20230120135330.3842518-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S231221AbjATOT3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 09:19:29 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA511CD208
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 06:18:59 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id hw16so14245730ejc.10
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 06:18:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5TS776QSf+XZfy673cDJNFU1tHVWrzQdFJV93jLAyIM=;
+        b=cHUrU1PwJJpAwkCQdhFOq01C/OPJQZwHUQUAmN3wnQjvIPONFfaX7gWZLVAmiKBt9u
+         yBlZsJTBXoESLzRKccHaWHjgHAj0hk/XfXpbIYN+1jKfyq6iHFqcceNr6UOOJDuuHX17
+         VVGmi1upFlOZtWYQw5rkNsSh5OmbLGWEKuiakXtcJAj1b719TWvwmZQSF1hQzBqZXRQW
+         NHmo1DyySEqScfRH6e4mox4RzdfYcJDdhEbdJEc3t56OSKgvivPnWVZpderSN031mk2P
+         KNu6tyJ9Gq4M5heul4YhP1LsA9oE2uVbPPHaf0tt93TYxcaDmDr26ZtB1z8bKHRC2wg5
+         U+jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5TS776QSf+XZfy673cDJNFU1tHVWrzQdFJV93jLAyIM=;
+        b=ltGcrxJAPPWu1wu++tOabt5ISV/efaJv2zLB38qiTOCJNAYMdZ4mheta2rFJw9kcV9
+         4ZPzJWa4qbjzrusEZ9ZUO4R+h3mfxhjaeHMx79ly9hwxG7K3MJ/SRO6Iw7RCyNk6AwJM
+         TlUXus01UlCmU7Qd5gdXH/0YuWZAIDir95H4oklW1Hlu87jJoo4UwYs34ixfxTdToC/5
+         dz+uj2BAk/KLjp+eJ+dqdbIc3owCeaQqX697c7vl5dDyeaisrjSF5Uk74soQHS/K5LP5
+         Eay+cl/vs06uU4ODhhN9NsP2ik6d2f0ey1xQMTPUBXd6X03yOtouqlNQJ3ay3proNIoe
+         CxIw==
+X-Gm-Message-State: AFqh2koAOKudK9gQb10M8KE2BK9Uf7wLpWRHqnzya7C8TTDugl2iCb9i
+        uENQ5mvWkVOmVj4RNGYAHBRn3WdnuXSpKCDUZg==
+X-Google-Smtp-Source: AMrXdXvTHitYZlxHMX5kUCvmSBPBz32ILTuWf0WFRX0q+TqHP6IyPDK82j1XcgZKIA1uUP47WSLVkwH75yDV5ppjpPE=
+X-Received: by 2002:a17:906:194f:b0:7c0:688a:6251 with SMTP id
+ b15-20020a170906194f00b007c0688a6251mr1723541eje.274.1674224260246; Fri, 20
+ Jan 2023 06:17:40 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=832; i=gregkh@linuxfoundation.org; h=from:subject; bh=pgCw9qlbNyoh3KfBY+dkPadvtlgHDM8rStaMIBJg3Ro=; b=owGbwMvMwCRo6H6F97bub03G02pJDMmn5tzw1PluJBAywVryvNicwjCb4yt+uM1M8WBQCRDwe9Gr Oc2jI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACbis51hfnXxhL2TNzeafa2b+ncPf/ CpRxwZMxnmBxpUOMzkyloeukRynWQKay3f3NbZAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6f02:c3a4:b0:46:50a5:c4c5 with HTTP; Fri, 20 Jan 2023
+ 06:17:39 -0800 (PST)
+Reply-To: illuminatiinitiationcenter7@gmail.com
+From:   Garry Lee <email.legezarichard@gmail.com>
+Date:   Fri, 20 Jan 2023 06:17:39 -0800
+Message-ID: <CAApAuVx6K=r=XnwcuFCYnMHPMT+hqO7HcW3AU0UkoCwugxbeKQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT,UNDISC_FREEM,UPPERCASE_75_100 autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB_DEVICE_ID_CODEMERCS_IOW100 header size was incorrect, it should
-be 12, not 13.
-
-Cc: stable <stable@kernel.org>
-Fixes: 17a82716587e ("USB: iowarrior: fix up report size handling for some devices")
-Reported-by: Christoph Jung <jung@codemercs.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/misc/iowarrior.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-index f9427a67789c..1e3df27bab58 100644
---- a/drivers/usb/misc/iowarrior.c
-+++ b/drivers/usb/misc/iowarrior.c
-@@ -814,7 +814,7 @@ static int iowarrior_probe(struct usb_interface *interface,
- 			break;
- 
- 		case USB_DEVICE_ID_CODEMERCS_IOW100:
--			dev->report_size = 13;
-+			dev->report_size = 12;
- 			break;
- 		}
- 	}
 -- 
-2.39.1
+DO YOU WANT TO BE RICH AND FAMOUS? JOIN THE GREAT ILLUMINATI ORDER OF
+RICHES, POWER/FAME  NOW AND ACHIEVE ALL YOUR DREAMS? IF YES EMAIL US :
+MAIL: illuminatiinitiationcenter7@gmail.com
 
+YOUR FULL NAME:
+PHONE NUMBER :
+COUNTRY :
+GENDER:
