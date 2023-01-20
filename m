@@ -2,92 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F6D6758EF
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 16:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5CB675A16
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 17:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjATPoM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 10:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S230348AbjATQgX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 11:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjATPoJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 10:44:09 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F242F6A334;
-        Fri, 20 Jan 2023 07:44:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674229448; x=1705765448;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6Qu9mgbn0uz4KQv860MeQD3YerquUjWp1+UWLUDD7Ng=;
-  b=U984D4Q3e7ck21HEAPhZ1bmUnnP5eDxIG6xd77HOO5N1KNkiCpfXkGdK
-   aeKf58fbjH1Q+KoFRRHahyqVgDk2viEBAW1I3d1WRwmLwPVYhGXnbSveR
-   gkZs/xEi6kNqEjThM5OCVK14NvJilhFgRrASehgqLP//uzCbn7TON+7ty
-   HxDIx0t9zqvSola27JcH0koJAiRZ11Ng6yO7bcW9fVUwa6r0IBYhoSrLP
-   FLhLIrTtvBEqxc78xCzSuCCwOZr7DYQEvWPCVWETGz8UVCFR9qUPnMil7
-   k7Fq0gQi07T9hF1DmjTI+heXeY2SahEOLhqlG0VN7UC6L2on5x8fwsR97
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="390114963"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="390114963"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 07:44:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="989427703"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="989427703"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Jan 2023 07:44:05 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 18DC1373; Fri, 20 Jan 2023 17:44:40 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 5/5] usb: fotg210: use devm_platform_get_and_ioremap_resource()
-Date:   Fri, 20 Jan 2023 17:44:37 +0200
-Message-Id: <20230120154437.22025-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
-References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S230085AbjATQgX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 11:36:23 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4C13A71BFD
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 08:35:55 -0800 (PST)
+Received: (qmail 38882 invoked by uid 1000); 20 Jan 2023 11:34:43 -0500
+Date:   Fri, 20 Jan 2023 11:34:43 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: host: ehci-fsl: Fix module alias
+Message-ID: <Y8rCo8ggvjy3ScdV@rowland.harvard.edu>
+References: <20230120122714.3848784-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120122714.3848784-1-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+On Fri, Jan 20, 2023 at 01:27:14PM +0100, Alexander Stein wrote:
+> Commit ca07e1c1e4a6 ("drivers:usb:fsl:Make fsl ehci drv an independent
+> driver module") changed DRV_NAME which was used for MODULE_ALIAS as well.
+> Starting from this the module alias didn't match the platform device
+> name created in fsl-mph-dr-of.c
+> Change DRV_NAME to match the driver name for host mode in fsl-mph-dr-of.
+> This is needed for module autoloading on ls1021a.
+> 
+> Fixes: ca07e1c1e4a6 ("drivers:usb:fsl:Make fsl ehci drv an independent driver module")
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/fotg210/fotg210-core.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
-index ce00d9407ce5..202d80adca2c 100644
---- a/drivers/usb/fotg210/fotg210-core.c
-+++ b/drivers/usb/fotg210/fotg210-core.c
-@@ -135,11 +135,7 @@ static int fotg210_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	fotg->dev = dev;
- 
--	fotg->res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!fotg->res)
--		return -ENODEV;
--
--	fotg->base = devm_ioremap_resource(dev, fotg->res);
-+	fotg->base = devm_platform_get_and_ioremap_resource(pdev, 0, &fotg->res);
- 	if (!fotg->base)
- 		return -ENOMEM;
- 
--- 
-2.39.0
+Does this need to go in a -stable kernel?
 
+>  drivers/usb/host/ehci-fsl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+> index 3d21946e8822a..92ec655fd09b6 100644
+> --- a/drivers/usb/host/ehci-fsl.c
+> +++ b/drivers/usb/host/ehci-fsl.c
+> @@ -29,7 +29,7 @@
+>  #include "ehci-fsl.h"
+>  
+>  #define DRIVER_DESC "Freescale EHCI Host controller driver"
+> -#define DRV_NAME "ehci-fsl"
+> +#define DRV_NAME "fsl-ehci"
+>  
+>  static struct hc_driver __read_mostly fsl_ehci_hc_driver;
+>  
+> -- 
+> 2.34.1
+> 
