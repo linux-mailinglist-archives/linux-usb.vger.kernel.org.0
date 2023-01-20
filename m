@@ -2,88 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46197675D35
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 19:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B697675DFF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 20:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjATS5T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 13:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S229877AbjATT01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 14:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjATS5R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 13:57:17 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498C6C41EE
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 10:57:16 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4b718cab0e4so85521147b3.9
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jan 2023 10:57:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mbJBQ/QNe3N4k5AQeZLZDsaOTwFekuD7h3aFXUEjErE=;
-        b=XY/aPGJF5s1t0ViUZ64imTUVbWIWEsrKzM7m6y9Prq/1GonmrRHDzvqHddP1SqAkNc
-         AGJcJBKY9i5xehpcWW59FnUwsSI3nra/1Osl9zUz2CaBK6hurxF8rQ8+V/0veM590lJz
-         OokbEClM1EX6igLVydpdmwpAItIWzrSTzQzyM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mbJBQ/QNe3N4k5AQeZLZDsaOTwFekuD7h3aFXUEjErE=;
-        b=WBNLMmZd67Sn278q1rhtakKCsdXavdQXKX4p605PG5AlWXmnVSe5XpYOy9/lzLS4al
-         l/n1ctBSzJwtjLFwzAyZQmR7TzEHRYp+ETVCrsz/hamedblOII3Rq8XhFx4wBqoWKCw/
-         uMCktMxAyJLozwbnXIRb0Yoq98KAafcJ4lM2JdK+8TgjBRnlvdncHz1iYhcN2C+ia7fi
-         Z0ypFrvS8TL3CqxQZKOkJdLTFCCGJ1QVdGxo0blZzWihIauASda8wAt2kSVwflgk/qXS
-         5hN4RGSfgyxkwDTcSvYPdhUr0aoyqabukQbI4Plr+aeoJM0ZTtd24k9kofvoiZ45QUFh
-         T+/Q==
-X-Gm-Message-State: AFqh2kqerFc8/phq28S8BTO0AgsBILT+AG3Z4dUfgiF4eu+NBq92xM8+
-        AP9DzAVSrMZXz3r+OX43htrr9z5NZk2SeD8D739t8w==
-X-Google-Smtp-Source: AMrXdXtbRwrhsETPSpzdFoX/sF7xdUw/sHjyyeAXaIonbA7r+3iCHQib6JsUcneLeqrwfhYhrGz8psuDJ10yZ2bfq0M=
-X-Received: by 2002:a0d:e8c9:0:b0:4e0:7220:22fd with SMTP id
- r192-20020a0de8c9000000b004e0722022fdmr2041281ywe.272.1674241035508; Fri, 20
- Jan 2023 10:57:15 -0800 (PST)
+        with ESMTP id S230105AbjATT0Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 14:26:24 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F3D88D3;
+        Fri, 20 Jan 2023 11:26:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=Hqia+NJ2QC41heYLi0dUCzudrgUsuC/RibFBeRL/VTE=; b=Nfquy
+        pxJ5APteHJ9Ee87rK2D8vicN6ZLnqLUEUWJ9RUN/jFnGWkrXh2ScdSzSQdS5ntDt6IOdLS02jpETE
+        ZXX+iQZOXbhWA+euupZrvN0yJB32vsOYUOdbyjvBAY7tsnX/YPgR1gFEJ5OWL8ywYffrR9Id4pt+w
+        XOAXOTzmlZRC4imNEq0k5UaLG+QfolJsIrxN24F7BIyxrN5deILBhAjcs4TIpvBgyTUN+l2CmZsRP
+        ds/rqKb3a4mB4PAK0HMmRcekUkmz1H0HkTsnt4QxrAJ1IOG5clAWS/THrKbJSnZT3FS634Dr6FIc6
+        n6DNvHpclHrXDY3pVZB0rGwviKnLQ==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1pIx1I-00013J-Oc;
+        Fri, 20 Jan 2023 19:25:48 +0000
+Date:   Fri, 20 Jan 2023 19:25:47 +0000
+From:   John Keeping <john@metanate.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] usb: gadget: Move kstrtox() out of lock
+Message-ID: <Y8rqu7osxWsdN/PA@donbot>
+References: <20230120182434.24245-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20230118031514.1278139-1-pmalani@chromium.org>
- <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com> <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
- <Y8kMsw/wT35KN7VK@kuha.fi.intel.com> <CACeCKaceu1KCPtpavBn23qyM29Eacxhm6L9SN78ZQxdzRCOk6Q@mail.gmail.com>
- <CACeCKaea_ZtzUZNAHMaDU9ff_BBs6sF_DqqMnkFcW_=_txVL4w@mail.gmail.com>
- <Y8pb+BTd7VJqwLzq@kuha.fi.intel.com> <Y8pdha65Co0DCihr@kuha.fi.intel.com>
-In-Reply-To: <Y8pdha65Co0DCihr@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Fri, 20 Jan 2023 10:57:04 -0800
-Message-ID: <CACeCKac6zNNm7_aFLoy3eDLjcrvcKCdKLrHZq38dVLMSzW9ZTA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120182434.24245-1-andriy.shevchenko@linux.intel.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 1:23 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Fri, Jan 20, 2023 at 11:16:43AM +0200, Heikki Krogerus wrote:
-> > It's not be possible to enter a mode with tcpm.c unless there is
-> > a driver for the altmode currently. Something has to take care of the
-> > altmode, and if that something is not the altmode driver it would need
-> > to be the user space. Right now we don't have an interface for that.
-> >
-> > In any case, if there's no driver for the altmode, then the partner
-> > altmode "active" file should not be visible.
->
-> I meant read-only :-).
+On Fri, Jan 20, 2023 at 08:24:34PM +0200, Andy Shevchenko wrote:
+> The kstrtox() calls operate on local (to the function) variables and do
+> not need to be serialized. We may call them out of the lock.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Got it. Thank you for explaining this to me :)
+Reviewed-by: John Keeping <john@metanate.com>
 
-I will send out a v2 soon.
-
-BR,
-
--Prashant
+> ---
+>  drivers/usb/gadget/configfs.c | 72 +++++++++++++++++------------------
+>  1 file changed, 36 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 78e7353e397b..63dc15b4f6d8 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -808,15 +808,15 @@ static ssize_t webusb_use_store(struct config_item *item, const char *page,
+>  	int ret;
+>  	bool use;
+>  
+> -	mutex_lock(&gi->lock);
+>  	ret = kstrtobool(page, &use);
+> -	if (!ret) {
+> -		gi->use_webusb = use;
+> -		ret = len;
+> -	}
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&gi->lock);
+> +	gi->use_webusb = use;
+>  	mutex_unlock(&gi->lock);
+>  
+> -	return ret;
+> +	return len;
+>  }
+>  
+>  static ssize_t webusb_bcdVersion_show(struct config_item *item, char *page)
+> @@ -832,10 +832,12 @@ static ssize_t webusb_bcdVersion_store(struct config_item *item,
+>  	u16 bcdVersion;
+>  	int ret;
+>  
+> -	mutex_lock(&gi->lock);
+>  	ret = kstrtou16(page, 0, &bcdVersion);
+>  	if (ret)
+> -		goto out;
+> +		return ret;
+> +
+> +	mutex_lock(&gi->lock);
+> +
+>  	ret = is_valid_bcd(bcdVersion);
+>  	if (ret)
+>  		goto out;
+> @@ -862,15 +864,15 @@ static ssize_t webusb_bVendorCode_store(struct config_item *item,
+>  	int ret;
+>  	u8 b_vendor_code;
+>  
+> -	mutex_lock(&gi->lock);
+>  	ret = kstrtou8(page, 0, &b_vendor_code);
+> -	if (!ret) {
+> -		gi->b_webusb_vendor_code = b_vendor_code;
+> -		ret = len;
+> -	}
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&gi->lock);
+> +	gi->b_webusb_vendor_code = b_vendor_code;
+>  	mutex_unlock(&gi->lock);
+>  
+> -	return ret;
+> +	return len;
+>  }
+>  
+>  static ssize_t webusb_landingPage_show(struct config_item *item, char *page)
+> @@ -956,15 +958,15 @@ static ssize_t os_desc_use_store(struct config_item *item, const char *page,
+>  	int ret;
+>  	bool use;
+>  
+> -	mutex_lock(&gi->lock);
+>  	ret = kstrtobool(page, &use);
+> -	if (!ret) {
+> -		gi->use_os_desc = use;
+> -		ret = len;
+> -	}
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&gi->lock);
+> +	gi->use_os_desc = use;
+>  	mutex_unlock(&gi->lock);
+>  
+> -	return ret;
+> +	return len;
+>  }
+>  
+>  static ssize_t os_desc_b_vendor_code_show(struct config_item *item, char *page)
+> @@ -980,15 +982,15 @@ static ssize_t os_desc_b_vendor_code_store(struct config_item *item,
+>  	int ret;
+>  	u8 b_vendor_code;
+>  
+> -	mutex_lock(&gi->lock);
+>  	ret = kstrtou8(page, 0, &b_vendor_code);
+> -	if (!ret) {
+> -		gi->b_vendor_code = b_vendor_code;
+> -		ret = len;
+> -	}
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&gi->lock);
+> +	gi->b_vendor_code = b_vendor_code;
+>  	mutex_unlock(&gi->lock);
+>  
+> -	return ret;
+> +	return len;
+>  }
+>  
+>  static ssize_t os_desc_qw_sign_show(struct config_item *item, char *page)
+> @@ -1113,15 +1115,15 @@ static ssize_t ext_prop_type_store(struct config_item *item,
+>  	u8 type;
+>  	int ret;
+>  
+> -	if (desc->opts_mutex)
+> -		mutex_lock(desc->opts_mutex);
+>  	ret = kstrtou8(page, 0, &type);
+>  	if (ret)
+> -		goto end;
+> -	if (type < USB_EXT_PROP_UNICODE || type > USB_EXT_PROP_UNICODE_MULTI) {
+> -		ret = -EINVAL;
+> -		goto end;
+> -	}
+> +		return ret;
+> +
+> +	if (type < USB_EXT_PROP_UNICODE || type > USB_EXT_PROP_UNICODE_MULTI)
+> +		return -EINVAL;
+> +
+> +	if (desc->opts_mutex)
+> +		mutex_lock(desc->opts_mutex);
+>  
+>  	if ((ext_prop->type == USB_EXT_PROP_BINARY ||
+>  	    ext_prop->type == USB_EXT_PROP_LE32 ||
+> @@ -1138,12 +1140,10 @@ static ssize_t ext_prop_type_store(struct config_item *item,
+>  		   type == USB_EXT_PROP_BE32))
+>  		ext_prop->data_len >>= 1;
+>  	ext_prop->type = type;
+> -	ret = len;
+>  
+> -end:
+>  	if (desc->opts_mutex)
+>  		mutex_unlock(desc->opts_mutex);
+> -	return ret;
+> +	return len;
+>  }
+>  
+>  static ssize_t ext_prop_data_show(struct config_item *item, char *page)
+> -- 
+> 2.39.0
+> 
