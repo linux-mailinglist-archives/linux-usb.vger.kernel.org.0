@@ -2,63 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B8D6750FE
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 10:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0610A675139
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jan 2023 10:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjATJ0r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 04:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S231167AbjATJeL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 04:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjATJ0p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 04:26:45 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0207C9085F;
-        Fri, 20 Jan 2023 01:26:18 -0800 (PST)
+        with ESMTP id S231137AbjATJeI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 04:34:08 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2806A6C56;
+        Fri, 20 Jan 2023 01:33:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674206778; x=1705742778;
+  t=1674207222; x=1705743222;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pp6YsFHbNJbOjAi4UCj2hbYp1XbmMKUOQriB/Adxhw0=;
-  b=b6pfOqgkZzV4oZlS8JczGMEcsinQrSlHbBCKNKEc3/tvd0ljl0cwmC/A
-   5N/x2ESNCC72tskhZ2FA+ItvxsJSIFSZyL2jVX19e3A19cbigcGpNEIG8
-   jIoPRC19uU+zIN6VW5RJ1Thm+6t455b9VVRG3vXZe65Zvwq1kwchAvA1H
-   +X9OI8tsjN5yTrP3s4JiPz6hqDNG0PLHmgYB2eGP3RHfB13FbKTLm5W7I
-   TD/WRmdUXQfdzQ0ONyqnpSAm3zJzijhhSm3UY4r5umtD4jHiXstx3Q13O
-   28gtxhzY4a5TcO1SPhecVIeRsIMvAMwvjSqHSjzjAP6KggW3inFozaw//
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305216221"
+  bh=7Bjm+trFUTtS/i82Eu7JZl1wzHSlKzvi9wvH7CXa8P0=;
+  b=Xb4/wAwcpSThNPbiBF1/fvoZmGGYSQ7lV4430e46+P4RNsZSd+bqOA6o
+   kJXCKCq9ojdVi9Q43DGj3VGL3jA8YBkUnDsWybK1sg/2nACRVIk1O1atn
+   Iz1rTpFFyFDuZg5FU1tcI6K5NHmEph+92oL8Py7BCMnhpPu8YNVD+TPKG
+   WNzn+IE2y56ILu5ojFN7c28fp2vQnavd4n+UcP16reaGf5j9FY7LgMj9W
+   M3LRWtMzSi9ol3t/BMj2iwc3aOg8/qPurfCjmkHBehqa08urebOPLuT/F
+   cleOUpn+vRfVjQ9skYqsEzY9G+Y4p7y/jRfkxSlBOi9l1StTo3NWsbv8Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="411775262"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="305216221"
+   d="scan'208";a="411775262"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:23:20 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:33:09 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="803016254"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="803018500"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="803016254"
+   d="scan'208";a="803018500"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2023 01:23:17 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 20 Jan 2023 11:23:17 +0200
-Date:   Fri, 20 Jan 2023 11:23:17 +0200
+  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2023 01:33:06 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 20 Jan 2023 11:33:05 +0200
+Date:   Fri, 20 Jan 2023 11:33:05 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
-Message-ID: <Y8pdha65Co0DCihr@kuha.fi.intel.com>
-References: <20230118031514.1278139-1-pmalani@chromium.org>
- <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
- <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
- <Y8kMsw/wT35KN7VK@kuha.fi.intel.com>
- <CACeCKaceu1KCPtpavBn23qyM29Eacxhm6L9SN78ZQxdzRCOk6Q@mail.gmail.com>
- <CACeCKaea_ZtzUZNAHMaDU9ff_BBs6sF_DqqMnkFcW_=_txVL4w@mail.gmail.com>
- <Y8pb+BTd7VJqwLzq@kuha.fi.intel.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Wayne Chang <waynec@nvidia.com>
+Subject: Re: [PATCH V6 3/6] usb: typec: ucsi_ccg: Add OF support
+Message-ID: <Y8pf0Vo+HzTZ7+H7@kuha.fi.intel.com>
+References: <20230119121639.226729-1-jonathanh@nvidia.com>
+ <20230119121639.226729-4-jonathanh@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8pb+BTd7VJqwLzq@kuha.fi.intel.com>
+In-Reply-To: <20230119121639.226729-4-jonathanh@nvidia.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,18 +65,98 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 11:16:43AM +0200, Heikki Krogerus wrote:
-> It's not be possible to enter a mode with tcpm.c unless there is
-> a driver for the altmode currently. Something has to take care of the
-> altmode, and if that something is not the altmode driver it would need
-> to be the user space. Right now we don't have an interface for that.
+On Thu, Jan 19, 2023 at 12:16:36PM +0000, Jon Hunter wrote:
+> From: Wayne Chang <waynec@nvidia.com>
 > 
-> In any case, if there's no driver for the altmode, then the partner
-> altmode "active" file should not be visible.
+> Add device-tree support for the Cypress CCG UCSI driver. The device-tree
+> binding for the Cypress CCG device uses the standard device-tree
+> 'firmware-name' string property to indicate the firmware build that is
+> used. For ACPI a 16-bit property named 'ccgx,firmware-build' is used and
+> if this is not found fall back to the 'firmware-name' property.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> Co-developed-by: Jon Hunter <jonathanh@nvidia.com>
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+> V5 -> V6: fixed compilation
+> V4 -> V5: add support for 'firmware-name'
+> V1 -> V4: nothing has changed
+> 
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 23 +++++++++++++++++++++--
+>  1 file changed, 21 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 46441f1477f2..661a3988b39d 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -643,7 +643,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
+>  {
+>  	unsigned long flags = IRQF_ONESHOT;
+>  
+> -	if (!has_acpi_companion(uc->dev))
+> +	if (!dev_fwnode(uc->dev))
+>  		flags |= IRQF_TRIGGER_HIGH;
+>  
+>  	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
+> @@ -1342,6 +1342,7 @@ static int ucsi_ccg_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+>  	struct ucsi_ccg *uc;
+> +	const char *fw_name;
+>  	int status;
+>  
+>  	uc = devm_kzalloc(dev, sizeof(*uc), GFP_KERNEL);
+> @@ -1359,7 +1360,18 @@ static int ucsi_ccg_probe(struct i2c_client *client)
+>  	/* Only fail FW flashing when FW build information is not provided */
+>  	status = device_property_read_u16(dev, "ccgx,firmware-build",
+>  					  &uc->fw_build);
 
-I meant read-only :-).
+You don't need this anymore. You already added the new property
+"firmware-name" to drivers/i2c/busses/i2c-nvidia-gpu.c.
 
-thanks,
+> -	if (status)
+> +	if (status) {
+> +		status = device_property_read_string(dev, "firmware-name",
+> +						     &fw_name);
+> +		if (!status) {
+> +			if (!strcmp(fw_name, "nvidia,jetson-agx-xavier"))
+> +				uc->fw_build = CCG_FW_BUILD_NVIDIA_TEGRA;
+> +			else if (!strcmp(fw_name, "nvidia,gpu"))
+> +				uc->fw_build = CCG_FW_BUILD_NVIDIA;
+> +		}
+
+So this will already work also with the build-in properties from
+i2c-nvidia-gpu.c.
+
+> +	}
+> +
+> +	if (!uc->fw_build)
+>  		dev_err(uc->dev, "failed to get FW build information\n");
+>  
+>  	/* reset ccg device and initialize ucsi */
+> @@ -1426,6 +1438,12 @@ static void ucsi_ccg_remove(struct i2c_client *client)
+>  	free_irq(uc->irq, uc);
+>  }
+>  
+> +static const struct of_device_id ucsi_ccg_of_match_table[] = {
+> +		{ .compatible = "cypress,cypd4226", },
+> +		{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
+> +
+>  static const struct i2c_device_id ucsi_ccg_device_id[] = {
+>  	{"ccgx-ucsi", 0},
+>  	{}
+> @@ -1480,6 +1498,7 @@ static struct i2c_driver ucsi_ccg_driver = {
+>  		.pm = &ucsi_ccg_pm,
+>  		.dev_groups = ucsi_ccg_groups,
+>  		.acpi_match_table = amd_i2c_ucsi_match,
+> +		.of_match_table = ucsi_ccg_of_match_table,
+>  	},
+>  	.probe_new = ucsi_ccg_probe,
+>  	.remove = ucsi_ccg_remove,
+> -- 
+> 2.25.1
 
 -- 
 heikki
