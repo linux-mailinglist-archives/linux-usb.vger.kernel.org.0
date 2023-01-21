@@ -2,143 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5098C6767DF
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jan 2023 18:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F1A67681E
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jan 2023 19:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjAUR6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Jan 2023 12:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S229744AbjAUSwc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Jan 2023 13:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjAUR6Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Jan 2023 12:58:16 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BD9265B8;
-        Sat, 21 Jan 2023 09:57:47 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id jl3so7955209plb.8;
-        Sat, 21 Jan 2023 09:57:47 -0800 (PST)
+        with ESMTP id S229636AbjAUSwb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Jan 2023 13:52:31 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0002C1DBA3
+        for <linux-usb@vger.kernel.org>; Sat, 21 Jan 2023 10:52:30 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h12so3484751wrv.10
+        for <linux-usb@vger.kernel.org>; Sat, 21 Jan 2023 10:52:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KGtMPXG+Aka08SYYYyo/KkQe1dgGt7Jtohr7QlueNXo=;
-        b=CDHKAHMPL7wIv23meaxe+3ZzUxHgMo5m6Tm4N/VqgoAGblTS+VmcmY6flogCoaD980
-         Z8pvO8Mbg1842kAFblDR2hLPxfoJaT1oUIB0GCNaJP4HD9RDviBwsUTsDW0YTui/cTV/
-         rLb6waQCHhShKnIkxASdlZoQ7ixPTW/EW1hGuUjg/ZPThzoHLTTa68cpolyDrUaCrUK9
-         4NxJ4IFDduAxiAYvLCoMPrHhEac+PsDLt7HVQId0Qu96dSUm5mY1iHtjW5+daiYkk++q
-         xiCYnORnV1BVuymOBx/jILTcrrZFKukg/Z9Cp/pvjFBl1niuu+bvDTwINYR77qqkQ1Sn
-         11zg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ngf6C8Ou5uJHgmljPhG4Mf0c9oFhFgcZFIr9zgd3T8c=;
+        b=bYaqz0tj/Khn6++kyaUpS1/DBgHHbdkXu/iYga3bJujcGvaNivFLj/wCCwYshgmKXh
+         SikdpW5/jueLQs/LlQNXMWq3DmUQLI8uqNmjo/9Brafxd1AIKLcPhOFfPJ1qsU2shB1Z
+         r9DIjgsuDBGX/vxZvfYqE3BlM3WSdXyl6XNSAk4cDv+8dBay1oDwim/fQyv7QktQ/V/p
+         tfLm0xLmlQyIvrmhq4CBWdntwVyIEBNFZI6E04rBQwO/4YPCdulPs4KgkvTFk/vnPgRn
+         3YfImXnEli83KmYTWx25u2DMqmXyX/ME+g8IU44tnNzoNdsIsGPSFnEsj7MXs4YTgNap
+         XmqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGtMPXG+Aka08SYYYyo/KkQe1dgGt7Jtohr7QlueNXo=;
-        b=P1gvtcTUCNah0CkcZ0J0I4s65n+ybvwoQeFMaR5tMNxUbyEr6Ckzoh4hRtPCQIg0Cu
-         HtIjLahjrjUa1pkCPFtl7XpWROT97wl/DK/UyddqA0UkZFgSdgRLeUCRHz8FzEQW5wg8
-         IWy/Lu33akMoH7TEGvKix9hRltdgRWi5sOf84gsOdHeJ734ZuTfjXJrykwsA5n+OjRom
-         EO6hDZ01FW2ztkfZ5M2gWHDuMLdd5p6fXkL8v7h2ZgUOtlCFLXC1pEwz7Dc9A/5qG9hS
-         cc2Bk7qswUSfOQPwLO4Awl4eVLZK+8u4yvTmDFGM+oIH2Jw4lJ1pCPMWOUXLZWF9YhAe
-         Vv0w==
-X-Gm-Message-State: AFqh2kqOHRmK8cpy4xJ5YtwZb2JkkPRmolFB8Pun0FvP07Dc7RdfQ6Ud
-        ZeknIaBsAEo4Hrb059mrDSc=
-X-Google-Smtp-Source: AMrXdXvI7b8pbgzCZcQDa0EQ94L2M5q99LsBpbLZlfEUjgkB1i5500YQOa7vzYwZfWYDNT4GCK91+Q==
-X-Received: by 2002:a05:6a20:1601:b0:b8:c659:9d51 with SMTP id l1-20020a056a20160100b000b8c6599d51mr23177312pzj.56.1674323866966;
-        Sat, 21 Jan 2023 09:57:46 -0800 (PST)
-Received: from localhost.localdomain ([45.112.3.15])
-        by smtp.gmail.com with ESMTPSA id r3-20020a632b03000000b00478e14e6e76sm24857374pgr.32.2023.01.21.09.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 09:57:46 -0800 (PST)
-From:   Anand Moon <linux.amoon@gmail.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ngf6C8Ou5uJHgmljPhG4Mf0c9oFhFgcZFIr9zgd3T8c=;
+        b=LVonbponC5QGky0FOI+C/m2Io0FRI4jeP9cI0CL3eZarlPQjHQgZJILkpux2z+BLqB
+         t6QRDIMq5NJ+c5ei0eZMKCWiY4RLNTTC739vhumU9h7WVacgKNC+8C8yWGIfIJ+UCeIm
+         5yMtn3WVuyQzTv/pR4pglpV2ExfbgGaq/xbVfEfreLtT7zHcdQbD56SV19mejNErcgkY
+         Z6bcK0Xm61ILhZmylvy2lyVVCiOsyEjXrUwFZp+uYu5OOYcL6g0LEc3AsDOjMRaGQhTR
+         aDtMjcn+8rmfOx16I9yWbCtDM6uPFhFxWOlVttTa++z9o+OiKsx41hwz0qDhEKIZCAdR
+         TvnQ==
+X-Gm-Message-State: AFqh2krifwrYB1NeR5VoRUYt1Y+YPjKaWGI9aQsCdMdu8BwQyny/xE5v
+        igCy36W4TJfdZAX7sFqqQ5zEGw==
+X-Google-Smtp-Source: AMrXdXv8n66dcnGj8QTsiWJKzX1M9YdavoiJFsFZ/FkXTfi2l2iPlyG1ie/uLmMptiuTN/VmbYyZcw==
+X-Received: by 2002:a5d:548d:0:b0:2aa:438a:2165 with SMTP id h13-20020a5d548d000000b002aa438a2165mr15730125wrv.24.1674327149444;
+        Sat, 21 Jan 2023 10:52:29 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id bw26-20020a0560001f9a00b00241cfe6e286sm245062wrb.98.2023.01.21.10.52.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Jan 2023 10:52:29 -0800 (PST)
+Message-ID: <df1c8545-01d0-3821-0c19-07a369e40472@linaro.org>
+Date:   Sat, 21 Jan 2023 19:52:27 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 6/9] dt-bindings: usb: Add Via lab VL817 hub
+Content-Language: en-US
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-amlogic@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 8/9] usb: misc: onboard_usb_hub: add VIA LAB VL817 hub support
-Date:   Sat, 21 Jan 2023 17:56:36 +0000
-Message-Id: <20230121175639.12818-9-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230121175639.12818-1-linux.amoon@gmail.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230121175639.12818-1-linux.amoon@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230121175639.12818-7-linux.amoon@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230121175639.12818-7-linux.amoon@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VIA LAB VL817 is a 4-port USB 3.1 hub and USB 2.0 root hub
-that has a reset pin to toggle and a 5.0V core supply exported
-though an integrated LDO is available for powering it.
+On 21/01/2023 18:56, Anand Moon wrote:
+> The VIA Lab VL817 is a USB 3.1 Gen 1 hub and USB 2.0 hub
+> controller that features 4 downstream ports and 1 otg, with
+> an internal 5V regulator and has external reset pin.
+> 
+> Add a device tree binding for its USB protocol part.
+> The internal LDO is not covered by this and can just be modelled
+> as a fixed regulator.
+> 
+> Add combo of USB 2.0 and USB 3.0 root hub using peer-hub.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> v3 - address review coments - Krzysztof
 
-Add the support for this hub, for controlling the reset pin and
-the core power supply.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Add USB device id's for USB 2.0 and USB 3.0 root hub.
-
-Acked-by: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-v3 - Add ack Matthias
-v2 - fix the compatible string and update the commit message
-   - update the USB device id for USB 3.0 and USB 2.0 root hub.
----
- drivers/usb/misc/onboard_usb_hub.c | 3 +++
- drivers/usb/misc/onboard_usb_hub.h | 6 ++++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index 9bf59792fb94..945d4e7125ea 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -335,6 +335,7 @@ static struct platform_driver onboard_hub_driver = {
- #define VENDOR_ID_MICROCHIP	0x0424
- #define VENDOR_ID_REALTEK	0x0bda
- #define VENDOR_ID_TI		0x0451
-+#define VENDOR_ID_VIA		0x2109
- 
- /*
-  * Returns the onboard_hub platform device that is associated with the USB
-@@ -417,6 +418,8 @@ static const struct usb_device_id onboard_hub_id_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
- 	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
- 	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
-+	{ USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817 3.1 */
-+	{ USB_DEVICE(VENDOR_ID_VIA, 0x2817) }, /* VIA VL817 2.0 */
- 	{}
- };
- MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
-diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index 163fc07abf25..0a943a154649 100644
---- a/drivers/usb/misc/onboard_usb_hub.h
-+++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -30,6 +30,10 @@ static const struct onboard_hub_pdata genesys_gl852g_data = {
- 	.reset_us = 50,
- };
- 
-+static const struct onboard_hub_pdata vialab_vl817_data = {
-+	.reset_us = 10,
-+};
-+
- static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
- 	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
-@@ -40,6 +44,8 @@ static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
- 	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
- 	{ .compatible = "usbbda,5414", .data = &realtek_rts5411_data, },
-+	{ .compatible = "usb2109,817", .data = &vialab_vl817_data, },
-+	{ .compatible = "usb2109,2817", .data = &vialab_vl817_data, },
- 	{}
- };
- 
--- 
-2.38.1
+Best regards,
+Krzysztof
 
