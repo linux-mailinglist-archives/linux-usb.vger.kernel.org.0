@@ -2,82 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6580C6761AC
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jan 2023 00:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F5B6761E0
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jan 2023 01:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjATXkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Jan 2023 18:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        id S229794AbjAUAGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Jan 2023 19:06:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjATXkV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 18:40:21 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B907ED69;
-        Fri, 20 Jan 2023 15:40:15 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id v5so8540440edc.3;
-        Fri, 20 Jan 2023 15:40:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YlFQs5uK1REKCJrhOvImfAktaMDFYnGI105SvemPmlY=;
-        b=RRiBdw8uKBYsQzBGG11bH8QpnGKO+OrOgFZgbwJ0LEsEIPHcP7NIdCOplfvqJq8Gcn
-         IDtizdX6lIF3alkc+hWGOqX8r13i2qRyNZp9JDHxXCaqxMbK9x5OKjof6i4tFgOSr3r5
-         tjuYBJAMeg/FMtfXejJCJ9r6vFrvi65I7Itw6TiKTUVIyLJegXEgLmgksKWfK+PqzEsi
-         H9P7nID/+0DuRX9/GhZ2wmEOfsmc0xKQsQrdu1EA/dnpRuFBVRaPndkx4OiPgtazlxEn
-         VdJXWiQveKeHn4g4HKUvrrTXj7UwfzR9tISQR/41dRU/sSQfgY1fuiSQQE0ogA67JIO/
-         uUUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YlFQs5uK1REKCJrhOvImfAktaMDFYnGI105SvemPmlY=;
-        b=BORCqbLvsxnYN9NJ+5cH+jyyR4sfGNUuorW+FIDsk0X4gjGHnkhZKXgUdL7QFw4qL0
-         PayXEwDFi9ErJ8Oa4hqEG6waXcP7Aa8BuMTKaiP/68BGRqjUuKHmq4jq7Bc2GnEs8ZvA
-         LkPinfVsxDEeogexzPxIPkRELgbIx1sywJNcQNl+pn9WeGm2Ps2d/PTxenwn2j0KVh0o
-         46VKqpOy6Ycljh7LXmI4so3FyTw4ehikAsmLx77KPRwDCBnBVUIgiMJPzsNYv+3cR3OW
-         /r4oxprsJx/wNGVR9OMl2uTAlrxM4R7N8UuEJOYxBfJTIH1rBkYghiWzH6z/sdijyQvZ
-         t9qw==
-X-Gm-Message-State: AFqh2kotMapyYq4Iawv5Wij9h+kiimWD6QMZVJh1SJK1EZJblGppTBi9
-        mCGz4aT4H7URrTnfhMU6FZwRZucMfrY=
-X-Google-Smtp-Source: AMrXdXuVuW4WzQPRX+Id1GCwSM7qs0K6dzLXuAUos1Todbd5RBeS68VoXDFF+todOBUIwUvJl8vzWQ==
-X-Received: by 2002:aa7:c44d:0:b0:46c:b919:997f with SMTP id n13-20020aa7c44d000000b0046cb919997fmr7738082edr.17.1674258014332;
-        Fri, 20 Jan 2023 15:40:14 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id ec49-20020a0564020d7100b0049e249c0e56sm7066080edb.56.2023.01.20.15.40.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 15:40:13 -0800 (PST)
-Message-ID: <be193659-e97f-23b9-b89c-d02205705db6@gmail.com>
-Date:   Sat, 21 Jan 2023 00:40:12 +0100
+        with ESMTP id S229622AbjAUAGo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Jan 2023 19:06:44 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDB772C2D;
+        Fri, 20 Jan 2023 16:06:43 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KNx32w023904;
+        Sat, 21 Jan 2023 00:06:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=URJJNvMzIFG5OS0ainlfqJaPOphmY2mAIG3YZvWWKXI=;
+ b=c1jvNBtbSJa5Hg1v+arYQqFXD5zUBq8mEZvlGZJFY8sFtOt3n4LJENLdVTk6oNaR7lAa
+ 076ej9x6jyi5r/zpbyDH4S7urYijScWdYcb6lJvMRqoPv94ltcixULcd53wCbP/turDS
+ koVhh975dyigRVV3gU5qplzw5CBi64YSHWdcpZr3iIshm/rhor8XUotPUKBcbasfyDQD
+ l7RvnGd3VRMNcK2SHJq5pfmlhYv2RTwAqBmDhaUFzA4ogSRihR3yaoiSbeUrXlqlhN8L
+ XqOeVRpoJFlD9oPO5XcSyfFBphdOpOuXUKVL+MwFXioCtWjrQFs4Im0SwJsiaj95mY+V Rw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7c28jut7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 21 Jan 2023 00:06:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30L06bgB002229
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 21 Jan 2023 00:06:37 GMT
+Received: from [10.110.55.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
+ 2023 16:06:36 -0800
+Message-ID: <045f9ac1-5d48-fad0-8e74-8d5144aa1431@quicinc.com>
+Date:   Fri, 20 Jan 2023 16:06:36 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to
- its own schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230118193056.673514-1-robh@kernel.org>
- <20230118193056.673514-2-robh@kernel.org>
- <4eca2695-cb73-eaad-4c8a-82dec923825e@gmail.com>
- <CAL_JsqKqiRbBJErkh2Hch+XZyLggGyjYo1rvKWPhxb99pA8mAA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/5] usb: gadget: Add remote wakeup capable flag
 Content-Language: en-US
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <CAL_JsqKqiRbBJErkh2Hch+XZyLggGyjYo1rvKWPhxb99pA8mAA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1673992507-7823-1-git-send-email-quic_eserrao@quicinc.com>
+ <1673992507-7823-2-git-send-email-quic_eserrao@quicinc.com>
+ <20230119014409.yiw6xlp5cwlmu25s@synopsys.com>
+ <f49c54d9-b9fe-e629-3f94-809cd79a2211@quicinc.com>
+ <20230120011513.ajwum224lfwwb6ws@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230120011513.ajwum224lfwwb6ws@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aWoYGC2SQq8OlrfFFU6saxsHB1Apbv4K
+X-Proofpoint-ORIG-GUID: aWoYGC2SQq8OlrfFFU6saxsHB1Apbv4K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_12,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301200232
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,38 +87,83 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 1/20/23 21:30, Rob Herring wrote:
-> On Wed, Jan 18, 2023 at 3:05 PM Johan Jonker <jbx6244@gmail.com> wrote:
+On 1/19/2023 5:15 PM, Thinh Nguyen wrote:
+> On Thu, Jan 19, 2023, Elson Serrao wrote:
 >>
->> Hi,
 >>
->> Some alignment at the examples and the unknown extcon property.
+>> On 1/18/2023 5:44 PM, Thinh Nguyen wrote:
+>>> On Tue, Jan 17, 2023, Elson Roy Serrao wrote:
+>>>> Add a flag to indicate whether the gadget is capable
+>>>> of sending remote wakeup to the host.
+>>>>
+>>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>>>> ---
+>>>>    drivers/usb/gadget/composite.c | 3 +++
+>>>>    include/linux/usb/gadget.h     | 2 ++
+>>>>    2 files changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+>>>> index 403563c..b83963a 100644
+>>>> --- a/drivers/usb/gadget/composite.c
+>>>> +++ b/drivers/usb/gadget/composite.c
+>>>> @@ -965,6 +965,9 @@ static int set_config(struct usb_composite_dev *cdev,
+>>>>    	else
+>>>>    		usb_gadget_clear_selfpowered(gadget);
+>>>> +	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes)
+>>>> +		gadget->rw_capable = 1;
+>>>
+>>> Some device may not support remote wakeup. gadget->rw_capable should be
+>>> set and reported by the UDC. May need a gadget ops to enable remote
+>>> wakeup here.
+>>>
+>>> Thanks,
+>>> Thinh
+>>>
+>> Not exactly clear on which parameter in UDC decides whether a device
+>> supports remote wakeup. Here I have this flag just to indicate whether the
+>> connected device is rw capable based on the bmAttributes populated in the
+>> config descriptor. If the UDC doesnt have a callback for remote wakeup we
+>> have that check when calling the gadget op in udc/core.c (have added a
+>> similar check in usb_func_wakeup() also ).
+> 
+> That flag describes the gadget's capability, not the device
+> configuration. However, it's being used as a configuration flag.
+> 
+> Thanks,
+> Thinh
+> 
+
+Thank you for the clarification. Please let me know if below approach 
+where we consider both gadget's capability and device configuration fine?
+
+if (gadget->ops->wakeup || gadget->ops->func_wakeup)
+    gadget->rw_capable = USB_CONFIG_ATT_WAKEUP & c->bmAttributes ? 1: 0;
+
+Thanks
+Elson
 >>
->> usb@fe800000: 'extcon' does not match any of the regexes
-> 
-> Does that go in the wrapper or dwc3 node?:
-> 
-> arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: usb@fe800000:
-> usb@fe800000: Unevaluated properties are not allowed ('extcon' was
-> unexpected)
->         From schema:
-> /home/rob/proj/linux-dt/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
-> 
-
-
-> That's the dwc3 node, but the majority are in the wrapper node, so I'm
-> going with the majority and leaving this one.
-
-In wrapper code for rk33899 in dwc3-of-simple.c I don't see no extcon activity I think.
-
-In core there's recently made some changes:
-https://github.com/torvalds/linux/blame/master/drivers/usb/dwc3/core.c#L1710
-
-usb: dwc3: Don't switch OTG -> peripheral if extcon is present 
-https://lore.kernel.org/all/20221017233510.53336-1-andriy.shevchenko@linux.intel.com/
-
-Binding status update for that is unknown for me.
-Do whatever suites you best.
-
-Johan
-> Rob
+>> int usb_gadget_wakeup(struct usb_gadget *gadget)
+>> {
+>> 	int ret = 0;
+>>
+>> 	if (!gadget->ops->wakeup) {
+>> 		ret = -EOPNOTSUPP;
+>> 		goto out;
+>>
+>> Thanks
+>> Elson
+>>
+>>>> +
+>>>>    	usb_gadget_vbus_draw(gadget, power);
+>>>>    	if (result >= 0 && cdev->delayed_status)
+>>>>    		result = USB_GADGET_DELAYED_STATUS;
+>>>> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+>>>> index dc3092c..15785f8 100644
+>>>> --- a/include/linux/usb/gadget.h
+>>>> +++ b/include/linux/usb/gadget.h
+>>>> @@ -385,6 +385,7 @@ struct usb_gadget_ops {
+>>>>     *	indicates that it supports LPM as per the LPM ECN & errata.
+>>>>     * @irq: the interrupt number for device controller.
+>>>>     * @id_number: a unique ID number for ensuring that gadget names are distinct
+>>>> + * @rw_capable: True if the gadget is capable of sending remote wakeup.
+>>>>     *
