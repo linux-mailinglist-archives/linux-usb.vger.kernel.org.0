@@ -2,112 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3C3677A05
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 12:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE0D677E21
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 15:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbjAWLUR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 06:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S231944AbjAWOdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 09:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjAWLUP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 06:20:15 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E40E061
-        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 03:20:13 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l8so8707022wms.3
-        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 03:20:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g3tBuJd9Y4+8y0v8GkFBdXamRmaTAdqpX1uQiUvGgms=;
-        b=Ez/L1ezlqPfh1JRYpJ1MKw21/5qS7cgMFueGUdoJnnOdJOUL1y1zMQvAYUEi2S2E0X
-         Dy7dreIHECU7XCd3GL6RwvSvc90EPg9VLKbgzgmrBmk7quo20QF3OXAskZYM2aOwPgQk
-         SDT3WcqpG/7Vbqq7a4WrkzfsG3ej8lCvGWVJktUMKvYf3NSsMlvjMfF17i/gkSHJcfha
-         k1Ms5mAzlMemzlZrWZvp0lP+fDDhHLarHz6JQFOfBMII1FIoaJ7grD91v+Tm3RWv2yC5
-         jRFDVrsj/xIPD8g7Uj5ve08Ljcn66LHZZakb76bHUlScXEDmXPPaM6wZvkggJCOmI1mW
-         DLeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g3tBuJd9Y4+8y0v8GkFBdXamRmaTAdqpX1uQiUvGgms=;
-        b=dai7dDDdH0kNUAxOSOcDQmK3PR0nX9lKSsSVUz6JCUWKWGgSMe2lakSc6aQ+je5yEJ
-         gNpE018FDQ6X0d7ZAj5lnL0VnU97KNdFVoXMhf+YcVx78mSvWgmb+D3e3YWkfS8dxXM/
-         /6zZFc2RrEG9KsWf236qADs1ePxbqXyFOvnrtjhIVGDlB++sBN2TvM35QPYz3acBd+0n
-         vGYEHjFO0aRilFCr4VE626tStRIi1aJ04xdGyUINvyRwkU3QXH4dGjxnbgSXsg6L0l+B
-         /1BtrXK2fhTtetT5cfSkVz869pbiJvWDSJWmpiDVXraSFv8LgFXhQMRo8iYe29PzWhmj
-         wITA==
-X-Gm-Message-State: AFqh2krMHT470VEuwrhb4m7g98QFiqYcju6qH6aD+qIZXqIocdNHcRCM
-        SiUQNfVvoG+pKrJM6NNOYKjnZQ==
-X-Google-Smtp-Source: AMrXdXsknrPbUg8k76V2RV4kaiUIVMIOoWVJJS0evjlVk0aCXWrNXRqkuChPeEG89Jpef04kGBVrVw==
-X-Received: by 2002:a05:600c:2d05:b0:3d0:85b5:33d3 with SMTP id x5-20020a05600c2d0500b003d085b533d3mr22561277wmf.16.1674472813464;
-        Mon, 23 Jan 2023 03:20:13 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id u8-20020a05600c19c800b003db0647645fsm11042492wmq.48.2023.01.23.03.20.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 03:20:13 -0800 (PST)
-Message-ID: <9fdeecf9-8723-5305-ae68-f525c7115456@linaro.org>
-Date:   Mon, 23 Jan 2023 11:20:12 +0000
-MIME-Version: 1.0
+        with ESMTP id S230520AbjAWOdW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 09:33:22 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2070.outbound.protection.outlook.com [40.107.244.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831B37693;
+        Mon, 23 Jan 2023 06:33:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jIjkgrmPamvpo43GfeDEzuY7t9ZjBqn0rAnp1gdJC5TpFBaVIkXYpBEBDBaqz2EfHqfUiVfyYBjy+BRb4A+Acc9BKBdx4UagZnsYJlnuoLRirms+3FmYIXo52aSNg2SaDvGn74mw4DbBpPVeINxDo+GbpcNNsUNvvFsDAJ/JBrL04lmcA00o9G2WeihOOGpH0XMu+wJAnh9ZaKxPO9nIJscR6YeSCmje8kr2yahkWNUbgtoT5/IEAnaphe6T0bscASAFoqFa6NcPtioycwA/ogYFoE6PU6CZhx4MUtaBkKLxjUnvOIptUoiNYQREh8x2BT3KKz+GW5E+ZBK0Ys6lUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0Pmps9L24qiJZfT66gM1Ahyu/GldNI7W7y1ogirN7Vo=;
+ b=OZZq0GOqaq1bV8sH+Iheh79gRkK4QEQlLDN/3ycIMGSC4Sa5e+ZChiRUI+WggrgPCWbZVV0QB5vUdy7VLtoEPRNF3ZTp5Lc5gTm1vkZX50uyE7osZxl2tnkUwVGLvI5ItwoSIXNzpA2inF+ZYQC/+TSzOK7R17EbTcUmSxE/WBdSegWY6vFX8LXyRf8mVZHesPY9vFwFB1satXvG5uM0q5cTZylSFLoA6C4d9NZyAteSqB6NCmwzeeydDo7qfjdcfaXgC14KCwVp4/GH+q6s3N/KvmNs7jxVIRhEtCTVEq3R6CNBJo6g7dLjhqSTfCCZtRjErhrbIiCEnDXFtZf2aQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0Pmps9L24qiJZfT66gM1Ahyu/GldNI7W7y1ogirN7Vo=;
+ b=i0yIPIff8tf+/0jCAdpukgtVK9QuPOlP5c3zvfe3mkKZZksiVog7d451f2+LjiHQ4TkiUmb/dm48ezj16vmTqRdmXTfZ7Xujf49LSk62LZ63fiyT+cgSGDaP1a83QKNJ1oG5x4CqKP38Lgy4N7cDemrfoIki9k8DKx3UHSG7UO6t00q6d8lV0rYm4QyVtGUPzUv36Y4IRGWdts35CxBoTcQAM6cD/P5iZ/g3JB6q8V6D6+VVVlPj5GgRr8JddXHyVn21HTklOMEwuiC1WvmCmLFCxw4TW/iprtCZOYlaRcqYyxArccUbddwN+t+nA9h+zGv6OJvr7clvcVOvUaOSxg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM6PR12MB4370.namprd12.prod.outlook.com (2603:10b6:5:2aa::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.33; Mon, 23 Jan 2023 14:33:19 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f1be:5d:f297:e2f]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f1be:5d:f297:e2f%8]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
+ 14:33:19 +0000
+Message-ID: <e39c0b6b-6265-b419-a7aa-18f930bb3a9f@nvidia.com>
+Date:   Mon, 23 Jan 2023 14:28:51 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] usb: dwc3: qcom: enable vbus override when in OTG dr-mode
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V6 1/6] dt-bindings: usb: Add Cypress cypd4226 Type-C
+ controller
 Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Wayne Chang <waynec@nvidia.com>
+References: <20230119121639.226729-1-jonathanh@nvidia.com>
+ <20230119121639.226729-2-jonathanh@nvidia.com>
+ <2789cf94-60b4-7e35-50f8-e21b564a1dfb@linaro.org>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <2789cf94-60b4-7e35-50f8-e21b564a1dfb@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO4P302CA0027.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c1::17) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM6PR12MB4370:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b778871-4450-4d1d-b20a-08dafd4ec5a7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hecf5Lak79XL+f8+ph0Ki0HGPB3QTGJKrb6zT1PhP+lUzlbg+1Oxxpc6nmqIslSRVTjqRl86pZkDu1aXY95wybE2AnJ8BiU+Cwq2rUEjwZOIPolaqi7D7XaTpWQ40zxlFhX9hwI+pv2OBQcfrMOxOt1MwheazNhsA7eaUF/+M1B6l5WsmHsJQ1BMwZmHmBRyhI83ZmpTjKuNe5tH+StSiBqwCLLwA8DBk2RzDOjj4IEpZp3SJQrV/R53pADIVr7bMxyJWnmJpEvvrdjG+Nv/tFTFp+t5fLlrUcKJid65QDiMRmz8VFW04kAhNOYVcEX9kXSA0s5aHhD/2KaucnRL1zb46vb5UsqD3laSYfY3kpq/S6+zZEZR9oaJmYp/EWStkFnu5cklCqHQktf8SQGkpdrt8o+kPJ8dk2QmvxshuozBl3fuJdAjkn2HIs9UhHcbvhYBEtvXGPP+VvIuANGHS5RJaO/+wpS968YtFhDiC+5aBrpyCLWBR1AqJtizq4Y6ZDYqqTi0EKuN3G2JuJYvINKbPHTHngQc9SjYfduOpNIQKQ0pIOZIlOFAel65jFHYsP/X9WSzDJLEs5uu3rAQ3j70t/0LIBu0+tTxPwxbPRJyYve7u05Zir1spz3XYsKdB5nzo6vSp4hLeufUNs2O5p1y1uLkoQVYcsLHk4l//e0w151QGt7CAXk4fftd3ZeeGGogOAfY3ipAD6uBuoiQnVQ59xsackJToZKK0gYKa8U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199015)(83380400001)(38100700002)(31696002)(41300700001)(86362001)(2906002)(8936002)(5660300002)(4326008)(8676002)(55236004)(26005)(53546011)(186003)(6512007)(6506007)(6666004)(107886003)(66476007)(316002)(66946007)(2616005)(66556008)(478600001)(110136005)(966005)(6486002)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3VEVDlxNm5VV3ZkTWRLTXpRQmNXamdCQkt2N2Z0ZmF2SVpTaXJrN2hPL0lH?=
+ =?utf-8?B?L2pDY2l0MVJBUkVsNFRCMzhIQmF0MkVwbDcrc3BDZUYvQVJlSlExK3BXd08x?=
+ =?utf-8?B?VUhGNmZCMTZvL3hhK0ZRcU84dTlxSExKeE1MaHFkMkpzNXAyZnlXS2d4RU1X?=
+ =?utf-8?B?VHpFV3VQNVZqOVI1SXBWbVlPS3FRNU5QOFdXVHdnSVlvNG02bVBnV2VYbVMy?=
+ =?utf-8?B?T3NRLyt5L2pldExQSWlUb3UzQ3NDVWl5N0FpOHcrUlQ4cHdySUw5NEJkbnFX?=
+ =?utf-8?B?QUtCSlo2Szg3eWNnZkplejlvbHlWUGNMaFR1QXBaU2lMNlFCdWNwaXVpdUJz?=
+ =?utf-8?B?UTlIMFZ6anZKOUV1VkVEcmtuQ3hybVJmSUhDUFNkc29jUkExTk9iYkhBYmNu?=
+ =?utf-8?B?aWdIN3dFK1hmWTV4cVI1bGFhTG1VZkdRNy9RelZnaVk3dkdUZkQ5dDY5SVZ4?=
+ =?utf-8?B?ZTEvcDVyUi95NEVScGIxR05JcTkvSTRnSnJSV0Z1NTBFTS9CdFNUUXlKR3gx?=
+ =?utf-8?B?dndlWFlOZ0xyVlhUdUN4eVVFQlk5NkRUb2JnSStoSFR0bDBQekFYbDhPSTJQ?=
+ =?utf-8?B?a1JoRTBkbU1NcXg0Z1pKKzFDdHkrZlA0SUlFenFoeWhQREtLYmhEVlJNRVBq?=
+ =?utf-8?B?b1NaYjExd0hqNGdLNnh3TEVwRVJqU3hYS213eFNPZUlDWEFLaGVSNVQ1TlZn?=
+ =?utf-8?B?STNSOUVhVDBPaDEwOUU2WlZKTHpPRFFHZUx6NTFxUHVXUWhVMG1mS0NRaUNT?=
+ =?utf-8?B?dndDMWkyNUYza29iaGlKNmhMY2dVWTliaXNHUWlmWHpKVFh5czlGQ0RhcXd0?=
+ =?utf-8?B?QjdYbHRxbStjemwvT3pNbHgvZ0xScU5rT2lXTzFJYThuNS9PakNoRGpscE0w?=
+ =?utf-8?B?VU9rdXFFSFl1OTdlcXNNUU1IZUR1TmQ3TWJadzVPWmdJVytqLzdWUkNpOTNZ?=
+ =?utf-8?B?dHhHc0NHb2dRa3FyR0tDK3QzajR6ajB4QXk2bTNPaW14dEVOZTVjY3V5bnNu?=
+ =?utf-8?B?TnEvMFpNZnR5TGdGQzN0d0FEZERQNGVOT2hRbGFaQ2ZXK3BIUkw1dENHb1lV?=
+ =?utf-8?B?bmVWVmxLU2RrVTJxdDRLZ1NKMm03NlM0c0FrNVd1WmNrQUMrTHdQelc5QnY0?=
+ =?utf-8?B?ZStHaW1QSGI0VDh0WCtNVnJLTUgvZFpXdW44dExEZGxLR0lsMFRpamtVNUUr?=
+ =?utf-8?B?bzlvdGwvd1ppbG9BaVF6ZzdpN2pzNXg2VEs4L2hWWTVwOTZUKzJEM2VXODI2?=
+ =?utf-8?B?dUdSb2IycjlKR0c2MmMvOTROT3BmMGM3QTZrMm43ekdQbkI5UTI3bFN3eExo?=
+ =?utf-8?B?TFVyc2JhbFVFbDlObmJlZ0lrcEVSRHVyVEJOUk9xaVRuTWMvb3ROV1NtRGNX?=
+ =?utf-8?B?SmRUMXYxNjZ0Wjg0cmQwSUhUdVBpYVBGaG1YKzJkSDdPRGlkRHNqYUx5cFUv?=
+ =?utf-8?B?TCtSd3JBK3VoUHhvUUhYRnVzUkZEVnFTellSSWlSU21Vd29nUlhzMkk3MkZJ?=
+ =?utf-8?B?NVFzUCthbnl4dElwajI5eGZBaFpQWi9UT1dkUTRKdElwQks2WDhZbjlOMll3?=
+ =?utf-8?B?NVBzaHpERjA2RUZvTytWcGY0dzQwZmFaSlN0cmYyR0d5bm9zUkU2YS8vWHBN?=
+ =?utf-8?B?UGhSTVF2bDVwRE1YdExtVVBsMW1SenZTUWcydVYzaWNjRFMvY25TTG5RZTNy?=
+ =?utf-8?B?T1dtai9UK3VZekkwUGlHL1lXbEl6VldzcGt0dFhMTDl2cXlmN0ZRL1d5eS9o?=
+ =?utf-8?B?UTF3d3V6SGE0QTNYWkVkNERKRGgxclJDcmVtMFZXSXJuZzhLYmdjbysyVTRn?=
+ =?utf-8?B?aTdiOU9QTWNIM1QwaTlTUXU3WGZyalFSNHpKYTdicmFNWnhpdkxOems3ZjUw?=
+ =?utf-8?B?eC9QaWJsZzBRSXYwRVhpVWJ0T2lmaDN5UFo4OXM1QkZmRmdFTkMzRStVSFNK?=
+ =?utf-8?B?UGd6dGtxU1F0MGNFTTlTa3lCTWQwRS9sTHBVRXNGbDVVWElldXBYMHRLNHdj?=
+ =?utf-8?B?L3g2emZ4d1c1OTJTeWE3YjVZVGRYSGprL2I5Rk00cU5BYzA1Nkg2cFg1dncr?=
+ =?utf-8?B?TTFsKzFrS01tenJLTWZNWVNwU0FjWW1GdytyM0s1eHh5ek04ZHFHdTFFc2ZZ?=
+ =?utf-8?B?Tk05QTBkQ3dFRkIwdm5SeG5NSU9CTXpibWZ2ZTY3endlbGNpYWVMamlVcWcx?=
+ =?utf-8?B?REE9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b778871-4450-4d1d-b20a-08dafd4ec5a7
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 14:33:19.5942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Pz2RGr5H+4MbT8JQUgZtN1rkg4i+mYty/uCnYf71XftBCV0h/sfjCSUyvCt8AqVZ+pzjr6iUqCUnSFVy5zInjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4370
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23/01/2023 09:01, Neil Armstrong wrote:
-> With vbus override enabled when in OTG dr_mode, Host<->Peripheral
-> switch now works on SM8550, otherwise the DWC3 seems to be stuck
-> in Host mode only.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   drivers/usb/dwc3/dwc3-qcom.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index b0a0351d2d8b..959fc925ca7c 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->   	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
->   
->   	/* enable vbus override for device mode */
-> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
-> +	if (qcom->mode != USB_DR_MODE_HOST)
->   		dwc3_qcom_vbus_override_enable(qcom, true);
->   
->   	/* register extcon to override sw_vbus on Vbus change later */
-> 
-> ---
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-> change-id: 20230123-topic-sm8550-upstream-dwc3-qcom-otg-81795ea148db
-> 
-> Best regards,
 
-This makes logical sense => only over-ride VBUS when !Host
+On 20/01/2023 08:32, Krzysztof Kozlowski wrote:
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+...
+
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/gpio/tegra194-gpio.h>
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    i2c {
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +      #interrupt-cells = <2>;
+> 
+> Drop, does not look like relevant or used here.
+
+
+Without the above I get ...
+
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dts:25.13-26: Warning (reg_format): /example-0/i2c/typec-controller@8:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dts:22.13-43.11: Warning (i2c_bus_bridge): /example-0/i2c: incorrect #address-cells for I2C bus
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dts:22.13-43.11: Warning (i2c_bus_bridge): /example-0/i2c: incorrect #size-cells for I2C bus
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'i2c_bus_bridge'
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dts:23.30-42.13: Warning (avoid_default_addr_size): /example-0/i2c/typec-controller@8: Relying on default #address-cells value
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dts:23.30-42.13: Warning (avoid_default_addr_size): /example-0/i2c/typec-controller@8: Relying on default #size-cells value
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
+Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb: typec-controller@8: interrupts: [[10], [8]] is too long
+
+> 
+>> +
+>> +      ucsi-ccg@8 {
+> 
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+Thanks. I don't see anything there is would fit here, so would 'typec-controller' for the node name be OK?
+
+Cheers
+Jon
+
+-- 
+nvpublic
