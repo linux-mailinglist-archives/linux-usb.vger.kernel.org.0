@@ -2,86 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0938D67777A
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 10:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A18677818
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 11:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjAWJfx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 04:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S230129AbjAWKA4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 05:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjAWJfx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 04:35:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B72915C8F;
-        Mon, 23 Jan 2023 01:35:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231495AbjAWKAy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 05:00:54 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CDF2278E
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 02:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674468026; x=1706004026;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=F1BT7g8C3uFzWcQWX6t39xTQz1NYTcofkyZ2CDSdzUE=;
+  b=n+vJO47rr3YNx09VgFxqmG2TyT7A4hMVEJloHIGgmtBSGcqxIKnGZkav
+   3G5pJzvFb/v6JAP7O8d588L04Y/0Dp2ldij6ZYI1lJPIWV+fehn39Duhh
+   saSP7KA9n+Ec/0s/v5ipXvQ3r8iTQ9oF7kD+IUvap2qCmD8wxp/YN27qn
+   0Q+mW0UGMYAIFPV8tXlccwqbqBKoFravMpmjcedW7Wr63C7fsQUjKsy8e
+   85EEIh8IuxLpILa8YRogWR6X17ZtRPpQareGMvteLnRGBGhfZ2zCFFpYW
+   ap3qE3vUQcSaowWTdFKvv7Nx/iKoQibZQrcmFTUdqrepY1oAO5ahnH8OX
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,239,1669071600"; 
+   d="scan'208";a="28586480"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 23 Jan 2023 11:00:12 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 23 Jan 2023 11:00:12 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 23 Jan 2023 11:00:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674468012; x=1706004012;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=F1BT7g8C3uFzWcQWX6t39xTQz1NYTcofkyZ2CDSdzUE=;
+  b=hA9HFINQdDS07qn6wI75lM2cCSR0jGaXQQEXM2XeVtN4i+QiVRLIMxi+
+   ssgXFh4Hx6hO0vtq7ybwcDCqinzCm/fxxWhSu0AMtgz9yhyFdOxFaIPBE
+   B5nz+Xt36gLVeWB4yEJqi3qmro2FQ+EWWpqYBV734O7xbc6SUvjYDyVOM
+   yVqguzXw4gluV7nda0vPfM1QEL/1lQ4VRzt2Lj0joVgT+G1zHnsquVy2x
+   FxdSsFlodhp6VCGLOz6z4U8i+dCap5J2NX8p6UwLxsx6f+qhnQjVY6+M8
+   XdkO4yJpw7rswjADCrQr7Tosjwptpj5/9PY4Am/8cd74//7JrRJzIsuCT
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,239,1669071600"; 
+   d="scan'208";a="28586479"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 23 Jan 2023 11:00:12 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1686E60DEF;
-        Mon, 23 Jan 2023 09:35:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3505C433EF;
-        Mon, 23 Jan 2023 09:35:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674466551;
-        bh=tC5u7WR8rBH0BR8LfZqsr5ySCjeVILLvKkXLo/zpAkI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2RBHwufh+FL/iZ7Zcdjwa19fEb5T53MHB6nvJxKPyxI20s6NUKL1ZrgqKTOPQiRdH
-         LLQV8duvET9KHZO3UDZwM4JiYJJvQw+dCtAdF+2hWEr0VUz2A+3hkERvZq6N925DjK
-         YaI9hynwM/+3+Ce2elFYRlohF9Q1qoesuZnpQg8c=
-Date:   Mon, 23 Jan 2023 10:35:48 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: qcom: enable vbus override when in OTG dr-mode
-Message-ID: <Y85U9HSD6TIXFkg0@kroah.com>
-References: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org>
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 6CEDB280056;
+        Mon, 23 Jan 2023 11:00:12 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ramneek Mehresh <ramneek.mehresh@freescale.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 1/1] usb: host: ehci-fsl: Use DRV_NAME
+Date:   Mon, 23 Jan 2023 11:00:07 +0100
+Message-Id: <20230123100007.1479090-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:01:25AM +0100, Neil Armstrong wrote:
-> With vbus override enabled when in OTG dr_mode, Host<->Peripheral
-> switch now works on SM8550, otherwise the DWC3 seems to be stuck
-> in Host mode only.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index b0a0351d2d8b..959fc925ca7c 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
->  
->  	/* enable vbus override for device mode */
-> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
-> +	if (qcom->mode != USB_DR_MODE_HOST)
->  		dwc3_qcom_vbus_override_enable(qcom, true);
->  
->  	/* register extcon to override sw_vbus on Vbus change later */
-> 
-> ---
+"fsl-ehci" is used for both MODULE_ALIAS and driver name. As they have to
+match use DRV_NAME in both locations.
 
-What commit does this fix?  Should it go to stable kernels?
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ drivers/usb/host/ehci-fsl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+index 38d06e5abfbb3..d74fa5ba845b8 100644
+--- a/drivers/usb/host/ehci-fsl.c
++++ b/drivers/usb/host/ehci-fsl.c
+@@ -712,7 +712,7 @@ static struct platform_driver ehci_fsl_driver = {
+ 	.remove = fsl_ehci_drv_remove,
+ 	.shutdown = usb_hcd_platform_shutdown,
+ 	.driver = {
+-		.name = "fsl-ehci",
++		.name = DRV_NAME,
+ 		.pm = EHCI_FSL_PM_OPS,
+ 	},
+ };
+-- 
+2.34.1
 
-greg k-h
