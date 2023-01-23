@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C9A6775A7
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 08:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540026775A8
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 08:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjAWHfa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 02:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S231556AbjAWHfb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 02:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjAWHfa (ORCPT
+        with ESMTP id S231551AbjAWHfa (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 02:35:30 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F10218B25
-        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:27 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id qx13so28004197ejb.13
-        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:27 -0800 (PST)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADFC166DC
+        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:29 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id v10so13477554edi.8
+        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jGaRgrBkYYiew71gsUhPMY+/P7zU/wdoAAyhj9g55V0=;
-        b=SHDwh2JMBmJnf5ZU5Bj7bgrdyIOxPjTnNkbJo9j/MnlfYW3/O2akY+b0l5N/YGqB5O
-         y+DnEx7/7XF1dHHCtDng9hwdp0W9pABtu/a4ckeP0iTnqHrTLmJbbMtR7gmaPgLY6NUn
-         JAXxTJ2ITht2UF0nIsFL2XnKu226TSmNap2tmdk3w9XG2JS221KBdNj+xAl05BLNPUdl
-         X2hE/Wr27zTiiSNYjPOu8nwiL8ZC0d5XUqc/0bbihor5+XLgewGv5lz7WWi9x5N6FLLN
-         a+D7oz/gCPOm7/A1miw+RQ/IL1UMlnlNoF+oGytAZhV9mHco6j4CeV2NFCBFDdIHlWqo
-         j4dQ==
+        bh=dmFV92Oe8RI2AuAY/Hs/y359Z5naSXU7oPpOL/UDG5Y=;
+        b=kUoFQEi1C+XgSX+/tKSocFFE87EtpfG6uzKer63av9oQ7mQrfkwAN3j9gOGGvU+4ZS
+         fj6Mbf6M+LTsBLzyE+FMEov2OkQ6VNXFMZOp7qT+WS0eh03WYjXgcfZvUnY1ttS8P0hA
+         FMFM1agqn2Js6/GOXAWtWD1Ef1j//FNsrgTl5W2VrnCoNWNXQEGLI+6S7LoyetBfucxz
+         q+3eKqfY9zHpn/xYTMBVMhaxZhXtRlRRhSb7P1n0bXfaQDuT320pxArOT6/082wzD717
+         eK5sFFBls+kvAcYd5A5EE055+6EfEDIILiY2CboHq0RrGcxY/TxCQlfOr/RNBZT/Knlo
+         6IYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jGaRgrBkYYiew71gsUhPMY+/P7zU/wdoAAyhj9g55V0=;
-        b=7mtYat9U8e/nLyj2kQ5hhFKALZGUZ/4E+GWiV+UrmjCzPBSI0salF6Sc03PPpnOaQu
-         YnOIU1MnOfRrCmkJ1Wu7+NeUXTX7ymXN0oDq847U+Nz8++Hn/FEvJ3O4ezQHvNHJ88Nu
-         f7YXf2kUrrO8xZmDgN0QrdA+dMILfy3ApW4eA7GCBz02WcA7uzBB+GEU/TAaby2Yjpli
-         Cd9P+93GH5Fv34kXTVYIQ4TTgsYJx4KbwMptfMgysICJNhIuFwY0jV+L4cWcui1+6b2F
-         y4eUg0k2hc05VeA+0gcNOqnYZrgeHIMN17+iKSQCg387GQRYELGVzCkNtVqEtEnMPiNi
-         2VFQ==
-X-Gm-Message-State: AFqh2krwIPHQML6Gc1hisbHK9MajXE3Avnq6MdsI1zz5YJdQDLzfSMMY
-        j5Qy/ie5+8Pw5BYuSIsWrckF/w==
-X-Google-Smtp-Source: AMrXdXt8OhZECd1Y/QTKexvQwGye7abBGB/E5qoB0z210/qXCCaJMsQvOze0opmMV93UIV74ozDKlg==
-X-Received: by 2002:a17:907:8b97:b0:84d:39ba:368b with SMTP id tb23-20020a1709078b9700b0084d39ba368bmr27241209ejc.75.1674459326075;
-        Sun, 22 Jan 2023 23:35:26 -0800 (PST)
+        bh=dmFV92Oe8RI2AuAY/Hs/y359Z5naSXU7oPpOL/UDG5Y=;
+        b=pdtAQ4n9FsJJ7X32PmoeecvwSxhResc7M+dHOBIGO/9hOq8B9/UX14IR9vCAmiqwPw
+         p9bmQyKcZGusEEWZJ00mPXuJn4yzWgBHiDH8sacYxvuNqxhlKeAcCwPSkhqLA/9rleeZ
+         eYWahdNmzHJg7lnmH0PGMsuxyMCSgYYpcP97cTPobSTbff3r2Dzy/e3Dh9G1Y0qc9/+/
+         4cbb23zFmLYSRutnXxvKwRLGUyxd5x0zkQLdqxgMGsXL6yiqKii872ruuLd94sorBuR0
+         hEAwn3Z07uNr/1HxBPCbG75McRMB0pTH61a5fjZFRFGBTiEwegM1rg42lg/rWG23nFwe
+         NPjw==
+X-Gm-Message-State: AFqh2krcb22+3MBPRrFtFF4mNGaJ0I+W1i6FGX3eAls706NdEXOqe6O1
+        UooGgnVETFYtl34uqlvyP8vQHZ7ms2xSImgp
+X-Google-Smtp-Source: AMrXdXsSv7F0Y80gxNA/95ixTFJqfOxdydWSkVBli/PU0+j5sACL+3mjn5AMqhMp3ehntm0XxSOxDQ==
+X-Received: by 2002:aa7:df8d:0:b0:492:bf3d:1a1a with SMTP id b13-20020aa7df8d000000b00492bf3d1a1amr24401419edy.18.1674459327754;
+        Sun, 22 Jan 2023 23:35:27 -0800 (PST)
 Received: from localhost.localdomain (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b0084c7f96d023sm22104821ejd.147.2023.01.22.23.35.25
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b0084c7f96d023sm22104821ejd.147.2023.01.22.23.35.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 23:35:25 -0800 (PST)
+        Sun, 22 Jan 2023 23:35:27 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 2/3] fotg210-udc: Introduce and use a fotg210_ack_int function
-Date:   Mon, 23 Jan 2023 08:35:07 +0100
-Message-Id: <20230123073508.2350402-3-linus.walleij@linaro.org>
+Subject: [PATCH 3/3] fotg210-udc: Improve device initialization
+Date:   Mon, 23 Jan 2023 08:35:08 +0100
+Message-Id: <20230123073508.2350402-4-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230123073508.2350402-1-linus.walleij@linaro.org>
 References: <20230123073508.2350402-1-linus.walleij@linaro.org>
@@ -72,137 +72,69 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Fabian Vogt <fabian@ritter-vogt.de>
 
-This is in preparation of support for devices where interrupts are acked
-differently.
+Reset the device explicitly to get into a known state and also set the chip
+enable bit. Additionally, mask interrupts which aren't handled.
 
 Signed-off-by: Fabian Vogt <fabian@ritter-vogt.de>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/usb/fotg210/fotg210-udc.c | 54 +++++++++++--------------------
- 1 file changed, 18 insertions(+), 36 deletions(-)
+ drivers/usb/fotg210/fotg210-udc.c | 15 +++++++++++++++
+ drivers/usb/fotg210/fotg210-udc.h |  2 ++
+ 2 files changed, 17 insertions(+)
 
 diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index 029b31c3107b..00c4c17a6919 100644
+index 00c4c17a6919..9beca4fa66c3 100644
 --- a/drivers/usb/fotg210/fotg210-udc.c
 +++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -28,6 +28,14 @@ static const char udc_name[] = "fotg210_udc";
- static const char * const fotg210_ep_name[] = {
- 	"ep0", "ep1", "ep2", "ep3", "ep4"};
+@@ -7,6 +7,7 @@
+  * Author : Yuan-Hsin Chen <yhchen@faraday-tech.com>
+  */
  
-+static void fotg210_ack_int(struct fotg210_udc *fotg210, u32 offset, u32 mask)
-+{
-+	u32 value = ioread32(fotg210->reg + offset);
-+
-+	value &= ~mask;
-+	iowrite32(value, fotg210->reg + offset);
-+}
-+
- static void fotg210_disable_fifo_int(struct fotg210_ep *ep)
- {
- 	u32 value = ioread32(ep->fotg210->reg + FOTG210_DMISGR1);
-@@ -303,8 +311,7 @@ static void fotg210_wait_dma_done(struct fotg210_ep *ep)
- 			goto dma_reset;
- 	} while (!(value & DISGR2_DMA_CMPLT));
- 
--	value &= ~DISGR2_DMA_CMPLT;
--	iowrite32(value, ep->fotg210->reg + FOTG210_DISGR2);
-+	fotg210_ack_int(ep->fotg210, FOTG210_DISGR2, DISGR2_DMA_CMPLT);
- 	return;
- 
- dma_reset:
-@@ -844,14 +851,6 @@ static void fotg210_ep0in(struct fotg210_udc *fotg210)
- 	}
- }
- 
--static void fotg210_clear_comabt_int(struct fotg210_udc *fotg210)
--{
--	u32 value = ioread32(fotg210->reg + FOTG210_DISGR0);
--
--	value &= ~DISGR0_CX_COMABT_INT;
--	iowrite32(value, fotg210->reg + FOTG210_DISGR0);
--}
--
- static void fotg210_in_fifo_handler(struct fotg210_ep *ep)
- {
- 	struct fotg210_request *req = list_entry(ep->queue.next,
-@@ -893,60 +892,43 @@ static irqreturn_t fotg210_irq(int irq, void *_fotg210)
- 		void __iomem *reg = fotg210->reg + FOTG210_DISGR2;
- 		u32 int_grp2 = ioread32(reg);
- 		u32 int_msk2 = ioread32(fotg210->reg + FOTG210_DMISGR2);
--		u32 value;
- 
- 		int_grp2 &= ~int_msk2;
- 
- 		if (int_grp2 & DISGR2_USBRST_INT) {
- 			usb_gadget_udc_reset(&fotg210->gadget,
- 					     fotg210->driver);
--			value = ioread32(reg);
--			value &= ~DISGR2_USBRST_INT;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_USBRST_INT);
- 			pr_info("fotg210 udc reset\n");
- 		}
- 		if (int_grp2 & DISGR2_SUSP_INT) {
--			value = ioread32(reg);
--			value &= ~DISGR2_SUSP_INT;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_SUSP_INT);
- 			pr_info("fotg210 udc suspend\n");
- 		}
- 		if (int_grp2 & DISGR2_RESM_INT) {
--			value = ioread32(reg);
--			value &= ~DISGR2_RESM_INT;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_RESM_INT);
- 			pr_info("fotg210 udc resume\n");
- 		}
- 		if (int_grp2 & DISGR2_ISO_SEQ_ERR_INT) {
--			value = ioread32(reg);
--			value &= ~DISGR2_ISO_SEQ_ERR_INT;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_ISO_SEQ_ERR_INT);
- 			pr_info("fotg210 iso sequence error\n");
- 		}
- 		if (int_grp2 & DISGR2_ISO_SEQ_ABORT_INT) {
--			value = ioread32(reg);
--			value &= ~DISGR2_ISO_SEQ_ABORT_INT;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_ISO_SEQ_ABORT_INT);
- 			pr_info("fotg210 iso sequence abort\n");
- 		}
- 		if (int_grp2 & DISGR2_TX0BYTE_INT) {
- 			fotg210_clear_tx0byte(fotg210);
--			value = ioread32(reg);
--			value &= ~DISGR2_TX0BYTE_INT;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_TX0BYTE_INT);
- 			pr_info("fotg210 transferred 0 byte\n");
- 		}
- 		if (int_grp2 & DISGR2_RX0BYTE_INT) {
- 			fotg210_clear_rx0byte(fotg210);
--			value = ioread32(reg);
--			value &= ~DISGR2_RX0BYTE_INT;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_RX0BYTE_INT);
- 			pr_info("fotg210 received 0 byte\n");
- 		}
- 		if (int_grp2 & DISGR2_DMA_ERROR) {
--			value = ioread32(reg);
--			value &= ~DISGR2_DMA_ERROR;
--			iowrite32(value, reg);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_DMA_ERROR);
- 		}
++#include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+@@ -1023,6 +1024,11 @@ static int fotg210_udc_start(struct usb_gadget *g,
+ 			dev_err(fotg210->dev, "can't bind to phy\n");
  	}
  
-@@ -960,7 +942,7 @@ static irqreturn_t fotg210_irq(int irq, void *_fotg210)
++	/* chip enable */
++	value = ioread32(fotg210->reg + FOTG210_DMCR);
++	value |= DMCR_CHIP_EN;
++	iowrite32(value, fotg210->reg + FOTG210_DMCR);
++
+ 	/* enable device global interrupt */
+ 	value = ioread32(fotg210->reg + FOTG210_DMCR);
+ 	value |= DMCR_GLINT_EN;
+@@ -1039,6 +1045,15 @@ static void fotg210_init(struct fotg210_udc *fotg210)
+ 	iowrite32(GMIR_MHC_INT | GMIR_MOTG_INT | GMIR_INT_POLARITY,
+ 		  fotg210->reg + FOTG210_GMIR);
  
- 		/* the highest priority in this source register */
- 		if (int_grp0 & DISGR0_CX_COMABT_INT) {
--			fotg210_clear_comabt_int(fotg210);
-+			fotg210_ack_int(fotg210, FOTG210_DISGR0, DISGR0_CX_COMABT_INT);
- 			pr_info("fotg210 CX command abort\n");
- 		}
++	/* mask interrupts for groups other than 0-2 */
++	iowrite32(~(DMIGR_MINT_G0 | DMIGR_MINT_G1 | DMIGR_MINT_G2),
++		  fotg210->reg + FOTG210_DMIGR);
++
++	/* udc software reset */
++	iowrite32(DMCR_SFRST, fotg210->reg + FOTG210_DMCR);
++	/* Better wait a bit, but without a datasheet, no idea how long. */
++	usleep_range(100, 200);
++
+ 	/* disable device global interrupt */
+ 	value = ioread32(fotg210->reg + FOTG210_DMCR);
+ 	value &= ~DMCR_GLINT_EN;
+diff --git a/drivers/usb/fotg210/fotg210-udc.h b/drivers/usb/fotg210/fotg210-udc.h
+index 22b72caf498c..252cb2b8e2fe 100644
+--- a/drivers/usb/fotg210/fotg210-udc.h
++++ b/drivers/usb/fotg210/fotg210-udc.h
+@@ -58,6 +58,8 @@
  
+ /* Device Mask of Interrupt Group Register (0x130) */
+ #define FOTG210_DMIGR		0x130
++#define DMIGR_MINT_G2		(1 << 2)
++#define DMIGR_MINT_G1		(1 << 1)
+ #define DMIGR_MINT_G0		(1 << 0)
+ 
+ /* Device Mask of Interrupt Source Group 0(0x134) */
 -- 
 2.39.0
 
