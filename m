@@ -2,155 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F5F6787AD
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 21:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF896678936
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 22:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjAWUZw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 15:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S232952AbjAWVHL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 16:07:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjAWUZu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 15:25:50 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF94367F2;
-        Mon, 23 Jan 2023 12:25:39 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NJdTeD021208;
-        Mon, 23 Jan 2023 20:25:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AA1KrKm4oTzXH2q/J01+TAIYrAX9lNtHmFsi5xCbFrs=;
- b=KKlz07BjMxvcev/8t4TSFWZWSOBJmTd2nYGUYZcY0lyAkT6dsa1P40jTO/1fu0hsl2II
- FJSHbZuhYfAPC3QZROrl8Yzyvl+Yeje9+wxSBb6xpw93H1TLVJTyv/sDvrXW/gWqCPq+
- Rgv+k4oDkl71DIh+NIosRcSUCG21Q3VBoGt1DJescC2ALjTBG+9jwKjrn5zjaKteTETS
- tSBBco6gQzz2pTrWqoxJ4cp1SHVlRtBgfBdi3hussOec7hmvVHmN10jmAxa3gwMLn73u
- zQYq3BBXL1KXBp9uO2pDaRPuGYunah2LTNQ0nwhIsmvhZY5mrgOZtAn0GLa5rE54ZLUf Ew== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89gtbqrg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 20:25:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30NKPXbk009014
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 20:25:33 GMT
-Received: from [10.110.97.68] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 23 Jan
- 2023 12:25:32 -0800
-Message-ID: <dae761af-6db4-f611-21c9-122fda74c5b6@quicinc.com>
-Date:   Mon, 23 Jan 2023 12:25:31 -0800
+        with ESMTP id S232599AbjAWVHJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 16:07:09 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A691C38667;
+        Mon, 23 Jan 2023 13:07:08 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-15ff0a1f735so7254605fac.5;
+        Mon, 23 Jan 2023 13:07:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CADNFe6R10wkswq9pySVFFUriCC1NhXTNYYz3U5dPho=;
+        b=OkEUccvimqLaU14wV72sCLRqDqWYa+MSlpfNEcmQxzuIzYL7c+wOCplXeBPgfrnF6m
+         L8sch+dxbsOsmlHeeswD2aRQV8Hyt96QXpGPEWwO8ccuvx597G7q6ab8Wr9kQaXd5OR0
+         1WjNzbBwWvfpjsQ9/tXNTnfoWxOTbsaX5quNVtsN5p3f7urP4K4r6iWWdN29rn3m6e6+
+         9Tk0PeKXgIOdRDuV0lv3/n8ctrc3msrMoTgVb9BjkndVZq+CYUToI9gi091kC9dAh1zP
+         82GJ5bysjrmLii9kAMQNUMYHbgUhnSKF5lW7DrPfJgpYOymOBoay4pPI2o/WQoCmXwgr
+         97ew==
+X-Gm-Message-State: AFqh2koIsLavNhmnYidxMj9TOXY81EYv+KdBHeTKF16fc/WURTSTcTeu
+        /ytVNP7SIHIz+NM7pOts+9V6QouwvQ==
+X-Google-Smtp-Source: AMrXdXtV9ocXW03GZSJCxa5MfMJy/xxFJnzNCrZoRiE/vvrfehKtCq3M2nfTBomny44RX0TFjadxRA==
+X-Received: by 2002:a05:6870:4c83:b0:150:14a3:6556 with SMTP id pi3-20020a0568704c8300b0015014a36556mr13995312oab.51.1674508027223;
+        Mon, 23 Jan 2023 13:07:07 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r38-20020a05687108a600b0015fa95b00d1sm6491872oaq.22.2023.01.23.13.07.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 13:07:06 -0800 (PST)
+Received: (nullmailer pid 2534798 invoked by uid 1000);
+        Mon, 23 Jan 2023 21:07:06 -0000
+Date:   Mon, 23 Jan 2023 15:07:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to
+ its own schema
+Message-ID: <20230123210706.GA2496689-robh@kernel.org>
+References: <20230118193056.673514-1-robh@kernel.org>
+ <20230118193056.673514-2-robh@kernel.org>
+ <4eca2695-cb73-eaad-4c8a-82dec923825e@gmail.com>
+ <CAL_JsqKqiRbBJErkh2Hch+XZyLggGyjYo1rvKWPhxb99pA8mAA@mail.gmail.com>
+ <be193659-e97f-23b9-b89c-d02205705db6@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/5] usb: gadget: Add remote wakeup capable flag
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1673992507-7823-2-git-send-email-quic_eserrao@quicinc.com>
- <20230119014409.yiw6xlp5cwlmu25s@synopsys.com>
- <f49c54d9-b9fe-e629-3f94-809cd79a2211@quicinc.com>
- <20230120011513.ajwum224lfwwb6ws@synopsys.com>
- <045f9ac1-5d48-fad0-8e74-8d5144aa1431@quicinc.com>
- <20230121002059.mpiqavemelnntxd7@synopsys.com>
- <Y8tGAXbKDtzmW8+E@rowland.harvard.edu>
- <20230121020223.l2tyvyqifc7umqpy@synopsys.com>
- <Y8tIrx+F/4X9YyFT@rowland.harvard.edu>
- <20230121021219.udgpwt7tv7dfr3jk@synopsys.com>
- <20230123193320.sxywht5vr3sig2ur@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230123193320.sxywht5vr3sig2ur@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: n1LSViPgKkl-mbK0_IYtKQ09lBPV63ml
-X-Proofpoint-ORIG-GUID: n1LSViPgKkl-mbK0_IYtKQ09lBPV63ml
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- suspectscore=0 impostorscore=0 bulkscore=0 mlxlogscore=856 adultscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301230195
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be193659-e97f-23b9-b89c-d02205705db6@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 1/23/2023 11:33 AM, Thinh Nguyen wrote:
-> On Sat, Jan 21, 2023, Thinh Nguyen wrote:
->> On Fri, Jan 20, 2023, Alan Stern wrote:
->>> On Sat, Jan 21, 2023 at 02:02:36AM +0000, Thinh Nguyen wrote:
->>>> On Fri, Jan 20, 2023, Alan Stern wrote:
->>>>> A UDC design might have multiple versions, some supporting remote wakeup
->>>>> and others not.  But drivers generally use a single static
->>>>> usb_gadget_ops structure, and they don't modify it at runtime to account
->>>>> for hardware differences.  So if a single driver controls those multiple
->>>>> versions, you can't rely on the presence of gadget->ops->wakeup to
->>>>> indicate whether there actually is hardware remote wakeup support.
->>>>>
->>>>> Ideally, the usb_gadget structure should have a wakeup_capable flag
->>>>> which the UDC driver would set appropriately (probably during its probe
->>>>> routine).
->>>>>
->>>>
->>>> I was thinking that it can be handled by the
->>>> usb_gadget_enable_remote_wakeup() so we can do away with the
->>>> wakeup_capable flag.
->>>
->>> usb_gadget_enable_remote_wakeup() gets called when the gadget or
->>> function is suspended, right?  But a gadget driver may want to know long
->>> before that whether the UDC supports remote wakeup, in order to set up
->>> its config descriptor correctly.
->>>
->>
->> No, this is to be called during set configuration. If the configuration
->> doesn't support remote wakeup, the device should not be able to send
->> remote wakeup.
->>
+On Sat, Jan 21, 2023 at 12:40:12AM +0100, Johan Jonker wrote:
 > 
-> On second thought, you're right about the descriptor. It's better to
-> warn and prevent the remote wakeup bit from being set in the descriptor
-> if the UDC doesn't support remote wakeup. Warning the user at set
-> configuration is too late.
 > 
-> So, we need both rw_capable flag and usb_gadget_enable_remote_wakeup().
+> On 1/20/23 21:30, Rob Herring wrote:
+> > On Wed, Jan 18, 2023 at 3:05 PM Johan Jonker <jbx6244@gmail.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> Some alignment at the examples and the unknown extcon property.
+> >>
+> >> usb@fe800000: 'extcon' does not match any of the regexes
+> > 
+> > Does that go in the wrapper or dwc3 node?:
+> > 
+> > arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: usb@fe800000:
+> > usb@fe800000: Unevaluated properties are not allowed ('extcon' was
+> > unexpected)
+> >         From schema:
+> > /home/rob/proj/linux-dt/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
+> > 
 > 
-> Thanks,
-> Thinh
+> 
+> > That's the dwc3 node, but the majority are in the wrapper node, so I'm
+> > going with the majority and leaving this one.
+> 
+> In wrapper code for rk33899 in dwc3-of-simple.c I don't see no extcon activity I think.
 
-Do we need usb_gadget_enable_remote_wakeup() gadget-op ?
-As per the discussion, we can have rw_capable flag in usb_gadget struct 
-and set it during gagdet init/probe if the UDC supports resume 
-signalling OR wants the remote wakeup feature to be enabled.
-This flag now represents UDC capability to initiate resume signalling.
+So all the other cases are just a stray property and the above one is 
+correct.
 
-During enumeration phase, when preparing the config descriptor we can 
-use gadget->rw_capable flag to rightly modify the remote wakeup
-bit. Based on this, host will decide whether to arm the device for 
-remote wakeup or not.
+'extcon' should be replaced in favor of a connector node, so if not 
+used, it should be able to be removed. Though maybe BSD or something 
+else cares.
 
-For gadget->ops->wakeup callback support we already have explicit checks 
-when invoking this gadget op and device wont be able to send remote 
-wakeup if callback support doesn't exist.
-Please let me know if I am missing something.
+> In core there's recently made some changes:
+> https://github.com/torvalds/linux/blame/master/drivers/usb/dwc3/core.c#L1710
+> 
+> usb: dwc3: Don't switch OTG -> peripheral if extcon is present 
+> https://lore.kernel.org/all/20221017233510.53336-1-andriy.shevchenko@linux.intel.com/
+> 
+> Binding status update for that is unknown for me.
+> Do whatever suites you best.
 
-Thanks
-Elson
+I'm going to leave it as-is for now.
+
+Rob
