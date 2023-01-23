@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D846775A6
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 08:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C9A6775A7
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 08:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbjAWHf2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 02:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S231555AbjAWHfa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 02:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjAWHf2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 02:35:28 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2F5166DC
-        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:25 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id mg12so28100287ejc.5
-        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:25 -0800 (PST)
+        with ESMTP id S230023AbjAWHfa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 02:35:30 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F10218B25
+        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:27 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id qx13so28004197ejb.13
+        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=46Yo8oFr2b2jeh/cQuJRHXKOZjoBylcQDCtI9YMOmuU=;
-        b=xUfTFqcSZBjl3PgkFWBey8fgMKX9eXj9qPwFii2zQBgOqVIvZMrOugRs6+eBdeAhJ4
-         AXN/bdadVWFU/rOwl5uDIn0MqThxhFs1t49JLaJZ6yXquex4plRrhusqouGsSkOzbOvt
-         gCatuJJ8ug4SheyD/k8PPfM+XHMLejN9EOKXG3sIupfli3Z1usqW/IHjiVHrw8eC+edN
-         kpn4o7PuT7S52khSs6bXaXujRxUF8uiKtL8tx0H7HeGBC+RzVvbZtHZxmPmq4NZJz7UF
-         ueVewQe5y0t3z4xcIU/0yNy6sWc7DCDSbnj7cKgRmoMbErTEXQJAoZgm+Zbb2C+hIl7C
-         AZEQ==
+        bh=jGaRgrBkYYiew71gsUhPMY+/P7zU/wdoAAyhj9g55V0=;
+        b=SHDwh2JMBmJnf5ZU5Bj7bgrdyIOxPjTnNkbJo9j/MnlfYW3/O2akY+b0l5N/YGqB5O
+         y+DnEx7/7XF1dHHCtDng9hwdp0W9pABtu/a4ckeP0iTnqHrTLmJbbMtR7gmaPgLY6NUn
+         JAXxTJ2ITht2UF0nIsFL2XnKu226TSmNap2tmdk3w9XG2JS221KBdNj+xAl05BLNPUdl
+         X2hE/Wr27zTiiSNYjPOu8nwiL8ZC0d5XUqc/0bbihor5+XLgewGv5lz7WWi9x5N6FLLN
+         a+D7oz/gCPOm7/A1miw+RQ/IL1UMlnlNoF+oGytAZhV9mHco6j4CeV2NFCBFDdIHlWqo
+         j4dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=46Yo8oFr2b2jeh/cQuJRHXKOZjoBylcQDCtI9YMOmuU=;
-        b=PgobBDKJ4C+7c+nMCi977D+IhwCssgbw5JHuLf6Jk/+85X2VHRVpVo9CyRAzDid+QJ
-         7Iloq3Okg5g4TH4NVClZgLfdsABP3mfi0FDmNP94dnjHKT8xP2SjumVselT0DAU9tYZ8
-         vPEDtLFLLPxA4s0tSYJq4v9SR6OTTQ3LVjvUT2e7dR7g6LfLUOQ7gT+1DalC01LZIgBu
-         TJPrDIamfyZdjjUmoeh7B+OxktE3ajj+CqonsVGRH+r5EYaXIjnrCEWef7fqWVUx0UqQ
-         HFazNDCYdozEaKccdQ7TXqNMwfanHnUXeHMblshjZka5jWgZEyx+yg5CPIbbEtUGLCtL
-         uoqw==
-X-Gm-Message-State: AFqh2krlhdzck2r+v05Mv3IJF98hEb7H4fyqxG5xffdPKTW587hjlKq2
-        vZ6rfMqo7EUNPU9UMPQDT6C/HQ==
-X-Google-Smtp-Source: AMrXdXsBdsoko8zoSna3PxoTY+I4U/dPr9KpZeQt8cPONFIPwHvD1gOBcB3BiiCzUhK2urwmk9p08Q==
-X-Received: by 2002:a17:906:fad4:b0:7c1:2529:b25e with SMTP id lu20-20020a170906fad400b007c12529b25emr25495354ejb.43.1674459324240;
-        Sun, 22 Jan 2023 23:35:24 -0800 (PST)
+        bh=jGaRgrBkYYiew71gsUhPMY+/P7zU/wdoAAyhj9g55V0=;
+        b=7mtYat9U8e/nLyj2kQ5hhFKALZGUZ/4E+GWiV+UrmjCzPBSI0salF6Sc03PPpnOaQu
+         YnOIU1MnOfRrCmkJ1Wu7+NeUXTX7ymXN0oDq847U+Nz8++Hn/FEvJ3O4ezQHvNHJ88Nu
+         f7YXf2kUrrO8xZmDgN0QrdA+dMILfy3ApW4eA7GCBz02WcA7uzBB+GEU/TAaby2Yjpli
+         Cd9P+93GH5Fv34kXTVYIQ4TTgsYJx4KbwMptfMgysICJNhIuFwY0jV+L4cWcui1+6b2F
+         y4eUg0k2hc05VeA+0gcNOqnYZrgeHIMN17+iKSQCg387GQRYELGVzCkNtVqEtEnMPiNi
+         2VFQ==
+X-Gm-Message-State: AFqh2krwIPHQML6Gc1hisbHK9MajXE3Avnq6MdsI1zz5YJdQDLzfSMMY
+        j5Qy/ie5+8Pw5BYuSIsWrckF/w==
+X-Google-Smtp-Source: AMrXdXt8OhZECd1Y/QTKexvQwGye7abBGB/E5qoB0z210/qXCCaJMsQvOze0opmMV93UIV74ozDKlg==
+X-Received: by 2002:a17:907:8b97:b0:84d:39ba:368b with SMTP id tb23-20020a1709078b9700b0084d39ba368bmr27241209ejc.75.1674459326075;
+        Sun, 22 Jan 2023 23:35:26 -0800 (PST)
 Received: from localhost.localdomain (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b0084c7f96d023sm22104821ejd.147.2023.01.22.23.35.23
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b0084c7f96d023sm22104821ejd.147.2023.01.22.23.35.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 23:35:23 -0800 (PST)
+        Sun, 22 Jan 2023 23:35:25 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 1/3] fotg210-udc: Add missing completion handler
-Date:   Mon, 23 Jan 2023 08:35:06 +0100
-Message-Id: <20230123073508.2350402-2-linus.walleij@linaro.org>
+Subject: [PATCH 2/3] fotg210-udc: Introduce and use a fotg210_ack_int function
+Date:   Mon, 23 Jan 2023 08:35:07 +0100
+Message-Id: <20230123073508.2350402-3-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230123073508.2350402-1-linus.walleij@linaro.org>
 References: <20230123073508.2350402-1-linus.walleij@linaro.org>
@@ -72,50 +72,137 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Fabian Vogt <fabian@ritter-vogt.de>
 
-This is used when responding to GET_STATUS requests. Without this, it
-crashes on completion.
+This is in preparation of support for devices where interrupts are acked
+differently.
 
-Fixes: b84a8dee23fd ("usb: gadget: add Faraday fotg210_udc driver")
 Signed-off-by: Fabian Vogt <fabian@ritter-vogt.de>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/usb/fotg210/fotg210-udc.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/usb/fotg210/fotg210-udc.c | 54 +++++++++++--------------------
+ 1 file changed, 18 insertions(+), 36 deletions(-)
 
 diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index 754429553f61..029b31c3107b 100644
+index 029b31c3107b..00c4c17a6919 100644
 --- a/drivers/usb/fotg210/fotg210-udc.c
 +++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -709,6 +709,20 @@ static int fotg210_is_epnstall(struct fotg210_ep *ep)
- 	return value & INOUTEPMPSR_STL_EP ? 1 : 0;
- }
+@@ -28,6 +28,14 @@ static const char udc_name[] = "fotg210_udc";
+ static const char * const fotg210_ep_name[] = {
+ 	"ep0", "ep1", "ep2", "ep3", "ep4"};
  
-+/* For EP0 requests triggered by this driver (currently GET_STATUS response) */
-+static void fotg210_ep0_complete(struct usb_ep *_ep, struct usb_request *req)
++static void fotg210_ack_int(struct fotg210_udc *fotg210, u32 offset, u32 mask)
 +{
-+	struct fotg210_ep *ep;
-+	struct fotg210_udc *fotg210;
++	u32 value = ioread32(fotg210->reg + offset);
 +
-+	ep = container_of(_ep, struct fotg210_ep, ep);
-+	fotg210 = ep->fotg210;
-+
-+	if (req->status || req->actual != req->length) {
-+		dev_warn(&fotg210->gadget.dev, "EP0 request failed: %d\n", req->status);
-+	}
++	value &= ~mask;
++	iowrite32(value, fotg210->reg + offset);
 +}
 +
- static void fotg210_get_status(struct fotg210_udc *fotg210,
- 				struct usb_ctrlrequest *ctrl)
+ static void fotg210_disable_fifo_int(struct fotg210_ep *ep)
  {
-@@ -1251,6 +1265,8 @@ int fotg210_udc_probe(struct platform_device *pdev, struct fotg210 *fotg)
- 	if (fotg210->ep0_req == NULL)
- 		goto err_map;
+ 	u32 value = ioread32(ep->fotg210->reg + FOTG210_DMISGR1);
+@@ -303,8 +311,7 @@ static void fotg210_wait_dma_done(struct fotg210_ep *ep)
+ 			goto dma_reset;
+ 	} while (!(value & DISGR2_DMA_CMPLT));
  
-+	fotg210->ep0_req->complete = fotg210_ep0_complete;
-+
- 	fotg210_init(fotg210);
+-	value &= ~DISGR2_DMA_CMPLT;
+-	iowrite32(value, ep->fotg210->reg + FOTG210_DISGR2);
++	fotg210_ack_int(ep->fotg210, FOTG210_DISGR2, DISGR2_DMA_CMPLT);
+ 	return;
  
- 	fotg210_disable_unplug(fotg210);
+ dma_reset:
+@@ -844,14 +851,6 @@ static void fotg210_ep0in(struct fotg210_udc *fotg210)
+ 	}
+ }
+ 
+-static void fotg210_clear_comabt_int(struct fotg210_udc *fotg210)
+-{
+-	u32 value = ioread32(fotg210->reg + FOTG210_DISGR0);
+-
+-	value &= ~DISGR0_CX_COMABT_INT;
+-	iowrite32(value, fotg210->reg + FOTG210_DISGR0);
+-}
+-
+ static void fotg210_in_fifo_handler(struct fotg210_ep *ep)
+ {
+ 	struct fotg210_request *req = list_entry(ep->queue.next,
+@@ -893,60 +892,43 @@ static irqreturn_t fotg210_irq(int irq, void *_fotg210)
+ 		void __iomem *reg = fotg210->reg + FOTG210_DISGR2;
+ 		u32 int_grp2 = ioread32(reg);
+ 		u32 int_msk2 = ioread32(fotg210->reg + FOTG210_DMISGR2);
+-		u32 value;
+ 
+ 		int_grp2 &= ~int_msk2;
+ 
+ 		if (int_grp2 & DISGR2_USBRST_INT) {
+ 			usb_gadget_udc_reset(&fotg210->gadget,
+ 					     fotg210->driver);
+-			value = ioread32(reg);
+-			value &= ~DISGR2_USBRST_INT;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_USBRST_INT);
+ 			pr_info("fotg210 udc reset\n");
+ 		}
+ 		if (int_grp2 & DISGR2_SUSP_INT) {
+-			value = ioread32(reg);
+-			value &= ~DISGR2_SUSP_INT;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_SUSP_INT);
+ 			pr_info("fotg210 udc suspend\n");
+ 		}
+ 		if (int_grp2 & DISGR2_RESM_INT) {
+-			value = ioread32(reg);
+-			value &= ~DISGR2_RESM_INT;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_RESM_INT);
+ 			pr_info("fotg210 udc resume\n");
+ 		}
+ 		if (int_grp2 & DISGR2_ISO_SEQ_ERR_INT) {
+-			value = ioread32(reg);
+-			value &= ~DISGR2_ISO_SEQ_ERR_INT;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_ISO_SEQ_ERR_INT);
+ 			pr_info("fotg210 iso sequence error\n");
+ 		}
+ 		if (int_grp2 & DISGR2_ISO_SEQ_ABORT_INT) {
+-			value = ioread32(reg);
+-			value &= ~DISGR2_ISO_SEQ_ABORT_INT;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_ISO_SEQ_ABORT_INT);
+ 			pr_info("fotg210 iso sequence abort\n");
+ 		}
+ 		if (int_grp2 & DISGR2_TX0BYTE_INT) {
+ 			fotg210_clear_tx0byte(fotg210);
+-			value = ioread32(reg);
+-			value &= ~DISGR2_TX0BYTE_INT;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_TX0BYTE_INT);
+ 			pr_info("fotg210 transferred 0 byte\n");
+ 		}
+ 		if (int_grp2 & DISGR2_RX0BYTE_INT) {
+ 			fotg210_clear_rx0byte(fotg210);
+-			value = ioread32(reg);
+-			value &= ~DISGR2_RX0BYTE_INT;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_RX0BYTE_INT);
+ 			pr_info("fotg210 received 0 byte\n");
+ 		}
+ 		if (int_grp2 & DISGR2_DMA_ERROR) {
+-			value = ioread32(reg);
+-			value &= ~DISGR2_DMA_ERROR;
+-			iowrite32(value, reg);
++			fotg210_ack_int(fotg210, FOTG210_DISGR2, DISGR2_DMA_ERROR);
+ 		}
+ 	}
+ 
+@@ -960,7 +942,7 @@ static irqreturn_t fotg210_irq(int irq, void *_fotg210)
+ 
+ 		/* the highest priority in this source register */
+ 		if (int_grp0 & DISGR0_CX_COMABT_INT) {
+-			fotg210_clear_comabt_int(fotg210);
++			fotg210_ack_int(fotg210, FOTG210_DISGR0, DISGR0_CX_COMABT_INT);
+ 			pr_info("fotg210 CX command abort\n");
+ 		}
+ 
 -- 
 2.39.0
 
