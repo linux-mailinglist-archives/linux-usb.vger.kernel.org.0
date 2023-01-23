@@ -2,108 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0E66776EF
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 10:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058D7677764
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 10:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjAWJBh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 04:01:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        id S231656AbjAWJ25 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 04:28:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjAWJBg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 04:01:36 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FFC1C33C
-        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 01:01:35 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so10062227wma.1
-        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 01:01:35 -0800 (PST)
+        with ESMTP id S229514AbjAWJ24 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 04:28:56 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2753D193DC
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 01:28:55 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id d30so17203542lfv.8
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 01:28:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EnbR18XVTVgA/kG2E8Uv4DzkNNYetgwaJLUmuarDdSk=;
-        b=JzK8IhpBF46oOeAJ76jz6D0Y6GOOrokHvTEDGusuNe3Me7BOEfEx95JrDZGmUc8yDg
-         StBnXbbXFuwDTZsCKINAjG2zces9HDT92dI7smnCOexe7cALbOH8I4A10R+BQcFKW/9U
-         PmrkYNZHXZKZq83Ul2puFJ2PXNiUM/1PFjsyO9bA6dzu8OpLazow+sdEas+m/V3R7Uq4
-         8i5H+HP6Jo+bOHL7Ut7RBOm53akrdpAAPxLxWXnAXzkYHdfIfORZ5E9drFbX6uv+C4W8
-         BC7S4Ou+88ayBwicUuyemqRWjFHXIWWP7d/fxEiaqlsc6IhAypkZkF8SD4oQRydkRDj1
-         sIVg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=riwGohdwIs67nJHMrftdXiKlM6Mmg+3JXhbTt0YvsJk=;
+        b=iC48eqlMArvLDXLFAD/gbIp1sczYv36emFZKs+9/KjVpImZWn6yUt4TuCH85NON7GA
+         JHmbYrlqrL8gmthUwYCFIU2squ/3fzTct3hYY9kKV85fBpZpJDHKPe5VO57Sp+2x87RP
+         5vDeh+fPVi4VvGd0eVFKIYCrVP0A+6HzZhIeMl9RgF83bMa2GebnUFH0Yt07+BZv8KOU
+         30+k0ySp46ZhpXsUt2g16pkDCVDlUhuYtoitA0SFbAtj9/5r+eEz0ETjhc2eaKn41h13
+         k7T04PUWJVFQaA1ey2V0IjSG450/+kxo94cFVVmYk4IM8XYulvH0mevpxz/l82Bltea2
+         GFJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EnbR18XVTVgA/kG2E8Uv4DzkNNYetgwaJLUmuarDdSk=;
-        b=urCLzyE2cA/3wpu+1EVvpBpjAN9T05epZ1iYwE+OkFjH9VPLQhFobFQPtCjcFcyspm
-         YRPQGCLpyNkHe5R8Lq6dZgqz0PESLZoypKojDFtHGwAErL+cwDZrFy6Bd7nj5aHG8AAX
-         KAbcX++agJxCyo8BX4tbt1+TDnb5RLXtNUWyjeS43BFV8gqeX+L8fQaSTY64mt3xwf0g
-         LGaYslUMzT1rlttEeLvbX0eCAwM357HCUmvCT7Yi0Zza2au2TkkOb08VwBI4Eyp3wFhe
-         SlMcm2h0MT8++fW+BtgzZVnlsnBez7Ua2+dY+p/mEOidYUFlhYpKdBMQzjS3XGAiE8be
-         JIQw==
-X-Gm-Message-State: AFqh2kpSucB7sGFpMvIfu4FbFE4XcmhOmiL8kQPUxfcehaE9hb4QwbXC
-        LiPO7SiZcyaAVAL1YFwKg1C7b++qUOzfsT3haW4=
-X-Google-Smtp-Source: AMrXdXu/HlyXTp/d7I1qaZ4QWa7ARUSXggvTNS6pnnOmW48dig76WBBRkDfoJsFeYItnkAgit3gqWQ==
-X-Received: by 2002:a05:600c:4fd3:b0:3cf:7197:e68a with SMTP id o19-20020a05600c4fd300b003cf7197e68amr19869124wmq.18.1674464493842;
-        Mon, 23 Jan 2023 01:01:33 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id t15-20020a05600c198f00b003db32ccf4bfsm10106087wmq.41.2023.01.23.01.01.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 01:01:33 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 23 Jan 2023 10:01:25 +0100
-Subject: [PATCH] usb: dwc3: qcom: enable vbus override when in OTG dr-mode
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAOVMzmMC/x2NSwrCMBQAr1Ky9kE+BqNXERf5PNtA8zEvVaH07
- gaXM4uZnRG2iMRu084aviPFkgeI08T8YvOMEMNgJrlUXEgFvdTogZLRmsNWqTe0CcLHK3j5kqD0
- GYy4XDVacTbBsVFylhBcs9kvo5W3dR2yNnzG7399fxzHD1TTZ32KAAAA
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=riwGohdwIs67nJHMrftdXiKlM6Mmg+3JXhbTt0YvsJk=;
+        b=te/cVIyUasiENxtfSCd1FCUhNgdKn2OZIQWtySoFGhEDaQybKnDIMyTKiBmGxJy1pM
+         4I3Vg7KK6XkdHKYpkGgiqMR7RDsQUbbtwmi2G4wexAyT1NEbuByXlWvSdTaVBGF2F6wD
+         Nh/p/tYGyaJAcECQL2GDiysPzxnmi0HoOowukTpnafuANE4GAI3vfxTloGRbjmf7evxs
+         Wuf0RMRfd6lOZp5HXoRccU+4qDgYKz2Iw9fcgr4cvgXQhDyZeRRwT+PDjsK4Ai0wsl7L
+         Mrboas4dAFmM3HQEt8BfGKxA7S5u53QgC1QtSQ2bKkRkbDfbg1lYaf/C8ZjzhJetCT94
+         vrPg==
+X-Gm-Message-State: AFqh2kr7snNnyZscS9ob/Zi046E+aIn0SqWm9b8sQ+WZxyfmxeocq5RT
+        oBZV07RL9RzLvZSS/yuPb+4=
+X-Google-Smtp-Source: AMrXdXtUB88vEhL2Fz3KO/T0iXLCo7GxcuVn76qVFOQpCXGeopzxV5rwMXrQBTbn+LQmj3h/fLqqIw==
+X-Received: by 2002:ac2:5f04:0:b0:4cc:7b49:a2f6 with SMTP id 4-20020ac25f04000000b004cc7b49a2f6mr5005728lfq.19.1674466133312;
+        Mon, 23 Jan 2023 01:28:53 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.75.56])
+        by smtp.gmail.com with ESMTPSA id i6-20020ac25b46000000b004cb1b4634edsm6454546lfp.194.2023.01.23.01.28.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 01:28:52 -0800 (PST)
+Subject: Re: [PATCH 1/3] fotg210-udc: Add missing completion handler
+To:     Linus Walleij <linus.walleij@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     linux-usb@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>
+References: <20230123073508.2350402-1-linus.walleij@linaro.org>
+ <20230123073508.2350402-2-linus.walleij@linaro.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <18225c0c-de37-7e01-2176-1c8e653ffb6c@gmail.com>
+Date:   Mon, 23 Jan 2023 12:28:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20230123073508.2350402-2-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With vbus override enabled when in OTG dr_mode, Host<->Peripheral
-switch now works on SM8550, otherwise the DWC3 seems to be stuck
-in Host mode only.
+Hello!
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 1/23/23 10:35 AM, Linus Walleij wrote:
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index b0a0351d2d8b..959fc925ca7c 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
- 
- 	/* enable vbus override for device mode */
--	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
-+	if (qcom->mode != USB_DR_MODE_HOST)
- 		dwc3_qcom_vbus_override_enable(qcom, true);
- 
- 	/* register extcon to override sw_vbus on Vbus change later */
+> From: Fabian Vogt <fabian@ritter-vogt.de>
+> 
+> This is used when responding to GET_STATUS requests. Without this, it
+> crashes on completion.
+> 
+> Fixes: b84a8dee23fd ("usb: gadget: add Faraday fotg210_udc driver")
+> Signed-off-by: Fabian Vogt <fabian@ritter-vogt.de>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/usb/fotg210/fotg210-udc.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
+> index 754429553f61..029b31c3107b 100644
+> --- a/drivers/usb/fotg210/fotg210-udc.c
+> +++ b/drivers/usb/fotg210/fotg210-udc.c
+> @@ -709,6 +709,20 @@ static int fotg210_is_epnstall(struct fotg210_ep *ep)
+>  	return value & INOUTEPMPSR_STL_EP ? 1 : 0;
+>  }
+>  
+> +/* For EP0 requests triggered by this driver (currently GET_STATUS response) */
+> +static void fotg210_ep0_complete(struct usb_ep *_ep, struct usb_request *req)
+> +{
+> +	struct fotg210_ep *ep;
+> +	struct fotg210_udc *fotg210;
+> +
+> +	ep = container_of(_ep, struct fotg210_ep, ep);
+> +	fotg210 = ep->fotg210;
+> +
+> +	if (req->status || req->actual != req->length) {
+> +		dev_warn(&fotg210->gadget.dev, "EP0 request failed: %d\n", req->status);
+> +	}
 
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230123-topic-sm8550-upstream-dwc3-qcom-otg-81795ea148db
+   Why {} here?
 
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+> +}
+> +
+>  static void fotg210_get_status(struct fotg210_udc *fotg210,
+>  				struct usb_ctrlrequest *ctrl)
+>  {
+[...]
+
+MBR, Sergey
