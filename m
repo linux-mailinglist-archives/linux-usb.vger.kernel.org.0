@@ -2,65 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540026775A8
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 08:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0E66776EF
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jan 2023 10:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjAWHfb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 02:35:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S231625AbjAWJBh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 04:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbjAWHfa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 02:35:30 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADFC166DC
-        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:29 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v10so13477554edi.8
-        for <linux-usb@vger.kernel.org>; Sun, 22 Jan 2023 23:35:29 -0800 (PST)
+        with ESMTP id S229579AbjAWJBg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 04:01:36 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FFC1C33C
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 01:01:35 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so10062227wma.1
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 01:01:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dmFV92Oe8RI2AuAY/Hs/y359Z5naSXU7oPpOL/UDG5Y=;
-        b=kUoFQEi1C+XgSX+/tKSocFFE87EtpfG6uzKer63av9oQ7mQrfkwAN3j9gOGGvU+4ZS
-         fj6Mbf6M+LTsBLzyE+FMEov2OkQ6VNXFMZOp7qT+WS0eh03WYjXgcfZvUnY1ttS8P0hA
-         FMFM1agqn2Js6/GOXAWtWD1Ef1j//FNsrgTl5W2VrnCoNWNXQEGLI+6S7LoyetBfucxz
-         q+3eKqfY9zHpn/xYTMBVMhaxZhXtRlRRhSb7P1n0bXfaQDuT320pxArOT6/082wzD717
-         eK5sFFBls+kvAcYd5A5EE055+6EfEDIILiY2CboHq0RrGcxY/TxCQlfOr/RNBZT/Knlo
-         6IYQ==
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EnbR18XVTVgA/kG2E8Uv4DzkNNYetgwaJLUmuarDdSk=;
+        b=JzK8IhpBF46oOeAJ76jz6D0Y6GOOrokHvTEDGusuNe3Me7BOEfEx95JrDZGmUc8yDg
+         StBnXbbXFuwDTZsCKINAjG2zces9HDT92dI7smnCOexe7cALbOH8I4A10R+BQcFKW/9U
+         PmrkYNZHXZKZq83Ul2puFJ2PXNiUM/1PFjsyO9bA6dzu8OpLazow+sdEas+m/V3R7Uq4
+         8i5H+HP6Jo+bOHL7Ut7RBOm53akrdpAAPxLxWXnAXzkYHdfIfORZ5E9drFbX6uv+C4W8
+         BC7S4Ou+88ayBwicUuyemqRWjFHXIWWP7d/fxEiaqlsc6IhAypkZkF8SD4oQRydkRDj1
+         sIVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dmFV92Oe8RI2AuAY/Hs/y359Z5naSXU7oPpOL/UDG5Y=;
-        b=pdtAQ4n9FsJJ7X32PmoeecvwSxhResc7M+dHOBIGO/9hOq8B9/UX14IR9vCAmiqwPw
-         p9bmQyKcZGusEEWZJ00mPXuJn4yzWgBHiDH8sacYxvuNqxhlKeAcCwPSkhqLA/9rleeZ
-         eYWahdNmzHJg7lnmH0PGMsuxyMCSgYYpcP97cTPobSTbff3r2Dzy/e3Dh9G1Y0qc9/+/
-         4cbb23zFmLYSRutnXxvKwRLGUyxd5x0zkQLdqxgMGsXL6yiqKii872ruuLd94sorBuR0
-         hEAwn3Z07uNr/1HxBPCbG75McRMB0pTH61a5fjZFRFGBTiEwegM1rg42lg/rWG23nFwe
-         NPjw==
-X-Gm-Message-State: AFqh2krcb22+3MBPRrFtFF4mNGaJ0I+W1i6FGX3eAls706NdEXOqe6O1
-        UooGgnVETFYtl34uqlvyP8vQHZ7ms2xSImgp
-X-Google-Smtp-Source: AMrXdXsSv7F0Y80gxNA/95ixTFJqfOxdydWSkVBli/PU0+j5sACL+3mjn5AMqhMp3ehntm0XxSOxDQ==
-X-Received: by 2002:aa7:df8d:0:b0:492:bf3d:1a1a with SMTP id b13-20020aa7df8d000000b00492bf3d1a1amr24401419edy.18.1674459327754;
-        Sun, 22 Jan 2023 23:35:27 -0800 (PST)
-Received: from localhost.localdomain (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b0084c7f96d023sm22104821ejd.147.2023.01.22.23.35.26
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EnbR18XVTVgA/kG2E8Uv4DzkNNYetgwaJLUmuarDdSk=;
+        b=urCLzyE2cA/3wpu+1EVvpBpjAN9T05epZ1iYwE+OkFjH9VPLQhFobFQPtCjcFcyspm
+         YRPQGCLpyNkHe5R8Lq6dZgqz0PESLZoypKojDFtHGwAErL+cwDZrFy6Bd7nj5aHG8AAX
+         KAbcX++agJxCyo8BX4tbt1+TDnb5RLXtNUWyjeS43BFV8gqeX+L8fQaSTY64mt3xwf0g
+         LGaYslUMzT1rlttEeLvbX0eCAwM357HCUmvCT7Yi0Zza2au2TkkOb08VwBI4Eyp3wFhe
+         SlMcm2h0MT8++fW+BtgzZVnlsnBez7Ua2+dY+p/mEOidYUFlhYpKdBMQzjS3XGAiE8be
+         JIQw==
+X-Gm-Message-State: AFqh2kpSucB7sGFpMvIfu4FbFE4XcmhOmiL8kQPUxfcehaE9hb4QwbXC
+        LiPO7SiZcyaAVAL1YFwKg1C7b++qUOzfsT3haW4=
+X-Google-Smtp-Source: AMrXdXu/HlyXTp/d7I1qaZ4QWa7ARUSXggvTNS6pnnOmW48dig76WBBRkDfoJsFeYItnkAgit3gqWQ==
+X-Received: by 2002:a05:600c:4fd3:b0:3cf:7197:e68a with SMTP id o19-20020a05600c4fd300b003cf7197e68amr19869124wmq.18.1674464493842;
+        Mon, 23 Jan 2023 01:01:33 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id t15-20020a05600c198f00b003db32ccf4bfsm10106087wmq.41.2023.01.23.01.01.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 23:35:27 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 3/3] fotg210-udc: Improve device initialization
-Date:   Mon, 23 Jan 2023 08:35:08 +0100
-Message-Id: <20230123073508.2350402-4-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230123073508.2350402-1-linus.walleij@linaro.org>
-References: <20230123073508.2350402-1-linus.walleij@linaro.org>
+        Mon, 23 Jan 2023 01:01:33 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Mon, 23 Jan 2023 10:01:25 +0100
+Subject: [PATCH] usb: dwc3: qcom: enable vbus override when in OTG dr-mode
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAOVMzmMC/x2NSwrCMBQAr1Ky9kE+BqNXERf5PNtA8zEvVaH07
+ gaXM4uZnRG2iMRu084aviPFkgeI08T8YvOMEMNgJrlUXEgFvdTogZLRmsNWqTe0CcLHK3j5kqD0
+ GYy4XDVacTbBsVFylhBcs9kvo5W3dR2yNnzG7399fxzHD1TTZ32KAAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.11.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,71 +77,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Fabian Vogt <fabian@ritter-vogt.de>
+With vbus override enabled when in OTG dr_mode, Host<->Peripheral
+switch now works on SM8550, otherwise the DWC3 seems to be stuck
+in Host mode only.
 
-Reset the device explicitly to get into a known state and also set the chip
-enable bit. Additionally, mask interrupts which aren't handled.
-
-Signed-off-by: Fabian Vogt <fabian@ritter-vogt.de>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/usb/fotg210/fotg210-udc.c | 15 +++++++++++++++
- drivers/usb/fotg210/fotg210-udc.h |  2 ++
- 2 files changed, 17 insertions(+)
+ drivers/usb/dwc3/dwc3-qcom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index 00c4c17a6919..9beca4fa66c3 100644
---- a/drivers/usb/fotg210/fotg210-udc.c
-+++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -7,6 +7,7 @@
-  * Author : Yuan-Hsin Chen <yhchen@faraday-tech.com>
-  */
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index b0a0351d2d8b..959fc925ca7c 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
  
-+#include <linux/delay.h>
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
-@@ -1023,6 +1024,11 @@ static int fotg210_udc_start(struct usb_gadget *g,
- 			dev_err(fotg210->dev, "can't bind to phy\n");
- 	}
+ 	/* enable vbus override for device mode */
+-	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
++	if (qcom->mode != USB_DR_MODE_HOST)
+ 		dwc3_qcom_vbus_override_enable(qcom, true);
  
-+	/* chip enable */
-+	value = ioread32(fotg210->reg + FOTG210_DMCR);
-+	value |= DMCR_CHIP_EN;
-+	iowrite32(value, fotg210->reg + FOTG210_DMCR);
-+
- 	/* enable device global interrupt */
- 	value = ioread32(fotg210->reg + FOTG210_DMCR);
- 	value |= DMCR_GLINT_EN;
-@@ -1039,6 +1045,15 @@ static void fotg210_init(struct fotg210_udc *fotg210)
- 	iowrite32(GMIR_MHC_INT | GMIR_MOTG_INT | GMIR_INT_POLARITY,
- 		  fotg210->reg + FOTG210_GMIR);
- 
-+	/* mask interrupts for groups other than 0-2 */
-+	iowrite32(~(DMIGR_MINT_G0 | DMIGR_MINT_G1 | DMIGR_MINT_G2),
-+		  fotg210->reg + FOTG210_DMIGR);
-+
-+	/* udc software reset */
-+	iowrite32(DMCR_SFRST, fotg210->reg + FOTG210_DMCR);
-+	/* Better wait a bit, but without a datasheet, no idea how long. */
-+	usleep_range(100, 200);
-+
- 	/* disable device global interrupt */
- 	value = ioread32(fotg210->reg + FOTG210_DMCR);
- 	value &= ~DMCR_GLINT_EN;
-diff --git a/drivers/usb/fotg210/fotg210-udc.h b/drivers/usb/fotg210/fotg210-udc.h
-index 22b72caf498c..252cb2b8e2fe 100644
---- a/drivers/usb/fotg210/fotg210-udc.h
-+++ b/drivers/usb/fotg210/fotg210-udc.h
-@@ -58,6 +58,8 @@
- 
- /* Device Mask of Interrupt Group Register (0x130) */
- #define FOTG210_DMIGR		0x130
-+#define DMIGR_MINT_G2		(1 << 2)
-+#define DMIGR_MINT_G1		(1 << 1)
- #define DMIGR_MINT_G0		(1 << 0)
- 
- /* Device Mask of Interrupt Source Group 0(0x134) */
+ 	/* register extcon to override sw_vbus on Vbus change later */
+
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230123-topic-sm8550-upstream-dwc3-qcom-otg-81795ea148db
+
+Best regards,
 -- 
-2.39.0
-
+Neil Armstrong <neil.armstrong@linaro.org>
