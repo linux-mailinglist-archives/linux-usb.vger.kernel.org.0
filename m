@@ -2,149 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56AAF678EE0
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 04:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8237B678F8D
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 05:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjAXDMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 22:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S231965AbjAXExy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 23:53:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjAXDMh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 22:12:37 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B9937B72
-        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 19:12:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674529956; x=1706065956;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QfNxQNFKvGIzTNKTRqiP7xBIUernOZnGRS5lFMqUsVE=;
-  b=dZJdwY6+JnJmSxNFE7LI95Q0z8o0ag5aneHh5O6YXTPxRgttRfg95iUS
-   D0lYs8YC+t3abRwdXBU2ZQLabE1IODjpCDV0uV5fs1P/HcMtzOhAeYQDo
-   /z+QAmSg2pIg25UxGtbq4TJTahNWefHqMFTCXWHd5ArRJG/8xXhcx80zl
-   /Q/MEIHDwVYg3Fnu5Lz56i1/MLg1t5PW16rFjTK5JSlCuZe83CqVQvRzN
-   X4LghyabackQ/Of3SbAXfXKjjvqxCwk5+q0q70CB13nImCb1WlBK78Cxn
-   /jvHQKsqcSijJzYAbmyDJxXqXrkCE7j9YDXlJGVLrshVLpC23FSUn7rRh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="353491176"
-X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
-   d="scan'208";a="353491176"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 19:12:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="750682524"
-X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
-   d="scan'208";a="750682524"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jan 2023 19:12:35 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pK9je-00064u-0a;
-        Tue, 24 Jan 2023 03:12:34 +0000
-Date:   Tue, 24 Jan 2023 11:12:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+        with ESMTP id S230088AbjAXExx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 23:53:53 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E32137B4D
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 20:53:52 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id n7so12706323wrx.5
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 20:53:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jq9qGoqSfaWb66NYd3pNfvT2WfQAhCftwFesWZusp/k=;
+        b=Vd0vR2bYAnuBo1V3KSrR0ZIZgxHTAmyz8JpqT45ii6NMEPgu3WQdM5SF7i12ZBl6GB
+         Ltpe0h02SWCTdaBB97YXxeTPuVPPPkXadj4OO18Kk21Z30dWMK3uTucYH049ynxkieFS
+         oWJqi700Rvibrdca20q7V+DjKt2DVY7eZ6lf+l8G+vF49OUEuYy8umR7m2szZX+30FEv
+         UlUrGUfTqX3P1GJ0xvnHoXP4qLY25oGpCGIcil+MT9SOTygAzS9OKAXjYMs50KuXTrOx
+         lhMZ9olLpaQ2WL5A9cJeh1fIneHGkki8s365E+JBf7xfFXjWHFWHC49y7A+fy5ta2XIt
+         ujVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jq9qGoqSfaWb66NYd3pNfvT2WfQAhCftwFesWZusp/k=;
+        b=aPVS0m9F1gj9swuwcZRcFfRD1opaILRP5pxJuYevWLGk2/OgPU3o8fhEmh9dO0TewG
+         6WjEjSG4HMfjqZ3o+E1yJoCVFkfvsE8IE4kSbLZ2RJStUDXnOChGFkS2m1ESbhMN746C
+         oED0dGveXxYL9qO0cIL9nDFLA9+MF0TsPJynf7tkOhB+Pbvs7rKoVh4acdAzqIVceyc6
+         2H+FtDmOMhEEx5GsipgdRnT2GTCkOqjHM66Ts1zZ7wUJ4rUhOQ3aMY4yUKrldA03U49P
+         9rpckHUoUpSKG3kaMiMfFuzsqM9hGOWBp2J7uwp1uYjwkSQvqS8y/pMFmXFVTrBYe+od
+         gikA==
+X-Gm-Message-State: AFqh2krSA3Du0FqqsD7nP9XJnqjrrk/Q0umlAfDVJAd+u8Ee72BE/g7S
+        TSCf/GRztin9Yf+qEoOG0GfX5uXuOEmqOg==
+X-Google-Smtp-Source: AMrXdXsUErSreCPHiwLc/eNX9FYL0XY6+oc2DEPDi2SgpnKo/2wZx/DKGd4SglJ/Xx3fh6WvsLV03g==
+X-Received: by 2002:adf:aa8f:0:b0:2bf:5dc0:56c8 with SMTP id h15-20020adfaa8f000000b002bf5dc056c8mr13214109wrc.51.1674536030761;
+        Mon, 23 Jan 2023 20:53:50 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id f5-20020adffcc5000000b002bfae3f6802sm773956wrs.58.2023.01.23.20.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 20:53:50 -0800 (PST)
+Date:   Tue, 24 Jan 2023 07:53:42 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     quic_ugoswami@quicinc.com
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- e3e9fc7fa7ad221cc2e7b207d514cc84ed393251
-Message-ID: <63cf4c95.NoiK54+koLIijTc3%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Subject: [bug report] usb: gadget: f_fs: Prevent race during
+ ffs_ep0_queue_wait
+Message-ID: <Y89kVv5jaw7hF/fv@kili>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: e3e9fc7fa7ad221cc2e7b207d514cc84ed393251  Merge 6.2-rc5 into usb-next
+Hello Udipto Goswami,
 
-elapsed time: 727m
+The patch 6a19da111057: "usb: gadget: f_fs: Prevent race during
+ffs_ep0_queue_wait" from Dec 15, 2022, leads to the following Smatch
+static checker warning:
 
-configs tested: 67
-configs skipped: 3
+	drivers/usb/gadget/function/f_fs.c:313 __ffs_ep0_queue_wait()
+	warn: inconsistent returns '&ffs->ev.waitq.lock'.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+drivers/usb/gadget/function/f_fs.c
+    276 static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
+    277         __releases(&ffs->ev.waitq.lock)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-gcc tested configs:
-m68k                             allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-arc                              allyesconfig
-x86_64                            allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-sh                               allmodconfig
-arc                                 defconfig
-s390                             allmodconfig
-mips                             allyesconfig
-alpha                               defconfig
-powerpc                          allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-arc                  randconfig-r043-20230123
-arm                  randconfig-r046-20230123
-ia64                             allmodconfig
-i386                 randconfig-a006-20230123
-x86_64               randconfig-a002-20230123
-x86_64               randconfig-a001-20230123
-x86_64                              defconfig
-arm                                 defconfig
-x86_64               randconfig-a004-20230123
-x86_64               randconfig-a003-20230123
-x86_64               randconfig-a005-20230123
-x86_64               randconfig-a006-20230123
-i386                 randconfig-a003-20230123
-i386                 randconfig-a002-20230123
-x86_64                               rhel-8.3
-i386                 randconfig-a001-20230123
-i386                 randconfig-a004-20230123
-x86_64                           rhel-8.3-bpf
-arm                              allyesconfig
-i386                 randconfig-a005-20230123
-x86_64                           rhel-8.3-syz
-arm64                            allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-i386                                defconfig
-i386                             allyesconfig
+    278 {
+    279         struct usb_request *req = ffs->ep0req;
+    280         int ret;
+    281 
+    282         if (!req)
+    283                 return -EINVAL;
+                        ^^^^^^^^^^^^^^^
+Drop the lock before returning?
 
-clang tested configs:
-hexagon              randconfig-r041-20230123
-hexagon              randconfig-r045-20230123
-s390                 randconfig-r044-20230123
-riscv                randconfig-r042-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a012-20230123
-x86_64               randconfig-a013-20230123
-x86_64               randconfig-a015-20230123
-x86_64               randconfig-a016-20230123
-i386                 randconfig-a016-20230123
-i386                 randconfig-a012-20230123
-i386                 randconfig-a013-20230123
-x86_64               randconfig-a014-20230123
-i386                 randconfig-a011-20230123
-i386                 randconfig-a014-20230123
-i386                 randconfig-a015-20230123
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-powerpc                  mpc885_ads_defconfig
-x86_64               randconfig-k001-20230123
+    284 
+    285         req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
+    286 
+    287         spin_unlock_irq(&ffs->ev.waitq.lock);
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    288 
+    289         req->buf      = data;
+    290         req->length   = len;
+    291 
+    292         /*
+    293          * UDC layer requires to provide a buffer even for ZLP, but should
+    294          * not use it at all. Let's provide some poisoned pointer to catch
+    295          * possible bug in the driver.
+    296          */
+    297         if (req->buf == NULL)
+    298                 req->buf = (void *)0xDEADBABE;
+    299 
+    300         reinit_completion(&ffs->ep0req_completion);
+    301 
+    302         ret = usb_ep_queue(ffs->gadget->ep0, req, GFP_ATOMIC);
+    303         if (ret < 0)
+    304                 return ret;
+    305 
+    306         ret = wait_for_completion_interruptible(&ffs->ep0req_completion);
+    307         if (ret) {
+    308                 usb_ep_dequeue(ffs->gadget->ep0, req);
+    309                 return -EINTR;
+    310         }
+    311 
+    312         ffs->setup_state = FFS_NO_SETUP;
+--> 313         return req->status ? req->status : req->actual;
+    314 }
+
+regards,
+dan carpenter
