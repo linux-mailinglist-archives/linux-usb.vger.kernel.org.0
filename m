@@ -2,79 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC0F67931C
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 09:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3762679324
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 09:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjAXI3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Jan 2023 03:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S232918AbjAXIb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Jan 2023 03:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjAXI3b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 03:29:31 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533402CFD1
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 00:29:30 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so10310610wmc.1
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 00:29:30 -0800 (PST)
+        with ESMTP id S232375AbjAXIb2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 03:31:28 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6FC2CFC4
+        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 00:31:27 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id r2so13075087wrv.7
+        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 00:31:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jjg3PTNaG9TA/YJFBk0aScsN783nundzyslnoyMX9ms=;
-        b=xPNk+ci70HKbMpoZal0Dkj6tQXIQ0jE5vSgfDCwEta//iXbXR82RbEcN176J2r9e8S
-         DzHLDMbej+BleQD0ucICiU+N5KlTvdDkgsnLWVvbB3/tErpHW2As10kx+tHLsJ0ZXONz
-         CXLoZ12xA+8qf/G4c4LmClcNNVokfbkoGD4rAN3lmbajf5rE+KQAlLomE1G7cwNEx2w9
-         3a6abMDI5vj9Xi9KU6IC1A59mFs2tFdM+OL+7NwDhYghT6yvrocfgbiYbIua9cqzfVuS
-         wp4q6fMPdvetnNqi45K1YrNBrVfxwlp7yyGF953xcRJxSpy7sM+mSt3F1y8BSIxEP/Sg
-         KlJQ==
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f9Z9xi4UTxKaj+2qIiteZ1vsHGIiq2RmA3CHBGm/Ijc=;
+        b=cXk9zSCJehPS/3cLtcWSeyGTZPpC4fQPdptDYqWVuC0YeJRVKpmH/1Hplwr4KlYLh2
+         8ptX7fsA935CbY7CoQvFwI5Wu6ZJRCZzqkV5YG3aLStRFASzQLAR7+WlwcaM6Zc9c68U
+         eFvXpfVvIxFVNXGNI/p9Ceadqi0Vyl/pJvd5pzFhLJljoBOkt0S0o6r8UngOaKcg07G4
+         PAHbuvQUnBaX0zJUXTdRSw1hkmFb26Us0qNARCiebVeku8qeGjjd7rirkNxq2Q81q7aK
+         QWLjwCD4INLpjWKGG4KH1Qt00MpDOq+hNUyIu5hXRpxMN6gW7g7XrVposCLSh8amd47N
+         Mw1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Jjg3PTNaG9TA/YJFBk0aScsN783nundzyslnoyMX9ms=;
-        b=liqTPKJQGTHy6eubCH3b4LHDNRzPQ/edr+id7I1SfEq9BpM8OR4XftuU5LDqYGwC9H
-         ETIWI6beMAVBEs0Pizwd53+FQu74LMrWHZcAT67Lk9rNVrQTTGaEIhqJcMzPXstbKHkr
-         w3sVkQWdrVl1f9DbeIaVXm/e8y5QsXyO1ZT4lOHDSnazjOUTko7mKJfhMMnZGEvy+WNG
-         2lh9+8gr+oHbXOZ04T47kfPUApuPG47RZax6H5ghSGOvgKzb6KaegbbPFL/Nt6Ofg4ky
-         LBzpQ4jH3iOEpYAUr+ZPt29nFg1XaezVv14GsAYmJERjVMTewmfdwBjE2r02xZ2YMXhD
-         xWrg==
-X-Gm-Message-State: AFqh2kqr6XBVqWw7wcs4WPW2KeVmKozkhZEO3e41SJ//5w9sfhi37HPy
-        Fb1Vd1ZAm36yyPKJuXKBviYmxA==
-X-Google-Smtp-Source: AMrXdXs0f4oNu7/SovheNXe2SEzsmHZxUroUQiV1dTGiqV5VhJJGJmH5pC6cGvjH2Xq4s4V64hYF1w==
-X-Received: by 2002:a05:600c:540c:b0:3da:fa18:a535 with SMTP id he12-20020a05600c540c00b003dafa18a535mr27222258wmb.29.1674548968857;
-        Tue, 24 Jan 2023 00:29:28 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:ebd2:15b:f444:7985? ([2a01:e0a:982:cbb0:ebd2:15b:f444:7985])
-        by smtp.gmail.com with ESMTPSA id e18-20020a05600c449200b003da105437besm1282237wmo.29.2023.01.24.00.29.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 00:29:28 -0800 (PST)
-Message-ID: <5d3d9ae3-4ff7-070e-24fb-3d808560f853@linaro.org>
-Date:   Tue, 24 Jan 2023 09:29:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
+        bh=f9Z9xi4UTxKaj+2qIiteZ1vsHGIiq2RmA3CHBGm/Ijc=;
+        b=f2nSP5PEUOLYik8TO+J8TSzx8mt/9LDSdkJ93KN3kIqKXRVoRPsRLnBnCCM8jat8Nj
+         iashIix/T7vLuMo5tHZ8d7f3mAE0cbNsC5HKHypukWt3qexfeN7tdfIdrMoY/gRqggqX
+         S8J1lndybdexqQhIucGbdRptpkfK/SrDrBEto0gr/93TwQaJXdt2fTK0K8gk3rtZ0AQ5
+         7a8Nnl4pZcaI6dzNx6+3QV8OCXlsVjsBur6gw75SLfmvr2fsU2Ka9z7TJ9NUMEyhsV0x
+         HGlrOLQMksOaYoVTgCIzK/JbLHUJq4N69IFB/toVO7aOq89xeMtJo2Ju6DxFNJ6lhVb5
+         bs8w==
+X-Gm-Message-State: AFqh2kpvDhP2Vc0VitlB8ysabgGzXbIxugbC8h8ajEGx/ZcwQvwjGQB0
+        YBS5JCkRgNQlCZAOHbsMprwsXw==
+X-Google-Smtp-Source: AMrXdXtQieMXAkBWAxi42JWZB4VtxtqkgdhtpdjC/SK4cZnolNIVwb2oQwvJEuXZAFXbNUrwJt7VjQ==
+X-Received: by 2002:a5d:6b07:0:b0:236:695b:82d4 with SMTP id v7-20020a5d6b07000000b00236695b82d4mr21887459wrw.30.1674549086005;
+        Tue, 24 Jan 2023 00:31:26 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d6842000000b002be5401ef5fsm1312291wrw.39.2023.01.24.00.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 00:31:25 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] usb: dwc3: qcom: enable vbus override when in OTG dr-mode
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>,
+Date:   Tue, 24 Jan 2023 09:31:21 +0100
+Subject: [PATCH v2] usb: dwc3: qcom: enable vbus override when in OTG
+ dr-mode
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v2-1-2d400e598463@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAFiXz2MC/5WOQQ6CMBBFr2K6dgwtEKor72FYDGWAJtDitKCGc
+ HcrN3D53uK/v4lAbCmI22kTTKsN1rsE6nwSZkDXE9g2sVCZyjOpcoh+tgbCpMsyg2UOkQknaF8
+ mh6fxE/jYg5bVtSSUhW4bkZYaDAQNozND2nLLOCY5M3X2faQfdeLBhuj5czxZ5c/+F10lSCClK
+ yykRiy7+2gdsr947kW97/sXSWw8WewAAAA=
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org>
- <Y85U9HSD6TIXFkg0@kroah.com>
-Organization: Linaro Developer Services
-In-Reply-To: <Y85U9HSD6TIXFkg0@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,43 +79,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23/01/2023 10:35, Greg Kroah-Hartman wrote:
-> On Mon, Jan 23, 2023 at 10:01:25AM +0100, Neil Armstrong wrote:
->> With vbus override enabled when in OTG dr_mode, Host<->Peripheral
->> switch now works on SM8550, otherwise the DWC3 seems to be stuck
->> in Host mode only.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   drivers/usb/dwc3/dwc3-qcom.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index b0a0351d2d8b..959fc925ca7c 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->>   	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
->>   
->>   	/* enable vbus override for device mode */
->> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
->> +	if (qcom->mode != USB_DR_MODE_HOST)
->>   		dwc3_qcom_vbus_override_enable(qcom, true);
->>   
->>   	/* register extcon to override sw_vbus on Vbus change later */
->>
->> ---
-> 
-> What commit does this fix?  Should it go to stable kernels?
+With vbus override enabled when in OTG dr_mode, Host<->Peripheral
+switch now works on SM8550, otherwise the DWC3 seems to be stuck
+in Host mode only.
 
-a4333c3a6ba9 usb: dwc3: Add Qualcomm DWC3 glue driver
+Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- Added Bryan's reviewed-by
+- Added Fixes tag
+- Link to v1: https://lore.kernel.org/r/20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Will resend with Fixes tag,
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index b0a0351d2d8b..959fc925ca7c 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
+ 
+ 	/* enable vbus override for device mode */
+-	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
++	if (qcom->mode != USB_DR_MODE_HOST)
+ 		dwc3_qcom_vbus_override_enable(qcom, true);
+ 
+ 	/* register extcon to override sw_vbus on Vbus change later */
 
-Neil
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230123-topic-sm8550-upstream-dwc3-qcom-otg-81795ea148db
 
-> 
-> thanks,
-> 
-> greg k-h
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
