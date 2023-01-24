@@ -2,61 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1683A678EA4
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 03:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E69678EB9
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 04:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjAXC7x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 21:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S232315AbjAXDFY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 22:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbjAXC7u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 21:59:50 -0500
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8D71116A;
-        Mon, 23 Jan 2023 18:59:49 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id d188so12197977oia.3;
-        Mon, 23 Jan 2023 18:59:49 -0800 (PST)
+        with ESMTP id S229791AbjAXDFX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 22:05:23 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B19B2CC76;
+        Mon, 23 Jan 2023 19:05:22 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id n8so12246453oih.0;
+        Mon, 23 Jan 2023 19:05:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YNOHf02gu1ukcHbN2NMoPdi9qGbutDky8/rFjzVgy/g=;
-        b=t9iWubGWkIVowdd1cMxtd3KFZKMHRU0PjwkkLGkoe5PFKVQS1JU5vY9V8B/GZBpHtg
-         m5SWdojtw8GZC/d+mRxYsFGr1zOkgLgzAeUdPZ9wcfJUXsWT1ZufuZ213yPTfw7bhBil
-         j/lSNN5QxTl0uEmqm3++Yhdt2TyJDRRhqu0UO8reXbPPY6YF+PZwK3NyNkQQ2LYGpYFs
-         1CE72wUR5O7OyHc+1a9NC9AgfZxDQmVS1MSroMxTMZFu2v27UPE/+MpKDF494VQM7JXs
-         M97WmDpU2ABFN+jJ1A1XVRQ5fOLQMSGThbrUJz9LNwmVxFCjgTz6u2Mq6Or5e142scPX
-         43dg==
-X-Gm-Message-State: AFqh2kp8zHimzttxugRE+OrIqKO3mj312eWE+qYyHkDk7QJW4VLc29qW
-        7RPonleoBHP/T3+MPVX/Tg==
-X-Google-Smtp-Source: AMrXdXuPTycFT9HqLjW73sbWjJQQa61581rl7rCGvQTc0VBwMUCdTxZ92ne8jUZBd7ASfym9tm4h/g==
-X-Received: by 2002:a54:4612:0:b0:364:5cf4:8d77 with SMTP id p18-20020a544612000000b003645cf48d77mr10729795oip.52.1674529188591;
-        Mon, 23 Jan 2023 18:59:48 -0800 (PST)
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xk4+Vm8v4wzLEgMP6WlX8JSzRYNU6eFU1QUEyNlFosI=;
+        b=4xn3XdE6Xk4+oiBGWcg6Q9l3BrkkqbHlfhYInw7AP89xceyJwIdineJjYBQcnaO7P/
+         ZfS53XY7HcKaJwA37pJoR9dC+OQE7jRCgU2FZNE8w5QJ6AyspAAf/9Z2SqG60PzHTzWz
+         xeB1q8/29kXp5An4hfBK9Pnd0T3GgHhzySI4lnPJhZm3OuV271kn5yGy+J7rjb8od9NQ
+         OeKEL/F37gN/zij5Y2uuCCMJ1vbyZ4vEBBhClDyd8ZdMn+pwPH7/k+VcahPYRKjnL9G7
+         B2RS9KN6BxstX8dLDOz1DcnTLDtPhUfHDsbzdM3Zyf/2oIsnbSqBLMlcOX88Knqc+1uX
+         199A==
+X-Gm-Message-State: AFqh2kpzHgYH6rqk7LAmmpQvqOTfGTElk/yuikqvlvCQ72gRQHT+Arzu
+        JzA83Y4QusgRaghXdHUeGg==
+X-Google-Smtp-Source: AMrXdXst3JoI2NBXuIrK65blr0cehJdMUewk4qoXF1Qd+FyS0toceDw915fLBXVpo2fyMR3DsMW4Hg==
+X-Received: by 2002:a05:6808:228a:b0:364:4eb7:e873 with SMTP id bo10-20020a056808228a00b003644eb7e873mr12078336oib.7.1674529521530;
+        Mon, 23 Jan 2023 19:05:21 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m1-20020a9d6ac1000000b0068655f477a6sm420863otq.50.2023.01.23.18.59.47
+        by smtp.gmail.com with ESMTPSA id bj19-20020a056808199300b0035b4b6d1bbfsm503702oib.28.2023.01.23.19.05.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 18:59:48 -0800 (PST)
-Received: (nullmailer pid 3256499 invoked by uid 1000);
-        Tue, 24 Jan 2023 02:59:46 -0000
+        Mon, 23 Jan 2023 19:05:21 -0800 (PST)
+Received: (nullmailer pid 3266337 invoked by uid 1000);
+        Tue, 24 Jan 2023 03:05:20 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v3 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its own schema
-Date:   Mon, 23 Jan 2023 20:59:36 -0600
-Message-Id: <20230124025936.3256213-2-robh@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230124025936.3256213-1-robh@kernel.org>
-References: <20230124025936.3256213-1-robh@kernel.org>
+Subject: [PATCH v3 0/5] dt-bindings: usb: Convert some more simple
+ OHCI/EHCI bindings
+Date:   Mon, 23 Jan 2023 21:05:15 -0600
+Message-Id: <20230110-dt-usb-v3-0-5af0541fcf8c@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOtKz2MC/22NQQ7CIBREr9KwFsP/BFpdeQ/jAui3JTbUQEs0T
+ e8u7c7ocibz3iwsUfSU2LlaWKTskx9DCfJQMdeb0BH3bckMBUoBIHg78TlZDk7LulZoGmlZGVu
+ TiNtoguvLPMzDUMpnpLt/7fbrreTep2mM7/0sw9b+eDNwwRuSWpNErUBeHhQDDccxdmxzZPzPY
+ eFOqK0D1IIUfHHrun4Ally7aOoAAAA=
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Lee Jones <lee@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org
+X-Mailer: b4 0.12-dev
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -67,193 +77,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK3399
-uses the discouraged parent wrapper node and child 'generic' DWC3 node.
-The intent was to modify the RK3399 DTs to use a single node, but the DT
-changes were rejected for ABI reasons. However, the schema was accepted
-as-is.
+The 'ohci-usb' compatible is another 'generic' compatible for OHCI, but 
+isn't documented with a schema. Let's add it to generic-ohci.yaml 
+schema. While looking at this, I found a few other USB host bindings 
+which are simple enough to use the 'generic' schemas.
 
-To fix this, we need to move the RK3399 binding to its own schema file.
-The RK3328 and RK3568 bindings are correct and use a single node.
-
-Cc: Johan Jonker <jbx6244@gmail.com>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-v3:
- - Align wrapped entries in examples
-v2:
- - no change
----
- .../bindings/usb/rockchip,dwc3.yaml           |  10 +-
- .../bindings/usb/rockchip,rk3399-dwc3.yaml    | 115 ++++++++++++++++++
- 2 files changed, 119 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
+Changes in v3:
+- Fix document references to generic-ehci.yaml and generic-ohci.yaml
+- Link to v2: https://lore.kernel.org/r/20230110-dt-usb-v2-0-926bc1260e51@kernel.org
 
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-index b3798d94d2fd..291844c8f3e1 100644
---- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-@@ -29,7 +29,6 @@ select:
-       contains:
-         enum:
-           - rockchip,rk3328-dwc3
--          - rockchip,rk3399-dwc3
-           - rockchip,rk3568-dwc3
-   required:
-     - compatible
-@@ -39,7 +38,6 @@ properties:
-     items:
-       - enum:
-           - rockchip,rk3328-dwc3
--          - rockchip,rk3399-dwc3
-           - rockchip,rk3568-dwc3
-       - const: snps,dwc3
- 
-@@ -90,7 +88,7 @@ required:
- 
- examples:
-   - |
--    #include <dt-bindings/clock/rk3399-cru.h>
-+    #include <dt-bindings/clock/rk3328-cru.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
-     bus {
-@@ -98,11 +96,11 @@ examples:
-       #size-cells = <2>;
- 
-       usbdrd3_0: usb@fe800000 {
--        compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
-+        compatible = "rockchip,rk3328-dwc3", "snps,dwc3";
-         reg = <0x0 0xfe800000 0x0 0x100000>;
-         interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
--        clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
--                 <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_GRF>;
-+        clocks = <&cru SCLK_USB3OTG_REF>, <&cru SCLK_USB3OTG_SUSPEND>,
-+                 <&cru ACLK_USB3OTG>;
-         clock-names = "ref_clk", "suspend_clk",
-                       "bus_clk", "grf_clk";
-         dr_mode = "otg";
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
-new file mode 100644
-index 000000000000..3159f9a6a0f7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
-@@ -0,0 +1,115 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/rockchip,rk3399-dwc3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip RK3399 SuperSpeed DWC3 USB SoC controller
-+
-+maintainers:
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+properties:
-+  compatible:
-+    const: rockchip,rk3399-dwc3
-+
-+  '#address-cells':
-+    const: 2
-+
-+  '#size-cells':
-+    const: 2
-+
-+  ranges: true
-+
-+  clocks:
-+    items:
-+      - description:
-+          Controller reference clock, must to be 24 MHz
-+      - description:
-+          Controller suspend clock, must to be 24 MHz or 32 KHz
-+      - description:
-+          Master/Core clock, must to be >= 62.5 MHz for SS
-+          operation and >= 30MHz for HS operation
-+      - description:
-+          USB3 aclk peri
-+      - description:
-+          USB3 aclk
-+      - description:
-+          Controller grf clock
-+
-+  clock-names:
-+    items:
-+      - const: ref_clk
-+      - const: suspend_clk
-+      - const: bus_clk
-+      - const: aclk_usb3_rksoc_axi_perf
-+      - const: aclk_usb3
-+      - const: grf_clk
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    const: usb3-otg
-+
-+patternProperties:
-+  '^usb@':
-+    $ref: snps,dwc3.yaml#
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#address-cells'
-+  - '#size-cells'
-+  - ranges
-+  - clocks
-+  - clock-names
-+  - resets
-+  - reset-names
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/rk3399-cru.h>
-+    #include <dt-bindings/power/rk3399-power.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    bus {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        usb {
-+            compatible = "rockchip,rk3399-dwc3";
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+            ranges;
-+            clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
-+                     <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_RKSOC_AXI_PERF>,
-+                     <&cru ACLK_USB3>, <&cru ACLK_USB3_GRF>;
-+            clock-names = "ref_clk", "suspend_clk",
-+                          "bus_clk", "aclk_usb3_rksoc_axi_perf",
-+                          "aclk_usb3", "grf_clk";
-+            resets = <&cru SRST_A_USB3_OTG0>;
-+            reset-names = "usb3-otg";
-+
-+            usb@fe800000 {
-+                compatible = "snps,dwc3";
-+                reg = <0x0 0xfe800000 0x0 0x100000>;
-+                interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH 0>;
-+                clocks = <&cru SCLK_USB3OTG0_REF>, <&cru ACLK_USB3OTG0>,
-+                         <&cru SCLK_USB3OTG0_SUSPEND>;
-+                clock-names = "ref", "bus_early", "suspend";
-+                dr_mode = "otg";
-+                phys = <&u2phy0_otg>, <&tcphy0_usb3>;
-+                phy-names = "usb2-phy", "usb3-phy";
-+                phy_type = "utmi_wide";
-+                snps,dis_enblslpm_quirk;
-+                snps,dis-u2-freeclk-exists-quirk;
-+                snps,dis_u2_susphy_quirk;
-+                snps,dis-del-phy-power-chg-quirk;
-+                snps,dis-tx-ipgap-linecheck-quirk;
-+                power-domains = <&power RK3399_PD_USB3>;
-+            };
-+        };
-+    };
-+...
+Changes in v2:
+- Fix schema error for 'transceiver'
+- Split OMAP changes to separate patch and convert omap-ehci
+- Link to v1: https://lore.kernel.org/r/20230110-dt-usb-v1-0-8e366e326513@kernel.org
+
+---
+Rob Herring (5):
+      dt-bindings: usb: Remove obsolete brcm,bcm3384-usb.txt
+      dt-bindings: usb: Convert multiple "usb-ohci" bindings to DT schema
+      dt-bindings: usb: Convert OMAP OHCI/EHCI bindings to schema
+      dt-bindings: usb: Convert Marvell Orion EHCI to DT schema
+      dt-bindings: usb: Convert Nuvoton EHCI to DT schema
+
+ .../devicetree/bindings/mfd/omap-usb-host.txt      |  8 ++---
+ .../devicetree/bindings/powerpc/nintendo/wii.txt   | 10 -------
+ .../devicetree/bindings/usb/brcm,bcm3384-usb.txt   | 11 -------
+ .../devicetree/bindings/usb/ehci-omap.txt          | 31 -------------------
+ .../devicetree/bindings/usb/ehci-orion.txt         | 22 --------------
+ .../devicetree/bindings/usb/generic-ehci.yaml      |  5 ++++
+ .../devicetree/bindings/usb/generic-ohci.yaml      | 32 +++++++++++++++++---
+ .../devicetree/bindings/usb/npcm7xx-usb.txt        | 20 -------------
+ Documentation/devicetree/bindings/usb/ohci-nxp.txt | 24 ---------------
+ .../devicetree/bindings/usb/ohci-omap3.txt         | 15 ----------
+ Documentation/devicetree/bindings/usb/pxa-usb.txt  |  2 +-
+ .../devicetree/bindings/usb/spear-usb.txt          | 35 ----------------------
+ 12 files changed, 38 insertions(+), 177 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230110-dt-usb-1c637752a83b
+
+Best regards,
 -- 
-2.39.0
+Rob Herring <robh@kernel.org>
 
