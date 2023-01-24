@@ -2,91 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFDE6795CB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 11:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44356795F2
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 12:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbjAXKxf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Jan 2023 05:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S233391AbjAXLCR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Jan 2023 06:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbjAXKxe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 05:53:34 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E370AEFB5
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 02:53:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=e/bpsoqeHZ/s06n74HGf7fiNqPP0IXdFuUfXiai3+5M=; b=Hn4Xa
-        DfqDxY0paiqo5FNxwQfRcHqSLSTAh0jxgJK9x0t6DF9oP8pRevlevx83ZI3KgA6DV/qiJx6Ym7bwp
-        b2Zf5pQn2DLoeYqyo+PwKLrWJDxbQIBtozXAYdUOuFfxGwjGIR/Bpt1EnV1ueLpP5v6gTQ+OhLdu8
-        Iq73OHJGa/SNKckP6JrNQY4sFBmEil/TMNJzfU+Subt1PUUmOQf0YT2irlAl5101vUm6nkQm3RIBq
-        d2X1Kuqi6kaWj7U0sLFLv1g/TjFzLXpX34+vAdGDfrAJIP9jzgjzKvUDW7HESAYEFbej3u9u4u+gF
-        0JqoSp0kUHyMD3h/fuawaK2B1F0kA==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1pKGvi-0008W4-3D;
-        Tue, 24 Jan 2023 10:53:30 +0000
-Date:   Tue, 24 Jan 2023 10:53:28 +0000
-From:   John Keeping <john@metanate.com>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc:     Dan Carpenter <error27@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Pratham Pratap <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH] usb: gadget: f_fs: Fix unbalanced spinlock in
-  __ffs_ep0_queue_wait
-Message-ID: <Y8+4qAqyKp64iqzQ@donbot>
-References: <20230124091149.18647-1-quic_ugoswami@quicinc.com>
+        with ESMTP id S233638AbjAXLCB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 06:02:01 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77E16A6A;
+        Tue, 24 Jan 2023 03:02:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674558120; x=1706094120;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vAFJXbptyBjom+Zl0+Qw8s7l1uWyT2WT30fX8zlGXXQ=;
+  b=LmjjegjCUkGt0r5byO8NxDPk/g/KoYGIxvpbnBKbtpWrrq6ZN3rvDTm1
+   90XeNPQWhb+PaaPqaVI/wdAnGwDRxC8Z+0ZIrkgJRRYDkNRoWYWluHgP3
+   Hrvz0C3gP1WolKE85Q/GizKr+qUMAjkj0oowtTo9XeMdQIxgnSTSMzkuk
+   XAP2j3sc0/0BQpTCGyX4+SPf5Eq9gaSc0sNvr3HP9XExvrsUecRsFzXse
+   kWhoaKbCJuf2xqJV0qHPjLgRzIztZXN9e1+bJ7ufgXd3EMaWRLoy3PnO1
+   74xXTjJ9+o0IdZXFhtGKN3zoItK0iRQO3T8/es1m14RqgnmuF/KGk/BSf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="306624042"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="306624042"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 03:02:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804548334"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="804548334"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 24 Jan 2023 03:01:57 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Jan 2023 13:01:56 +0200
+Date:   Tue, 24 Jan 2023 13:01:56 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, gregkh@linuxfoundation.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/2] usb: typec: altmodes/displayport: Update active
+ state
+Message-ID: <Y8+6pA9XHRA/mEH1@kuha.fi.intel.com>
+References: <20230120205827.740900-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124091149.18647-1-quic_ugoswami@quicinc.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230120205827.740900-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:41:49PM +0530, Udipto Goswami wrote:
-> __ffs_ep0_queue_wait executes holding the spinlock of &ffs->ev.waitq.lock
-> and unlocks it after the assignments to usb_request are done.
-> However in the code if the request is already NULL we bail out returning
-> -EINVAL but never unlocked the spinlock.
+On Fri, Jan 20, 2023 at 08:58:26PM +0000, Prashant Malani wrote:
+> Update the altmode "active" state when we receive Acks for Enter and
+> Exit Mode commands. Having the right state is necessary to change Pin
+> Assignments using the 'pin_assignment" sysfs file.
 > 
-> Fix this by adding spin_unlock_irq &ffs->ev.waitq.lock before returning.
-> 
-> Fixes: 6a19da111057("usb: gadget: f_fs: Prevent race during ffs_ep0_queue_wait")
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Benson Leung <bleung@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Reviewed-by: John Keeping <john@metanate.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/gadget/function/f_fs.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 523a961b910b..8ad354741380 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -279,8 +279,10 @@ static int __ffs_ep0_queue_wait(struct ffs_data *ffs, char *data, size_t len)
->  	struct usb_request *req = ffs->ep0req;
->  	int ret;
->  
-> -	if (!req)
-> +	if (!req) {
-> +		spin_unlock_irq(&ffs->ev.waitq.lock);
->  		return -EINVAL;
-> +	}
->  
->  	req->zero     = len < le16_to_cpu(ffs->ev.setup.wLength);
->  
+> Changes since v1:
+> - Dropped the Fixes and Cc: stable tags; given the discussion in [1]
+>   I no longer think this constitutes a fix.
+> - Added Reviewed-by tag from Benson.
+> 
+> [1] https://lore.kernel.org/linux-usb/20230118031514.1278139-1-pmalani@chromium.org/
+> 
+>  drivers/usb/typec/altmodes/displayport.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 06fb4732f8cd..bc1c556944d6 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -277,9 +277,11 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+>  	case CMDT_RSP_ACK:
+>  		switch (cmd) {
+>  		case CMD_ENTER_MODE:
+> +			typec_altmode_update_active(alt, true);
+>  			dp->state = DP_STATE_UPDATE;
+>  			break;
+>  		case CMD_EXIT_MODE:
+> +			typec_altmode_update_active(alt, false);
+>  			dp->data.status = 0;
+>  			dp->data.conf = 0;
+>  			break;
 > -- 
-> 2.17.1
-> 
+> 2.39.0.246.g2a6d74b583-goog
+
+-- 
+heikki
