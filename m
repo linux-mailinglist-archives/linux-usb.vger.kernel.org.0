@@ -2,118 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3762679324
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 09:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD796793AB
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 10:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbjAXIb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Jan 2023 03:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S233119AbjAXJJI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Jan 2023 04:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjAXIb2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 03:31:28 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6FC2CFC4
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 00:31:27 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id r2so13075087wrv.7
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 00:31:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9Z9xi4UTxKaj+2qIiteZ1vsHGIiq2RmA3CHBGm/Ijc=;
-        b=cXk9zSCJehPS/3cLtcWSeyGTZPpC4fQPdptDYqWVuC0YeJRVKpmH/1Hplwr4KlYLh2
-         8ptX7fsA935CbY7CoQvFwI5Wu6ZJRCZzqkV5YG3aLStRFASzQLAR7+WlwcaM6Zc9c68U
-         eFvXpfVvIxFVNXGNI/p9Ceadqi0Vyl/pJvd5pzFhLJljoBOkt0S0o6r8UngOaKcg07G4
-         PAHbuvQUnBaX0zJUXTdRSw1hkmFb26Us0qNARCiebVeku8qeGjjd7rirkNxq2Q81q7aK
-         QWLjwCD4INLpjWKGG4KH1Qt00MpDOq+hNUyIu5hXRpxMN6gW7g7XrVposCLSh8amd47N
-         Mw1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f9Z9xi4UTxKaj+2qIiteZ1vsHGIiq2RmA3CHBGm/Ijc=;
-        b=f2nSP5PEUOLYik8TO+J8TSzx8mt/9LDSdkJ93KN3kIqKXRVoRPsRLnBnCCM8jat8Nj
-         iashIix/T7vLuMo5tHZ8d7f3mAE0cbNsC5HKHypukWt3qexfeN7tdfIdrMoY/gRqggqX
-         S8J1lndybdexqQhIucGbdRptpkfK/SrDrBEto0gr/93TwQaJXdt2fTK0K8gk3rtZ0AQ5
-         7a8Nnl4pZcaI6dzNx6+3QV8OCXlsVjsBur6gw75SLfmvr2fsU2Ka9z7TJ9NUMEyhsV0x
-         HGlrOLQMksOaYoVTgCIzK/JbLHUJq4N69IFB/toVO7aOq89xeMtJo2Ju6DxFNJ6lhVb5
-         bs8w==
-X-Gm-Message-State: AFqh2kpvDhP2Vc0VitlB8ysabgGzXbIxugbC8h8ajEGx/ZcwQvwjGQB0
-        YBS5JCkRgNQlCZAOHbsMprwsXw==
-X-Google-Smtp-Source: AMrXdXtQieMXAkBWAxi42JWZB4VtxtqkgdhtpdjC/SK4cZnolNIVwb2oQwvJEuXZAFXbNUrwJt7VjQ==
-X-Received: by 2002:a5d:6b07:0:b0:236:695b:82d4 with SMTP id v7-20020a5d6b07000000b00236695b82d4mr21887459wrw.30.1674549086005;
-        Tue, 24 Jan 2023 00:31:26 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id o2-20020a5d6842000000b002be5401ef5fsm1312291wrw.39.2023.01.24.00.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 00:31:25 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 24 Jan 2023 09:31:21 +0100
-Subject: [PATCH v2] usb: dwc3: qcom: enable vbus override when in OTG
- dr-mode
+        with ESMTP id S232827AbjAXJJG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 04:09:06 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FE33A85A
+        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 01:09:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674551345; x=1706087345;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LEHelsAi7XkgV18EkkVKHefJtHLvN2IdJSffJIEWRbk=;
+  b=ebEKDC8GjvxtXsPttcXBOQYJPepdJdANzIoR/pz/YKpWcM73KNo2E+Hz
+   BsN+6qxoeikG4/f3tihs5X2EbNM/4ZQQqJUM9GzS/jDxA8y/zVo3gPKsA
+   UyKrQHp6sty3qDfRbbhxLPOpzSXaEiD6xZSeaV/omHBL6ZL3YS+7TuS3M
+   o4DVLSAEhL3MB7KMYVISj01Y47VqtjqwZufwAnoDFfh9Dn+Snt1QM9iMN
+   aXya32k4VY+0kzwAmto4wfXv1Jt5pcKnaRWfVD9oVlDGSifrpsrnEXuWD
+   d2kz7qVaNHl/20wNqckWLM/8xMlMu/18SrjjK8aA4yJlpw8/nZpBYvMmW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327511725"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="327511725"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 01:09:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="639510354"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="639510354"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 24 Jan 2023 01:09:03 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 44FE0154; Tue, 24 Jan 2023 11:09:39 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 1/2] thunderbolt: Handle bandwidth allocation mode enablement notification
+Date:   Tue, 24 Jan 2023 11:09:37 +0200
+Message-Id: <20230124090938.58825-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v2-1-2d400e598463@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAFiXz2MC/5WOQQ6CMBBFr2K6dgwtEKor72FYDGWAJtDitKCGc
- HcrN3D53uK/v4lAbCmI22kTTKsN1rsE6nwSZkDXE9g2sVCZyjOpcoh+tgbCpMsyg2UOkQknaF8
- mh6fxE/jYg5bVtSSUhW4bkZYaDAQNozND2nLLOCY5M3X2faQfdeLBhuj5czxZ5c/+F10lSCClK
- yykRiy7+2gdsr947kW97/sXSWw8WewAAAA=
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With vbus override enabled when in OTG dr_mode, Host<->Peripheral
-switch now works on SM8550, otherwise the DWC3 seems to be stuck
-in Host mode only.
+When the graphics side enables bandwidth allocation mode the DP IN
+adapter sends notification to the connection manager about this.
+Currently the handler misses this and tries to allocate 0 Mb/s that then
+makes the graphics side to think the request failed.
 
-Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-Changes in v2:
-- Added Bryan's reviewed-by
-- Added Fixes tag
-- Link to v1: https://lore.kernel.org/r/20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org
----
- drivers/usb/dwc3/dwc3-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fix this by properly handling the enablement notification.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index b0a0351d2d8b..959fc925ca7c 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
+Fixes: 6ce3563520be ("thunderbolt: Add support for DisplayPort bandwidth allocation mode")
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/tb.c   | 10 +++++++---
+ drivers/thunderbolt/usb4.c |  7 ++++---
+ 2 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 0b891d749a96..7bfbc9ca9ba4 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1756,11 +1756,15 @@ static void tb_handle_dp_bandwidth_request(struct work_struct *work)
+ 		goto unlock;
+ 	}
  
- 	/* enable vbus override for device mode */
--	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
-+	if (qcom->mode != USB_DR_MODE_HOST)
- 		dwc3_qcom_vbus_override_enable(qcom, true);
+-	requested_bw = usb4_dp_port_requested_bw(in);
+-	if (requested_bw < 0) {
+-		tb_port_dbg(in, "no bandwidth request active\n");
++	ret = usb4_dp_port_requested_bw(in);
++	if (ret < 0) {
++		if (ret == -ENODATA)
++			tb_port_dbg(in, "no bandwidth request active\n");
++		else
++			tb_port_warn(in, "failed to read requested bandwidth\n");
+ 		goto unlock;
+ 	}
++	requested_bw = ret;
  
- 	/* register extcon to override sw_vbus on Vbus change later */
-
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230123-topic-sm8550-upstream-dwc3-qcom-otg-81795ea148db
-
-Best regards,
+ 	tb_port_dbg(in, "requested bandwidth %d Mb/s\n", requested_bw);
+ 
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 2a9266fb5c0f..1e5e9c147a31 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -2732,7 +2732,8 @@ int usb4_dp_port_allocate_bw(struct tb_port *port, int bw)
+  * Reads the DPCD (graphics driver) requested bandwidth and returns it
+  * in Mb/s. Takes the programmed granularity into account. In case of
+  * error returns negative errno. Specifically returns %-EOPNOTSUPP if
+- * the adapter does not support bandwidth allocation mode.
++ * the adapter does not support bandwidth allocation mode, and %ENODATA
++ * if there is no active bandwidth request from the graphics driver.
+  */
+ int usb4_dp_port_requested_bw(struct tb_port *port)
+ {
+@@ -2750,10 +2751,10 @@ int usb4_dp_port_requested_bw(struct tb_port *port)
+ 	ret = tb_port_read(port, &val, TB_CFG_PORT,
+ 			   port->cap_adap + ADP_DP_CS_8, 1);
+ 	if (ret)
+-		return 0;
++		return ret;
+ 
+ 	if (!(val & ADP_DP_CS_8_DR))
+-		return 0;
++		return -ENODATA;
+ 
+ 	return (val & ADP_DP_CS_8_REQUESTED_BW_MASK) * granularity;
+ }
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.39.0
 
