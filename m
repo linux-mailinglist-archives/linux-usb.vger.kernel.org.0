@@ -2,48 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA86679AD3
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 14:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0297B679ACE
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 14:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbjAXN7S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Jan 2023 08:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        id S234012AbjAXN6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Jan 2023 08:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjAXN7J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 08:59:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6C27299;
-        Tue, 24 Jan 2023 05:58:46 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 125568A9;
-        Tue, 24 Jan 2023 14:58:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674568683;
-        bh=+IKoJk285CRjKexmMgjG1gUz9g2XFQkogbpPUD07jrk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aNie/7FI6nBD+uimQzn6J9Ms2yl0JDSi8zcwil6xJh3vCLVEwm6/LwYE8ZXG8E3n0
-         kdwsTXAIZ2PPKlieum+tdHp4unIYnyzYr0JFBwkFADAcrPOTUS2p85HWRVFWMAQ1aY
-         kb60+dy6J5EN/9Bs6vp/8nlZrPTRFF1AtHAfDsDE=
-Message-ID: <bc21ec03-bc20-3640-d5f0-9e72f50eabce@ideasonboard.com>
-Date:   Tue, 24 Jan 2023 13:57:59 +0000
+        with ESMTP id S233977AbjAXN6i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 08:58:38 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A9E40FE;
+        Tue, 24 Jan 2023 05:58:15 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id bk15so39141345ejb.9;
+        Tue, 24 Jan 2023 05:58:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EsE8LAxbmcbJ8Rh9c45zJHgSKEw3j1IDQef94+hEZn8=;
+        b=ERcsHbTxkmAGcUFsnWBLecWkyzZDcgK2pztKG0dmxEGdG0CR/8QSdDdGNC2L7HY7Bk
+         cNYG08EnEmFa6jo/fZRzgbFdI2w5SYfWirsxevTACycubyVlzHtDjU1cZOhEOzAU5PRX
+         UWXq06VPmijoCaqeQVHJObNcRzVwg3Ne8kudBGqykrCcFPAeljTchl7rIqYtVZgFcyIT
+         gKu0E5MThC53FXO4VdySU0TX8slzU+2tnXbACq3IornNM36wg0iBhBVillwvEr79UKUc
+         DYQtvSMbp6dyDNS2itSmZOeQfqkYV8PiKh9vJeqcExXdD1CUadi6hoORGuw1GN5xr0Te
+         /yiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EsE8LAxbmcbJ8Rh9c45zJHgSKEw3j1IDQef94+hEZn8=;
+        b=Ptrj4YJiHEEhuhKcWw+u0oaVM9UHWzLgYvGRgbv8nBHWF8NWKbj3VA0CKvtgmhbZh5
+         V6KQHAWKqTMlts/qqk3jOXAimSGufdiRqPP6LgUeFBLDZJOpVHgqK/XI78/KMHWxOLh1
+         xRBM92e5JdXtdiok/KZnqYdLGOE3/6FKXRnfyiEPoRGBcmKO3XytYHARq+9LwLrH0VPg
+         u5z6FAkjlMVibjf9jtCNkZz32Dka7ZX4k2G9VjPr96CqvvIqpmeUr/7/Vw4WFfy4tT5+
+         vSQoqj7HZEFg1SuurWeWNELkCyd/+X10EGrU4Brrr/8D0SwuhAIplq2amkJRTFP9wJCT
+         TARQ==
+X-Gm-Message-State: AFqh2krT8WnCsSmjHT++mIzmEfYBI5q5OJFQqhILLKIdJXsf60MA07oB
+        yJVdsNhHi/+eslIadMpi1xE=
+X-Google-Smtp-Source: AMrXdXsyq7toRa5W56MK7Pcofn3IR3CQf5VXhEAxy8VmJkn5cj7/wgxqMb9W3ZpWOrkfJhSgDBCsmA==
+X-Received: by 2002:a17:906:af8f:b0:7c1:5098:9074 with SMTP id mj15-20020a170906af8f00b007c150989074mr25993652ejb.0.1674568687780;
+        Tue, 24 Jan 2023 05:58:07 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id t15-20020a1709066bcf00b00877ff0c2bb0sm237151ejs.166.2023.01.24.05.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 05:58:07 -0800 (PST)
+Date:   Tue, 24 Jan 2023 14:58:05 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V5 1/5] dt-bindings: usb: tegra-xudc: Add dma-coherent
+ for Tegra194
+Message-ID: <Y8/j7Q1NPPsGjs5P@orome>
+References: <20230119104208.28726-1-jonathanh@nvidia.com>
+ <20230119104208.28726-2-jonathanh@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] MAINTAINERS: Add myself as UVC Gadget Maintainer
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20221206113841.1359976-1-dan.scally@ideasonboard.com>
- <Y4+SxVzTywR3qHdg@pendragon.ideasonboard.com>
- <Y81RdyDX6SHGYc3W@pendragon.ideasonboard.com> <Y81ZmhguW3F0eGOv@kroah.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <Y81ZmhguW3F0eGOv@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="n9EIHA5MKRYXq+mq"
+Content-Disposition: inline
+In-Reply-To: <20230119104208.28726-2-jonathanh@nvidia.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -51,22 +79,43 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-On 22/01/2023 15:43, Greg KH wrote:
-> On Sun, Jan 22, 2023 at 05:08:39PM +0200, Laurent Pinchart wrote:
->> Hi Dan,
->>
->> I've just noticed that neither linux-usb nor Greg were CC'ed on this.
->>
->> Greg, could you pick this patch up ([1]) for v6.3, or should Dan resend
->> it with the right CC list ?
->>
->> [1] https://lore.kernel.org/all/20221206113841.1359976-1-dan.scally@ideasonboard.com/
-> Please resend it with the correct list :)
+--n9EIHA5MKRYXq+mq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Oops; how did I manage that!? Thanks for the heads up Laurent; I'll 
-re-send it
+On Thu, Jan 19, 2023 at 10:42:04AM +0000, Jon Hunter wrote:
+> DMA operations for XUSB device controller are coherent for Tegra194 and
+> so update the device-tree binding to add this property.
+>=20
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+> V5: Dropped fixes tag
+> V4: This is new in this version
+>=20
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml   | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-> thanks,
->
-> greg k-h
+--n9EIHA5MKRYXq+mq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPP4+0ACgkQ3SOs138+
+s6FQhA//Z8xJ8POz2V/1ENyhFPZ5ezbUKTPd0c//NQJKL8ZyBoxgtwAUXvsyMsSw
+ooKN0DfsODsNLJNW4YApMDCI6a7VT/e49kNGZhHMWEXDv8RKjNY7sPVj+wGcy06P
+KOHmaGKf2+AIVbuVu5cyPXidIjWYsTRbgK+zLLQL50B0ZrNFs7UQTBr5jQXAjo6v
+cjpnCU8wwQibXuDiSz5Hrml4hVnYC/or4HDU5jRWOCo0LSISFrwatxNjrUwoxf4V
+MPfqSCtB58rfeC65IQG+EbZjlAwgrtXG62dwRxaYGujwg7j0enaTROAhnVOgZ3Vr
+CN8JkgM596AG2sgsPD6MniZrADucitTutUiRcrS8Uqu7gJmRcbweTSl61AENlIST
+uj3GcyPR0dXBwdP+AORbxe8VBbbM2JJPQ26EAnnySkrVJELzhn4dkF8H09JRWDfT
+3g0F5bXdU1JwHhVMexKiLZGilIbrHitzrjGfr4IlzWo0ySdK0iip2KtFSNu1L1FE
+9w/wBWKRKPNR5KFC9TYhMkNTs+pk/+zzungs/hZhsVJvDVJqXjuxlpJBsUcZ8jXF
+aq1C0baSCaEj87hN4uaCV6YSMgM2nHbi/VzO9fGIL2YBG1wRk71s8g9vll/qUrqG
+Bqj2q69R4S4p9k2wCIRPV+uCR34exbkPWBGvbNXKitucrWbZNZk=
+=gsd+
+-----END PGP SIGNATURE-----
+
+--n9EIHA5MKRYXq+mq--
