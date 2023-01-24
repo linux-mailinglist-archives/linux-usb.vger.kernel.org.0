@@ -2,148 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734A767A14F
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 19:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A97467A18F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 19:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbjAXSiN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Jan 2023 13:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
+        id S233964AbjAXSnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Jan 2023 13:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233560AbjAXSiI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 13:38:08 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C28432516
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 10:37:58 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:2f4a:8573:c294:b2ce])
-        by laurent.telenet-ops.be with bizsmtp
-        id CidZ2900K56uRqi01idZ2h; Tue, 24 Jan 2023 19:37:55 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pKOAe-007HCs-OB;
-        Tue, 24 Jan 2023 19:37:33 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pKOAn-002n1A-8j;
-        Tue, 24 Jan 2023 19:37:33 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Vinod Koul <vkoul@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     linux-phy@lists.infradead.org, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 9/9] usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
-Date:   Tue, 24 Jan 2023 19:37:28 +0100
-Message-Id: <3adc5dd1149a17ea7daf4463549feab886c6b145.1674584626.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1674584626.git.geert+renesas@glider.be>
-References: <cover.1674584626.git.geert+renesas@glider.be>
+        with ESMTP id S233871AbjAXSnC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 13:43:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B3261BB;
+        Tue, 24 Jan 2023 10:42:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C782461324;
+        Tue, 24 Jan 2023 18:42:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37236C433A8;
+        Tue, 24 Jan 2023 18:42:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674585767;
+        bh=DBSo7OynaPiD3LOZ5Et+hWfS1NPFDENYrFZZTqaJ4Zo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RuxlPFOPF6nG3xhTMWTioiwTQkM78eHKGibjNQ4Ld2qVM6eMg+Pqb+1pVDyLlEO88
+         pCYdM+O5ReIsLpkyvLRIL8D6J8ybMRFahWkSUIYHGGmpS8jhZzaK8678isY2qke6J2
+         Cc4WWweSKl5bPOqJYmyqqauDgUrccGrX1l18oSf5R4CHQZk/4niQE1RwVUAD8XWJaR
+         TwCmM300aL9mG3rYbQBV7zQVXNTDypTmog+KVAjaRBT2nOh06Tg7xGq2KZH3P2MUdk
+         IYGcne5XS33CH7MmDjhdgIB4U4YYi0kmVixCDf3HSDRQD921jyFvl2U+H5qXGNjAMO
+         DsXd2ZRZKdUcA==
+Received: by mail-vs1-f49.google.com with SMTP id t10so17452873vsr.3;
+        Tue, 24 Jan 2023 10:42:47 -0800 (PST)
+X-Gm-Message-State: AFqh2kogD8gk997Ly8jqKxhPwk/3wFcKmHnlw6wmkYwFdlWvhxipBIbr
+        XNiUK+W5oJ0jD+EUXb9955/nCw9QPqs22iOIDQ==
+X-Google-Smtp-Source: AMrXdXvM0olT9jSHiUMDJsNqRTneaeFB/92hij1cU2Y+/6V74N/GT/dxRky2xzkFIbykeif2r193/563hWiLeZlWlho=
+X-Received: by 2002:a05:6102:5490:b0:3b5:1fe4:f1c2 with SMTP id
+ bk16-20020a056102549000b003b51fe4f1c2mr3941513vsb.0.1674585766048; Tue, 24
+ Jan 2023 10:42:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230110-dt-usb-v3-0-5af0541fcf8c@kernel.org> <Y9ASq0VZ6G7Efe7s@kroah.com>
+In-Reply-To: <Y9ASq0VZ6G7Efe7s@kroah.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 24 Jan 2023 12:42:34 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJJ8tFUCw-MbAsfJ7vKssRxu=p+3jG7dURmB77DOYoiSg@mail.gmail.com>
+Message-ID: <CAL_JsqJJ8tFUCw-MbAsfJ7vKssRxu=p+3jG7dURmB77DOYoiSg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] dt-bindings: usb: Convert some more simple
+ OHCI/EHCI bindings
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Lee Jones <lee@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, openbmc@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the new devm_of_phy_optional_get() helper instead of open-coding the
-same operation.
+On Tue, Jan 24, 2023 at 11:17 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jan 23, 2023 at 09:05:15PM -0600, Rob Herring wrote:
+> > The 'ohci-usb' compatible is another 'generic' compatible for OHCI, but
+> > isn't documented with a schema. Let's add it to generic-ohci.yaml
+> > schema. While looking at this, I found a few other USB host bindings
+> > which are simple enough to use the 'generic' schemas.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> Am I supposed to take these in my USB tree?
 
-As devm_of_phy_optional_get() returns NULL if either the PHY cannot be
-found, or if support for the PHY framework is not enabled, it is no
-longer needed to check for -ENODEV or -ENOSYS.
+Yes, please.
 
-This lets us drop several checks for IS_ERR(), as phy_power_{on,off}()
-handle NULL parameters fine.
+> I'm still confused if you all want me to take these types of things or
+> not...
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
-v2:
-  - Add Acked-by,
-  - Clarify removed checks for -ENODEV and -ENOSYS,
-  - Remove error printing in case of real failures.
----
- drivers/usb/host/ohci-exynos.c | 23 ++++++-----------------
- 1 file changed, 6 insertions(+), 17 deletions(-)
+Yes. I try to only pick up what has less responsive subsys
+maintainers, treewide (binding) cleanups, or otherwise falls thru the
+cracks.
 
-diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-index 8d7977fd5d3bd502..8af17c1ee5cc8f1e 100644
---- a/drivers/usb/host/ohci-exynos.c
-+++ b/drivers/usb/host/ohci-exynos.c
-@@ -69,19 +69,11 @@ static int exynos_ohci_get_phy(struct device *dev,
- 			return -EINVAL;
- 		}
- 
--		phy = devm_of_phy_get(dev, child, NULL);
-+		phy = devm_of_phy_optional_get(dev, child, NULL);
- 		exynos_ohci->phy[phy_number] = phy;
- 		if (IS_ERR(phy)) {
--			ret = PTR_ERR(phy);
--			if (ret == -EPROBE_DEFER) {
--				of_node_put(child);
--				return ret;
--			} else if (ret != -ENOSYS && ret != -ENODEV) {
--				dev_err(dev,
--					"Error retrieving usb2 phy: %d\n", ret);
--				of_node_put(child);
--				return ret;
--			}
-+			of_node_put(child);
-+			return PTR_ERR(phy);
- 		}
- 	}
- 
-@@ -97,12 +89,10 @@ static int exynos_ohci_phy_enable(struct device *dev)
- 	int ret = 0;
- 
- 	for (i = 0; ret == 0 && i < PHY_NUMBER; i++)
--		if (!IS_ERR(exynos_ohci->phy[i]))
--			ret = phy_power_on(exynos_ohci->phy[i]);
-+		ret = phy_power_on(exynos_ohci->phy[i]);
- 	if (ret)
- 		for (i--; i >= 0; i--)
--			if (!IS_ERR(exynos_ohci->phy[i]))
--				phy_power_off(exynos_ohci->phy[i]);
-+			phy_power_off(exynos_ohci->phy[i]);
- 
- 	return ret;
- }
-@@ -114,8 +104,7 @@ static void exynos_ohci_phy_disable(struct device *dev)
- 	int i;
- 
- 	for (i = 0; i < PHY_NUMBER; i++)
--		if (!IS_ERR(exynos_ohci->phy[i]))
--			phy_power_off(exynos_ohci->phy[i]);
-+		phy_power_off(exynos_ohci->phy[i]);
- }
- 
- static int exynos_ohci_probe(struct platform_device *pdev)
--- 
-2.34.1
-
+Rob
