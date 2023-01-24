@@ -2,127 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF7F678EC0
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 04:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AAF678EE0
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 04:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjAXDFh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Jan 2023 22:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S232215AbjAXDMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Jan 2023 22:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbjAXDF1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 22:05:27 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493C2CFC9;
-        Mon, 23 Jan 2023 19:05:26 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id i5so12171296oih.11;
-        Mon, 23 Jan 2023 19:05:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t21dCSgXMADUq1pWfl156WNqD9atSWj6SahX+ddDCFs=;
-        b=lUGjFf3oEyxPGdUPeZoUQluGQ+cqEF9h1WR63aJmfBraJOCMMY9cYX7l18fuGH4Irb
-         VFJtwShlKz4tr5lbVN77FTRGpBr3t+K148N6huJnqs0ClLxby0/kuVPPAJMoDFAzOeYU
-         +w+DNCqqatx2ryMvqGq3EpY8oYi5uQ6Y9vQUPFjF1RhAADcQZzfQNTYgh3bM5Dyfiv1F
-         SfKOhwTVgPdUrrrn0m/NMdljFylhQISw9gvQ+D96Dr93lnz9ZbvO0GEJxIzYs8VyrmIw
-         U6JrpGI0fiv0mrJhpPhBvnAhKYo44eSTCbqi/Dv6rEX9n0wgz/KaoV8YLXquiqYbVnaM
-         2/rg==
-X-Gm-Message-State: AFqh2krzx5LCsxiXBCa2Dvv1ipoG6fwn4fxGQu7l/LeQDHERLllPi/95
-        IIqgPE7PISB75RaRZ1hpbg==
-X-Google-Smtp-Source: AMrXdXsQxU+g4VkhTO6PSGz2Uzgx2PhXFUQ4vF3YFaAwscF0LSrRJQAelA7PCrv0Epi3/ObSdAJ3mA==
-X-Received: by 2002:a05:6808:2a8c:b0:36a:8422:d962 with SMTP id fc12-20020a0568082a8c00b0036a8422d962mr10569363oib.2.1674529525545;
-        Mon, 23 Jan 2023 19:05:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s26-20020a056808009a00b003645ec41412sm492545oic.27.2023.01.23.19.05.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 19:05:24 -0800 (PST)
-Received: (nullmailer pid 3266348 invoked by uid 1000);
-        Tue, 24 Jan 2023 03:05:20 -0000
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 23 Jan 2023 21:05:19 -0600
-Subject: [PATCH v3 5/5] dt-bindings: usb: Convert Nuvoton EHCI to DT schema
+        with ESMTP id S229507AbjAXDMh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Jan 2023 22:12:37 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B9937B72
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jan 2023 19:12:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674529956; x=1706065956;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QfNxQNFKvGIzTNKTRqiP7xBIUernOZnGRS5lFMqUsVE=;
+  b=dZJdwY6+JnJmSxNFE7LI95Q0z8o0ag5aneHh5O6YXTPxRgttRfg95iUS
+   D0lYs8YC+t3abRwdXBU2ZQLabE1IODjpCDV0uV5fs1P/HcMtzOhAeYQDo
+   /z+QAmSg2pIg25UxGtbq4TJTahNWefHqMFTCXWHd5ArRJG/8xXhcx80zl
+   /Q/MEIHDwVYg3Fnu5Lz56i1/MLg1t5PW16rFjTK5JSlCuZe83CqVQvRzN
+   X4LghyabackQ/Of3SbAXfXKjjvqxCwk5+q0q70CB13nImCb1WlBK78Cxn
+   /jvHQKsqcSijJzYAbmyDJxXqXrkCE7j9YDXlJGVLrshVLpC23FSUn7rRh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="353491176"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="353491176"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 19:12:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="750682524"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="750682524"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jan 2023 19:12:35 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pK9je-00064u-0a;
+        Tue, 24 Jan 2023 03:12:34 +0000
+Date:   Tue, 24 Jan 2023 11:12:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ e3e9fc7fa7ad221cc2e7b207d514cc84ed393251
+Message-ID: <63cf4c95.NoiK54+koLIijTc3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230110-dt-usb-v3-5-5af0541fcf8c@kernel.org>
-References: <20230110-dt-usb-v3-0-5af0541fcf8c@kernel.org>
-In-Reply-To: <20230110-dt-usb-v3-0-5af0541fcf8c@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Lee Jones <lee@kernel.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org
-X-Mailer: b4 0.12-dev
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Nuvoton EHCI binding is just some compatible strings, so add it to the
-generic-ehci.yaml schema.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: e3e9fc7fa7ad221cc2e7b207d514cc84ed393251  Merge 6.2-rc5 into usb-next
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/usb/generic-ehci.yaml        |  2 ++
- .../devicetree/bindings/usb/npcm7xx-usb.txt          | 20 --------------------
- 2 files changed, 2 insertions(+), 20 deletions(-)
+elapsed time: 727m
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index ebbb01b39a92..050cfd5acdaa 100644
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -76,6 +76,8 @@ properties:
-           - generic-ehci
-           - marvell,armada-3700-ehci
-           - marvell,orion-ehci
-+          - nuvoton,npcm750-ehci
-+          - nuvoton,npcm845-ehci
-           - ti,ehci-omap
-           - usb-ehci
- 
-diff --git a/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt b/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt
-deleted file mode 100644
-index 352a0a1e2f76..000000000000
---- a/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Nuvoton NPCM7XX SoC USB controllers:
-------------------------------
--
--EHCI:
-------
--
--Required properties:
--- compatible: should be one of
--    "nuvoton,npcm750-ehci"
--    "nuvoton,npcm845-ehci"
--- interrupts: Should contain the EHCI interrupt
--- reg:        Physical address and length of the register set for the device
--
--Example:
--
--	ehci1: usb@f0806000 {
--		compatible = "nuvoton,npcm750-ehci";
--		reg = <0xf0806000 0x1000>;
--		interrupts = <0 61 4>;
--	};
+configs tested: 67
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+m68k                             allmodconfig
+m68k                             allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+arc                              allyesconfig
+x86_64                            allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+sh                               allmodconfig
+arc                                 defconfig
+s390                             allmodconfig
+mips                             allyesconfig
+alpha                               defconfig
+powerpc                          allmodconfig
+s390                                defconfig
+s390                             allyesconfig
+arc                  randconfig-r043-20230123
+arm                  randconfig-r046-20230123
+ia64                             allmodconfig
+i386                 randconfig-a006-20230123
+x86_64               randconfig-a002-20230123
+x86_64               randconfig-a001-20230123
+x86_64                              defconfig
+arm                                 defconfig
+x86_64               randconfig-a004-20230123
+x86_64               randconfig-a003-20230123
+x86_64               randconfig-a005-20230123
+x86_64               randconfig-a006-20230123
+i386                 randconfig-a003-20230123
+i386                 randconfig-a002-20230123
+x86_64                               rhel-8.3
+i386                 randconfig-a001-20230123
+i386                 randconfig-a004-20230123
+x86_64                           rhel-8.3-bpf
+arm                              allyesconfig
+i386                 randconfig-a005-20230123
+x86_64                           rhel-8.3-syz
+arm64                            allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+i386                                defconfig
+i386                             allyesconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20230123
+hexagon              randconfig-r045-20230123
+s390                 randconfig-r044-20230123
+riscv                randconfig-r042-20230123
+x86_64               randconfig-a011-20230123
+x86_64               randconfig-a012-20230123
+x86_64               randconfig-a013-20230123
+x86_64               randconfig-a015-20230123
+x86_64               randconfig-a016-20230123
+i386                 randconfig-a016-20230123
+i386                 randconfig-a012-20230123
+i386                 randconfig-a013-20230123
+x86_64               randconfig-a014-20230123
+i386                 randconfig-a011-20230123
+i386                 randconfig-a014-20230123
+i386                 randconfig-a015-20230123
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+powerpc                  mpc885_ads_defconfig
+x86_64               randconfig-k001-20230123
 
 -- 
-2.39.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
