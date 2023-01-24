@@ -2,74 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE40679ACA
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 14:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA86679AD3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 14:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbjAXN60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Jan 2023 08:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S234085AbjAXN7S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Jan 2023 08:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234012AbjAXN6Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 08:58:24 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD48245F45;
-        Tue, 24 Jan 2023 05:58:04 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ud5so39249268ejc.4;
-        Tue, 24 Jan 2023 05:58:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C8ITfvJMUbAB9n/WNUOpYEt4kZtbu9A4WESFL60Ocvw=;
-        b=ZCtu7IpZipWMzHYjJD0NrrG0vXhqkl79/l3MyZHXQK1Cs6QvbiCxwtznkmkbsqvGbJ
-         jreeqva9ctlonoJJCob2KEpQjuNJfsV0epWdPYXMQICW2/osZ71WEMNLHnh4+yzFvV0S
-         tn9JLmrWHSRzo3sQWlJvMyHXUGvpKRkAsxv3LaMegoLvFB74IBKM6gJ5VyYnxtIz4+zJ
-         /wEGRsE7IfqbRiB1UDRtdhNvM8wmQf/ds580YLZsEwCbRboOgDWR59Bq3/DEhrFINwm3
-         SQNFpNrNNBJhR5dE4SG4VSbwmFJfVP7UOcA1ET1I+Jp5dEP4oHJ1ast5WB/yjM+B5S04
-         zbJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C8ITfvJMUbAB9n/WNUOpYEt4kZtbu9A4WESFL60Ocvw=;
-        b=6MWaVPMSMF/8ud3UYT+INatCR2sj69juwqsSRbjtKMe23E2NiSDDb68qWaPR6lBtNI
-         vYRPz42ekcX8ttQzQRNJe8okfMVWNRO/GhQT+H1+fU8cRn9L7Z0XA+WPSyHQxDox7FwJ
-         eNt832cCldn0Y4OZSMQUwKEorsEMydJCfDw1twZb1h7puKbC6ki9ug5Lz1PWOv7RpoWU
-         4I88riaXk1aeGn9U3+6LllxrDZWdgM3C4y8kGfJRZmGYYqDUMi7FEhdx0ImGoVCmfBxB
-         WDWTNJHioAcJXhhSw1L9dwVbhAhUq5tRCU6XbeBI5F8BXq7Lah9m+G6aGrJZV8sQHmWi
-         8yQQ==
-X-Gm-Message-State: AFqh2kqwJZ3jyddT5fCadkljWquH7QG9YizHum01Os/iNW+9fkpnW9yL
-        mPCW44ErFgz6w07Tpe6QmGaDlFrZD0I=
-X-Google-Smtp-Source: AMrXdXvHVx3+V2x2vQ/cKtaZnanXiKGMRWRB+3IJ86B/PWOPlcnH+ESdWYf7R+bBQDGuUb+6lQp5QQ==
-X-Received: by 2002:a17:906:c02:b0:83f:cbc0:1b30 with SMTP id s2-20020a1709060c0200b0083fcbc01b30mr30097434ejf.10.1674568662510;
-        Tue, 24 Jan 2023 05:57:42 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ck1-20020a0564021c0100b004835bd8dfe5sm1090288edb.35.2023.01.24.05.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 05:57:41 -0800 (PST)
-Date:   Tue, 24 Jan 2023 14:57:40 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH V5 0/5] Tegra USB device support updates
-Message-ID: <Y8/j1HBwgEdd4Mp2@orome>
-References: <20230119104208.28726-1-jonathanh@nvidia.com>
+        with ESMTP id S234111AbjAXN7J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 08:59:09 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6C27299;
+        Tue, 24 Jan 2023 05:58:46 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 125568A9;
+        Tue, 24 Jan 2023 14:58:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674568683;
+        bh=+IKoJk285CRjKexmMgjG1gUz9g2XFQkogbpPUD07jrk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aNie/7FI6nBD+uimQzn6J9Ms2yl0JDSi8zcwil6xJh3vCLVEwm6/LwYE8ZXG8E3n0
+         kdwsTXAIZ2PPKlieum+tdHp4unIYnyzYr0JFBwkFADAcrPOTUS2p85HWRVFWMAQ1aY
+         kb60+dy6J5EN/9Bs6vp/8nlZrPTRFF1AtHAfDsDE=
+Message-ID: <bc21ec03-bc20-3640-d5f0-9e72f50eabce@ideasonboard.com>
+Date:   Tue, 24 Jan 2023 13:57:59 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lZx75aZqCyuqNaGg"
-Content-Disposition: inline
-In-Reply-To: <20230119104208.28726-1-jonathanh@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] MAINTAINERS: Add myself as UVC Gadget Maintainer
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20221206113841.1359976-1-dan.scally@ideasonboard.com>
+ <Y4+SxVzTywR3qHdg@pendragon.ideasonboard.com>
+ <Y81RdyDX6SHGYc3W@pendragon.ideasonboard.com> <Y81ZmhguW3F0eGOv@kroah.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+In-Reply-To: <Y81ZmhguW3F0eGOv@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,65 +51,22 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---lZx75aZqCyuqNaGg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 22/01/2023 15:43, Greg KH wrote:
+> On Sun, Jan 22, 2023 at 05:08:39PM +0200, Laurent Pinchart wrote:
+>> Hi Dan,
+>>
+>> I've just noticed that neither linux-usb nor Greg were CC'ed on this.
+>>
+>> Greg, could you pick this patch up ([1]) for v6.3, or should Dan resend
+>> it with the right CC list ?
+>>
+>> [1] https://lore.kernel.org/all/20221206113841.1359976-1-dan.scally@ideasonboard.com/
+> Please resend it with the correct list :)
 
-On Thu, Jan 19, 2023 at 10:42:03AM +0000, Jon Hunter wrote:
-> This series adds USB device support for Tegra234. 3/5 patches were
-> originally part of the series to add both USB host and device support
-> for Tegra234 [0]. However, the series was getting quite large and so I
-> have split this into a separate series but calling it 'V4' to indicate
-> that this is not completely new either.
->=20
-> I have added two more patches in this version to fix DMA coherency for
-> Tegra194.
->=20
-> [0] https://lore.kernel.org/linux-tegra/20221114124053.1873316-1-waynec@n=
-vidia.com/
->=20
-> Jon Hunter (3):
->   dt-bindings: usb: tegra-xudc: Add dma-coherent for Tegra194
->   arm64: tegra: Add dma-coherent property for Tegra194 XUDC
->   arm64: tegra: Populate the XUDC node for Tegra234
->=20
-> Sing-Han Chen (1):
->   usb: gadget: tegra-xudc: Add Tegra234 support
->=20
-> Wayne Chang (1):
->   dt-bindings: usb: tegra-xudc: Add Tegra234 XUDC support
->=20
->  .../bindings/usb/nvidia,tegra-xudc.yaml       | 15 ++++++++++++
->  arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  1 +
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 23 +++++++++++++++++++
->  drivers/usb/gadget/udc/tegra-xudc.c           | 17 ++++++++++++++
->  4 files changed, 56 insertions(+)
+Oops; how did I manage that!? Thanks for the heads up Laurent; I'll 
+re-send it
 
-I've picked up patches 2 and 5 of this series into the Tegra tree. Greg,
-can you pick up patches 1, 3 and 4?
 
-Thanks,
-Thierry
-
---lZx75aZqCyuqNaGg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPP49QACgkQ3SOs138+
-s6EjWxAAiwl3LlrF8B0u2Tsd2ejPHnkYfVryWSQsA6npc4Qwdks5Quo+LeaqJkDr
-BORwAJLaFSBXbRoBfdE8DG0VgqJsS2a5Hej+kDUocMpfm6XDyuGm5QxcRvmnKO0S
-HYgpt+3K2dZMLZx4Ah+XpYOsk78HBmH5ZqXtyYJTby59dtryILvHCwCgGqCfedob
-wgW6khfeho+ejVsTJ9TvE7Jfy4BaqzwovOcmbNOqmRwwgeCvdsE/mpD6jBQhiE4q
-TKNoUz1EsalEORT/1Op1FBgYHdKJ47O+1cJ0umuLJEXucFlpnFJFt9W9nOHyFwZJ
-Y4U5ss84CNtf/LQwHPNkZTus3ITpHGb70kdEF2XeqDvPBd4rDa5fs1icplTqTvKG
-ds6PQeBeKZwq9Z8je2U/WZ4d2cjb3+4vIXHWcxCjZjQqSJ9ch1CowPzpHyetQx4o
-XeWsp3W+v7x9+C44KY02/G7snziCmiv6/d34ksYxRphtuHGGn+jlqEHS+2MabsB2
-JVPDwztnSF8v8tOsu2/iHcLQktAiCR2hrcOD69ZcXEbS9RKnFxdHfpX6BHqv/VMw
-veqR/YXY7bdVUnpeU1KTqBIce4RFOBXPwD8SVO85YjTzrT+BvuXN5hIT3Taf0Txb
-aGhuA2TdwJLvH36DQNycDv8zbR6jlhRnynZioe496PAMidFvY9o=
-=fzSZ
------END PGP SIGNATURE-----
-
---lZx75aZqCyuqNaGg--
+> thanks,
+>
+> greg k-h
