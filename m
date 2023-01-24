@@ -2,69 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A97467A18F
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 19:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFA467A5F1
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jan 2023 23:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbjAXSnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Jan 2023 13:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S233907AbjAXWgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Jan 2023 17:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbjAXSnC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 13:43:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B3261BB;
-        Tue, 24 Jan 2023 10:42:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C782461324;
-        Tue, 24 Jan 2023 18:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37236C433A8;
-        Tue, 24 Jan 2023 18:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674585767;
-        bh=DBSo7OynaPiD3LOZ5Et+hWfS1NPFDENYrFZZTqaJ4Zo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RuxlPFOPF6nG3xhTMWTioiwTQkM78eHKGibjNQ4Ld2qVM6eMg+Pqb+1pVDyLlEO88
-         pCYdM+O5ReIsLpkyvLRIL8D6J8ybMRFahWkSUIYHGGmpS8jhZzaK8678isY2qke6J2
-         Cc4WWweSKl5bPOqJYmyqqauDgUrccGrX1l18oSf5R4CHQZk/4niQE1RwVUAD8XWJaR
-         TwCmM300aL9mG3rYbQBV7zQVXNTDypTmog+KVAjaRBT2nOh06Tg7xGq2KZH3P2MUdk
-         IYGcne5XS33CH7MmDjhdgIB4U4YYi0kmVixCDf3HSDRQD921jyFvl2U+H5qXGNjAMO
-         DsXd2ZRZKdUcA==
-Received: by mail-vs1-f49.google.com with SMTP id t10so17452873vsr.3;
-        Tue, 24 Jan 2023 10:42:47 -0800 (PST)
-X-Gm-Message-State: AFqh2kogD8gk997Ly8jqKxhPwk/3wFcKmHnlw6wmkYwFdlWvhxipBIbr
-        XNiUK+W5oJ0jD+EUXb9955/nCw9QPqs22iOIDQ==
-X-Google-Smtp-Source: AMrXdXvM0olT9jSHiUMDJsNqRTneaeFB/92hij1cU2Y+/6V74N/GT/dxRky2xzkFIbykeif2r193/563hWiLeZlWlho=
-X-Received: by 2002:a05:6102:5490:b0:3b5:1fe4:f1c2 with SMTP id
- bk16-20020a056102549000b003b51fe4f1c2mr3941513vsb.0.1674585766048; Tue, 24
- Jan 2023 10:42:46 -0800 (PST)
+        with ESMTP id S233407AbjAXWgV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Jan 2023 17:36:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46538518ED
+        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 14:35:50 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pKRsV-0008Uy-AJ; Tue, 24 Jan 2023 23:34:55 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pKRsT-0002s3-UZ; Tue, 24 Jan 2023 23:34:53 +0100
+Date:   Tue, 24 Jan 2023 23:34:53 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de, stable <stable@kernel.org>
+Subject: Re: [PATCH v2 1/2] media: videobuf2-dma-sg: fix vmap and vunmap
+ callbacks
+Message-ID: <20230124223453.GB7611@pengutronix.de>
+References: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-References: <20230110-dt-usb-v3-0-5af0541fcf8c@kernel.org> <Y9ASq0VZ6G7Efe7s@kroah.com>
-In-Reply-To: <Y9ASq0VZ6G7Efe7s@kroah.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 24 Jan 2023 12:42:34 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJJ8tFUCw-MbAsfJ7vKssRxu=p+3jG7dURmB77DOYoiSg@mail.gmail.com>
-Message-ID: <CAL_JsqJJ8tFUCw-MbAsfJ7vKssRxu=p+3jG7dURmB77DOYoiSg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] dt-bindings: usb: Convert some more simple
- OHCI/EHCI bindings
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Lee Jones <lee@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="R3G7APHDIzY6R/pk"
+Content-Disposition: inline
+In-Reply-To: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +54,102 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 11:17 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+--R3G7APHDIzY6R/pk
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Gentle Ping!
+
+On Fri, Nov 25, 2022 at 04:34:49PM +0100, Michael Grzeschik wrote:
+>For dmabuf import users to be able to use the vaddr from another
+>videobuf2-dma-sg source, the exporter needs to set a proper vaddr on
+>vb2_dma_sg_dmabuf_ops_vmap callback.
 >
-> On Mon, Jan 23, 2023 at 09:05:15PM -0600, Rob Herring wrote:
-> > The 'ohci-usb' compatible is another 'generic' compatible for OHCI, but
-> > isn't documented with a schema. Let's add it to generic-ohci.yaml
-> > schema. While looking at this, I found a few other USB host bindings
-> > which are simple enough to use the 'generic' schemas.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
+>This patch adds vm_map_ram on map if buf->vaddr was not set, and also
+>adds the vb2_dma_sg_dmabuf_ops_vunmap function to remove the mapping
+>afterwards.
 >
-> Am I supposed to take these in my USB tree?
+>Cc: stable <stable@kernel.org>
+>Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>
+>---
+>v1 -> v2: using vmap and vunmap instead of vm_map_ram and vm_unmap_ram
+>
+> .../media/common/videobuf2/videobuf2-dma-sg.c    | 16 ++++++++++++++++
+> 1 file changed, 16 insertions(+)
+>
+>diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/m=
+edia/common/videobuf2/videobuf2-dma-sg.c
+>index fa69158a65b1fd..dcb8de5ab3e84a 100644
+>--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+>+++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+>@@ -496,11 +496,26 @@ static int vb2_dma_sg_dmabuf_ops_vmap(struct dma_buf=
+ *dbuf,
+> {
+> 	struct vb2_dma_sg_buf *buf =3D dbuf->priv;
+>
+>+	if (!buf->vaddr)
+>+		buf->vaddr =3D vmap(buf->pages, buf->num_pages, VM_MAP,
+>+				  PAGE_KERNEL);
+>+
+> 	iosys_map_set_vaddr(map, buf->vaddr);
+>
+> 	return 0;
+> }
+>
+>+static void vb2_dma_sg_dmabuf_ops_vunmap(struct dma_buf *dbuf,
+>+				      struct iosys_map *map)
+>+{
+>+	struct vb2_dma_sg_buf *buf =3D dbuf->priv;
+>+
+>+	if (buf->vaddr)
+>+		vunmap(buf->vaddr);
+>+
+>+	buf->vaddr =3D NULL;
+>+}
+>+
+> static int vb2_dma_sg_dmabuf_ops_mmap(struct dma_buf *dbuf,
+> 	struct vm_area_struct *vma)
+> {
+>@@ -515,6 +530,7 @@ static const struct dma_buf_ops vb2_dma_sg_dmabuf_ops =
+=3D {
+> 	.begin_cpu_access =3D vb2_dma_sg_dmabuf_ops_begin_cpu_access,
+> 	.end_cpu_access =3D vb2_dma_sg_dmabuf_ops_end_cpu_access,
+> 	.vmap =3D vb2_dma_sg_dmabuf_ops_vmap,
+>+	.vunmap =3D vb2_dma_sg_dmabuf_ops_vunmap,
+> 	.mmap =3D vb2_dma_sg_dmabuf_ops_mmap,
+> 	.release =3D vb2_dma_sg_dmabuf_ops_release,
+> };
+>--=20
+>2.30.2
+>
 
-Yes, please.
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-> I'm still confused if you all want me to take these types of things or
-> not...
+--R3G7APHDIzY6R/pk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Yes. I try to only pick up what has less responsive subsys
-maintainers, treewide (binding) cleanups, or otherwise falls thru the
-cracks.
+-----BEGIN PGP SIGNATURE-----
 
-Rob
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmPQXQsACgkQC+njFXoe
+LGS69RAAibc0X4wb2SgUdW6gHJEIGjEQ+RmvNVXvFko0nYxmmwYbD2NGuMwLsPQx
+zmT98lQwxycwQ88/ftrMmJplJc8Hg1+166ex4CsWJtdEURpZu+3g5pTM6Ak2CrOM
+BIRzp8rfTWcOaHRuc4sz6txfEswkr3OwPQ9d+dcBA/wGMMsMb7IgdqvNPQa1LcXG
+D+Pxq8vDcHDMNNVopFNu4zDiPaHnP55ScXOR+8h3sWZfiOvpGpNlLpemOcdYDlul
+HaV0XNNHlkH8srpTNhdNpBhKxtvmx2QjYR+sPZU8XcLDIRRWzh/PoGt1uoiewxNg
+8ffZieowyaDBYcP3xpYFxzGXX/f8nweT3zMAgF8B8Qg7bUIRIxKU0xr4N1DcJ1v/
+8aswpncwfHSvSMVRBXU5biuxTNNTkYhJ1mZ2NTGja/HfxwfiySgFNQF3voIahVxt
+SG+NvuqAIYGIAFcfHYGdifBB7F4NC/J6XW8rwmZ7c1CeUN+rKO+0YeXx5BRtAgxd
++9K/dkDPA1uBvv95bUwnuzrBQWILywg571qTEj8+d3YVz9m3IjD4DFB4LiyaShhm
+SxMHag753uOLXDNh1phUT9wRYaD7Oq+FT7nH89vB/fqNQEf8Q8Xw7eBpgCeKbpTH
+2+fsdshacWy1KkWAP8WTnjld8EJqjKdITET0VIYVC9zCGbHAob8=
+=shkw
+-----END PGP SIGNATURE-----
+
+--R3G7APHDIzY6R/pk--
