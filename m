@@ -2,66 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510F267B453
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 15:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E51667B492
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 15:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbjAYOZZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 09:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S235675AbjAYOfB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 09:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbjAYOZB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 09:25:01 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19803561B4;
-        Wed, 25 Jan 2023 06:24:52 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id n190so19899676vsc.11;
-        Wed, 25 Jan 2023 06:24:52 -0800 (PST)
+        with ESMTP id S235758AbjAYOe4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 09:34:56 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AAD5998B;
+        Wed, 25 Jan 2023 06:34:44 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id b24-20020a17090a551800b0022beefa7a23so2199619pji.5;
+        Wed, 25 Jan 2023 06:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MUqrk3GP/3DhSmWkuOs8ye3NG8xp7aQ+gekfrX4lQc0=;
-        b=ZdftSwjj1akDmWaqauSggV71jW2O+HXguAfnqr6NnF30jtnzzC1QbrFAJEAxUiPUC2
-         2EwQgfL9avUaF/FtKblPe7764ZyUIxLYHv0Ujvu8Reailrj99ot/mgUfGb4JG+v+cjR4
-         0SImZT+cU08V9+a3xPMyJcCz1utBX6387Ol+k6GkHKtU7qt2s1EUL5cyxY60aQxvl5PP
-         NTajtuHRDbtB+MutOWPhxu48bOLX/7lEAGsvYdGQG6IChaxsLzMCRDLMl6IfJwMZhk2k
-         X2oYHLmyalFzic/odZzxSnfPTqtwyXgzb5ywVXsjjqXFZIGwDRlVlf/79YqGj3LiA/01
-         nFng==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jl6Yi+gm6x0jddwKUYCeMj4VHkB5ErH9lG4Oo4LvHEI=;
+        b=UTCrM5Ts3D+yEtU/KCHhWsAXHapP08wO/KjKMqHYe9yj2GF1ch9RqJJf+heWVMtBy8
+         Dk/Iep6KJsQQrmSo5dE8av/feMByB04hc4uRjTskJti89/F4Yb3TsjNEe/0h+RZuXDnz
+         lTwBzPnyftadre+sp7SCUwyvxhikmt718eNJG9vysYXXw1nDtBy4843hQ6VyowtdLU2H
+         IlrT0nyknu7PKTCYNG575dWrl3mMrhiLz13KMSKlQPocVnalREz/Br3m2wQtybHWRJiK
+         sVezqiyX2i4tl/NRPUJ5AAy/Dp2/QioyaoHw7eyrs2ahqrUe5ttWkz3h0YMq4oZMafia
+         jONQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MUqrk3GP/3DhSmWkuOs8ye3NG8xp7aQ+gekfrX4lQc0=;
-        b=26CmU8Bz0R0Dzk4J1iQHF3ipxJ75CZeDMwkngwl0pwvYBplikURH6JXeFO4GroUD/G
-         cVWMSD3X74Oukm9kQrSb+LQcs9/uGjEqNqI0fQ2G23GdeLMMnt7TeiF6oqJixIQ8XrZU
-         5jAroi8FZY0RJRqKbbg1UxyPeEZkyM2jaWhcsGMudmC2xCxjgV9K303FErkGa5Q79eUJ
-         6o4Pn5drQA3zKvdEIFZ7/fSw/fmvnz5njbDaburoChdGfEjMalae4/m6dAKpgWTPYmFe
-         3Em3ZxmunvctB80bRDvDriWjV0XbbF1ADfxR4pwmEzAoNxXo9M3vyD/LC7XP1a/YEKeF
-         I1Pw==
-X-Gm-Message-State: AFqh2ko6VXP1Lx74oyFRskDZjehz0q5SDjNYBEIZ3Mj34mD7Dm8VRjjh
-        pMuYCuwoUyZaygtOnF3NVLHJQiJDwNG2Wkd7Dp211+TL
-X-Google-Smtp-Source: AMrXdXtp+1+l0V7eBzDbpTKwsXlca8z4HTN//sBpr4Dtwdc6Xx/uxZgT00JsWeAYoFgKAlb6wawZbQI7lVXyFEiKCm4=
-X-Received: by 2002:a67:d097:0:b0:3d0:cb3d:ad47 with SMTP id
- s23-20020a67d097000000b003d0cb3dad47mr5095413vsi.76.1674656691211; Wed, 25
- Jan 2023 06:24:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20230125072605.1121-1-linux.amoon@gmail.com> <20230125072605.1121-5-linux.amoon@gmail.com>
- <bd29cba9-fb1c-051e-e10e-cb3e73ec5ff9@linaro.org> <CANAwSgRWVPghhEwvQgzQicJHcjgAv_d5nYfE0Ni90butc5ouSQ@mail.gmail.com>
- <d2ce0dce-eaa0-12e9-e250-bf948d2ce9e1@linaro.org>
-In-Reply-To: <d2ce0dce-eaa0-12e9-e250-bf948d2ce9e1@linaro.org>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jl6Yi+gm6x0jddwKUYCeMj4VHkB5ErH9lG4Oo4LvHEI=;
+        b=OUAPOtFcazLPdEWLgjJSalVMH8bBiGg7JViwmPmDpKLakDoANy9c72CI3lcoh4zRD7
+         8vobvcjUWt8qQnfZ1jSgqVIM0NKjCs0JE6+ZowtW0n5P8+L6OEmF0POpf4I7m+1FOriq
+         GD8Qaj2F+uW2/tS3NHxOZWi9kf1Z15PwxRtwqNcXbIiUPS3I4lDaE/PI+02JhP2/OKh2
+         fUjT/bP4+tFG/tHxxW4YlOub6GvqVF4IQocW6YFDHpbiFQSadcC/ggFjC3jbrGVYhkx8
+         0SsDHN72r+PjDjAjgw6tLx5q+of4Rf5of+Tcirz/hgB+2o2+E0fCG9s//DFdp01fImnj
+         DTPQ==
+X-Gm-Message-State: AFqh2koAq9gzF5pwEfsLbsj+ItRaYZgiSQDLKOHFFDOKOIJWol3YZ6Yw
+        nD27iby1kcn+anJTT3kubzs=
+X-Google-Smtp-Source: AMrXdXtvjxXhIcJ2tVOdp1iKzinV8pzyoZgxU25wu2sydM8Afq2kh6MP3sp+3RaSnj7uV+rlPS1qDw==
+X-Received: by 2002:a17:90a:f612:b0:225:e88c:33c2 with SMTP id bw18-20020a17090af61200b00225e88c33c2mr34864397pjb.7.1674657283921;
+        Wed, 25 Jan 2023 06:34:43 -0800 (PST)
+Received: from localhost.localdomain ([45.112.3.15])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090a1d0200b0022c033f501asm1671465pjd.41.2023.01.25.06.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 06:34:43 -0800 (PST)
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 25 Jan 2023 19:54:33 +0530
-Message-ID: <CANAwSgRDM87oHsVSkxieD6C-+eAV__TKL8e2P22ucQ+iJEooZQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND linux-next v4 4/4] dt-bindings: usb: Fix properties
- for VL817 hub controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH RESEND linux-next v4.1 4/4] dt-bindings: usb: Fix properties for VL817 hub controller
+Date:   Wed, 25 Jan 2023 14:34:03 +0000
+Message-Id: <20230125143404.1424-5-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230125143404.1424-1-linux.amoon@gmail.com>
+References: <20230125143404.1424-1-linux.amoon@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,40 +73,69 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+Cleanup by removing unneeded quotes from refs and
+add maxItems to reset-gpios and fix the required list.
 
-On Wed, 25 Jan 2023 at 15:27, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 25/01/2023 10:43, Anand Moon wrote:
-> > Hi Krzysztof,
-> >
-> > On Wed, 25 Jan 2023 at 13:10, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 25/01/2023 08:26, Anand Moon wrote:
-> >>> Cleanup by removing unneeded quotes from refs and
-> >>> add maxItems to reset-gpios and fix the required list.
-> >>>
-> >>> Fixes: 31360c28dfdd ("dt-bindings: usb: Add binding for Via lab VL817 hub controller")
-> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> >> NAK.
-> >>
-> >> You ignored my feedback. Please help me understand how my tag appeared here.
-> >>
-> > I have followed your feedback and modified the below patch
-> > I thought you review these changes see below.
-> >
-> > [0] https://lore.kernel.org/all/df1c8545-01d0-3821-0c19-07a369e40472@linaro.org/
->
-> This was entirely different patch. You cannot take reviews from
-> something else and apply to other patch.
->
-> Best regards,
-> Krzysztof
->
-ok, I will keep this in my mind.
+Fixes: 31360c28dfdd ("dt-bindings: usb: Add binding for Via lab VL817 hub controller")
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+---
+Dropped Rev Krzysztof.
+---
+ .../devicetree/bindings/usb/vialab,vl817.yaml  | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
- Thanks
--Anand
+diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+index 5f9771e22058..23a13e1d5c7a 100644
+--- a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
++++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+@@ -14,29 +14,32 @@ allOf:
+ 
+ properties:
+   compatible:
+-    items:
+-      - enum:
+-          - usb2109,2817
+-          - usb2109,817
++    enum:
++      - usb2109,2817
++      - usb2109,817
+ 
+   reg: true
+ 
+   reset-gpios:
+-    description: GPIO controlling the RESET# pin.
++    maxItems: 1
++    description:
++      GPIO controlling the RESET# pin.
+ 
+   vdd-supply:
+     description:
+       phandle to the regulator that provides power to the hub.
+ 
+   peer-hub:
+-    $ref: '/schemas/types.yaml#/definitions/phandle'
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+       phandle to the peer hub on the controller.
+ 
+ required:
+-  - peer-hub
+   - compatible
+   - reg
++  - reset-gpios
++  - vdd-supply
++  - peer-hub
+ 
+ additionalProperties: false
+ 
+@@ -45,7 +48,6 @@ examples:
+     #include <dt-bindings/gpio/gpio.h>
+ 
+     usb {
+-        dr_mode = "host";
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-- 
+2.38.1
+
