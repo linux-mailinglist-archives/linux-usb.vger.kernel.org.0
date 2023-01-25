@@ -2,99 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD6A67B8BF
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 18:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E0B67B8EA
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 18:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbjAYRkc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 12:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S236106AbjAYR7x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 12:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbjAYRkb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 12:40:31 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7726532E44;
-        Wed, 25 Jan 2023 09:40:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=L0W/ElxkwKW4ucK0Y8HMhZnAbZjnuN6zwjLdv7pdAe0=; b=WV1IO
-        +XS2O3NbO6O/IJ+YF87kfBAmlxYnDihChz1noWeNHPuQ/mZ8IVj9xirEYdyi86odIMGg0jdhC1q9I
-        p9wHSdOaa0PTd7zNq2Ge/HHcLKOYFpcLcDCFF1+ghqhzptj+zLlU5JtNAiEF1kLBj6VsN5ZsMyf6/
-        HFM6Amfi5Hyfu45bIBTM98CG9w6IUelnzzWXWmz90WJ8SZOI586O1WrW+7TJfLTfeulhvcBCSjqRg
-        lvFKMAyZNB52DtIAvwxQXckfg3ktOSpl/gcXm5XAlTS0Vwu3DJTFNPP4PB48QDmwLTHcxLghWpy1F
-        9Z6O+6IiukC0DELVhm1FTXzwtR+8A==;
-Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1pKjkv-0004ra-9S;
-        Wed, 25 Jan 2023 17:40:17 +0000
-Date:   Wed, 25 Jan 2023 17:40:16 +0000
-From:   John Keeping <john@metanate.com>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Joe Perches <joe@perches.com>, Julian Scheel <julian@jusst.de>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: f_uac2: Fix incorrect increment of
- bNumEndpoints
-Message-ID: <Y9FpgKYmRR415dz9@donbot>
-References: <1674631645-28888-1-git-send-email-quic_prashk@quicinc.com>
+        with ESMTP id S235404AbjAYR7w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 12:59:52 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7DC3C2B1
+        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 09:59:50 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id m7so4228134wru.8
+        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 09:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sTOOyplbHxnZ+EFGvkRK9RseAv80+oP0c90JV+EsvHc=;
+        b=b3xrzTS5gcAyZdQpRwmO6xq87K/+gmwj3GtougbVYdVQRQCOEZHNlrsx6LRYrb2KnG
+         AVIP1dZjGgS8PfB9/OiiHLgXsTAYL+xYW4OSiWSmwiYjizCelQw9X/ga3CFj5xse05gS
+         lmmZ/fj88VeBXnC0Yr9ZZbmCzwNMdFn6+yAc669OjP/0o3F8l8/1W4vqUv6jPElbvzAt
+         KbOEoXZbQRCAqWvdM/FsVZZhUZ7t+7Xm6g0JlpWUCAjOsq9TEF/C3X/NT5cl2n55zn6z
+         ga8meNb/niwL0bojsOlp8FgZjgdx8/11jRwcP0pFjW2I4yR/OSwrAW4RClEXCQXYMGTo
+         eMnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sTOOyplbHxnZ+EFGvkRK9RseAv80+oP0c90JV+EsvHc=;
+        b=BxQmF/bshzcR1M/377yHbvtQWOrrw8lzHjfcMQgA3pAdokmkAo4Q5QBxWqqTT31I8a
+         57WjsKDC0w9d3iKgB0EZHSp3QgoKJWQXL4YzdB5Svq62BBuvKNQy0n6O7Gh701bOsEh8
+         FgZph4vDnapflIh6uP4SPOTqoho+Y2iYASYA64byAJOYNekMs/dhAZ8LT6yuNxZMMn4p
+         Kkp/On/EWiKfWQSwFzZTvn9/W4rwtHV6euxmj7ABUEpKIlknMH9EfaM1pdey+k3tnvdE
+         a+ZgF+IvhmY7rhM+D9uNjdQp4uBLtPUqrzIszCDs4WODMqAx9t/1djM6cDUab6XIEz1E
+         eUtg==
+X-Gm-Message-State: AO0yUKUH+Mz4cvOETbIyUHjznE8caRWI6QVkfp2Du+vyZm8BKbwTBljs
+        HK4KF3iOzuqkdRZJLIPz95Qwkw==
+X-Google-Smtp-Source: AK7set8wYctbejAZWGPmx51Hf1KyVA1kzcMV4t6Iwl3vyOvPDFih0BorVAjojrAKqLqCV6ssK3VAiA==
+X-Received: by 2002:adf:fa09:0:b0:2bf:ac2c:4489 with SMTP id m9-20020adffa09000000b002bfac2c4489mr6572646wrr.54.1674669588976;
+        Wed, 25 Jan 2023 09:59:48 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w14-20020a5d608e000000b002bc84c55758sm6048927wrt.63.2023.01.25.09.59.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 09:59:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit address in DTS
+Date:   Wed, 25 Jan 2023 18:59:43 +0100
+Message-Id: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1674631645-28888-1-git-send-email-quic_prashk@quicinc.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 12:57:25PM +0530, Prashanth K wrote:
-> From: Pratham Pratap <quic_ppratap@quicinc.com>
-> 
-> Currently connect/disconnect of USB cable calls afunc_bind and
-> eventually increments the bNumEndpoints. Performing multiple
-> plugin/plugout will increment bNumEndpoints incorrectly, and on
-> the next plug-in it leads to invalid configuration of descriptor
-> and hence enumeration fails.
-> 
-> Fix this by resetting the value of bNumEndpoints to 1 on every
-> afunc_bind call.
-> 
-> Fixes: 40c73b30546e ("usb: gadget: f_uac2: add adaptive sync support for capture")
-> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> ---
-> v3: Added Fixes tag.
+The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
+actual DWC3 Controller device node.  It handles necessary Samsung
+Exynos-specific resources (regulators, clocks), but does not have its
+own MMIO address space.
 
-Reviewed-by: John Keeping <john@metanate.com>
+However neither simple-bus bindings nor dtc W=1 accept device nodes in
+soc@ node which do not have unit address.  Therefore allow using
+the address space of child device (actual DWC3 Controller) as the
+wrapper's address.
 
-Is there a similar problem for std_ac_if_desc.bNumEndpoints ?  That
-looks like it should be zero when no controls are enabled.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->  drivers/usb/gadget/function/f_uac2.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> index 08726e4..0219cd7 100644
-> --- a/drivers/usb/gadget/function/f_uac2.c
-> +++ b/drivers/usb/gadget/function/f_uac2.c
-> @@ -1142,6 +1142,7 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
->  		}
->  		std_as_out_if0_desc.bInterfaceNumber = ret;
->  		std_as_out_if1_desc.bInterfaceNumber = ret;
-> +		std_as_out_if1_desc.bNumEndpoints = 1;
->  		uac2->as_out_intf = ret;
->  		uac2->as_out_alt = 0;
->  
-> -- 
-> 2.7.4
-> 
+---
+
+DTS fixes are here:
+https://lore.kernel.org/linux-samsung-soc/20230125175751.675090-1-krzysztof.kozlowski@linaro.org/T/#t
+---
+ .../devicetree/bindings/usb/samsung,exynos-dwc3.yaml        | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+index 6b9a3bcb3926..a94b1926dda0 100644
+--- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+@@ -29,6 +29,9 @@ properties:
+ 
+   ranges: true
+ 
++  reg:
++    maxItems: 1
++
+   '#size-cells':
+     const: 1
+ 
+@@ -108,8 +111,9 @@ examples:
+     #include <dt-bindings/clock/exynos5420.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+-    usb {
++    usb-wrapper@12000000 {
+         compatible = "samsung,exynos5250-dwusb3";
++        reg = <0x12000000 0x10000>;
+         #address-cells = <1>;
+         #size-cells = <1>;
+         ranges;
+-- 
+2.34.1
+
