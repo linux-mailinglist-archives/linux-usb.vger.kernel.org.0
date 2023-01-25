@@ -2,112 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EED867B4FF
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 15:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B047167B50A
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 15:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235896AbjAYOmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 09:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S235387AbjAYOpF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 09:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbjAYOmo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 09:42:44 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E561BDF;
-        Wed, 25 Jan 2023 06:42:11 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id 187so19952239vsv.10;
-        Wed, 25 Jan 2023 06:42:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3kODBhOs5SF/g+uKKdGLvYQ1uu9onF2vNH+SdUo5BiI=;
-        b=aVwUVFhMTb8XjI5LFcDMTUWQumvqpJiF/5rsORKZkMSpoyjjDhM3LS6kHT2ODXPMwC
-         8z3dRrv9t5ow0Idu2TYW755IxsMeseHCM7DoMwwXwr4BrsOvV/MXd/swkOiuCvuEeSkv
-         jakH+mhd8Ibp0gvy2RyYgRfyj+9r54BWTECL3lXF5hPNtYwHBSBE3pK6jubf5mFne84n
-         5R6wp0ItP9wDUlaVkH/dLsFP/VaoN4lLw2thV/0uLFrP0k1n1kTkEjcydNh+E7sx+OEA
-         Im9g/sg5lSn4mnlA4B7li2dcapRNEGnwSuhAp/gaiNGNxPTrzjfs9TOwOFAHj6tAW4oE
-         snZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3kODBhOs5SF/g+uKKdGLvYQ1uu9onF2vNH+SdUo5BiI=;
-        b=LN4k8vf2kRkJEgL692e7S1RQ1l5DzZDKa3qcysnu3t6XipuFrMkOz/iABgDmbjZ+Me
-         YTDlUGImV4OSm6td5Q1tRY61H3tR834JlVe+zTqS6qLnaAc18+IbHUyHovizSyP3nAIZ
-         cOJMu6ybOIcJsAiZqojDFEAtsRhk5XcVC3IASuge73sTdk0N93gWzmLLrmkTmnSDU26n
-         4hiNAdvjbPKWZLq10prR0F1Yw3xJqJT1abRilAD1id5pY0iqoaKi6nAfOvrVbhIhV4ir
-         7qZxsYQmF0YnBysslc26MzAbcItSpgwMCknESgvltKUYxrzrs9WHMjguhmR6O+M572vX
-         cdRw==
-X-Gm-Message-State: AFqh2kpg35C5T6jMx2Z2FW90fDwqht5hv/HYO69htyyF/JMKCbnRgIxf
-        zp0Dk4WwwE7wgpemkNJFpm6DCbsmMwAKMeBxdpksfc/F
-X-Google-Smtp-Source: AMrXdXtWNtz7jGkvrEjuW/eC43d0euK66cieClgRJo4Ag8TIa/cgv5PNKGO3RiqydqTOtwzFpXTffRtcFZiv2Wi6MIk=
-X-Received: by 2002:a67:d097:0:b0:3d0:cb3d:ad47 with SMTP id
- s23-20020a67d097000000b003d0cb3dad47mr5103870vsi.76.1674657690896; Wed, 25
- Jan 2023 06:41:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20230121175639.12818-1-linux.amoon@gmail.com> <20230121175639.12818-2-linux.amoon@gmail.com>
- <Y9E98OLYedOsXHHV@kroah.com>
-In-Reply-To: <Y9E98OLYedOsXHHV@kroah.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 25 Jan 2023 20:11:13 +0530
-Message-ID: <CANAwSgRe0PdB5iWi-fvK4NFsH4XbaSR3M_KwBNm7wQXzxTkrRg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] dt-bindings: usb: Add device id for Genesys Logic
- hub controller
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S235469AbjAYOpE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 09:45:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA7B182;
+        Wed, 25 Jan 2023 06:44:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7582561528;
+        Wed, 25 Jan 2023 14:44:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82AC9C433D2;
+        Wed, 25 Jan 2023 14:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674657842;
+        bh=WViY2kIrxqPrKUVwduoiDaCJwvXTgjlAIlKvjfvj95o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2cn6wv0eUEf6XEUi44Qck0nDI+pSRt2PC/FRZ4N2UpYUhfIF3moH3blEE7wPcIWyQ
+         bgfKodccvgTcokmIjF/NvFfryexlERtmRl/rKbFUrIVLDA3HvsC2ih0ttRFzTR/2j7
+         jnYc73pDu4UW+6nU31+NEMSNhw8gBjOkhlDrRLOI=
+Date:   Wed, 25 Jan 2023 15:44:00 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        linux-amlogic@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Johan Hovold <johan@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V5 0/5] Tegra USB device support updates
+Message-ID: <Y9FAMOUTHBSihY7q@kroah.com>
+References: <20230119104208.28726-1-jonathanh@nvidia.com>
+ <Y8/j1HBwgEdd4Mp2@orome>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8/j1HBwgEdd4Mp2@orome>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Tue, Jan 24, 2023 at 02:57:40PM +0100, Thierry Reding wrote:
+> On Thu, Jan 19, 2023 at 10:42:03AM +0000, Jon Hunter wrote:
+> > This series adds USB device support for Tegra234. 3/5 patches were
+> > originally part of the series to add both USB host and device support
+> > for Tegra234 [0]. However, the series was getting quite large and so I
+> > have split this into a separate series but calling it 'V4' to indicate
+> > that this is not completely new either.
+> > 
+> > I have added two more patches in this version to fix DMA coherency for
+> > Tegra194.
+> > 
+> > [0] https://lore.kernel.org/linux-tegra/20221114124053.1873316-1-waynec@nvidia.com/
+> > 
+> > Jon Hunter (3):
+> >   dt-bindings: usb: tegra-xudc: Add dma-coherent for Tegra194
+> >   arm64: tegra: Add dma-coherent property for Tegra194 XUDC
+> >   arm64: tegra: Populate the XUDC node for Tegra234
+> > 
+> > Sing-Han Chen (1):
+> >   usb: gadget: tegra-xudc: Add Tegra234 support
+> > 
+> > Wayne Chang (1):
+> >   dt-bindings: usb: tegra-xudc: Add Tegra234 XUDC support
+> > 
+> >  .../bindings/usb/nvidia,tegra-xudc.yaml       | 15 ++++++++++++
+> >  arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  1 +
+> >  arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 23 +++++++++++++++++++
+> >  drivers/usb/gadget/udc/tegra-xudc.c           | 17 ++++++++++++++
+> >  4 files changed, 56 insertions(+)
+> 
+> I've picked up patches 2 and 5 of this series into the Tegra tree. Greg,
+> can you pick up patches 1, 3 and 4?
 
-Thanks for your review comments.
+Yes, I will do that now, thanks!
 
-On Wed, 25 Jan 2023 at 20:04, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sat, Jan 21, 2023 at 05:56:29PM +0000, Anand Moon wrote:
-> > Add usb hub device id for Genesys Logic, Inc. GL852G Hub USB 2.0
-> > root hub.
-> >
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > v3: - add Ack of Krzysztof
-> > v2: - drop the vendor name from compatible string.
-> >     - drop the -OTG and -QFN76 suffix from commit message.
-> >     - drop the GL3523 USB 3.1 root hub device id.
->
-> I only see 4 of the 9 patches sent to the linux-usb list and cc: me, so
-> I'm totally confused.
->
-> I'll drop them all from my review queue now and expect a full series to
-> show up if they are needed to be merged through the USB tree
->
-> thanks,
->
-
-Sorry for this mixup from my side.
-I will send the full series of patches again tmr
-
-> greg k-h
-
-Thanks
--Anand
+greg k-h
