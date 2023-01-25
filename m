@@ -2,67 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D7267BF5B
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 22:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACBD67BFC1
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 23:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjAYV4v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 16:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S236250AbjAYWPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 17:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjAYVzL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 16:55:11 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A50C2696;
-        Wed, 25 Jan 2023 13:55:10 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id d10so80342ilc.12;
-        Wed, 25 Jan 2023 13:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=neYEi0cw4EDxVYjfQLR6pAXtwhYG53KqKTVTIsfdX4k=;
-        b=D8kM3+XfkUVIQZCl0fXu4VUjpGIbecF4+xekcyktbQwE5SmYPqX6iIoh0lvosgKhI3
-         T+6MdQmw2SGrFsQKEg39zajkJc57jZXd0WnaGUc/P7LlfInKTthVR3hLo506eqNAjxCb
-         sQ+XIm7ppRULHxGcOB050jml5TzGiDn4Wl+psJk/SKeAZSrtXhTm/1G/ik+vD3bhJvmp
-         eWl7cjG5KpBxXCUPe8kA2WjLtNJwI01RXlIEVgxpOPKR95uq1vZpZ+goi7mfbG3pYbSv
-         1sic8U6OFeUj8RfZwA4VryvKcjn899kQAQhrpGobdWxJpubMEJ/4DeGkJBJ/GFUedyFM
-         q+SA==
+        with ESMTP id S236130AbjAYWO6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 17:14:58 -0500
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B265356C;
+        Wed, 25 Jan 2023 14:14:49 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id n24-20020a0568301e9800b006865671a9d5so120656otr.6;
+        Wed, 25 Jan 2023 14:14:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=neYEi0cw4EDxVYjfQLR6pAXtwhYG53KqKTVTIsfdX4k=;
-        b=Qekhj47MLC/XXweRnMjxOvwi0CgJGYeNkwLDQzXZ9ETSXwTypRNY3iL13LJyiFmh8p
-         7uuSx3ea4/dVQnunTF0Ff5fIu0/1No2lNrcz01kwjcfj7kGTbX8n/Ntiu7mKXO6h/bj6
-         JO3vcFU/ikteFofDRhf7m0x1MstBplqIUJl9Zs1/9Yp65vZ/RbOGQS70YuLrhyPxBr3c
-         km7MBP9sZ/Bgl+G7t7ltosUYXDXGwPtg+xGO1MFR4DEvZVggJmoi/TpFDJAfpKajYTDm
-         im9PhoGoQ6xzuVNYqGSs/ISjM0eWNGr9Kge1SavRyQLgO3Y3a4R+TBWv9Xg90Rs9OazM
-         wcKQ==
-X-Gm-Message-State: AFqh2kruuSdhw3nqQ/EmNAxY4A64tMlQXVaMkF1few9Lj7RtpTN/N47Z
-        /ONbWDftfyWDyOnwUsYJ8y2r3ITT6m/yFMlmO5W5FnaBzG0=
-X-Google-Smtp-Source: AMrXdXvhV5JG7qD7XXjwA72/JoOIluBtsCYvQQMzrPWbWd7PNpDARPbsll/2FI3hJwy/YTaFzMI19nmpFsD0ZA8Li4s=
-X-Received: by 2002:a05:6e02:c0d:b0:30f:5797:2c71 with SMTP id
- d13-20020a056e020c0d00b0030f57972c71mr2157310ile.51.1674683709367; Wed, 25
- Jan 2023 13:55:09 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VntylNPkRn7HwDOyGLvqIMmZ4+nA7TLouy4C3scpsR4=;
+        b=h+V7bftuqB2QH6zC9LY3BG+XKfF2PFH4QeqrqOXfZ0hFLvdLZe6/24A7KhUuUFT83q
+         YdLblbs3QFag+5YpLSCWKLbwIenQC0uPNKV/6n7AnG4dUeF8LFYZ1/ncPuhM/kwb5MM9
+         ACRt5nPmX9Zkb5BWFVTvHZCm6+54avEu1pykPXxNICupP/DW2+PH/kCM8FtfMzqxYIn/
+         KSNZvQv6xiuaTKEFvlnyV+QX3wfJ/jfj1zE+OEyAJLCYTHoGNRuCnizSbMtcIEyywOhU
+         wGdVR7v26Vg2kg3w12DXDPb63s6ukkKgAPtrlBG8V167ppdUnId7agdUEShUs3adIKmB
+         JocQ==
+X-Gm-Message-State: AO0yUKXHmoUyTJhGlcqhcf4DWpE8lz2kPPLyerAJbsWugoNsvTjSlm/J
+        qEO3wGMk5bRgYT2RadIDlknlEi/JIg==
+X-Google-Smtp-Source: AK7set92WE+b16Zc6lK++b0mfe9v5JKPbgYOLupTZTTfk+RBYuKrRvGSICJJo3MYY3Wn2iTJYHYGUQ==
+X-Received: by 2002:a9d:70d6:0:b0:686:5b76:1610 with SMTP id w22-20020a9d70d6000000b006865b761610mr41333otj.1.1674684889198;
+        Wed, 25 Jan 2023 14:14:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p7-20020a9d6947000000b0066e873e4c2csm2746090oto.45.2023.01.25.14.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 14:14:48 -0800 (PST)
+Received: (nullmailer pid 3058728 invoked by uid 1000);
+        Wed, 25 Jan 2023 22:14:48 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Yu Chen <chenyu56@huawei.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: phy: hisilicon: Fix 'hisilicon,eye-diagram-param' differing types
+Date:   Wed, 25 Jan 2023 16:14:43 -0600
+Message-Id: <20230125221444.3058631-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230125143425.85268-1-andriy.shevchenko@linux.intel.com>
- <CAMUOyH2Kc6hL4564sYDZdGRjiJJYmDA5WXEsF92p_xN8iZGMsg@mail.gmail.com> <Y9GKje/7t79cxecC@smile.fi.intel.com>
-In-Reply-To: <Y9GKje/7t79cxecC@smile.fi.intel.com>
-From:   =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
-Date:   Wed, 25 Jan 2023 22:54:58 +0100
-Message-ID: <CAMUOyH163WY3Csbs8QOy6VssrR9TXZRi6ChnqPn=PO7z12rZOQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] usb: gadget: Use correct APIs and data types for
- UUID handling
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,53 +66,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 9:01 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Jan 25, 2023 at 06:31:36PM +0100, J=C3=B3 =C3=81gila Bitsch wrote=
-:
-> > On Wed, Jan 25, 2023 at 3:34 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > We have two types for UUIDs depending on the byte ordering.
-> > > Instead of explaining how bytes should go over the wire,
-> > > use dedicated APIs and data types. This removes a confusion
-> > > over the byte ordering.
-> >
-> > Thanks for pointing this out. I was unaware of the exact UUID
-> > functions, as I'm still quite a newbie here.
-> >
-> > I compiled and tested your patch in my test setup and it works perfectl=
-y.
->
-> Thanks for the testing. According to Submitting Patches documentation
-> you can provide a formal Tested-by tag.
+'hisilicon,eye-diagram-param' is also defined in
+hisilicon,phy-hi3670-pcie.yaml as a 'uint32-array'. Unify it to use
+'uint32-array' everywhere.
 
-Thanks for pointing this out to me.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml         | 3 ++-
+ .../devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml         | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-I'm not really sure how to do that though.
-On https://docs.kernel.org/process/submitting-patches.html#reviewer-s-state=
-ment-of-oversight,
-it says:
-> Both Tested-by and Reviewed-by tags, once received on mailing list from t=
-ester or reviewer, should be added by author to the applicable patches when=
- sending next versions.
+diff --git a/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml b/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml
+index 20b79e2e8b82..b11d9873854a 100644
+--- a/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml
++++ b/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml
+@@ -27,7 +27,8 @@ properties:
+     description: phandle of syscon used to control usb tcxo.
+ 
+   hisilicon,eye-diagram-param:
+-    $ref: /schemas/types.yaml#/definitions/uint32
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    maxItems: 1
+     description: Eye diagram for phy.
+ 
+ required:
+diff --git a/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml b/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+index 1cb00dbcd4c5..3c69aca6c7eb 100644
+--- a/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
++++ b/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+@@ -32,7 +32,8 @@ properties:
+     description: phandle of syscon used to control phy deep sleep.
+ 
+   hisilicon,eye-diagram-param:
+-    $ref: /schemas/types.yaml#/definitions/uint32
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    maxItems: 1
+     description: Eye diagram for phy.
+ 
+   hisilicon,tx-vboost-lvl:
+-- 
+2.39.0
 
-So I guess you could do that at your convenience on any next version.
-Or is it already ok, if I just add the following line in my comment?
-
-Tested-By: J=C3=B3 =C3=81gila Bitsch <jgilab@gmail.com>
-
-I'm still quite a newbie in the kernel development community, so
-thanks for bearing with my ignorance :-)
-
-Best regards and thanks a lot,
-J=C3=B3
-
-
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
