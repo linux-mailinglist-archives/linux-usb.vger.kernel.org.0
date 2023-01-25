@@ -2,137 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9317567BD2E
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 21:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B4167BD56
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 21:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbjAYUnJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 15:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S236190AbjAYUtf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 15:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235993AbjAYUnG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 15:43:06 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060.outbound.protection.outlook.com [40.107.237.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A0D5CE62;
-        Wed, 25 Jan 2023 12:42:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a2+vIw5Bj2/QLTc4Fva7udSUGUXCLAcGhj8erO+nuyk0ymTikXY5w+x+9VRP7G6iN6cmxRwT601E2KglfjvnO8EE0FLxG1sIgiIJWywCEFwuLhlkisr0zbIBYWRrVYK3AE1qD7H/NwkJPkHVmpPO6U00VLn7QwIYpXJgQDszKwiLdV88gzAvfIxaUJhgzLTRDYlG2G8gzL/DW5O27pGS0FhgaHKy8YSXvKH7UkrsRQb0YaZWEE0reKQvxpoVWDTibllj5wSmhMJxRaQB+NkVOEjz7WnF+X+OT3nzN1CC86YR/04VdTObSmSxDdfLg6bQ0QkCweYNemTfq1szlSjmJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TTjf5G+NXaU5lXSrwxsQOaZCTW7Hi7Dv348B38qYUFg=;
- b=UWw5d2NuSHTv+/mY2hFGVHdKU/kmbHrRowounRPvN3eioh3L7Pk13JpTJTaARzkedN0TqLeauxgoMaQssmzkovQKUDvl0f/57SdfOv2Iez6Qvj+FTUs2/rZmnY2E/OHIhEsuYkCHTgW8bTKxtwL5DDtnqFzq15lcSmpLIYs+E3mIkQBFrlb3EneUUJSKnnuGATBaR+pKSvqpWG7b0FKkHWOBmls9inb5KT/HYjGX4CHdyZ60Lr3qVcfYwjaf2n4JQwQl8ocl39iBp47ByjhwCtDksy/TEQA3e1v0cBdex1xVuoCjoG8Tk5ui8ds0mEWNmoFsPG8eHjZVg6wtxVRZYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TTjf5G+NXaU5lXSrwxsQOaZCTW7Hi7Dv348B38qYUFg=;
- b=urdbrbEZM7BJyQcm8Ivm98pC6tMn+7edoXC5Jlivk71wzUhgpehuQWCaEw4foKTRdOI2Ih3pBuvzLA8Hb6cqT1k+4CfOOsyEz25KfHWibAaK5Xfcn4/sCH32+iTA+diTJih0P+7WKMJ20BfeQ7XkIYeUe6up9syRB1Tca1lrB4D2D9nrxZBljkGtmuLzHZztflL8vd7cIx6qJE1ZjokgdsKmBPYboZYaXJs/aBKK+lGhbNvLZyxXTIpfRdhJGx49/NMrwsz9EUEUpQtdUFNwoy7ocTonDnoM9Qzd7npMlTcd9Zuxh70otTgyCrQogtxxKmkjprtQBJGQ0ecIMKXaxw==
-Received: from BN1PR12CA0003.namprd12.prod.outlook.com (2603:10b6:408:e1::8)
- by DM6PR12MB4251.namprd12.prod.outlook.com (2603:10b6:5:21e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 20:42:57 +0000
-Received: from BN8NAM11FT021.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e1:cafe::20) by BN1PR12CA0003.outlook.office365.com
- (2603:10b6:408:e1::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.21 via Frontend
- Transport; Wed, 25 Jan 2023 20:42:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT021.mail.protection.outlook.com (10.13.177.114) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.17 via Frontend Transport; Wed, 25 Jan 2023 20:42:56 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
- 2023 12:42:40 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
- 2023 12:42:40 -0800
-Received: from moonraker.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Wed, 25 Jan 2023 12:42:37 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S235065AbjAYUte (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 15:49:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18648694;
+        Wed, 25 Jan 2023 12:49:30 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKWIU7023790;
+        Wed, 25 Jan 2023 20:49:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=xACmOZ4ukkAcUmVvUM2aiIZYmP4ylYGfvpEzRuo+ADQ=;
+ b=hirsF36WmOnPPiLYEfT6z5x6zLQ1iZpDCo7XmAKUfIL6XSumL0YUs3i3F9uyouDnaSPk
+ 6Scp64RlrxjUlTz1UnFyCJVohIo3/uXhF1Zz3hWC8LUIrr++Ght3mki78+0BfFJr3Zve
+ kLOOKiFtVYk1+hgkvIL8pdXTf9+znDpX8TCgeQbsQfgZ6Fkn2aJxJlq3se1qpdFMvzwT
+ 6SoAt7qg0udHpUBqWZfPRDa6K+r/0PKF1oS5i2lN3uaEUkvS5KD1disivs7imrewhbpM
+ SazazOUnjyoa2uMwgULeZ7jXVqWH8UDRBrvAX/KMVDmIzdorsQVsTjKqlQEsBctSEuOm 3Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nak7jjnrq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 20:49:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PKnKW1029109
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 20:49:20 GMT
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 25 Jan 2023 12:49:19 -0800
+Date:   Wed, 25 Jan 2023 12:49:11 -0800
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, Wayne Chang <waynec@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V8 6/6] arm64: defconfig: Enable UCSI support
-Date:   Wed, 25 Jan 2023 20:42:11 +0000
-Message-ID: <20230125204211.63680-7-jonathanh@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230125204211.63680-1-jonathanh@nvidia.com>
-References: <20230125204211.63680-1-jonathanh@nvidia.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        "Harsh Agarwal" <quic_harshq@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
+Subject: Re: [RFC v4 2/5] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+Message-ID: <20230125204911.GA2657@jackp-linux.qualcomm.com>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-3-quic_kriskura@quicinc.com>
+ <20230119003619.ane3weigd4ebsta6@synopsys.com>
+ <7fa2d7b0-509d-ae90-4208-6f0245f927f7@quicinc.com>
+ <20230120010226.wjwtisj4id6frirl@synopsys.com>
+ <91fa86d8-f443-db13-1544-73e2dd50d964@quicinc.com>
+ <20230120224400.77t2j3qtcdfqwt5s@synopsys.com>
+ <0d9eab77-ad5f-be23-8ed6-d78c0d3ccef1@quicinc.com>
+ <20230125190805.l7yo5lls7gfhoo4b@synopsys.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT021:EE_|DM6PR12MB4251:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffee2512-cfdf-41bd-4dff-08daff14bd31
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lVGgq4R80UcBEWLSyHIYotP1gfcE2jitff65aN7YbItrNfnhaNtGQYsaJ9j3OZlUaxqXeA/FoODBGwDwkfWRxFjPsmLbMUhw8Uoq56vTM1EeqZMme4ALhWfLXb4MxMQTf5pMlH+xBUXCOj9ViJqtbpJc8+VtVilfcCgZnot8qgkOx+ApHsL31zg5C7WIA6J5KtGzlaAFZ7nW12iiqLQUtySMntIjbTg4oH2v+Ry/zeAbB4hUUcJnkkTiLWuuY4D1L3Q++oOsVkx7aDHgmYoP1L6MZJluRHEwYDHQrCAwU/KswtwJcbzuDxJcLrATo0a6lZIFG6rlrsc8VwVpONsgK82s5XOOQNtlKcIfG7McvKn4Ty0TaOpUdoW/7iTXtQu+AFxWrdc+YJVZNQJ0ZBAA7+1slVUvcLcZQAXNLuwK8IvdLBkGDUvBn5fTZ/kEjER8r7TeyMJ6grfrs3oMgNamrMLnL8+ZBEIo+1OmcjPRpWeC42lQQpiyGfCMbuweCHIPNKRLtJ0FJuZzwZMGygjSVD8ZkHbTsYFc8xt9PxD3v5G0k4XE2Zrrl+O7BQp2d3MBuqfIp6gG0nHNSqju1GILXBVrMqU2pA2XyaGZG4YsTyZ7tembuZ+6vW/qtRfCT2zpu/Qf+i4F5oqjHv9enh3gtkl8kINTgqa8Hzp2Hvn+Vbnfl4fBrF3JODAee24AkLNdYO9rS77VqjbR98zbHxSEtA==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(376002)(346002)(451199018)(36840700001)(40470700004)(46966006)(36860700001)(70586007)(4326008)(8676002)(54906003)(107886003)(110136005)(316002)(26005)(70206006)(41300700001)(336012)(2616005)(8936002)(356005)(1076003)(40480700001)(4744005)(82310400005)(5660300002)(40460700003)(426003)(2906002)(36756003)(478600001)(86362001)(6666004)(47076005)(82740400003)(83380400001)(7696005)(7636003)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 20:42:56.2869
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffee2512-cfdf-41bd-4dff-08daff14bd31
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT021.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4251
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230125190805.l7yo5lls7gfhoo4b@synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Z-C9IGQCNa0z5KoXaTsC96qJO6MLpGlF
+X-Proofpoint-ORIG-GUID: Z-C9IGQCNa0z5KoXaTsC96qJO6MLpGlF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=799
+ priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1015 bulkscore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301250185
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable the TYPEC UCSI support and the Cypress UCSI driver that is used
-on the NVIDIA Jetson platforms.
+On Wed, Jan 25, 2023 at 07:08:10PM +0000, Thinh Nguyen wrote:
 
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
----
-V8: no changes
-V7: Added in V7
+<snip>
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> > +       /*
+> > +        * If the controller is not host-only, then it must be a
+> > +        * single port controller.
+> > +        */
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 984553d55e17..d487d0e2b8e0 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -959,6 +959,8 @@ CONFIG_TYPEC_TCPCI=m
- CONFIG_TYPEC_FUSB302=m
- CONFIG_TYPEC_TPS6598X=m
- CONFIG_TYPEC_HD3SS3220=m
-+CONFIG_TYPEC_UCSI=m
-+CONFIG_UCSI_CCG=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
--- 
-2.25.1
+Thinh, is this a correct assumption?  Is it possible for the IP to be
+synthesized to support both dual-role and multiple ports?  We know that
+when operating in device mode only the first port can be used but the
+additional ports would be usable when in host.
 
+Thanks,
+Jack
+
+> > +       temp = readl(regs + DWC3_GHWPARAMS0);
+> > +       hw_mode = DWC3_GHWPARAMS0_MODE(temp);
+> > +       if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST) {
+> > +               dwc->num_ports = 1;
+> > +               dwc->num_ss_ports = 1;
+> > +               return 0;
+> > +       }
+> 
+> This check should be done before we get into this function.
