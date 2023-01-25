@@ -2,277 +2,294 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725EE67ABCE
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 09:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C09D867AC02
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 09:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235190AbjAYId2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 03:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S235290AbjAYIjV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 03:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbjAYIdT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 03:33:19 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550663E08C;
-        Wed, 25 Jan 2023 00:33:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674635588; x=1706171588;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jZ25MeoGnL2uaXymFyLU1cTV0Zfr7PXco6b3u6MyroA=;
-  b=Ywe4rX7Opz8qJw9KJT1tn2YfdumCU5G7+R4p5byU+z2h3ny3yD56aaXl
-   fuz1v6ejzPAH6fFCEcvJhMK+iOusJJhaEHNiCsGDjBgERooS4jBCgl8EM
-   g6a2Rff2vWOybfeTY7HD9EXSQKdiNS0AscA6DM+2YnQrK5jkQB6yO71pp
-   ivxQHtv1I1WAhT351F8TpJ2byRZ37FmSbEKEBIYlgKeMoKq64Yc9VSokR
-   otWVG6eQkZUIhdM2OIqlbEWIneOfHgbCKDhFCkXeoaYqmV1TE+6Vt7HSw
-   zLf/3BLmom1BN2zkytMac5j0cvRtE1kTFbM/25TNusbtSHn3ew4fearT8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="327761962"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208,223";a="327761962"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 00:33:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="804925816"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208,223";a="804925816"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Jan 2023 00:33:05 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 25 Jan 2023 10:33:04 +0200
-Date:   Wed, 25 Jan 2023 10:33:04 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Fan Chengwei <fancieux@outlook.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: BUG: crash after suspending
-Message-ID: <Y9DpQGj+9FZglZjo@kuha.fi.intel.com>
-References: <SG2PR02MB4090B1F3E5EC0B7FCCC01807D7CE9@SG2PR02MB4090.apcprd02.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="XeOJB41DODR5ewEl"
-Content-Disposition: inline
-In-Reply-To: <SG2PR02MB4090B1F3E5EC0B7FCCC01807D7CE9@SG2PR02MB4090.apcprd02.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235260AbjAYIjD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 03:39:03 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4402D49011
+        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 00:38:57 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5073cf66299so1096907b3.17
+        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 00:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gBh0+9Ej4fdZiBcL1FEtjjBddEyxpct0JkyXcSRf3Wg=;
+        b=lB4btchvNlTfCRHflexrgCXbRXFvyy8g1gFK/OMeKiIJNh1tqeN9E/OUXMnf2U4uji
+         YYT9ZG6Uz9BNIXcJPuB6IBGSNwEdssClBGTD7I8F8xN9feCnsNR77DeUemH49gSW7JIZ
+         i8Fyk+8dX7xmZBgb/4LlxS50DWuY+p/ZAvE5rke3AXUvgG50Y7E3pTP3J2Z3NRLwRPG+
+         tuCoTtjvQeclLyeusopPtZIO8LUuu13+9dnLJ2g+6d0g96WjPTO8eD8l7HbwyilzSGVH
+         oGzLOV4is7gwgAYTgd7llD5IZe+pWMCF81FsE6KNSAjCT9NY1E+DcM18ZvHUvuruVpcX
+         WOLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gBh0+9Ej4fdZiBcL1FEtjjBddEyxpct0JkyXcSRf3Wg=;
+        b=p6vCvP24A9h8CYk+A77+a0bk7mX2Nfska6t7ywCgB1IsLn7bHECMQw/U/bBD39ovof
+         6qP6lYPWIOKwNQxqBVs2NzDIo4dnQd43qBzW0fm+1H7sfxBw9RaQ5gAq5Cn/Ld6nRF8a
+         EK7wNOD5LkTIW/vAO69SHTV1OoMQFgz4zsYgXkj12yRWvLUTPYzJ5+rZQg1qg0Jmu79E
+         uEZ3edtdI5Azd1W4QEHOmGYXC9rOlDosTJobLAhG6195CdOE/edy2rhTVDBTZN1dS3az
+         7K6nxkIdIl3xZLAh6kXb3kmhK+s7sjOe6fM5sNhHYeR58sCS3quzf61EaX3KjzcvqScX
+         6owQ==
+X-Gm-Message-State: AFqh2kqL4nidx8mpXnxKaDULp34b8fgEyG4ZWcZidK5PM2yEUcHbYeUk
+        nAif9pOu6mqfMkfNEyVrbbE91cRmtMU=
+X-Google-Smtp-Source: AMrXdXtLI+TT5dUaC9pRI2aKjkmKt7tjdC79b+se6AwZUh4jJJgCSUqcAubWc2ByjewYclrfSPgwiLKmrmw=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:f7b0:20e8:ce66:f98])
+ (user=surenb job=sendgmr) by 2002:a05:6902:34f:b0:6f9:7bf9:8fc7 with SMTP id
+ e15-20020a056902034f00b006f97bf98fc7mr3373858ybs.279.1674635936246; Wed, 25
+ Jan 2023 00:38:56 -0800 (PST)
+Date:   Wed, 25 Jan 2023 00:38:45 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
+Message-ID: <20230125083851.27759-1-surenb@google.com>
+Subject: [PATCH v2 0/6] introduce vm_flags modifier functions
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        luto@kernel.org, songliubraving@fb.com, peterx@redhat.com,
+        david@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This patchset was originally published as a part of per-VMA locking [1] and
+was split after suggestion that it's viable on its own and to facilitate
+the review process. It is now a preprequisite for the next version of per-VMA
+lock patchset, which reuses vm_flags modifier functions to lock the VMA when
+vm_flags are being updated.
 
---XeOJB41DODR5ewEl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+VMA vm_flags modifications are usually done under exclusive mmap_lock
+protection because this attrubute affects other decisions like VMA merging
+or splitting and races should be prevented. Introduce vm_flags modifier
+functions to enforce correct locking.
 
-Hi,
+[1] https://lore.kernel.org/all/20230109205336.3665937-1-surenb@google.com/
 
-On Wed, Jan 25, 2023 at 01:23:01PM +0800, Fan Chengwei wrote:
-> My laptop crash after suspending due to failure of driver of usb type c.
-> 
-> This may be a follow-up to
-> https://bugzilla.kernel.org/show_bug.cgi?id=216706 and
-> https://bugzilla.kernel.org/show_bug.cgi?id=216697. You mentioned a patch in
-> BUG 216697 above, which was merged into mainline in 6.2.0-rc5. But I tried
-> 6.2.0-rc5 yesterday and it still doesn't work.
-> 
-> I add a comment here in
-> https://bugzilla.kernel.org/show_bug.cgi?id=216697#c11 and there is some
-> discussion in https://bbs.archlinux.org/viewtopic.php?id=282999.
-> 
-> Bisection shows that
-> > # first bad commit: [4e3a50293c2b21961f02e1afa2f17d3a1a90c7c8] usb:
-> typec: ucsi: acpi: Implement resume callback
-> which makes my laptop freezes when resuming from suspend. While in
-> https://bugzilla.kernel.org/show_bug.cgi?id=216706, someone reports that the
-> same commit causes that USBC resume callback takes far too long.
-> 
-> That bad commit was merged in mainline in 6.1.0-rc2, which causes my laptop
-> to freeze and journalctl can't capture any message. While after the
-> archlinux kernel package is upgraded to 6.1.1 and later, the system will not
-> be stuck, but a oops will be displayed, I posted it here
-> https://bbs.archlinux.org/viewtopic.php?id=282999. And following is the
-> dmesg in 6.2.0-rc5:
-> > [   29.677975] Oops: 0000 [#1] PREEMPT SMP PTI
-> > [   29.677981] CPU: 4 PID: 73 Comm: kworker/4:1 Not tainted
-> 6.2.0-rc5-1-mainline #1 9dd3e34c332001c1d20c681d031ef729664f899d
-> > [   29.677989] Hardware name: LENOVO 81HX/LNVNB161216, BIOS
-> 6UCN53WW(V4.08) 09/26/2018
-> > [   29.677992] Workqueue: events_long ucsi_resume_work [typec_ucsi]
-> > [   29.678017] RIP: 0010:ucsi_resume_work+0x32/0x80 [typec_ucsi]
-> > [   29.678037] Code: 00 55 31 c9 31 d2 53 48 8b b7 a0 00 00 00 48 89 fb 48
-> 83 ef 38 48 83 ce 05 e8 5a f6 ff ff 85 c0 0f 88 95 22 00 00 48 8b 5b f8 <48>
-> 83 bb 88 00 00 00 00 74 3b 48 8d 6b 10 48 89 ef e8 f8 57 a6 e2
-> > [   29.678041] RSP: 0000:ffffb2dac030fe80 EFLAGS: 00010246
-> > [   29.678047] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
-> 0000000000000002
-> > [   29.678050] RDX: 0000000000000000 RSI: 0000000000000246 RDI:
-> ffff91b009189db8
-> > [   29.678053] RBP: ffff91b169f32b00 R08: 0000000000000001 R09:
-> 0000000000000000
-> > [   29.678056] R10: 0000000000000004 R11: 0000000000000000 R12:
-> ffff91b169f38b00
-> > [   29.678059] R13: 0000000000000000 R14: ffff91b000f5dc00 R15:
-> ffff91b009189d40
-> > [   29.678063] FS:  0000000000000000(0000) GS:ffff91b169f00000(0000)
-> knlGS:0000000000000000
-> > [   29.678067] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [   29.678071] CR2: 0000000000000088 CR3: 000000005e810001 CR4:
-> 00000000003706e0
-> > [   29.678075] Call Trace:
-> > [   29.678080]  <TASK>
-> > [   29.678085]  process_one_work+0x1c5/0x380
-> > [   29.678099]  worker_thread+0x51/0x390
-> > [   29.678109]  ? __pfx_worker_thread+0x10/0x10
-> > [   29.678117]  kthread+0xdb/0x110
-> > [   29.678124]  ? __pfx_kthread+0x10/0x10
-> > [   29.678130]  ret_from_fork+0x29/0x50
-> > [   29.678146]  </TASK>
-> > [   29.678148] Modules linked in: nft_chain_nat xt_REDIRECT nf_nat
-> nf_conntrack xt_mark nft_compat nf_tables libcrc32c nfnetlink snd_soc_avs
-> xt_TPROXY snd_soc_hda_codec nf_tproxy_ipv6 snd_soc_skl nf_tproxy_ipv4
-> nf_defrag_ipv6 snd_soc_hdac_hda nf_defrag_ipv4 snd_hda_ext_core
-> snd_soc_sst_ipc intel_tcc_cooling snd_soc_sst_dsp x86_pkg_temp_thermal
-> snd_soc_acpi_intel_match intel_powerclamp kvm_intel snd_soc_acpi
-> snd_soc_core ccm snd_hda_codec_hdmi algif_aead snd_compress
-> snd_hda_codec_conexant kvm snd_hda_codec_generic ac97_bus cbc ledtrig_audio
-> irqbypass ath10k_pci snd_pcm_dmaengine crct10dif_pclmul crc32_pclmul
-> hid_logitech_hidpp polyval_clmulni des_generic snd_hda_intel polyval_generic
-> libdes gf128mul snd_intel_dspcfg ath10k_core ecb ghash_clmulni_intel
-> snd_intel_sdw_acpi sha512_ssse3 iTCO_wdt snd_hda_codec ath intel_pmc_bxt
-> aesni_intel algif_skcipher uvcvideo cmac joydev snd_hda_core serio_raw
-> crypto_simd snd_hwdep iTCO_vendor_support mei_hdcp mousedev mei_pxp
-> intel_rapl_msr 8021q atkbd
-> > [   29.678263]  cryptd hid_logitech_dj garp libps2 md4 btusb
-> videobuf2_vmalloc snd_pcm mrp mac80211 rapl vivaldi_fmap algif_hash
-> videobuf2_memops processor_thermal_device_pci_legacy btrtl snd_timer r8169
-> btbcm stp intel_cstate af_alg llc videobuf2_v4l2 snd coretemp
-> processor_thermal_device i2c_i801 libarc4 intel_uncore btintel realtek btmtk
-> intel_wmi_thunderbolt wmi_bmof mdio_devres i2c_smbus soundcore ucsi_acpi
-> mei_me processor_thermal_rfim cfg80211 bluetooth videodev libphy typec_ucsi
-> processor_thermal_mbox intel_lpss_pci vfat i2c_hid_acpi mei
-> processor_thermal_rapl intel_lpss fat idma64 typec ecdh_generic
-> videobuf2_common i2c_hid intel_xhci_usb_role_switch intel_rapl_common mc
-> usbhid intel_soc_dts_iosf intel_pch_thermal roles elan_i2c ideapad_laptop
-> sparse_keymap platform_profile int3403_thermal rfkill int340x_thermal_zone
-> i8042 serio int3400_thermal soc_button_array acpi_thermal_rel acpi_pad
-> mac_hid vmw_vmci pkcs8_key_parser dm_multipath crypto_user fuse bpf_preload
-> ip_tables x_tables
-> > [   29.678388]  ext4 crc32c_generic crc16 mbcache jbd2 dm_mod nvme
-> nvme_core crc32c_intel xhci_pci nvme_common xhci_pci_renesas i915 drm_buddy
-> intel_gtt video wmi drm_display_helper cec ttm
-> > [   29.678420] CR2: 0000000000000088
-> > [   29.678424] ---[ end trace 0000000000000000 ]---
-> > [   29.678426] RIP: 0010:ucsi_resume_work+0x32/0x80 [typec_ucsi]
-> > [   29.678445] Code: 00 55 31 c9 31 d2 53 48 8b b7 a0 00 00 00 48 89 fb 48
-> 83 ef 38 48 83 ce 05 e8 5a f6 ff ff 85 c0 0f 88 95 22 00 00 48 8b 5b f8 <48>
-> 83 bb 88 00 00 00 00 74 3b 48 8d 6b 10 48 89 ef e8 f8 57 a6 e2
-> > [   29.678449] RSP: 0000:ffffb2dac030fe80 EFLAGS: 00010246
-> > [   29.678454] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
-> 0000000000000002
-> > [   29.678457] RDX: 0000000000000000 RSI: 0000000000000246 RDI:
-> ffff91b009189db8
-> > [   29.678460] RBP: ffff91b169f32b00 R08: 0000000000000001 R09:
-> 0000000000000000
-> > [   29.678462] R10: 0000000000000004 R11: 0000000000000000 R12:
-> ffff91b169f38b00
-> > [   29.678465] R13: 0000000000000000 R14: ffff91b000f5dc00 R15:
-> ffff91b009189d40
-> > [   29.678468] FS:  0000000000000000(0000) GS:ffff91b169f00000(0000)
-> knlGS:0000000000000000
-> > [   29.678472] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [   29.678475] CR2: 0000000000000088 CR3: 000000005e810001 CR4:
-> 00000000003706e0
-> Although you merged a patch in 6.2.0-rc5, nothing seems to have changed.
-> 
-> I also noticed one more thing, since I started using linux system every time
-> I boot there is a message:
-> > ucsi_acpi USBC000:00: PPM init failed (-16)
-> Its return value sometimes changes, about 70% is -16, 20% is -19, 10% is
-> -110, and sporadically -22, -95. On the past system, this will not cause any
-> problems. I thought it was completely harmless. But one time when I was
-> testing the kernel this error did not appear and the system resumed normally
-> from suspending, even though it was a bad kernel. This happens once in about
-> 150 boots, I can't reproduce it. Besides, even on a bad kernel, as long as
-> after entering the system, `rmmod ucsi_acpi typec_ucsi` and then modprobe
-> them. The system can resume normally.
-> 
-> I'm not an experienced linux user and I don't know much about it, I hope to
-> get your help.
+The patchset applies cleanly over mm-unstable branch of mm tree.
 
-The information you just gave is very useful. Thank you!
+My apologies for an extremely large distribution list. The patch touches
+lots of files and many are in arch/ and drivers/.
 
-I'm still not completely sure if I understand the problem, but I'm
-attaching a patch. Can you test it?
+Suren Baghdasaryan (6):
+  mm: introduce vma->vm_flags modifier functions
+  mm: replace VM_LOCKED_CLEAR_MASK with VM_LOCKED_MASK
+  mm: replace vma->vm_flags direct modifications with modifier calls
+  mm: replace vma->vm_flags indirect modification in ksm_madvise
+  mm: introduce mod_vm_flags_nolock and use it in untrack_pfn
+  mm: export dump_mm()
 
-I'll also attach it to the bug.
-
-thanks,
+ arch/arm/kernel/process.c                     |  2 +-
+ arch/ia64/mm/init.c                           |  8 +--
+ arch/loongarch/include/asm/tlb.h              |  2 +-
+ arch/powerpc/kvm/book3s_hv_uvmem.c            |  5 +-
+ arch/powerpc/kvm/book3s_xive_native.c         |  2 +-
+ arch/powerpc/mm/book3s64/subpage_prot.c       |  2 +-
+ arch/powerpc/platforms/book3s/vas-api.c       |  2 +-
+ arch/powerpc/platforms/cell/spufs/file.c      | 14 ++---
+ arch/s390/mm/gmap.c                           |  8 +--
+ arch/x86/entry/vsyscall/vsyscall_64.c         |  2 +-
+ arch/x86/kernel/cpu/sgx/driver.c              |  2 +-
+ arch/x86/kernel/cpu/sgx/virt.c                |  2 +-
+ arch/x86/mm/pat/memtype.c                     | 14 +++--
+ arch/x86/um/mem_32.c                          |  2 +-
+ drivers/acpi/pfr_telemetry.c                  |  2 +-
+ drivers/android/binder.c                      |  3 +-
+ drivers/char/mspec.c                          |  2 +-
+ drivers/crypto/hisilicon/qm.c                 |  2 +-
+ drivers/dax/device.c                          |  2 +-
+ drivers/dma/idxd/cdev.c                       |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c       |  2 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_chardev.c      |  4 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_doorbell.c     |  4 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_events.c       |  4 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_process.c      |  4 +-
+ drivers/gpu/drm/drm_gem.c                     |  2 +-
+ drivers/gpu/drm/drm_gem_dma_helper.c          |  3 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c        |  2 +-
+ drivers/gpu/drm/drm_vm.c                      |  8 +--
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c         |  2 +-
+ drivers/gpu/drm/exynos/exynos_drm_gem.c       |  4 +-
+ drivers/gpu/drm/gma500/framebuffer.c          |  2 +-
+ drivers/gpu/drm/i810/i810_dma.c               |  2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_mman.c      |  4 +-
+ drivers/gpu/drm/mediatek/mtk_drm_gem.c        |  2 +-
+ drivers/gpu/drm/msm/msm_gem.c                 |  2 +-
+ drivers/gpu/drm/omapdrm/omap_gem.c            |  3 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |  3 +-
+ drivers/gpu/drm/tegra/gem.c                   |  5 +-
+ drivers/gpu/drm/ttm/ttm_bo_vm.c               |  3 +-
+ drivers/gpu/drm/virtio/virtgpu_vram.c         |  2 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_ttm_glue.c      |  2 +-
+ drivers/gpu/drm/xen/xen_drm_front_gem.c       |  3 +-
+ drivers/hsi/clients/cmt_speech.c              |  2 +-
+ drivers/hwtracing/intel_th/msu.c              |  2 +-
+ drivers/hwtracing/stm/core.c                  |  2 +-
+ drivers/infiniband/hw/hfi1/file_ops.c         |  4 +-
+ drivers/infiniband/hw/mlx5/main.c             |  4 +-
+ drivers/infiniband/hw/qib/qib_file_ops.c      | 13 +++--
+ drivers/infiniband/hw/usnic/usnic_ib_verbs.c  |  2 +-
+ .../infiniband/hw/vmw_pvrdma/pvrdma_verbs.c   |  2 +-
+ .../common/videobuf2/videobuf2-dma-contig.c   |  2 +-
+ .../common/videobuf2/videobuf2-vmalloc.c      |  2 +-
+ drivers/media/v4l2-core/videobuf-dma-contig.c |  2 +-
+ drivers/media/v4l2-core/videobuf-dma-sg.c     |  4 +-
+ drivers/media/v4l2-core/videobuf-vmalloc.c    |  2 +-
+ drivers/misc/cxl/context.c                    |  2 +-
+ drivers/misc/habanalabs/common/memory.c       |  2 +-
+ drivers/misc/habanalabs/gaudi/gaudi.c         |  4 +-
+ drivers/misc/habanalabs/gaudi2/gaudi2.c       |  8 +--
+ drivers/misc/habanalabs/goya/goya.c           |  4 +-
+ drivers/misc/ocxl/context.c                   |  4 +-
+ drivers/misc/ocxl/sysfs.c                     |  2 +-
+ drivers/misc/open-dice.c                      |  4 +-
+ drivers/misc/sgi-gru/grufile.c                |  4 +-
+ drivers/misc/uacce/uacce.c                    |  2 +-
+ drivers/sbus/char/oradax.c                    |  2 +-
+ drivers/scsi/cxlflash/ocxl_hw.c               |  2 +-
+ drivers/scsi/sg.c                             |  2 +-
+ .../staging/media/atomisp/pci/hmm/hmm_bo.c    |  2 +-
+ drivers/staging/media/deprecated/meye/meye.c  |  4 +-
+ .../media/deprecated/stkwebcam/stk-webcam.c   |  2 +-
+ drivers/target/target_core_user.c             |  2 +-
+ drivers/uio/uio.c                             |  2 +-
+ drivers/usb/core/devio.c                      |  3 +-
+ drivers/usb/mon/mon_bin.c                     |  3 +-
+ drivers/vdpa/vdpa_user/iova_domain.c          |  2 +-
+ drivers/vfio/pci/vfio_pci_core.c              |  2 +-
+ drivers/vhost/vdpa.c                          |  2 +-
+ drivers/video/fbdev/68328fb.c                 |  2 +-
+ drivers/video/fbdev/core/fb_defio.c           |  4 +-
+ drivers/xen/gntalloc.c                        |  2 +-
+ drivers/xen/gntdev.c                          |  4 +-
+ drivers/xen/privcmd-buf.c                     |  2 +-
+ drivers/xen/privcmd.c                         |  4 +-
+ fs/aio.c                                      |  2 +-
+ fs/cramfs/inode.c                             |  2 +-
+ fs/erofs/data.c                               |  2 +-
+ fs/exec.c                                     |  4 +-
+ fs/ext4/file.c                                |  2 +-
+ fs/fuse/dax.c                                 |  2 +-
+ fs/hugetlbfs/inode.c                          |  4 +-
+ fs/orangefs/file.c                            |  3 +-
+ fs/proc/task_mmu.c                            |  2 +-
+ fs/proc/vmcore.c                              |  3 +-
+ fs/userfaultfd.c                              |  2 +-
+ fs/xfs/xfs_file.c                             |  2 +-
+ include/linux/mm.h                            | 51 +++++++++++++++++--
+ include/linux/mm_types.h                      |  8 ++-
+ include/linux/pgtable.h                       |  5 +-
+ kernel/bpf/ringbuf.c                          |  4 +-
+ kernel/bpf/syscall.c                          |  4 +-
+ kernel/events/core.c                          |  2 +-
+ kernel/fork.c                                 |  2 +-
+ kernel/kcov.c                                 |  2 +-
+ kernel/relay.c                                |  2 +-
+ mm/debug.c                                    |  1 +
+ mm/hugetlb.c                                  |  4 +-
+ mm/khugepaged.c                               |  2 +
+ mm/ksm.c                                      |  2 +
+ mm/madvise.c                                  |  2 +-
+ mm/memory.c                                   | 19 +++----
+ mm/memremap.c                                 |  4 +-
+ mm/mlock.c                                    | 12 ++---
+ mm/mmap.c                                     | 32 +++++++-----
+ mm/mprotect.c                                 |  2 +-
+ mm/mremap.c                                   |  8 +--
+ mm/nommu.c                                    | 11 ++--
+ mm/secretmem.c                                |  2 +-
+ mm/shmem.c                                    |  2 +-
+ mm/vmalloc.c                                  |  2 +-
+ net/ipv4/tcp.c                                |  4 +-
+ security/selinux/selinuxfs.c                  |  6 +--
+ sound/core/oss/pcm_oss.c                      |  2 +-
+ sound/core/pcm_native.c                       |  9 ++--
+ sound/soc/pxa/mmp-sspa.c                      |  2 +-
+ sound/usb/usx2y/us122l.c                      |  4 +-
+ sound/usb/usx2y/usX2Yhwdep.c                  |  2 +-
+ sound/usb/usx2y/usx2yhwdeppcm.c               |  2 +-
+ 129 files changed, 292 insertions(+), 233 deletions(-)
 
 -- 
-heikki
+2.39.1
 
---XeOJB41DODR5ewEl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-usb-typec-ucsi-Release-the-connector-array-if-ucsi_i.patch"
-
-From c6a1e65373b97c8aac8b63c8a47047166bfe3dae Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Wed, 25 Jan 2023 10:16:28 +0200
-Subject: [PATCH] usb: typec: ucsi: Release the connector array if ucsi_init()
- fails
-
-Interim.
-
-If ucsi_init() fails, leaving ucsi->connector with value
-NULL. The array that the pointer contains is also freed at
-the same time.
-
-This is a test fix for:
-https://bugzilla.kernel.org/show_bug.cgi?id=216697
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 308498e871dfb..be517efc403af 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1400,6 +1400,9 @@ static int ucsi_init(struct ucsi *ucsi)
- 		con->port = NULL;
- 	}
- 
-+	kfree(ucsi->connector);
-+	ucsi->connector = NULL;
-+
- err_reset:
- 	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
- 	ucsi_reset_ppm(ucsi);
-@@ -1431,7 +1434,8 @@ static void ucsi_resume_work(struct work_struct *work)
- 
- int ucsi_resume(struct ucsi *ucsi)
- {
--	queue_work(system_long_wq, &ucsi->resume_work);
-+	if (ucsi->connector)
-+		queue_work(system_long_wq, &ucsi->resume_work);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(ucsi_resume);
-@@ -1551,6 +1555,9 @@ void ucsi_unregister(struct ucsi *ucsi)
- 	/* Disable notifications */
- 	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
- 
-+	if (!ucsi->connector)
-+		return;
-+
- 	for (i = 0; i < ucsi->cap.num_connectors; i++) {
- 		cancel_work_sync(&ucsi->connector[i].work);
- 		ucsi_unregister_partner(&ucsi->connector[i]);
--- 
-2.39.0
-
-
---XeOJB41DODR5ewEl--
