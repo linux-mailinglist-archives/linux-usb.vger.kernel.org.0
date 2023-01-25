@@ -2,113 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D9167AACC
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 08:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A862D67AAD7
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 08:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbjAYHWU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 02:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S234999AbjAYH0x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 02:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234449AbjAYHWP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 02:22:15 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141DB24111
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 23:22:06 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P6U1nF029736;
-        Wed, 25 Jan 2023 07:21:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=Wf/WjQ2J/lhSF+TM/r9G5pNXqwNr4z5fUnRTOPj49bo=;
- b=NOyL+8i9zQY//KRwNjd/ioPp/ugzmlR9cZu/qK72rwXu6nI6rU8lwLLxtbl815U7RIr2
- 72+9ZsGDHaNJEKnv30VzLX5vuP6HNHocfd6ieUWZzaAK0gq+1ArkdgSh8X5MTHX0ugGz
- GGAU1+c2G5a9x1DzkYCRkFiNHbr77J/3wDKMvr8y7cRGCvh2wmaDD51q7OeZUy4bm882
- SH9ImfOYWz6drqmMe61LxaGWBE3k3v/vFiZPOrVD1fj0PkkVCmUr7XNaW8GVsi2fjhJJ
- d9uVqRdeZd4yuK9qc5NEePN7jg1TggP/6Mm4jXRPhV/nzEG8/r+BNH3Iic79g5BoQdQD Bg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89dnekb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 07:21:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30P7Lw6Z015305
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 07:21:58 GMT
-Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 24 Jan 2023 23:21:55 -0800
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+        with ESMTP id S235009AbjAYH0r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 02:26:47 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1719F42DD0;
+        Tue, 24 Jan 2023 23:26:44 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id j5so3952272pjn.5;
+        Tue, 24 Jan 2023 23:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hq3YLnLVdkwJ+hnndTnVXYO2IvsFe7R/GdMhEuzT5j4=;
+        b=eXrMPHaKJJACcgNbFqY2MDAunrGJohcSX0+b/zZxdECntrVwymZjD+yOT6pSbC9HqI
+         7qSpSKQWfJUvWCfG5mkvrnOPcsf7NsPVW0BFPd2UVWjfJk7g2fTbzt8El0BmAfHDmgMH
+         AXv7eJuaagz8LUGm/uHJMqIEKdLhkERxNkq3+YMtBLA4t4zg8MIYlEL8pxxC3i5tayCH
+         OYdhUL3ybK/mnER140UZB9853TdZ8J8aIXHe1GFqP0cZfK48qXnGzM9On6PVMuvnXMH4
+         +gavM0ogR2a/Rtzj/G4pgVsSYWWSgXqFw5Vfod4SsO0i5WQ/hIhFjnmFOh02f0Cm/JXG
+         mIEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hq3YLnLVdkwJ+hnndTnVXYO2IvsFe7R/GdMhEuzT5j4=;
+        b=PltIWEBK2/+A+l0TP1yInK39oXNa2m5zTfUK2WmewmGMUKGQ6gskZ1cWEMV+QkG5K+
+         neP9PBzbRGgnzz4xp9mVAFILhXxacZz+4neb5b34ndmoQ/4Lr8U43ww/hFZHcl57gxMv
+         Aay+TcxavnU7BvCi6imc3FZD/a/AXkOAdRrK14mkAVPlrR5CCiRSEkLsHGL36YeHn8QU
+         V+tAeikT44/WOxWNnpsqFUmtwh8C3Om2ONTzx3RsM6WzQGDSBuO4nFgFmkH51DHlMyky
+         DbKwyepQ5O/VzLnJ5ne/tRF1wVOTxZ/k6jyPgZPB7T7kAiZieFjTsowfJOB7kSsKqYbF
+         553g==
+X-Gm-Message-State: AFqh2kpCFZmYG0IyiDsEHSufTaMQq8QSeRsVE6LEWH5DzoffcBIm7qtu
+        dWQxb3ktoI1TdV6Q0WeJvgM=
+X-Google-Smtp-Source: AMrXdXstAyLpMzWAC60MRIw9AG6QXdX7KPpnlpPM+JvyeDaY19pGDE6gRaLGJiCKZwcMgWfTDsZ/Ig==
+X-Received: by 2002:a17:903:2289:b0:194:9290:fa6f with SMTP id b9-20020a170903228900b001949290fa6fmr43429571plh.25.1674631603605;
+        Tue, 24 Jan 2023 23:26:43 -0800 (PST)
+Received: from localhost.localdomain ([45.112.3.15])
+        by smtp.gmail.com with ESMTPSA id h6-20020a170902f54600b001769e6d4fafsm2902500plf.57.2023.01.24.23.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 23:26:43 -0800 (PST)
+From:   Anand Moon <linux.amoon@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Frank Li <frank.li@nxp.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [v2] usb: gadget: configfs: Restrict symlink creation is UDC already binded
-Date:   Wed, 25 Jan 2023 12:51:38 +0530
-Message-ID: <20230125072138.21925-1-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-amlogic@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND linux-next v4 4/4] dt-bindings: usb: Fix properties for VL817 hub controller
+Date:   Wed, 25 Jan 2023 07:26:04 +0000
+Message-Id: <20230125072605.1121-5-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230125072605.1121-1-linux.amoon@gmail.com>
+References: <20230125072605.1121-1-linux.amoon@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: W-CGU_kdOsQjE4Z9BXJcFWVD2td5AYrd
-X-Proofpoint-ORIG-GUID: W-CGU_kdOsQjE4Z9BXJcFWVD2td5AYrd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_04,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 impostorscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=1 phishscore=0 mlxscore=1 bulkscore=0
- malwarescore=0 mlxlogscore=202 suspectscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250067
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During enumeration or composition switch,a userspace process
-agnostic of the conventions of configs can try to create function
-symlinks even after the UDC is bound to current config which is
-not correct. Potentially it can create duplicates within the
-current config.
+Cleanup by removing unneeded quotes from refs and
+add maxItems to reset-gpios and fix the required list.
 
-Prevent this by adding a check if udc_name already exists then bail
-out of cfg_link.
-
-Fixes: 88af8bbe4ef7 ("usb: gadget: the start of the configfs interface")
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Fixes: 31360c28dfdd ("dt-bindings: usb: Add binding for Via lab VL817 hub controller")
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v2: Fixed spelling mistakes in commit text.
+ .../devicetree/bindings/usb/vialab,vl817.yaml  | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
- drivers/usb/gadget/configfs.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 78e7353e397b..434e49d29c50 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -455,6 +455,11 @@ static int config_usb_cfg_link(
- 		}
- 	}
+diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+index 5f9771e22058..23a13e1d5c7a 100644
+--- a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
++++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+@@ -14,29 +14,32 @@ allOf:
  
-+	if (gi->composite.gadget_driver.udc_name) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
- 	f = usb_get_function(fi);
- 	if (IS_ERR(f)) {
- 		ret = PTR_ERR(f);
+ properties:
+   compatible:
+-    items:
+-      - enum:
+-          - usb2109,2817
+-          - usb2109,817
++    enum:
++      - usb2109,2817
++      - usb2109,817
+ 
+   reg: true
+ 
+   reset-gpios:
+-    description: GPIO controlling the RESET# pin.
++    maxItems: 1
++    description:
++      GPIO controlling the RESET# pin.
+ 
+   vdd-supply:
+     description:
+       phandle to the regulator that provides power to the hub.
+ 
+   peer-hub:
+-    $ref: '/schemas/types.yaml#/definitions/phandle'
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+       phandle to the peer hub on the controller.
+ 
+ required:
+-  - peer-hub
+   - compatible
+   - reg
++  - reset-gpios
++  - vdd-supply
++  - peer-hub
+ 
+ additionalProperties: false
+ 
+@@ -45,7 +48,6 @@ examples:
+     #include <dt-bindings/gpio/gpio.h>
+ 
+     usb {
+-        dr_mode = "host";
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
 -- 
-2.17.1
+2.38.1
 
