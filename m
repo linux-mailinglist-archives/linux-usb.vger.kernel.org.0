@@ -2,110 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4167C67B2C2
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 13:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AF367B2E3
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 14:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235313AbjAYMvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 07:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S235281AbjAYNCU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 08:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYMvT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 07:51:19 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14170577D3
-        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 04:51:19 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 567526602E4D;
-        Wed, 25 Jan 2023 12:51:17 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674651077;
-        bh=qlVifLrYyGYH6SPmRmLmHNiY05C4/Zlelt4l8cTLs7E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FIQlWd8kFcRPwfC08+YzlwsWOgppeZVWVcdPAAB/78IcQ6n1z4gpgRKsZjDYPB+jq
-         1GqJP3V3e3/pgxfvX1ymVw+XagUadUMavgP5/pWsUiSUeHhkPNDY4Yv48/38+rjSPZ
-         yamVvNPzlOySu1ZwDm8E3pLDKOfAsdbsYytVi+nj+LSDejnYkETaoRhpdAcsWJ35/J
-         6ZgsdPCSNh1IEdXTc3gi9Zu6f3xUK2aiY7FeYK5Nxu1rSZK7CklXQcKydqkeSfDEO4
-         YaVTQxN7GzqCznn4CUSM58im0/g7jQmmPvnoO0yKzyRnJraqmoGv9mORZpYc+g9wYu
-         O/2Bb0pzF9ROw==
-Message-ID: <87361f5e-f0af-6bb9-ada1-db0f2aabd400@collabora.com>
-Date:   Wed, 25 Jan 2023 13:51:14 +0100
+        with ESMTP id S235313AbjAYNCS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 08:02:18 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A7246739
+        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 05:02:11 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id d30so28778142lfv.8
+        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 05:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WUlWEcztX7LC+YPVdX7zQ3TiSCzemn77YbP9UmZzYSE=;
+        b=ZWujWps5xV+1Wp9WkpTktZV8uw9uUYoO8g5XV6hX5GoFex0wS6QvPRwAG/2X2m1TpC
+         AnHeNzLJDDtn53tWfoYWTefbTDjXDAE0nyphHivQZvoRdrxbqpV+7GwZiiMjSczRHu8S
+         2+wR907XANDw+tY9iJAZ7kQb7uGdBtK+VXYG5abfl8fMtfvdNrdyGPXGOMxIoU9QKeVu
+         4IlTBODyMAWFOY81r6JOyh5Fa315CiPWT2rXXbjFQEfpJSeF4VXVDJglh9UTsnUwh9su
+         TYGOZhQhykmGOSX5lbdOvzn5eD1DRAR9mumAOcV1QbWLinLDbhcnO/qlNyd2Axsp+wEi
+         p/4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WUlWEcztX7LC+YPVdX7zQ3TiSCzemn77YbP9UmZzYSE=;
+        b=awhvZLIxBNyYvzW8qOkQvujux4UNi8sAlz/0KYdEzmy23ZfkF0e/m3HgvPhsWfi9N6
+         vDj3nB0u7N5n4AV/eyXWAgFFLzhwZ8nBp5Ztq9hJwbpBs6umt0CL7RLID5stC3pKZV7v
+         qji6aZ17dnlrrGC0JyCpYbW3q/SsMpDiIlBVAKDdkpfijS3zkkvdafPMqHDe1AJP+t21
+         +jX+EJjHLFPF61prOcqOmSUtAk7fkApKDesz+5KsKILeINhUdV1Ux/yBWTB+jSRhSkbn
+         f0hF/h6tVfmd04/NNHY6PI4It9akxuq5M7fvit6bj50usQfZZZo/0zhsW8HU1JJEpPYZ
+         aipg==
+X-Gm-Message-State: AFqh2koU26lWqJaQvBxTgi0g6s1MoHINhZ+bl2iYwFeNvweZuKaByI2G
+        wNl3DqZQ0exlsmZzbpj01BNnnCL0MC5JUPoHGmTUdg==
+X-Google-Smtp-Source: AMrXdXua3Xzk3n+mAS+SHWDmCwyiaUE3a82cF5mU8PKvzbJFSacMHuyCjbHJ/PWxjesRw9CjRh1dmLPf3Blx2uP0BXc=
+X-Received: by 2002:a05:6512:3984:b0:4ca:faca:5b59 with SMTP id
+ j4-20020a056512398400b004cafaca5b59mr2768406lfu.615.1674651728174; Wed, 25
+ Jan 2023 05:02:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [v2] usb: gadget: configfs: Restrict symlink creation is UDC
- already binded
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+References: <20230124230048.371144-1-robh@kernel.org>
+In-Reply-To: <20230124230048.371144-1-robh@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 25 Jan 2023 14:01:55 +0100
+Message-ID: <CAMRc=MfdDv5teeQx802Qi3otwfXtZ1jAX_bzvH4DQMvdas9YtQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing (unevaluated|additional)Properties
+ on child node schemas
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Li <frank.li@nxp.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org
-References: <20230125072138.21925-1-quic_ugoswami@quicinc.com>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20230125072138.21925-1-quic_ugoswami@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Udipto,
-
-W dniu 25.01.2023 o 08:21, Udipto Goswami pisze:
-> During enumeration or composition switch,a userspace process
-> agnostic of the conventions of configs can try to create function
-> symlinks even after the UDC is bound to current config which is
-> not correct. Potentially it can create duplicates within the
-> current config.
-> 
-> Prevent this by adding a check if udc_name already exists then bail
-> out of cfg_link.
-> 
-> Fixes: 88af8bbe4ef7 ("usb: gadget: the start of the configfs interface")
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+On Wed, Jan 25, 2023 at 12:00 AM Rob Herring <robh@kernel.org> wrote:
+>
+> Just as unevaluatedProperties or additionalProperties are required at
+> the top level of schemas, they should (and will) also be required for
+> child node schemas. That ensures only documented properties are
+> present.
+>
+> Add unevaluatedProperties or additionalProperties as appropriate, and
+> then add any missing properties flagged by the addition.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> v2: Fixed spelling mistakes in commit text.
-> 
->   drivers/usb/gadget/configfs.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 78e7353e397b..434e49d29c50 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -455,6 +455,11 @@ static int config_usb_cfg_link(
->   		}
->   	}
->   
-> +	if (gi->composite.gadget_driver.udc_name) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
 
-If we want to introduce this kind of check, I'd say it should be done
-as the very first thing in this function - in particular before
-traversing two linked lists (&gi->available_func, &cfg->func_list).
+[...]
 
-And, you probably want to keep the word "PATCH" in the title, like this:
+>  .../devicetree/bindings/gpio/x-powers,axp209-gpio.yaml |  1 +
 
-[PATCH v2] usb: gadget: configfs: .....
+[...]
 
-Regards,
+> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+> index 7f26f6b1eea1..31906c253940 100644
+> --- a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+> @@ -35,6 +35,7 @@ properties:
+>  patternProperties:
+>    "^.*-pins?$":
+>      $ref: /schemas/pinctrl/pinmux-node.yaml#
+> +    additionalProperties: false
+>
+>      properties:
+>        pins:
 
-Andrzej
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
->   	f = usb_get_function(fi);
->   	if (IS_ERR(f)) {
->   		ret = PTR_ERR(f);
-
+[...]
