@@ -2,122 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E0B67B8EA
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 18:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7B267B98F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 19:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236106AbjAYR7x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 12:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S236105AbjAYSi7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 13:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235404AbjAYR7w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 12:59:52 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7DC3C2B1
-        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 09:59:50 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id m7so4228134wru.8
-        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 09:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTOOyplbHxnZ+EFGvkRK9RseAv80+oP0c90JV+EsvHc=;
-        b=b3xrzTS5gcAyZdQpRwmO6xq87K/+gmwj3GtougbVYdVQRQCOEZHNlrsx6LRYrb2KnG
-         AVIP1dZjGgS8PfB9/OiiHLgXsTAYL+xYW4OSiWSmwiYjizCelQw9X/ga3CFj5xse05gS
-         lmmZ/fj88VeBXnC0Yr9ZZbmCzwNMdFn6+yAc669OjP/0o3F8l8/1W4vqUv6jPElbvzAt
-         KbOEoXZbQRCAqWvdM/FsVZZhUZ7t+7Xm6g0JlpWUCAjOsq9TEF/C3X/NT5cl2n55zn6z
-         ga8meNb/niwL0bojsOlp8FgZjgdx8/11jRwcP0pFjW2I4yR/OSwrAW4RClEXCQXYMGTo
-         eMnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sTOOyplbHxnZ+EFGvkRK9RseAv80+oP0c90JV+EsvHc=;
-        b=BxQmF/bshzcR1M/377yHbvtQWOrrw8lzHjfcMQgA3pAdokmkAo4Q5QBxWqqTT31I8a
-         57WjsKDC0w9d3iKgB0EZHSp3QgoKJWQXL4YzdB5Svq62BBuvKNQy0n6O7Gh701bOsEh8
-         FgZph4vDnapflIh6uP4SPOTqoho+Y2iYASYA64byAJOYNekMs/dhAZ8LT6yuNxZMMn4p
-         Kkp/On/EWiKfWQSwFzZTvn9/W4rwtHV6euxmj7ABUEpKIlknMH9EfaM1pdey+k3tnvdE
-         a+ZgF+IvhmY7rhM+D9uNjdQp4uBLtPUqrzIszCDs4WODMqAx9t/1djM6cDUab6XIEz1E
-         eUtg==
-X-Gm-Message-State: AO0yUKUH+Mz4cvOETbIyUHjznE8caRWI6QVkfp2Du+vyZm8BKbwTBljs
-        HK4KF3iOzuqkdRZJLIPz95Qwkw==
-X-Google-Smtp-Source: AK7set8wYctbejAZWGPmx51Hf1KyVA1kzcMV4t6Iwl3vyOvPDFih0BorVAjojrAKqLqCV6ssK3VAiA==
-X-Received: by 2002:adf:fa09:0:b0:2bf:ac2c:4489 with SMTP id m9-20020adffa09000000b002bfac2c4489mr6572646wrr.54.1674669588976;
-        Wed, 25 Jan 2023 09:59:48 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w14-20020a5d608e000000b002bc84c55758sm6048927wrt.63.2023.01.25.09.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 09:59:48 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit address in DTS
-Date:   Wed, 25 Jan 2023 18:59:43 +0100
-Message-Id: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230257AbjAYSix (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 13:38:53 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C885A366A8;
+        Wed, 25 Jan 2023 10:38:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WhE3p5nMlMDjaV/irGLArTSJUCL3MW0izpTScdbc1OU=; b=mx74wVm8uyXRMzRkznkmPv14f3
+        DM5mkZY0d2Y454KV/p1DBO6bVWUBYmLnjNwq5de4oOCp4K1tzlZ+pYhblaAnUsgNim9Cg22n4lXC7
+        YVziRodKlXV3h1dcA4wCil3iZ6I2W+LteukgjO5nFw9bnJFOnLJvx0ni4Ju6wCzLw38ztU2xqwXDF
+        Hz7a4pCnrIPatIpdvDFmrtxTdMVr7eH9j59LSpJj79ys6zGb7fhMV69syzXZoxm/q67WE7IxkNx+x
+        YR6wIJfVUlSwCzFkthS2vqR79CZmfDxbuiYrAaQdlm8CD16FJpwzTtCFj0zPf7AtdmoIV8Mlhhb7E
+        KwDK04uQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKkaL-0066XZ-MG; Wed, 25 Jan 2023 18:33:25 +0000
+Date:   Wed, 25 Jan 2023 18:33:25 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/6] mm: introduce vma->vm_flags modifier functions
+Message-ID: <Y9F19QEDX5d/44EV@casper.infradead.org>
+References: <20230125083851.27759-1-surenb@google.com>
+ <20230125083851.27759-2-surenb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125083851.27759-2-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
-actual DWC3 Controller device node.  It handles necessary Samsung
-Exynos-specific resources (regulators, clocks), but does not have its
-own MMIO address space.
+On Wed, Jan 25, 2023 at 12:38:46AM -0800, Suren Baghdasaryan wrote:
+> +/* Use when VMA is not part of the VMA tree and needs no locking */
+> +static inline void init_vm_flags(struct vm_area_struct *vma,
+> +				 unsigned long flags)
+> +{
+> +	vma->vm_flags = flags;
 
-However neither simple-bus bindings nor dtc W=1 accept device nodes in
-soc@ node which do not have unit address.  Therefore allow using
-the address space of child device (actual DWC3 Controller) as the
-wrapper's address.
+vm_flags are supposed to have type vm_flags_t.  That's not been
+fully realised yet, but perhaps we could avoid making it worse?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  	pgprot_t vm_page_prot;
+> -	unsigned long vm_flags;		/* Flags, see mm.h. */
+> +
+> +	/*
+> +	 * Flags, see mm.h.
+> +	 * WARNING! Do not modify directly.
+> +	 * Use {init|reset|set|clear|mod}_vm_flags() functions instead.
+> +	 */
+> +	unsigned long vm_flags;
 
----
-
-DTS fixes are here:
-https://lore.kernel.org/linux-samsung-soc/20230125175751.675090-1-krzysztof.kozlowski@linaro.org/T/#t
----
- .../devicetree/bindings/usb/samsung,exynos-dwc3.yaml        | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-index 6b9a3bcb3926..a94b1926dda0 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-@@ -29,6 +29,9 @@ properties:
- 
-   ranges: true
- 
-+  reg:
-+    maxItems: 1
-+
-   '#size-cells':
-     const: 1
- 
-@@ -108,8 +111,9 @@ examples:
-     #include <dt-bindings/clock/exynos5420.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
--    usb {
-+    usb-wrapper@12000000 {
-         compatible = "samsung,exynos5250-dwusb3";
-+        reg = <0x12000000 0x10000>;
-         #address-cells = <1>;
-         #size-cells = <1>;
-         ranges;
--- 
-2.34.1
-
+Including changing this line to vm_flags_t
