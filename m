@@ -2,126 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B4167BD56
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 21:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140AD67BDD7
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 22:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbjAYUtf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 15:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S236059AbjAYVNi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 16:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235065AbjAYUte (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 15:49:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18648694;
-        Wed, 25 Jan 2023 12:49:30 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKWIU7023790;
-        Wed, 25 Jan 2023 20:49:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=xACmOZ4ukkAcUmVvUM2aiIZYmP4ylYGfvpEzRuo+ADQ=;
- b=hirsF36WmOnPPiLYEfT6z5x6zLQ1iZpDCo7XmAKUfIL6XSumL0YUs3i3F9uyouDnaSPk
- 6Scp64RlrxjUlTz1UnFyCJVohIo3/uXhF1Zz3hWC8LUIrr++Ght3mki78+0BfFJr3Zve
- kLOOKiFtVYk1+hgkvIL8pdXTf9+znDpX8TCgeQbsQfgZ6Fkn2aJxJlq3se1qpdFMvzwT
- 6SoAt7qg0udHpUBqWZfPRDa6K+r/0PKF1oS5i2lN3uaEUkvS5KD1disivs7imrewhbpM
- SazazOUnjyoa2uMwgULeZ7jXVqWH8UDRBrvAX/KMVDmIzdorsQVsTjKqlQEsBctSEuOm 3Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nak7jjnrq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 20:49:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PKnKW1029109
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 20:49:20 GMT
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 25 Jan 2023 12:49:19 -0800
-Date:   Wed, 25 Jan 2023 12:49:11 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S235602AbjAYVNh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 16:13:37 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9CC12F2A;
+        Wed, 25 Jan 2023 13:13:31 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id r132so17419632oif.10;
+        Wed, 25 Jan 2023 13:13:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mxxLu5neQmd1wkijNxY+uQAZdlFfbPPJYNilQTfY588=;
+        b=dia0HfuMAMd75vSEwVfY4fAzzyZA7lHYJxsX9dh5L9QEv3BkPbBKEwbMpfi32uGpke
+         uzcXem4ikueBezF0ktjd+I0IaiFbsB8Q7oORlQTrMWvqBELqQb4A5muNUX/8ogLQBv7i
+         ef69pD9sTrXzWOgNt1olsESXA1OBn/SuTvgWuklceBcgT1dLUxRWhFAwT5cSlfptZIvy
+         z7AZv26IE6H+uAhAybYtsggXcV6V+PGv6BJDyNkQHlEH52l4TuSu4cL28Oz/4jCDQ0OX
+         HposoCluAyQuqLZ7f7I1L1iqzarbYv9M9utc9U8v1arlbCP84+H1ob0yxuHeugySItFn
+         poyA==
+X-Gm-Message-State: AFqh2kpZrd8ZoGvBf1rVCaYiERYnjx4vJLn1QjwY4RtBXCkS2Vv+ONoj
+        6rm6IxOAr0vz+4i8Tj9j6Hv2JoRnCQ==
+X-Google-Smtp-Source: AMrXdXu/SugN1OZvYht+GqN+hP045IwbIzwV4tVY82cvphVKskkZ9RCsN4cRd8p4EMcNXA2Injxghg==
+X-Received: by 2002:aca:1b0a:0:b0:364:ef1f:90e with SMTP id b10-20020aca1b0a000000b00364ef1f090emr14953639oib.28.1674681210360;
+        Wed, 25 Jan 2023 13:13:30 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h22-20020a9d6016000000b00670461b8be4sm2607200otj.33.2023.01.25.13.13.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 13:13:30 -0800 (PST)
+Received: (nullmailer pid 2902560 invoked by uid 1000);
+        Wed, 25 Jan 2023 21:13:29 -0000
+Date:   Wed, 25 Jan 2023 15:13:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        "Harsh Agarwal" <quic_harshq@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
-Subject: Re: [RFC v4 2/5] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <20230125204911.GA2657@jackp-linux.qualcomm.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-3-quic_kriskura@quicinc.com>
- <20230119003619.ane3weigd4ebsta6@synopsys.com>
- <7fa2d7b0-509d-ae90-4208-6f0245f927f7@quicinc.com>
- <20230120010226.wjwtisj4id6frirl@synopsys.com>
- <91fa86d8-f443-db13-1544-73e2dd50d964@quicinc.com>
- <20230120224400.77t2j3qtcdfqwt5s@synopsys.com>
- <0d9eab77-ad5f-be23-8ed6-d78c0d3ccef1@quicinc.com>
- <20230125190805.l7yo5lls7gfhoo4b@synopsys.com>
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit
+ address in DTS
+Message-ID: <20230125211329.GA2899932-robh@kernel.org>
+References: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125190805.l7yo5lls7gfhoo4b@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Z-C9IGQCNa0z5KoXaTsC96qJO6MLpGlF
-X-Proofpoint-ORIG-GUID: Z-C9IGQCNa0z5KoXaTsC96qJO6MLpGlF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=799
- priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1015 bulkscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301250185
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 07:08:10PM +0000, Thinh Nguyen wrote:
-
-<snip>
-
-> > +       /*
-> > +        * If the controller is not host-only, then it must be a
-> > +        * single port controller.
-> > +        */
-
-Thinh, is this a correct assumption?  Is it possible for the IP to be
-synthesized to support both dual-role and multiple ports?  We know that
-when operating in device mode only the first port can be used but the
-additional ports would be usable when in host.
-
-Thanks,
-Jack
-
-> > +       temp = readl(regs + DWC3_GHWPARAMS0);
-> > +       hw_mode = DWC3_GHWPARAMS0_MODE(temp);
-> > +       if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST) {
-> > +               dwc->num_ports = 1;
-> > +               dwc->num_ss_ports = 1;
-> > +               return 0;
-> > +       }
+On Wed, Jan 25, 2023 at 06:59:43PM +0100, Krzysztof Kozlowski wrote:
+> The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
+> actual DWC3 Controller device node.  It handles necessary Samsung
+> Exynos-specific resources (regulators, clocks), but does not have its
+> own MMIO address space.
 > 
-> This check should be done before we get into this function.
+> However neither simple-bus bindings nor dtc W=1 accept device nodes in
+> soc@ node which do not have unit address.  Therefore allow using
+> the address space of child device (actual DWC3 Controller) as the
+> wrapper's address.
+
+The correct fix is 'ranges' should have a value. Though the whole 
+wrapper thing when there are no registers I dislike...
+
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> DTS fixes are here:
+> https://lore.kernel.org/linux-samsung-soc/20230125175751.675090-1-krzysztof.kozlowski@linaro.org/T/#t
+> ---
+>  .../devicetree/bindings/usb/samsung,exynos-dwc3.yaml        | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+> index 6b9a3bcb3926..a94b1926dda0 100644
+> --- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+> @@ -29,6 +29,9 @@ properties:
+>  
+>    ranges: true
+>  
+> +  reg:
+> +    maxItems: 1
+> +
+>    '#size-cells':
+>      const: 1
+>  
+> @@ -108,8 +111,9 @@ examples:
+>      #include <dt-bindings/clock/exynos5420.h>
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  
+> -    usb {
+> +    usb-wrapper@12000000 {
+>          compatible = "samsung,exynos5250-dwusb3";
+> +        reg = <0x12000000 0x10000>;
+>          #address-cells = <1>;
+>          #size-cells = <1>;
+>          ranges;
+> -- 
+> 2.34.1
+> 
