@@ -2,134 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1006367B863
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 18:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D09367B89F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 18:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236230AbjAYRW5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 12:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S235870AbjAYRbv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 12:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236233AbjAYRWt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 12:22:49 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFEA5B5A6
-        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 09:22:36 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id 123so23897900ybv.6
-        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 09:22:36 -0800 (PST)
+        with ESMTP id S235476AbjAYRbu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 12:31:50 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3339914E9C;
+        Wed, 25 Jan 2023 09:31:48 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id u8so9017344ilq.13;
+        Wed, 25 Jan 2023 09:31:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IqJXv+IInDU1mKTOWecSjx46uIp9RhIiEah7PjvPLrg=;
-        b=QlZyecSvRJAlH7daZiVbTmdMCDJawwIkjqybbPcYd50INvCOOFwycJjGFsDCENBvPF
-         JeBM9yeOQDknmaZC6LT0p7wlzLAJo3QYgAn7K1xQNCTJjPrh6oinOxgRNGwGedAqUfeH
-         4EF6oknHwKU0N6BIZOc0CJi1hrgM4W0zxm3gicvvOuEGF7JC9HCNICDdMPEAz6Lz/B5y
-         FN2dpyuojKkpe3r7ipsFxRIyHaJ4nJmkiiUGkQy6aOsuBhBZ3WzwUsGkq0uXDlGTKFEH
-         iRh4N/trPN148wcbBUC1DmqB3ErHQLF9n9pkmMXooLK6oXyXf0aS41iIJv2buhnN7zSu
-         X8Bw==
+        bh=NtTqLiJvxwVV55x1IGiHg4bkp14WzNiHGHlvSCBuiY0=;
+        b=YOSZ3WeL5e1yj/iFO7N6GwJsD5cOGS41sDZINhA2LatEiHahcSbRN5SdjHDr30CR59
+         4bOB3fn0N06UVMRJPwlraOw3hfaWxLepH/Y5edHPCfiqwrwWFeQRqw7XQ0SggvVQZRzr
+         nJ5x00Age2sB3I2hjxu+sdqvU70a3R2NBQDRSm71oqXKbla52VH7+l2PJTTjhSbJsYfV
+         aqArXreHAGCtx+B+st+KimPS8mbU2x5xNa0whm8ZLc/xPHhBknkKP+0bV4/tbSTR3fBB
+         f9nZtCEi9FoB3g3QbZL+DHFu7uxEhddwJKBI/G6h2+MIlYEZXA+rHJ/GFtrA92rbWAY4
+         tLJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IqJXv+IInDU1mKTOWecSjx46uIp9RhIiEah7PjvPLrg=;
-        b=3ikxIJhO6OS44S7R4ghcVkFyqLp2ocPtgfu9HmgDjbIyW96uIY/d3cuUnVJkw1y2sl
-         7f5wVQ7u5CM4eC/Sk1WSEtPAayIOKrodnGUrUhYiAEkmwYIdOPWtDhmq/fBPyQdaxikg
-         4WCZIS1HA5at8RqCl0Ge5FAjNfTPAhAwC5xvihsSTTlCXkp8YfarmX7BVPclgG5zlg/p
-         +VXnkbjV1+3FF4VjcMZs1Fr9O7tCuvB6bjk0c89afsWGBOsJm+13GftBI0p9+G9cSuD5
-         pPCKeL55toFnHDmYElXCh/JEYxYRGemqcD1cHa2sxHFHHgLsuTkr/krvTNQHxihanwzR
-         t0UQ==
-X-Gm-Message-State: AFqh2kpbCzSFPTx1/EU+pKzjskfqR1gQ293fyNwxujToR0s/hHSd4oWH
-        bNnFTLoDjhwRlrSqNGw3BqLc9uzIRvLdz9sjxKElfw==
-X-Google-Smtp-Source: AMrXdXv634nY3BrnZ3PlTUGlyUi8i7L3YenO2gMgxW5qJ4tF6Xha6yZp+2FFeWeU8OQrXrCFeHpomo5nr++haHZW7UI=
-X-Received: by 2002:a25:a408:0:b0:800:28d4:6936 with SMTP id
- f8-20020a25a408000000b0080028d46936mr2303639ybi.431.1674667354997; Wed, 25
- Jan 2023 09:22:34 -0800 (PST)
+        bh=NtTqLiJvxwVV55x1IGiHg4bkp14WzNiHGHlvSCBuiY0=;
+        b=wohs0CUV1izwKoxV+6AlJS3NkYPkQt+0eOC0c6O50oCTTVKhhRCb0ld6vTH0iAuqbs
+         mXu0VHQQt2asgSk0YTBHvonNnCI9Wo9z1bB39mdefVitaWrwzIXWcw+o7WQRjvSUQTXV
+         eyOlr/ECONTfILnN+gt6eZwrtDud/of/p/WGdSjehVdV1yukynSJnijkurySmMSayPJv
+         qnydz4rFVo1OStsVakV0EyFPan0QD6mepJzsRfrcTLPyj2pABUW2XvqUsgrwnkuYgsTO
+         tn0tG3f0X83K3Ihl7akiwI2eb2fxLtumE2dW7D8zw/o7h/PO0YsaZge2fLLh8dzbrjfq
+         l4uA==
+X-Gm-Message-State: AO0yUKVIe5W2PVTNisR6giWrP9VIb0sb3TA+V+4NHUbL+s9fItpNnDQv
+        t9rFvpGkxjUytnmFEE5nkEYFMLM9OQp6E2aNstRQw22z7SM=
+X-Google-Smtp-Source: AK7set9HHiqePNy4b+qndL8Ur702tQb8cpO4DAFf9iYo1OEEnaCUYHdsA0CAOCNh+Z+aVC1BArxwpg1cr/uCEqUKF4g=
+X-Received: by 2002:a92:503:0:b0:310:a1f1:8e09 with SMTP id
+ q3-20020a920503000000b00310a1f18e09mr393180ile.180.1674667907378; Wed, 25 Jan
+ 2023 09:31:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20230125083851.27759-1-surenb@google.com> <20230125083851.27759-5-surenb@google.com>
- <Y9D4rWEsajV/WfNx@dhcp22.suse.cz> <CAJuCfpGd2eG0RSMte9OVgsRVWPo+Sj7+t8EOo8o_iKzZoh1MXA@mail.gmail.com>
- <Y9Fh9joU3vTCwYbX@dhcp22.suse.cz>
-In-Reply-To: <Y9Fh9joU3vTCwYbX@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 25 Jan 2023 09:22:23 -0800
-Message-ID: <CAJuCfpEJ1U2UHBNhLx4gggN3PLZKP5RejiZL_U5ZLxU_wdviVg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] mm: replace vma->vm_flags indirect modification in ksm_madvise
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        qianweili@huawei.com, wangzhou1@hisilicon.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        airlied@gmail.com, daniel@ffwll.ch,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, l.stach@pengutronix.de,
-        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
-        matthias.bgg@gmail.com, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
-        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
-        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
-        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
-        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, miklos@szeredi.hu,
-        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
-        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
-        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
-        loongarch@lists.linux.dev, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
-        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        devel@lists.orangefs.org, kexec@lists.infradead.org,
-        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
-        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
-        kernel-team@android.com
+References: <20230125143425.85268-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230125143425.85268-1-andriy.shevchenko@linux.intel.com>
+From:   =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
+Date:   Wed, 25 Jan 2023 18:31:36 +0100
+Message-ID: <CAMUOyH2Kc6hL4564sYDZdGRjiJJYmDA5WXEsF92p_xN8iZGMsg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] usb: gadget: Use correct APIs and data types for
+ UUID handling
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,31 +67,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 9:08 AM Michal Hocko <mhocko@suse.com> wrote:
+On Wed, Jan 25, 2023 at 3:34 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Wed 25-01-23 08:57:48, Suren Baghdasaryan wrote:
-> > On Wed, Jan 25, 2023 at 1:38 AM 'Michal Hocko' via kernel-team
-> > <kernel-team@android.com> wrote:
-> > >
-> > > On Wed 25-01-23 00:38:49, Suren Baghdasaryan wrote:
-> > > > Replace indirect modifications to vma->vm_flags with calls to modifier
-> > > > functions to be able to track flag changes and to keep vma locking
-> > > > correctness. Add a BUG_ON check in ksm_madvise() to catch indirect
-> > > > vm_flags modification attempts.
-> > >
-> > > Those BUG_ONs scream to much IMHO. KSM is an MM internal code so I
-> > > gueess we should be willing to trust it.
-> >
-> > Yes, but I really want to prevent an indirect misuse since it was not
-> > easy to find these. If you feel strongly about it I will remove them
-> > or if you have a better suggestion I'm all for it.
->
-> You can avoid that by making flags inaccesible directly, right?
+> We have two types for UUIDs depending on the byte ordering.
+> Instead of explaining how bytes should go over the wire,
+> use dedicated APIs and data types. This removes a confusion
+> over the byte ordering.
 
-Ah, you mean Peter's suggestion of using __private? I guess that would
-cover it. I'll drop these BUG_ONs in the next version. Thanks!
+Thanks for pointing this out. I was unaware of the exact UUID
+functions, as I'm still quite a newbie here.
+
+I compiled and tested your patch in my test setup and it works perfectly.
 
 >
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/usb/gadget/composite.c | 4 ++--
+>  include/linux/usb/webusb.h     | 9 +++------
+>  2 files changed, 5 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> index 8e2603688016..fa7dd6cf014d 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -829,7 +829,7 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>         if (cdev->use_webusb) {
+>                 struct usb_plat_dev_cap_descriptor *webusb_cap;
+>                 struct usb_webusb_cap_data *webusb_cap_data;
+> -               uuid_t webusb_uuid = WEBUSB_UUID;
+> +               guid_t webusb_uuid = WEBUSB_UUID;
+>
+>                 webusb_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+>                 webusb_cap_data = (struct usb_webusb_cap_data *) webusb_cap->CapabilityData;
+> @@ -841,7 +841,7 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>                 webusb_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+>                 webusb_cap->bDevCapabilityType = USB_PLAT_DEV_CAP_TYPE;
+>                 webusb_cap->bReserved = 0;
+> -               export_uuid(webusb_cap->UUID, &webusb_uuid);
+> +               export_guid(webusb_cap->UUID, &webusb_uuid);
+>
+>                 if (cdev->bcd_webusb_version != 0)
+>                         webusb_cap_data->bcdVersion = cpu_to_le16(cdev->bcd_webusb_version);
+> diff --git a/include/linux/usb/webusb.h b/include/linux/usb/webusb.h
+> index b430d84357f3..fe43020b4a48 100644
+> --- a/include/linux/usb/webusb.h
+> +++ b/include/linux/usb/webusb.h
+> @@ -11,15 +11,12 @@
+>  #include "uapi/linux/usb/ch9.h"
+>
+>  /*
+> - * little endian PlatformCapablityUUID for WebUSB
+> + * Little Endian PlatformCapablityUUID for WebUSB
+>   * 3408b638-09a9-47a0-8bfd-a0768815b665
+> - * to identify Platform Device Capability descriptors as referring to WebUSB
+> - *
+> - * the UUID above MUST be sent over the wire as the byte sequence:
+> - * {0x38, 0xB6, 0x08, 0x34, 0xA9, 0x09, 0xA0, 0x47, 0x8B, 0xFD, 0xA0, 0x76, 0x88, 0x15, 0xB6, 0x65}.
+
+This is actually explicitly spelled out this way in the specification:
+https://wicg.github.io/webusb/#webusb-platform-capability-descriptor
+
+But I agree, the way you rewrote it is much clearer!
+
+> + * to identify Platform Device Capability descriptors as referring to WebUSB.
+>   */
+>  #define WEBUSB_UUID \
+> -       UUID_INIT(0x38b60834, 0xa909, 0xa047, 0x8b, 0xfd, 0xa0, 0x76, 0x88, 0x15, 0xb6, 0x65)
+> +       GUID_INIT(0x3408b638, 0x09a9, 0x47a0, 0x8b, 0xfd, 0xa0, 0x76, 0x88, 0x15, 0xb6, 0x65)
+
+Yes, this is definitely more readable.
+
+>
+>  /*
+>   * WebUSB Platform Capability data
 > --
-> Michal Hocko
-> SUSE Labs
+> 2.39.0
+>
