@@ -2,79 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2686667AB24
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 08:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C176D67ABB0
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 09:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235184AbjAYHpV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 02:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S235003AbjAYI3S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 03:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbjAYHpQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 02:45:16 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419593F293
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 23:45:15 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 188so21928554ybi.9
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jan 2023 23:45:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qF3ME8KmAbiPM+uV8e+9+UHUcvv3JfyvhjzNHS8NdOs=;
-        b=do0qOmLqFZjiqUYiWqOhchhr1U7fhT+qtoPgfMCbIuxEf1Uv7W6fHlzEMDs5H+aaSE
-         b5iZeqc30NgmrBwNqqmALTDoPquf39PP/Y9iA7fDP4JqLdjVD2CVVmUSBxnLnH9/WznT
-         9SOHux2MRTmiz6WJBwgHeRNUasBWs4m+LqME9kqQmEUvahG5c27CUspCtIFBQKEfiNhV
-         W8Q1VVeL1wZV1pQggdpZBWUbvCcVjF/YqkT87M/QdB1uca1zG2gzH2kyB+7dbpdqvuNE
-         JHnLNsJ2gq0h9nQpVp7NKnusDleZX5JLn7cfOH8x9Qs00yaKNY50/+bFf1UiII4Gvo4P
-         Ilhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qF3ME8KmAbiPM+uV8e+9+UHUcvv3JfyvhjzNHS8NdOs=;
-        b=WHr1reE8KvaOq2lmrLDdrL3Z8KbiToyrTJVJntAy9ERSieC7dQKmDagcbnV2fMwDJe
-         y2su0qT7zngyjbVV+WXEPxog/UePdG9wd9a/CNTe+hi7E+mm4CYkiQvJv5a4hdJsWwC5
-         uqz0pjQLKHGZammgcxcZ5o60iDoKGdWugEu1rjxFqy66+N8DkPZxg0AF+LqfP9EQJ6ip
-         7sNBK8uQ8+fCg06kQaNC1B0nEtwUm1CrBPSFL+LWAocqb19oxLctp0QOsjpKlwkV2nvY
-         NzAbaLhmdKhjKUHgKS/s4bo+GDBb7R2kq3AuqoMF53GyZOziugKjz7nYeJz+nQOKvsqJ
-         BAZA==
-X-Gm-Message-State: AFqh2kqCRGk8F10fK356ZYyJ7Ev+8oHMC1KXOirgW7nYzUXxq8MEr1Li
-        qfms8MtE4ntXoWkCTUx6+p/nipWQ81vZfFgvK6RnMA==
-X-Google-Smtp-Source: AMrXdXs9H6rNVyo8wsq5+UbjgawuNwzre+If+h1NDNeCNnkszIz1w7OgCBbOJ5/bm8vQn/XCtj4DGOzwU2lU8PzPadc=
-X-Received: by 2002:a5b:38b:0:b0:7ca:9b40:72a7 with SMTP id
- k11-20020a5b038b000000b007ca9b4072a7mr3871061ybp.130.1674632714500; Tue, 24
- Jan 2023 23:45:14 -0800 (PST)
+        with ESMTP id S235016AbjAYI3O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 03:29:14 -0500
+X-Greylist: delayed 367 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 00:29:09 PST
+Received: from mail.lineo.co.jp (mail.lineo.co.jp [203.141.200.203])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693555FCB
+        for <linux-usb@vger.kernel.org>; Wed, 25 Jan 2023 00:29:09 -0800 (PST)
+Received: from [172.31.17.196] (vpn1.lineo.co.jp [203.141.200.204])
+        by mail.lineo.co.jp (Postfix) with ESMTPSA id 6B2CC802F9525;
+        Wed, 25 Jan 2023 17:23:00 +0900 (JST)
+Message-ID: <60cd04bb-c080-4242-b981-8da1e1c3ca53@lineo.co.jp>
+Date:   Wed, 25 Jan 2023 17:23:00 +0900
 MIME-Version: 1.0
-References: <20230124233511.23616-1-rdunlap@infradead.org>
-In-Reply-To: <20230124233511.23616-1-rdunlap@infradead.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 25 Jan 2023 08:45:00 +0100
-Message-ID: <CACRpkdZRQ4jRzDdaW45h-AYU84_JSVY_S+yG7na1CGxsBKxHVg@mail.gmail.com>
-Subject: Re: [PATCH] usb: fotg210: fix a Kconfig spelling mistake
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+From:   Yuta Hayama <hayama@lineo.co.jp>
+Subject: OS Descriptor version in FunctionFS
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URI_TRY_3LD autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 12:35 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+Hi,
 
-> Correct a spelling mistake (reported by codespell).
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I have a question about MS OS descriptor support in FunctionFS.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+I understand that the current FunctionFS supports OS descriptors and that the
+FunctionFS user mode driver can optionally be set up with a configuration that
+includes OS descriptors. Here, there are several versions of the OS descriptor,
+but the current FunctionFS (or gadget framework?) supports only v1.0, I think.
+Indeed, __ffs_do_os_desc_header() in drivers/usb/gadget/function/f_fs.c rejects
+OS descriptors other than v1.0 in the following way:
 
-Yours,
-Linus Walleij
+static int __ffs_do_os_desc_header(enum ffs_os_desc_type *next_type,
+				   struct usb_os_desc_header *desc)
+{
+	u16 bcd_version = le16_to_cpu(desc->bcdVersion);
+	u16 w_index = le16_to_cpu(desc->wIndex);
+
+	if (bcd_version != 1) {
+		pr_vdebug("unsupported os descriptors version: %d",
+			  bcd_version);
+		return -EINVAL;
+	}
+	
+	/* ... */
+
+Here's a question: isn't it wrong to assume that the value of desc->bcdVersion
+in OS descriptor v1.0 is 0x0001? From reference to the following document on
+OS descriptor v1.0, it looks like the value 0x0100 is assumed. (Well, I don't
+think v1.0 will be 0x0001 since it would be in BCD form as the name suggests.)
+
+[Microsoft OS 1.0 Descriptors Specification]
+https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/microsoft-os-1-0-descriptors-specification
+
+Page 6 of OS_Desc_CompatID.doc and page 5 of OS_Desc_Ext_Prop.doc explain the
+header section, which can be found there. The examples of descriptors also show
+bcdVersion=0x0100.
+
+Would the fix be something like the following?
+
+	if (bcd_version == 0x0001) {
+		pr_debug(" ... ");
+		/*
+		 * Pass through for compatibility, but notify to fix the user
+		 * mode driver?
+		 */
+	} else if (bcd_version != 0x0100) {
+		pr_vdebug("unsupported os descriptors version: %d",
+				  bcd_version);
+			return -EINVAL;
+	}
+
+By the way, with the current FunctionFS code, we have to set bcd_version=0x0001
+in the OS descriptor, but it looks like the Windows host(USB host) won't
+complain about that.
+
+
+Thank you.
+
+Yuta Hayama
