@@ -2,48 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B047167B50A
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 15:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88AA67B575
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jan 2023 16:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbjAYOpF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Jan 2023 09:45:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S235827AbjAYPJI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Jan 2023 10:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbjAYOpE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 09:45:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA7B182;
-        Wed, 25 Jan 2023 06:44:40 -0800 (PST)
+        with ESMTP id S234279AbjAYPJG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Jan 2023 10:09:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CAB1BE0;
+        Wed, 25 Jan 2023 07:09:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7582561528;
-        Wed, 25 Jan 2023 14:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82AC9C433D2;
-        Wed, 25 Jan 2023 14:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674657842;
-        bh=WViY2kIrxqPrKUVwduoiDaCJwvXTgjlAIlKvjfvj95o=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EF9761547;
+        Wed, 25 Jan 2023 15:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC81C433EF;
+        Wed, 25 Jan 2023 15:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674659344;
+        bh=v+B+KDBEA50AHtVt9lQ1BTuMYwoPUgbIgH8/Amio1lE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2cn6wv0eUEf6XEUi44Qck0nDI+pSRt2PC/FRZ4N2UpYUhfIF3moH3blEE7wPcIWyQ
-         bgfKodccvgTcokmIjF/NvFfryexlERtmRl/rKbFUrIVLDA3HvsC2ih0ttRFzTR/2j7
-         jnYc73pDu4UW+6nU31+NEMSNhw8gBjOkhlDrRLOI=
-Date:   Wed, 25 Jan 2023 15:44:00 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH V5 0/5] Tegra USB device support updates
-Message-ID: <Y9FAMOUTHBSihY7q@kroah.com>
-References: <20230119104208.28726-1-jonathanh@nvidia.com>
- <Y8/j1HBwgEdd4Mp2@orome>
+        b=hSoessefOv16Xt7Qbj98AdgmJicOcikMVtEdI8hVuvfe5IRYVPezihO/irb3buQZt
+         3ZFdNvsViDwPHeE3Jm/XuN6iGzIm1ESIZsv0lbDa1vk4s6rEEf6cKYM+bN/iuQe9VW
+         P/Svjep8k+fSgfN9zyFG7lQqfCHheo29BxDr+K+4T3lE67taLSodJ3E7d4EG4RrRqe
+         73RJMrkg3YqzKBZH4GY2t14YGyMJND9cOXmrIKdYBcHjYwCgCzhERtbbPGPR5fu5EG
+         NLAP3xoucfO28ZdQF16a1/t4V81l7sTg4luWlxs+aH+wX1wDHuET+t7+76hhEK6te3
+         8HtxOatriltJw==
+Date:   Wed, 25 Jan 2023 15:08:54 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing
+ (unevaluated|additional)Properties on child node schemas
+Message-ID: <Y9FGBqFKMxL3XraK@google.com>
+References: <20230124230228.372305-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y8/j1HBwgEdd4Mp2@orome>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230124230228.372305-1-robh@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,39 +77,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:57:40PM +0100, Thierry Reding wrote:
-> On Thu, Jan 19, 2023 at 10:42:03AM +0000, Jon Hunter wrote:
-> > This series adds USB device support for Tegra234. 3/5 patches were
-> > originally part of the series to add both USB host and device support
-> > for Tegra234 [0]. However, the series was getting quite large and so I
-> > have split this into a separate series but calling it 'V4' to indicate
-> > that this is not completely new either.
-> > 
-> > I have added two more patches in this version to fix DMA coherency for
-> > Tegra194.
-> > 
-> > [0] https://lore.kernel.org/linux-tegra/20221114124053.1873316-1-waynec@nvidia.com/
-> > 
-> > Jon Hunter (3):
-> >   dt-bindings: usb: tegra-xudc: Add dma-coherent for Tegra194
-> >   arm64: tegra: Add dma-coherent property for Tegra194 XUDC
-> >   arm64: tegra: Populate the XUDC node for Tegra234
-> > 
-> > Sing-Han Chen (1):
-> >   usb: gadget: tegra-xudc: Add Tegra234 support
-> > 
-> > Wayne Chang (1):
-> >   dt-bindings: usb: tegra-xudc: Add Tegra234 XUDC support
-> > 
-> >  .../bindings/usb/nvidia,tegra-xudc.yaml       | 15 ++++++++++++
-> >  arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  1 +
-> >  arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 23 +++++++++++++++++++
-> >  drivers/usb/gadget/udc/tegra-xudc.c           | 17 ++++++++++++++
-> >  4 files changed, 56 insertions(+)
+On Tue, 24 Jan 2023, Rob Herring wrote:
+
+> Just as unevaluatedProperties or additionalProperties are required at
+> the top level of schemas, they should (and will) also be required for
+> child node schemas. That ensures only documented properties are
+> present.
 > 
-> I've picked up patches 2 and 5 of this series into the Tegra tree. Greg,
-> can you pick up patches 1, 3 and 4?
+> Add unevaluatedProperties or additionalProperties as appropriate, and
+> then add any missing properties flagged by the addition.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: David Airlie <airlied@gmail.com>
+> To: Daniel Vetter <daniel@ffwll.ch>
+> To: Bartosz Golaszewski <brgl@bgdev.pl>
+> To: Jean Delvare <jdelvare@suse.com>
+> To: Guenter Roeck <linux@roeck-us.net>
+> To: Thomas Gleixner <tglx@linutronix.de>
+> To: Marc Zyngier <maz@kernel.org>
+> To: Jassi Brar <jassisinghbrar@gmail.com>
+> To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> To: Lee Jones <lee@kernel.org>
+> To: Ulf Hansson <ulf.hansson@linaro.org>
+> To: Richard Weinberger <richard@nod.at>
+> To: Vignesh Raghavendra <vigneshr@ti.com>
+> To: Sebastian Reichel <sre@kernel.org>
+> To: Mark Brown <broonie@kernel.org>
+> To: "Rafael J. Wysocki" <rafael@kernel.org>
+> To: Daniel Lezcano <daniel.lezcano@linaro.org>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: openbmc@lists.ozlabs.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../devicetree/bindings/arm/arm,vexpress-juno.yaml     |  1 +
+>  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml |  5 +++--
+>  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml         |  4 ++++
+>  .../bindings/bus/allwinner,sun50i-a64-de2.yaml         |  1 +
+>  .../bindings/bus/allwinner,sun8i-a23-rsb.yaml          |  1 +
+>  .../bus/intel,ixp4xx-expansion-bus-controller.yaml     |  6 ++++++
+>  Documentation/devicetree/bindings/bus/palmbus.yaml     |  1 +
+>  .../devicetree/bindings/display/msm/qcom,mdss.yaml     |  5 +++++
+>  Documentation/devicetree/bindings/example-schema.yaml  |  2 ++
+>  .../devicetree/bindings/gpio/x-powers,axp209-gpio.yaml |  1 +
+>  .../devicetree/bindings/hwmon/adi,ltc2992.yaml         |  1 +
+>  .../bindings/interrupt-controller/arm,gic-v3.yaml      |  2 ++
+>  .../bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml      |  1 +
+>  .../devicetree/bindings/media/i2c/maxim,max9286.yaml   |  7 +++++++
+>  .../bindings/memory-controllers/arm,pl35x-smc.yaml     |  1 +
+>  .../bindings/memory-controllers/exynos-srom.yaml       |  1 +
+>  .../memory-controllers/nvidia,tegra124-emc.yaml        |  1 +
+>  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml |  1 +
+>  .../devicetree/bindings/mfd/mediatek,mt6370.yaml       |  2 ++
+>  .../devicetree/bindings/mmc/aspeed,sdhci.yaml          |  1 +
+>  Documentation/devicetree/bindings/mtd/mtd.yaml         |  1 +
+>  .../devicetree/bindings/power/supply/ti,lp8727.yaml    |  1 +
+>  .../devicetree/bindings/soc/imx/fsl,imx93-src.yaml     |  3 ++-
+>  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml   |  1 +
+>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml |  1 +
+>  .../devicetree/bindings/sound/marvell,mmp-sspa.yaml    |  1 +
+>  .../devicetree/bindings/sound/qcom,wcd934x.yaml        |  1 +
+>  .../devicetree/bindings/sound/samsung,odroid.yaml      |  2 ++
+>  .../devicetree/bindings/soundwire/qcom,soundwire.yaml  |  1 +
+>  .../bindings/spi/allwinner,sun4i-a10-spi.yaml          |  1 +
+>  .../bindings/spi/allwinner,sun6i-a31-spi.yaml          |  1 +
+>  .../devicetree/bindings/spi/spi-controller.yaml        |  1 +
+>  .../sram/allwinner,sun4i-a10-system-control.yaml       | 10 +++++-----
+>  Documentation/devicetree/bindings/sram/qcom,ocmem.yaml |  1 +
+>  .../devicetree/bindings/thermal/thermal-zones.yaml     |  1 +
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml   |  1 +
+>  36 files changed, 65 insertions(+), 8 deletions(-)
 
-Yes, I will do that now, thanks!
+Acked-by: Lee Jones <lee@kernel.org>
 
-greg k-h
+-- 
+Lee Jones [李琼斯]
