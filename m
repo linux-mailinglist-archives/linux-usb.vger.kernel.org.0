@@ -2,87 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D12467C894
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 11:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E0967C908
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 11:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjAZKa3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 05:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S236984AbjAZKtS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 05:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbjAZKa1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 05:30:27 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62034346C
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 02:30:24 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0B4402B3;
-        Thu, 26 Jan 2023 11:30:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674729023;
-        bh=E9tX4NfZojW8A+eU5f08Co410hxBquRyYEnZkPr6UJw=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=SA+XQFWC9B8TbLl+u8NUssgNqrQDhaC4WEbpaGCPE5m2s1r/VsA10wYpECp5jN3hT
-         tqCtXH2mnBydBZQp4zIHDNdHe6Hsf7Xg2nO6/umEaE3f0zdxoOL/HuKoeaar/QQvag
-         n7XIaKQ7H3kvLnz4F9LQ0kQTA+AwTvwzPsOHxiRQ=
-Message-ID: <dda24f8e-8d74-c6c1-ae7c-e423bc50a143@ideasonboard.com>
-Date:   Thu, 26 Jan 2023 10:30:20 +0000
+        with ESMTP id S236596AbjAZKtJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 05:49:09 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAB56278A
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 02:48:33 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id z5so1325481wrt.6
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 02:48:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S1oHIv84+gqWpeprpYr5WHtUeIKRCWjFxOmQZdohkr0=;
+        b=k/HX4mkyFa8lPlhUKq14mrbcyBZFE3LLULrAnrsgDM/fXCRrK552LC5x4/apKOBt2q
+         cbgiUvNsdJi8SWBW1dBq+EApvnGwBfjaTJ/yeLop4ncIf3QZbfjiJdqj9JSjQNAcPYuK
+         cUPuJaHZI4I5RxqtCnDwXuEH1gkPrloiGhnSbNDk/qORMIBNhH/GLz5mEtw65YJ4MN2C
+         iYQ7DDUiIGJpTpgXdNr4NzZ3HaiX8rs3zkTD/96thlIPRc0LqO9wJdg91CPxlZjZCBKn
+         2ZEP+PDKn7Szx8g5N9ftDnnNo+t/XHfzZFv1NjWzMTc+n+/eRQ1WkeIrVwjWW8um7cS4
+         Y3Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S1oHIv84+gqWpeprpYr5WHtUeIKRCWjFxOmQZdohkr0=;
+        b=JncLLJV3rlgthvY3dVLM8wJLIHr7ueZIlAtS63h2WW3NvyUnSRcBB+0zXd0HgJ4vSn
+         +RG2Qo3NV47QBIbtrNR0dqGL/UxtLhWkJUahRRL/L7aMpTxx0Uo5QVCKNG1hX5IyBhh0
+         AaJ5bhqsiHPjoNGKfUK2o7+q+XHSxGRiri2C6ZKAwDC4FtyXtuEUTcHX5Hf2X6y3x7ym
+         6/SbhhqQga57JjVdv8KBiG28O756GST2xwvDndad6WmOh88xMofExQBG9jn1P+60VBL2
+         AP6K1rZTAheMGmijeLix0RaSLC1W2PGoLBrBDR84DDpMdp0q/73EMfz3yKbeinGxGCc+
+         sVpA==
+X-Gm-Message-State: AO0yUKV+Mxd16i3lIrppGRGtK7From1BqmZn16cxqhBmuVlM2dzRBMTh
+        PHZb4ficTCfKwi48xspC8ufeRA==
+X-Google-Smtp-Source: AK7set9ng1No/R1yeLGXdRUAQYm/shCPRwBRFuOjvcleaWNJ5RfczIJwORV/9dTBmib4dq4Z2jYg4A==
+X-Received: by 2002:adf:a30d:0:b0:2bf:b44d:6dae with SMTP id c13-20020adfa30d000000b002bfb44d6daemr8076614wrb.28.1674730108083;
+        Thu, 26 Jan 2023 02:48:28 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id a17-20020adffb91000000b002bddac15b3dsm940450wrr.33.2023.01.26.02.48.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 02:48:27 -0800 (PST)
+Message-ID: <afce38b0-be90-a3b5-f181-a88ad3025bd9@linaro.org>
+Date:   Thu, 26 Jan 2023 11:48:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit address
+ in DTS
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <9ce226b4-90c6-94c4-a5ad-bd623409bc51@ideasonboard.com>
- <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: Explicit status phase for DWC3
-In-Reply-To: <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
+ <20230125211329.GA2899932-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230125211329.GA2899932-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh
-
-On 26/01/2023 00:20, Thinh Nguyen wrote:
-> On Tue, Jan 24, 2023, Dan Scally wrote:
->> Hi Thinh
+On 25/01/2023 22:13, Rob Herring wrote:
+> On Wed, Jan 25, 2023 at 06:59:43PM +0100, Krzysztof Kozlowski wrote:
+>> The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
+>> actual DWC3 Controller device node.  It handles necessary Samsung
+>> Exynos-specific resources (regulators, clocks), but does not have its
+>> own MMIO address space.
 >>
->>
->> I'm trying to update the DWC3 driver to allow the status phase of a
->> transaction to be explicit; meaning the gadget driver has the choice to
->> either Ack or Stall _after_ the data phase so that the contents of the data
->> phase can be validated. I thought that I should be able to achieve this by
->> preventing dwc3_ep0_xfernotready() from calling dwc3_ep0_do_control_status()
->> (relying on an "explicit_status" flag added to the usb_request to decide
->> whether or not to do so) and then calling it manually later once the data
->> phase was validated by the gadget driver (or indeed userspace). A very
->> barebones version of my attempt to do that looks like this:
->>
-> We shouldn't do this. At the protocol level, there must be better ways
-> to do handshake than relying on protocol STALL _after_ the data stage.
-> Note that not all controllers support this.
+>> However neither simple-bus bindings nor dtc W=1 accept device nodes in
+>> soc@ node which do not have unit address.  Therefore allow using
+>> the address space of child device (actual DWC3 Controller) as the
+>> wrapper's address.
+> 
+> The correct fix is 'ranges' should have a value. Though the whole 
+> wrapper thing when there are no registers I dislike...
+
+You mean something like this (diff against this patchset):
+----------
+diff --git a/arch/arm/boot/dts/exynos54xx.dtsi
+b/arch/arm/boot/dts/exynos54xx.dtsi
+index 08786fd9c6ea..75b6f9678672 100644
+--- a/arch/arm/boot/dts/exynos54xx.dtsi
++++ b/arch/arm/boot/dts/exynos54xx.dtsi
+@@ -142,16 +142,15 @@ hsi2c_7: i2c@12cd0000 {
+                        status = "disabled";
+                };
+
+-               usbdrd3_0: usb-wrapper@12000000 {
++               usbdrd3_0: usb-wrapper {
+                        compatible = "samsung,exynos5250-dwusb3";
+-                       reg = <0x12000000 0x10000>;
+                        #address-cells = <1>;
+                        #size-cells = <1>;
+-                       ranges;
++                       ranges = <0x0 0x12000000 0x10000>;
+
+-                       usbdrd_dwc3_0: usb@12000000 {
++                       usbdrd_dwc3_0: usb@0 {
+                                compatible = "snps,dwc3";
+-                               reg = <0x12000000 0x10000>;
++                               reg = <0x0 0x10000>;
+
+---------
+
+Unfortunately dtc W=1 is still not happy:
+
+exynos54xx.dtsi:145.26-159.5: Warning (unit_address_vs_reg):
+/soc/usb-wrapper: node has a reg or ranges property, but no unit name
+
+neither dtbs_check is:
+
+exynos5410-smdk5410.dtb: soc: usb-wrapper: {'compatible':
+['samsung,exynos5250-dwusb3'], '#address-cells': [[1]], '#size-cells':
+[[1]], 'ranges': [[0, 301989888, 65536]], 'clocks': [[5, 366]],
+'clock-names': ['usbdrd30'], 'pinctrl-names': ['default'], 'pinctrl-0':
+[[21, 22]], 'vdd10-supply': [[23]], 'vdd33-supply': [[23]], 'usb@0':
+{'compatible': ['snps,dwc3'], 'reg': [[0, 65536]], 'interrupts': [[0,
+72, 4]], 'phys': [[24, 0], [24, 1]], 'phy-names': ['usb2-phy',
+'usb3-phy'], 'snps,dis_u3_susphy_quirk': True}} should not be valid
+under {'type': 'object'}
+	From schema:
+/home/krzk/.local/lib/python3.10/site-packages/dtschema/schemas/simple-bus.yaml
 
 
-Maybe I'm misunderstanding, but isn't this how the USB spec expects it 
-to work? Reading "Reporting Status Results (8.5.3.1)" in the USB 2.0 
-spec for the status stage in a control write it says "The function 
-responds with either a handshake or a zero-length data packet to 
-indicate its current status", and the handshake can be either STALL or 
-NAK. If we can't do this, how else can we indicate to the host that the 
-data sent during a control out transfer is in some way invalid?
+Best regards,
+Krzysztof
 
-
-Thanks
-
-Dan
-
->
-> Thanks,
-> Thinh
