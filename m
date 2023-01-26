@@ -2,82 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A67067CA44
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 12:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2938D67CA54
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 12:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236978AbjAZLt4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 06:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S237387AbjAZLza (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 06:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237386AbjAZLty (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 06:49:54 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F56C65F3D
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 03:49:44 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id g205so933299pfb.6
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 03:49:44 -0800 (PST)
+        with ESMTP id S237383AbjAZLz3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 06:55:29 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050783FF0F
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 03:55:28 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id h16so1485595wrz.12
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 03:55:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=connectedcars.dk; s=google;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=s1k8jJEZub0cGC2UifvfG5lR+DZx44WZNUkTP6fbUPU=;
-        b=Wl0mS34CanEhBtA/7FanDNJ51Ndaq/frrqHWv+z0VOJy8wzChDRQP52syiZ+5moP6u
-         +WAq4eU8cEjKldFrxGbVLjkhTK78vzz/1OOhr4EpqeNcsU4zG54yPjOuVzQuvSao92RB
-         wE8n1pqcguQkpk483X9yMv8bcxWUyo2pgJBFE=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5yP0BywDAnuuMbf+32a07Q6Ygejqs/wXSQRU+sh7FeI=;
+        b=pTbd3ZJCw9QkBCVFBLLz7s12GMYqKUxPMsNWFVb0xVjETIqqg8a1SYtG7M4T4xtcYS
+         EX8QJFOwqFCbF4E0kcBu3fdLUhbzHs0lYk5o1fHs+2wGBXTGxCp2pdy0MSwr3bfpOCtt
+         iwwNN6tBZMLMDlXKZCOoy3whFNnGfh7ZWa0iJirmFc/FIPjpnrWEDYvBvv+OuU+LEfuw
+         UFIOhyHGt4JmN3eq8hs9GR66BgK6PTw7RPxqWg0sp2hQBLBJgBvuidoojbaupcegM6Ha
+         SJiLu8o8nzc+t2IC3ay3yYkX9x5EE2oy9l0eZ9hFy2QnDtBG9skdx+/M0a2JuSZ4u3u6
+         GAmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s1k8jJEZub0cGC2UifvfG5lR+DZx44WZNUkTP6fbUPU=;
-        b=j9mUdkke8okb4+atzD7EZbtc7lUCT9SBL0ny1Ck445Bfq7nroEa0n7KxXBeKYrV1FT
-         oO4bt26FGnmVcIt0hmRyIMC3lactXyq1aGDe0hiojSeYmLRRZi+wHze5SUmutGEpaIgK
-         cMB/lo28VvT+TVvNs6h8JoOkQnX8g39b8QgvPYgPJR9Tk9DSMsP2yzUL5DTscddAAaC1
-         BdRyQDA4q+Ew+KHmvh5RnqZ5adjpXdYtf5SBgL+JxUzsDfsa9fHDeLvEzpfd/bEj6aSR
-         uUiMw5K4pUzA/yTE3SHmsrUqn1mcSapt3iLJFPMEqhmh5cT8NlTtDoWXvaeVfMPDiZTd
-         go+Q==
-X-Gm-Message-State: AFqh2kqAuMfA9pKFHNyJuLrrnPa1fim1T2wkqlqSAuMV83UCUu8YOm2V
-        HGbjjBeScaVv7xftt5JNIETnoP6gAUNArBMRHt1uPg7aMKNZwDsBJm0=
-X-Google-Smtp-Source: AMrXdXvifjbjv9+/r/c5v1NQZmsgio9zgtydIIPmc1+q1uSwg81XDfljdGWXBpx9xavErxyCjPhI1399EmwOKYR1gr4=
-X-Received: by 2002:aa7:8a4e:0:b0:577:a0ce:6e5e with SMTP id
- n14-20020aa78a4e000000b00577a0ce6e5emr4014662pfa.21.1674733783413; Thu, 26
- Jan 2023 03:49:43 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5yP0BywDAnuuMbf+32a07Q6Ygejqs/wXSQRU+sh7FeI=;
+        b=oCkLpfh8LSeW+QjylrXV146T5bYUOZJqyYTh5igOs0JUZ48wkKCyquHRCZK88vYRPC
+         P755Vsw96w/8MzFBvcgMAVGeiK4K2DSwKnujRb/VOAvXVclXc0Tj2Msq5+Wqbzr45Xb9
+         Kc3liGGWjGHivL6bUCsr/wYbYFyIi+SmRBoymmxFs3J1fV3zhFr6yA+urVGr25RWpEwy
+         7TEE5HwAXjJr6mrpV53JbhOMcOnR5m7RgLGco8BXz3cBFp4YQvm0v9mPw3noE+x7dV+5
+         ASwHVVpWGsRZBuZmhlG7GyroqMPDNjPGuefT6gWJBmu+8ieFWEHaykhrV0iKHI4opKaq
+         slMw==
+X-Gm-Message-State: AO0yUKXjkB4saHVJgTCmVqSTDj9oXmhYc0NwTV31sqwwXCXe3Q5fi3Gz
+        wdw9bj5Blc1FbHnFD/7+aJp69Q==
+X-Google-Smtp-Source: AK7set9qt9nTQzZdQh3JcvKhICbeSSBvdsDbg5AZQS8AybL0RpuPHM+dTgnRZcLj2lVpBsg2yesVVA==
+X-Received: by 2002:a5d:480b:0:b0:2bf:c748:b8bd with SMTP id l11-20020a5d480b000000b002bfc748b8bdmr1588634wrq.53.1674734126483;
+        Thu, 26 Jan 2023 03:55:26 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h4-20020adfaa84000000b002bfbf4c3f9fsm1149608wrc.17.2023.01.26.03.55.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 03:55:26 -0800 (PST)
+Message-ID: <62207c21-38f2-eb37-ea1d-2f6eef2202ff@linaro.org>
+Date:   Thu, 26 Jan 2023 12:55:23 +0100
 MIME-Version: 1.0
-From:   Troels Liebe Bentsen <troels@connectedcars.dk>
-Date:   Thu, 26 Jan 2023 12:49:32 +0100
-Message-ID: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
-Subject: All USB tools hang when one descriptor read fails and needs to timeout
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCH v2 08/22] ASoC: dt-bindings: Add USB_RX port
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-9-quic_wcheng@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126031424.14582-9-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 26/01/2023 04:14, Wesley Cheng wrote:
+> Q6DSP supports handling of USB playback audio data if USB audio offloading
+> is enabled.  Add a new definition for the USB_RX AFE port, which is
+> referenced when the AFE port is started.
 
-We have a hardware projekt where something is off with power ON
-timing. It sometimes gets started in a broken state where the device
-is seen by the USB system but does not respond to descriptor reads.
+Subject prefix:
+ASoC: dt-bindings: qcom,q6dsp-lpass-ports:
 
-When this happens this causes lsusb and libusb based tools to hang
-until the descriptor read in the USB subsystem timeout out after 30
-seconds or so. It looks like the tools are trying to read
-/sys/bus/usb/devices/.../descriptors and it blocks until the timeout
-happens.
+because you are not adding USB_RX port to all bindings in ASoC.
 
-We should fix our hardware and have done so in the next revision but
-why should one device be able to block the descriptors file that most
-user land USB code seem to use.
+With subject fixes:
 
-Would there be any reasoning against just serving the descriptors file
-as it looked before inserting the broken USB device instead of
-blocking the read?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-And if we wanted to create a pull request for a change like that would
-it be accepted or would it be considered breaking the API?
 
-Regards Troels
+Best regards,
+Krzysztof
+
