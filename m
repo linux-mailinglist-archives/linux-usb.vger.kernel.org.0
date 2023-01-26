@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC3E67D5D0
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 21:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B864567D5D2
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 21:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjAZUAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 15:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S232160AbjAZUAw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 15:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbjAZUAG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 15:00:06 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327186D5C0
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 12:00:03 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4c131bede4bso38505897b3.5
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 12:00:03 -0800 (PST)
+        with ESMTP id S231664AbjAZUAv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 15:00:51 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1176B58299
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 12:00:50 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-4fd37a1551cso38049067b3.13
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 12:00:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hVRUNLjCIjUUqcVDUBbgjMILwZgLU2Q4EQGndfqZctc=;
-        b=AZjSjxtx4wegMExpl5wFFq5rlmtjBIBkaV6HcsyWOjhGXPCCiBpmb/wIsekFdfo9kQ
-         LDin4Xfuajz4AfU5s7rkgIZ39RE5pX1zEYnERoH+gNlWttCNhzIljQ5eRZu/EWmadcwr
-         4COEFlqaEVy5a35picJsMJkoJQpjE+6q6MPVBtJ2x2BqwuWqjA7c+5QkFRxchfvK2ftc
-         hL7UDEbRA/TG0FKCvsqz0/FtRpqSYhq3mu1RHE/57t4PYWsbTEfOo3EbUkCdvjvHBxEk
-         WwG5sfgsVKxIGaGDj2X6/1xdoQSsKBklIhRt9oXR64WD78Zi8S9sktitSUywF+PSvOq6
-         QSpQ==
+        bh=oItix3jG4qCPecp5WUeVdn8MFWUmFNzwQudW0f6qh8o=;
+        b=EQZ7DzFH0xhBjiLV9wEk+bxFk/eBaVummsYyA5ZQ8e+7cHf03o6qAFCQBC35aY7Szn
+         Ev+RLMMXvYmaJeC6+/JCAoW7gj45zfCGvQHXfAjzx4zHLJWKGjN3LXlCEvG39IzpEm65
+         0OZ7NdIKtJz7M7FmKN8ZqGQ48sZOG/s+Du1qWMDMVYsRpzsUnTaQt4OVuaDwn4Z4K0bD
+         vWiSIGUXjkCVxNIlbAvXQ8Xq9221946A5Mh2TOOKiucUwly4TeYLcgrcWHy01xocaUMF
+         ty6M2st2+oat7xVB3AXj1Bpf3B/zwcxE/w0puRz8GoCoCxFSTlaTvL4bkMibx8HXaW6w
+         EXtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hVRUNLjCIjUUqcVDUBbgjMILwZgLU2Q4EQGndfqZctc=;
-        b=yw8Cee//lMauR66NeMmVFcJUe045khBd3MvEgiwEnKXO9DlvXfkYKIu34jCfodWAgu
-         3L/5fxxAts32Ji3DW+gN7Xp8F+YerdY2wGFGt6GMPmP539nGKNPBP6w9mgaH7835zZ+O
-         60bFtqD98FE0sd65CVrtkBaaOpHwVT2r1uME1UFrOFn9Y5PY3HF8VHXysLM4/ZzGktQX
-         zODJb+2BSvMgL3DlTo5jXlzNYznh4t0JORR7FAn80UuLITThza5UbGgqmy6OCU/BnUWz
-         JYm1Kk4RMnqgqDD50LFktUcq3sbMAt6JI+gjjBDgkpwlZiFC9EbR5rR9oTeKNtRTic72
-         nySw==
-X-Gm-Message-State: AO0yUKVHya3UA/+zxFQ9MZIKkNdsuNxXc8K37KrQ6b8AX4FrbY/gVnPw
-        bLTZjrJs3vAX1e9/JvQ6Eh3+BvM7oOhBbYWs9EuT/A==
-X-Google-Smtp-Source: AK7set/620QxP+YxwSup3H0faYChigsEwRWBbiMXYcIpyH8Jz+TSApYVFX4U2ZAfau7okUlf4yy8CvA91ekJZ2r6W4s=
-X-Received: by 2002:a0d:e701:0:b0:506:66f5:fd24 with SMTP id
- q1-20020a0de701000000b0050666f5fd24mr1142106ywe.130.1674763202381; Thu, 26
- Jan 2023 12:00:02 -0800 (PST)
+        bh=oItix3jG4qCPecp5WUeVdn8MFWUmFNzwQudW0f6qh8o=;
+        b=bXZCQ5BdGkDrjm8WFYCuZeYolGsSmNng6EkLQOmmQ4I7fZo7BlHRDx9AK7/hPHLcpX
+         KP7kecf077GYKfw1OsSQr5dpfumqb54MHKz4WIsRcUvtSFX9eK+sD787cyUYUQo46gny
+         4xBmfnyfHaD6xP08ukOJiHzkkANmLO6Cupmt0YqbbStLvcIzneOmuMHXMi6VY0yybPPQ
+         HhHRwiJHMMfbNCzecToX8ox+tQI+OrYVkt+WHL7vosZ/3wB3lX/DOjv8GwSVbJsZbpEv
+         snEMeWMwQXQ/vtxj/2/vq8rV7wjvhD1q+eeBjobrMdHhJ6uQr1VzPVK7A1gU2Z6vZ9ye
+         Ryyg==
+X-Gm-Message-State: AO0yUKUk/J6xEbUOsMsWauVBxVP64BrmUyN8isq3shuzvdNSKv0c6VPB
+        thdyR60Wc1FE69amdhzwBoJF+zuZHJQf/UkWe8QWyA==
+X-Google-Smtp-Source: AK7set+cYfPJvzfOrPX+KxOBk1zIzkGiZ1A0/eFulPJuzaRj5ebpgTZD6igyhHYqZ2h3ez1oAIFj1RTfj0VnS56RLbQ=
+X-Received: by 2002:a81:784f:0:b0:506:651b:cd0 with SMTP id
+ t76-20020a81784f000000b00506651b0cd0mr1103812ywc.273.1674763249263; Thu, 26
+ Jan 2023 12:00:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
+References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com> <20230120154437.22025-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230120154437.22025-2-andriy.shevchenko@linux.intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 26 Jan 2023 20:59:51 +0100
-Message-ID: <CACRpkdbRtXVLhmMKwCZxfCgp4H64gQEi38Y1J_rQ7x+b+4Dt5g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] usb: fotg210-hcd: use sysfs_emit() to instead of scnprintf()
+Date:   Thu, 26 Jan 2023 21:00:38 +0100
+Message-ID: <CACRpkdb+UPuWsWz7+cHTpES0Uogx_o1G5m8zqwvO=kG7c1oDcg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/5] usb: fotg210-hcd: Don't shadow error codes in store()
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -69,9 +69,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 On Fri, Jan 20, 2023 at 4:44 PM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
+> kstrtox() along with regmap API can return different error codes based on
+> circumstances.
+>
+> Don't shadow them when returning to the caller.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
