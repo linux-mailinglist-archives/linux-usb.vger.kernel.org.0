@@ -2,46 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C467CBB4
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 14:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA7767CC6E
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 14:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjAZNNA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 08:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S230455AbjAZNln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 08:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjAZNNA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 08:13:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D0945F45
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 05:12:59 -0800 (PST)
+        with ESMTP id S229472AbjAZNlm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 08:41:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54024457FE;
+        Thu, 26 Jan 2023 05:41:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3D72617C4
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 13:12:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5FD0C433D2;
-        Thu, 26 Jan 2023 13:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674738778;
-        bh=gx5qUdDXtHTRrHLOXwvTm0SpJVM5QLJDWnEv7jI8hs8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h8luFZTmdMPQ/iTlbL72cHfdb6+TYt7OQVI3hvThEWCTvauZFrF2n8ypYH1hoByrC
-         aicyDniNZ5MsvdXR3ykpU5ik4+2feStaupv27X8fQWEmeubKUzQ4sxwx2do1iySDkk
-         June5itb/mk3Qye6aR0WALrIIUFxqUBgPc/sWsC8=
-Date:   Thu, 26 Jan 2023 14:12:54 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Troels Liebe Bentsen <troels@connectedcars.dk>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: All USB tools hang when one descriptor read fails and needs to
- timeout
-Message-ID: <Y9J8VncWSJdVURgB@kroah.com>
-References: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
- <Y9Jwv1ColWNwH4+0@kroah.com>
- <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3010B81DBE;
+        Thu, 26 Jan 2023 13:41:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72FCCC4339B;
+        Thu, 26 Jan 2023 13:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674740498;
+        bh=OfjvJlFHKnWvYxycX8NSllNoKHk1aH1b6L4NLVoak14=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KvJFq9K9eto2JqqoAFUOX/dUmibZpc3MmkO1gjyBIQE/GpBB6BeKWzVngDmJ8u2lm
+         lB/oBz06HGHnjGWlVQDwIeD38j2xRbtUiSqknObpNRjWnzyipVFCeteJR1Mkqwtrpd
+         fq709+RWXH67L6dHXvwDmTJURFGs3hjjoE0406BuusrGNKM+ajX3GvUX52f5tz/1dk
+         DaxfprWiHcOGWBoFJ5cFi0Tx1sthjh+aLN62le3jrsrN8+m125eSwk4WUcWq/HE/3Z
+         Fi4tirDCp5H2hrJlAntmw5TqAsPCpblvSBcLi/yIj9IrIqXgO6W5KMR9ShmoO6Rxu7
+         FnTzio1ywds1w==
+Received: by mail-vs1-f49.google.com with SMTP id 187so1877360vsv.10;
+        Thu, 26 Jan 2023 05:41:38 -0800 (PST)
+X-Gm-Message-State: AFqh2kr0fWORURRV4c8EiGUCQplZTp9ULoCUilfIuzNXaYNosPO5nc3u
+        chAaOwsumvIzp9yU9qYy7Yjvcz0a+7UaUGVImw==
+X-Google-Smtp-Source: AMrXdXsWENzKkYOuOdC+oVtMFqxH4XRwLpmuHN77BN9u4u6pqZ52lbeZfgKydbou4+U0NFA6ehsUq0i0oKKw3/eQRlM=
+X-Received: by 2002:a05:6102:5490:b0:3b5:1fe4:f1c2 with SMTP id
+ bk16-20020a056102549000b003b51fe4f1c2mr4864173vsb.0.1674740497377; Thu, 26
+ Jan 2023 05:41:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+References: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
+ <20230125211329.GA2899932-robh@kernel.org> <afce38b0-be90-a3b5-f181-a88ad3025bd9@linaro.org>
+In-Reply-To: <afce38b0-be90-a3b5-f181-a88ad3025bd9@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 26 Jan 2023 07:41:25 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKpibaWgWXwhNFQ4U_tT0cdvUMO4attSsYqoSFmbq4RZQ@mail.gmail.com>
+Message-ID: <CAL_JsqKpibaWgWXwhNFQ4U_tT0cdvUMO4attSsYqoSFmbq4RZQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit address
+ in DTS
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,114 +66,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 02:06:39PM +0100, Troels Liebe Bentsen wrote:
-> Hi Greg,
-> 
-> On Thu, 26 Jan 2023 at 13:23, Greg KH <gregkh@linuxfoundation.org> wrote:
+On Thu, Jan 26, 2023 at 4:48 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 25/01/2023 22:13, Rob Herring wrote:
+> > On Wed, Jan 25, 2023 at 06:59:43PM +0100, Krzysztof Kozlowski wrote:
+> >> The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
+> >> actual DWC3 Controller device node.  It handles necessary Samsung
+> >> Exynos-specific resources (regulators, clocks), but does not have its
+> >> own MMIO address space.
+> >>
+> >> However neither simple-bus bindings nor dtc W=1 accept device nodes in
+> >> soc@ node which do not have unit address.  Therefore allow using
+> >> the address space of child device (actual DWC3 Controller) as the
+> >> wrapper's address.
 > >
-> > On Thu, Jan 26, 2023 at 12:49:32PM +0100, Troels Liebe Bentsen wrote:
-> > > Hi,
-> > >
-> > > We have a hardware projekt where something is off with power ON
-> > > timing. It sometimes gets started in a broken state where the device
-> > > is seen by the USB system but does not respond to descriptor reads.
-> >
-> > Ah, a broken USB device, not much the kernel can do about that :(
-> 
-> Would be nice if it could, but I settle for papering over the worst parts  :)
-> 
-> >
-> > > When this happens this causes lsusb and libusb based tools to hang
-> > > until the descriptor read in the USB subsystem timeout out after 30
-> > > seconds or so. It looks like the tools are trying to read
-> > > /sys/bus/usb/devices/.../descriptors and it blocks until the timeout
-> > > happens.
-> > >
-> > > We should fix our hardware and have done so in the next revision but
-> > > why should one device be able to block the descriptors file that most
-> > > user land USB code seem to use.
-> >
-> > If the device does not respond, what is the kernel or userspace supposed
-> > to do?
-> 
-> Might not have been clear that the issue is when I "plug in"/connect the
-> device that it happens. I think the kernel is doing the right thing here and
-> just timing out the device and at least in the kernel it does not seem to block
-> other devices from doing their thing. The problem is that part of the userspace
-> interface used for listing all devices on a hub block until the timeout
-> happens.
+> > The correct fix is 'ranges' should have a value. Though the whole
+> > wrapper thing when there are no registers I dislike...
+>
+> You mean something like this (diff against this patchset):
+> ----------
+> diff --git a/arch/arm/boot/dts/exynos54xx.dtsi
+> b/arch/arm/boot/dts/exynos54xx.dtsi
+> index 08786fd9c6ea..75b6f9678672 100644
+> --- a/arch/arm/boot/dts/exynos54xx.dtsi
+> +++ b/arch/arm/boot/dts/exynos54xx.dtsi
+> @@ -142,16 +142,15 @@ hsi2c_7: i2c@12cd0000 {
+>                         status = "disabled";
+>                 };
+>
+> -               usbdrd3_0: usb-wrapper@12000000 {
+> +               usbdrd3_0: usb-wrapper {
 
-What userspace code exactly is doing this?  Perhaps just work on making
-that tool handle timeouts better?
+Why did you drop the unit-address? Unit-address is valid with 'reg' or 'ranges'.
 
-> One nice options would be if the timeout was configurable based on
-> port/devpath, I can understand 30-60 seconds timeout for a spindel USB
-> disk, but for other devices 5 seconds would be more than enough to
-> conclude they are dead, but that's nice to have.
-
-The timeouts the kernel has now have had to be increased over time due
-to bad devices.  And we don't know what type of device this is until we
-read from it, so you can't pick the timeout based on the type of device
-if you can't read the type of device :)
-
-> >
-> > > Would there be any reasoning against just serving the descriptors file
-> > > as it looked before inserting the broken USB device instead of
-> > > blocking the read?
-> >
-> > So a different device's descriptor file is being blocked by a broken
-> > device?  Are you sure?  They should all be independent.
-> 
-> Not the descriptor file, but the descriptor*s* under the hub folder in sysfs:
-> 
-> >From https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-bus-usb :
-> 
-> What: /sys/bus/usb/devices/usbX/descriptors
-> Description:
-> Contains the interface descriptors, in binary.
-> 
-> As I understand it, this is a file that contains all the information for devices
-> under a hub.
-
-No, just the single device's descriptor.
-
-> Most likely an optimization made for lsusb and libusb so they
-> don't have to traverse all the individual folders to get the same information.
-
-Nope, libusb walks the whole bus if you ask it to.
-
-> The problem is that /sys/bus/usb/devices/usbX/descriptors block while the
-> kernel is trying to do the descriptor read on that one broken device even if
-> all the other devices on the hub is well behaving the read is blocked until
-> it times out.
-
-So if you read one descriptor, it will time out for others if you do so
-at the same time?  Do they all share a single kernel lock perhaps?
-
-> If lsusb and libusb had traversed the folder structure they would not have
-> blocked as the broken devices never showed in the folder structure:
-> 
-> fx.
-> 
-> tlb@tlb-nuc:/sys/bus/usb/devices/usb3$ ls -1
-> 3-0:1.0 # Device shows up when USB initialization is done
-> 3-10 # Device shows up when USB initialization is done
-> 3-3 # Device shows up when USB initialization is done
-> ...
-> descriptors # Blocks on read until kernel times out waiting for descriptor read.
-> ...
-> 
-> > > And if we wanted to create a pull request for a change like that would
-> > > it be accepted or would it be considered breaking the API?
-> >
-> > It depends on what the kernel change looks like.  Have you tried
-> > anything that worked for you that you wish to propose?
-> >
-> 
-> I would like to change /sys/bus/usb/devices/usbX/descriptors so it never blocks.
-
-Patches gladly reviewed to do so :)
-
-thanks,
-
-greg k-h
+>                         compatible = "samsung,exynos5250-dwusb3";
+> -                       reg = <0x12000000 0x10000>;
+>                         #address-cells = <1>;
+>                         #size-cells = <1>;
+> -                       ranges;
+> +                       ranges = <0x0 0x12000000 0x10000>;
+>
+> -                       usbdrd_dwc3_0: usb@12000000 {
+> +                       usbdrd_dwc3_0: usb@0 {
+>                                 compatible = "snps,dwc3";
+> -                               reg = <0x12000000 0x10000>;
+> +                               reg = <0x0 0x10000>;
+>
+> ---------
+>
+> Unfortunately dtc W=1 is still not happy:
+>
+> exynos54xx.dtsi:145.26-159.5: Warning (unit_address_vs_reg):
+> /soc/usb-wrapper: node has a reg or ranges property, but no unit name
+>
+> neither dtbs_check is:
+>
+> exynos5410-smdk5410.dtb: soc: usb-wrapper: {'compatible':
+> ['samsung,exynos5250-dwusb3'], '#address-cells': [[1]], '#size-cells':
+> [[1]], 'ranges': [[0, 301989888, 65536]], 'clocks': [[5, 366]],
+> 'clock-names': ['usbdrd30'], 'pinctrl-names': ['default'], 'pinctrl-0':
+> [[21, 22]], 'vdd10-supply': [[23]], 'vdd33-supply': [[23]], 'usb@0':
+> {'compatible': ['snps,dwc3'], 'reg': [[0, 65536]], 'interrupts': [[0,
+> 72, 4]], 'phys': [[24, 0], [24, 1]], 'phy-names': ['usb2-phy',
+> 'usb3-phy'], 'snps,dis_u3_susphy_quirk': True}} should not be valid
+> under {'type': 'object'}
+>         From schema:
+> /home/krzk/.local/lib/python3.10/site-packages/dtschema/schemas/simple-bus.yaml
+>
+>
+> Best regards,
+> Krzysztof
+>
