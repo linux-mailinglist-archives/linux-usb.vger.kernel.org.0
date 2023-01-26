@@ -2,46 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F6D67CE53
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 15:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5916567CE58
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 15:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbjAZOh4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 09:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S232120AbjAZOib (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 09:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjAZOhx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 09:37:53 -0500
-X-Greylist: delayed 573 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 06:37:44 PST
-Received: from mail.turbocat.net (turbocat.net [IPv6:2a01:4f8:c17:6c4b::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4CB69533
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 06:37:43 -0800 (PST)
-Received: from [10.36.2.154] (unknown [46.212.121.255])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229948AbjAZOi3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 09:38:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6806180;
+        Thu, 26 Jan 2023 06:38:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.turbocat.net (Postfix) with ESMTPSA id E3F0D262E88;
-        Thu, 26 Jan 2023 15:27:48 +0100 (CET)
-Message-ID: <236997e1-d2db-ad2d-7161-c9e3845318f6@selasky.org>
-Date:   Thu, 26 Jan 2023 15:27:50 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58C52B81D15;
+        Thu, 26 Jan 2023 14:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819EEC433D2;
+        Thu, 26 Jan 2023 14:38:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674743906;
+        bh=J6kTUDHhp3UX3SKN+nHetWZA+yyFDNmaZMGXaU/Kwxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AYTqRKSW62JnHa+QPvCzuJ7D2W5Sd7w+SS+Gc0kWhW6sBEwV0WEY2ZuHBR5v2yJqW
+         gOTg417S8mg4dOOPMkiJ26ELSOjpVxezlY05fYHilegIrMTy6n/ONSO4VdXuJnQFvO
+         0SVTvHTgCwbRdcR4w7ZNDUiO1wsuOz9YZRme9IUOTMQds93NFLeJSiCYsDN6yw/DBi
+         uxPg6UxNhAGKostehxnl/tu8sS8gzTLppGnOWRvt4QQVO+51Aj4ddhEkv7JfT6SAG5
+         wngRELtMSbB/qu8QwRM3+FhYlIuT7B3E6jv0iwh5yF5ytRm8YliUnKog2E4Tkrr5il
+         Pyu2Yp1gItPMg==
+Date:   Thu, 26 Jan 2023 14:38:18 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, linus.walleij@linaro.org, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
+Subject: Re: [PATCH v9 3/9] dt-bindings: mfd: syscon: Add mt8365-syscfg
+Message-ID: <Y9KQWp1942TDjV1P@google.com>
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-4-bero@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: All USB tools hang when one descriptor read fails and needs to
- timeout
-To:     Troels Liebe Bentsen <troels@connectedcars.dk>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-References: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
- <Y9Jwv1ColWNwH4+0@kroah.com>
- <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
- <Y9J8VncWSJdVURgB@kroah.com>
- <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
-Content-Language: en-US
-From:   Hans Petter Selasky <hps@selasky.org>
-In-Reply-To: <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230125143503.1015424-4-bero@baylibre.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,46 +62,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/26/23 14:59, Troels Liebe Bentsen wrote:
-> On Thu, 26 Jan 2023 at 14:12, Greg KH <gregkh@linuxfoundation.org> wrote:
->>>
->>> I would like to change /sys/bus/usb/devices/usbX/descriptors so it never blocks.
->>
->> Patches gladly reviewed to do so :)
+On Wed, 25 Jan 2023, Bernhard Rosenkränzer wrote:
 
-Be careful. Been there done that for FreeBSD. You can cache the 
-descriptor in memory - yes, but beware that the values inside the device 
-descriptor may change after re-enumerating the device via software, like 
-firmware upgrade, and that directly hits on the XHCI controller 
-programming, that you need to load and configure the new bMaxPacketSize 
-in there!
-
-And the same goes for the other fields in there :-)
-
+> Document Mediatek mt8365-syscfg
 > 
-> We will have a look and get back to you.
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-It's probably best to find the undocumented bits of your USB peripheral 
-controller first! With USB control transactions I've seen so much 
-craziness over the years you won't believe it. The only ones that get it 
-right, is the ones that lay out all USB control endpoint jobs in memory 
-via DMA descriptors. All the ones that simply use a few registers to 
-receive the SETUP packet, DATA and status ZLP, have undocumented races. 
-By races I mean, what happens if you get SETUP and DATA interrupt bits 
-at the same time, or maybe all three, what is the right order, or what 
-about STALL conditions and short control transfers and blah blah blah. 
-This thing can really blow your mind, but yeah, many device side 
-programmers simply use the example code they get from the vendor and 
-give a shit about anything that can later go wrong. That is my simple 
-impression so far in the USB world.
+Applied, thanks
 
---HPS
-
-> 
->>
->> thanks,
->>
->> greg k-h
-> 
-> Regards Troels
-
+-- 
+Lee Jones [李琼斯]
