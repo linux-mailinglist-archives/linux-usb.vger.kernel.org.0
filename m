@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2938D67CA54
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 12:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F6767CA68
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 13:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237387AbjAZLza (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 06:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S237060AbjAZMB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 07:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237383AbjAZLz3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 06:55:29 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050783FF0F
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 03:55:28 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id h16so1485595wrz.12
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 03:55:27 -0800 (PST)
+        with ESMTP id S236821AbjAZMBz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 07:01:55 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378CF6387C
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 04:01:48 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id bk16so1510630wrb.11
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 04:01:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5yP0BywDAnuuMbf+32a07Q6Ygejqs/wXSQRU+sh7FeI=;
-        b=pTbd3ZJCw9QkBCVFBLLz7s12GMYqKUxPMsNWFVb0xVjETIqqg8a1SYtG7M4T4xtcYS
-         EX8QJFOwqFCbF4E0kcBu3fdLUhbzHs0lYk5o1fHs+2wGBXTGxCp2pdy0MSwr3bfpOCtt
-         iwwNN6tBZMLMDlXKZCOoy3whFNnGfh7ZWa0iJirmFc/FIPjpnrWEDYvBvv+OuU+LEfuw
-         UFIOhyHGt4JmN3eq8hs9GR66BgK6PTw7RPxqWg0sp2hQBLBJgBvuidoojbaupcegM6Ha
-         SJiLu8o8nzc+t2IC3ay3yYkX9x5EE2oy9l0eZ9hFy2QnDtBG9skdx+/M0a2JuSZ4u3u6
-         GAmw==
+        bh=jxZC6LLZuJ2Wkp1f5+/EfRQ8da/gCgTKGWvHnHflOhU=;
+        b=Rswj04CGt0Ro3ujr1S3ZR7Y4N7ASGIziExdcXQQ1t0tAHoOBAp+Rv5Ajen5TTCq6Uz
+         V+gbLHslr8DIqj/sRgvvvf8NUzKPPd6cmc9xvD1L7rcVbwPmzDsw3cAt+hTyMsnIl2PM
+         rgekxtRTULXWNdJGG/boM6Zhy9E4nKwbd+2Nja0PJkbK/LewLdXrLTCKK7crMd27onpI
+         n8C54T/Wl9738vrpLNe2zjqr1R6cr0NVVjTzmHzTSL6zGTDH6BsMb/kPsihpsNZP6JV2
+         4KMrSIN3h6M0XEtV1Vs7I6kkZoOtFnpJKm+11aqUHNkqsMd0Fezu0O+W/aj2Dutu8cc/
+         TFuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5yP0BywDAnuuMbf+32a07Q6Ygejqs/wXSQRU+sh7FeI=;
-        b=oCkLpfh8LSeW+QjylrXV146T5bYUOZJqyYTh5igOs0JUZ48wkKCyquHRCZK88vYRPC
-         P755Vsw96w/8MzFBvcgMAVGeiK4K2DSwKnujRb/VOAvXVclXc0Tj2Msq5+Wqbzr45Xb9
-         Kc3liGGWjGHivL6bUCsr/wYbYFyIi+SmRBoymmxFs3J1fV3zhFr6yA+urVGr25RWpEwy
-         7TEE5HwAXjJr6mrpV53JbhOMcOnR5m7RgLGco8BXz3cBFp4YQvm0v9mPw3noE+x7dV+5
-         ASwHVVpWGsRZBuZmhlG7GyroqMPDNjPGuefT6gWJBmu+8ieFWEHaykhrV0iKHI4opKaq
-         slMw==
-X-Gm-Message-State: AO0yUKXjkB4saHVJgTCmVqSTDj9oXmhYc0NwTV31sqwwXCXe3Q5fi3Gz
-        wdw9bj5Blc1FbHnFD/7+aJp69Q==
-X-Google-Smtp-Source: AK7set9qt9nTQzZdQh3JcvKhICbeSSBvdsDbg5AZQS8AybL0RpuPHM+dTgnRZcLj2lVpBsg2yesVVA==
-X-Received: by 2002:a5d:480b:0:b0:2bf:c748:b8bd with SMTP id l11-20020a5d480b000000b002bfc748b8bdmr1588634wrq.53.1674734126483;
-        Thu, 26 Jan 2023 03:55:26 -0800 (PST)
+        bh=jxZC6LLZuJ2Wkp1f5+/EfRQ8da/gCgTKGWvHnHflOhU=;
+        b=xZv1zGe/NGqwU90CVhGcvE8rLlf38KMHHdENMIIw54SnEDDv37GTiu7zCta4atqAjS
+         Ek4WKQf+HhMe1i2nKBxjRh8KOkPqcHboqPqkMP741114c3bDA/LTrgBv+PkL9atdb7tb
+         KFbQmGDUFsVTHlfUcelNL9ZPVaPszRPX6pqVzLqoyIqsp2ef9LgENQX0LZBmqjuifsl8
+         6g16O1LfoBC5fkbTgfgio7B6B1Qd9rpAE6LvHzeAHWCoavcvRVBwIPviwgWKpgHlupYL
+         hHWDlvKAL3zTTytzBbAt3WCwhENGK6FlX5x3R6NEjfu4UHKC2hnBTQefeVMxGTLRvNNy
+         Tcdg==
+X-Gm-Message-State: AFqh2krQb6ELWilRqElba092tTG6SCVyCnTq1KOCb471dKkapnrL28pX
+        Pb7iFo+XViQSSAcGQB+VpKcYxw==
+X-Google-Smtp-Source: AMrXdXvJKL26MJpG47M527MVT8QsOcuIjm1qzs/c5EZqKeKst2KGGu2u0oX9JCS35u+WUqsyvQMexQ==
+X-Received: by 2002:a5d:67d2:0:b0:2be:50a7:cfa9 with SMTP id n18-20020a5d67d2000000b002be50a7cfa9mr20937182wrw.63.1674734506461;
+        Thu, 26 Jan 2023 04:01:46 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h4-20020adfaa84000000b002bfbf4c3f9fsm1149608wrc.17.2023.01.26.03.55.24
+        by smtp.gmail.com with ESMTPSA id z2-20020a5d6542000000b00267bcb1bbe5sm1153739wrv.56.2023.01.26.04.01.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 03:55:26 -0800 (PST)
-Message-ID: <62207c21-38f2-eb37-ea1d-2f6eef2202ff@linaro.org>
-Date:   Thu, 26 Jan 2023 12:55:23 +0100
+        Thu, 26 Jan 2023 04:01:46 -0800 (PST)
+Message-ID: <05e55db1-5181-8025-8aee-e398200b047c@linaro.org>
+Date:   Thu, 26 Jan 2023 13:01:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [RFC PATCH v2 08/22] ASoC: dt-bindings: Add USB_RX port
+Subject: Re: [RFC PATCH v2 14/22] dt-bindings: usb: dwc3: Add
+ snps,num-hc-interrupters definition
 Content-Language: en-US
 To:     Wesley Cheng <quic_wcheng@quicinc.com>,
         srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
@@ -68,9 +69,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
         quic_plai@quicinc.com
 References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-9-quic_wcheng@quicinc.com>
+ <20230126031424.14582-15-quic_wcheng@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230126031424.14582-9-quic_wcheng@quicinc.com>
+In-Reply-To: <20230126031424.14582-15-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,19 +85,49 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 26/01/2023 04:14, Wesley Cheng wrote:
-> Q6DSP supports handling of USB playback audio data if USB audio offloading
-> is enabled.  Add a new definition for the USB_RX AFE port, which is
-> referenced when the AFE port is started.
+> Add a new definition for specifying how many XHCI secondary interrupters
+> can be allocated.  XHCI in general can potentially support up to 1024
+> interrupters, which some uses may want to limit depending on how many
+> users utilize the interrupters.
 
-Subject prefix:
-ASoC: dt-bindings: qcom,q6dsp-lpass-ports:
+I cannot find in the code any user of this. Your next patch stores it,
+but which other patch uses stored value?
 
-because you are not adding USB_RX port to all bindings in ASoC.
+What I still don't get how is this exactly hardware property, not policy
+or driver choice.
 
-With subject fixes:
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 6d78048c4613..4faaec9655e0 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -349,6 +349,18 @@ properties:
+>      items:
+>        enum: [1, 4, 8, 16, 32, 64, 128, 256]
+>  
+> +  snps,num-hc-interrupters:
+> +    description:
+> +      Defines the maximum number of XHCI host controller interrupters that can
+> +      be supported.  The XHCI host controller has support to allocate multiple
+> +      event rings, which can be assigned to different clients/users.  The DWC3
+> +      controller has a maximum of 8 interrupters.  If this is not defined then
+> +      the value will be defaulted to 1.  This parameter is used only when
+> +      operating in host mode.
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    minimum: 1
+> +    maximum: 8
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+default: 1
 
+> +
+>    port:
+>      $ref: /schemas/graph.yaml#/properties/port
+>      description:
 
 Best regards,
 Krzysztof
