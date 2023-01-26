@@ -2,115 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BCE67CF51
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 16:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4665267D02A
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 16:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjAZPJL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 10:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
+        id S231201AbjAZP07 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 10:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjAZPJK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 10:09:10 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03851554A
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 07:09:08 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so4101614wmq.1
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 07:09:08 -0800 (PST)
+        with ESMTP id S231475AbjAZP05 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 10:26:57 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B7D6A58
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 07:26:39 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id d10so1230573pgm.13
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 07:26:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ajpze3MQAtAYvqF9cQldA9cf7OwdmlVDcuG8wHeoRgs=;
-        b=FYSBmhD19DPaZ+sYkioR8rvsR1S61pjCm2F6hhPKO9Wx6aQe6lG7AKj6WZ/pbnqifH
-         erq7dkFAAnezOLndNVdIhyFxmpWo6gtG/q5n//0JUQe+qPFfFXZXoeKXpcafhfOJO6Rp
-         h2OubWFiQ4j7ObP2RFI3WJMzzxY1p+m9zRUhcBSLYVSs7md26wfTJoVJQHyM37kyN6ZP
-         WHDuLaKPrO6jqyFNh+I4wf1ZjuqUyn4uto8kBOxptMbq+5kDHkGcKI+N3aFKP3UwOCPk
-         R4ujUrAa7WTfU7Yo4RXVGtj4ViBKak1EFBaoTAD1+sE6LStM1qHPI5iZfaYqGbuzH3Y+
-         0LjQ==
+        d=connectedcars.dk; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LoCCSwjV5JGT5vnEAKl4rfjVlRzbba59WLoTHaIVaFw=;
+        b=OVbbL56Q2+zDJ85KKeLZ9oXkLtSwphlyCCRyfY7FYObGCr/3IhAFj5SXL8iHBzhinX
+         zbJpqg7OSWKFiTgdkI5Npq8kvIeF4zcgHk5pUCRpBkZ59Z4i42a+VxOYv1gBcUgO12ws
+         J0LC3UmNCBndBnjm3ObZLppoDMIe0S2kvvlKs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ajpze3MQAtAYvqF9cQldA9cf7OwdmlVDcuG8wHeoRgs=;
-        b=wVTL5kjKUkUpugLBNad5rztruzyQ7jDhN/JacFucAYv68BXfHinb2C8h1PS+4Hp1C5
-         iFq3s1tOVfXRHVv+84odCCGklD9RxuZBHMpVgqiacm43AA/poSYTIDeTiDpHg9HZGKfQ
-         osXgNqbKEq6cFbplGufS5jws9O/vC1pFq3e30yfZvE49ihT7+DPkdkKrAVtSIsRWkEqQ
-         GpuFcL/G9DFwc98+5Ev2GlU7uMXbDueoS/8fSgz+Bi9WZg5imJ5mJitxE/swx44o4vjC
-         LHwFbdgFF3J71uSzc4jmkv8nkwwb8dArzLHbqn0eVb9CLZN2KDl5NWESoFj5FiqtDhhs
-         REMQ==
-X-Gm-Message-State: AFqh2kqvZb0sL7kyjNzlggdLAshUM/yPwxh5ofKz1FStS1ozjdfMeniK
-        K7moWlMCxUMvvsATrWNGCJfRPw==
-X-Google-Smtp-Source: AMrXdXtgFJtcW/CyDSscF5zX4thhHfrzGW2wYzmuzbbfzlkbA0G2ExYJ6Y5m6PB09MYvx9PJPN8JNw==
-X-Received: by 2002:a05:600c:3b02:b0:3da:1bb0:4d71 with SMTP id m2-20020a05600c3b0200b003da1bb04d71mr43595511wms.11.1674745747349;
-        Thu, 26 Jan 2023 07:09:07 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id ip6-20020a05600ca68600b003d04e4ed873sm4834628wmb.22.2023.01.26.07.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 07:09:06 -0800 (PST)
-Message-ID: <c27b5fc4-9153-0682-38d1-65b4adf14082@linaro.org>
-Date:   Thu, 26 Jan 2023 15:09:05 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LoCCSwjV5JGT5vnEAKl4rfjVlRzbba59WLoTHaIVaFw=;
+        b=EeWRvt+9fFKOG50tNwbKOH1GCJ7qY1KpMOxvGxpwb+qCUUSXFoqFxfkZ2ahK6zn66C
+         PeBIhLB6KzUE5H8MD8ozPnEz9Eko/79fR9DtGs39xtQa1jVcW3jmIM2zQ7bF7z3j4udv
+         HyfElmzYtXqhpO+eTZ4YJOq1a2hR7f9uHWxMaYWoThLPPLtt9a2q+YpyJr7J7DEnzlSp
+         qDMd+uAkc/Bx9je1/Qjf3i2fn0IzXssodCInKq6TdwqS1JbDXaJoM3cVQGEJRqOYKTle
+         rFsaTn4Ff2RiKgAqM3efyfpVP4GXmYgUmzJYlEK1E11WJ9tMP/rAaiuXce+fXepvDsDo
+         m8Rg==
+X-Gm-Message-State: AFqh2kq5iSuqwS99sGBTyYdE3eYCMuldAPTy0iTGxUQrmZ/yn7y9r81x
+        HVTahxhPIQf7yIXnnnzDZFh5MOQeU6khQNyqci7BBwQJDAjkXWWOfk4=
+X-Google-Smtp-Source: AMrXdXvHISo+gofCIljd5z4s5qlvYNm9Xiim1fBueWwkYy5eriSsSxoTCebGqM+ArnXz+SOQJDEVu9WBD3m2jWNi/nk=
+X-Received: by 2002:a63:c052:0:b0:477:27f7:794a with SMTP id
+ z18-20020a63c052000000b0047727f7794amr3640553pgi.58.1674746795603; Thu, 26
+ Jan 2023 07:26:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v2 10/22] ASoC: qdsp6: q6afe: Increase APR timeout
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-11-quic_wcheng@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230126031424.14582-11-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
+ <Y9Jwv1ColWNwH4+0@kroah.com> <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+ <Y9J8VncWSJdVURgB@kroah.com> <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
+ <236997e1-d2db-ad2d-7161-c9e3845318f6@selasky.org>
+In-Reply-To: <236997e1-d2db-ad2d-7161-c9e3845318f6@selasky.org>
+From:   Troels Liebe Bentsen <troels@connectedcars.dk>
+Date:   Thu, 26 Jan 2023 16:26:24 +0100
+Message-ID: <CAHHqYPPh43XccGvA6Dt9Ofy7PoXJsJxQvZDVima671Kq1bOn1Q@mail.gmail.com>
+Subject: Re: All USB tools hang when one descriptor read fails and needs to timeout
+To:     Hans Petter Selasky <hps@selasky.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, 26 Jan 2023 at 15:27, Hans Petter Selasky <hps@selasky.org> wrote:
+>
+> On 1/26/23 14:59, Troels Liebe Bentsen wrote:
+> > On Thu, 26 Jan 2023 at 14:12, Greg KH <gregkh@linuxfoundation.org> wrote:
+> >>>
+> >>> I would like to change /sys/bus/usb/devices/usbX/descriptors so it never blocks.
+> >>
+> >> Patches gladly reviewed to do so :)
+>
+> Be careful. Been there done that for FreeBSD. You can cache the
+> descriptor in memory - yes, but beware that the values inside the device
+> descriptor may change after re-enumerating the device via software, like
+> firmware upgrade, and that directly hits on the XHCI controller
+> programming, that you need to load and configure the new bMaxPacketSize
+> in there!
+>
+> And the same goes for the other fields in there :-)
 
+It actually looks like a lot of the other files in sysfs are cached already, fx.
+/sys/bus/usb/devices/x-x.x/manufacturer
 
-On 26/01/2023 03:14, Wesley Cheng wrote:
-> For USB offloading situations, the AFE port start command will result in a
-> QMI handshake between the Q6DSP and the main processor.  Depending on if
-> the USB bus is suspended, this routine would require more time to complete,
-> as resuming the USB bus has some overhead associated with it.  Increase the
-> timeout to 3s to allow for sufficient time for the USB QMI stream enable
-> handshake to complete.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+We tried changing the manufacturer name after our hardware was booted and using
+the Linux usb gadget driver and only libusb seemed to be able to see the change.
 
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+But that's another question, how do I get Linux to re-enumerating the
+device and update the sysfs files?
 
---srini
-> ---
->   sound/soc/qcom/qdsp6/q6afe.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/qcom/qdsp6/q6afe.c b/sound/soc/qcom/qdsp6/q6afe.c
-> index ca799fc3820e..41b4871e2ca1 100644
-> --- a/sound/soc/qcom/qdsp6/q6afe.c
-> +++ b/sound/soc/qcom/qdsp6/q6afe.c
-> @@ -365,7 +365,7 @@
->   #define AFE_API_VERSION_SLOT_MAPPING_CONFIG	1
->   #define AFE_API_VERSION_CODEC_DMA_CONFIG	1
->   
-> -#define TIMEOUT_MS 1000
-> +#define TIMEOUT_MS 3000
->   #define AFE_CMD_RESP_AVAIL	0
->   #define AFE_CMD_RESP_NONE	1
->   #define AFE_CLK_TOKEN		1024
+>
+> >
+> > We will have a look and get back to you.
+>
+> It's probably best to find the undocumented bits of your USB peripheral
+> controller first! With USB control transactions I've seen so much
+> craziness over the years you won't believe it. The only ones that get it
+> right, is the ones that lay out all USB control endpoint jobs in memory
+> via DMA descriptors. All the ones that simply use a few registers to
+> receive the SETUP packet, DATA and status ZLP, have undocumented races.
+> By races I mean, what happens if you get SETUP and DATA interrupt bits
+> at the same time, or maybe all three, what is the right order, or what
+> about STALL conditions and short control transfers and blah blah blah.
+> This thing can really blow your mind, but yeah, many device side
+> programmers simply use the example code they get from the vendor and
+> give a shit about anything that can later go wrong. That is my simple
+> impression so far in the USB world.
+>
+
+It's an i.MX6 and built in microcode that runs the USB in flash mode, but
+we are quite sure it's a power sequencing issue that hangs the CPU in
+I.MX6. So bad hardware design and not NPX this time, we have had
+plenty of other issues, but this time it does not seem to be their fault.
+Also we have some other designs with i.MX6 and don't have
+the issue there.
+
+Regards Troels
+
+> --HPS
+>
+> >
+> >>
+> >> thanks,
+> >>
+> >> greg k-h
+> >
+> > Regards Troels
+>
