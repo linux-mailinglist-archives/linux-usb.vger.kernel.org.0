@@ -2,86 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF8467D18F
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 026E167D144
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbjAZQ1R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 11:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S230317AbjAZQYJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 11:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbjAZQ0k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:26:40 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A82721DA;
-        Thu, 26 Jan 2023 08:26:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674750361; x=1706286361;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=VoCnjpuatxN+O2Dg71Cb0IcLA9Rb+BbQQjLiUoOMEUc=;
-  b=TirGAkSHr/6dDg9L85HRt6QskQ+GWBmisXkj2RfjoMMYz0Hkl1h2ZRWC
-   wVGnK249qxlP2jfe+8jS3aB+pVIdnK46qVvaNC3bCxhWzuhlvZiXAceCs
-   e3DlVk0xn+UI0scWX5HnVUKQUe8ospQ+YKq+zxk/DLF27ukWhTXya9Ejp
-   exd+B1k0NIdS1TNGUhYj3btE/h9w1ISmNyU8XOkechhdmGEYge0KfL0Pj
-   mDKTl+FG6XMIBugkzyZUP+L8Sp/l2K4YDDE0vH1A9EhUg437YGLWiSmLj
-   TixGhbLsarB57AeLDzj9Jsab2rQS5UKSgByqW8+pVKEM5ReXz+xei1uEw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354154739"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="354154739"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="612855103"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="612855103"
-Received: from nmani1-mobl2.amr.corp.intel.com (HELO [10.209.167.178]) ([10.209.167.178])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:44 -0800
-Message-ID: <ad9e375e-fe4f-b4bd-aebd-26f5f0a6317b@linux.intel.com>
-Date:   Thu, 26 Jan 2023 10:22:56 -0600
+        with ESMTP id S232678AbjAZQYH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:24:07 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C9D15211E
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 08:23:42 -0800 (PST)
+Received: (qmail 264950 invoked by uid 1000); 26 Jan 2023 11:23:42 -0500
+Date:   Thu, 26 Jan 2023 11:23:42 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Troels Liebe Bentsen <troels@connectedcars.dk>
+Cc:     Hans Petter Selasky <hps@selasky.org>,
+        Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: All USB tools hang when one descriptor read fails and needs to
+ timeout
+Message-ID: <Y9KpDvYEag++ec4t@rowland.harvard.edu>
+References: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
+ <Y9Jwv1ColWNwH4+0@kroah.com>
+ <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+ <Y9J8VncWSJdVURgB@kroah.com>
+ <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
+ <236997e1-d2db-ad2d-7161-c9e3845318f6@selasky.org>
+ <CAHHqYPPh43XccGvA6Dt9Ofy7PoXJsJxQvZDVima671Kq1bOn1Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [RFC PATCH v2 00/22] Introduce QC USB SND audio offloading
- support
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20230126031424.14582-1-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHHqYPPh43XccGvA6Dt9Ofy7PoXJsJxQvZDVima671Kq1bOn1Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This version has lots of improvements, but I am concerned
-about hard-coded ops/callbacks that look racy and assume dependencies
-between driver probes. How does this work if the probe is delayed on one
-side for some reason? What happens is a driver is 'blacklisted' and
-manually added later? The code has to deal with this sort of known unknowns.
+On Thu, Jan 26, 2023 at 04:26:24PM +0100, Troels Liebe Bentsen wrote:
+> But that's another question, how do I get Linux to re-enumerating the
+> device and update the sysfs files?
 
-I also still have a bit of heartburn with the notion that there would be
-a completely separate card with all the control for volume/mute/etc
-having to be duplicated.
+You can force a device reset using libusb or the usb-reset program 
+floating around the Internet.  After the kernel resets a device, it 
+checks to make sure the device, BOS, configuration, and serial-number 
+string descriptors have not changed.  If any of them is different from 
+what it used to be, the kernel will re-enumerate the device.
 
-It's still a lot of good work so thanks for sharing and pushing for this
-capability.
+Or, you can get the same effect by unplugging the device and then 
+plugging it back in.  But with direct-wired connections, that's not 
+possible.
 
-
+Alan Stern
