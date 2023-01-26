@@ -2,116 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C905967C82F
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 11:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D12467C894
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 11:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbjAZKPh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 05:15:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
+        id S229674AbjAZKa3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 05:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237004AbjAZKPY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 05:15:24 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2832E82F;
-        Thu, 26 Jan 2023 02:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674728116; x=1706264116;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7/eKBAv/PLaUG5rE5WAQml5SQW9ir/oGhQL6aSA4HJg=;
-  b=azwFW0s5IWtIW5O5iZ5rJNhSDjNXRszqxkyonIvrgSFq7A9fU3sPL9RX
-   cfkrPTgB5hJxxg9QljiUpDh1HKCHEMH2cpyPNTVFvcWiS3V2tK9EqwVr2
-   XkgjHMgqI04AJqcn5aZhUnEwFOCrvo1RJ4wJbS95BYs6JZ0px3/lvcYmk
-   swReIEwHG3D/yCQT3r75hO23kokRZ/LfjdgoE7Tq5jewpAIlB2RUiSIbC
-   5mpdbnlqKEfCai4c0MXWNORKjVkkRNoxeunECW3m1jO18Ko4F4/j7cigM
-   1e4IlScfyd5FyYph1OT3oqMh2CuLP/kg2N/9v7JLmqEA/QFFvZUWXGLFp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="326809693"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="326809693"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 02:15:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="695037285"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="695037285"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2023 02:15:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pKzHi-00FKsQ-13;
-        Thu, 26 Jan 2023 12:15:10 +0200
-Date:   Thu, 26 Jan 2023 12:15:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] usb: gadget: Use correct APIs and data types for
- UUID handling
-Message-ID: <Y9JSrWafclaTmLwP@smile.fi.intel.com>
-References: <20230125143425.85268-1-andriy.shevchenko@linux.intel.com>
- <CAMUOyH2Kc6hL4564sYDZdGRjiJJYmDA5WXEsF92p_xN8iZGMsg@mail.gmail.com>
- <Y9GKje/7t79cxecC@smile.fi.intel.com>
- <CAMUOyH163WY3Csbs8QOy6VssrR9TXZRi6ChnqPn=PO7z12rZOQ@mail.gmail.com>
+        with ESMTP id S236391AbjAZKa1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 05:30:27 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62034346C
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 02:30:24 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0B4402B3;
+        Thu, 26 Jan 2023 11:30:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674729023;
+        bh=E9tX4NfZojW8A+eU5f08Co410hxBquRyYEnZkPr6UJw=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=SA+XQFWC9B8TbLl+u8NUssgNqrQDhaC4WEbpaGCPE5m2s1r/VsA10wYpECp5jN3hT
+         tqCtXH2mnBydBZQp4zIHDNdHe6Hsf7Xg2nO6/umEaE3f0zdxoOL/HuKoeaar/QQvag
+         n7XIaKQ7H3kvLnz4F9LQ0kQTA+AwTvwzPsOHxiRQ=
+Message-ID: <dda24f8e-8d74-c6c1-ae7c-e423bc50a143@ideasonboard.com>
+Date:   Thu, 26 Jan 2023 10:30:20 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMUOyH163WY3Csbs8QOy6VssrR9TXZRi6ChnqPn=PO7z12rZOQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <9ce226b4-90c6-94c4-a5ad-bd623409bc51@ideasonboard.com>
+ <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: Explicit status phase for DWC3
+In-Reply-To: <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:54:58PM +0100, Jó Ágila Bitsch wrote:
-> On Wed, Jan 25, 2023 at 9:01 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Wed, Jan 25, 2023 at 06:31:36PM +0100, Jó Ágila Bitsch wrote:
-> > > On Wed, Jan 25, 2023 at 3:34 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
+Hi Thinh
 
-...
-
-> > > I compiled and tested your patch in my test setup and it works perfectly.
-> >
-> > Thanks for the testing. According to Submitting Patches documentation
-> > you can provide a formal Tested-by tag.
-> 
-> Thanks for pointing this out to me.
-> 
-> I'm not really sure how to do that though.
-> On https://docs.kernel.org/process/submitting-patches.html#reviewer-s-statement-of-oversight,
-> it says:
-> > Both Tested-by and Reviewed-by tags, once received on mailing list from tester or reviewer, should be added by author to the applicable patches when sending next versions.
-> 
-> So I guess you could do that at your convenience on any next version.
-
-In mine I can only do if you give me that tag. Till this
-line the tag is not given, but...
-
-> Or is it already ok, if I just add the following line in my comment?
-
-...this is what is expected to have.
-
-> Tested-By: Jó Ágila Bitsch <jgilab@gmail.com>
-
-And now _if_ I need a new version I will bear this with it. Otherwise
-maintainer, who picks up the patch, takes care of gathering these all
-together.
-
-> I'm still quite a newbie in the kernel development community, so
-> thanks for bearing with my ignorance :-)
-
-So far you are doing good, thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
+On 26/01/2023 00:20, Thinh Nguyen wrote:
+> On Tue, Jan 24, 2023, Dan Scally wrote:
+>> Hi Thinh
+>>
+>>
+>> I'm trying to update the DWC3 driver to allow the status phase of a
+>> transaction to be explicit; meaning the gadget driver has the choice to
+>> either Ack or Stall _after_ the data phase so that the contents of the data
+>> phase can be validated. I thought that I should be able to achieve this by
+>> preventing dwc3_ep0_xfernotready() from calling dwc3_ep0_do_control_status()
+>> (relying on an "explicit_status" flag added to the usb_request to decide
+>> whether or not to do so) and then calling it manually later once the data
+>> phase was validated by the gadget driver (or indeed userspace). A very
+>> barebones version of my attempt to do that looks like this:
+>>
+> We shouldn't do this. At the protocol level, there must be better ways
+> to do handshake than relying on protocol STALL _after_ the data stage.
+> Note that not all controllers support this.
 
 
+Maybe I'm misunderstanding, but isn't this how the USB spec expects it 
+to work? Reading "Reporting Status Results (8.5.3.1)" in the USB 2.0 
+spec for the status stage in a control write it says "The function 
+responds with either a handshake or a zero-length data packet to 
+indicate its current status", and the handshake can be either STALL or 
+NAK. If we can't do this, how else can we indicate to the host that the 
+data sent during a control out transfer is in some way invalid?
+
+
+Thanks
+
+Dan
+
+>
+> Thanks,
+> Thinh
