@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698BE67D156
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F65D67D15F
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbjAZQZc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 11:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S232756AbjAZQ0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 11:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAZQZ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:25:27 -0500
+        with ESMTP id S232723AbjAZQZy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:25:54 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB376FD32;
-        Thu, 26 Jan 2023 08:24:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2273A485B2;
+        Thu, 26 Jan 2023 08:25:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674750278; x=1706286278;
+  t=1674750310; x=1706286310;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=/S4O1xQUstj71vMufDuTxZtrxS0kRcuRW6nd5unpPcQ=;
-  b=AmCfdeQeocHVhfSsg93d/Rm7qN6dqYBjSY1UHu4r3SxVrp5W+W/b9XQF
-   Wqp/IWhAviJ3Yf+/6vMZA6oocqf4/m+/DVZnEymQrFT8VkzD6JbEsB5eN
-   1Kodt9rAz7BDDSI9WOofp6O9sUAw3gL+2vDiFdU3wTvFh6BgB3nFrnBA3
-   5iuF0uIuMkTGxsfOfUeqAcG2hHDZrXmRKl4oJRj2llQVfp/z5B8et64Xw
-   bur4pgMLaqb8y5qXE3CVFF2q0K7FugF5bCpm+STOG4Rj+NKE6YZNwCS1b
-   MNQZXGEuqKaztvJkvQszTHYJ/HdvfS5RbIkrB7LXbbjcM2hZtkC1oFb5T
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354154594"
+  bh=7tKbBPC9aDVVfGKolDI9/dBbPmFzcQG7teudBkR6D2c=;
+  b=ZP0wB5j1ha2Ec0vTdj9teVwj3qnxnZZ/DLfGraTt9gSUqiGphcigBZcB
+   ysmAH7PiM0gPflfzVnti+4ccpvB8QGro4tJIH/dimG+yHZ59qPHXyM5VT
+   SYiVzb0n6XUgsMuNwRezzpzB51hshFyYbnrTqh16fc+l5ma9CjwbvLzVi
+   P4cuCrXJwmnYTqXvE1O2JModJZieY2SvQKVhYe5c5J9zqB9I3RPsaMMot
+   PORGywFOfec6R79MFcjNB9kjFSEUevmVNmwohVeRouuLRNtRN5dSb3OTw
+   WWH9oxnTOzIJIZ+feTyDo0IL35RALkHRPRNRND2crBmD1GSdek8YNtpEf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354154632"
 X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="354154594"
+   d="scan'208";a="354154632"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:33 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="612855051"
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="612855059"
 X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="612855051"
+   d="scan'208";a="612855059"
 Received: from nmani1-mobl2.amr.corp.intel.com (HELO [10.209.167.178]) ([10.209.167.178])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:31 -0800
-Message-ID: <dea77277-6971-fe27-1ae0-ed551e84b6e4@linux.intel.com>
-Date:   Thu, 26 Jan 2023 09:38:57 -0600
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:34 -0800
+Message-ID: <7f471960-0909-4680-e192-261d1fdfe6d7@linux.intel.com>
+Date:   Thu, 26 Jan 2023 09:44:23 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v2 09/22] ASoC: qcom: qdsp6: Introduce USB AFE port to
- q6dsp
+Subject: Re: [RFC PATCH v2 11/22] ASoC: qcom: Add USB backend ASoC driver for
+ Q6
 Content-Language: en-US
 To:     Wesley Cheng <quic_wcheng@quicinc.com>,
         srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
@@ -57,9 +57,9 @@ Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
         quic_plai@quicinc.com
 References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-10-quic_wcheng@quicinc.com>
+ <20230126031424.14582-12-quic_wcheng@quicinc.com>
 From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230126031424.14582-10-quic_wcheng@quicinc.com>
+In-Reply-To: <20230126031424.14582-12-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,37 +75,39 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 On 1/25/23 21:14, Wesley Cheng wrote:
-> The QC ADSP is able to support USB playback endpoints, so that the main
-> application processor can be placed into lower CPU power modes.  This adds
-> the required AFE port configurations and port start command to start an
-> audio session.
-> 
-> Specifically, the QC ADSP can support all potential endpoints that are
-> exposed by the audio data interface.  This includes, feedback endpoints
-> (both implicit and explicit) as well as the isochronous (data) endpoints.
-> The size of audio samples sent per USB frame (microframe) will be adjusted
-> based on information received on the feedback endpoint.
+> Create a USB BE component that will register a new USB port to the ASoC USB
+> framework.  This will handle determination on if the requested audio
+> profile is supported by the USB device currently selected.
 
-I think you meant "support all potential endpoint types"
-
-It's likely that some USB devices have more endpoints than what the DSP
-can handle, no?
-
-And that brings me back to the question: what is a port and the
-relationship between port/backend/endpoints?
-
-Sorry for being picky on terminology, but if I learned something in days
-in standardization it's that there shouldn't be any ambiguity on
-concepts, otherwise everyone is lost at some point.
+Can you clarify how? because ...
 
 
->  static struct afe_port_map port_maps[AFE_PORT_MAX] = {
-> +	[USB_RX] = { AFE_PORT_ID_USB_RX, USB_RX, 1, 1},
->  	[HDMI_RX] = { AFE_PORT_ID_MULTICHAN_HDMI_RX, HDMI_RX, 1, 1},
->  	[SLIMBUS_0_RX] = { AFE_PORT_ID_SLIMBUS_MULTI_CHAN_0_RX,
->  				SLIMBUS_0_RX, 1, 1},
+> +static struct snd_soc_dai_driver q6usb_be_dais[] = {
+> +	{
+> +		.playback = {
+> +			.stream_name = "USB BE RX",
+> +			.rates = SNDRV_PCM_RATE_8000 | SNDRV_PCM_RATE_11025 |
+> +				SNDRV_PCM_RATE_16000 | SNDRV_PCM_RATE_22050 |
+> +				SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_44100 |
+> +				SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_96000 |
+> +				SNDRV_PCM_RATE_192000,
+> +			.formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S16_BE |
+> +				SNDRV_PCM_FMTBIT_U16_LE | SNDRV_PCM_FMTBIT_U16_BE |
+> +				SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S24_BE |
+> +				SNDRV_PCM_FMTBIT_U24_LE | SNDRV_PCM_FMTBIT_U24_BE,
+> +			.channels_min = 1,
+> +			.channels_max = 2,
+> +			.rate_max =     192000,
+> +			.rate_min =	8000,
+> +		},
+> +		.id = USB_RX,
+> +		.name = "USB_RX_BE",
+> +		.ops = &q6usb_ops,
+> +	},
+> +};
 
-And if I look here a port seems to be a very specific AFE concept
-related to interface type? Do we even need to refer to a port in the USB
-parts?
+... here I see a single DAI, so presumably ONE endpoint can be supported?
+
+I didn't see in the rest of the code how a card with multiple endpoint
+would be rejected, nor how the capabilities are checked?
 
