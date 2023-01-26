@@ -2,169 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A59D67D177
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D6967D1BE
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjAZQ0j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 11:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
+        id S231596AbjAZQf6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 11:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjAZQ0G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:26:06 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043E1EC73
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 08:25:33 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4ff07dae50dso30294897b3.2
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 08:25:32 -0800 (PST)
+        with ESMTP id S231521AbjAZQfz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:35:55 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA96485B2
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 08:35:53 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id y11so2381484edd.6
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 08:35:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rUFKXit/Slxp5jNkRtm2qJfbudUdkwg/5ym9L9/2xFg=;
-        b=BrNExWGHbV1NeR+vu2Js5zAqwDKTAmFhHgoWjYZ0a3qbH7rru8W3QViuclznskZkVo
-         6Q5eqrGX7jMOOdvE9K9lsVmJpHX9roidNQoqd4ah6qpZ3z5AR/LzfumpWsF7qxr+L/L7
-         2EeJAw9MATGkA5VBf2UwOc7KCg21F0CUspP8pGqPmL78PHbmYrJgHGcDXuiJf+tpyEq5
-         mYd3qiJmdB/mmqbT25mkgF6e/9yHOLIF4ZmJU2qiUjSg09+a1L9BOQF70sP/z/t1hEtG
-         N3QguNCw23qX8RL/9XVLJb/vAzwIwx19tcG6Myly1SJ+d6fdbBsCbrW+Wp9iSE9SLjFe
-         r7Zw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=afez1nsKlZmE+ENEERE7Oo/V5VhLLIWK6OgZUW8xIho=;
+        b=cvhnX0fWR5gLtPdV8uzCMk0K87aF0P1NkjL7UbHZZwQwDjKaLGLKdJuiGcE9pO3Ne6
+         jYpCr4xptwHNwgB4Yw3ba8yohEdlfpwPyGGZy4LX4u5vay/33iWUpx4O3LrATSGkQw/b
+         jhXV/KJ8SKTr0pM8z4X1BiZb2FM0fMKE2r3fe8WbyjmdBHvpRwE6BS39v0n8izjR0vfW
+         1LmFvibAgrN2OD1nE7VoUj6oImoD7PgLaDYWIfo8AwPcR2lgcIdeSHFBgwk8JcU7crQh
+         cObk+cmzFvq+LxN1f7JfrRfdvhktdkNgH8dYTnxNRo97I5IT17Y1cbjQjHpb0MGWmG41
+         dcHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rUFKXit/Slxp5jNkRtm2qJfbudUdkwg/5ym9L9/2xFg=;
-        b=kxtcVwTzQQXBy96er/o7rHBVZXbJ5lLjc+L059ARpHZSkQndwcDWohEFh8i/aziuyp
-         BkXKQlY0kppbk+LeZamdu4WKFqW2loVJQ545U9fqlYrDjx9XI7bD6Dio26a3unH2bEYr
-         6CbkN436c8Ov7Pua2mqXQW9Kk+Dxv6Sw5zV8ujGpVfOU7htU9k4PU+U3ljoQPYjrogUS
-         AUkR8NPYHxC2UilxrFqiAQPTBJp8Jy/lqKtCFQ/1r+3pAhPtanH/Gflisihrw+TQAYuJ
-         AGWsTx7AlVKBY2diK79JTwVK0WbL1IoMwt7AraMPsUTZW/kVQvSFArUR/GPecdbc07b+
-         0xBw==
-X-Gm-Message-State: AFqh2kr/jFQYKr+aaYSZVD/DNVIPL9grJ6z4NjFzDUwDgYoMhp8NftWG
-        a5LX0lApeQQJIBoJem1OanHMDdO8hmF0soy2tkyTsg==
-X-Google-Smtp-Source: AMrXdXvRVLeaIi85wIrJBS5zRkOyr5/BQ66PCe0y1aLe9hmWIu7jqHBlhyy2SYPoXbE9x4WotKo1j1aRHLVU6Hd1LsI=
-X-Received: by 2002:a81:1b8b:0:b0:4ff:774b:7ffb with SMTP id
- b133-20020a811b8b000000b004ff774b7ffbmr3541685ywb.218.1674750315051; Thu, 26
- Jan 2023 08:25:15 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=afez1nsKlZmE+ENEERE7Oo/V5VhLLIWK6OgZUW8xIho=;
+        b=DqgmfErE6OGmN8HroqPUFBQH26Y4CUU8R1QjHDpL7xzw4HKyj0eRKvxNNLT4qWbaOK
+         UkCNhv+DwD7Y3eAv16dgHaG/2wpsw33yts2MMGah+WNX0G41C3SUIr3AVuKVOk6C6l16
+         ZEWWNAmteBvmSEcYjeC2u0ywRqq1rPc4dPtk2eSj+xtelVaxr4wvBIphvvbbOSiSYLuL
+         1mKCU1s7MEpnt0Y1UL+HYfVoDuWSTu7ooPPXsdRRTBOVkG9gc22xAJSc3biQFldnaW9f
+         9jcMweXvkSPiTzMqpl8DqYdiBa289N+c9WT3T4ODY1j2w/5tV+A7Rp83BUuUHPomyL4w
+         8VbQ==
+X-Gm-Message-State: AFqh2koF1gPF4Ce/6iA8IdLId0IpOblYQVJxn3GlLMeirHCYQNeq62k4
+        OAlYPXObpxEABxhe4El2ca2KuA==
+X-Google-Smtp-Source: AMrXdXu/trqwU0wO6hcbTWNdvL7JmToL9lOSDZ0+tnzXlz5ZWkKoQjyYDauMEG0SU0okMmsikNA/Jw==
+X-Received: by 2002:aa7:de95:0:b0:49d:be2b:b9b1 with SMTP id j21-20020aa7de95000000b0049dbe2bb9b1mr37564501edv.36.1674750952116;
+        Thu, 26 Jan 2023 08:35:52 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id w25-20020aa7d299000000b0048789661fa2sm952239edq.66.2023.01.26.08.35.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 08:35:51 -0800 (PST)
+Message-ID: <e1291152-2c74-514c-00a5-526564d7d827@linaro.org>
+Date:   Thu, 26 Jan 2023 16:35:50 +0000
 MIME-Version: 1.0
-References: <20230125083851.27759-1-surenb@google.com> <20230125083851.27759-2-surenb@google.com>
- <Y9JFFYjfJf9uDijE@kernel.org> <Y9KTUw/04FmBVplw@kernel.org> <Y9KXjLaFFUvqqdd4@casper.infradead.org>
-In-Reply-To: <Y9KXjLaFFUvqqdd4@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 26 Jan 2023 08:25:03 -0800
-Message-ID: <CAJuCfpHs4wvQpitiAYc+PQX3LnitF=wvm=zVX7CzMozzmnbcnw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] mm: introduce vma->vm_flags modifier functions
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        qianweili@huawei.com, wangzhou1@hisilicon.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        airlied@gmail.com, daniel@ffwll.ch,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, l.stach@pengutronix.de,
-        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
-        matthias.bgg@gmail.com, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
-        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
-        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
-        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
-        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, miklos@szeredi.hu,
-        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
-        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
-        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
-        loongarch@lists.linux.dev, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
-        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        devel@lists.orangefs.org, kexec@lists.infradead.org,
-        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
-        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v2 11/22] ASoC: qcom: Add USB backend ASoC driver for
+ Q6
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-12-quic_wcheng@quicinc.com>
+Content-Language: en-US
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230126031424.14582-12-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 7:09 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Thu, Jan 26, 2023 at 04:50:59PM +0200, Mike Rapoport wrote:
-> > On Thu, Jan 26, 2023 at 11:17:09AM +0200, Mike Rapoport wrote:
-> > > On Wed, Jan 25, 2023 at 12:38:46AM -0800, Suren Baghdasaryan wrote:
-> > > > +/* Use when VMA is not part of the VMA tree and needs no locking */
-> > > > +static inline void init_vm_flags(struct vm_area_struct *vma,
-> > > > +                          unsigned long flags)
-> > >
-> > > I'd suggest to make it vm_flags_init() etc.
-> >
-> > Thinking more about it, it will be even clearer to name these vma_flags_xyz()
->
-> Perhaps vma_VERB_flags()?
->
-> vma_init_flags()
-> vma_reset_flags()
-> vma_set_flags()
-> vma_clear_flags()
-> vma_mod_flags()
 
-Due to excessive email bouncing I posted the v3 of this patchset using
-the original per-VMA patchset's distribution list. That might have
-dropped Mike from the list. Sorry about that Mike, I'll add you to my
-usual list of suspects :)
-The v3 is here:
-https://lore.kernel.org/all/20230125233554.153109-1-surenb@google.com/
-and Andrew did suggest the same renames, so I'll be posting v4 with
-those changes later today.
-Thanks for the feedback!
 
->
+On 26/01/2023 03:14, Wesley Cheng wrote:
+> +}
+> +
+> +static int q6usb_dai_dev_probe(struct platform_device *pdev)
+> +{
+...
+> +	data->priv.domain = iommu_domain_alloc(pdev->dev.bus);
+> +	if (!data->priv.domain) {
+> +		dev_err(&pdev->dev, "failed to allocate iommu domain\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	/* attach to external processor iommu */
+> +	ret = iommu_attach_device(data->priv.domain, &pdev->dev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "failed to attach device ret = %d\n", ret);
+> +		goto free_domain;
+> +	}
+> +
+Why are we doing this manually here? device core should take care of 
+attaching iommu to the device instance.
+
+...
+
+
+> +detach_device:
+> +	iommu_detach_device(data->priv.domain, &pdev->dev);
+> +free_domain:
+> +	iommu_domain_free(data->priv.domain);
+> +
+> +	return ret;
+> +}
+> +
+> +static int q6usb_dai_dev_remove(struct platform_device *pdev)
+> +{
+> +	struct q6usb_port_data *data = platform_get_drvdata(pdev);
+> +
+> +	iommu_detach_device(data->priv.domain, &pdev->dev);
+> +	iommu_domain_free(data->priv.domain);
+> +
