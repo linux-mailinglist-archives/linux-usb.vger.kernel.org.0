@@ -2,215 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3713D67D18B
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2D367D122
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jan 2023 17:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbjAZQ1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Jan 2023 11:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S230461AbjAZQRu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Jan 2023 11:17:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjAZQ0N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:26:13 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC86721CB;
-        Thu, 26 Jan 2023 08:25:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674750353; x=1706286353;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tkQrGs3FSg5dTmlRU0hcgvbam/IWtDu8mWuckiRq01s=;
-  b=GPk182CpQsM/0tECI8Y1sf1yn/QuX6El8GxErrRSHumLZMHvqyGR4N0v
-   0lfems8LGQ9aZg7NjX9BWg7q/uIaobCIt38JWDzlTy4bKgXyYfW305m7Q
-   gr+0k8goffv0V3EY2UpM1QGUUXk+MOdijBU+2ahxgjiYJY/IciM6tMYkK
-   3kfP3R7mY2d9LzZF4He+VHbm85i1GZVh67fa4KsZRBEI6TKBacpoRRRpC
-   Wxh9oYadsj0LvgY1TZDvPT+bl2Q0blsk/wCf6+fYU0raPtuuuvZgA0e6T
-   WwTXb6lNtXn3+inAIhgpoeT6mz77dflG/PF/iprMcJ8ejaf8rrshnWVTE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354154717"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="354154717"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="612855093"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="612855093"
-Received: from nmani1-mobl2.amr.corp.intel.com (HELO [10.209.167.178]) ([10.209.167.178])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:41 -0800
-Message-ID: <557f8f76-38f5-5e07-905e-774e03120bd2@linux.intel.com>
-Date:   Thu, 26 Jan 2023 10:12:36 -0600
+        with ESMTP id S232098AbjAZQRt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Jan 2023 11:17:49 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D13A5596
+        for <linux-usb@vger.kernel.org>; Thu, 26 Jan 2023 08:17:33 -0800 (PST)
+Received: (qmail 264659 invoked by uid 1000); 26 Jan 2023 11:17:32 -0500
+Date:   Thu, 26 Jan 2023 11:17:32 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Troels Liebe Bentsen <troels@connectedcars.dk>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: All USB tools hang when one descriptor read fails and needs to
+ timeout
+Message-ID: <Y9KnnH+5O6MtO6kz@rowland.harvard.edu>
+References: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
+ <Y9Jwv1ColWNwH4+0@kroah.com>
+ <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+ <Y9J8VncWSJdVURgB@kroah.com>
+ <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v2 20/22] sound: usb: Prevent starting of audio stream
- if in use
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-21-quic_wcheng@quicinc.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230126031424.14582-21-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 1/25/23 21:14, Wesley Cheng wrote:
-> With USB audio offloading, an audio session is started from the ASoC
-> platform sound card and PCM devices.  Likewise, the USB SND path is still
-> readily available for use, in case the non-offload path is desired.  In
-> order to prevent the two entities from attempting to use the USB bus,
-> introduce a flag that determines when either paths are in use.
+On Thu, Jan 26, 2023 at 02:59:35PM +0100, Troels Liebe Bentsen wrote:
+> On Thu, 26 Jan 2023 at 14:12, Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Jan 26, 2023 at 02:06:39PM +0100, Troels Liebe Bentsen wrote:
+> > > Hi Greg,
+> > >
+> > > On Thu, 26 Jan 2023 at 13:23, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Thu, Jan 26, 2023 at 12:49:32PM +0100, Troels Liebe Bentsen wrote:
+> > > > > Hi,
+> > > > >
+> > > > > We have a hardware projekt where something is off with power ON
+> > > > > timing. It sometimes gets started in a broken state where the device
+> > > > > is seen by the USB system but does not respond to descriptor reads.
+> > > >
+> > > > Ah, a broken USB device, not much the kernel can do about that :(
+> > >
+> > > Would be nice if it could, but I settle for papering over the worst parts  :)
+> > >
+> > > >
+> > > > > When this happens this causes lsusb and libusb based tools to hang
+> > > > > until the descriptor read in the USB subsystem timeout out after 30
+> > > > > seconds or so. It looks like the tools are trying to read
+> > > > > /sys/bus/usb/devices/.../descriptors and it blocks until the timeout
+> > > > > happens.
+> > > > >
+> > > > > We should fix our hardware and have done so in the next revision but
+> > > > > why should one device be able to block the descriptors file that most
+> > > > > user land USB code seem to use.
+> > > >
+> > > > If the device does not respond, what is the kernel or userspace supposed
+> > > > to do?
+> > >
+> > > Might not have been clear that the issue is when I "plug in"/connect the
+> > > device that it happens. I think the kernel is doing the right thing here and
+> > > just timing out the device and at least in the kernel it does not seem to block
+> > > other devices from doing their thing. The problem is that part of the userspace
+> > > interface used for listing all devices on a hub block until the timeout
+> > > happens.
+> >
+> > What userspace code exactly is doing this?  Perhaps just work on making
+> > that tool handle timeouts better?
 > 
-> If a PCM device is already in use, the check will return an error to
-> userspace notifying that the stream is currently busy.  This ensures that
-> only one path is using the USB substream.
-
-It's good to maintain mutual exclusion, but it's still very hard for an
-application to figure out which card can be used when.
-
-Returning -EBUSY is not super helpful. There should be something like a
-notification or connection status so that routing decisions can be made
-without trial-and-error.
-
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  sound/usb/card.h                  |  1 +
->  sound/usb/pcm.c                   | 19 +++++++++++++++++--
->  sound/usb/qcom/qc_audio_offload.c | 15 ++++++++++++++-
->  3 files changed, 32 insertions(+), 3 deletions(-)
+> We are using libusb to drive an automated flashing setup to test our hardware
+> but libusb_get_device_list blocks as it reads
+> /sys/bus/usb/devices/usbX/descriptors
+> for the hub the broken hardware is attached to. The hang happens when we
+> put the device into flash mode(by setting some flashing pins) where the MCU
+> has some low level USB function where we can load u-boot over a
+> proprietary protocol but for some reason does not enter fully into this state.
 > 
-> diff --git a/sound/usb/card.h b/sound/usb/card.h
-> index 410a4ffad98e..ff6d4695e727 100644
-> --- a/sound/usb/card.h
-> +++ b/sound/usb/card.h
-> @@ -163,6 +163,7 @@ struct snd_usb_substream {
->  	unsigned int pkt_offset_adj;	/* Bytes to drop from beginning of packets (for non-compliant devices) */
->  	unsigned int stream_offset_adj;	/* Bytes to drop from beginning of stream (for non-compliant devices) */
->  
-> +	unsigned int opened:1;		/* pcm device opened */
->  	unsigned int running: 1;	/* running status */
->  	unsigned int period_elapsed_pending;	/* delay period handling */
->  
-> diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
-> index 0b01a5dfcb73..8946f8ddb892 100644
-> --- a/sound/usb/pcm.c
-> +++ b/sound/usb/pcm.c
-> @@ -1114,8 +1114,15 @@ static int snd_usb_pcm_open(struct snd_pcm_substream *substream)
->  	struct snd_usb_stream *as = snd_pcm_substream_chip(substream);
->  	struct snd_pcm_runtime *runtime = substream->runtime;
->  	struct snd_usb_substream *subs = &as->substream[direction];
-> +	struct snd_usb_audio *chip = subs->stream->chip;
->  	int ret;
->  
-> +	mutex_lock(&chip->mutex);
-> +	if (subs->opened) {
-> +		mutex_unlock(&chip->mutex);
-> +		return -EBUSY;
-> +	}
-> +
->  	runtime->hw = snd_usb_hardware;
->  	/* need an explicit sync to catch applptr update in low-latency mode */
->  	if (direction == SNDRV_PCM_STREAM_PLAYBACK &&
-> @@ -1132,13 +1139,17 @@ static int snd_usb_pcm_open(struct snd_pcm_substream *substream)
->  
->  	ret = setup_hw_info(runtime, subs);
->  	if (ret < 0)
-> -		return ret;
-> +		goto out;
->  	ret = snd_usb_autoresume(subs->stream->chip);
->  	if (ret < 0)
-> -		return ret;
-> +		goto out;
->  	ret = snd_media_stream_init(subs, as->pcm, direction);
->  	if (ret < 0)
->  		snd_usb_autosuspend(subs->stream->chip);
-> +	subs->opened = 1;
-> +out:
-> +	mutex_unlock(&chip->mutex);
-> +
->  	return ret;
->  }
->  
-> @@ -1147,6 +1158,7 @@ static int snd_usb_pcm_close(struct snd_pcm_substream *substream)
->  	int direction = substream->stream;
->  	struct snd_usb_stream *as = snd_pcm_substream_chip(substream);
->  	struct snd_usb_substream *subs = &as->substream[direction];
-> +	struct snd_usb_audio *chip = subs->stream->chip;
->  	int ret;
->  
->  	snd_media_stop_pipeline(subs);
-> @@ -1160,6 +1172,9 @@ static int snd_usb_pcm_close(struct snd_pcm_substream *substream)
->  
->  	subs->pcm_substream = NULL;
->  	snd_usb_autosuspend(subs->stream->chip);
-> +	mutex_lock(&chip->mutex);
-> +	subs->opened = 0;
-> +	mutex_unlock(&chip->mutex);
->  
->  	return 0;
->  }
-> diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-> index c1254d5f680d..9bd09282e70d 100644
-> --- a/sound/usb/qcom/qc_audio_offload.c
-> +++ b/sound/usb/qcom/qc_audio_offload.c
-> @@ -1365,12 +1365,17 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  		goto response;
->  	}
->  
-> +	mutex_lock(&chip->mutex);
->  	if (req_msg->enable) {
-> -		if (info_idx < 0 || chip->system_suspend) {
-> +		if (info_idx < 0 || chip->system_suspend || subs->opened) {
->  			ret = -EBUSY;
-> +			mutex_unlock(&chip->mutex);
-> +
->  			goto response;
->  		}
-> +		subs->opened = 1;
->  	}
-> +	mutex_unlock(&chip->mutex);
->  
->  	if (req_msg->service_interval_valid) {
->  		ret = get_data_interval_from_si(subs,
-> @@ -1392,6 +1397,11 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  		if (!ret)
->  			ret = prepare_qmi_response(subs, req_msg, &resp,
->  					info_idx);
-> +		if (ret < 0) {
-> +			mutex_lock(&chip->mutex);
-> +			subs->opened = 0;
-> +			mutex_unlock(&chip->mutex);
-> +		}
->  	} else {
->  		info = &uadev[pcm_card_num].info[info_idx];
->  		if (info->data_ep_pipe) {
-> @@ -1413,6 +1423,9 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  		}
->  
->  		disable_audio_stream(subs);
-> +		mutex_lock(&chip->mutex);
-> +		subs->opened = 0;
-> +		mutex_unlock(&chip->mutex);
->  	}
->  
->  response:
+> So we have workaround code to see if the hardware has blocked the descriptors
+> file of the hub and then power cycle the device until it starts
+> behaving and set a
+> global mutex that everything else attached to that hub has to wait as we can't
+> scan the hub.
+> 
+> But the problem is general so if we try to run lsusb or tools using
+> libusb they will
+> block until the kernel times out the device.
+> 
+> >
+> > > One nice options would be if the timeout was configurable based on
+> > > port/devpath, I can understand 30-60 seconds timeout for a spindel USB
+> > > disk, but for other devices 5 seconds would be more than enough to
+> > > conclude they are dead, but that's nice to have.
+> >
+> > The timeouts the kernel has now have had to be increased over time due
+> > to bad devices.  And we don't know what type of device this is until we
+> > read from it, so you can't pick the timeout based on the type of device
+> > if you can't read the type of device :)
+> >
+> 
+> It might be a special use case, for our automated hardware testing station
+> we know what goes into what port/hub so it would be nice to have an option
+> to lower the timeout in general or per hub or per port.
+
+There already is such an option.  It's named "early_stop" and it's 
+described in Documentation/ABI/testing/sysfs-bus-usb.  You may not be 
+aware of it because it was added after the 6.1 version of the kernel was 
+released.
+
+> > > > > Would there be any reasoning against just serving the descriptors file
+> > > > > as it looked before inserting the broken USB device instead of
+> > > > > blocking the read?
+> > > >
+> > > > So a different device's descriptor file is being blocked by a broken
+> > > > device?  Are you sure?  They should all be independent.
+> > >
+> > > Not the descriptor file, but the descriptor*s* under the hub folder in sysfs:
+> > >
+> > > >From https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-bus-usb :
+> > >
+> > > What: /sys/bus/usb/devices/usbX/descriptors
+> > > Description:
+> > > Contains the interface descriptors, in binary.
+> > >
+> > > As I understand it, this is a file that contains all the information for devices
+> > > under a hub.
+> >
+> > No, just the single device's descriptor.
+> 
+> Ahh, sorry I misunderstood but then it makes even less sense that the hub's
+> descriptors file blocks when the device hangs or am I missing something.
+
+Reading the file blocks because it has to be mutually exclusive with 
+other parts of the kernel which can reallocate the buffers storing the 
+descriptors.  This mutual exclusion is provided by a per-device lock, 
+and for hubs this device lock is held while a child device is being 
+probed.
+
+> The other files in /sys/bus/usb/devices/3-3/ such as idProduct, idVendor, etc.
+> do not block.
+
+Because they rely on values stored in the kernel's copy of the device 
+descriptor, which does not get reallocated during the lifetime of the 
+device.
+
+> This is what I get when the hardware is in broken state:
+> 
+> strace lsusb
+> ...
+> openat(AT_FDCWD, "/sys/bus/usb/devices/3-3/descriptors", O_RDONLY|O_CLOEXEC) = 8
+> read(8,
+> ...
+> 
+> dmesg -wH
+> [  +2.528009] usb 3-3.6: new high-speed USB device number 20 using xhci_hcd
+> [  +5.300072] usb 3-3.6: device descriptor read/64, error -110
+> [ +15.615955] usb 3-3.6: device descriptor read/64, error -110
+> [  +0.187975] usb 3-3.6: new high-speed USB device number 21 using xhci_hcd
+> [  +5.188069] usb 3-3.6: device descriptor read/64, error -110
+> [ +15.615973] usb 3-3.6: device descriptor read/64, error -110
+> [  +0.112158] usb 3-3-port6: attempt power cycle
+> [  +0.603789] usb 3-3.6: new high-speed USB device number 22 using xhci_hcd
+> [Jan26 13:33] xhci_hcd 0000:00:14.0: Timeout while waiting for setup
+> device command
+> [  +5.375996] xhci_hcd 0000:00:14.0: Timeout while waiting for setup
+> device command
+> [  +0.207876] usb 3-3.6: device not accepting address 22, error -62
+> [  +0.080030] usb 3-3.6: new high-speed USB device number 23 using xhci_hcd
+> [  +5.088086] xhci_hcd 0000:00:14.0: Timeout while waiting for setup
+> device command
+> [  +5.376001] xhci_hcd 0000:00:14.0: Timeout while waiting for setup
+> device command
+> [  +0.207889] usb 3-3.6: device not accepting address 23, error -62
+> [  +0.002418] usb 3-3-port6: unable to enumerate USB device
+> 
+> I tried the other devices attached to the hub and their descriptors do
+> not block on
+> read, only the hubs.
+
+Because the other children are not locked while the new device is being 
+probed.  Only the parent hub and the new device itself are locked.
+
+Alan Stern
+
+> > > Most likely an optimization made for lsusb and libusb so they
+> > > don't have to traverse all the individual folders to get the same information.
+> >
+> > Nope, libusb walks the whole bus if you ask it to.
+> >
+> > > The problem is that /sys/bus/usb/devices/usbX/descriptors block while the
+> > > kernel is trying to do the descriptor read on that one broken device even if
+> > > all the other devices on the hub is well behaving the read is blocked until
+> > > it times out.
+> >
+> > So if you read one descriptor, it will time out for others if you do so
+> > at the same time?  Do they all share a single kernel lock perhaps?
+> >
+> > > If lsusb and libusb had traversed the folder structure they would not have
+> > > blocked as the broken devices never showed in the folder structure:
+> > >
+> > > fx.
+> > >
+> > > tlb@tlb-nuc:/sys/bus/usb/devices/usb3$ ls -1
+> > > 3-0:1.0 # Device shows up when USB initialization is done
+> > > 3-10 # Device shows up when USB initialization is done
+> > > 3-3 # Device shows up when USB initialization is done
+> > > ...
+> > > descriptors # Blocks on read until kernel times out waiting for descriptor read.
+> > > ...
+> > >
+> > > > > And if we wanted to create a pull request for a change like that would
+> > > > > it be accepted or would it be considered breaking the API?
+> > > >
+> > > > It depends on what the kernel change looks like.  Have you tried
+> > > > anything that worked for you that you wish to propose?
+> > > >
+> > >
+> > > I would like to change /sys/bus/usb/devices/usbX/descriptors so it never blocks.
+> >
+> > Patches gladly reviewed to do so :)
+> 
+> We will have a look and get back to you.
+> 
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> Regards Troels
