@@ -2,130 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D55D67EAC0
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 17:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E74D067EC7B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 18:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234196AbjA0QW0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Jan 2023 11:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
+        id S235214AbjA0Rbd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Jan 2023 12:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjA0QWZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 11:22:25 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD2B44B;
-        Fri, 27 Jan 2023 08:22:24 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ss4so15057641ejb.11;
-        Fri, 27 Jan 2023 08:22:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y4OTyOhq5ph49i2Sy9LKLfnqL2EM/Rj+cmCGMdBMlfw=;
-        b=gDkOvsj4AhTDhnfA/Kn+Keq9CFS5AmQp8SUXAJ8gb48RU0fjRQwfo+R08Yjx5rfp1u
-         A0+zAslnSpWmUaMoOsonoenmeLthUY3aJ85PiRMUJ3JikBfOfHSsg9h2OLphc5w5uW1G
-         smtHqMYI10XofhnqWSpYG4io9JpXpHwf/tJIGIp91dC2N7Roby/nC/lGjc/Uf1EzOZnv
-         2kBwYZjEoVF60meKfDKkqC3UofRq8moWDuKJODsTVVUEtuW/tIhvkhN7SnO6RR8LMzfb
-         hbdno94WAfN+nSO597u2TwnM1bLVaCczr/KSZpRefNZfHscCnTGfd4iVuB0T/meWU05x
-         lsLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y4OTyOhq5ph49i2Sy9LKLfnqL2EM/Rj+cmCGMdBMlfw=;
-        b=VpNiXw0Bxtvzsqub2J0cYZvNVhNYaUPhk+x9n06LkD5pW7RmT6bJmU1tOV8Ty+J21x
-         XNnf4V3P8q18Jxi5O12TwDOQnQ2k65tDhOBvHMP2w5CD1ScVcL6c8D3MwgFA/HeP5EPf
-         43QIjDLx1muPa906E+/A0wEjtMqSuRQ9sI+sUENPWVS7Bq18RJyn4sTIppgEqCGOtWzb
-         nnepxPNnIJLyTF0ImX9/k/18YTb4pabQ5hl0thqa1TvKaJaBXUR10lmrMmeI0iXwwgJo
-         MLwRMcxS6fIYgmtZiDpM0DF/x/6/pxiwp1aA9n6n+SzVx93HkQYlzNXGyQPrhHVspmcV
-         d5cQ==
-X-Gm-Message-State: AFqh2kon1La2xBwsKJbiqJQkYR2RCl0V5dtZyjTASG8EfObwwqfPc23q
-        17haSKAQjt1u6iAwBtLHJfQ=
-X-Google-Smtp-Source: AMrXdXt2OhjgoI53tjT3nvzAVMGrKi73ulioqKoNtQWBcgvgIEJFCLLgKNEfR5QSlEe4xYwFMFtj4g==
-X-Received: by 2002:a17:907:6c16:b0:86f:3dfa:4016 with SMTP id rl22-20020a1709076c1600b0086f3dfa4016mr47989890ejc.7.1674836542928;
-        Fri, 27 Jan 2023 08:22:22 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ja23-20020a170907989700b00872c0bccab2sm2524552ejc.35.2023.01.27.08.22.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 08:22:22 -0800 (PST)
-Date:   Fri, 27 Jan 2023 17:22:20 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-phy@lists.infradead.org, waynec@nvidia.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH V6 2/6] dt-bindings: phy: tegra-xusb: Add support for
- Tegra234
-Message-ID: <Y9P6PJ9xPVst/um2@orome>
-References: <20230111110450.24617-1-jonathanh@nvidia.com>
- <20230111110450.24617-3-jonathanh@nvidia.com>
+        with ESMTP id S232433AbjA0Rba (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 12:31:30 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDD34224;
+        Fri, 27 Jan 2023 09:31:28 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RE2pQv007570;
+        Fri, 27 Jan 2023 17:41:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=A6zmRHSUYsMdoUpGI6Iqs9zAp5mpTn+BpeTwOOm0jbw=;
+ b=BjQh+a2gyUS4e2SpUe5ml/kLj/8c9clCSCwi7aRP7AfCw04Pmir3sHq9cWxy19gdvaOD
+ k7WUOuAelYrcmDrWnNql4fYwM4Apin41sR4xT98In5iqcF6saiUKNUMTgqBMC+C3A5T/
+ CWd+hHq68z8T3crOhn8JapMJUB7jDWW+oyRtGNmTSAENesaTuuDRFs2bnNiU8IMfD9SL
+ zX42yPG7ub5KpvjONC5tW4gIZ5uDLT22oKWNxPMXauTIepQ7QzlWt/MUg968XhG5bHL+
+ 5EDrIBWYQ/gYrYVVXBUdsPeZp8Fv9BB0ypr14IBausynlfE7/9Yzy504zHV9Rqi1z4Cq /A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3n89eqdd7n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 17:41:26 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 33B7310002A;
+        Fri, 27 Jan 2023 17:41:21 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 15A4421D3EF;
+        Fri, 27 Jan 2023 17:41:21 +0100 (CET)
+Received: from localhost (10.201.21.177) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Fri, 27 Jan
+ 2023 17:41:20 +0100
+From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Gatien Chevallier <gatien.chevallier@foss.st.com>
+Subject: [PATCH v3 0/6] Introduce STM32 system bus
+Date:   Fri, 27 Jan 2023 17:40:34 +0100
+Message-ID: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="b0gkupGM8zWoxRNZ"
-Content-Disposition: inline
-In-Reply-To: <20230111110450.24617-3-jonathanh@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.177]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_10,2023-01-27_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Document STM32 System Bus. This bus is intended to control firewall
+access for the peripherals connected to it.
 
---b0gkupGM8zWoxRNZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For every peripheral, the bus checks the firewall registers to see
+if the peripheral is configured as non-secure. If the peripheral
+is configured as secure, the node is marked populated, so the
+device won't be probed.
 
-On Wed, Jan 11, 2023 at 11:04:46AM +0000, Jon Hunter wrote:
-> Add the compatible string for the Tegra234 XUSB PHY.
->=20
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> V5 -> V6: Added Krzysztof's ACK=20
-> V3 -> V5: Fixed compatible string
-> V3 -> V4: Added patch
->=20
->  .../devicetree/bindings/phy/nvidia,tegra194-xusb-padctl.yaml  | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+This is useful as a firewall configuration sanity check and avoid
+platform crashes in case peripherals are incorrectly configured.
 
-Hi Vinod,
+The STM32 System Bus implements the feature-domain-controller
+bindings. It is used by peripherals to reference a domain
+controller, in this case the firewall feature domain.
+The bus uses the ID referenced by the feature-domains property to
+know where to look in the firewall to get the security configuration
+for the peripheral. This allows a device tree description rather
+than a hardcoded peripheral table in the bus driver.
 
-can you pick this up into your tree? This applies on top of the
-conversion patch ("dt-bindings: phy: tegra-xusb: Convert to
-json-schema") that's aready in your next branch.
+On STM32MP13/15 platforms, the firewall bus is represented by the
+ETZPC node, which is responsible for the securing / MCU isolating
+the capable peripherals.
 
-Thanks,
-Thierry
+STM32MP13/15 device trees are updated in this series to implement
+the bus. All peripherals that are securable or MCU isolation capable
+by the ETZPC are connected to the bus.
 
---b0gkupGM8zWoxRNZ
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in V2:
+	- Corrected YAMLS errors highlighted by Rob's robot
+	- Re-ordered Signed-off-by tags in two patches
 
------BEGIN PGP SIGNATURE-----
+Changes in V3:
+	- Document feature-domains property in YAML documentation for
+	concerned periperals under the System Bus
+	- Fix STM32 System Bus YAML documentation
+	- Remove STM32 System bus bindings that were currently used
+	as helpers for device tree
+	- Correct few errors in driver
+	- Add missing peripherals under the System Bus that were in
+	SoC variation device tree files
+	- Fix node names
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPT+jwACgkQ3SOs138+
-s6EmYA/9FJsPyQ6dWaqhDXMyzc1HR5Pr1gLqJZksMN7R4k/xvryrwbYCO19IfrD0
-gilOAeiniIpxcKV4CMr0dvMGI/o9UbrAOcxE85oP2sBiLiUhBQ0QEAFKAQskQOOl
-o8r422cr/CJYDC9OAW1xITSvuWwamJAec7n/lqyYvWr4urMlsT6mDZEpNlKCVfNQ
-lQSfQcN7mnGjzKwycbt5GMVpupDhPRvmNLSVUey6owxULZBdcrPC0b/K5hVElX6o
-rWAkcwh77s3nhwJuPOrREIhnyNBiK3K8x5FM6ncP6l9ndlTHQU4yFVyze0jFPH8c
-QQaFAPTn/axKu+mSZxjUK3OEsGy+ybAplBivH6pY3qEX6D2oYUJ4Ie6Jx1GqGPzh
-Nkv914gkdMfmB4HdaQOELyYseKrLaEmy6AmTNMOpumKv0/8ucV/19s+cqdLWNlOh
-ELjd4CLeOzvYxpA0u1OlOBLNEeBHeg3KY0C9ted8q1RJSOnxLzF4C1ujj+0kFp8U
-/zp6FoLkbchfc50rIxLszh9hfRcyoG25H3jXYDY1xenxhv4Iba5sAILts5/IvI9c
-ZyenKl3sU/pyQDrv8DhFJluIJotQ606moVk1PxJhRv0Yt34Eaa6+TNszezcPnPWU
-kkEf5UXWBofFCYl0f8XVqcFDGmo0tdYTfbi4pK6RSEehe100xVI=
-=wD/W
------END PGP SIGNATURE-----
+Gatien Chevallier (5):
+  dt-bindings: treewide: add feature-domains description in binding
+    files
+  dt-bindings: bus: add STM32 System Bus
+  bus: stm32_sys_bus: add support for STM32MP15 and STM32MP13 system bus
+  ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
+  ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
 
---b0gkupGM8zWoxRNZ--
+Oleksii Moisieiev (1):
+  dt-bindings: Document common device controller bindings
+
+ .../devicetree/bindings/bus/st,sys-bus.yaml   |  127 +
+ .../bindings/crypto/st,stm32-hash.yaml        |    5 +
+ .../devicetree/bindings/dma/st,stm32-dma.yaml |    5 +
+ .../bindings/dma/st,stm32-dmamux.yaml         |    5 +
+ .../feature-domain-controller.yaml            |   84 +
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml |    5 +
+ .../bindings/iio/adc/st,stm32-adc.yaml        |    5 +
+ .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |    5 +
+ .../bindings/iio/dac/st,stm32-dac.yaml        |    5 +
+ .../bindings/media/st,stm32-cec.yaml          |    5 +
+ .../bindings/media/st,stm32-dcmi.yaml         |    5 +
+ .../memory-controllers/st,stm32-fmc2-ebi.yaml |    5 +
+ .../bindings/mfd/st,stm32-lptimer.yaml        |    5 +
+ .../bindings/mfd/st,stm32-timers.yaml         |    6 +
+ .../devicetree/bindings/mmc/arm,pl18x.yaml    |    5 +
+ .../devicetree/bindings/net/stm32-dwmac.yaml  |    5 +
+ .../bindings/phy/phy-stm32-usbphyc.yaml       |    5 +
+ .../bindings/regulator/st,stm32-vrefbuf.yaml  |    5 +
+ .../devicetree/bindings/rng/st,stm32-rng.yaml |    5 +
+ .../bindings/serial/st,stm32-uart.yaml        |    5 +
+ .../bindings/sound/st,stm32-i2s.yaml          |    5 +
+ .../bindings/sound/st,stm32-sai.yaml          |    5 +
+ .../bindings/sound/st,stm32-spdifrx.yaml      |    5 +
+ .../bindings/spi/st,stm32-qspi.yaml           |    5 +
+ .../devicetree/bindings/spi/st,stm32-spi.yaml |    5 +
+ .../devicetree/bindings/usb/dwc2.yaml         |    5 +
+ MAINTAINERS                                   |    6 +
+ arch/arm/boot/dts/stm32mp131.dtsi             |  407 +--
+ arch/arm/boot/dts/stm32mp133.dtsi             |   51 +-
+ arch/arm/boot/dts/stm32mp13xc.dtsi            |   19 +-
+ arch/arm/boot/dts/stm32mp13xf.dtsi            |   18 +-
+ arch/arm/boot/dts/stm32mp151.dtsi             | 2722 +++++++++--------
+ arch/arm/boot/dts/stm32mp153.dtsi             |   52 +-
+ arch/arm/boot/dts/stm32mp15xc.dtsi            |   19 +-
+ drivers/bus/Kconfig                           |    9 +
+ drivers/bus/Makefile                          |    1 +
+ drivers/bus/stm32_sys_bus.c                   |  168 +
+ 37 files changed, 2208 insertions(+), 1596 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+ create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+ create mode 100644 drivers/bus/stm32_sys_bus.c
+
+-- 
+2.35.3
+
