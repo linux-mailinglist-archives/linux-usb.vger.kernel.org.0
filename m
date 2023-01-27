@@ -2,138 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A86D67E916
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 16:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F8967EA66
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 17:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbjA0PLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Jan 2023 10:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S232197AbjA0QHW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Jan 2023 11:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234253AbjA0PLi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 10:11:38 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F2A84B67;
-        Fri, 27 Jan 2023 07:11:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UvP7KtQfght7bNKlT/RB6dH3c+bTDH6HuEcmbByU54wbKw3MUK9jAP3scIjR10TBUrUzdx2XDlFDDEH8W5wu2fw0THy6PJ65IqittNiFcvDW4R+rL6sK8HdxehZ+g4J8P3Ts9+iMtMojcuZ20shItOwYgBa+oj0ZANSbJ3BY3CtPtHgqcVa+zGMa0Ha0qNv2xp4oIeKwJfwhJwJ1F1YljKbyP/rkfooPc8sTXbGikWnZAq/x7Rpse69P9Obm99eKwoIep8BGTXrf2VrG68cPcEyDwqSulYQ6sarA8ryJ9tdJsBz4BAgvInSqrzdqXg7BfGbKPz6/3G9qGDH18xwdCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vmRcd5VUiO2rkU0EnnCsNEDa2lP5CSxMzj3tGED5A9Y=;
- b=T30UwRJgTDy71lQm7hr9efwxdPcNL0tOyArRBWqgu+xjUoH0s3Ecy/XDSGvJ8y7OWQsrBzIE23dPHP7LOM+scOxy/MzVb8rx0dmWgaftSqkKPR+K2dw77sXFqI3nakyoE5LFs91wEPpsu1O8KmM+S0IXCkWWQ0vgXjh4NyFy3EaJUUvbMKpJKXdiE0Q+4AzZ7OjdOOL+oT0ow+Fo++8Mztw/7DXXCt15+2tZUmHR9cjSyE+oZ5tsMS8m98T907eu2Yo2tklQcqhSCfVxRiAttDWeiWcyKGKfh2naH8riABLReEGxxeLEe2QdisxdcbmO8Q3RWEfOopK0frHdz2Ut+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vmRcd5VUiO2rkU0EnnCsNEDa2lP5CSxMzj3tGED5A9Y=;
- b=ow6kacWYYxTqEq9u3IaxQehGBT3pMo2s0NLiayzr2AZlPs6S+3dYLL4DNLtzfsy+cVJPiZ4sXJGZAiuwZtVLlrpcH5nSS7gIBgdj66yc5kVeOjVMjS3BNJVddhEYl9ugjC6Y/dMWl8ZCZrOHhDVA7URMq7i28XpATjx7ioQ8bs/zXXUZJVeoTQxiTNnjRi2g7jx/O1RU28yZ5xL6VeKbzo7hxl0kQ+Ol5rqEhKsSTLlJO47KB5Hw4hBUhCVEHTPYdLMjfHI+AtC0FYUqwMJIiJZ+W9bUpeuGaZnkLQLqQs5NajSbuuCN74Xgx4zMGuhV43CS08IX9tJB4vsQPcohHg==
-Received: from MW4PR04CA0207.namprd04.prod.outlook.com (2603:10b6:303:86::32)
- by DS7PR12MB6191.namprd12.prod.outlook.com (2603:10b6:8:98::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.23; Fri, 27 Jan
- 2023 15:11:24 +0000
-Received: from CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:86:cafe::66) by MW4PR04CA0207.outlook.office365.com
- (2603:10b6:303:86::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.23 via Frontend
- Transport; Fri, 27 Jan 2023 15:11:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT029.mail.protection.outlook.com (10.13.174.214) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.22 via Frontend Transport; Fri, 27 Jan 2023 15:11:23 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 27 Jan
- 2023 07:11:06 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 27 Jan
- 2023 07:11:06 -0800
-Received: from moonraker.home (10.127.8.14) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Fri, 27 Jan
- 2023 07:11:04 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, Wayne Chang <waynec@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V9 6/6] arm64: defconfig: Enable UCSI support
-Date:   Fri, 27 Jan 2023 15:10:41 +0000
-Message-ID: <20230127151041.65751-7-jonathanh@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230127151041.65751-1-jonathanh@nvidia.com>
-References: <20230127151041.65751-1-jonathanh@nvidia.com>
+        with ESMTP id S231382AbjA0QHV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 11:07:21 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EBFA83AB3
+        for <linux-usb@vger.kernel.org>; Fri, 27 Jan 2023 08:07:19 -0800 (PST)
+Received: (qmail 306570 invoked by uid 1000); 27 Jan 2023 11:07:18 -0500
+Date:   Fri, 27 Jan 2023 11:07:18 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Troels Liebe Bentsen <troels@connectedcars.dk>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: All USB tools hang when one descriptor read fails and needs to
+ timeout
+Message-ID: <Y9P2tvPkdwHrbPXd@rowland.harvard.edu>
+References: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
+ <Y9Jwv1ColWNwH4+0@kroah.com>
+ <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+ <Y9J8VncWSJdVURgB@kroah.com>
+ <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
+ <Y9KnnH+5O6MtO6kz@rowland.harvard.edu>
+ <CAHHqYPNtVkHoiX1LrxUDa32BgVsgymcPtKVODcVGxEh2f=tYRw@mail.gmail.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT029:EE_|DS7PR12MB6191:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c33e94b-ca28-4a1e-fb00-08db0078c12c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oZ59n9nCbvU9ChPzmgvlI7yVBz1+LBS6NyXwdYgJ8OX+/LX5AZR11Z0kvenDfz0Bz3guWkfOdVb4JgqYl9wK4I7TuYe/YW3a6sTqYxbprZXG3RG0Oml6+UWZZtpz0pwu72zuajx1oEO12u3xs2KWKouyIuYDPCv/gBkSkHPnBOqhBRmw+q/jiCeKFKq4/fNXUghrxLxWk1oewUzkcoCxzJd+NFw27gK+zLIAA7wsQChmdpcEZIvwd+3uDzITTAH7rQg3YqJ64OVa9Z1yG/ZoEiwtCx6wasYrAxezr10l0gx7TlONopaikQFZ/0y4LlyF5X7ar9yl2dxVsZwe3bS/KAVpLrw/lfEBiPiwapEy4Mysfsk90Qw6g1T7Z2R4QYZEleDX+M35QIkT3Tt2T+r/N8CZQCljVGNMmMqylaxhjvtFD4am/1Wphd5wnMXEPoPDOCduNIxpiIWK/mDBOzxQtb0kGRizlDSHkmVTCypEj/NMSgMztxdUOud2mTFtC0XuZMJ14CoOUA95kVuA+O+91Q/UQ6c6I7KtrQZn9LLq8DRQADqK1yum0/DT04bLYAf2c8nBKt99f6X/PpM7OIUQAPiWCyhY0YYSv0PhOpZkJdPQ0AlZeoLTJz/VmpFnhc0j4+4F0x2IruHqpDZ8Va3JpLYJ8HtholpOOlBvomM0W/tVmepL7V1dVP3oowREdT21XIhw2p9DPc1PQll4fEZShw==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199018)(36840700001)(40470700004)(46966006)(186003)(41300700001)(26005)(356005)(8936002)(70586007)(5660300002)(8676002)(83380400001)(70206006)(6666004)(1076003)(107886003)(4744005)(478600001)(36756003)(36860700001)(2616005)(110136005)(54906003)(426003)(86362001)(7636003)(82310400005)(336012)(4326008)(40480700001)(40460700003)(82740400003)(47076005)(2906002)(316002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 15:11:23.8520
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c33e94b-ca28-4a1e-fb00-08db0078c12c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6191
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHHqYPNtVkHoiX1LrxUDa32BgVsgymcPtKVODcVGxEh2f=tYRw@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable the TYPEC UCSI support and the Cypress UCSI driver that is used
-on the NVIDIA Jetson platforms.
+On Fri, Jan 27, 2023 at 03:12:11PM +0100, Troels Liebe Bentsen wrote:
+> On Thu, 26 Jan 2023 at 17:17, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, Jan 26, 2023 at 02:59:35PM +0100, Troels Liebe Bentsen wrote:
+> > > It might be a special use case, for our automated hardware testing station
+> > > we know what goes into what port/hub so it would be nice to have an option
+> > > to lower the timeout in general or per hub or per port.
+> >
+> > There already is such an option.  It's named "early_stop" and it's
+> > described in Documentation/ABI/testing/sysfs-bus-usb.  You may not be
+> > aware of it because it was added after the 6.1 version of the kernel was
+> > released.
+> 
+> Thanks, is it something that has to be enabled when compiling the kernel?
 
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
----
-V9: no changes
-V8: no changes
-V7: Added in V7
+No, it is always enabled.
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> Using Ubuntu mainline 6.1.4 and it does not seem to have this file in the
+> ports folder.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 984553d55e17..d487d0e2b8e0 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -959,6 +959,8 @@ CONFIG_TYPEC_TCPCI=m
- CONFIG_TYPEC_FUSB302=m
- CONFIG_TYPEC_TPS6598X=m
- CONFIG_TYPEC_HD3SS3220=m
-+CONFIG_TYPEC_UCSI=m
-+CONFIG_UCSI_CCG=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
--- 
-2.25.1
+Probably because it is still quite new.
+
+> > > Ahh, sorry I misunderstood but then it makes even less sense that the hub's
+> > > descriptors file blocks when the device hangs or am I missing something.
+> >
+> > Reading the file blocks because it has to be mutually exclusive with
+> > other parts of the kernel which can reallocate the buffers storing the
+> > descriptors.  This mutual exclusion is provided by a per-device lock,
+> > and for hubs this device lock is held while a child device is being
+> > probed.
+> >
+> I guess the reasoning for also holding a lock for the hubs is that there is some
+> accounting on the hub for the children. But the hub's descriptors file won't
+> change because a child device got enumerated right?
+
+That's true, and in principle a separate lock could be used.  But there 
+never seemed to be any need for adding a second lock.  Until now.
+
+> Also if I understand it correctly based on your second email both the parsed
+> sysfs files(fx idProduct, idVendor, etc.) and the descriptors file won't change
+> for the lifetime of the hub. It's just that the descriptors file is backed by
+> buffers that need to be locked because they can be reallocated by the kernel.
+
+The files that export data from the device descriptor (idProduct etc.) 
+might change during a device's lifetime, but the buffer they read from 
+won't get reallocated.
+
+However, now that I look more closely I see that the buffers for the 
+config descriptors won't get reallocated either!  Evidently this was 
+changed back in 2014 by commit e50a322e5177 ("usb: Do not re-read 
+descriptors for wired devices in usb_authorize_device()"), but nobody 
+realized at the time that the locking for the descriptors sysfs could 
+then be relaxed.
+
+> Why not store the descriptors file the same way as the parsed sysfs files,
+> etc. it seems fairly small and I guess it contains the same data that is found
+> in the sysfs folder for the hub?
+
+The buffer holding the device descriptor is fixed size, since all device 
+descriptors are always 18 bytes long.  The configuration and interface 
+descriptors are variable length, so their buffers have to be allocated 
+on-the-fly.
+
+> I don't know how much work it would be to try to avoid locking the hub or if
+> it even makes sense. So maybe it would be better if we spent time trying to
+> workaround this in userspace, fx. by getting libusb to open the descriptors
+> file in non-blocking mode and falling back to reading the individual files in
+> sysfs if we get an EAGAIN. Would there be anything wrong with that
+> approach?
+
+Now that I know the config descriptors won't get reallocated after all, 
+I can remove the locking from the descriptors file entirely.  A patch to 
+do this is below.  It ought to fix your problem.  Try it and see.
+
+> Also in general thanks for the quick and detailed responses, it's a
+> pleasure writing on this mailing list.
+
+You're welcome.
+
+Alan Stern
+
+
+
+Index: usb-devel/drivers/usb/core/sysfs.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/sysfs.c
++++ usb-devel/drivers/usb/core/sysfs.c
+@@ -869,11 +869,7 @@ read_descriptors(struct file *filp, stru
+ 	size_t srclen, n;
+ 	int cfgno;
+ 	void *src;
+-	int retval;
+ 
+-	retval = usb_lock_device_interruptible(udev);
+-	if (retval < 0)
+-		return -EINTR;
+ 	/* The binary attribute begins with the device descriptor.
+ 	 * Following that are the raw descriptor entries for all the
+ 	 * configurations (config plus subsidiary descriptors).
+@@ -898,7 +894,6 @@ read_descriptors(struct file *filp, stru
+ 			off -= srclen;
+ 		}
+ 	}
+-	usb_unlock_device(udev);
+ 	return count - nleft;
+ }
+ 
 
