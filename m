@@ -2,147 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C7467DD9F
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 07:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADA567DE7A
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 08:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjA0Gkx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Jan 2023 01:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S232662AbjA0HZX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Jan 2023 02:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbjA0Gk3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 01:40:29 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63E174C32;
-        Thu, 26 Jan 2023 22:40:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=0tBu6Erz+dlIKmi6Fcf2PLuhswsM+Mn8+mdPYDo4x14=; b=2SuElG0dZjMUm+IcyMMWh43ge6
-        7wfgozINmdWGJA/BmCuooKFLOzUf6abx+CRWJVB/nrCj8dIalHAgBTH9e88wpmFrnK65/M+YHUlC6
-        EqexX3bTfz+aJ2udkWFgNeS+OPJVIxQk1sj6KgQbWaIkX186kM6vw9a5+h8R6+L4GqZ/zRD8TnIlt
-        y9kF7cTpjm0PK1p+aXmmj4OyRcYdWfUAyRI8/k58ShYkspQ3EKyhe8cNJCLKX7RsR8jDE3kuxN/qi
-        KrhD26P2QeKQ92+WKZtDsxWtLQiRamsfZGcBU5cbArNGcWcFuvoeRCB+odep4AIi++lSm8H7ITNly
-        Qx2DryIw==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLIPR-00DM0u-1E; Fri, 27 Jan 2023 06:40:25 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 32/35] Documentation: usb: correct spelling
-Date:   Thu, 26 Jan 2023 22:40:02 -0800
-Message-Id: <20230127064005.1558-33-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
-References: <20230127064005.1558-1-rdunlap@infradead.org>
+        with ESMTP id S229886AbjA0HZW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 02:25:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D56A518E8;
+        Thu, 26 Jan 2023 23:25:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1E43B81F83;
+        Fri, 27 Jan 2023 07:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A47C433D2;
+        Fri, 27 Jan 2023 07:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674804319;
+        bh=uiDH1wTvjIHk7fS7H/gr3ugWkoj8lJ2x2AXClUIXcVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CFSAlYy9Dm+0rzvxNPbzD6Hoget8LchXtUZIKj1/mPZ++3Z9tihvpDIyl37ehs2FF
+         my4KMLyXyzqUhN1d/9MBncXqDzA/zsX6yup9N3f1nihtrvHkHeSXaq5jj3ZZGBqW1H
+         wifmRiZnQc7yJN1EedhndkIv4M8pRLDRELw5Hsmw=
+Date:   Fri, 27 Jan 2023 08:25:16 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Adrian Zaharia <adrian.zaharia@windriver.com>
+Cc:     stable@vger.kernel.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10 1/1] xhci: Set HCD flag to defer primary roothub
+ registration
+Message-ID: <Y9N8XEh6rL/MWP77@kroah.com>
+References: <20230125133359.3538078-1-adrian.zaharia@windriver.com>
+ <20230125133359.3538078-2-adrian.zaharia@windriver.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125133359.3538078-2-adrian.zaharia@windriver.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Correct spelling problems for Documentation/usb/ as reported
-by codespell.
+On Wed, Jan 25, 2023 at 03:33:59PM +0200, Adrian Zaharia wrote:
+> From: Kishon Vijay Abraham I <kishon@ti.com>
+> 
+> [ Upstream commit b7a4f9b5d0e4b6dd937678c546c0b322dd1a4054 ]
+> 
+> Set "HCD_FLAG_DEFER_RH_REGISTER" to hcd->flags in xhci_run() to defer
+> registering primary roothub in usb_add_hcd() if xhci has two roothubs.
+> This will make sure both primary roothub and secondary roothub will be
+> registered along with the second HCD.
+> This is required for cold plugged USB devices to be detected in certain
+> PCIe USB cards (like Inateck USB card connected to AM64 EVM or J7200 EVM).
+> 
+> This patch has been added and reverted earier as it triggered a race
+> in usb device enumeration.
+> That race is now fixed in 5.16-rc3, and in stable back to 5.4
+> commit 6cca13de26ee ("usb: hub: Fix locking issues with address0_mutex")
+> commit 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0
+> race")
+> 
+> [minor rebase change, and commit message update -Mathias]
+> 
+> CC: stable@vger.kernel.org # 5.4+
+> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Tested-by: Chris Chiu <chris.chiu@canonical.com>
+> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+> Link: https://lore.kernel.org/r/20220510091630.16564-3-kishon@ti.com
+> Signed-off-by: Adrian Zaharia <Adrian.Zaharia@windriver.com>
+> ---
+>  drivers/usb/host/xhci.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
----
- Documentation/usb/chipidea.rst       |   19 ++++++++++---------
- Documentation/usb/gadget-testing.rst |    2 +-
- Documentation/usb/mass-storage.rst   |    2 +-
- 3 files changed, 12 insertions(+), 11 deletions(-)
+You dropped my original signed-off-by?  Odd...
 
-diff -- a/Documentation/usb/chipidea.rst b/Documentation/usb/chipidea.rst
---- a/Documentation/usb/chipidea.rst
-+++ b/Documentation/usb/chipidea.rst
-@@ -35,10 +35,10 @@ which can show otg fsm variables and som
- 1) Power up 2 Freescale i.MX6Q sabre SD boards with gadget class driver loaded
-    (e.g. g_mass_storage).
- 
--2) Connect 2 boards with usb cable with one end is micro A plug, the other end
-+2) Connect 2 boards with usb cable: one end is micro A plug, the other end
-    is micro B plug.
- 
--   The A-device(with micro A plug inserted) should enumerate B-device.
-+   The A-device (with micro A plug inserted) should enumerate B-device.
- 
- 3) Role switch
- 
-@@ -54,18 +54,19 @@ which can show otg fsm variables and som
- 
- 	echo 0 > /sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
- 
--   or, by introducing HNP polling, B-Host can know when A-peripheral wish
--   to be host role, so this role switch also can be trigged in A-peripheral
--   side by answering the polling from B-Host, this can be done on A-device::
-+   or, by introducing HNP polling, B-Host can know when A-peripheral wishes to
-+   be in the host role, so this role switch also can be triggered in
-+   A-peripheral side by answering the polling from B-Host. This can be done on
-+   A-device::
- 
- 	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_req
- 
-    A-device should switch back to host and enumerate B-device.
- 
--5) Remove B-device(unplug micro B plug) and insert again in 10 seconds,
-+5) Remove B-device (unplug micro B plug) and insert again in 10 seconds;
-    A-device should enumerate B-device again.
- 
--6) Remove B-device(unplug micro B plug) and insert again after 10 seconds,
-+6) Remove B-device (unplug micro B plug) and insert again after 10 seconds;
-    A-device should NOT enumerate B-device.
- 
-    if A-device wants to use bus:
-@@ -105,7 +106,7 @@ July 27, 2012 Revision 2.0 version 1.1a"
- 2. How to enable USB as system wakeup source
- --------------------------------------------
- Below is the example for how to enable USB as system wakeup source
--at imx6 platform.
-+on an imx6 platform.
- 
- 2.1 Enable core's wakeup::
- 
-@@ -128,6 +129,6 @@ at imx6 platform.
- 	echo enabled > /sys/bus/usb/devices/1-1/power/wakeup
- 
- If the system has only one usb port, and you want usb wakeup at this port, you
--can use below script to enable usb wakeup::
-+can use the below script to enable usb wakeup::
- 
- 	for i in $(find /sys -name wakeup | grep usb);do echo enabled > $i;done;
-diff -- a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -813,7 +813,7 @@ the user must provide the following:
- 	================== ====================================================
- 
- Each frame description contains frame interval specification, and each
--such specification consists of a number of lines with an inverval value
-+such specification consists of a number of lines with an interval value
- in each line. The rules stated above are best illustrated with an example::
- 
-   # mkdir functions/uvc.usb0/control/header/h
-diff -- a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
---- a/Documentation/usb/mass-storage.rst
-+++ b/Documentation/usb/mass-storage.rst
-@@ -150,7 +150,7 @@ Module parameters
-   - bcdDevice     -- USB Device version (BCD) (16 bit integer)
-   - iManufacturer -- USB Manufacturer string (string)
-   - iProduct      -- USB Product string (string)
--  - iSerialNumber -- SerialNumber string (sting)
-+  - iSerialNumber -- SerialNumber string (string)
- 
- sysfs entries
- =============
+Anyway, now queued up.
+
+greg k-h
