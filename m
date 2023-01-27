@@ -2,131 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA4367E525
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 13:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7337A67E559
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 13:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbjA0M2N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Jan 2023 07:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S233929AbjA0MfX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Jan 2023 07:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbjA0M1q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 07:27:46 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3B73C15
-        for <linux-usb@vger.kernel.org>; Fri, 27 Jan 2023 04:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674822434; x=1706358434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=c9TnFmcvkj3GpSPv1RtyqYRP6siRp+zFEx1vQtlh39A=;
-  b=R9CV+AKNn9qxnVXsTebM3JzI6PeD7a+ZGfVJHzgfE3obD2SWIhutAsUi
-   TxlyQWBfh/1jxzXlO8k+FyaYHqJBrsTRqzBlCelHuYPyWUKHJBLZw9Lcu
-   bMcREG/bg5r3t91undK196fL5Hedu0qtz/dM8bU9E+9JhfHj4CNrZg7Jf
-   /5yCMz3yy7K5EwMniHjKZpKxP66KP+YhyGbR8ySkqve39N3d+56N2V6Jd
-   8FjkZEVL8xeaw3pd9KXOi8/TmnSZIQgWCOKlxtFbXh6ptpVf4c/Zxb8h+
-   CHpzzd+YWW7qWNW+TZsIPC90RA/0x/rBQvsnnu2xWJgLxi0HXRhU3IfPZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="328363160"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="328363160"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 04:27:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="771565837"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="771565837"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Jan 2023 04:27:12 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 43797152; Fri, 27 Jan 2023 14:27:49 +0200 (EET)
-Date:   Fri, 27 Jan 2023 14:27:49 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-Cc:     linux-usb@vger.kernel.org,
-        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
-Subject: Re: Possible problem with thunderbolt 4
-Message-ID: <Y9PDRYHHYNSJWwGe@black.fi.intel.com>
-References: <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
- <Y7wNnrlEWMOV4Cj/@black.fi.intel.com>
- <0f862f75-9805-f5d0-ef89-0b77d0ae8778@gmx.at>
- <Y72AbwKFd9snjZrJ@black.fi.intel.com>
- <3ccb150b-dbd9-c9d0-0e8c-8c169f0d8faf@gmx.at>
- <Y76TS54PJpmseZs3@black.fi.intel.com>
- <8c2da730-ba9b-6ec7-d493-1a6a2ce54622@gmx.at>
- <Y8kXFFrue7l7DKf3@black.fi.intel.com>
- <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
- <0c9e644e-a07d-e9bb-f8d6-692d2412fd30@gmx.at>
+        with ESMTP id S233847AbjA0MfS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 07:35:18 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279A57A497
+        for <linux-usb@vger.kernel.org>; Fri, 27 Jan 2023 04:35:08 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id z5so4840460wrt.6
+        for <linux-usb@vger.kernel.org>; Fri, 27 Jan 2023 04:35:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9unmXBFY2LCpkLlGduWq9KiCNNGjxWEAC2OciASOX1E=;
+        b=avi5dm/0cmJyqN+xxxHp+8Bk5+Z/0VmWOTRq0yiY4UmeaZbB0sEmpQsuzYzmUYEXYo
+         rONGzpHRgMrboJ5S3CudmhmAMuLNiHxpFO7EXjH62ns3oequ5SnEmiYkv5jcinvLwnUh
+         dnFxIgQpXeoHK2Sla/LF3Q22J4Xtjgk0zq+lzeGYGdLZBj2Ya/Dxl4vuysRRJSUqJH9n
+         rBkp9eAd40blim6iByp/eDjLqHipBXv3Rh7L43sb/AbU+s/K11urQs6eAqz5L4ZrApHg
+         NpQ6sAHjqDBcRUFZlLIXMiTGjpQYVVUNXAc67SGRcZclkpoz2B+LdpFPTXcr2nhIAXap
+         3Gog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9unmXBFY2LCpkLlGduWq9KiCNNGjxWEAC2OciASOX1E=;
+        b=BTlHlbTzUdSrgiiPtFxVX2bjU487ySa/UglocI1okpPVq3kArVjOrqBLTUZTfR/fqe
+         rFqGcqGmavBCJNvi9nrHKHYmZP7PoZh0nKUs//3r7ba/B0u+lgh8mBj4QeOM11xeHxLl
+         8LShl0qNLEkD+Oc0qkcyEAA6Z5jg29OdZU+Veco+rxmYs5R/Ixue5AX495nOMuHorRK3
+         YfwkyarU6VzNsDR6vI6ccoIZdd1bqNFhdBC9AC9ONBW87egt3hTzXXstLtVkLHER8j4+
+         iGenEpzRDG3XQVWQKDx886qm81rLOcs4NdMigqGQOVMshKat1K7bzLFN+SLlLFqkYrjQ
+         LN1w==
+X-Gm-Message-State: AO0yUKXwOaSqVpwTa/PFkDE3qpffZ1tq517wRNrIHpg5AcXKPaUlDrbM
+        e3+vqMJ51A/iQ08YDaD3omUfrQ==
+X-Google-Smtp-Source: AK7set8kgl+UYZC1EZtugC3b1RYbe7/NubWbi3C5CSEFCXcerqdM+Mga7HQqn4rbU0NMZK0hYx3Xcw==
+X-Received: by 2002:a05:6000:1204:b0:2bf:b33b:fb7d with SMTP id e4-20020a056000120400b002bfb33bfb7dmr11183611wrx.61.1674822906604;
+        Fri, 27 Jan 2023 04:35:06 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d514d000000b002be2f18938csm3732984wrt.41.2023.01.27.04.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 04:35:06 -0800 (PST)
+Date:   Fri, 27 Jan 2023 14:35:04 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: allow required-opps
+Message-ID: <Y9PE+Hli/kLHW2Ag@linaro.org>
+References: <20230127121122.342191-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0c9e644e-a07d-e9bb-f8d6-692d2412fd30@gmx.at>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230127121122.342191-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Fri, Jan 27, 2023 at 01:07:43PM +0100, Christian Schaubschläger wrote:
-> Hi Mika,
+On 23-01-27 13:11:22, Krzysztof Kozlowski wrote:
+> Few Qualcomm SoCs require minimum performance level of power domain, so
+> allow it:
 > 
-> >>> Previously you said you'd talk with your Windows folks about this; any
-> >>> news from there?
-> >> I've talked to them and still in talks with the UEFI folks but the
-> >> current undestanding is that Windows does not do anything special when
-> >> the system is rebooted (so equal to what Linux does). There is one
-> >> "development" system in Israel lab that should be pretty similar to what
-> >> the HP system of yours is but the person who was going to try to
-> >> reproduce is in sick leave now.
-> > Ok...
-> I was just wondering if there are already any news from your lab in
-> Israel with the similar HP system. And if the issue can be reproduced
-> there...
+>   sm8550-mtp.dtb: usb@a6f8800: 'required-opps' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yeah, I just got report from the folks and unfortunately we were not
-able to reproduce the issue in the lab. The PCIe tunnel stays up (or
-gets re-created) after reboot from Linux and is visible in the UEFI
-shell (so in the BIOS).
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-So at the moment I'm out of ideas why this happens since Windows flows
-should be the same. And we have no means to repro it locally to
-investigate further :/
-
-> Another thought of mine was, if it wouldn't it be useful to have a kernel commandline switch (or thunderbolt module option) that allows the user to select whether the software connection manager should be used, or the firmware connection manager (if avialable)? I understand that in general using the sw connection manager is favorable because the OS then has control over the connection, but maybe there are use cases where letting the firmware doing the job is just fine (like in my case ;-)
-
-Right, we may add one but I think it should be part of the USB4 _OSC
-negotiation like the below patch (acpi.native_usb4_disable=1 in the
-command line should switch to FW CM). We could also make it "automatic"
-by adding a DMI quirks table that then sets this.
-
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 0c05ccde1f7a..7da4d56fb936 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -296,6 +296,9 @@ EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirmed);
- /*
-  * ACPI 6.4 Operating System Capabilities for USB.
-  */
-+bool native_usb4_disable;
-+module_param(native_usb4_disable, bool, 0644);
-+
- bool osc_sb_native_usb4_support_confirmed;
- EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
- 
-@@ -344,7 +347,7 @@ static void acpi_bus_osc_negotiate_platform_control(void)
- 	if (IS_ENABLED(CONFIG_SCHED_MC_PRIO))
- 		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_DIVERSE_HIGH_SUPPORT;
- 
--	if (IS_ENABLED(CONFIG_USB4))
-+	if (IS_ENABLED(CONFIG_USB4) && !native_usb4_disable)
- 		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_NATIVE_USB4_SUPPORT;
- 
- 	if (!ghes_disable)
+> 
+> ---
+> 
+> Cc: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index a3f8a3f49852..4875c5b7d5b5 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -58,6 +58,9 @@ properties:
+>      description: specifies a phandle to PM domain provider node
+>      maxItems: 1
+>  
+> +  required-opps:
+> +    maxItems: 1
+> +
+>    clocks:
+>      description: |
+>        Several clocks are used, depending on the variant. Typical ones are::
+> -- 
+> 2.34.1
+> 
