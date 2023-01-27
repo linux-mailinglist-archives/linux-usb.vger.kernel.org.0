@@ -2,98 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD0367EF7D
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 21:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5FE67F047
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jan 2023 22:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjA0UWQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Jan 2023 15:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S231564AbjA0VR6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Jan 2023 16:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbjA0UWN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 15:22:13 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92561761C8;
-        Fri, 27 Jan 2023 12:22:12 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id v10so5739436edi.8;
-        Fri, 27 Jan 2023 12:22:12 -0800 (PST)
+        with ESMTP id S229506AbjA0VR4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Jan 2023 16:17:56 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518721CF67
+        for <linux-usb@vger.kernel.org>; Fri, 27 Jan 2023 13:17:55 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id fl24so4326020wmb.1
+        for <linux-usb@vger.kernel.org>; Fri, 27 Jan 2023 13:17:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mqf3tpDJNX5sIiyTeIYmTr7VbjdNQeu0rlBoqz1e+Q0=;
-        b=KjwD47Qr6iZP/O9PFJhqPa4DXwn1l74X3nfx6kTwt+q9S7DkJW1ctaL1SAg+HarvRo
-         E8mVvJB8G0aM4EzQmGTh0uF45yjqn+nDVC0/6eAe57kksR2S6u2qqOIwcSZgWdFW3Ic+
-         ppvwB8u8v0YZuLJ/M88zYnWPZDekyWFImeo5gxaj3lMv1qmVWE33IHZYMQ8JX0vjY640
-         2FRiGOVg4AjznpAz8uS+VyysPYvPVhD9Uo/KGFEpLBFv3PmdhrOKmeNOTasLzM2Qmb4L
-         fqVMz85pS9/47JF/mmoSYodYM0xJpTbVeWczW1yEX5X21Ww0sQpz4eoYcNIdbzTf+3fs
-         QRvg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n2CqnTIkfAqED0CQ9aF9DG/sLx9ru/fz+pepxlbDILA=;
+        b=NAX3/vBvZG6/s8AhSoJJmBMZWopusb2B7NRWdsTPrKQ+zYNDn+iIqAtAjx/ZNF2UI/
+         z3gLvKp2c/AkrCr5LrzvdCUQqU8hbaW1501X9Y5CRgLlGbk0n/dnrxae/9qnBXbztRtO
+         MDRSHFhM8UmFzozoJ9YVeODEQKnJaRB9tonDpCWa5OhWZNR+6TCfQwTs5EvPhiw3QUTW
+         qPVZkPSlOl+0SHZCry8Dn8kiqHb6jkZ/TbgCWlRuLeHxgVISHhq2Bhv90LCpYx1vQ2aU
+         lVM3dNPaKFw4pe8RpZaHUJ+4Rb0KfRlEdNqA89r8pEMAmM41fbS2bbduXT8EGKkWKbuA
+         znlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mqf3tpDJNX5sIiyTeIYmTr7VbjdNQeu0rlBoqz1e+Q0=;
-        b=J9ESqlHP7viclAzgyWFjevE+rpd8WhdiwqtAqvyenTJMcEfr0XT+bZjyljoVB/jwDd
-         7kKi0KX+ByMSXOxaWLcR71m1wWu+KKY4Vu722oEAbcyrUEgU60QktFKVfKQW/h5yr8gF
-         5TrGz3pSDfgIDIUQxgC+FtM26/Vbz0zPgnkRodYlAB7OoDR/Qne8B2qLokNco4PP8yJz
-         1m5iBRi1Urugp/1YR8A9oino2lnkoNtruXeQ5I3QdEwqEnoYd2r5EGzH6ibXPrtcgE2R
-         Jbm+NjebSCMZzZZzg47wbIVoNSe219sWe1c/1wPr5/1jloWy0quEAYlxUcrZq1Geg9EL
-         4e7g==
-X-Gm-Message-State: AFqh2ko40gjG25g9gIBSPZPZNrGhosIzPKTGX1MvSCKZOc8RPIFhTpFJ
-        PyPa4RkwNRR+9Lf4rT/Lh+o=
-X-Google-Smtp-Source: AMrXdXslchCqGmh70f80P2YbvDJBdxIzu+HfPexB7WQFcZPWKwYNQ5BuM/fuJwEdI0F73cI7vK1NlA==
-X-Received: by 2002:a05:6402:28c6:b0:49b:98be:c38 with SMTP id ef6-20020a05640228c600b0049b98be0c38mr44822085edb.11.1674850931014;
-        Fri, 27 Jan 2023 12:22:11 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056402068500b0046dd0c2a08esm2861517edy.36.2023.01.27.12.22.09
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n2CqnTIkfAqED0CQ9aF9DG/sLx9ru/fz+pepxlbDILA=;
+        b=WEU0qcaLRIHtpo9xWmQahmGnmPVIKvGxe7jGaNEL7D5JphIO216BEv5vG1Re5jdyr+
+         UM8WvR6Yho2v10/HG7kNdGUzqQDxrwiCbmE3EFrnFVZRfKWR+ATh0GP34/6DN/riGPfF
+         ZXF+202Rk0ZmSugU64ul1sfzMiKYQe2bC1k+3w5pIuvBZr36qQYviH1tYrV65aLJJFSE
+         G4XNL17XEYOlS+ug9d/LWnOmpg+jbLVXUHpp9lJeJtU35PmX1ZgJH35cGlGGxkcThbMl
+         1uRgnjxiEUkFg2lT1tXxwai8QWf+5rdKFV0+IdLlxc1bn84Y8v8bw0mE4z75QAliMukx
+         PvpA==
+X-Gm-Message-State: AFqh2kq12JFzNHrQNey/RRdjBG2O49VY+n4mf8l/Nk2NzQ41DshclX4+
+        4O+rWSa3g2uZRvBeyHOW2cHTSQ==
+X-Google-Smtp-Source: AMrXdXuAvXQR2Q0dQ5687sSwAmQYI3bktYVsYW/LUdQo+8U8qvC1x44cvRqs3S+hq8k5B0Me4mmBVQ==
+X-Received: by 2002:a1c:7712:0:b0:3da:1e35:dfec with SMTP id t18-20020a1c7712000000b003da1e35dfecmr41853351wmi.4.1674854273942;
+        Fri, 27 Jan 2023 13:17:53 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b5-20020a05600c150500b003dafb0c8dfbsm6080811wmg.14.2023.01.27.13.17.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 12:22:10 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        Fri, 27 Jan 2023 13:17:53 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bin Liu <b-liu@ti.com>, Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <uwu@icenowy.me>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, soc@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 03/11] usb: musb: sunxi: Introduce config struct
-Date:   Fri, 27 Jan 2023 21:22:08 +0100
-Message-ID: <12138531.O9o76ZdvQC@jernej-laptop>
-In-Reply-To: <20230111015332.172021-4-andre.przywara@arm.com>
-References: <20230111015332.172021-1-andre.przywara@arm.com>
- <20230111015332.172021-4-andre.przywara@arm.com>
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
+        Henrik Grimler <henrik@grimler.se>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: usb: samsung,exynos-dwc3: allow unit address in DTS
+Date:   Fri, 27 Jan 2023 22:17:48 +0100
+Message-Id: <20230127211748.260718-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne sreda, 11. januar 2023 ob 02:53:24 CET je Andre Przywara napisal(a):
-> Currently the probe routine explicitly compares the compatible string of
-> the device node to figure out which features and quirks a certain
-> Allwinner MUSB model requires. This gets harder to maintain for new
-> SoCs.
-> 
-> Add a struct sunxi_musb_cfg that names the features and quirks
-> explicitly, and create instances of this struct for every type of MUSB
-> device we support. Then bind this to the compatible strings via the OF
-> data feature.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
+actual DWC3 Controller device node.  It handles necessary Samsung
+Exynos-specific resources (regulators, clocks), but does not have its
+own MMIO address space.
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+However neither simple-bus bindings nor dtc W=1 accept device nodes in
+soc@ node which do not have unit address.
 
-Best regards,
-Jernej
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+---
+
+Changes since v1:
+1. Use ranges with values and drop reg from usb-wrapper node.
+2. Keep "usb" as wrapper's node name.
+
+DTS fixes are here:
+https://lore.kernel.org/linux-samsung-soc/20230127211527.260060-1-krzysztof.kozlowski@linaro.org/T/#t
+---
+ .../devicetree/bindings/usb/samsung,exynos-dwc3.yaml      | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+index 6b9a3bcb3926..42ceaf13cd5d 100644
+--- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+@@ -108,19 +108,19 @@ examples:
+     #include <dt-bindings/clock/exynos5420.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+-    usb {
++    usb@12000000 {
+         compatible = "samsung,exynos5250-dwusb3";
+         #address-cells = <1>;
+         #size-cells = <1>;
+-        ranges;
++        ranges = <0x0 0x12000000 0x10000>;
+         clocks = <&clock CLK_USBD300>;
+         clock-names = "usbdrd30";
+         vdd33-supply = <&ldo9_reg>;
+         vdd10-supply = <&ldo11_reg>;
+ 
+-        usb@12000000 {
++        usb@0 {
+             compatible = "snps,dwc3";
+-            reg = <0x12000000 0x10000>;
++            reg = <0x0 0x10000>;
+             interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+             phys = <&usbdrd_phy0 0>, <&usbdrd_phy0 1>;
+             phy-names = "usb2-phy", "usb3-phy";
+-- 
+2.34.1
 
