@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FF967F849
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jan 2023 14:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A863067F84C
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jan 2023 14:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbjA1Ntf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Jan 2023 08:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
+        id S230394AbjA1Nuh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Jan 2023 08:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbjA1Nte (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Jan 2023 08:49:34 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB7C24135
-        for <linux-usb@vger.kernel.org>; Sat, 28 Jan 2023 05:49:33 -0800 (PST)
+        with ESMTP id S234613AbjA1Nug (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Jan 2023 08:50:36 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747402659E
+        for <linux-usb@vger.kernel.org>; Sat, 28 Jan 2023 05:50:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674913772; x=1706449772;
+  t=1674913833; x=1706449833;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=NAgFDAVot0Rv2KDIET21wR/2nqblLrbZUHfgJgnaMKo=;
-  b=X5IELkh4Y+pnZlXKgXo+rj+bt6dyr+ZaztOrONYaWRIVqjpGosWJjgjL
-   Kaf0oCVRhtnudLS8GhslBRtMIjRCXU31qb2qrTxQ2DwikZMQod+HT1+jM
-   kSjNCuZwGjl//XonKkCwdWxp8G5d0nBg63S5szPe497pt4niEEXhmXlLA
-   kgbng2V2E9Y+ilWnkQ51G8w/0dDzCwA8a0y9nxWaffD26WbFCDO0hpt/j
-   8ej6iJg8dvS7m9CTxBOJFddyIhx1lPDbm2z2Dh1RbpfJgueB44+lukjdQ
-   wRizkAOvgfRzxsP8B3L3hYG5wxJajazjKWrs9RYKSY5GcM3H9cEOdt5P/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="324984903"
+  bh=XoE5quQeMoICElge9xqNx/XchnoYdu14obfC5kW1GzQ=;
+  b=eI+tXBdYkPM0zJYIZ0LVqXjzMYo2Pg6/kSv6Z9pqBgipMUdQMbAekEUx
+   spXj62sQlJRoYXREL1fHZkalODCzWiIZjIffzrFPMojJkf3wvebSdbIhF
+   gicJV+KBeLPZbKmIRm4qz58Cx3sV5Yxg2WX020wX6IwXTVFtgU/Hhi48d
+   CC70shRX1wkKUe/1UtHBM0TYQn1NfQD01MfPb4Ox39o1k0hxCneB9OJ5Z
+   cAnlho6X18cX/FIZuHd3VcW5kz5tWKI4KLYWgYemnYGx1BHzbj0f5Svzx
+   MknVE2dfC9CY1wH5BrMm3COcBGtx+KPYDjb8QF8vDjqSYHmOf6a06Xqkk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="389670369"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="324984903"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 05:49:32 -0800
+   d="scan'208";a="389670369"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 05:50:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="806149531"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="613515759"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="806149531"
+   d="scan'208";a="613515759"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jan 2023 05:49:31 -0800
+  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2023 05:50:31 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pLlaE-0000h3-2Q;
-        Sat, 28 Jan 2023 13:49:30 +0000
-Date:   Sat, 28 Jan 2023 21:49:27 +0800
+        id 1pLlbC-0000hT-2y;
+        Sat, 28 Jan 2023 13:50:30 +0000
+Date:   Sat, 28 Jan 2023 21:49:34 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- c52c9acc415eb6ff54f658492f8c53da0fc3528a
-Message-ID: <63d527e7.TLva/VBU4d2kAV3C%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 2fa89458af9993fab8054daf827f38881e2ad473
+Message-ID: <63d527ee.FD+Apn80wgJPsqLi%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -62,28 +62,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: c52c9acc415eb6ff54f658492f8c53da0fc3528a  xhci: host: Add Renesas RZ/V2M SoC support
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 2fa89458af9993fab8054daf827f38881e2ad473  usb: gadget: f_uac2: Fix incorrect increment of bNumEndpoints
 
-elapsed time: 749m
+elapsed time: 752m
 
-configs tested: 91
+configs tested: 85
 configs skipped: 2
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
 
 gcc tested configs:
+x86_64                            allnoconfig
 um                             i386_defconfig
 um                           x86_64_defconfig
-x86_64                            allnoconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allyesconfig
 arc                                 defconfig
-alpha                               defconfig
 s390                             allmodconfig
+alpha                               defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
 s390                                defconfig
 s390                             allyesconfig
 i386                             allyesconfig
@@ -107,16 +107,16 @@ i386                 randconfig-a005-20230123
 i386                 randconfig-a002-20230123
 i386                 randconfig-a003-20230123
 i386                 randconfig-a001-20230123
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
 x86_64               randconfig-a002-20230123
 x86_64               randconfig-a005-20230123
 x86_64               randconfig-a001-20230123
 x86_64               randconfig-a006-20230123
 x86_64               randconfig-a003-20230123
 x86_64               randconfig-a004-20230123
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
 i386                          randconfig-a012
 i386                          randconfig-a014
 i386                          randconfig-a016
@@ -127,7 +127,6 @@ riscv                    nommu_k210_defconfig
 riscv                             allnoconfig
 i386                   debian-10.3-kselftests
 i386                              debian-10.3
-i386                          randconfig-c001
 m68k                         amcore_defconfig
 powerpc                      makalu_defconfig
 m68k                        mvme147_defconfig
@@ -136,11 +135,6 @@ mips                          rb532_defconfig
 arc                        nsim_700_defconfig
 sh                           se7724_defconfig
 sh                            shmin_defconfig
-sh                        sh7763rdp_defconfig
-sh                          rsk7264_defconfig
-arm                          exynos_defconfig
-xtensa                  nommu_kc705_defconfig
-arc                      axs103_smp_defconfig
 
 clang tested configs:
 x86_64               randconfig-a013-20230123
