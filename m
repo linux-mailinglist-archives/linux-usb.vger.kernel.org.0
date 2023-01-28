@@ -2,160 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DF067F89F
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jan 2023 15:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3418567F924
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jan 2023 16:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbjA1OXh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Jan 2023 09:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S234296AbjA1PcY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Jan 2023 10:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232105AbjA1OXg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Jan 2023 09:23:36 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2126D1BE8
-        for <linux-usb@vger.kernel.org>; Sat, 28 Jan 2023 06:23:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674915816; x=1706451816;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PU/tfv+FdmR0S52ETx9uXq/jRdrhA0TRLzy47b0DA3Y=;
-  b=NhPEhSEL062jyCbp8gNTQ7WGr/SRuTuszPsE6B6XYptEqbS3+9it0r6q
-   778ko//l7aO7cf4R/0PKOCj5fH1SZQhwYuLbj0vk8zNVDJ1om5NwhNJhV
-   mMM/krbXYzDD/+ekHCrPwgMSTruqJk3LERvfgLveAsOIFV6AV9IhVf15A
-   ZLnsTawUAzv5Yf9ToCOgiDmE2WgJqjsGIdQXDeSHMOBrx1V1xCQ/DRkN4
-   CNsYilCJ+no96TDfGczWlOX0h0mch/NHpfNH8CMTRSEWZBY2QrAN/yQT/
-   l/Zhxse8M/hPtKSb16IjJR8hNOhKAtw9e5eMP3TCynlNTiSKe2Dncyfcx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="328580039"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="328580039"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 06:23:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="663604480"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="663604480"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2023 06:23:33 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLm7B-0000l7-01;
-        Sat, 28 Jan 2023 14:23:33 +0000
-Date:   Sat, 28 Jan 2023 22:23:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:next] BUILD SUCCESS
- 06cbcbfaa6510eed406e3b6d5d071386b9830689
-Message-ID: <63d52fd8.PIHC+m+3Jei6mxRE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229894AbjA1PcV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Jan 2023 10:32:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1669623DAD;
+        Sat, 28 Jan 2023 07:32:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A37BEB80919;
+        Sat, 28 Jan 2023 15:32:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C1EC433EF;
+        Sat, 28 Jan 2023 15:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674919937;
+        bh=6bUIRH8u5Cxb143fKnG2xu5Mame0Rqrt7wtVXi/pBI0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B/UHPiLasadsoRWpYuGJDp1GLMSeZmlfVRTmB/u7+euzi1jGnfanl6/0d+JYc2Anh
+         w7UO6aa2RsLgUjI1TkHXjO36kqVYHhfXz/NCtaRI8OBIp/Q2pEZFlv4mub7gKuB0qI
+         1Mc7qpLn6KKILoT9rYANmy7LzgbATjPALJjEwNQejFsO1M7vRDp0lv6AF9qG6JMfUy
+         5lpHy0ZUkiHDj2il7+hETu3TJKnGEz59b4YBLnwu8O8u6aCEuUKLoI0SiudsfUi4Fr
+         1BAyerZrGeDn7mhab+7xjaNDPuPf2DsSywJWmBDFLs9BxgUuYRquba0R/ZzEBRsQJE
+         Hlj1/II1JU4cQ==
+Date:   Sat, 28 Jan 2023 15:46:06 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-crypto@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3 2/6] dt-bindings: treewide: add feature-domains
+ description in binding files
+Message-ID: <20230128154606.18b70629@jic23-huawei>
+In-Reply-To: <20230127164040.1047583-3-gatien.chevallier@foss.st.com>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+        <20230127164040.1047583-3-gatien.chevallier@foss.st.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-branch HEAD: 06cbcbfaa6510eed406e3b6d5d071386b9830689  thunderbolt: Add missing kernel-doc comment to tb_tunnel_maximum_bandwidth()
+On Fri, 27 Jan 2023 17:40:36 +0100
+Gatien Chevallier <gatien.chevallier@foss.st.com> wrote:
 
-elapsed time: 738m
+> feature-domains is an optional property that allows a peripheral to
+> refer to one or more feature domain controller(s).
+> 
+> Description of this property is added to all peripheral binding files of
+> the peripheral under the STM32 System Bus. It allows an accurate
+> representation of the hardware, where various peripherals are connected
+> to this firewall bus. The firewall can then check the peripheral accesses
+> before allowing it to probe.
+> 
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 
-configs tested: 78
-configs skipped: 2
+There was probably a cleaner way to ensure that this could go via the various
+subsystem trees, but hopefully there won't be any clashes with other work going in
+and if there is, the resolution should be simple. Hence I'm fine with
+this going via the dt tree.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+So for the IIO ones below,
 
-gcc tested configs:
-x86_64                            allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64               randconfig-a002-20230123
-x86_64               randconfig-a005-20230123
-x86_64               randconfig-a001-20230123
-x86_64               randconfig-a006-20230123
-x86_64               randconfig-a003-20230123
-x86_64               randconfig-a004-20230123
-i386                 randconfig-a004-20230123
-i386                 randconfig-a006-20230123
-i386                 randconfig-a005-20230123
-i386                 randconfig-a002-20230123
-i386                 randconfig-a003-20230123
-i386                 randconfig-a001-20230123
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-bpf
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-ia64                             allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                 randconfig-c001-20230123
-i386                          randconfig-c001
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-clang tested configs:
-x86_64               randconfig-a013-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a016-20230123
-x86_64               randconfig-a012-20230123
-x86_64               randconfig-a015-20230123
-x86_64               randconfig-a014-20230123
-riscv                randconfig-r042-20230123
-hexagon              randconfig-r041-20230123
-hexagon              randconfig-r045-20230123
-s390                 randconfig-r044-20230123
-i386                 randconfig-a013-20230123
-i386                 randconfig-a016-20230123
-i386                 randconfig-a012-20230123
-i386                 randconfig-a015-20230123
-i386                 randconfig-a011-20230123
-i386                 randconfig-a014-20230123
-powerpc                 mpc832x_mds_defconfig
-powerpc                      walnut_defconfig
-arm                        mvebu_v5_defconfig
-arm                           sama7_defconfig
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r041-20230124
-hexagon              randconfig-r045-20230124
-arm                  randconfig-r046-20230124
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+> index 1c340c95df16..c68b7b0e1903 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+> @@ -93,6 +93,11 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> +  feature-domains:
+> +    $ref: /schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
+> +    minItems: 1
+> +    maxItems: 3
+> +
+>  allOf:
+>    - if:
+>        properties:
+> diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+> index 1970503389aa..d01f60765e48 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+> @@ -59,6 +59,11 @@ properties:
+>        If not, SPI CLKOUT frequency will not be accurate.
+>      maximum: 20000000
+>  
+> +  feature-domains:
+> +    $ref: /schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
+> +    minItems: 1
+> +    maxItems: 3
+> +
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
+> index 0f1bf1110122..f6fe58d2f9b8 100644
+> --- a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
+> +++ b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
+> @@ -45,6 +45,11 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> +  feature-domains:
+> +    $ref: /schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
+> +    minItems: 1
+> +    maxItems: 3
+> +
+>  additionalProperties: false
