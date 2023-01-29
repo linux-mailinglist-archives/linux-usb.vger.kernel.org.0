@@ -2,72 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA2A6800C2
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jan 2023 19:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 055A168021E
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jan 2023 23:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbjA2SXs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Jan 2023 13:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S235218AbjA2WF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Jan 2023 17:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbjA2SXp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Jan 2023 13:23:45 -0500
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2571C58D
-        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 10:23:40 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id MCKlpGwDQMaRbMCL4pnjkG; Sun, 29 Jan 2023 19:23:38 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 29 Jan 2023 19:23:38 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     gregkh@linuxfoundation.org, peterz@infradead.org, pmladek@suse.com,
-        john.ogness@linutronix.de, baolu.lu@linux.intel.com,
-        tglx@linutronix.de, mingo@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 3/3] usb: early: xhci-dbc: Use memcpy_and_pad()
-Date:   Sun, 29 Jan 2023 19:23:10 +0100
-Message-Id: <b447a7e9778d3f9e6997eb9494f1687dc2d5d3bf.1675016180.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1675016180.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1675016180.git.christophe.jaillet@wanadoo.fr>
+        with ESMTP id S232647AbjA2WF4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Jan 2023 17:05:56 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65ED1ABDA
+        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 14:05:53 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 276342C04C6;
+        Mon, 30 Jan 2023 11:05:48 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1675029948;
+        bh=2AZL63pfAWUKEF4IHdZOZ5Vad7bOLhjr1WKbUqAuAW8=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=P0dXpHi/5znpUykxRil2Si/6qxBtFjTVxPBlsi2IxMyBtjB79Tms00WTKqcIOkCsf
+         Rl91e2btnbEYOvYg8lCnK/huyA9vZQQlCAu7FvZ51Vz6jzfPLv9ITUvuhcylJnbxpM
+         nq1R5sw98lBD+8Z5boiR2iD97BPuU7Lywcp4Wpy8tRGguJgt+iKkcpcOFF9gyBzGXB
+         SccoFAV2s0aLEsQ5gPWOEHYnuNKlsBKRVxudWEZZHONRDJbrtZEtOiBPRKTg5dcXlK
+         dfR9zpk1EQUBxQhFsUA8NsQgHzBMTz1C1nZ4WfbSRdxoFrQkijRQJhUmGDdy+w5EvH
+         OosZQoOLbYHLQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63d6edbc0001>; Mon, 30 Jan 2023 11:05:48 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.45; Mon, 30 Jan 2023 11:05:47 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.045; Mon, 30 Jan 2023 11:05:47 +1300
+From:   Mark Tomlinson <Mark.Tomlinson@alliedtelesis.co.nz>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: MAX3421: Handle USB NAK correctly
+Thread-Topic: [PATCH] USB: MAX3421: Handle USB NAK correctly
+Thread-Index: AQHZMfm2aO24Wzk0JEq5z3qToIgLia6w8bAAgAQsGwA=
+Date:   Sun, 29 Jan 2023 22:05:46 +0000
+Message-ID: <c42ca86c191f425297090e45a125e370323f87e6.camel@alliedtelesis.co.nz>
+References: <20230127024734.8777-1-mark.tomlinson@alliedtelesis.co.nz>
+         <Y9NtvKbY1nfoVtw9@kroah.com>
+In-Reply-To: <Y9NtvKbY1nfoVtw9@kroah.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:23:249b:4bf3:3b6:8672]
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <BF05EB9A99FFCC4E874CAD0A2F046EE6@atlnz.lc>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=a6lOCnaF c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=Q9fys5e9bTEA:10 a=RvmDmJFTN0MA:10 a=4GEGL-l4OV8QxAh4I78A:9 a=PUjeQqilurYA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Instead of zeroing some memory and then copying data in part or all of it,
-use memcpy_and_pad().
-This avoids writing some memory twice and should save a few cycles.
+On Fri, 2023-01-27 at 07:22 +0100, Greg KH wrote:
+>=20
+> What commit id does this fix?  And should it be backported to older
+> kernel trees?
+>=20
+> thanks,
+>=20
+> greg k-h
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/early/xhci-dbc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+The code in question has been unchanged since the original commit
+2d53139f3. I'm sure that the behaviour is the same in all kernels since
+this driver existed, but also wonder how many people would be affected by
+it. I would be happy if this only went into the current tree.
 
-diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
-index 965a24e47c0f..341408410ed9 100644
---- a/drivers/usb/early/xhci-dbc.c
-+++ b/drivers/usb/early/xhci-dbc.c
-@@ -499,8 +499,7 @@ static int xdbc_bulk_transfer(void *data, int size, bool read)
- 		addr = xdbc.in_dma;
- 		xdbc.flags |= XDBC_FLAGS_IN_PROCESS;
- 	} else {
--		memset(xdbc.out_buf, 0, XDBC_MAX_PACKET);
--		memcpy(xdbc.out_buf, data, size);
-+		memcpy_and_pad(xdbc.out_buf, XDBC_MAX_PACKET, data, size, 0);
- 		addr = xdbc.out_dma;
- 		xdbc.flags |= XDBC_FLAGS_OUT_PROCESS;
- 	}
--- 
-2.34.1
+ - Mark
 
