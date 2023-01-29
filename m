@@ -2,171 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A4367FEA9
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jan 2023 12:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738C367FF03
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jan 2023 13:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjA2Lu3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 29 Jan 2023 06:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
+        id S231707AbjA2MnM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Jan 2023 07:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjA2Lu2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Jan 2023 06:50:28 -0500
-X-Greylist: delayed 326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 Jan 2023 03:50:27 PST
-Received: from voltaic.bi-co.net (voltaic.bi-co.net [134.119.3.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B4A20D10
-        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 03:50:27 -0800 (PST)
-Received: from [192.168.0.36] (ip-037-201-145-251.um10.pools.vodafone-ip.de [37.201.145.251])
-        by voltaic.bi-co.net (Postfix) with ESMTPSA id 107B520E99
-        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 12:45:00 +0100 (CET)
-Message-ID: <8be9b56c6becd0981d1cd9c13742df6ba2975b56.camel@bi-co.net>
-Subject: Cypress CDC ACM serial port not working correctly with autosuspend
-From:   Michael =?ISO-8859-1?Q?La=DF?= <bevan@bi-co.net>
-To:     linux-usb@vger.kernel.org
-Date:   Sun, 29 Jan 2023 12:44:59 +0100
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S234912AbjA2MnK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Jan 2023 07:43:10 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D034B126C1;
+        Sun, 29 Jan 2023 04:43:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1674996183; bh=9fz4xL5G7vsXInxpDkUGRVGvDGpzYQnWOzaC+5JEBTs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=n6m/cqeG3XzHmL9G0YAqZAmlElFYKw1S1b78nQku4K4p4vmTYU2MBDip1Iinj+X55
+         so6gxLqvS/eS7qDpcXnnORKv2C0MsVZ8sNkZoBwUtrWLb9iZrK2rIKxKk0ZbItRXGP
+         4Y5udD/XgHuKlZAvUdwN9w1Dlrt5DWdzmZEEMVBVX9rz4CncdrytXGGeK5WKbLMPVM
+         qIewoFGJUhhKDhDuYEgAYFNn9KF2f6ENn3yvKNq/G0Z8aFf/4MKwOKYlH1t/znXAq2
+         mc0G1wLTzdhoheDgYlVVwMwtbFrnMsG0da/uCKWq1nZpFRJSwBqin6+2hEX4VUSvIl
+         +5vBZT2DPb/dw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5GE1-1odKL40QEP-0117hr; Sun, 29
+ Jan 2023 13:43:03 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     devicetree@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: phy: nop: Fix a typo ("specifiy")
+Date:   Sun, 29 Jan 2023 13:42:58 +0100
+Message-Id: <20230129124258.1295503-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:zHsQwgpM2Z+0Eg0oMK+ANH/cRXMlp6tk0QIf/ZQVQzuwJTQa3A7
+ 1lGx91ypYIDskOgxiE+gCxZ76fcm1xcB6BxDUFvqRGM3pGZMpxB/sZLwJ8+eyp6r2dZ32kC
+ gKQLS51jLmEHQVC07K0veAF2KYB5Y3rGyM7KOD6zFCNkuWo8wH66MVyXpFT9N6ZbtiD5KvI
+ hagCaGjxoSCaxuJX3VDlQ==
+UI-OutboundReport: notjunk:1;M01:P0:bQnWwKzea9A=;4GqUWPFs7Rxokjhxrb3SuQFz7P3
+ P+Lgdd9ASs2gV09av6uOlx8hqjcSDO7JrFqhwtY6ElyEuB8ao7LBvHcxDppwDQ8kTKDpfMoFz
+ YzJNkUjeb9I2B15Q+Q8Rde0+JzT0rLvAa1q+6dRrBHTYXWrri3jhGLjcX6+Pa8RHW2i+pV0r0
+ ebMKY4aB1zRiIKCQ5/E+IpfatLKtoBXlaBR+4N6ZLSrOXLt7YfWm68drQU7WDk2ZwOfAe4zqP
+ +l4yLq0f28QegryhT86SGzzxXClQyRR7TZ+NVQvFIniqxCKxAjGWou1iQpY6rfjez3p90Y/Dr
+ sTXxIwxBzbEXOCmkSnl/5BDRNAOWvONFKyzW+TZ1dzo0MuvkOzMg6k4tyQ/Yk9RO/IPioyL1+
+ qQtCkoNbS/G+vRSepSExMkwiKc6YgPPkUOp5EB9f0Ay5wOVoIsx/VutQPFWKlpz1Vjl4QyA20
+ mN8kL6gaE/2eGo1mJtqv9FILfHdXTANOQk8mhia+omCWJonfcxWLczGMspAhM0PULp76WKoUu
+ rSTlNlijkabj2pbS7SMhjxELri3oswXakaLKOzZH8GiDzGOoGqAU2siAIcD8YV89aTLereDhq
+ yO0X26QW74q/Jr0f7+FHctRDmnEdIbcmDGhoR9L6RDHAIyQYLEPJqWpI+K1CF6TICoWkj01Oc
+ LQpmAIc5OIf0Dvo9t/O2hc49PUKK2EvpBlw0+ygWaJy2jqOawr2GpIChK4Ey9ChWIVwMKJaWB
+ GI7iRYvhCRwK66gTgQ48+GNvZn6seL9dmFTGIebPMQb5FiYxhFJZIKvl2yVt944/edu1HRGZA
+ Or7et6KHDFJdYGMczXGzRe70qgBFk9nnv1BNwYees0ku6VhMcO4E1A+SJL35pqAoK58QMRtuO
+ cmH7nXPzGRCz9Y3WNLCFRoTm/0MM6Nq8MmJigsHFlKq48vBO/nnZXQC0uacse6DiNsHD7mAHE
+ 6ouhUw==
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Spell it correctly as "specify".
 
-I noticed an issue with the following USB to serial adapter when
-autosuspend is enabled for that device:
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    ID 04b4:0008 Cypress Semiconductor Corp. CDC ACM serial port
+diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml b/Do=
+cumentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
+index 326131dcf14d7..921b986adc477 100644
+=2D-- a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
++++ b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
+@@ -35,7 +35,7 @@ properties:
+     maxItems: 1
 
-The problem is that the device silently drops any data received from
-the serial connection whenever there is a pause in communication for
-longer than one or two seconds. Then one needs to either touch the
-device (e.g., /dev/ttyACM0) or send some characters via USB to receive
-data again.
+   vbus-regulator:
+-    description: Should specifiy the regulator supplying current drawn fr=
+om
++    description: Should specify the regulator supplying current drawn fro=
+m
+       the VBus line.
+     $ref: /schemas/types.yaml#/definitions/phandle
 
-The problem can be circumvented by the following udev rule:
-ACTION=="add|change", SUBSYSTEM=="usb", ATTR{idVendor}=="04b4", ATTR{idProduct}=="0008", TEST=="power/control", ATTR{power/control}="on"
+=2D-
+2.39.0
 
-Is this something that should already be applied by the kernel?
-
-I'm running Linux 6.1.8. Below you find outputs of lspci and lsusb for
-the relevant devices.
-
-
-lspci -v for the USB controler:
-
-06:00.4 USB controller: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne USB 3.1 (prog-if 30 [XHCI])
-        Subsystem: Lenovo Device 5082
-        Flags: bus master, fast devsel, latency 0, IRQ 75, IOMMU group 7
-        Memory at fd100000 (64-bit, non-prefetchable) [size=1M]
-        Capabilities: [48] Vendor Specific Information: Len=08 <?>
-        Capabilities: [50] Power Management version 3
-        Capabilities: [64] Express Endpoint, MSI 00
-        Capabilities: [a0] MSI: Enable- Count=1/8 Maskable- 64bit+
-        Capabilities: [c0] MSI-X: Enable+ Count=8 Masked-
-        Capabilities: [100] Vendor Specific Information: ID=0001 Rev=1 Len=010 <?>
-        Kernel driver in use: xhci_hcd
-        Kernel modules: xhci_pci
-
-
-lsusb -v for the USB device:
-
-Bus 006 Device 010: ID 04b4:0008 Cypress Semiconductor Corp. CDC ACM serial port
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            2 Communications
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0         8
-  idVendor           0x04b4 Cypress Semiconductor Corp.
-  idProduct          0x0008 CDC ACM serial port
-  bcdDevice            0.00
-  iManufacturer           1 2012 Cypress Semiconductor
-  iProduct                2 Cypress-USB2UART-Ver1.0G
-  iSerial                 4 827211C2091B
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0043
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          3 USB-UART Configuration
-    bmAttributes         0xa0
-      (Bus Powered)
-      Remote Wakeup
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0 
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Union:
-        bMasterInterface        0
-        bSlaveInterface         1 
-      CDC Call Management:
-        bmCapabilities       0x00
-        bDataInterface          1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0010  1x 16 bytes
-        bInterval               2
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 
-      bInterfaceProtocol      0 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-Device Status:     0x0000
-  (Bus Powered)
-
-
-
-Best regards,
-Michael
