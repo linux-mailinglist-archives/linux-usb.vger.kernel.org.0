@@ -2,156 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ACE681D9B
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 23:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3952681DE6
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 23:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjA3WDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 17:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S231530AbjA3WRs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 17:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjA3WDN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 17:03:13 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA5230E96;
-        Mon, 30 Jan 2023 14:03:12 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ULsVXN017941;
-        Mon, 30 Jan 2023 22:02:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ILW2ve8L0jEt9qEsEsaaeIOpHW9pUVZIoAQxIT5Y2Eg=;
- b=CM53rTJIuODJJOlNE7LUXbBP8s4euiMXtzMlkTYKN8kPKs8MgoojnVD+6VCXib/OT9/N
- 680mb4xbAEH5FO6msq9EvwSj2WsN7dhXU02av1zpTFYfiAnOQ4p42kftehfS+qnpgj/B
- BLTgL7yXgB5z8APTqsmgP+iZlhTexvqJCF/YipUhzM5aoco8/HnCOq7R6CwMs3iqi4hx
- mOMJZ43I1Hul9fXslk16Sc1PL5+jKXfBZrXXHLuwmT+ZOyqpBYib2MFkK/TjV41b+9UW
- M70rp6COAyl8hsJ8czOJvipO47kZGd5a0u1OfpsEsAdpxmV2xMVqi/AODs3U/u4kSSxY xQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nefmfrwp3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 22:02:52 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UM2psh025299
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 22:02:51 GMT
-Received: from [10.110.113.14] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 14:02:50 -0800
-Message-ID: <6655bd97-61e8-e03b-b782-bcfcc2138717@quicinc.com>
-Date:   Mon, 30 Jan 2023 14:02:49 -0800
+        with ESMTP id S229573AbjA3WRq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 17:17:46 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4AE1B563;
+        Mon, 30 Jan 2023 14:17:46 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id g21-20020a9d6495000000b0068bb336141dso3106378otl.11;
+        Mon, 30 Jan 2023 14:17:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sxkc34nw9NakpfF2w3ZNxT+rUUgjADCyMtUMUVCKK2k=;
+        b=rPddJsvljaOJ12UuCR0NLHXJ+JXUSyWBwxFRxgwUR7YuNtZMZrckChTjNBKGkIYfKP
+         qo2EH6yXFYn4Pfd0LTHh0Hej/6wwyNDq+DKzDKcp7+6n1Sin5PJvEyMrhM3ABR498WWF
+         1ItTFAhkm55czGm5kzoPrpmH4AsgHwP+fVb0HDzt0sfOnYgC/kT+X3QGCuFBEh3xPCGy
+         Rib4l/nD3SmBpY0yp/DP/RkY+EsMD2PjbPKZ8Nc9LpZTiNjLQP1IyW0fqDTbaEZ5iRXE
+         +W0EI1zoD/k+SFadT+G+UO5H9Hvs5i7o7Dmv6AI70dy67uj01N4zFO2suLr+NGCwnlDg
+         Pd2Q==
+X-Gm-Message-State: AFqh2kqOQTGoBxLU1XR5LkZzDXWDDDVhtgeuaycxLR9XT4W7lWJXn2HR
+        76p9pJdvDXA0atx/uHI9Pw==
+X-Google-Smtp-Source: AMrXdXv/tN1MqqC7568LA2s4569AU6e8d7ISb2XpF76WsCbozrLujaQajfsgpCmIFTa/VdU5T0Etjw==
+X-Received: by 2002:a9d:5e84:0:b0:684:ccc3:1569 with SMTP id f4-20020a9d5e84000000b00684ccc31569mr11524701otl.0.1675117065580;
+        Mon, 30 Jan 2023 14:17:45 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k96-20020a9d19e9000000b0068bb3a9e2b9sm4343048otk.77.2023.01.30.14.17.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 14:17:45 -0800 (PST)
+Received: (nullmailer pid 3626287 invoked by uid 1000);
+        Mon, 30 Jan 2023 22:17:44 -0000
+Date:   Mon, 30 Jan 2023 16:17:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: usb: phy: nop: Fix a typo ("specifiy")
+Message-ID: <167511706397.3626248.6621009863447665163.robh@kernel.org>
+References: <20230129124258.1295503-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 14/22] dt-bindings: usb: dwc3: Add
- snps,num-hc-interrupters definition
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-15-quic_wcheng@quicinc.com>
- <05e55db1-5181-8025-8aee-e398200b047c@linaro.org>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <05e55db1-5181-8025-8aee-e398200b047c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Yz_E4BLFiZ2GtEA--tQbffoSRNPjd3yO
-X-Proofpoint-GUID: Yz_E4BLFiZ2GtEA--tQbffoSRNPjd3yO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 mlxlogscore=353 suspectscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301300202
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230129124258.1295503-1-j.neuschaefer@gmx.net>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
 
-On 1/26/2023 4:01 AM, Krzysztof Kozlowski wrote:
-> On 26/01/2023 04:14, Wesley Cheng wrote:
->> Add a new definition for specifying how many XHCI secondary interrupters
->> can be allocated.  XHCI in general can potentially support up to 1024
->> interrupters, which some uses may want to limit depending on how many
->> users utilize the interrupters.
+On Sun, 29 Jan 2023 13:42:58 +0100, Jonathan Neuschäfer wrote:
+> Spell it correctly as "specify".
 > 
-> I cannot find in the code any user of this. Your next patch stores it,
-> but which other patch uses stored value?
-> 
-> What I still don't get how is this exactly hardware property, not policy
-> or driver choice.
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+>  Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
-Sorry I must have missed that patchset when rebasing over Mathias' xHCI 
-changes.  It was there previously in my initial submission where the 
-property is carried over into xhci-plat from dwc3/host.c.
-
-So the xHC controller has a HCSPARAMs field that defines the number of 
-interrupters it can support.  It does potentially have the capability of 
-having 1024 interrupters.  Each interrupter has to have its own set of 
-interrupt register sets, which depending on the vendor implementing it 
-could limit the maximum.  For example, as stated below, DWC3 only allows 
-for 8 interrupters to be allocated.
-
-The purpose for this property is to allow the user/driver to not have to 
-allocate memory for supporting 1024 event rings, if they are only going 
-to utilize one.  Likewise, if the user attempts to allocate more than 
-what is supported by the HW, then Mathias' SW will cross check to ensure 
-that isn't allowed. (by checking the HCSPARAMs against the DT property 
-below)
-
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> index 6d78048c4613..4faaec9655e0 100644
->> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> @@ -349,6 +349,18 @@ properties:
->>       items:
->>         enum: [1, 4, 8, 16, 32, 64, 128, 256]
->>   
->> +  snps,num-hc-interrupters:
->> +    description:
->> +      Defines the maximum number of XHCI host controller interrupters that can
->> +      be supported.  The XHCI host controller has support to allocate multiple
->> +      event rings, which can be assigned to different clients/users.  The DWC3
->> +      controller has a maximum of 8 interrupters.  If this is not defined then
->> +      the value will be defaulted to 1.  This parameter is used only when
->> +      operating in host mode.
->> +    $ref: /schemas/types.yaml#/definitions/uint8
->> +    minimum: 1
->> +    maximum: 8
-> 
-> default: 1
-> 
-
-Got it.
-
-Thanks
-Wesley Cheng
+Acked-by: Rob Herring <robh@kernel.org>
