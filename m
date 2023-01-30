@@ -2,324 +2,298 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AF06816D3
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 17:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88426819B2
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 19:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbjA3QsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 11:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S237986AbjA3Syn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 13:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235791AbjA3QsR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 11:48:17 -0500
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D8AF77D;
-        Mon, 30 Jan 2023 08:48:15 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id k15-20020a4adfaf000000b00517450f9bd7so601337ook.8;
-        Mon, 30 Jan 2023 08:48:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vLqvqE2pEr5jQoyGystjR0URkw9KxZ/MIpXl61MzN8w=;
-        b=IiP8gdjJWj92ZDo8HJiF5kOVii6pSVk4O0ntLXdhX52WLD5dl+eRtL+WND9DL6uyBq
-         fPLFeyjYEYKZOHWN6NGo//zWGLF6Vw2wq2iclmrKuH2+j2hSrSqmyAvbJcaYkuxi9whN
-         ooN9kcT9liGl89yczCXHvNKdLOuLZcufbo67KHIBk1THB/GFfjSfKUwXDagtOB9sLALS
-         7Dw34uxFx3fI07ECcQBylup6ePW+1JW6gN1vFNMwLL+EGuon5ihlMl+iEnvSdnM2Pvbt
-         HclsnglctgvgvQXbnDhdlnM6pXp8n7diFWhuOLShKThqLmXLS1NggtD4etcGkyu7wkRM
-         8ySQ==
-X-Gm-Message-State: AFqh2kq3rbG0QREI1HxoAeaQjkxlLaPtokcF6UQxZT2ihEZJbWnhxXQl
-        XAZnmOOCC3NPZnPgK0TM/A==
-X-Google-Smtp-Source: AMrXdXvHVPlVqvcNpBLmjf0I9+f+tvHHIjoM9QSGwRCoSefFTS8eaMuG+7CTLiL9cy19UAtRlzAeig==
-X-Received: by 2002:a4a:c118:0:b0:4f2:9e:3e87 with SMTP id s24-20020a4ac118000000b004f2009e3e87mr21300637oop.4.1675097294723;
-        Mon, 30 Jan 2023 08:48:14 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v6-20020a4ac906000000b0051762a73553sm2313549ooq.18.2023.01.30.08.48.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 08:48:14 -0800 (PST)
-Received: (nullmailer pid 2790934 invoked by uid 1000);
-        Mon, 30 Jan 2023 16:48:13 -0000
-Date:   Mon, 30 Jan 2023 10:48:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-Message-ID: <20230130164813.GA2730437-robh@kernel.org>
-References: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
- <20230117175657.GA3275060-robh@kernel.org>
- <20230118180811.GB3322341@hu-bjorande-lv.qualcomm.com>
- <20230119161132.GA1880784-robh@kernel.org>
- <20230119173954.GB3899167@hu-bjorande-lv.qualcomm.com>
- <CAL_Jsq+4t09XDkF0dbh+aOyTz80SY18EpRBdoGpLqQBuCPQ5=Q@mail.gmail.com>
- <20230124170437.GA1209567@hu-bjorande-lv.qualcomm.com>
- <CAL_JsqL+-updMkZ7AZoKPdU==PPdVv7qZC2MFc7Xw_PSo7QPGw@mail.gmail.com>
- <20230125234013.GA2132606@hu-bjorande-lv.qualcomm.com>
+        with ESMTP id S237541AbjA3Sym (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 13:54:42 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2093.outbound.protection.outlook.com [40.107.215.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11992B094;
+        Mon, 30 Jan 2023 10:54:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FRT9XFIPxW33TbaX0lvd9jgnib186oM8bmEoqzKxGXUvZ8Chc1wJlV7q0H/LYIDy8fblhS1RW1iTkv7oEmQsgfcXkVvFPHEVo8MUZO0v8OkIZLNQNCWW+bYKUku5tq5dH74r41WuI6wdCr6upvKjZpu/kS9y3KzJJF7svFtavHe7xDXClG23oR5EoKGG1jhdE8vpBCuXvIx2VrTr2s9rH5r+2v9rK+4Lt+Izi1KeKs7pv5uHq5N9Z6DHITbhvo0utiD7a1rqv+4x4B8s4TlM50NXzNrytf3LRunOb1CgOq5dn/enkVJEGUPiEE23so4NfQkyC0RsUIEaLACbcuD9MA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b0J4HycYXS4cl5g/ed8Z9+ZmTH4HlDmDov+h/iCNJGE=;
+ b=MHO4gH0zGeYewnSMjg/e0Pbgldf0tiMqcUVTbZW0N7I5BDh7fnqnf4PTecbDujTnmtHWLEMDoffTMxHwjZD0JJkK8KhsPXKWqntDHdMR7VtNCDbAvbAoIfYUrNWeOc96jbnPictjRnxY02Coh2fDPXvRh191F3zrOV6ZHgei6h/sJBiTEZckPpB7ygYBmxyayGBFW6gJs40BINyYNxmCJLolNeZOQbu5yoI43agQ0olMs2mDtC1KlKKYfgCnvr7xmjhVBoo/cmuuSd6OauDivFtKnDyzstSsaWqgcjm2glgueiRC9ykW5EuPVJKBxs6wdfpm28KJ9FCHyabrRwdIYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b0J4HycYXS4cl5g/ed8Z9+ZmTH4HlDmDov+h/iCNJGE=;
+ b=opagAaNuBzHzrkRfvBYpPZZPD/2nBEHfh+LbS664Xxz3OqjUexp833Ht4KqVpEren3f/bEvpM8KGBjf0w+kQ4bM6eswpj7ueBnDfrO+x4vCcv0EZZILVCdbUB1AW4PLyB+Ru8Vyu0mOMCxdWahfvMzxazVwZqTE1Gb1RLWiZCpk=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by OS3PR01MB10389.jpnprd01.prod.outlook.com (2603:1096:604:1fa::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 18:54:36 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::343d:7339:78e5:a46e%8]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
+ 18:54:36 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     kernel test robot <lkp@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+CC:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
+ detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
+Thread-Topic: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
+ detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
+Thread-Index: AQHZNFRzWGTdb9Qh20GbjjeGaxR0fa62s0+w
+Date:   Mon, 30 Jan 2023 18:54:36 +0000
+Message-ID: <OS0PR01MB59220EFDE43A39D61FC73E2786D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <202301301054.KVvGA5XO-lkp@intel.com>
+In-Reply-To: <202301301054.KVvGA5XO-lkp@intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OS3PR01MB10389:EE_
+x-ms-office365-filtering-correlation-id: 081d93ac-3cd2-4641-a4c7-08db02f36f2e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PV9q+WFjfnQ3oWYD0oL1+DlIL372Lami3EJVzntnhcJC6OcvFcZPn1XTvSpMu8+yjrjXAN0QmPccml+QBSzUFyaaYtSvbgob/XK2n9kNyOnS4BSLIbmWvKbeI0/O+rsILFYOkFD7SQKmoMIhXc2n+5LrpMeJPmuH9WWvROkfS9UQhvywVtYv15qW7MSvvXz+jTXS90KVB7QkxIjBRF5FnioTvJl0hks/F4uFMnqWzeMMXh2eqNUZ13yN9ie5grHRHf31docBoE18UlvwrE9uvq2GbZKEw2dji9kRoWUcI6esPtvVYlU9RM77EPZyoNA93oxZ6Yk9NP5MIeI5ANIPFV3pa3mdMHQpRxB5eO8qiXUZAJwiU/w2IH7fJSaf5584GQMuC8c6rQty7P3QDpmZ8gea59uOAVP0hpoPbJ4o55+URnMA7PmicGPar7WHykDYBcCf8xQzrBwgC1mmghPy1nB6VmR1qrpIuUMEtzsROBdHx5bULQD/5OWLHBbL6jGDSjYt5xLOe2IYItF+FB513g42ubRxi37tmz6/G/iG/BM57BR4m2ODnC1TtSl+OkexgGjFc0Vgo9s9pk5PExsXaDjMzhYMJf30+BiZ0c4tjASWGKIr/a+rFbZ0paeHhG0F6X1miY6IlOSIvZBmLBBAjbuwX7AAN98vmDSmQYSnySvIrwo2KcMQTnSIwNCqxR3XXdKuPDlmt7Rqm2jjCdq+omy66A0+yG5HPN1VY2/y4xw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(39860400002)(396003)(136003)(366004)(451199018)(186003)(71200400001)(7696005)(41300700001)(83380400001)(966005)(9686003)(6506007)(478600001)(26005)(54906003)(110136005)(66946007)(316002)(45080400002)(66556008)(76116006)(122000001)(38100700002)(64756008)(66476007)(66446008)(8676002)(4326008)(5660300002)(55016003)(2906002)(86362001)(33656002)(38070700005)(52536014)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XFUhle3/CMXmzcQwtUZmYfxQ7iuXmur+aN5+O8FwevN33u+yQDgogMYVZjHn?=
+ =?us-ascii?Q?GdWVt8RDfnufEbKTY0HdJJrRznOX0P01QFtjOs5xchRY8rxLv4/7lGBikRD3?=
+ =?us-ascii?Q?2l7kjG5rEHyDFqp3us0zkqZfKIs3wYRVipk7OgILppN0EdOirl6GWf3pqXYo?=
+ =?us-ascii?Q?prv4QpOtC362cUGd41Q4vFzhl6Pp62K3H0SRGKNFzcQxiJBdPgrGAh0Dyzx7?=
+ =?us-ascii?Q?fIAwi6qb6TfyR0MSHZtNmJlqBA41p7m51YsIbkaaMyu97ENBCoUOK5BETQBO?=
+ =?us-ascii?Q?6BNvEi751dswYN5HBx7ApRVMJdx6lZ93CKl8drrVbByWUKYPak8iGOdGzB3L?=
+ =?us-ascii?Q?IZzbmEz2dM1GVhPs/F6KUPVT/evZ+GozyH/WCY0XAn3ctTHBowxVKYnVw5l+?=
+ =?us-ascii?Q?qxlpGgpHJVV5+dgEQi1+9I48tvgd9qeGmdRvPHNmgWOvHVLPVl26NiIJkEPn?=
+ =?us-ascii?Q?nMRKYbv2W7ZAqd1Xp5jPz3LvaWNqJsyt0+U8XqbHqEJXyc+fcbqESxxkyo9w?=
+ =?us-ascii?Q?C2IvZSXHzOF37rxZiIGGhmbH5uzV6p2CDFShK02nQXgpPxSCWhAU90ifN3ki?=
+ =?us-ascii?Q?+j+P5Xi72+l95EFWyvUpTj6HZoFa/C+42JySc50cgRZKqz2YsVG5buip6kLG?=
+ =?us-ascii?Q?lgpj3u4l4+oBpqfkaPolFea1kZ6JOVduIkNcYuTDhoEPz2VhpPpgO3oO2BCw?=
+ =?us-ascii?Q?5XoQxvOUqUL6rOFiY+1XxqRxAI0Kf5COXHT+k139gD3g20m/WPyRyWJj8T8P?=
+ =?us-ascii?Q?oQsmi9nVgOR1WKiHg6eWWKzgBPqXvjwT81F6t3AqKUvph/BkgfWDgYwcB5a/?=
+ =?us-ascii?Q?hfYfws6M8m5yAhLZ1iNxAWKGsf+tAjlk+cvvbRh8BJNVPHESshbYyVXG2Nya?=
+ =?us-ascii?Q?XwIXip96c9sMWggNFDg0mhq6WESadCD1/vgpu2F5npey/d2LWtv9KROmpItW?=
+ =?us-ascii?Q?YO2bvL5gfhjZO0TLKV32idhJ+OXqT0/jGbXVZu/9L0vhXvQdEkl+iq/5pJkw?=
+ =?us-ascii?Q?2z6WY/JunOJc/5SqH9nW61GWCMeKzlPMu9cCkJt43JqmKqxrM9lz0hRy00ul?=
+ =?us-ascii?Q?j93EXi7JnwXjz0FZ59piilAwtXhtsjH0dgmAkGW36JRQs6MhioDDRBNXikrs?=
+ =?us-ascii?Q?wxcepqutcQFyua6zTeLS1aNbDNi52efPURG1F+9vtfk1ziBTjUJhcE4wnhoQ?=
+ =?us-ascii?Q?dKVipT6EbHk9hqkKxgoWQPP3KuV2po5I/mU+wMu2hNrm+eKKjXRhYDL2RyYH?=
+ =?us-ascii?Q?Bone0bc3zO5KgRpdsACWwCPoyhEVKqg3Dlj8gYTfcdj07Kg5nCP4ENF4RAht?=
+ =?us-ascii?Q?H35baRnb2UEiDCQR04eQMcjehxsmsrGn8dz/GkF4Aw9s34tbR5W1J2exaV2o?=
+ =?us-ascii?Q?UwnelRrPfb2vJMbGXAT1Y5T6ms0AtZ3sLJxPXscxDQ+BimSqK0UFhP8b4r+w?=
+ =?us-ascii?Q?KFDaKPENlp/NHas5qzdNle5sy+65ZKU0l4HCH2Ig9v4/1UWhQDo0CkwA4pYv?=
+ =?us-ascii?Q?ilsDrS14UClBUxcYO35n2CAjJH96pmU1GhgE6AnS/dXgUJMYZ1zVICLIPVM+?=
+ =?us-ascii?Q?7cAIL/ibLM2MOO02IfgymcoS6G2+We7N5WWIDck5H69JeY9xxu8iqRpLdfXa?=
+ =?us-ascii?Q?SQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125234013.GA2132606@hu-bjorande-lv.qualcomm.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 081d93ac-3cd2-4641-a4c7-08db02f36f2e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 18:54:36.8069
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EWXIeimsm1w03ITlscmL+1Uhb4xfImy02vV44nYsr2ysD5xJ/c1s5RPgnlFWUFneTjCaxWaLlLzcJ7uJuREX6hTxYW0gpLyusOAI0d7q//g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB10389
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:40:13PM -0800, Bjorn Andersson wrote:
-> On Tue, Jan 24, 2023 at 08:31:13PM -0600, Rob Herring wrote:
-> > On Tue, Jan 24, 2023 at 11:04 AM Bjorn Andersson
-> > <quic_bjorande@quicinc.com> wrote:
-> > >
-> > > On Tue, Jan 24, 2023 at 10:00:12AM -0600, Rob Herring wrote:
-> > > > On Thu, Jan 19, 2023 at 11:40 AM Bjorn Andersson
-> > > > <quic_bjorande@quicinc.com> wrote:
-> > > > >
-> > > > > On Thu, Jan 19, 2023 at 10:11:32AM -0600, Rob Herring wrote:
-> > > > > > On Wed, Jan 18, 2023 at 10:08:11AM -0800, Bjorn Andersson wrote:
-> > > > > > > On Tue, Jan 17, 2023 at 11:56:57AM -0600, Rob Herring wrote:
-> > > > > > > > On Thu, Jan 12, 2023 at 08:11:14PM -0800, Bjorn Andersson wrote:
-> > > > > > > > > From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > > > > > >
-> > > > > > > > > Introduce a binding for GPIO-based mux hardware used for connecting,
-> > > > > > > > > disconnecting and switching orientation of the SBU lines in USB Type-C
-> > > > > > > > > applications.
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > > > > > > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> > > > > > > > > ---
-> > > > > >
-> > > > > >
-> > > > > > > > > +    tcpm {
-> > > > > > > > > +        connector {
-> > > > > > > > > +            compatible = "usb-c-connector";
-> > > > > > > > > +
-> > > > > > > > > +            ports {
-> > > > > > > > > +                #address-cells = <1>;
-> > > > > > > > > +                #size-cells = <0>;
-> > > > > > > > > +
-> > > > > > > > > +                port@0 {
-> > > > > > > > > +                    reg = <0>;
-> > > > > > > > > +                    tcpm_hs_out: endpoint {
-> > > > > > > > > +                        remote-endpoint = <&usb_hs_phy_in>;
-> > > > > > > > > +                    };
-> > > > > > > > > +                };
-> > > > > > > > > +
-> > > > > > > > > +                port@1 {
-> > > > > > > > > +                    reg = <1>;
-> > > > > > > > > +                    tcpm_ss_out: endpoint {
-> > > > > > > > > +                        remote-endpoint = <&usb_ss_phy_in>;
-> > > > > > > > > +                    };
-> > > > > > > > > +                };
-> > > > > > > > > +
-> > > > > > > > > +                port@2 {
-> > > > > > > > > +                    reg = <2>;
-> > > > > > > > > +                    tcpm_sbu_out: endpoint {
-> > > > > > > > > +                        remote-endpoint = <&sbu_mux_in>;
-> > > > > > > > > +                    };
-> > > > > > > > > +                };
-> > > > > > > > > +            };
-> > > > > > > > > +        };
-> > > > > > > > > +    };
-> > > > > > > > > +
-> > > > > > > > > +    sbu-mux {
-> > > > > > > > > +        compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-> > > > > > > > > +
-> > > > > > > > > +        enable-gpios = <&tlmm 101 GPIO_ACTIVE_LOW>;
-> > > > > > > > > +        select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-> > > > > > > > > +
-> > > > > > > > > +        mode-switch;
-> > > > > > > > > +        orientation-switch;
-> > > > > > > > > +
-> > > > > > > > > +        port {
-> > > > > > > > > +            sbu_mux_in: endpoint {
-> > > > > > > > > +                remote-endpoint = <&tcpm_sbu_out>;
-> > > > > > > > > +            };
-> > > > > > > >
-> > > > > > > > Don't you need a connection to whatever drives SBU? Maybe your case is
-> > > > > > > > fixed because the phy does the DP/USB muxing? But the binding needs to
-> > > > > > > > support the worst case which I guess would be all the muxing/switching
-> > > > > > > > is done by separate board level components.
-> > > > > > > >
-> > > > > > >
-> > > > > > > Perhaps I'm misunderstanding your request, but I think this is the worst
-> > > > > > > case you're talking about.
-> > > > > > >
-> > > > > > > &usb_ss_phy_in is a reference to the PHY, which does switching/muxing of
-> > > > > > > the SuperSpeed lanes in the connector, but the PHY provides no control
-> > > > > > > over the SBU signals.
-> > > > > > >
-> > > > > > > So this sbu-mux is a separate component between the SBU-pads on the SoC
-> > > > > > > and the usb-c-connector, referenced through he &sbu_mux_in reference.
-> > > > > > >
-> > > > > > >
-> > > > > > > So upon e.g. a orientation switch, the typec_switch_set() call the tcpm
-> > > > > > > implementation will request orientation switching from port@1 and port@2
-> > > > > > > (no orientation-switch on port@0/HS pins).
-> > > > > >
-> > > > > > 'port@2' is supposed to define the connection to what controls SBU. The
-> > > > > > mux here switches the signals, but it doesn't control them.
-> > > > >
-> > > > > The SBU signals are driven by the SS PHY, on behalf of the DisplayPort
-> > > > > controller. These signals are  turned on/off as a result of the TCPM
-> > > > > indicating the HPD state to the DisplayPort controller.
-> > > > >
-> > > > > There's a such not really a direct representation today of the entity
-> > > > > that drives the SBU lines. It happens to be a sub-block in
-> > > > > &usb_ss_phy_in, but I don't envision that we need/want any signaling
-> > > > > between the TCPM and the SBU-"driver".
-> > > > >
-> > > > >
-> > > > > I see that I missed that in the example above, your suggestion on how to
-> > > > > model that relationship (TCPM - DP controller) was to add an additional
-> > > > > endpoint in port@1. So that's the current design (but neither ports nor
-> > > > > endpoints are significant from an implementation point of view).
-> > > > >
-> > > > > > The mux should sit in the middle, but the graph terminates at the mux.
-> > > > > > You don't have a connection presumably because you know what the
-> > > > > > connection.
-> > > > >
-> > > > > But do you suggest that the graph should reference the entity that
-> > > > > drives the SBU signals?
-> > > >
-> > > > Yes, that was the original intent.
-> > > >
-> > >
-> > > Directly from the connector, or just indirectly?
-> > >
-> > > > > What about the discrete mux?
-> > > >
-> > > > You mean the mux in this binding, right? That should be in the middle:
-> > > >
-> > > > DPaux --> SBUmux --> connector
-> > > >
-> > > > Maybe the SS phy is in there too.
-> > > >
-> > >
-> > > The signal originally comes from the DP controller, the analog
-> > > electronics lives in the SS phy, then the signal goes to the SBU mux and
-> > > finally to the connector.
-> > >
-> > > > >
-> > > > > > Perhaps because there is only 1 connector and controller.
-> > > > > >
-> > > > >
-> > > > > There is one SBU mux, one DP controller and one SS PHY per
-> > > > > usb-c-connector.
-> > > > >
-> > > > > > Suppose you have 2 connectors and 2 controllers which drive SBU
-> > > > > > signals. Also assume that the SBU signals are completely independent
-> > > > > > from what's driving the altmode SS signals. How would you describe that?
-> > > > > >
-> > > > >
-> > > > > This is the setup we have on e.g. SC8280XP CRD; where the TCPM has two
-> > > > > usb-c-connectors defined, each with their graph referencing the SS PHY,
-> > > > > DP controller and respective sbu-mux.
-> > > > >
-> > > > > There's an incomplete example of this published at [1] (where the SS phy
-> > > > > isn't represented yet - and hence there's no control over the SS lanes,
-> > > > > nor is the HS lanes connected to the dwc3 for role switching).
-> > > > >
-> > > > > Perhaps I'm misunderstanding your concerns though?
-> > > >
-> > > > That looks like you can assume who drives SBU based on the DP
-> > > > controller. Probably a safe assumption for DP (that DP-aux is part of
-> > > > the DP controller), but I was more worried about if you can't assume
-> > > > that relationship. Take HDMI for example where the DDC signals can
-> > > > come from anywhere. They could be part of the HDMI bridge, a general
-> > > > purpose I2C bus off the SoC, or bitbanged GPIOs. Though from what I've
-> > > > read, HDMI Altmode is dead. I don't know if the need to describe the
-> > > > SBU connection would apply to anything else.
-> > > >
-> > > > I guess this all boils down to whether the SBU mux should have a 2nd
-> > > > optional port as the input for what drives it.
-> > > >
-> > >
-> > > Are you saying that the connector should link with the mux and then the
-> > > source of the signal should be daisy chained? Or that we should just
-> > > link both of them as two separate endpoints from the connector?
-> > 
-> > The former. The data path of the signal in h/w should match in the DT
-> > graph. The caveat being we don't normally show PHYs in that mix
-> > because they are somewhat transparent. That's maybe becoming less true
-> > with routing or muxing included in PHYs.
-> > 
-> 
-> We have discussed and prototyped this a few times now in the Qualcomm
-> community, and I am not a fan of having to add forwarding-logic to each
-> implementation of a Type-C mux/switch, which in some configuration might
-> have an entity behind it that needs the notifications.
+Hi all,
 
-I don't know if we can really escape that.
+> Subject: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
+> detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
+>=20
+> tree:
+> head:   c52c9acc415eb6ff54f658492f8c53da0fc3528a
+> commit: c52c9acc415eb6ff54f658492f8c53da0fc3528a [35/35] xhci: host: Add
+> Renesas RZ/V2M SoC support
+>         git remote add usb
+>         git fetch --no-tags usb usb-next
+>         git checkout c52c9acc415eb6ff54f658492f8c53da0fc3528a
+>         # 1. reproduce by kismet
+>            # install kmax per
+>            kismet --linux-ksrc=3Dlinux --selectees CONFIG_USB_RZV2M_USB3D=
+RD --
+> selectors CONFIG_USB_XHCI_RZV2M -a=3Dcsky
+>         # 2. reproduce by make
+>            # save the config file to linux source tree
+>            cd linux
+>            make ARCH=3Dcsky olddefconfig
+>=20
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> kismet warnings: (new ones prefixed by >>)
+> >> kismet: WARNING: unmet direct dependencies detected for USB_RZV2M_USB3=
+DRD
+> when selected by USB_XHCI_RZV2M
+>    .config:4492:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' inval=
+id
+> for ARCH_MMAP_RND_BITS
+>=20
+>    WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
+>      Depends on [n]: USB_SUPPORT [=3Dy] && USB_GADGET [=3Dn] && (ARCH_R9A=
+09G011
+> [=3Dn] || COMPILE_TEST [=3Dy])
+>      Selected by [y]:
+>      - USB_XHCI_RZV2M [=3Dy] && USB_SUPPORT [=3Dy] && USB [=3Dy] && USB_X=
+HCI_HCD
+> [=3Dy] && USB_XHCI_PLATFORM [=3Dy] && (ARCH_R9A09G011 [=3Dn] || COMPILE_T=
+EST [=3Dy])
+
+I have investigated this issue,=20
+
+Just for testing, I have reverted Arnd's patch[1] and then done the below c=
+hanges=20
+which is fixing unmet dependencies reported by the bot.
+
+Looks like USB_RZV2M_USB3DRD should depend upon both USB and USB_GADGET. Pr=
+eviously
+It depends only on USB_GADGET.
+
+Also the USB3DRD driver should be in "driver/usb/renesas_usb3drd" directory=
+ instead
+of "driver/usb/gadget/udc" as both HOST and device ctrlr need this driver.
+
+So not sure,=20
+
+1) Use Arnd's patch for fixing this issue
+
+2) Use the changes from [2]
+
+Or
+
+3) Arnd's changes + changes from [2].
+
+Please let me know.
+
+[2]
+diff --git a/drivers/usb/renesas_usb3drd/Kconfig b/drivers/usb/renesas_usb3=
+drd/Kconfig
+new file mode 100644
+index 000000000000..6205d815d283
+--- /dev/null
++++ b/drivers/usb/renesas_usb3drd/Kconfig
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0
++
++config USB_RZV2M_USB3DRD
++	tristate 'Renesas USB3.1 DRD controller'
++	depends on (USB || USB_GADGET)=20
++	depends on ARCH_R9A09G011 || COMPILE_TEST
++	default USB_XHCI_RZV2M
++	default USB_RENESAS_USB3
++	help
++	   Renesas USB3.1 DRD controller is a USB DRD controller
++	   that supports both host and device switching.
++
++	   Say "y" to link the driver statically, or "m" to build a
++	   dynamically linked module called "rzv2m_usb3drd".
 
 
-> But I don't think there's a concern for this binding (in my
-> implementation), there's currently no mode/orientation switching
-> happening beyond this entity.
-> 
-> 
-> 
-> That said, if we're to represent each signal path to the connector,
-> I would like to bring up this problem again:
-> https://lore.kernel.org/all/20220520164810.141400-1-bjorn.andersson@linaro.org/
-> 
-> port@0 represent the HS signals going to the connector, port@1 the SS
-> signals going to the connector, port@2 the SBU signals going to the
-> connector.
-> 
-> But I need some representation of the HPD (hot plug detection) "signal"
-> (there is no actual signal path in hardware, this is a virtual
-> notification) going _from_ the connector to the DisplayPort controller.
-
-I would assume whatever entity is deciding to enable the DP signals on 
-the connector would be what generates the HPD notification. I think you 
-want to describe the DP signal connections and muxing, but HPD itself 
-wouldn't be in the DT.
-
-> We discussed this (perhaps in person, as there's no trace on lkml?) and
-> you suggested that I use a second endpoint under port@1, instead of
-> introducing a fourth port.
-
-Multiple endpoints on a port are typically a mux or fanout depending on 
-the data direction. But the muxing is not really in the connector, so 
-that should probably be represented somewhere else. I think a new port 
-suffers from the same issue. Maybe that's close enough? Depends if there 
-are cases of more alt modes or more complicated muxing/switching.
-
-> I'm fine either way, but I don't think it would be convenient nor
-> representable to daisy chain this behind any of the existing endpoints;
-> none of the other endpoints should deal with the HPD signal and the
-> direct of_graph-link between the usb-c-connector and the DP controller
-> mimics that of e.g. dp-connector very nicely, both in description and
-> implementation.
-
-That would be nice, but the reality is there's a lot more between DP and 
-the connector with USB-C and the graph should reflect that. I guess the 
-problem there is being able to walk the graph. Suppose we have:
-
-DP out port -> altmode mux in port -> altmode mux out port -> type-c 
-port 1
-
-The issue walking the graph here would be generic code doesn't know 
-altmode mux port numbering as that's not a generic thing (could be 
-perhaps?). Maybe you can walk from each end and see if you end up in 
-the same device.
-
-Of course, I haven't even considered the split cases where it's not 
-just either USB3 OR DP, but combinations. 
+[1] https://lore.kernel.org/linux-usb/OS0PR01MB592264B5D8BB98A1B2F759C086D3=
+9@OS0PR01MB5922.jpnprd01.prod.outlook.com/T/#t
 
 
-What I'd really like to see for all this USB-C stuff is block diagrams 
-of the h/w components and then what the corresponding DT looks like. 
-Trying to extend things one piece at a time is hard to review and not 
-likely going to end with a flexible design.
+Kismet results:
+(env_kmax) dasb@ree-du1sdd5:~/linux-next$ kismet --linux-ksrc=3D. --selecte=
+es CONFIG_USB_RZV2M_USB3DRD --selectors CONFIG_USB_XHCI_RZV2M -a=3Dcsky
+INFO: Computing the build system id for the Linux source..
+INFO: Build system id: d48d1edf73bf
+INFO: Kismet will analyze the select constructs of the architecture "csky" =
+for unmet direct dependency.
+INFO: All times reported are measured using Python's time.perf_counter() ut=
+ility.
+INFO: Prefetching the architecture kclause formulas.
+[STEP 1/3] reading kextract file
+[STEP 1/3] finished reading kextract file
+[STEP 2/3] translated 15981/15981 configuration option dependencies        =
+                                                 =20
+[STEP 3/3] converted 16084/16084 constraints to smtlib2 format
+[STEP 3/3] pickling the map
+[STEP 3/3] done=20
+INFO: Architecture kclause formulas were loaded. (686.24sec)
+INFO: Identifying the select constructs.
+INFO: Identification of the select constructs was done in 0.02sec. 1 constr=
+ucts were found. unmet safe due to syntactical pass: 0. alarms: 1.
+INFO: Doing optimized SAT pass for 1 constructs
+INFO: 18:33:24 Optimized SAT pass progress:  1/1 (%100).
+INFO: Optimized SAT test was done in 0.02sec. 1 constructs with alarms were=
+ checked. unmet safe due to optimized SAT test: 1. alarms: 0.
+INFO: Doing precise SAT pass for 0 constructs
+INFO: 18:33:24 Precise SAT pass progress:  0/0.
+INFO: Precise SAT test was done in 0.00sec. 0 constructs with alarms were c=
+hecked. unmet safe due to precise SAT test: 0. alarms: 0.
+INFO: During precise SAT test, 0 models were generated.
+INFO: Skipping test case generation since there are no models to generate t=
+est cases for.
+INFO: Skipping verification since there are no test cases to verify.
+INFO: Writing the aggregated summary txt to "kismet_summary_csky.txt".
+INFO: Aggregated summary txt was written.
+INFO: Writing the summary csv to "kismet_summary_csky.csv".
+INFO: Summary csv was written.
 
-Rob
+(env_kmax) dasb@ree-du1sdd5:~/linux-next$ cat kismet_summary_csky.txt=20
+=3D Overall analysis =3D
+Over 1 select constructs, unmet dependency analysis resulted in: 1 safe, 0 =
+alarm.
+The analysis was done in 686.27 seconds.
+
+=3D Timing results (seconds) =3D
+Prefetch arch formulas     : 686.24
+Identify constructs        : 0.02
+Optimized SAT pass         : 0.02
+Precise SAT pass           : 0.00
+
+=3D Per-stage results =3D
+
+=3D=3D Identification of select constructs & udd analysis through syntax =
+=3D=3D
+1 select constructs identified in the architecture.
+0 select constructs were found udd safe through syntax analysis.
+1 select constructs were found udd alarm through syntax analysis.
+
+=3D=3D Optimized SAT pass =3D=3D
+1 select constructs with alarms from the previous stage were checked during=
+ optimized SAT pass.
+1 select constructs were found udd SAFE through optimized SAT pass.
+0 select constructs were found udd ALARM through optimized SAT pass.
+
+=3D=3D Precise SAT pass =3D=3D
+0 select constructs with alarms from the previous stage were checked during=
+ precise SAT pass.
+0 select constructs were found udd SAFE through precise SAT pass.
+0 select constructs were found udd ALARM through precise SAT pass.
+(env_kmax) dasb@ree-du1sdd5:~/linux-next$ cat kismet_summary_csky.csv=20
+arch,selectee,selector,visib_id,constraint_type,analysis_result,testcase
+csky,CONFIG_USB_RZV2M_USB3DRD,CONFIG_USB_XHCI_RZV2M,0,0,UNMET_SAFE_OPTIMIZE=
+D_PASS,N/A
+
+Cheers,
+Biju
