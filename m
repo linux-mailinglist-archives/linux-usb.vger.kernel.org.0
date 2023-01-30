@@ -2,291 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BB8680D7F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 13:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6216680E67
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 14:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbjA3MU3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 07:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S236768AbjA3NDm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 08:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236628AbjA3MU1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 07:20:27 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E175636FE1
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 04:20:25 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFCE18B8;
-        Mon, 30 Jan 2023 13:20:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675081224;
-        bh=EON7GaVkzXrbhq+qwTMKdFiUhNWkMr3JuL/Pxhs6+5g=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=UE3d6pThm/l6aivR5o9xHeW0UWSR5alL0xUr4Fr6beBqZRIlz6RHweYYmynbasImt
-         aW3J0g0eLrnbHcJV0RSLzAwKtz2qV6lYot6ZUAAAOwSIIHPjIAlZxmKOsMGiZQH+BX
-         G9fQO1hQ9Cdc6/GVODsYJUTuYYNRtCq9m/MmD3Ug=
-Message-ID: <1cf61684-e095-dbe5-2967-0fcdeabc65f9@ideasonboard.com>
-Date:   Mon, 30 Jan 2023 12:20:20 +0000
-MIME-Version: 1.0
+        with ESMTP id S236379AbjA3NDl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 08:03:41 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2085.outbound.protection.outlook.com [40.107.241.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE251724
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 05:03:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eB30ofJdxh7EH/yTsZx93FAXXfIz5qGp7e9P1p82yqPZTdYsz3SLxwI1BT5zde4yFz4JpTl7GEipOuCCbjc8IZCm/6oTXqG4b7QQpWcptVcJQSXV+ckRh/93LiRjtgUVoJ3UhfHJhF2CxBDsrh706aF5hHfyQhdftYFvmnB8WWI9+LBMIqdRUA8pT4EIScPLPMVQ98jUvRgTabtIXdJIQuH/U85LLzUNc9cCTOKLdqfrc4mWZtctXF2qj95JqZqIGaI1WNx7dd7BJ7I6xhdPJYQ4/sWvL2hf1VNN02+ytUCXJ5zYzrtfRe8ELkK7Rw5AFU+/w9xWfiWVLVQ7LSs4PA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G6KEfjxE3ruWKfQis7nv54FDcTtxClvMAAwTHFyHQ8c=;
+ b=iolYvIzVmAwB8W9CVYLRZ0BgTZh6vZJErJZ1KpirARjNsh6P+4WfqHHwK4acNT3DbbH/aWex21dN/cCmriBqily5FMj9uKNBEZO298QO/c0hLrj+/XCq+FLcJtiVmN/IpwBjVDdKCzRdgansaWpZ9bslAtPkk43mjmL393HMnezU/7qRIGQNAKQRxGoa5qv5i9GaIgQJ+A2+vsLgEQXm+8ZYCHnamrqDlqeQrFccRyILMyeK3NEAaDWFRX652fqTamfJCqSxr5sHv76PGAIXaog2RWDVGRd9Q+7YYKwh426wbo6H2sOk34WnyAj4OliLHhwoKmR05qpuzlt4LOeOXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G6KEfjxE3ruWKfQis7nv54FDcTtxClvMAAwTHFyHQ8c=;
+ b=kK1pLJ6EgI22VC10s1y2me9Tw6WuV56a3yELbNsS8E89ide4zFdYXal+PntCCqEcN4DnGsOrJhH1uGqoVwJ53+XqgTpNOcEyj3SPhPJBNF38Nsh7ghSyC4a8obeA3ODDUoFVlhxRqkLlVyJgPMDdys4lLtFNENc9/LZCGkadvep5J26U88fth+CK95nhOoW3/cQOqW/Nn10/xBbOZQulbROwWeHnnXLUi0DvpVK2ECxWWYkFqPp3j38Uo/KY4F4RN5srbmvIZZETQgHm7Cur6A7eVSatUuj/zzfWM/ubPwUFpF77tMpU7ROWJ3rDoY3Lkn3o8RKhjSx/SLxviE9U7A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by PA4PR04MB7504.eurprd04.prod.outlook.com (2603:10a6:102:e6::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27; Mon, 30 Jan
+ 2023 13:03:34 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::2191:53f7:4a90:c7cc]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::2191:53f7:4a90:c7cc%4]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
+ 13:03:34 +0000
+Message-ID: <74ff01d9-dc12-0c3c-932f-9ccde5370dda@suse.com>
+Date:   Mon, 30 Jan 2023 14:03:31 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 4/7] usb: gadget: uvc: Copy color matching descriptor
- for each frame
+ Thunderbird/102.6.1
+Subject: Re: Cypress CDC ACM serial port not working correctly with
+ autosuspend
+To:     =?UTF-8?Q?Michael_La=c3=9f?= <bevan@bi-co.net>,
+        linux-usb@vger.kernel.org
+References: <8be9b56c6becd0981d1cd9c13742df6ba2975b56.camel@bi-co.net>
 Content-Language: en-US
-From:   Dan Scally <dan.scally@ideasonboard.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        w36195@motorola.com, m.grzeschik@pengutronix.de,
-        kieran.bingham@ideasonboard.com, torleiv@huddly.com
-References: <20221219144316.757680-1-dan.scally@ideasonboard.com>
- <20221219144316.757680-5-dan.scally@ideasonboard.com>
- <Y6urD6Elt+xvrimU@pendragon.ideasonboard.com>
- <e7436e7e-f013-2f79-5a35-ad84dd793a2a@ideasonboard.com>
-In-Reply-To: <e7436e7e-f013-2f79-5a35-ad84dd793a2a@ideasonboard.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <8be9b56c6becd0981d1cd9c13742df6ba2975b56.camel@bi-co.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0155.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::16) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PA4PR04MB7504:EE_
+X-MS-Office365-Filtering-Correlation-Id: 40a3a4ed-7b07-455c-cd16-08db02c2647e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Z3cwt/Oowqut8B+a2BTa96jS5lmnU6UGJwjXYqBkypEn7mKOnigvipu5ba5zoUQQ1EV8amUYypbxOO5x7P6M4kDZRmq4lIQDyO35j18uFR0aeEV3zmHOOih38kF4w7xlVYJGQv3U1ZvsCXkfYXxD6BL+XsrwpIiEP+rEddlIBF9XnR9wMGQkB8R9YGLbR8g/Wg5qhEa5WZmFCNdzIgGj30U1APd8kl/KNsHta2lv1J09+A/vIB2kvaWh+VsJERgUDEcMfXTalp8Nrd6nMrLd6W4o/PFiMYOTopbiRW3E9c3SXjSOCks/A6oj/x82P+GqJTljpf+jCjQ454r2Ht0AamtW7iqsBXHVSyMVGX6AaXoYm0qI5nq8pdiopVaIQX8rpDuxwQZV411/gs3p8qFPxhmjC57x2rMkhQcxYfAjpa0dKTgaE+HGFZKd0B+dtMz4eX8N3E7lyxDppQi7Ep5BsxceU35Yc0BemI7cdlxRysQFD7rH9jTONImPW9z2tT1yZGO9nWLMpITpI+Gkkm3iuP8VLa208iF3dBLDjrViHZYAQArmkBygHz0FhcAd4Oaky7gmvYA3xIGRPbqwFSiWJQFr2NjCWOlwOCZGBj+MI1obDvE+BcN9boDok8iYXFAAqmRQWg5niOVynD2w7vIKXmkeVsfmKCHBI2cBgKxdqDBVH0ITodRXMg3QWNYBOQF2rlUA2yccktUh68SdmwSzxFEU0w7x9VU0oELUhWdUaHM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(376002)(346002)(396003)(366004)(451199018)(66946007)(5660300002)(2616005)(31686004)(8676002)(66476007)(41300700001)(8936002)(186003)(316002)(6486002)(19627235002)(6506007)(36756003)(53546011)(66556008)(6666004)(478600001)(86362001)(38100700002)(6512007)(31696002)(83380400001)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTNDWUMzekZ4Nk1XbFFKdE1sSjVQSmI0ajgrcWZZRE1oWjZNcmw4V3VkcDl6?=
+ =?utf-8?B?RUl0UUhVcVhmTG56ZFBiaDBBd2hCNEFLNjlxR3ExZ3pTYjB0YTd4N0JBNFFL?=
+ =?utf-8?B?TG1VUERNR1NTYTFwNm56ajlBN1pKSzhqdXF2T1JGUTM5d3Y0WU1neWRmNnhX?=
+ =?utf-8?B?bkY5dTg0UXZmRlV5a0EyVmxSTmc4c1VwblJmd1RWU1ZsVFVhbSt3NFcvd0tH?=
+ =?utf-8?B?bFd1MDFCUXVaUTh2alVPWHJod2xmYURpSHdneTc4M1BhS0EvUG40cGI0L29h?=
+ =?utf-8?B?NS8rNXZxMVdOMzlQRWt2R01oS3hadkdiMXpyaGRsbmNBSndtZGE2WDgzNU5v?=
+ =?utf-8?B?eFRYS0owak9jeVR2L0sxa2l0LzhlNGNBMlBrWE1yU3BHOWlnaUh3aC9rQVdT?=
+ =?utf-8?B?K1VpWUJhRzBVMjIrb0tNWnBTcFZQODNmOWE5azYzUHVpblpnL0ZGSlpDOWxW?=
+ =?utf-8?B?RkFLYThodGJiS3h0eEs0WjQ2VGYzZlN1Rjk3bHloZlFoSWVKL1BHZ2ZZcXpv?=
+ =?utf-8?B?TlBjU2xQRlRldnRsMXZpaUNkbkdyNmdjUW05a2F4MXo1UWhOSWwrK0grZWR1?=
+ =?utf-8?B?eVdJK2ltejdKQzhPdndXYXBNNVVUZVJwNmgwRjJ0VFBrdWVIM3BNTWZlcmFL?=
+ =?utf-8?B?dk1aRnFzY3E5dlU3NTVOUDlMZUVmR3NHNUN2Um9JYTRGWmxhcWFOTDhGMzl5?=
+ =?utf-8?B?aFJSOVJsUTVWeHJDQmxCREhXMGpnV0V3VHQ2ZmM5QjlXa3BMZWZBZEQ0WVJu?=
+ =?utf-8?B?dWsydExldUFrUlIvbTZBT05wQ2o0TFQ2MTJGK25YV3lTMnVmZ1FsUlpXTyti?=
+ =?utf-8?B?aWd6T1I3Z3pLZ3pMZHk2SGFTY2thMVNKYmdTT203T0RWY3VaSVlpdHpoVlhU?=
+ =?utf-8?B?RCtacHhPWUE4aVFwWTN5dWNPa0FDOC85cy9BSXYveWpQK1RrQmU1dHV0REpp?=
+ =?utf-8?B?cTNCK1FsSU9XQ2Q4ZW5qVHozUHUwTGw1ZDRyS3cwaWJSS0o5TW1HSFNpZ0RJ?=
+ =?utf-8?B?cmt2YXpsbzZ3bk1KRFo2Z1AvRWVJbFcwOGZFb1BsQ2ExQWlhT0JSTUxJVUM2?=
+ =?utf-8?B?RldkNDFCb2ozV09nR3RKb1JiMldsNkdLQlQxV05rcFJuSzRtTXRYUEFxOHVW?=
+ =?utf-8?B?eXFYdFJnVlhJaXN1M1A2UHMwSFhPWWhTYU1FU3NCRng4Szc2NlJIVDBTYlFy?=
+ =?utf-8?B?eWl0d0NHaFU2WGZLa0FoVHNtd3JPNlN3Zmd3bng1N3o3Rk83YUgzWVRQZFZw?=
+ =?utf-8?B?K1ZlamZaSVE3TzFZYVR1bzJVbWFmZmR0M211YnJPK2U0bFVObUJXZDVZaFd6?=
+ =?utf-8?B?MXQ2SXlRQ1dDMWtqK0wxeHlib25FSm9wS2JrdElCQjVzZHZyT1A1VTFrTExJ?=
+ =?utf-8?B?dmFwY29aclRMMGNFSUd3UVNNNTBjRklpcnJBeTV5M2kxZkVaN2llREJGT2FI?=
+ =?utf-8?B?QUg2U2hrcW9vQmhSTGhUSzNlbktpb1pOT3EzdDQyUnJxbFduKzgyTUN4am41?=
+ =?utf-8?B?UmhPNXZPNUx4bFJpME8rcVRhYWQ2KzlCZXVjSWZOWDcxQ1lGMkYzYWd3VlF3?=
+ =?utf-8?B?Rk1VaWZ3V2NNWjdQVExaYUo4bk0rVjN6LzM2TDBHazQwQ3hmZGpJWjVvUnd2?=
+ =?utf-8?B?MWxkK2t5UTAwVXJUeHVGZHJycndyZkZ6MGIzT2VBd0lPd2hpRldOd0Y1Mjdy?=
+ =?utf-8?B?R29GS3YxV1pmMFU5cWxlVVJMV1NqeUkrR1UvblhaTzFwYk1QRFNvRmtzL2or?=
+ =?utf-8?B?dzluYkQ3VGZMOEdZZVUzUmdaamFHMFp0cUREK1dPTHo1c0ZDNXl2cXFDUjlI?=
+ =?utf-8?B?N3BiV1JMVGZvb3Fyam5KK2pTUjdEVUFaUFBmS1RBeEVqemRyVDZkZUYrZGpL?=
+ =?utf-8?B?SlZMN2x3d1BySHE5RFl6R1pYbk9GajB2bUZ4OEVESExCWmMxUjlLcVgvS0t3?=
+ =?utf-8?B?YWFLRnZJUmQ5UmloUFdPNzIwcmRMV3pXSDllZE11VzVsYU14d2RqTmJIRGhD?=
+ =?utf-8?B?Qis5bmNITmJwR2E1dC9VYmNGU0dKNkNXNVVjT2dqaVZBRjdYNjdjMUpUcXdL?=
+ =?utf-8?B?T3Voc1d4NGg4Q1E5UFRPR2ExZlhYdEtMM2VGVzhRZzVZYWkwQitkVzJydFVl?=
+ =?utf-8?B?b3U4YU5jZ2RSekhnSFo1ODhSeDBiNEc1QVUwcGgxeWlmWmc1bjhpYWpzTm81?=
+ =?utf-8?Q?87du/mfZ41FSniCcjG37PPbTlXCNadEoYN/3aUxBSmgq?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40a3a4ed-7b07-455c-cd16-08db02c2647e
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 13:03:34.4123
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nF0Yc1phqBibwz4rQjG6Mth/QeRDRxewcwlWt0NyzNCK9ZRJ1UAMk00sxd9Fmbz1oW4RL2xoTM2n5SFH+A+Z3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7504
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 29.01.23 12:44, Michael Laß wrote:
 
-On 30/01/2023 12:01, Dan Scally wrote:
-> Hi Laurent
->
-> On 28/12/2022 02:33, Laurent Pinchart wrote:
->> Hi Dan,
->>
->> Thank you for the patch.
->>
->> On Mon, Dec 19, 2022 at 02:43:13PM +0000, Daniel Scally wrote:
->>> As currently implemented the default color matching descriptor is
->>> appended after _all_ the formats and frames that the gadget is
->>> configured with. According to the UVC specifications however this
->>> is supposed to be on a per-format basis (section 3.9.2.6):
->>>
->>> "Only one instance is allowed for a given format and if present,
->>> the Color Matching descriptor shall be placed following the Video
->>> and Still Image Frame descriptors for that format."
->>>
->>> Associate the default color matching descriptor with struct
->>> uvcg_format and copy it once-per-format instead of once only.
->>>
->>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->>> ---
->>> Changes in v2:
->>>
->>>     - Renamed uvcg_cmd and associated variables.
->>>     - Formatting
->>>     - Increased the refcnt variable for the color matching struct in
->>>     the format make() functions
->>>
->>>   drivers/usb/gadget/function/uvc_configfs.c | 64 
->>> +++++++++++++++++++++-
->>>   drivers/usb/gadget/function/uvc_configfs.h | 13 +++--
->>>   2 files changed, 68 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c 
->>> b/drivers/usb/gadget/function/uvc_configfs.c
->>> index 147d3def24dd..6fb7ac8366fe 100644
->>> --- a/drivers/usb/gadget/function/uvc_configfs.c
->>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
->>> @@ -748,6 +748,29 @@ static const char * const uvcg_format_names[] = {
->>>       "mjpeg",
->>>   };
->>>   +static struct uvcg_color_matching *
->>> +uvcg_format_get_default_color_match(struct config_item *streaming)
->>> +{
->>> +    struct config_item *color_matching_item, *cm_default;
->>> +    struct uvcg_color_matching *color_match;
->>> +
->>> +    color_matching_item = 
->>> config_group_find_item(to_config_group(streaming),
->>> +                             "color_matching");
->>> +    if (!color_matching_item)
->>> +        return NULL;
->>> +
->>> +    cm_default = 
->>> config_group_find_item(to_config_group(color_matching_item),
->>> +                        "default");
->>> +    config_item_put(color_matching_item);
->>> +    if (!cm_default)
->>> +        return NULL;
->>> +
->>> +    color_match = to_uvcg_color_matching(to_config_group(cm_default));
->>> +    config_item_put(cm_default);
->>> +
->>> +    return color_match;
->>> +}
->>> +
->>>   static ssize_t uvcg_format_bma_controls_show(struct uvcg_format 
->>> *f, char *page)
->>>   {
->>>       struct f_uvc_opts *opts;
->>> @@ -1561,8 +1584,15 @@ static struct config_group 
->>> *uvcg_uncompressed_make(struct config_group *group,
->>>           'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00,
->>>            0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
->>>       };
->>> +    struct uvcg_color_matching *color_match;
->>> +    struct config_item *streaming;
->>>       struct uvcg_uncompressed *h;
->>>   +    streaming = group->cg_item.ci_parent;
->>> +    color_match = uvcg_format_get_default_color_match(streaming);
->>> +    if (!color_match)
->>> +        return ERR_PTR(-EINVAL);
->>> +
->>>       h = kzalloc(sizeof(*h), GFP_KERNEL);
->>>       if (!h)
->>>           return ERR_PTR(-ENOMEM);
->>> @@ -1580,6 +1610,8 @@ static struct config_group 
->>> *uvcg_uncompressed_make(struct config_group *group,
->>>         INIT_LIST_HEAD(&h->fmt.frames);
->>>       h->fmt.type = UVCG_UNCOMPRESSED;
->>> +    h->fmt.color_matching = color_match;
->>> +    color_match->refcnt++;
->> Does this need to be protected by a lock ? I suppose it may not matter
->> too much for the default as it will never be dropped, but it would still
->> be nice to get locking right overall.
->
->
-> I don't think the locking is necessary here as in practice it's done 
-> by configfs core when you symlink between the config items. The refcnt 
-> here is only being used to protect a color matching descriptor's 
-> attributes from being changed when it's already been linked to a 
-> format, we rely on core to protect the descriptor from being dropped 
-> if it's in use somewhere.
->
->>
->> I'm tempted to increase the refcnt in
->> uvcg_format_get_default_color_match(), as function that look up and
->> return a pointer to a refcounted object should take a reference. That's
->> not a hard requirement here if it makes the rest of the code too
->> complex.
+> Bus 006 Device 010: ID 04b4:0008 Cypress Semiconductor Corp. CDC ACM serial port
+> Device Descriptor:
+>    bLength                18
+>    bDescriptorType         1
+>    bcdUSB               2.00
+>    bDeviceClass            2 Communications
+>    bDeviceSubClass         0
+>    bDeviceProtocol         0
+>    bMaxPacketSize0         8
+>    idVendor           0x04b4 Cypress Semiconductor Corp.
+>    idProduct          0x0008 CDC ACM serial port
+>    bcdDevice            0.00
+>    iManufacturer           1 2012 Cypress Semiconductor
+>    iProduct                2 Cypress-USB2UART-Ver1.0G
+>    iSerial                 4 827211C2091B
+>    bNumConfigurations      1
+>    Configuration Descriptor:
+>      bLength                 9
+>      bDescriptorType         2
+>      wTotalLength       0x0043
+>      bNumInterfaces          2
+>      bConfigurationValue     1
+>      iConfiguration          3 USB-UART Configuration
+>      bmAttributes         0xa0
+>        (Bus Powered)
+>        Remote Wakeup
 
+The device claims to support remote wakeup.
 
-Sorry forgot to respond here; in fact it does take a reference the the 
-colour matching descriptors config_item, through 
-config_group_find_item() in configfs core.
+There are two possibilities here
+1. The kernel fails to order remote wakeup to be enabled
+2. The device's claim to support it is false.
 
->>
->>> config_group_init_type_name(&h->fmt.group, name,
->>>                       &uvcg_uncompressed_type);
->>>   @@ -1744,8 +1776,15 @@ static const struct config_item_type 
->>> uvcg_mjpeg_type = {
->>>   static struct config_group *uvcg_mjpeg_make(struct config_group 
->>> *group,
->>>                              const char *name)
->>>   {
->>> +    struct uvcg_color_matching *color_match;
->>> +    struct config_item *streaming;
->>>       struct uvcg_mjpeg *h;
->>>   +    streaming = group->cg_item.ci_parent;
->>> +    color_match = uvcg_format_get_default_color_match(streaming);
->>> +    if (!color_match)
->>> +        return ERR_PTR(-EINVAL);
->>> +
->>>       h = kzalloc(sizeof(*h), GFP_KERNEL);
->>>       if (!h)
->>>           return ERR_PTR(-ENOMEM);
->>> @@ -1761,6 +1800,8 @@ static struct config_group 
->>> *uvcg_mjpeg_make(struct config_group *group,
->>>         INIT_LIST_HEAD(&h->fmt.frames);
->>>       h->fmt.type = UVCG_MJPEG;
->>> +    h->fmt.color_matching = color_match;
->>> +    color_match->refcnt++;
->>>       config_group_init_type_name(&h->fmt.group, name,
->>>                       &uvcg_mjpeg_type);
->>>   @@ -1909,7 +1950,8 @@ static inline struct uvc_descriptor_header
->>>   enum uvcg_strm_type {
->>>       UVCG_HEADER = 0,
->>>       UVCG_FORMAT,
->>> -    UVCG_FRAME
->>> +    UVCG_FRAME,
->>> +    UVCG_CMD,
->> s/UVCG_CMD/UVCG_COLOR_MATCHING/
->>
->>>   };
->>>     /*
->>> @@ -1959,6 +2001,10 @@ static int __uvcg_iter_strm_cls(struct 
->>> uvcg_streaming_header *h,
->>>               if (ret)
->>>                   return ret;
->>>           }
->>> +
->>> +        ret = fun(f->fmt->color_matching, priv2, priv3, 0, UVCG_CMD);
->>> +        if (ret)
->>> +            return ret;
->>>       }
->>>         return ret;
->>> @@ -2014,6 +2060,12 @@ static int __uvcg_cnt_strm(void *priv1, void 
->>> *priv2, void *priv3, int n,
->>>           *size += frm->frame.b_frame_interval_type * sz;
->>>       }
->>>       break;
->>> +    case UVCG_CMD: {
->>> +        struct uvcg_color_matching *color_match = priv1;
->>> +
->>> +        *size += sizeof(color_match->desc);
->>> +    }
->>> +    break;
->>>       }
->>>         ++*count;
->>> @@ -2099,6 +2151,13 @@ static int __uvcg_fill_strm(void *priv1, void 
->>> *priv2, void *priv3, int n,
->>>                   frm->frame.b_frame_interval_type);
->>>       }
->>>       break;
->>> +    case UVCG_CMD: {
->>> +        struct uvcg_color_matching *color_match = priv1;
->>> +
->>> +        memcpy(*dest, &color_match->desc, sizeof(color_match->desc));
->>> +        *dest += sizeof(color_match->desc);
->>> +    }
->>> +    break;
->>>       }
->>>         return 0;
->>> @@ -2138,7 +2197,7 @@ static int 
->>> uvcg_streaming_class_allow_link(struct config_item *src,
->>>       if (ret)
->>>           goto unlock;
->>>   -    count += 2; /* color_matching, NULL */
->>> +    count += 1; /* NULL */
->>>       *class_array = kcalloc(count, sizeof(void *), GFP_KERNEL);
->>>       if (!*class_array) {
->>>           ret = -ENOMEM;
->>> @@ -2165,7 +2224,6 @@ static int 
->>> uvcg_streaming_class_allow_link(struct config_item *src,
->>>           kfree(data_save);
->>>           goto unlock;
->>>       }
->>> -    *cl_arr = (struct uvc_descriptor_header 
->>> *)&opts->uvc_color_matching;
->>>         ++target_hdr->linked;
->>>       ret = 0;
->>> diff --git a/drivers/usb/gadget/function/uvc_configfs.h 
->>> b/drivers/usb/gadget/function/uvc_configfs.h
->>> index c7392c9b840e..174ee691302b 100644
->>> --- a/drivers/usb/gadget/function/uvc_configfs.h
->>> +++ b/drivers/usb/gadget/function/uvc_configfs.h
->>> @@ -52,12 +52,13 @@ enum uvcg_format_type {
->>>   };
->>>     struct uvcg_format {
->>> -    struct config_group    group;
->>> -    enum uvcg_format_type    type;
->>> -    unsigned        linked;
->>> -    struct list_head    frames;
->>> -    unsigned        num_frames;
->>> -    __u8            bmaControls[UVCG_STREAMING_CONTROL_SIZE];
->>> +    struct config_group        group;
->>> +    enum uvcg_format_type        type;
->>> +    unsigned            linked;
->>> +    struct list_head        frames;
->>> +    unsigned            num_frames;
->>> +    __u8 bmaControls[UVCG_STREAMING_CONTROL_SIZE];
->>> +    struct uvcg_color_matching    *color_matching;
->>>   };
->>>     struct uvcg_format_ptr {
+What is to be done depends on which possibility is true.
+Can you check an usbmon trace of the problem happening
+for the control request enabling remote wakeup?
+
+	Regards
+		Oliver
