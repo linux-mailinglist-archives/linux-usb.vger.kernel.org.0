@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BA8681330
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 15:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D8B681334
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 15:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237627AbjA3O25 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 09:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S237678AbjA3O3H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 09:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237642AbjA3O2e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 09:28:34 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244D83EFDE
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 06:27:08 -0800 (PST)
+        with ESMTP id S237683AbjA3O2j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 09:28:39 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FB786AE
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 06:27:16 -0800 (PST)
 Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7BCE8121A;
-        Mon, 30 Jan 2023 15:26:56 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 187FA1802;
+        Mon, 30 Jan 2023 15:26:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675088816;
-        bh=WSWcsexcwcTvojhwvofeTyDhmtiElkwLC8iP6eqydfQ=;
+        s=mail; t=1675088817;
+        bh=xqeCAWn0PRlU8xmyNjD1uctcSWSOfIS8thoVgTCBe4E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cpueFXH1pKwHf+vyaJFS0PDaD9taPm1KfjSJcn0sJFrOBd2j9FAPjt0cAOsdpnYXQ
-         GUzXPmEc6i9wupm59b0oDrUb8/eiRezIC/D5UHjw8DYyxKLEZPe1eYwXDHo9OGwRlk
-         pzHLzk6ofzwZB4KFgUJJD7SDsU47E2DG3AHyejjM=
+        b=E6GeegRTCm85lz1qBQU1Y13WTAMz9JbBRg/4daefXmRw5s1F/Tn3R3DO22/3tGyaU
+         ej6eC/qLC0WFUYvvfPDRltAQK8xWfa6AgYwZq79Iq2zVF/s3cFzkbGH85KtDRlMzvb
+         pWtGIdgBCklKCE8E0aRcEhNzij44jhWEsfUhcJ+A=
 From:   Daniel Scally <dan.scally@ideasonboard.com>
 To:     linux-usb@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
         w36195@motorola.com, m.grzeschik@pengutronix.de,
         kieran.bingham@ideasonboard.com, torleiv@huddly.com,
         Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v3 5/7] usb: gadget: uvc: Remove the hardcoded default color matching
-Date:   Mon, 30 Jan 2023 14:26:37 +0000
-Message-Id: <20230130142639.217885-6-dan.scally@ideasonboard.com>
+Subject: [PATCH v3 6/7] usb: gadget: uvc: Make color matching attributes read/write
+Date:   Mon, 30 Jan 2023 14:26:38 +0000
+Message-Id: <20230130142639.217885-7-dan.scally@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230130142639.217885-1-dan.scally@ideasonboard.com>
 References: <20230130142639.217885-1-dan.scally@ideasonboard.com>
@@ -47,63 +47,87 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A hardcoded default color matching descriptor is embedded in struct
-f_uvc_opts but no longer has any use - remove it.
+In preparation for allowing more than the default color matching
+descriptor, make the color matching attributes writeable.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
-Changes in v3:
+Changes in v3 (laurent):
 
-	- None
+	- Put the refcnt check beind the mutex_lock(su_mutex) call
 
 Changes in v2:
 
-	- None
+	- Check refcnt before allowing the change in .store()
+	- Renamed uvcg_cmd to uvcg_color_matching
 
- drivers/usb/gadget/function/f_uvc.c | 9 ---------
- drivers/usb/gadget/function/u_uvc.h | 1 -
- 2 files changed, 10 deletions(-)
+ .../ABI/testing/configfs-usb-gadget-uvc       |  2 +-
+ drivers/usb/gadget/function/uvc_configfs.c    | 39 ++++++++++++++++++-
+ 2 files changed, 39 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 32f2c1645467..fbb57a0df57f 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -803,7 +803,6 @@ static struct usb_function_instance *uvc_alloc_inst(void)
- 	struct uvc_camera_terminal_descriptor *cd;
- 	struct uvc_processing_unit_descriptor *pd;
- 	struct uvc_output_terminal_descriptor *od;
--	struct uvc_color_matching_descriptor *md;
- 	struct uvc_descriptor_header **ctl_cls;
- 	int ret;
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+index f00cff6d8c5c..53258b7c6f2d 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+@@ -165,7 +165,7 @@ Date:		Dec 2014
+ KernelVersion:	4.0
+ Description:	Default color matching descriptors
  
-@@ -852,14 +851,6 @@ static struct usb_function_instance *uvc_alloc_inst(void)
- 	od->bSourceID			= 2;
- 	od->iTerminal			= 0;
+-		All attributes read only:
++		All attributes read/write:
  
--	md = &opts->uvc_color_matching;
--	md->bLength			= UVC_DT_COLOR_MATCHING_SIZE;
--	md->bDescriptorType		= USB_DT_CS_INTERFACE;
--	md->bDescriptorSubType		= UVC_VS_COLORFORMAT;
--	md->bColorPrimaries		= 1;
--	md->bTransferCharacteristics	= 1;
--	md->bMatrixCoefficients		= 4;
--
- 	/* Prepare fs control class descriptors for configfs-based gadgets */
- 	ctl_cls = opts->uvc_fs_control_cls;
- 	ctl_cls[0] = NULL;	/* assigned elsewhere by configfs */
-diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
-index 24b8681b0d6f..577c1c48ca4a 100644
---- a/drivers/usb/gadget/function/u_uvc.h
-+++ b/drivers/usb/gadget/function/u_uvc.h
-@@ -52,7 +52,6 @@ struct f_uvc_opts {
- 	struct uvc_camera_terminal_descriptor		uvc_camera_terminal;
- 	struct uvc_processing_unit_descriptor		uvc_processing;
- 	struct uvc_output_terminal_descriptor		uvc_output_terminal;
--	struct uvc_color_matching_descriptor		uvc_color_matching;
+ 		========================  ======================================
+ 		bMatrixCoefficients	  matrix used to compute luma and
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 41f4ce7e8a9a..a9a1306ff579 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -1851,7 +1851,44 @@ static ssize_t uvcg_color_matching_##cname##_show(			\
+ 	return result;							\
+ }									\
+ 									\
+-UVC_ATTR_RO(uvcg_color_matching_, cname, aname)
++static ssize_t uvcg_color_matching_##cname##_store(			\
++	struct config_item *item, const char *page, size_t len)		\
++{									\
++	struct config_group *group = to_config_group(item);		\
++	struct mutex *su_mutex = &group->cg_subsys->su_mutex;		\
++	struct uvcg_color_matching *color_match =			\
++		to_uvcg_color_matching(group);				\
++	struct f_uvc_opts *opts;					\
++	struct config_item *opts_item;					\
++	int ret;							\
++	u##bits num;							\
++									\
++	ret = kstrtou##bits(page, 0, &num);				\
++	if (ret)							\
++		return ret;						\
++									\
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */	\
++									\
++	if (color_match->refcnt) {					\
++		ret = -EBUSY;						\
++		goto unlock_su;						\
++	}								\
++									\
++	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;	\
++	opts = to_f_uvc_opts(opts_item);				\
++									\
++	mutex_lock(&opts->lock);					\
++									\
++	color_match->desc.aname = num;					\
++	ret = len;							\
++									\
++	mutex_unlock(&opts->lock);					\
++unlock_su:								\
++	mutex_unlock(su_mutex);						\
++									\
++	return ret;							\
++}									\
++UVC_ATTR(uvcg_color_matching_, cname, aname)
  
- 	/*
- 	 * Control descriptors pointers arrays for full-/high-speed and
+ UVCG_COLOR_MATCHING_ATTR(b_color_primaries, bColorPrimaries, 8);
+ UVCG_COLOR_MATCHING_ATTR(b_transfer_characteristics, bTransferCharacteristics, 8);
 -- 
 2.34.1
 
