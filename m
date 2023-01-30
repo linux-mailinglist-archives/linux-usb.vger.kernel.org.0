@@ -2,122 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FD4680F36
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 14:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B4D680F61
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 14:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235037AbjA3Nm6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 08:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S235984AbjA3NwF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 08:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbjA3Nm4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 08:42:56 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667C9468B
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 05:42:54 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D20A36602E28;
-        Mon, 30 Jan 2023 13:42:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675086173;
-        bh=wJXT2D+Mg/aJIqPHLYNtVivTcfcH1Oslk4YPOHBJ/V4=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=CP825TiJcBsORzIKzrmg5pSYg0yBJ2EU+rnMjJRLTo5s8UYl5Lr+shGO8fxjASmqm
-         in3bsIPP7yRv4w6/b/DUVd1OPxw3eTEo0u/6qZI6w+U+w6Zu2n+J1RPU/oXg+cHduF
-         WgR+m4zBIGTj+UdEiKPrmM2HI98XRtmWW/Spdtyhwy8y+A6jL0tNWZ6NAjQKR4Ag0f
-         mJyxgzraz3eQdhJVABglvku0drm1AUp2NiQNIjaPX8Q+poIx8Jvp6KbBBaHnL/3XrA
-         myl06tEFOAQE80rYXY0dj0mHDTzYQCspBOeNTp7X2mNMp4dDqEEBbY1d0RhNSOPjVl
-         W69n4sUWFxJYg==
-Message-ID: <979dcea0-938e-377b-c9a4-0a796bbdf7bc@collabora.com>
-Date:   Mon, 30 Jan 2023 14:42:49 +0100
+        with ESMTP id S235687AbjA3NwE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 08:52:04 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9193638E87
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 05:52:02 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so8206725wms.2
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 05:52:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=a7n0PxcebcHmKgUAZTbAc0QU/gWAxsFXWO0xPIkTGuE=;
+        b=AzBN0CYjuUoXUor1L2wXmADp/jKdt1fLSUw4BXTQXmQIX8JJUXqU3bGFykXN7Dd0aK
+         kIh/5CAftp6r+yowWZ7oQxylHCcPunMtRLy4qtfyRE36wd8KbN3ATUNs75geIg6P0w1N
+         92yf9XvsW9OByiccT3P0fbfCCB27QBP0qT4PQxCbqxa1rhiEDslu2y4kc3wWgL5utpx3
+         r+E/icPV8wSFsjhpQAQZHmEJOdYXrUHdwMBf4WWJUXv2spJ/i8INt6nIxwUKu8bRxse7
+         nKAbLvE3ILORq54UE2EKe8aJ96//TnkSpCLRR3P5Wv1umcdIpdLkfnvVxgtTSNR0z0T5
+         j51w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a7n0PxcebcHmKgUAZTbAc0QU/gWAxsFXWO0xPIkTGuE=;
+        b=qFhaOOUF25C7xOHNp+X3i3I5uOOeIRvExtt9uLCozQiE0GfL4NLNHpUeG4yOhXSzI/
+         5BpxP/GosSVGbIreGWBmG/SIfLTwWp9xP4YQHUzBQfl/iD1KOmS+GQMlbPUyCgpj65AY
+         KrbZagN0d06J4UCBuWq+iglr15j5c2hBvONYhTGNLMkEGOqy3eOelr1piHfQu4LPGZNm
+         rwYou+REzo8ewnA2Uk/LmEQ9jDfdHym3NRG0X+CC8YuTlYv8bfRQIRduUE/tmLPHsZ5I
+         vnNasPZLkLIWiLNe8rPQL0XHhKteWz+Hqtrc4CkgoIzkQs6aEJ/ESAZNK8Hda956gC2U
+         mI7w==
+X-Gm-Message-State: AO0yUKUQ0SNxQXLtmhGec9vBu2P18eTrwyqBTgMlPlR7jDFhqr8NHViX
+        Q7l7rpxyFKNi/f6+QIyFU2jIMA==
+X-Google-Smtp-Source: AK7set83eYIYLeNX/W2zorUjCu7uQCvek/ASGg64yVz08SKysalxjaHTJ4xzGbNCKX3gfOe5UaTbHg==
+X-Received: by 2002:a05:600c:35d6:b0:3dc:443e:3a8b with SMTP id r22-20020a05600c35d600b003dc443e3a8bmr9419572wmq.16.1675086721024;
+        Mon, 30 Jan 2023 05:52:01 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5f17:219:cb05:7cd? ([2a01:e0a:982:cbb0:5f17:219:cb05:7cd])
+        by smtp.gmail.com with ESMTPSA id hg6-20020a05600c538600b003dafbd859a6sm16320125wmb.43.2023.01.30.05.52.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 05:52:00 -0800 (PST)
+Message-ID: <a2c364da-16ba-2a9f-ec4b-507313c78477@linaro.org>
+Date:   Mon, 30 Jan 2023 14:51:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: OS Descriptor version in FunctionFS
-To:     Yuta Hayama <hayama@lineo.co.jp>, linux-usb@vger.kernel.org
-References: <60cd04bb-c080-4242-b981-8da1e1c3ca53@lineo.co.jp>
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2] usb: dwc3: qcom: enable vbus override when in OTG
+ dr-mode
 Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <60cd04bb-c080-4242-b981-8da1e1c3ca53@lineo.co.jp>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v2-1-2d400e598463@linaro.org>
+ <5dee594f-b05f-1211-7444-c45691455b9c@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <5dee594f-b05f-1211-7444-c45691455b9c@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 30/01/2023 14:37, Konrad Dybcio wrote:
+> 
+> 
+> On 24.01.2023 09:31, Neil Armstrong wrote:
+>> With vbus override enabled when in OTG dr_mode, Host<->Peripheral
+>> switch now works on SM8550, otherwise the DWC3 seems to be stuck
+>> in Host mode only.
+>>
+>> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+> Required for SM6115P Lenovo Tab P11 to switch to peripheral
+> with otg dr_mode as well!
 
-W dniu 25.01.2023 o 09:23, Yuta Hayama pisze:
-> Hi,
-> 
-> I have a question about MS OS descriptor support in FunctionFS.
-> 
-> I understand that the current FunctionFS supports OS descriptors and that the
-> FunctionFS user mode driver can optionally be set up with a configuration that
-> includes OS descriptors. Here, there are several versions of the OS descriptor,
-> but the current FunctionFS (or gadget framework?) supports only v1.0, I think.
-> Indeed, __ffs_do_os_desc_header() in drivers/usb/gadget/function/f_fs.c rejects
-> OS descriptors other than v1.0 in the following way:
-> 
-> static int __ffs_do_os_desc_header(enum ffs_os_desc_type *next_type,
-> 				   struct usb_os_desc_header *desc)
-> {
-> 	u16 bcd_version = le16_to_cpu(desc->bcdVersion);
-> 	u16 w_index = le16_to_cpu(desc->wIndex);
-> 
-> 	if (bcd_version != 1) {
-> 		pr_vdebug("unsupported os descriptors version: %d",
-> 			  bcd_version);
-> 		return -EINVAL;
-> 	}
-> 	
-> 	/* ... */
-> 
-> Here's a question: isn't it wrong to assume that the value of desc->bcdVersion
-> in OS descriptor v1.0 is 0x0001? From reference to the following document on
-> OS descriptor v1.0, it looks like the value 0x0100 is assumed. (Well, I don't
-> think v1.0 will be 0x0001 since it would be in BCD form as the name suggests.)
-> 
-> [Microsoft OS 1.0 Descriptors Specification]
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/microsoft-os-1-0-descriptors-specification
-> 
-> Page 6 of OS_Desc_CompatID.doc and page 5 of OS_Desc_Ext_Prop.doc explain the
-> header section, which can be found there. The examples of descriptors also show
-> bcdVersion=0x0100.
-> 
-> Would the fix be something like the following?
-> 
-> 	if (bcd_version == 0x0001) {
-> 		pr_debug(" ... ");
-> 		/*
-> 		 * Pass through for compatibility, but notify to fix the user
-> 		 * mode driver?
-> 		 */
-> 	} else if (bcd_version != 0x0100) {
-> 		pr_vdebug("unsupported os descriptors version: %d",
-> 				  bcd_version);
-> 			return -EINVAL;
-> 	}
-> 
-> By the way, with the current FunctionFS code, we have to set bcd_version=0x0001
-> in the OS descriptor, but it looks like the Windows host(USB host) won't
-> complain about that.
+Thanks for testing, seems it was applied by Greg
 
-Are you able to check what does Windows host actually see in bcd_version if
-it is set as "0x0001" at the FunctionFS gadget side? And then, whether it does
-not complain because it sees what it expects or because it does not care even
-though it sees something it doesn't expect?
+Neil
 
-Regards,
-
-Andrzej
+> 
+> Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Konrad
+>> Changes in v2:
+>> - Added Bryan's reviewed-by
+>> - Added Fixes tag
+>> - Link to v1: https://lore.kernel.org/r/20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org
+>> ---
+>>   drivers/usb/dwc3/dwc3-qcom.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>> index b0a0351d2d8b..959fc925ca7c 100644
+>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>> @@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
+>>   
+>>   	/* enable vbus override for device mode */
+>> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
+>> +	if (qcom->mode != USB_DR_MODE_HOST)
+>>   		dwc3_qcom_vbus_override_enable(qcom, true);
+>>   
+>>   	/* register extcon to override sw_vbus on Vbus change later */
+>>
+>> ---
+>> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+>> change-id: 20230123-topic-sm8550-upstream-dwc3-qcom-otg-81795ea148db
+>>
+>> Best regards,
 
