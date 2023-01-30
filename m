@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A472680662
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 08:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF17680670
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 08:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjA3HRE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 02:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S235825AbjA3HXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 02:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjA3HRD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 02:17:03 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2133.outbound.protection.outlook.com [40.107.117.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C61F1BA
-        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 23:17:01 -0800 (PST)
+        with ESMTP id S235333AbjA3HXv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 02:23:51 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2091.outbound.protection.outlook.com [40.107.215.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F46EB65
+        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 23:23:49 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UCOtMxv4wCNX8sGOZutlTboL4vFPvy03gS33aPARd0PfywvEKIuARaXRabIdfQehBRyjw7Nj+dW/210EgidtQgujiNadVi41jhbo4FysFsoy7NJNr+On7Ox4ni7wAd2SbM6JiCJLvTzVjN5pCC4axapq+OcDKkpQLH96mtYWlM88DfL/oQeVgK+Y5jh/6pSivd4rfNGDohGhEgJwQmYtMcT21MQoY50AZFrPyvW9MadvuVMh9ziGHM6zlaG8XlVcKnQc3Rw1bJXxSHXz4TxarjEYKc5d4sTXlK8Oie4ONhL1RWfqdRPFsJtv7mSr9+XDSY8GecAaKxV5kx/2cu731g==
+ b=gXMT7wNseocYIB8Vc4DS0VEVBqomoQh8fwbZSpn6dB0JgspIG+O9UtXy/xtU4hvgbYKeOgndhHwBMzFEVCi5oCWni/lf4zez4KPQAMz7AgsUp8zTN00U9OwWMwyKLkpqZj1Jkm3U9hFE2k/LO/sltO3/KIHTYrzAgup8tJddeK7AaZ5RDRaZvbW29nTIaUcHYR0xnvhbnS3TlLXm1v3DZSIjfqTPVbLafXt4wISyqioevEumHnLPX9ywyGANx3vBJznc+23115bcLWRNi/VxC2tLfi3VtL7b6rphkXpM0HdBEmQJfMZkLD/QaKcaLqzca2EPddbsygGNdAfpFpkMkQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HRFdudie+/8HvMFhWOGDyq8xYE06nvz0ISG25mYyQFE=;
- b=BNZJZrvJOAkFbz+ZDqHfjilbVe8HFPNHl+6GC4jsofeGzcYHXjwkfYg9y96ttsj/9VS2djcehrKZD8odXInmJSwhAvusrfPXceHtzVLKR3fMOH4gwTBdH4EPHEXzEd/RodYCKCSC2bJ5oaHT7Z4EkETU3pBZn+KLGKGvmf0tC7ucoRvCTczxP+2M1j3N+c1xVvtTHlovwekHQIj0zLl2qtOPQOzTizVXPHH7YTtzjf2A6lorHfRtMFPvCYwTYPKwdO32s12xjljx/Awcgh3UbbnuEcF+pr6JZrnKG1Lmto+goPTMsK4WbItvAHuvTq6pFIIrR+nHKpPIfPJUwm7pMw==
+ bh=7o7kpQ91q40Ebx8HU/oBZ2Xb5UP8MX6Mn0MKTCu002k=;
+ b=UPyEf+TTwwcNDl8PNEv/sHEZPssK/pF/pE6coH2o/ac1lFMDTTovrrdhn+l2IrAQ+U+JmHdEd4C27eExusA9LInt69JY8pkL6lvfuTK08t3efq6uMX+m185xNsEstXSJjyXKLlXKsXmi/9RWKNW3NybcY6+YGcZdEj3s8iMH3dRWeKx8xwVkbiwcM8Om/Wz0w+hYnONsZQE6kcPRZ0i+pf5jSk4XYVNNR0FN2YMMG9PGlx9y7SOdSCzM/HxuRrtYJpTUtgW2aHrB0WBBhR2l7P+FtPEclYHNCq0wCtRHbA9lfnVe6HLxV37qziX58OrmAzdZrxYWntB210WlTObHKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
  header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HRFdudie+/8HvMFhWOGDyq8xYE06nvz0ISG25mYyQFE=;
- b=lwYMwEzGIdfL/wTHSIJsSw8DO0RD2effTVMA4b5mYXC7/yxnH/HnUyCW3FQXH78exjnVWVcOlJXTduEAALzkSq44Qw1O+u78fJ2f/wls8Ain3msLmK5n1hdeA0aFKd6bbnlCxq5z0sJt+O4CuoowKxJlt+F29rzh6/KznBX8Uq0=
+ bh=7o7kpQ91q40Ebx8HU/oBZ2Xb5UP8MX6Mn0MKTCu002k=;
+ b=ZBOLVvTa7VoY1NAnX/IESRgByHBdJVtVg5BGzyBKlktjf1K2wFNEo1GlCDLnt8DvFYmWDIki7VkzlL9v2v4a4pJk0t06JHSadXNKYD4pc7p5H1KygHW2DkBv7XoG6fPaizwd4n+5R1PM3umupc2i211Vb5pvTlW+jA9i3hMwxvw=
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OSZPR01MB8387.jpnprd01.prod.outlook.com (2603:1096:604:16d::6) with
+ by TYVPR01MB11168.jpnprd01.prod.outlook.com (2603:1096:400:368::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.20; Mon, 30 Jan
- 2023 07:16:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Mon, 30 Jan
+ 2023 07:23:46 +0000
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::343d:7339:78e5:a46e%8]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 07:16:57 +0000
+ 07:23:46 +0000
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     kernel test robot <lkp@intel.com>
 CC:     Paul Gazzillo <paul@pgazz.com>,
@@ -49,11 +49,12 @@ Subject: RE: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
  detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
 Thread-Topic: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
  detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
-Thread-Index: AQHZNFRzWGTdb9Qh20GbjjeGaxR0fa62i/xQ
-Date:   Mon, 30 Jan 2023 07:16:57 +0000
-Message-ID: <OS0PR01MB5922363553F69FF265A052CA86D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Thread-Index: AQHZNFRzWGTdb9Qh20GbjjeGaxR0fa62i/xQgAACqkA=
+Date:   Mon, 30 Jan 2023 07:23:46 +0000
+Message-ID: <OS0PR01MB59220F2F7FA1C03815EC39A486D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 References: <202301301054.KVvGA5XO-lkp@intel.com>
-In-Reply-To: <202301301054.KVvGA5XO-lkp@intel.com>
+ <OS0PR01MB5922363553F69FF265A052CA86D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB5922363553F69FF265A052CA86D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -61,56 +62,56 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bp.renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OSZPR01MB8387:EE_
-x-ms-office365-filtering-correlation-id: 3d265b87-eba3-4904-607c-08db0291f92b
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYVPR01MB11168:EE_
+x-ms-office365-filtering-correlation-id: 46f64a5b-24dd-47a8-fbc5-08db0292eccd
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o9Nute3D6resN6vb9GEGbydjD/xCCPBu0Fad4DZ1RHZvv/7mxolKZEcGUBW+yVufpFusHvaX+p2OftCClVlanWekVFKhiTqqduUNsqqnCt36BkNlyuSRPCTZlvaxnnfnSvSgLe938miwsAy6YHAyjSVJRYT6uNgY1KFOY8O3/ciLRvpibT9WgxaFoQb55Cy673HKekTvsqKwkWSItt5BOgL3ToCdxdl1ypR08IpufwAA0bUfYBXKBCyKDen5zTT2Juwl9ZmCyEVTNwhJf2bdFP9XX1+1hhUxyEE2iUXRIWCJVAXbKhSyyaZBDLlIQd+VmCwHBhiV+2jlOr4GYbDP//U4DRt04nVx4Qu0ciS35t2El/nLB3omnvXNwR0aUzCUdjrCryGcdbgkUh7AYSgo6siUrhbyqzQQwtZtCPYQH5ZlGxr8WBoLRDz27aKjUsog6+zpeMDNk87XYQ6YSAHHfF3WcNYmEhEMPFrO4F+EjS9U4votWHYoDFaccsEnvjM5LhYfHUhLlaxji5xOJ1pzjzK7kGOVynU5qVpN7h4789JBF9geyt2sG6Dv72r6oVLZj2YaM4+m5kcVUX16yNtqAZnpejqu/76w1WFdXS7I38ZO5hq7Nzs3D3XqI22PSZQkBtpBzV21tuejPDxcAesrfnDPzKFs9nwLAIZOKVD8oI/r0OkR71Hcchq3fWPaCLVwGECClHLPQSCimb9Vksh7AQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199018)(33656002)(26005)(54906003)(71200400001)(38070700005)(7696005)(316002)(2906002)(38100700002)(9686003)(186003)(478600001)(66476007)(66446008)(8676002)(6916009)(6506007)(55016003)(66556008)(76116006)(64756008)(66946007)(52536014)(122000001)(86362001)(5660300002)(41300700001)(4326008)(83380400001)(8936002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: FNLNGtESo8ALUH00qv/JfcnVKvZIe+Ziysw8VvcOCrOn5RqsBuVCT+A0Dc9DEeMRrioK1kYNy0T1Y1bclTTCYGPpy6w5iIYWE/IHv9ZqYHmKGtN/OCcNdAP8KnNBoao+df8ujIuOy1Ee6jGeQchSSO1fMwIFYLpLTX7UeADJMELu2c1pxJTBW4iE22I0PwMavqilj7/jp7pwIqTcJMgaO0W/0U8a7A9kOPQBY0EDHa2vG5JCBWUcy6BlGsjLyzwYV74Z1Ko1mvYL7/fEV12udzbuvfd805yMDbvtdEqhQ98lSw6xpa/ialwt3bKXENEVbH+vumT/iC/oKEpIBIeRw3NYl4RfeH+LkOieZXU/XZYGktVPt0AQk1YD14IsC1WJl7QGUpi97PdhNZuVmO35TTDenIbJyDbkJzxO8zy4Z5LvTFvWtKjK1poRjD3JWJPz07YMQR4aDtIuMNBtjySxB1ZHeJHx5ijzIOnDgxk8oKkqoMflmDdOPLPmD96VGRtrUd4U9iGFCDsGsZl6CPAkSvIb22epTIUCJVARnLI2EpPHv60y9EDhoPj8lzPOrgERysQDMgMhAcV44Dh01qZt6txpGKR2mXMbblLTZ1oW5PY6uuNONUBCl4tjcVVROJS6ctvzzIqidmTu1qBI9fbLjCoPEkGswgn76ZRYxQivA4FBxTuBXOHocgqSQgVYeEEePY1dcvY30Hentww3onMu/sQ0dV3AHJU1DdwSC2wEoSw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199018)(66946007)(66476007)(64756008)(66556008)(66446008)(4326008)(76116006)(5660300002)(6506007)(316002)(54906003)(8936002)(52536014)(2906002)(8676002)(6916009)(41300700001)(71200400001)(7696005)(966005)(478600001)(2940100002)(9686003)(186003)(26005)(83380400001)(33656002)(55016003)(38100700002)(38070700005)(86362001)(122000001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xtmS3dXOCWowVG+T/03DPHkLwzWFNfEVsCSZyafylweZd/EW0wJlyAlGC9aR?=
- =?us-ascii?Q?lHl6VVh731lf4wPQ/O4EFxX6jkWuBgJMLuTON50yblb7KZNMp5QaUCoemkEf?=
- =?us-ascii?Q?n1qGIN83iWnUmdwH2T9KaQKM3xZUO4JL7rdWYvyHF4twHnJah1N8d5NUrSLa?=
- =?us-ascii?Q?zmlml71GJ8caULSAvUpi00gOe0PYJppIx/okCtycevlc/NlSkJ3zGCypU9Bw?=
- =?us-ascii?Q?1/tRNSsOFw5z52lmKXgpdwDTZD4kALkkT6JwwfJjIt64K1uFVo4+bCdHQug4?=
- =?us-ascii?Q?e7OJUtQ2d4mfDyDtk6gdcAaIVR7Bn+22vQz2+j+EnH23ISg+Kf2fZCBbx9WF?=
- =?us-ascii?Q?rvxKIJaCxjLxuJiGGTcZujvK75wZMQQtcaWRv/aY4LG/tgquAT+zKskPEO4t?=
- =?us-ascii?Q?WPcBQbn4ultL92zA/KujrCyxeQbBfw6MZsEL6rgPsknrsfp3no39TWaWLyYf?=
- =?us-ascii?Q?SKeWg/ZFEIzloe7lmkUH8YlvKdl4ruPhDWGG1alETLF8c4acdehcaxAb2x+N?=
- =?us-ascii?Q?5izGjRIsR0S0GUOGEGbq3uaJOelSbw4rRH+z+AXn2SogNlef5Brcwreebs3m?=
- =?us-ascii?Q?x0fH4+Qq4HDLLcv8RuEiSxp8O1EfDEBqLBt+BgS81XNV64HJES80N9ncld6u?=
- =?us-ascii?Q?MF43ky27VOvWm0KVH4Z5FiN0YfGYiEmPxxdBVGTxuEc9n4/Eu1WU2IDlsu3G?=
- =?us-ascii?Q?RP8OCdeDLWLF6BoPohQt3FllBQSusIj6555ddfcodDYBXRbCs16iATtc3dqq?=
- =?us-ascii?Q?rtj0xJUe1Mk/WEYAO6z2k17sjOusIGiLzGQymtVJQvKapsMDaZ6d1rhVyy8g?=
- =?us-ascii?Q?0KpsxuZx03zlqqx0JVfljB+Xe0Uxn5f/I8oBGcNN/Nz9NvbqxnQc26MmxlHE?=
- =?us-ascii?Q?MOVbsl0Ut1Fot/ZJVDYrcmxsr23kfQbRCK7FQgs8cEz5le8EI0Yykws9Wl6H?=
- =?us-ascii?Q?coBY4HtfW4BSdUjs+as5gB7W6mWAhasCHcSoSoPHVViidfkgE3nmrHQbkRsS?=
- =?us-ascii?Q?TAol0dkX+WUpeX7Dv4ycoRFRS+LM27isc8WzSRaYvh6X6dCZO6SNYZc7wKHD?=
- =?us-ascii?Q?Cdr+cRptYSgFnctGr2qOEYpNkZYJr76s5nwey59RgFvuOpZwo6x/jCpXWR8J?=
- =?us-ascii?Q?cdh03lpTULjTqwHGzvbA+zlO7NRtpaZ2Quyg+/7vjwcJk+kM+2Q71E1jTgP4?=
- =?us-ascii?Q?Un+MmWzfr928Z92UPHVEc7JVD5iQ/HvQceuK0J28SQVTK2+qUSWIDMHhccOy?=
- =?us-ascii?Q?MwDjaGf9D8aolVKjt5jiLtDap98+JOLHTlDun5xA3lhFYO6DfEkhl49LQdz7?=
- =?us-ascii?Q?/8rDD7yGBPZ0vVYuss/PHWG3yznzTrL0NuI6Gh+RW3kL00mVMF8OnU7yELaH?=
- =?us-ascii?Q?uJFkC/W0+N4Lpne1EWvc/80abuM7hN5c5sQFuwTraD+p1JeR5EiogLtYWZBM?=
- =?us-ascii?Q?E3Rq7zIpfrjVdgmc5wT950eLg5X9EnndDLs8AS8E/VVOEmPJLIElCWV30cvF?=
- =?us-ascii?Q?5hDFuaq26H5gaiMhPg50POXOL+HhioWEJjeStY5VRrP5+/etBV+URMYIeWI0?=
- =?us-ascii?Q?/DneZOkWjoirw0svef8QE7GKGUdkSzrzdmPVpIi4zLootrwzgBuMFC4OEWr4?=
- =?us-ascii?Q?ZQ=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lk8a6UBgbd1z3SQrYqXAIFY1M77EZo1wRLFphnANn+4ANdJMYyk2CWwb810P?=
+ =?us-ascii?Q?1AwckDzdrYx1lM/sUd6VPPdyICFpGyos61sEbFwkK+IaqkJx+GEYjHI5Nbby?=
+ =?us-ascii?Q?boBbgu9CHICYv2GIP39ThbVhivRXmHf8VaBp+BYpxFxRzuE5hTeQIAZUsVT1?=
+ =?us-ascii?Q?/nzRmnsCjQ/Gkhm7wCc9j4gUkRF4YEYxPLDotejl1qPcoKsZLMMxKoM6jjgh?=
+ =?us-ascii?Q?yJrqtFNvZanAUKvAdmGpVY6QmEwI+nHLU4N0CaGRdc03FAHdao7hlNzSae8T?=
+ =?us-ascii?Q?ljKGlZgq9mirAw0QaIR2VR2iOF+rlXe+DnMUAJs1sK69/pTbz7kqzICtalSd?=
+ =?us-ascii?Q?dyPRfpXFqhm3ycxGusPl5OiY2m8fdkbBNqzn+O0zjgLHTRUWnx3W94qc+IfC?=
+ =?us-ascii?Q?p1FqlpT1vED/iiD9/8Wp5+aHqAd+zELj6P1ejGFZhLXDKEaue2Tioh+AAQne?=
+ =?us-ascii?Q?V1/B9pBYYzphQUDcYyPNcv5rkx+rIoU67LjQZjF7S77+dGcbxeHwNVQIq4Xp?=
+ =?us-ascii?Q?/6UyzbtLFXzKHNheT/fTjL21wbZGOWEDjBnGysRdEkfbTYYIkzlYSCiSkaT/?=
+ =?us-ascii?Q?bcLqMm9ps8bCy19YmGaYcXHyYzmHRAjUzC/OzSlh9AXseBwslIdcy17EhAXq?=
+ =?us-ascii?Q?os5A4Mu0lotuH+qcywtdJBCgy0w7gA3JzYbCtYCzOLeQBUyNU/sbOedwkUIq?=
+ =?us-ascii?Q?7g2v92GYR9OGTrYWERLj05qn+PvjBgXMfajtuqWvtmqp8Q+AM6Fhfp4SUz8z?=
+ =?us-ascii?Q?OmE51wA1w7EbcKGpJYIvlJqPgyq+FYKc2kF1L2JRRYyBsWd2+NRJf7uLpDCb?=
+ =?us-ascii?Q?hqninsUwzGpq9owCPh1BAYnPcTfu7UQuUjayNjKkPYeR/bThGyCO9drtltbI?=
+ =?us-ascii?Q?yG5wlbr/pbHgCGiNJ0TUTda7uvaPdJ0ZlXHA6rUn5Sc+rIip9KMRyrpuzCN4?=
+ =?us-ascii?Q?YdDnO4A57iOdc0akeFaqVIf4dq/1eeweuUpuwtyX/DPfvITaaE15fOLsamTL?=
+ =?us-ascii?Q?nQKV6caJlLiFcp9VvtYp0/mhmnaFgOZXtAG9wRqEwmCOq0D1yFlLyDedAe1O?=
+ =?us-ascii?Q?kghGtukAWRYhXlo9N8Huln9e0uz0atgbyXqtXbH6XeYLNMAUpDfUiX8gcx/R?=
+ =?us-ascii?Q?3sxU7LSuJY5Q4Ou6Jz31LmMdKW912buSfWI/aPIk6gUypx2JDApwGwqQLmLT?=
+ =?us-ascii?Q?Tj4zYEtuZj4LnwOm0vX5E/1ifD58KXcHKKBLIZoBaVhzDNlAqwk43gl/2YAs?=
+ =?us-ascii?Q?lXQZU2AybQscBEy87ctF6L2H3noPft6LB8dMxlHZAXy9ar6u+LRDRlP9BtRk?=
+ =?us-ascii?Q?OPTNnFKCuA41dO7wXqJntD4Jd1o4TZZttH88tIpIKnlgI2wjwtUbcnk6HpSQ?=
+ =?us-ascii?Q?oPqgLYYtNjH8DM2xjy9YQS5d2QGAssiu2G67GWuyqUOOhJVvu8qPklYgsX/G?=
+ =?us-ascii?Q?CfShbUG43gUhGN3P3Pz5L1uhbnWLwamGGWEQRBix9mO8g4GQM6bZaefD9Sw6?=
+ =?us-ascii?Q?O0hv+96Wj1255wJ2HpH2bNF0YyEhhKQSKMAH+jsFNmezJvuGIYTiVtRAEsIs?=
+ =?us-ascii?Q?Zj2Wuiawq6iHdNohQKVQ9ifADWYnaPzhRN1WW7Ek0CaNDpVjC7SEnh3F97SH?=
+ =?us-ascii?Q?eA=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d265b87-eba3-4904-607c-08db0291f92b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 07:16:57.6315
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46f64a5b-24dd-47a8-fbc5-08db0292eccd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 07:23:46.3835
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hxwArIeMSihnap4zlVtUH7+m9Nzr/ncEufZM4BJiHS59WNNDF74VSQmKqye+ssEJRCpsEMBA0W2kbHTBBDNnEAB5WZUXgCWasp8PKML7LAc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8387
+X-MS-Exchange-CrossTenant-userprincipalname: G9+Ll529/g0MBWxWzIuDUthsentupN6kpJWqgJ/l3Utdez3nIO9jMiW0JQTZtik0gb5HjzluzSmutQmsM9oHceGMEyzNPUBBAcZoATCAN9s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB11168
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -120,49 +121,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-Hi lkp@intel.com,
-
-> Subject: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
+> Subject: RE: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependenc=
+ies
 > detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
 >=20
->         git fetch --no-tags usb usb-next
->         git checkout c52c9acc415eb6ff54f658492f8c53da0fc3528a
->         # 1. reproduce by kismet
->            # install kmax per
 >=20
->            kismet --linux-ksrc=3Dlinux --selectees CONFIG_USB_RZV2M_USB3D=
-RD --
-> selectors CONFIG_USB_XHCI_RZV2M -a=3Dcsky
->         # 2. reproduce by make
->            # save the config file to linux source tree
->            cd linux
->            make ARCH=3Dcsky olddefconfig
+> Hi lkp@intel.com,
 >=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
+> > Subject: [usb:usb-next 35/35] kismet: WARNING: unmet direct
+> > dependencies detected for USB_RZV2M_USB3DRD when selected by
+> > USB_XHCI_RZV2M
+> >
+> >         git fetch --no-tags usb usb-next
+> >         git checkout c52c9acc415eb6ff54f658492f8c53da0fc3528a
+> >         # 1. reproduce by kismet
+> >            # install kmax per
+> >
+> >            kismet --linux-ksrc=3Dlinux --selectees
+> > CONFIG_USB_RZV2M_USB3DRD -- selectors CONFIG_USB_XHCI_RZV2M -a=3Dcsky
+> >         # 2. reproduce by make
+> >            # save the config file to linux source tree
+> >            cd linux
+> >            make ARCH=3Dcsky olddefconfig
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > kismet warnings: (new ones prefixed by >>)
+> > >> kismet: WARNING: unmet direct dependencies detected for
+> > >> USB_RZV2M_USB3DRD
+> > when selected by USB_XHCI_RZV2M
+> >    .config:4492:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI'
+> > invalid
 >=20
-> kismet warnings: (new ones prefixed by >>)
-> >> kismet: WARNING: unmet direct dependencies detected for USB_RZV2M_USB3=
-DRD
-> when selected by USB_XHCI_RZV2M
->    .config:4492:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' inval=
-id
+> Looks like this config from kismet is wrong. Can you please fix it and tr=
+y?
 
-Looks like this config from kismet is wrong. Can you please fix it and try?
+Similar wrong config issue reported here [1] as well.
 
-Cheers,
-Biju
+[1] https://lore.kernel.org/linux-mm/202301301239.ht1u9zke-lkp@intel.com/T/
 
-> for ARCH_MMAP_RND_BITS
 >=20
->    WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
->      Depends on [n]: USB_SUPPORT [=3Dy] && USB_GADGET [=3Dn] && (ARCH_R9A=
-09G011
-> [=3Dn] || COMPILE_TEST [=3Dy])
->      Selected by [y]:
->      - USB_XHCI_RZV2M [=3Dy] && USB_SUPPORT [=3Dy] && USB [=3Dy] && USB_X=
-HCI_HCD
-> [=3Dy] && USB_XHCI_PLATFORM [=3Dy] && (ARCH_R9A09G011 [=3Dn] || COMPILE_T=
-EST [=3Dy])
+> Cheers,
+> Biju
 >=20
+> > for ARCH_MMAP_RND_BITS
+> >
+> >    WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
+> >      Depends on [n]: USB_SUPPORT [=3Dy] && USB_GADGET [=3Dn] &&
+> > (ARCH_R9A09G011 [=3Dn] || COMPILE_TEST [=3Dy])
+> >      Selected by [y]:
+> >      - USB_XHCI_RZV2M [=3Dy] && USB_SUPPORT [=3Dy] && USB [=3Dy] &&
+> > USB_XHCI_HCD [=3Dy] && USB_XHCI_PLATFORM [=3Dy] && (ARCH_R9A09G011 [=3D=
+n] ||
+> > COMPILE_TEST [=3Dy])
+> >
