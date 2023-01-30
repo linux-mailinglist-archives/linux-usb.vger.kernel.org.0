@@ -2,43 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12846680B4F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 11:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E26C680B55
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 11:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235815AbjA3KvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 05:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
+        id S235907AbjA3KxO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 05:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbjA3KvA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 05:51:00 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C552FCFA
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 02:50:59 -0800 (PST)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BD69FE68;
-        Mon, 30 Jan 2023 11:50:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675075856;
-        bh=Pr5vYeTHiulL0pXq90FQ8/gB3wzhi+Eweb0uk9ZnFpA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qRWT7sv65Wx9ekCJz0BoYo9Yj/Zdhy8xCX/AntFBRbrAXOOkYLZh6euiHKAPux3K2
-         hqPVjcsuXsoZGN9TRxvoBDNNBFXg5pvn16TO4QcuIVpmj8PvUObJp/FfGWfkw7N9Sz
-         VtI+STg//c1jNhHLOd+YJLouZ+okyrQQdNcyviUk=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     linux-usb@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        mgr@pengutronix.de, kieran.bingham@ideasonboard.com,
-        torleiv@huddly.com, Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2 3/3] usb: gadget: uvc: Disable interrupt endpoint by default
-Date:   Mon, 30 Jan 2023 10:50:45 +0000
-Message-Id: <20230130105045.120886-4-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230130105045.120886-1-dan.scally@ideasonboard.com>
-References: <20230130105045.120886-1-dan.scally@ideasonboard.com>
+        with ESMTP id S235575AbjA3KxN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 05:53:13 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC5B13D60
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 02:53:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
+        t=1675075984; bh=2jfpMBagZaGgDG8RBKN6VHWmQCjG4MeLyw0BAmxvHpg=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=R3zUJ551Y9ptEZhKxA3Y31JH0vlkmOaMre1fCIW5ExRnx/X4TMQ8T5ZKTVy3D1ejX
+         iZ9zH+Kkz742AnMy3Fjr+VRoiCCmdVc6ByuEMrThCHJZ4lHmJEEXxFF4v3NF4fBsvH
+         hLXOm5a1yiG7My2DmdjWD11fvXvS+rEhb/3ZmdxjHPpuoNn2NCqXd9oAJWDEzc9W+Z
+         tf/38PRiALuMiCmXIfqEzbfcyETc0VMxJiibudVEoIi94YkrPmjBbynIqzMTspA0Oc
+         Wy5RTIHywTo0cx8DdXsTIqcnyZ4+Xq50un1LzSc4/Rxte8fwNtsIne7C//cV63ri49
+         NSOFA0PVROYKg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([81.189.232.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MCsQ4-1pVDE00rke-008t5V; Mon, 30
+ Jan 2023 11:53:04 +0100
+Message-ID: <47af73e9-0d3f-0ac2-52e6-b89a87bc602b@gmx.at>
+Date:   Mon, 30 Jan 2023 11:52:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Possible problem with thunderbolt 4
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        "michael.simon@cpsd.at" <michael.simon@cpsd.at>
+References: <057da4af-9507-fdc6-9588-160a88210674@gmx.at>
+ <Y7wNnrlEWMOV4Cj/@black.fi.intel.com>
+ <0f862f75-9805-f5d0-ef89-0b77d0ae8778@gmx.at>
+ <Y72AbwKFd9snjZrJ@black.fi.intel.com>
+ <3ccb150b-dbd9-c9d0-0e8c-8c169f0d8faf@gmx.at>
+ <Y76TS54PJpmseZs3@black.fi.intel.com>
+ <8c2da730-ba9b-6ec7-d493-1a6a2ce54622@gmx.at>
+ <Y8kXFFrue7l7DKf3@black.fi.intel.com>
+ <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
+ <0c9e644e-a07d-e9bb-f8d6-692d2412fd30@gmx.at>
+ <Y9PDRYHHYNSJWwGe@black.fi.intel.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+In-Reply-To: <Y9PDRYHHYNSJWwGe@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:S32kNS3NBOaGvK+gW8K0eNiWpv9P0YVGbhBORREQnTxaXOALmii
+ 4tjti9oM9RMIXVuiOxFOC4l+RShola/0HnELrwce3D1KcoNCXOTKMQXaesfnnJhKQLbkKm/
+ RaOtZNSUNWW4QFmSN4q5UnJ1df/yO0D2iqTXSDdMHnOklTONSzLBNeZiJ3fAloH4ppE3RHl
+ vbZWX+lIjUw2rtKt2Z+1Q==
+UI-OutboundReport: notjunk:1;M01:P0:JnjV3/9Uw3M=;3nYRpYZvdLGJZ5m/OxJy/F23P67
+ NHKN/XNjRWU55Gr2Gxwmak1e2L1/REz1JmmgmzaSOMQLveAGYKZrrqGk1zzsD2kiS9OGA9iNj
+ NxFdCQcOxOM3VC4OGl7FnUrgfiTYzrn2KfQOsmpz/fcjhCicpEDN6q/wrArwg5Np8OYfTHQ+s
+ +uOvFfG0MvfNP3AnvzvDGdwJ44bkbI/DmueHm0gDp3uoSbQVNilvV3AjggAJrIn8n1ngDcKs4
+ VPJSK7Kz3VGWRxz0mTHslRed5cSgdUcBplXUnCFmiWeZmp+txEDlrbxDgKhw2Y3Ar/my7Sjyh
+ ZXPpbmi/7LjTAt2r7rOWyuIG5jdgfiH5SaWMFZkdt5y7ZOGuMsGwtnmLtppq1zQTzOP7SvDvE
+ Or9S04Wsz1Q4MN1HZsJxytzdXUga3NSTM06jbjQ8akTDSzQAIOzj9X/vXrGzL71tl8NInwq9e
+ SU2qF9Pz3iPjDrxkJNOqk284sH+MGK3TbY1N0vG0EiGYUu2+b8EJ4hP7z+0MNaIcY3+6mfmtV
+ RMJxHPtxzJxQAjPHPR1/+WWNbs3TU9VRbojDoIftG0HUnWKlPW7KXGwBILRmdWhmG1GBp5w6U
+ UlhU2rDKbj4gCJoqZTnc6LUrBl7Z5F/KMBZ/O58p80Zcmj8ZwP/72F+NYOEb7CKFfLtxzlVav
+ sLURkNGsNZnLqFeiuroiyEx0yDbNj1njC/jPIMhe2M+28pI4n8PIgeLfavFHkk/yluJ6yC6oK
+ 3jWprAjTx+4rxog7q2NZpao7aDVwVKxXR2f7U89X1C8Q3vdDjQTmAbTU2nOOPHxBO2E0m9iz9
+ zr4kL8LMQzBSC50AmafpP+O9qVvBqBHZfrf4WhZXY3NCSL4a47dz8/HW1BdTwNO9Uv4s62eqX
+ oJUCiZvMVJGo/9b2bXtt0dT07XzHQNo5OnB3Oqs97kclrOIxLdgegZzmqYoK5wzakGG39Ke0e
+ Jx+eoQ==
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,164 +82,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The f_uvc code includes an interrupt endpoint against the VideoControl
-interface. According to section 2.4.2 of the UVC specification however
-this endpoint is optional in at least some cases:
+Hi,
 
-"This endpoint is optional, but may be mandatory under certain
-conditions"
+Am 27.01.23 um 13:27 schrieb Mika Westerberg:
+> Yeah, I just got report from the folks and unfortunately we were not
+> able to reproduce the issue in the lab. The PCIe tunnel stays up (or
+> gets re-created) after reboot from Linux and is visible in the UEFI
+> shell (so in the BIOS).
+>
+> So at the moment I'm out of ideas why this happens since Windows flows
+> should be the same. And we have no means to repro it locally to
+> investigate further :/
 
-The conditions enumerated are whether...
+Ok. I try to get access to some more TB4 devices. Currently I have two (HP=
+, Lenovo) that show the issue when the software connection manager is used=
+.
 
-1. The device supports hardware triggers
-2. The device implements any AutoUpdate controls
-3. The device implements any Asynchronous controls
+>> Another thought of mine was, if it wouldn't it be useful to have a kern=
+el commandline switch (or thunderbolt module option) that allows the user =
+to select whether the software connection manager should be used, or the f=
+irmware connection manager (if avialable)? I understand that in general us=
+ing the sw connection manager is favorable because the OS then has control=
+ over the connection, but maybe there are use cases where letting the firm=
+ware doing the job is just fine (like in my case ;-)
+> Right, we may add one but I think it should be part of the USB4 _OSC
+> negotiation like the below patch (acpi.native_usb4_disable=3D1 in the
+> command line should switch to FW CM). We could also make it "automatic"
+> by adding a DMI quirks table that then sets this.
+>
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 0c05ccde1f7a..7da4d56fb936 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -296,6 +296,9 @@ EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirm=
+ed);
+>  /*
+>   * ACPI 6.4 Operating System Capabilities for USB.
+>   */
+> +bool native_usb4_disable;
+> +module_param(native_usb4_disable, bool, 0644);
+> +
+>  bool osc_sb_native_usb4_support_confirmed;
+>  EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+>
+> @@ -344,7 +347,7 @@ static void acpi_bus_osc_negotiate_platform_control(=
+void)
+>  	if (IS_ENABLED(CONFIG_SCHED_MC_PRIO))
+>  		capbuf[OSC_SUPPORT_DWORD] |=3D OSC_SB_CPC_DIVERSE_HIGH_SUPPORT;
+>
+> -	if (IS_ENABLED(CONFIG_USB4))
+> +	if (IS_ENABLED(CONFIG_USB4) && !native_usb4_disable)
+>  		capbuf[OSC_SUPPORT_DWORD] |=3D OSC_SB_NATIVE_USB4_SUPPORT;
+>
+>  	if (!ghes_disable)
+That works fine on the HP, with that active the firmware connection manger=
+ is used! To make it 'automatic' would mean that on machines listed in thi=
+s new DMI quirks table the software connection manager would be disabled, =
+correct?
 
-As all of those things are implementation dependent, this endpoint
-might be unnecessary for some users. Further to that it is unusable
-in the current implementation as there is no mechanism within the
-UVC gadget driver that allows data to be sent over that endpoint.
-Disable the interrupt endpoint by default, but check whether the
-user has asked for it to be enabled in configfs and continue to
-generate it if so.
+Regards,
+Christian
 
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
-Changes in v3 (Laurent):
-
-	- Switched to enable_interrupt_ep. This has the effect of suppressing the
-	endpoint by default, which is a change from the existing behaviour. Given
-	the endpoint is at present completely unusable though this seems safe.
-	- Some formatting (line wraps and indentation)
-
- drivers/usb/gadget/function/f_uvc.c | 60 ++++++++++++++++++-----------
- drivers/usb/gadget/function/uvc.h   |  1 +
- 2 files changed, 38 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index a673001f5271..5250805153c7 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -76,7 +76,7 @@ static struct usb_interface_descriptor uvc_control_intf = {
- 	.bDescriptorType	= USB_DT_INTERFACE,
- 	.bInterfaceNumber	= UVC_INTF_VIDEO_CONTROL,
- 	.bAlternateSetting	= 0,
--	.bNumEndpoints		= 1,
-+	.bNumEndpoints		= 0,
- 	.bInterfaceClass	= USB_CLASS_VIDEO,
- 	.bInterfaceSubClass	= UVC_SC_VIDEOCONTROL,
- 	.bInterfaceProtocol	= 0x00,
-@@ -300,14 +300,17 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
- 		if (alt)
- 			return -EINVAL;
- 
--		uvcg_info(f, "reset UVC interrupt endpoint\n");
--		usb_ep_disable(uvc->interrupt_ep);
-+		if (uvc->enable_interrupt_ep) {
-+			uvcg_info(f, "reset UVC interrupt endpoint\n");
-+			usb_ep_disable(uvc->interrupt_ep);
- 
--		if (!uvc->interrupt_ep->desc)
--			if (config_ep_by_speed(cdev->gadget, f, uvc->interrupt_ep))
--				return -EINVAL;
-+			if (!uvc->interrupt_ep->desc)
-+				if (config_ep_by_speed(cdev->gadget, f,
-+						       uvc->interrupt_ep))
-+					return -EINVAL;
- 
--		usb_ep_enable(uvc->interrupt_ep);
-+			usb_ep_enable(uvc->interrupt_ep);
-+		}
- 
- 		if (uvc->state == UVC_STATE_DISCONNECTED) {
- 			memset(&v4l2_event, 0, sizeof(v4l2_event));
-@@ -385,7 +388,8 @@ uvc_function_disable(struct usb_function *f)
- 	uvc->state = UVC_STATE_DISCONNECTED;
- 
- 	usb_ep_disable(uvc->video.ep);
--	usb_ep_disable(uvc->interrupt_ep);
-+	if (uvc->enable_interrupt_ep)
-+		usb_ep_disable(uvc->interrupt_ep);
- }
- 
- /* --------------------------------------------------------------------------
-@@ -533,14 +537,17 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	control_size = 0;
- 	streaming_size = 0;
- 	bytes = uvc_iad.bLength + uvc_control_intf.bLength
--	      + uvc_interrupt_ep.bLength + uvc_interrupt_cs_ep.bLength
- 	      + uvc_streaming_intf_alt0.bLength;
- 
--	if (speed == USB_SPEED_SUPER) {
--		bytes += uvc_ss_interrupt_comp.bLength;
--		n_desc = 6;
--	} else {
--		n_desc = 5;
-+	n_desc = 3;
-+	if (uvc->enable_interrupt_ep) {
-+		bytes += uvc_interrupt_ep.bLength + uvc_interrupt_cs_ep.bLength;
-+		n_desc += 2;
-+
-+		if (speed == USB_SPEED_SUPER) {
-+			bytes += uvc_ss_interrupt_comp.bLength;
-+			n_desc += 1;
-+		}
- 	}
- 
- 	for (src = (const struct usb_descriptor_header **)uvc_control_desc;
-@@ -579,11 +586,14 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	uvc_control_header->bInCollection = 1;
- 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
- 
--	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_ep);
--	if (speed == USB_SPEED_SUPER)
--		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_interrupt_comp);
-+	if (uvc->enable_interrupt_ep) {
-+		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_ep);
-+		if (speed == USB_SPEED_SUPER)
-+			UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_interrupt_comp);
-+
-+		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_cs_ep);
-+	}
- 
--	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_cs_ep);
- 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_streaming_intf_alt0);
- 
- 	uvc_streaming_header = mem;
-@@ -666,12 +676,16 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 			    (opts->streaming_maxburst + 1));
- 
- 	/* Allocate endpoints. */
--	ep = usb_ep_autoconfig(cdev->gadget, &uvc_interrupt_ep);
--	if (!ep) {
--		uvcg_info(f, "Unable to allocate control EP\n");
--		goto error;
-+	if (opts->enable_interrupt_ep) {
-+		ep = usb_ep_autoconfig(cdev->gadget, &uvc_interrupt_ep);
-+		if (!ep) {
-+			uvcg_info(f, "Unable to allocate interrupt EP\n");
-+			goto error;
-+		}
-+		uvc->interrupt_ep = ep;
-+		uvc_control_intf.bNumEndpoints = 1;
- 	}
--	uvc->interrupt_ep = ep;
-+	uvc->enable_interrupt_ep = opts->enable_interrupt_ep;
- 
- 	if (gadget_is_superspeed(c->cdev->gadget))
- 		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_ss_streaming_ep,
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 48b71e04c2b1..daf226610f49 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -149,6 +149,7 @@ struct uvc_device {
- 	struct usb_ep *interrupt_ep;
- 	struct usb_request *control_req;
- 	void *control_buf;
-+	bool enable_interrupt_ep;
- 
- 	unsigned int streaming_intf;
- 
--- 
-2.34.1
 
