@@ -2,99 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A133681ABB
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 20:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3D4681B26
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 21:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238245AbjA3TpX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 14:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S229494AbjA3UOf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 15:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbjA3TpV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 14:45:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5068C163;
-        Mon, 30 Jan 2023 11:45:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 679EEB8168D;
-        Mon, 30 Jan 2023 19:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1ACC4339E;
-        Mon, 30 Jan 2023 19:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675107918;
-        bh=52J5/EqGhJ3KiKyV/iLX4Xpcfv1lkJzb5jsBfV0Gup0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ib7QLhO+fxZOwPJNUB43bjppstdngCG6rh1dMFX67vm2xHc902j+AYYpWI5OeiscI
-         XBWDhLNM89oTYcJdVrzRg9BQaJPftYV155LeF6KKMGgQ1DTzjemBG1aWlN/ozVo81+
-         AkEn38XP8uxtQltmDvV+DbSx54i2XNNd4V/OKl6e041o1o7miISG1rkHgZ9mK1XCbu
-         iNHhpP0dwKjn2VXk4SnMrKIkKkfkf7gE6i/Mvkagwq062VCP9lHbkgIu4FjD9MwRh+
-         Uaen15pskfu7saWpQi7QEbp4NCQdMeXMah2NZ/IksjtPc8YzAlBYPpxpJl398Q6w/N
-         ol1HdFQMqd+ZQ==
-Received: by mail-lf1-f45.google.com with SMTP id br9so20725616lfb.4;
-        Mon, 30 Jan 2023 11:45:17 -0800 (PST)
-X-Gm-Message-State: AFqh2koS8OaK59he3THjPwhz496ITerhpGIJV9iHV7JS08FpRufdQgaN
-        qS9kbWrYjJEGJu73dKZ+czFt6Nv+hUXG/SQiBWw=
-X-Google-Smtp-Source: AMrXdXuJOo7Pbv6iG6Moq7Ekn6wEAfrVjI/RQUFeuIXgnRtOAymLGgvgkwj6Zk11Ct0HYyEHh/eJJ8bCCHgUjjNms4Q=
-X-Received: by 2002:ac2:4c4a:0:b0:4cc:a1e3:c04b with SMTP id
- o10-20020ac24c4a000000b004cca1e3c04bmr3476130lfk.15.1675107915984; Mon, 30
- Jan 2023 11:45:15 -0800 (PST)
+        with ESMTP id S229468AbjA3UOd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 15:14:33 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7D7302B5
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 12:14:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675109672; x=1706645672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Ms+hu3CYdYzlkJaLug3KmwicPx4jhzjOekkjRORy2A=;
+  b=kMJxLOze69Ld/IXPAqgdpV3sO3djzPyK4NoUrG8gkq2NVmDNlyhNReP9
+   Y5E0SKYVZBoqHx5Xq8LIZxWSx2/n8QCfPmD8i54hs/J3YkP8/D0v8jotn
+   wctBSusY7qngM2vE/3Cp74IvRS/0FsCjfgbPtr8ykyjeirxkCNJiWSsqg
+   AHoGoCcc9DmmtLSirH+GCvQQrMpbuPJQSJQxEpL9XpvJVzBaD4SP5Udt/
+   Aq8LezrS79og9ngKxDOXMdc7qFY7HUlc3sP9dziB707lro6qBqUtzilkj
+   9ZC90wewlg8GIiLEV3xkRqB2Nf4OSShirHn+tkfbTFO896xdK6eKsp5Ky
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="413881894"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="413881894"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 12:14:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="838089883"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="838089883"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 30 Jan 2023 12:14:19 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pMaXi-0003sg-1o;
+        Mon, 30 Jan 2023 20:14:18 +0000
+Date:   Tue, 31 Jan 2023 04:13:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Scally <dan.scally@ideasonboard.com>,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     oe-kbuild-all@lists.linux.dev, mgr@pengutronix.de,
+        balbi@kernel.org, kieran.bingham@ideasonboard.com,
+        torleiv@huddly.com, stern@rowland.harvard.edu,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH v3 03/11] usb: gadget: uvc: Allow definition of XUs in
+ configfs
+Message-ID: <202301310439.qAxkvKBD-lkp@intel.com>
+References: <20230130093443.25644-4-dan.scally@ideasonboard.com>
 MIME-Version: 1.0
-References: <20230129231053.20863-1-rdunlap@infradead.org> <20230129231053.20863-3-rdunlap@infradead.org>
-In-Reply-To: <20230129231053.20863-3-rdunlap@infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 30 Jan 2023 11:45:03 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6GgFyF8AwJeZDTdtKfvDw2gRwPyQKii7Sgx-XqvtAcrw@mail.gmail.com>
-Message-ID: <CAPhsuW6GgFyF8AwJeZDTdtKfvDw2gRwPyQKii7Sgx-XqvtAcrw@mail.gmail.com>
-Subject: Re: [PATCH 2/9] Documentation: driver-api: correct spelling
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-raid@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130093443.25644-4-dan.scally@ideasonboard.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 3:11 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Correct spelling problems for Documentation/driver-api/ as reported
-> by codespell.
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Vishal Verma <vishal.l.verma@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: nvdimm@lists.linux.dev
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: dmaengine@vger.kernel.org
-> Cc: Song Liu <song@kernel.org>
-> Cc: linux-raid@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> ---
-[...]
->  Documentation/driver-api/md/md-cluster.rst            |    2 +-
->  Documentation/driver-api/md/raid5-cache.rst           |    2 +-
+Hi Daniel,
 
-For md bits:
-Acked-by: Song Liu <song@kernel.org>
+I love your patch! Perhaps something to improve:
 
-[...]
+[auto build test WARNING on usb/usb-linus]
+[also build test WARNING on westeri-thunderbolt/next linus/master v6.2-rc6 next-20230130]
+[cannot apply to usb/usb-testing usb/usb-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Scally/usb-gadget-uvc-Make-bSourceID-read-write/20230130-174215
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+patch link:    https://lore.kernel.org/r/20230130093443.25644-4-dan.scally%40ideasonboard.com
+patch subject: [PATCH v3 03/11] usb: gadget: uvc: Allow definition of XUs in configfs
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/c1a147d5dfd26ea76a1d054efc3a184dec36061b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Scally/usb-gadget-uvc-Make-bSourceID-read-write/20230130-174215
+        git checkout c1a147d5dfd26ea76a1d054efc3a184dec36061b
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/ABI/testing/configfs-usb-gadget-uvc:120: WARNING: Malformed table.
+
+vim +120 Documentation/ABI/testing/configfs-usb-gadget-uvc
+
+   118	
+   119	What:		/config/usb-gadget/gadget/functions/uvc.name/control/extensions/name
+ > 120	Date:		Nov 2022
+   121	KernelVersion:	6.1
+   122	Description:	Extension Unit (XU) Descriptor
+   123	
+   124			bLength, bUnitID and iExtension are read-only. All others are
+   125			read-write.
+   126	
+   127			===============		========================================
+   128			bLength			size of the descriptor in bytes
+   129			bUnitID			non-zero ID of this unit
+   130			guidExtensionCode	Vendor-specific code identifying the XU
+   131			bNumControls		number of controls in this XU
+   132			bNrInPins		number of input pins for this unit
+   133			baSourceID		list of the IDs of the units or terminals
+   134						to which this XU is connected
+   135			bControlSize		size of the bmControls field in bytes
+   136			bmControls		list of bitmaps detailing which vendor
+   137						specific controls are supported
+   138			iExtension		index of a string descriptor that describes
+   139						this extension unit
+   140			===============		========================================
+   141	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
