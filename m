@@ -2,192 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53591680B87
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 12:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52ED9680C07
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 12:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235544AbjA3LCz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 06:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        id S236379AbjA3LcY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 06:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235959AbjA3LCZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 06:02:25 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5801E3402F
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 03:01:39 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id m14so10193273wrg.13
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 03:01:39 -0800 (PST)
+        with ESMTP id S236598AbjA3LcH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 06:32:07 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9F634C37
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 03:31:55 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id qw12so14889235ejc.2
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 03:31:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmN+g/dAnuer7yOAtI/to5ZWjp6c/Vk223ZfFssWlmQ=;
-        b=bkrkwX1ZmtQHtKR46u2m3FuzsAUs+wp6w0S6i+OD33iRdckKm8yFLdsaeA5VIfiPkc
-         YHNgLa07djAT4QttWNg0ALSyHS0INYj3Qb61AQcnGIC3qn9RwRPf9HfYCKxOaXeTEc4S
-         y5N24BQZpldNrz7NyCJDXTaVuN4NKQbhSrxDR/4HpRJxRv8G6Miz9xDaO6oy5FD48/+c
-         ePn21hgP9E9+BTCI9CR7hajq8BzsqhWY2Ij5l4OkOAC8d+D0Fc3SHCeNUAbu0GO79gia
-         +5Saj5QEERgTRCl2GPtzDvwrcRkwALjp9+1b6zyZnwR8tsILhwdTwzeJHJdwhjBflGux
-         rUtg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4YbWf65lg2cQpgfmV5inxaJ+xw++SwQJT+M7eoK5F4Q=;
+        b=x6p8Wts7qSiLZarPrBkLp0wV/Ji/Izq6x9YUDQ+t2ydvkeNyAAcwooP/s5sxdbXTJZ
+         QfAhnkLD5xXVNOmoQPxXZQhRvOxyDefu9UfCdXDPdsQxFwgN7nYp5rOnrHmQubeU0Wz7
+         eK8nt31Y79kCDI/WUOlpVbVLKhY/A31MF9kIPCvHzXEuKzigl5N+HTdSbOTO3jVO9UrJ
+         rvIPF4HY1xI8S88pNf/hGoRybHV6Gnw15MGvIukhgOTviXWV+h9ZyCkIvMDsOCHhPSaF
+         l8IGOlFeqnLzxwf6O4+j4feBX2xVOR+1HMOBCCcBzWUZeSdWFXNCW1cUaYH9u8txG47Z
+         Bvaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BmN+g/dAnuer7yOAtI/to5ZWjp6c/Vk223ZfFssWlmQ=;
-        b=YD9fYvDNSbI+ff5VtTvk7kuYEyoMcmxS1HLebCzYCiSn/xdSh9Z0Qqt/kx4sbGyljc
-         VpPTzxIE+D8GunQrpZyLu90CPxVDmmNfKHsttd7KX94ligeQQacNqfiKp87wCEiA+Xgp
-         Q6GViE79c9SVxbG0LZtQwnlWH0AKjMOspTJ9O5xyI3ZZaubsDAOdJcBb7S236N67B5tQ
-         udrAw5JBUyhBdeXSJbYcqNenY/13xWx3QsIBhiaLQ3Uhi2mj69F/PU9NCekcvohfZX/1
-         XpS+eEzQL71QUA12xftIhd+HiBkqZDYJiCbwcd9Pa+ZEArTdP9hD/+SQ4f5SpHmouXai
-         wmAg==
-X-Gm-Message-State: AFqh2kqNCaem4Mm3CzJRBrxNAhVKAcHKREU0bgBhLbIun69s3wiRNxL7
-        3IfjpAgNbwOm4hpe6dFcwMhtlAPuuL0BVNCrzs4=
-X-Google-Smtp-Source: AMrXdXu1MHbaat0/kWk30g5Bk1GkRBZQXl4XwxezF2rlzOZtqzjFvEjyu/AID3ezJDgJcjQGh3Fqzg==
-X-Received: by 2002:a5d:5c07:0:b0:2bd:fa1d:5291 with SMTP id cc7-20020a5d5c07000000b002bdfa1d5291mr49366324wrb.67.1675076497821;
-        Mon, 30 Jan 2023 03:01:37 -0800 (PST)
-Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id k4-20020a5d4284000000b00241fde8fe04sm11614558wrq.7.2023.01.30.03.01.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 03:01:37 -0800 (PST)
-Message-ID: <ea95f4fb-ccbb-8078-ddac-5254e1dbfc85@linaro.org>
-Date:   Mon, 30 Jan 2023 12:01:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 5/7] arm64: dts: qcom: sm8450-hdk: add pmic glink node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        bh=4YbWf65lg2cQpgfmV5inxaJ+xw++SwQJT+M7eoK5F4Q=;
+        b=3rfbrQ+EvQ8H+9MYEDv4oGuYFjedKRE0zeYUkyGBLEiO1v+YTHYxDwiDLlRE0kn5Rj
+         WmGmid8v6udjrum1libLknchS//dr0iEmxBfL6g41HMBDOypKMa5PYLn/1eejd8u40Nd
+         KzBM1Cj8z601IRj1MtU/XypUYwZqkiPlTRyTwv+/BZVI393wFcp17j1Ni0qsQ4Bq2O5d
+         4aLUXDqbclwASmdoviDQ5lXBCc5Ma3HFWEbZ2qpoLla7cwrrdW6aAhpxwpf/6BOvU/yq
+         IMIllPCZFNShwO99GQNOMLMXrqjEqx9YQc1WAIok79un5gax9ioD0mNUrtIwJzvsyI8o
+         Ls5g==
+X-Gm-Message-State: AFqh2kqMD38ZDpYroq1OcODKeVlMz5hZfgRPogwuNHvLrevAk8IKIobU
+        t3mQ48Pp8nkTVxamv0SOEKkXSg==
+X-Google-Smtp-Source: AMrXdXtOvcr+SFVypdszhnnG8chKGR68qAsLVWoEYFnrJOTeUx1xaP+iDHtDb/nHwypYGL0jd/mnXQ==
+X-Received: by 2002:a17:907:7e9c:b0:84d:363c:888b with SMTP id qb28-20020a1709077e9c00b0084d363c888bmr64669724ejc.58.1675078314495;
+        Mon, 30 Jan 2023 03:31:54 -0800 (PST)
+Received: from localhost.localdomain (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id w5-20020a1709061f0500b0086a2e31d1c1sm6703356ejj.28.2023.01.30.03.31.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 03:31:53 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230130-topic-sm8450-upstream-pmic-glink-v1-0-0b0acfad301e@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v1-5-0b0acfad301e@linaro.org>
- <1c3fa66b-651f-c3c1-1751-af3f43c86c49@linaro.org>
- <6cde6bce-ce28-2dd0-1f16-4868ae93fb3f@linaro.org>
- <51d1c4a3-60bf-72df-e1d5-91c69514c36b@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <51d1c4a3-60bf-72df-e1d5-91c69514c36b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: fsa4480: Use generic node name
+Date:   Mon, 30 Jan 2023 12:31:50 +0100
+Message-Id: <20230130113151.2130063-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30/01/2023 11:59, Konrad Dybcio wrote:
-> 
-> 
-> On 30.01.2023 11:58, Neil Armstrong wrote:
->> On 30/01/2023 11:40, Konrad Dybcio wrote:
->>>
->>>
->>> On 30.01.2023 10:54, Neil Armstrong wrote:
->>>> Add the pmic glink node linked with the DWC3 USB controller
->>>> switched to OTG mode and tagged with usb-role-switch.
->>>>
->>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>> Missing commit message
->>
->> ??
->>
->>>
->>>> ---
->>>>    arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 34 ++++++++++++++++++++++++++++++++-
->>>>    1 file changed, 33 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> index 5bdc2c1159ae..5ab12c911bfe 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> @@ -87,6 +87,31 @@ lt9611_3v3: lt9611-3v3-regulator {
->>>>            enable-active-high;
->>>>        };
->>>>    +    pmic-glink {
->>>> +        compatible = "qcom,sm8450-pmic-glink", "qcom,pmic-glink";
->>>> +
->>> You could remove this newline
->>>> +        #address-cells = <1>;
->>>> +        #size-cells = <0>;
->>>> +
->>>> +        connector@0 {
->>>> +            compatible = "usb-c-connector";
->>>> +            reg = <0>;
->>>> +            power-role = "dual";
->>>> +            data-role = "dual";
->>>> +
->>>> +            ports {
->>>> +                #address-cells = <1>;
->>>> +                #size-cells = <0>;
->>> And add one here
->>>
->>>> +                port@0 {
->>>> +                    reg = <0>;
->>> And here
->>>
->>
->> Ack
->>
->>>> +                    pmic_glink_dwc3_in: endpoint {
->>>> +                        remote-endpoint = <&usb_1_dwc3_out>;
->>>> +                    };
->>>> +                };
->>>> +            };
->>>> +        };
->>>> +    };
->>>> +
->>>>        vph_pwr: vph-pwr-regulator {
->>>>            compatible = "regulator-fixed";
->>>>            regulator-name = "vph_pwr";
->>>> @@ -724,7 +749,14 @@ &usb_1 {
->>>>    };
->>>>      &usb_1_dwc3 {
->>>> -    dr_mode = "peripheral";
->>>> +    dr_mode = "otg";
->>>> +    usb-role-switch;
->>>> +
->>>> +    port {
->>> Hm, maybe this could be moved to 8450 dtsi?
->>
->> Nop because it depends on the board layout, I think dr_mode
->> and eventual connector description should really stay in
->> the board dts.
-> I just meant the port definition, would it cause any side
-> effects to have it there?
+Node names should be generic. Change fsa4480@ to typec-mux@.
 
-Right, I don't think so, I don't have an opinion on that so whatever
+Fixes: 01afa882f12d ("dt-bindings: usb: Add binding for fcs,fsa4480")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Neil
-
-> 
-> Konrad
->>
->> Thanks,
->> Neil
->>
->>>
->>> Konrad
->>>> +        usb_1_dwc3_out: endpoint {
->>>> +              remote-endpoint = <&pmic_glink_dwc3_in>;
->>>> +          };
->>>> +    };
->>>>    };
->>>>      &usb_1_hsphy {
->>>>
->>
+diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+index 9473f26b0621..51120fe90322 100644
+--- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
++++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+@@ -51,7 +51,7 @@ examples:
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-        fsa4480@42 {
++        typec-mux@42 {
+           compatible = "fcs,fsa4480";
+           reg = <0x42>;
+ 
+-- 
+2.39.1
 
