@@ -2,98 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52ED9680C07
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 12:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCB6680C1B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 12:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236379AbjA3LcY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 06:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S235861AbjA3Liq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 06:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236598AbjA3LcH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 06:32:07 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9F634C37
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 03:31:55 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id qw12so14889235ejc.2
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 03:31:55 -0800 (PST)
+        with ESMTP id S229728AbjA3Lin (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 06:38:43 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9902CC42;
+        Mon, 30 Jan 2023 03:38:42 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id q8so7757786wmo.5;
+        Mon, 30 Jan 2023 03:38:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4YbWf65lg2cQpgfmV5inxaJ+xw++SwQJT+M7eoK5F4Q=;
-        b=x6p8Wts7qSiLZarPrBkLp0wV/Ji/Izq6x9YUDQ+t2ydvkeNyAAcwooP/s5sxdbXTJZ
-         QfAhnkLD5xXVNOmoQPxXZQhRvOxyDefu9UfCdXDPdsQxFwgN7nYp5rOnrHmQubeU0Wz7
-         eK8nt31Y79kCDI/WUOlpVbVLKhY/A31MF9kIPCvHzXEuKzigl5N+HTdSbOTO3jVO9UrJ
-         rvIPF4HY1xI8S88pNf/hGoRybHV6Gnw15MGvIukhgOTviXWV+h9ZyCkIvMDsOCHhPSaF
-         l8IGOlFeqnLzxwf6O4+j4feBX2xVOR+1HMOBCCcBzWUZeSdWFXNCW1cUaYH9u8txG47Z
-         Bvaw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T8FHcl8FQ7LWPsHGvishUG9eXa2hE3G0FJT29OwvLWE=;
+        b=dQObpp8mkgw/42GS/NWrS1KwKrtRCNvP2/fPxxIxLSF/hT7TAgV3UJkSyMtA30zsLe
+         XoUcFq7r80b4ooaQm1vxsrQNkLPa/vt0gd+g4d1GKY8WL2b9OmKDKDNX9cbExq971M8a
+         +ns184Q+LtV4AFmjvgoCTv1tx35k5mLvHzG1nTvScKzLeKxS8jTcRfWVFJ6MeUlwiO1G
+         M48j8JmIwT8Mo4l+4RkLwJi/uM8AaOfsh3RZvOzaWnuzt3gHlZNSUDd8NG3xeJpXsWVV
+         hF3D7wDuV9Xu2PwTtg3BpqR7oMgEzGYoeaUHdonZ9300YzdgRwL05QjnK0FWu6leMQKd
+         vEhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4YbWf65lg2cQpgfmV5inxaJ+xw++SwQJT+M7eoK5F4Q=;
-        b=3rfbrQ+EvQ8H+9MYEDv4oGuYFjedKRE0zeYUkyGBLEiO1v+YTHYxDwiDLlRE0kn5Rj
-         WmGmid8v6udjrum1libLknchS//dr0iEmxBfL6g41HMBDOypKMa5PYLn/1eejd8u40Nd
-         KzBM1Cj8z601IRj1MtU/XypUYwZqkiPlTRyTwv+/BZVI393wFcp17j1Ni0qsQ4Bq2O5d
-         4aLUXDqbclwASmdoviDQ5lXBCc5Ma3HFWEbZ2qpoLla7cwrrdW6aAhpxwpf/6BOvU/yq
-         IMIllPCZFNShwO99GQNOMLMXrqjEqx9YQc1WAIok79un5gax9ioD0mNUrtIwJzvsyI8o
-         Ls5g==
-X-Gm-Message-State: AFqh2kqMD38ZDpYroq1OcODKeVlMz5hZfgRPogwuNHvLrevAk8IKIobU
-        t3mQ48Pp8nkTVxamv0SOEKkXSg==
-X-Google-Smtp-Source: AMrXdXtOvcr+SFVypdszhnnG8chKGR68qAsLVWoEYFnrJOTeUx1xaP+iDHtDb/nHwypYGL0jd/mnXQ==
-X-Received: by 2002:a17:907:7e9c:b0:84d:363c:888b with SMTP id qb28-20020a1709077e9c00b0084d363c888bmr64669724ejc.58.1675078314495;
-        Mon, 30 Jan 2023 03:31:54 -0800 (PST)
-Received: from localhost.localdomain (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id w5-20020a1709061f0500b0086a2e31d1c1sm6703356ejj.28.2023.01.30.03.31.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 03:31:53 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: fsa4480: Use generic node name
-Date:   Mon, 30 Jan 2023 12:31:50 +0100
-Message-Id: <20230130113151.2130063-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8FHcl8FQ7LWPsHGvishUG9eXa2hE3G0FJT29OwvLWE=;
+        b=yXjvmQzYnDsejSw5vNxtC+qyKTkgjvJ/UfhM6AOTaqDTlFMxcd1fv2xwSyylSNRYct
+         FNZu1VQ3KG1f0HptBUProKMHpx6vAojfqYfAsDYgrFSAo366T6HDMZJ2h0ALonknyof1
+         5YNyRpicG3Vk9ioGkAfkKD+7/oa9ImM2H+AePE/MuqV5iaW4VDl8jPJWjLmiT8vcBWjJ
+         IKVSv2QbHHi/ci+62pGTjncbx2EfpIewWYEPPTNR1YgcyKMq9vIIem8X5ogRFj20IsWh
+         JfS5WcPngO96N9xmI+8iu/Vu0kX7qHa7aT3s1gaXpdsbFm1MriBE96asR8U69cAuBSeZ
+         K1kA==
+X-Gm-Message-State: AO0yUKW1ePmrjrA4zFNNULRT1wB6/qPHO14nQ6Z2mp+QPVw27BJvx+2l
+        xtOUDyDWm/w3yQyhH9FkWCk=
+X-Google-Smtp-Source: AK7set9SBbhpGl1UMgZ6IK9FggJEYs30pNmfKdhBsS3neeguVhniJ62uvheSsRHchaEktAYjlQHmBw==
+X-Received: by 2002:a7b:c38a:0:b0:3da:2ba4:b97 with SMTP id s10-20020a7bc38a000000b003da2ba40b97mr4480397wmj.19.1675078720531;
+        Mon, 30 Jan 2023 03:38:40 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b003cffd3c3d6csm12228110wmo.12.2023.01.30.03.38.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 03:38:39 -0800 (PST)
+Message-ID: <0dec66ce-424c-e682-3f73-594e5b1edb65@gmail.com>
+Date:   Mon, 30 Jan 2023 12:38:38 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 8/9] dt-bindings: serial: mediatek,uart: add MT8365
+Content-Language: en-US
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-9-bero@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230125143503.1015424-9-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Node names should be generic. Change fsa4480@ to typec-mux@.
 
-Fixes: 01afa882f12d ("dt-bindings: usb: Add binding for fcs,fsa4480")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-index 9473f26b0621..51120fe90322 100644
---- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-+++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-@@ -51,7 +51,7 @@ examples:
-         #address-cells = <1>;
-         #size-cells = <0>;
- 
--        fsa4480@42 {
-+        typec-mux@42 {
-           compatible = "fcs,fsa4480";
-           reg = <0x42>;
- 
--- 
-2.39.1
+On 25/01/2023 15:35, Bernhard Rosenkränzer wrote:
+> Add binding description for mediatek,mt8365-uart
+> 
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+Greg will you take 5,6 and 8 from this series through your branch or are you Ok 
+if I take them. They are all just adding a new compatible string to the 
+following files:
+Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+and
+Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+
+Best regards,
+Matthias
+
+> ---
+>   Documentation/devicetree/bindings/serial/mediatek,uart.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+> index fe098d98af6ee..303d02ca4e1ba 100644
+> --- a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+> @@ -45,6 +45,7 @@ properties:
+>                 - mediatek,mt8188-uart
+>                 - mediatek,mt8192-uart
+>                 - mediatek,mt8195-uart
+> +              - mediatek,mt8365-uart
+>                 - mediatek,mt8516-uart
+>             - const: mediatek,mt6577-uart
+>   
