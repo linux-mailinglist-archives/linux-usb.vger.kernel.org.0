@@ -2,82 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F61F6815EC
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 17:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E79681601
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 17:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236372AbjA3QEW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 11:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S236723AbjA3QKf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 11:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236245AbjA3QEU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 11:04:20 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCBDAD17
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 08:04:19 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id i7-20020a056e021b0700b003033a763270so7623035ilv.19
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 08:04:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BZ6fwlL9CLfD/ZLTd4A9jeogS/MbrZVfZRRqCUVSY0w=;
-        b=vomz7O5PvNnoLaibRKNgq2jQ/efvYY8+RyWzckpwQIETJinmjYDjk+CB4fUmctcPvK
-         fabA+TInBTvy7PMLlGbnWnV4qEEb2XogEVhy71e98lLGNjyvAyyL6YF5am6aCjj6du7i
-         zoGpeMfld77iSfzoKWZj2Xi9HMIbaXo/SUvpBN99Ihdw6xzRFTpOQ9dYHOG2zFGoKDPn
-         0C+oYexyIcER9mEKi59JDkggWE/cwAaF54VFTkKH3pTPWRUzmczxFC3+x5BnGFQBFKYs
-         bEERtJcpE28JqS48gOgQ73h5x+WoqRIbigF/akptKANQA4NwDmize1bYfwBUC0nLVLk8
-         2JBw==
-X-Gm-Message-State: AO0yUKWRVDk+cwcrS+43YCA5JdStulxWw+IrIaz9Nz/oju15eDuHCLDt
-        gVM6i8LwLMTsg+HICYPBuFqAC4ZWSNNstAEqHqBXEeGJKghD
-X-Google-Smtp-Source: AK7set/5YeZxLCX5Z2pfifdN9ZEJzOFnavh/kL/NAgpnd4AsOrtdJgTr8eI2LvenarbAzK9jtMOxekaTR3trvPZlncoVX/3XkEzV
+        with ESMTP id S237153AbjA3QKb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 11:10:31 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35623D0B9
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 08:10:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675095030; x=1706631030;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qP/xji/U4WCjQ8ujBJU9lFncC+QI6BbWZ3144OxqwM4=;
+  b=iQXrGdxqKGeKf7bYYHwl3gmYy0t5eWynmD/MBDveqmqREAdnD9jsW69r
+   IBLiy0OfW8DN/I5Pgxpe/VaqYoIM2RBI7yF68m4zn9MXiAVKRKzMe+dnH
+   BDtIul9yglXcdttHdz+cFZ3ivjEg4AE20hSnO8/4kL3vkaE0JTSRAlso+
+   5/ZurkKhPsMhaL0ta5NojaCUNOn3IO2LjyS+DxWPODDn5kOIbGtiZtBsD
+   FbWuxcCFkuraDQZQlYOBG2gz6gzn65tX29EMaOAamLeln+Eb5fycdTABC
+   D6I+8iacKOSULz5TTC+Xuhqq2SH9OrzTQtA6bdAhkepDm2n6KUBXUubcu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="307942406"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="307942406"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 08:08:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="641597691"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="641597691"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2023 08:08:08 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pMWhT-0003jS-1L;
+        Mon, 30 Jan 2023 16:08:07 +0000
+Date:   Tue, 31 Jan 2023 00:07:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Scally <dan.scally@ideasonboard.com>,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     oe-kbuild-all@lists.linux.dev, mgr@pengutronix.de,
+        balbi@kernel.org, kieran.bingham@ideasonboard.com,
+        torleiv@huddly.com, stern@rowland.harvard.edu,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH v3 06/11] usb: gadget: configfs: Support arbitrary string
+ descriptors
+Message-ID: <202301302344.mwzUOCim-lkp@intel.com>
+References: <20230130093443.25644-7-dan.scally@ideasonboard.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:200f:0:b0:310:c4b0:3608 with SMTP id
- j15-20020a92200f000000b00310c4b03608mr1716968ile.93.1675094658947; Mon, 30
- Jan 2023 08:04:18 -0800 (PST)
-Date:   Mon, 30 Jan 2023 08:04:18 -0800
-In-Reply-To: <000000000000ba030f05a87330b6@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ca15605f37d5ec6@google.com>
-Subject: Re: [syzbot] WARNING in ath9k_hif_usb_alloc_urbs/usb_submit_urb
-From:   syzbot <syzbot+d625c772c7814faabef9@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, bxb5544@psu.edu, davem@davemloft.net,
-        edumazet@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, khoroshilov@ispras.ru, kuba@kernel.org,
-        kvalo@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, pchelkin@ispras.ru,
-        quic_kvalo@quicinc.com, syzkaller-bugs@googlegroups.com,
-        toke@toke.dk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130093443.25644-7-dan.scally@ideasonboard.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Hi Daniel,
 
-commit 16ef02bad239f11f322df8425d302be62f0443ce
-Author: Fedor Pchelkin <pchelkin@ispras.ru>
-Date:   Sat Oct 8 21:15:32 2022 +0000
+I love your patch! Perhaps something to improve:
 
-    wifi: ath9k: verify the expected usb_endpoints are present
+[auto build test WARNING on usb/usb-linus]
+[also build test WARNING on westeri-thunderbolt/next linus/master v6.2-rc6 next-20230130]
+[cannot apply to usb/usb-testing usb/usb-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=153e9c11480000
-start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
-dashboard link: https://syzkaller.appspot.com/bug?extid=d625c772c7814faabef9
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138d8cc2880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12b2dc3c880000
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Scally/usb-gadget-uvc-Make-bSourceID-read-write/20230130-174215
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+patch link:    https://lore.kernel.org/r/20230130093443.25644-7-dan.scally%40ideasonboard.com
+patch subject: [PATCH v3 06/11] usb: gadget: configfs: Support arbitrary string descriptors
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230130/202301302344.mwzUOCim-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/452304e81fac1427f314a4b0beef8561ef4ebf17
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Scally/usb-gadget-uvc-Make-bSourceID-read-write/20230130-174215
+        git checkout 452304e81fac1427f314a4b0beef8561ef4ebf17
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/usb/gadget/
 
-If the result looks correct, please mark the issue as fixed by replying with:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-#syz fix: wifi: ath9k: verify the expected usb_endpoints are present
+All warnings (new ones prefixed by >>):
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+   drivers/usb/gadget/configfs.c: In function 'gadget_string_s_store':
+>> drivers/usb/gadget/configfs.c:811:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     811 |         int ret;
+         |             ^~~
+
+
+vim +/ret +811 drivers/usb/gadget/configfs.c
+
+   805	
+   806	static ssize_t gadget_string_s_store(struct config_item *item, const char *page,
+   807					     size_t len)
+   808	{
+   809		struct gadget_string *string = to_gadget_string(item);
+   810		int size = min(sizeof(string->string), len + 1);
+ > 811		int ret;
+   812	
+   813		if (len > USB_MAX_STRING_LEN)
+   814			return -EINVAL;
+   815	
+   816		ret = strscpy(string->string, page, size);
+   817		return len;
+   818	}
+   819	CONFIGFS_ATTR(gadget_string_, s);
+   820	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
