@@ -2,102 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD9F68098A
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 10:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8659E6809A3
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 10:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbjA3Jbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 04:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S236500AbjA3Jgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 04:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235972AbjA3JbM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 04:31:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C1530E99;
-        Mon, 30 Jan 2023 01:29:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E4E660EF5;
-        Mon, 30 Jan 2023 09:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127BCC433EF;
-        Mon, 30 Jan 2023 09:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675070871;
-        bh=L6DQkAcPvIKi+T4eGspMMolrBK+1nrGGRuHqkmC162U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kdbA+rmUpGxEMKET78aKHH01Iq9x5xjEDMJgNaY4Dt+iL54lpORmj/9a8H28uJjI5
-         dwKmBABgkEwgxmmZW70yuBrtVzVvGcLc3ByoXR2nBwBqSS1UC8qjMjlp0dOLhuUBlZ
-         eYREFAHN5Iot6xilhKAZKD9QLqtBND1vMzfazX8o=
-Date:   Mon, 30 Jan 2023 10:27:48 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhou Furong <furong.zhou@linux.intel.com>
-Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
-        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [RFC PATCH v2 07/22] ASoC: Add SOC USB APIs for adding an USB
- backend
-Message-ID: <Y9eNlKNRqsar4GDb@kroah.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-8-quic_wcheng@quicinc.com>
- <Y9UiiMbJFjkzyEol@kroah.com>
- <7c1d80b6-5db3-9955-0a67-908455bd77fa@linux.intel.com>
- <Y9YbumlV9qh+k68h@kroah.com>
- <7f461661-2dcf-056d-f78a-93c409388f29@linux.intel.com>
+        with ESMTP id S236524AbjA3JgH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 04:36:07 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959E62F7BB
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 01:35:25 -0800 (PST)
+Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1F9ABD6;
+        Mon, 30 Jan 2023 10:35:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675071301;
+        bh=ZGgAo2Mt6BG66yEfdUO3uzSYHL4tpZZwgFnxTDYYzJQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Qb5oTJ5vFAopSSdmhc8NEu6/L59dzeHAV4FxCQxu5AsbEKPbFbwwN8eMEU8euI+tj
+         rv0afLM3C6fwMrKJQ3rcD45WU/GXs1/qzHFN3w+9/QuJCmH7CMRqp4OnwRfJa6l+GZ
+         no1w7rIT9RgDkU7qJEMcZO8spR126r8esdE1zAJc=
+From:   Daniel Scally <dan.scally@ideasonboard.com>
+To:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     mgr@pengutronix.de, balbi@kernel.org,
+        kieran.bingham@ideasonboard.com, torleiv@huddly.com,
+        stern@rowland.harvard.edu,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Subject: [PATCH v3 00/11] Add XU support to UVC Gadget
+Date:   Mon, 30 Jan 2023 09:34:32 +0000
+Message-Id: <20230130093443.25644-1-dan.scally@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7f461661-2dcf-056d-f78a-93c409388f29@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 04:34:58PM +0800, Zhou Furong wrote:
-> 
-> 
-> On 2023/1/29 15:09, Greg KH wrote:
-> > On Sun, Jan 29, 2023 at 02:54:43PM +0800, Zhou Furong wrote:
-> > > 
-> > > 
-> > > > > +void *snd_soc_usb_get_priv_data(struct device *usbdev)
-> > > > > +{
-> > > > > +	struct snd_soc_usb *ctx;
-> > > > > +
-> > > > > +	if (!usbdev)
-> > > > > +		return NULL;
-> > > > 
-> > > > How could usbdev ever be NULL?
-> > > The method is exported to public, valid check should be reasonable
-> > > as someone may call it by mistake
-> > 
-> > We do not protect the kernel from itself like this, no need to check
-> > things that should never happen.  If the caller gets it wrong, their
-> > code will break :)
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> Thank you Greg!
-> 
-> This has been confused me for long time when I found Linux kernel don't
-> check input even for public method.
+Hello all
 
-That is because we control all callers of internal kernel apis,
-otherwise we would have nothing but checks all over the place that did
-nothing in the end.
+This series adds support for the definition of extension units in configfs for
+the UVC Gadget. The XUs are modelled as config_items within a new "extensions"
+group under control, which seemed like an appropriate place to put them.
 
-thanks,
+To allow the XU's to be inserted in the function graph, the bSourceID attribute
+for the default output terminal is made writeable - users will need to configure
+it with the bUnitID of the XU that they want to use as the OT's source. This does
+mean that the XUs can _only_ be placed immediately preceding the OT, but I think
+that that's fine for now.
 
-greg k-h
+Series level changes:
+
+  - Added patches 5-9 which additionally add the ability to create string
+  descriptors through configfs and link them to the extension units as well as
+  to override the default descriptors for the IAD and VC/VS interfaces
+
+The XUs configured through this series have been tested via uvc-gadget, uvcvideo
+and uvcdynctrl.
+
+v2 of the series here: https://lore.kernel.org/linux-usb/0ae65812-c937-d071-455b-7c1d6418b080@ideasonboard.com/
+
+Thanks
+Dan
+
+Daniel Scally (11):
+  usb: gadget: uvc: Make bSourceID read/write
+  usb: gadget: uvc: Generalise helper functions for reuse
+  usb: gadget: uvc: Allow definition of XUs in configfs
+  usb: gadget: uvc: Copy XU descriptors during .bind()
+  usb: gadget: configfs: Rename struct gadget_strings
+  usb: gadget: configfs: Support arbitrary string descriptors
+  usb: gadget: configfs: Attach arbitrary strings to cdev
+  usb: gadget: uvc: Allow linking XUs to string descriptors
+  usb: gadget: uvc: Pick up custom string descriptor IDs
+  usb: gadget: uvc: Allow linking function to string descs
+  usb: gadget: uvc: Use custom strings if available
+
+ .../ABI/testing/configfs-usb-gadget-uvc       |  30 +-
+ drivers/usb/gadget/configfs.c                 | 293 ++++++-
+ drivers/usb/gadget/function/f_uvc.c           |  69 +-
+ drivers/usb/gadget/function/u_uvc.h           |  15 +
+ drivers/usb/gadget/function/uvc.h             |   1 +
+ drivers/usb/gadget/function/uvc_configfs.c    | 771 ++++++++++++++++--
+ drivers/usb/gadget/function/uvc_configfs.h    |  30 +
+ include/linux/usb/composite.h                 |   1 +
+ include/linux/usb/gadget.h                    |  11 +
+ 9 files changed, 1129 insertions(+), 92 deletions(-)
+
+-- 
+2.34.1
+
