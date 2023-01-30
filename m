@@ -2,298 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88426819B2
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 19:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7768B681A01
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 20:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237986AbjA3Syn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 13:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S237655AbjA3TLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 14:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237541AbjA3Sym (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 13:54:42 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2093.outbound.protection.outlook.com [40.107.215.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11992B094;
-        Mon, 30 Jan 2023 10:54:40 -0800 (PST)
+        with ESMTP id S229887AbjA3TLh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 14:11:37 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A25810F;
+        Mon, 30 Jan 2023 11:11:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675105897; x=1706641897;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=YAGvMuO1Ug06y2pmJFnYHAhuqT/H7r14FaPK81yAUYk=;
+  b=YeVzpNYAd8Y2Ol4dfkRelkSpAYdVMDQaMACVEDPVMyITxnR9qTRxVVr3
+   xYgJTqtXj5TeSX2T4Is/3McrU2V6P300PYKDRAowkEgZhvZhSeg/Yk3hi
+   IAvTpTnjQNmhnnyZl3HKUVmgp3YjIzaPPD/VgL1d4OgV5rhUbHw8QApK/
+   niFm/1lZrufHxbbxU99ipbnrhUpjID2eXaXdLFpNY0FVrxJKlGM//e8kj
+   6EY8FJFWHNhbigNUELoPLXNH187ddn6uEDxcX4zkagvZCHNo+ujf6TtFl
+   srKNJO+Vswa7gEdb7Wo9pTnfUIzTYEfAoWzq3BJDjsAmvJVs3XyO9r5+T
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="325344325"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="325344325"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 11:11:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="806802802"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="806802802"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2023 11:11:33 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 11:11:33 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 11:11:32 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 11:11:32 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 30 Jan 2023 11:11:32 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FRT9XFIPxW33TbaX0lvd9jgnib186oM8bmEoqzKxGXUvZ8Chc1wJlV7q0H/LYIDy8fblhS1RW1iTkv7oEmQsgfcXkVvFPHEVo8MUZO0v8OkIZLNQNCWW+bYKUku5tq5dH74r41WuI6wdCr6upvKjZpu/kS9y3KzJJF7svFtavHe7xDXClG23oR5EoKGG1jhdE8vpBCuXvIx2VrTr2s9rH5r+2v9rK+4Lt+Izi1KeKs7pv5uHq5N9Z6DHITbhvo0utiD7a1rqv+4x4B8s4TlM50NXzNrytf3LRunOb1CgOq5dn/enkVJEGUPiEE23so4NfQkyC0RsUIEaLACbcuD9MA==
+ b=XSARrHfHvwkJjDsc37T2h3Fnp0qOAr8Ghz9iR8UNE7Laz/8WeN/sFM/3J4vSghx7oZhdZ8Jpxzmh/UYZSH9A09A/nRqEBlm+fe2KmyshCU4CsqRequpLr1qh/jVMd+FYi2MAejIFeBZje6O15R5XYBH1aaoajpbHZFmibMsoBzPLSDiyxYGuKYfx15Zmwr9VPvdpKjPAdqVrdu6rLleK5ymgaSFi3VbzGiTqU4gVlGJ3a3kv/e071tXcsi/ewybQnXZ2RL3vrvCQzHOeBdwIjO3nTk/Rx3RMT8Uz/fcMufqLQKlMstzP5WnTXfsf2Yo7oyE2Iy25fP8gizcDeb+4UA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b0J4HycYXS4cl5g/ed8Z9+ZmTH4HlDmDov+h/iCNJGE=;
- b=MHO4gH0zGeYewnSMjg/e0Pbgldf0tiMqcUVTbZW0N7I5BDh7fnqnf4PTecbDujTnmtHWLEMDoffTMxHwjZD0JJkK8KhsPXKWqntDHdMR7VtNCDbAvbAoIfYUrNWeOc96jbnPictjRnxY02Coh2fDPXvRh191F3zrOV6ZHgei6h/sJBiTEZckPpB7ygYBmxyayGBFW6gJs40BINyYNxmCJLolNeZOQbu5yoI43agQ0olMs2mDtC1KlKKYfgCnvr7xmjhVBoo/cmuuSd6OauDivFtKnDyzstSsaWqgcjm2glgueiRC9ykW5EuPVJKBxs6wdfpm28KJ9FCHyabrRwdIYQ==
+ bh=64dR28LlIRykv1DR2snIjyrz1ie70Jn29DNw2EHYMao=;
+ b=N9PFfBCBKLM8+/6lEcAcIyJeXsKJk3W8ITGrKtQZL2n6qrRuhxtjLiXr+S6O97x+GqN5+6OhXo//24aS8Y1aURoPMqJ26g18iQlHqIpQcvilhlXf9g/B5243Vm6OuBzivYtmJFDwGNrVvNciQQrRuEyUxwR9xMA0bKHgo6bAAkgsXQ5sS0ASp6kGjUmpfq6hotGjEaCD+1VnzSMqeIxJ6pX/6zpVxUSYV/7/ZExlqi+NLOxVHSQEjy6OHvy+Swj8H1UHhDl739aakXt/S2bTNe9qqTW+ekd3eT5v47FOfqzDjN72T58q2uF5GZucAXRxsxs0toecQt/QThZ2EnBViA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b0J4HycYXS4cl5g/ed8Z9+ZmTH4HlDmDov+h/iCNJGE=;
- b=opagAaNuBzHzrkRfvBYpPZZPD/2nBEHfh+LbS664Xxz3OqjUexp833Ht4KqVpEren3f/bEvpM8KGBjf0w+kQ4bM6eswpj7ueBnDfrO+x4vCcv0EZZILVCdbUB1AW4PLyB+Ru8Vyu0mOMCxdWahfvMzxazVwZqTE1Gb1RLWiZCpk=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OS3PR01MB10389.jpnprd01.prod.outlook.com (2603:1096:604:1fa::12) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH0PR11MB7542.namprd11.prod.outlook.com (2603:10b6:510:28b::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 18:54:36 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e%8]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 18:54:36 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     kernel test robot <lkp@intel.com>,
+ 2023 19:11:31 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6043.022; Mon, 30 Jan 2023
+ 19:11:31 +0000
+Date:   Mon, 30 Jan 2023 11:11:28 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, <nvdimm@lists.linux.dev>,
+        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        Song Liu <song@kernel.org>, <linux-raid@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
- detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
-Thread-Topic: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
- detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
-Thread-Index: AQHZNFRzWGTdb9Qh20GbjjeGaxR0fa62s0+w
-Date:   Mon, 30 Jan 2023 18:54:36 +0000
-Message-ID: <OS0PR01MB59220EFDE43A39D61FC73E2786D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <202301301054.KVvGA5XO-lkp@intel.com>
-In-Reply-To: <202301301054.KVvGA5XO-lkp@intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OS3PR01MB10389:EE_
-x-ms-office365-filtering-correlation-id: 081d93ac-3cd2-4641-a4c7-08db02f36f2e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PV9q+WFjfnQ3oWYD0oL1+DlIL372Lami3EJVzntnhcJC6OcvFcZPn1XTvSpMu8+yjrjXAN0QmPccml+QBSzUFyaaYtSvbgob/XK2n9kNyOnS4BSLIbmWvKbeI0/O+rsILFYOkFD7SQKmoMIhXc2n+5LrpMeJPmuH9WWvROkfS9UQhvywVtYv15qW7MSvvXz+jTXS90KVB7QkxIjBRF5FnioTvJl0hks/F4uFMnqWzeMMXh2eqNUZ13yN9ie5grHRHf31docBoE18UlvwrE9uvq2GbZKEw2dji9kRoWUcI6esPtvVYlU9RM77EPZyoNA93oxZ6Yk9NP5MIeI5ANIPFV3pa3mdMHQpRxB5eO8qiXUZAJwiU/w2IH7fJSaf5584GQMuC8c6rQty7P3QDpmZ8gea59uOAVP0hpoPbJ4o55+URnMA7PmicGPar7WHykDYBcCf8xQzrBwgC1mmghPy1nB6VmR1qrpIuUMEtzsROBdHx5bULQD/5OWLHBbL6jGDSjYt5xLOe2IYItF+FB513g42ubRxi37tmz6/G/iG/BM57BR4m2ODnC1TtSl+OkexgGjFc0Vgo9s9pk5PExsXaDjMzhYMJf30+BiZ0c4tjASWGKIr/a+rFbZ0paeHhG0F6X1miY6IlOSIvZBmLBBAjbuwX7AAN98vmDSmQYSnySvIrwo2KcMQTnSIwNCqxR3XXdKuPDlmt7Rqm2jjCdq+omy66A0+yG5HPN1VY2/y4xw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(39860400002)(396003)(136003)(366004)(451199018)(186003)(71200400001)(7696005)(41300700001)(83380400001)(966005)(9686003)(6506007)(478600001)(26005)(54906003)(110136005)(66946007)(316002)(45080400002)(66556008)(76116006)(122000001)(38100700002)(64756008)(66476007)(66446008)(8676002)(4326008)(5660300002)(55016003)(2906002)(86362001)(33656002)(38070700005)(52536014)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XFUhle3/CMXmzcQwtUZmYfxQ7iuXmur+aN5+O8FwevN33u+yQDgogMYVZjHn?=
- =?us-ascii?Q?GdWVt8RDfnufEbKTY0HdJJrRznOX0P01QFtjOs5xchRY8rxLv4/7lGBikRD3?=
- =?us-ascii?Q?2l7kjG5rEHyDFqp3us0zkqZfKIs3wYRVipk7OgILppN0EdOirl6GWf3pqXYo?=
- =?us-ascii?Q?prv4QpOtC362cUGd41Q4vFzhl6Pp62K3H0SRGKNFzcQxiJBdPgrGAh0Dyzx7?=
- =?us-ascii?Q?fIAwi6qb6TfyR0MSHZtNmJlqBA41p7m51YsIbkaaMyu97ENBCoUOK5BETQBO?=
- =?us-ascii?Q?6BNvEi751dswYN5HBx7ApRVMJdx6lZ93CKl8drrVbByWUKYPak8iGOdGzB3L?=
- =?us-ascii?Q?IZzbmEz2dM1GVhPs/F6KUPVT/evZ+GozyH/WCY0XAn3ctTHBowxVKYnVw5l+?=
- =?us-ascii?Q?qxlpGgpHJVV5+dgEQi1+9I48tvgd9qeGmdRvPHNmgWOvHVLPVl26NiIJkEPn?=
- =?us-ascii?Q?nMRKYbv2W7ZAqd1Xp5jPz3LvaWNqJsyt0+U8XqbHqEJXyc+fcbqESxxkyo9w?=
- =?us-ascii?Q?C2IvZSXHzOF37rxZiIGGhmbH5uzV6p2CDFShK02nQXgpPxSCWhAU90ifN3ki?=
- =?us-ascii?Q?+j+P5Xi72+l95EFWyvUpTj6HZoFa/C+42JySc50cgRZKqz2YsVG5buip6kLG?=
- =?us-ascii?Q?lgpj3u4l4+oBpqfkaPolFea1kZ6JOVduIkNcYuTDhoEPz2VhpPpgO3oO2BCw?=
- =?us-ascii?Q?5XoQxvOUqUL6rOFiY+1XxqRxAI0Kf5COXHT+k139gD3g20m/WPyRyWJj8T8P?=
- =?us-ascii?Q?oQsmi9nVgOR1WKiHg6eWWKzgBPqXvjwT81F6t3AqKUvph/BkgfWDgYwcB5a/?=
- =?us-ascii?Q?hfYfws6M8m5yAhLZ1iNxAWKGsf+tAjlk+cvvbRh8BJNVPHESshbYyVXG2Nya?=
- =?us-ascii?Q?XwIXip96c9sMWggNFDg0mhq6WESadCD1/vgpu2F5npey/d2LWtv9KROmpItW?=
- =?us-ascii?Q?YO2bvL5gfhjZO0TLKV32idhJ+OXqT0/jGbXVZu/9L0vhXvQdEkl+iq/5pJkw?=
- =?us-ascii?Q?2z6WY/JunOJc/5SqH9nW61GWCMeKzlPMu9cCkJt43JqmKqxrM9lz0hRy00ul?=
- =?us-ascii?Q?j93EXi7JnwXjz0FZ59piilAwtXhtsjH0dgmAkGW36JRQs6MhioDDRBNXikrs?=
- =?us-ascii?Q?wxcepqutcQFyua6zTeLS1aNbDNi52efPURG1F+9vtfk1ziBTjUJhcE4wnhoQ?=
- =?us-ascii?Q?dKVipT6EbHk9hqkKxgoWQPP3KuV2po5I/mU+wMu2hNrm+eKKjXRhYDL2RyYH?=
- =?us-ascii?Q?Bone0bc3zO5KgRpdsACWwCPoyhEVKqg3Dlj8gYTfcdj07Kg5nCP4ENF4RAht?=
- =?us-ascii?Q?H35baRnb2UEiDCQR04eQMcjehxsmsrGn8dz/GkF4Aw9s34tbR5W1J2exaV2o?=
- =?us-ascii?Q?UwnelRrPfb2vJMbGXAT1Y5T6ms0AtZ3sLJxPXscxDQ+BimSqK0UFhP8b4r+w?=
- =?us-ascii?Q?KFDaKPENlp/NHas5qzdNle5sy+65ZKU0l4HCH2Ig9v4/1UWhQDo0CkwA4pYv?=
- =?us-ascii?Q?ilsDrS14UClBUxcYO35n2CAjJH96pmU1GhgE6AnS/dXgUJMYZ1zVICLIPVM+?=
- =?us-ascii?Q?7cAIL/ibLM2MOO02IfgymcoS6G2+We7N5WWIDck5H69JeY9xxu8iqRpLdfXa?=
- =?us-ascii?Q?SQ=3D=3D?=
+        <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH 2/9] Documentation: driver-api: correct spelling
+Message-ID: <63d816603493d_3a36e52949a@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+ <20230129231053.20863-3-rdunlap@infradead.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <20230129231053.20863-3-rdunlap@infradead.org>
+X-ClientProxiedBy: BY5PR16CA0027.namprd16.prod.outlook.com
+ (2603:10b6:a03:1a0::40) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH0PR11MB7542:EE_
+X-MS-Office365-Filtering-Correlation-Id: 500bd372-5be1-40a5-2201-08db02f5cb7e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dsqvnfS+tHvMGsoBKZGfzpUEs29BYzdXXiMFcoOHwRURAiLskF5NpjInmKpTqay3f9lE8JMABRhibkLug1yQ1MyFMw46w98OWUagMFnNInggQS3MSRaxX5616dYUxfkTqoglUmQF8h2frxWzaplN7YU+wXp0Y8K4m26slZ5HLaBizfR9J2xU//bDRBPLjn90ibHn9Cwb0BILmS6XLVRoJ6Op6162z3oAfQ+RYCkrk2yPoeh7BKh+rpksJ+WBLxMgX849iokBhLovdeSdDdGz8TPB+dXwZ3lTcgviNx9mzHuT94AVD2Myw231fzE9+xWOeSyyA4WzoqrYqCRGgCa2eCBNZSIlG8p+Ntt1L5bZ0fVvqwhKFKTEyiDK9oPW2APay+qIawWAYWrCcjxbhqGth6km+ugjUXywRXsT2GQoK6Bz8MCQXEXISDpKPv6ojbiOzgthuKbenaKZW+ULiFYZQbWAazLl9SQnwzqQUYqMupmCv2+9p2O7rCcz7gE9GMu2ouq6K+ANwb6IUEmwuA9NUa2jHjqClvdaktkEvdztK05qOthWbmH9O/11y67mbDbKDzeIkElg8lSXS5UIu4eahkKsJzMsdBjo6fPcGdPA0bnDr7CPrKJgCGrIiG8OfCVk0Fhe5FvoFYuqAur9cLGtAw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(39860400002)(136003)(346002)(376002)(451199018)(4326008)(41300700001)(66556008)(8936002)(8676002)(66476007)(6666004)(66946007)(316002)(54906003)(5660300002)(7416002)(6486002)(83380400001)(4744005)(26005)(2906002)(9686003)(186003)(478600001)(6512007)(6506007)(86362001)(82960400001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qcN1vedortm2o8gN2nb7NRkjW5AfYj+yLeLVM04fPtJD1mOIi1j+/Jr1h1WQ?=
+ =?us-ascii?Q?efomOHMrQllQiVfmMdk90Wvc7YPdBGZeIphPTWDSx5fUXDI2jg+r6zhgbXSV?=
+ =?us-ascii?Q?vhMOv41F/TKmwI22XkfQsYVlkZmVUZSluO2mEO5Hv5zX7lKrt7VtmWaUg4Hs?=
+ =?us-ascii?Q?lxnFTNbs25ldguNWzp002bvsH0OYPMtUzJRv4kZv6EF12SQ6G2rVE5c4+szH?=
+ =?us-ascii?Q?RIA9/kugtWVQs/5rsH/RQM72Zkq141mVCh30NV62XCEKpH7VdMWk3T7SXuuH?=
+ =?us-ascii?Q?JP2ZIPGbBYEXWwsB4b+Lg26b1tGRaiKe+755ZvyCRSz/OoWe2yRMg98jfVVD?=
+ =?us-ascii?Q?DfwYAFB6/V7zJ+lOZ4dr9FGuAMG8cwK2N4NF38TXRUjK9H9gpn8jW/3FTC3P?=
+ =?us-ascii?Q?++iHk2EmcnWs7IdHDK1KoajTTYhdI4dldjveo8RldhR+wI/UwgWiZEpFaUbR?=
+ =?us-ascii?Q?IN+076aI9HnNsD7TRs7iYXyPhE8WpJm+nP9utmgRRlODuJaO5Cw1e0ZcBRVx?=
+ =?us-ascii?Q?CM1tv6bjkMgF1nXrLH5RUbEQDG4pVMTAnW4hWmCHn8s/kU98pjRoN4hnmamv?=
+ =?us-ascii?Q?z6cE9EJqqMdCmRLmOKrXL1ZLkFjLSUrhu/eiT4JIYFVYK042LsEwLfofITRS?=
+ =?us-ascii?Q?8/c9xjSKE8BCQRCNuFqGJWrVmX1j8ziOT3Fxd0yInv+YdZjLLVsm5jYQCW+A?=
+ =?us-ascii?Q?nBR+2uhBdYD4B8gdFwny/E0OpKSbxtOnbgAqyqHf65JBAB5eUzOki72TEtbW?=
+ =?us-ascii?Q?J8Ia6iGsBIbzBRipsSJ2LmMkPcVfjDN7E6PY0xuRp3btrKVM80ZoAC7SuYNT?=
+ =?us-ascii?Q?utVxjku2QzGnZP8BYxhH6m87B5bpyOURU0kgvpxHR8mw7U6XFvSKmBlsLNMM?=
+ =?us-ascii?Q?MgtYNR7vHVYA8kDsdpyrrkPboSTZIw/WT7H3kclgBg69GbjAXqc5AOD/zf2y?=
+ =?us-ascii?Q?0zR1sxaOu2fLyt2nHfhqQsDnw4osQUcPc8KkCp1x/eR6DbhFUjfitOXojpDH?=
+ =?us-ascii?Q?b5ZKRxqCdF/7dK6z5hI+xMHbjDethvShoLVkphUsrby7a7nbvjnqto+VMymy?=
+ =?us-ascii?Q?pHRdONzqufYiDkzTDVF3He+fqegy2KQ33h6KnLL4aoIeP+8rgUZn9+sJbhvQ?=
+ =?us-ascii?Q?6X9IxC6+mZe0QAmOyBqxc3jGILf8NO7Wm2Kx56w7O2gtbMfDdcKKh3qAFdHv?=
+ =?us-ascii?Q?dp8N5p+FRrJWy072rC9QhbeT6MkM+cIuCboSeSE8f4NZz7H15UINEQFsPW0t?=
+ =?us-ascii?Q?VOqtU/hVQXcJ5cQ0J7B08k8x/a5yqabTcJ822THiUdu6EjP+AOiQ5dkQxclE?=
+ =?us-ascii?Q?N5rI+IvwWaX5pnIrjvD3/YcMwlP7z6Ivukr5nbwxpvMBYrj/HSpyuMVCl2eV?=
+ =?us-ascii?Q?75YKVKsxfgu48SmjebolZQKr0fsnySZFDvlB+2AIxpfFqrclFAIa5UiVXbrL?=
+ =?us-ascii?Q?vTw3eUXBBhELyM74aRmbiMNodi1x6dqiURg00BTENoW/w9T0dZbAK4OnZ6UO?=
+ =?us-ascii?Q?1K5fo0vmI7d+KY9tE3eNQLAjUf94+IzvPlJDozHkFFktkj2zJhf+guZMLpPs?=
+ =?us-ascii?Q?10MfITM8CM9N16eJlQhLq3WYwkeDaoroc3IBrf6NFKhwWGvxkP/fr28BEmzB?=
+ =?us-ascii?Q?Qw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 500bd372-5be1-40a5-2201-08db02f5cb7e
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 081d93ac-3cd2-4641-a4c7-08db02f36f2e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 18:54:36.8069
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 19:11:30.9060
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EWXIeimsm1w03ITlscmL+1Uhb4xfImy02vV44nYsr2ysD5xJ/c1s5RPgnlFWUFneTjCaxWaLlLzcJ7uJuREX6hTxYW0gpLyusOAI0d7q//g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB10389
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bCnt9WFjy2VGtG/CMjkdz5UqdG1+z8MLMBlVfTo2FQMN8Q+/NOBqVbYLPgosTB2fivLbILq3B1B3gm60GgYyVnPFER1JcW8TLLPoVKljBk8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7542
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+Randy Dunlap wrote:
+> Correct spelling problems for Documentation/driver-api/ as reported
+> by codespell.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Vishal Verma <vishal.l.verma@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: nvdimm@lists.linux.dev
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: dmaengine@vger.kernel.org
+> Cc: Song Liu <song@kernel.org>
+> Cc: linux-raid@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  Documentation/driver-api/nvdimm/nvdimm.rst            |    2 +-
+>  Documentation/driver-api/nvdimm/security.rst          |    2 +-
 
-> Subject: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
-> detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
->=20
-> tree:
-> head:   c52c9acc415eb6ff54f658492f8c53da0fc3528a
-> commit: c52c9acc415eb6ff54f658492f8c53da0fc3528a [35/35] xhci: host: Add
-> Renesas RZ/V2M SoC support
->         git remote add usb
->         git fetch --no-tags usb usb-next
->         git checkout c52c9acc415eb6ff54f658492f8c53da0fc3528a
->         # 1. reproduce by kismet
->            # install kmax per
->            kismet --linux-ksrc=3Dlinux --selectees CONFIG_USB_RZV2M_USB3D=
-RD --
-> selectors CONFIG_USB_XHCI_RZV2M -a=3Dcsky
->         # 2. reproduce by make
->            # save the config file to linux source tree
->            cd linux
->            make ARCH=3Dcsky olddefconfig
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->=20
-> kismet warnings: (new ones prefixed by >>)
-> >> kismet: WARNING: unmet direct dependencies detected for USB_RZV2M_USB3=
-DRD
-> when selected by USB_XHCI_RZV2M
->    .config:4492:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' inval=
-id
-> for ARCH_MMAP_RND_BITS
->=20
->    WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
->      Depends on [n]: USB_SUPPORT [=3Dy] && USB_GADGET [=3Dn] && (ARCH_R9A=
-09G011
-> [=3Dn] || COMPILE_TEST [=3Dy])
->      Selected by [y]:
->      - USB_XHCI_RZV2M [=3Dy] && USB_SUPPORT [=3Dy] && USB [=3Dy] && USB_X=
-HCI_HCD
-> [=3Dy] && USB_XHCI_PLATFORM [=3Dy] && (ARCH_R9A09G011 [=3Dn] || COMPILE_T=
-EST [=3Dy])
+For the nvdimm bits,
 
-I have investigated this issue,=20
-
-Just for testing, I have reverted Arnd's patch[1] and then done the below c=
-hanges=20
-which is fixing unmet dependencies reported by the bot.
-
-Looks like USB_RZV2M_USB3DRD should depend upon both USB and USB_GADGET. Pr=
-eviously
-It depends only on USB_GADGET.
-
-Also the USB3DRD driver should be in "driver/usb/renesas_usb3drd" directory=
- instead
-of "driver/usb/gadget/udc" as both HOST and device ctrlr need this driver.
-
-So not sure,=20
-
-1) Use Arnd's patch for fixing this issue
-
-2) Use the changes from [2]
-
-Or
-
-3) Arnd's changes + changes from [2].
-
-Please let me know.
-
-[2]
-diff --git a/drivers/usb/renesas_usb3drd/Kconfig b/drivers/usb/renesas_usb3=
-drd/Kconfig
-new file mode 100644
-index 000000000000..6205d815d283
---- /dev/null
-+++ b/drivers/usb/renesas_usb3drd/Kconfig
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+config USB_RZV2M_USB3DRD
-+	tristate 'Renesas USB3.1 DRD controller'
-+	depends on (USB || USB_GADGET)=20
-+	depends on ARCH_R9A09G011 || COMPILE_TEST
-+	default USB_XHCI_RZV2M
-+	default USB_RENESAS_USB3
-+	help
-+	   Renesas USB3.1 DRD controller is a USB DRD controller
-+	   that supports both host and device switching.
-+
-+	   Say "y" to link the driver statically, or "m" to build a
-+	   dynamically linked module called "rzv2m_usb3drd".
-
-
-[1] https://lore.kernel.org/linux-usb/OS0PR01MB592264B5D8BB98A1B2F759C086D3=
-9@OS0PR01MB5922.jpnprd01.prod.outlook.com/T/#t
-
-
-Kismet results:
-(env_kmax) dasb@ree-du1sdd5:~/linux-next$ kismet --linux-ksrc=3D. --selecte=
-es CONFIG_USB_RZV2M_USB3DRD --selectors CONFIG_USB_XHCI_RZV2M -a=3Dcsky
-INFO: Computing the build system id for the Linux source..
-INFO: Build system id: d48d1edf73bf
-INFO: Kismet will analyze the select constructs of the architecture "csky" =
-for unmet direct dependency.
-INFO: All times reported are measured using Python's time.perf_counter() ut=
-ility.
-INFO: Prefetching the architecture kclause formulas.
-[STEP 1/3] reading kextract file
-[STEP 1/3] finished reading kextract file
-[STEP 2/3] translated 15981/15981 configuration option dependencies        =
-                                                 =20
-[STEP 3/3] converted 16084/16084 constraints to smtlib2 format
-[STEP 3/3] pickling the map
-[STEP 3/3] done=20
-INFO: Architecture kclause formulas were loaded. (686.24sec)
-INFO: Identifying the select constructs.
-INFO: Identification of the select constructs was done in 0.02sec. 1 constr=
-ucts were found. unmet safe due to syntactical pass: 0. alarms: 1.
-INFO: Doing optimized SAT pass for 1 constructs
-INFO: 18:33:24 Optimized SAT pass progress:  1/1 (%100).
-INFO: Optimized SAT test was done in 0.02sec. 1 constructs with alarms were=
- checked. unmet safe due to optimized SAT test: 1. alarms: 0.
-INFO: Doing precise SAT pass for 0 constructs
-INFO: 18:33:24 Precise SAT pass progress:  0/0.
-INFO: Precise SAT test was done in 0.00sec. 0 constructs with alarms were c=
-hecked. unmet safe due to precise SAT test: 0. alarms: 0.
-INFO: During precise SAT test, 0 models were generated.
-INFO: Skipping test case generation since there are no models to generate t=
-est cases for.
-INFO: Skipping verification since there are no test cases to verify.
-INFO: Writing the aggregated summary txt to "kismet_summary_csky.txt".
-INFO: Aggregated summary txt was written.
-INFO: Writing the summary csv to "kismet_summary_csky.csv".
-INFO: Summary csv was written.
-
-(env_kmax) dasb@ree-du1sdd5:~/linux-next$ cat kismet_summary_csky.txt=20
-=3D Overall analysis =3D
-Over 1 select constructs, unmet dependency analysis resulted in: 1 safe, 0 =
-alarm.
-The analysis was done in 686.27 seconds.
-
-=3D Timing results (seconds) =3D
-Prefetch arch formulas     : 686.24
-Identify constructs        : 0.02
-Optimized SAT pass         : 0.02
-Precise SAT pass           : 0.00
-
-=3D Per-stage results =3D
-
-=3D=3D Identification of select constructs & udd analysis through syntax =
-=3D=3D
-1 select constructs identified in the architecture.
-0 select constructs were found udd safe through syntax analysis.
-1 select constructs were found udd alarm through syntax analysis.
-
-=3D=3D Optimized SAT pass =3D=3D
-1 select constructs with alarms from the previous stage were checked during=
- optimized SAT pass.
-1 select constructs were found udd SAFE through optimized SAT pass.
-0 select constructs were found udd ALARM through optimized SAT pass.
-
-=3D=3D Precise SAT pass =3D=3D
-0 select constructs with alarms from the previous stage were checked during=
- precise SAT pass.
-0 select constructs were found udd SAFE through precise SAT pass.
-0 select constructs were found udd ALARM through precise SAT pass.
-(env_kmax) dasb@ree-du1sdd5:~/linux-next$ cat kismet_summary_csky.csv=20
-arch,selectee,selector,visib_id,constraint_type,analysis_result,testcase
-csky,CONFIG_USB_RZV2M_USB3DRD,CONFIG_USB_XHCI_RZV2M,0,0,UNMET_SAFE_OPTIMIZE=
-D_PASS,N/A
-
-Cheers,
-Biju
+Acked-by: Dan Williams <dan.j.williams@intel.com>
