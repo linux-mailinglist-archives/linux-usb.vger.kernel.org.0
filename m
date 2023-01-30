@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD11682046
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 01:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8913768204A
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 01:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjAaAAy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 19:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S231272AbjAaAA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 19:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjAaAAv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 19:00:51 -0500
+        with ESMTP id S231296AbjAaAAw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 19:00:52 -0500
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4B9241EB;
-        Mon, 30 Jan 2023 16:00:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DE62ED70;
+        Mon, 30 Jan 2023 16:00:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675123219; x=1706659219;
+  t=1675123220; x=1706659220;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=NxMa5bJdffBaqxCEjJ47Ei59YQ+ioElnc5bDUaZ3lyo=;
-  b=QL7vJMQLQIf0XXnhH1zojlO+tbUAc20VZhJZsEM4tlLnwORh1gtnInx6
-   o0OLk9B6MnqxYaeOABX4zBH4AAH1OjhKbsQ8XvP9naKXLvwLuglKJ+ZBE
-   hx9DwTmQ94et1dp3b1avRIuVewTPRXIykBLjgTWF+rH6ORMKjQC29pIyG
-   omtTgwV1cgLFM18Dz/SDg46p4GUh89upF6CV4rxw4mX0JSvx/6gjYuXwE
-   oSfzCG+AqMfXmvbaaPe7bQB8ajYgtb0H3YNhuiDqmlAI3jVBELCv1/HBL
-   jDzFHdEUwx5zxiuhF1BhBWxcIhk1eWzNpdo0QmFsqX3Z/M13+fL2EWTbg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="327726698"
+  bh=WUwUPxlnqbiRmgDhKOibNerjH9tu78jzKFyyYvm0Dns=;
+  b=ahNoGFSQZ6IVRlNnLiFYdmH1erqTcOlikz2ncAWDdt4F27oEV7rLg3W/
+   VHXVwTq/y3t5WRCKUjmAEG1Ly2MMrA4QyWEMPK0zmRENQsfNydwPAGZUz
+   E1/JWyyamNLFp50NDeVO5nLSVlxwI3RNiApIouMkFjOnTKJzn+dL7isO9
+   ryJ9jfZz/VYU9hdlOYYYu1ptcz+mRjgIHDcmGlsuPuD71LOmyeHRhHzit
+   glzqoTXBLP5JTDYacRXj4jmryGaatffYBIK3+UXcMqld6xxI1kgykD3Pn
+   jKETZB5o2lifY82gl3IH+fV6a5ZipIHkrSBhALYaU2nB33AUHHoGj1izx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="327726719"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="327726698"
+   d="scan'208";a="327726719"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 16:00:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="614227900"
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 16:00:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="614227920"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="614227900"
+   d="scan'208";a="614227920"
 Received: from inuber-mobl5.amr.corp.intel.com (HELO [10.212.58.60]) ([10.212.58.60])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 16:00:15 -0800
-Message-ID: <8f827e42-e5d8-1190-b5ae-2f99c71fbeee@linux.intel.com>
-Date:   Mon, 30 Jan 2023 17:50:23 -0600
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 16:00:18 -0800
+Message-ID: <ebf8ebed-ef79-bf18-4635-360f916877a6@linux.intel.com>
+Date:   Mon, 30 Jan 2023 17:59:26 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v2 11/22] ASoC: qcom: Add USB backend ASoC driver for
- Q6
+Subject: Re: [RFC PATCH v2 09/22] ASoC: qcom: qdsp6: Introduce USB AFE port to
+ q6dsp
 Content-Language: en-US
 To:     Wesley Cheng <quic_wcheng@quicinc.com>,
         srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
@@ -57,11 +57,11 @@ Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
         quic_plai@quicinc.com
 References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-12-quic_wcheng@quicinc.com>
- <7f471960-0909-4680-e192-261d1fdfe6d7@linux.intel.com>
- <4a255518-6fbb-122a-ba97-1e995785c35f@quicinc.com>
+ <20230126031424.14582-10-quic_wcheng@quicinc.com>
+ <dea77277-6971-fe27-1ae0-ed551e84b6e4@linux.intel.com>
+ <5dec443d-9894-2d06-1798-c56b8f2e1e5e@quicinc.com>
 From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <4a255518-6fbb-122a-ba97-1e995785c35f@quicinc.com>
+In-Reply-To: <5dec443d-9894-2d06-1798-c56b8f2e1e5e@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -74,51 +74,77 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
->>> +static struct snd_soc_dai_driver q6usb_be_dais[] = {
->>> +    {
->>> +        .playback = {
->>> +            .stream_name = "USB BE RX",
->>> +            .rates = SNDRV_PCM_RATE_8000 | SNDRV_PCM_RATE_11025 |
->>> +                SNDRV_PCM_RATE_16000 | SNDRV_PCM_RATE_22050 |
->>> +                SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_44100 |
->>> +                SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_96000 |
->>> +                SNDRV_PCM_RATE_192000,
->>> +            .formats = SNDRV_PCM_FMTBIT_S16_LE |
->>> SNDRV_PCM_FMTBIT_S16_BE |
->>> +                SNDRV_PCM_FMTBIT_U16_LE | SNDRV_PCM_FMTBIT_U16_BE |
->>> +                SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S24_BE |
->>> +                SNDRV_PCM_FMTBIT_U24_LE | SNDRV_PCM_FMTBIT_U24_BE,
->>> +            .channels_min = 1,
->>> +            .channels_max = 2,
->>> +            .rate_max =     192000,
->>> +            .rate_min =    8000,
->>> +        },
->>> +        .id = USB_RX,
->>> +        .name = "USB_RX_BE",
->>> +        .ops = &q6usb_ops,
->>> +    },
->>> +};
->>
->> ... here I see a single DAI, so presumably ONE endpoint can be supported?
->>
-> 
-> One USB audio device can be supported.
-> one AFE port = one USB audio device
-> 
->> I didn't see in the rest of the code how a card with multiple endpoint
->> would be rejected, nor how the capabilities are checked?
->>
-> 
-> Need to take a look at this query a bit more.  Let me try to pass in a
-> format that can't be supported by the audio DSP, and see if the formats
-> specified in this structure will not allow userspace to start the session.
-> 
-> When you say a "card with multiple endpoints" are you referring to a USB
-> device that exposes multiple data (ISOC let's say) eps for its data
-> interface?  I haven't run into a device like that.
 
-A headset will typically only have two isoc endpoints for playback and
-capture respectively, but while that's a very large market USB audio is
-far from restricted to this configuration. It's not uncommon for the pro
-or prosumer market to see devices with multiple input/output
-capabilities and run-time mixing on the host.
+On 1/30/23 16:54, Wesley Cheng wrote:
+> Hi Pierre,
+> 
+> On 1/26/2023 7:38 AM, Pierre-Louis Bossart wrote:
+>>
+>>
+>> On 1/25/23 21:14, Wesley Cheng wrote:
+>>> The QC ADSP is able to support USB playback endpoints, so that the main
+>>> application processor can be placed into lower CPU power modes.  This
+>>> adds
+>>> the required AFE port configurations and port start command to start an
+>>> audio session.
+>>>
+>>> Specifically, the QC ADSP can support all potential endpoints that are
+>>> exposed by the audio data interface.  This includes, feedback endpoints
+>>> (both implicit and explicit) as well as the isochronous (data)
+>>> endpoints.
+>>> The size of audio samples sent per USB frame (microframe) will be
+>>> adjusted
+>>> based on information received on the feedback endpoint.
+>>
+>> I think you meant "support all potential endpoint types"
+>>
+>> It's likely that some USB devices have more endpoints than what the DSP
+>> can handle, no?
+>>
+> 
+> True, as we discussed before, we only handle the endpoints for the audio
+> interface.  Other endpoints, such as HID, or control is still handled by
+> the main processor.
+
+The number of isoc/audio endpoints can be larger than 1 per direction,
+it's not uncommon for a USB device to have multiple connectors on the
+front side for instruments, mics, monitor speakers, you name it. Just
+google 'motu' or 'rme usb' and you'll see examples of USB devices that
+are very different from plain vanilla headsets.
+
+>> And that brings me back to the question: what is a port and the
+>> relationship between port/backend/endpoints?
+>>
+>> Sorry for being picky on terminology, but if I learned something in days
+>> in standardization it's that there shouldn't be any ambiguity on
+>> concepts, otherwise everyone is lost at some point.
+>>
+> 
+> No worries, I can understand where you're coming from :).  After
+> re-reading some of the notations used, I can see where people may be
+> confused.
+> 
+>>
+>>>   static struct afe_port_map port_maps[AFE_PORT_MAX] = {
+>>> +    [USB_RX] = { AFE_PORT_ID_USB_RX, USB_RX, 1, 1},
+>>>       [HDMI_RX] = { AFE_PORT_ID_MULTICHAN_HDMI_RX, HDMI_RX, 1, 1},
+>>>       [SLIMBUS_0_RX] = { AFE_PORT_ID_SLIMBUS_MULTI_CHAN_0_RX,
+>>>                   SLIMBUS_0_RX, 1, 1},
+>>
+>> And if I look here a port seems to be a very specific AFE concept
+>> related to interface type? Do we even need to refer to a port in the USB
+>> parts?
+>>
+> 
+> Well, this is a design specific to how the Q6 AFE is implemented.  There
+> is a concept for an AFE port to be opened.  However, as mentioned
+> earlier, the "port" term used in soc-usb should be more for how many USB
+> devices can be supported.
+> 
+> If there was a case the audio DSP would support more than one USB
+> device, I believe another AFE port would need to be added.
+
+
+would the suggested infrastructure work though, even if the DSP could
+deal with multiple endpoints on different devices ? You have static
+mutexes and ops, can that scale to more than one USB device?
