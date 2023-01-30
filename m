@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E9E680B4E
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 11:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12846680B4F
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 11:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235715AbjA3KvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 05:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S235815AbjA3KvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 05:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235573AbjA3KvA (ORCPT
+        with ESMTP id S235596AbjA3KvA (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 05:51:00 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD002FCF9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C552FCFA
         for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 02:50:59 -0800 (PST)
 Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 36EBFD5F;
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BD69FE68;
         Mon, 30 Jan 2023 11:50:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675075855;
-        bh=Hp0S2pG9c9eSnY9vaqtKYShPannZEA6BH1mkGSLf5uU=;
+        s=mail; t=1675075856;
+        bh=Pr5vYeTHiulL0pXq90FQ8/gB3wzhi+Eweb0uk9ZnFpA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sj3DLUpcAAytpN1XIPZTt6MeqkP5U44GaISY1n4ypbwh+Rw/Rln5ZaQxmfSJJcmhK
-         lV9MSEIzur6aiTkEhRk213mgrJJNwFzg5/h9P0mg3nKImeRwwCmTLRVhDgDS6UKbXr
-         9p0b+IVzidMFetAn1H9WhDIbHV5L41aB7+lM3Dyc=
+        b=qRWT7sv65Wx9ekCJz0BoYo9Yj/Zdhy8xCX/AntFBRbrAXOOkYLZh6euiHKAPux3K2
+         hqPVjcsuXsoZGN9TRxvoBDNNBFXg5pvn16TO4QcuIVpmj8PvUObJp/FfGWfkw7N9Sz
+         VtI+STg//c1jNhHLOd+YJLouZ+okyrQQdNcyviUk=
 From:   Daniel Scally <dan.scally@ideasonboard.com>
 To:     linux-usb@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
         mgr@pengutronix.de, kieran.bingham@ideasonboard.com,
         torleiv@huddly.com, Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2 2/3] usb: gadget: uvc: Add new enable_interrupt_ep attribute
-Date:   Mon, 30 Jan 2023 10:50:44 +0000
-Message-Id: <20230130105045.120886-3-dan.scally@ideasonboard.com>
+Subject: [PATCH v2 3/3] usb: gadget: uvc: Disable interrupt endpoint by default
+Date:   Mon, 30 Jan 2023 10:50:45 +0000
+Message-Id: <20230130105045.120886-4-dan.scally@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230130105045.120886-1-dan.scally@ideasonboard.com>
 References: <20230130105045.120886-1-dan.scally@ideasonboard.com>
@@ -46,120 +46,163 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a new attribute to the default control config group that allows
-users to specify whether they want to enable the optional interrupt
-endpoint for the VideoControl interface.
+The f_uvc code includes an interrupt endpoint against the VideoControl
+interface. According to section 2.4.2 of the UVC specification however
+this endpoint is optional in at least some cases:
+
+"This endpoint is optional, but may be mandatory under certain
+conditions"
+
+The conditions enumerated are whether...
+
+1. The device supports hardware triggers
+2. The device implements any AutoUpdate controls
+3. The device implements any Asynchronous controls
+
+As all of those things are implementation dependent, this endpoint
+might be unnecessary for some users. Further to that it is unusable
+in the current implementation as there is no mechanism within the
+UVC gadget driver that allows data to be sent over that endpoint.
+Disable the interrupt endpoint by default, but check whether the
+user has asked for it to be enabled in configfs and continue to
+generate it if so.
 
 Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
-Changes in v2 (Laurent):
+Changes in v3 (Laurent):
 
-	- Added the new attribute to confifs Documentation
-	- Renamed from "disable_interrupt_ep" to "enable_interrupt_ep" to reflect
-	the intention to change the default behaviour
+	- Switched to enable_interrupt_ep. This has the effect of suppressing the
+	endpoint by default, which is a change from the existing behaviour. Given
+	the endpoint is at present completely unusable though this seems safe.
+	- Some formatting (line wraps and indentation)
 
- .../ABI/testing/configfs-usb-gadget-uvc       |  4 +-
- drivers/usb/gadget/function/u_uvc.h           |  2 +
- drivers/usb/gadget/function/uvc_configfs.c    | 53 +++++++++++++++++++
- 3 files changed, 58 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_uvc.c | 60 ++++++++++++++++++-----------
+ drivers/usb/gadget/function/uvc.h   |  1 +
+ 2 files changed, 38 insertions(+), 23 deletions(-)
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index f00cff6d8c5c..eb13cc5d363a 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -15,11 +15,13 @@ Date:		Dec 2014
- KernelVersion:	4.0
- Description:	Control descriptors
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index a673001f5271..5250805153c7 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -76,7 +76,7 @@ static struct usb_interface_descriptor uvc_control_intf = {
+ 	.bDescriptorType	= USB_DT_INTERFACE,
+ 	.bInterfaceNumber	= UVC_INTF_VIDEO_CONTROL,
+ 	.bAlternateSetting	= 0,
+-	.bNumEndpoints		= 1,
++	.bNumEndpoints		= 0,
+ 	.bInterfaceClass	= USB_CLASS_VIDEO,
+ 	.bInterfaceSubClass	= UVC_SC_VIDEOCONTROL,
+ 	.bInterfaceProtocol	= 0x00,
+@@ -300,14 +300,17 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+ 		if (alt)
+ 			return -EINVAL;
  
--		All attributes read only:
-+		All attributes read only except enable_interrupt_ep:
+-		uvcg_info(f, "reset UVC interrupt endpoint\n");
+-		usb_ep_disable(uvc->interrupt_ep);
++		if (uvc->enable_interrupt_ep) {
++			uvcg_info(f, "reset UVC interrupt endpoint\n");
++			usb_ep_disable(uvc->interrupt_ep);
  
- 		================	=============================
- 		bInterfaceNumber	USB interface number for this
- 					streaming interface
-+		enable_interrupt_ep	flag to enable the interrupt
-+					endpoint for the VC interface
- 		================	=============================
+-		if (!uvc->interrupt_ep->desc)
+-			if (config_ep_by_speed(cdev->gadget, f, uvc->interrupt_ep))
+-				return -EINVAL;
++			if (!uvc->interrupt_ep->desc)
++				if (config_ep_by_speed(cdev->gadget, f,
++						       uvc->interrupt_ep))
++					return -EINVAL;
  
- What:		/config/usb-gadget/gadget/functions/uvc.name/control/class
-diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
-index 24b8681b0d6f..9d15bc2c7045 100644
---- a/drivers/usb/gadget/function/u_uvc.h
-+++ b/drivers/usb/gadget/function/u_uvc.h
-@@ -29,6 +29,8 @@ struct f_uvc_opts {
- 	unsigned int					streaming_interface;
- 	char						function_name[32];
+-		usb_ep_enable(uvc->interrupt_ep);
++			usb_ep_enable(uvc->interrupt_ep);
++		}
  
-+	bool						enable_interrupt_ep;
-+
- 	/*
- 	 * Control descriptors array pointers for full-/high-speed and
- 	 * super-speed. They point by default to the uvc_fs_control_cls and
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 76cb60d13049..83ecb047aa85 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -716,8 +716,61 @@ static ssize_t uvcg_default_control_b_interface_number_show(
+ 		if (uvc->state == UVC_STATE_DISCONNECTED) {
+ 			memset(&v4l2_event, 0, sizeof(v4l2_event));
+@@ -385,7 +388,8 @@ uvc_function_disable(struct usb_function *f)
+ 	uvc->state = UVC_STATE_DISCONNECTED;
  
- UVC_ATTR_RO(uvcg_default_control_, b_interface_number, bInterfaceNumber);
+ 	usb_ep_disable(uvc->video.ep);
+-	usb_ep_disable(uvc->interrupt_ep);
++	if (uvc->enable_interrupt_ep)
++		usb_ep_disable(uvc->interrupt_ep);
+ }
  
-+static ssize_t uvcg_default_control_enable_interrupt_ep_show(
-+	struct config_item *item, char *page)
-+{
-+	struct config_group *group = to_config_group(item);
-+	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-+	struct config_item *opts_item;
-+	struct f_uvc_opts *opts;
-+	int result = 0;
+ /* --------------------------------------------------------------------------
+@@ -533,14 +537,17 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	control_size = 0;
+ 	streaming_size = 0;
+ 	bytes = uvc_iad.bLength + uvc_control_intf.bLength
+-	      + uvc_interrupt_ep.bLength + uvc_interrupt_cs_ep.bLength
+ 	      + uvc_streaming_intf_alt0.bLength;
+ 
+-	if (speed == USB_SPEED_SUPER) {
+-		bytes += uvc_ss_interrupt_comp.bLength;
+-		n_desc = 6;
+-	} else {
+-		n_desc = 5;
++	n_desc = 3;
++	if (uvc->enable_interrupt_ep) {
++		bytes += uvc_interrupt_ep.bLength + uvc_interrupt_cs_ep.bLength;
++		n_desc += 2;
 +
-+	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
++		if (speed == USB_SPEED_SUPER) {
++			bytes += uvc_ss_interrupt_comp.bLength;
++			n_desc += 1;
++		}
+ 	}
+ 
+ 	for (src = (const struct usb_descriptor_header **)uvc_control_desc;
+@@ -579,11 +586,14 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	uvc_control_header->bInCollection = 1;
+ 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
+ 
+-	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_ep);
+-	if (speed == USB_SPEED_SUPER)
+-		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_interrupt_comp);
++	if (uvc->enable_interrupt_ep) {
++		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_ep);
++		if (speed == USB_SPEED_SUPER)
++			UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_interrupt_comp);
 +
-+	opts_item = item->ci_parent;
-+	opts = to_f_uvc_opts(opts_item);
-+
-+	mutex_lock(&opts->lock);
-+	result += sprintf(page, "%u\n", opts->enable_interrupt_ep);
-+	mutex_unlock(&opts->lock);
-+
-+	mutex_unlock(su_mutex);
-+
-+	return result;
-+}
-+
-+static ssize_t uvcg_default_control_enable_interrupt_ep_store(
-+	struct config_item *item, const char *page, size_t len)
-+{
-+	struct config_group *group = to_config_group(item);
-+	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-+	struct config_item *opts_item;
-+	struct f_uvc_opts *opts;
-+	ssize_t ret;
-+	u8 num;
-+
-+	ret = kstrtou8(page, 0, &num);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-+
-+	opts_item = item->ci_parent;
-+	opts = to_f_uvc_opts(opts_item);
-+
-+	mutex_lock(&opts->lock);
-+	opts->enable_interrupt_ep = num;
-+	mutex_unlock(&opts->lock);
-+
-+	mutex_unlock(su_mutex);
-+
-+	return len;
-+}
-+UVC_ATTR(uvcg_default_control_, enable_interrupt_ep, enable_interrupt_ep);
-+
- static struct configfs_attribute *uvcg_default_control_attrs[] = {
- 	&uvcg_default_control_attr_b_interface_number,
-+	&uvcg_default_control_attr_enable_interrupt_ep,
- 	NULL,
- };
++		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_cs_ep);
++	}
+ 
+-	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_cs_ep);
+ 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_streaming_intf_alt0);
+ 
+ 	uvc_streaming_header = mem;
+@@ -666,12 +676,16 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 			    (opts->streaming_maxburst + 1));
+ 
+ 	/* Allocate endpoints. */
+-	ep = usb_ep_autoconfig(cdev->gadget, &uvc_interrupt_ep);
+-	if (!ep) {
+-		uvcg_info(f, "Unable to allocate control EP\n");
+-		goto error;
++	if (opts->enable_interrupt_ep) {
++		ep = usb_ep_autoconfig(cdev->gadget, &uvc_interrupt_ep);
++		if (!ep) {
++			uvcg_info(f, "Unable to allocate interrupt EP\n");
++			goto error;
++		}
++		uvc->interrupt_ep = ep;
++		uvc_control_intf.bNumEndpoints = 1;
+ 	}
+-	uvc->interrupt_ep = ep;
++	uvc->enable_interrupt_ep = opts->enable_interrupt_ep;
+ 
+ 	if (gadget_is_superspeed(c->cdev->gadget))
+ 		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_ss_streaming_ep,
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 48b71e04c2b1..daf226610f49 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -149,6 +149,7 @@ struct uvc_device {
+ 	struct usb_ep *interrupt_ep;
+ 	struct usb_request *control_req;
+ 	void *control_buf;
++	bool enable_interrupt_ep;
+ 
+ 	unsigned int streaming_intf;
  
 -- 
 2.34.1
