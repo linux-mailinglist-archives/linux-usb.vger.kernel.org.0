@@ -2,96 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9304D6803DF
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 03:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A45E768063E
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 07:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbjA3CmH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Jan 2023 21:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
+        id S235573AbjA3Guc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 01:50:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjA3CmF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Jan 2023 21:42:05 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285EA18AB3
-        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 18:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675046525; x=1706582525;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n4bjKMTTt1A9Ns2l5KAG1RFlZYdRPlG6wPWs/TscKL0=;
-  b=d9PYk1ZrD5dKyp3vldaZHReA0fZEGasOgareKIXesV2Pn8dmgAwyh82T
-   l+TqOg2tpaTi8G0lvd0x9y+xd5PK9m8P/VbcZth5YZRT4uJIEtw3uOcb0
-   FBiYXsLoiMrQFNBBQgDZSn39xJpJ9rpUjA9a00s3MPikx22BJYVQwJyPq
-   EpExpGQU3ipzHZW4FL1i9PIuyeXsbj/8WjvjSV9q4qWT0NK/sH9L1OD57
-   J3fe93lzU5PTVXTQdXQ8gq4dHfcZ/LpqrqZIVrKod7XYIllCcng5xk47G
-   erTT2Z2AUAfWN6o9mTz93baKqNhD7dIu7hzx89A4kpx7a8JTcFPwTL2kr
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="325156494"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="325156494"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 18:42:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="772319475"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="772319475"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Jan 2023 18:42:02 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMK7N-0003Iw-2j;
-        Mon, 30 Jan 2023 02:42:01 +0000
-Date:   Mon, 30 Jan 2023 10:41:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-next 35/35] kismet: WARNING: unmet direct dependencies
- detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
-Message-ID: <202301301054.KVvGA5XO-lkp@intel.com>
+        with ESMTP id S235504AbjA3Gua (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 01:50:30 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4470AA5E9
+        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 22:50:19 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id b10-20020a5ea70a000000b0071a96a509a7so1481765iod.22
+        for <linux-usb@vger.kernel.org>; Sun, 29 Jan 2023 22:50:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oa5ai5GL3vgKUKle+VKAr5dROC4CldLbzyie3VnJ+yQ=;
+        b=N31E+uJ9Ic7ugSqYPspdy4d8WVuzjAqyMhAqs3aZjuIVFG4Z9XOuYlo+mZmMAkfwAR
+         JqWMYe8WLJQnzVycX8zqDXHqW2GlWLWVb5cM6Nw/O6edsPmIM9qfK3nGeNg8Lmq58h6H
+         /ef+yKzQbimrDSTQLLMunqG6bseAUC9v7R+Ow2hF0Db08H5lPAxrP3o/Qiz/2f9btci0
+         7BAxy4pnGtvZ8y23Q2STHnbom06iP8UsrBqSj4z4Eik6X1Ng956F3uRKWUgYxWT0Yt3B
+         sXq2vm6qxXPiwg8R01nSJHxkJ4VOltcJELalIQESz+zc+zNFaDX0peo8x50Z9FyjzXi+
+         KB1g==
+X-Gm-Message-State: AFqh2ko8mY/l3TgA+aYdhBSSXv2qmFYv85OjExgcmXxewGRy5XpLXcjI
+        84mHIV+i9RF7Dv0zJfyzAfsjADEdHtUsOCCNIpSIdpcbVWG6
+X-Google-Smtp-Source: AMrXdXvdC+QErAlVG7uJMgNQ9lTgBFDx8bCpdbG8lK11Lf/u7Qj+dQBdFWzASs8r7KUmd/iYPqFVKZPMme/w94wlhO5NXaRYEgiw
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:3601:0:b0:30b:dae5:c56 with SMTP id
+ d1-20020a923601000000b0030bdae50c56mr5711752ila.99.1675061418554; Sun, 29 Jan
+ 2023 22:50:18 -0800 (PST)
+Date:   Sun, 29 Jan 2023 22:50:18 -0800
+In-Reply-To: <000000000000021e6b05b0ea60bd@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d47cbe05f375a0f1@google.com>
+Subject: Re: [syzbot] WARNING in hif_usb_send/usb_submit_urb
+From:   syzbot <syzbot+f5378bcf0f0cab45c1c6@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        ca@plazainn.com.qa, davem@davemloft.net, edumazet@google.com,
+        eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        khoroshilov@ispras.ru, kuba@kernel.org, kvalo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        oneukum@suse.com, pabeni@redhat.com, pchelkin@ispras.ru,
+        quic_kvalo@quicinc.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.de, toke@toke.dk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-head:   c52c9acc415eb6ff54f658492f8c53da0fc3528a
-commit: c52c9acc415eb6ff54f658492f8c53da0fc3528a [35/35] xhci: host: Add Renesas RZ/V2M SoC support
-config: csky-kismet-CONFIG_USB_RZV2M_USB3DRD-CONFIG_USB_XHCI_RZV2M-0-0 (https://download.01.org/0day-ci/archive/20230130/202301301054.KVvGA5XO-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=c52c9acc415eb6ff54f658492f8c53da0fc3528a
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-next
-        git checkout c52c9acc415eb6ff54f658492f8c53da0fc3528a
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_USB_RZV2M_USB3DRD --selectors CONFIG_USB_XHCI_RZV2M -a=csky
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=csky olddefconfig
+syzbot suspects this issue was fixed by commit:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+commit 16ef02bad239f11f322df8425d302be62f0443ce
+Author: Fedor Pchelkin <pchelkin@ispras.ru>
+Date:   Sat Oct 8 21:15:32 2022 +0000
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD when selected by USB_XHCI_RZV2M
-   .config:4492:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
-   
-   WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
-     Depends on [n]: USB_SUPPORT [=y] && USB_GADGET [=n] && (ARCH_R9A09G011 [=n] || COMPILE_TEST [=y])
-     Selected by [y]:
-     - USB_XHCI_RZV2M [=y] && USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && USB_XHCI_PLATFORM [=y] && (ARCH_R9A09G011 [=n] || COMPILE_TEST [=y])
+    wifi: ath9k: verify the expected usb_endpoints are present
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1162ac2d480000
+start commit:   274a2eebf80c Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
+dashboard link: https://syzkaller.appspot.com/bug?extid=f5378bcf0f0cab45c1c6
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1343a8eb080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17dc40eb080000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: wifi: ath9k: verify the expected usb_endpoints are present
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
