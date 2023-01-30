@@ -2,72 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C02E6807D0
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 09:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF57680813
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 10:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236131AbjA3ItB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 03:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        id S235961AbjA3JBz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 04:01:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236129AbjA3Is4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 03:48:56 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E95F18B26;
-        Mon, 30 Jan 2023 00:48:23 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id cq16-20020a17090af99000b0022c9791ac39so2319398pjb.4;
-        Mon, 30 Jan 2023 00:48:23 -0800 (PST)
+        with ESMTP id S235953AbjA3JBx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 04:01:53 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061A428D0F
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 01:01:52 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id br9so17970557lfb.4
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 01:01:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0dgMsTq5Ts9YEjqdpbek5QxemQ/PfLYpnehoHOo4hN8=;
-        b=kRlKvwqJrudORyPXxYlY6uAPXAorGilGpcQYT9VxBv+HOC0g2w6/zeryG5O0wZF8xJ
-         1hO/UFchFYBL4M00kX7zFg+5A4IrEt2454v2kJkfXXAvlLsiwDZRY1eBfjYdEwafGoRz
-         3skVunpDqqgQgy+Gh445WndXIdL7eQag6l6SfTvwTjz2+VD8zocooGY6yf3sLTDAWTSA
-         zVxnnOycc0BZgmmJk6Rj3zT0rn/rf9C+FDI8jMzf5MuRH/BPNjmNIWSyLye0UY7cB5cC
-         iMj6VpJQ7lO382Mr04hN2ECiwIhsjcwhao8NVosolZwUiT+0W1r5MrMeBMEcp4KLTtP/
-         8GpQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UZj9/cvDapyg3C3XeyJ8O7FcL+Q9vTGYpiiZhybQ3/Y=;
+        b=YpZPybRH2g6b5MNlae882cJyQH3+GhaRS1KtkQ1ic4U9DQ1wAksC7l424HEbF+ADxN
+         fmcDLTrktBtYMQMPkMUDNQIZxVM+BtAxgcnyQJWwaWpP0v1je0i2oRgTSbR2VLze9BqV
+         1BnxymwS2i52LfRIyveXklR4p0oebRBpofJZomFe9/cTpunIeKSf8raZU6JTf07/dnv1
+         GIZ2nHXbEouap68BiQOwnezKzLYrtAAmNMjYXfQejCOEfAY1k18W3dL3Q8XvBXm1rPms
+         898HEjlsuc2LbxFm0rngcEx5mQIZU7LN/4ANBG5/WrHIlhPovrw4VKPZT7M4zGDb1FxL
+         uzPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0dgMsTq5Ts9YEjqdpbek5QxemQ/PfLYpnehoHOo4hN8=;
-        b=TnRHrskK9Bp/u4jUcQ5UnaQqVtF+R8cPYSxaM/0FzTXuLSQ3tqqiNABN+1QoBaxwER
-         Dnr23LrfcKdoW3mc6vtyX8Rc4OeP7jM0oNW/dQwVI6md0f73LqEJF4b3TMKHMLZeDOwP
-         L7jdzpa3YA7cEIZtr2Luq0sBZE9wmu8CiWxNrsGUR0x3s6GEZSSRO1J5TPUrVkroLg9j
-         TVcYtsq8QuTafhJ84oHgqqLhq1UMyMg/ojJWYjLznDuemVeOwWOt34oGT6QBNwFuthS0
-         9TStCBiK3PGVu3VIMZ/mDVj9dlQw84G2ukpQoavLE2sNrY6+kMAN0JJaOiooS4RRbzBh
-         2gnA==
-X-Gm-Message-State: AO0yUKUUJLoNQVrB6Lt8Q/pfUFTQn1noD+qYziFKS3Msxsty67/nXEA/
-        tMnba2HIeiFvu9SPp51A3ik=
-X-Google-Smtp-Source: AK7set8Nlmxdg0CtwUfU9uT+3YiRsDDX20CZDBHXxQPB1hfblLlao+qqh6ph4W22gi2k3hBv3FKL7w==
-X-Received: by 2002:a17:903:11cd:b0:196:8d33:f083 with SMTP id q13-20020a17090311cd00b001968d33f083mr1179155plh.28.1675068502630;
-        Mon, 30 Jan 2023 00:48:22 -0800 (PST)
-Received: from localhost.localdomain ([45.112.3.15])
-        by smtp.gmail.com with ESMTPSA id ix1-20020a170902f80100b00192d9258512sm7205284plb.154.2023.01.30.00.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 00:48:22 -0800 (PST)
-From:   Anand Moon <linux.amoon@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-amlogic@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH linux-next v5 4/4] dt-bindings: usb: vialab,vl817: Cleanup compatible, reset-gpios and required
-Date:   Mon, 30 Jan 2023 08:47:43 +0000
-Message-Id: <20230130084744.2539-5-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230130084744.2539-1-linux.amoon@gmail.com>
-References: <20230130084744.2539-1-linux.amoon@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UZj9/cvDapyg3C3XeyJ8O7FcL+Q9vTGYpiiZhybQ3/Y=;
+        b=0oLFgJ9P74oVp+5YmTRlqgdixtEfY8YXU2nZseNce+0iTy3dTgLXN0Df+1nV6uvCHd
+         8X11FsEkzQxZaP/OFgt43FOXMmNHbJg3EG0OKXxeRD/EBr91o/NCJc3g+Qw99li2kfgo
+         nD+iKYc8+jBIN6qT3FBgEQRU5AcfQsSh0ccIipIbOecfk+xxlWScpnxQCvB216PDaDPc
+         AaYSPOI3aj+CzUuJYZGZCv/NmAJDO0j8j74mtbRn7Y657riRYdIoxrPfaOFBE1g2McL4
+         IzlhpTGX7/xFMi80O8bGHxDwR3OlWV5eLOEWJvFlf7MLAwn1b3SR1P6CvmP2oCRyO+/K
+         B7og==
+X-Gm-Message-State: AFqh2kpQZ8TTpROGtEeLZA0OjekcKzDwwcvl/wuPYFIvvo/v8+sIYL7b
+        qGMclhvERHipiI5W8S8xRB7G+ImtRaD3kml1b9BPtg==
+X-Google-Smtp-Source: AMrXdXuWZiiyZkf/64VNhp78eRnhB3/NmfVKBBNmIECUtn74jpbV7QLgFX3t7cQcj0HXz/vx4Vtw1n340djOaOQFYX0=
+X-Received: by 2002:a05:6512:2115:b0:4cb:1d3e:685b with SMTP id
+ q21-20020a056512211500b004cb1d3e685bmr4243828lfr.126.1675069310153; Mon, 30
+ Jan 2023 01:01:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <000000000000021e6b05b0ea60bd@google.com> <000000000000d47cbe05f375a0f1@google.com>
+In-Reply-To: <000000000000d47cbe05f375a0f1@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 30 Jan 2023 10:01:37 +0100
+Message-ID: <CACT4Y+b6Uu4vcuQX+dcmiyzGRX8jnDq3v3SU94Lm2-miB1hBxg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in hif_usb_send/usb_submit_urb
+To:     syzbot <syzbot+f5378bcf0f0cab45c1c6@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        ca@plazainn.com.qa, davem@davemloft.net, edumazet@google.com,
+        eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        khoroshilov@ispras.ru, kuba@kernel.org, kvalo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        oneukum@suse.com, pabeni@redhat.com, pchelkin@ispras.ru,
+        quic_kvalo@quicinc.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.de, toke@toke.dk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,72 +75,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Cleanup by removing unneeded quotes from refs and
-add maxItems to reset-gpios and fix the required list.
+On Mon, 30 Jan 2023 at 07:50, syzbot
+<syzbot+f5378bcf0f0cab45c1c6@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 16ef02bad239f11f322df8425d302be62f0443ce
+> Author: Fedor Pchelkin <pchelkin@ispras.ru>
+> Date:   Sat Oct 8 21:15:32 2022 +0000
+>
+>     wifi: ath9k: verify the expected usb_endpoints are present
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1162ac2d480000
+> start commit:   274a2eebf80c Merge tag 'for_linus' of git://git.kernel.org..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f5378bcf0f0cab45c1c6
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1343a8eb080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17dc40eb080000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: wifi: ath9k: verify the expected usb_endpoints are present
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Fixes: 31360c28dfdd ("dt-bindings: usb: Add binding for Via lab VL817 hub controller")
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-v5: added Rev by Krzysztof
-    fix the subject as suggested by Krzysztof.
-v4: Fix the subject and patch description.
----
- .../devicetree/bindings/usb/vialab,vl817.yaml  | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+Looks reasonable, let's close the bug:
 
-diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-index 5f9771e22058..23a13e1d5c7a 100644
---- a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-+++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-@@ -14,29 +14,32 @@ allOf:
- 
- properties:
-   compatible:
--    items:
--      - enum:
--          - usb2109,2817
--          - usb2109,817
-+    enum:
-+      - usb2109,2817
-+      - usb2109,817
- 
-   reg: true
- 
-   reset-gpios:
--    description: GPIO controlling the RESET# pin.
-+    maxItems: 1
-+    description:
-+      GPIO controlling the RESET# pin.
- 
-   vdd-supply:
-     description:
-       phandle to the regulator that provides power to the hub.
- 
-   peer-hub:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description:
-       phandle to the peer hub on the controller.
- 
- required:
--  - peer-hub
-   - compatible
-   - reg
-+  - reset-gpios
-+  - vdd-supply
-+  - peer-hub
- 
- additionalProperties: false
- 
-@@ -45,7 +48,6 @@ examples:
-     #include <dt-bindings/gpio/gpio.h>
- 
-     usb {
--        dr_mode = "host";
-         #address-cells = <1>;
-         #size-cells = <0>;
- 
--- 
-2.38.1
-
+#syz fix: wifi: ath9k: verify the expected usb_endpoints are present
