@@ -2,85 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B997A681A1C
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 20:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624FF681A38
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jan 2023 20:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238356AbjA3TOY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Jan 2023 14:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
+        id S237074AbjA3TVZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Jan 2023 14:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238385AbjA3TON (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 14:14:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A963E38B6C
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 11:14:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DFDFECE1928
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 19:14:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19913C433A4
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jan 2023 19:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675106045;
-        bh=sopm4pvyymCB89K1YakRwawaLabXNmjv3CKL2hkqeUw=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=C/2XF9HEe6c27GvP43IPXK3YIkD2mON2OVxYze1APBk2czuAoMmiW3UCR3Q3D9YER
-         8dZE4F/xJSmMxh3+5prU1+buqkACUMu6WseAVUg9Un1l7MhPrlZnRFI20kqa1zVJCO
-         OBwivWiZTDUywKcTdS/3Ioc9L1Evkto4L9sBISPj95rpVVAq2IxQYN/2TgVkBMHkuo
-         8yzjjjzk057CglR2HPdkLVOj5CAqfqxQuAJrNMU2QgaC/AfOIhkiSZPUM64SIEelpS
-         xDtGzskKwOBxexokQBk+K3b7fz4XBm7mztpKh9lHZyA76RD+3A4j4jSiUKouj+2h7f
-         E0q3KY437gTWg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 085C6C43141; Mon, 30 Jan 2023 19:14:05 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216697] Resume from suspend stopped working
-Date:   Mon, 30 Jan 2023 19:14:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: oliver@diereehs.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216697-208809-yfY4SpJgn5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216697-208809@https.bugzilla.kernel.org/>
-References: <bug-216697-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S234744AbjA3TVY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Jan 2023 14:21:24 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A743B0F9;
+        Mon, 30 Jan 2023 11:21:23 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1631b928691so16394023fac.11;
+        Mon, 30 Jan 2023 11:21:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OqEEzAjm7ErZyTSvMvMr9NKEMMUAe4vIhpRQfZAeFjM=;
+        b=TCG7yf8txyOlcdFkE+W6K4M3n2gazRvaKWosARw+j53nZWJ5QmoHLROiXXnWMOJweB
+         48uviP206WRdIUlvg9XAYk+94o520Jkdn2jCwBpFogT8VTBjFvkZoK7OiFYsNl20O4GZ
+         4akZr/PAUBCFpt6ATkcsl3YN5yuKeUXC4dL8Pk6hOsqwvi2N8BmUytro9t7WZeZ6QA7V
+         frXLSw9rs/aJzOeK5GRQJr6qBXYokhMN5AoWuFp3cI1QNAlCxGzoTY6Cvp23iSAoycUH
+         Ig3vsyNYE3d0OGU7Gi7W8Jsd0aekibHtKRh2UwRk0IKNScs2CrSp7UObiJEiP0PMVtKf
+         Ibzg==
+X-Gm-Message-State: AO0yUKXZ6s1KkaA3zHjhFgLh95jO9aL6PjWSm6He3Tr9CZZ5AzPBNQ1f
+        0tbhZ4apT+T/UwO4Qsyxm/wbL7dtvg==
+X-Google-Smtp-Source: AK7set/TnYkY8abbpnKNtMFcxbrdXaGRsVZ0fKHz4Atlf94NTILAzGwNNPGDY1/GnL7mP24I+xpXhw==
+X-Received: by 2002:a05:6870:b526:b0:163:b8fe:1e5e with SMTP id v38-20020a056870b52600b00163b8fe1e5emr3109349oap.6.1675106482830;
+        Mon, 30 Jan 2023 11:21:22 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 14-20020a9d048e000000b006864c8043e0sm5702626otm.61.2023.01.30.11.21.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 11:21:22 -0800 (PST)
+Received: (nullmailer pid 3213774 invoked by uid 1000);
+        Mon, 30 Jan 2023 19:21:21 -0000
+Date:   Mon, 30 Jan 2023 13:21:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: allow required-opps
+Message-ID: <167510648099.3213715.103009992195904156.robh@kernel.org>
+References: <20230127121122.342191-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127121122.342191-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216697
 
---- Comment #15 from Oliver Reeh (oliver@diereehs.de) ---
-I figured that already ...
+On Fri, 27 Jan 2023 13:11:22 +0100, Krzysztof Kozlowski wrote:
+> Few Qualcomm SoCs require minimum performance level of power domain, so
+> allow it:
+> 
+>   sm8550-mtp.dtb: usb@a6f8800: 'required-opps' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-I'm running a patched kernel 6.1.8 for two days with lots of USB-C/Thunderb=
-olt
-plugging and unplugging without any issues.
-No more lockups after suspend and no more kernel oops in the logs.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Acked-by: Rob Herring <robh@kernel.org>
