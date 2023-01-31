@@ -2,107 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9898682EFB
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 15:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E40682F0B
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 15:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbjAaOPW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Jan 2023 09:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S231569AbjAaOUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Jan 2023 09:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjAaOPO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 09:15:14 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A6F4E500;
-        Tue, 31 Jan 2023 06:15:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675174513; x=1706710513;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qofIi4J/WDgnzxuUFsZeX30i77ieCjMSAit43TlIBbk=;
-  b=Nr/Iu/tzM8JCl+1HX9srI60ERbFUNJ58hO4RhwzQLqGWTfoBt5k+goj+
-   5/9YIiTeh9RPCHPnQQLebz2Qyoe/RPLt1tG2fy/OoDO6cgT3AlPTmE744
-   1ESdm4gtM8cXRCnWVLo0svJQh2ccnAEqXFiecGXJrM/E5JSb+171wSRWK
-   K8p//ryr22twIH2SYfV2FC/fdBGm2tBaDDzhEfIiLM+ecNBvgJrVanwPi
-   QfMT9lM9+dn84FHEE9980RScgadJo3JnPhFTt2MN0K1yizUWvFcm6TU9N
-   7m5akf5+3k/VoWoqg71LcticGw7+SooNlB3CjWCqNU3t7WOxXUIqAP86u
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="325550161"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="325550161"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 06:14:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="807142307"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="807142307"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 31 Jan 2023 06:14:41 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     oliver@diereehs.de, fancieux@outlook.com, speranskiy@gmx.com,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: Don't attempt to resume the ports before they exist
-Date:   Tue, 31 Jan 2023 16:15:18 +0200
-Message-Id: <20230131141518.78215-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S230272AbjAaOUh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 09:20:37 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110331D921;
+        Tue, 31 Jan 2023 06:20:36 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qw12so26134928ejc.2;
+        Tue, 31 Jan 2023 06:20:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nVBmiYiYPs6Oa6XcLvsYrvHcRCbEE7kM/cPMb1XwWXI=;
+        b=h1mo+nPagVMmKtLS37LHPDUIkBa9zreqkK8+d8CklgBMP4XZuJkLTJglD8bKci7qsq
+         dWWBUbax+gFDEPIxP2x66jmEl5h4UctxogqpwblpI6aOm3gl9idHQVvJ/VqZ8xxG2eNb
+         VWDuuTk/i5NTBnZ8TKVQ5cjfLJp8chL3uQFx0/M3Dh7ieoZx9vg7ol4XWs4dwbdI+n+E
+         /+bE7MDAOvJhtThVosD2bpYxg+0J8nVp4Dq7ZJEMbqJsFQwTreY7AY/Z1Doscij64BxB
+         Qd40Vk9pkEYmL9mH+MdW/KsfBzab2soYM0JkqUhvG0WRtbTmzIhZGzLRt+XRruVOvV7W
+         bGug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nVBmiYiYPs6Oa6XcLvsYrvHcRCbEE7kM/cPMb1XwWXI=;
+        b=j82/DO5/VB17zNiJ6pyovzanzA9nLQVblALR5T1AF49Rc9YDJYTjs60K2EPrMlqvGt
+         DNLyhzr2v7v+OXjS4HH/WWSDEZexGSWhfMeNi3RPz1PMCHXnort6v0Y5SWCLvTcvl1gk
+         ttgP+vGYgpX3WRPrl14cwDUMkG/YyuugijlacI/G6nTWD4r0flgS0EsuXFvU9pJ3SGHS
+         6Y5vlEW9UV+ovjLfbOhYbr54EeBYzMfMRyN3+wIm/3J1sadYo615FCmrM3B9mpmuh/V1
+         L0VJ5Wh2qO2zwzfktMpeST+tNl7J853whrMm6zNaa9U2MARHDsSW/gmhahRYrz7oqcIV
+         Nf1g==
+X-Gm-Message-State: AO0yUKXUkgyoCwaYIgkk9gha1YjhxdR3oHTQSn0DyT1BlrdoakTD7Cf2
+        NSEduJk3a7i3QQk0adh4Hbg=
+X-Google-Smtp-Source: AK7set8hYqvGPk7DR0V5AAhZJzyAkPR0z/qjrj4D9DH/dwo/o74aLTE6Zu7DnqhUEw8jaFZUJqv5yg==
+X-Received: by 2002:a17:906:f192:b0:878:7ef1:4a20 with SMTP id gs18-20020a170906f19200b008787ef14a20mr17375244ejb.4.1675174834642;
+        Tue, 31 Jan 2023 06:20:34 -0800 (PST)
+Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
+        by smtp.gmail.com with ESMTPSA id fm19-20020a1709072ad300b007c10d47e748sm8368868ejc.36.2023.01.31.06.20.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 06:20:34 -0800 (PST)
+Message-ID: <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+Subject: [PATCH v2] net/usb: kalmia: Fix uninit-value in
+ kalmia_send_init_packet
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Tue, 31 Jan 2023 15:20:33 +0100
+In-Reply-To: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
+References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This will fix null pointer dereference that was caused by
-the driver attempting to resume ports that were not yet
-registered.
+syzbot reports that act_len in kalmia_send_init_packet() is
+uninitialized. Fix this by initializing it to 0.
 
-Fixes: e0dced9c7d47 ("usb: typec: ucsi: Resume in separate work")
-Cc: <stable@vger.kernel.org>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216697
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for Samsung GT-B37=
+30")
+Reported-and-tested-by: syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.c=
+om
+Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+v1 -> v2
+* Minor alteration of commit message.
+* Added 'reported-and-tested-by' which is attributed to syzbot.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 00fc8672098f3..f632350f6dcb2 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1400,6 +1400,9 @@ static int ucsi_init(struct ucsi *ucsi)
- 		con->port = NULL;
- 	}
- 
-+	kfree(ucsi->connector);
-+	ucsi->connector = NULL;
-+
- err_reset:
- 	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
- 	ucsi_reset_ppm(ucsi);
-@@ -1431,7 +1434,8 @@ static void ucsi_resume_work(struct work_struct *work)
- 
- int ucsi_resume(struct ucsi *ucsi)
+ drivers/net/usb/kalmia.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+index 9f2b70ef39aa..b158fb7bf66a 100644
+--- a/drivers/net/usb/kalmia.c
++++ b/drivers/net/usb/kalmia.c
+@@ -56,7 +56,7 @@ static int
+ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8 init_msg_len,
+ 	u8 *buffer, u8 expected_len)
  {
--	queue_work(system_long_wq, &ucsi->resume_work);
-+	if (ucsi->connector)
-+		queue_work(system_long_wq, &ucsi->resume_work);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(ucsi_resume);
-@@ -1551,6 +1555,9 @@ void ucsi_unregister(struct ucsi *ucsi)
- 	/* Disable notifications */
- 	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
- 
-+	if (!ucsi->connector)
-+		return;
-+
- 	for (i = 0; i < ucsi->cap.num_connectors; i++) {
- 		cancel_work_sync(&ucsi->connector[i].work);
- 		ucsi_unregister_partner(&ucsi->connector[i]);
--- 
+-	int act_len;
++	int act_len =3D 0;
+ 	int status;
+=20
+ 	netdev_dbg(dev->net, "Sending init packet");
+--=20
 2.39.1
+
 
