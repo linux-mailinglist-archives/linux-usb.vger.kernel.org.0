@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11E268347C
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 18:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8208D683482
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 18:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjAaR7Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Jan 2023 12:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        id S230236AbjAaR7W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Jan 2023 12:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjAaR7N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 12:59:13 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D314A4900E;
-        Tue, 31 Jan 2023 09:59:10 -0800 (PST)
+        with ESMTP id S229903AbjAaR7V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 12:59:21 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BD121A31;
+        Tue, 31 Jan 2023 09:59:15 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kSKNrE+z1ADcyFCCKtLclFw09PivMsOpU5ImD60O5UaEuV8FwbsQnXVO0/MJKNNlrNwD3eFfZ/fd772q+RmLx2Oszaagp+k2doO0KNHfM4qgPxLWPDGFjuo9uFgff+h/LsbyxzLjnXPLCI5Pe5nSchRQ0gGadUJlGtEFUZPocIC63tNa1o82rMrn6bzUk1ZiBGthpm3KsVM+E0gFJ0u/0/0Syz7jfqvLEwMpQOrQnrtqJ1uNSknSaoAi+BoBY4WTJ6S0HtSbwTRFoZ8v1EFJLcAmZWTHfCnjrEfGHXbU0neKhYB0jB7p2w2Ff0GSkzysD9Oy0gv0KJUk4XofISRzIQ==
+ b=OBisflVk6cfyXZtOiIoQJBNo6mg5FBnUfa8TPDTrMAqhPJmgp6YMYbz1HWIw9zO6wJXJ87tPdMjfpm1FnrSP+12lDNZL97mvL7KgVLoLxoPQe5pgl2sg320BrDRohq23wMISUFkSg2yoj0ejUK33fh0yRvlgr1IaA5jfvZ1Q2v3jnBn3RPBImEO3HH1Es+Qy6CQeE5lOd+ycyehckzCzNKR12lB3GJ+gXGlaR3cvdRqHfu2TzJQZckdgMuf1yyjtfRrfBS0MwMca7C5yDWXdo7iPsuY9iVyoZkvJNnLBa5Sr9iJfinrjvj3rrc6hvjPo1l5i5yaaqECpHOetkjJ0yQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XBXshQTJI2cqEhrRnFsqGNGlKErb7yK6vxxhU00D4oA=;
- b=RQhJGOlEI6FxYEHQUE8XMb0oybvyerfg3n9MtWC9QQPRw8CgHY7PimYy8kEcBhvLfzzP1lOjl1sxOKAHexcHqxEvDznA5MAfMysvf21GzYQUB7L51owPfyY4WrNmoDZ62KjDwEMcJx2s2wgOJGH3xfmC5DbNN9KYmZxWlSoTKsESlH1TH2PIeN8eq89/4ZWsveS/GUtT+nrxpAttOQyhYrSTDbdzKm3u2V6j7kH4cNSCrtfPANUkuRrxaSCG9E+vDqJqKlUKdiYFWfO+YYIaMHSW/KRJnVRkh4vBBdpw/D2m/iPPpWdKof/ypqsNVMVNLx/FFFIj0mazfejElqTBgA==
+ bh=z7FDRxLahFR6uDmDIwphTX0R7vjBs5HU4RejtC3PX70=;
+ b=Tt8jofG0J0tzGKn27erj2Z0rcXwYY7yRutKlC3P0XBNr1EK+jxIgeKij+nDfGiHmbSapLPS4Oeo2TUaH8gQ9E5B/iHCdmLH0G4VkETXjUyTp7aeNro2mQp7w0I6Hk8OLBsqePTgXt8sUCG0T59WNtYmplbFtZucJKgxbyWfkSRquzJGkK1gKsraN5qvDuILGVffftO54MMJAOr6oANQEVm4jUFDmAUKo/2nXfCf932Ssc9tJOsbfhsXIvr8zY/g+N/+TWO53j9HEfwPRsIF6CkprEVasnuFkZdGKjBA0vJ6ku4LYYq4hxQ2PIsxeAlF1fhZjqxCzx0XXlJ2oxnBxGw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -28,18 +28,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XBXshQTJI2cqEhrRnFsqGNGlKErb7yK6vxxhU00D4oA=;
- b=YeJ+ch9edWNWNT08Yj/f8hW/4xiEUR4g6WiTMBSPBcisEBzeqUK+FWG/LpoQNXCM/m4ZpijR/eGUdw/gH9ylE8NJvuR1+5QZbo5RxWnT6lP6yrQM1Ws4k8Lgh88su7i+REhSAfkHnDJWspvcuBQvReWV9kDRqN43qBSKU5trwd7yYGLxV4tVu2Hzrn4cXeyaDePFB76PSIc0He8tLvLrar0jLQo/xR8A5BuAhXRwOVQjDpAGhXzKm076V/pHCquRijoCG7G8FBp26wNYydrbjnf9Pk4Ek+VPKENlv2vaFnSE49xPgn5L9zgSgc/pbwYZZ7uD39gjYKPXgZuJbCt6Aw==
-Received: from MW4PR04CA0091.namprd04.prod.outlook.com (2603:10b6:303:83::6)
- by DS0PR12MB7678.namprd12.prod.outlook.com (2603:10b6:8:135::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
- 2023 17:59:09 +0000
+ bh=z7FDRxLahFR6uDmDIwphTX0R7vjBs5HU4RejtC3PX70=;
+ b=Hi2gJgTG5YVV9dsACnFK9jxAns6TYDe2PzkEJGB/iPrOFF7X2NZgB88zIa5e43M7OuI0NHvZnuj5VIEYETsFWXym5R2GANEPK0uvcTF8zK8wr31KbrcpeQs+vp4oQGfBo83b5EofhOwOV42THOcu3+Xa/J2SnwsFOi0q0lVhlnbEOvs5yuznXw9RuXAwgirUDrfKeLDN+HupHfQEWnkAtzkFZkg64D6wx4s9u18VBujQ3Ydnhs+bmj6E0xIj/6ayxgesO4S3fvcuycrk/G1oWenck7JGmdORgs7S5jHAVnFQr8Rv7Lx+ZR5d0TBmSkd18heVV3lPxits8MUc8n1QJw==
+Received: from MW4PR04CA0110.namprd04.prod.outlook.com (2603:10b6:303:83::25)
+ by DM4PR12MB6184.namprd12.prod.outlook.com (2603:10b6:8:a6::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.38; Tue, 31 Jan 2023 17:59:14 +0000
 Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::8d) by MW4PR04CA0091.outlook.office365.com
- (2603:10b6:303:83::6) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:303:83:cafe::94) by MW4PR04CA0110.outlook.office365.com
+ (2603:10b6:303:83::25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38 via Frontend
- Transport; Tue, 31 Jan 2023 17:59:09 +0000
+ Transport; Tue, 31 Jan 2023 17:59:13 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -49,18 +48,18 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.117.160) by
  CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.22 via Frontend Transport; Tue, 31 Jan 2023 17:59:08 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ 15.20.6043.22 via Frontend Transport; Tue, 31 Jan 2023 17:59:13 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 09:59:02 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 09:59:05 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 09:59:02 -0800
+ 2023 09:59:04 -0800
 Received: from moonraker.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Tue, 31 Jan 2023 09:59:00 -0800
+ Transport; Tue, 31 Jan 2023 09:59:02 -0800
 From:   Jon Hunter <jonathanh@nvidia.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -70,9 +69,9 @@ To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, Wayne Chang <waynec@nvidia.com>,
         Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V10 5/6] arm64: tegra: Populate USB Type-C Controller for Jetson AGX Orin
-Date:   Tue, 31 Jan 2023 17:57:47 +0000
-Message-ID: <20230131175748.256423-6-jonathanh@nvidia.com>
+Subject: [PATCH V10 6/6] arm64: defconfig: Enable UCSI support
+Date:   Tue, 31 Jan 2023 17:57:48 +0000
+Message-ID: <20230131175748.256423-7-jonathanh@nvidia.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230131175748.256423-1-jonathanh@nvidia.com>
 References: <20230131175748.256423-1-jonathanh@nvidia.com>
@@ -82,23 +81,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT031:EE_|DS0PR12MB7678:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f3f214b-5952-4354-9ae8-08db03b4d9ea
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT031:EE_|DM4PR12MB6184:EE_
+X-MS-Office365-Filtering-Correlation-Id: 450fe0d3-858f-48a8-0a4e-08db03b4dcef
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kRS4Ta6VFW2xOcssAdl7fCuIho5ATymyRXivKVhtuf2mJjOiJUiist9GcuY6SpKemeQYs0j95q2AEFtsTEVZeaO7aKyS+jMeNFxa0KwMfkSSht39opKR9r2JNw7toizIPbtbNngtxpw5n65PLlGhWRikT/VInD4iqI32dGs+TlASdlsn8k4GmuWiR8z4AJ7OuBCVwG4UPH5fZb3g5TPXv0OndbPkv2WxrxFLIk4OReNkD2HVs7CUPDDyXRml2dc90VT2ujEjDxjNAD9pla/L8P0Oo9Umx2129IDojxZ58q07udTxmrPpa1a3CQ47gjK2Yn9dEiPRC4GmolJrQmyOnIwJw6E3rO49pBowjNeEUYjb/v0tmFNE+Au79uERDOi0qGzXiLOAnsMSeLTzyqZ9BOpHqynslvKhE53ieBFvQQ3IkyA5XIuXNqErGtK69XSYOZWV1bBmBg9o7d33WnxKhYqPqDYcx3cazwvh/gWkP7yBGfgSkv8sYwhfH9yKPPYcROHk6VmzFBcgDVxjDdYrCiVLgHieHyJ2QnhkkhXWUPrEnNjQqtg+ZseACq6Yiuucnjhd46Bi/4D6K5Q13SvBPttUmaH4gzm7bck5Pp1sy2YKP2hyDUZC3UkQESGYRjNhfTqUJR1UwzDVybXN5uIR4hvuMJF5mLTApuLIjp5doqDc+WFej163UGgMzX3W2oJ18zV/A7qJRTuYWorB7i/RxA==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199018)(46966006)(40470700004)(36840700001)(82310400005)(2906002)(86362001)(336012)(426003)(47076005)(83380400001)(8936002)(41300700001)(40460700003)(356005)(7696005)(26005)(36756003)(36860700001)(478600001)(186003)(6666004)(1076003)(107886003)(5660300002)(82740400003)(7636003)(54906003)(110136005)(2616005)(4326008)(70586007)(70206006)(316002)(40480700001)(8676002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: KhJzkncrdrTOoevo6Ho0lrsU/zMRqnBGcIEGfGSArSbWhe7Jir1XZ+4uT70lm2K/+Kh8I/mBhI889T43d4XZhktMcfbTsaFpjDF8iYq+CxNz5JpTaIqehgHoGJzuI+/2gK1Sfcrmj8nWMaTF/hD1yR/RZxHiYaEAItdSpaqX+kMVccGFqh7MRBI1d75BPUsBD6+0O7CQ5yMNuOJE9gLCmRhdz1Ssuh8YHWbQYbJp60EWYutNqsvrNHkvxwjikvN4owRR30OSVGeQHL1Zz1C0weaoVWZPHz0GtGTiXAjfL09xNk8MHXJzOe+raTknzzatPP+i8DVPOlb+KBsAZHIhlNBzpI5S6kK4PnSRdD8dbQStPox1/AGcIE8rEV0fZ7J7GtbAHjLsWUunjtzRXv9fSTtJGpkj78Pbe0bfbWA8+KuIyNF2MwTmTOJAb1WpN97zW6a3Y0C+HxA3ZH8Ap1mEz36GGJiddyJShqBvRgFWfVA6IsIK3wVYRcidt1oChsymeuY6w52LOySIpkkHW5HPl6Yw5gJ9VXmADyLhhAmPZNzpdNnXLFUiLkY49yEaAX53hlCc+PwIazQCC60ra+ZqiMPAd8V2Z/Cw9VtgPZ5KQRcRQYIaVy+xb+7bEczMN26MbEk0NQp5ZK1LrjD3PCjyD6uQuU5TdliVb6zzxs3IXCz3LtwITiALhpYlZVh1EQjHJH47L5vnzUgwYUb9/jRMjQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199018)(46966006)(40470700004)(36840700001)(2906002)(36756003)(82310400005)(4744005)(2616005)(110136005)(336012)(426003)(316002)(54906003)(83380400001)(47076005)(6666004)(107886003)(1076003)(40460700003)(356005)(186003)(7696005)(478600001)(26005)(70206006)(4326008)(70586007)(5660300002)(8936002)(40480700001)(86362001)(36860700001)(41300700001)(8676002)(82740400003)(7636003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:59:08.6991
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:59:13.7613
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f3f214b-5952-4354-9ae8-08db03b4d9ea
+X-MS-Exchange-CrossTenant-Network-Message-Id: 450fe0d3-858f-48a8-0a4e-08db03b4dcef
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7678
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6184
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -109,139 +108,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the USB Type-C controller that is present on the Jetson AGX Orin
-board. The ports for the Type-C controller are not populated yet, but
-will be added later once the USB host and device support for Jetson AGX
-Orin is enabled.
-
-This is based upon a patch from Wayne Chang <waynec@nvidia.com>.
+Enable the TYPEC UCSI support and the Cypress UCSI driver that is used
+on the NVIDIA Jetson platforms.
 
 Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 ---
-V10: Populated connectors for type-c controller
-V9: no changes
-V8: no changes
-V7: updated to use 'typec' for the node name
-V6: no changes
-V5: no changes
-V4: added in this version
+V8 -> V10: no changes
+V7: Added in V7
 
- .../nvidia/tegra234-p3737-0000+p3701-0000.dts | 78 +++++++++++++++++++
- 1 file changed, 78 insertions(+)
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-index 8a9747855d6b..33ef939fa3bf 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-@@ -2073,11 +2073,21 @@ ports {
- 				usb2-0 {
- 					mode = "host";
- 					status = "okay";
-+					port {
-+						hs_typec_p1: endpoint {
-+							remote-endpoint = <&hs_ucsi_ccg_p1>;
-+						};
-+					};
- 				};
- 
- 				usb2-1 {
- 					mode = "host";
- 					status = "okay";
-+					port {
-+						hs_typec_p0: endpoint {
-+							remote-endpoint = <&hs_ucsi_ccg_p0>;
-+						};
-+					};
- 				};
- 
- 				usb2-2 {
-@@ -2093,11 +2103,21 @@ usb2-3 {
- 				usb3-0 {
- 					nvidia,usb2-companion = <1>;
- 					status = "okay";
-+					port {
-+						ss_typec_p0: endpoint {
-+							remote-endpoint = <&ss_ucsi_ccg_p0>;
-+						};
-+					};
- 				};
- 
- 				usb3-1 {
- 					nvidia,usb2-companion = <0>;
- 					status = "okay";
-+					port {
-+						ss_typec_p1: endpoint {
-+							remote-endpoint = <&ss_ucsi_ccg_p1>;
-+						};
-+					};
- 				};
- 
- 				usb3-2 {
-@@ -2190,6 +2210,64 @@ TEGRA234_AON_GPIO(AA, 4)
- 			phy-names = "p2u-0", "p2u-1", "p2u-2", "p2u-3", "p2u-4",
- 				    "p2u-5", "p2u-6", "p2u-7";
- 		};
-+
-+		i2c@c240000 {
-+			status = "okay";
-+			typec@8 {
-+				compatible = "cypress,cypd4226";
-+				reg = <0x08>;
-+				interrupt-parent = <&gpio>;
-+				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
-+				firmware-name = "nvidia,jetson-agx-xavier";
-+				status = "okay";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				ccg_typec_con0: connector@0 {
-+					compatible = "usb-c-connector";
-+					reg = <0>;
-+					label = "USB-C";
-+					data-role = "host";
-+					ports {
-+						#address-cells = <1>;
-+						#size-cells = <0>;
-+						port@0 {
-+							reg = <0>;
-+							hs_ucsi_ccg_p0: endpoint {
-+								remote-endpoint = <&hs_typec_p0>;
-+							};
-+						};
-+						port@1 {
-+							reg = <1>;
-+							ss_ucsi_ccg_p0: endpoint {
-+								remote-endpoint = <&ss_typec_p0>;
-+							};
-+						};
-+					};
-+				};
-+				ccg_typec_con1: connector@1 {
-+					compatible = "usb-c-connector";
-+					reg = <1>;
-+					label = "USB-C";
-+					data-role = "dual";
-+					ports {
-+						#address-cells = <1>;
-+						#size-cells = <0>;
-+						port@0 {
-+							reg = <0>;
-+							hs_ucsi_ccg_p1: endpoint {
-+								remote-endpoint = <&hs_typec_p1>;
-+							};
-+						};
-+						port@1 {
-+							reg = <1>;
-+							ss_ucsi_ccg_p1: endpoint {
-+								remote-endpoint = <&ss_typec_p1>;
-+							};
-+						};
-+					};
-+				};
-+			};
-+		};
- 	};
- 
- 	gpio-keys {
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 984553d55e17..d487d0e2b8e0 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -959,6 +959,8 @@ CONFIG_TYPEC_TCPCI=m
+ CONFIG_TYPEC_FUSB302=m
+ CONFIG_TYPEC_TPS6598X=m
+ CONFIG_TYPEC_HD3SS3220=m
++CONFIG_TYPEC_UCSI=m
++CONFIG_UCSI_CCG=m
+ CONFIG_MMC=y
+ CONFIG_MMC_BLOCK_MINORS=32
+ CONFIG_MMC_ARMMMCI=y
 -- 
 2.34.1
 
