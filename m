@@ -2,127 +2,327 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33FC6839B9
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 23:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E929683A6C
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Feb 2023 00:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjAaWzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Jan 2023 17:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S230013AbjAaXYU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Jan 2023 18:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjAaWy5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 17:54:57 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A873753558;
-        Tue, 31 Jan 2023 14:54:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32C8F2F4;
-        Tue, 31 Jan 2023 14:55:29 -0800 (PST)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B82343F71E;
-        Tue, 31 Jan 2023 14:54:44 -0800 (PST)
-Date:   Tue, 31 Jan 2023 22:52:53 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Icenowy Zheng <uwu@icenowy.me>, devicetree@vger.kernel.org,
-        soc@kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 02/11] usb: musb: sunxi: add support for the F1C100s
- MUSB controller
-Message-ID: <20230131225253.04369efc@slackpad.lan>
-In-Reply-To: <20230111015332.172021-3-andre.przywara@arm.com>
-References: <20230111015332.172021-1-andre.przywara@arm.com>
-        <20230111015332.172021-3-andre.przywara@arm.com>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+        with ESMTP id S232202AbjAaXXy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 18:23:54 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D3235BF
+        for <linux-usb@vger.kernel.org>; Tue, 31 Jan 2023 15:23:29 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 7so11228129pga.1
+        for <linux-usb@vger.kernel.org>; Tue, 31 Jan 2023 15:23:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cu8tklsyAymcSrqGUlRmNmim7c7BEdwoohSZMNePtI8=;
+        b=pJ5oHxky75g0Zv+8JSBUfhiQQhtAlzpZpeEwb7GrJcwAZNKp9UkaqiGQ4SNH+1fz/S
+         /5Myl51sNJn5x9YOt2DwbKib3cnxcpt0CD3+q8TttSLsdChRUdWrAvSofrtu37rK8HIU
+         USI4LUMzzQtzz70qUnUHQ6PbHhawo7teSdf/U42++Ao3zW9fmg6BpMoa8U3aYYStnrj7
+         o0pBTm8tIIUWkpUzjXUUU0/5qT4Bwj5Lttwk4UNpQ2LvWEe/VIWaTac3H5moJiYpbvuW
+         JNOlTgqERJgap8hK6EAmsEbqlWUC1x5EBwDqrYTx8MIHGgL8GZL6ZLwkF31azOyF8p3m
+         1yJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cu8tklsyAymcSrqGUlRmNmim7c7BEdwoohSZMNePtI8=;
+        b=HdBWVOgV8pqhVN/y7mAKY/301dgMRkFzODduJdkr/mo3G2AHhBv1MANklZBe9SFsYq
+         UD4KDU96izuBBHknIA43/Zwk9Bi/quyqquwVoKxyp8R4QqRZyVtLxUMXLBnEKsDTRKrg
+         ZqBZVsbRtgkD44lJtrcQhaETGSxp84P5ScTLodeLooM21B4a6g1nj77zISBaVQsNgp7K
+         STeYdDGXGe/tGygLSkqWTBmNk9a2CCz2ZDCSn9GlNXPxzn0wdMoLWoSzcamPd88xQese
+         QKjfsG47lV1QM5F0bCz2uznfLxMTqzWSN0iIEnRez7eC3cqh8RCP3/B7YRvxzOtAeNus
+         4Log==
+X-Gm-Message-State: AO0yUKXBWFQgHBSHomjqcpyV4yYeyrRTfOpAtU62qP46yGFQD/fryAS5
+        7OGTGDQkvZx27gWuv5a5+aiQ2D5mwz+CuSTXkTx1tqnzmnE=
+X-Google-Smtp-Source: AK7set9iUxsK7RZgabmB1upiou+Nbp66tPRbYNUNGWDFOagsyumPshKbnCnUf9YyGK15LuAbglZxkp8YUIwwmvtSyTQ=
+X-Received: by 2002:a62:e819:0:b0:593:11c7:e0f9 with SMTP id
+ c25-20020a62e819000000b0059311c7e0f9mr53753pfi.40.1675207388826; Tue, 31 Jan
+ 2023 15:23:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CABdb6gwzmiE6jH9jSCMucASNKrK-hkaQgxG7K04vjgdxE-L4-w@mail.gmail.com>
+In-Reply-To: <CABdb6gwzmiE6jH9jSCMucASNKrK-hkaQgxG7K04vjgdxE-L4-w@mail.gmail.com>
+From:   Fehmi Demiralp <f.demiralp@gmail.com>
+Date:   Wed, 1 Feb 2023 00:22:56 +0100
+Message-ID: <CABdb6gxuzWhk05Q4Q+eVDP+-vwD0=Ggusn-b4ciKuQ6+qrfwTw@mail.gmail.com>
+Subject: Re: Prolific Technology, Inc. USB-To-USB Cable Bridge
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 11 Jan 2023 01:53:23 +0000
-Andre Przywara <andre.przywara@arm.com> wrote:
+Hello There,
 
-Hi Bin, Greg,
+Regarding the recommendation on the dmesg of my Fedora 36,  the
+information about the USB 3.0 Data Transfer Cable by lsusb is inlined
+below.
+(Please find more information unde the link
+https://www.cablematters.com/pc-1177-135-usb-30-data-transfer-cable.aspx#Support)
 
-> From: Icenowy Zheng <uwu@icenowy.me>
-> 
-> The suniv SoC has a MUSB controller like the one in A33, but with a SRAM
-> region to be claimed.
-> 
-> Add support for it.
+Best Regards,
 
-is there any chance you could take this patch (and the next one,
-ideally) through your tree? And not sure if the binding patch (01/11)
-should also go this way?
-Patch 03/11 is a cleanup, so is somewhat optional, but Jernej acked
-that recently.
+Fehmi Demiralp
 
-The original series [1] is now almost three years old, and the whole
-series was mostly ready in the previous cycle already, but got stuck
-in some dependency chain, which should now be solved, since the PHY
-patch series [2] made it into -next more than two weeks ago.
+# lsusb
+Bus 002 Device 021: ID 067b:27a1 Prolific Technology, Inc. USB-To-USB
+Cable Bridge
+Bus 002 Device 020: ID 067b:27a1 Prolific Technology, Inc. USB-To-USB
+Cable Bridge
 
-This would help to unblock the rest of this series, which are DT
-patches only.
+# lsusb -v -d 067b:27a1
 
-Many thanks, and let me know if there is something left for me to do.
+Bus 002 Device 021: ID 067b:27a1 Prolific Technology, Inc. USB-To-USB
+Cable Bridge
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0         9
+  idVendor           0x067b Prolific Technology, Inc.
+  idProduct          0x27a1
+  bcdDevice            1.00
+  iManufacturer           1 Prolific Technology Inc.
+  iProduct                2 USB-To-USB Cable Bridge
+  iSerial                 3 PROLIFICMP000000020
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x004f
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower               96mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x08  EP 8 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x0016
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000002
+      HIRD Link Power Management (LPM) Supported
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+Device Status:     0x000c
+  (Bus Powered)
+  U1 Enabled
+  U2 Enabled
 
-Cheers,
-Andre
+Bus 002 Device 020: ID 067b:27a1 Prolific Technology, Inc. USB-To-USB
+Cable Bridge
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0         9
+  idVendor           0x067b Prolific Technology, Inc.
+  idProduct          0x27a1
+  bcdDevice            1.00
+  iManufacturer           1 Prolific Technology Inc.
+  iProduct                2 USB-To-USB Cable Bridge
+  iSerial                 3 PROLIFICMP000000020
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x004f
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower               96mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x08  EP 8 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x0016
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000002
+      HIRD Link Power Management (LPM) Supported
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+Device Status:     0x000c
+  (Bus Powered)
+  U1 Enabled
+  U2 Enabled
 
-[1]
-https://patchwork.kernel.org/project/linux-usb/cover/20200309204326.27403-1-thirtythreeforty@gmail.com/
-[2] https://lore.kernel.org/linux-arm-kernel/Y8BFwPZ0DRGImo5O@matsya/
-
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  drivers/usb/musb/sunxi.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
-> index 7f9a999cd5ff1..4b368d16a73ad 100644
-> --- a/drivers/usb/musb/sunxi.c
-> +++ b/drivers/usb/musb/sunxi.c
-> @@ -722,14 +722,17 @@ static int sunxi_musb_probe(struct platform_device *pdev)
->  	INIT_WORK(&glue->work, sunxi_musb_work);
->  	glue->host_nb.notifier_call = sunxi_musb_host_notifier;
->  
-> -	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb"))
-> +	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb") ||
-> +	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
->  		set_bit(SUNXI_MUSB_FL_HAS_SRAM, &glue->flags);
-> +	}
->  
->  	if (of_device_is_compatible(np, "allwinner,sun6i-a31-musb"))
->  		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
->  
->  	if (of_device_is_compatible(np, "allwinner,sun8i-a33-musb") ||
-> -	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb")) {
-> +	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb") ||
-> +	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
->  		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
->  		set_bit(SUNXI_MUSB_FL_NO_CONFIGDATA, &glue->flags);
->  	}
-> @@ -815,6 +818,7 @@ static const struct of_device_id sunxi_musb_match[] = {
->  	{ .compatible = "allwinner,sun6i-a31-musb", },
->  	{ .compatible = "allwinner,sun8i-a33-musb", },
->  	{ .compatible = "allwinner,sun8i-h3-musb", },
-> +	{ .compatible = "allwinner,suniv-f1c100s-musb", },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, sunxi_musb_match);
-
+________________________________
