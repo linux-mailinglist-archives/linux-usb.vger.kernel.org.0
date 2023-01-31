@@ -2,136 +2,402 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8208D683482
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 18:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53E36836C0
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 20:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjAaR7W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Jan 2023 12:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S230009AbjAaToK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Jan 2023 14:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjAaR7V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 12:59:21 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BD121A31;
-        Tue, 31 Jan 2023 09:59:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OBisflVk6cfyXZtOiIoQJBNo6mg5FBnUfa8TPDTrMAqhPJmgp6YMYbz1HWIw9zO6wJXJ87tPdMjfpm1FnrSP+12lDNZL97mvL7KgVLoLxoPQe5pgl2sg320BrDRohq23wMISUFkSg2yoj0ejUK33fh0yRvlgr1IaA5jfvZ1Q2v3jnBn3RPBImEO3HH1Es+Qy6CQeE5lOd+ycyehckzCzNKR12lB3GJ+gXGlaR3cvdRqHfu2TzJQZckdgMuf1yyjtfRrfBS0MwMca7C5yDWXdo7iPsuY9iVyoZkvJNnLBa5Sr9iJfinrjvj3rrc6hvjPo1l5i5yaaqECpHOetkjJ0yQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z7FDRxLahFR6uDmDIwphTX0R7vjBs5HU4RejtC3PX70=;
- b=Tt8jofG0J0tzGKn27erj2Z0rcXwYY7yRutKlC3P0XBNr1EK+jxIgeKij+nDfGiHmbSapLPS4Oeo2TUaH8gQ9E5B/iHCdmLH0G4VkETXjUyTp7aeNro2mQp7w0I6Hk8OLBsqePTgXt8sUCG0T59WNtYmplbFtZucJKgxbyWfkSRquzJGkK1gKsraN5qvDuILGVffftO54MMJAOr6oANQEVm4jUFDmAUKo/2nXfCf932Ssc9tJOsbfhsXIvr8zY/g+N/+TWO53j9HEfwPRsIF6CkprEVasnuFkZdGKjBA0vJ6ku4LYYq4hxQ2PIsxeAlF1fhZjqxCzx0XXlJ2oxnBxGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z7FDRxLahFR6uDmDIwphTX0R7vjBs5HU4RejtC3PX70=;
- b=Hi2gJgTG5YVV9dsACnFK9jxAns6TYDe2PzkEJGB/iPrOFF7X2NZgB88zIa5e43M7OuI0NHvZnuj5VIEYETsFWXym5R2GANEPK0uvcTF8zK8wr31KbrcpeQs+vp4oQGfBo83b5EofhOwOV42THOcu3+Xa/J2SnwsFOi0q0lVhlnbEOvs5yuznXw9RuXAwgirUDrfKeLDN+HupHfQEWnkAtzkFZkg64D6wx4s9u18VBujQ3Ydnhs+bmj6E0xIj/6ayxgesO4S3fvcuycrk/G1oWenck7JGmdORgs7S5jHAVnFQr8Rv7Lx+ZR5d0TBmSkd18heVV3lPxits8MUc8n1QJw==
-Received: from MW4PR04CA0110.namprd04.prod.outlook.com (2603:10b6:303:83::25)
- by DM4PR12MB6184.namprd12.prod.outlook.com (2603:10b6:8:a6::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.38; Tue, 31 Jan 2023 17:59:14 +0000
-Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::94) by MW4PR04CA0110.outlook.office365.com
- (2603:10b6:303:83::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38 via Frontend
- Transport; Tue, 31 Jan 2023 17:59:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.22 via Frontend Transport; Tue, 31 Jan 2023 17:59:13 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 09:59:05 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 09:59:04 -0800
-Received: from moonraker.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Tue, 31 Jan 2023 09:59:02 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, Wayne Chang <waynec@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V10 6/6] arm64: defconfig: Enable UCSI support
-Date:   Tue, 31 Jan 2023 17:57:48 +0000
-Message-ID: <20230131175748.256423-7-jonathanh@nvidia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230131175748.256423-1-jonathanh@nvidia.com>
-References: <20230131175748.256423-1-jonathanh@nvidia.com>
+        with ESMTP id S229742AbjAaToJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 14:44:09 -0500
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1597A49548;
+        Tue, 31 Jan 2023 11:44:08 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-142b72a728fso20758573fac.9;
+        Tue, 31 Jan 2023 11:44:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2m9tJqzXLR/Xzl9b5IOsjDqW60hmyJ9ePLlpb3yLZfU=;
+        b=lkJRj/9bf7On/RbHJ/losJQm9LBRcnuyyqutIG6yuUcLmcAxNayEHVPmY+JTN6WdVp
+         xYjP5qz+tIjTYJ2OipxVocIgs9XX4yfnxDotYrZwUEH7DdSY1qq+76m7WXGS2w6Ltrhu
+         mXrejoY+LwiZTXt8UDy0uA8YVxFED3K/inQaTBiWESeLTbfOFcyOP8JHL4ZSzgXYs9mH
+         j5glRKKhr8GunsWj7e2wLAvDEeyK2/20Hn8GycsdQVQ6cKt64/q38RKHrMyOld5S5Lc/
+         4RvnLI+mpJ9NTK1sP0seB0rHAN9zv81NDmUBJHCJ7U4MY08HCRKoW3+mD0s6LNyU6OOQ
+         DNtQ==
+X-Gm-Message-State: AO0yUKX4itZgMH0Ddq9FHD23K2Ji1A58EDqPcQX8yIki8Uy+bpFxhxBi
+        FwHD/5WpaMSwx7qYNeTN5w==
+X-Google-Smtp-Source: AK7set+Qd5VxIRtd+LTzqR87o/lZl+6e+O3ojtFUT/yPAUaWm3DEnfWlJp92dTB67fCjVASNdj+U5w==
+X-Received: by 2002:a05:6870:738d:b0:163:b86b:2f0f with SMTP id z13-20020a056870738d00b00163b86b2f0fmr5150991oam.18.1675194247164;
+        Tue, 31 Jan 2023 11:44:07 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id kz12-20020a056871408c00b0013b911d5960sm6941580oab.49.2023.01.31.11.44.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 11:44:06 -0800 (PST)
+Received: (nullmailer pid 1832867 invoked by uid 1000);
+        Tue, 31 Jan 2023 19:44:05 -0000
+Date:   Tue, 31 Jan 2023 13:44:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+Message-ID: <20230131194405.GA3793867-robh@kernel.org>
+References: <20230117175657.GA3275060-robh@kernel.org>
+ <20230118180811.GB3322341@hu-bjorande-lv.qualcomm.com>
+ <20230119161132.GA1880784-robh@kernel.org>
+ <20230119173954.GB3899167@hu-bjorande-lv.qualcomm.com>
+ <CAL_Jsq+4t09XDkF0dbh+aOyTz80SY18EpRBdoGpLqQBuCPQ5=Q@mail.gmail.com>
+ <20230124170437.GA1209567@hu-bjorande-lv.qualcomm.com>
+ <CAL_JsqL+-updMkZ7AZoKPdU==PPdVv7qZC2MFc7Xw_PSo7QPGw@mail.gmail.com>
+ <20230125234013.GA2132606@hu-bjorande-lv.qualcomm.com>
+ <20230130164813.GA2730437-robh@kernel.org>
+ <20230130214214.GA953860@hu-bjorande-lv.qualcomm.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT031:EE_|DM4PR12MB6184:EE_
-X-MS-Office365-Filtering-Correlation-Id: 450fe0d3-858f-48a8-0a4e-08db03b4dcef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KhJzkncrdrTOoevo6Ho0lrsU/zMRqnBGcIEGfGSArSbWhe7Jir1XZ+4uT70lm2K/+Kh8I/mBhI889T43d4XZhktMcfbTsaFpjDF8iYq+CxNz5JpTaIqehgHoGJzuI+/2gK1Sfcrmj8nWMaTF/hD1yR/RZxHiYaEAItdSpaqX+kMVccGFqh7MRBI1d75BPUsBD6+0O7CQ5yMNuOJE9gLCmRhdz1Ssuh8YHWbQYbJp60EWYutNqsvrNHkvxwjikvN4owRR30OSVGeQHL1Zz1C0weaoVWZPHz0GtGTiXAjfL09xNk8MHXJzOe+raTknzzatPP+i8DVPOlb+KBsAZHIhlNBzpI5S6kK4PnSRdD8dbQStPox1/AGcIE8rEV0fZ7J7GtbAHjLsWUunjtzRXv9fSTtJGpkj78Pbe0bfbWA8+KuIyNF2MwTmTOJAb1WpN97zW6a3Y0C+HxA3ZH8Ap1mEz36GGJiddyJShqBvRgFWfVA6IsIK3wVYRcidt1oChsymeuY6w52LOySIpkkHW5HPl6Yw5gJ9VXmADyLhhAmPZNzpdNnXLFUiLkY49yEaAX53hlCc+PwIazQCC60ra+ZqiMPAd8V2Z/Cw9VtgPZ5KQRcRQYIaVy+xb+7bEczMN26MbEk0NQp5ZK1LrjD3PCjyD6uQuU5TdliVb6zzxs3IXCz3LtwITiALhpYlZVh1EQjHJH47L5vnzUgwYUb9/jRMjQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199018)(46966006)(40470700004)(36840700001)(2906002)(36756003)(82310400005)(4744005)(2616005)(110136005)(336012)(426003)(316002)(54906003)(83380400001)(47076005)(6666004)(107886003)(1076003)(40460700003)(356005)(186003)(7696005)(478600001)(26005)(70206006)(4326008)(70586007)(5660300002)(8936002)(40480700001)(86362001)(36860700001)(41300700001)(8676002)(82740400003)(7636003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:59:13.7613
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 450fe0d3-858f-48a8-0a4e-08db03b4dcef
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6184
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130214214.GA953860@hu-bjorande-lv.qualcomm.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable the TYPEC UCSI support and the Cypress UCSI driver that is used
-on the NVIDIA Jetson platforms.
+On Mon, Jan 30, 2023 at 01:42:14PM -0800, Bjorn Andersson wrote:
+> On Mon, Jan 30, 2023 at 10:48:13AM -0600, Rob Herring wrote:
+> > On Wed, Jan 25, 2023 at 03:40:13PM -0800, Bjorn Andersson wrote:
+> > > On Tue, Jan 24, 2023 at 08:31:13PM -0600, Rob Herring wrote:
+> > > > On Tue, Jan 24, 2023 at 11:04 AM Bjorn Andersson
+> > > > <quic_bjorande@quicinc.com> wrote:
+> > > > >
+> > > > > On Tue, Jan 24, 2023 at 10:00:12AM -0600, Rob Herring wrote:
+> > > > > > On Thu, Jan 19, 2023 at 11:40 AM Bjorn Andersson
+> > > > > > <quic_bjorande@quicinc.com> wrote:
+> [..]
+> > > > > Are you saying that the connector should link with the mux and then the
+> > > > > source of the signal should be daisy chained? Or that we should just
+> > > > > link both of them as two separate endpoints from the connector?
+> > > > 
+> > > > The former. The data path of the signal in h/w should match in the DT
+> > > > graph. The caveat being we don't normally show PHYs in that mix
+> > > > because they are somewhat transparent. That's maybe becoming less true
+> > > > with routing or muxing included in PHYs.
+> > > > 
+> > > 
+> > > We have discussed and prototyped this a few times now in the Qualcomm
+> > > community, and I am not a fan of having to add forwarding-logic to each
+> > > implementation of a Type-C mux/switch, which in some configuration might
+> > > have an entity behind it that needs the notifications.
+> > 
+> > I don't know if we can really escape that.
+> > 
+> 
+> Okay, we'll have to figure out how to implement that when such need come...
+> 
+> > 
+> > > But I don't think there's a concern for this binding (in my
+> > > implementation), there's currently no mode/orientation switching
+> > > happening beyond this entity.
+> > > 
+> > > 
+> > > 
+> > > That said, if we're to represent each signal path to the connector,
+> > > I would like to bring up this problem again:
+> > > https://lore.kernel.org/all/20220520164810.141400-1-bjorn.andersson@linaro.org/
+> > > 
+> > > port@0 represent the HS signals going to the connector, port@1 the SS
+> > > signals going to the connector, port@2 the SBU signals going to the
+> > > connector.
+> > > 
+> > > But I need some representation of the HPD (hot plug detection) "signal"
+> > > (there is no actual signal path in hardware, this is a virtual
+> > > notification) going _from_ the connector to the DisplayPort controller.
+> > 
+> > I would assume whatever entity is deciding to enable the DP signals on 
+> > the connector would be what generates the HPD notification.
+> 
+> The HPD notification comes from the display/connector, and is
+> conceptually equivalent to hpd-gpios in e.g. the dp-connector binding.
 
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
----
-V8 -> V10: no changes
-V7: Added in V7
+Except that it is software based rather than a h/w signal (ignoring the 
+s/w generating a h/w HPD signal for you).
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> 
+> > I think you want to describe the DP signal connections and muxing, but
+> > HPD itself wouldn't be in the DT.
+> > 
+> 
+> Okay, so you're saying that the display driver needs to traverse the
+> graph representing the display-signal path, in hope to find someone
+> generating a HPD notification?
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 984553d55e17..d487d0e2b8e0 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -959,6 +959,8 @@ CONFIG_TYPEC_TCPCI=m
- CONFIG_TYPEC_FUSB302=m
- CONFIG_TYPEC_TPS6598X=m
- CONFIG_TYPEC_HD3SS3220=m
-+CONFIG_TYPEC_UCSI=m
-+CONFIG_UCSI_CCG=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
--- 
-2.34.1
+After further discussion, I think it is still the immediate neighbor, it 
+is just that the immediate neighbor is some other component, not the 
+type-c connector. 
 
+> > > We discussed this (perhaps in person, as there's no trace on lkml?) and
+> > > you suggested that I use a second endpoint under port@1, instead of
+> > > introducing a fourth port.
+> > 
+> > Multiple endpoints on a port are typically a mux or fanout depending on 
+> > the data direction. But the muxing is not really in the connector, so 
+> > that should probably be represented somewhere else. I think a new port 
+> > suffers from the same issue. Maybe that's close enough? Depends if there 
+> > are cases of more alt modes or more complicated muxing/switching.
+> > 
+> > > I'm fine either way, but I don't think it would be convenient nor
+> > > representable to daisy chain this behind any of the existing endpoints;
+> > > none of the other endpoints should deal with the HPD signal and the
+> > > direct of_graph-link between the usb-c-connector and the DP controller
+> > > mimics that of e.g. dp-connector very nicely, both in description and
+> > > implementation.
+> > 
+> > That would be nice, but the reality is there's a lot more between DP and 
+> > the connector with USB-C and the graph should reflect that.
+> 
+> Not when it comes to delivering the HPD notification, afaict.
+> 
+> The TCPM will configure muxes & switches to ensure that the USB
+> connector is wired up according to what has been decided over USB PD.
+> 
+> The HPD signal is orthogonal to that configuration, and should not be
+> picked up by any of the other components.
+
+Agreed as HPD is not a h/w signal routed between components.
+
+
+> > I guess the 
+> > problem there is being able to walk the graph. Suppose we have:
+> > 
+> > DP out port -> altmode mux in port -> altmode mux out port -> type-c 
+> > port 1
+> > 
+> > The issue walking the graph here would be generic code doesn't know 
+> > altmode mux port numbering as that's not a generic thing (could be 
+> > perhaps?). Maybe you can walk from each end and see if you end up in 
+> > the same device.
+> > 
+> > Of course, I haven't even considered the split cases where it's not 
+> > just either USB3 OR DP, but combinations. 
+> > 
+> 
+> The implementation that toggles between the DP-only and USB/DP-combo is
+> not stable, so we currently only support USB/DP-combo upstream.
+
+Okay, but I don't care about that from a binding standpoint. All 
+possibilities need to be considered whether your h/w can support it or 
+not.
+ 
+> Again, the TCPM will handle the muxing and orientation switching in the
+> PHY and sbu-mux, then once a datapath capable of delivering DP-altmode
+> data is established, it might send HPD notifications - to the display
+> driver.
+> 
+> > 
+> > What I'd really like to see for all this USB-C stuff is block diagrams 
+> > of the h/w components and then what the corresponding DT looks like. 
+> > Trying to extend things one piece at a time is hard to review and not 
+> > likely going to end with a flexible design.
+> > 
+> 
+> This is the design we have in a range of different boards:
+
+*This* is what I need for every Type-C binding.
+
+> 
+>                      +------------- - -
+>  USB connector       | SoC
+>  +-+                 |   +--------+    +-------+
+>  | |                 |   |        |    |       |
+>  |*|<------- HS -----|-->| HS phy |<-->| (EUD) |<--+
+>  | |                 |   |        |    |       |   |   +--------+
+>  | |                 |   +--------+    +-------+   +-->|        |
+>  | |                 |                                 |  dwc3  |
+>  | |                 |   +--------+        /---------->|        |
+>  | |   +----------+  |   |        |<------/            +--------+
+>  |*|<--|(redriver)|<-|-->| SS phy |
+>  | |   +----------+  |   |        |<-\   +------------+
+>  | |                 |   +--------+   \->|            |
+>  | |                 |                   |     DP     |
+>  | |     +-----+     |                   | controller |
+>  |*|<--->| SBU |<----|------------------>|            |
+>  | |     | mux |     |                   |            |
+>  | |     +----+      |                   +------------+
+>  +-+                 |
+>                      +------------- - -
+
+Where's the TCPM?
+
+
+> The EUD and redriver are only found/used in some designs.  My proposed
+> representation of this (without those) is:
+
+I'd assume a redriver is mostly transparent to s/w?
+
+
+> 
+> /soc {
+>     usb-controller {
+>         dwc3 {
+>             port {
+>                 dwc0-out: endpoint {
+>                     remote-endpoint = <&connector0_hs>;
+>             };
+>         };
+>     };
+> 
+>     ss_phy: phy {
+>         port {
+>             ss_phy_out: endpoint {
+>                 remote-endpoint = <&connector0_ss>;
+>             };
+>         };
+>     };
+> 
+>     display-subsystem {
+>         displayport-controller {
+>             phys = <&ss_phy>;
+>             ports {
+>                 port@1 {
+>                     reg = <1>;
+>                     dp0_out: endpoint {
+>                         remote-endpoint = <&connector0_hpd>;
+>                     };
+>                 };
+>             };
+>         };
+>     };
+> };
+> 
+> usb0-sbu-mux {
+>     compatible = "gpio-sbu-mux";
+> 
+>     port {
+>         sbu0_out: endpoint {
+>             remote-endpoint = <&connector_sbu>;
+>         };
+>     };
+> };
+> 
+> tcpm {
+>     connector@0 {
+>         compatible = "usb-c-connector";
+>         reg = <0>;
+>         ports {
+>             port@0 {
+>                 reg = <0>;
+>                 connector0_hs: endpoint {
+>                     remote-endpoint = <&dwc0_out>;
+>                 };
+>             };
+> 
+>             port@1 {
+>                 reg = <1>;
+>                 connector0_ss: endpoint@0 {
+>                     remote-endpoint = <&ss_phy_out>;
+>                 };
+>                 connector0_hpd: endpoint@1 {
+>                     remote-endpoint = <&dp0_out>;
+>                 };
+
+This just looks wrong to me because one connection is the output of the 
+phy's mux and one is the input. The USB SS connection is implicit, but I 
+think it should be explicit from dwc3 to ss_phy. It would need an output 
+port and 2 input ports. I want to say we already have bindings doing 
+this.
+
+>             };
+> 
+>             port@2 {
+>                 reg = <2>;
+>                     connector_sbu: endpoint {
+>                         remote-endpoint = <&sbu0_out>;
+>                 };
+>             };
+>         };
+>     };
+> };
+> 
+> The EUD needs to be able to override the role-switch state, so the design that
+> was accepted was to implement the role-switch forwarding logic in the driver
+> and daisy chain the of-graph.
+
+Given EUD is a Qualcomm only thing, I'm not all that worried about it.
+
+> 
+> No redriver has made it to LKML, but the this is where the daisy chain vs
+> reference all instances from port@1 comes in.
+> 
+> The Type-C port manager (tcpm) might be handling multiple usb-c-connectors, in
+> which case the reg of the connector identifies which instance is being
+> described.
+> 
+> 
+> So I think that all these pieces fits your model, except the port@1/endpoint@1
+> and the fact that displayport-controller has a of_graph.
+> 
+> 
+> In particular we have a number of these:
+> 
+> /dp-connector {
+>     compatible = "dp-connector";
+> 
+>     port {
+>         connector: endpoint {
+>             remote-endpoint = <&dp_out>;
+>         };
+>     };
+> };
+> 
+> /soc {
+>     display-subsystem {
+>         displayport-controller {
+>             phys = <&some_dp_phy>;
+>             ports {
+>                 port@1 {
+>                     reg = <1>;
+>                     dp_out: endpoint {
+>                         remote-endpoint = <&connector>;
+>                     };
+>                 };
+>             };
+>         };
+>     };
+> };
+> 
+> As you said previously, it doesn't make sense to represent the phy in this
+> graph. We just define the output of the controller as port@1 and link that to
+> the connector.
+
+What I said (or meant) was we don't represent phys which are just 
+providing the electrical interface. Your 'phy' is also a mux/switch, so 
+it does make sense to represent it in the graph.
+
+> 
+> So what is the output of the dp controller in the USB case - if we're not
+> representing that as the HPD link directly between the connector and the
+> controller?
+
+The answer lies in your block diagram... 
+
+The question I think is whether we could standardize the mux/switch 
+graph ports. Say 'port@0' is the output to type-C connector port@1, 
+and port@[1-9] are altmode connections to USB/DP/TB. If we did that, 
+then generic code can walk the graph from a controller to the connector. 
+We only need to know that port@0 goes to the connector. However, that 
+assumes there is only 1 entity in the middle and I don't know if that 
+holds true.
+
+Rob
