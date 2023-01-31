@@ -2,107 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E284D6837DF
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 21:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB929683818
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 21:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjAaUtO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Jan 2023 15:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S231865AbjAaU5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Jan 2023 15:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjAaUtN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 15:49:13 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A2A844941F
-        for <linux-usb@vger.kernel.org>; Tue, 31 Jan 2023 12:49:05 -0800 (PST)
-Received: (qmail 462733 invoked by uid 1000); 31 Jan 2023 15:49:04 -0500
-Date:   Tue, 31 Jan 2023 15:49:04 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
+        with ESMTP id S231815AbjAaU46 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 15:56:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5423B41B6D
+        for <linux-usb@vger.kernel.org>; Tue, 31 Jan 2023 12:56:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD38FB81EC4
+        for <linux-usb@vger.kernel.org>; Tue, 31 Jan 2023 20:56:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D06C433D2;
+        Tue, 31 Jan 2023 20:56:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675198568;
+        bh=cCh6LcWp6XRm1bTstcY/0Jt3nGGDf3DWReW0/zDt0Jg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DLHQS2OwB4o3sjtH381a/R3nG+TF7zEcTpZAtGwzyOX20DTrhK7md9vuqF9gK4sBd
+         KB58O1ZBdT9Qe3eaXMe9dj9LiFtMMdASRiJUI/6RM7ED/Ol9cXLaUcFDJqgD2RF83Q
+         EtIQ5vA8727nu6xg3bIpNLAxTpW49J9BX1frabZg=
+Date:   Tue, 31 Jan 2023 21:56:00 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Troels Liebe Bentsen <troels@connectedcars.dk>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: core: Don't hold device lock while reading the
- "descriptors" sysfs file
-Message-ID: <Y9l+wDTRbuZABzsE@rowland.harvard.edu>
+        linux-usb@vger.kernel.org
+Subject: Re: All USB tools hang when one descriptor read fails and needs to
+ timeout
+Message-ID: <Y9mAYH7L/CcTTSw6@kroah.com>
+References: <CAHHqYPMHBuPZqG9Rd9i+hN9Mq89pRn6M_0PLsyWkcK_hZr3xAA@mail.gmail.com>
+ <Y9Jwv1ColWNwH4+0@kroah.com>
+ <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+ <Y9J8VncWSJdVURgB@kroah.com>
+ <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
+ <Y9KnnH+5O6MtO6kz@rowland.harvard.edu>
+ <CAHHqYPNtVkHoiX1LrxUDa32BgVsgymcPtKVODcVGxEh2f=tYRw@mail.gmail.com>
+ <Y9P2tvPkdwHrbPXd@rowland.harvard.edu>
+ <CAHHqYPPWvxMvSU=HMS9C2aPk08j25MBKXS7XC6im5_oz_nXTuw@mail.gmail.com>
+ <Y9l85PAcc/i/tgnS@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9l85PAcc/i/tgnS@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ever since commit 83e83ecb79a8 ("usb: core: get config and string
-descriptors for unauthorized devices") was merged in 2013, there has
-been no mechanism for reallocating the rawdescriptors buffers in
-struct usb_device after the initial enumeration.  Before that commit,
-the buffers would be deallocated when a device was deauthorized and
-reallocated when it was authorized and enumerated.
+On Tue, Jan 31, 2023 at 03:41:08PM -0500, Alan Stern wrote:
+> On Tue, Jan 31, 2023 at 04:59:36PM +0100, Troels Liebe Bentsen wrote:
+> > On Fri, 27 Jan 2023 at 17:07, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > Now that I know the config descriptors won't get reallocated after all,
+> > > I can remove the locking from the descriptors file entirely.  A patch to
+> > > do this is below.  It ought to fix your problem.  Try it and see.
+> > 
+> > Thank you very much, I built a new kernel with the patch and can confirm
+> > that it fixes my issue.
+> > 
+> > Will the patch make it into any of the LTS kernels as it could seem like a
+> > bugfix depending on how you look at it or is it only destined mainline, fx. 6.2
+> > or 6.3?
+> 
+> I don't know.  I will submit it for the -stable kernels, but the 
+> decision on whether to accept it will be up to Greg KH.
 
-This means that the locking in the read_descriptors() routine is not
-needed, since the buffers it reads will never be reallocated while the
-routine is running.  This locking can interfere with user programs
-trying to read a hub's descriptors via sysfs while new child devices
-of the hub are being initialized, since the hub is locked during this
-procedure.
+I'll backport it, as it can help out with systems as Troels said.  But
+will wait until 6.3-rc1 is out as this should get some testing.
 
-Since the locking in read_descriptors() hasn't been needed for over
-nine years, we can remove it.
+thanks,
 
-Reported-and-tested-by: Troels Liebe Bentsen <troels@connectedcars.dk>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: stable@vger.kernel.org
-
----
-
-
-[as1990]
-
-
- drivers/usb/core/hub.c   |    5 ++---
- drivers/usb/core/sysfs.c |    5 -----
- 2 files changed, 2 insertions(+), 8 deletions(-)
-
-Index: usb-devel/drivers/usb/core/sysfs.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/sysfs.c
-+++ usb-devel/drivers/usb/core/sysfs.c
-@@ -869,11 +869,7 @@ read_descriptors(struct file *filp, stru
- 	size_t srclen, n;
- 	int cfgno;
- 	void *src;
--	int retval;
- 
--	retval = usb_lock_device_interruptible(udev);
--	if (retval < 0)
--		return -EINTR;
- 	/* The binary attribute begins with the device descriptor.
- 	 * Following that are the raw descriptor entries for all the
- 	 * configurations (config plus subsidiary descriptors).
-@@ -898,7 +894,6 @@ read_descriptors(struct file *filp, stru
- 			off -= srclen;
- 		}
- 	}
--	usb_unlock_device(udev);
- 	return count - nleft;
- }
- 
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -2386,9 +2386,8 @@ static int usb_enumerate_device_otg(stru
-  * usb_enumerate_device - Read device configs/intfs/otg (usbcore-internal)
-  * @udev: newly addressed device (in ADDRESS state)
-  *
-- * This is only called by usb_new_device() and usb_authorize_device()
-- * and FIXME -- all comments that apply to them apply here wrt to
-- * environment.
-+ * This is only called by usb_new_device() -- all comments that apply there
-+ * apply here wrt to environment.
-  *
-  * If the device is WUSB and not authorized, we don't attempt to read
-  * the string descriptors, as they will be errored out by the device
+greg k-h
