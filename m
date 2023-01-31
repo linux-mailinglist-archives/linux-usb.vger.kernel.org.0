@@ -2,65 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCC968347F
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 18:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE21C683473
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Jan 2023 18:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjAaR7T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Jan 2023 12:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S231528AbjAaR7N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Jan 2023 12:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbjAaR7P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 12:59:15 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2056.outbound.protection.outlook.com [40.107.243.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D577F29E38;
-        Tue, 31 Jan 2023 09:59:12 -0800 (PST)
+        with ESMTP id S229504AbjAaR7H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Jan 2023 12:59:07 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2047.outbound.protection.outlook.com [40.107.94.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F43A23859;
+        Tue, 31 Jan 2023 09:59:06 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ezk5gBgwWUHyuK398fypdg2X5gfJUILBDTOoxc3uzZUr8A/v1Pg5yZ/7Ycq1a1NXN16TF1EAOHUe1BJCjz1+0qgsqar9qPiMdR1CphAaIKXTJlI2NyFTkVMHmMc8h2ORFzfi55b0ZfSFOjSgTXd6Hg0qNKyUjXFrcqAR8iQhBbxWYZMWlTcJsBYoTOB0ybrEoOHkZBHUnI6s9Vr3QEiF+1+mzWoQDrLxvzd1QvhWQSQF++1OW9/MYe0Bz4t9oApUm6ARySniAtZw/alY9XjXUDMeMxFFsH9E3/b+g/KyHzJUVMVL2GUlrcnHBngTK9t+QPvrp+O990Tsp+dsqCQ2Rg==
+ b=MtYKG9NwjSbtuoSbmTnPU1UbAf8uIiKjscB+P5pyzApa/u2HnAEEbA18xscglHLktLIjXyI82qCo8b4D1JNMs7bbWvW714AcGsAXfJ2cw7zgnG4EvUw5AGI0BflcRc3SMkV245ahPY8LOmzq4ief/9VumZ4Q/9WOKSbV6FYfz25jMsdSiAnqdGSXMC31W6jNe3kHZoSmaTkn0MahSJbmQO5A11h1NK+yXz2d2gZqj/5ztVjVmg6Y4mDObMsY6SS1n3BJ+M5F714jAxZ245myor5HSVqLH9yn5nldxtDJAvHRrimoq1VsLQ7i5HSBg/xyQocAeWSyamnSagSpWVLMvg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NxVFJeA3+kof27jWNbbcdoKwIxcQNFUAoG85A6XujoU=;
- b=ZUo6ppZukbQPGXphlpLSZT+HwYS3osYR0KVPfJHi03TUyW5FFwRwllwHHSw+eCpS7ckaDqtGpL7s0pJaKgTOabXRth+SnRXFcYXL9THFMsZ0Qc1OqM8zOgQ5kT3Dgy5mg8cBsHN4uIGshJoBIwJ951hMOiCJt0259ePjaEdDptA5QLgPtC4kJTPuh7wHSMXYXGhCgw1Gv940r3GtRB1Nc+re6uHHD/X0Qx2bOmUU2VroESwf3oI3u2Etqjx7ftSwnm+VOlhqMCCAfuC+0TkHKLFLAP48xAkEYnQN10z07t8BS7AT81Nfr1XrFVdWK8OcZqaVk2aE7bmsRbU1CPHifA==
+ bh=mOOwsZY4u5iuq50uii2xX6tbvBZVbyNTqqxjhZzzo54=;
+ b=BHgp1D3CC6FGg6s8WcbNRjcoQqzjrXG+LgSYI/VVPGweqVFFHhBtJQfgrzuXJFjq7MyQrKAsjKpMIijoT2qxxh7J8bstcYcYdg1zopi44ueyogNN5TvtJakU0F9Ui+SVXv2Uv/tC3Z8fkMBe5rPPCFAVFIEwufu9T0aWHJeJ/BlOjAqK+pKRkGMadLACIZgGZ8G+riJ1PRBT9PtpdBOvRVlpLTRN/6uyRqUQ533+ElqlWsw6cj0rekI5WG8lT6fhFR4IouFW9go66RtzJ24TCK9d3SCC+19EUaHv0vF5VnnQxzw1pRiIPF3WgPJnKPhSN+sehrWk0q/ON16tGIZeKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NxVFJeA3+kof27jWNbbcdoKwIxcQNFUAoG85A6XujoU=;
- b=kb6mVlkg+Wf3Bmmfw6WN5aZnhp6ko8Uv5qksej04q56mvFCLWDZxhZNNgeh/6COsxAiVP39k2hqNNFqnuzjQRN/7s65hsln29KRotmrNaQMajvJpm97eudXt+vHXzZ1zQSDWciZtBb6BCwTztDljGEZn2McrOW+GxW9LMgAaIrKzsEfoEfE/wMKadu2c2MPw3euj5ALykj+3bD0TqkOMkfjA5aPBpC9syo0XusfQIIHe+dKcP5COvHm00EGfvNFlYwv7NNmNr7jeHmrEjG+9ZoIe2KLg+6fDM9gxFRFCImnXgCuqu5xILVWZhRTyYIOmc4eMlt0GFdr+NNH7FJt7Ow==
-Received: from BN0PR08CA0030.namprd08.prod.outlook.com (2603:10b6:408:142::9)
- by DS0PR12MB8575.namprd12.prod.outlook.com (2603:10b6:8:164::10) with
+ bh=mOOwsZY4u5iuq50uii2xX6tbvBZVbyNTqqxjhZzzo54=;
+ b=TpfqcXxzs7lmfKAM1ywv4w/ZltzIYD6y4zqSTj/5aM4k1v2Hf9DJepb/dgewsyvN3jrUtEeVDYC0shsor4HM8WPzZMECjvccsx1KF0h3es9dUwKNJs1LxwkoiuzzzDfgS/6RtvafJf9+BBx/aQlY7kblOn+hUsWT1G4SgbDFpGmKXINJFavrqMU0NkrOsDIXf8ALGlqahb8KYSk5W9Ef7Yt5uyAINyS/9GT5oRcxNu5kKfYTLGEn80oJxLzD6YRXki5ot2whzjJaowd2zUq2srKb3yI6uDDVUHCuU4YbeozC1hy4UWDC/YdglqnOLB0IsLbQaP44C8IHnDERo6ofgw==
+Received: from MW4PR04CA0316.namprd04.prod.outlook.com (2603:10b6:303:82::21)
+ by SN7PR12MB7785.namprd12.prod.outlook.com (2603:10b6:806:346::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
- 2023 17:59:11 +0000
-Received: from BN8NAM11FT086.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:142:cafe::c2) by BN0PR08CA0030.outlook.office365.com
- (2603:10b6:408:142::9) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 17:59:04 +0000
+Received: from CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::12) by MW4PR04CA0316.outlook.office365.com
+ (2603:10b6:303:82::21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36 via Frontend
- Transport; Tue, 31 Jan 2023 17:59:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ Transport; Tue, 31 Jan 2023 17:59:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT086.mail.protection.outlook.com (10.13.176.220) with Microsoft SMTP
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT054.mail.protection.outlook.com (10.13.174.70) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.22 via Frontend Transport; Tue, 31 Jan 2023 17:59:10 +0000
+ 15.20.6043.36 via Frontend Transport; Tue, 31 Jan 2023 17:59:04 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 09:58:54 -0800
+ 2023 09:58:57 -0800
 Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 09:58:54 -0800
+ 2023 09:58:57 -0800
 Received: from moonraker.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Tue, 31 Jan 2023 09:58:52 -0800
+ Transport; Tue, 31 Jan 2023 09:58:55 -0800
 From:   Jon Hunter <jonathanh@nvidia.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -70,9 +70,9 @@ To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, Wayne Chang <waynec@nvidia.com>,
         Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V10 2/6] i2c: nvidia-gpu: Add ACPI property to align with device-tree
-Date:   Tue, 31 Jan 2023 17:57:44 +0000
-Message-ID: <20230131175748.256423-3-jonathanh@nvidia.com>
+Subject: [PATCH V10 3/6] usb: typec: ucsi_ccg: Add OF support
+Date:   Tue, 31 Jan 2023 17:57:45 +0000
+Message-ID: <20230131175748.256423-4-jonathanh@nvidia.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230131175748.256423-1-jonathanh@nvidia.com>
 References: <20230131175748.256423-1-jonathanh@nvidia.com>
@@ -82,23 +82,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT086:EE_|DS0PR12MB8575:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d6d0504-45fb-4466-2b6b-08db03b4db29
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT054:EE_|SN7PR12MB7785:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5bc87efe-14be-463c-255c-08db03b4d73b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: prW7VxaP72CpYrGQiF1dI044UGQKYlPUY8G7xba/q28CdGwLIEvgYTeRTNbaPXv3sgMgqO/p+nKM9V4WNpu8ApaAOOvttmjjOAOrJsZsvD4eYgJD+bwf96aSsbssgM6loqe+NtjOlgND6BUy5x5jW3PuUcSfG8BMmI98KB2FiRX2MaEoXYfYt8sbH9wzVe+2fq5UoAo534GFAqzyeHyCnOTU3VvIap6kt/uJQH5oEJAZinQ0+qjBmxAGoS7Q/nUsHlHjpWnZB5kY+J0KlyGrIVRWM9dWrEow9NxRAyZ/fIn4aWFkhm34a41KJ/2WeZ/fhJAAK6tqHwPM/Ootrflqc0VTkIbnoHArBEIv9p/mG+eOCcea+gG5YjDCtdx++XMUA4ZZ39o+vNnLwHWnYPbkhGdyyCCU+372Pk6nuuJeCGBpQPoF7eJ6z4TWXbvbXnTy5i2ZAJF91XN3f0p5DYBIE9fekDfyIh7Z1bQI7qAOpm3Vuw8ScrY2cnSvtqQtToOMY9iwmsRLPjCWKV/ULRV9Ek7B+LwTFIgMTjP2zwwTpIwPQAD9VC8iMyMxBlA2McM8wbxoA33cyzJI+97A7vDdIt0aeVo8phwCWrZDsvnt+ZsoGqyUWRI8O56L82kwGOyn2Sy6i8chx1e2rf3uuB6xhVHKITxF1pX4jUZlPbS5LtkwVlMbB1iV+GXxSD+EqYFxfWv/eHh66NFKQeY9XVbHQA==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199018)(46966006)(36840700001)(40470700004)(8936002)(41300700001)(107886003)(426003)(47076005)(40480700001)(36860700001)(5660300002)(7636003)(86362001)(2616005)(40460700003)(356005)(70206006)(4326008)(8676002)(36756003)(7696005)(478600001)(110136005)(54906003)(70586007)(316002)(82740400003)(336012)(6666004)(186003)(1076003)(26005)(82310400005)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: IyfYhuI5wo60hMf+hUVaqwv7vMAefza745W3mhDeFH/C5cSjfIDT+FXJvR4YvmFMQWIt+T/trB7cPnUfjwVZqyFwVHbu0l3ERmn5F2sgfrpvgBD61KcTL/fCAKKz5KhVPyu010oolHkhe+UXl2YDCZAbOgBN+9xLf+ioxoJZQltPG4MR2KFtGjgM/C5PcBtHkrZe7R85GZw7ymZyrTlE9QYV2ZG9t7KObedNUiQeGOKcTRdcBj63NkFdOwH9f2kcFhHRxScrTmb+nIJg7fiLcHCDA/udAoFHWajgSNr8IocBTIlVKyuTIm36nP2/T2Un37am7kvgyw5Het9k5kbylZUGS1VU4ylK1whfix6dFJ/gp24npENhCj5yJzB+sOw7QxolU648mSxiyCTEoNiJ0qMEg6EG+arCnRKle5epjeOzF/zAmLYqUIAinp3GKY6kZ7Z/V7Fj1mADdb2JL0gf9//eFQuDxdJlAR7NYygsbPpMvGjT9KPgECLckw+Ipz6oNXl1hPIr8TpNNNJNxXHr0X4vjzRYAi2WSMEt7QxpFBh8FwL1O6lJX7HX/NnQ129aIaGE61tkwLL93yvhcmxlluTOw3oVYrknRrOpFCPqpp1xGwuvJsUCEI5ejDWTQV0IMyGYnElDcJGX+zpU4UuKS1XwDlwKHjxsZ1Zn7iI1ppn/JHmKVeV/nqMioR9Xamha0moPPvEASkrHiOfEw5X6jg==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199018)(36840700001)(46966006)(40470700004)(41300700001)(4326008)(8676002)(110136005)(107886003)(40480700001)(8936002)(316002)(70586007)(6666004)(70206006)(5660300002)(54906003)(83380400001)(36860700001)(36756003)(40460700003)(1076003)(26005)(2906002)(7696005)(478600001)(186003)(426003)(47076005)(336012)(86362001)(2616005)(356005)(82740400003)(82310400005)(7636003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:59:10.6931
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:59:04.2093
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d6d0504-45fb-4466-2b6b-08db03b4db29
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5bc87efe-14be-463c-255c-08db03b4d73b
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT086.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8575
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7785
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -111,37 +111,92 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Wayne Chang <waynec@nvidia.com>
 
-Device-tree uses the 'firmware-name' string property to pass a name of
-the firmware build to the Cypress CCGx driver. Add a new ACPI string
-property to the NVIDIA GPU I2C driver to align with device-tree so that
-we can migrate to using a common property name for both ACPI and
-device-tree.
+Add device-tree support for the Cypress CCG UCSI driver. The device-tree
+binding for the Cypress CCG device uses the standard device-tree
+'firmware-name' string property to indicate the firmware build that is
+used.
+
+The NVIDIA GPU I2C driver has been updated to use an ACPI string
+property that is also named 'firmware-build' and given that this was the
+only users of the 'ccgx,firmware-build' property, we can now remove
+support for this legacy property.
 
 Signed-off-by: Wayne Chang <waynec@nvidia.com>
 Co-developed-by: Jon Hunter <jonathanh@nvidia.com>
 Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
-V8 -> V10: no changes
-V7: Added Heikki's reviewed-by
-V6: no changes
-V5: Added this patch from V3
+V9 -> V10: no changes
+V8: Add Heikki's reviewed-by and fixed unnecessary line wrapping
+V7: removed 'ccgx,firmware-build' property
+V6: fixed compilation
+V5: add support for 'firmware-name'
+V1 -> V4: nothing has changed
 
- drivers/i2c/busses/i2c-nvidia-gpu.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index 12e330cd7635..6d81ea530a83 100644
---- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-+++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -261,6 +261,7 @@ MODULE_DEVICE_TABLE(pci, gpu_i2c_ids);
- static const struct property_entry ccgx_props[] = {
- 	/* Use FW built for NVIDIA (nv) only */
- 	PROPERTY_ENTRY_U16("ccgx,firmware-build", ('n' << 8) | 'v'),
-+	PROPERTY_ENTRY_STRING("firmware-name", "nvidia,gpu"),
- 	{ }
- };
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index 46441f1477f2..e0ed465bd518 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -643,7 +643,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
+ {
+ 	unsigned long flags = IRQF_ONESHOT;
  
+-	if (!has_acpi_companion(uc->dev))
++	if (!dev_fwnode(uc->dev))
+ 		flags |= IRQF_TRIGGER_HIGH;
+ 
+ 	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
+@@ -1342,6 +1342,7 @@ static int ucsi_ccg_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct ucsi_ccg *uc;
++	const char *fw_name;
+ 	int status;
+ 
+ 	uc = devm_kzalloc(dev, sizeof(*uc), GFP_KERNEL);
+@@ -1357,9 +1358,15 @@ static int ucsi_ccg_probe(struct i2c_client *client)
+ 	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
+ 
+ 	/* Only fail FW flashing when FW build information is not provided */
+-	status = device_property_read_u16(dev, "ccgx,firmware-build",
+-					  &uc->fw_build);
+-	if (status)
++	status = device_property_read_string(dev, "firmware-name", &fw_name);
++	if (!status) {
++		if (!strcmp(fw_name, "nvidia,jetson-agx-xavier"))
++			uc->fw_build = CCG_FW_BUILD_NVIDIA_TEGRA;
++		else if (!strcmp(fw_name, "nvidia,gpu"))
++			uc->fw_build = CCG_FW_BUILD_NVIDIA;
++	}
++
++	if (!uc->fw_build)
+ 		dev_err(uc->dev, "failed to get FW build information\n");
+ 
+ 	/* reset ccg device and initialize ucsi */
+@@ -1426,6 +1433,12 @@ static void ucsi_ccg_remove(struct i2c_client *client)
+ 	free_irq(uc->irq, uc);
+ }
+ 
++static const struct of_device_id ucsi_ccg_of_match_table[] = {
++		{ .compatible = "cypress,cypd4226", },
++		{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
++
+ static const struct i2c_device_id ucsi_ccg_device_id[] = {
+ 	{"ccgx-ucsi", 0},
+ 	{}
+@@ -1480,6 +1493,7 @@ static struct i2c_driver ucsi_ccg_driver = {
+ 		.pm = &ucsi_ccg_pm,
+ 		.dev_groups = ucsi_ccg_groups,
+ 		.acpi_match_table = amd_i2c_ucsi_match,
++		.of_match_table = ucsi_ccg_of_match_table,
+ 	},
+ 	.probe_new = ucsi_ccg_probe,
+ 	.remove = ucsi_ccg_remove,
 -- 
 2.34.1
 
