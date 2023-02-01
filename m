@@ -2,110 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390AE686C35
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Feb 2023 17:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0A2686D48
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Feb 2023 18:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjBAQ4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Feb 2023 11:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S231551AbjBARoW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Feb 2023 12:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjBAQ4Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Feb 2023 11:56:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D07F470B9;
-        Wed,  1 Feb 2023 08:56:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B68B9B821D7;
-        Wed,  1 Feb 2023 16:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC269C433D2;
-        Wed,  1 Feb 2023 16:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675270580;
-        bh=p95VTZ74s0ngq1ak6ssuGjQk341jIH4Db9h0E9DotDQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hSgfHDJfjGSCg+AbjO0MN5I/C7xaW4gTqTuMmVspHl6qh+ppLkuvnIR5E1gSUEmZr
-         mbmah0KLgRm5vdUQJzGJ4cjguLGrNrqCal+cBQYMQvW98Qx36H2RAFQ6bQHfqusGyS
-         5GRTaP0yLS+PJBZ6Ng9SbmbMvu9sEYyXx/M2J9QDrCxUiYUY7fWnPpwS4ymyA47qw9
-         6sXdWeUwOG2+G7mCiOFM4PNUXpSze6iWT3OP+Cfryr0GIGh0BYA7NeksplaN4eEFbr
-         SDOa/AMShlISPd5Z4bG4G47TGV03OffTOocohUoJzzTPV1rfZDFIuhygiircEzXJRb
-         A4rPIZFrQhT5w==
-Date:   Wed, 1 Feb 2023 17:56:17 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S230214AbjBARoV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Feb 2023 12:44:21 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A22D5F;
+        Wed,  1 Feb 2023 09:44:19 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id g7so1939825qto.11;
+        Wed, 01 Feb 2023 09:44:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0grifz9oyU58374EdScY3NpybfPtk3g+WDr7VXFF15k=;
+        b=R8cgjkJ9K6RB/P7cY+kyT0nYrGhg/J7hCkQdazFYGDEqtDAe38PggKOEoXIeTWavj+
+         JhVyTEAMvuT7d2YRzcNj64BK2vYcNUsIOiFVb7WoMmD9uQTMVclMVNauC6x7p7r93R0z
+         VdIji2IHoB+aCCrPA/a3phZddBzlA85AOrnNjEE2cS3HIukuUcsKlgYQBNaY6mq6PoOw
+         SdCElwgzCgYs0iC3lMx38pHsLVBrXjrn21P+DgnZZvgRUoexebhqWkHnjj69aYc4pDpp
+         A9TCk1zCXrAV/V4tPOVEtGE1SaB5q+2N/AqMNhQ1ZM6IePMjfSysShtZ1clHnJgqfUrK
+         5j5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0grifz9oyU58374EdScY3NpybfPtk3g+WDr7VXFF15k=;
+        b=I2EA0Z9EO4QNVmmdGscRFvJmyLqWKi8E6cAhzr2Vo2VHGQ3kNSnSQjxa8cuJAgPoEV
+         jaqLQheeQTRZSPiKLF+xrJVddZAvgNDmfCuH/PfA5vpNJt1eccNfRrkWzNpvtt7uena3
+         JxggimI/RgcZwpLQWANxhCSjPhf6qK7H5SxWcW4ilv0xoOhPqILG8/9ltjD53Zx8Hgg4
+         GBsCeQQbA21ldudSBwF2bs9joE+AwXuernVhOUf2l7/S4OCkRUjvFDbsiF8oMkXwd9q9
+         +OV0AONHnl3J9gVNUZpjAqYweRZIjLDESGGqbLWLwPcFwRP1xubJ5UVTFnzmrvvG8MNE
+         NthQ==
+X-Gm-Message-State: AO0yUKXHOYWpqADsepXfkJJp6nOSJTWHcDoFM2zhReHT0Y58ndcz06pO
+        LjqauQBDNEuO+WnfxZ2WGa0EsmsEsgpysA==
+X-Google-Smtp-Source: AK7set8ClY4Osb1Wp19ezjIbCkAEdc8H96qba4/SjoW8MbiYJU+201JCIx+2udG1IXW3um8xRtgs/A==
+X-Received: by 2002:ac8:5f52:0:b0:3b9:bdb0:7aa1 with SMTP id y18-20020ac85f52000000b003b9bdb07aa1mr3215892qta.41.1675273458214;
+        Wed, 01 Feb 2023 09:44:18 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id f23-20020ac80157000000b003b868cdc689sm6681784qtg.5.2023.02.01.09.44.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 09:44:14 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Wayne Chang <waynec@nvidia.com>
-Subject: Re: [PATCH V10 2/6] i2c: nvidia-gpu: Add ACPI property to align with
- device-tree
-Message-ID: <Y9qZsTQK8G8gW6+h@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Wayne Chang <waynec@nvidia.com>
-References: <20230131175748.256423-1-jonathanh@nvidia.com>
- <20230131175748.256423-3-jonathanh@nvidia.com>
- <db53d28c-119b-90c5-de47-bf7a3561552b@nvidia.com>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER)
+Subject: [PATCH stable 4.14] usb: host: xhci-plat: add wakeup entry at sysfs
+Date:   Wed,  1 Feb 2023 09:44:02 -0800
+Message-Id: <20230201174404.32777-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JUQU0uqB0ZH3qFIY"
-Content-Disposition: inline
-In-Reply-To: <db53d28c-119b-90c5-de47-bf7a3561552b@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Peter Chen <peter.chen@nxp.com>
 
---JUQU0uqB0ZH3qFIY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+commit 4bb4fc0dbfa23acab9b762949b91ffd52106fe4b upstream
 
+With this change, there will be a wakeup entry at /sys/../power/wakeup,
+and the user could use this entry to choose whether enable xhci wakeup
+features (wake up system from suspend) or not.
 
-> Apologies, but we appear to be missing you on this series [0].
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20200918131752.16488-6-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/usb/host/xhci-plat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yup, me, the i2c-list and the dedicated maintainer for this driver:
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 2a73592908e1..3d20fe9c415f 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -252,7 +252,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 			*priv = *priv_match;
+ 	}
+ 
+-	device_wakeup_enable(hcd->self.controller);
++	device_set_wakeup_capable(&pdev->dev, true);
+ 
+ 	xhci->clk = clk;
+ 	xhci->main_hcd = hcd;
+-- 
+2.34.1
 
-$ scripts/get_maintainer.pl -f drivers/i2c/busses/i2c-nvidia-gpu.c
-Ajay Gupta <ajayg@nvidia.com>
-linux-i2c@vger.kernel.org
-linux-kernel@vger.kernel.org
-
-If Ajay Gupta is happy, you'll get my ack for free.
-
-
---JUQU0uqB0ZH3qFIY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPama0ACgkQFA3kzBSg
-KbZ3Ew//dej9eH30wkbpqRs8i6+6ra4N51QjnoIE7iGw8zkpw0bcEvbmr/5H9xLH
-ZFTJhqP/FZzxWp7eap9z96ZQ9sin/m1c0Hqws0uVRMr3fYql8H419KsLZJ5vy2VQ
-ImeYxOu+4/KAad6x8Jsd4BsVk4DJzSfFGPQu7t3lVlSh/LgzitSZV5W755qpo1wS
-g4NncOOoHfwv95AUi6RQcGihTyV8NZcS8Sa3gfitUkg1T/xXqYqsjDYkx/wVL/nD
-PTD25TxaRoGU4wHCZmaSuUzRvLeWKE/0AK/Fzre9qeiyGcv02qG3uonY457bHfwj
-+QmosdIvWCh4vpuSd2MukYQ2NtWggxtAalKMD6D13ljCkEu9hNCn8yNR7A4cdA4c
-ApOhVfaFz362jjzLAldFwPxyFbo/Qp13MeoAKUJ/fkhMWQedt48VCBKE/CCEJO7j
-itvLPI5u5VPLHruYOgUu4BjcQe3XzFVxFh2OZnm3T0KTb4PKzmo5FOTGfKz4lDFI
-dkDox/gpBTAGmTIHy7c3nQJv2E7+/l502hVEDFeUBiVON47Vy1SQHpdo4mnQcr45
-EsScKpfL9v6+gUh9joBJ5oxEOPEQ4xpu9S/N16hwxvbfOq6HkvPOKhgR3JEBfQ1h
-dA+eutpdoYgdF+0cghfTj18cyuYBzqEornMdth1m5nUDYsZaJG0=
-=6gc6
------END PGP SIGNATURE-----
-
---JUQU0uqB0ZH3qFIY--
