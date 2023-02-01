@@ -2,109 +2,305 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2256870B2
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Feb 2023 22:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C786870CB
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Feb 2023 23:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjBAVs5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Feb 2023 16:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
+        id S231641AbjBAWBk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Feb 2023 17:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjBAVsy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Feb 2023 16:48:54 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155A05267
-        for <linux-usb@vger.kernel.org>; Wed,  1 Feb 2023 13:48:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=hubGEZf4ZraTDuQsrcF8EsKr65EW
-        qd8xY4s6J5P/QNY=; b=xW3XxxjZGI5PQb8/hyJ4JyKS6jDj/KBzVMbtDcPWBEtn
-        mEvs4jdEonsXZW0Xg6M6loeWu+VZIj1ZwppJ+exexVvv1cx5KbtUBzjMiiLFO1MY
-        eheSqTI60lVTea8JKTN6wmazbpHP+MI/N4nWJtq0EaFhtJiygvfU3jQoSl0YrWY=
-Received: (qmail 2393229 invoked from network); 1 Feb 2023 22:48:32 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Feb 2023 22:48:32 +0100
-X-UD-Smtp-Session: l3s3148p1@jMTRaKrzzOUujnsO
-Date:   Wed, 1 Feb 2023 22:48:31 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Ajay Gupta <ajayg@nvidia.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S230043AbjBAWBj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Feb 2023 17:01:39 -0500
+X-Greylist: delayed 9668 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 14:01:37 PST
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67658721E3;
+        Wed,  1 Feb 2023 14:01:37 -0800 (PST)
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPS id 60EF61B001A3;
+        Thu,  2 Feb 2023 00:01:34 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1675288894;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=7qMACyI50QCL/1H8CQztKwAHxqU95HicQ+T+75853As=;
+        b=C3hyYo+q5gsvGCex9DMuC+hDsie43vE0s5nr2I3VM4TioBL0hPTAxVWiDqiO8W4SsJZr/M
+        0AgWWNOpdoVnBOGINMOnvPctd89w+nBYsv2SRjMekBsBsTFYZaMf3mfGRhcfTd14cDChZI
+        0ruteU74W95yrV3uo5Dgx5wsa9Fcq5gUYwkBfe7WE/WfCRF+bZVrsPSs4OxzZvq3RzAAFx
+        uOAeQcIQCNix8Vdl4nb9gYiJSgV9d9hw18L8HZ5OPqzR3XxS+v5AkDugKYTkWWOhcs9U8U
+        yshxfE174KYH6KYFIVvh69EufdhRzyFUD6PvRkcncqWUHRUWSx3Z/m73IAt6eg==
+Received: from darkstar.musicnaut.iki.fi (85-76-35-32-nat.elisa-mobile.fi [85.76.35.32])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id A663A20071;
+        Thu,  2 Feb 2023 00:01:27 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1675288888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=7qMACyI50QCL/1H8CQztKwAHxqU95HicQ+T+75853As=;
+        b=Cr2/+l3633BNoAOWWyjwPWw9AwLNxM0CEgndIYguIliAzbpuf+Co5m0yvAT9PPuAttPuCr
+        cbQGI9oKrLyG0JVMiequANl/tvuRVATAfXcrWNZQdS6H9I9Y25w1TkhPNVJHZw/Br6MTfD
+        xyyBoM90fxI8kkJAOIlsaG2ascyQFvo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1675288888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=7qMACyI50QCL/1H8CQztKwAHxqU95HicQ+T+75853As=;
+        b=QJWKXv6TymNVDw5KlNYoyq8TFhR27v5UHHBs19G6BYp8TgEVhyyDE1eQ8a/QPtFMNGM1kN
+        vlmvUVL2bpgPJjG90PMlGepSOuF36HtL+ycSQUjpEAwivQNZQSQmEXYiCQMPNgZlllVxrt
+        GVmKi4xTfQZ6am1bOvlixMGyF7tOk9Q=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1675288888; a=rsa-sha256; cv=none;
+        b=et3oMo+X+eGZzbGfLHm3Gelzlbsw07EbR5xiwnV61dEUXjCmDNjxvn5kJbQatWbCjDoX1w
+        JnAsbzXY7qQaz1pEHFpGZa9fjrpOzA9Ytzv39hn6zGbOgCluKRpIte1TbbEuSjFNiG+UEQ
+        bMqAVaWsAulsXrAnGq+PdWqujyUT9Gs=
+Date:   Thu, 2 Feb 2023 00:01:25 +0200
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Wayne Chang <waynec@nvidia.com>
-Subject: Re: [PATCH V10 4/6] i2c: nvidia-gpu: Remove ccgx,firmware-build
- property
-Message-ID: <Y9reL0BBF9Po0Yam@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Wayne Chang <waynec@nvidia.com>
-References: <20230131175748.256423-1-jonathanh@nvidia.com>
- <20230131175748.256423-5-jonathanh@nvidia.com>
- <936488c6-f86d-3552-1a35-1039eca55c00@nvidia.com>
- <00059af2-dc99-0771-4d30-b7dd94ce1150@nvidia.com>
- <DM4PR12MB577082ABC3CE4731E06E4963DCD19@DM4PR12MB5770.namprd12.prod.outlook.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: udc: do not clear gadget driver.bus
+Message-ID: <20230201220125.GD2415@darkstar.musicnaut.iki.fi>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MjmHH0M0XfhIaQAP"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM4PR12MB577082ABC3CE4731E06E4963DCD19@DM4PR12MB5770.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Before the commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
+gadget driver.bus was unused. For whatever reason, many UDC drivers set
+this field explicitly to NULL in udc_start(). With the newly added gadget
+bus, doing this will crash the driver during the attach.
 
---MjmHH0M0XfhIaQAP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The problem was first reported, fixed and tested with OMAP UDC and g_ether.
+Other drivers are changed based on code analysis only.
 
+Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
+Signed-off-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+---
+ drivers/usb/fotg210/fotg210-udc.c      | 1 -
+ drivers/usb/gadget/udc/bcm63xx_udc.c   | 1 -
+ drivers/usb/gadget/udc/fsl_qe_udc.c    | 1 -
+ drivers/usb/gadget/udc/fsl_udc_core.c  | 1 -
+ drivers/usb/gadget/udc/fusb300_udc.c   | 1 -
+ drivers/usb/gadget/udc/goku_udc.c      | 1 -
+ drivers/usb/gadget/udc/gr_udc.c        | 1 -
+ drivers/usb/gadget/udc/m66592-udc.c    | 1 -
+ drivers/usb/gadget/udc/max3420_udc.c   | 1 -
+ drivers/usb/gadget/udc/mv_u3d_core.c   | 1 -
+ drivers/usb/gadget/udc/mv_udc_core.c   | 1 -
+ drivers/usb/gadget/udc/net2272.c       | 1 -
+ drivers/usb/gadget/udc/net2280.c       | 1 -
+ drivers/usb/gadget/udc/omap_udc.c      | 1 -
+ drivers/usb/gadget/udc/pch_udc.c       | 1 -
+ drivers/usb/gadget/udc/snps_udc_core.c | 1 -
+ 16 files changed, 16 deletions(-)
 
-> > >> Now the Cypress CCG driver has been updated to support the
-> > >> 'firmware-name' property to align with device-tree, remove the
-> > >> 'ccgx,firmware-build' property as this is no longer needed.
->=20
-> Acked-by: Ajay Gupta <ajayg@nvidia.com>
+diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
+index 87cca81bf4ac..eb076746f032 100644
+--- a/drivers/usb/fotg210/fotg210-udc.c
++++ b/drivers/usb/fotg210/fotg210-udc.c
+@@ -1014,7 +1014,6 @@ static int fotg210_udc_start(struct usb_gadget *g,
+ 	int ret;
+ 
+ 	/* hook up the driver */
+-	driver->driver.bus = NULL;
+ 	fotg210->driver = driver;
+ 
+ 	if (!IS_ERR_OR_NULL(fotg210->phy)) {
+diff --git a/drivers/usb/gadget/udc/bcm63xx_udc.c b/drivers/usb/gadget/udc/bcm63xx_udc.c
+index 2cdb07905bde..d04d72f5816e 100644
+--- a/drivers/usb/gadget/udc/bcm63xx_udc.c
++++ b/drivers/usb/gadget/udc/bcm63xx_udc.c
+@@ -1830,7 +1830,6 @@ static int bcm63xx_udc_start(struct usb_gadget *gadget,
+ 	bcm63xx_select_phy_mode(udc, true);
+ 
+ 	udc->driver = driver;
+-	driver->driver.bus = NULL;
+ 	udc->gadget.dev.of_node = udc->dev->of_node;
+ 
+ 	spin_unlock_irqrestore(&udc->lock, flags);
+diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/fsl_qe_udc.c
+index bf745358e28e..3b1cc8fa30c8 100644
+--- a/drivers/usb/gadget/udc/fsl_qe_udc.c
++++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
+@@ -2285,7 +2285,6 @@ static int fsl_qe_start(struct usb_gadget *gadget,
+ 	/* lock is needed but whether should use this lock or another */
+ 	spin_lock_irqsave(&udc->lock, flags);
+ 
+-	driver->driver.bus = NULL;
+ 	/* hook up the driver */
+ 	udc->driver = driver;
+ 	udc->gadget.speed = driver->max_speed;
+diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
+index 50435e804118..a67873a074b7 100644
+--- a/drivers/usb/gadget/udc/fsl_udc_core.c
++++ b/drivers/usb/gadget/udc/fsl_udc_core.c
+@@ -1943,7 +1943,6 @@ static int fsl_udc_start(struct usb_gadget *g,
+ 	/* lock is needed but whether should use this lock or another */
+ 	spin_lock_irqsave(&udc_controller->lock, flags);
+ 
+-	driver->driver.bus = NULL;
+ 	/* hook up the driver */
+ 	udc_controller->driver = driver;
+ 	spin_unlock_irqrestore(&udc_controller->lock, flags);
+diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/udc/fusb300_udc.c
+index 9af8b415f303..5954800d652c 100644
+--- a/drivers/usb/gadget/udc/fusb300_udc.c
++++ b/drivers/usb/gadget/udc/fusb300_udc.c
+@@ -1311,7 +1311,6 @@ static int fusb300_udc_start(struct usb_gadget *g,
+ 	struct fusb300 *fusb300 = to_fusb300(g);
+ 
+ 	/* hook up the driver */
+-	driver->driver.bus = NULL;
+ 	fusb300->driver = driver;
+ 
+ 	return 0;
+diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+index bdc56b24b5c9..5ffb3d5c635b 100644
+--- a/drivers/usb/gadget/udc/goku_udc.c
++++ b/drivers/usb/gadget/udc/goku_udc.c
+@@ -1375,7 +1375,6 @@ static int goku_udc_start(struct usb_gadget *g,
+ 	struct goku_udc	*dev = to_goku_udc(g);
+ 
+ 	/* hook up the driver */
+-	driver->driver.bus = NULL;
+ 	dev->driver = driver;
+ 
+ 	/*
+diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+index 22096f8505de..85cdc0af3bf9 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -1906,7 +1906,6 @@ static int gr_udc_start(struct usb_gadget *gadget,
+ 	spin_lock(&dev->lock);
+ 
+ 	/* Hook up the driver */
+-	driver->driver.bus = NULL;
+ 	dev->driver = driver;
+ 
+ 	/* Get ready for host detection */
+diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
+index c7e421b449f3..06e21cee431b 100644
+--- a/drivers/usb/gadget/udc/m66592-udc.c
++++ b/drivers/usb/gadget/udc/m66592-udc.c
+@@ -1454,7 +1454,6 @@ static int m66592_udc_start(struct usb_gadget *g,
+ 	struct m66592 *m66592 = to_m66592(g);
+ 
+ 	/* hook up the driver */
+-	driver->driver.bus = NULL;
+ 	m66592->driver = driver;
+ 
+ 	m66592_bset(m66592, M66592_VBSE | M66592_URST, M66592_INTENB0);
+diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
+index 3074da00c3df..ddf0ed3eb4f2 100644
+--- a/drivers/usb/gadget/udc/max3420_udc.c
++++ b/drivers/usb/gadget/udc/max3420_udc.c
+@@ -1108,7 +1108,6 @@ static int max3420_udc_start(struct usb_gadget *gadget,
+ 
+ 	spin_lock_irqsave(&udc->lock, flags);
+ 	/* hook up the driver */
+-	driver->driver.bus = NULL;
+ 	udc->driver = driver;
+ 	udc->gadget.speed = USB_SPEED_FULL;
+ 
+diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
+index 598654a3cb41..411b6179782c 100644
+--- a/drivers/usb/gadget/udc/mv_u3d_core.c
++++ b/drivers/usb/gadget/udc/mv_u3d_core.c
+@@ -1243,7 +1243,6 @@ static int mv_u3d_start(struct usb_gadget *g,
+ 	}
+ 
+ 	/* hook up the driver ... */
+-	driver->driver.bus = NULL;
+ 	u3d->driver = driver;
+ 
+ 	u3d->ep0_dir = USB_DIR_OUT;
+diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
+index fdb17d86cd65..b397f3a848cf 100644
+--- a/drivers/usb/gadget/udc/mv_udc_core.c
++++ b/drivers/usb/gadget/udc/mv_udc_core.c
+@@ -1359,7 +1359,6 @@ static int mv_udc_start(struct usb_gadget *gadget,
+ 	spin_lock_irqsave(&udc->lock, flags);
+ 
+ 	/* hook up the driver ... */
+-	driver->driver.bus = NULL;
+ 	udc->driver = driver;
+ 
+ 	udc->usb_state = USB_STATE_ATTACHED;
+diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
+index 84605a4d0715..538c1b9a2883 100644
+--- a/drivers/usb/gadget/udc/net2272.c
++++ b/drivers/usb/gadget/udc/net2272.c
+@@ -1451,7 +1451,6 @@ static int net2272_start(struct usb_gadget *_gadget,
+ 		dev->ep[i].irqs = 0;
+ 	/* hook up the driver ... */
+ 	dev->softconnect = 1;
+-	driver->driver.bus = NULL;
+ 	dev->driver = driver;
+ 
+ 	/* ... then enable host detection and ep0; and we're ready
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index d6a68631354a..1b929c519cd7 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -2423,7 +2423,6 @@ static int net2280_start(struct usb_gadget *_gadget,
+ 		dev->ep[i].irqs = 0;
+ 
+ 	/* hook up the driver ... */
+-	driver->driver.bus = NULL;
+ 	dev->driver = driver;
+ 
+ 	retval = device_create_file(&dev->pdev->dev, &dev_attr_function);
+diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
+index bea346e362b2..f660ebfa1379 100644
+--- a/drivers/usb/gadget/udc/omap_udc.c
++++ b/drivers/usb/gadget/udc/omap_udc.c
+@@ -2066,7 +2066,6 @@ static int omap_udc_start(struct usb_gadget *g,
+ 	udc->softconnect = 1;
+ 
+ 	/* hook up the driver */
+-	driver->driver.bus = NULL;
+ 	udc->driver = driver;
+ 	spin_unlock_irqrestore(&udc->lock, flags);
+ 
+diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
+index 9bb7a9d7a2fb..4f8617210d85 100644
+--- a/drivers/usb/gadget/udc/pch_udc.c
++++ b/drivers/usb/gadget/udc/pch_udc.c
+@@ -2908,7 +2908,6 @@ static int pch_udc_start(struct usb_gadget *g,
+ {
+ 	struct pch_udc_dev	*dev = to_pch_udc(g);
+ 
+-	driver->driver.bus = NULL;
+ 	dev->driver = driver;
+ 
+ 	/* get ready for ep0 traffic */
+diff --git a/drivers/usb/gadget/udc/snps_udc_core.c b/drivers/usb/gadget/udc/snps_udc_core.c
+index 52ea4dcf6a92..2fc5d4d277bc 100644
+--- a/drivers/usb/gadget/udc/snps_udc_core.c
++++ b/drivers/usb/gadget/udc/snps_udc_core.c
+@@ -1933,7 +1933,6 @@ static int amd5536_udc_start(struct usb_gadget *g,
+ 	struct udc *dev = to_amd5536_udc(g);
+ 	u32 tmp;
+ 
+-	driver->driver.bus = NULL;
+ 	dev->driver = driver;
+ 
+ 	/* Some gadget drivers use both ep0 directions.
+-- 
+2.17.0
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
-
-
---MjmHH0M0XfhIaQAP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPa3i8ACgkQFA3kzBSg
-KbZSYA/+K7njFaUeK0bxDYLNUiVKOdYHpDIFuzJZa/eOxmNaf4SAyspFVWNa9c89
-jYqglT+ZHZ5zptZd0yp3bT3lvUbQfO5g3wX9fhme3qN7mzPprWBqY3LFks5wKxVr
-iArQBIfBTZ5ulMrOkdS7UaLnEBiitwL9dQpY4GtV2xJY/yr8soX3IWK6verSJOuo
-CHpn0XfIgr+O9Yslu/bNEmRH4GJPFWNY/fSAJFKiDg9Zt3e6pW2xHiAB7ljjvTLq
-g8gwqNHX1TYAOUx7Y4qp8XlLUQkukIkn50fvMHrZaiJRbKSu6W3PG6u36fEo6fBI
-Moy4rtBOJRBz6EbVGm75xozzIqd1elhwQzKlbZaQSJCWb70bhkSZjBil35/LzDix
-l3odfAsxxpFwPKyRYw3BNilh7MfybbCw5Mc5OM+8nCwpTof+19O+RpC+tMNQxzVX
-0tw+9JCgPZkutXdId9xa24WBsLMXAN1n3qTVk1YYuXz7RcTsCAbnIejaA3dWp+nz
-HAWTAERv3z9IGNpcFyYHbqjKkU/b5mE2HXxyXVtBVs1YKo1wcL+W5fyZ8ZwUaKLN
-FxYXILXJPneZ2djaQsHe1+I1HCpxPArpBlvhAf3UBFcMzeiRBQemKeIIX/78CqI9
-LtaxuiCD1KhAO/iRIrVnMql61AbmTt67GPmJFFDcOw0r5sjsKYU=
-=2M82
------END PGP SIGNATURE-----
-
---MjmHH0M0XfhIaQAP--
