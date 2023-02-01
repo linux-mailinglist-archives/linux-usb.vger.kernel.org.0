@@ -2,147 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDCF68704C
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Feb 2023 22:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5316870AF
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Feb 2023 22:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjBAVGD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Feb 2023 16:06:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S229935AbjBAVsa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Feb 2023 16:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjBAVGB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Feb 2023 16:06:01 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4A26C131
-        for <linux-usb@vger.kernel.org>; Wed,  1 Feb 2023 13:05:59 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id r11-20020a6b8f0b000000b0071853768168so7202386iod.23
-        for <linux-usb@vger.kernel.org>; Wed, 01 Feb 2023 13:05:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u3PmGRfbG2FyM6dtBICa8SqYwc52m52X+oEjjhvzQDI=;
-        b=EgWgzqKIbPm3M93Scn3eFtci3pThVFakcv2rUycwV/ABdwelCNTs1MFIE7A2p0fHjc
-         q1bNPD9nJQCdvSvf8HHN1q+DsVjOxzHjNHivosnH3jyLhPxYzuoQ0YQDO2coMyYhaaVl
-         g5qpDgaSaQm7K54D7VqkxKTpIb4R/Y23HqATNbkS2kMnlKVcGUFzCUktk1RgtDR68P/U
-         IoDy88gAmhP01AQE4xx1ePTfbHsHCP1mUVSbTXeFOCnTfYJEjQQc6EztIXvBVRco5HUm
-         1bz2yVr6bVpD4QWDo3sn4juB7DvS8HOZp14aSYs+iJheom5fWdXE+XxfeKLrQ+aAGGUy
-         5Yxw==
-X-Gm-Message-State: AO0yUKX7qTa/HOz4D7Hf0qy5YV1qeYqKVoxq8Sv/5iyO6DU2a+qZ/Fxh
-        56ukzjkh63I8CAoEqtreWtpSLLN6/OYILFht49CKPKDSLRx/
-X-Google-Smtp-Source: AK7set9Unrpvidh/P+Fd6hfW7ohyyBl8pIEZS47yyVPvX8oN7jakBQ4PiGehip5A5Md4fGKzCVrxAMRLA1Ib6zGGAfIcHwCBjFpt
+        with ESMTP id S229662AbjBAVs3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Feb 2023 16:48:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA54014E85;
+        Wed,  1 Feb 2023 13:48:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E53CB822A5;
+        Wed,  1 Feb 2023 21:48:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738FDC433D2;
+        Wed,  1 Feb 2023 21:48:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675288096;
+        bh=nohq72nSV2jjLhRpAk5UnpL5hktV2vDmaMQZtyMyLso=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PgZc9JCFB69COcAUIfdI2TbWdXKtRMSgHcQkUb97miR0FTFvEtDz80vfxp+LE6nYm
+         1/y7r5uBJ0lP7tn8tp2ipO57L1+Nx4pDtaZQD3y8TxNaydlddeHaeHI+gyCQ1JSsaz
+         HPdL7r6Te9zXG2InIEgGmOHTeqqj0XHke+OdxARVxdibyX1zbYa0GxjiO/bZ3sFq8e
+         Do13N6YA5gNa0jIZaknJUokUB9WRXyGxWwEokR8vb+KhUXfulIqzlDphkWQEWvfZoE
+         Q4zYEYFkH7E9EUttfNnRck7S+pWw1vNFSTcvhGIbQwk9gwGPY2BxrvOAWPAJD0AA+R
+         sZYzbrM18JGMw==
+Date:   Wed, 1 Feb 2023 22:48:13 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Ajay Gupta <ajayg@nvidia.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Wayne Chang <waynec@nvidia.com>
+Subject: Re: [PATCH V10 2/6] i2c: nvidia-gpu: Add ACPI property to align with
+ device-tree
+Message-ID: <Y9reHZDeRWDRZG7e@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Wayne Chang <waynec@nvidia.com>
+References: <20230131175748.256423-1-jonathanh@nvidia.com>
+ <20230131175748.256423-3-jonathanh@nvidia.com>
+ <db53d28c-119b-90c5-de47-bf7a3561552b@nvidia.com>
+ <Y9qZsTQK8G8gW6+h@ninjato>
+ <b7576f93-45e5-7d5c-29e1-e95a2e58f118@nvidia.com>
+ <DM4PR12MB5770C83B3ED79401558B15E6DCD19@DM4PR12MB5770.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:2a89:0:b0:3ae:d313:3af with SMTP id
- w131-20020a022a89000000b003aed31303afmr918794jaw.79.1675285558290; Wed, 01
- Feb 2023 13:05:58 -0800 (PST)
-Date:   Wed, 01 Feb 2023 13:05:58 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000099748b05f3a9d0ad@google.com>
-Subject: [syzbot] WARNING in ath6kl_bmi_get_target_info
-From:   syzbot <syzbot+624665ad2304abbedf2a@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        kvalo@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ifa7/+Xth6NipKW0"
+Content-Disposition: inline
+In-Reply-To: <DM4PR12MB5770C83B3ED79401558B15E6DCD19@DM4PR12MB5770.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
-
-HEAD commit:    c52c9acc415e xhci: host: Add Renesas RZ/V2M SoC support
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=12cf70c9480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dcf19b1033eb57df
-dashboard link: https://syzkaller.appspot.com/bug?extid=624665ad2304abbedf2a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/729855741e3d/disk-c52c9acc.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a4fc630e298b/vmlinux-c52c9acc.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6fd5e7bf2703/bzImage-c52c9acc.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+624665ad2304abbedf2a@syzkaller.appspotmail.com
-
-usb 1-1: New USB device found, idVendor=0cf3, idProduct=9374, bcdDevice=bc.3b
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5559 at drivers/net/wireless/ath/ath6kl/bmi.c:90 ath6kl_bmi_get_target_info+0x4db/0x580 drivers/net/wireless/ath/ath6kl/bmi.c:90
-Modules linked in:
-CPU: 0 PID: 5559 Comm: kworker/0:7 Not tainted 6.2.0-rc5-syzkaller-00917-gc52c9acc415e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:ath6kl_bmi_get_target_info+0x4db/0x580 drivers/net/wireless/ath/ath6kl/bmi.c:90
-Code: 8f fc ff ff e8 16 30 12 fe be 08 00 00 00 48 c7 c7 e0 58 97 86 41 bc f3 ff ff ff e8 ad 59 ab 02 e9 71 fd ff ff e8 f5 2f 12 fe <0f> 0b 41 bc ea ff ff ff e9 5f fd ff ff e8 a3 ed 45 fe e9 01 fc ff
-RSP: 0018:ffffc90006ce6f48 EFLAGS: 00010212
-RAX: 0000000000025d59 RBX: ffffc90006ce7058 RCX: ffffc9000cc1f000
-RDX: 0000000000040000 RSI: ffffffff83352c9b RDI: 0000000000000005
-RBP: ffff88813f480de0 R08: 0000000000000005 R09: 000000000000000c
-R10: 000000006d6d67b4 R11: 0000000000000000 R12: 000000006d6d67b4
-R13: 1ffff92000d9cdea R14: ffff88813f480e10 R15: ffffc90006ce705c
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f38cab4d718 CR3: 000000010dc0c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ath6kl_core_init drivers/net/wireless/ath/ath6kl/core.c:101 [inline]
- ath6kl_core_init+0x1d1/0x11c0 drivers/net/wireless/ath/ath6kl/core.c:66
- ath6kl_usb_probe+0xc58/0x1270 drivers/net/wireless/ath/ath6kl/usb.c:1168
- usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3479
- usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2171
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3479
- usb_new_device.cold+0x685/0x10ad drivers/usb/core/hub.c:2576
- hub_port_connect drivers/usb/core/hub.c:5408 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5552 [inline]
- port_event drivers/usb/core/hub.c:5712 [inline]
- hub_event+0x2d58/0x4810 drivers/usb/core/hub.c:5794
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- process_scheduled_works kernel/workqueue.c:2352 [inline]
- worker_thread+0x854/0x1080 kernel/workqueue.c:2438
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+--ifa7/+Xth6NipKW0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > Adding Ajay.
+> Acked-by: Ajay Gupta <ajayg@nvidia.com>
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+
+--ifa7/+Xth6NipKW0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPa3hkACgkQFA3kzBSg
+KbZmsRAAsq7JPvFWKh2Rvxhs+zXvhAkaS+TH1fPUBOOe27RntRVEEVtB0gLxFGe+
+GSjM3853USxGXXRXovWqNbzGzzjvsNgHaYQ3mpONJU2KhyETuiabG+U+PRq+8rQW
+Lyz8mMUrx/g/yM2OcWGGxsV2SvuyAnIZrAKLMdWHjzz16el7SJ8M+PJgPOTAIQwl
+jkC+3BrAUxknNjh893c2o9bRqI9gs+nMKrTupNt+2itgp8v0Q2jYqGvo91xHAcxM
+XvOedjU8k12dGP2eQzXusUahcJ0AfrHh7ZCTZoHo2+30bo0ma9P1EePvM8li2orZ
+B3rJmad/v610QLA8lj3feQMlAouvmnqoEGfB8uW8RisEYQu2iuRGt6O1Tco4K1Ct
+VJZ8tzxZZeCM1jKnPusHELNTtgKGz9N7YYVQx4FSSSNVwqi03631sD49+m+UrQA1
+gr2bY4o48mTBbitOLYDqx8iZr/2PQcE8zpja5R/5Q8IY3aa/tuZ57e8fbTEmosVI
+2VBGDnskPxzOgTDkXkJSAXzdYQJqOvwp7IeCmK6KkdGLCW8rmBT4DU0s6bi2+Zxv
+xVog/CrH1RwLiQzEUCCh8gIEngx95Z9ouTo5rtWP1oyPWCAZuzzTOflBjxdTfmIr
+T+QewxYAMelZKgkcxgLArssgkSas8WKs9DmuVLBfKGEt/x/UOgs=
+=EuyP
+-----END PGP SIGNATURE-----
+
+--ifa7/+Xth6NipKW0--
