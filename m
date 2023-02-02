@@ -2,74 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0539C6888D8
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 22:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C361268893B
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 22:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjBBVQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 16:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S230140AbjBBVuK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 16:50:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjBBVQa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 16:16:30 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0225A373
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 13:16:29 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id d24-20020a5d9bd8000000b006ee2ddf6d77so1877317ion.6
-        for <linux-usb@vger.kernel.org>; Thu, 02 Feb 2023 13:16:29 -0800 (PST)
+        with ESMTP id S230011AbjBBVuI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 16:50:08 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616BF1A95E;
+        Thu,  2 Feb 2023 13:49:26 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id j21so2632758oie.4;
+        Thu, 02 Feb 2023 13:49:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+YbYrisVg+rUMlfc+ZTbTP5txmI4PVaRYzb4aIG716E=;
-        b=uuJlIDwWmuhIWfhWZXzUuZwhazr7ODOsmbP0iXv99VK5S2OVyy7nRlW4Nn2OTsTJM9
-         JL/0r4bEplf3zAYPgCrUkEAP8vCFN+MNESvMRL/zRcH2JvNSq36aGE8qakzMk9MYK4NJ
-         Gqbdu9CpzV5X+su8ZN0mH+T4cDiue5WXQUxaZnpYgT3wNel+p5keqMAjSaPOh+PUn8l+
-         c01d9jex/AreyMaQ/2lGVJ/f9DSL8rUZuW9EWZYU1H6sLjdI/wl3FLUlZBxn6LF3UBQg
-         85A0yr0A6EnYxtPe18hbzm8HbSX/qMnaj+76RjqAVS0i1xpINYtYjnixQ1Rb/elCBUzK
-         bJGQ==
-X-Gm-Message-State: AO0yUKVL9qz6rL0HaUKEIGs67CD4Z47j+H3JUvbUEDCYm7mpHNun3INC
-        QIKiV/R2limkBC3Q5jSwvoolOMXhuYu6pNcVl8lw/SXVnBIQ
-X-Google-Smtp-Source: AK7set9iDhmuB+0/B75YQ9dp6pYxfnN++6k6LDppqbGnv35zHEk/f8aqTpgfmaZNX6aL4LXxYfLT6ZrZqVONGUPX2UgNDdAVBFKx
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UXW7/lUbSjpYWVlJlGqM54KI3OSQHsjjhBbib+nvF1g=;
+        b=3RJNa7koinc7mEk3ppZBfApN6JOlzUaRZIAjEebEfqQNyCM3TY6zeGKo/qeiEu5F8t
+         kpk/9O1CAybIN6q7LnhNALvQBzv1MoXtqPWjagTfCODulKJwiJOd+85wzJZGqOY/sxvl
+         TNkCY+GHTg15Ifjut/H5MdEYXDQuhRJ1yZpyFNPwysiNlRSRcoKs5skUZ+ynNlxgRAPi
+         y6B8GiSTTuUMKPSR30Jd2uq7o7g/lgNOt5vklPHrQptp47SP9UDeU0sYjJnawTK3/Bek
+         sHxi5PG5QqhheWvXJ+wea5ASRQe+PmwYF9Xue6x6izw9istQjYeQ0d1eOqzhbZSYEUH0
+         jYxA==
+X-Gm-Message-State: AO0yUKWtGEwbDu2NJ6oZ5o9kRfqw3zlqDQ5i8KuyO1uRRUASDgqw0X7+
+        ctTTT8LWJlIRvdEVz+3fEg==
+X-Google-Smtp-Source: AK7set990Xxf5sx8jmyGReXFqOd7t3qi2d4ril4HjTaHWa86PG/UDSm2/3qj0/UOtZb8eORu+AVCUA==
+X-Received: by 2002:a05:6808:20a:b0:35e:910d:10e6 with SMTP id l10-20020a056808020a00b0035e910d10e6mr3670327oie.9.1675374519648;
+        Thu, 02 Feb 2023 13:48:39 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r24-20020a0568080ab800b003783caeaf61sm169035oij.13.2023.02.02.13.48.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 13:48:39 -0800 (PST)
+Received: (nullmailer pid 2780551 invoked by uid 1000);
+        Thu, 02 Feb 2023 21:48:38 -0000
+Date:   Thu, 2 Feb 2023 15:48:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: usb: rockchip,dwc3: update inno usb2 phy
+ binding name
+Message-ID: <167537451786.2780496.5603789940127974377.robh@kernel.org>
+References: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:37a6:b0:3ab:d5a:e20f with SMTP id
- w38-20020a05663837a600b003ab0d5ae20fmr1813657jal.47.1675372588686; Thu, 02
- Feb 2023 13:16:28 -0800 (PST)
-Date:   Thu, 02 Feb 2023 13:16:28 -0800
-In-Reply-To: <Y9wh8dGK6oHSjJQl@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000003e49a05f3be1479@google.com>
-Subject: Re: [syzbot] WARNING in __usbnet_read_cmd/usb_submit_urb
-From:   syzbot <syzbot+2a0e7abd24f1eb90ce25@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mailhol.vincent@wanadoo.fr, mkl@pengutronix.de, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+On Thu, 02 Feb 2023 14:59:35 +0100, Johan Jonker wrote:
+> The binding for the inno usb2 phy was given a name in more a common format,
+> so update the reference in rockchip,dwc3.yaml as well.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Reported-and-tested-by: syzbot+2a0e7abd24f1eb90ce25@syzkaller.appspotmail.com
+Acked-by: Rob Herring <robh@kernel.org>
 
-Tested on:
-
-commit:         9f266cca Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=157cfe31480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=94f93727847d4d81
-dashboard link: https://syzkaller.appspot.com/bug?extid=2a0e7abd24f1eb90ce25
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=173ddea5480000
-
-Note: testing is done by a robot and is best-effort only.
