@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CFB6879FC
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 11:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1752687A22
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 11:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbjBBKUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 05:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S231520AbjBBKZ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 05:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjBBKU3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 05:20:29 -0500
+        with ESMTP id S231876AbjBBKZ1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 05:25:27 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA9283062
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 02:20:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474B110433
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 02:25:25 -0800 (PST)
 Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C6381505;
-        Thu,  2 Feb 2023 11:20:22 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 44975505;
+        Thu,  2 Feb 2023 11:25:23 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675333223;
-        bh=ZQGV4gY0HtnSzrL6QvqvJSWpos4nKo6ZMisjBIpxlhw=;
+        s=mail; t=1675333523;
+        bh=XnnBfG4l1XYyrMJOpleUHhIZ9IwVIHbIYaceAzZpR2Y=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U3x8eM5ZKcQ2BIaX2O7FUlAYazAig6h6xcOHRW0SWAIdSKfXWR8vul2TxKYRDwsvF
-         qj59Uq8A4o5tqtT0azHmVRsB3lFp1rVpzpRe/4xbBdd6TIUJf0I7O6RKfrSiorA41L
-         mceoWLoCRV8Q3xVf3XsXtEwFLAVRq6VRKNvMqC4k=
-Message-ID: <f1d817b8-ab8d-e69d-8a06-d860aabf07fc@ideasonboard.com>
-Date:   Thu, 2 Feb 2023 10:20:20 +0000
+        b=aP8xjjXc01dNHDfBAKP3gayGPSiPyZuQVGKrB40ZI8tTg0RkrEixKGOXeO7w68G4K
+         VtFux2IPHRUaAotwQgqbAWiawcxKF1ocdz54ccWRfY5B04bsKdMci6MGZMucjHEzDv
+         mPQPkaSPky4t0izQPK5MR2IQoqPSB4t/1LaRReCc=
+Message-ID: <779061ef-6a1f-f7b6-f378-8d77d1567aa3@ideasonboard.com>
+Date:   Thu, 2 Feb 2023 10:25:20 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/7] UVC Gadget: Extend color matching support
+Subject: Re: [PATCH] usb: gadget: uvc: Make bmControls attr read/write
 Content-Language: en-US
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        w36195@motorola.com, m.grzeschik@pengutronix.de,
-        kieran.bingham@ideasonboard.com, torleiv@huddly.com
-References: <20230130142639.217885-1-dan.scally@ideasonboard.com>
- <Y9uN+9zwS97kUilT@kroah.com>
+        kieran.bingham@ideasonboard.com, mgr@pengutronix.de,
+        torleiv@huddly.com
+References: <20230131095738.429197-1-dan.scally@ideasonboard.com>
+ <Y9uN6q3Q6GiqTur8@kroah.com>
 From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <Y9uN+9zwS97kUilT@kroah.com>
+In-Reply-To: <Y9uN6q3Q6GiqTur8@kroah.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,50 +50,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Morning Greg
+Hi Greg
 
 On 02/02/2023 10:18, Greg KH wrote:
-> On Mon, Jan 30, 2023 at 02:26:32PM +0000, Daniel Scally wrote:
->> The current UVC gadget implementation hardcodes a single color matching
->> descriptor and includes it in the payload of USB descriptors a single time
->> following all the format and frame descriptors. This is inflexible, and
->> additionally applies only to the _last_ format in the array of descriptors.
+> On Tue, Jan 31, 2023 at 09:57:38AM +0000, Daniel Scally wrote:
+>> For the Processing Unit and Camera Terminal descriptors defined in
+>> the UVC Gadget we currently hard-code values into their bmControls
+>> fields, which enumerates the controls the gadget is able to
+>> support. This isn't appropriate since only the userspace companion
+>> program to the kernel driver will know which controls are supported.
+>> Make the configfs attributes that point to those fields read/write
+>> so userspace can set them to appropriate values.
 >>
->> This series extends the support such that the default descriptor can be amended
->> and is included once-per-format instead of once-only, it then adds the ability
->> to create new color matching descriptors and associate them with particular formats.
->> The default color matching descriptor is retained and used where the user does not
->> link a new color matching descriptor to the format, so the default interaction
->> with userspace is unchanged from the current implementation.
+>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> ---
 >>
->> Daniel Scally (7):
->>    usb: gadget: usb: Remove "default" from color matching attributes
->>    usb: uvc: Enumerate valid values for color matching
->>    usb: gadget: uvc: Add struct for color matching in configs
->>    usb: gadget: uvc: Copy color matching descriptor for each frame
->>    usb: gadget: uvc: Remove the hardcoded default color matching
->>    usb: gadget: uvc: Make color matching attributes read/write
->>    usb: gadget: uvc: Allow creating new color matching descriptors
+>> This patch depends on "usb: gadget: uvc: Generalise helper functions for reuse"
+>> from my recent series:
 >>
->>   .../ABI/testing/configfs-usb-gadget-uvc       |  19 +-
->>   drivers/usb/gadget/function/f_uvc.c           |   9 -
->>   drivers/usb/gadget/function/u_uvc.h           |   1 -
->>   drivers/usb/gadget/function/uvc_configfs.c    | 282 ++++++++++++++++--
->>   drivers/usb/gadget/function/uvc_configfs.h    |  22 +-
->>   include/uapi/linux/usb/video.h                |  30 ++
->>   6 files changed, 315 insertions(+), 48 deletions(-)
->>
->> -- 
->> 2.34.1
->>
-> This series does not apply against my tree at all, what was it made
-> against?
+>> https://lore.kernel.org/linux-usb/20230130093443.25644-3-dan.scally@ideasonboard.com/T/#u
+> Odd, I think I have that in my tree, yet this fails to build with:
+>
+>    CALL    scripts/checksyscalls.sh
+>    CC [M]  drivers/usb/gadget/function/uvc_configfs.o
+> drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_processing_bm_controls_store’:
+> drivers/usb/gadget/function/uvc_configfs.c:295:15: error: implicit declaration of function ‘__uvcg_iter_item_entries’ [-Werror=implicit-function-declaration]
+>    295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+>        |               ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/usb/gadget/function/uvc_configfs.c:295:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
+>    295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+>        |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/usb/gadget/function/uvc_configfs.c:295:51: note: each undeclared identifier is reported only once for each function it appears in
+> drivers/usb/gadget/function/uvc_configfs.c:311:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
+>    311 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
+>        |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_camera_bm_controls_store’:
+> drivers/usb/gadget/function/uvc_configfs.c:465:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
+>    465 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+>        |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/usb/gadget/function/uvc_configfs.c:481:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
+>    481 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
+>        |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+>
+> What did I do wrong?
 
 
-I thought I had rebased it against usb-linus, was that the wrong branch 
-to use? If not then I probably messed it up somehow, I can rebase and 
-resend.
+That's the error set I would expect if you didn't have that series 
+earlier in the tree as __uvcg_iter_item_entries() is declared in one of 
+those patches...if you have a link to the tree I can look more closely 
+for you?
 
+>
 > thanks,
 >
 > greg k-h
