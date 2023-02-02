@@ -2,111 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E2B687F5C
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 14:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2044C687F6D
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 14:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjBBNzy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 08:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S231743AbjBBN7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 08:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjBBNzy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 08:55:54 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90E18C1DE
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 05:55:49 -0800 (PST)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E77A6505;
-        Thu,  2 Feb 2023 14:55:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675346127;
-        bh=5Gk1LAEahm4E/tXuzlVT4IxLwmyax3/PXhPlOfFzL38=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z9AQmnY7mWpHHTrwhjdnGED76OhxPjA2J21HQfL5r89t0QVzB5j+h6nVA41v9Xqk4
-         pFA2ULUspdkDkVXVoJ/harUh+/5JiBkLSLFTVewOMX/akXED0Doyvwc1aIPg1vv3Fw
-         voyBl+7q+odc7lwKvKEVdtDtL7Pg53x73sAWqH7k=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        laurent.pinchart@ideasonboard.com
-Cc:     mgr@pengutronix.de, balbi@kernel.org,
-        kieran.bingham@ideasonboard.com, torleiv@huddly.com,
-        stern@rowland.harvard.edu,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v4 11/11] usb: gadget: uvc: Use custom strings if available
-Date:   Thu,  2 Feb 2023 13:55:08 +0000
-Message-Id: <20230202135508.447109-12-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202135508.447109-1-dan.scally@ideasonboard.com>
-References: <20230202135508.447109-1-dan.scally@ideasonboard.com>
+        with ESMTP id S231546AbjBBN7k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 08:59:40 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AC643447;
+        Thu,  2 Feb 2023 05:59:39 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id v10so2073934edi.8;
+        Thu, 02 Feb 2023 05:59:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7C4yOiCfMP0qj/5KoOd6moIn3AHrcKCsnXClv4cfnTU=;
+        b=JLeYM8r6D7I8hxEIZGXSNrXiCOM1r6JaTyiPcGesBFtSNBlrYczTEh5y7VHxbMwY3p
+         E17554goaZ5Rh1MR/xAnCOXn1XNvKmOxhhvifW3UisCHMNV8L0m4aU3CQdmOBTo59u6E
+         T+NB9+bvs4/7prBq3D9RmiJNaxzfyS9Z2X/EpA8MrfQjm2Xx4vX1dLYVq2FNn2KvJx4d
+         2MFTVmdBSUEW/s70LJvEOJcqQilYpMcWAKWg1WGCzuZH4thNkulTiz8vWgC5Qs/FCoit
+         qT4knHMcXpi2WmzqiC/FP3ZEM5eQVfsdsJB8d9vME9hMszTEF3V6DTKPKj9AO+32mpen
+         UdTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7C4yOiCfMP0qj/5KoOd6moIn3AHrcKCsnXClv4cfnTU=;
+        b=ydW6UgV6YJpCGDzYt5xs+ob881btU3bpAfM9emnSLw/paXwDB2pRrehUBaN/faFKmO
+         zjWqHCCAkncRlJhG2DlKgcu8ZOJrUfUAlRpM4OmIEJ+Ik1IetHhOobdfkweIWI8qEA56
+         t5cCSryMgm6EPs4zkQzRvjn7eKSfSm2mndCAymZfmxKO/FBjXt7JcUlmULUSO773gMHO
+         akSo2W4dYAOtv5MlvXPM99U2ZqGvqEcVHmI9anWtHS61d2P3I9bDLivHkl8+/sw2HnMn
+         Fu3P7oj0Xw8rsk/fim3vOvoueIwfajGcVvOfB0mTf+iLR6f3k+ZqgwtGcf9MgAJpUZ1a
+         zz1g==
+X-Gm-Message-State: AO0yUKXGVc51pgYWZqEQDpl3VrdTLP9HIxz9CoBxa3LrIB5awza64uS+
+        w+RvGUBpzJo5Vn7O0lCdoZM=
+X-Google-Smtp-Source: AK7set+2cZg5uKgjKIT+gcK65XOYzB/T6/0Z7PWmZujYuCIp5ZQcCHjkg4wT6MFMnqE2zF8hXbAtzA==
+X-Received: by 2002:aa7:c70c:0:b0:4a2:6c9a:ad19 with SMTP id i12-20020aa7c70c000000b004a26c9aad19mr6082501edq.17.1675346377847;
+        Thu, 02 Feb 2023 05:59:37 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id p2-20020a05640210c200b00499e5659988sm11120854edu.68.2023.02.02.05.59.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 05:59:37 -0800 (PST)
+Message-ID: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
+Date:   Thu, 2 Feb 2023 14:59:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1] dt-bindings: usb: rockchip,dwc3: update inno usb2 phy
+ binding name
+To:     gregkh@linuxfoundation.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the user has defined a custom string descriptor for the IAD or the
-VideoStreaming interfaces then set their index field to point to the
-custom descriptor instead of the hardcoded defaults. If no custom
-descriptors have been linked to, then use the default ones.
+The binding for the inno usb2 phy was given a name in more a common format,
+so update the reference in rockchip,dwc3.yaml as well.
 
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
-Changes in v4:
+ Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	- None
+diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+index edb130c78..422dcc156 100644
+--- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+@@ -15,7 +15,7 @@ description:
+   Phy documentation is provided in the following places.
 
-Changes in v3:
+   USB2.0 PHY
+-  Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
++  Documentation/devicetree/bindings/phy/rockchip,inno-usb2phy.yaml
 
-	- Dropped the VideoControl description since there's an attribute for
-	that now
-
-Changes in v2:
-
-	- New patch
-
- drivers/usb/gadget/function/f_uvc.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 14e1aed52124..71953c731d30 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -745,6 +745,10 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (xu->string_descriptor_index)
- 			xu->desc.iExtension = cdev->usb_strings[xu->string_descriptor_index].id;
- 
-+	/*
-+	 * We attach the hard-coded defaults incase the user does not provide
-+	 * any more appropriate strings through configfs.
-+	 */
- 	uvc_en_us_strings[UVC_STRING_CONTROL_IDX].s = opts->function_name;
- 	us = usb_gstrings_attach(cdev, uvc_function_strings,
- 				 ARRAY_SIZE(uvc_en_us_strings));
-@@ -752,11 +756,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 		ret = PTR_ERR(us);
- 		goto error;
- 	}
--	uvc_iad.iFunction = us[UVC_STRING_CONTROL_IDX].id;
--	uvc_control_intf.iInterface = us[UVC_STRING_CONTROL_IDX].id;
--	ret = us[UVC_STRING_STREAMING_IDX].id;
--	uvc_streaming_intf_alt0.iInterface = ret;
--	uvc_streaming_intf_alt1.iInterface = ret;
-+
-+	uvc_iad.iFunction = opts->iad_index ? cdev->usb_strings[opts->iad_index].id :
-+			    us[UVC_STRING_CONTROL_IDX].id;
-+	uvc_streaming_intf_alt0.iInterface = opts->vs0_index ?
-+					     cdev->usb_strings[opts->vs0_index].id :
-+					     us[UVC_STRING_STREAMING_IDX].id;
-+	uvc_streaming_intf_alt1.iInterface = opts->vs1_index ?
-+					     cdev->usb_strings[opts->vs1_index].id :
-+					     us[UVC_STRING_STREAMING_IDX].id;
- 
- 	/* Allocate interface IDs. */
- 	if ((ret = usb_interface_id(c, f)) < 0)
--- 
-2.34.1
+   Type-C PHY
+   Documentation/devicetree/bindings/phy/phy-rockchip-typec.txt
+--
+2.20.1
 
