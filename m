@@ -2,118 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E840687CA6
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 12:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6714F687CD9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 13:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjBBLs3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 06:48:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S231923AbjBBMGV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 07:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjBBLs1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 06:48:27 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073DD7307D
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 03:48:26 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ED6FF505;
-        Thu,  2 Feb 2023 12:48:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675338504;
-        bh=T0PZ0nZgQyiAd3VeBm00YudHzYjoZzfsp0nZfV4h36g=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oJWokWx5XlKdbGmuWru/ootheCdkKGcDAWweIeu1tz7u0lWid46wR+bsTM9Rqi4KV
-         ygogBdy1Sf/g1Ry31bDFy16P+MoBh2QHamFoX+suLsZLGbKuzBxQOMl8aZDcbjoLK2
-         YbF9OMeYodKJ9CoxjAueZq1lu1jzWXGwdm4hxxvg=
-Message-ID: <403623e4-58df-0514-708b-00e5b7421376@ideasonboard.com>
-Date:   Thu, 2 Feb 2023 11:48:20 +0000
+        with ESMTP id S229755AbjBBMGU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 07:06:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1A789373
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 04:06:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 836D1B825B4
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 12:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9993AC433EF;
+        Thu,  2 Feb 2023 12:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675339573;
+        bh=pjfClUIU2/I7dyYhyrVy/IwHZIM1se5vVdT4UwutDHk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zj6Zy/RqmrOUg/JlONvvEZumxPM66nVwraDJ+TzHhZkLAgWiOy8/46xta/wB2N0Px
+         PXJ96h87m4yu6xfuQpGo3YDcOWfVuIijnIpIrcL7qoY8SHeQ+LkYRIIax3cTJx0cVo
+         BhZ0HE9+qEoM14w0F0T7hdj5p1IGTNsq9eaZ0msM=
+Date:   Thu, 2 Feb 2023 13:06:09 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
+Subject: Re: [PATCH v2] usb: typec: tcpm: fix create duplicate
+ source/sink-capabilities file
+Message-ID: <Y9unMSoqj4gWssq5@kroah.com>
+References: <20230202111616.1484680-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] usb: gadget: uvc: Make bmControls attr read/write
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, mgr@pengutronix.de,
-        torleiv@huddly.com
-References: <20230131095738.429197-1-dan.scally@ideasonboard.com>
- <Y9uN6q3Q6GiqTur8@kroah.com>
- <779061ef-6a1f-f7b6-f378-8d77d1567aa3@ideasonboard.com>
- <Y9uUiwbH53YP/ogn@kroah.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <Y9uUiwbH53YP/ogn@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202111616.1484680-1-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
+On Thu, Feb 02, 2023 at 07:16:16PM +0800, Xu Yang wrote:
+> After soft reset has completed, an Explicit Contract negotiation occurs.
+> The sink device will receive source capabilitys again. This will cause
+> a duplicate source-capabilities file be created.
+> 
+> And the kernel will dump:
+> sysfs: cannot create duplicate filename '/devices/virtual/usb_power_delivery/pd1/source-capabilities'
+> 
+> This will unregister existing capabilities when received soft reset or is
+> sending soft reset by sink.
+> 
+> Fixes: 8203d26905ee ("usb: typec: tcpm: Register USB Power Delivery Capabilities")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index a0d943d78580..d84649838082 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4570,6 +4570,8 @@ static void run_state_machine(struct tcpm_port *port)
+>  	case SOFT_RESET:
+>  		port->message_id = 0;
+>  		port->rx_msgid = -1;
+> +		/* remove existing capabilities */
+> +		usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+>  		tcpm_pd_send_control(port, PD_CTRL_ACCEPT);
+>  		tcpm_ams_finish(port);
+>  		if (port->pwr_role == TYPEC_SOURCE) {
+> @@ -4589,6 +4591,8 @@ static void run_state_machine(struct tcpm_port *port)
+>  	case SOFT_RESET_SEND:
+>  		port->message_id = 0;
+>  		port->rx_msgid = -1;
+> +		/* remove existing capabilities */
+> +		usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+>  		if (tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET))
+>  			tcpm_set_state_cond(port, hard_reset_state(port), 0);
+>  		else
+> -- 
+> 2.34.1
+> 
 
-On 02/02/2023 10:46, Greg KH wrote:
-> On Thu, Feb 02, 2023 at 10:25:20AM +0000, Dan Scally wrote:
->> Hi Greg
->>
->> On 02/02/2023 10:18, Greg KH wrote:
->>> On Tue, Jan 31, 2023 at 09:57:38AM +0000, Daniel Scally wrote:
->>>> For the Processing Unit and Camera Terminal descriptors defined in
->>>> the UVC Gadget we currently hard-code values into their bmControls
->>>> fields, which enumerates the controls the gadget is able to
->>>> support. This isn't appropriate since only the userspace companion
->>>> program to the kernel driver will know which controls are supported.
->>>> Make the configfs attributes that point to those fields read/write
->>>> so userspace can set them to appropriate values.
->>>>
->>>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->>>> ---
->>>>
->>>> This patch depends on "usb: gadget: uvc: Generalise helper functions for reuse"
->>>> from my recent series:
->>>>
->>>> https://lore.kernel.org/linux-usb/20230130093443.25644-3-dan.scally@ideasonboard.com/T/#u
->>> Odd, I think I have that in my tree, yet this fails to build with:
->>>
->>>     CALL    scripts/checksyscalls.sh
->>>     CC [M]  drivers/usb/gadget/function/uvc_configfs.o
->>> drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_processing_bm_controls_store’:
->>> drivers/usb/gadget/function/uvc_configfs.c:295:15: error: implicit declaration of function ‘__uvcg_iter_item_entries’ [-Werror=implicit-function-declaration]
->>>     295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
->>>         |               ^~~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/usb/gadget/function/uvc_configfs.c:295:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
->>>     295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
->>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/usb/gadget/function/uvc_configfs.c:295:51: note: each undeclared identifier is reported only once for each function it appears in
->>> drivers/usb/gadget/function/uvc_configfs.c:311:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
->>>     311 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
->>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_camera_bm_controls_store’:
->>> drivers/usb/gadget/function/uvc_configfs.c:465:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
->>>     465 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
->>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/usb/gadget/function/uvc_configfs.c:481:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
->>>     481 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
->>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
->>> cc1: all warnings being treated as errors
->>>
->>> What did I do wrong?
->>
->> That's the error set I would expect if you didn't have that series earlier
->> in the tree as __uvcg_iter_item_entries() is declared in one of those
->> patches...if you have a link to the tree I can look more closely for you?
-> It's my usb-testing branch right now, rebase on that and see what
-> happens.
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-I get the same build errors, but I also don't see the earlier patch in 
-that tree, or indeed any of that series. I probably need to rebase that 
-series to usb-testing anyway as it was also built on usb-linus. I'll do 
-that series now and resend this patch immediately after too.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
->
-> thanks,
->
-> greg k-h
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
