@@ -2,84 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BBF688998
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 23:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2006A6889A1
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 23:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjBBWPy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 17:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S232320AbjBBWVR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 2 Feb 2023 17:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbjBBWPx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 17:15:53 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE3E23DB4
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 14:15:52 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5254e8994e8so292447b3.6
-        for <linux-usb@vger.kernel.org>; Thu, 02 Feb 2023 14:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=19V0e97JoWZ67eUcIY5neNgqP4C3AsW402fTkFZrQZk=;
-        b=AfeZaaL1aLPhIB152+5ci5G7/wre5jroesPOHlH7PgLb2mHXiR8n/aS7MZach7yvwS
-         Qk21Y8FGM3xZmNh/ahI/f2VsPSR0o20RhS/RIM2JttgspyDkkgjXvh0YWao6IUtfdUhJ
-         Vz99yX7Q7qsxM2iWIB3IXB738UfGFHQ+RG43UarZoneNAapvuao0q6lh44MD5GY/rZTw
-         BYYIyOkpA6kEMBQVb26T0yAdhdv3bgpTgn7vaxxLN/hgf6nxLFaraIZjM7FaTCQBE2ga
-         B3s9HEZrJS7UojumIuGVBKBJgdPx0u+kGB4bqLbIDLFXJcYa12ZNF2IG6btWQmMXjqYG
-         OKHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=19V0e97JoWZ67eUcIY5neNgqP4C3AsW402fTkFZrQZk=;
-        b=flr2wc8MfmdX0QDxEyUI0XgGTatnn4RCGF6in9lDul6t9TO6YHoZVh88cJoQD5iYTx
-         R4+MHf30TocW9/QJvPIdIY+RVkxSk0Qc+QrlOvLEMCJTi8RMrMFJ0d1oZc1IljTIHkCu
-         SLvqW7NfUf2KN7l75fPTu/RhrDzkkz29OtxZjwHXyr1w33T2gyFpsVTL+3U3ZlsGs45V
-         0SmYLv5LtLeO/cP1L5OKmqW/zw9PRsE5ZgsEMvmqs+rj90UYQchL8BLhUmj0ns2grFFa
-         mEmHLM6JPFUmKvOo7lZfRNGhNFMnTsKOgcmAKS8CLi4bYZIJA3vnGWt3oCg6BEfKe5th
-         D81g==
-X-Gm-Message-State: AO0yUKUaEoUiTQpy+iunLyQktRt4Z/oSZqlL7yrj3KTYFbmvmIW+4Kaq
-        kT6EdbQGJs2DOGR4HtiRAHBQ+OCZmNN+EftyQzJd2A==
-X-Google-Smtp-Source: AK7set8pUL+pN6rjicEsRGrTUBOiwilyWNtzSCpLc1Ftf2R+TSJHgSqaJ1+Xyu3Jbt4bc8Psfldvzhca+5psDBZMHRA=
-X-Received: by 2002:a05:690c:23c1:b0:4dc:818f:f9f2 with SMTP id
- do1-20020a05690c23c100b004dc818ff9f2mr759395ywb.469.1675376151782; Thu, 02
- Feb 2023 14:15:51 -0800 (PST)
+        with ESMTP id S232279AbjBBWVQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 17:21:16 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F24461D73
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 14:21:14 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-6-NIErQV5sM7O9WZeEFgFa4A-1; Thu, 02 Feb 2023 22:21:11 +0000
+X-MC-Unique: NIErQV5sM7O9WZeEFgFa4A-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Thu, 2 Feb
+ 2023 22:21:09 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Thu, 2 Feb 2023 22:21:09 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?iso-8859-1?Q?J=F3_=C1gila_Bitsch?= <jgilab@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1 1/1] usb: gadget: configfs: Use memcpy_and_pad()
+Thread-Topic: [PATCH v1 1/1] usb: gadget: configfs: Use memcpy_and_pad()
+Thread-Index: AQHZNxm+l/T4NTiDmECVJ2T25+K0iq68OOyQ
+Date:   Thu, 2 Feb 2023 22:21:09 +0000
+Message-ID: <c97c4048109242228b0af3199a67f0bc@AcuMS.aculab.com>
+References: <20230202151736.64552-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230202151736.64552-1-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230202153235.2412790-1-gregkh@linuxfoundation.org> <20230202153235.2412790-5-gregkh@linuxfoundation.org>
-In-Reply-To: <20230202153235.2412790-5-gregkh@linuxfoundation.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 2 Feb 2023 23:15:40 +0100
-Message-ID: <CACRpkdbDihXa8DRmF_XbRvh3hQ_4g8c6eQQbWRRRhEn_MuLBjA@mail.gmail.com>
-Subject: Re: [PATCH 05/13] USB: fotg210: fix memory leak with using debugfs_lookup()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:33 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+From: Andy Shevchenko
+> Sent: 02 February 2023 15:18
+> 
+> Instead of zeroing some memory and then copying data in part or all of it,
+> use memcpy_and_pad().
+> This avoids writing some memory twice and should save a few cycles.
 
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.  To make things simpler, just
-> call debugfs_lookup_and_remove() instead which handles all of the logic
-> at once.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Maybe, maybe not.
+It rather depends on the lengths involved (the code doesn't seem to be in the
+main tree).
 
-Thanks Greg!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+The cost of the conditionals and the misaligned length/start for the
+memset() could easily overwhelm any apparent saving.
 
-Yours,
-Linus Walleij
+A memset() of a constant whole number of words is going to be significantly
+faster than the partial one.
+
+	David
+
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/usb/gadget/configfs.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 1346b330b358..0ee47e4c22cb 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -909,8 +909,7 @@ static ssize_t webusb_landingPage_store(struct config_item *item, const char *pa
+> 
+>  	mutex_lock(&gi->lock);
+>  	// ensure 0 bytes are set, in case the new landing page is shorter then the old one.
+> -	memset(gi->landing_page, 0, sizeof(gi->landing_page));
+> -	memcpy(gi->landing_page, page, l);
+> +	memcpy_and_pad(gi->landing_page, sizeof(gi->landing_page), page, l, 0);
+>  	mutex_unlock(&gi->lock);
+> 
+>  	return len;
+> --
+> 2.39.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
