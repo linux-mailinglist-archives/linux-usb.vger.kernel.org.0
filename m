@@ -2,240 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD366687C7C
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 12:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E840687CA6
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 12:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjBBLmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 06:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S230213AbjBBLs3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 06:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjBBLmU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 06:42:20 -0500
+        with ESMTP id S230233AbjBBLs1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 06:48:27 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23468C1F3
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 03:42:14 -0800 (PST)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5D4F01490;
-        Thu,  2 Feb 2023 12:42:02 +0100 (CET)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073DD7307D
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 03:48:26 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ED6FF505;
+        Thu,  2 Feb 2023 12:48:23 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675338122;
-        bh=NFlApynxCprYuPmB3/DwD6LE6MUXOaQJj8ORKxPkJUU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FovBEJoMwgmvo62bYE9ZQZbf64Y+mpZl7ScCR6rHAf//1ZaQ9m/Oiclwn7PDDt4d4
-         Pw90Sfp0myLCFGf6WthkyZasRIG98ZpFZ1JTuThDk1WL9zRe9xqGUxj/mfvNIfIJ/K
-         nSuKv3d1iBoyksw+nw/MtehDmjYPXi5KIUXH69lc=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     linux-usb@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        w36195@motorola.com, m.grzeschik@pengutronix.de,
-        kieran.bingham@ideasonboard.com, torleiv@huddly.com,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [RESEND v3 6/6] usb: gadget: uvc: Allow creating new color matching descriptors
-Date:   Thu,  2 Feb 2023 11:41:42 +0000
-Message-Id: <20230202114142.300858-7-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202114142.300858-1-dan.scally@ideasonboard.com>
-References: <20230202114142.300858-1-dan.scally@ideasonboard.com>
+        s=mail; t=1675338504;
+        bh=T0PZ0nZgQyiAd3VeBm00YudHzYjoZzfsp0nZfV4h36g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oJWokWx5XlKdbGmuWru/ootheCdkKGcDAWweIeu1tz7u0lWid46wR+bsTM9Rqi4KV
+         ygogBdy1Sf/g1Ry31bDFy16P+MoBh2QHamFoX+suLsZLGbKuzBxQOMl8aZDcbjoLK2
+         YbF9OMeYodKJ9CoxjAueZq1lu1jzWXGwdm4hxxvg=
+Message-ID: <403623e4-58df-0514-708b-00e5b7421376@ideasonboard.com>
+Date:   Thu, 2 Feb 2023 11:48:20 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: gadget: uvc: Make bmControls attr read/write
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        kieran.bingham@ideasonboard.com, mgr@pengutronix.de,
+        torleiv@huddly.com
+References: <20230131095738.429197-1-dan.scally@ideasonboard.com>
+ <Y9uN6q3Q6GiqTur8@kroah.com>
+ <779061ef-6a1f-f7b6-f378-8d77d1567aa3@ideasonboard.com>
+ <Y9uUiwbH53YP/ogn@kroah.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+In-Reply-To: <Y9uUiwbH53YP/ogn@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Allow users to create new color matching descriptors in addition to
-the default one. These must be associated with a UVC format in order
-to be transmitted to the host, which is achieved by symlinking from
-the format to the newly created color matching descriptor - extend
-the uncompressed and mjpeg formats to support that linking operation.
+Hi Greg
 
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
-Changes in v3:
+On 02/02/2023 10:46, Greg KH wrote:
+> On Thu, Feb 02, 2023 at 10:25:20AM +0000, Dan Scally wrote:
+>> Hi Greg
+>>
+>> On 02/02/2023 10:18, Greg KH wrote:
+>>> On Tue, Jan 31, 2023 at 09:57:38AM +0000, Daniel Scally wrote:
+>>>> For the Processing Unit and Camera Terminal descriptors defined in
+>>>> the UVC Gadget we currently hard-code values into their bmControls
+>>>> fields, which enumerates the controls the gadget is able to
+>>>> support. This isn't appropriate since only the userspace companion
+>>>> program to the kernel driver will know which controls are supported.
+>>>> Make the configfs attributes that point to those fields read/write
+>>>> so userspace can set them to appropriate values.
+>>>>
+>>>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+>>>> ---
+>>>>
+>>>> This patch depends on "usb: gadget: uvc: Generalise helper functions for reuse"
+>>>> from my recent series:
+>>>>
+>>>> https://lore.kernel.org/linux-usb/20230130093443.25644-3-dan.scally@ideasonboard.com/T/#u
+>>> Odd, I think I have that in my tree, yet this fails to build with:
+>>>
+>>>     CALL    scripts/checksyscalls.sh
+>>>     CC [M]  drivers/usb/gadget/function/uvc_configfs.o
+>>> drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_processing_bm_controls_store’:
+>>> drivers/usb/gadget/function/uvc_configfs.c:295:15: error: implicit declaration of function ‘__uvcg_iter_item_entries’ [-Werror=implicit-function-declaration]
+>>>     295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+>>>         |               ^~~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/usb/gadget/function/uvc_configfs.c:295:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
+>>>     295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+>>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/usb/gadget/function/uvc_configfs.c:295:51: note: each undeclared identifier is reported only once for each function it appears in
+>>> drivers/usb/gadget/function/uvc_configfs.c:311:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
+>>>     311 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
+>>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_camera_bm_controls_store’:
+>>> drivers/usb/gadget/function/uvc_configfs.c:465:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
+>>>     465 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+>>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/usb/gadget/function/uvc_configfs.c:481:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
+>>>     481 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
+>>>         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+>>> cc1: all warnings being treated as errors
+>>>
+>>> What did I do wrong?
+>>
+>> That's the error set I would expect if you didn't have that series earlier
+>> in the tree as __uvcg_iter_item_entries() is declared in one of those
+>> patches...if you have a link to the tree I can look more closely for you?
+> It's my usb-testing branch right now, rebase on that and see what
+> happens.
 
-	- None
 
-Changes in v2:
+I get the same build errors, but I also don't see the earlier patch in 
+that tree, or indeed any of that series. I probably need to rebase that 
+series to usb-testing anyway as it was also built on usb-linus. I'll do 
+that series now and resend this patch immediately after too.
 
-	- New section of the ABI documentation
-	- uvcg_format_allow_link() now checks to see if an existing link is 
-	already there
-	- .allow_link() and .drop_link() track color_matching->refcnt
-
- .../ABI/testing/configfs-usb-gadget-uvc       | 17 ++++
- drivers/usb/gadget/function/uvc_configfs.c    | 99 ++++++++++++++++++-
- 2 files changed, 114 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index ef3b8b852cd2..fec205044c87 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -179,6 +179,23 @@ Description:	Default color matching descriptors
- 					  white
- 		========================  ======================================
- 
-+What:		/config/usb-gadget/gadget/functions/uvc.name/streaming/color_matching/name
-+Date:		Dec 2022
-+KernelVersion:	6.3
-+Description:	Additional color matching descriptors
-+
-+		All attributes read/write:
-+
-+		========================  ======================================
-+		bMatrixCoefficients	  matrix used to compute luma and
-+					  chroma values from the color primaries
-+		bTransferCharacteristics  optoelectronic transfer
-+					  characteristic of the source picture,
-+					  also called the gamma function
-+		bColorPrimaries		  color primaries and the reference
-+					  white
-+		========================  ======================================
-+
- What:		/config/usb-gadget/gadget/functions/uvc.name/streaming/mjpeg
- Date:		Dec 2014
- KernelVersion:	4.0
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index a210b1990080..e2ffddb969fd 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -824,6 +824,77 @@ uvcg_format_get_default_color_match(struct config_item *streaming)
- 	return color_match;
- }
- 
-+static int uvcg_format_allow_link(struct config_item *src, struct config_item *tgt)
-+{
-+	struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
-+	struct uvcg_color_matching *color_matching_desc;
-+	struct config_item *streaming, *color_matching;
-+	struct uvcg_format *fmt;
-+	int ret = 0;
-+
-+	mutex_lock(su_mutex);
-+
-+	streaming = src->ci_parent->ci_parent;
-+	color_matching = config_group_find_item(to_config_group(streaming), "color_matching");
-+	if (!color_matching || color_matching != tgt->ci_parent) {
-+		ret = -EINVAL;
-+		goto out_put_cm;
-+	}
-+
-+	fmt = to_uvcg_format(src);
-+
-+	/*
-+	 * There's always a color matching descriptor associated with the format
-+	 * but without a symlink it should only ever be the default one. If it's
-+	 * not the default, there's already a symlink and we should bail out.
-+	 */
-+	color_matching_desc = uvcg_format_get_default_color_match(streaming);
-+	if (fmt->color_matching != color_matching_desc) {
-+		ret = -EBUSY;
-+		goto out_put_cm;
-+	}
-+
-+	color_matching_desc->refcnt--;
-+
-+	color_matching_desc = to_uvcg_color_matching(to_config_group(tgt));
-+	fmt->color_matching = color_matching_desc;
-+	color_matching_desc->refcnt++;
-+
-+out_put_cm:
-+	config_item_put(color_matching);
-+	mutex_unlock(su_mutex);
-+
-+	return ret;
-+}
-+
-+static void uvcg_format_drop_link(struct config_item *src, struct config_item *tgt)
-+{
-+	struct mutex *su_mutex = &src->ci_group->cg_subsys->su_mutex;
-+	struct uvcg_color_matching *color_matching_desc;
-+	struct config_item *streaming;
-+	struct uvcg_format *fmt;
-+
-+	mutex_lock(su_mutex);
-+
-+	color_matching_desc = to_uvcg_color_matching(to_config_group(tgt));
-+	color_matching_desc->refcnt--;
-+
-+	streaming = src->ci_parent->ci_parent;
-+	color_matching_desc = uvcg_format_get_default_color_match(streaming);
-+
-+	fmt = to_uvcg_format(src);
-+	fmt->color_matching = color_matching_desc;
-+	color_matching_desc->refcnt++;
-+
-+	mutex_unlock(su_mutex);
-+}
-+
-+static struct configfs_item_operations uvcg_format_item_operations = {
-+	.release	= uvcg_config_item_release,
-+	.allow_link	= uvcg_format_allow_link,
-+	.drop_link	= uvcg_format_drop_link,
-+};
-+
- static ssize_t uvcg_format_bma_controls_show(struct uvcg_format *f, char *page)
- {
- 	struct f_uvc_opts *opts;
-@@ -1624,7 +1695,7 @@ static struct configfs_attribute *uvcg_uncompressed_attrs[] = {
- };
- 
- static const struct config_item_type uvcg_uncompressed_type = {
--	.ct_item_ops	= &uvcg_config_item_ops,
-+	.ct_item_ops	= &uvcg_format_item_operations,
- 	.ct_group_ops	= &uvcg_uncompressed_group_ops,
- 	.ct_attrs	= uvcg_uncompressed_attrs,
- 	.ct_owner	= THIS_MODULE,
-@@ -1820,7 +1891,7 @@ static struct configfs_attribute *uvcg_mjpeg_attrs[] = {
- };
- 
- static const struct config_item_type uvcg_mjpeg_type = {
--	.ct_item_ops	= &uvcg_config_item_ops,
-+	.ct_item_ops	= &uvcg_format_item_operations,
- 	.ct_group_ops	= &uvcg_mjpeg_group_ops,
- 	.ct_attrs	= uvcg_mjpeg_attrs,
- 	.ct_owner	= THIS_MODULE,
-@@ -1978,6 +2049,29 @@ static const struct config_item_type uvcg_color_matching_type = {
-  * streaming/color_matching
-  */
- 
-+static struct config_group *uvcg_color_matching_make(struct config_group *group,
-+						     const char *name)
-+{
-+	struct uvcg_color_matching *color_match;
-+
-+	color_match = kzalloc(sizeof(*color_match), GFP_KERNEL);
-+	if (!color_match)
-+		return ERR_PTR(-ENOMEM);
-+
-+	color_match->desc.bLength = UVC_DT_COLOR_MATCHING_SIZE;
-+	color_match->desc.bDescriptorType = USB_DT_CS_INTERFACE;
-+	color_match->desc.bDescriptorSubType = UVC_VS_COLORFORMAT;
-+
-+	config_group_init_type_name(&color_match->group, name,
-+				    &uvcg_color_matching_type);
-+
-+	return &color_match->group;
-+}
-+
-+static struct configfs_group_operations uvcg_color_matching_grp_group_ops = {
-+	.make_group	= uvcg_color_matching_make,
-+};
-+
- static int uvcg_color_matching_create_children(struct config_group *parent)
- {
- 	struct uvcg_color_matching *color_match;
-@@ -2003,6 +2097,7 @@ static int uvcg_color_matching_create_children(struct config_group *parent)
- static const struct uvcg_config_group_type uvcg_color_matching_grp_type = {
- 	.type = {
- 		.ct_item_ops	= &uvcg_config_item_ops,
-+		.ct_group_ops	= &uvcg_color_matching_grp_group_ops,
- 		.ct_owner	= THIS_MODULE,
- 	},
- 	.name = "color_matching",
--- 
-2.34.1
-
+>
+> thanks,
+>
+> greg k-h
