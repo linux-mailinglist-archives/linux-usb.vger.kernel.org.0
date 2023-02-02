@@ -2,76 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F46D68799D
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 10:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E75136879E4
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 11:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbjBBJ6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 04:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S232245AbjBBKMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 05:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbjBBJ6I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 04:58:08 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE30E387
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 01:58:06 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3129PrEU014209;
-        Thu, 2 Feb 2023 09:58:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=nCgWQ+i+tPVMPBg/9HyrH6EqsQH3+Bofk0wpmJktrXY=;
- b=CoxGQJ2aXP4h8/hzxj6Z642jxtTHy1Sn8j6ckgcaLNUItBzF4Zm0k+ucBvsqXniVFAuK
- urIZcFgCPXMAkvDGaI3HO2uKCDq2sB5eR0Fa0UJe865AqvcCXtxG5iRjlX1ydnGE9EUL
- elDaM/aEw+RMjTQHyQtApu3f5JAgAZ4bb7tAUyvqljijQpFkaymDwHuVu3YCHOG8IkoD
- HMf46syFAK//3Y1ta/Fr7ViqI+WiPQG0LN2fmpRr9fPsIW21a5yEfXG3qPYHgiVtvDm+
- pKsnP+RWOXuVmTXigWKJcR1R8Eu6muGZFk2uC9Ouvj+UDiVq1DsE9jziL43aZjC1ecVZ EQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngahqr2qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 09:58:03 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3129w2R1024140
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 09:58:02 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 01:58:00 -0800
-Message-ID: <7bada92d-2aab-62b2-8981-9461ebf3c88a@quicinc.com>
-Date:   Thu, 2 Feb 2023 17:57:58 +0800
+        with ESMTP id S231949AbjBBKMw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 05:12:52 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B07D71996
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 02:12:51 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 90381505;
+        Thu,  2 Feb 2023 11:12:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675332768;
+        bh=2jYANZg6skmoVk4M7HuBZgtlDydISLaFPT+EvzB14SM=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=AzydEKdiAn0QU1zCB/c4kiH5tIGekRhaN+58o638PdaNiBw0GwJ1145hVanHGoDCz
+         cqQ+U9ANrmnBmfEJRwpDj5cTOAzfAyntfdu5w2EyVhhsX8jiwx9Vmpi8iuwny4YW/P
+         33v144bZ1ZPtbqWboej0wleYh6oPi2s78RKEw9PE=
+Message-ID: <43b077ad-c8cd-bb49-134d-1bd66bed0b84@ideasonboard.com>
+Date:   Thu, 2 Feb 2023 10:12:45 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH] usb: typec: ucsi: change role command to async write
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
 Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-References: <1675158735-2757-1-git-send-email-quic_linyyuan@quicinc.com>
- <Y9on3G7gXGEAN6oG@kuha.fi.intel.com>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <Y9on3G7gXGEAN6oG@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MStOz_MlAk00OtIMIsngvY4LKvNNI4kh
-X-Proofpoint-GUID: MStOz_MlAk00OtIMIsngvY4LKvNNI4kh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_02,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=800 malwarescore=0 adultscore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302020092
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        rogerq@kernel.org
+References: <9ce226b4-90c6-94c4-a5ad-bd623409bc51@ideasonboard.com>
+ <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
+ <dda24f8e-8d74-c6c1-ae7c-e423bc50a143@ideasonboard.com>
+ <20230126193131.ifaj7arsrrgesjh5@synopsys.com>
+ <Y9LjMcO/7/VUNld3@rowland.harvard.edu>
+ <20230126235704.62d32y7y4sa4mmry@synopsys.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: Explicit status phase for DWC3
+In-Reply-To: <20230126235704.62d32y7y4sa4mmry@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,78 +54,100 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+(+CC roger as the author of the USB_GADGET_DELAYED_STATUS mechanism)
 
-On 2/1/2023 4:50 PM, Heikki Krogerus wrote:
-> On Tue, Jan 31, 2023 at 05:52:15PM +0800, Linyu Yuan wrote:
->> In ucsi_dr_swap() and ucsi_pr_swap(), it will wait complete.
->> it is better change role switch command to async mode which will avoid
->> reset ppm in condition that data/power switch can't operate.
-> I think I need a little bit more information. Reseting the whole PPM
-> is a heavy operation, I do admit that, but you are not really
-> explaining what happens in your case when the driver does it - why is
-> it a problem?
-
-
-the case i can think is connect a mobile device to PC through USB A-C cable,
-
-and run data role switch command on mobile device, it definitely will 
-fail, right ?
-
-the problem is if ppm can't response reset timely, the data role switch 
-will exit after 10 seconds,
-
-it is very long time.
-
-
->
-> The proposal of using async_write here is in any case not acceptable.
-> You would now end up generationg a spurious command completion event
-> that can in worst case will screws up some other command.
-
-
-do you mean other command can run before role switch command operation ?
-
-
->
-> If the PPM reset is the problem here, then perhaps the proper thing to
-> do would be to remove that instead?
->
-> thanks,
->
->> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->> ---
->>   drivers/usb/typec/ucsi/ucsi.c | 12 ++++++++----
->>   1 file changed, 8 insertions(+), 4 deletions(-)
+On 26/01/2023 23:57, Thinh Nguyen wrote:
+> On Thu, Jan 26, 2023, Alan Stern wrote:
+>> On Thu, Jan 26, 2023 at 07:31:34PM +0000, Thinh Nguyen wrote:
+>>> On Thu, Jan 26, 2023, Dan Scally wrote:
+>>>> Hi Thinh
+>>>>
+>>>> On 26/01/2023 00:20, Thinh Nguyen wrote:
+>>>>> On Tue, Jan 24, 2023, Dan Scally wrote:
+>>>>>> Hi Thinh
+>>>>>>
+>>>>>>
+>>>>>> I'm trying to update the DWC3 driver to allow the status phase of a
+>>>>>> transaction to be explicit; meaning the gadget driver has the choice to
+>>>>>> either Ack or Stall _after_ the data phase so that the contents of the data
+>>>>>> phase can be validated. I thought that I should be able to achieve this by
+>>>>>> preventing dwc3_ep0_xfernotready() from calling dwc3_ep0_do_control_status()
+>>>>>> (relying on an "explicit_status" flag added to the usb_request to decide
+>>>>>> whether or not to do so) and then calling it manually later once the data
+>>>>>> phase was validated by the gadget driver (or indeed userspace). A very
+>>>>>> barebones version of my attempt to do that looks like this:
+>>>>>>
+>>>>> We shouldn't do this. At the protocol level, there must be better ways
+>>>>> to do handshake than relying on protocol STALL _after_ the data stage.
+>>>>> Note that not all controllers support this.
+>>>>
+>>>> Maybe I'm misunderstanding, but isn't this how the USB spec expects it to
+>>>> work? Reading "Reporting Status Results (8.5.3.1)" in the USB 2.0 spec for
+>>>> the status stage in a control write it says "The function responds with
+>>>> either a handshake or a zero-length data packet to indicate its current
+>>>> status", and the handshake can be either STALL or NAK. If we can't do this,
+>>>> how else can we indicate to the host that the data sent during a control out
+>>>> transfer is in some way invalid?
+>>>>
+>>> My concern is from the documentation note[*] added from this commit:
+>>> 579c2b46f74 ("USB Gadget: documentation update")
+>> When the gadget subsystem was originally designed, it made no allowance
+>> for sending a STALL in the status stage.  The UDC drivers existing at
+>> that time would automatically send their own zero-length status packet
+>> when the control data was received.
 >>
->> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
->> index 00fc867..466ae93 100644
->> --- a/drivers/usb/typec/ucsi/ucsi.c
->> +++ b/drivers/usb/typec/ucsi/ucsi.c
->> @@ -997,17 +997,21 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
->>   
->>   static int ucsi_role_cmd(struct ucsi_connector *con, u64 command)
->>   {
->> +	struct ucsi *ucsi = con->ucsi;
->>   	int ret;
->>   
->> -	ret = ucsi_send_command(con->ucsi, command, NULL, 0);
->> +	mutex_lock(&ucsi->ppm_lock);
->> +	ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL, &command, sizeof(command));
->> +	mutex_unlock(&ucsi->ppm_lock);
->> +
->>   	if (ret == -ETIMEDOUT) {
->>   		u64 c;
->>   
->>   		/* PPM most likely stopped responding. Resetting everything. */
->> -		ucsi_reset_ppm(con->ucsi);
->> +		ucsi_reset_ppm(ucsi);
->>   
->> -		c = UCSI_SET_NOTIFICATION_ENABLE | con->ucsi->ntfy;
->> -		ucsi_send_command(con->ucsi, c, NULL, 0);
->> +		c = UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
->> +		ucsi_send_command(ucsi, c, NULL, 0);
->>   
->>   		ucsi_reset_connector(con, true);
->>   	}
->> -- 
->> 2.7.4
+>> Drivers written since then have copied that approach.  They had to, if
+>> they wanted to work with the existing gadget drivers.  So the end result
+>> is that fully supporting status stalls will require changing pretty much
+>> every UDC driver.
+>>
+>> As for whether the UDC hardware has support...  I don't know.  Some of
+>> the earlier devices might not, but I expect that the more popular recent
+>> designs would provide a way to do it.
+>>
+> Right, it's just a bit concerning when the document also noted this:
+> "Note that some USB device controllers disallow protocol stall responses
+> in some cases."
+>
+> It could be just for older controllers as you mentioned.
+>
+>
+> Hi Dan,
+>
+> We should already have this mechanism in place to do protocol STALL.
+> Please look into delayed_status and set halt.
+
+
+Thanks; I tried this by returning USB_GADGET_DELAYED_STATUS from the 
+function's .setup() callback and later (after userspace checks the data 
+packet) either calling usb_ep_queue() or usb_ep_set_halt() and it does 
+seem to be working. This surprises me, as my understanding was that the 
+purpose of USB_GADGET_DELAYED_STATUS  is to pause all control transfers 
+including the data phase to give the function driver enough time to 
+queue a request (and possibly only for specific requests). Regardless 
+though I think the conclusion from previous discussions on this topic 
+(see [1] for example) was that we don't want to rely on 
+USB_GADGET_DELAYED_STATUS to do this which is why I had avoided it in 
+the first place. A colleague made a series [2] some time ago that adds a 
+flag to usb_request which function drivers can set when queuing the data 
+phase request. UDC drivers then read that flag to decide whether to 
+delay the status phase until after another usb_ep_queue(), and that's 
+what I'm trying to implement here.
+
+
+[1] https://lkml.org/lkml/2018/10/10/138
+
+[2] 
+https://patchwork.kernel.org/project/linux-usb/patch/20190124030228.19840-5-paul.elder@ideasonboard.com/
+
+>
+> Regarding this question:
+> 	How else can we indicate to the host that the data sent during a
+> 	control out transfer is in some way invalid?
+>
+> Typically there should be another request checking for the command
+> status. I suppose if we use protocol STALL, you only need to send status
+> request check on error cases.
+>
+> Thanks,
+> Thinh
