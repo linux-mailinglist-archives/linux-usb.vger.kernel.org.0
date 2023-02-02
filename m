@@ -2,152 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75136879E4
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 11:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078246879F7
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 11:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjBBKMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 05:12:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S232517AbjBBKS2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 05:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjBBKMw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 05:12:52 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B07D71996
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 02:12:51 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 90381505;
-        Thu,  2 Feb 2023 11:12:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675332768;
-        bh=2jYANZg6skmoVk4M7HuBZgtlDydISLaFPT+EvzB14SM=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=AzydEKdiAn0QU1zCB/c4kiH5tIGekRhaN+58o638PdaNiBw0GwJ1145hVanHGoDCz
-         cqQ+U9ANrmnBmfEJRwpDj5cTOAzfAyntfdu5w2EyVhhsX8jiwx9Vmpi8iuwny4YW/P
-         33v144bZ1ZPtbqWboej0wleYh6oPi2s78RKEw9PE=
-Message-ID: <43b077ad-c8cd-bb49-134d-1bd66bed0b84@ideasonboard.com>
-Date:   Thu, 2 Feb 2023 10:12:45 +0000
+        with ESMTP id S232475AbjBBKS1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 05:18:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C66B1C58B
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 02:18:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 04A98CE2954
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 10:18:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77BCC433D2;
+        Thu,  2 Feb 2023 10:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675333101;
+        bh=+++scxWVOzsQ4O8wRAr5uoF/2dTwN219UDNAHdsOZVE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GOJVLTrfEzOEzQgY6yQvpoUUCSfmvriMxcQX/y9wqEMLpnzz8HDRMZ4Ke4UminqNv
+         tMn6C3Sbz4BN3deFDqowaLwdQ+GuPSOYB0C88TxWrywT9gayJFCdsnBV/sABavj6i3
+         vv4pbZ+HRQjolqhHG+0NY2/B1+xDNMccEy8EV61I=
+Date:   Thu, 2 Feb 2023 11:18:18 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Daniel Scally <dan.scally@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        kieran.bingham@ideasonboard.com, mgr@pengutronix.de,
+        torleiv@huddly.com
+Subject: Re: [PATCH] usb: gadget: uvc: Make bmControls attr read/write
+Message-ID: <Y9uN6q3Q6GiqTur8@kroah.com>
+References: <20230131095738.429197-1-dan.scally@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        rogerq@kernel.org
-References: <9ce226b4-90c6-94c4-a5ad-bd623409bc51@ideasonboard.com>
- <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
- <dda24f8e-8d74-c6c1-ae7c-e423bc50a143@ideasonboard.com>
- <20230126193131.ifaj7arsrrgesjh5@synopsys.com>
- <Y9LjMcO/7/VUNld3@rowland.harvard.edu>
- <20230126235704.62d32y7y4sa4mmry@synopsys.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: Explicit status phase for DWC3
-In-Reply-To: <20230126235704.62d32y7y4sa4mmry@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230131095738.429197-1-dan.scally@ideasonboard.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-(+CC roger as the author of the USB_GADGET_DELAYED_STATUS mechanism)
+On Tue, Jan 31, 2023 at 09:57:38AM +0000, Daniel Scally wrote:
+> For the Processing Unit and Camera Terminal descriptors defined in
+> the UVC Gadget we currently hard-code values into their bmControls
+> fields, which enumerates the controls the gadget is able to
+> support. This isn't appropriate since only the userspace companion
+> program to the kernel driver will know which controls are supported.
+> Make the configfs attributes that point to those fields read/write
+> so userspace can set them to appropriate values.
+> 
+> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> ---
+> 
+> This patch depends on "usb: gadget: uvc: Generalise helper functions for reuse"
+> from my recent series:
+> 
+> https://lore.kernel.org/linux-usb/20230130093443.25644-3-dan.scally@ideasonboard.com/T/#u
 
-On 26/01/2023 23:57, Thinh Nguyen wrote:
-> On Thu, Jan 26, 2023, Alan Stern wrote:
->> On Thu, Jan 26, 2023 at 07:31:34PM +0000, Thinh Nguyen wrote:
->>> On Thu, Jan 26, 2023, Dan Scally wrote:
->>>> Hi Thinh
->>>>
->>>> On 26/01/2023 00:20, Thinh Nguyen wrote:
->>>>> On Tue, Jan 24, 2023, Dan Scally wrote:
->>>>>> Hi Thinh
->>>>>>
->>>>>>
->>>>>> I'm trying to update the DWC3 driver to allow the status phase of a
->>>>>> transaction to be explicit; meaning the gadget driver has the choice to
->>>>>> either Ack or Stall _after_ the data phase so that the contents of the data
->>>>>> phase can be validated. I thought that I should be able to achieve this by
->>>>>> preventing dwc3_ep0_xfernotready() from calling dwc3_ep0_do_control_status()
->>>>>> (relying on an "explicit_status" flag added to the usb_request to decide
->>>>>> whether or not to do so) and then calling it manually later once the data
->>>>>> phase was validated by the gadget driver (or indeed userspace). A very
->>>>>> barebones version of my attempt to do that looks like this:
->>>>>>
->>>>> We shouldn't do this. At the protocol level, there must be better ways
->>>>> to do handshake than relying on protocol STALL _after_ the data stage.
->>>>> Note that not all controllers support this.
->>>>
->>>> Maybe I'm misunderstanding, but isn't this how the USB spec expects it to
->>>> work? Reading "Reporting Status Results (8.5.3.1)" in the USB 2.0 spec for
->>>> the status stage in a control write it says "The function responds with
->>>> either a handshake or a zero-length data packet to indicate its current
->>>> status", and the handshake can be either STALL or NAK. If we can't do this,
->>>> how else can we indicate to the host that the data sent during a control out
->>>> transfer is in some way invalid?
->>>>
->>> My concern is from the documentation note[*] added from this commit:
->>> 579c2b46f74 ("USB Gadget: documentation update")
->> When the gadget subsystem was originally designed, it made no allowance
->> for sending a STALL in the status stage.  The UDC drivers existing at
->> that time would automatically send their own zero-length status packet
->> when the control data was received.
->>
->> Drivers written since then have copied that approach.  They had to, if
->> they wanted to work with the existing gadget drivers.  So the end result
->> is that fully supporting status stalls will require changing pretty much
->> every UDC driver.
->>
->> As for whether the UDC hardware has support...  I don't know.  Some of
->> the earlier devices might not, but I expect that the more popular recent
->> designs would provide a way to do it.
->>
-> Right, it's just a bit concerning when the document also noted this:
-> "Note that some USB device controllers disallow protocol stall responses
-> in some cases."
->
-> It could be just for older controllers as you mentioned.
->
->
-> Hi Dan,
->
-> We should already have this mechanism in place to do protocol STALL.
-> Please look into delayed_status and set halt.
+Odd, I think I have that in my tree, yet this fails to build with:
 
+  CALL    scripts/checksyscalls.sh
+  CC [M]  drivers/usb/gadget/function/uvc_configfs.o
+drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_processing_bm_controls_store’:
+drivers/usb/gadget/function/uvc_configfs.c:295:15: error: implicit declaration of function ‘__uvcg_iter_item_entries’ [-Werror=implicit-function-declaration]
+  295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/usb/gadget/function/uvc_configfs.c:295:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
+  295 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/usb/gadget/function/uvc_configfs.c:295:51: note: each undeclared identifier is reported only once for each function it appears in
+drivers/usb/gadget/function/uvc_configfs.c:311:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
+  311 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/usb/gadget/function/uvc_configfs.c: In function ‘uvcg_default_camera_bm_controls_store’:
+drivers/usb/gadget/function/uvc_configfs.c:465:51: error: ‘__uvcg_count_item_entries’ undeclared (first use in this function)
+  465 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/usb/gadget/function/uvc_configfs.c:481:51: error: ‘__uvcg_fill_item_entries’ undeclared (first use in this function)
+  481 |         ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-Thanks; I tried this by returning USB_GADGET_DELAYED_STATUS from the 
-function's .setup() callback and later (after userspace checks the data 
-packet) either calling usb_ep_queue() or usb_ep_set_halt() and it does 
-seem to be working. This surprises me, as my understanding was that the 
-purpose of USB_GADGET_DELAYED_STATUS  is to pause all control transfers 
-including the data phase to give the function driver enough time to 
-queue a request (and possibly only for specific requests). Regardless 
-though I think the conclusion from previous discussions on this topic 
-(see [1] for example) was that we don't want to rely on 
-USB_GADGET_DELAYED_STATUS to do this which is why I had avoided it in 
-the first place. A colleague made a series [2] some time ago that adds a 
-flag to usb_request which function drivers can set when queuing the data 
-phase request. UDC drivers then read that flag to decide whether to 
-delay the status phase until after another usb_ep_queue(), and that's 
-what I'm trying to implement here.
+What did I do wrong?
 
+thanks,
 
-[1] https://lkml.org/lkml/2018/10/10/138
-
-[2] 
-https://patchwork.kernel.org/project/linux-usb/patch/20190124030228.19840-5-paul.elder@ideasonboard.com/
-
->
-> Regarding this question:
-> 	How else can we indicate to the host that the data sent during a
-> 	control out transfer is in some way invalid?
->
-> Typically there should be another request checking for the command
-> status. I suppose if we use protocol STALL, you only need to send status
-> request check on error cases.
->
-> Thanks,
-> Thinh
+greg k-h
