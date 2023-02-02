@@ -2,134 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A923688495
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 17:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB406688622
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 19:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbjBBQhS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 11:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S232338AbjBBSJM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 13:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbjBBQhQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 11:37:16 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 539D26ACAD
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 08:37:03 -0800 (PST)
-Received: (qmail 529976 invoked by uid 1000); 2 Feb 2023 11:37:02 -0500
-Date:   Thu, 2 Feb 2023 11:37:02 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dan Scally <dan.scally@ideasonboard.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        rogerq@kernel.org
-Subject: Re: Explicit status phase for DWC3
-Message-ID: <Y9vmrgeblXC7zeQj@rowland.harvard.edu>
-References: <9ce226b4-90c6-94c4-a5ad-bd623409bc51@ideasonboard.com>
- <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
- <dda24f8e-8d74-c6c1-ae7c-e423bc50a143@ideasonboard.com>
- <20230126193131.ifaj7arsrrgesjh5@synopsys.com>
- <Y9LjMcO/7/VUNld3@rowland.harvard.edu>
- <20230126235704.62d32y7y4sa4mmry@synopsys.com>
- <43b077ad-c8cd-bb49-134d-1bd66bed0b84@ideasonboard.com>
- <Y9vONL8ZyQdEVkr0@rowland.harvard.edu>
- <9da07e03-7cd2-cfeb-8c67-4562948aa948@ideasonboard.com>
+        with ESMTP id S232116AbjBBSJJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 13:09:09 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9EA6DFD7;
+        Thu,  2 Feb 2023 10:09:08 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 48D347DE;
+        Thu,  2 Feb 2023 18:09:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 48D347DE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1675361345; bh=2+a4mZYwqT3vzf0UQzfkcA5CdDxOuo7YvzN9jr8nkig=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gY7ULbf3et5D4Qc/CNx/w7sCxqXxX6fR0sNacSV7nefpdle702hp6si3iizN6qwiE
+         uEIY7Q78a9h2RN4xfonCmMXE/H1WHGv23zZbRY3a8TD9z3xCs5/ly7iH92i4XVhMfk
+         m1+3SrM+pmOm5qUcXvYL8szbXDpSICOPir4Ff+tNZ80bHoZS0uhfOu3aabBosNVFfP
+         7pgupe9C5u4Sz6v8uZtM64S9OiXXXwx07OTa5szwYHdV6XxaRnf+mq/MpKQwaSbzh0
+         jfCb5rfx6sWATpmne99lGmlwL/b8o+ggGmLTspO1j2VtBWLoL4M3uxU9erIgFeIYC3
+         b3TsgnsFP3UgQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-mm@kvack.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 0/9] Documentation: correct lots of spelling errors
+ (series 2)
+In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+Date:   Thu, 02 Feb 2023 11:09:04 -0700
+Message-ID: <875yckvt1b.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9da07e03-7cd2-cfeb-8c67-4562948aa948@ideasonboard.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:45:24PM +0000, Dan Scally wrote:
-> 
-> On 02/02/2023 14:52, Alan Stern wrote:
-> > On Thu, Feb 02, 2023 at 10:12:45AM +0000, Dan Scally wrote:
-> > > (+CC roger as the author of the USB_GADGET_DELAYED_STATUS mechanism)
-> > > 
-> > > On 26/01/2023 23:57, Thinh Nguyen wrote:
-> > > > We should already have this mechanism in place to do protocol STALL.
-> > > > Please look into delayed_status and set halt.
-> > > 
-> > > Thanks; I tried this by returning USB_GADGET_DELAYED_STATUS from the
-> > > function's .setup() callback and later (after userspace checks the data
-> > > packet) either calling usb_ep_queue() or usb_ep_set_halt() and it does seem
-> > > to be working. This surprises me, as my understanding was that the purpose
-> > > of USB_GADGET_DELAYED_STATUS  is to pause all control transfers including
-> > > the data phase to give the function driver enough time to queue a request
-> > > (and possibly only for specific requests). Regardless though I think the
-> > > conclusion from previous discussions on this topic (see [1] for example) was
-> > > that we don't want to rely on USB_GADGET_DELAYED_STATUS to do this which is
-> > > why I had avoided it in the first place. A colleague made a series [2] some
-> > > time ago that adds a flag to usb_request which function drivers can set when
-> > > queuing the data phase request. UDC drivers then read that flag to decide
-> > > whether to delay the status phase until after another usb_ep_queue(), and
-> > > that's what I'm trying to implement here.
-> > > 
-> > > 
-> > > [1] https://lkml.org/lkml/2018/10/10/138
-> > > 
-> > > [2] https://patchwork.kernel.org/project/linux-usb/patch/20190124030228.19840-5-paul.elder@ideasonboard.com/
-> > I'm in favor of the explicit_status approach from [2].  In fact, there
-> > was a whole series of patches impementing this, and I don't think any of
-> > them were merged.
-> 
-> 
-> Yep, I'm picking that series up and want to get it merged.
-> 
-> > Keep in mind that there are two separate issues here:
-> > 
-> > 	Status/data stage for a control-IN or 0-length control-OUT
-> > 	transfer.
-> > 
-> > 	Status stage for a non-0-length control-OUT transfer.
-> > 
-> > The USB_GADGET_DELAYED_STATUS mechanism was meant to help with the
-> > first, not the second.  explicit_status was meant to help with the
-> > second; it may be able to help with both.
-> 
-> Ack - thanks. That thread I linked was very informative, I wish I'd found it
-> sooner!
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-There is still a race in the gadget layer's handling of control 
-requests.  The host can send a SETUP packet at any time.  So when a 
-function driver queues a usb_request for ep0, how does the UDC driver 
-know whether it is in response to the SETUP packet that just now arrived 
-or in response to one that arrived earlier (and is now superseded)?
+> Maintainers of specific kernel subsystems are only Cc-ed on their
+> respective patches, not the entire series. [if all goes well]
+>
+> These patches are based on linux-next-20230127.
 
-This race exists even at the hardware level, and I'm pretty sure that a 
-lot of UDC controllers don't handle it properly.  But there's nothing we 
-can do about that...
+So I've applied a bunch of these
 
-My thought (and this goes back almost 20 years!) was that a UDC driver 
-should associate a different tag value with each incoming SETUP packet.  
-This tag would get passed to the function driver in its ->setup() 
-callback, and the function driver would copy the value into a new 
-.control_tag field of the usb_request structure it queues as part of the 
-control transfer.
+>  [PATCH 1/9] Documentation: admin-guide: correct spelling
+>  [PATCH 2/9] Documentation: driver-api: correct spelling
 
-Then the UDC driver could inspect the control_tag value when it is asked 
-to queue a request for ep0, and it could return failure if the value 
-doesn't match the UDC's current tag.  This can be done while holding the 
-UDC's spinlock, so it will be free of races.
+applied
 
-The right way to do this would be to add a new argument to the ->setup() 
-callback, for the tag value.  But this would mean changing the gadget 
-API, and it would require simultaneously updating every UDC driver and 
-every gadget/function driver.
+>  [PATCH 3/9] Documentation: hwmon: correct spelling
+>  [PATCH 4/9] Documentation: networking: correct spelling
+>  [PATCH 5/9] Documentation: RCU: correct spelling
 
-Alternatively, there could be a .current_tag field added to the 
-usb_gadget structure, which is also passed to ->setup().  It would be 
-more awkward, but drivers not converted to the new mechanism would 
-simply leave the field permanently set to 0.  Provided all genuine tags 
-are nonzero, the mechanism would be backward compatible with existing 
-code.
+These have been taken up elsewhere
 
-Of course, this is all independent of the explicit_status changes.
+>  [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
+>  [PATCH 7/9] Documentation: scsi: correct spelling
 
-Alan Stern
+I've left these for the SCSI folks for now.  Do we *really* want to be
+fixing spelling in ChangeLog files from almost 20 years ago?
+
+>  [PATCH 8/9] Documentation: sparc: correct spelling
+>  [PATCH 9/9] Documentation: userspace-api: correct spelling
+
+Applied.
+
+Thanks,
+
+jon
