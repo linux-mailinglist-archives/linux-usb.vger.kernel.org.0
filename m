@@ -2,91 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66446882E5
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 16:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA7E6882F4
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 16:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjBBPnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 10:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S232024AbjBBPqn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 10:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbjBBPnS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 10:43:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CCA27D46;
-        Thu,  2 Feb 2023 07:42:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B829461BE2;
-        Thu,  2 Feb 2023 15:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA6DFC4339B;
-        Thu,  2 Feb 2023 15:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675351976;
-        bh=9jlFcZReaRqGG5HOvntUdmyxy0CRaO52IN9kpSRb2vs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L/d22WHalF5IHieEA4ZC3AdeKcY3j4jnBr2gh1Zj2mWqDDsuQpS0haOplVBNpPmLH
-         OjrXrrg3HRti65BZYpgzkNgZE3SWX0VYdxW2gnkLUGX4SBq1QQxt5aMMUfia4foUeg
-         X62puFv1JX/3I+0OBWuz5wnVwwHj9ze7NTHweqtw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] USB: gadget: s3c2410_udc: fix memory leak with using debugfs_lookup()
-Date:   Thu,  2 Feb 2023 16:32:35 +0100
-Message-Id: <20230202153235.2412790-13-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202153235.2412790-1-gregkh@linuxfoundation.org>
-References: <20230202153235.2412790-1-gregkh@linuxfoundation.org>
+        with ESMTP id S232771AbjBBPqk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 10:46:40 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD3B7B791
+        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 07:46:11 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D897D505;
+        Thu,  2 Feb 2023 16:45:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675352727;
+        bh=ugJOnnTC1XRM6GChGM1XsXB3bm1on/4YomtpJkVQhhg=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=X5EhEOC0/55OkYNDt10WsDtAFr2zpDe4NOD0P5lb77rYH0mA3upptjyQ6pzlN/jQK
+         MrXXyIFgRf2W+DW0fa8eCfxVpn0ImWlMB4TH1/vgxNYpR8TomTISceNRsyppqCX7A8
+         kJC0jtuQJYeFp+XOl9u/uMoq1ysFAo8LuyAgpn7s=
+Message-ID: <9da07e03-7cd2-cfeb-8c67-4562948aa948@ideasonboard.com>
+Date:   Thu, 2 Feb 2023 15:45:24 +0000
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1327; i=gregkh@linuxfoundation.org; h=from:subject; bh=9jlFcZReaRqGG5HOvntUdmyxy0CRaO52IN9kpSRb2vs=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3r09eL5hl8nPLpjW9Ex/53eWat+utokDKkYcxQV9a05Yt YKnX7YhlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJPLZmmF+7cu2Ca7vnFfyz2Hta8r FI2dHca7MY5nAaKEa/PxRfsrPmDYv45xgu2w7R9QA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        rogerq@kernel.org
+References: <9ce226b4-90c6-94c4-a5ad-bd623409bc51@ideasonboard.com>
+ <20230126002017.tbxc3j6xdgplncfs@synopsys.com>
+ <dda24f8e-8d74-c6c1-ae7c-e423bc50a143@ideasonboard.com>
+ <20230126193131.ifaj7arsrrgesjh5@synopsys.com>
+ <Y9LjMcO/7/VUNld3@rowland.harvard.edu>
+ <20230126235704.62d32y7y4sa4mmry@synopsys.com>
+ <43b077ad-c8cd-bb49-134d-1bd66bed0b84@ideasonboard.com>
+ <Y9vONL8ZyQdEVkr0@rowland.harvard.edu>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: Explicit status phase for DWC3
+In-Reply-To: <Y9vONL8ZyQdEVkr0@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic
-at once.
 
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Jakob Koschel <jakobkoschel@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/gadget/udc/s3c2410_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 02/02/2023 14:52, Alan Stern wrote:
+> On Thu, Feb 02, 2023 at 10:12:45AM +0000, Dan Scally wrote:
+>> (+CC roger as the author of the USB_GADGET_DELAYED_STATUS mechanism)
+>>
+>> On 26/01/2023 23:57, Thinh Nguyen wrote:
+>>> We should already have this mechanism in place to do protocol STALL.
+>>> Please look into delayed_status and set halt.
+>>
+>> Thanks; I tried this by returning USB_GADGET_DELAYED_STATUS from the
+>> function's .setup() callback and later (after userspace checks the data
+>> packet) either calling usb_ep_queue() or usb_ep_set_halt() and it does seem
+>> to be working. This surprises me, as my understanding was that the purpose
+>> of USB_GADGET_DELAYED_STATUS  is to pause all control transfers including
+>> the data phase to give the function driver enough time to queue a request
+>> (and possibly only for specific requests). Regardless though I think the
+>> conclusion from previous discussions on this topic (see [1] for example) was
+>> that we don't want to rely on USB_GADGET_DELAYED_STATUS to do this which is
+>> why I had avoided it in the first place. A colleague made a series [2] some
+>> time ago that adds a flag to usb_request which function drivers can set when
+>> queuing the data phase request. UDC drivers then read that flag to decide
+>> whether to delay the status phase until after another usb_ep_queue(), and
+>> that's what I'm trying to implement here.
+>>
+>>
+>> [1] https://lkml.org/lkml/2018/10/10/138
+>>
+>> [2] https://patchwork.kernel.org/project/linux-usb/patch/20190124030228.19840-5-paul.elder@ideasonboard.com/
+> I'm in favor of the explicit_status approach from [2].  In fact, there
+> was a whole series of patches impementing this, and I don't think any of
+> them were merged.
 
-diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
-index 8c57b191e52b..3525a3c260a7 100644
---- a/drivers/usb/gadget/udc/s3c2410_udc.c
-+++ b/drivers/usb/gadget/udc/s3c2410_udc.c
-@@ -1881,7 +1881,7 @@ static int s3c2410_udc_remove(struct platform_device *pdev)
- 		return -EBUSY;
- 
- 	usb_del_gadget_udc(&udc->gadget);
--	debugfs_remove(debugfs_lookup("registers", s3c2410_udc_debugfs_root));
-+	debugfs_lookup_and_remove("registers", s3c2410_udc_debugfs_root);
- 
- 	if (udc->vbus_gpiod)
- 		free_irq(gpiod_to_irq(udc->vbus_gpiod), udc);
--- 
-2.39.1
 
+Yep, I'm picking that series up and want to get it merged.
+
+> Keep in mind that there are two separate issues here:
+>
+> 	Status/data stage for a control-IN or 0-length control-OUT
+> 	transfer.
+>
+> 	Status stage for a non-0-length control-OUT transfer.
+>
+> The USB_GADGET_DELAYED_STATUS mechanism was meant to help with the
+> first, not the second.  explicit_status was meant to help with the
+> second; it may be able to help with both.
+
+Ack - thanks. That thread I linked was very informative, I wish I'd 
+found it sooner!
+
+
+> Alan Stern
