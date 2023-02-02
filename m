@@ -2,66 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC357687846
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 10:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E849C687882
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 10:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjBBJHx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 04:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S232093AbjBBJN4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 04:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjBBJHw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 04:07:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9963D0BC
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 01:07:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0391F61A2D
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 09:07:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 653CCC433A7
-        for <linux-usb@vger.kernel.org>; Thu,  2 Feb 2023 09:07:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675328870;
-        bh=G/ywNFC3S6xJcMQs5ePDM66VnCiiYZrexjf6cixKPXc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=CcNn8+/YpRKJ3ANDw2T9+Ap94dsHcjaDG5r1vGOsPTXmeG65CSRAWOdzqb/4zVori
-         5bBRnjhuDHToXu6nnIdYleJBvBDC9KVsBryQa3vmUGA1v88FBrxJHDX5+N/IQY5SGZ
-         hJqOBst157L4vuhFufHxLHvBgACBzHgbWekHnqoyk3NsXGsxvL2N6AtsGMYGqB6hYL
-         84h05PJ1K3fwCRxzeQlKPMuEO1Xk6MU7Zj+P1ly1im/oixIYdPKSrS9SXVbGxuWpy7
-         bDxyTBSx3m+d4T4FaojZjPBMj7Kuye+1ICEULW7uja+FbzPgXkbtl/k9MU+vW1TcB2
-         vnE928hFBQOuw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 50C2AC43165; Thu,  2 Feb 2023 09:07:50 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216697] Resume from suspend stopped working
-Date:   Thu, 02 Feb 2023 09:07:49 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: oliver@diereehs.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216697-208809-WA9I7NhU8m@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216697-208809@https.bugzilla.kernel.org/>
-References: <bug-216697-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S232004AbjBBJNs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 04:13:48 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469FC5BBE;
+        Thu,  2 Feb 2023 01:13:27 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3128OtDj005306;
+        Thu, 2 Feb 2023 09:12:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OCwaJ6C1lOVND9T/swRUkWAuo/z51wRqAbF07B9mwzk=;
+ b=BRneSkb0d+Wru1aZq1/mjcX1YKzDhMmOIO8A6eSlwvtoEZfKgUTCaf8MBvX7DCsgkOua
+ oSLmG/q/ZdRHmrathK5MC2asi43cPd+DTAiDsTzP6UkBv0Alvw5vaLUKlZVnu8qa648k
+ +yOmUCE3LaDBJKHXhOn/5/yGUxJh73CsB4GLJl2LNH2x/kiJmO2uJLqcoF4otzfcZAEB
+ T7juN4gYHWC+UIDGN3oOgK+O0+I8KUbiZ5ol3UkmPEZdxbuss2V/KVXv+WD/3uUqGnYE
+ NmLJ57+58BdUs7zzyGBjUxWRhkAXxod8JukNNTXoEG4vOd5kgxfNOA7QwvPpQa9Rm6oS pw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfkj4aqsf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 09:12:26 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3129CPVj025922
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 09:12:25 GMT
+Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
+ 01:12:23 -0800
+Message-ID: <d6e66c50-421d-f57e-fae3-1a4e14dce780@quicinc.com>
+Date:   Thu, 2 Feb 2023 17:12:20 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] usb: dwc3: update link state when process wakeup
+ interrupt
+Content-Language: en-US
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Elson Roy Serrao" <quic_eserrao@quicinc.com>
+References: <1675221286-23833-1-git-send-email-quic_linyyuan@quicinc.com>
+ <20230201190550.jozzrvwdi5lcwtbo@synopsys.com>
+ <197a1446-9382-3d83-d26e-694e4d707679@quicinc.com>
+In-Reply-To: <197a1446-9382-3d83-d26e-694e4d707679@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Z2V-YlaKd_Jn8PkCojCfKDzAG-i-0oD6
+X-Proofpoint-ORIG-GUID: Z2V-YlaKd_Jn8PkCojCfKDzAG-i-0oD6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_01,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ impostorscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=724 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020086
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,18 +84,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216697
 
---- Comment #16 from Oliver Reeh (oliver@diereehs.de) ---
-The fix in kernel 6.1.9 doesn't work.
+hi Thinh,
 
-02.02.23 09:59  darkstar        kernel  RIP: 0010:ucsi_resume_work+0x2e/0x80
-[typec_ucsi]
 
-The system hangs after resuming from suspend.
+do you prefer below change ? will it be good for all cases ?
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
++static void dwc3_gadget_update_link_state(struct dwc3 *dwc,
++               const struct dwc3_event_devt *event)
++{
++       switch (event->type) {
++       case DWC3_DEVICE_EVENT_HIBER_REQ:
++       case DWC3_DEVICE_EVENT_LINK_STATUS_CHANGE:
++       case DWC3_DEVICE_EVENT_SUSPEND:
++               break;
++       default:
++               dwc->link_state = event->event_info & DWC3_LINK_STATE_MASK;
++               break;
++       }
++}
++
+  static void dwc3_gadget_interrupt(struct dwc3 *dwc,
+                 const struct dwc3_event_devt *event)
+  {
++       dwc3_gadget_update_link_state(dwc3, event);
++
+         switch (event->type)
+
+
