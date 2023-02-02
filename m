@@ -2,153 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDBD6880F4
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 16:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B226880FA
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Feb 2023 16:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjBBPDl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 10:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S232222AbjBBPEA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Feb 2023 10:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjBBPDk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 10:03:40 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1BE1715E;
-        Thu,  2 Feb 2023 07:03:15 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-163bd802238so2805495fac.1;
-        Thu, 02 Feb 2023 07:03:15 -0800 (PST)
+        with ESMTP id S232178AbjBBPD4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 10:03:56 -0500
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52359552A0;
+        Thu,  2 Feb 2023 07:03:36 -0800 (PST)
+Received: by mail-ot1-f41.google.com with SMTP id d21-20020a056830005500b0068bd2e0b25bso535976otp.1;
+        Thu, 02 Feb 2023 07:03:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yOafWoNIBGU3Q76qlhkVuk+ht5BzMZtDb+TwP4LrI+s=;
-        b=7SxN6CsChFi5CsO8BdujQhNA/maxiN0bWxxXhoWdm5A6m7yQlMHyBtpBPTDKt5RtZB
-         GxO3XulvBXey/LiZakCjF5UgHjDQL3MxMhzeCDJl2+qgCwVoUXiC/l6HGEpuocw8pSKL
-         ZRL2mkLBjDBw5MVj+5xB4bjZW2GzsTRu7foHfGBz0pzYWJhxaRoGuLeHu0voWnA+IOow
-         2NwgNOi6wVerN4nl8x5yKvPRiof1UBDPtFJ4dSoCRAi5TmWcD0o+UpKUMFuhqvXfWPsY
-         yRs7U0IzCyr04h+BGAgpJTnjOxp9P79qOBMp8NW7GNvVDSartGam4huphLKdEseQ5JvL
-         nq+g==
-X-Gm-Message-State: AO0yUKUUt45JuYS2f4r/EmiRbsZ9QORZ5bxUVV0fcioOWI4HZPkB21hb
-        n4PsE5d14T9TNJRYd+uYFbsA3kcnGuW50Q==
-X-Google-Smtp-Source: AK7set/jqRpSpKwOVgmd0hRVvLflEu/ZJ53kNj+Z0g73c5pb0/FJd/Mx0loSgB+vzVz/aKrqVxiwDg==
-X-Received: by 2002:a05:6870:d184:b0:163:88f7:d947 with SMTP id a4-20020a056870d18400b0016388f7d947mr3037186oac.43.1675350169477;
-        Thu, 02 Feb 2023 07:02:49 -0800 (PST)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id o4-20020a05620a0d4400b006ea7f9d8644sm14344458qkl.96.2023.02.02.07.02.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 07:02:49 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id 74so2238008ybl.12;
-        Thu, 02 Feb 2023 07:02:49 -0800 (PST)
-X-Received: by 2002:a25:fc1c:0:b0:80b:8602:f3fe with SMTP id
- v28-20020a25fc1c000000b0080b8602f3femr916791ybd.36.1675349832295; Thu, 02 Feb
- 2023 06:57:12 -0800 (PST)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xhLIwzkmCznX0GHhQwC0/P1h3t8y8u+T1ODla0Zh5kk=;
+        b=awOJcQ48EQRuf8Fzslq07euRx9quaeEzYPhV15Bb4tP1sRvDRA4WGE6dRLEeJn7Mt9
+         y8jiURC7bnKk6tfH/gmy6QeiMBwchD/7/3sfIVs4lTHgdcN/K0E7xHfxn0TxxZhI6qp0
+         +V2T/FJn+skXsHCrFnIfbeB/eD39rMvqSlLNDjUbwPj0vuorg09KCdtDTR0xYGANUZkU
+         AADcVG3pCAzXsmh44SouWCZ3p1gPyPJEdZgstHzAn3ze067dpv7L+LQ/UTynhVcCA9zO
+         UonQOFRoD6emtwfj8exKSUpKovCQICDq05DEJ9PM1QdrnxCh8PHgpI5TfCaMzHX12/Pg
+         al7Q==
+X-Gm-Message-State: AO0yUKV9zVSFJ62tASB4Go7wou6Yi6eFfSMbc1gbkta0i8/gsf/yg2Nt
+        5J9azCh1C9uvhu+VxGB5JNY1p35EzQ==
+X-Google-Smtp-Source: AK7set9CBOiY1Y27c21v6wju0XHcELQW66Yw+qKAXhK9DVt099gofzi2TiGaQ0sIsd4bfdHS1s2fTQ==
+X-Received: by 2002:a05:6830:18f6:b0:68b:c2d2:8967 with SMTP id d22-20020a05683018f600b0068bc2d28967mr3312164otf.26.1675350215344;
+        Thu, 02 Feb 2023 07:03:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p5-20020a056830318500b0068bce0cd4e1sm5411539ots.9.2023.02.02.07.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 07:03:34 -0800 (PST)
+Received: (nullmailer pid 1858084 invoked by uid 1000);
+        Thu, 02 Feb 2023 15:03:31 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <cover.1674584626.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1674584626.git.geert+renesas@glider.be>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Feb 2023 15:57:00 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWhY9OtW2Pa+LmY0qOvbxLiuyNYEQr5WnPgO1xD=5M1AQ@mail.gmail.com>
-Message-ID: <CAMuHMdWhY9OtW2Pa+LmY0qOvbxLiuyNYEQr5WnPgO1xD=5M1AQ@mail.gmail.com>
-Subject: Re: [PATCH treewide v2 0/9] phy: Add devm_of_phy_optional_get() helper
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-phy@lists.infradead.org, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     linux-usb@vger.kernel.org, robh+dt@kernel.org, heiko@sntech.de,
         linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+In-Reply-To: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
+References: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
+Message-Id: <167535004008.1854256.11552006567095484269.robh@kernel.org>
+Subject: Re: [PATCH v1] dt-bindings: usb: rockchip,dwc3: update inno usb2
+ phy binding name
+Date:   Thu, 02 Feb 2023 09:03:31 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Vinod,
 
-On Tue, Jan 24, 2023 at 7:37 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> While there exist several optional_get() PHY helper functions, there is
-> no optional variant of devm_of_phy_get(), leading to several drivers
-> implementing this theirselves, sometimes in buggy ways.
->
-> Hence this series, after two cleanup patches, introduces a
-> devm_of_phy_optional_get() helper(), and converts existing users of
-> devm_of_phy_get() where appropriate.
->
-> Changes compared to v1[1]:
->   - Incorporate "[PATCH v2 1/9] phy: Remove unused phy_optional_get()",
->     as it touches the same documentation,
->   - New patch "[PATCH v2 2/9] doc: phy: Document devm_of_phy_get()",
->   - Print an error message in case of failure, as requested by RobH,
->   - Update Documentation,
->   - Clarify removed checks for -ENODEV and -ENOSYS,
->   - Remove error printing in case of real failures from callers,
->   - Rebase am65-cpsw change on top of commit 854617f52ab42418 ("net:
->     ethernet: ti: am65-cpsw: Handle -EPROBE_DEFER for Serdes PHY") in
->     net-next (next-20230123 and later),
->   - Add Reviewed-by, Acked-by.
->
-> Most of this series been compile-tested only, but the new helper itself
-> has been tested with a new user[2].
+On Thu, 02 Feb 2023 14:59:35 +0100, Johan Jonker wrote:
+> The binding for the inno usb2 phy was given a name in more a common format,
+> so update the reference in rockchip,dwc3.yaml as well.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Are you happy with this?  This series (at least patch 3) is a dependency
-for [2], and in [3] you said you could apply it and create an immutable
-branch.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks!
+yamllint warnings/errors:
 
-> [1] "[PATCH treewide 0/7] phy: Add devm_of_phy_optional_get() helper"
->     https://lore.kernel.org/r/cover.1674036164.git.geert+renesas@glider.be
-> [2] "[PATCH 12/12] can: rcar_canfd: Add transceiver support"
->     https://lore.kernel.org/r/e825b50a843ffe40e33f34e4d858c07c1b2ff259.1674499048.git.geert+renesas@glider.be
+dtschema/dtc warnings/errors:
 
-[3] https://lore.kernel.org/all/Y8kmG+jB%2Fs7stebA@matsya
 
->
-> Geert Uytterhoeven (9):
->   phy: Remove unused phy_optional_get()
->   doc: phy: Document devm_of_phy_get()
->   phy: Add devm_of_phy_optional_get() helper
->   net: fman: memac: Convert to devm_of_phy_optional_get()
->   net: lan966x: Convert to devm_of_phy_optional_get()
->   net: ethernet: ti: am65-cpsw: Convert to devm_of_phy_optional_get()
->   PCI: tegra: Convert to devm_of_phy_optional_get()
->   usb: host: ehci-exynos: Convert to devm_of_phy_optional_get()
->   usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
+doc reference errors (make refcheckdocs):
+Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml: Documentation/devicetree/bindings/phy/rockchip,inno-usb2phy.yaml
 
-Gr{oetje,eeting}s,
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com
 
-                        Geert
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
