@@ -2,183 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C699C6898FF
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 13:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E442C6899E0
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 14:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjBCMqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 07:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S232930AbjBCNhO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 08:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjBCMqh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 07:46:37 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988719AFEA;
-        Fri,  3 Feb 2023 04:46:35 -0800 (PST)
-Received: from [94.107.229.70] (helo=[192.168.31.91]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pNvSb-000198-Uh; Fri, 03 Feb 2023 13:46:33 +0100
-Message-ID: <1d2c42f7-5cc9-17a6-dbe6-1c599428831b@leemhuis.info>
-Date:   Fri, 3 Feb 2023 13:46:33 +0100
+        with ESMTP id S232891AbjBCNhM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 08:37:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C71885F0;
+        Fri,  3 Feb 2023 05:37:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B47C061F20;
+        Fri,  3 Feb 2023 13:37:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44020C433D2;
+        Fri,  3 Feb 2023 13:37:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675431423;
+        bh=ZZx3nGqH4qzHtCTP7gc5u4gXwhafYjW64wFE9xehQZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PC8VNj+wZkDfbJoqNkderv9knz5Oo+pT3sfm3c1cr77Ubyjs3yab0Mav8a2YbJY6k
+         jtpvCnCaaokAr5EWzY1ykc0vHUHVXMKsc0ycKRc/iRKUvLCGFXt0IMzaa0uBP3dgNv
+         FXJkGaYYb9Aw3ZUGbMEgz94uHmKcGarBi78/BLR8/aI2/t+6ZmVV6F4yJsg3P8AORq
+         vspHZ51eKSajiXxbw2vZTv8NlI0QdrLKoAxh1XB+3/GAIQE7IcDzpY7u0c/XMPvrww
+         yongZFEgBem0zD3pu82swgRGLsa4ByrzeEAB6xQFtaHAhivstR5Bft9aRFXKNbFBGV
+         Sc407wctcLSEw==
+Date:   Fri, 3 Feb 2023 19:06:58 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
+        waynec@nvidia.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH V6 2/6] dt-bindings: phy: tegra-xusb: Add support for
+ Tegra234
+Message-ID: <Y90N+v0Qo0zdYdNS@matsya>
+References: <20230111110450.24617-1-jonathanh@nvidia.com>
+ <20230111110450.24617-3-jonathanh@nvidia.com>
+ <Y9P6PJ9xPVst/um2@orome>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
- net device
-Content-Language: en-US, de-DE
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20221104131031.850850-1-s.hauer@pengutronix.de>
- <20221104131031.850850-2-s.hauer@pengutronix.de>
- <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
-From:   "Linux kernel regression tracking (#adding)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675428395;a4564287;
-X-HE-SMSGID: 1pNvSb-000198-Uh
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9P6PJ9xPVst/um2@orome>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
-
-On 01.02.23 14:32, Paul Cercueil wrote:
-> Hi Sascha, Greg,
+On 27-01-23, 17:22, Thierry Reding wrote:
+> On Wed, Jan 11, 2023 at 11:04:46AM +0000, Jon Hunter wrote:
+> > Add the compatible string for the Tegra234 XUSB PHY.
+> > 
+> > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> > V5 -> V6: Added Krzysztof's ACK 
+> > V3 -> V5: Fixed compatible string
+> > V3 -> V4: Added patch
+> > 
+> >  .../devicetree/bindings/phy/nvidia,tegra194-xusb-padctl.yaml  | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> I have a breakage in 6.2-rc* that I eventually bisected to this commit,
-> on a Ingenic SoC (using the jz4740 musb driver) with ECM or RNDIS
-> configured through gadgetfs.
+> Hi Vinod,
 > 
-> When plugging the board to my PC, the USB network interface is
-> recognized, but 'ip link' sees it as 'NO-CARRIER'. With this commit
-> reverted on v6.2-rc5, everything works fine.
+> can you pick this up into your tree? This applies on top of the
+> conversion patch ("dt-bindings: phy: tegra-xusb: Convert to
+> json-schema") that's aready in your next branch.
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+Applied now, thanks for pinging
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced 321b59870f850
-#regzbot title usb: gadget: USB network interface is recognized, but 'ip
-link' sees it as 'NO-CARRIER'
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.	
-
-> Le vendredi 04 novembre 2022 à 14:10 +0100, Sascha Hauer a écrit :
->> The UDC is not a suitable parent of the net device as the UDC can
->> change or vanish during the lifecycle of the ethernet gadget. This
->> can be illustrated with the following:
->>
->> mkdir -p /sys/kernel/config/usb_gadget/mygadget
->> cd /sys/kernel/config/usb_gadget/mygadget
->> mkdir -p configs/c.1/strings/0x409
->> echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
->> mkdir -p functions/ecm.usb0
->> ln -s functions/ecm.usb0 configs/c.1/
->> echo "dummy_udc.0" > UDC
->> rmmod dummy_hcd
->>
->> The 'rmmod' removes the UDC from the just created gadget, leaving
->> the still existing net device with a no longer existing parent.
->>
->> Accessing the ethernet device with commands like:
->>
->> ip --details link show usb0
->>
->> will result in a KASAN splat:
->>
->> ==================================================================
->> BUG: KASAN: use-after-free in if_nlmsg_size+0x3e8/0x528
->> Read of size 4 at addr c5c84754 by task ip/357
->>
->> CPU: 3 PID: 357 Comm: ip Not tainted 6.1.0-rc3-00013-gd14953726b24-
->> dirty #324
->> Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
->>  unwind_backtrace from show_stack+0x10/0x14
->>  show_stack from dump_stack_lvl+0x58/0x70
->>  dump_stack_lvl from print_report+0x134/0x4d4
->>  print_report from kasan_report+0x78/0x10c
->>  kasan_report from if_nlmsg_size+0x3e8/0x528
->>  if_nlmsg_size from rtnl_getlink+0x2b4/0x4d0
->>  rtnl_getlink from rtnetlink_rcv_msg+0x1f4/0x674
->>  rtnetlink_rcv_msg from netlink_rcv_skb+0xb4/0x1f8
->>  netlink_rcv_skb from netlink_unicast+0x294/0x478
->>  netlink_unicast from netlink_sendmsg+0x328/0x640
->>  netlink_sendmsg from ____sys_sendmsg+0x2a4/0x3b4
->>  ____sys_sendmsg from ___sys_sendmsg+0xc8/0x12c
->>  ___sys_sendmsg from sys_sendmsg+0xa0/0x120
->>  sys_sendmsg from ret_fast_syscall+0x0/0x1c
->>
->> Solve this by not setting the parent of the ethernet device.
->>
->> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
->> ---
->>  drivers/usb/gadget/function/u_ether.c | 4 ----
->>  1 file changed, 4 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/u_ether.c
->> b/drivers/usb/gadget/function/u_ether.c
->> index e06022873df16..8f12f3f8f6eeb 100644
->> --- a/drivers/usb/gadget/function/u_ether.c
->> +++ b/drivers/usb/gadget/function/u_ether.c
->> @@ -798,7 +798,6 @@ struct eth_dev *gether_setup_name(struct
->> usb_gadget *g,
->>         net->max_mtu = GETHER_MAX_MTU_SIZE;
->>  
->>         dev->gadget = g;
->> -       SET_NETDEV_DEV(net, &g->dev);
->>         SET_NETDEV_DEVTYPE(net, &gadget_type);
->>  
->>         status = register_netdev(net);
->> @@ -873,8 +872,6 @@ int gether_register_netdev(struct net_device
->> *net)
->>         struct usb_gadget *g;
->>         int status;
->>  
->> -       if (!net->dev.parent)
->> -               return -EINVAL;
->>         dev = netdev_priv(net);
->>         g = dev->gadget;
->>  
->> @@ -905,7 +902,6 @@ void gether_set_gadget(struct net_device *net,
->> struct usb_gadget *g)
->>  
->>         dev = netdev_priv(net);
->>         dev->gadget = g;
->> -       SET_NETDEV_DEV(net, &g->dev);
->>  }
->>  EXPORT_SYMBOL_GPL(gether_set_gadget);
->>  
-> 
+-- 
+~Vinod
