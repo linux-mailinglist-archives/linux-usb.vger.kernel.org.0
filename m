@@ -2,102 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9137689825
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 12:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EEF6898AF
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 13:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbjBCLz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 06:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S232838AbjBCMaV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 07:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBCLz2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 06:55:28 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B720172F
-        for <linux-usb@vger.kernel.org>; Fri,  3 Feb 2023 03:55:27 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313BjmhB010118;
-        Fri, 3 Feb 2023 11:55:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=Dayg+CV8csAY0kw/fEGKxPXOs2t3qyqga/LOVApJBE0=;
- b=MY4Q/t9TGd8YJHU0mmdXGgF/5mnMGURDxd+SZ1scUq8AAjXVZ40TIOIdKqTVqyC9x904
- DV8cIDbJgVv79v307C82jsOwIRkALqUEhoOqiirRA74MXYCD1a1L4ciHvhDNS/lAEdxT
- Q6+6EjwXBTwe2Nv5eoDrWvm4wWuVhypBfkrs/+pBjgU+nWImRSxBkcHQgKAtbJlNuDfH
- Tt/z2tXfWhFYfgg3+AMbzXmdM21QnAxEE8QemsqkOUakjHgQZOnsx+VexBCHVmhJrJak
- OdTW74+SP4CEJeV7jyxy2OMH4TU2Q2fUQCUhG+Kldq7ID4E4OPkXUK3IWUSCwWvCzwE/ 6g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ng969u5ak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 11:55:22 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313BtLfN020001
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 11:55:21 GMT
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 3 Feb 2023 03:55:19 -0800
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        "Wesley Cheng" <quic_wcheng@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2] usb: roles: disable pm for role switch device
-Date:   Fri, 3 Feb 2023 19:55:14 +0800
-Message-ID: <1675425314-13857-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S231616AbjBCMaS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 07:30:18 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9301277DCB
+        for <linux-usb@vger.kernel.org>; Fri,  3 Feb 2023 04:30:10 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id k16so3751980wms.2
+        for <linux-usb@vger.kernel.org>; Fri, 03 Feb 2023 04:30:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oliUtLWESo3lQu6iHKqwx+2QOwN2sNCjDu921E6eImU=;
+        b=PC6jnhprbBOYA5gQ8hht4uhJybrq7/0C64ACU2Gt9qfbW1pk9VfapwtzsEQiHMXbWG
+         1JppW/crId+0Ce/5NY+vbYD8aQrWah3VOr/cgyiKfrz+CsV1xjGADT9tWMUyPppehNBX
+         SC0wy/PcQSuekQwM7g/y6t2SL8B/Gkosz5mtmibN43bNv0b1mD4tCXB0banPcItFJwfc
+         i54CE0XoHTzA+jAmoTtBHleO+mnp2xAR7FyjhdHzEDNwwY9TdNXm+ghb8j6ArobpiwRR
+         9hn30hxFYj4ol+bMYzOz9KNKlsouP5G6WIVr/nA+qavbwuBMicrP2QKe1d5rCLF7jiXP
+         ViLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oliUtLWESo3lQu6iHKqwx+2QOwN2sNCjDu921E6eImU=;
+        b=Gy530cWbTYgb7u20XmPq3VjJdIRJNHvBZxq/8ZoDMB1WEFk4B6sB6xAfcyh+vaDygp
+         SFb0O16P48/Du+zn3+tNBoAqaS+6UqMQ4Mb5jYGzLaoLLF0Af4vgRaey7//nDgkE69uE
+         blsACU/NJnBW5yFadpxX7D4HcmQ3qwcsCQm4Ak2+o+R4BAsT6DFAAXD42svUxrc169fs
+         m8rnz7DtWRS9HE3dTkEz5bGhww1skYR8B/TM/R/teF9dXOPBY4X2+5BJYr50nUBFqF+y
+         bOV2mjF4qUudNcPj2igjP2TeWBrdDuGPoRG12YQrBXpfathI/41eIRlevOT8ZWSQ+vgr
+         hIFQ==
+X-Gm-Message-State: AO0yUKUpfokizlyIjKN4EQE3RBKrnrbUq1D0tIQfyxMwGwHAYN242j9G
+        ZT+1qO2gNWhtEDee00tLMJHOAg==
+X-Google-Smtp-Source: AK7set8hvfzN5yvSx0vn3SHDYBE0Cu37jFl12DeSADMr5lTBdrNCrV6wJaZ+esFXBrp8t+sFKTfd2w==
+X-Received: by 2002:a05:600c:4395:b0:3df:9858:c02c with SMTP id e21-20020a05600c439500b003df9858c02cmr4411370wmn.1.1675427409090;
+        Fri, 03 Feb 2023 04:30:09 -0800 (PST)
+Received: from [192.168.2.104] ([79.115.63.122])
+        by smtp.gmail.com with ESMTPSA id h27-20020a05600c2cbb00b003db12112fcfsm2871505wmc.4.2023.02.03.04.30.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 04:30:08 -0800 (PST)
+Message-ID: <e50fe7d3-0c73-d4af-9a61-74d1279202cc@linaro.org>
+Date:   Fri, 3 Feb 2023 12:30:06 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] tree-wide: trivial: s/ a SPI/ an SPI/
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     trivial@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-wireless@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-rtc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org
+References: <20230203101624.474611-1-tudor.ambarus@linaro.org>
+ <CAMuHMdVeDbTGLBAk5QWGQGf=o6g25t341FjGTmNsHw0_sDOceg@mail.gmail.com>
+ <Y9z0bQ8TeFROA0Fj@sirena.org.uk>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <Y9z0bQ8TeFROA0Fj@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2MkrozJ4sIcwapg-cu3xH4FljRH6aSKy
-X-Proofpoint-GUID: 2MkrozJ4sIcwapg-cu3xH4FljRH6aSKy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_08,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=587
- malwarescore=0 bulkscore=0 adultscore=0 spamscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030108
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-there is no PM operation for a role switch device,
-call device_set_pm_not_required() in usb_role_switch_register() to disable.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: remove cc stable
 
- drivers/usb/roles/class.c | 1 +
- 1 file changed, 1 insertion(+)
+On 2/3/23 11:47, Mark Brown wrote:
+> On Fri, Feb 03, 2023 at 11:28:03AM +0100, Geert Uytterhoeven wrote:
+>> On Fri, Feb 3, 2023 at 11:17 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+> 
+>>> The deciding factor for when a/an should be used is the sound
+>>> that begins the word which follows these indefinite articles,
+>>> rather than the letter which does. Use "an SPI" (SPI begins
+>>> with the consonant letter S, but the S is pronounced with its
+>>> letter name, "es.").
+> 
+>> While I agree with your pronunciation, I believe the SPI maintainer
+>> (which you forgot to CC) pronounces it in James Bond-style, i.e. rhymes
+>> with "spy" ;-)
+> 
+> Yes, I do.  To the best of my knowledge most people just say "spy"
+> rather than pronouncing the letters or anything.
+> 
+> In any case as I said in reply to one of the individual patches English
+> isn't regular enough to go with hard and fast rules on anything, and the
+> letter rule is much more commonly used where something is needed.  Using
+> an here looks wrong to me, and the fact that a is so widely used does
+> suggest that usage has escaped whatever rule there is.
 
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index eacb46e..b303c64 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -344,6 +344,7 @@ usb_role_switch_register(struct device *parent,
- 	dev_set_drvdata(&sw->dev, desc->driver_data);
- 	dev_set_name(&sw->dev, "%s-role-switch",
- 		     desc->name ? desc->name : dev_name(parent));
-+	device_set_pm_not_required(&sw->dev);
- 
- 	ret = device_register(&sw->dev);
- 	if (ret) {
--- 
-2.7.4
+Indeed:
+$ git grep " a SPI" | wc -l
+131
+$ git grep " an SPI" | wc -l
+88
 
+Ok, let's drop this patch.
+
+Cheers,
+ta
