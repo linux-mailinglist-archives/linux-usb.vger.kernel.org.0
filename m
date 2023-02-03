@@ -2,77 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95ED868A0CE
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 18:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED2A68A187
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 19:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbjBCRus (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 12:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S233449AbjBCSV0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 13:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjBCRup (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 12:50:45 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA11783F8;
-        Fri,  3 Feb 2023 09:50:42 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id g8so6311820qtq.13;
-        Fri, 03 Feb 2023 09:50:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X98XwPHCATAqoyCJbroZ3zmbYV9N3z/uPBJxyFU6PR8=;
-        b=qKwT99gXJUlK8jpfdkOFgWa74gVxy/H0hDP+O6VTX2V5uEipX1eD4IrZ0/zqXiqHKx
-         sbvaAQ91J4eXgP1uP9vAp1lhAGYIEVGcBxeEUaKX9edpPSJinWQdV0Hm0UCqaYsH/39q
-         T17gYDxcpA5KJQ5cWAiO+Y9bWqg5LaFrPG5MUpi1xhzRSkFHATUJqG0YXsjMp0xh7tS1
-         J/V+xpNxHzPODmsVESM1t2ghJBEvAXpJ/wMx65mHALSfwAE3EuI4NtgoTWAIfkkg3tj/
-         ycgiS1ZR6LMebI/QLGMEzsElInyVkhHRkwAG1XVOfpuYmtcXeBKG/q8M3xCRmROqTD1j
-         OxzA==
+        with ESMTP id S233397AbjBCSVZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 13:21:25 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B638A9D4A;
+        Fri,  3 Feb 2023 10:21:22 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id n25-20020a9d7119000000b0068bd8c1e836so1612399otj.3;
+        Fri, 03 Feb 2023 10:21:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X98XwPHCATAqoyCJbroZ3zmbYV9N3z/uPBJxyFU6PR8=;
-        b=yY1ARJXQZ/kRqX9RHLlJmu/cwnQi8Ed70J/AaXAyQ8nuT4TAC2yEQuhPUQzJIVlmP3
-         b8bXHPBca3VCsraK4BUxDTWlayT27cQZxeDWvUUeaL15Jh+qt9yyC7pJAoKHVhBgTE0r
-         9vMg7wJdlCz7gfhjld0Ig3M9E1lweiJ11ZSuB6HDb4eiaMAYUbRRns3PFmpXHY1wOeTb
-         TawNMWt/4R0C0K53wLfIV6duqbmFwW/NlB2iVZyu0X+MscNcKJ7ATVWKC05TWkuKPUgR
-         XI/j9WGJpcFUaoyqYhWGJlbBab5wQK8uVfuMoG8XuqbZOHTHO36p0jaAGxGXIoIEt5yq
-         YOWQ==
-X-Gm-Message-State: AO0yUKXRGNoo2tg84I9oC+KyKS+SDWCFfG/HT2h7mf4m5H/vNF9SMReh
-        E9CySK15EabQw9Kr1dPPZNg=
-X-Google-Smtp-Source: AK7set+pwTCJGnVY1tSsiOxjAN7/Pvsx4cx3hcJic7vMvYqUuWK7aMxHvORkCbE52P788Ugn+r6gkA==
-X-Received: by 2002:ac8:584e:0:b0:3b9:a4c8:d57a with SMTP id h14-20020ac8584e000000b003b9a4c8d57amr21058494qth.32.1675446641849;
-        Fri, 03 Feb 2023 09:50:41 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id 63-20020a370a42000000b00719d9f823c4sm2206530qkk.34.2023.02.03.09.50.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 09:50:39 -0800 (PST)
-Message-ID: <075c6ee2-fc1d-1b95-4cc6-4caec754dab7@gmail.com>
-Date:   Fri, 3 Feb 2023 09:50:35 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CKqTtd06uef5ibtsjMifbrRQEy2r/fkXlh2L538fCSc=;
+        b=qsjHrZgIOec4fWogb9P7PcPZak2vJiQW9feXSYS2k4Xw/tKnqBazvooYTj9JOEL/jO
+         ikxg1Nw2W+N4jSpDIzszgdz+PEjk4kwiciTQyQzRpsEFlH6CwCNJnXeZ0Z/+bYKTkBs3
+         GkavRiPMh4/omY1JLMRwEFG/BoVQa0MKMp9slAZRA7qsaAHk7iq/8R7whtwl6yYyX+9p
+         wvcIE/HGke+fdW2r3OxCo8766zbhrl8qFtyPGB4qlvLNxjS1RXmTLSkMj0jTqPt94wJp
+         E9Wp7tuP89WNsL2KA2Qaw8DPMeD0rpJUIOsU1To6fLn3GMCtkBp5TP3YVHaOjek6yRJd
+         +JeA==
+X-Gm-Message-State: AO0yUKUHeDpJ7FahIHaIIw0M28qrrtsBx/ekJSOXrubZlrCCKO0U7/IG
+        UX7NQQorJp9JJ/BHU+X6UZQ5hb0few==
+X-Google-Smtp-Source: AK7set+8hw6nat6H4DhyX2Limgqmen5W+zGdMAXZEu5LDxHEuhE4wlDY9lWj4NXoZichwA+bz/wc3A==
+X-Received: by 2002:a05:6830:1e84:b0:670:9610:1ce4 with SMTP id n4-20020a0568301e8400b0067096101ce4mr6394077otr.24.1675448481741;
+        Fri, 03 Feb 2023 10:21:21 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05683022cc00b0068bcf7995aesm1367341otc.64.2023.02.03.10.21.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 10:21:21 -0800 (PST)
+Received: (nullmailer pid 617539 invoked by uid 1000);
+        Fri, 03 Feb 2023 18:21:19 -0000
+Date:   Fri, 3 Feb 2023 12:21:19 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     heiko@sntech.de, hjc@rock-chips.com,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        linus.walleij@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v6 01/17] dt-bindings: display: rockchip: convert
+ rockchip-lvds.txt to YAML
+Message-ID: <20230203182119.GA615242-robh@kernel.org>
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH stable 5.4] usb: host: xhci-plat: add wakeup entry at
- sysfs
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
-References: <20230201174404.32777-1-f.fainelli@gmail.com>
- <20230201174404.32777-3-f.fainelli@gmail.com> <Y9qsZysFUFnq7VQW@kroah.com>
- <319ebea0-61dc-2e08-f48b-4555b8fb894a@gmail.com> <Y9y+wRPYzQVwb3JS@kroah.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <Y9y+wRPYzQVwb3JS@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,47 +73,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/2/23 23:58, Greg Kroah-Hartman wrote:
-> On Wed, Feb 01, 2023 at 03:19:08PM -0800, Florian Fainelli wrote:
->> On 2/1/23 10:16, Greg Kroah-Hartman wrote:
->>> On Wed, Feb 01, 2023 at 09:44:04AM -0800, Florian Fainelli wrote:
->>>> From: Peter Chen <peter.chen@nxp.com>
->>>>
->>>> commit  4bb4fc0dbfa23acab9b762949b91ffd52106fe4b upstream
->>>>
->>>> With this change, there will be a wakeup entry at /sys/../power/wakeup,
->>>> and the user could use this entry to choose whether enable xhci wakeup
->>>> features (wake up system from suspend) or not.
->>>>
->>>> Tested-by: Matthias Kaehlcke <mka@chromium.org>
->>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->>>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
->>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>> Link: https://lore.kernel.org/r/20200918131752.16488-6-mathias.nyman@linux.intel.com
->>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->>>> ---
->>>>    drivers/usb/host/xhci-plat.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> Why is this new feature needed on these older kernels?  What does it fix
->>> that is broken?
->>
->> It fixes the inability to make the XHCI controller a wake-up device since
->> there is no /sys/*/*xhci/power/wakeup sysfs entry to manipulate unless this
->> patch is applied.
+On Thu, Dec 22, 2022 at 03:22:14PM +0100, Johan Jonker wrote:
+> Convert rockchip-lvds.txt to YAML.
 > 
-> But that is a new feature, not a bugfix.
-
-Support for wake-up was already there in the xhci driver, just there was 
-no way to activate it from user-space, that seems like a fix to me.
-
+> Changed:
+>   Add power-domains property.
+>   Requirements between PX30 and RK3288
 > 
-> What systems need this for these older kernels that will actually update
-> to them in order to pick up this change?
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> 
+> Changed V3:
+>   Filename matching compatible style
+>   Drop "Regulator phandle for "
+>   Specify properties and requirements per SoC
+>   Sort order and restyle
+> 
+> Changed V2:
+>   Fix title
+> ---
+>  .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
+>  .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+>  2 files changed, 170 insertions(+), 92 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
 
-Some NXP systems required that, and all of our ARCH_BRCMSTB SoCs also 
-have that capability, I see you applied those patches, thanks!
--- 
-Florian
+What's the plan for these patches? Don't see them in linux-next still. 
+Do you want me to take patches 1-8?
 
+Rob
