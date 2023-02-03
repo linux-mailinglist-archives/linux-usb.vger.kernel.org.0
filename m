@@ -2,123 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6148689701
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 11:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0750E689731
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 11:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbjBCKhK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 3 Feb 2023 05:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S232422AbjBCKpm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 05:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjBCKhG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 05:37:06 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3158412F22;
-        Fri,  3 Feb 2023 02:36:48 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pNtQu-0005LU-Pm; Fri, 03 Feb 2023 11:36:40 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pNtQu-000Qu4-EY; Fri, 03 Feb 2023 11:36:40 +0100
-Message-ID: <1c4be6be8aa9f69af71c967b4cc0b77344d374de.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Fri, 03 Feb 2023 11:36:35 +0100
-In-Reply-To: <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
-         <20230203083037.GA30738@lst.de>
-         <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
-         <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S231989AbjBCKpj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 05:45:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC3C4DE34;
+        Fri,  3 Feb 2023 02:45:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C9FFB82911;
+        Fri,  3 Feb 2023 10:45:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CBBC433EF;
+        Fri,  3 Feb 2023 10:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675421134;
+        bh=SuTJEMBQVNWW0UtXQvJqhKD+s4e//c7KXMNI8Q4O34Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hyyt9W04xaKg7rchWtQze8rvUrIjdOIcesKEd0Blet3yknX8Egp/TT4nEcnycyCX4
+         KdfVLUwLcqYy8QuQv/yc4opy3hYcj3L6irucvuh0gpGTiE16FgGsVBccOAIWuub1wc
+         bqJVq/l3NNbSCSYnnS3dEdbz7+UzI3JrwxOH7rK4=
+Date:   Fri, 3 Feb 2023 11:45:31 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Anastasia Belova <abelova@astralinux.ru>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
+Message-ID: <Y9zly1vrj9z4c1qT@kroah.com>
+References: <20230203101828.14799-1-abelova@astralinux.ru>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203101828.14799-1-abelova@astralinux.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Geert!
-
-On Fri, 2023-02-03 at 11:33 +0100, Geert Uytterhoeven wrote:
-> Hi Adrian,
+On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
+> Before dereferencing dev->driver check it for NULL.
 > 
-> On Fri, Feb 3, 2023 at 11:29 AM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
-> > On Fri, 2023-02-03 at 09:30 +0100, Christoph Hellwig wrote:
-> > > On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> > > > Since this is my very first time stepping up as a kernel maintainer, I was hoping
-> > > > to get some pointers on what to do to make this happen.
-> > > > 
-> > > > So far, we have set up a new kernel tree and I have set up a local development and
-> > > > test environment for SH kernels using my SH7785LCR board as the target platform.
-> > > > 
-> > > > Do I just need to send a patch asking to change the corresponding entry in the
-> > > > MAINTAINERS file?
-> > > 
-> > > I'm not sure a there is a document, but:
-> > > 
-> > >  - add the MAINTAINERS change to your tree
-> > >  - ask Stephen to get your tree included in linux-next
-> > > 
-> > > then eventually send a pull request to Linus with all of that.  Make
-> > > sure it's been in linux-next for a while.
-> > 
-> > OK, thanks for the pointers! Will try to get this done by next week.
-> > 
-> > We're still discussing among SuperH developer community whether there will be a second
-> > maintainer, so please bear with us a few more days. I will collect patches in the
-> > meantime.
+> If an interrupt handler is called after assigning
+> NULL to dev->driver, but before resetting dev->int_enable,
+> NULL-pointer will be dereferenced.
 > 
-> Thanks a lot!
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> If you need any help with process, setup, ... don't hesitate to ask
-> (on e.g. #renesas-soc on Libera).
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> ---
+>  drivers/usb/gadget/udc/goku_udc.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+> index bdc56b24b5c9..896bba8b47f1 100644
+> --- a/drivers/usb/gadget/udc/goku_udc.c
+> +++ b/drivers/usb/gadget/udc/goku_udc.c
+> @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void *_dev)
+>  pm_next:
+>  		if (stat & INT_USBRESET) {		/* hub reset done */
+>  			ACK(INT_USBRESET);
+> -			INFO(dev, "USB reset done, gadget %s\n",
+> -				dev->driver->driver.name);
+> +			if (dev->driver)
+> +				INFO(dev, "USB reset done, gadget %s\n",
+> +					dev->driver->driver.name);
 
-Thanks a lot! I've got some real-life tasks to do today, but I will join later today.
+How can this ever happen?  Can you trigger this somehow?  If not, I
+don't think this is going to be possible (also what's up with printk
+from an irq handler???)
 
-And I will ask questions ;-).
+Odds are, no one actually has this hardware anymore, right?
 
-Adrian
+thanks,
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+greg k-h
