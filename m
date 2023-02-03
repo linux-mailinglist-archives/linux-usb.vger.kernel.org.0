@@ -2,124 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EEF6898AF
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 13:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C699C6898FF
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 13:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbjBCMaV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 07:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S232467AbjBCMqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 07:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjBCMaS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 07:30:18 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9301277DCB
-        for <linux-usb@vger.kernel.org>; Fri,  3 Feb 2023 04:30:10 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k16so3751980wms.2
-        for <linux-usb@vger.kernel.org>; Fri, 03 Feb 2023 04:30:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oliUtLWESo3lQu6iHKqwx+2QOwN2sNCjDu921E6eImU=;
-        b=PC6jnhprbBOYA5gQ8hht4uhJybrq7/0C64ACU2Gt9qfbW1pk9VfapwtzsEQiHMXbWG
-         1JppW/crId+0Ce/5NY+vbYD8aQrWah3VOr/cgyiKfrz+CsV1xjGADT9tWMUyPppehNBX
-         SC0wy/PcQSuekQwM7g/y6t2SL8B/Gkosz5mtmibN43bNv0b1mD4tCXB0banPcItFJwfc
-         i54CE0XoHTzA+jAmoTtBHleO+mnp2xAR7FyjhdHzEDNwwY9TdNXm+ghb8j6ArobpiwRR
-         9hn30hxFYj4ol+bMYzOz9KNKlsouP5G6WIVr/nA+qavbwuBMicrP2QKe1d5rCLF7jiXP
-         ViLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oliUtLWESo3lQu6iHKqwx+2QOwN2sNCjDu921E6eImU=;
-        b=Gy530cWbTYgb7u20XmPq3VjJdIRJNHvBZxq/8ZoDMB1WEFk4B6sB6xAfcyh+vaDygp
-         SFb0O16P48/Du+zn3+tNBoAqaS+6UqMQ4Mb5jYGzLaoLLF0Af4vgRaey7//nDgkE69uE
-         blsACU/NJnBW5yFadpxX7D4HcmQ3qwcsCQm4Ak2+o+R4BAsT6DFAAXD42svUxrc169fs
-         m8rnz7DtWRS9HE3dTkEz5bGhww1skYR8B/TM/R/teF9dXOPBY4X2+5BJYr50nUBFqF+y
-         bOV2mjF4qUudNcPj2igjP2TeWBrdDuGPoRG12YQrBXpfathI/41eIRlevOT8ZWSQ+vgr
-         hIFQ==
-X-Gm-Message-State: AO0yUKUpfokizlyIjKN4EQE3RBKrnrbUq1D0tIQfyxMwGwHAYN242j9G
-        ZT+1qO2gNWhtEDee00tLMJHOAg==
-X-Google-Smtp-Source: AK7set8hvfzN5yvSx0vn3SHDYBE0Cu37jFl12DeSADMr5lTBdrNCrV6wJaZ+esFXBrp8t+sFKTfd2w==
-X-Received: by 2002:a05:600c:4395:b0:3df:9858:c02c with SMTP id e21-20020a05600c439500b003df9858c02cmr4411370wmn.1.1675427409090;
-        Fri, 03 Feb 2023 04:30:09 -0800 (PST)
-Received: from [192.168.2.104] ([79.115.63.122])
-        by smtp.gmail.com with ESMTPSA id h27-20020a05600c2cbb00b003db12112fcfsm2871505wmc.4.2023.02.03.04.30.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 04:30:08 -0800 (PST)
-Message-ID: <e50fe7d3-0c73-d4af-9a61-74d1279202cc@linaro.org>
-Date:   Fri, 3 Feb 2023 12:30:06 +0000
+        with ESMTP id S229785AbjBCMqh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 07:46:37 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988719AFEA;
+        Fri,  3 Feb 2023 04:46:35 -0800 (PST)
+Received: from [94.107.229.70] (helo=[192.168.31.91]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pNvSb-000198-Uh; Fri, 03 Feb 2023 13:46:33 +0100
+Message-ID: <1d2c42f7-5cc9-17a6-dbe6-1c599428831b@leemhuis.info>
+Date:   Fri, 3 Feb 2023 13:46:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] tree-wide: trivial: s/ a SPI/ an SPI/
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     trivial@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-wireless@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-rtc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org
-References: <20230203101624.474611-1-tudor.ambarus@linaro.org>
- <CAMuHMdVeDbTGLBAk5QWGQGf=o6g25t341FjGTmNsHw0_sDOceg@mail.gmail.com>
- <Y9z0bQ8TeFROA0Fj@sirena.org.uk>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <Y9z0bQ8TeFROA0Fj@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
+ net device
+Content-Language: en-US, de-DE
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20221104131031.850850-1-s.hauer@pengutronix.de>
+ <20221104131031.850850-2-s.hauer@pengutronix.de>
+ <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675428395;a4564287;
+X-HE-SMSGID: 1pNvSb-000198-Uh
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-
-On 2/3/23 11:47, Mark Brown wrote:
-> On Fri, Feb 03, 2023 at 11:28:03AM +0100, Geert Uytterhoeven wrote:
->> On Fri, Feb 3, 2023 at 11:17 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+On 01.02.23 14:32, Paul Cercueil wrote:
+> Hi Sascha, Greg,
 > 
->>> The deciding factor for when a/an should be used is the sound
->>> that begins the word which follows these indefinite articles,
->>> rather than the letter which does. Use "an SPI" (SPI begins
->>> with the consonant letter S, but the S is pronounced with its
->>> letter name, "es.").
+> I have a breakage in 6.2-rc* that I eventually bisected to this commit,
+> on a Ingenic SoC (using the jz4740 musb driver) with ECM or RNDIS
+> configured through gadgetfs.
 > 
->> While I agree with your pronunciation, I believe the SPI maintainer
->> (which you forgot to CC) pronounces it in James Bond-style, i.e. rhymes
->> with "spy" ;-)
+> When plugging the board to my PC, the USB network interface is
+> recognized, but 'ip link' sees it as 'NO-CARRIER'. With this commit
+> reverted on v6.2-rc5, everything works fine.
+
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
+
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced 321b59870f850
+#regzbot title usb: gadget: USB network interface is recognized, but 'ip
+link' sees it as 'NO-CARRIER'
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.	
+
+> Le vendredi 04 novembre 2022 à 14:10 +0100, Sascha Hauer a écrit :
+>> The UDC is not a suitable parent of the net device as the UDC can
+>> change or vanish during the lifecycle of the ethernet gadget. This
+>> can be illustrated with the following:
+>>
+>> mkdir -p /sys/kernel/config/usb_gadget/mygadget
+>> cd /sys/kernel/config/usb_gadget/mygadget
+>> mkdir -p configs/c.1/strings/0x409
+>> echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
+>> mkdir -p functions/ecm.usb0
+>> ln -s functions/ecm.usb0 configs/c.1/
+>> echo "dummy_udc.0" > UDC
+>> rmmod dummy_hcd
+>>
+>> The 'rmmod' removes the UDC from the just created gadget, leaving
+>> the still existing net device with a no longer existing parent.
+>>
+>> Accessing the ethernet device with commands like:
+>>
+>> ip --details link show usb0
+>>
+>> will result in a KASAN splat:
+>>
+>> ==================================================================
+>> BUG: KASAN: use-after-free in if_nlmsg_size+0x3e8/0x528
+>> Read of size 4 at addr c5c84754 by task ip/357
+>>
+>> CPU: 3 PID: 357 Comm: ip Not tainted 6.1.0-rc3-00013-gd14953726b24-
+>> dirty #324
+>> Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+>>  unwind_backtrace from show_stack+0x10/0x14
+>>  show_stack from dump_stack_lvl+0x58/0x70
+>>  dump_stack_lvl from print_report+0x134/0x4d4
+>>  print_report from kasan_report+0x78/0x10c
+>>  kasan_report from if_nlmsg_size+0x3e8/0x528
+>>  if_nlmsg_size from rtnl_getlink+0x2b4/0x4d0
+>>  rtnl_getlink from rtnetlink_rcv_msg+0x1f4/0x674
+>>  rtnetlink_rcv_msg from netlink_rcv_skb+0xb4/0x1f8
+>>  netlink_rcv_skb from netlink_unicast+0x294/0x478
+>>  netlink_unicast from netlink_sendmsg+0x328/0x640
+>>  netlink_sendmsg from ____sys_sendmsg+0x2a4/0x3b4
+>>  ____sys_sendmsg from ___sys_sendmsg+0xc8/0x12c
+>>  ___sys_sendmsg from sys_sendmsg+0xa0/0x120
+>>  sys_sendmsg from ret_fast_syscall+0x0/0x1c
+>>
+>> Solve this by not setting the parent of the ethernet device.
+>>
+>> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+>> ---
+>>  drivers/usb/gadget/function/u_ether.c | 4 ----
+>>  1 file changed, 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/u_ether.c
+>> b/drivers/usb/gadget/function/u_ether.c
+>> index e06022873df16..8f12f3f8f6eeb 100644
+>> --- a/drivers/usb/gadget/function/u_ether.c
+>> +++ b/drivers/usb/gadget/function/u_ether.c
+>> @@ -798,7 +798,6 @@ struct eth_dev *gether_setup_name(struct
+>> usb_gadget *g,
+>>         net->max_mtu = GETHER_MAX_MTU_SIZE;
+>>  
+>>         dev->gadget = g;
+>> -       SET_NETDEV_DEV(net, &g->dev);
+>>         SET_NETDEV_DEVTYPE(net, &gadget_type);
+>>  
+>>         status = register_netdev(net);
+>> @@ -873,8 +872,6 @@ int gether_register_netdev(struct net_device
+>> *net)
+>>         struct usb_gadget *g;
+>>         int status;
+>>  
+>> -       if (!net->dev.parent)
+>> -               return -EINVAL;
+>>         dev = netdev_priv(net);
+>>         g = dev->gadget;
+>>  
+>> @@ -905,7 +902,6 @@ void gether_set_gadget(struct net_device *net,
+>> struct usb_gadget *g)
+>>  
+>>         dev = netdev_priv(net);
+>>         dev->gadget = g;
+>> -       SET_NETDEV_DEV(net, &g->dev);
+>>  }
+>>  EXPORT_SYMBOL_GPL(gether_set_gadget);
+>>  
 > 
-> Yes, I do.  To the best of my knowledge most people just say "spy"
-> rather than pronouncing the letters or anything.
-> 
-> In any case as I said in reply to one of the individual patches English
-> isn't regular enough to go with hard and fast rules on anything, and the
-> letter rule is much more commonly used where something is needed.  Using
-> an here looks wrong to me, and the fact that a is so widely used does
-> suggest that usage has escaped whatever rule there is.
-
-Indeed:
-$ git grep " a SPI" | wc -l
-131
-$ git grep " an SPI" | wc -l
-88
-
-Ok, let's drop this patch.
-
-Cheers,
-ta
