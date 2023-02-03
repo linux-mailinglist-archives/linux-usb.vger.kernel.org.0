@@ -2,85 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364016895DA
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 11:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39A1689712
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 11:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjBCKTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 05:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S232204AbjBCKiw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 05:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbjBCKTo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 05:19:44 -0500
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F4D8B7E6;
-        Fri,  3 Feb 2023 02:19:08 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id BFC5F1863E8A;
-        Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id hEE99ydb8xu4; Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 7014D1863BFD;
-        Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id sntV4lUThDfK; Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.58])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id 018591862F44;
-        Fri,  3 Feb 2023 13:18:32 +0300 (MSK)
-From:   Anastasia Belova <abelova@astralinux.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH] goku_udc: Add check for NULL in goku_irq
-Date:   Fri,  3 Feb 2023 13:18:28 +0300
-Message-Id: <20230203101828.14799-1-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S233572AbjBCKif (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 05:38:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E23A2D7C;
+        Fri,  3 Feb 2023 02:38:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1813561E92;
+        Fri,  3 Feb 2023 10:38:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C898DC433EF;
+        Fri,  3 Feb 2023 10:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675420710;
+        bh=vQS7C9kztdfXOeeXrW+VPQxT7S8tVcrsOlD1rJ+FntI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hv+WqU+w8pCyGraIqN/K5t2HEqjp+Z7cP7b35VL9BbikrV8LOqTlgSbaaDcDkEBoa
+         kkh4IakS5iNLzJiNRoP21qeoz0Gj6MSalQ/4uJ8Ed86jdPHu22HEo2OudVKbTqZhvT
+         SAjamje2Z1lkkljI+sfU/KgxkqRTC7D/2vEVhyy4=
+Date:   Fri, 3 Feb 2023 11:18:43 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>
+Subject: Re: [PATCH] usb: roles: disable pm for role switch device
+Message-ID: <Y9zfg6+Fgs5Tck49@kroah.com>
+References: <1675419059-30078-1-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675419059-30078-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Before dereferencing dev->driver check it for NULL.
+On Fri, Feb 03, 2023 at 06:10:59PM +0800, Linyu Yuan wrote:
+> there is no PM operation for a role switch device,
+> call device_set_pm_not_required() in usb_role_switch_register() to disable.
+> 
+> Cc: stable@vger.kernel.org # 5.4+
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 
-If an interrupt handler is called after assigning
-NULL to dev->driver, but before resetting dev->int_enable,
-NULL-pointer will be dereferenced.
+What commit id does this fix?
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+thanks,
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
----
- drivers/usb/gadget/udc/goku_udc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/g=
-oku_udc.c
-index bdc56b24b5c9..896bba8b47f1 100644
---- a/drivers/usb/gadget/udc/goku_udc.c
-+++ b/drivers/usb/gadget/udc/goku_udc.c
-@@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void *_dev)
- pm_next:
- 		if (stat & INT_USBRESET) {		/* hub reset done */
- 			ACK(INT_USBRESET);
--			INFO(dev, "USB reset done, gadget %s\n",
--				dev->driver->driver.name);
-+			if (dev->driver)
-+				INFO(dev, "USB reset done, gadget %s\n",
-+					dev->driver->driver.name);
- 		}
- 		// and INT_ERR on some endpoint's crc/bitstuff/... problem
- 	}
---=20
-2.30.2
-
+greg k-h
