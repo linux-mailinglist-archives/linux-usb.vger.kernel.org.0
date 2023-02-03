@@ -2,143 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A4D6891AD
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 09:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7C5689213
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 09:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjBCIL1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 03:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        id S232840AbjBCIWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 03:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjBCIKw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 03:10:52 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E507EBB9B;
-        Fri,  3 Feb 2023 00:10:09 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id c15so3375919oic.8;
-        Fri, 03 Feb 2023 00:10:09 -0800 (PST)
+        with ESMTP id S233023AbjBCIWL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 03:22:11 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18DA991D2
+        for <linux-usb@vger.kernel.org>; Fri,  3 Feb 2023 00:20:34 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id o18so3924382wrj.3
+        for <linux-usb@vger.kernel.org>; Fri, 03 Feb 2023 00:20:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=45Tnhfu0pAuxepjnBLmTM16w/DDLwSO1jhjjoAKVus8=;
+        b=OUGU+d2plzG4JQUvTzSTt/pZc/bAsHxNbwp/HWH8vk4+Gh4xG+LPYlHI9CElCcbnxB
+         4JDHm9QJB31ixhJ2S/EnpQRLSQiHIawt5YAt8wKciDlOxVsmFgrVMH70GBKd4MjfvUEa
+         Sauy8zaw2OPEWV/GU41j/70NzI+Tkyhc45sFA+dm/p9w6/WmfHTmmnyFnx4zHLnPcCs2
+         iYMOEDqqEiIFTMYYQwHgSP9972H0KdOufjFJyEGejeWeVoaOIMOImooURU1xPI1dyZcj
+         jrgnPWg80CPQJv5gw/ywY3J3zM+nN5lT91wuINZmtsNCA+f7DZoDqineBN9NTx3yKkw+
+         f/Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kDxWR290mL61G5r22X9+N8Kd9HuPTjlQvTYHZMCubL4=;
-        b=3eDzzWTiVP1aYFzPvZd8gKqPSx+KLtHm0PKZeHp3NYuZJ+wTXr0R/tTlic1v+1wjQJ
-         Bfxp+jWw9ENk3ZIW3W5zLK0hpYpBZndRhkl5yh1AqqjaNTzxFP8vhrlkt5uzwZvYLFLj
-         rwd8pSc+ZwpDai3zuCpzTgSzaWguZ8gssHfNcW7m9uPkhnuQ5rkdH+3SZAX0S+sORfij
-         gwERmBL1q08YRKqq2TxJcYK0x5ZnjiKYW/gWsWZBQc7qV277g13EkKh/nBToEADED7rD
-         8T5zp7F8ug454zLx1jFQGF3MLyCMMpsoD3H90e+v7408nD/ZM9mI4o0l6EOVKwMVt07/
-         dU/g==
-X-Gm-Message-State: AO0yUKWiIn9oW1g7jpOEe0Cc3ANQyb9cWsWoH+VpAvvN09Kn/6nWdop2
-        /4EyHH8/eBmAaBTpKRFcesTAIR6giUUjSQ==
-X-Google-Smtp-Source: AK7set9OnnbUpKR2KW2u/fmuxsyJ48mxJX3thUsf4xqf7oPnWAZMhOZ987ucA0ujE5juIfy+gaYgWg==
-X-Received: by 2002:a05:6808:10c1:b0:35a:7043:ee4d with SMTP id s1-20020a05680810c100b0035a7043ee4dmr5791990ois.0.1675411809101;
-        Fri, 03 Feb 2023 00:10:09 -0800 (PST)
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com. [209.85.210.54])
-        by smtp.gmail.com with ESMTPSA id bk30-20020a0568081a1e00b0037880fdb1f6sm584350oib.24.2023.02.03.00.10.08
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=45Tnhfu0pAuxepjnBLmTM16w/DDLwSO1jhjjoAKVus8=;
+        b=6pU6eEpwVNnTfDSD6jHtKpe+2mtUk2sx17NQg6Y9w8ghyJ2Gs57ukqMeHHUmxhTR0s
+         MvpRZsV6PIAbfk/FncjHJJgtMNdzVyBeTxA/NBHqtzNRCQJrJLY4jS0ATrgu2O+VUzKt
+         G+/e4yXKg4AsVww41Nkn4GK1U5lD/D2jiuoJhzP7+nnn9m5dAdqxYA1yH/QnHbiNOCUl
+         u4sBkex0+wdqTnqCPOrz8ZQgSnRyBABa5tO0at8B7A8mGZgJI58t5D2yOAoWXn+ShTdD
+         Q+mmmgJbfbs2WbyKdUF9DobuV8rP2bhOxUk4cck6V1MyTr8JW7032Vy/mSflml9LyQYe
+         Aq9Q==
+X-Gm-Message-State: AO0yUKVveOoIjD+8wqW72F+oF0oPXZlg/wl43+nZcTnE7c8gw1DxHEgw
+        JDR3rjdyedW/PR2yz+5QhvKu4A==
+X-Google-Smtp-Source: AK7set+EHfIJ8oVMvuan/LXh1dEkhymKWZxpfR3L3yw2Z1sdfrUNYRGI4me9tY8RpOo4+CdlFbpKHA==
+X-Received: by 2002:a05:6000:1889:b0:2bf:c5e4:1af4 with SMTP id a9-20020a056000188900b002bfc5e41af4mr10438931wri.15.1675412412036;
+        Fri, 03 Feb 2023 00:20:12 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c12-20020a5d4ccc000000b002bddac15b3dsm1378894wrt.33.2023.02.03.00.20.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 00:10:08 -0800 (PST)
-Received: by mail-ot1-f54.google.com with SMTP id n25-20020a9d7119000000b0068bd8c1e836so1148749otj.3;
-        Fri, 03 Feb 2023 00:10:08 -0800 (PST)
-X-Received: by 2002:a25:ada1:0:b0:839:c329:be37 with SMTP id
- z33-20020a25ada1000000b00839c329be37mr1030442ybi.89.1675411484019; Fri, 03
- Feb 2023 00:04:44 -0800 (PST)
+        Fri, 03 Feb 2023 00:20:11 -0800 (PST)
+Message-ID: <241f919c-8190-00d6-f89b-6f7f54b29df9@linaro.org>
+Date:   Fri, 3 Feb 2023 09:20:10 +0100
 MIME-Version: 1.0
-References: <cover.1674584626.git.geert+renesas@glider.be> <3d612c95031cf5c6d5af4ec35f40121288a2c1c6.1674584626.git.geert+renesas@glider.be>
- <Y9ybPmWub43JpMUb@matsya>
-In-Reply-To: <Y9ybPmWub43JpMUb@matsya>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 3 Feb 2023 09:04:32 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVJo3aRLh4BCSvOrX+4KMNC=WoQCHMzdiWOmdjSSESxbg@mail.gmail.com>
-Message-ID: <CAMuHMdVJo3aRLh4BCSvOrX+4KMNC=WoQCHMzdiWOmdjSSESxbg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] net: ethernet: ti: am65-cpsw: Convert to devm_of_phy_optional_get()
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-phy@lists.infradead.org, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 13/13] USB: gadget: s3c2410_udc: fix memory leak with
+ using debugfs_lookup()
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@kernel.org>
+References: <20230202153235.2412790-1-gregkh@linuxfoundation.org>
+ <20230202153235.2412790-13-gregkh@linuxfoundation.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230202153235.2412790-13-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Vinod,
+On 02/02/2023 16:32, Greg Kroah-Hartman wrote:
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  To make things simpler, just
+> call debugfs_lookup_and_remove() instead which handles all of the logic
+> at once.
+> 
 
-On Fri, Feb 3, 2023 at 6:27 AM Vinod Koul <vkoul@kernel.org> wrote:
-> On 24-01-23, 19:37, Geert Uytterhoeven wrote:
-> > Use the new devm_of_phy_optional_get() helper instead of open-coding the
-> > same operation.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > v2:
-> >   - Rebase on top of commit 854617f52ab42418 ("net: ethernet: ti:
-> >     am65-cpsw: Handle -EPROBE_DEFER for Serdes PHY") in net-next
-> >     (next-20230123 and later).
->
-> I was trying to apply this on rc1, so ofcourse this fails for me? How do
-> we resolve this?
->
-> I can skip this patch, provide a tag for this to be pulled into -net
-> tree
+Hi Greg,
 
-Thanks, that's one option.
-The other option is to postpone this patch, and apply it after v6.3-rc1.
+This driver will be removed in v6.3 via Arnd's tree:
+https://lore.kernel.org/all/20221021203329.4143397-13-arnd@kernel.org/
 
-Thanks!
+I think we can skip any work on this.
 
-> > --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> > +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> > @@ -1460,11 +1460,9 @@ static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *por
-> >       struct phy *phy;
-> >       int ret;
-> >
-> > -     phy = devm_of_phy_get(dev, port_np, name);
-> > -     if (PTR_ERR(phy) == -ENODEV)
-> > -             return 0;
-> > -     if (IS_ERR(phy))
-> > -             return PTR_ERR(phy);
-> > +     phy = devm_of_phy_optional_get(dev, port_np, name);
-> > +     if (IS_ERR_OR_NULL(phy))
-> > +             return PTR_ERR_OR_ZERO(phy);
-> >
-> >       /* Serdes PHY exists. Store it. */
-> >       port->slave.serdes_phy = phy;
+Best regards,
+Krzysztof
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
