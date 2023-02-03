@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7937B6890D9
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 08:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A696890E8
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 08:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjBCH2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 02:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S231761AbjBCHc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 02:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbjBCH23 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 02:28:29 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACBE28866;
-        Thu,  2 Feb 2023 23:28:27 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so8012162pjd.2;
-        Thu, 02 Feb 2023 23:28:27 -0800 (PST)
+        with ESMTP id S229785AbjBCHc5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 02:32:57 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A390C79237;
+        Thu,  2 Feb 2023 23:32:56 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id hv11-20020a17090ae40b00b002307b580d7eso573235pjb.3;
+        Thu, 02 Feb 2023 23:32:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yrUqXfryLQlrLCm9hyDoqZD26Fw47bBABUs2gO/ieAw=;
-        b=LSsFXEfftMJGiVLjtMNzhivatY1XQ4DELbLj6r0NuahhqFSAQPW6dZJKiLGhd/ldn4
-         tRCsuYkfgyRPh0zAYLKwjVmpGFrmHQ5jo4RAyaujkwkfvX1JmrhTUiXEV3wm9FN7Xqeo
-         7sdGfotQxJHTTl+uJEsVs0BuQw4xi0vpfsBSvuj4Bp0RhULIM5bd7GQ92Ot8DW325Gum
-         H6vhmNPcYUc9xGjAeErLni63/TWKuqIlrLrQPoCT1JOuv30azv/nkmfi64RqK8M9BTRj
-         T/tVYfnu18b+373OACSI68IYyq9E0uF+3GV2NdNmf6vHtn61VRpuSEHIZz1b1VDnm37Z
-         +QaQ==
+        bh=8Bl6Sk47HkvLOT4g5kYdWwukzPWPY0tzuMQrBIW1g8c=;
+        b=AMCAgKswDcLXDth+I3fOp9QfA6ARnDu/3jPhvONTQsHbn3EjNOXMzsipS7J2QXhWyV
+         soealD3NdbJYzjr/lIQW78ua0OXLOmdIdEwNvXI9Xrl/TZd2j9/ZgMOe8U0IJuSq2kpC
+         L/0/xyXNv2OwZx+R+v6ghRnLwWCAIEnqCzKq2ahGbwwfGln+8oPgYJmS04Wez6qDCOTm
+         XVa4mNWtl9LUvUwJ7kqoS6xOz+Xw3b5e6Qz3Iwc+rghtdISHHGi3t8jiG7qKd94SWmKv
+         OPQgWE+WbQgwRy5SAjwcmUVolOvA5JB15FgVgjUfb8V67mVzfUuipqmpsi28Hbtk/LuZ
+         rMIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yrUqXfryLQlrLCm9hyDoqZD26Fw47bBABUs2gO/ieAw=;
-        b=uCTjg1p8mu3yvK7tIdULWl9L2291kx8hgXAMoQRBNM7CEFn+gLZo7PVqDJGhIU8FSe
-         KRBrH3ye9L2d8rH1OrM80/dYsOGxlpGXzrfk2gR8lasN3+9d5NlFdjYFL51jXF8xvw/5
-         NwHb2mLM3oh5oXYbD4/NGZ7UOxRszUNMoiPP3/mv6Q72go/JZE/0jnJ7S4qOfVRzWOm+
-         XaIzDBSIHwy8NYIiqaLwXfAo0UzoeVEQl6cYoznmdkuxRnuPgKod/jrSsWMDdi6cML9e
-         Z0NhE26VZt8vDjR9SlGqkN3awO2GGXbybQdTkXiVoRIWrOT+NAL65SD0r5bW0RqDjtww
-         Z76w==
-X-Gm-Message-State: AO0yUKUFwNdDEXNYqQMZaKGLpSLD9iaApEfCe9QstQAXWZVdITNy430J
-        KqRqKya7qKTG2koL608xHux0i2xQkT0=
-X-Google-Smtp-Source: AK7set9q2Adj1gdXQI/B+c5O74A8qQBVNq4OwTNFPaCkZ7iDmdp2cs23NtuXcMJlbb04+uq+bSOoUw==
-X-Received: by 2002:a17:903:2288:b0:198:dd3f:2846 with SMTP id b8-20020a170903228800b00198dd3f2846mr1879080plh.29.1675409306986;
-        Thu, 02 Feb 2023 23:28:26 -0800 (PST)
+        bh=8Bl6Sk47HkvLOT4g5kYdWwukzPWPY0tzuMQrBIW1g8c=;
+        b=hAZUDgBw90YIC3m6xmeYHeMrlm7QVQQILXqBpSmG/S6LjTan44lZubTeIYxrTz05J4
+         kt7qkCqTOhTsK8pN7a8U2/QHI2RIiU6lNQYOXkjmMCYq+qZyNJKWGxzW9RQdyUT2VDnh
+         gwenclx6AwntPynS2tK8f/iBZpMpJN6GwnpVoUZJRPjGg8E2WE5EDGg4iGLy2KL6U/kI
+         dOj6M0kqPWnrUtQWc2uKeJbvjZeFasvg9KTtq/hjq0bE6bWwgMQjjHq9CnABuipB9R8r
+         Qqp5ZZTO38Zfuurbu7TXK2YITVcC9bLuLXOXoDqIDDTpUEk5KRvnkzZiaAZi2yQoyr7e
+         Em9Q==
+X-Gm-Message-State: AO0yUKWWGivBg+lmYg2/Tcf8JAPdj42XEITS2CtJk8I4iQHkx0raHFhH
+        ZvNav3xCuf8bz0OXs5LnwgEbQumL9Rc=
+X-Google-Smtp-Source: AK7set9/q0axN3f4rDzK4IZ7phmSdSamza3e5sDIYKUR4j57UlcO3iO8qr+LgprHMQ59luC60FzqOQ==
+X-Received: by 2002:a17:902:c40f:b0:191:7d3:7fdd with SMTP id k15-20020a170902c40f00b0019107d37fddmr4333669plk.60.1675409575901;
+        Thu, 02 Feb 2023 23:32:55 -0800 (PST)
 Received: from zj-T470P.. ([103.135.104.6])
-        by smtp.gmail.com with ESMTPSA id c19-20020a170902849300b00192a8b35fa3sm874750plo.122.2023.02.02.23.28.24
+        by smtp.gmail.com with ESMTPSA id h14-20020a170902f7ce00b00195f249e688sm867202plw.248.2023.02.02.23.32.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 23:28:26 -0800 (PST)
+        Thu, 02 Feb 2023 23:32:55 -0800 (PST)
 From:   Zhu Zhongjie <zhongjiezhu1@gmail.com>
 To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Zhongjie Zhu <zhongjiezhu1@gmail.com>
-Subject: [PATCH] USB: core: hub: fix usb_hub worker blocking drain_all_pages() worker issue
-Date:   Fri,  3 Feb 2023 15:28:19 +0800
-Message-Id: <20230203072819.3408-1-zhongjiezhu1@gmail.com>
+Subject: [PATCH v1] USB: core: hub: fix usb_hub worker blocking drain_all_pages() worker issue
+Date:   Fri,  3 Feb 2023 15:32:50 +0800
+Message-Id: <20230203073250.3465-1-zhongjiezhu1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,7 +72,7 @@ From: Zhongjie Zhu <zhongjiezhu1@gmail.com>
 When disconnecting a usb mass storege, if there are a lot of inodes
 like 10 thousands files need to be freed, the invalidate_inodes() will
 run for a loog time to freeing all inodes, this will block other worker
-to run in the cpu, so mark the usb_hub workqueue to WQ_CPU_INTENSIVE to
+to run on the cpu, so mark the usb_hub workqueue to WQ_CPU_INTENSIVE to
 avoid this situation.
 
 Sometimes the flowing call stack will hanppen: the cma_alloc() will be
