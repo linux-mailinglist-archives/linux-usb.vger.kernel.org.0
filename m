@@ -2,85 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AE1688D17
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 03:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B62C688EF7
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 06:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjBCCby (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Feb 2023 21:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S231866AbjBCF1h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 00:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjBCCbx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Feb 2023 21:31:53 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2272278F;
-        Thu,  2 Feb 2023 18:31:52 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313297gv028705;
-        Fri, 3 Feb 2023 02:31:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jv3epMqncONzbIT4T8Ty/1OW0lkMcwgsh14aoGpR0MA=;
- b=LpYiRQ/L/L44b0IXw2vGmBeOb4EN0u7YGvJyyRq7M3lMDGfu3O0q69lMCG4dd+bOpW6U
- /a2BFbYx+p2Z8mOYaGw9eH8IO8yWzfcEc/Sk0eFFd0VqGO9fdVd5TWmexuRp6Nb6Ma6p
- O14/45tPg0nJFty+MzP3SasW/wDRQ46MGaaBh9RorbkXVBjqfZYpJUmLIOdze39kzCvb
- kBoGWKBbK0yju+km+tY4u31i36dsWOJcuiI5H99PZIqpC3j4g751RZzhoRqM8U3Z9MqP
- DABFobrWTZungox/DdNdvmXCKbi4Gc+62b1V6myInP7IK9OflvlFN47GxGipz/lrRO/g gQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngncv0e9m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 02:31:50 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3132Vn92005829
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 02:31:49 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 18:31:46 -0800
-Message-ID: <47a6e9cb-e07c-2296-c9f1-6c7f92abd670@quicinc.com>
-Date:   Fri, 3 Feb 2023 10:31:44 +0800
+        with ESMTP id S230230AbjBCF1d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 00:27:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982381F5C1;
+        Thu,  2 Feb 2023 21:27:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 327FF61D0D;
+        Fri,  3 Feb 2023 05:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D55C433EF;
+        Fri,  3 Feb 2023 05:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675402051;
+        bh=fHq9IkxqxVUwz3GGvOE/Mwt4EK7elXIC9jlHvqcrh8s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b8aDl1NIsRsl5BjZTgbUD7FGwU0exrjPdV5CSous9UsW/GkGSVWtwdmywNbhtc1vP
+         qD9wUxbxs4lj9ObsBx32KTRRww8VYUVzr6hON2oshLd7CP5vusl+YUfCsiAkfcSbSw
+         7Z6mei8DcZOM3Ehye2TfF33alKtXhQjfgRng4kstNIvCyfoPX98cySlNoZWzbVFS2d
+         cor3Ij5NklP1JiZI+8k/udVX0Y6uJoq2kDnY3bYNBFzIO3aheHu2zWc5I9WQSve3bl
+         0dJycH5YhwSy/+uaptRsgK8hnl4CyBZ+y01J2rNUqcZt8yXiLMgEcbaeqXlcGIi7ry
+         TS2czWrz8ECfQ==
+Date:   Fri, 3 Feb 2023 10:57:26 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-phy@lists.infradead.org, linux-doc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 6/9] net: ethernet: ti: am65-cpsw: Convert to
+ devm_of_phy_optional_get()
+Message-ID: <Y9ybPmWub43JpMUb@matsya>
+References: <cover.1674584626.git.geert+renesas@glider.be>
+ <3d612c95031cf5c6d5af4ec35f40121288a2c1c6.1674584626.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] usb: dwc3: update link state when process wakeup
- interrupt
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Elson Roy Serrao" <quic_eserrao@quicinc.com>,
-        Prashanth K <quic_prashk@quicinc.com>
-References: <1675221286-23833-1-git-send-email-quic_linyyuan@quicinc.com>
- <20230201190550.jozzrvwdi5lcwtbo@synopsys.com>
- <197a1446-9382-3d83-d26e-694e4d707679@quicinc.com>
- <d6e66c50-421d-f57e-fae3-1a4e14dce780@quicinc.com>
- <20230202203841.5vxxtejol3zyjjef@synopsys.com>
- <20230202235838.5d3a5lgdspahk6od@synopsys.com>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <20230202235838.5d3a5lgdspahk6od@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SIFaBn7rJXt3urA88S09jbAcArR4B5YB
-X-Proofpoint-GUID: SIFaBn7rJXt3urA88S09jbAcArR4B5YB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_16,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
- mlxlogscore=854 mlxscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030021
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d612c95031cf5c6d5af4ec35f40121288a2c1c6.1674584626.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,74 +78,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 24-01-23, 19:37, Geert Uytterhoeven wrote:
+> Use the new devm_of_phy_optional_get() helper instead of open-coding the
+> same operation.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v2:
+>   - Rebase on top of commit 854617f52ab42418 ("net: ethernet: ti:
+>     am65-cpsw: Handle -EPROBE_DEFER for Serdes PHY") in net-next
+>     (next-20230123 and later).
 
-On 2/3/2023 7:58 AM, Thinh Nguyen wrote:
-> On Thu, Feb 02, 2023, Thinh Nguyen wrote:
->> On Thu, Feb 02, 2023, Linyu Yuan wrote:
->>> hi Thinh,
->>>
->>>
->>> do you prefer below change ? will it be good for all cases ?
->>>
->>>
->>> +static void dwc3_gadget_update_link_state(struct dwc3 *dwc,
->>> +               const struct dwc3_event_devt *event)
->>> +{
->>> +       switch (event->type) {
->>> +       case DWC3_DEVICE_EVENT_HIBER_REQ:
->>> +       case DWC3_DEVICE_EVENT_LINK_STATUS_CHANGE:
->>> +       case DWC3_DEVICE_EVENT_SUSPEND:
->>> +               break;
->>> +       default:
->>> +               dwc->link_state = event->event_info & DWC3_LINK_STATE_MASK;
->>> +               break;
->>> +       }
->>> +}
->>> +
->>>   static void dwc3_gadget_interrupt(struct dwc3 *dwc,
->>>                  const struct dwc3_event_devt *event)
->>>   {
->>> +       dwc3_gadget_update_link_state(dwc3, event);
->>> +
->>>          switch (event->type)
->>>
->>>
->> This would break the check in dwc3_gadget_suspend_interrupt(). However,
->> I'm actually not sure why we had that check in the beginning. I suppose
->> certain setup may trigger suspend event multiple time consecutively?
->>
-> Actually, looking at it again, you're skipping updating the events
-> listed above and not for every event. So that should work. For some
-> reason, I thought you want to update the link_state for every new event.
+I was trying to apply this on rc1, so ofcourse this fails for me? How do
+we resolve this?
 
+I can skip this patch, provide a tag for this to be pulled into -net
+tree
 
-the reason why suggest new change is because we found it also need 
-update link state in other case,
+> ---
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> index c696da89962f1ae3..794f228c8d632f7a 100644
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> @@ -1460,11 +1460,9 @@ static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *por
+>  	struct phy *phy;
+>  	int ret;
+>  
+> -	phy = devm_of_phy_get(dev, port_np, name);
+> -	if (PTR_ERR(phy) == -ENODEV)
+> -		return 0;
+> -	if (IS_ERR(phy))
+> -		return PTR_ERR(phy);
+> +	phy = devm_of_phy_optional_get(dev, port_np, name);
+> +	if (IS_ERR_OR_NULL(phy))
+> +		return PTR_ERR_OR_ZERO(phy);
+>  
+>  	/* Serdes PHY exists. Store it. */
+>  	port->slave.serdes_phy = phy;
+> -- 
+> 2.34.1
 
-e.g. suspend -> reset ->conndone -> suspend
-
-
->
-> However, this would complicate the driver. Now we have to remember when
-> to set the link_state and when not to, and when to check the previous
-> link_state. On top of that, dwc->link_state may not reflect the current
-> state of the controller either, which makes it more confusing.
-
-
-agree now it is complicate.
-
-
->
-> Perhaps we should not update dwc->link_state outside of link state
-> change event, and just track whether we called gadget_driver->suspend()
-> to call the correspond resume() on wakeup? It can be tracked with
-> dwc->gadget_driver_is_suspended.
-
-
-could you help provide a change for this idea ?
-
-
->
-> Thanks,
-> Thinh
->
+-- 
+~Vinod
