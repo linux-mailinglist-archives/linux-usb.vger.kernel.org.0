@@ -2,222 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CDF689489
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 11:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7486894CD
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 11:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbjBCJ7K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 04:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S233160AbjBCKLW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 05:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbjBCJ7J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 04:59:09 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53107CCAD;
-        Fri,  3 Feb 2023 01:59:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A512ECE2F9F;
-        Fri,  3 Feb 2023 09:59:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8FDC433EF;
-        Fri,  3 Feb 2023 09:59:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675418342;
-        bh=bsaJGpoQ3BowAWk0LACdzI62vcqdapO3RJNXwpE5yEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h0ETe13YECCMtn9AWUX0nh4FVq4BJ3UctF9xsmAOpnMiWQxgaE70MpuMpH3R7s83h
-         8o/TZiFzxMnf00ZTJPjL9Ui7/P0QvRj01+dxcCQ+I8XGAwKufbUkga2u+usCVriXa4
-         01Y26kFxNoEXMLKRf07RdcwqtHtZzZU7oQUgDkIoSbtKNPu4GjeoGkcHloDAQXAWbO
-         d6zwta61uOEbhYsUgmtNMj+NGmwFbL08fZaCAhh6i2zRraN+i+PHM5yxzZgqMs89zl
-         38saQ9tCrvgyZKQNnkAeX4uIcD/xg/dsyHFgtw5dKIbzPe3J9r4upBwF1JgcpR2eGF
-         BovIGvGxEL2/A==
-Date:   Fri, 3 Feb 2023 15:28:57 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-phy@lists.infradead.org, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH treewide v2 0/9] phy: Add devm_of_phy_optional_get()
- helper
-Message-ID: <Y9za4a8qyapi4CWD@matsya>
-References: <cover.1674584626.git.geert+renesas@glider.be>
+        with ESMTP id S233150AbjBCKLU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 05:11:20 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F57F8F276;
+        Fri,  3 Feb 2023 02:11:17 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31384jmn031810;
+        Fri, 3 Feb 2023 10:11:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=Bi8WJKE5y537khIPPrNVdQZFE2iyZCYf2LUJHrDVH8A=;
+ b=D1DQsTUKf0pNJOLSP3YB0MmuQ0YGR+3SwKeyh92IahnS9n5zUkMtac+YJ4/zmDsfrqL4
+ ZF3RAiefur4izxJRYhyLazV3PrJ9Xo5kcj54S5AQc9cljiDdcUDG69t+TxfDIrFXsEc4
+ apuKKIX/QYlqNuei9u7UcQSrDJ6vXakhzX0ArBYBOiC+5Im0NeChQgbOQewcsWQ/P2WY
+ PhSp4oWAqRX4OvBo3oIVInDajrAqs4iUDnWTExnoo92z4u9joXHVE4C+rAUSbKYxvjWI
+ sTlfkTlLxJ1SbIV82M1C9N6XV+MPQyWvPDJ40TEf9YdaxRWEOFlllPLqgwDgIcPUb4jt tw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngxedg845-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 10:11:15 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313ABDGa017536
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Feb 2023 10:11:14 GMT
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 3 Feb 2023 02:11:11 -0800
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Pratham Pratap" <quic_ppratap@quicinc.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH] usb: roles: disable pm for role switch device
+Date:   Fri, 3 Feb 2023 18:10:59 +0800
+Message-ID: <1675419059-30078-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1674584626.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Zikuaxr7poYzE1J-fpzHS07SJFRW77DV
+X-Proofpoint-ORIG-GUID: Zikuaxr7poYzE1J-fpzHS07SJFRW77DV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_06,2023-02-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=608
+ priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030093
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24-01-23, 19:37, Geert Uytterhoeven wrote:
-> 	Hi Vinod et al,
-> 
-> While there exist several optional_get() PHY helper functions, there is
-> no optional variant of devm_of_phy_get(), leading to several drivers
-> implementing this theirselves, sometimes in buggy ways.
-> 
-> Hence this series, after two cleanup patches, introduces a
-> devm_of_phy_optional_get() helper(), and converts existing users of
-> devm_of_phy_get() where appropriate.
+there is no PM operation for a role switch device,
+call device_set_pm_not_required() in usb_role_switch_register() to disable.
 
-Applied and pushed to tag phy-devm_of_phy_optional_get
+Cc: stable@vger.kernel.org # 5.4+
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+ drivers/usb/roles/class.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-devm_of_phy_optional_get
-
-for you to fetch changes up to 41a435e30eb007ca2c8f71db734af6ec3509af4d:
-
-  usb: host: ohci-exynos: Convert to devm_of_phy_optional_get() (2023-02-03 11:19:35 +0530)
-
-----------------------------------------------------------------
-Phy tag for new devm_of_phy_optional_get() API
-
-----------------------------------------------------------------
-Geert Uytterhoeven (8):
-      phy: Remove unused phy_optional_get()
-      doc: phy: Document devm_of_phy_get()
-      phy: Add devm_of_phy_optional_get() helper
-      net: fman: memac: Convert to devm_of_phy_optional_get()
-      net: lan966x: Convert to devm_of_phy_optional_get()
-      PCI: tegra: Convert to devm_of_phy_optional_get()
-      usb: host: ehci-exynos: Convert to devm_of_phy_optional_get()
-      usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
-
- Documentation/driver-api/phy/phy.rst                  | 24 ++++++++++++++----------
- drivers/net/ethernet/freescale/fman/fman_memac.c      |  9 ++++-----
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c |  5 ++---
- drivers/pci/controller/pci-tegra.c                    |  5 +----
- drivers/phy/phy-core.c                                | 51 ++++++++++++++++++++++++++++++---------------------
- drivers/usb/host/ehci-exynos.c                        | 23 ++++++-----------------
- drivers/usb/host/ohci-exynos.c                        | 23 ++++++-----------------
- include/linux/phy/phy.h                               | 16 +++++++++-------
- 8 files changed, 72 insertions(+), 84 deletions(-)
-
-
-> Thanks!
-> 
-> > > --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> > > +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> > > @@ -1460,11 +1460,9 @@ static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *por
-> > >       struct phy *phy;
-> > >       int ret;
-> > >
-> > > -     phy = devm_of_phy_get(dev, port_np, name);
-> > > -     if (PTR_ERR(phy) == -ENODEV)
-> > > -             return 0;
-> > > -     if (IS_ERR(phy))
-> > > -             return PTR_ERR(phy);
-> > > +     phy = devm_of_phy_optional_get(dev, port_np, name);
-> > > +     if (IS_ERR_OR_NULL(phy))
-> > > +             return PTR_ERR_OR_ZERO(phy);
-> > >
-> > >       /* Serdes PHY exists. Store it. */
-> > >       port->slave.serdes_phy = phy;
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
-
-> 
-> Changes compared to v1[1]:
->   - Incorporate "[PATCH v2 1/9] phy: Remove unused phy_optional_get()",
->     as it touches the same documentation,
->   - New patch "[PATCH v2 2/9] doc: phy: Document devm_of_phy_get()",
->   - Print an error message in case of failure, as requested by RobH,
->   - Update Documentation,
->   - Clarify removed checks for -ENODEV and -ENOSYS,
->   - Remove error printing in case of real failures from callers,
->   - Rebase am65-cpsw change on top of commit 854617f52ab42418 ("net:
->     ethernet: ti: am65-cpsw: Handle -EPROBE_DEFER for Serdes PHY") in
->     net-next (next-20230123 and later),
->   - Add Reviewed-by, Acked-by.
-> 
-> Most of this series been compile-tested only, but the new helper itself
-> has been tested with a new user[2].
-> 
-> Thanks for your comments!
-> 
-> [1] "[PATCH treewide 0/7] phy: Add devm_of_phy_optional_get() helper"
->     https://lore.kernel.org/r/cover.1674036164.git.geert+renesas@glider.be
-> [2] "[PATCH 12/12] can: rcar_canfd: Add transceiver support"
->     https://lore.kernel.org/r/e825b50a843ffe40e33f34e4d858c07c1b2ff259.1674499048.git.geert+renesas@glider.be
-> 
-> Geert Uytterhoeven (9):
->   phy: Remove unused phy_optional_get()
->   doc: phy: Document devm_of_phy_get()
->   phy: Add devm_of_phy_optional_get() helper
->   net: fman: memac: Convert to devm_of_phy_optional_get()
->   net: lan966x: Convert to devm_of_phy_optional_get()
->   net: ethernet: ti: am65-cpsw: Convert to devm_of_phy_optional_get()
->   PCI: tegra: Convert to devm_of_phy_optional_get()
->   usb: host: ehci-exynos: Convert to devm_of_phy_optional_get()
->   usb: host: ohci-exynos: Convert to devm_of_phy_optional_get()
-> 
->  Documentation/driver-api/phy/phy.rst          | 24 +++++----
->  .../net/ethernet/freescale/fman/fman_memac.c  |  9 ++--
->  .../ethernet/microchip/lan966x/lan966x_main.c |  5 +-
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c      |  8 ++-
->  drivers/pci/controller/pci-tegra.c            |  5 +-
->  drivers/phy/phy-core.c                        | 51 +++++++++++--------
->  drivers/usb/host/ehci-exynos.c                | 23 +++------
->  drivers/usb/host/ohci-exynos.c                | 23 +++------
->  include/linux/phy/phy.h                       | 16 +++---
->  9 files changed, 75 insertions(+), 89 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-> Gr{oetje,eeting}s,
-> 
-> 						Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
-> 							    -- Linus Torvalds
-
+diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+index eacb46e..b303c64 100644
+--- a/drivers/usb/roles/class.c
++++ b/drivers/usb/roles/class.c
+@@ -344,6 +344,7 @@ usb_role_switch_register(struct device *parent,
+ 	dev_set_drvdata(&sw->dev, desc->driver_data);
+ 	dev_set_name(&sw->dev, "%s-role-switch",
+ 		     desc->name ? desc->name : dev_name(parent));
++	device_set_pm_not_required(&sw->dev);
+ 
+ 	ret = device_register(&sw->dev);
+ 	if (ret) {
 -- 
-~Vinod
+2.7.4
+
