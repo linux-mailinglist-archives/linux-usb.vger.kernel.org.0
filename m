@@ -2,82 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABD2689EDE
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 17:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95ED868A0CE
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 18:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjBCQFN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 11:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S232866AbjBCRus (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 12:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbjBCQFG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 11:05:06 -0500
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F866A2A4C;
-        Fri,  3 Feb 2023 08:05:03 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-51ba4b1b9feso73909487b3.11;
-        Fri, 03 Feb 2023 08:05:03 -0800 (PST)
+        with ESMTP id S233008AbjBCRup (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 12:50:45 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA11783F8;
+        Fri,  3 Feb 2023 09:50:42 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id g8so6311820qtq.13;
+        Fri, 03 Feb 2023 09:50:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X98XwPHCATAqoyCJbroZ3zmbYV9N3z/uPBJxyFU6PR8=;
+        b=qKwT99gXJUlK8jpfdkOFgWa74gVxy/H0hDP+O6VTX2V5uEipX1eD4IrZ0/zqXiqHKx
+         sbvaAQ91J4eXgP1uP9vAp1lhAGYIEVGcBxeEUaKX9edpPSJinWQdV0Hm0UCqaYsH/39q
+         T17gYDxcpA5KJQ5cWAiO+Y9bWqg5LaFrPG5MUpi1xhzRSkFHATUJqG0YXsjMp0xh7tS1
+         J/V+xpNxHzPODmsVESM1t2ghJBEvAXpJ/wMx65mHALSfwAE3EuI4NtgoTWAIfkkg3tj/
+         ycgiS1ZR6LMebI/QLGMEzsElInyVkhHRkwAG1XVOfpuYmtcXeBKG/q8M3xCRmROqTD1j
+         OxzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7wIYdPVdo9w8wJeFawgcWpGlCHgpXqP0aU2proD/z4A=;
-        b=h7Y+KCF7rYYuzKa23/XVH7EqKMk5LTZnVw2PqeMnOFM+xWLo9NJHdhJ7VXQEzh/jEQ
-         43USwhMjApuBXpP8uDT4/9ZWtcfiac4as5JkOYvgtFByz33C36/DfwkQOIfY4SCuqGDK
-         Hv9r2B8MXFnnKurrI2YIIpkW+iLxoK+7IxwMN41GkLxe5SYkAMuhmyEdUiIf3h+NbtlV
-         Vjrsgdy/0uWZlA6GCyhPVQQLTybtIXlZAYgovWjXFPEmbkXmJ1R6oNLeW1Q9wjp7INOt
-         dpYwOYdzkRdvH3M1sRrIE5bOaaFyPkuU4ojNBjyPoq103GnN5D0iyOl6ib+Yx3KeeBsY
-         CkPA==
-X-Gm-Message-State: AO0yUKUt0cK5Wr875sm9z9U0bJzP+91+5+O4ghRPfaBfRmU8ORcDIFi3
-        96J/1/Ux8eteagW4UXGq2OK0nBZCNN5sEw==
-X-Google-Smtp-Source: AK7set/a/Eq2gP6R7fciPiamzKQR29gjZ+vbzZcYT0ptMjiTbNLQIWRvobf0piyfY0iq11BERjizRw==
-X-Received: by 2002:a0d:d648:0:b0:506:4342:1a2d with SMTP id y69-20020a0dd648000000b0050643421a2dmr7042060ywd.12.1675440302426;
-        Fri, 03 Feb 2023 08:05:02 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id r195-20020a37a8cc000000b0071ddbe8fe23sm2101905qke.24.2023.02.03.08.05.01
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X98XwPHCATAqoyCJbroZ3zmbYV9N3z/uPBJxyFU6PR8=;
+        b=yY1ARJXQZ/kRqX9RHLlJmu/cwnQi8Ed70J/AaXAyQ8nuT4TAC2yEQuhPUQzJIVlmP3
+         b8bXHPBca3VCsraK4BUxDTWlayT27cQZxeDWvUUeaL15Jh+qt9yyC7pJAoKHVhBgTE0r
+         9vMg7wJdlCz7gfhjld0Ig3M9E1lweiJ11ZSuB6HDb4eiaMAYUbRRns3PFmpXHY1wOeTb
+         TawNMWt/4R0C0K53wLfIV6duqbmFwW/NlB2iVZyu0X+MscNcKJ7ATVWKC05TWkuKPUgR
+         XI/j9WGJpcFUaoyqYhWGJlbBab5wQK8uVfuMoG8XuqbZOHTHO36p0jaAGxGXIoIEt5yq
+         YOWQ==
+X-Gm-Message-State: AO0yUKXRGNoo2tg84I9oC+KyKS+SDWCFfG/HT2h7mf4m5H/vNF9SMReh
+        E9CySK15EabQw9Kr1dPPZNg=
+X-Google-Smtp-Source: AK7set+pwTCJGnVY1tSsiOxjAN7/Pvsx4cx3hcJic7vMvYqUuWK7aMxHvORkCbE52P788Ugn+r6gkA==
+X-Received: by 2002:ac8:584e:0:b0:3b9:a4c8:d57a with SMTP id h14-20020ac8584e000000b003b9a4c8d57amr21058494qth.32.1675446641849;
+        Fri, 03 Feb 2023 09:50:41 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 63-20020a370a42000000b00719d9f823c4sm2206530qkk.34.2023.02.03.09.50.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 08:05:02 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id 74so6528236ybl.12;
-        Fri, 03 Feb 2023 08:05:01 -0800 (PST)
-X-Received: by 2002:a5b:941:0:b0:865:e214:f4e3 with SMTP id
- x1-20020a5b0941000000b00865e214f4e3mr352487ybq.604.1675440301482; Fri, 03 Feb
- 2023 08:05:01 -0800 (PST)
+        Fri, 03 Feb 2023 09:50:39 -0800 (PST)
+Message-ID: <075c6ee2-fc1d-1b95-4cc6-4caec754dab7@gmail.com>
+Date:   Fri, 3 Feb 2023 09:50:35 -0800
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de> <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de> <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
- <20230203083037.GA30738@lst.de> <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
- <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com> <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
-In-Reply-To: <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 3 Feb 2023 17:04:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWJ3XOBewDoU8umAHc6b83hJQge5xjY3Cxx03AvoiR7iQ@mail.gmail.com>
-Message-ID: <CAMuHMdWJ3XOBewDoU8umAHc6b83hJQge5xjY3Cxx03AvoiR7iQ@mail.gmail.com>
-Subject: Re: remove arch/sh
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH stable 5.4] usb: host: xhci-plat: add wakeup entry at
+ sysfs
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
+References: <20230201174404.32777-1-f.fainelli@gmail.com>
+ <20230201174404.32777-3-f.fainelli@gmail.com> <Y9qsZysFUFnq7VQW@kroah.com>
+ <319ebea0-61dc-2e08-f48b-4555b8fb894a@gmail.com> <Y9y+wRPYzQVwb3JS@kroah.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <Y9y+wRPYzQVwb3JS@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,27 +80,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Randy,
+On 2/2/23 23:58, Greg Kroah-Hartman wrote:
+> On Wed, Feb 01, 2023 at 03:19:08PM -0800, Florian Fainelli wrote:
+>> On 2/1/23 10:16, Greg Kroah-Hartman wrote:
+>>> On Wed, Feb 01, 2023 at 09:44:04AM -0800, Florian Fainelli wrote:
+>>>> From: Peter Chen <peter.chen@nxp.com>
+>>>>
+>>>> commit  4bb4fc0dbfa23acab9b762949b91ffd52106fe4b upstream
+>>>>
+>>>> With this change, there will be a wakeup entry at /sys/../power/wakeup,
+>>>> and the user could use this entry to choose whether enable xhci wakeup
+>>>> features (wake up system from suspend) or not.
+>>>>
+>>>> Tested-by: Matthias Kaehlcke <mka@chromium.org>
+>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>>>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+>>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>> Link: https://lore.kernel.org/r/20200918131752.16488-6-mathias.nyman@linux.intel.com
+>>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>> ---
+>>>>    drivers/usb/host/xhci-plat.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> Why is this new feature needed on these older kernels?  What does it fix
+>>> that is broken?
+>>
+>> It fixes the inability to make the XHCI controller a wake-up device since
+>> there is no /sys/*/*xhci/power/wakeup sysfs entry to manipulate unless this
+>> patch is applied.
+> 
+> But that is a new feature, not a bugfix.
 
-On Fri, Feb 3, 2023 at 4:57 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> Is this "sh64" still accurate and applicable? from Documentation/kbuild/kbuild.rst:
->
-> But some architectures such as x86 and sparc have aliases.
->
-> - x86: i386 for 32 bit, x86_64 for 64 bit
-> - sh: sh for 32 bit, sh64 for 64 bit <<<<<<<<<<<<<<<
-> - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+Support for wake-up was already there in the xhci driver, just there was 
+no way to activate it from user-space, that seems like a fix to me.
 
-No, support for sh64 was removed in commit 37744feebc086908
-("sh: remove sh5 support") in v5.8.
+> 
+> What systems need this for these older kernels that will actually update
+> to them in order to pick up this change?
 
-Gr{oetje,eeting}s,
+Some NXP systems required that, and all of our ARCH_BRCMSTB SoCs also 
+have that capability, I see you applied those patches, thanks!
+-- 
+Florian
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
