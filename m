@@ -2,123 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4550A689A3C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 14:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 415B1689ACC
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Feb 2023 15:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjBCNwU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Feb 2023 08:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S232866AbjBCN7D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Feb 2023 08:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbjBCNwN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 08:52:13 -0500
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A2B9AFC2;
-        Fri,  3 Feb 2023 05:51:56 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id s124so4197825oif.1;
-        Fri, 03 Feb 2023 05:51:56 -0800 (PST)
+        with ESMTP id S233536AbjBCN6m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Feb 2023 08:58:42 -0500
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AE2A2A45;
+        Fri,  3 Feb 2023 05:55:47 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id f10so5472656qtv.1;
+        Fri, 03 Feb 2023 05:55:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T0jj9gHXQzeTegxc5ifle/pC5AQPQL/9erpLdHEPqBc=;
-        b=1ZB8r7Z7iQ3P7JM5IRVKLKvNODm5ob/5ij3dT25eut+aI3Vf17PQUuwyE2dqdj8VEs
-         2KEntXtCEW68uWHDZN41Lt5HSZag8ntWTkM8k/a5wtIPf5YKx2sqf3xFaghnhTunXs6F
-         GPlv2Yt4Zp1RXsVIdLTIbPhd3Ppey+RQKq8PJ0wf107oNZcpF5PBUsIomW+/4uIuhxaN
-         rzGlntMbq7qRghCQqjiMmhC1ZywAcKICY0+64KIN833H5YdnDcttlscQcO9EW/f85fYZ
-         3Ejn+unaLEH86zouM1mBXazTx666TPxEIa4eQFK2UOoShxqgGu7D5bPdL3z0n3PVKd00
-         NIag==
-X-Gm-Message-State: AO0yUKXZ9LBRpifBEpWG0F5R1oe3y7EVkQUMfk72zpyjNQWnqd16peNq
-        3fTKA583eyR6b0ZthjIXyw==
-X-Google-Smtp-Source: AK7set9GnMjZPQwg4ZvZ1OCLOCzeHoNXp6WHCRFHCa42vbc9O0oYiYLXbh6m33mjRk69hL37c6pQwQ==
-X-Received: by 2002:aca:408b:0:b0:370:ac59:7226 with SMTP id n133-20020aca408b000000b00370ac597226mr4042902oia.11.1675432315646;
-        Fri, 03 Feb 2023 05:51:55 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s191-20020acaa9c8000000b003631fe1810dsm793426oie.47.2023.02.03.05.51.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 05:51:55 -0800 (PST)
-Received: (nullmailer pid 4088845 invoked by uid 1000);
-        Fri, 03 Feb 2023 13:51:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nbKgXRRhHOsf8b2qFYqubarXiD/2JOI3CXyxQSetlOo=;
+        b=HlEDPXIokd/UDyTtc0FxQNaDH0ZU/iUhw74FrRW24qFU+x/UvHrM3GvgjU6XYoPfK4
+         2a2wgRqkfLi1xDl5PSBd5UkwLYsdlnwlmZvc5sMXnZVOKO0ld5QsKfMM4Xta/ms5CNxS
+         ppXL+O3ObR9qo8Vq45mIVyXo+YcXgreGnvBUUWGiX/vXsD14bkYewuWgtd2COS54VdSy
+         KUKU9eEw5Wp39brBfUJYMOM/S6kXT2FUwFn4y6EgyrZO/Pm8GUtPRNZ4nQee+mT+NH8Z
+         kX+5LCYAEVVGBYc2Zw2vGRC3e6C9SSXL77LKPQVWLKskZTa4XqQmh9orAtTSvVK3EXoP
+         CEEA==
+X-Gm-Message-State: AO0yUKVcLrFdcEncIeo8DCv1VeOvmBlSU4e1lgl6i+PjpTk7oXrN7eCy
+        /8MGYFvKOvbzHC1alr44Fi3raKccTgAn8Q==
+X-Google-Smtp-Source: AK7set/VrH2W/hF5htoK/wyjMPPVEuFk9wCswUkXu2hSgQiBOpjFpUlZY44JgVrrob1RrSq8KnXVeA==
+X-Received: by 2002:ac8:57d6:0:b0:3b8:4bb8:5aa5 with SMTP id w22-20020ac857d6000000b003b84bb85aa5mr20729191qta.54.1675432441314;
+        Fri, 03 Feb 2023 05:54:01 -0800 (PST)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id n3-20020ac86743000000b003b80a69d353sm1577481qtp.49.2023.02.03.05.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 05:54:00 -0800 (PST)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5254e8994e8so23778007b3.6;
+        Fri, 03 Feb 2023 05:54:00 -0800 (PST)
+X-Received: by 2002:a0d:c2c4:0:b0:514:a90f:10ea with SMTP id
+ e187-20020a0dc2c4000000b00514a90f10eamr1025067ywd.316.1675432440139; Fri, 03
+ Feb 2023 05:54:00 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org, jun.li@nxp.com,
-        balbi@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Peng Fan <peng.fan@nxp.com>, devicetree@vger.kernel.org
-In-Reply-To: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
-References: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
-Message-Id: <167543212276.4084541.17286318072815310709.robh@kernel.org>
-Subject: Re: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
-Date:   Fri, 03 Feb 2023 07:51:54 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230113062339.1909087-1-hch@lst.de> <20230113062339.1909087-2-hch@lst.de>
+ <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com> <20230203071506.GB24833@lst.de> <Y90Q73ykVEHRNII4@pendragon.ideasonboard.com>
+In-Reply-To: <Y90Q73ykVEHRNII4@pendragon.ideasonboard.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 3 Feb 2023 14:53:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVi1DPqYNbB5xWeG+1kK4x=8zQ0y57WSJ_j2xENCjQREQ@mail.gmail.com>
+Message-ID: <CAMuHMdVi1DPqYNbB5xWeG+1kK4x=8zQ0y57WSJ_j2xENCjQREQ@mail.gmail.com>
+Subject: Re: [PATCH 01/22] gpu/drm: remove the shmobile drm driver
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Laurent,
 
-On Fri, 03 Feb 2023 09:45:26 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> i.MX8MQ use Synopsys DesignWare USB3 Controller IP, so add the
-> compatible.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> 
-> V2:
->  Rebased on linux-next, remove power-domains from v1
-> 
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
+On Fri, Feb 3, 2023 at 2:49 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Fri, Feb 03, 2023 at 08:15:06AM +0100, Christoph Hellwig wrote:
+> > So given that the big series doesn't go in, can we get this removal
+> > picked up through the drm tree?
+>
+> Geert has a board with an ARM-based SoC compatible with this driver, and
+> he expressed interest in taking over maintainership. Geert, could you
+> share your plans ? Should the shmobile_drm driver be dropped now, or
+> will you revive it in a relatively near future ?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+(Trying to) get it working on that board is on my list...
 
-yamllint warnings/errors:
+Gr{oetje,eeting}s,
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['rockchip,rk3399-dwc3', 'snps,dwc3'] is too long
-	'fsl,imx8mq-dwc3' was expected
-	'snps,dwc3' was expected
-	'synopsys,dwc3' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: Unevaluated properties are not allowed ('compatible' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['rockchip,rk3399-dwc3', 'snps,dwc3'] is too long
-	'fsl,imx8mq-dwc3' was expected
-	'snps,dwc3' was expected
-	'synopsys,dwc3' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: Unevaluated properties are not allowed ('compatible' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: Unevaluated properties are not allowed ('dr_mode' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+                        Geert
 
-doc reference errors (make refcheckdocs):
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230203014526.1461386-1-peng.fan@oss.nxp.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
