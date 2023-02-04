@@ -2,68 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19DC68AA32
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Feb 2023 14:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5074F68AA54
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Feb 2023 14:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbjBDNde (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Feb 2023 08:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S232288AbjBDNq5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Feb 2023 08:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbjBDNdR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 08:33:17 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8612E3EFDF;
-        Sat,  4 Feb 2023 05:32:24 -0800 (PST)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 314DWEKn097633;
-        Sat, 4 Feb 2023 22:32:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Sat, 04 Feb 2023 22:32:14 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 314DWDFf097627
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 4 Feb 2023 22:32:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
-Date:   Sat, 4 Feb 2023 22:32:11 +0900
+        with ESMTP id S232230AbjBDNqz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 08:46:55 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9B82385A;
+        Sat,  4 Feb 2023 05:46:54 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id v13so7574576eda.11;
+        Sat, 04 Feb 2023 05:46:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+4ghapI4q6dNHqD6cXMOO0iyx2zSt5s40nsfdBhe7Xo=;
+        b=GdcCA2+4ALdPbJl47fleI0zNrFm2ilDwhr8DSUNPK99FrergL6PAi6MQFsg3i7lzU9
+         Z3VkhPPKyYSy8Zxlg83Gs/UXrGlk+vLleH0gnrkmmOs5LHwTnArttHP7yTlPWxhr6Keu
+         s94AGN/wUYNFG51F0JeakRyAFGTddsCqXp6F8EURVHeWWoCxCKSbQUGbeYYhr0EduE8r
+         PJO2vt2UeLFNI2Nx0NEEjxuhZj0bcRbBsYh7mQzVXISk/sLFRta3/o8RCU72H0VdlkTx
+         8i2kzrY08euuaY1N+odQu3Sc+D8WJMU/6L34cxy4/1FuyrB/DZy2IrXpm1b+jSGYh22T
+         DoNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+4ghapI4q6dNHqD6cXMOO0iyx2zSt5s40nsfdBhe7Xo=;
+        b=CggO+4eHh4uEIBXY9DZinmr+XM0fxxVGT9se/UKps01D6kOOpWEadxjz5LCaBhaAx0
+         NQa9zo/dsl45zX8KQht+eaoenf06Ji7tAydKkexUv7YpWz5sbhjm4Ca6VDNEwjpvNO9B
+         1nSTaVL4naKDamAgHAiyA2SHbVHnwsUg/hZGHisQVbUplDj56Rb11KrPJfZiHxt+0HAN
+         OHhMQFnd7CFAYPbBsUbLoIKiMlzI+Jh6rS2tJb4/oA7KQOuuWnkidj1I3o3JSekzlrvM
+         PiI73FN4Kw8Q0JJgciKzA4PTyEjAV9Kt6hFgO8dQAumb9CTDAMk5+IQLq+WuYb3wac5m
+         U/LQ==
+X-Gm-Message-State: AO0yUKWEC5+2sv5xvtjjjF4LNxytIdgLmLYVDNLKyyG1ZBfdy5fn016D
+        KDQUAHdmF4a6hHBZRNZbBX8PMH0guOQ=
+X-Google-Smtp-Source: AK7set9RYkEZF2gAT5pOqCJW8lapvfGI37PM1dMntPyLFGzOJ6Q36E5AspEKErl5e6UUjJcwMIUg7A==
+X-Received: by 2002:a05:6402:2206:b0:492:bf3d:1a16 with SMTP id cq6-20020a056402220600b00492bf3d1a16mr12208655edb.4.1675518412970;
+        Sat, 04 Feb 2023 05:46:52 -0800 (PST)
+Received: from nam-dell (ip-80-113-101-30.ip.prioritytelecom.net. [80.113.101.30])
+        by smtp.gmail.com with ESMTPSA id rl6-20020a170907216600b008775b8a5a5fsm2808510ejb.198.2023.02.04.05.46.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 05:46:52 -0800 (PST)
+From:   Nam Cao <namcaov@gmail.com>
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nam Cao <namcaov@gmail.com>
+Subject: [PATCH] USB: serial: whiteheat: use stack instead of heap memory
+Date:   Sat,  4 Feb 2023 14:46:51 +0100
+Message-Id: <20230204134651.22569-1-namcaov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: Converting dev->mutex into dev->spinlock ?
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello.
+Some buffers in whiteheat_attach() are small and only used locally. Move
+them to the stack to avoid complications with heap memory.
 
-There is a long-standing deadlock problem in driver core code caused by
-"struct device"->mutex being marked as "do not apply lockdep checks".
+Compile-tested only.
 
-We can make this deadlock visible by applying [1], and we can confirm that
-there is a deadlock problem that I think needs to be addressed in core code [2].
+Signed-off-by: Nam Cao <namcaov@gmail.com>
+---
+ drivers/usb/serial/whiteheat.c | 25 ++++---------------------
+ 1 file changed, 4 insertions(+), 21 deletions(-)
 
-Also, since driver developers are taking it for granted that driver callback
-functions can behave as if dev->mutex is not held (because possibility of deadlock
-was never reported), it would solve many deadlocks in driver code if you can update
-driver core code to avoid calling driver callback functions with dev->mutex held
-(by e.g. replacing dev->mutex with dev->spinlock and dev->atomic_flags).
-But I'm not familiar enough to propose such change...
+diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
+index 7f82d40753ee..4ad8915b536b 100644
+--- a/drivers/usb/serial/whiteheat.c
++++ b/drivers/usb/serial/whiteheat.c
+@@ -220,22 +220,16 @@ static int whiteheat_attach(struct usb_serial *serial)
+ 	int pipe;
+ 	int ret;
+ 	int alen;
+-	__u8 *command;
+-	__u8 *result;
++	__u8 command[2];
++	__u8 result[sizeof(*hw_info) + 1];
+ 
+ 	command_port = serial->port[COMMAND_PORT];
+ 
+ 	pipe = usb_sndbulkpipe(serial->dev,
+ 			command_port->bulk_out_endpointAddress);
+-	command = kmalloc(2, GFP_KERNEL);
+-	if (!command)
+-		goto no_command_buffer;
++
+ 	command[0] = WHITEHEAT_GET_HW_INFO;
+ 	command[1] = 0;
+-
+-	result = kmalloc(sizeof(*hw_info) + 1, GFP_KERNEL);
+-	if (!result)
+-		goto no_result_buffer;
+ 	/*
+ 	 * When the module is reloaded the firmware is still there and
+ 	 * the endpoints are still in the usb core unchanged. This is the
+@@ -283,7 +277,7 @@ static int whiteheat_attach(struct usb_serial *serial)
+ 	command_info = kmalloc(sizeof(struct whiteheat_command_private),
+ 								GFP_KERNEL);
+ 	if (!command_info)
+-		goto no_command_private;
++		return -ENOMEM;
+ 
+ 	mutex_init(&command_info->mutex);
+ 	command_info->port_running = 0;
+@@ -291,8 +285,6 @@ static int whiteheat_attach(struct usb_serial *serial)
+ 	usb_set_serial_port_data(command_port, command_info);
+ 	command_port->write_urb->complete = command_port_write_callback;
+ 	command_port->read_urb->complete = command_port_read_callback;
+-	kfree(result);
+-	kfree(command);
+ 
+ 	return 0;
+ 
+@@ -307,16 +299,7 @@ static int whiteheat_attach(struct usb_serial *serial)
+ 	dev_err(&serial->dev->dev,
+ 		"%s: please contact support@connecttech.com\n",
+ 		serial->type->description);
+-	kfree(result);
+-	kfree(command);
+ 	return -ENODEV;
+-
+-no_command_private:
+-	kfree(result);
+-no_result_buffer:
+-	kfree(command);
+-no_command_buffer:
+-	return -ENOMEM;
+ }
+ 
+ static void whiteheat_release(struct usb_serial *serial)
+-- 
+2.34.1
 
-[1] https://lkml.kernel.org/r/8c3fc3d1-8fed-be22-e0e7-ef1e1ea723ce@I-love.SAKURA.ne.jp
-[2] https://lkml.kernel.org/r/b7bc63c8-bb28-d21d-7c3f-97e4e79a9292@I-love.SAKURA.ne.jp
