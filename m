@@ -2,102 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488A068AB74
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Feb 2023 18:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C7868ABDE
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Feb 2023 19:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbjBDRKF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Feb 2023 12:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S232946AbjBDSfu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Feb 2023 13:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjBDRKC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 12:10:02 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802831E0F;
-        Sat,  4 Feb 2023 09:09:58 -0800 (PST)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 314H9h6r037810;
-        Sun, 5 Feb 2023 02:09:43 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Sun, 05 Feb 2023 02:09:43 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 314H9hMh037807
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 5 Feb 2023 02:09:43 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
-Date:   Sun, 5 Feb 2023 02:09:40 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Content-Language: en-US
+        with ESMTP id S231866AbjBDSft (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 13:35:49 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EF229E0A
+        for <linux-usb@vger.kernel.org>; Sat,  4 Feb 2023 10:35:48 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so11728985pjq.0
+        for <linux-usb@vger.kernel.org>; Sat, 04 Feb 2023 10:35:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y4Iggp5kqvksO/U/bhTVuafQ0FnnRUqQxs3NZ2skqWs=;
+        b=YGU2UvvQE8nEH1e9k70ke2m5p/SmROFmLZu5F10bu5KeeB2DlDoMjKuuL4OeKG3600
+         Qxwb+spG4ji9S/uUuG3O3dc1dtOP/eu+J9qzbHGzLs78JjaN1Y+TVx3LWLXiV+87du+U
+         vhJ45u9oSq12BM9Vg/OxabaPk6UV4T9ZdHrW8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y4Iggp5kqvksO/U/bhTVuafQ0FnnRUqQxs3NZ2skqWs=;
+        b=2YO7FDd+I9HqhwP7u0VZPj8m3GdmJAYToxAkn6GY4Nst+0y3ETFG+CsGNunpCIXd2s
+         wN/CGWzNpXpctp0/P8iH9dsu2IeO/TbzYBNZmnlvuO5uzgJXB+inLsXuTarnzqltf4BL
+         3bN9STKiaOe6ATjj1GPrHmCAdk72Z/wiBACnCGY1H9HWYxvtR4doYoVE31hOrnRk8erT
+         KwEiQxyjPf8oZMN+1p8oBIhBVPQip/VrtxvJhDgczb9R/Wg2/Qk0Q+klBHJa+zq9wbUm
+         hWIY7Du+4Wx9K++mV+4rVc678/L8P7COngV2Dx3AcynOHp6oYQ/sQAe2tRvI7WJK1Uyq
+         +6TQ==
+X-Gm-Message-State: AO0yUKVtP7N5mUtM3jL6KUhejzVov+Q1Di7D1hEuv2/sDXhknbIXjsi4
+        oQRry0/07OFqEG4NqmGYFnw9CA==
+X-Google-Smtp-Source: AK7set/Ipy9LMwppXMkdEyP44q/GSHSpT7gPZAzBZWD9Xw3ds3PVWaExsNhPfU+KJdmiSqT4WTfFHw==
+X-Received: by 2002:a17:903:30d4:b0:198:eaac:4643 with SMTP id s20-20020a17090330d400b00198eaac4643mr3371011plc.4.1675535748368;
+        Sat, 04 Feb 2023 10:35:48 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b001947ba0ac8fsm1258800pla.236.2023.02.04.10.35.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 10:35:48 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
- <Y95h7Vop9t5Li0HD@kroah.com>
- <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
- <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
- <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
- <Y96HiYcreb8jZIHi@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y96HiYcreb8jZIHi@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] USB: ene_usb6250: Allocate enough memory for full object
+Date:   Sat,  4 Feb 2023 10:35:46 -0800
+Message-Id: <20230204183546.never.849-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2821; h=from:subject:message-id; bh=HZQ/N+dDa7Aj5LUGfDBEb4DGw2KcwT9Ja3nU44I+6Qw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qWCaI/XfC+dVjIlk4z3PejMwVwypoWj0t55dUNY ngLmhQmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96lggAKCRCJcvTf3G3AJrbCD/ 9/OMKzc0Ea/9XHo64RRzTHtQLOvCN4nDl6tDnY8I1zWmllZ4q7R4+dmSxpbDIlA1KsOMbqJv2uZ3j5 xU9a2RW8+9cuCUgglfThFn9yjAPn1h89UITBR6tUi66w+Grrrdqabel966IsLL4h0anfdvniLx9/Q+ 1gLIInMAeYSny+rZXufLpRHcsPV5/arwLM6+LhebZHEU0XgPYkzu78s6vN2nl7OX7oznGan2XOpyWL kImWBreBw5D9hD5Wz84Nwz0c9oTNLTzZElayos7V/uArYc5g0sjwNhZT43GlePcRiqDz5YRUCLHMUI /K63RXa6N+Ch7kLHz+Omnb0TG+PD5yo0jQ086va23SsFfob6w1eniL3YEyMwf6p2jnJor+w9yLC6Et X80luhybjh3sy7/0+kv3H/eQTqGfpwkmgOg7tbP/7oyOuoRaao84Y+7ZihUBDPjgw7QXidM/84PNsE vl3CSDyif7jEsz37rqaD+SmUhw9r61ZRPHqcC96s1IhKbEx2DHGBtrDX11Ujx4MsTsrwS9uaMClIO2 c3LeUjG/p85F6vlRU5h0rahbAFsFntLTrIVfxIf1vpscY9Z7Hkq0PmxL3BOM/GsX4Iv42pg1jjF4wi ws5dSc4t27nmVzA239IFWffYQbmVO4gbgpLtpR5L6qrz+uYyMftjEgLZdgzw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/02/05 1:27, Alan Stern wrote:
-> On Sun, Feb 05, 2023 at 01:12:12AM +0900, Tetsuo Handa wrote:
->> On 2023/02/05 0:34, Alan Stern wrote:
->>>> A few of examples:
->>>>
->>>>   https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101
->>>
->>> It's hard to figure out what's wrong from looking at the syzbot report.  
->>> What makes you think it is connected with dev->mutex?
->>>
->>> At first glance, it seems that the ath6kl driver is trying to flush a 
->>> workqueue while holding a lock or mutex that is needed by one of the 
->>> jobs in the workqueue.  That's obviously never going to work, no matter 
->>> what sort of lockdep validation gets used.
->>
->> That lock is exactly dev->mutex where lockdep validation is disabled.
->> If lockdep validation on dev->mutex were not disabled, we can catch
->> possibility of deadlock before khungtaskd reports real deadlock as hung.
->>
->> Lockdep validation on dev->mutex being disabled is really annoying, and
->> I want to make lockdep validation on dev->mutex enabled; that is the
->> "drivers/core: Remove lockdep_set_novalidate_class() usage" patch.
-> 
->> Even if it is always safe to acquire a child device's lock while holding
->> the parent's lock, disabling lockdep checks completely on device's lock is
->> not safe.
-> 
-> I understand the problem you want to solve, and I understand that it
-> can be frustrating.  However, I do not believe you will be able to
-> solve this problem.
+The allocation of PageBuffer is 512 bytes in size, but the dereferencing
+of struct ms_bootblock_idi (also size 512) happens at a calculated offset
+within the allocation, which means the object could potentially extend
+beyond the end of the allocation. Avoid this case by just allocating
+enough space to catch any accesses beyond the end. Seen with GCC 13:
 
-That is a declaration that driver developers are allowed to take it for granted
-that driver callback functions can behave as if dev->mutex is not held. 
+../drivers/usb/storage/ene_ub6250.c: In function 'ms_lib_process_bootblock':
+../drivers/usb/storage/ene_ub6250.c:1050:44: warning: array subscript 'struct ms_bootblock_idi[0]' is partly outside array bounds of 'unsigned char[512]' [-Warray-bounds=]
+ 1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
+      |                                            ^~
+../include/uapi/linux/byteorder/little_endian.h:37:51: note: in definition of macro '__le16_to_cpu'
+   37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+      |                                                   ^
+../drivers/usb/storage/ene_ub6250.c:1050:29: note: in expansion of macro 'le16_to_cpu'
+ 1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
+      |                             ^~~~~~~~~~~
+In file included from ../drivers/usb/storage/ene_ub6250.c:5:
+In function 'kmalloc',
+    inlined from 'ms_lib_process_bootblock' at ../drivers/usb/storage/ene_ub6250.c:942:15:
+../include/linux/slab.h:580:24: note: at offset [256, 512] into object of size 512 allocated by 'kmalloc_trace'
+  580 |                 return kmalloc_trace(
+      |                        ^~~~~~~~~~~~~~
+  581 |                                 kmalloc_caches[kmalloc_type(flags)][index],
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  582 |                                 flags, size);
+      |                                 ~~~~~~~~~~~~
 
-Some developers test their changes with lockdep enabled, and believe that their
-changes are correct because lockdep did not complain.
-https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174 is an example.
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: usb-storage@lists.one-eyed-alien.net
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/usb/storage/ene_ub6250.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We should somehow update driver core code to make it possible to keep lockdep
-checks enabled on dev->mutex.
+diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
+index 6012603f3630..97c66c0d91f4 100644
+--- a/drivers/usb/storage/ene_ub6250.c
++++ b/drivers/usb/storage/ene_ub6250.c
+@@ -939,7 +939,7 @@ static int ms_lib_process_bootblock(struct us_data *us, u16 PhyBlock, u8 *PageDa
+ 	struct ms_lib_type_extdat ExtraData;
+ 	struct ene_ub6250_info *info = (struct ene_ub6250_info *) us->extra;
+ 
+-	PageBuffer = kmalloc(MS_BYTES_PER_PAGE, GFP_KERNEL);
++	PageBuffer = kzalloc(MS_BYTES_PER_PAGE * 2, GFP_KERNEL);
+ 	if (PageBuffer == NULL)
+ 		return (u32)-1;
+ 
+-- 
+2.34.1
 
