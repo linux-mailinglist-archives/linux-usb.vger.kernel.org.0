@@ -2,32 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE4168AC22
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Feb 2023 20:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D94E68AC36
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Feb 2023 21:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjBDTnv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Feb 2023 14:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S231521AbjBDUBr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Feb 2023 15:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDTnt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 14:43:49 -0500
+        with ESMTP id S229796AbjBDUBq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 15:01:46 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 945DE1C300
-        for <linux-usb@vger.kernel.org>; Sat,  4 Feb 2023 11:43:48 -0800 (PST)
-Received: (qmail 603745 invoked by uid 1000); 4 Feb 2023 14:43:47 -0500
-Date:   Sat, 4 Feb 2023 14:43:47 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1EB1426587
+        for <linux-usb@vger.kernel.org>; Sat,  4 Feb 2023 12:01:45 -0800 (PST)
+Received: (qmail 604113 invoked by uid 1000); 4 Feb 2023 15:01:44 -0500
+Date:   Sat, 4 Feb 2023 15:01:44 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kees Cook <keescook@chromium.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] USB: ene_usb6250: Allocate enough memory for full object
-Message-ID: <Y961c1/JIkDUqMbC@rowland.harvard.edu>
-References: <20230204183546.never.849-kees@kernel.org>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Message-ID: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+ <Y95h7Vop9t5Li0HD@kroah.com>
+ <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
+ <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
+ <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
+ <Y96HiYcreb8jZIHi@rowland.harvard.edu>
+ <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230204183546.never.849-kees@kernel.org>
+In-Reply-To: <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -37,70 +46,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 10:35:46AM -0800, Kees Cook wrote:
-> The allocation of PageBuffer is 512 bytes in size, but the dereferencing
-> of struct ms_bootblock_idi (also size 512) happens at a calculated offset
-> within the allocation, which means the object could potentially extend
-> beyond the end of the allocation. Avoid this case by just allocating
-> enough space to catch any accesses beyond the end. Seen with GCC 13:
+On Sun, Feb 05, 2023 at 02:09:40AM +0900, Tetsuo Handa wrote:
+> On 2023/02/05 1:27, Alan Stern wrote:
+> > On Sun, Feb 05, 2023 at 01:12:12AM +0900, Tetsuo Handa wrote:
+> >> On 2023/02/05 0:34, Alan Stern wrote:
+> >> Lockdep validation on dev->mutex being disabled is really annoying, and
+> >> I want to make lockdep validation on dev->mutex enabled; that is the
+> >> "drivers/core: Remove lockdep_set_novalidate_class() usage" patch.
+> > 
+> >> Even if it is always safe to acquire a child device's lock while holding
+> >> the parent's lock, disabling lockdep checks completely on device's lock is
+> >> not safe.
+> > 
+> > I understand the problem you want to solve, and I understand that it
+> > can be frustrating.  However, I do not believe you will be able to
+> > solve this problem.
+> 
+> That is a declaration that driver developers are allowed to take it for granted
+> that driver callback functions can behave as if dev->mutex is not held. 
 
-In principle, it would be better to add a runtime check for overflow.  
-Doing it this way means that the code could read an invalid value.
+No it isn't.  It is a declaration that driver developers must be extra 
+careful because lockdep is unable to detect locking errors involving 
+dev->mutex.
 
-In fact, I get the impression that this code tries to load a data 
-structure which might straddle a page boundary by reading in just the 
-first page.  Either that, or else EntryOffset is always a multiple of 
-512 so the error cannot arise.
+> Some developers test their changes with lockdep enabled, and believe that their
+> changes are correct because lockdep did not complain.
+> https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174 is an example.
 
-In any event, it's doubtful that there are very many devices of this 
-sort still in use, so it probably doesn't matter.
+How do you know developers are making this mistake?  That example 
+doesn't show anything of the sort; the commit which introduced the bug 
+says nothing about lockdep.
+
+> We should somehow update driver core code to make it possible to keep lockdep
+> checks enabled on dev->mutex.
+
+I'm sorry, but that simply is not feasible.  It doesn't matter how much 
+you want to do it or feel it is needed; there is no reasonable way to do 
+it.  To take just one example, what you are saying implies that when a 
+driver is probed for a device, it would not be allowed to register a 
+child device.  That's a ridiculous restriction.
+
+(I might also mention that dev->mutex is used by drivers in places 
+outside of the driver core.  So even if you did magically manage to fix 
+the driver core, the problem would still remain.)
 
 Alan Stern
-
-> 
-> ../drivers/usb/storage/ene_ub6250.c: In function 'ms_lib_process_bootblock':
-> ../drivers/usb/storage/ene_ub6250.c:1050:44: warning: array subscript 'struct ms_bootblock_idi[0]' is partly outside array bounds of 'unsigned char[512]' [-Warray-bounds=]
->  1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
->       |                                            ^~
-> ../include/uapi/linux/byteorder/little_endian.h:37:51: note: in definition of macro '__le16_to_cpu'
->    37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->       |                                                   ^
-> ../drivers/usb/storage/ene_ub6250.c:1050:29: note: in expansion of macro 'le16_to_cpu'
->  1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
->       |                             ^~~~~~~~~~~
-> In file included from ../drivers/usb/storage/ene_ub6250.c:5:
-> In function 'kmalloc',
->     inlined from 'ms_lib_process_bootblock' at ../drivers/usb/storage/ene_ub6250.c:942:15:
-> ../include/linux/slab.h:580:24: note: at offset [256, 512] into object of size 512 allocated by 'kmalloc_trace'
->   580 |                 return kmalloc_trace(
->       |                        ^~~~~~~~~~~~~~
->   581 |                                 kmalloc_caches[kmalloc_type(flags)][index],
->       |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   582 |                                 flags, size);
->       |                                 ~~~~~~~~~~~~
-> 
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: usb-storage@lists.one-eyed-alien.net
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/usb/storage/ene_ub6250.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
-> index 6012603f3630..97c66c0d91f4 100644
-> --- a/drivers/usb/storage/ene_ub6250.c
-> +++ b/drivers/usb/storage/ene_ub6250.c
-> @@ -939,7 +939,7 @@ static int ms_lib_process_bootblock(struct us_data *us, u16 PhyBlock, u8 *PageDa
->  	struct ms_lib_type_extdat ExtraData;
->  	struct ene_ub6250_info *info = (struct ene_ub6250_info *) us->extra;
->  
-> -	PageBuffer = kmalloc(MS_BYTES_PER_PAGE, GFP_KERNEL);
-> +	PageBuffer = kzalloc(MS_BYTES_PER_PAGE * 2, GFP_KERNEL);
->  	if (PageBuffer == NULL)
->  		return (u32)-1;
->  
-> -- 
-> 2.34.1
-> 
