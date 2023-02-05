@@ -2,147 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC6168B048
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 15:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5B268B103
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 17:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjBEO1F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Feb 2023 09:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S229502AbjBEQqM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Feb 2023 11:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjBEO1C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 09:27:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7036E1BADE
-        for <linux-usb@vger.kernel.org>; Sun,  5 Feb 2023 06:26:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675607175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6ovV0qxfXRlGuR+HK7ss8YuGnGDnO7QYRjF7EXEvhUA=;
-        b=V4B2+LNT1rNOk6HDYgdsOH6UvdY5njRtzu8xfa6/MA+pGeoxhT/gq6ZuvQYDABrm+aj9UZ
-        CBVeAt8OhDMWkejea1qJ/qV0+pSdjt0of0pXNpNl4nuANcWMfVXXpwYjLzJGkWAs0yaPly
-        +2EptlS34RYYrHlFlmvAlFjXEuOicT0=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-460-kxPFChMwNlK4iw8FMv66bw-1; Sun, 05 Feb 2023 09:26:13 -0500
-X-MC-Unique: kxPFChMwNlK4iw8FMv66bw-1
-Received: by mail-qv1-f71.google.com with SMTP id jo26-20020a056214501a00b0053aa15f61d4so4668788qvb.7
-        for <linux-usb@vger.kernel.org>; Sun, 05 Feb 2023 06:26:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ovV0qxfXRlGuR+HK7ss8YuGnGDnO7QYRjF7EXEvhUA=;
-        b=GfhD3IkLfW1R+os+G0dHYcz2BAfKBYMRKEWEWGfEK4I5ptoDzTrb/BIvp4hOvwnAhn
-         +uVCPxpXBixvLtEipSv9SJHHXodx5/KdC0RG7Bbvgo4ETB8DrCuHqT3S2tzhb/FiUmYa
-         S88N00fnvXwunwZK1rFs18SzkzcJcog8ar1zogt+uTzVKqFqCDjrHHbmmgf3XJUQs1a5
-         mE4S4B4mIfD23Wi8MP2J24C+QDJtr0QnMF4jlGTGJtDnryZBlSkAhs7q3N502RC37ije
-         gGYB0T419byLE/tsS2oiScpXomUPsl4jJtPj2+sPrG7V2wPHFMXsbHcoxH0Jh/F9KFaN
-         JBsA==
-X-Gm-Message-State: AO0yUKVYU5iRacZnAgcBsiyEeNXkkuHlmHgeQCXzdJ/0Rfv3lH9t2iVO
-        4SysojiUEH7fYCaftZrmfOZ0m3z3sgxYilwXoz7MlHTDkT3QN3a/qEr+iOJH1AAJu8FQ9UU7QF0
-        FlZnprbSFciYpb2kgJmFa
-X-Received: by 2002:ac8:5a4d:0:b0:3ba:247a:3fb7 with SMTP id o13-20020ac85a4d000000b003ba247a3fb7mr1415594qta.53.1675607173449;
-        Sun, 05 Feb 2023 06:26:13 -0800 (PST)
-X-Google-Smtp-Source: AK7set9qppldBLGixlkM3q2z0IzkIe25wC7YU9wx75EHtd9OGiPGAXNIBI/Tm/BuoBQtjl1T0a1TKg==
-X-Received: by 2002:ac8:5a4d:0:b0:3ba:247a:3fb7 with SMTP id o13-20020ac85a4d000000b003ba247a3fb7mr1415568qta.53.1675607173179;
-        Sun, 05 Feb 2023 06:26:13 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id 131-20020a370689000000b0072b5242bd0bsm5586740qkg.77.2023.02.05.06.26.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Feb 2023 06:26:12 -0800 (PST)
-Subject: Re: [PATCH] usb: host: USB_XHCI_RZV2M depends on USB_GADGET
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "artur.bujdoso@gmail.com" <artur.bujdoso@gmail.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "tmaimon77@gmail.com" <tmaimon77@gmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230205021227.3017634-1-trix@redhat.com>
- <OS0PR01MB592285E3E3B9AA7FD8C291A286D59@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <46943159-4cd0-41d7-e63c-28239c17445a@redhat.com>
-Date:   Sun, 5 Feb 2023 06:26:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S229437AbjBEQqM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 11:46:12 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 51B2312F2F
+        for <linux-usb@vger.kernel.org>; Sun,  5 Feb 2023 08:46:06 -0800 (PST)
+Received: (qmail 627686 invoked by uid 1000); 5 Feb 2023 11:46:06 -0500
+Date:   Sun, 5 Feb 2023 11:46:06 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Message-ID: <Y9/dTp/hQ5btWTEH@rowland.harvard.edu>
+References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+ <Y95h7Vop9t5Li0HD@kroah.com>
+ <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
+ <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
+ <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
+ <Y96HiYcreb8jZIHi@rowland.harvard.edu>
+ <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
+ <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+ <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <OS0PR01MB592285E3E3B9AA7FD8C291A286D59@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sun, Feb 05, 2023 at 10:31:56AM +0900, Tetsuo Handa wrote:
+> On 2023/02/05 5:01, Alan Stern wrote:
+> > On Sun, Feb 05, 2023 at 02:09:40AM +0900, Tetsuo Handa wrote:
+> >> That is a declaration that driver developers are allowed to take it for granted
+> >> that driver callback functions can behave as if dev->mutex is not held. 
+> > 
+> > No it isn't.  It is a declaration that driver developers must be extra 
+> > careful because lockdep is unable to detect locking errors involving 
+> > dev->mutex.
+> 
+> Driver developers are not always familiar with locks used by driver core,
+> like your
+> 
+>   It's hard to figure out what's wrong from looking at the syzbot report.
+>   What makes you think it is connected with dev->mutex?
 
-On 2/5/23 12:52 AM, Biju Das wrote:
-> Hi Tom,
->
-> Thanks for the patch.
->
-> Arnd send a patch for refactoring the USB_XHCI_RZV2M KConfig dependencies related to USB_GADGET on [1] and
-> is in usb-next. Do you see this issue after applying[1]?
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=ec5499d338ece9db9b7590649d3cfcc4d7f9603d
+You didn't answer this question.
 
- From reviewing, it will likely work.
+>   At first glance, it seems that the ath6kl driver is trying to flush a
+>   workqueue while holding a lock or mutex that is needed by one of the
+>   jobs in the workqueue.  That's obviously never going to work, no matter
+>   what sort of lockdep validation gets used.
+> 
+> comment indicates that you did not notice that dev->mutex was connected to
+> this problem which involved ath6kl driver code and ath9k driver code and
+> driver core code.
 
-Tom
+Of course I didn't.  There isn't enough information in the syzbot log 
+for someone to recognize the connection if they aren't already familiar 
+with the code in question.
 
-> Cheers,
-> Biju
->
->> -----Original Message-----
->> From: Tom Rix <trix@redhat.com>
->> Sent: Sunday, February 5, 2023 2:12 AM
->> To: gregkh@linuxfoundation.org; arnd@arndb.de; linus.walleij@linaro.org;
->> artur.bujdoso@gmail.com; miquel.raynal@bootlin.com; colin.i.king@gmail.com;
->> Biju Das <biju.das.jz@bp.renesas.com>; tmaimon77@gmail.com
->> Cc: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; Tom Rix
->> <trix@redhat.com>
->> Subject: [PATCH] usb: host: USB_XHCI_RZV2M depends on USB_GADGET
->>
->> A rand config causes this link error
->> ld: drivers/usb/host/xhci-rzv2m.o: in function `xhci_rzv2m_init_quirk':
->> xhci-rzv2m.c:(.text+0x13): undefined reference to `rzv2m_usb3drd_reset'
->>
->> xhci_rzv2m_init_quirk build is controlled by USB_XHCI_RZV2M
->> rzv2m_usb3drd_reset build is controlled by USB_RZV2M_USB3DRD
->>
->> USE_XHCI_RZV2M does select USB_RZV2M_USB3DRD, but USB_RZV2M_USB3DRD depends
->> on USB_GADGET, so now does USE_XHCI_RZV2M.
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   drivers/usb/host/Kconfig | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig index
->> 2b80ce9587c1..2dd9e95a5b86 100644
->> --- a/drivers/usb/host/Kconfig
->> +++ b/drivers/usb/host/Kconfig
->> @@ -100,6 +100,7 @@ config USB_XHCI_RZV2M
->>   	tristate "xHCI support for Renesas RZ/V2M SoC"
->>   	depends on USB_XHCI_PLATFORM
->>   	depends on ARCH_R9A09G011 || COMPILE_TEST
->> +	depends on USB_GADGET
->>   	select USB_RZV2M_USB3DRD
->>   	help
->>   	  Say 'Y' to enable the support for the xHCI host controller
->> --
->> 2.27.0
+> Core developers can't assume that driver developers are extra careful, as
+> well as driver developers can't assume that core developers are familiar
+> with locks used by individual drivers. We need to fill the gap.
 
+Agreed.
+
+> >> Some developers test their changes with lockdep enabled, and believe that their
+> >> changes are correct because lockdep did not complain.
+> >> https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174 is an example.
+> > 
+> > How do you know developers are making this mistake?  That example 
+> > doesn't show anything of the sort; the commit which introduced the bug 
+> > says nothing about lockdep.
+> 
+> The commit which introduced the bug cannot say something about lockdep, for
+> lockdep validation is disabled and nobody noticed the possibility of deadlock
+> until syzbot reports it as hung. Since the possibility of deadlock cannot be
+> noticed until syzbot reports it as hung,
+
+That isn't true at all.  There are lots of occasions when people realize 
+that a deadlock might occur without seeing a report from lockdep or 
+syzbot.  You just aren't aware of these occasions because the developer 
+then fixes the code before submitting it.  But if you search through the 
+mailing list archives, I'm sure you'll find plenty of examples where 
+somebody criticizes a proposed patch on the grounds that it can cause a 
+deadlock.
+
+>  I assume that there are many similar
+> deadlocks in the kernel that involves dev->mutex. How do you teach developers
+> that they are making this mistake, without keeping lockdep validation enabled?
+
+There probably are many similar deadlocks in the kernel.  There probably 
+also are deadlocks (not involving dev->mutex) which lockdep could catch, 
+but hasn't because the right combination of conditions hasn't occurred.
+
+You teach developers about this the same way you teach them about 
+anything else: Publishing information, talking to people, and putting 
+comments in the kernel source code.
+
+> By keeping lockdep validation disabled, you are declaring that driver developers
+> need not to worry about dev->mutex rather than declaring that driver developers
+> need to worry about dev->mutex.
+
+That is a very peculiar thing to say.  How do you think people managed 
+to deal with deadlocks in the kernel before lockdep was developed?  Do 
+you think they said: "My testing didn't reveal any deadlocks, so the 
+code must be perfect"?
+
+Of course they didn't.  And now people simply need to realize that 
+lockdep isn't perfect either.
+
+And by the way, by disabling lockdep validation I am declaraing that 
+enabling it would cause an overwhelming number of false positives, 
+rendering lockdep useless (as you found out when you tried).  Not that 
+driver developers don't have to worry about dev->mutex.
+
+Alan Stern
