@@ -2,115 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C10468AFC9
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 13:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B87D68B033
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 15:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjBEMzH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Feb 2023 07:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S229741AbjBEOKD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Feb 2023 09:10:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBEMzG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 07:55:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA8A1F90B;
-        Sun,  5 Feb 2023 04:55:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCCA5B80AEC;
-        Sun,  5 Feb 2023 12:55:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E30FC433D2;
-        Sun,  5 Feb 2023 12:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675601702;
-        bh=x/qDsEHlWJK+SjGX4aEIfZBQAJmIhwYl+Yiwf3fMysE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lssMWPTq9vAlmqT9VnicpcZ1B+4eMc89IfIk29psRrPkA9nJUCLVg/OW3K4/cQR0C
-         F2Op+E8ujw8auzImX2EXIplqzh+5c1qjGrZGavhYUuRVWPbZMoyG+AHa0+rUEnEtEN
-         HFONKGt4l7oOIs9q7LOsDDaSVQKC8etZ/ErBICZk=
-Date:   Sun, 5 Feb 2023 13:54:59 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.2-rc7
-Message-ID: <Y9+nI9o/v/RjiWne@kroah.com>
+        with ESMTP id S229490AbjBEOKC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 09:10:02 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8010D1F919;
+        Sun,  5 Feb 2023 06:10:00 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pOfi4-00075Q-6S; Sun, 05 Feb 2023 15:09:36 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Robert Foss <rfoss@kernel.org>,
+        dri-devel@lists.freedesktop.org, kyungmin.park@samsung.com,
+        linux-kernel@vger.kernel.org, jernej.skrabec@gmail.com,
+        hjc@rock-chips.com, philippe.cornu@foss.st.com, jonas@kwiboo.se,
+        krzysztof.kozlowski+dt@linaro.org,
+        Laurent.pinchart@ideasonboard.com, alim.akhtar@samsung.com,
+        neil.armstrong@linaro.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, gregkh@linuxfoundation.org,
+        linux-rockchip@lists.infradead.org, inki.dae@samsung.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, daniel@ffwll.ch,
+        airlied@gmail.com, devicetree@vger.kernel.org,
+        andrzej.hajda@intel.com, linux-usb@vger.kernel.org,
+        sw0312.kim@samsung.com
+Subject: Re: (subset) [PATCH v6 01/17] dt-bindings: display: rockchip: convert rockchip-lvds.txt to YAML
+Date:   Sun,  5 Feb 2023 15:09:34 +0100
+Message-Id: <167560616167.854266.15581661831063028156.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
+On Thu, 22 Dec 2022 15:22:14 +0100, Johan Jonker wrote:
+> Convert rockchip-lvds.txt to YAML.
+> 
+> Changed:
+>   Add power-domains property.
+>   Requirements between PX30 and RK3288
+> 
+> 
+> [...]
 
-  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
+Applied, thanks!
 
-are available in the Git repository at:
+[01/17] dt-bindings: display: rockchip: convert rockchip-lvds.txt to YAML
+        commit: d567ca6ed9fd5fe594bca5e29717ff9e9631efba
+[02/17] dt-bindings: soc: rockchip: grf: add rockchip,lvds.yaml
+        commit: cbfc73a3febdf14395ecdd738decd53835166662
+[03/17] dt-bindings: display: dsi-controller: move clock-master property
+        commit: a1b7455dc4a399a565353ceb7cce605b4b9db41a
+[04/17] dt-bindings: display: bridge: snps,dw-mipi-dsi: fix clock properties
+        commit: a90fa0adbeb07f11c08635364d206678d9e1b938
+[05/17] dt-bindings: display: rockchip: convert dw_mipi_dsi_rockchip.txt to yaml
+        commit: 0dac2102cf6baacba0d9d7804b0c163337f69839
+[06/17] dt-bindings: display: bridge: convert analogix_dp.txt to yaml
+        commit: 440112adadd3e273d2a2ff6e5d4b969ee03fda47
+[07/17] dt-bindings: display: rockchip: convert analogix_dp-rockchip.txt to yaml
+        commit: 9bb35d4c3230803345d5218676a7325b26823209
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.2-rc7
-
-for you to fetch changes up to f82060da749c611ed427523b6d1605d87338aac1:
-
-  usb: typec: ucsi: Don't attempt to resume the ports before they exist (2023-02-02 11:27:28 +0100)
-
-----------------------------------------------------------------
-USB fixes for 6.2-rc7
-
-Here are some small USB fixes for 6.2-rc7 that resolve some reported
-problems.  These include:
-  - gadget driver fixes
-  - dwc3 driver fix
-  - typec driver fix
-  - MAINTAINERS file update.
-
-All of these have been in linux-next with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Aaro Koskinen (1):
-      usb: gadget: udc: do not clear gadget driver.bus
-
-Daniel Scally (1):
-      MAINTAINERS: Add myself as UVC Gadget Maintainer
-
-Heikki Krogerus (1):
-      usb: typec: ucsi: Don't attempt to resume the ports before they exist
-
-Neil Armstrong (1):
-      usb: dwc3: qcom: enable vbus override when in OTG dr-mode
-
-Pratham Pratap (1):
-      usb: gadget: f_uac2: Fix incorrect increment of bNumEndpoints
-
-Udipto Goswami (1):
-      usb: gadget: f_fs: Fix unbalanced spinlock in __ffs_ep0_queue_wait
-
- MAINTAINERS                            | 1 +
- drivers/usb/dwc3/dwc3-qcom.c           | 2 +-
- drivers/usb/fotg210/fotg210-udc.c      | 1 -
- drivers/usb/gadget/function/f_fs.c     | 4 +++-
- drivers/usb/gadget/function/f_uac2.c   | 1 +
- drivers/usb/gadget/udc/bcm63xx_udc.c   | 1 -
- drivers/usb/gadget/udc/fsl_qe_udc.c    | 1 -
- drivers/usb/gadget/udc/fsl_udc_core.c  | 1 -
- drivers/usb/gadget/udc/fusb300_udc.c   | 1 -
- drivers/usb/gadget/udc/goku_udc.c      | 1 -
- drivers/usb/gadget/udc/gr_udc.c        | 1 -
- drivers/usb/gadget/udc/m66592-udc.c    | 1 -
- drivers/usb/gadget/udc/max3420_udc.c   | 1 -
- drivers/usb/gadget/udc/mv_u3d_core.c   | 1 -
- drivers/usb/gadget/udc/mv_udc_core.c   | 1 -
- drivers/usb/gadget/udc/net2272.c       | 1 -
- drivers/usb/gadget/udc/net2280.c       | 1 -
- drivers/usb/gadget/udc/omap_udc.c      | 1 -
- drivers/usb/gadget/udc/pch_udc.c       | 1 -
- drivers/usb/gadget/udc/snps_udc_core.c | 1 -
- drivers/usb/typec/ucsi/ucsi.c          | 9 ++++++++-
- 21 files changed, 14 insertions(+), 19 deletions(-)
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
