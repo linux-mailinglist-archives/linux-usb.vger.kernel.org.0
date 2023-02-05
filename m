@@ -2,31 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B8D68ADEB
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 02:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E0268ADF0
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 02:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjBEBYC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Feb 2023 20:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S231994AbjBEBcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Feb 2023 20:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbjBEBYB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 20:24:01 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B46871C312
-        for <linux-usb@vger.kernel.org>; Sat,  4 Feb 2023 17:23:59 -0800 (PST)
-Received: (qmail 609844 invoked by uid 1000); 4 Feb 2023 20:23:58 -0500
-Date:   Sat, 4 Feb 2023 20:23:58 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229453AbjBEBcU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 20:32:20 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A247E23C71;
+        Sat,  4 Feb 2023 17:32:18 -0800 (PST)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3151VwtN028840;
+        Sun, 5 Feb 2023 10:31:58 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Sun, 05 Feb 2023 10:31:58 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3151VwAm028837
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 5 Feb 2023 10:31:58 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
+Date:   Sun, 5 Feb 2023 10:31:56 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Message-ID: <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
  <Y95h7Vop9t5Li0HD@kroah.com>
  <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
@@ -35,76 +50,78 @@ References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
  <Y96HiYcreb8jZIHi@rowland.harvard.edu>
  <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
  <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
- <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 12:14:54PM -0800, Linus Torvalds wrote:
-> On Sat, Feb 4, 2023 at 12:01 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > I'm sorry, but that simply is not feasible.  It doesn't matter how much
-> > you want to do it or feel it is needed; there is no reasonable way to do
-> > it.  To take just one example, what you are saying implies that when a
-> > driver is probed for a device, it would not be allowed to register a
-> > child device.  That's a ridiculous restriction.
+On 2023/02/05 5:01, Alan Stern wrote:
+> On Sun, Feb 05, 2023 at 02:09:40AM +0900, Tetsuo Handa wrote:
+>> On 2023/02/05 1:27, Alan Stern wrote:
+>>> On Sun, Feb 05, 2023 at 01:12:12AM +0900, Tetsuo Handa wrote:
+>>>> On 2023/02/05 0:34, Alan Stern wrote:
+>>>> Lockdep validation on dev->mutex being disabled is really annoying, and
+>>>> I want to make lockdep validation on dev->mutex enabled; that is the
+>>>> "drivers/core: Remove lockdep_set_novalidate_class() usage" patch.
+>>>
+>>>> Even if it is always safe to acquire a child device's lock while holding
+>>>> the parent's lock, disabling lockdep checks completely on device's lock is
+>>>> not safe.
+>>>
+>>> I understand the problem you want to solve, and I understand that it
+>>> can be frustrating.  However, I do not believe you will be able to
+>>> solve this problem.
+>>
+>> That is a declaration that driver developers are allowed to take it for granted
+>> that driver callback functions can behave as if dev->mutex is not held. 
 > 
-> Well, we've worked around that in other places by making the lockdep
-> classes for different locks of the same type be different.
+> No it isn't.  It is a declaration that driver developers must be extra 
+> careful because lockdep is unable to detect locking errors involving 
+> dev->mutex.
+
+Driver developers are not always familiar with locks used by driver core,
+like your
+
+  It's hard to figure out what's wrong from looking at the syzbot report.
+  What makes you think it is connected with dev->mutex?
+
+  At first glance, it seems that the ath6kl driver is trying to flush a
+  workqueue while holding a lock or mutex that is needed by one of the
+  jobs in the workqueue.  That's obviously never going to work, no matter
+  what sort of lockdep validation gets used.
+
+comment indicates that you did not notice that dev->mutex was connected to
+this problem which involved ath6kl driver code and ath9k driver code and
+driver core code.
+
+Core developers can't assume that driver developers are extra careful, as
+well as driver developers can't assume that core developers are familiar
+with locks used by individual drivers. We need to fill the gap.
+
 > 
-> So this *could* possibly be solved by lockdep being smarter about
-> dev->mutex than just "disable checking entirely".
+>> Some developers test their changes with lockdep enabled, and believe that their
+>> changes are correct because lockdep did not complain.
+>> https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174 is an example.
 > 
-> So maybe the lock_set_novalidate_class() could be something better. It
-> _is_ kind of disgusting.
-> 
-> That said, maybe people tried to subclass the locks and failed, and
-> that "no validation" is the best that can be done.
-> 
-> But other areas *do* end up spending extra effort to separate out the
-> locks (and the different uses of the locks), and I think the
-> dev->mutex is one of the few cases that just gives up and says "no
-> validation at all".
-> 
-> The other case seems to be the md bcache code.
+> How do you know developers are making this mistake?  That example 
+> doesn't show anything of the sort; the commit which introduced the bug 
+> says nothing about lockdep.
 
-I suppose we could create separate lockdep classes for every bus_type 
-and device_type combination, as well as for the different sorts of 
-devices -- treat things like class devices separately from normal 
-devices, and so on.  But even then there would be trouble.
+The commit which introduced the bug cannot say something about lockdep, for
+lockdep validation is disabled and nobody noticed the possibility of deadlock
+until syzbot reports it as hung. Since the possibility of deadlock cannot be
+noticed until syzbot reports it as hung, I assume that there are many similar
+deadlocks in the kernel that involves dev->mutex. How do you teach developers
+that they are making this mistake, without keeping lockdep validation enabled?
 
-For example, consider PCI devices and PCI bridges (this sort of thing 
-happens on other buses too).  I don't know the details of how the PCI 
-subsystem works, but presumably when a bridge is probed, the driver then 
-probes all the devices on the other side of the bridge while holding the 
-bridge's lock.  Then if one of those devices is another bridge, the same 
-thing happens recursively, and so on.  How would drivers cope with that?  
-How deep will this nesting go?  I doubt that the driver core could take 
-care of these issues all by itself.
+By keeping lockdep validation disabled, you are declaring that driver developers
+need not to worry about dev->mutex rather than declaring that driver developers
+need to worry about dev->mutex.
 
-I don't know if the following situation ever happens anywhere, but it 
-could: Suppose a driver wants to lock several children of some device A.  
-Providing it already holds A's lock, this is perfectly safe.  But how 
-can we tell lockdep?  Even if A belongs to a different lockdep class 
-from its children, the children would all be in the same class.
-
-What happens when a driver wants to lock both a regular device and its 
-corresponding class device?  Some drivers might acquire the locks in one 
-order and some drivers in another.  Again it's safe, because separate 
-drivers will never try to lock the same devices, but how do you tell 
-lockdep about this?
-
-No doubt there are other examples of potential problems.  Somebody could 
-try to implement this kind of approach, but almost certainly it would 
-lead to tons of false positives.
-
-Alan Stern
