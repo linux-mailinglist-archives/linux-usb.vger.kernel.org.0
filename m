@@ -2,126 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E0268ADF0
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 02:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB0D68AE04
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Feb 2023 03:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjBEBcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Feb 2023 20:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S229793AbjBECNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Feb 2023 21:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjBEBcU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 20:32:20 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A247E23C71;
-        Sat,  4 Feb 2023 17:32:18 -0800 (PST)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3151VwtN028840;
-        Sun, 5 Feb 2023 10:31:58 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Sun, 05 Feb 2023 10:31:58 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3151VwAm028837
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 5 Feb 2023 10:31:58 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
-Date:   Sun, 5 Feb 2023 10:31:56 +0900
+        with ESMTP id S229453AbjBECNc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Feb 2023 21:13:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D1722DC4
+        for <linux-usb@vger.kernel.org>; Sat,  4 Feb 2023 18:12:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675563160;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TxjJOlkRD9KQJJ8RtFDJbVPO6vwF/VfUk2KQLMypAoU=;
+        b=KD/HbL8qKentFazK024FYXa5E35q4Iis3vuccryXkNuw2Yovk/HUl0qroeZ2oQ8g5T3a5W
+        6nCXtOgbtX0aor6gYFUSsQudDB1yQ8GWg58WAnn8GFfC7HGTJNEdz25AU9X4lOWU7y+pV4
+        xv55f159HGHUiVHV6UDhU9nW4wDTSC4=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-111-zy-SmIvSPjyxrOlRC15NSA-1; Sat, 04 Feb 2023 21:12:38 -0500
+X-MC-Unique: zy-SmIvSPjyxrOlRC15NSA-1
+Received: by mail-qt1-f200.google.com with SMTP id a13-20020ac8108d000000b003b7ea9814a2so4600112qtj.2
+        for <linux-usb@vger.kernel.org>; Sat, 04 Feb 2023 18:12:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TxjJOlkRD9KQJJ8RtFDJbVPO6vwF/VfUk2KQLMypAoU=;
+        b=TxX2arwLiyUBPzrpAmJCcW3OevYAOsjnFiiSNGNywtCaEN+zfd6uTKbPmb39/oxMWW
+         8v/NTGQvT3zOb+DFskn6CLBkl+EstPIVb79SofcIlDBVBVRQNAA6u1IUGy7lgjQmKWa8
+         JefFN0q0q5NKqQcgnObwjAU04H3RjEXwx3iPnTvsBX+PcomxLL0RD4goO2Hw5bF8XmNb
+         uKzFuPQjkrt+wHYSTqTiPhAUASO0W605ijqbXQWhSFqk2+arrBJvMhOSz9JH91oyrdmG
+         Vn0u+5YBQJ1z/TQ7KTEvRbIOp6q1ICE3YFfuw60acM4hKRJwAU7ANNMC7YOX2XhnERiO
+         REeA==
+X-Gm-Message-State: AO0yUKVmDR61di6QEggdtBHUXq/JSqeS9AuQbcFmYtl18rYDq8juHW2S
+        oxwynRt55aLgZTHzpcWbHcH0iRgCu2OfjxeldeBaIpkL6Xm8lSOasK3m/fyS3NiWe8tSkEALuRS
+        dLVv2H4Y0X9chaj/eNzJp
+X-Received: by 2002:ac8:7dd3:0:b0:3b9:a777:3d9a with SMTP id c19-20020ac87dd3000000b003b9a7773d9amr28666320qte.44.1675563158500;
+        Sat, 04 Feb 2023 18:12:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set9g2HQ6czvVeGwBxMrcctOOmsHCimOzFUbYG6cWZmHqZ0y22vTjElFS6ahjksrz7A2cD7+6mQ==
+X-Received: by 2002:ac8:7dd3:0:b0:3b9:a777:3d9a with SMTP id c19-20020ac87dd3000000b003b9a7773d9amr28666302qte.44.1675563158283;
+        Sat, 04 Feb 2023 18:12:38 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id m15-20020ac85b0f000000b003a591194221sm4648646qtw.7.2023.02.04.18.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 18:12:37 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linus.walleij@linaro.org, artur.bujdoso@gmail.com,
+        miquel.raynal@bootlin.com, colin.i.king@gmail.com,
+        biju.das.jz@bp.renesas.com, tmaimon77@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: host: USB_XHCI_RZV2M depends on USB_GADGET
+Date:   Sat,  4 Feb 2023 21:12:27 -0500
+Message-Id: <20230205021227.3017634-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
- <Y95h7Vop9t5Li0HD@kroah.com>
- <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
- <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
- <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
- <Y96HiYcreb8jZIHi@rowland.harvard.edu>
- <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
- <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/02/05 5:01, Alan Stern wrote:
-> On Sun, Feb 05, 2023 at 02:09:40AM +0900, Tetsuo Handa wrote:
->> On 2023/02/05 1:27, Alan Stern wrote:
->>> On Sun, Feb 05, 2023 at 01:12:12AM +0900, Tetsuo Handa wrote:
->>>> On 2023/02/05 0:34, Alan Stern wrote:
->>>> Lockdep validation on dev->mutex being disabled is really annoying, and
->>>> I want to make lockdep validation on dev->mutex enabled; that is the
->>>> "drivers/core: Remove lockdep_set_novalidate_class() usage" patch.
->>>
->>>> Even if it is always safe to acquire a child device's lock while holding
->>>> the parent's lock, disabling lockdep checks completely on device's lock is
->>>> not safe.
->>>
->>> I understand the problem you want to solve, and I understand that it
->>> can be frustrating.  However, I do not believe you will be able to
->>> solve this problem.
->>
->> That is a declaration that driver developers are allowed to take it for granted
->> that driver callback functions can behave as if dev->mutex is not held. 
-> 
-> No it isn't.  It is a declaration that driver developers must be extra 
-> careful because lockdep is unable to detect locking errors involving 
-> dev->mutex.
+A rand config causes this link error
+ld: drivers/usb/host/xhci-rzv2m.o: in function `xhci_rzv2m_init_quirk':
+xhci-rzv2m.c:(.text+0x13): undefined reference to `rzv2m_usb3drd_reset'
 
-Driver developers are not always familiar with locks used by driver core,
-like your
+xhci_rzv2m_init_quirk build is controlled by USB_XHCI_RZV2M
+rzv2m_usb3drd_reset build is controlled by USB_RZV2M_USB3DRD
 
-  It's hard to figure out what's wrong from looking at the syzbot report.
-  What makes you think it is connected with dev->mutex?
+USE_XHCI_RZV2M does select USB_RZV2M_USB3DRD, but USB_RZV2M_USB3DRD
+depends on USB_GADGET, so now does USE_XHCI_RZV2M.
 
-  At first glance, it seems that the ath6kl driver is trying to flush a
-  workqueue while holding a lock or mutex that is needed by one of the
-  jobs in the workqueue.  That's obviously never going to work, no matter
-  what sort of lockdep validation gets used.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/host/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-comment indicates that you did not notice that dev->mutex was connected to
-this problem which involved ath6kl driver code and ath9k driver code and
-driver core code.
-
-Core developers can't assume that driver developers are extra careful, as
-well as driver developers can't assume that core developers are familiar
-with locks used by individual drivers. We need to fill the gap.
-
-> 
->> Some developers test their changes with lockdep enabled, and believe that their
->> changes are correct because lockdep did not complain.
->> https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174 is an example.
-> 
-> How do you know developers are making this mistake?  That example 
-> doesn't show anything of the sort; the commit which introduced the bug 
-> says nothing about lockdep.
-
-The commit which introduced the bug cannot say something about lockdep, for
-lockdep validation is disabled and nobody noticed the possibility of deadlock
-until syzbot reports it as hung. Since the possibility of deadlock cannot be
-noticed until syzbot reports it as hung, I assume that there are many similar
-deadlocks in the kernel that involves dev->mutex. How do you teach developers
-that they are making this mistake, without keeping lockdep validation enabled?
-
-By keeping lockdep validation disabled, you are declaring that driver developers
-need not to worry about dev->mutex rather than declaring that driver developers
-need to worry about dev->mutex.
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 2b80ce9587c1..2dd9e95a5b86 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -100,6 +100,7 @@ config USB_XHCI_RZV2M
+ 	tristate "xHCI support for Renesas RZ/V2M SoC"
+ 	depends on USB_XHCI_PLATFORM
+ 	depends on ARCH_R9A09G011 || COMPILE_TEST
++	depends on USB_GADGET
+ 	select USB_RZV2M_USB3DRD
+ 	help
+ 	  Say 'Y' to enable the support for the xHCI host controller
+-- 
+2.27.0
 
