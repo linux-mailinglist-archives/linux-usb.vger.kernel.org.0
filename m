@@ -2,91 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC27F68B484
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 04:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0790368B4F7
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 05:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjBFDgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Feb 2023 22:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S229478AbjBFEot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Feb 2023 23:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFDgB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 22:36:01 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822DD16323;
-        Sun,  5 Feb 2023 19:36:00 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id g2so12446110ybk.8;
-        Sun, 05 Feb 2023 19:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LGGtA4PNstDo2ZtU+3JdzkWj0NhK3SlJ22hiQduzGTs=;
-        b=ddphka7bOXwqefz5YmH4mO90m3oLNPZEjaDZL0p9U+qNVyha4q4GruGlmAevP41Mlk
-         ZyxPfP+M0tfhheJ4A5wT6D/mdIyFIc6rYW1J2j1FxoFhlxiXj9ZnjcMIb1xbJu60ntfJ
-         Z0spMI/YMK847YUGnCamtsM3acWN3IxtOc1HcYJwHDG/zNJvdEWYd7pEuO8+giZCXTuA
-         jvoazFhkpvb51B9/g071zzjdJQUdHK5csj+jZGY+BC2d5yP13vJZNmO3/7r8cKzKn9/h
-         L9T9gka8NYgw2twjC7KRWWTxsX2o7PMymarQhfexL8LGh3hZgaT6LUSPiYtZoGbHn6QP
-         zhTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LGGtA4PNstDo2ZtU+3JdzkWj0NhK3SlJ22hiQduzGTs=;
-        b=OPkxIP3XGQVSHb7sTa0xOBPUs/Q8vrzqwel3Qz8cvXQ4n4f6JMLqGXdu4mCHCJzCI4
-         ywcxFP/dVIWpCV49ECz+xsG+n/oipYkH3+yNSmpGiUb6F5SkYtQKaJUHo+kgjSAb1F3o
-         jf9LMsyq/6HKxRYhDkjbgrDDFP06OtfHxifSZ3lpNFyg04ZimpJNzoresnVC4jIoRm9G
-         iF0gAFfRE2urJieIdPELG87b97QtENwNYSAh6z5Wj0D7xzekFlnDxrSwvtXQNSRFBHF/
-         lWKifcYS73df+v2oPhioZtfUx9IoR9hDYczRNc9U5mmb2LM6oLAKS0taMuzyJqlRaxeN
-         jOBg==
-X-Gm-Message-State: AO0yUKWu627S4pL400eGJbl99KtRbtjj8B93TRSaQgg9j5BN2DDtqwIK
-        R+ImMYKylvUIi5uk7gF71Nv6VbIEBmRb2RvB4Ace0Ny3qpQ=
-X-Google-Smtp-Source: AK7set8DrFRnQWTMMC2pkTZ9Dj3WJa94VbSPG24zG+ZoDNiMQW5UInj2b7rsMmmeFeh0TlgvBg+cViyRmDI5oDWE52s=
-X-Received: by 2002:a25:8c8a:0:b0:882:4616:654a with SMTP id
- m10-20020a258c8a000000b008824616654amr378587ybl.589.1675654559752; Sun, 05
- Feb 2023 19:35:59 -0800 (PST)
+        with ESMTP id S229526AbjBFEon (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 23:44:43 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED16615543;
+        Sun,  5 Feb 2023 20:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vnoxxnFupsctnz6PYmQvdvAVDmQ6Sog6ZUyHJ5kggYs=; b=c77iJQ/wF72o+8X2qH2VVeUYy/
+        pMn9C95oNhdcjSzx3+dRwU3ungMEHHYItlf7JDThl7+h0LMGkQAyPZVrJrwZBwAbOu3MY8cnTUw15
+        eWlKKCmMIdmZk3Z7hrX8gUFJ5DPQBQCwcBPPZd9Mzhk++k0pN5FFlxIUXAGiozfQgI0W/mr7+ujpB
+        cdKQNUuyC4lQPyz4q8q4WZOqcO9hh7mvgpdg/Ks2+tbwXXXOOkmnA+YO1S1RXSksYjoVpCjG3KL9q
+        PjNTY0XSxU2X2Da5KRjpSH+WIscWKX2E3L2K08mBeAmZ9q/qG80XJUpr2wBfKB+z92CSbvBS7vnB6
+        4aseEvkg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pOtMX-00GTNl-N0; Mon, 06 Feb 2023 04:44:17 +0000
+Date:   Mon, 6 Feb 2023 04:44:17 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Message-ID: <Y+CFofRj7EYefqUR@casper.infradead.org>
+References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+ <Y95h7Vop9t5Li0HD@kroah.com>
+ <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
+ <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
+ <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
+ <Y96HiYcreb8jZIHi@rowland.harvard.edu>
+ <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
+ <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+ <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
+ <20230206025629.1786-1-hdanton@sina.com>
 MIME-Version: 1.0
-References: <20230203072819.3408-1-zhongjiezhu1@gmail.com> <Y90egBL6HSoEdz2P@rowland.harvard.edu>
-In-Reply-To: <Y90egBL6HSoEdz2P@rowland.harvard.edu>
-From:   =?UTF-8?B?5pyx5b+g5p2w?= <zhongjiezhu1@gmail.com>
-Date:   Mon, 6 Feb 2023 11:33:15 +0800
-Message-ID: <CAJnoMhNYDXjfttiio+P7k6W1fDU3N=jbjmZe+ZRVON=bqm0yvw@mail.gmail.com>
-Subject: Re: [PATCH] USB: core: hub: fix usb_hub worker blocking
- drain_all_pages() worker issue
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206025629.1786-1-hdanton@sina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Yes, this is a very special case.
+On Mon, Feb 06, 2023 at 10:56:29AM +0800, Hillf Danton wrote:
+> On Sun, 5 Feb 2023 11:46:06 -0500 Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > And by the way, by disabling lockdep validation I am declaraing that 
+> > enabling it would cause an overwhelming number of false positives, 
+> 
+> Could you share 5 false positives you see upstream to help understand how
+> it is useless?
 
-It will happen only when disconnecting the mass storage if there are
-too many files in the storage, and the scanning operation is running,
-and the file system is not unmounted.
-It looks like this issue should be fixed in the usb mass storage
-driver, but I don't find an appropriate place.
-
-On Fri, Feb 3, 2023 at 10:47 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Feb 03, 2023 at 03:28:19PM +0800, Zhu Zhongjie wrote:
-> > From: Zhongjie Zhu <zhongjiezhu1@gmail.com>
-> >
-> > When disconnecting a usb mass storege, if there are a lot of inodes
-> > like 10 thousands files need to be freed, the invalidate_inodes() will
-> > run for a loog time to freeing all inodes, this will block other worker
-> > to run in the cpu, so mark the usb_hub workqueue to WQ_CPU_INTENSIVE to
-> > avoid this situation.
->
-> Very infrequently this will happen.  In the vast majority of cases, the
-> usb_hub workqueue uses very little CPU time.  Marking it
-> WQ_CPU_INTENSIVE seems inappropriate.
->
-> Alan Stern
+I've asked you before to stop cc'ing linux-mm on things which aren't
+about memory management.  Now I'm asking you publically.
