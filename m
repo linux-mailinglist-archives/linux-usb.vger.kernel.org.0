@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABE268B522
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 06:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A2B68B5C2
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 07:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjBFFRK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Feb 2023 00:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
+        id S229625AbjBFGsK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Feb 2023 01:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBFFRJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 00:17:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503D7EB68;
-        Sun,  5 Feb 2023 21:17:08 -0800 (PST)
+        with ESMTP id S229456AbjBFGsJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 01:48:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A046A5D7;
+        Sun,  5 Feb 2023 22:48:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB89860C77;
-        Mon,  6 Feb 2023 05:17:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF63C433D2;
-        Mon,  6 Feb 2023 05:17:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4AA81B80D52;
+        Mon,  6 Feb 2023 06:48:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F51C433EF;
+        Mon,  6 Feb 2023 06:48:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675660627;
-        bh=IOaVM/sUdZ4EOC4ES3KNjUSwD0PavkGrsos3VJBn+uw=;
+        s=korg; t=1675666086;
+        bh=1VtEB+g5PvA7JJDmummqrb9ZrXzYa3O18vA/KOro2kM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ggd0HV9GyaNAjGCVVShKOLR6wV2owadaL1D+vgTGWu5ebIby/+Z+bP0svkY6aqQhD
-         OQQP2kvQUvnQg8y/R2dTqeyuY0zlLcoUgLq94SBTrNL6nxCDJwcWu3u+Xt2wELzE8a
-         vRxfELVHJCjLKSLwLBjnauPdJuCoaiiD/B6Uo2Mw=
-Date:   Mon, 6 Feb 2023 06:17:03 +0100
+        b=odUmwiZGoifvDiADHA/k0+2HHMJV/ssZR9P3lWDe2Lnq5NdUUXBXu/kk/q2kIl/7Q
+         U7PoC63WvzX5Y5N19cTwhiOGEmDydI+urVvcTPURLRX9zj+fq+Not27r73TqsTO/ga
+         9S72StcCmugISBEiYxSUNgRZX0s9Nc5AuwkzpIC0=
+Date:   Mon, 6 Feb 2023 07:48:03 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Hillf Danton <hdanton@sina.com>
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
@@ -38,9 +38,8 @@ Cc:     Alan Stern <stern@rowland.harvard.edu>,
         USB list <linux-usb@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: Converting dev->mutex into dev->spinlock ?
-Message-ID: <Y+CNT5qpjrVMdvrY@kroah.com>
-References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
- <Y95h7Vop9t5Li0HD@kroah.com>
+Message-ID: <Y+Cio48RvJe9Y2cv@kroah.com>
+References: <Y95h7Vop9t5Li0HD@kroah.com>
  <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
  <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
  <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
@@ -49,12 +48,13 @@ References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
  <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
  <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
  <20230206025629.1786-1-hdanton@sina.com>
+ <20230206064305.1838-1-hdanton@sina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230206025629.1786-1-hdanton@sina.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230206064305.1838-1-hdanton@sina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,14 +62,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 10:56:29AM +0800, Hillf Danton wrote:
-> On Sun, 5 Feb 2023 11:46:06 -0500 Alan Stern <stern@rowland.harvard.edu>
+On Mon, Feb 06, 2023 at 02:43:05PM +0800, Hillf Danton wrote:
+> On Mon, 6 Feb 2023 06:17:03 +0100 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > On Mon, Feb 06, 2023 at 10:56:29AM +0800, Hillf Danton wrote:
+> > > On Sun, 5 Feb 2023 11:46:06 -0500 Alan Stern <stern@rowland.harvard.edu>
+> > > > 
+> > > > And by the way, by disabling lockdep validation I am declaraing that 
+> > > > enabling it would cause an overwhelming number of false positives, 
+> > > 
+> > > Could you share 5 false positives you see upstream to help understand how
+> > > it is useless?
 > > 
-> > And by the way, by disabling lockdep validation I am declaraing that 
-> > enabling it would cause an overwhelming number of false positives, 
+> > Please see this other email in this thread:
+> > 	https://lore.kernel.org/r/Y98FLlr7jkiFlV0k@rowland.harvard.edu
 > 
-> Could you share 5 false positives you see upstream to help understand how
-> it is useless?
+> What lockdep warnings?  Specific examples, please.
 
-Please see this other email in this thread:
-	https://lore.kernel.org/r/Y98FLlr7jkiFlV0k@rowland.harvard.edu
+Remove the one line of code, as per the patch in this thread, and boot
+with lockdep enabled and see what happens if you wish to see them
+yourself.
+
+thanks,
+
+greg k-h
