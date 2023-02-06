@@ -2,42 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0790368B4F7
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 05:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABE268B522
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 06:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjBFEot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Feb 2023 23:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        id S229565AbjBFFRK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Feb 2023 00:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjBFEon (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 23:44:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED16615543;
-        Sun,  5 Feb 2023 20:44:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vnoxxnFupsctnz6PYmQvdvAVDmQ6Sog6ZUyHJ5kggYs=; b=c77iJQ/wF72o+8X2qH2VVeUYy/
-        pMn9C95oNhdcjSzx3+dRwU3ungMEHHYItlf7JDThl7+h0LMGkQAyPZVrJrwZBwAbOu3MY8cnTUw15
-        eWlKKCmMIdmZk3Z7hrX8gUFJ5DPQBQCwcBPPZd9Mzhk++k0pN5FFlxIUXAGiozfQgI0W/mr7+ujpB
-        cdKQNUuyC4lQPyz4q8q4WZOqcO9hh7mvgpdg/Ks2+tbwXXXOOkmnA+YO1S1RXSksYjoVpCjG3KL9q
-        PjNTY0XSxU2X2Da5KRjpSH+WIscWKX2E3L2K08mBeAmZ9q/qG80XJUpr2wBfKB+z92CSbvBS7vnB6
-        4aseEvkg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pOtMX-00GTNl-N0; Mon, 06 Feb 2023 04:44:17 +0000
-Date:   Mon, 6 Feb 2023 04:44:17 +0000
-From:   Matthew Wilcox <willy@infradead.org>
+        with ESMTP id S229479AbjBFFRJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 00:17:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503D7EB68;
+        Sun,  5 Feb 2023 21:17:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB89860C77;
+        Mon,  6 Feb 2023 05:17:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF63C433D2;
+        Mon,  6 Feb 2023 05:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675660627;
+        bh=IOaVM/sUdZ4EOC4ES3KNjUSwD0PavkGrsos3VJBn+uw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ggd0HV9GyaNAjGCVVShKOLR6wV2owadaL1D+vgTGWu5ebIby/+Z+bP0svkY6aqQhD
+         OQQP2kvQUvnQg8y/R2dTqeyuY0zlLcoUgLq94SBTrNL6nxCDJwcWu3u+Xt2wELzE8a
+         vRxfELVHJCjLKSLwLBjnauPdJuCoaiiD/B6Uo2Mw=
+Date:   Mon, 6 Feb 2023 06:17:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Hillf Danton <hdanton@sina.com>
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>, linux-mm@kvack.org,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: Converting dev->mutex into dev->spinlock ?
-Message-ID: <Y+CFofRj7EYefqUR@casper.infradead.org>
+Message-ID: <Y+CNT5qpjrVMdvrY@kroah.com>
 References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
  <Y95h7Vop9t5Li0HD@kroah.com>
  <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
@@ -52,9 +53,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230206025629.1786-1-hdanton@sina.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,5 +71,5 @@ On Mon, Feb 06, 2023 at 10:56:29AM +0800, Hillf Danton wrote:
 > Could you share 5 false positives you see upstream to help understand how
 > it is useless?
 
-I've asked you before to stop cc'ing linux-mm on things which aren't
-about memory management.  Now I'm asking you publically.
+Please see this other email in this thread:
+	https://lore.kernel.org/r/Y98FLlr7jkiFlV0k@rowland.harvard.edu
