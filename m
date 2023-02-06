@@ -2,83 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C996968C115
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 16:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B0368C12D
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 16:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjBFPLx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Feb 2023 10:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S231236AbjBFPSE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Feb 2023 10:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjBFPLx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 10:11:53 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B872D71;
-        Mon,  6 Feb 2023 07:11:52 -0800 (PST)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A80844DA;
-        Mon,  6 Feb 2023 16:11:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675696310;
-        bh=11SGDLDQe7sbPNdpImr651tu3ohy7mJTMkZjZMMEijU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cXomPMAlHMO14YF0GA/bf1UTPvUmSSX+isS/8KRK6u5jwJR59uQHudvtFMRBsi6v0
-         vwaeJmS2mEc+X2YjQYFGGalvDf41P/2qo2ZkdDLFJ23mvxGa+3tm3e3TD2djZpMvgE
-         ew0EG6sw8RImOm3XymsJxe3phstiKjyo33LdOMmQ=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2] usb: gadget: uvc: Correct documentation formatting
-Date:   Mon,  6 Feb 2023 15:11:31 +0000
-Message-Id: <20230206151131.863960-1-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231153AbjBFPR4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 10:17:56 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 93B9F5250
+        for <linux-usb@vger.kernel.org>; Mon,  6 Feb 2023 07:17:54 -0800 (PST)
+Received: (qmail 657159 invoked by uid 1000); 6 Feb 2023 10:17:53 -0500
+Date:   Mon, 6 Feb 2023 10:17:53 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     =?utf-8?B?5pyx5b+g5p2w?= <zhongjiezhu1@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: core: hub: fix usb_hub worker blocking
+ drain_all_pages() worker issue
+Message-ID: <Y+EaIRHZfLs49w9L@rowland.harvard.edu>
+References: <20230203072819.3408-1-zhongjiezhu1@gmail.com>
+ <Y90egBL6HSoEdz2P@rowland.harvard.edu>
+ <CAJnoMhNYDXjfttiio+P7k6W1fDU3N=jbjmZe+ZRVON=bqm0yvw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJnoMhNYDXjfttiio+P7k6W1fDU3N=jbjmZe+ZRVON=bqm0yvw@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The documentation table added in a36afe780461 ("usb: gadget: uvc: Add
-new enable_interrupt_ep attribute") was incorrect, resulting in a new
-warning when compiling the documentation.
+On Mon, Feb 06, 2023 at 11:33:15AM +0800, 朱忠杰 wrote:
+> Yes, this is a very special case.
+> 
+> It will happen only when disconnecting the mass storage if there are
+> too many files in the storage, and the scanning operation is running,
+> and the file system is not unmounted.
+> It looks like this issue should be fixed in the usb mass storage
+> driver, but I don't find an appropriate place.
 
-Correct the formatting to resolve the warning.
+That's not surprising, because usb-storage doesn't know anything about 
+what's happening on the mass-storage device it connects to.  All it does 
+is send the commands that it gets from the SCSI subsystem to the device 
+and receive the results back.  It has no idea whether there is a mounted 
+filesystem on the device, if the filesystem contains any files, or 
+whether a scanning operation is running,
 
-Fixes: a36afe780461 ("usb: gadget: uvc: Add new enable_interrupt_ep attribute")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
+A better place to look for fixing this might be the filesystem code.  
+That's where the information about mounting, files, and scanning can be 
+found.
 
-Updated the commit message with the proper Fixes and Reported-by tags.
-
- Documentation/ABI/testing/configfs-usb-gadget-uvc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index fec205044c87..9c716dd3ae6f 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -17,12 +17,12 @@ Description:	Control descriptors
- 
- 		All attributes read only except enable_interrupt_ep:
- 
--		================	=============================
-+		===================	=============================
- 		bInterfaceNumber	USB interface number for this
- 					streaming interface
- 		enable_interrupt_ep	flag to enable the interrupt
- 					endpoint for the VC interface
--		================	=============================
-+		===================	=============================
- 
- What:		/config/usb-gadget/gadget/functions/uvc.name/control/class
- Date:		Dec 2014
--- 
-2.34.1
-
+Alan Stern
