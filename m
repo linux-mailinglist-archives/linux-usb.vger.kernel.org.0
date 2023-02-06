@@ -2,85 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F331468B3C4
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 02:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC27F68B484
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 04:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjBFBYS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Feb 2023 20:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
+        id S229543AbjBFDgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Feb 2023 22:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBFBYJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 20:24:09 -0500
-X-Greylist: delayed 1165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Feb 2023 17:23:59 PST
-Received: from rain.florz.de (rain.florz.de [IPv6:2a07:12c0:1c00:40::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334A61A97A
-        for <linux-usb@vger.kernel.org>; Sun,  5 Feb 2023 17:23:58 -0800 (PST)
-Received: from [2a07:12c0:1c00:43::121] (port=42166 helo=florz.florz.de)
-        by rain.florz.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-SHA256:256)
-        (Exim 4.92)
-        (envelope-from <florz@florz.de>)
-        id 1pOpvp-0005d5-1v; Mon, 06 Feb 2023 02:04:29 +0100
-Received: from florz by florz.florz.de with local (Exim 4.92)
-        (envelope-from <florz@florz.de>)
-        id 1pOpvo-0007Iy-KM; Mon, 06 Feb 2023 02:04:28 +0100
-Date:   Mon, 6 Feb 2023 02:04:28 +0100
-From:   Florian Zumbiehl <florz@florz.de>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH] usbserial: Add support for VW/Skoda "Carstick LTE"
-Message-ID: <20230206010428.GF23822@florz.florz.de>
+        with ESMTP id S229447AbjBFDgB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Feb 2023 22:36:01 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822DD16323;
+        Sun,  5 Feb 2023 19:36:00 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id g2so12446110ybk.8;
+        Sun, 05 Feb 2023 19:36:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LGGtA4PNstDo2ZtU+3JdzkWj0NhK3SlJ22hiQduzGTs=;
+        b=ddphka7bOXwqefz5YmH4mO90m3oLNPZEjaDZL0p9U+qNVyha4q4GruGlmAevP41Mlk
+         ZyxPfP+M0tfhheJ4A5wT6D/mdIyFIc6rYW1J2j1FxoFhlxiXj9ZnjcMIb1xbJu60ntfJ
+         Z0spMI/YMK847YUGnCamtsM3acWN3IxtOc1HcYJwHDG/zNJvdEWYd7pEuO8+giZCXTuA
+         jvoazFhkpvb51B9/g071zzjdJQUdHK5csj+jZGY+BC2d5yP13vJZNmO3/7r8cKzKn9/h
+         L9T9gka8NYgw2twjC7KRWWTxsX2o7PMymarQhfexL8LGh3hZgaT6LUSPiYtZoGbHn6QP
+         zhTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LGGtA4PNstDo2ZtU+3JdzkWj0NhK3SlJ22hiQduzGTs=;
+        b=OPkxIP3XGQVSHb7sTa0xOBPUs/Q8vrzqwel3Qz8cvXQ4n4f6JMLqGXdu4mCHCJzCI4
+         ywcxFP/dVIWpCV49ECz+xsG+n/oipYkH3+yNSmpGiUb6F5SkYtQKaJUHo+kgjSAb1F3o
+         jf9LMsyq/6HKxRYhDkjbgrDDFP06OtfHxifSZ3lpNFyg04ZimpJNzoresnVC4jIoRm9G
+         iF0gAFfRE2urJieIdPELG87b97QtENwNYSAh6z5Wj0D7xzekFlnDxrSwvtXQNSRFBHF/
+         lWKifcYS73df+v2oPhioZtfUx9IoR9hDYczRNc9U5mmb2LM6oLAKS0taMuzyJqlRaxeN
+         jOBg==
+X-Gm-Message-State: AO0yUKWu627S4pL400eGJbl99KtRbtjj8B93TRSaQgg9j5BN2DDtqwIK
+        R+ImMYKylvUIi5uk7gF71Nv6VbIEBmRb2RvB4Ace0Ny3qpQ=
+X-Google-Smtp-Source: AK7set8DrFRnQWTMMC2pkTZ9Dj3WJa94VbSPG24zG+ZoDNiMQW5UInj2b7rsMmmeFeh0TlgvBg+cViyRmDI5oDWE52s=
+X-Received: by 2002:a25:8c8a:0:b0:882:4616:654a with SMTP id
+ m10-20020a258c8a000000b008824616654amr378587ybl.589.1675654559752; Sun, 05
+ Feb 2023 19:35:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203072819.3408-1-zhongjiezhu1@gmail.com> <Y90egBL6HSoEdz2P@rowland.harvard.edu>
+In-Reply-To: <Y90egBL6HSoEdz2P@rowland.harvard.edu>
+From:   =?UTF-8?B?5pyx5b+g5p2w?= <zhongjiezhu1@gmail.com>
+Date:   Mon, 6 Feb 2023 11:33:15 +0800
+Message-ID: <CAJnoMhNYDXjfttiio+P7k6W1fDU3N=jbjmZe+ZRVON=bqm0yvw@mail.gmail.com>
+Subject: Re: [PATCH] USB: core: hub: fix usb_hub worker blocking
+ drain_all_pages() worker issue
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for VW/Skoda "Carstick LTE"
+Yes, this is a very special case.
 
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1c9e ProdID=7605 Rev=02.00
-S:  Manufacturer=USB Modem
-S:  Product=USB Modem
-C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+It will happen only when disconnecting the mass storage if there are
+too many files in the storage, and the scanning operation is running,
+and the file system is not unmounted.
+It looks like this issue should be fixed in the usb mass storage
+driver, but I don't find an appropriate place.
 
-The stick has AT command interfaces on interfaces 1, 2, and 3, and does PPP
-on interface 3.
-
-Signed-off-by: Florian Zumbiehl <florz@florz.de>
----
-Note that the patch is untested, I hope that it's trivial enough. I have
-the device running on a Debian kernel 4.19 by dynamically binding the USB
-device ID to the option driver.
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index ee5ac4e..61b4a46 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -406,6 +406,8 @@ static void option_instat_callback(struct urb *urb);
-  * It seems to contain a Qualcomm QSC6240/6290 chipset            */
- #define FOUR_G_SYSTEMS_PRODUCT_W14		0x9603
- #define FOUR_G_SYSTEMS_PRODUCT_W100		0x9b01
-+/* This one was sold as the VW and Skoda "Carstick LTE" */
-+#define FOUR_G_SYSTEMS_PRODUCT_CARSTICK_LTE	0x7605
- 
- /* Fujisoft products */
- #define FUJISOFT_PRODUCT_FS040U			0x9b02
-@@ -1980,6 +1982,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(0) | NCTRL(1) },
- 	{ USB_DEVICE(LONGCHEER_VENDOR_ID, FOUR_G_SYSTEMS_PRODUCT_W100),
- 	  .driver_info = NCTRL(1) | NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE(LONGCHEER_VENDOR_ID, FOUR_G_SYSTEMS_PRODUCT_CARSTICK_LTE),
-+	  .driver_info = RSVD(0) },
- 	{USB_DEVICE(LONGCHEER_VENDOR_ID, FUJISOFT_PRODUCT_FS040U),
- 	 .driver_info = RSVD(3)},
- 	{ USB_DEVICE_INTERFACE_CLASS(LONGCHEER_VENDOR_ID, SPEEDUP_PRODUCT_SU9800, 0xff) },
+On Fri, Feb 3, 2023 at 10:47 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, Feb 03, 2023 at 03:28:19PM +0800, Zhu Zhongjie wrote:
+> > From: Zhongjie Zhu <zhongjiezhu1@gmail.com>
+> >
+> > When disconnecting a usb mass storege, if there are a lot of inodes
+> > like 10 thousands files need to be freed, the invalidate_inodes() will
+> > run for a loog time to freeing all inodes, this will block other worker
+> > to run in the cpu, so mark the usb_hub workqueue to WQ_CPU_INTENSIVE to
+> > avoid this situation.
+>
+> Very infrequently this will happen.  In the vast majority of cases, the
+> usb_hub workqueue uses very little CPU time.  Marking it
+> WQ_CPU_INTENSIVE seems inappropriate.
+>
+> Alan Stern
