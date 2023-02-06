@@ -2,36 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FEB68C655
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 20:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D96168C67F
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Feb 2023 20:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjBFTA1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Feb 2023 14:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S229896AbjBFTNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Feb 2023 14:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjBFTA0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 14:00:26 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 207E283ED
-        for <linux-usb@vger.kernel.org>; Mon,  6 Feb 2023 11:00:25 -0800 (PST)
-Received: (qmail 666421 invoked by uid 1000); 6 Feb 2023 14:00:24 -0500
-Date:   Mon, 6 Feb 2023 14:00:24 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] USB: ene_usb6250: Allocate enough memory for full object
-Message-ID: <Y+FOSNyVKJdkwRy0@rowland.harvard.edu>
-References: <20230204183546.never.849-kees@kernel.org>
- <Y961c1/JIkDUqMbC@rowland.harvard.edu>
- <63e14809.170a0220.7fcb2.150b@mx.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63e14809.170a0220.7fcb2.150b@mx.google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        with ESMTP id S229557AbjBFTNk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 14:13:40 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AF720D18;
+        Mon,  6 Feb 2023 11:13:39 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316ETWAZ009718;
+        Mon, 6 Feb 2023 19:13:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=2ygW30YeDTcPzPiF2otx2r+VOzDotuS0oTMi579oCAQ=;
+ b=FVRlGHQiq6l1dS6DdMcN95a89AFiq1TUjcDBd/HFNsJzW6NvqQHUVDUdWF1OYh2IXmi6
+ v1N4rTqyYDV6l8o7HkZa+fkUiUQDP9cGioQqF1Ce1I39p5IxVBmf6sqWX7U/wxLsAWnK
+ QQ+nMcd+h67Xm5MWnRlsD66Iw4jyX2YoYODb5ns0QBdx/jjThU61iiS0tmNfYblEsr7s
+ bhqWuyPALK9ADKdkz+Os6o9mxuYRUtpuwI6N4It5aPNcJvaL6SJHKWx95sNbx/LJJD3V
+ x3Nml59SBx0FP15rnwZVCl2au25LasDTVgm5yCLN9I9RX5Syv3iX05cfgm3RHSt6cqbk /Q== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhgng4d0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Feb 2023 19:13:35 +0000
+Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 316JC7rI012072;
+        Mon, 6 Feb 2023 19:13:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgekjv8p-1;
+        Mon, 06 Feb 2023 19:13:34 +0000
+Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 316JDY9p013623;
+        Mon, 6 Feb 2023 19:13:34 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 316JDXuD013621;
+        Mon, 06 Feb 2023 19:13:34 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id E641420E36; Mon,  6 Feb 2023 11:13:33 -0800 (PST)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        balbi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v3 0/5] Add function suspend/resume and remote wakeup support 
+Date:   Mon,  6 Feb 2023 11:13:21 -0800
+Message-Id: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tIKFpPlprAEpk4uqoB8ohxo9PLHwdzG3
+X-Proofpoint-ORIG-GUID: tIKFpPlprAEpk4uqoB8ohxo9PLHwdzG3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=563
+ bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302060167
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,30 +77,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 10:33:44AM -0800, Kees Cook wrote:
-> On Sat, Feb 04, 2023 at 02:43:47PM -0500, Alan Stern wrote:
-> > On Sat, Feb 04, 2023 at 10:35:46AM -0800, Kees Cook wrote:
-> > > The allocation of PageBuffer is 512 bytes in size, but the dereferencing
-> > > of struct ms_bootblock_idi (also size 512) happens at a calculated offset
-> > > within the allocation, which means the object could potentially extend
-> > > beyond the end of the allocation. Avoid this case by just allocating
-> > > enough space to catch any accesses beyond the end. Seen with GCC 13:
-> > 
-> > In principle, it would be better to add a runtime check for overflow.  
-> > Doing it this way means that the code could read an invalid value.
-> > 
-> > In fact, I get the impression that this code tries to load a data 
-> > structure which might straddle a page boundary by reading in just the 
-> > first page.  Either that, or else EntryOffset is always a multiple of 
-> > 512 so the error cannot arise.
-> 
-> Yeah, I couldn't figure it out. It seems like it might move in
-> non-512-byte steps too sometimes? Doubling the allocation (and zero-fill
-> it) seemed the safest way to cover it.
+Changes in v3
+ - Modified rw_capable flag to reflect the gadgets capability for wakeup
+   signalling.
+ - Added a check to configure wakeup bit in bmAttributes only if gadget
+   is capable of triggering wakeup.
+ - Implemented a gadget op for composite layer to inform UDC whether device
+   is configured for remote wakeup.
+ - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+   device is configured for it.
+ - Cosmetic changes in dwc3_gadget_func_wakeup() API.
 
-It hardly seems to matter at this point.  I doubt that any significant 
-number of laptops still in operation use the ENE UB6250 reader.  The 
-driver was originally written in 2010, and official support for the 
-hardware under Windows apparently ended with Windows 7.
+Changes in v2
+ - Added a flag to indicate whether the device is remote wakeup capable.
+ - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+   changes.
+ - Added flags to reflect the state of  function suspend and function remote
+   wakeup to usb_function struct rather than function specific struct (f_ecm).
+ - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+   checking the link state and then sending the device notification. Also
+   added debug log for DEVICE_NOTIFICATION generic cmd.
+ - Added changes to arm the device for remotewakeup/function remotewakeup
+   only if device is capable.
 
-Alan Stern
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+To achieve this an interface can invoke gadget_wakeup op and wait for the
+device to come out of LPM. But the current polling based implementation
+fails if the host takes a long time to drive the resume signaling specially
+in high speed capable devices. Switching to an interrupt based approach is
+more robust and efficient. This can be leveraged by enabling link status
+change events and triggering a gadget resume when the link comes to active
+state.
+
+If the device is enhanced super-speed capable, individual interfaces can
+also be put into suspend state. An interface can be in function suspend
+state even when the device is not in suspend state. Function suspend state
+is retained throughout the device suspend entry and exit process.
+A function can be put to function suspend through FUNCTION_SUSPEND feature
+selector sent by the host. This setup packet also decides whether that
+function is capable of initiating a function remote wakeup. When the
+function sends a wakeup notification to the host the link must be first
+brought to a non-U0 state and then this notification is sent.
+
+This change adds the infrastructure needed to support the above
+functionalities.
+
+Elson Roy Serrao (5):
+  usb: gadget: Properly configure the device for remote wakeup
+  usb: dwc3: Add remote wakeup handling
+  usb: gadget: Add function wakeup support
+  usb: dwc3: Add function suspend and function wakeup support
+  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
+
+ drivers/usb/dwc3/core.h               |   5 ++
+ drivers/usb/dwc3/debug.h              |   2 +
+ drivers/usb/dwc3/ep0.c                |  16 ++---
+ drivers/usb/dwc3/gadget.c             | 110 +++++++++++++++++++++++++++++++---
+ drivers/usb/gadget/composite.c        |  50 +++++++++++++++-
+ drivers/usb/gadget/function/f_ecm.c   |  68 +++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.c |  63 +++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |   4 ++
+ drivers/usb/gadget/udc/core.c         |  46 ++++++++++++++
+ drivers/usb/gadget/udc/trace.h        |   5 ++
+ include/linux/usb/composite.h         |   6 ++
+ include/linux/usb/gadget.h            |  12 ++++
+ 12 files changed, 371 insertions(+), 16 deletions(-)
+
+-- 
+2.7.4
+
