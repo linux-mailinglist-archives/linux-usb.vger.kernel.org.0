@@ -2,282 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136FE68DFD0
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 19:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5B468E153
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 20:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbjBGSVS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Feb 2023 13:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S231262AbjBGTfw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 Feb 2023 14:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjBGSU5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 13:20:57 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB0C410AE;
-        Tue,  7 Feb 2023 10:20:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675794007; x=1707330007;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zwoDr1wPKNYQiCl8mRwM1UPgx4ddKwyU+8/uwG8BezI=;
-  b=UcDuonBkv8EMLYUs6paDAXWYjJIaQ3ecMZozEMh9RcMM4JQKUFwkXxnx
-   8jbdhFDEB4oLOY1xjUOphn9a2BFfbsDKktH+dnOywfzljt5B+DUjYcJf2
-   gn+NagYQeE6kgrGolVJVnlyMaK78rx0UT/4phKjmYdsmXPnD7vUb5WBnV
-   f/n4LcNIuNi4nU9rJhyMsDpNpeqv4JwDEtsAEscXangnzG/17htO/nnXJ
-   YKxxUpr2a94DxyTOMbj5r44NAKWjk23iegl6B9obV4v4RLTu0knzmnZhT
-   jUiZI6AJTnOWO9KshM3rBGhmJRHFqOq10NOYFp08fs4UWAobi94mceTu4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="391983044"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="391983044"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 10:18:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="730547125"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="730547125"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Feb 2023 10:18:26 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPSXx-0003li-1E;
-        Tue, 07 Feb 2023 18:18:25 +0000
-Date:   Wed, 08 Feb 2023 02:18:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        alsa-devel@alsa-project.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 49a8133221c71b935f36a7c340c0271c2a9ee2db
-Message-ID: <63e295f0.u1bD0VjqG0iQsm1w%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229836AbjBGTfv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 14:35:51 -0500
+Received: from voltaic.bi-co.net (voltaic.bi-co.net [134.119.3.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E963B655
+        for <linux-usb@vger.kernel.org>; Tue,  7 Feb 2023 11:35:47 -0800 (PST)
+Received: from [192.168.0.36] (ip-037-201-145-251.um10.pools.vodafone-ip.de [37.201.145.251])
+        by voltaic.bi-co.net (Postfix) with ESMTPSA id 01676210DB;
+        Tue,  7 Feb 2023 20:35:45 +0100 (CET)
+Message-ID: <9adb1e30b93d4e24b373b04eaf1d597daa1a1472.camel@bi-co.net>
+Subject: Re: Cypress CDC ACM serial port not working correctly with
+ autosuspend
+From:   Michael =?ISO-8859-1?Q?La=DF?= <bevan@bi-co.net>
+To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Date:   Tue, 07 Feb 2023 20:35:45 +0100
+In-Reply-To: <bde43a1913cf55e580e77ac0e059fff3c26dc093.camel@bi-co.net>
+References: <8be9b56c6becd0981d1cd9c13742df6ba2975b56.camel@bi-co.net>
+         <0db2a0a4-6ed4-fe06-217a-cb564f1d4a8c@suse.com>
+         <bde43a1913cf55e580e77ac0e059fff3c26dc093.camel@bi-co.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 49a8133221c71b935f36a7c340c0271c2a9ee2db  Add linux-next specific files for 20230207
+Hi,
 
-Error/Warning reports:
+did you have a chance to look at the trace? I can't really make sense
+of that raw output so I used Wireshark to sniff on usbmon6. I let the
+remote system, which is connected via the serial port, print something
+every three seconds. This is the behavior I see:
 
-https://lore.kernel.org/oe-kbuild-all/202301230743.Xnut0Zvc-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301300743.bp7Dpazv-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301301801.y5O08tQx-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301302110.mEtNwkBD-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301310939.TAgCOEZb-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302011836.kA3BxqdY-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302061911.C7xvHX9v-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302062224.ByzeTXh1-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302072055.odjDVd5V-lkp@intel.com
+[starting trace with power/control set to "auto"]
+[no communication whatsoever]
+[echo -n "on" | sudo tee /sys/bus/usb/devices/6-2*/power/control]
+735	23.506773	host	6.1.0	USBHUB	64	GET_STATUS Request     [Port 2]
+736	23.506786	6.1.0	host	USBHUB	68	GET_STATUS Response    [Port 2]
+737	23.506793	host	6.1.0	USBHUB	64	CLEAR_FEATURE Request  [Port 2: PORT_SUSPEND]
+740	23.555346	6.1.0	host	USBHUB	64	CLEAR_FEATURE Response [Port 2: PORT_SUSPEND]
+747	23.601999	host	6.1.0	USBHUB	64	GET_STATUS Request     [Port 2]
+748	23.602018	6.1.0	host	USBHUB	68	GET_STATUS Response    [Port 2]
+749	23.602027	host	6.1.0	USBHUB	64	CLEAR_FEATURE Request  [Port 2: C_PORT_SUSPEND]
+750	23.602033	6.1.0	host	USBHUB	64	CLEAR_FEATURE Response [Port 2: C_PORT_SUSPEND]
+756	23.622039	host	6.7.2	USB	64	URB_BULK in
+757	23.622041	host	6.7.2	USB	64	URB_BULK in
+758	23.622043	host	6.7.2	USB	64	URB_BULK in
+759	23.622045	host	6.7.2	USB	64	URB_BULK in
+760	23.622046	host	6.7.2	USB	64	URB_BULK in
+761	23.622048	host	6.7.2	USB	64	URB_BULK in
+762	23.622049	host	6.7.2	USB	64	URB_BULK in
+763	23.622051	host	6.7.2	USB	64	URB_BULK in
+764	23.622053	host	6.7.2	USB	64	URB_BULK in
+765	23.622055	host	6.7.2	USB	64	URB_BULK in
+766	23.622057	host	6.7.2	USB	64	URB_BULK in
+767	23.622058	host	6.7.2	USB	64	URB_BULK in
+768	23.622060	host	6.7.2	USB	64	URB_BULK in
+769	23.622061	host	6.1.0	USBHUB	64	GET_STATUS Request     [Port 2]
+770	23.622062	host	6.7.2	USB	64	URB_BULK in
+771	23.622064	host	6.7.2	USB	64	URB_BULK in
+772	23.622067	host	6.7.2	USB	64	URB_BULK in
+773	23.622074	6.1.0	host	USBHUB	68	GET_STATUS Response    [Port 2]
+818	25.411626	6.7.2	host	USB	65	URB_BULK in
+[that last line contains the very first character of the printed message]
+[leaving out the rest of the message and its repetitions here]
+[echo -n "auto" | sudo tee /sys/bus/usb/devices/6-2*/power/control]
+1219	36.891101	host	6.1.0	USBHUB	64	SET_FEATURE Request    [Port 2: PORT_SUSPEND]
+1220	36.908667	6.1.0	host	USBHUB	64	SET_FEATURE Response   [Port 2: PORT_SUSPEND]
+[no communication whatsoever]
 
-Error/Warning: (recently discovered and may have been fixed)
+I hope I haven't missed anything important here as I used filters to
+get rid of the noise created by other devices on that bus.
 
-Documentation/riscv/uabi.rst:24: WARNING: Enumerated list ends without a blank line; unexpected unindent.
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-FAILED: load BTF from vmlinux: No data available
-arch/arm64/kvm/arm.c:2207: warning: expecting prototype for Initialize Hyp(). Prototype was for kvm_arm_init() instead
-drivers/clk/qcom/gcc-sa8775p.c:313:32: warning: unused variable 'gcc_parent_map_10' [-Wunused-const-variable]
-drivers/clk/qcom/gcc-sa8775p.c:318:37: warning: unused variable 'gcc_parent_data_10' [-Wunused-const-variable]
-drivers/clk/qcom/gcc-sa8775p.c:333:32: warning: unused variable 'gcc_parent_map_12' [-Wunused-const-variable]
-drivers/clk/qcom/gcc-sa8775p.c:338:37: warning: unused variable 'gcc_parent_data_12' [-Wunused-const-variable]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.h:62:10: fatal error: mod_info_packet.h: No such file or directory
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c:1011:6: warning: no previous prototype for 'hubbub31_init' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_hubbub.c:948:6: warning: no previous prototype for 'hubbub32_init' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_hubp.c:158:6: warning: no previous prototype for 'hubp32_init' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c:62:18: warning: variable 'cursor_bpp' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/accessories/link_dp_trace.c:148:6: warning: no previous prototype for 'link_dp_trace_set_edp_power_timestamp' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/accessories/link_dp_trace.c:158:10: warning: no previous prototype for 'link_dp_trace_get_edp_poweron_timestamp' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/accessories/link_dp_trace.c:163:10: warning: no previous prototype for 'link_dp_trace_get_edp_poweroff_timestamp' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:1295:32: warning: variable 'result_write_min_hblank' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:279:42: warning: variable 'ds_port' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training.c:1585:38: warning: variable 'result' set but not used [-Wunused-but-set-variable]
-ftrace-ops.c:(.init.text+0x2c3): undefined reference to `__udivdi3'
-libbpf: failed to find '.BTF' ELF section in vmlinux
+Best regards,
+Michael
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
 
-drivers/media/i2c/max9286.c:802 max9286_s_stream() error: buffer overflow 'priv->fmt' 4 <= 32
-drivers/thermal/qcom/tsens-v0_1.c:106:40: sparse: sparse: symbol 'tsens_9607_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:26:40: sparse: sparse: symbol 'tsens_8916_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:42:40: sparse: sparse: symbol 'tsens_8939_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:62:40: sparse: sparse: symbol 'tsens_8974_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:84:40: sparse: sparse: symbol 'tsens_8974_backup_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v1.c:24:40: sparse: sparse: symbol 'tsens_qcs404_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v1.c:45:40: sparse: sparse: symbol 'tsens_8976_nvmem' was not declared. Should it be static?
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-sound/firewire/amdtp-stream.c:1187 process_rx_packets() error: uninitialized symbol 'curr_cycle_time'.
+Am Montag, dem 30.01.2023 um 16:44 +0100 schrieb Michael Laß:
+> Hi. Thanks for looking into this.
+> 
+> Am Montag, dem 30.01.2023 um 14:08 +0100 schrieb Oliver Neukum:
+> > 
+> > thinking about this further, it is possible that remote wakeup
+> > is not properly processed. Could you test autosuspend with another
+> > device, for example a mouse? It should wake up after an autosuspend
+> > if you press a mouse button.
+> 
+> I tested the behavior with a mouse connected to the same port and
+> power/control set to "auto". It behaved correctly: After 1-2 seconds
+> the LED of the mouse turned off and pressing a mouse button let it
+> wake
+> up again. This was repeatable.
+> 
+> I also recorded a usbmon trace as you asked for in the previous mail.
+> It is attached to this mail. Unfortunately it is a bit noisy because
+> there is another device connected to that USB bus internally. The
+> Cypress device was connected to bus 6, port 2. I think it is device
+> number 18 in that trace.
+> 
+> What I did during the trace:
+> - Use the serial connection to launch
+>      while true; do date; sleep 3; done
+>   on the remote device.
+> - I received the output of the very first `date` but not the upcoming
+>   ones.
+> - After 10 seconds or so I sent a couple of characters and afterwards
+>   received another `date` output.
+> 
+> Best regards,
+> Michael
 
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweroff_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweron_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_set_edp_power_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweroff_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweron_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_set_edp_power_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweroff_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweron_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_set_edp_power_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arm64-allyesconfig
-|   |-- arch-arm64-kvm-arm.c:warning:expecting-prototype-for-Initialize-Hyp().-Prototype-was-for-kvm_arm_init()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn31-dcn31_hubbub.c:warning:no-previous-prototype-for-hubbub31_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubbub.c:warning:no-previous-prototype-for-hubbub32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubp.c:warning:no-previous-prototype-for-hubp32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweroff_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweron_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_set_edp_power_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arm64-randconfig-c023-20230205
-|   `-- arch-arm64-kvm-arm.c:warning:expecting-prototype-for-Initialize-Hyp().-Prototype-was-for-kvm_arm_init()-instead
-|-- arm64-randconfig-s042-20230205
-|   |-- arch-arm64-kvm-arm.c:warning:expecting-prototype-for-Initialize-Hyp().-Prototype-was-for-kvm_arm_init()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn31-dcn31_hubbub.c:warning:no-previous-prototype-for-hubbub31_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubbub.c:warning:no-previous-prototype-for-hubbub32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubp.c:warning:no-previous-prototype-for-hubp32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweroff_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_get_edp_poweron_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-accessories-link_dp_trace.c:warning:no-previous-prototype-for-link_dp_trace_set_edp_power_timestamp
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   |-- drivers-thermal-qcom-tsens-v0_1.c:sparse:sparse:symbol-tsens_8916_nvmem-was-not-declared.-Should-it-be-static
-|   |-- drivers-thermal-qcom-tsens-v0_1.c:sparse:sparse:symbol-tsens_8939_nvmem-was-not-declared.-Should-it-be-static
-|   |-- drivers-thermal-qcom-tsens-v0_1.c:sparse:sparse:symbol-tsens_8974_backup_nvmem-was-not-declared.-Should-it-be-static
-|   |-- drivers-thermal-qcom-tsens-v0_1.c:sparse:sparse:symbol-tsens_8974_nvmem-was-not-declared.-Should-it-be-static
-clang_recent_errors
-`-- riscv-randconfig-r003-20230204
-    |-- drivers-clk-qcom-gcc-sa8775p.c:warning:unused-variable-gcc_parent_data_10
-    |-- drivers-clk-qcom-gcc-sa8775p.c:warning:unused-variable-gcc_parent_data_12
-    |-- drivers-clk-qcom-gcc-sa8775p.c:warning:unused-variable-gcc_parent_map_10
-    `-- drivers-clk-qcom-gcc-sa8775p.c:warning:unused-variable-gcc_parent_map_12
-
-elapsed time: 726m
-
-configs tested: 87
-configs skipped: 3
-
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-i386                                defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-x86_64                              defconfig
-arc                                 defconfig
-s390                             allmodconfig
-i386                 randconfig-a011-20230206
-sh                               allmodconfig
-i386                             allyesconfig
-x86_64               randconfig-a014-20230206
-x86_64                               rhel-8.3
-alpha                               defconfig
-ia64                             allmodconfig
-mips                             allyesconfig
-x86_64                           rhel-8.3-bpf
-m68k                             allyesconfig
-x86_64                           rhel-8.3-syz
-m68k                             allmodconfig
-x86_64                         rhel-8.3-kunit
-arc                              allyesconfig
-x86_64               randconfig-a013-20230206
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a014-20230206
-x86_64               randconfig-a011-20230206
-i386                 randconfig-a012-20230206
-i386                 randconfig-a016-20230206
-alpha                            allyesconfig
-sh                          rsk7203_defconfig
-arm                                 defconfig
-s390                                defconfig
-x86_64               randconfig-a015-20230206
-s390                             allyesconfig
-m68k                          amiga_defconfig
-x86_64               randconfig-a012-20230206
-x86_64                           allyesconfig
-i386                 randconfig-a013-20230206
-xtensa                           alldefconfig
-i386                 randconfig-a015-20230206
-x86_64               randconfig-a016-20230206
-s390                 randconfig-r044-20230206
-arc                  randconfig-r043-20230205
-arm64                            allyesconfig
-arm                  randconfig-r046-20230205
-arc                  randconfig-r043-20230206
-arm                              allyesconfig
-riscv                randconfig-r042-20230206
-arm                            mps2_defconfig
-arm                           h3600_defconfig
-m68k                       bvme6000_defconfig
-sh                            hp6xx_defconfig
-powerpc                      tqm8xx_defconfig
-sh                        sh7785lcr_defconfig
-sh                          urquell_defconfig
-arm                         nhk8815_defconfig
-powerpc                     rainier_defconfig
-arm                         axm55xx_defconfig
-powerpc                       maple_defconfig
-sh                           se7705_defconfig
-i386                          randconfig-c001
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-x86_64               randconfig-a001-20230206
-x86_64               randconfig-a005-20230206
-x86_64               randconfig-a002-20230206
-x86_64               randconfig-a004-20230206
-x86_64               randconfig-a003-20230206
-hexagon              randconfig-r041-20230205
-x86_64               randconfig-a006-20230206
-arm                         mv78xx0_defconfig
-riscv                randconfig-r042-20230205
-hexagon              randconfig-r045-20230206
-i386                 randconfig-a005-20230206
-hexagon              randconfig-r041-20230206
-i386                 randconfig-a004-20230206
-i386                 randconfig-a003-20230206
-i386                 randconfig-a001-20230206
-i386                 randconfig-a002-20230206
-arm                  randconfig-r046-20230206
-s390                 randconfig-r044-20230205
-hexagon              randconfig-r045-20230205
-i386                 randconfig-a006-20230206
-powerpc                 mpc8315_rdb_defconfig
-x86_64                        randconfig-k001
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
