@@ -2,78 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8604E68D5E2
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 12:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DCE68D618
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 12:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjBGLnw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Feb 2023 06:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S231430AbjBGL7s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Feb 2023 06:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjBGLnv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 06:43:51 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739A330F1
-        for <linux-usb@vger.kernel.org>; Tue,  7 Feb 2023 03:43:47 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id r19-20020a056e02109300b00313dd5ce563so1632843ilj.18
-        for <linux-usb@vger.kernel.org>; Tue, 07 Feb 2023 03:43:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PUyfOhpgTbF2+YI7MnCqF6CygmkIjkpPcQlI+czzkjU=;
-        b=iriUYEestlE3E4rv+hIoMTvfgYY5FwkJSOygtPCqo+iANqbhzJIscIm0jSKYAjXcYM
-         xYW1zH8UJObNrfGMREFJTUmYCtbNnHECLdGaphpkQXfC2RpodCJLYaoNq4zc6aKzRnwl
-         o0ZPWlACkPe9j4r9nmAaLv57Mn/oaP/l0vjY3ECZGS0iQl6EuNbIcdW/ZrD9SYHqPniQ
-         RcnxP96Hy3IcDgDENlQFEfAxHgNE+2Ed2vqlDRO6l68Y1YmJcTqhiZxijNgWKqitRcUC
-         CwVijb/6rWva7GpPjRx7KEMD/po4H0e55duUU1SjGbccwq2UcBIhQoT4ecywcithslpg
-         zD5w==
-X-Gm-Message-State: AO0yUKX7NHMOYyrVIfqk49OrUO2bBixg5VBFjWwJhtY8csVzxiGiN4kZ
-        ZcthxbZ1NIg4NgQtJG10Q01oVKfVAzJZQ3xUfm2XRFtvWpiS
-X-Google-Smtp-Source: AK7set+/14TWY+DOMhjvkj/guDGeassBa2eBE6HH+Omv5wnGpzNrO8K6Nwnec0EjpoxCGimpZRzAtS/xy5YXoYv3XTwHgeZBAbnP
+        with ESMTP id S231402AbjBGL7r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 06:59:47 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381881C336;
+        Tue,  7 Feb 2023 03:59:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=SwNfBQdytqcD5R0x5w6EaPtW4xgLiprOimA8MmIP7zQ=; b=Alw8R
+        760YfE+zq25EJElMa0mhL/bf1uj118PAmzIqwjuwNNsnEfdTym1WTLlRGiIXrnu/edJHEY+vFPIVI
+        1lz4WSHE76N9FzSVDtMg0ia1XcElqw/r+1oN+V1X/oFqVUWIO4VPdtJungDFzv5uPql0DzHnfMJmu
+        kD1grnJjXPrUrSIzV5RnbEtCgfj1uwX36cvgfWflgbPba+BbWeIYZCPHeNmJ2gZuiVVZ8dI18sFvM
+        k5LBsga0ZXgjuhIEGaKB/gzg1Qm2VbdiN/7unegDQVd3CXD4zzwQF6N0U3FQIkn9GuTWfb8FUJoEH
+        ywMgSG/SGIjsrMrE7rA6V/CIpFoZA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1pPMdC-0000ef-Jv;
+        Tue, 07 Feb 2023 11:59:26 +0000
+Date:   Tue, 7 Feb 2023 11:59:25 +0000
+From:   John Keeping <john@metanate.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Xin Zhao <xnzhao@google.com>, gregkh@linuxfoundation.org,
+        jakobkoschel@gmail.com, rdunlap@infradead.org, ira.weiny@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: dummyhcd: Fix use-after-free in
+ dummy_free_request
+Message-ID: <Y+I9HcPvrm1TzUCw@donbot>
+References: <20230206225258.2302954-1-xnzhao@google.com>
+ <Y+GcoFKiAkrCoAsv@rowland.harvard.edu>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d10a:0:b0:72a:c776:64d with SMTP id
- l10-20020a6bd10a000000b0072ac776064dmr2249557iob.31.1675770226844; Tue, 07
- Feb 2023 03:43:46 -0800 (PST)
-Date:   Tue, 07 Feb 2023 03:43:46 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000018a7e905f41aa9b6@google.com>
-Subject: [syzbot] usb-testing build error (3)
-From:   syzbot <syzbot+10d3db984342f15529e6@syzkaller.appspotmail.com>
-To:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, masahiroy@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+GcoFKiAkrCoAsv@rowland.harvard.edu>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Feb 06, 2023 at 07:34:40PM -0500, Alan Stern wrote:
+> On Mon, Feb 06, 2023 at 10:52:58PM +0000, Xin Zhao wrote:
+> > DummyHCD assume when dummy_free_request is called, the request
+> > is already detached from request queues. It is correct in most
+> > cases.
+> > But when DummyHCD is detached from gadget configfs with pending
+> > requests and some requests are still in pending queue,
+> > dummy_free_request would free them directly.
+> > Later on, dummy_udc_stop would iterate pending queue to release
+> > the requests again.
+> > 
+> > Stacktrace for dummy_free_reqeust
+> > ```
+> > kfree(const void * x) (slub.c:4200)
+> > dummy_free_request(struct usb_ep * _ep, struct usb_request * _req) (dummy_hcd.c:691)
+> > usb_ep_free_request(struct usb_ep * ep, struct usb_request * req) (core.c:201)
+> > functionfs_unbind(struct ffs_data * ffs) (f_fs.c:1894)
+> 
+> That's the bug right there.  The kerneldoc for usb_ep_free_request() 
+> says "Caller guarantees the request is not queued".  So it looks like 
+> the real solution is to fix functionfs_unbind().
 
-syzbot found the following issue on:
+This is commit ce405d561b02 ("usb: gadget: f_fs: Ensure ep0req is
+dequeued before free_request") IIUC.
 
-HEAD commit:    4f6dfc2136fb usb: remove the dead USB_OHCI_SH option
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1300e3ab480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=25edf19773f52fa6
-dashboard link: https://syzkaller.appspot.com/bug?extid=10d3db984342f15529e6
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+10d3db984342f15529e6@syzkaller.appspotmail.com
-
-scripts/basic/fixdep.c:364:1: fatal error: error writing to /tmp/ccJKJAxg.s: No space left on device
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Xin, are you able to test a version with that commit?
