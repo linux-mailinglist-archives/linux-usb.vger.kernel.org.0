@@ -2,45 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5EC68DF32
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 18:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A7668DF6D
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 18:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbjBGRqf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Feb 2023 12:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S232447AbjBGRw6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Feb 2023 12:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbjBGRqe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 12:46:34 -0500
+        with ESMTP id S232517AbjBGRwg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 12:52:36 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4EB2412F10
-        for <linux-usb@vger.kernel.org>; Tue,  7 Feb 2023 09:46:33 -0800 (PST)
-Received: (qmail 703452 invoked by uid 1000); 7 Feb 2023 12:46:32 -0500
-Date:   Tue, 7 Feb 2023 12:46:32 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AF89737F1C
+        for <linux-usb@vger.kernel.org>; Tue,  7 Feb 2023 09:52:16 -0800 (PST)
+Received: (qmail 703612 invoked by uid 1000); 7 Feb 2023 12:52:16 -0500
+Date:   Tue, 7 Feb 2023 12:52:16 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Message-ID: <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
-References: <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
- <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
- <Y96HiYcreb8jZIHi@rowland.harvard.edu>
- <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
- <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
- <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
- <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
- <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
- <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
- <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
+To:     Troels Liebe Bentsen <troels@connectedcars.dk>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: All USB tools hang when one descriptor read fails and needs to
+ timeout
+Message-ID: <Y+KP0N73jE3PJVZ4@rowland.harvard.edu>
+References: <CAHHqYPONhyKrqMWiw29TRETtiBatNaej8+62Z40fvuj3LX4RWQ@mail.gmail.com>
+ <Y9J8VncWSJdVURgB@kroah.com>
+ <CAHHqYPO_A=7V_8Z-qrGy0-eOkPEpyv+vU_8Jpz-ABGg60t244w@mail.gmail.com>
+ <Y9KnnH+5O6MtO6kz@rowland.harvard.edu>
+ <CAHHqYPNtVkHoiX1LrxUDa32BgVsgymcPtKVODcVGxEh2f=tYRw@mail.gmail.com>
+ <Y9P2tvPkdwHrbPXd@rowland.harvard.edu>
+ <CAHHqYPPWvxMvSU=HMS9C2aPk08j25MBKXS7XC6im5_oz_nXTuw@mail.gmail.com>
+ <Y9l85PAcc/i/tgnS@rowland.harvard.edu>
+ <Y9mAYH7L/CcTTSw6@kroah.com>
+ <CAHHqYPOkj3oJseEwD3=66zck1LGJGo3DD77cG0E8_GNp3EEDUw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAHHqYPOkj3oJseEwD3=66zck1LGJGo3DD77cG0E8_GNp3EEDUw@mail.gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -50,52 +45,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 10:07:18PM +0900, Tetsuo Handa wrote:
-> On 2023/02/07 0:45, Alan Stern wrote:
-> > On Mon, Feb 06, 2023 at 11:13:38PM +0900, Tetsuo Handa wrote:
-> >> On 2023/02/05 10:23, Alan Stern wrote:
-> >>> I suppose we could create separate lockdep classes for every bus_type 
-> >>> and device_type combination, as well as for the different sorts of 
-> >>> devices -- treat things like class devices separately from normal 
-> >>> devices, and so on.  But even then there would be trouble.
-> >>
-> >> Sorry, since I'm not familiar with devices, I can't interpret what you
-> >> are talking about in this response. But why don't you try test5() approach
-> >> in an example module shown below (i.e. treat all dev->mutex instances
-> >> independent to each other) ?
-> >>
-> >> Sharing mutex_init() (like test2() approach) causes false positives,
-> >> but allocating a key on each dev->mutex (like test5() approach) should
-> >> avoid false positives.
-> > 
-> > Interesting idea.  I'm doubtful that it will accomplish all that you 
-> > want.  After all, one of lockdep's biggest advantages is that it can 
-> > detect the potential for deadlocks without a deadlock actually 
-> > occurring.  By putting each mutex into its own class, you lose much of 
-> > this ability.
-> > 
-> > But who knows?  Maybe it will be a big help.
-> > 
-> > Anyway, below is a patch you can try, based on the code for your test5.  
-> > Let me know what happens.
-> > 
+On Tue, Feb 07, 2023 at 09:25:55AM +0100, Troels Liebe Bentsen wrote:
+> Hi again,
 > 
-> It boots, except lockdep_register_key() hit WARN_ON_ONCE() at
-> device_register(&platform_bus) from platform_bus_init(), for
-> platform_bus is a static object.
+> Did a bit more testing and found another lock that would be nice to remove,
+> the /dev/bus/usb/$BUS/$DEV file for the hub is also locked:
 > 
->   struct device platform_bus = {
->   	.init_name	= "platform",
->   };
+> Bus 003 Device 016: ID 1a40:0201 Terminus Technology Inc. FE 2.1 7-port Hub
 > 
-> We need to skip lockdep_register_key()/lockdep_unregister_key() on
-> static "struct device" instances...
+> strace lsusb -v
+> ...
+> openat(AT_FDCWD, "/dev/bus/usb/003/016", O_RDWR|O_CLOEXEC...
+> 
+> The openat can not be canceled from userspace and even kill -9 won't stop
+> the process until the descriptor read times out.
 
-Okay, no doubt you can modify the patch to handle that.
+Yes, that really should be an interruptible lock.  In fact, all the 
+locks connected with usbfs should be interruptible.
 
-The real question is what will happen in your syzbot test scenarios.  
-Lockdep certainly ought to be able to detect a real deadlock when one 
-occurs.  It will be more interesting to find out if it can warn about 
-potential deadlocks _without_ them occurring.
+However, it can't be eliminated entirely.  This is a case where two 
+things end up being mutually exclusive with each other because they both 
+need to be mutually exclusive with a third thing.  In other words, 
+opening a hub's usbfs file and probing a hub's children both have to be 
+mutually exclusive with disconnecting the hub.  The three pathways all 
+use the device lock for this purpose, so they are all mutually exclusive 
+with each other.
+
+> Also managed to get "lsusb -v" to hang in an unkillable way even after
+> I unplugged the device and hub:
+>
+> ) = 1 ([{fd=5, revents=POLLIN}])
+> ioctl(8, USBDEVFS_DISCARDURB
+
+Making these lock calls interruptible should fix this problem, right?
 
 Alan Stern
