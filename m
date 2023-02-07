@@ -2,104 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B1368CC68
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 03:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5E368CC80
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 03:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjBGCFk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Feb 2023 21:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S229940AbjBGCOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Feb 2023 21:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBGCFj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 21:05:39 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8CA199E8;
-        Mon,  6 Feb 2023 18:05:38 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-51ba4b1b9feso178752187b3.11;
-        Mon, 06 Feb 2023 18:05:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AhnCh5zbjhk3Y70RN8FbNeJAsxe56/TZZOL0mVxexa4=;
-        b=j5ziuwLFNxKsh0LI7undd8Qv0R6OS8N+bmxkOp8Eoe8LTs+7B6UEhBKnX6f4plnHgq
-         LoP8FFn71pgnl0Phed9KT9xdjbgF64rUt74JCKYxE++rJ+n5SWoIAx9I8no1nYFwj91F
-         7tndIhCf3FC4cnJUOEPlQD+/g+9qOmzpHRmJKA9RrHg9mAnObS0cxyLS9l6kZ9cKCk4i
-         2Lf7N+meu0rKdWLPQNlLMyOMog/77heaOAgAzXzlflrAra1XXCJoyMoO5wG0tzHzn1Nf
-         JWdK8w6LtfipC3NHuKiYUqYKYoPNmJg8mW035AQlZAoM4Z+XE7DYTxzlxhlK0eBAUYvD
-         T38w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AhnCh5zbjhk3Y70RN8FbNeJAsxe56/TZZOL0mVxexa4=;
-        b=06WIYyZbnfdhSjcGt/mHGO9yNUCHL51ACjxEy3dOS4o9+j0dWdmn5FeidnEHhs2B9j
-         UJ+ExwlXdR8nvhXyhYwX5iZ26dkiEAJXm9Yn+AlQUUkXBNk0/ubdlX6XEDjvU0EYMpdg
-         7tnlw+h+cHEEpQMkud1OEN/DKU3EtpIHP/Co/YfL7Enxs15fTblwL8dz3MD4h2XpeeV6
-         6+2CMwqtyvOFRwkHHc3PgwpMO5zv7PTtftJHQErq5WbmgH9lJYTsT/ajCGNxGmL2xYzh
-         ScVAQ7dpFRf2Mrr/W9YGIMBLqfXd/vc5NyhH5bccLCs7/h11o/+0DKcAbWD7XUIvvpoF
-         au3g==
-X-Gm-Message-State: AO0yUKVuJFFNC1upUJoyrRd5Rc/UPmC8UNnXGBmFhQ6HPN8sdamLdgK9
-        zR9p73Z6QcAGEsOJ1uHWTsSmvERT0VDA8N36urqgPmgbm14=
-X-Google-Smtp-Source: AK7set9f8IE+gzmaLDyr/TJX0zSap+HP43BG7NtRj5/xZBEK8KSrpFl6SIjIwFtz17J6pMEUjr88sHE36y9LidPZr04=
-X-Received: by 2002:a81:6086:0:b0:4fd:25ef:8e1f with SMTP id
- u128-20020a816086000000b004fd25ef8e1fmr148326ywb.166.1675735537366; Mon, 06
- Feb 2023 18:05:37 -0800 (PST)
+        with ESMTP id S229447AbjBGCOu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Feb 2023 21:14:50 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185A432E40;
+        Mon,  6 Feb 2023 18:14:49 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3170tPVG019555;
+        Tue, 7 Feb 2023 02:14:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=HIZqz72hdsGvvVsRL2vVOjvEDEzV7j2IvRzfKDCGvHk=;
+ b=Z3vnHnNtAP9RPgBUE7rldF39FOQLZ5QPx5KEnpxO2QVa4qH0SBsAI2W4Emp773LGb43f
+ orWXHFjRH+z5mTSXosi/P+y2xoNa9VIG2TbptZXBQmaz1FCG8oeNAGXsj229954V8PsU
+ R7EGAQTGSRLdkleuJCHO378tAZlkKWmpGPCBJYDPa22LHPrXgromeGpk7nLqSIrNUeX1
+ 7k/C32hVdKaa0Lil0nXrUMPKSRY18W7Q2arWnybT3EuVj3SPHswW3Dvne7qLN3Ffp1j+
+ QaVgiZrrN7vvwPAMTahAYs6xFfZ5KpGd71pmbL/uhxPLVKKCaWpgSlkL+cqT3H13nk3c +g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhd2qd9sk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 02:14:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3172EitL018588
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Feb 2023 02:14:44 GMT
+Received: from [10.110.22.31] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 18:14:43 -0800
+Message-ID: <06343334-b3e1-004d-954e-93b3cf022079@quicinc.com>
+Date:   Mon, 6 Feb 2023 18:14:43 -0800
 MIME-Version: 1.0
-References: <20230203072819.3408-1-zhongjiezhu1@gmail.com> <Y90egBL6HSoEdz2P@rowland.harvard.edu>
- <CAJnoMhNYDXjfttiio+P7k6W1fDU3N=jbjmZe+ZRVON=bqm0yvw@mail.gmail.com> <Y+EaIRHZfLs49w9L@rowland.harvard.edu>
-In-Reply-To: <Y+EaIRHZfLs49w9L@rowland.harvard.edu>
-From:   Zhongjie Zhu <zhongjiezhu1@gmail.com>
-Date:   Tue, 7 Feb 2023 10:02:51 +0800
-Message-ID: <CAJnoMhO_AWU0ABoJN_EQZ9BpnpgxSeuv26PqOJ1feLh_CdJHsg@mail.gmail.com>
-Subject: Re: [PATCH] USB: core: hub: fix usb_hub worker blocking
- drain_all_pages() worker issue
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 0/5] Add function suspend/resume and remote wakeup
+ support
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
+ <20230207012412.m2imw4bodu7ehvn4@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230207012412.m2imw4bodu7ehvn4@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: F2vtPbXbuTg_M9U89mm3D7_vKDAySdp4
+X-Proofpoint-GUID: F2vtPbXbuTg_M9U89mm3D7_vKDAySdp4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302070019
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 11:17 PM Alan Stern <stern@rowland.harvard.edu> wrot=
-e:
->
-> On Mon, Feb 06, 2023 at 11:33:15AM +0800, =E6=9C=B1=E5=BF=A0=E6=9D=B0 wro=
-te:
-> > Yes, this is a very special case.
-> >
-> > It will happen only when disconnecting the mass storage if there are
-> > too many files in the storage, and the scanning operation is running,
-> > and the file system is not unmounted.
-> > It looks like this issue should be fixed in the usb mass storage
-> > driver, but I don't find an appropriate place.
->
-> That's not surprising, because usb-storage doesn't know anything about
-> what's happening on the mass-storage device it connects to.  All it does
-> is send the commands that it gets from the SCSI subsystem to the device
-> and receive the results back.  It has no idea whether there is a mounted
-> filesystem on the device, if the filesystem contains any files, or
-> whether a scanning operation is running,
->
-> A better place to look for fixing this might be the filesystem code.
-> That's where the information about mounting, files, and scanning can be
-> found.
->
-> Alan Stern
 
-The problem is there is a for loop in the invalidate_inodes(), this
-function is in the block device driver. when the usb_disconnect is
-called, the filesystem is not umounted, userspace applications will be
-noticed the usb storage is disconnected, and then do the umounting
-work.
-the invalidate_inodes() is called in the usb hub worker, and will run
-for a long time. To fix this issue, the long running loop need to be
-moved out from the usb hub worker.
+
+On 2/6/2023 5:24 PM, Thinh Nguyen wrote:
+> Hi Elson,
+> 
+> On Mon, Feb 06, 2023, Elson Roy Serrao wrote:
+>> Changes in v3
+>>   - Modified rw_capable flag to reflect the gadgets capability for wakeup
+>>     signalling.
+>>   - Added a check to configure wakeup bit in bmAttributes only if gadget
+>>     is capable of triggering wakeup.
+>>   - Implemented a gadget op for composite layer to inform UDC whether device
+>>     is configured for remote wakeup.
+>>   - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+>>     device is configured for it.
+>>   - Cosmetic changes in dwc3_gadget_func_wakeup() API.
+>>
+>> Changes in v2
+>>   - Added a flag to indicate whether the device is remote wakeup capable.
+>>   - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+>>     changes.
+>>   - Added flags to reflect the state of  function suspend and function remote
+>>     wakeup to usb_function struct rather than function specific struct (f_ecm).
+>>   - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+>>     checking the link state and then sending the device notification. Also
+>>     added debug log for DEVICE_NOTIFICATION generic cmd.
+>>   - Added changes to arm the device for remotewakeup/function remotewakeup
+>>     only if device is capable.
+>>
+>> An usb device can initate a remote wakeup and bring the link out of
+>> suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+>> To achieve this an interface can invoke gadget_wakeup op and wait for the
+>> device to come out of LPM. But the current polling based implementation
+>> fails if the host takes a long time to drive the resume signaling specially
+>> in high speed capable devices. Switching to an interrupt based approach is
+>> more robust and efficient. This can be leveraged by enabling link status
+>> change events and triggering a gadget resume when the link comes to active
+>> state.
+>>
+>> If the device is enhanced super-speed capable, individual interfaces can
+>> also be put into suspend state. An interface can be in function suspend
+>> state even when the device is not in suspend state. Function suspend state
+>> is retained throughout the device suspend entry and exit process.
+>> A function can be put to function suspend through FUNCTION_SUSPEND feature
+>> selector sent by the host. This setup packet also decides whether that
+>> function is capable of initiating a function remote wakeup. When the
+>> function sends a wakeup notification to the host the link must be first
+>> brought to a non-U0 state and then this notification is sent.
+>>
+>> This change adds the infrastructure needed to support the above
+>> functionalities.
+>>
+>> Elson Roy Serrao (5):
+>>    usb: gadget: Properly configure the device for remote wakeup
+>>    usb: dwc3: Add remote wakeup handling
+>>    usb: gadget: Add function wakeup support
+>>    usb: dwc3: Add function suspend and function wakeup support
+>>    usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
+>>
+>>   drivers/usb/dwc3/core.h               |   5 ++
+>>   drivers/usb/dwc3/debug.h              |   2 +
+>>   drivers/usb/dwc3/ep0.c                |  16 ++---
+>>   drivers/usb/dwc3/gadget.c             | 110 +++++++++++++++++++++++++++++++---
+>>   drivers/usb/gadget/composite.c        |  50 +++++++++++++++-
+>>   drivers/usb/gadget/function/f_ecm.c   |  68 +++++++++++++++++++++
+>>   drivers/usb/gadget/function/u_ether.c |  63 +++++++++++++++++++
+>>   drivers/usb/gadget/function/u_ether.h |   4 ++
+>>   drivers/usb/gadget/udc/core.c         |  46 ++++++++++++++
+>>   drivers/usb/gadget/udc/trace.h        |   5 ++
+>>   include/linux/usb/composite.h         |   6 ++
+>>   include/linux/usb/gadget.h            |  12 ++++
+>>   12 files changed, 371 insertions(+), 16 deletions(-)
+>>
+>> -- 
+>> 2.7.4
+>>
+> 
+> Hi Elson,
+> 
+> Thanks for your patches! I provided some comments. Hopefully they can be
+> merged soon.
+> 
+> Thanks,
+> Thinh
+
+Hi Thinh
+
+Thank you for your feedback/comments. I will address them in v4.
+
+Regards
+Elson
