@@ -2,136 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86D368D143
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 09:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8706E68D170
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 09:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjBGIH3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Feb 2023 03:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
+        id S230172AbjBGI0c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Feb 2023 03:26:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjBGIH2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 03:07:28 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E53440FB
-        for <linux-usb@vger.kernel.org>; Tue,  7 Feb 2023 00:07:27 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3174owSw017881;
-        Tue, 7 Feb 2023 08:07:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pObzctjs6sHh36fLH3VH50UNWqimVx6ZCeG+rI0Xtxk=;
- b=PvDhBb7EXwQMBSEdn/+JlPjGI62FJaFiLgpPZP6TBJYzEme6aA18nNvcW0px84oPUaxl
- Z53v9Z73X7eDr07CznSS+rjEmQU3+z5ON8RvSFN/KWzQxYNIkkNszWkfuwBtfd4T+2+0
- PFnpT9Nrc2/tBDRlfezrVBMlL+C2vSJhz6HiWgkrgf/LzADG57rhw5FZPVH5HOW3+jC/
- l6t41PykVcsF9As26OqRGwn0Q0Z1BHfIq8n9IaL25gm1I8EbiEQ9XzL3wkJh7SrutWcm
- aM3SKvqSKD1Qxd3I2HVokQ6/UebOeYpRXqj1QVprzhg2pbYXVFY/9XP5sVYcEzJxDJGY 9g== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nheche07k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 08:07:23 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31787LaY014910
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Feb 2023 08:07:21 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 7 Feb 2023
- 00:07:20 -0800
-Message-ID: <3aa7756b-8967-8ea9-bba1-56811846b5ca@quicinc.com>
-Date:   Tue, 7 Feb 2023 16:07:17 +0800
+        with ESMTP id S229625AbjBGI0b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 03:26:31 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4B4EF8D;
+        Tue,  7 Feb 2023 00:26:30 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id t1so8232398ybd.4;
+        Tue, 07 Feb 2023 00:26:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VnR0rvO8n7tyVdnpylOr297xpsBR1VkzYY2ahlh+35M=;
+        b=GMGrbOAFET8/XeIh/XhWMs5iL9+c0lxMeDFYaKRSGkGi39tSyqoEh3FuChL2ne7VcL
+         kYRy0P9poOvJVzpHXuYdrT+E1zTWVXRpNkmOvySOGZwn40JG0IBFIoLAmRJzlJgR2lbc
+         oUS2ygHyxJJ2o7KBn5AK4Y5PpwBgq93iGBkQLR/Bgqmz2BEffXlrSDLjzZFznmHwh41H
+         Xd327DQpiwoZ7AFSaczIZ2gI3cMj0qCadMxfOFhyep2VdHDrgLiNNyVm64Vid0yldk0S
+         HZZ6zrNOLDGsaWxUge9EBwNMvd6JbrKpq5v9amGDB1qRFXkzd/xJXJ3ktwTaSsHo8Zpv
+         bDzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VnR0rvO8n7tyVdnpylOr297xpsBR1VkzYY2ahlh+35M=;
+        b=DhJIvQMp+Yz79Ka1tKYYXyAi3gLqhfr+9rVScPnLs2JCa8DbPYuM+G4ABd4Jete0TX
+         mUGvrlPJiYOgjK1arKm8dorkqnNq3EgBkSfZ9Cn7KspG4uN6UImVHY9ucg3t7goUd8AP
+         SjmP8r9SuFQcYlxDiT09A/mukFnzpk5zajuqzxf2sIJcjB5XvyRbBwhYjQlY2t8X0DkW
+         5ICfVynN7HodrqqwdFpuAU+FQdGvZuCLMXN4TcgyXsdphDFkAhYbTCvPqF3Ku4wc4wT8
+         cXFk2WmVVM2slfVnXsWyY1UQ+eN5XIm1eii2Ki0nmiicRjV7I04ymz3Cx18alB1154hU
+         CRFg==
+X-Gm-Message-State: AO0yUKU4S9UB9xe8Fdk48DhqbpwQhg++YKLSUIGwAgA5d0bU05SilRUe
+        46McyDA4KDndQsvV5aK5Ah3XRsGStXKYhApgdH0L3dQ1meo=
+X-Google-Smtp-Source: AK7set+ir/62DPXKv/j+xTFzYrFmUNP42qtldAPuUE11K0H8CHgloF334k6sO+GhE4DeNajGzGWyqTWAspsv9JCRTQ4=
+X-Received: by 2002:a25:43:0:b0:864:9aee:7b7e with SMTP id 64-20020a250043000000b008649aee7b7emr273838yba.244.1675758389812;
+ Tue, 07 Feb 2023 00:26:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] usb: typec: disable pm for typec class devices
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>
-References: <1675752122-8147-1-git-send-email-quic_linyyuan@quicinc.com>
- <Y+H+8Nt/5bgTBv4Y@kuha.fi.intel.com>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <Y+H+8Nt/5bgTBv4Y@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: HKPWNwz7Ar87J4mSUrYjglFMkzWhPmvf
-X-Proofpoint-ORIG-GUID: HKPWNwz7Ar87J4mSUrYjglFMkzWhPmvf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_01,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=629 priorityscore=1501 mlxscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302070073
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203072819.3408-1-zhongjiezhu1@gmail.com> <Y90egBL6HSoEdz2P@rowland.harvard.edu>
+ <CAJnoMhNYDXjfttiio+P7k6W1fDU3N=jbjmZe+ZRVON=bqm0yvw@mail.gmail.com>
+ <Y+EaIRHZfLs49w9L@rowland.harvard.edu> <CAJnoMhO_AWU0ABoJN_EQZ9BpnpgxSeuv26PqOJ1feLh_CdJHsg@mail.gmail.com>
+ <Y+HObaGgp3fwrL/7@rowland.harvard.edu>
+In-Reply-To: <Y+HObaGgp3fwrL/7@rowland.harvard.edu>
+From:   Zhongjie Zhu <zhongjiezhu1@gmail.com>
+Date:   Tue, 7 Feb 2023 16:23:44 +0800
+Message-ID: <CAJnoMhMDcvsB18PnFxRrnJA+VGWCBmJUjFGjWZToYXB36+Xmtw@mail.gmail.com>
+Subject: Re: [PATCH] USB: core: hub: fix usb_hub worker blocking
+ drain_all_pages() worker issue
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On 2/7/2023 3:34 PM, Heikki Krogerus wrote:
-> On Tue, Feb 07, 2023 at 02:42:02PM +0800, Linyu Yuan wrote:
->> as there is no pm operation, call device_set_pm_not_required() to disable
->> all typec class devices.
->>
->> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->> ---
->>   drivers/usb/typec/class.c   | 5 +++++
->>   drivers/usb/typec/mux.c     | 2 ++
->>   drivers/usb/typec/pd.c      | 3 +++
->>   drivers/usb/typec/retimer.c | 1 +
->>   4 files changed, 11 insertions(+)
-> Now this is just boilerplate.
+On Tue, Feb 7, 2023 at 12:07 PM Alan Stern <stern@rowland.harvard.edu> wrot=
+e:
 >
-> Why not propose this to be done in core for every new device that
-> doesn't have a bus, and that doesn't have the pm ops assigned in the
-> device type?
-
-
-thanks, will try.
-
-
+> On Tue, Feb 07, 2023 at 10:02:51AM +0800, Zhongjie Zhu wrote:
+> > On Mon, Feb 6, 2023 at 11:17 PM Alan Stern <stern@rowland.harvard.edu> =
+wrote:
+> > >
+> > > On Mon, Feb 06, 2023 at 11:33:15AM +0800, =E6=9C=B1=E5=BF=A0=E6=9D=B0=
+ wrote:
+> > > > Yes, this is a very special case.
+> > > >
+> > > > It will happen only when disconnecting the mass storage if there ar=
+e
+> > > > too many files in the storage, and the scanning operation is runnin=
+g,
+> > > > and the file system is not unmounted.
+> > > > It looks like this issue should be fixed in the usb mass storage
+> > > > driver, but I don't find an appropriate place.
+> > >
+> > > That's not surprising, because usb-storage doesn't know anything abou=
+t
+> > > what's happening on the mass-storage device it connects to.  All it d=
+oes
+> > > is send the commands that it gets from the SCSI subsystem to the devi=
+ce
+> > > and receive the results back.  It has no idea whether there is a moun=
+ted
+> > > filesystem on the device, if the filesystem contains any files, or
+> > > whether a scanning operation is running,
+> > >
+> > > A better place to look for fixing this might be the filesystem code.
+> > > That's where the information about mounting, files, and scanning can =
+be
+> > > found.
+> > >
+> > > Alan Stern
+> >
+> > The problem is there is a for loop in the invalidate_inodes(), this
+> > function is in the block device driver. when the usb_disconnect is
+> > called, the filesystem is not umounted, userspace applications will be
+> > noticed the usb storage is disconnected, and then do the umounting
+> > work.
+> > the invalidate_inodes() is called in the usb hub worker, and will run
+> > for a long time. To fix this issue, the long running loop need to be
+> > moved out from the usb hub worker.
 >
->> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
->> index ed3d070..b75ec6d 100644
->> --- a/drivers/usb/typec/class.c
->> +++ b/drivers/usb/typec/class.c
->> @@ -548,6 +548,7 @@ typec_register_altmode(struct device *parent,
->>   	alt->adev.dev.groups = alt->groups;
->>   	alt->adev.dev.type = &typec_altmode_dev_type;
->>   	dev_set_name(&alt->adev.dev, "%s.%u", dev_name(parent), id);
->> +	device_set_pm_not_required(&alt->adev.dev);
-> Note that for alt modes you can't do this. They can be bind to
-> drivers - there is a bus for them.
-
-
-but even in the bus, there is power management,
-
-struct bus_type typec_bus = {
-     .name = "typec",
-     .dev_groups = typec_groups,
-     .match = typec_match,
-     .uevent = typec_uevent,
-     .probe = typec_probe,
-     .remove = typec_remove,
-};
-
-
-we can disable it, right ?
-
-
+> Oh, maybe I didn't understand.
 >
-> thanks,
+> You've got a USB mass-storage device with a mounted filesystem and a lot
+> of dirty inodes, right?  Then a USB disconnect happens, and as part of
+> the disconnect processing, invalidate_inodes() runs for a long time.
 >
+> Do you know why it takes so long?  The I/O operations shouldn't need any
+> time; they will all fail immediately because the device has been
+> disconnected and so there is no way to communicate with it.
+>
+> Alan Stern
+
+Yes, invalidate_inodes() will free all the inodes related to the
+supper_block, there are more
+than 20 thousands inodes (some times more) need to be freed, the perf
+record shows the
+cpu is busy running the spin_lock and spin_unlock in the
+invalidate_inodes(). The work in
+this function is to free all the inodes with the super_block.
+Maybe I need to find out why the spin_lock is running so much first.
