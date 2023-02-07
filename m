@@ -2,125 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5B468E153
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 20:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3F468E387
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Feb 2023 23:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjBGTfw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 Feb 2023 14:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S229777AbjBGWo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Feb 2023 17:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjBGTfv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 14:35:51 -0500
-Received: from voltaic.bi-co.net (voltaic.bi-co.net [134.119.3.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E963B655
-        for <linux-usb@vger.kernel.org>; Tue,  7 Feb 2023 11:35:47 -0800 (PST)
-Received: from [192.168.0.36] (ip-037-201-145-251.um10.pools.vodafone-ip.de [37.201.145.251])
-        by voltaic.bi-co.net (Postfix) with ESMTPSA id 01676210DB;
-        Tue,  7 Feb 2023 20:35:45 +0100 (CET)
-Message-ID: <9adb1e30b93d4e24b373b04eaf1d597daa1a1472.camel@bi-co.net>
-Subject: Re: Cypress CDC ACM serial port not working correctly with
- autosuspend
-From:   Michael =?ISO-8859-1?Q?La=DF?= <bevan@bi-co.net>
-To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Date:   Tue, 07 Feb 2023 20:35:45 +0100
-In-Reply-To: <bde43a1913cf55e580e77ac0e059fff3c26dc093.camel@bi-co.net>
-References: <8be9b56c6becd0981d1cd9c13742df6ba2975b56.camel@bi-co.net>
-         <0db2a0a4-6ed4-fe06-217a-cb564f1d4a8c@suse.com>
-         <bde43a1913cf55e580e77ac0e059fff3c26dc093.camel@bi-co.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S229505AbjBGWo1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Feb 2023 17:44:27 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE95B9EC0;
+        Tue,  7 Feb 2023 14:44:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675809866; x=1707345866;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=w4yUWgdrMkSu5h1zXbr5sfr/CirMhN4jXxr0vnH7soA=;
+  b=HfO1bJch7urb36Y8969+dlDJjzJG33h4btEq+2Q74gm5aF1+wEJxGWhq
+   0xy1m4whevJPOkWbzdj3CZeMzZQqag+0Fu3AjZdS1q88zE9t6dbMtgXCF
+   l/d3EY2EI4CDZVQMfKenurSVnlBbnQZ2313G6c3ER7BWqTI26qqGeFPa5
+   3iThx4tVsArsSqARBR6Pdi6RAg9btw0r4XUQUd+o9q8Xwx7YsoMxIkwNy
+   N/rGoUCtODkCee/Hdy7lDNN2rMH2PQmvbDXLlNvZ7Hf6GlxmaO9bNffSf
+   XcytN1lDVwzGomT8AL0AdhINWJH91r/Rmq3fUsKSDyR9ddbZO0igPBMab
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="357027931"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="357027931"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 14:44:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="616981528"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="616981528"
+Received: from jinggu-mobl.amr.corp.intel.com (HELO [10.212.120.142]) ([10.212.120.142])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 14:44:23 -0800
+Message-ID: <b532bf7b-e1fb-3a9d-1b88-02f3159be47d@linux.intel.com>
+Date:   Tue, 7 Feb 2023 07:29:19 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v2 20/22] sound: usb: Prevent starting of audio stream
+ if in use
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-21-quic_wcheng@quicinc.com>
+ <557f8f76-38f5-5e07-905e-774e03120bd2@linux.intel.com>
+ <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-did you have a chance to look at the trace? I can't really make sense
-of that raw output so I used Wireshark to sniff on usbmon6. I let the
-remote system, which is connected via the serial port, print something
-every three seconds. This is the behavior I see:
-
-[starting trace with power/control set to "auto"]
-[no communication whatsoever]
-[echo -n "on" | sudo tee /sys/bus/usb/devices/6-2*/power/control]
-735	23.506773	host	6.1.0	USBHUB	64	GET_STATUS Request     [Port 2]
-736	23.506786	6.1.0	host	USBHUB	68	GET_STATUS Response    [Port 2]
-737	23.506793	host	6.1.0	USBHUB	64	CLEAR_FEATURE Request  [Port 2: PORT_SUSPEND]
-740	23.555346	6.1.0	host	USBHUB	64	CLEAR_FEATURE Response [Port 2: PORT_SUSPEND]
-747	23.601999	host	6.1.0	USBHUB	64	GET_STATUS Request     [Port 2]
-748	23.602018	6.1.0	host	USBHUB	68	GET_STATUS Response    [Port 2]
-749	23.602027	host	6.1.0	USBHUB	64	CLEAR_FEATURE Request  [Port 2: C_PORT_SUSPEND]
-750	23.602033	6.1.0	host	USBHUB	64	CLEAR_FEATURE Response [Port 2: C_PORT_SUSPEND]
-756	23.622039	host	6.7.2	USB	64	URB_BULK in
-757	23.622041	host	6.7.2	USB	64	URB_BULK in
-758	23.622043	host	6.7.2	USB	64	URB_BULK in
-759	23.622045	host	6.7.2	USB	64	URB_BULK in
-760	23.622046	host	6.7.2	USB	64	URB_BULK in
-761	23.622048	host	6.7.2	USB	64	URB_BULK in
-762	23.622049	host	6.7.2	USB	64	URB_BULK in
-763	23.622051	host	6.7.2	USB	64	URB_BULK in
-764	23.622053	host	6.7.2	USB	64	URB_BULK in
-765	23.622055	host	6.7.2	USB	64	URB_BULK in
-766	23.622057	host	6.7.2	USB	64	URB_BULK in
-767	23.622058	host	6.7.2	USB	64	URB_BULK in
-768	23.622060	host	6.7.2	USB	64	URB_BULK in
-769	23.622061	host	6.1.0	USBHUB	64	GET_STATUS Request     [Port 2]
-770	23.622062	host	6.7.2	USB	64	URB_BULK in
-771	23.622064	host	6.7.2	USB	64	URB_BULK in
-772	23.622067	host	6.7.2	USB	64	URB_BULK in
-773	23.622074	6.1.0	host	USBHUB	68	GET_STATUS Response    [Port 2]
-818	25.411626	6.7.2	host	USB	65	URB_BULK in
-[that last line contains the very first character of the printed message]
-[leaving out the rest of the message and its repetitions here]
-[echo -n "auto" | sudo tee /sys/bus/usb/devices/6-2*/power/control]
-1219	36.891101	host	6.1.0	USBHUB	64	SET_FEATURE Request    [Port 2: PORT_SUSPEND]
-1220	36.908667	6.1.0	host	USBHUB	64	SET_FEATURE Response   [Port 2: PORT_SUSPEND]
-[no communication whatsoever]
-
-I hope I haven't missed anything important here as I used filters to
-get rid of the noise created by other devices on that bus.
-
-Best regards,
-Michael
 
 
-Am Montag, dem 30.01.2023 um 16:44 +0100 schrieb Michael Laß:
-> Hi. Thanks for looking into this.
+On 2/6/23 19:15, Wesley Cheng wrote:
+> Hi Pierre,
 > 
-> Am Montag, dem 30.01.2023 um 14:08 +0100 schrieb Oliver Neukum:
-> > 
-> > thinking about this further, it is possible that remote wakeup
-> > is not properly processed. Could you test autosuspend with another
-> > device, for example a mouse? It should wake up after an autosuspend
-> > if you press a mouse button.
+> On 1/26/2023 8:12 AM, Pierre-Louis Bossart wrote:
+>>
+>>
+>> On 1/25/23 21:14, Wesley Cheng wrote:
+>>> With USB audio offloading, an audio session is started from the ASoC
+>>> platform sound card and PCM devices.  Likewise, the USB SND path is
+>>> still
+>>> readily available for use, in case the non-offload path is desired.  In
+>>> order to prevent the two entities from attempting to use the USB bus,
+>>> introduce a flag that determines when either paths are in use.
+>>>
+>>> If a PCM device is already in use, the check will return an error to
+>>> userspace notifying that the stream is currently busy.  This ensures
+>>> that
+>>> only one path is using the USB substream.
+>>
+>> It's good to maintain mutual exclusion, but it's still very hard for an
+>> application to figure out which card can be used when.
+>>
+>> Returning -EBUSY is not super helpful. There should be something like a
+>> notification or connection status so that routing decisions can be made
+>> without trial-and-error.
+>>
 > 
-> I tested the behavior with a mouse connected to the same port and
-> power/control set to "auto". It behaved correctly: After 1-2 seconds
-> the LED of the mouse turned off and pressing a mouse button let it
-> wake
-> up again. This was repeatable.
-> 
-> I also recorded a usbmon trace as you asked for in the previous mail.
-> It is attached to this mail. Unfortunately it is a bit noisy because
-> there is another device connected to that USB bus internally. The
-> Cypress device was connected to bus 6, port 2. I think it is device
-> number 18 in that trace.
-> 
-> What I did during the trace:
-> - Use the serial connection to launch
->      while true; do date; sleep 3; done
->   on the remote device.
-> - I received the output of the very first `date` but not the upcoming
->   ones.
-> - After 10 seconds or so I sent a couple of characters and afterwards
->   received another `date` output.
-> 
-> Best regards,
-> Michael
+> The USB offload driver does have access to the USB substream that is
+> being utilized/offloaded.  Maybe in addition to this check, we can also
+> set the PCM runtime state as well (for that particular substream)?  That
+> way userspace can fetch information about if the stream is busy or not.
 
+You're missing the point. When a card is exposed but the PCM devices may
+or may not be usable (consuming data with no sound rendered or returning
+an error), it's much better to provide a clear connection status to
+userspace.
+
+Let me give you an example. Intel drivers can expose 3 HDMI/DP PCM
+devices. Userspace has no idea which one to use, so there's a jack
+control that tells userspace whether there is a receiver connected so
+that the audio server can use the relevant PCM device.
+
+Audio routing based on trial and error is really problematic, errors can
+happen but they should be exceptional (e.g. xruns), not a means of
+driver-userspace communication on the device status.
