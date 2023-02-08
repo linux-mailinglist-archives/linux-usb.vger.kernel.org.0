@@ -2,154 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EB368F24C
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Feb 2023 16:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1055668F336
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Feb 2023 17:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjBHPqK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Feb 2023 10:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S231359AbjBHQeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Feb 2023 11:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjBHPqJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 10:46:09 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC4BAA;
-        Wed,  8 Feb 2023 07:46:07 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318E01JA015937;
-        Wed, 8 Feb 2023 15:46:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GCM0sK4z2/OQ3hyfzs19Ds1R77hemYqc95qhkiZb5Nk=;
- b=B36nsMAx4oq4DMUjuPOVo1aoXeEBh++rawpe/PrueAftY9V7IkYd7TeLQiHp2gbv88sK
- T0GdeFYytVGhdwSfkNXAP141ZpGADd8knyTzqUVDcBPwirnmc/pLbSSECvYxQ9qicK1Y
- DiSmHTOvBjEH7G3jrOeXwrOpXAlON9fvfJAkNHJ/OG9sbpL6yiViU5wYgnqL9o7SABhl
- c/MlqPe9iVsbUJ9l3EmsdyD+VoNPFion5HhaWGchpJFGGxzLB1MVMesRQZIaUcotXocx
- wHPSQPPq832Pu6kS8yxZK0rjL0etTbEsAeKd9yqpHfXjnhhgBgoPh/Y7BPf67d5AFzRZ Mw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm7g1s5xv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 15:46:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318Fk1Ax013569
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 15:46:01 GMT
-Received: from [10.216.1.90] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 07:45:58 -0800
-Message-ID: <482f2c32-41d1-f07e-ee3f-3eb9aee76ac7@quicinc.com>
-Date:   Wed, 8 Feb 2023 21:15:54 +0530
+        with ESMTP id S231354AbjBHQeY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 11:34:24 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8D82B2B2;
+        Wed,  8 Feb 2023 08:34:23 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id x15-20020a4ab90f000000b004e64a0a967fso1780306ooo.2;
+        Wed, 08 Feb 2023 08:34:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3NLFPMpnZb+miJhy2+iFm0INrDfxWTo0LlkjNOUCi9o=;
+        b=PiGPC4/nea7pctVNxbi6ZvRwtz6qW2xC2KTattYqWNIARqnkmWfqXiNOzJwT/RZqwc
+         2E525oYGiLdVPQ7Yc7Gm/XD1z3CwZXnrvdVE3Kt9SBrIecT/DstQnSJgoTk+eWh1C8w3
+         Gtnw9ZW4FLlCqYAJeQ1N5LbEI8K9/8KMPGgxEVd4wvgxKtmOd/SCHEKwpR0CJXKt1cym
+         oseEs+zUnvsaF+78HHzW+8sS88nvwrrhBUc6UQAAp6Cvf63WaMxgHIYf6Kh9F+tYMQ5M
+         vJYXBKaY4Wghavls9eesmPvPPeISWUTyV8qioeia1yNzBWio3TBtf6W378ROV/arFlGf
+         /3Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3NLFPMpnZb+miJhy2+iFm0INrDfxWTo0LlkjNOUCi9o=;
+        b=3xHFoJc2tKNUDgp6pa0t/XqRUZFO91AEuaWQ0QLjs87AzP0djUFdQjOExZCK47a+cW
+         2+B9SUWywG28sdMcne+jyXBNgCRN6zBGJjIuPnmrrsQds+MGprG3viBlgiUpl1hHrGcA
+         F2FFfB7IqqAThxIUPCQccF9guW2sfTAukOCT/HuBHbU4ZJd86SqfuSqZNSbdjMX5q+Ny
+         bhxr4ARqjn6GvGCh4nkRWRfBu5inUGQIHGVKSA8MPDprbQ9nZGoxuu0LugoPad5KA3b4
+         spAqiXCIxcZObwq1TcOhtlyXAeADrSbk4SDU5KiKSjiPsepEuOBE84/geXKCSoXEAaar
+         ++vQ==
+X-Gm-Message-State: AO0yUKWt+8jtjIcE1NLFoEcpf+cP1VW/98AzxauBUenP/nBv17HKqccu
+        4oc/E3plHxUQPT3J17zosN7zEvs8ENw=
+X-Google-Smtp-Source: AK7set+Eo/3CGpyueJ8ifKatcamILHyEtR20MglqVLcSVWtl7ipuQoLMU7kPBNA2BWWi7lh3oufSVQ==
+X-Received: by 2002:a4a:b6c8:0:b0:517:3f56:d292 with SMTP id w8-20020a4ab6c8000000b005173f56d292mr2569784ooo.1.1675874062470;
+        Wed, 08 Feb 2023 08:34:22 -0800 (PST)
+Received: from jassi-Alienware-x17-R2.. (wnpgmb0311w-ds01-45-177-228.dynamic.bellmts.net. [206.45.177.228])
+        by smtp.gmail.com with ESMTPSA id g26-20020a4ab81a000000b0051a72e69e24sm5930214oop.37.2023.02.08.08.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 08:34:21 -0800 (PST)
+From:   jassisinghbrar@gmail.com
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, error27@gmail.com,
+        stern@rowland.harvard.edu, Jassi Brar <jaswinder.singh@linaro.org>
+Subject: [PATCH] usb: gadget: udc: max3420_udc: fix serialized access
+Date:   Wed,  8 Feb 2023 10:34:18 -0600
+Message-Id: <20230208163418.342210-1-jassisinghbrar@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        "Jack Pham" <quic_jackp@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1675864487-18620-1-git-send-email-quic_prashk@quicinc.com>
- <Y+O3vBbBh4ZwSBWT@kroah.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <Y+O3vBbBh4ZwSBWT@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: iTC5KPkPWDisUTkktpi1P3iS1jUFdD8j
-X-Proofpoint-ORIG-GUID: iTC5KPkPWDisUTkktpi1P3iS1jUFdD8j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_06,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxlogscore=905 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302080140
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Jassi Brar <jaswinder.singh@linaro.org>
 
+ The mutex 'spi_bus_mutex' should be used, instead of the spin-lock,
+while changing the state of the kernel-thread. Also changing the
+usb-gadget state need not be protected by a spin-lock.
+ This should fix the Smatch static checker warning
+    warn: sleeping in atomic context
 
-On 08-02-23 08:24 pm, Greg Kroah-Hartman wrote:
-> On Wed, Feb 08, 2023 at 07:24:47PM +0530, Prashanth K wrote:
->> Consider a case where gserial_disconnect has already cleared
->> gser->ioport. And if a wakeup interrupt triggers afterwards,
->> gserial_resume gets called, which will lead to accessing of
->> gserial->port and thus causing null pointer dereference.Add
->> a null pointer check to prevent this.
->>
->> Fixes: aba3a8d01d62 (" usb: gadget: u_serial: add suspend resume callbacks")
-> 
-> Nit, and our tools will complain, no " " before the "usb:" string here,
-> right?
-> 
-Will fix it in next patch.
-> 
-> 
->> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
->> ---
->>   drivers/usb/gadget/function/u_serial.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
->> index 840626e..98be2b8 100644
->> --- a/drivers/usb/gadget/function/u_serial.c
->> +++ b/drivers/usb/gadget/function/u_serial.c
->> @@ -1428,6 +1428,9 @@ void gserial_resume(struct gserial *gser)
->>   	struct gs_port *port = gser->ioport;
->>   	unsigned long	flags;
->>   
->> +	if (!port)
->> +		return;
->> +
-> 
-> What prevents port from going to NULL right after this check?
-In our case we got a null pointer de-reference while performing USB 
-compliance tests, as the gser->port was null. Because in gserial_resume, 
-spinlock_irq_save(&port->port_lock) accesses a null-pointer as port was 
-already marked null by gserial_disconnect.
+Fixes: 48ba02b2e2b1 ("usb: gadget: add udc driver for max3420")
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+---
+ drivers/usb/gadget/udc/max3420_udc.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-And after gserial_resume acquires the spinlock, gserial_disconnect cant 
-mark it null until the spinlock is released. We need to check if the 
-port->lock is valid before accessing it, otherwise it can lead to the 
-above mentioned scenario
+diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
+index ddf0ed3eb4f2..3666cc44f4e7 100644
+--- a/drivers/usb/gadget/udc/max3420_udc.c
++++ b/drivers/usb/gadget/udc/max3420_udc.c
+@@ -501,13 +501,16 @@ static irqreturn_t max3420_vbus_handler(int irq, void *dev_id)
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&udc->lock, flags);
++
+ 	/* its a vbus change interrupt */
+ 	udc->vbus_active = !udc->vbus_active;
+ 	udc->todo |= UDC_START;
++
++	spin_unlock_irqrestore(&udc->lock, flags);
++
+ 	usb_udc_vbus_handler(&udc->gadget, udc->vbus_active);
+ 	usb_gadget_set_state(&udc->gadget, udc->vbus_active
+ 			     ? USB_STATE_POWERED : USB_STATE_NOTATTACHED);
+-	spin_unlock_irqrestore(&udc->lock, flags);
+ 
+ 	if (udc->thread_task)
+ 		wake_up_process(udc->thread_task);
+@@ -1298,15 +1301,14 @@ static int max3420_probe(struct spi_device *spi)
+ static void max3420_remove(struct spi_device *spi)
+ {
+ 	struct max3420_udc *udc = spi_get_drvdata(spi);
+-	unsigned long flags;
+ 
+ 	usb_del_gadget_udc(&udc->gadget);
+ 
+-	spin_lock_irqsave(&udc->lock, flags);
++	mutex_lock(&udc->spi_bus_mutex);
+ 
+ 	kthread_stop(udc->thread_task);
+ 
+-	spin_unlock_irqrestore(&udc->lock, flags);
++	mutex_unlock(&udc->spi_bus_mutex);
+ }
+ 
+ static const struct of_device_id max3420_udc_of_match[] = {
+-- 
+2.34.1
 
-Issue Type: kernel panic issue
-Issue AutoSignature:
-pc : do_raw_spin_lock
-lr : _raw_spin_lock_irqsave
-Call trace:
-do_raw_spin_lock
-_raw_spin_lock_irqsave
-gserial_resume
-acm_resume
-composite_resume
-configfs_composite_resume
-dwc3_process_event_entry
-dwc3_process_event_buf
-dwc3_thread_interrupt
-irq_thread_fn
-irq_thread
-kthread
-ret_from_fork
-
-Thanks in advance,
-Prashanth
-> 
-> thanks,
-> 
-> greg k-h
