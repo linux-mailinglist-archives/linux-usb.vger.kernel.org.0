@@ -2,82 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2182468F18A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Feb 2023 16:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC8868F19A
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Feb 2023 16:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjBHPDI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Feb 2023 10:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S230237AbjBHPHk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Feb 2023 10:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjBHPDH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 10:03:07 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6529531E2F;
-        Wed,  8 Feb 2023 07:03:06 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 425323200645;
-        Wed,  8 Feb 2023 10:03:05 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 08 Feb 2023 10:03:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1675868584; x=1675954984; bh=Tp4WrLE6w4
-        CxHre1AULQK7ewiIbrA5XQqc0WYdu9Gfs=; b=nIY1/+FnvifwoKLHY0jMM8XETK
-        jDNsI+G8FylzoPlNFzLDoyOaYIi7+Gx9rEHmpaIhGRQxJuDCXCxV4PLMa+R6rM/H
-        KLiAA0t2HI5zlyKNso8SSTflCSXHQYF/EkdYS0H93UK+qGmhvYAiaIoydws1Bccj
-        QnILyqIeu7I7bSs8VcIcmWIOndB+pA4Ht5/M/8/pjHz/ENBiLCL/2NchrnmpfQ8N
-        ceVvPOufyE+7MKCp2mEPoZ4Nn4PvX5aB2XewHq6vJiY4FH81kN12ys1/wHVTwUcJ
-        uSHoo0hz3i3bvKfM5bh15lxmwQ+Gxi0BEXCeya07pxzOUX6l82D7OIJpodfQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1675868584; x=1675954984; bh=Tp4WrLE6w4CxHre1AULQK7ewiIbr
-        A5XQqc0WYdu9Gfs=; b=WBzUiBlFO08QKb3DU4+mujE1e0WUADxEiJCnwDfKA3ZW
-        9MreeJIXpFSiCfDVdAuw8JB/BnxCxPDoA/AsKJQGUtlmr6yg9pLwGQrZ0c1iZNcI
-        ESWF7APe8gGY9zo/CdjuB8cfkAiVG2KLCcYCQi6RNmfm/2C4FDshbWqj2T6jH2wf
-        IZyNiE9hp+7MaPTwgfCbR+UlQ6RxIaxjQAFrwYBiMkXn/8t37rS8YCfVzHto+peH
-        TEi2hi66I+3o0pIlwtmEgSyl/lZEvYe+B6skJBNhMBISHcU5YGqNfTQ5NRVOyaJR
-        SCPIgjjRCsnxuw9guGvzijW/KFrp0fIoMa2zLkCkww==
-X-ME-Sender: <xms:p7njYx5LUSTrkCaSTstnrapp5huACPHfCzG82-3ZBdkScAEN9p0DNw>
-    <xme:p7njY-4LuAsvkTYQa2ktixnXqEbl0alsLNB9D6d7Zj7Of7BUymBq8Y-wEy_gp8-wT
-    KU7wNR-ESvgXA>
-X-ME-Received: <xmr:p7njY4dA3bLB5h0QbQ2poGkk_D7uaZVMmhsdGCExyZIeqLErEgqaj8v0XlkobdfM8MrupxZ5bmUNsx5DT8UsemknMO6IpDWjj05__g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehuddgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:qLnjY6IvhcNPsk0cNJnkuWIpByfr30hp2we6wM5hErv4Yg9yyDrbhA>
-    <xmx:qLnjY1KYHIrH6KqOviIA_yj39ka7DPR4Nrk16HK0bmXqLTdq-0R5NQ>
-    <xmx:qLnjYzwjhYe77B0TRAYec9mX5MFc_w0Yu7szbr6TvrzpjnjCZlUugQ>
-    <xmx:qLnjY89YiTlvoCsdHn_6_h8uC1ESyS5BC7sS_OXQvb17otHGD14ZJQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Feb 2023 10:03:03 -0500 (EST)
-Date:   Wed, 8 Feb 2023 16:03:00 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc:     linux-usb@vger.kernel.org, Miroslav Zatko <mzatko@mirexoft.com>,
-        Dennis Wassenberg <dennis.wassenberg@secunet.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: core: add quirk for Alcor Link AK9563 smartcard
- reader
-Message-ID: <Y+O5pLXHW/0goHMy@kroah.com>
-References: <mpearson-lenovo@squebb.ca>
- <20230208144648.1079898-1-mpearson-lenovo@squebb.ca>
+        with ESMTP id S231231AbjBHPHh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 10:07:37 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 364A537F25
+        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 07:07:35 -0800 (PST)
+Received: (qmail 735684 invoked by uid 1000); 8 Feb 2023 10:07:34 -0500
+Date:   Wed, 8 Feb 2023 10:07:34 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+O6toMmAKBSILMf@rowland.harvard.edu>
+References: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+ <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
+ <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
+ <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
+ <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
+ <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
+ <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
+ <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
+ <20230208080739.1649-1-hdanton@sina.com>
+ <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230208144648.1079898-1-mpearson-lenovo@squebb.ca>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,41 +53,134 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 09:46:48AM -0500, Mark Pearson wrote:
-> The Alcor Link AK9563 smartcard reader used on some Lenovo platforms
-> doesn't work. If LPM is enabled the reader will provide an invalid
-> usb config descriptor. Added quirk to disable LPM.
+On Wed, Feb 08, 2023 at 07:30:25PM +0900, Tetsuo Handa wrote:
+> Commit 1704f47b50b5 ("lockdep: Add novalidate class for dev->mutex
+> conversion") made it impossible to find real deadlocks unless timing
+> dependent testings manage to trigger hung task like [1] and [2]. And
+> lockdep_set_novalidate_class() remained for more than one decade due to
+> a fear of false positives [3]. But not sharing mutex_init() could make
+> it possible to find real deadlocks without triggering hung task [4].
+> Thus, let's assign a unique class key on each "struct device"->mutex.
 > 
-> Verified fix on Lenovo P16 G1 and T14 G3
-> 
-> Tested-by: Miroslav Zatko <mzatko@mirexoft.com>
-> Tested-by: Dennis Wassenberg <dennis.wassenberg@secunet.com>
-> 
-> Cc: stable@vger.kernel.org
-> 
-> Signed-off-by: Dennis Wassenberg <dennis.wassenberg@secunet.com>
-> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+> Link: https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101 [1]
+> Link: https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb [2]
+> Link: https://lkml.kernel.org/r/Y98FLlr7jkiFlV0k@rowland.harvard.edu [3]
+> Link: https://lkml.kernel.org/r/827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp [4]
+> Suggested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 
-No blank lines needed between tested-by and cc: stable.
+You must never do this!
 
+I did not put my Signed-off-by: on the patch I sent to you.  I do not 
+want it added to that patch or to this one.  You should never put 
+somebody else's Signed-off-by: on a patch unless they tell you it's okay 
+to do so.
+
+I'm happy to have people test this patch, but I do not want anybody 
+think that it is ready to be merged into the kernel.
+
+> Co-developed-by: Hillf Danton <hdanton@sina.com>
+> Signed-off-by: Hillf Danton <hdanton@sina.com>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 > ---
->  drivers/usb/core/quirks.c | 3 +++
->  1 file changed, 3 insertions(+)
+> Hello, syzkaller users.
 > 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 079e183cf3bf..9b1c56646ac5 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -535,6 +535,9 @@ static const struct usb_device_id usb_quirk_list[] = {
->  	/* INTEL VALUE SSD */
->  	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+> We made a patch that keeps lockdep validation enabled on "struct dev->mutex".
+> Will you try this patch and see if this patch causes boot failures and/or
+> too frequent crashes to continue testing.
+> 
+>  drivers/base/core.c      | 7 ++++++-
+>  include/linux/device.h   | 1 +
+>  include/linux/lockdep.h  | 6 ++++++
+>  kernel/locking/lockdep.c | 7 +++++++
+>  4 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index a3e14143ec0c..c30ecbc4d60e 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2322,6 +2322,9 @@ static void device_release(struct kobject *kobj)
+>  	devres_release_all(dev);
 >  
-> +	/* Alcor Link AK9563 SC Reader used in 2022 Lenovo ThinkPads */
-> +	{ USB_DEVICE(0x2ce3, 0x9563), .driver_info = USB_QUIRK_NO_LPM },
+>  	kfree(dev->dma_range_map);
+> +	mutex_destroy(&dev->mutex);
+> +	if (!lockdep_static_obj(dev))
+> +		lockdep_unregister_key(&dev->mutex_key);
+>  
+>  	if (dev->release)
+>  		dev->release(dev);
+> @@ -2941,7 +2944,9 @@ void device_initialize(struct device *dev)
+>  	kobject_init(&dev->kobj, &device_ktype);
+>  	INIT_LIST_HEAD(&dev->dma_pools);
+>  	mutex_init(&dev->mutex);
+> -	lockdep_set_novalidate_class(&dev->mutex);
+> +	if (!lockdep_static_obj(dev))
+> +		lockdep_register_key(&dev->mutex_key);
+> +	lockdep_set_class(&dev->mutex, &dev->mutex_key);
+>  	spin_lock_init(&dev->devres_lock);
+>  	INIT_LIST_HEAD(&dev->devres_head);
+>  	device_pm_init(dev);
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 44e3acae7b36..bdaca9f54dc2 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -570,6 +570,7 @@ struct device {
+>  	struct mutex		mutex;	/* mutex to synchronize calls to
+>  					 * its driver.
+>  					 */
+> +	struct lock_class_key	mutex_key;	/* Unique key for each device */
+>  
+>  	struct dev_links_info	links;
+>  	struct dev_pm_info	power;
+> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+> index 1f1099dac3f0..5afc999a7e56 100644
+> --- a/include/linux/lockdep.h
+> +++ b/include/linux/lockdep.h
+> @@ -172,6 +172,7 @@ do {							\
+>  	current->lockdep_recursion -= LOCKDEP_OFF;	\
+>  } while (0)
+>  
+> +extern int lockdep_static_obj(const void *obj);
+>  extern void lockdep_register_key(struct lock_class_key *key);
+>  extern void lockdep_unregister_key(struct lock_class_key *key);
+>  
+> @@ -391,6 +392,11 @@ static inline void lockdep_set_selftest_task(struct task_struct *task)
+>  # define lockdep_free_key_range(start, size)	do { } while (0)
+>  # define lockdep_sys_exit() 			do { } while (0)
+>  
+> +static inline int lockdep_static_obj(const void *obj)
+> +{
+> +	return 0;
+> +}
+> +
+>  static inline void lockdep_register_key(struct lock_class_key *key)
+>  {
+>  }
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index e3375bc40dad..74c0113646f1 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -857,6 +857,13 @@ static int static_obj(const void *obj)
+>  	 */
+>  	return is_module_address(addr) || is_module_percpu_address(addr);
+>  }
+> +
+> +int lockdep_static_obj(const void *obj)
+> +{
+> +	return static_obj(obj);
+> +}
+> +EXPORT_SYMBOL_GPL(lockdep_static_obj);
 
-Please follow the instructions in the comment right above this structure
-definition for where to put the entry in the list.
+What's the point of adding a new function that just calls the old 
+function?  Why not simply rename the old function?
 
-thanks,
+Alan Stern
 
-greg k-h
+> +
+>  #endif
+>  
+>  /*
+> -- 
+> 2.34.1
+> 
