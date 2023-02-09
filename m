@@ -2,127 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327B6690508
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 11:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D2D69057F
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 11:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjBIKi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Feb 2023 05:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
+        id S229995AbjBIKqF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Feb 2023 05:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjBIKiN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 05:38:13 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BD85DC07;
-        Thu,  9 Feb 2023 02:37:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1675939028; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fAhPtJ4vBWAnEr416NpnDhVYXkvFOP9NCU+AdWdC5yw=;
-        b=uitw+P655/VjMhm309vorYf/mLfx1izhcUPvaN2m0pIa/0hrrb8MpM/MDCo76CJl6wlBjY
-        kMxbWPx8f8T3GgRb+6iuhdrROPAM6D5peRpAATm4l2h0zZx3dFcBS82b8Bm70CAAaoj7zd
-        nR22X27Aj5NB46mJtsGKrJmsaaXcLZE=
-Message-ID: <6d618e518de06854727f26de950404f02ec61c64.camel@crapouillou.net>
-Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
- net device
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Date:   Thu, 09 Feb 2023 10:37:05 +0000
-In-Reply-To: <20230209101807.GO10447@pengutronix.de>
-References: <20221104131031.850850-1-s.hauer@pengutronix.de>
-         <20221104131031.850850-2-s.hauer@pengutronix.de>
-         <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
-         <20230209101807.GO10447@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229608AbjBIKpR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 05:45:17 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456256951C;
+        Thu,  9 Feb 2023 02:44:47 -0800 (PST)
+X-UUID: c2f86d2ea86611eda06fc9ecc4dadd91-20230209
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=DkedwfjcaQD4hYIWgCBqXCk7AYMg3rf0bUauXxMR93A=;
+        b=fyCR0Pn2xeP2XJgvDvJo6OZk/z8ih9fPXDVshlXnon2dxYs8oP6gNVD7y2TcJ1aPgIqIqYg7Yp6aThYsJ0Yj21brmkigbHnAao9auStFw29ouOvLogrKtb/aC2QpNWO6FAZVwDW3nR1J5AHL2r3UOxZTuFcd8J/m+Aor6Q25Zoo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:9492656a-3a17-47f9-bb14-3a6c61f2cb83,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.19,REQID:9492656a-3a17-47f9-bb14-3a6c61f2cb83,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:885ddb2,CLOUDID:1364cb56-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230209184443NIC7C8V2,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48|1
+        02,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,C
+        OL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: c2f86d2ea86611eda06fc9ecc4dadd91-20230209
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1958085959; Thu, 09 Feb 2023 18:44:42 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 9 Feb 2023 18:44:41 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 9 Feb 2023 18:44:41 +0800
+Message-ID: <33b44e7c-eb2a-ae16-eb22-18adc874ee6a@mediatek.com>
+Date:   Thu, 9 Feb 2023 18:44:39 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/3] arm64: dts: mediatek: Introduce MT8195 LAPTOP and
+ IOT's USB configurations
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Bear Wang <bear.wang@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        <linux-usb@vger.kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        <yow-shin.liou@mediatek.com>, <ben.lok@mediatek.com>
+References: <20230105092809.14214-1-macpaul.lin@mediatek.com>
+ <0ae6a31c-9a7b-ff05-08e1-eed96e672bd9@collabora.com>
+ <7851a7a2-a2bc-c460-a53a-52a8f94e3969@mediatek.com>
+ <c834dc47-02f7-d6e0-60c6-ce42b3255c86@gmail.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <c834dc47-02f7-d6e0-60c6-ce42b3255c86@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sascha,
 
-Le jeudi 09 f=C3=A9vrier 2023 =C3=A0 11:18 +0100, Sascha Hauer a =C3=A9crit=
-=C2=A0:
-> Hi Paul,
->=20
-> On Wed, Feb 01, 2023 at 01:32:51PM +0000, Paul Cercueil wrote:
-> > Hi Sascha, Greg,
-> >=20
-> > I have a breakage in 6.2-rc* that I eventually bisected to this
-> > commit,
-> > on a Ingenic SoC (using the jz4740 musb driver) with ECM or RNDIS
-> > configured through gadgetfs.
-> >=20
-> > When plugging the board to my PC, the USB network interface is
-> > recognized, but 'ip link' sees it as 'NO-CARRIER'. With this commit
-> > reverted on v6.2-rc5, everything works fine.
->=20
-> I don't have this hardware available. I just tried with a i.MX
-> hardware
-> and it works as expected. I have no idea where the jz4740 musb could
-> behave differently.
->=20
-> Here's exactly what I did:
->=20
-> mkdir -p /sys/kernel/config/usb_gadget/mygadget
-> cd /sys/kernel/config/usb_gadget/mygadget
-> mkdir -p configs/c.1/strings/0x409
-> echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
-> mkdir -p functions/ecm.usb0
-> ln -s functions/ecm.usb0 configs/c.1/
-> echo "ci_hdrc.0" > UDC
->=20
-> Did you do something differently apart from the "ci_hdrc.0" of
-> course?
 
-Nothing very different, no.
+On 2/1/23 20:52, Matthias Brugger wrote:
+> Hi all,
+> 
+> On 11/01/2023 06:37, Macpaul Lin wrote:
+>>
+>>
+>> On 1/9/23 23:13, AngeloGioacchino Del Regno wrote:
+>>> Il 05/01/23 10:28, Macpaul Lin ha scritto:
+>>>> Introduce the split MT8195 laptop and iot USB configurations.
+>>>> The hardware specifications for LAPTOP devices is different from IOT
+>>>> devices. The major differences include some hardware constrains for
+>>>> dual-role switch for USB controllers in different configurations,
+>>>> especially for power management and other control flows as well.
+>>>>
+>>>> Here are some hardware specifiction differences listed:
+>>>>    1. LAPTOP (Cherry Tomato boards) don't support USB gadget (device 
+>>>> mode).
+>>>>    2. IOT devices must support multiple gadget devices and host mode.
+>>>>    3. Dual-role switch is not fully supported. Only USB PORT0 support
+>>>>       dual-role switch.
+>>>>    4. Power management is designed in primary and secondary dominator.
+>>>>       For a dual-role port, the device controller is the primary 
+>>>> controller
+>>>>       for power management; while the host controller is the secondary.
+>>>>       LAPTOP devices should remove device nodes for avoiding abnormal
+>>>>       behavior.
+>>>>
+>>>> This modifcation is to add USB configurations "mt8195-laptop-usb.dtsi"
+>>>> for LAPTOP devices, and add "mt8195-iot-usb.dtsi" for IOT devices.
+>>>>
+>>>> To remove common USB configurations for mt8195.dtsi and switch includes
+>>>> dtsi these new files for the boards will come in next patch.
+>>>>
+>>>> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+>>>
+>>> I'm mostly sure that there's no reason to split the two configurations.
+>>>
+>>> I agree in that Tomato doesn't support gadget mode on the Type-A port 
+>>> and I
+>>> honestly don't currently know (and I'll test that later!) if it would 
+>>> be possible
+>>> to act as gadget on any of the two Type-C ports.
+>>> Of course I agree on the fact that a laptop acting as a gadget may 
+>>> not be useful,
+>>> but that's not something that I want to judge, as someone may find a 
+>>> usecase.
+>>>
+>>> In any case, even if Tomato does *not* support gadget mode on *any* 
+>>> port at all,
+>>> I wonder why we wouldn't be able to probe MTU3 (and correctly 
+>>> describe the SoC)
+>>> on Chromebooks but only on MT8195-based IoT boards...
+>>> ...and in case there's any real issue, we can always force host mode 
+>>> (with a
+>>> generic  devicetree property!) on the MTU3 on Tomato.
+>>
+>> We are sorry it cannot be achieved by even setting "force host mode" 
+>> to usb device node. At least, it cannot be done on MT8195.
+>>
+>> The basic reason is the power requirements for USB host on a LAPTOP 
+>> are different from those on an IoT device.
+>>
+>> The main cause is low power management. The hardware of each device 
+>> port is different on MT8195. Even the bit fields definition in 
+>> registers were different.
+>>
+>> Some details such as sequence need to be coordinated with the SPM 
+>> firmware. When a device hardware is involved in runtime PM, function 
+>> like remote wakeup and other suspend/resume behavior will be abnormal 
+>> for a LAPTOP device. If we split the dtsi for different devices, 
+>> people can choose different configuration in SPM firmware in coreboot 
+>> or in TF-A to meet the requirement. Hence we'd better not to get more 
+>> messy code in Linux driver.
+>>
+> 
+> I'm not sure I understand everything here. If the XHCI device is a child 
+> of the mtu3 node then we have problems with some SPM firmware that is 
+> not coordinated with the runtime PM functions of the kernel?
 
-I do:
+The behavior of runtime PM function, especially the behavior of USB 
+remote wake up will be different if mtu3 node is involved, for MT8195.
 
-cd /sys/kernel/config/usb_gadget
-mkdir mtp \
-  mtp/strings/0x409 \
-  mtp/configs/c.1 \
-  mtp/configs/c.1/strings/0x409 \
-  mtp/functions/ffs.mtp \
-  mtp/functions/ecm.net \
-  mtp/functions/rndis.net
+> Fixing that in the device tree sounds wrong here. I think the real fix 
+> would be, to fix the SPM firmware, so that it can deal with that.
+> 
+> Or is there more to it? If so what? In that case can we try to ignore 
+> the runtime PM in the MTU3 kernel driver?
+> 
+> I'm not an USB expert but to me it looks very strange that we can have 
+> the XHCI devices nodes as 'standalone' or as children of mtu3. We should 
+> try to describe the HW as it is in DT.
 
-echo 0x80 > mtp/configs/c.1/bmAttributes
-echo 500 > mtp/configs/c.1/MaxPower
+After a discussion with MTU3 maintainer Chunfeng, we think there might 
+be a way to give it a try to refactor the mtu3 driver.
+That is to create an extra USB platform device to handle mtu3 and 
+xhci-mtk as the children at the same level. Both mtu3 platform device 
+xhci-mtk platform device will become the children of a common USB 
+platform device. However, we are not sure if this could work and solved the
+dependencies. It requires some development time and MediaTek need
+to allocate some developer's resource to verify this approach.
 
-echo 0x049f > mtp/idVendor
-echo 0x505a > mtp/idProduct
-echo cdc > mtp/configs/c.1/strings/0x409/configuration
-ln -s mtp/functions/ecm.net mtp/configs/c.1/ecm.net
 
-echo ci_hdrc.0 > mtp/UDC
+> Regards,
+> Matthias
+> 
+>>> Finally, if we're able to add MTU3 to Tomato boards, this means that 
+>>> we won't be
+>>> seeing these two DTSI files and that USB nodes are still going to all 
+>>> lie in the
+>>> main `mt8195.dtsi` file, without all this duplication that I'm seeing 
+>>> here.
+>>>
+>>> What do you think?
+>>>
+>>> Regards,
+>>> Angelo
+>>>
+>>
+>> Thanks for the suggestion, we hope the next platform in the future 
+>> could avoid this issue and reduce some duplicate dts.
+>>
+>> Macpaul Lin
 
-> BTW when you say 'NO-CARRIER' is it on the PC side, board side, or
-> both?
-
-PC side. I don't know what it says on the board side, I can't
-telnet/SSH.
-
-> It would be great if we could sort this out, but if not I am fine
-> with
-> reverting this patch. I guess this topic will come back to my desk
-> sooner or later then
-
-Considering that the clock is ticking, let's revert it for now; that
-will give me some time to debug the issue, and then we can work on a
-revised patch.
-
-Cheers,
--Paul
+Thanks
+Macpaul Lin
