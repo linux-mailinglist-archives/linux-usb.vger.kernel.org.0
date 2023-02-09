@@ -2,86 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E88268FB79
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 00:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D22168FBEE
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 01:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjBHXqt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Feb 2023 18:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S229712AbjBIAXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Feb 2023 19:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjBHXqm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 18:46:42 -0500
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493ED1CF73;
-        Wed,  8 Feb 2023 15:46:35 -0800 (PST)
-Received: by mail-oo1-f45.google.com with SMTP id i17-20020a4adf11000000b0051abd9835d4so67544oou.1;
-        Wed, 08 Feb 2023 15:46:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sbEn39jZuVbrp1KfyknBN5gIqFu1Lykme5hYfqFo0KQ=;
-        b=SL3SSkRxt5VDPxqoKokNYJSkkLTcxtWQ6A0KZJfVjy0sBYPDvvTsYuvu9KpJx2AptY
-         Eu0D1K6227SYn+Ln4h+9wZo+Ot19ufs4avtx23+dq4AD/3vo22zGpCjJpRCbO4pvJzQS
-         W/XuMFvTnucH0NH+dKQ8htog0PBbR8rj5hia4zC3Kk3M+0Bh9VuxJtAj5mi8fA4GtrSi
-         gCBwL4FjDWJNEYwrJDeKYb5dcpYxNeUhpDVQtivYbGOxsl4dCcApPkVORHrXatgrje48
-         83vEgt7h9rTFhHLDNoxKg7ZySKUYqXBfOMLR4AfYxNYhibj1U/P4S/rRHd/mlQA915sE
-         mC/w==
-X-Gm-Message-State: AO0yUKW5lDPp7jcX/QDfONaUN3RJr7GM1//nU34qqh3LjWrHVi4gedMR
-        Qwjcfy/AksySBbNJltzIyHyhbFaiwg==
-X-Google-Smtp-Source: AK7set+u84M8vV5Z7iR2FMh6IRGAFVe2dAiIP5ph2YQMbwK4m652fyZPas/rGZQc1f3IcdFVrQdE1g==
-X-Received: by 2002:a05:6820:1355:b0:517:98b6:b08b with SMTP id b21-20020a056820135500b0051798b6b08bmr4911474oow.2.1675899994513;
-        Wed, 08 Feb 2023 15:46:34 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g26-20020a4ab81a000000b0051a72e69e24sm6388811oop.37.2023.02.08.15.46.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 15:46:34 -0800 (PST)
-Received: (nullmailer pid 2934831 invoked by uid 1000);
-        Wed, 08 Feb 2023 23:46:33 -0000
-Date:   Wed, 8 Feb 2023 17:46:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Kevin Hilman <khilman@baylibre.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: make G12A
- usb3-phy0 optional
-Message-ID: <167589999250.2934778.14203415915697370629.robh@kernel.org>
-References: <20230207-b4-amlogic-g12a-usb-ctrl-bindings-fix-v1-1-c310293da7a2@linaro.org>
+        with ESMTP id S229478AbjBIAXU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 19:23:20 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DA720682
+        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 16:23:18 -0800 (PST)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3190MdMR040407;
+        Thu, 9 Feb 2023 09:22:39 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Thu, 09 Feb 2023 09:22:39 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3190MdPB040398
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 9 Feb 2023 09:22:39 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
+Date:   Thu, 9 Feb 2023 09:22:39 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207-b4-amlogic-g12a-usb-ctrl-bindings-fix-v1-1-c310293da7a2@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] drivers/core: Replace lockdep_set_novalidate_class() with
+ unique class keys
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>
+References: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+ <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
+ <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
+ <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
+ <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
+ <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
+ <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
+ <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
+ <20230208080739.1649-1-hdanton@sina.com>
+ <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
+ <Y+O6toMmAKBSILMf@rowland.harvard.edu>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y+O6toMmAKBSILMf@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Tue, 07 Feb 2023 16:02:04 +0100, Neil Armstrong wrote:
-> On the G12A USB complex, the USB3 PHY is shared with the PCIe controller,
-> thus on designs without PCIe enabled the USB3 PHY entry can be ommited from
-> the PHY list.
+On 2023/02/09 0:07, Alan Stern wrote:
+> On Wed, Feb 08, 2023 at 07:30:25PM +0900, Tetsuo Handa wrote:
+>> Commit 1704f47b50b5 ("lockdep: Add novalidate class for dev->mutex
+>> conversion") made it impossible to find real deadlocks unless timing
+>> dependent testings manage to trigger hung task like [1] and [2]. And
+>> lockdep_set_novalidate_class() remained for more than one decade due to
+>> a fear of false positives [3]. But not sharing mutex_init() could make
+>> it possible to find real deadlocks without triggering hung task [4].
+>> Thus, let's assign a unique class key on each "struct device"->mutex.
+>>
+>> Link: https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101 [1]
+>> Link: https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb [2]
+>> Link: https://lkml.kernel.org/r/Y98FLlr7jkiFlV0k@rowland.harvard.edu [3]
+>> Link: https://lkml.kernel.org/r/827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp [4]
+>> Suggested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+>> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 > 
-> Fixes: cdff2c946f06 ("dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add the Amlogic AXG Families USB Glue Bindings")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> You must never do this!
 > 
+> I did not put my Signed-off-by: on the patch I sent to you.  I do not 
+> want it added to that patch or to this one.  You should never put 
+> somebody else's Signed-off-by: on a patch unless they tell you it's okay 
+> to do so.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Did I misuse the Co-developed-by: tag? I added your Signed-off-by: tag because
+https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+states that "every Co-developed-by: must be immediately followed by a Signed-off-by:
+of the associated co-author."
+
+I don't know whether the Co-developed-by: tag is used only when somebody else takes over
+a previously proposed formal patch. I use the Co-developed-by: tag in order to state
+developer's contribution when he/she suggested some plain diff but does not propose
+that diff as a formal patch with description. Unless changes are proposed as a formal
+patch (by somebody), bugs won't be fixed.
+
+> 
+> I'm happy to have people test this patch, but I do not want anybody 
+> think that it is ready to be merged into the kernel.
+
+People (and build/test bots) won't test changes that are not proposed as
+a formal patch with Signed-off-by: tag. As far as I am aware, bot is not
+testing plain diff.
+
+I expected you to post a formal patch with your Signed-off-by: tag, but you didn't.
+Therefore, I took over. Namely, define a dummy function for CONFIG_LOCKDEP=n case,
+apply Hillf's suggestion, and reduce lines changed in kernel/locking/lockdep.c
+in order to make the patch smaller and easier to apply the change.
+
+> 
+>> Co-developed-by: Hillf Danton <hdanton@sina.com>
+>> Signed-off-by: Hillf Danton <hdanton@sina.com>
+>> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>> ---
+
+>> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+>> index e3375bc40dad..74c0113646f1 100644
+>> --- a/kernel/locking/lockdep.c
+>> +++ b/kernel/locking/lockdep.c
+>> @@ -857,6 +857,13 @@ static int static_obj(const void *obj)
+>>  	 */
+>>  	return is_module_address(addr) || is_module_percpu_address(addr);
+>>  }
+>> +
+>> +int lockdep_static_obj(const void *obj)
+>> +{
+>> +	return static_obj(obj);
+>> +}
+>> +EXPORT_SYMBOL_GPL(lockdep_static_obj);
+> 
+> What's the point of adding a new function that just calls the old 
+> function?  Why not simply rename the old function?
+
+This makes the patch smaller and easier to apply the change. Of course,
+I can update the patch if lockdep developers prefer rename over add.
+What I worry is that lockdep developers do not permit static_obj() being
+used by non-lockdep code.
 
