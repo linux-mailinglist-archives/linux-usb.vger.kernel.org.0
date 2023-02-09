@@ -2,186 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8166E690B52
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 15:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F14690C22
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 15:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjBIOHW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Feb 2023 09:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
+        id S230405AbjBIOrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Feb 2023 09:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjBIOHV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 09:07:21 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB19D34C23;
-        Thu,  9 Feb 2023 06:07:18 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319Dt8PM016690;
-        Thu, 9 Feb 2023 14:07:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6BjXXrUgtSw1W0BvYgELXc4KDV/uFU8ceLk0soJ1EeE=;
- b=Gzftj8z1qvLQDIysOT/FeruQMfVw+9nZo6ti8CCoPBuumOgxaLGZGk17JZRzYjefLgk6
- e6aH3gkiFcDNgu4gn/i+aBRuXOL8dbjNVY9vvMSjUAVI1xPx6bq0O4Q+bEX+anekcUND
- gTowIlzfh2gyXD70bOEpTd1wvgjMNiJjwvrECeUyFAosfMigK0CTcSVzGe1l45eW5dFp
- gNk7ikHj1igGOUjJuSX5YFl3bQKDf9+bjWLDRUhuggBgiSgS6kHQeaO64vGbcrpgbmd5
- 1p18rEGB1Cm+uAK+kczHFdkmNCsNvDrJ6aMdIXPc/DGOfh7aj3m5piC35ruVfiQM+vUr eg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm7g1ut70-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 14:07:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 319E785k007405
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 9 Feb 2023 14:07:08 GMT
-Received: from [10.216.12.28] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 06:07:05 -0800
-Message-ID: <e7dde0aa-c1e2-dd6c-94a1-1e9049f0a5fb@quicinc.com>
-Date:   Thu, 9 Feb 2023 19:37:01 +0530
+        with ESMTP id S229551AbjBIOrR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 09:47:17 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAAD402CD;
+        Thu,  9 Feb 2023 06:47:15 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id c26so2248281ejz.10;
+        Thu, 09 Feb 2023 06:47:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JA1dtStn/FELPiXnU/VmDeB+f/rDJ8+vPh28Fy48pYw=;
+        b=b+S+v7yTsIIFc/qiVsiiGUPhm8BFWv9mKu53Sg0WaIwcDvnkRKVPnCSgU3m89ijvT3
+         W2bLTq6OrlX9Dt+xg80VrF/gYR3PQdlIIhj67Sr4iAYqKg1IKTSCJ0qZxYrpQR4ctTkL
+         9/1IVt3SWTkXa/R1lqrQzb2Tzj0YpVc8OIAPXabutA+l/zW1sPVgAYEFTfTL92GW472j
+         3eSs0jjKVyyS26r9UZrqQF/Y4982O5GOzfPnz6FyVQlpkhVnJOT3TJQuj/ITzQPR1hzm
+         1LXGu3crCUn09Fmx0JvaWbW76ZrcCRSqYw+44lsgRMyvrIFubKxxyxpE9Hf/rPnPghnh
+         EgHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JA1dtStn/FELPiXnU/VmDeB+f/rDJ8+vPh28Fy48pYw=;
+        b=O0lqMiBGU1eEjHPNmzXYrSLdwFhKd+eTcFcElJdC2U3eCOWlYIL+81OviQMh95KG+6
+         YLGH6uaZPO52V2oLNBStQGDNbhW4yvKuw0svVFZW4JQOkXZwzCAhGHZHj6na42tWucJe
+         ccZfSyK6bkNxIcSTSxVNUmcAYInawXaXx4Gb2B4VjlfJOPhqrx/F+FUY5eD42GRW6RSF
+         Bk2wr3gPtosbwVkzBnsSjTOTuhX44NbE30u1EYdO1VbZTjLa7dd7HWAEvWZrjoI8Rnsz
+         y31VViPZt67sfFTJC6P1ygXYSMyt1CwGnnmzeJ5v69GlDRptiwszQB3EJoTuXtff8X7s
+         04Pg==
+X-Gm-Message-State: AO0yUKUyBz3tjS9O/0j/za9Qmd9F979Sz5shYBKstsw/IWBBHW0vi8hP
+        qAblaqJueIEXcW2a0cAFJXA=
+X-Google-Smtp-Source: AK7set8+Nd1FHDML75QGlIUrQhfdsOT1PjTWh9yS5jCBDzIQINv4qGXDpxa2gKhyOMQDukzv7zCOmg==
+X-Received: by 2002:a17:907:a391:b0:8a9:f870:d25b with SMTP id se17-20020a170907a39100b008a9f870d25bmr11247487ejc.15.1675954034537;
+        Thu, 09 Feb 2023 06:47:14 -0800 (PST)
+Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
+        by smtp.gmail.com with ESMTPSA id fi9-20020a170906da0900b0084c6ec69a9dsm950533ejb.124.2023.02.09.06.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 06:47:13 -0800 (PST)
+Message-ID: <23e899f83c4f05a18deb2f86047d57d941205374.camel@gmail.com>
+Subject: Re: [PATCH v2] net/usb: kalmia: Fix uninit-value in
+ kalmia_send_init_packet
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     Jiri Pirko <jiri@resnulli.us>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Thu, 09 Feb 2023 15:47:12 +0100
+In-Reply-To: <Y9pY61y1nwTuzMOa@nanopsycho>
+References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
+         <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+         <Y9pY61y1nwTuzMOa@nanopsycho>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Content-Language: en-US
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        "Jack Pham" <quic_jackp@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1675864487-18620-1-git-send-email-quic_prashk@quicinc.com>
- <Y+O3vBbBh4ZwSBWT@kroah.com>
- <482f2c32-41d1-f07e-ee3f-3eb9aee76ac7@quicinc.com>
- <Y+QEQBxlr6FZ58DK@rowland.harvard.edu>
- <542ee8a6-598c-ca17-6d75-5eca2b34133a@quicinc.com>
- <Y+SaZrDmaqB0U2QA@kroah.com>
- <f32398bb-62f3-12fd-4b81-7ce7bdf4706a@quicinc.com>
-In-Reply-To: <f32398bb-62f3-12fd-4b81-7ce7bdf4706a@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _4hL5REzVjOxZrLzx7vaX3dRdU_p79HA
-X-Proofpoint-ORIG-GUID: _4hL5REzVjOxZrLzx7vaX3dRdU_p79HA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-09_10,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxlogscore=693 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302090135
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, 2023-02-01 at 13:19 +0100, Jiri Pirko wrote:
+> Tue, Jan 31, 2023 at 03:20:33PM CET, mikoxyzzz@gmail.com=C2=A0wrote:
+> > syzbot reports that act_len in kalmia_send_init_packet() is
+> > uninitialized. Fix this by initializing it to 0.
+> >=20
+> > Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for
+> > Samsung GT-B3730")
+> > Reported-and-tested-by:
+> > syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.com
+> > Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
+> > ---
+> > v1 -> v2
+> > * Minor alteration of commit message.
+> > * Added 'reported-and-tested-by' which is attributed to syzbot.
+> >=20
+> > drivers/net/usb/kalmia.c | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+> > index 9f2b70ef39aa..b158fb7bf66a 100644
+> > --- a/drivers/net/usb/kalmia.c
+> > +++ b/drivers/net/usb/kalmia.c
+> > @@ -56,7 +56,7 @@ static int
+> > kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8
+> > init_msg_len,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 *buffer, u8 expected=
+_len)
+> > {
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int act_len;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int act_len =3D 0;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int status;
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0netdev_dbg(dev->net, "S=
+ending init packet");
+>=20
+> Hmm, this is not the right fix.
+>=20
+> If the second call of usb_bulk_msg() in this function returns !=3D 0,
+> the
+> act_len printed out contains the value from previous usb_bulk_msg()
+> call,
+> which does not make sense.
+>=20
+> Printing act_len on error path is pointless, so rather remove it from
+> the error message entirely for both usb_bulk_msg() calls.
 
+Something like this, then?
 
-On 09-02-23 12:33 pm, Prashanth K wrote:
-> 
-> 
-> On 09-02-23 12:31 pm, Greg Kroah-Hartman wrote:
->> On Thu, Feb 09, 2023 at 10:31:50AM +0530, Prashanth K wrote:
->>>
->>>
->>> On 09-02-23 01:51 am, Alan Stern wrote:
->>>> On Wed, Feb 08, 2023 at 09:15:54PM +0530, Prashanth K wrote:
->>>>>
->>>>>
->>>>> On 08-02-23 08:24 pm, Greg Kroah-Hartman wrote:
->>>>>> On Wed, Feb 08, 2023 at 07:24:47PM +0530, Prashanth K wrote:
->>>>>>> Consider a case where gserial_disconnect has already cleared
->>>>>>> gser->ioport. And if a wakeup interrupt triggers afterwards,
->>>>>>> gserial_resume gets called, which will lead to accessing of
->>>>>>> gserial->port and thus causing null pointer dereference.Add
->>>>>>> a null pointer check to prevent this.
->>>>>>>
->>>>>>> Fixes: aba3a8d01d62 (" usb: gadget: u_serial: add suspend resume 
->>>>>>> callbacks")
->>>>>>
->>>>>> Nit, and our tools will complain, no " " before the "usb:" string 
->>>>>> here,
->>>>>> right?
->>>>>>
->>>>> Will fix it in next patch.
->>>>>>
->>>>>>
->>>>>>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
->>>>>>> ---
->>>>>>>     drivers/usb/gadget/function/u_serial.c | 3 +++
->>>>>>>     1 file changed, 3 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/usb/gadget/function/u_serial.c 
->>>>>>> b/drivers/usb/gadget/function/u_serial.c
->>>>>>> index 840626e..98be2b8 100644
->>>>>>> --- a/drivers/usb/gadget/function/u_serial.c
->>>>>>> +++ b/drivers/usb/gadget/function/u_serial.c
->>>>>>> @@ -1428,6 +1428,9 @@ void gserial_resume(struct gserial *gser)
->>>>>>>         struct gs_port *port = gser->ioport;
->>>>>>>         unsigned long    flags;
->>>>>>> +    if (!port)
->>>>>>> +        return;
->>>>>>> +
->>>>>>
->>>>>> What prevents port from going to NULL right after this check?
->>>>> In our case we got a null pointer de-reference while performing USB
->>>>> compliance tests, as the gser->port was null. Because in 
->>>>> gserial_resume,
->>>>> spinlock_irq_save(&port->port_lock) accesses a null-pointer as port 
->>>>> was
->>>>> already marked null by gserial_disconnect.
->>>>>
->>>>> And after gserial_resume acquires the spinlock, gserial_disconnect 
->>>>> cant mark
->>>>> it null until the spinlock is released. We need to check if the 
->>>>> port->lock
->>>>> is valid before accessing it, otherwise it can lead to the above 
->>>>> mentioned
->>>>> scenario
->>>>
->>>> What happens if gserial_disconnect sets gser->port to NULL immediately
->>>> after your new check occurs, but before
->>>> spinlock_irq_save(&port->port_lock) gets called?
->>>>
->>>> You may need to add a static spinlock to prevent this from happening.
->>>>
->>>> Alan Stern
->>> In that case i guess we have to make port_lock a global variable and 
->>> take it
->>> out of gs_port structure.
->>>
->>> + static DEFINE_SPINLOCK(port_lock);
->>>
->>> struct gs_port {
->>>     struct tty_port port;
->>> -    spinlock_t port_lock;
->>>
->>> This will require us to change all the spinlock(port->port_lock) used in
->>> u_serial.c, what do you suggest?
->>
->> Yes, that would be the correct thing to do.
-Hi Greg/Alan, One general doubt, if we make the spinlock static/global, 
-wouldn't that be a problem when there are multiple instances, and also 
-multiple interfaces can use u_serial at same time. Asking this because 
-u_serial can be used by f_serial (gser) as well as f_acm (acm).
+diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+index 9f2b70ef39aa..613fc6910f14 100644
+--- a/drivers/net/usb/kalmia.c
++++ b/drivers/net/usb/kalmia.c
+@@ -65,8 +65,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
+ u8 init_msg_len,
+ 		init_msg, init_msg_len, &act_len, KALMIA_USB_TIMEOUT);
+ 	if (status !=3D 0) {
+ 		netdev_err(dev->net,
+-			"Error sending init packet. Status %i, length %i\n",
+-			status, act_len);
++			"Error sending init packet. Status %i\n",
++			status);
+ 		return status;
+ 	}
+ 	else if (act_len !=3D init_msg_len) {
+@@ -83,8 +83,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
+ u8 init_msg_len,
+=20
+ 	if (status !=3D 0)
+ 		netdev_err(dev->net,
+-			"Error receiving init result. Status %i, length %i\n",
+-			status, act_len);
++			"Error receiving init result. Status %i\n",
++			status);
+ 	else if (act_len !=3D expected_len)
+ 		netdev_err(dev->net, "Unexpected init result length: %i\n",
+ 			act_len);
 
-Thanks
-Prahanth K
-
-> will do it and share next patch
-> 
-> Thanks for the suggestions
-> Prashanth K
+--=20
+~miko
