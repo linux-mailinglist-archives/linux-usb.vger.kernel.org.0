@@ -2,53 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2AC68FCBB
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 02:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B1368FD15
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 03:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjBIBur (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Feb 2023 20:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S231876AbjBIC0g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Feb 2023 21:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjBIBuq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 20:50:46 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B19D24C90
-        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 17:50:45 -0800 (PST)
-Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3191oDnK061127;
-        Thu, 9 Feb 2023 10:50:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
- Thu, 09 Feb 2023 10:50:13 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3191oDG3061120
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 9 Feb 2023 10:50:13 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <1e3085b0-c19e-a585-60de-5f5db5261920@I-love.SAKURA.ne.jp>
-Date:   Thu, 9 Feb 2023 10:50:13 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drivers/core: Replace lockdep_set_novalidate_class() with
- unique class keys
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller <syzkaller@googlegroups.com>,
+        with ESMTP id S230296AbjBIC0f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 21:26:35 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 60B7127D57
+        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 18:26:34 -0800 (PST)
+Received: (qmail 755478 invoked by uid 1000); 8 Feb 2023 21:26:33 -0500
+Date:   Wed, 8 Feb 2023 21:26:33 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Hillf Danton <hdanton@sina.com>
-References: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
- <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
- <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
+Subject: Re: [PATCH] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
+References: <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
  <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
  <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
  <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
@@ -58,54 +40,58 @@ References: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
  <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
  <Y+O6toMmAKBSILMf@rowland.harvard.edu>
  <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
- <CAHk-=wg_E5qAOTtZ6BSJph1zDN7Unzw_ct8wK1pr+E8HTnooRw@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAHk-=wg_E5qAOTtZ6BSJph1zDN7Unzw_ct8wK1pr+E8HTnooRw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/02/09 9:46, Linus Torvalds wrote:
-> On Wed, Feb 8, 2023 at 4:23 PM Tetsuo Handa
-> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->>
->> Did I misuse the Co-developed-by: tag? I added your Signed-off-by: tag because
->> https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
->> states that "every Co-developed-by: must be immediately followed by a Signed-off-by:
->> of the associated co-author."
+On Thu, Feb 09, 2023 at 09:22:39AM +0900, Tetsuo Handa wrote:
+> On 2023/02/09 0:07, Alan Stern wrote:
+> > I'm happy to have people test this patch, but I do not want anybody 
+> > think that it is ready to be merged into the kernel.
 > 
-> That doesn't mean that *You* can add a Signed-off-by:
-> 
-> Nobody can certify sign-off for anybody else. Read the sign-off rules:
-> you can add your *own* sign-off if the rules hold, but you can't sign
-> off for somebody else.
-> 
-> The "Co-developed-by: must be immediately followed by a
-> Signed-off-by:" thing only means that if there are multiple
-> developers, then ALL DEVELOPERS MUST SIGN OFF.
-> 
-> It absolutely does *NOT* mean that you adding a Co-developed-by means
-> that you then add a Signed-off-by.
-> 
-> That's like faking somebody else's signature on some paperwork. Never
-> do that either, and it's hopefully obvious why.
+> People (and build/test bots) won't test changes that are not proposed as
+> a formal patch with Signed-off-by: tag. As far as I am aware, bot is not
+> testing plain diff.
 
-OK. Then, how to handle a case where a developer suggested a diff but
-he/she does not propose that diff as a formal patch?
+People _do_ test changes without a Signed-off-by: tag.  This happens 
+with my patches all the time; I don't put Signed-off-by: on a patch 
+until I think it is ready to be merged.  If you search through the email 
+archives, you'll find examples where people deliberately put a 
+"Not-yet-signed-off-by:" tag on a suggested patch.
 
-Hillf is suggesting diffs for many bugs (an example is
-https://syzkaller.appspot.com/bug?id=ee93abc9a483645fc0914811af9c12da355a2e3e ),
-and some of diffs look reasonable/correct, but Hillf never tries to propose as
-a formal patch, and that diff is left forgotten and that bug remains unfixed.
+Syzbot also tests patches without a Signed-off-by: tag.  Here's a recent 
+example:
 
-I don't want to steal Hillf's effort. But given that I can't add Co-developed-by:
-and Signed-off-by: on behalf of Hillf, how can I propose a formal patch in a way
-that preserves Hillf's effort? Is Suggested-by: suitable for this case?
+https://lore.kernel.org/linux-usb/Y9wh8dGK6oHSjJQl@rowland.harvard.edu/
 
+> > What's the point of adding a new function that just calls the old 
+> > function?  Why not simply rename the old function?
+> 
+> This makes the patch smaller and easier to apply the change. Of course,
+
+How does it make the patch easier to apply?  With either the original 
+version or yours, you apply the patch by doing
+
+	patch -p1 <patchfile
+
+(or a similar git command).  Same command, same amount of difficulty for 
+both patches.
+
+> I can update the patch if lockdep developers prefer rename over add.
+> What I worry is that lockdep developers do not permit static_obj() being
+> used by non-lockdep code.
+
+I worry about that too, and I hoped that Peter Z. would comment on it. 
+But if they don't want the function to be exported, they ought to be 
+able to suggest an alternative.
+
+Alan Stern
