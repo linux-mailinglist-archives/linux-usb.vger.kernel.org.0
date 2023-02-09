@@ -2,126 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FDE68FDF4
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 04:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E560368FF97
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 06:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbjBID3D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Feb 2023 22:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229743AbjBIFCK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Feb 2023 00:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbjBID2l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 22:28:41 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF37E1EBEB
-        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 19:27:15 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5258f66721bso8955807b3.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 Feb 2023 19:27:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=skydio.com; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+dFU4D+3NJXtvoLWdpHYJ6p3GWkAyfwQu99maiNSiG4=;
-        b=Tkk5Sc5C4ohZPWWEamSPWNA1rZBgTC/K40Akvckqgqdq8NGhsr61Esy4WmqNMFxwqj
-         NlNrFVf1Tc8lwXY1q8o0+IjpqnYpsOtE+H2CcLq1uBi//XxMiSEmd0eZb/yuEsV51iS9
-         aZQBN11pGn61qpzojw6FF1Lq3mdS5WPtUm5+ebUXyVo8N9m+gQy9HWtpuDzHVWYuZgnn
-         tD5Ua5eSlEGZFYg5QRTcOfb+fbzDAAxHcvBGMUkuCTkzRr13SACUzFzhsrlsyCO+gLh5
-         42BoHqucNRh7a56yesx2JM6YwvK3knR1r6TtUXAB4O3Fw/Enp34kW+FSdFaS6eyc3Kr6
-         T8Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+dFU4D+3NJXtvoLWdpHYJ6p3GWkAyfwQu99maiNSiG4=;
-        b=CQrMmx3BpbFE4fGvWoJ+wBbi90MC3nrEqrpJqhG3k7CXBZhDGwgzMQWY4sWYWIgRkX
-         U60UUWqVi6+ZoRMEl9lFygroehkeZ/I/QOE9EwC4FQkoQiFVWwUbXHnlHhOn7QMqiyLz
-         wOVT28Lmdich5lTdNont0cIhWhldUbiiKRuTOAp7AheNo5/IYUQyYYn1aUprQ0VPJg2U
-         UkotgU1d9Iu7uVnecy3bsOi5mBRkZZ4X/e7TfDVcnruylSX4/PGmZlA2WFc5z1k2rk9X
-         ftmV0efI8B7WJ5EU1Kerwq/Nx/R8oJnkjDI3RssoOmDVIJPUPbt8ykY1pL3sToG8HjG3
-         XUfg==
-X-Gm-Message-State: AO0yUKWm4oH9AMvU1Ruv3txhbveSrAfOSNjQ6uOCCKMw7iPFfg0IeJ7Q
-        3OtNqSFyR4HwVHDWHEUOzaKzafV7Ly3QnTQQtGr2VeUjnqu/z9xk
-X-Google-Smtp-Source: AK7set8I3xNUUZYdjej4JQECpo5dGzkAtw1sARpvAtEgVA91TWWVhIOYeg5GX2f47cE7sGU/+IUGxZm5gLHzYF+qXq0=
-X-Received: by 2002:a0d:d411:0:b0:52a:9e00:d32 with SMTP id
- w17-20020a0dd411000000b0052a9e000d32mr800216ywd.153.1675913234808; Wed, 08
- Feb 2023 19:27:14 -0800 (PST)
+        with ESMTP id S229691AbjBIFCJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 00:02:09 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78D519F14;
+        Wed,  8 Feb 2023 21:02:05 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3194Ubre032322;
+        Thu, 9 Feb 2023 05:01:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=wdJ6uGLfrcc8yxhlQyk6ZtAtxaYH1Fl/TXAVynWAwBU=;
+ b=ReY8rfl6Sl+8V/ELK9iCWn2TY2tpiOdrKRM3NHUSeo1zbRxulaYLCy+h+WpktF/4/ROR
+ y/We7q3zsY+z3kO14ssQr2MDEHgGDrvPmyjGNIlygBUubl6cFhEPYY3RwbVFwiCqbZls
+ nT0dvKdoq7jrkSGw1oTmW5PGCHXs6n9ktiwWY9O5EDaUleczoW8h9vTqcJIRIIqDhCwZ
+ uic26hgS7AnpUtIeWgasqivPIXBmIKS+94WQXZSOxrxdZfJStBCK8EP60zCuCD6FIeRr
+ 3+PUxsH6ujvh09/c1rPW7JAu/KOu5m6+ccbU/lKtkA8HChMUCJvcJPx+adDZsGSRnjux 6A== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nmjm68w50-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 05:01:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31951uxj010360
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Feb 2023 05:01:56 GMT
+Received: from [10.206.28.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
+ 21:01:53 -0800
+Message-ID: <542ee8a6-598c-ca17-6d75-5eca2b34133a@quicinc.com>
+Date:   Thu, 9 Feb 2023 10:31:50 +0530
 MIME-Version: 1.0
-From:   Jerry Zhang <jerry@skydio.com>
-Date:   Wed, 8 Feb 2023 19:27:04 -0800
-Message-ID: <CAMKO5Cs69cN+RZNvszobqpHwNNsPFafAaSUxg63sWhSGPXcjyw@mail.gmail.com>
-Subject: dwc3 stuck in U3 state on USB3-only link
-To:     balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, Alex Mallery <alex.mallery@skydio.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer check in
+ gserial_resume
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1675864487-18620-1-git-send-email-quic_prashk@quicinc.com>
+ <Y+O3vBbBh4ZwSBWT@kroah.com>
+ <482f2c32-41d1-f07e-ee3f-3eb9aee76ac7@quicinc.com>
+ <Y+QEQBxlr6FZ58DK@rowland.harvard.edu>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <Y+QEQBxlr6FZ58DK@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qsl7bELqH_Tr0-sX3a7P_vigQzekmCAg
+X-Proofpoint-ORIG-GUID: qsl7bELqH_Tr0-sX3a7P_vigQzekmCAg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-09_02,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1011 bulkscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=703 phishscore=0 priorityscore=1501 adultscore=0
+ impostorscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302090045
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
 
-I'm reaching out to more knowledgeable people as I've exhausted my
-other debug options.
 
-We have a custom board with two linux systems connected by USB 3 wires
-only, vbus and USB2 are omitted for space savings. This has pretty
-much worked as the controllers are independent, except for the
-following bug:
+On 09-02-23 01:51 am, Alan Stern wrote:
+> On Wed, Feb 08, 2023 at 09:15:54PM +0530, Prashanth K wrote:
+>>
+>>
+>> On 08-02-23 08:24 pm, Greg Kroah-Hartman wrote:
+>>> On Wed, Feb 08, 2023 at 07:24:47PM +0530, Prashanth K wrote:
+>>>> Consider a case where gserial_disconnect has already cleared
+>>>> gser->ioport. And if a wakeup interrupt triggers afterwards,
+>>>> gserial_resume gets called, which will lead to accessing of
+>>>> gserial->port and thus causing null pointer dereference.Add
+>>>> a null pointer check to prevent this.
+>>>>
+>>>> Fixes: aba3a8d01d62 (" usb: gadget: u_serial: add suspend resume callbacks")
+>>>
+>>> Nit, and our tools will complain, no " " before the "usb:" string here,
+>>> right?
+>>>
+>> Will fix it in next patch.
+>>>
+>>>
+>>>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>>>> ---
+>>>>    drivers/usb/gadget/function/u_serial.c | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+>>>> index 840626e..98be2b8 100644
+>>>> --- a/drivers/usb/gadget/function/u_serial.c
+>>>> +++ b/drivers/usb/gadget/function/u_serial.c
+>>>> @@ -1428,6 +1428,9 @@ void gserial_resume(struct gserial *gser)
+>>>>    	struct gs_port *port = gser->ioport;
+>>>>    	unsigned long	flags;
+>>>> +	if (!port)
+>>>> +		return;
+>>>> +
+>>>
+>>> What prevents port from going to NULL right after this check?
+>> In our case we got a null pointer de-reference while performing USB
+>> compliance tests, as the gser->port was null. Because in gserial_resume,
+>> spinlock_irq_save(&port->port_lock) accesses a null-pointer as port was
+>> already marked null by gserial_disconnect.
+>>
+>> And after gserial_resume acquires the spinlock, gserial_disconnect cant mark
+>> it null until the spinlock is released. We need to check if the port->lock
+>> is valid before accessing it, otherwise it can lead to the above mentioned
+>> scenario
+> 
+> What happens if gserial_disconnect sets gser->port to NULL immediately
+> after your new check occurs, but before
+> spinlock_irq_save(&port->port_lock) gets called?
+> 
+> You may need to add a static spinlock to prevent this from happening.
+> 
+> Alan Stern
+In that case i guess we have to make port_lock a global variable and 
+take it out of gs_port structure.
 
-- When the host system (tegra xhci host driver) reboots, the device
-(msm-dwc3) enters the U3 state and never leaves it, even after the
-host powers back up.
-- Also if the device system happens to finish booting before the host,
-the same thing happens, dwc3 gets stuck in U3 and never enumerates.
++ static DEFINE_SPINLOCK(port_lock);
 
-I'm able to get these messages from the dwc3 driver when the host reboots
+struct gs_port {
+	struct tty_port port;
+-	spinlock_t port_lock;
 
-[   34.549834] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
-[   34.555749] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=28100C
-[   34.562902] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler link
-state = 0x0006
-[   34.570319] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
-unexpected PWR_EVNT, irq_stat=281000
-[   34.663734] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
-[   34.669644] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=2C1004
-[   34.676698] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
-unexpected PWR_EVNT, irq_stat=2C1000
-[   34.686082] dwc3 a600000.dwc3: dwc3_gadget_suspend_interrupt Entry to 3
-[   34.692919] dwc3 a600000.dwc3: Notify controller from
-dwc3_gadget_vbus_draw. mA = 2
-[   34.700777] msm-dwc3 a600000.ssusb:
-DWC3_CONTROLLER_SET_CURRENT_DRAW_EVENT received
-[   34.708648] dwc3 a600000.dwc3: Notify OTG from dwc3_gadget_suspend_interrupt
-[   34.715888] msm-dwc3 a600000.ssusb: DWC3_CONTROLLER_NOTIFY_OTG_EVENT received
-
-I think the main thing I'm looking for is validating my existing
-understanding and confirming a few things I suspect, but am not sure
-of due to unfamiliarity with the details of the USB3 spec:
-
-- iiuc USB3 power management and states should actually be independent
-from both vbus and usb2 lines as all the negotiation happens with LFPS
-over the USB3 wires.
-- I see that entry to U3 requires an LFPS message, but in this case
-the host wouldn't have been able to send a message as it is powering
-off. Is the device also capable of entering U3 due to timeouts and is
-it expected to enter U3 in this situation?
-- Similarly I've seen that exiting from U3 requires an LFPS message.
-My expectation is that the host would wake up all devices on the bus
-with LFPS messages shortly after bootup, and either this isn't
-happening, or the device is failing to receive or process the message.
-If the entry to U3 is expected, how is it then expected to exit U3?
-
-I've also tried relevant looking quirks on the gadget side including
-ssp-u3-u0-quirk, u2exit_lfps_quirk, disable_scramble_quirk. I don't
-see a way to explicitly prevent the controller from entering U3 mode,
-is this possible with a register setting?
-
-Would appreciate any thoughts. If I haven't misunderstood anything,
-the next step would probably be to find a beagle 5000 analyzer and
-track down the LFPS messages.
-
-Thanks
+This will require us to change all the spinlock(port->port_lock) used in 
+u_serial.c, what do you suggest?
