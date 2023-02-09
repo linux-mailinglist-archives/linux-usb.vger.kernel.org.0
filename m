@@ -2,134 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F85168FDA5
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 04:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FDE68FDF4
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 04:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbjBIDBS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Feb 2023 22:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S232756AbjBID3D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Feb 2023 22:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjBIC7L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 21:59:11 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99081A95D
-        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 18:56:37 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id i21-20020a4ad395000000b00517895ed15dso103314oos.0
-        for <linux-usb@vger.kernel.org>; Wed, 08 Feb 2023 18:56:37 -0800 (PST)
+        with ESMTP id S232738AbjBID2l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 22:28:41 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF37E1EBEB
+        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 19:27:15 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5258f66721bso8955807b3.1
+        for <linux-usb@vger.kernel.org>; Wed, 08 Feb 2023 19:27:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=cpXzCzr+cz0YwMg8OioZbOdFT6x6Xm6HxQuCqdoPsmS9hedulw1eO6Kk/3hEebcpma
-         XmVmNXfmMApG2N79Si3uHiYwQf3pkrY8yoF8TXhNqwM63RW+rXEAr2c9GvCwLnpdMizZ
-         /i8XL5yNmB4lLP5zpVm7le3plURiLI5xI0pF39yvS1te1cCGkPno0+9YUYvh8/jIQets
-         PkfeCX7kq7oaaZINx71/ntTci+5+uSn1VJ3kfEYljJIBKf1cp8PDE/LSANc9+WdWamP2
-         UdiemMHM1/q9NSBnjYTg3Wlj/GIvYnBRMQxV2QKkM2GCOhCzUuRGyTbkMr557hPEVKAp
-         8+Cw==
+        d=skydio.com; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+dFU4D+3NJXtvoLWdpHYJ6p3GWkAyfwQu99maiNSiG4=;
+        b=Tkk5Sc5C4ohZPWWEamSPWNA1rZBgTC/K40Akvckqgqdq8NGhsr61Esy4WmqNMFxwqj
+         NlNrFVf1Tc8lwXY1q8o0+IjpqnYpsOtE+H2CcLq1uBi//XxMiSEmd0eZb/yuEsV51iS9
+         aZQBN11pGn61qpzojw6FF1Lq3mdS5WPtUm5+ebUXyVo8N9m+gQy9HWtpuDzHVWYuZgnn
+         tD5Ua5eSlEGZFYg5QRTcOfb+fbzDAAxHcvBGMUkuCTkzRr13SACUzFzhsrlsyCO+gLh5
+         42BoHqucNRh7a56yesx2JM6YwvK3knR1r6TtUXAB4O3Fw/Enp34kW+FSdFaS6eyc3Kr6
+         T8Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=zrHuXXpTC/brd7PAIAWMXjTHyPWt/l1bL7xMtlQlVvJ4CgQVZEgYV10iGn0h+yTbfJ
-         2zRQhkQrZFAgN3CYRueHobwQPTUoOvdWSXU7zuAzgihFKQD5Oe3wvFTi6eIl5AQunPrS
-         TyZ2USPZqjyX1YqEI3+TaqJ8CKFgHkhCIXwX9950h7GJ4CUquTgzw6nwFoZsNaur0ytx
-         4ogJeyYdU+rC2FTAlcQO066NbVbhd1wRq6k/fNhb0fmTtnRYJGWAQDhVn++MOucwTKoo
-         kCGkYeyAj3Bi/JOIOvknhht6pUJnZn884K5NlYl51+Em66wBydxo3/cZGqmD3ADO4eLo
-         Cy1Q==
-X-Gm-Message-State: AO0yUKXUIg/nmD7As81EnBvoKtT5Z9CphT6S3rX1NGmPKvGuX+H0ge6D
-        6A+B9N4pSvy/A5t6KbZ3I9gyiQ==
-X-Google-Smtp-Source: AK7set/z8RwoK5zLi99e0gYyO0saoOIvr4Qi+M0w1VEg8sxij2tCPL/DbU7DENRObgoCAx8yBLGhmQ==
-X-Received: by 2002:a4a:9b8e:0:b0:51a:48f4:75de with SMTP id x14-20020a4a9b8e000000b0051a48f475demr241022ooj.0.1675911397288;
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id bm9-20020a056820188900b004f8cf5f45e9sm133765oob.22.2023.02.08.18.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Message-ID: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Date:   Wed, 8 Feb 2023 21:09:35 -0600
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+dFU4D+3NJXtvoLWdpHYJ6p3GWkAyfwQu99maiNSiG4=;
+        b=CQrMmx3BpbFE4fGvWoJ+wBbi90MC3nrEqrpJqhG3k7CXBZhDGwgzMQWY4sWYWIgRkX
+         U60UUWqVi6+ZoRMEl9lFygroehkeZ/I/QOE9EwC4FQkoQiFVWwUbXHnlHhOn7QMqiyLz
+         wOVT28Lmdich5lTdNont0cIhWhldUbiiKRuTOAp7AheNo5/IYUQyYYn1aUprQ0VPJg2U
+         UkotgU1d9Iu7uVnecy3bsOi5mBRkZZ4X/e7TfDVcnruylSX4/PGmZlA2WFc5z1k2rk9X
+         ftmV0efI8B7WJ5EU1Kerwq/Nx/R8oJnkjDI3RssoOmDVIJPUPbt8ykY1pL3sToG8HjG3
+         XUfg==
+X-Gm-Message-State: AO0yUKWm4oH9AMvU1Ruv3txhbveSrAfOSNjQ6uOCCKMw7iPFfg0IeJ7Q
+        3OtNqSFyR4HwVHDWHEUOzaKzafV7Ly3QnTQQtGr2VeUjnqu/z9xk
+X-Google-Smtp-Source: AK7set8I3xNUUZYdjej4JQECpo5dGzkAtw1sARpvAtEgVA91TWWVhIOYeg5GX2f47cE7sGU/+IUGxZm5gLHzYF+qXq0=
+X-Received: by 2002:a0d:d411:0:b0:52a:9e00:d32 with SMTP id
+ w17-20020a0dd411000000b0052a9e000d32mr800216ywd.153.1675913234808; Wed, 08
+ Feb 2023 19:27:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Jerry Zhang <jerry@skydio.com>
+Date:   Wed, 8 Feb 2023 19:27:04 -0800
+Message-ID: <CAMKO5Cs69cN+RZNvszobqpHwNNsPFafAaSUxg63sWhSGPXcjyw@mail.gmail.com>
+Subject: dwc3 stuck in U3 state on USB3-only link
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, Alex Mallery <alex.mallery@skydio.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/8/23 06:13, John Paul Adrian Glaubitz wrote:
-> Hi Randy!
-> 
-> On Tue, 2023-02-07 at 17:31 -0800, Randy Dunlap wrote:
->> 
->> On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
->> > Hello Christoph!
->> > 
->> > On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
->> > > On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
->> > > > We have had a discussion between multiple people invested in the SuperH port and
->> > > > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
->> > > > when he isn't available.
->> > > 
->> > > So, this still isn't reflected in MAINTAINERS in linux-next.  When
->> > > do you plan to take over?  What platforms will remain supported and
->> > > what can we start dropping due to being unused and unmaintained?
->> > 
->> > I'm getting everything ready now with Geert's help and I have a probably dumb
->> > question regarding the MAINTAINERS file change: Shall I just add myself as an
->> > additional maintainer first or shall I also drop Yoshinori Sato?
->> > 
->> > Also, is it desirable to add a "T:" entry for the kernel tree?
->> 
->> Yes, definitely.
-> 
-> Geert has suggested to wait with adding a tree source to the entry until I get my
-> own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
+Hi all,
 
-So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-but push to kernel.org and ask Linus to pull from there?
+I'm reaching out to more knowledgeable people as I've exhausted my
+other debug options.
 
-> Adrian
+We have a custom board with two linux systems connected by USB 3 wires
+only, vbus and USB2 are omitted for space savings. This has pretty
+much worked as the controllers are independent, except for the
+following bug:
 
-Rob
+- When the host system (tegra xhci host driver) reboots, the device
+(msm-dwc3) enters the U3 state and never leaves it, even after the
+host powers back up.
+- Also if the device system happens to finish booting before the host,
+the same thing happens, dwc3 gets stuck in U3 and never enumerates.
+
+I'm able to get these messages from the dwc3 driver when the host reboots
+
+[   34.549834] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
+[   34.555749] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=28100C
+[   34.562902] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler link
+state = 0x0006
+[   34.570319] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+unexpected PWR_EVNT, irq_stat=281000
+[   34.663734] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
+[   34.669644] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=2C1004
+[   34.676698] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+unexpected PWR_EVNT, irq_stat=2C1000
+[   34.686082] dwc3 a600000.dwc3: dwc3_gadget_suspend_interrupt Entry to 3
+[   34.692919] dwc3 a600000.dwc3: Notify controller from
+dwc3_gadget_vbus_draw. mA = 2
+[   34.700777] msm-dwc3 a600000.ssusb:
+DWC3_CONTROLLER_SET_CURRENT_DRAW_EVENT received
+[   34.708648] dwc3 a600000.dwc3: Notify OTG from dwc3_gadget_suspend_interrupt
+[   34.715888] msm-dwc3 a600000.ssusb: DWC3_CONTROLLER_NOTIFY_OTG_EVENT received
+
+I think the main thing I'm looking for is validating my existing
+understanding and confirming a few things I suspect, but am not sure
+of due to unfamiliarity with the details of the USB3 spec:
+
+- iiuc USB3 power management and states should actually be independent
+from both vbus and usb2 lines as all the negotiation happens with LFPS
+over the USB3 wires.
+- I see that entry to U3 requires an LFPS message, but in this case
+the host wouldn't have been able to send a message as it is powering
+off. Is the device also capable of entering U3 due to timeouts and is
+it expected to enter U3 in this situation?
+- Similarly I've seen that exiting from U3 requires an LFPS message.
+My expectation is that the host would wake up all devices on the bus
+with LFPS messages shortly after bootup, and either this isn't
+happening, or the device is failing to receive or process the message.
+If the entry to U3 is expected, how is it then expected to exit U3?
+
+I've also tried relevant looking quirks on the gadget side including
+ssp-u3-u0-quirk, u2exit_lfps_quirk, disable_scramble_quirk. I don't
+see a way to explicitly prevent the controller from entering U3 mode,
+is this possible with a register setting?
+
+Would appreciate any thoughts. If I haven't misunderstood anything,
+the next step would probably be to find a beagle 5000 analyzer and
+track down the LFPS messages.
+
+Thanks
