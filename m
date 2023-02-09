@@ -2,149 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D22168FBEE
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 01:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05A968FBF4
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 01:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBIAXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Feb 2023 19:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S230336AbjBIA0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Feb 2023 19:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBIAXU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 19:23:20 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DA720682
-        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 16:23:18 -0800 (PST)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3190MdMR040407;
-        Thu, 9 Feb 2023 09:22:39 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Thu, 09 Feb 2023 09:22:39 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3190MdPB040398
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 9 Feb 2023 09:22:39 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
-Date:   Thu, 9 Feb 2023 09:22:39 +0900
+        with ESMTP id S229669AbjBIA0V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Feb 2023 19:26:21 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD3F1B557
+        for <linux-usb@vger.kernel.org>; Wed,  8 Feb 2023 16:26:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675902380; x=1707438380;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oOwBptlBv55HHj6BhYgyQlqaKwsv6SJjBXzU3WFYQrA=;
+  b=PpMZAZA4MVul9+aN14O06cL/aF/OPDTqmCsH5+6Hr8CBfVGnjSjTF1DW
+   IJpIEqJ6+BoxZ08+z93me86vLlo51GUZF68r1Qbnt55iwAzLo4AJc6cpW
+   o/86OkNEjhIlS9HtkbYFEMcxVDgJ8b5OEIvRGNoqrKdvir/LL3Xeya7Mp
+   wYv/Q5/gP3QWaJcGXrEbdhZ9TkoxoOJOeO/eJr61XqzMeqIRKRF1N+43p
+   iyH/ccK9O2gE+smFYJsOsSYJIHAwu3DWWiemtkPLZ+9dE+8JiMg5MEWjf
+   A94XzHQF4WFarxBr0vg5DSRzUgzJjGUtdwOVyB3H3gTqr5ZJwaATM2jw5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="416188212"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="416188212"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 16:26:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791401037"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="791401037"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Feb 2023 16:26:19 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPulW-0004ik-0b;
+        Thu, 09 Feb 2023 00:26:18 +0000
+Date:   Thu, 09 Feb 2023 08:25:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
+ 88e054e8df1db32cea4ccb911b67dba22f1ddfa2
+Message-ID: <63e43d96.2b0n7GoVC2eNydat%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drivers/core: Replace lockdep_set_novalidate_class() with
- unique class keys
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hillf Danton <hdanton@sina.com>
-References: <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
- <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
- <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
- <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
- <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
- <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
- <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
- <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
- <20230208080739.1649-1-hdanton@sina.com>
- <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
- <Y+O6toMmAKBSILMf@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y+O6toMmAKBSILMf@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/02/09 0:07, Alan Stern wrote:
-> On Wed, Feb 08, 2023 at 07:30:25PM +0900, Tetsuo Handa wrote:
->> Commit 1704f47b50b5 ("lockdep: Add novalidate class for dev->mutex
->> conversion") made it impossible to find real deadlocks unless timing
->> dependent testings manage to trigger hung task like [1] and [2]. And
->> lockdep_set_novalidate_class() remained for more than one decade due to
->> a fear of false positives [3]. But not sharing mutex_init() could make
->> it possible to find real deadlocks without triggering hung task [4].
->> Thus, let's assign a unique class key on each "struct device"->mutex.
->>
->> Link: https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101 [1]
->> Link: https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb [2]
->> Link: https://lkml.kernel.org/r/Y98FLlr7jkiFlV0k@rowland.harvard.edu [3]
->> Link: https://lkml.kernel.org/r/827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp [4]
->> Suggested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
->> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> You must never do this!
-> 
-> I did not put my Signed-off-by: on the patch I sent to you.  I do not 
-> want it added to that patch or to this one.  You should never put 
-> somebody else's Signed-off-by: on a patch unless they tell you it's okay 
-> to do so.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 88e054e8df1db32cea4ccb911b67dba22f1ddfa2  Merge tag 'thunderbolt-for-v6.3-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
 
-Did I misuse the Co-developed-by: tag? I added your Signed-off-by: tag because
-https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
-states that "every Co-developed-by: must be immediately followed by a Signed-off-by:
-of the associated co-author."
+Warning reports:
 
-I don't know whether the Co-developed-by: tag is used only when somebody else takes over
-a previously proposed formal patch. I use the Co-developed-by: tag in order to state
-developer's contribution when he/she suggested some plain diff but does not propose
-that diff as a formal patch with description. Unless changes are proposed as a formal
-patch (by somebody), bugs won't be fixed.
+https://lore.kernel.org/oe-kbuild-all/202302071942.wrmMMxiA-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302072028.rI3pAivq-lkp@intel.com
 
-> 
-> I'm happy to have people test this patch, but I do not want anybody 
-> think that it is ready to be merged into the kernel.
+Warning: (recently discovered and may have been fixed)
 
-People (and build/test bots) won't test changes that are not proposed as
-a formal patch with Signed-off-by: tag. As far as I am aware, bot is not
-testing plain diff.
+drivers/usb/gadget/configfs.c:824:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+drivers/usb/gadget/configfs.c:824:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
 
-I expected you to post a formal patch with your Signed-off-by: tag, but you didn't.
-Therefore, I took over. Namely, define a dummy function for CONFIG_LOCKDEP=n case,
-apply Hillf's suggestion, and reduce lines changed in kernel/locking/lockdep.c
-in order to make the patch smaller and easier to apply the change.
+Warning ids grouped by kconfigs:
 
-> 
->> Co-developed-by: Hillf Danton <hdanton@sina.com>
->> Signed-off-by: Hillf Danton <hdanton@sina.com>
->> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
->> ---
+gcc_recent_errors
+|-- alpha-allmodconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- alpha-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- alpha-randconfig-r033-20230207
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- arc-buildonly-randconfig-r001-20230205
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- i386-randconfig-a014
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- ia64-allmodconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- ia64-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- loongarch-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- m68k-allmodconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- m68k-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- m68k-buildonly-randconfig-r003-20230205
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- m68k-randconfig-r021-20230206
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- mips-allmodconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- mips-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- nios2-randconfig-r011-20230204
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- openrisc-randconfig-r001-20230206
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- parisc-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- powerpc-allmodconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- powerpc-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- riscv-allmodconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- riscv-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- s390-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- sh-allmodconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- sh-randconfig-r015-20230204
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- sparc-allyesconfig
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+clang_recent_errors
+|-- hexagon-randconfig-r041-20230206
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- i386-randconfig-a011
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- i386-randconfig-a015
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- mips-randconfig-r035-20230207
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- riscv-randconfig-r003-20230204
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+|-- riscv-randconfig-r042-20230205
+|   `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
+`-- s390-randconfig-r044-20230205
+    `-- drivers-usb-gadget-configfs.c:warning:variable-ret-set-but-not-used
 
->> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
->> index e3375bc40dad..74c0113646f1 100644
->> --- a/kernel/locking/lockdep.c
->> +++ b/kernel/locking/lockdep.c
->> @@ -857,6 +857,13 @@ static int static_obj(const void *obj)
->>  	 */
->>  	return is_module_address(addr) || is_module_percpu_address(addr);
->>  }
->> +
->> +int lockdep_static_obj(const void *obj)
->> +{
->> +	return static_obj(obj);
->> +}
->> +EXPORT_SYMBOL_GPL(lockdep_static_obj);
-> 
-> What's the point of adding a new function that just calls the old 
-> function?  Why not simply rename the old function?
+elapsed time: 725m
 
-This makes the patch smaller and easier to apply the change. Of course,
-I can update the patch if lockdep developers prefer rename over add.
-What I worry is that lockdep developers do not permit static_obj() being
-used by non-lockdep code.
+configs tested: 62
+configs skipped: 2
 
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+x86_64                            allnoconfig
+sh                               allmodconfig
+x86_64                           rhel-8.3-bpf
+i386                 randconfig-a011-20230206
+i386                 randconfig-a014-20230206
+arm                                 defconfig
+i386                 randconfig-a012-20230206
+i386                 randconfig-a013-20230206
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a016-20230206
+i386                 randconfig-a015-20230206
+i386                          randconfig-a014
+arm                              allyesconfig
+i386                                defconfig
+arm64                            allyesconfig
+mips                             allyesconfig
+ia64                             allmodconfig
+x86_64                              defconfig
+powerpc                          allmodconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+i386                          randconfig-a012
+x86_64                               rhel-8.3
+m68k                             allmodconfig
+i386                          randconfig-a016
+arc                              allyesconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+arc                  randconfig-r043-20230205
+arm                  randconfig-r046-20230205
+arc                  randconfig-r043-20230206
+riscv                randconfig-r042-20230206
+s390                 randconfig-r044-20230206
+i386                             allyesconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+
+clang tested configs:
+i386                          randconfig-a013
+i386                 randconfig-a004-20230206
+i386                          randconfig-a011
+i386                 randconfig-a003-20230206
+i386                 randconfig-a006-20230206
+i386                 randconfig-a001-20230206
+i386                 randconfig-a002-20230206
+i386                 randconfig-a005-20230206
+i386                          randconfig-a015
+x86_64                          rhel-8.3-rust
+riscv                randconfig-r042-20230205
+hexagon              randconfig-r045-20230206
+hexagon              randconfig-r041-20230206
+hexagon              randconfig-r045-20230205
+arm                  randconfig-r046-20230206
+s390                 randconfig-r044-20230205
+hexagon              randconfig-r041-20230205
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
