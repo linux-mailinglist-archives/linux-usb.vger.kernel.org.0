@@ -2,99 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCC9690480
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 11:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327B6690508
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 11:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBIKSN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Feb 2023 05:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S230135AbjBIKi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Feb 2023 05:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBIKSM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 05:18:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ED2113F0
-        for <linux-usb@vger.kernel.org>; Thu,  9 Feb 2023 02:18:10 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pQ40F-00013n-Uh; Thu, 09 Feb 2023 11:18:07 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pQ40F-0003M0-71; Thu, 09 Feb 2023 11:18:07 +0100
-Date:   Thu, 9 Feb 2023 11:18:07 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
+        with ESMTP id S230153AbjBIKiN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 05:38:13 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BD85DC07;
+        Thu,  9 Feb 2023 02:37:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1675939028; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fAhPtJ4vBWAnEr416NpnDhVYXkvFOP9NCU+AdWdC5yw=;
+        b=uitw+P655/VjMhm309vorYf/mLfx1izhcUPvaN2m0pIa/0hrrb8MpM/MDCo76CJl6wlBjY
+        kMxbWPx8f8T3GgRb+6iuhdrROPAM6D5peRpAATm4l2h0zZx3dFcBS82b8Bm70CAAaoj7zd
+        nR22X27Aj5NB46mJtsGKrJmsaaXcLZE=
+Message-ID: <6d618e518de06854727f26de950404f02ec61c64.camel@crapouillou.net>
+Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
+ net device
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
 Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
- net device
-Message-ID: <20230209101807.GO10447@pengutronix.de>
+Date:   Thu, 09 Feb 2023 10:37:05 +0000
+In-Reply-To: <20230209101807.GO10447@pengutronix.de>
 References: <20221104131031.850850-1-s.hauer@pengutronix.de>
- <20221104131031.850850-2-s.hauer@pengutronix.de>
- <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
+         <20221104131031.850850-2-s.hauer@pengutronix.de>
+         <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
+         <20230209101807.GO10447@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Paul,
+Hi Sascha,
 
-On Wed, Feb 01, 2023 at 01:32:51PM +0000, Paul Cercueil wrote:
-> Hi Sascha, Greg,
-> 
-> I have a breakage in 6.2-rc* that I eventually bisected to this commit,
-> on a Ingenic SoC (using the jz4740 musb driver) with ECM or RNDIS
-> configured through gadgetfs.
-> 
-> When plugging the board to my PC, the USB network interface is
-> recognized, but 'ip link' sees it as 'NO-CARRIER'. With this commit
-> reverted on v6.2-rc5, everything works fine.
+Le jeudi 09 f=C3=A9vrier 2023 =C3=A0 11:18 +0100, Sascha Hauer a =C3=A9crit=
+=C2=A0:
+> Hi Paul,
+>=20
+> On Wed, Feb 01, 2023 at 01:32:51PM +0000, Paul Cercueil wrote:
+> > Hi Sascha, Greg,
+> >=20
+> > I have a breakage in 6.2-rc* that I eventually bisected to this
+> > commit,
+> > on a Ingenic SoC (using the jz4740 musb driver) with ECM or RNDIS
+> > configured through gadgetfs.
+> >=20
+> > When plugging the board to my PC, the USB network interface is
+> > recognized, but 'ip link' sees it as 'NO-CARRIER'. With this commit
+> > reverted on v6.2-rc5, everything works fine.
+>=20
+> I don't have this hardware available. I just tried with a i.MX
+> hardware
+> and it works as expected. I have no idea where the jz4740 musb could
+> behave differently.
+>=20
+> Here's exactly what I did:
+>=20
+> mkdir -p /sys/kernel/config/usb_gadget/mygadget
+> cd /sys/kernel/config/usb_gadget/mygadget
+> mkdir -p configs/c.1/strings/0x409
+> echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
+> mkdir -p functions/ecm.usb0
+> ln -s functions/ecm.usb0 configs/c.1/
+> echo "ci_hdrc.0" > UDC
+>=20
+> Did you do something differently apart from the "ci_hdrc.0" of
+> course?
 
-I don't have this hardware available. I just tried with a i.MX hardware
-and it works as expected. I have no idea where the jz4740 musb could
-behave differently.
+Nothing very different, no.
 
-Here's exactly what I did:
+I do:
 
-mkdir -p /sys/kernel/config/usb_gadget/mygadget
-cd /sys/kernel/config/usb_gadget/mygadget
-mkdir -p configs/c.1/strings/0x409
-echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
-mkdir -p functions/ecm.usb0
-ln -s functions/ecm.usb0 configs/c.1/
-echo "ci_hdrc.0" > UDC
+cd /sys/kernel/config/usb_gadget
+mkdir mtp \
+  mtp/strings/0x409 \
+  mtp/configs/c.1 \
+  mtp/configs/c.1/strings/0x409 \
+  mtp/functions/ffs.mtp \
+  mtp/functions/ecm.net \
+  mtp/functions/rndis.net
 
-Did you do something differently apart from the "ci_hdrc.0" of course?
+echo 0x80 > mtp/configs/c.1/bmAttributes
+echo 500 > mtp/configs/c.1/MaxPower
 
-BTW when you say 'NO-CARRIER' is it on the PC side, board side, or
-both?
+echo 0x049f > mtp/idVendor
+echo 0x505a > mtp/idProduct
+echo cdc > mtp/configs/c.1/strings/0x409/configuration
+ln -s mtp/functions/ecm.net mtp/configs/c.1/ecm.net
 
-It would be great if we could sort this out, but if not I am fine with
-reverting this patch. I guess this topic will come back to my desk
-sooner or later then
+echo ci_hdrc.0 > mtp/UDC
 
-Sascha
+> BTW when you say 'NO-CARRIER' is it on the PC side, board side, or
+> both?
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+PC side. I don't know what it says on the board side, I can't
+telnet/SSH.
+
+> It would be great if we could sort this out, but if not I am fine
+> with
+> reverting this patch. I guess this topic will come back to my desk
+> sooner or later then
+
+Considering that the clock is ticking, let's revert it for now; that
+will give me some time to debug the issue, and then we can work on a
+revised patch.
+
+Cheers,
+-Paul
