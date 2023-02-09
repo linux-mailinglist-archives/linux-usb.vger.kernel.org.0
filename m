@@ -2,72 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBD269031C
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 10:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EA869040D
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Feb 2023 10:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjBIJQQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Feb 2023 04:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S229791AbjBIJoQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Feb 2023 04:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBIJQM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 04:16:12 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558EB5B92;
-        Thu,  9 Feb 2023 01:16:10 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pQ323-003ncL-Bt; Thu, 09 Feb 2023 10:15:55 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pQ323-0012H8-3k; Thu, 09 Feb 2023 10:15:55 +0100
-Message-ID: <ed4a36508c3d047f9e9a882475388be18b790b76.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Rob Landley <rob@landley.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Thu, 09 Feb 2023 10:15:52 +0100
-In-Reply-To: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
-         <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
-         <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-         <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S229468AbjBIJoP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 04:44:15 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72984740F
+        for <linux-usb@vger.kernel.org>; Thu,  9 Feb 2023 01:44:14 -0800 (PST)
+Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E454D8DD;
+        Thu,  9 Feb 2023 10:44:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675935853;
+        bh=K2rSPq//ljj+MpeLjAQtcZkDaJ3LjpNe1LLahyvJcrY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MvZW4sdRMFS8UaZKUlKaXHbqtHCkIu+5VejAJ6R+p9GVynYS5m5TrQcogSpJtg8DU
+         SW/6+rQNjaJqdO2kPxN2ukuQo0rNB1S6XnZCuZTISYMUvlUF3fI8Lt94bGUStwICt9
+         y+dBy0+4Pwjesbtn4QECf8suWU1LXHI+2az13Xsg=
+From:   Daniel Scally <dan.scally@ideasonboard.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        linux-usb@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>
+Subject: [PATCH] usb: gadget: configfs: Fix set but not used variable warning
+Date:   Thu,  9 Feb 2023 09:43:59 +0000
+Message-Id: <20230209094359.1549629-1-dan.scally@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,20 +44,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2023-02-08 at 21:09 -0600, Rob Landley wrote:
-> > Geert has suggested to wait with adding a tree source to the entry until I get my
-> > own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> > on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
-> 
-> So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-> but push to kernel.org and ask Linus to pull from there?
+Fix a -Wunused-but-set-variable warning in gadget_string_s_store()
 
-Yes, that's what Geert recommended.
+Fixes: 15a7cf8caabe ("usb: gadget: configfs: Support arbitrary string descriptors")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+---
+ drivers/usb/gadget/configfs.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Adrian
-
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 06a0b73e0546..b9f1136aa0a2 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -821,13 +821,11 @@ static ssize_t gadget_string_s_store(struct config_item *item, const char *page,
+ {
+ 	struct gadget_string *string = to_gadget_string(item);
+ 	int size = min(sizeof(string->string), len + 1);
+-	int ret;
+ 
+ 	if (len > USB_MAX_STRING_LEN)
+ 		return -EINVAL;
+ 
+-	ret = strscpy(string->string, page, size);
+-	return len;
++	return strscpy(string->string, page, size);
+ }
+ CONFIGFS_ATTR(gadget_string_, s);
+ 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.34.1
+
