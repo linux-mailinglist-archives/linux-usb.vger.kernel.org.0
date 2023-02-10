@@ -2,87 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B079691740
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 04:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80AC691879
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 07:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjBJDnV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Feb 2023 22:43:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
+        id S231214AbjBJGWl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Feb 2023 01:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjBJDnU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 22:43:20 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2501305F5;
-        Thu,  9 Feb 2023 19:43:18 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31A3hFUB002395;
-        Fri, 10 Feb 2023 03:43:15 GMT
+        with ESMTP id S230285AbjBJGWk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 01:22:40 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4A0A5C3;
+        Thu,  9 Feb 2023 22:22:39 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31A1W9jW008643;
+        Fri, 10 Feb 2023 06:22:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6R546K2+P4BWJfRMEx/hrrFGGasKc/TNYyxZ0TrCD+k=;
- b=j0UC3onrdscRYcCvaXld3dfXIJV9JZXkeIOcqpU+dFLQrCEoJEDFedmKIY5+bo5nteGY
- YG0Q/9eIsUJhVeFGxh12YSXX6N0Q4607ZHyx2M/2i1td0KzByZWjIFUeD+8/RVZhGNN5
- S0M33nHGY7VttsX3BYJrCsPA+nzwGcZzLj57VBs2OO0WDnJjy5HJnjRuTvvuDwi/8BDK
- A1eWL9vJv7sZlDANCWneGRuOWpD5jghtq35WGsrd0wScdCYccXRYBlMY1gCOlMXT6Gmw
- s7H44MWisJBefo4irBEUCLwHkBF6QhbF4ikvBeHjYmaOf7DOdFt5A4gzfpl006s/ZLTd yQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nn5ek906s-1
+ bh=ar0pYUB3i0YoG/YwnKIWqsXl7gBUQvgaTOSgCRz16U8=;
+ b=nClCZk+d9nHsbI+yL+xwspeicErEiI6yQZjWzW7m9lJNeLjv7KJoNkRNu9Qn0VN2QDOZ
+ OmZ/UR+UfjaQNm3yjPYABt5kIM0Z+3z3azYBDCU1h8eAsB4X8fZn/lwXephl0H0/4hbb
+ M3VTrnn+Bxu529RkeP9BQ6GQxBCoeiTEu2lKng48K+LoPDfWlw7Ts1AiocxZ6JYq8TEm
+ k0Gw4MXqoskSx61Vqo0yGRCD4Jg0UfPOfubkfG6GBb5VpyIienSKsh1llv4au9zH9WME
+ 9ETmS/1wYtx2ESVgdmVkn16/d5VZXY12pQTm/V4V6jb7ER9FFca3idDZpI/bIULm7yw2 Bg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nmv9btsdv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 03:43:14 +0000
+        Fri, 10 Feb 2023 06:22:30 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31A3hDrk014661
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31A6MTb4010171
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 03:43:13 GMT
-Received: from [10.110.96.245] (10.80.80.8) by nalasex01a.na.qualcomm.com
+        Fri, 10 Feb 2023 06:22:29 GMT
+Received: from [10.206.28.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 19:43:13 -0800
-Message-ID: <808ca5c4-898a-dc94-6811-1d4913f6b6a8@quicinc.com>
-Date:   Thu, 9 Feb 2023 19:43:12 -0800
+ 22:22:26 -0800
+Message-ID: <53d48954-3f7e-fd02-5e8e-2912c16565b3@quicinc.com>
+Date:   Fri, 10 Feb 2023 11:52:23 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v3 2/5] usb: dwc3: Add remote wakeup handling
+Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer check in
+ gserial_resume
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
- <1675710806-9735-3-git-send-email-quic_eserrao@quicinc.com>
- <20230207004833.tuy52evcgk7sfa4q@synopsys.com>
- <9bcf323a-5660-da47-dd6c-b218f7f26a45@quicinc.com>
- <20230208011017.47o7m3xt63lbih3m@synopsys.com>
- <cd143a99-f781-fd32-cad2-3df8f8c0d617@quicinc.com>
- <20230208021127.syauhdtpbyyncixr@synopsys.com>
- <28322f07-de6b-81e0-38c5-c856d5ce2dce@quicinc.com>
- <20230210022719.ktggsykndv4k7i42@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230210022719.ktggsykndv4k7i42@synopsys.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <482f2c32-41d1-f07e-ee3f-3eb9aee76ac7@quicinc.com>
+ <Y+QEQBxlr6FZ58DK@rowland.harvard.edu>
+ <542ee8a6-598c-ca17-6d75-5eca2b34133a@quicinc.com>
+ <Y+SaZrDmaqB0U2QA@kroah.com>
+ <f32398bb-62f3-12fd-4b81-7ce7bdf4706a@quicinc.com>
+ <e7dde0aa-c1e2-dd6c-94a1-1e9049f0a5fb@quicinc.com>
+ <Y+UMkA9iaJTWVQ5u@rowland.harvard.edu>
+ <5ad875be-079c-7f91-ede9-68f954cc7f34@quicinc.com>
+ <Y+UZQvuh8KR4gE4P@rowland.harvard.edu>
+ <71f624df-5302-8276-2a2a-96223d4ba3c7@quicinc.com>
+ <Y+VgHdJjrd0ZvY33@rowland.harvard.edu>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <Y+VgHdJjrd0ZvY33@rowland.harvard.edu>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Bg7aAt9ZUE5sUh6TI8nGd0_QQbU0Nec4
-X-Proofpoint-GUID: Bg7aAt9ZUE5sUh6TI8nGd0_QQbU0Nec4
+X-Proofpoint-GUID: vVLrAXiukhYdMFF27msqNqcO3V4KIYpP
+X-Proofpoint-ORIG-GUID: vVLrAXiukhYdMFF27msqNqcO3V4KIYpP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-09_17,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- adultscore=0 suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100031
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ definitions=2023-02-10_01,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ phishscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1015 mlxlogscore=485 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302100054
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,101 +94,152 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 2/9/2023 6:27 PM, Thinh Nguyen wrote:
-> On Thu, Feb 09, 2023, Elson Serrao wrote:
+On 10-02-23 02:35 am, Alan Stern wrote:
+> On Thu, Feb 09, 2023 at 11:57:17PM +0530, Prashanth K wrote:
 >>
 >>
->> On 2/7/2023 6:11 PM, Thinh Nguyen wrote:
->>> On Tue, Feb 07, 2023, Elson Serrao wrote:
+>> On 09-02-23 09:33 pm, Alan Stern wrote:
+>>> On Thu, Feb 09, 2023 at 09:13:37PM +0530, Prashanth K wrote:
 >>>>
 >>>>
->>>> On 2/7/2023 5:10 PM, Thinh Nguyen wrote:
->>>>> On Tue, Feb 07, 2023, Elson Serrao wrote:
->>>>>> On 2/6/2023 4:48 PM, Thinh Nguyen wrote:
->>>>>>>> +static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async)
->>>>>>>>      {
->>>>>>>>      	int			retries;
->>>>>>>> @@ -2296,9 +2309,14 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
->>>>>>>>      	link_state = DWC3_DSTS_USBLNKST(reg);
->>>>>>>>      	switch (link_state) {
->>>>>>>> +	case DWC3_LINK_STATE_U3:	/* in HS, means SUSPEND */
->>>>>>>
->>>>>>> It's also possible to do remote wakeup in L1 for highspeed.
->>>>>>>
->>>>>>
->>>>>> The rw_configured flag here is in context of triggering remote wakeup from
->>>>>> bus suspend only.
->>>>>>
->>>>>> The remote wakeup setting for l1 in HighSpeed is controlled through LPM
->>>>>> token and overrides/ignores the config desc bmAttributes wakeup bit.
->>>>>>
->>>>>> Section 4.1 of USB2_LinkPowerMangement_ECN[final] spec "The host system sets the Remote Wake Flag parameter in this request to
->>>>>> enable or disable the addressed device
->>>>>> for remote wake from L1. The value of this flag will temporarily (while in
->>>>>> L1) override the current setting of the
->>>>>> Remote Wake feature settable by the standard Set/ClearFeature() commands
->>>>>> defined in Universal Serial Bus Specification, revision 2.0, Chapter 9."
->>>>>>
->>>>>> Please let me know if I am missing something.
->>>>>>
->>>>>
->>>>> It overrides the setting of the SetFeature request, not the device
->>>>> configuration.
->>>>>
->>>>> The rw_configured reflects the user configuration. Whether the host
->>>>> tries to enable the remote wakeup through SetFeature request or LPM
->>>>> token, the device should operate within the user configuration
->>>>> limitation.
->>>>>
->>>>> If the configuration indicates that it doesn't support remote wakeup, we
->>>>> should prevent unexpected behavior from the device. For simplicity, we
->>>>> can just return failure to wakeup for all states.
->>>>>
->>>>> Thanks,
->>>>> Thinh
->>>>
->>>> L1 entry/exit is HW controlled and the remote wakeup is conditional.(Section
->>>> 7.1/Table7.2 of dwc3 data book). Even though we block it from
->>>> SW the l1 exit will still happen from HW point of view.
->>>>
->>>> To correlate the user configuration with LPM token, I experimented by
->>>> disabling the wakeup bit in the bmAtrributes, but I still see remote wakeup
->>>> bit being set in the LPM token. From the observation it seems like there is
+>>>> On 09-02-23 08:39 pm, Alan Stern wrote:
+>>>>> You should consider having _two_ spinlocks: One in the gs_port structure
+>>>>> (the way it is now) and a separate global lock.  The first would be used
+>>>>> in situations where you know you have a valid pointer.  The second would
+>>>>> be used in situations where you don't know if the pointer is non-NULL
+>>>>> or where you are changing the pointer's value.
+>>>> Lets say we replaced the existing spinlock in gserial_resume and
+>>>> gserial_disconnect with a new static spinlock, and kept the spinlocks in
+>>>> other functions unchanged. In that case, wouldn't it cause additional race
+>>>> conditions as we are using 2 different locks.
 >>>
->>> That's because the linux xhci driver enables remote wakeup bit in its
->>> port without regard for the device configuration.
+>>> Not race conditions, but possibilities for deadlock.
 >>>
->>>> no correlation between the wakeup bit in the bmAtrributes and the wakeup bit
->>>> in the LPM token.
->>>>
+>>> Indeed, you would have to be very careful about avoiding deadlock
+>>> scenarios.  In particular, you would have to ensure that the code never
+>>> tries to acquire the global spinlock while already holding one of the
+>>> per-port spinlocks.
 >>>
->>> The host can bring the device out of L1, that's probably what you saw.
->>> The controller doesn't initiate remote wakeup by itself.
->>>
->>> Thanks,
->>> Thinh
->>
->> Actually it seems the controller is initiating a remote wakeup by itself to
->> exit from l1 when we send a STARTTRANSFER command. I did below experiment
->> when the device was in HighSpeed
->>
+>>> Alan Stern
+>> Hi Alan, instead of doing these and causing potential regressions, can we
+>> just have the null pointer check which i suggested in the beginning? The
+>> major concern was that port might become null after the null pointer check.
 > 
-> That's driven by the driver telling the controller to initiate remote
-> wakeup and not the controller itself. When we send the START_TRANSFER
-> command, the driver does remote wakeup so the host would bring the
-> device to ON state so that the command can go through.
+> What you are describing is a data race: gserial_disconnect() can write
+> to gser->ioport at the same time that gserial_resume() reads from it.
+> Unless you're working on a fast path -- which this isn't -- you should
+> strive to avoid data races by using proper locking.  That means adding
+> the extra spinlock, or finding some other way to make these two accesses
+> be mutually exclusive.
 > 
-> However you bring up a good point that if we prevent remote wakeup for
-> L1, then we have to delay sending START_TRANSFER command until the host
-> initiate resume. This would require additional enhancement to dwc3 to
-> handle this scenario. For now, can we ignore this specific case when
-> sending START_TRANSFER command and only check for the case when the user
-> trigger remote wakeup via gadget->ops->wakeup/func_wakeup.
+> With a little care you can ensure there won't be any regressions.  Just
+> do what I said above: Make sure the code never tries to acquire the
+> global spinlock while already holding one of the per-port spinlocks.
 > 
-> Thanks,
-> Thinh
+>> We mark gser->ioport as null pointer in gserial_disconnect, and in
+>> gserial_resume we copy the gser->ioport to *port in the beginning.
+>>
+>> struct gs_port *port = gser->ioport;
+>>
+>> And hence it wont cause null pointer deref after the check as we don't
+>> de-reference anything from gser->ioport afterwards. We only use the local
+>> pointer *port afterwards.
+> 
+> You cannot depend on this to work the way you want.  The compiler will
+> optimize your source code, and one of the optimizations might be to
+> eliminate the "port" variable entirely and replace it with gser->ioport.
+> 
+> Alan Stern
+Hi Alan, Thanks for the detailed info. I checked and included few cases 
+here.
 
-Sure. I will upload v4 with the suggested feedback/comments.
+This would cause a deadlock if gserial_disconnect acquires port_lock and 
+gserial_resume acquires static_lock.
 
-Thanks
-Elson
+gserial_disconnect {
+	spin_lock(port)
+	...
+	spin_lock(static)
+
+	gser->ioport = NULL;
+
+	spin_unlock(static)
+	...
+	spin_unlock(port)
+}
+
+gserial_resume {
+	struct gs_port *port = gser->ioport;
+
+	spin_lock(static)
+	if (!port)
+		return
+	spin_lock(port)
+	spin_unlock(static)
+
+	...
+	spin_unlock(port)
+}
+
+------------------------------------------------------------------
+
+This would cause additional races when gserial_disconnect releases 
+port_lock and some other functions acquire it.
+
+gserial_disconnect {
+	spin_lock(port)
+	...
+	spin_unlock(port)
+	spin_lock(static)
+
+	gser->ioport = NULL;
+
+	spin_unlock(static)
+	spin_lock(port)
+	...
+	spin_unlock(port)
+}
+
+gserial_resume {
+	struct gs_port *port = gser->ioport;
+
+	spin_lock(static)
+	if (!port)
+		return
+	spin_lock(port)
+	spin_unlock(static)
+
+	...
+	spin_unlock(port)
+}
+
+------------------------------------------------------------------
+
+And this seems like a viable option to me, what do you suggest?
+
+gserial_disconnect {
+	spin_lock(static)
+	spin_lock(port)
+	...
+	gser->ioport = NULL;
+	...	
+	spin_lock(port)
+	spin_unlock(static)
+
+}
+
+gserial_resume {
+	struct gs_port *port = gser->ioport;
+
+	spin_lock(static)
+	if (!port)
+		return
+	spin_lock(port)
+
+	...
+	spin_unlock(port)
+	spin_unlock(static)
+}
+
+Thanks,
+Prashanth K
