@@ -2,109 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FB169190B
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 08:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6436919D3
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 09:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbjBJHSN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Feb 2023 02:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
+        id S231447AbjBJINx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Feb 2023 03:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjBJHSN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 02:18:13 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389896F20D
-        for <linux-usb@vger.kernel.org>; Thu,  9 Feb 2023 23:18:09 -0800 (PST)
-Received: from dggpemm100007.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PClM75vD3zJqwg;
-        Fri, 10 Feb 2023 15:13:23 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by dggpemm100007.china.huawei.com
- (7.185.36.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 10 Feb
- 2023 15:18:02 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <laurent.pinchart@ideasonboard.com>, <dan.scally@ideasonboard.com>,
-        <gregkh@linuxfoundation.org>, <yangyingliang@huawei.com>
-Subject: [PATCH -next] usb: gadget: uvc: fix missing mutex_unlock() if kstrtou8() fails
-Date:   Fri, 10 Feb 2023 15:17:18 +0800
-Message-ID: <20230210071718.4072995-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231187AbjBJINw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 03:13:52 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3559CAD34;
+        Fri, 10 Feb 2023 00:13:48 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qb15so11615536ejc.1;
+        Fri, 10 Feb 2023 00:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RfxTuaXPFuuhKw07EKGJnJD31rzl8qOc8YDdNEsacKs=;
+        b=RdcGv9oMi1uOe9HVvrUmX7JiCVTJVCJkgRvPkmB3cRA9PHZP6ohj5J7JRL8Ut1ZfNB
+         zuTs9nl8pXxWPMkCSlDb1uEwDJwTjCIQexPTaZZdwpbxT4aZ3hq+S1h0scWw6EwBStES
+         9C04sC0qokj1S9Iir7ew+S4MH+JfS8Xgia75GUncszm+DqVLi7BZ2afS/REVbewKysov
+         h91V0BG2RoE+5cfr0Pq7vFN7GXaQEI1Rwsh/fRN9q6KNZ4ZlvILf7Po+vLv4S80pvgsW
+         6O8KfT8jwPg2ZPb3sEinQaPbsqxuHvp6eDQWLjHPQ6qzFQErw87TMv9770H6Lqqf/bO9
+         zCFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RfxTuaXPFuuhKw07EKGJnJD31rzl8qOc8YDdNEsacKs=;
+        b=iRI3O64p+KjECDfgzRzlVPcV6upujH0bmDXl/NWrNiIw9DO629Eb8SJAMwsrxV6FuO
+         vwMDsHf8iTwpIWrsHWItOXG3txoceCvzneBd3yUAQjIKRzJVIoO4wsje4F1ll64bqSAk
+         FrbctrGuNyu0qJf08T65dwHfdAlBht7mNpMnZ2zM7htDb9CY5M7Lo8SXpItz6VQg9msl
+         GHomoYkF5MA3c27yo4bIkSemwPWD/m4CT3Q/AkAmDphOSP9184PrlbgeIosiq48EcKt1
+         344uSr5O11+mo5bQrm3TCUJfCgLM7dfdM92w9wpLd61Okg90RzIHjuy9jIB0mth4rI2g
+         E+DQ==
+X-Gm-Message-State: AO0yUKUmOOOj7lHan91+hfpQYgw9MUl1FnHGUvPTKTnv/6oUgf71fOrP
+        a2yUE70lFL5XDrX5mMPzMQ4av2NgvXE=
+X-Google-Smtp-Source: AK7set8mqXrZb6jqki+1zDCnnlahbJj2YaPV0blCenw8kJwEKAEiaUrR1gBqwF0fVukNmx9UbgrkZw==
+X-Received: by 2002:a17:906:d0c9:b0:8aa:dffa:badd with SMTP id bq9-20020a170906d0c900b008aadffabaddmr8951399ejb.1.1676016826535;
+        Fri, 10 Feb 2023 00:13:46 -0800 (PST)
+Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
+        by smtp.gmail.com with ESMTPSA id a18-20020a170906469200b007c0f217aadbsm2036701ejr.24.2023.02.10.00.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 00:13:46 -0800 (PST)
+Message-ID: <2f74aab82a40e4c11c91ccba40f5b620f6cb209c.camel@gmail.com>
+Subject: [PATCH] net/usb: kalmia: Don't pass act_len in usb_bulk_msg error
+ path
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Pirko <jiri@resnulli.us>, Paolo Abeni <pabeni@redhat.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Date:   Fri, 10 Feb 2023 09:13:44 +0100
+In-Reply-To: <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
+         <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm100007.china.huawei.com (7.185.36.116)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add missing mutex_unlock() if kstrtou8() fails in store functions.
+syzbot reported that act_len in kalmia_send_init_packet() is
+uninitialized when passing it to the first usb_bulk_msg error path. Jiri
+Pirko noted that it's pointless to pass it in the error path, and that
+the value that would be printed in the second error path would be the
+value of act_len from the first call to usb_bulk_msg.[1]
 
-Fixes: 0525210c9840 ("usb: gadget: uvc: Allow definition of XUs in configfs")
-Fixes: b3c839bd8a07 ("usb: gadget: uvc: Make bSourceID read/write")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+With this in mind, let's just not pass act_len to the usb_bulk_msg error
+paths.
+
+1: https://lore.kernel.org/lkml/Y9pY61y1nwTuzMOa@nanopsycho/
+
+Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for Samsung GT-B37=
+30")
+Reported-and-tested-by: syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.c=
+om
+Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
 ---
- drivers/usb/gadget/function/uvc_configfs.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/net/usb/kalmia.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 18c6a1461b7e..c2f0eb1c1f87 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -598,8 +598,10 @@ static ssize_t uvcg_default_output_b_source_id_store(struct config_item *item,
- 	cd = &opts->uvc_output_terminal;
- 
- 	result = kstrtou8(page, 0, &num);
--	if (result)
-+	if (result) {
-+		mutex_unlock(su_mutex);
- 		return result;
-+	}
- 
- 	mutex_lock(&opts->lock);
- 	cd->bSourceID = num;
-@@ -713,8 +715,10 @@ static ssize_t uvcg_extension_b_num_controls_store(struct config_item *item,
- 	opts = to_f_uvc_opts(opts_item);
- 
- 	ret = kstrtou8(page, 0, &num);
--	if (ret)
-+	if (ret) {
-+		mutex_unlock(su_mutex);
- 		return ret;
-+	}
- 
- 	mutex_lock(&opts->lock);
- 	xu->desc.bNumControls = num;
-@@ -748,8 +752,10 @@ static ssize_t uvcg_extension_b_nr_in_pins_store(struct config_item *item,
- 	opts = to_f_uvc_opts(opts_item);
- 
- 	ret = kstrtou8(page, 0, &num);
--	if (ret)
-+	if (ret) {
-+		mutex_unlock(su_mutex);
- 		return ret;
-+	}
- 
- 	mutex_lock(&opts->lock);
- 
-@@ -801,8 +807,10 @@ static ssize_t uvcg_extension_b_control_size_store(struct config_item *item,
- 	opts = to_f_uvc_opts(opts_item);
- 
- 	ret = kstrtou8(page, 0, &num);
--	if (ret)
-+	if (ret) {
-+		mutex_unlock(su_mutex);
- 		return ret;
-+	}
- 
- 	mutex_lock(&opts->lock);
- 
--- 
-2.25.1
+diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+index 9f2b70ef39aa..613fc6910f14 100644
+--- a/drivers/net/usb/kalmia.c
++++ b/drivers/net/usb/kalmia.c
+@@ -65,8 +65,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
+ u8 init_msg_len,
+ 		init_msg, init_msg_len, &act_len, KALMIA_USB_TIMEOUT);
+ 	if (status !=3D 0) {
+ 		netdev_err(dev->net,
+-			"Error sending init packet. Status %i, length %i\n",
+-			status, act_len);
++			"Error sending init packet. Status %i\n",
++			status);
+ 		return status;
+ 	}
+ 	else if (act_len !=3D init_msg_len) {
+@@ -83,8 +83,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
+ u8 init_msg_len,
+=20
+ 	if (status !=3D 0)
+ 		netdev_err(dev->net,
+-			"Error receiving init result. Status %i, length %i\n",
+-			status, act_len);
++			"Error receiving init result. Status %i\n",
++			status);
+ 	else if (act_len !=3D expected_len)
+ 		netdev_err(dev->net, "Unexpected init result length: %i\n",
+ 			act_len);
+--=20
+2.39.1
+
 
