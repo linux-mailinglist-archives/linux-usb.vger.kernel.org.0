@@ -2,229 +2,311 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AFD691649
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 02:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08EF691650
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 02:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjBJBgd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Feb 2023 20:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S229755AbjBJBmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Feb 2023 20:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjBJBgc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 20:36:32 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0265DC2C;
-        Thu,  9 Feb 2023 17:36:30 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31A1EQ7x023355;
-        Fri, 10 Feb 2023 01:36:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gf1WQiKBQwYaE38RO5jpV8WfjKBbW2+FB9Rqw+LNPwY=;
- b=KKuowHJs7BXbYDQ7P0XR4jV82pRpKD0/eBbHRy2A6+oG4TaatkCd4N99C4aoM0krJSDJ
- z1vs3cIppOQ6+iKjuE3WwlsNhlmtzuGollIYmWoUn8qr5SaYsKX1wFJ4+3uzyDqsEBxK
- yU33brf4q1z3XDyTjyxT90dZVtapuCxmY3Gjs1hl1LJLe8fr3YZZNMlSAedThG0wUm91
- QDeRJhG9amoE2MApZGgVPLhXsYMbsMtdWPTXv9q46ZE+XGIh6zYTP72XXNmQYmKDR4os
- 9bZZV2wH6rRFdtkpD3+F5KQsBjIK6fQQYZO6jPun6jVe4WvRgIc0qFnClH5Oxf0di7ZP uA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm86mvyyf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 01:36:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31A1aPWv015933
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 01:36:25 GMT
-Received: from [10.110.96.245] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 17:36:24 -0800
-Message-ID: <28322f07-de6b-81e0-38c5-c856d5ce2dce@quicinc.com>
-Date:   Thu, 9 Feb 2023 17:36:23 -0800
+        with ESMTP id S229692AbjBJBl7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Feb 2023 20:41:59 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB97C26CFA
+        for <linux-usb@vger.kernel.org>; Thu,  9 Feb 2023 17:41:55 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id g2so4669531ybk.8
+        for <linux-usb@vger.kernel.org>; Thu, 09 Feb 2023 17:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=skydio.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y6h2zNJyEy4BK2N7DKGUmCGRPsFJSXQ8ei+VKDm25n4=;
+        b=1GHoUshUodDYFMmo6qwlXjsrs5PbyNzCkmEmjOmPbRcWwNWF0UMmqbK590gT6PlhOd
+         dQCKPFDYo6txkq6wscnp+slKpYJAoO5ccGFQMmfE6LJThygL1kTKH/Hda8C7cSFDDXHv
+         U5VC1eJfU0vKio+FzMcIDufg9Vp3perskBv/7TA22THs+CIOAZN6AiRMYm5F8MobSy5x
+         uGU7p7ILQzIF62fZ5R6Uqg/CNg5D6uE7+41FT83CLRVllA2zqWAjTAVdXUA6DBED//pU
+         auZP9hsBxHrUn/eBjT3buuPRjY3kteFWOjiI2c2dq2mFltE4M6YeYxOseMM/Pgc2CtWe
+         FBAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y6h2zNJyEy4BK2N7DKGUmCGRPsFJSXQ8ei+VKDm25n4=;
+        b=fKaVJgZN3DRDF6T4y0H9rWitx01vrJLEekZpKXG/qd+9AgU6GCocvz8XX4GA5infiX
+         XRrPve5inT8sw6C7Z2hP7eJ3n8jPKtC/lbbXQzqcOwiWsKhO9MTwM7HQ+NOziggll5XI
+         V+z2zLt9ris/B+gE8qct7QpWFS3RjsySv1c6bJppJxQEGFuXBmK2tack85hX1xMZeEfI
+         Y7G8R8pvwsUKcH6TxOI6Brbbyh+40aBN7OoxP1J4059jMLCczMS8ECeqohXQGP7uSEgo
+         3ON4Tcv2z+QNfT1bQjVkJfKJy5aohYzO1kDkz2MLvcheq98fHBn4O0jkMHunF8HEjyjY
+         KGkA==
+X-Gm-Message-State: AO0yUKWiD8qrkbSeWvw1jEZPNCPepSl6uSgRXQXY9L0P4fh9ywfOCJ8t
+        vXoY8XwKZwaLH59ph3GtXo48MW4KBSNdlJcSJxbpKw==
+X-Google-Smtp-Source: AK7set+am83adW+pjNp25DuRKIrKM5ikSNDwiZTGcGtu3kir+R+uxybn3oPDk6g5Ro/gsHRr3PfkQUn5rfT9lhAPiMI=
+X-Received: by 2002:a25:8911:0:b0:801:4e03:49a0 with SMTP id
+ e17-20020a258911000000b008014e0349a0mr1320787ybl.317.1675993314149; Thu, 09
+ Feb 2023 17:41:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 2/5] usb: dwc3: Add remote wakeup handling
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
- <1675710806-9735-3-git-send-email-quic_eserrao@quicinc.com>
- <20230207004833.tuy52evcgk7sfa4q@synopsys.com>
- <9bcf323a-5660-da47-dd6c-b218f7f26a45@quicinc.com>
- <20230208011017.47o7m3xt63lbih3m@synopsys.com>
- <cd143a99-f781-fd32-cad2-3df8f8c0d617@quicinc.com>
- <20230208021127.syauhdtpbyyncixr@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230208021127.syauhdtpbyyncixr@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UknoGDqjV5ryVXpzbJSD0ZlXjNVCGseF
-X-Proofpoint-ORIG-GUID: UknoGDqjV5ryVXpzbJSD0ZlXjNVCGseF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-09_17,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 phishscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
- adultscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302100012
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAMKO5Cs69cN+RZNvszobqpHwNNsPFafAaSUxg63sWhSGPXcjyw@mail.gmail.com>
+ <20230209081136.GA31049@hu-jackp-lv.qualcomm.com>
+In-Reply-To: <20230209081136.GA31049@hu-jackp-lv.qualcomm.com>
+From:   Jerry Zhang <jerry@skydio.com>
+Date:   Thu, 9 Feb 2023 17:41:43 -0800
+Message-ID: <CAMKO5CvCbABxEauXiojEPLK6q8543wm2SBsLisMEZ2b_-Gkx1w@mail.gmail.com>
+Subject: Re: dwc3 stuck in U3 state on USB3-only link
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        Alex Mallery <alex.mallery@skydio.com>,
+        quic_wcheng@quicinc.com, quic_ppratap@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Thanks for the detailed responses
+On Thu, Feb 9, 2023 at 12:11 AM Jack Pham <quic_jackp@quicinc.com> wrote:
+>
+> Hi Jerry,
+>
+> On Wed, Feb 08, 2023 at 07:27:04PM -0800, Jerry Zhang wrote:
+> > We have a custom board with two linux systems connected by USB 3 wires
+> > only, vbus and USB2 are omitted for space savings. This has pretty
+> > much worked as the controllers are independent, except for the
+> > following bug:
+> >
+> > - When the host system (tegra xhci host driver) reboots, the device
+> > (msm-dwc3) enters the U3 state and never leaves it, even after the
+> > host powers back up.
+> > - Also if the device system happens to finish booting before the host,
+> > the same thing happens, dwc3 gets stuck in U3 and never enumerates.
+>
+> In both of these scenarios when the host is momentarily offline, what
+> is state of the superspeed signal lines?  Specifically, does the host
+> remove terminations from its SSTX lines?
+I haven't been able to verify but assuming the generic behavior is for
+those terminations to be removed if the host is powered off or held in
+reset, then that's probably what's happening here.
+As I'll mention below, the issue is reproducible with a generic linux
+desktop, hence why I'm somewhat confident our host isn't doing
+anything weird.
+>
+> > I'm able to get these messages from the dwc3 driver when the host reboots
+> >
+> > [   34.549834] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
+> > [   34.555749] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=28100C
+> > [   34.562902] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler link
+> > state = 0x0006
+> > [   34.570319] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+> > unexpected PWR_EVNT, irq_stat=281000
+> > [   34.663734] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
+> > [   34.669644] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=2C1004
+> > [   34.676698] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+> > unexpected PWR_EVNT, irq_stat=2C1000
+> > [   34.686082] dwc3 a600000.dwc3: dwc3_gadget_suspend_interrupt Entry to 3
+> > [   34.692919] dwc3 a600000.dwc3: Notify controller from
+> > dwc3_gadget_vbus_draw. mA = 2
+> > [   34.700777] msm-dwc3 a600000.ssusb:
+> > DWC3_CONTROLLER_SET_CURRENT_DRAW_EVENT received
+> > [   34.708648] dwc3 a600000.dwc3: Notify OTG from dwc3_gadget_suspend_interrupt
+> > [   34.715888] msm-dwc3 a600000.ssusb: DWC3_CONTROLLER_NOTIFY_OTG_EVENT received
+>
+> (BTW I notice from these msm-dwc3 logs you must be using a Qualcomm SoC
+> with a downstream kernel.  Though I think the issue is generic enough to
+> debug with the upstream dwc3 gadget, if it does turn out to be some
+> vendor-specific behavior then I would ask you to contact us directly for
+> more focused support.)
+Yep the issue can be reproduced with a QRB5165 devkit plugged into a
+linux desktop using a cable with USB2 snipped. dwc3-msm in our kernel
+is identical to that in
+https://git.codelinaro.org/clo/la/kernel/msm-5.4.git.
+>
+> If possible please enable dwc3 tracing events as we might be able to see
+> more info about the specific events that occur when the host reboots.
+I did this by mounting tracefs and echo 1 > events/dwc3/enable and it
+produces a trace file, however the events end the end of the trace
+looks like
+          <idle>-0       [006] d.s5   140.648282: dwc3_gadget_ep_cmd:
+ep1in: cmd 'Update Transfer' [30007] params 00000000 00000000 00000000
+--> status: Successful
+          <idle>-0       [000] dnh1   140.736735: dwc3_readl: addr
+00000000f7508d19 value 00000004
+          <idle>-0       [000] dnh1   140.736739: dwc3_readl: addr
+00000000967e799a value 00001000
+          <idle>-0       [000] dnh1   140.736741: dwc3_writel: addr
+00000000967e799a value 80001000
+          <idle>-0       [000] dnh1   140.736743: dwc3_writel: addr
+00000000f7508d19 value 00000004
+  kworker/u17:10-767     [002] d..1   140.736770: dwc3_event: event
+(00030601): End-Of-Frame [U3]
+  kworker/u17:10-767     [002] dn.1   140.781424: dwc3_readl: addr
+00000000967e799a value 80001000
+  kworker/u17:10-767     [002] dn.1   140.781426: dwc3_writel: addr
+00000000967e799a value 00001000
 
+These seem to be data events from the end of the connection, and I
+don't see any events related to suspend or power state.
+> > I think the main thing I'm looking for is validating my existing
+> > understanding and confirming a few things I suspect, but am not sure
+> > of due to unfamiliarity with the details of the USB3 spec:
+> >
+> > - iiuc USB3 power management and states should actually be independent
+> > from both vbus and usb2 lines as all the negotiation happens with LFPS
+> > over the USB3 wires.
+>
+> Yes, but in the corner scenario above with the host going offline, you
+> might be in a situation in which the device abrutly exits its U0 state
+> due to a perceived disconnection or lack of communication on the SS
+> pins.  It might be that the LTSSM could have transitioned to SS.Disabled
+> state--in which case one of the only ways out of that state is, to quote
+> from the USB3.2 spec (7.5.1.1.2 Exit from eSS.Disabled):
+>
+>   "An upstream port shall transition to Rx.Detect only when VBUS
+>    transitions to valid or a USB 2.0 bus reset is detected."
+>
+> But since you don't have VBUS nor usb2 lines connected, it's possible
+> the controller could have gotten stuck here and not have a way out.
+>
+> :) there is a reason that spec compliant USB3.x implementations must
+> also provide D+/D- connectivity; not only for backwards compatibility
+> but also for these sorts of fallback scenarios.
+Understood, we knew we were getting into sketchy territory with this
+but we're actually port splitting on the host side and using that USB2
+slot for a different device, which helps us avoid the need for a hub.
+For embedded systems with a fixed topology, this strategy has a lot of
+advantages if we can get it working.
+>
+> > - I see that entry to U3 requires an LFPS message, but in this case
+> > the host wouldn't have been able to send a message as it is powering
+> > off. Is the device also capable of entering U3 due to timeouts and is
+> > it expected to enter U3 in this situation?
+>
+> In this case since it's obviously not a U3 entry due to LFPS, the only
+> other interpretation of the dwc3's U3 link state is that it is a
+> HS/FS/LS Suspend/L2 state.  This can occur simply by not having activity
+> on D+/D- lines.
+>
+> > - Similarly I've seen that exiting from U3 requires an LFPS message.
+> > My expectation is that the host would wake up all devices on the bus
+> > with LFPS messages shortly after bootup, and either this isn't
+> > happening, or the device is failing to receive or process the message.
+> > If the entry to U3 is expected, how is it then expected to exit U3?
+>
+> I think what might have happened is that when the host rebooted, the
+> device must have abruptly exited U0 and went into eSS.Disabled; at that
+> point the dwc3 controller "falls back" into USB2 mode but since D+/D-
+> are not connected, it is then perceived as entering USB2 suspend.
+> Being in eSS.Disabled could explain why it doesn't respond to further
+> LFPS signaling from the host.
+>
+> You'd somehow need to get the controller to go back into Rx.Detect.
+> Since you don't have a way to do USB2 reset on D+/D-, you may need to at
+> least simulate a VBUS toggle, or forcefully reset the dwc3 controller.
+>
+> With the QCOM HW there is a register that can do this.  Please refer to
+> dwc3_qcom_vbus_override_enable() in dwc3-qcom.c for the upstream
+> implementation.
+The equivalent of this is already being called in dwc3-msm.c as
+dwc3_override_vbus_status, except for missing the SW_SESSVLD_SEL flag,
+but I added that and I didn't notice any difference. I'm assuming
+dwc3-msm and dwc3-qcom are different implementations targeting the
+same device?
 
-On 2/7/2023 6:11 PM, Thinh Nguyen wrote:
-> On Tue, Feb 07, 2023, Elson Serrao wrote:
->>
->>
->> On 2/7/2023 5:10 PM, Thinh Nguyen wrote:
->>> On Tue, Feb 07, 2023, Elson Serrao wrote:
->>>> On 2/6/2023 4:48 PM, Thinh Nguyen wrote:
->>>>>> +static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async)
->>>>>>     {
->>>>>>     	int			retries;
->>>>>> @@ -2296,9 +2309,14 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
->>>>>>     	link_state = DWC3_DSTS_USBLNKST(reg);
->>>>>>     	switch (link_state) {
->>>>>> +	case DWC3_LINK_STATE_U3:	/* in HS, means SUSPEND */
->>>>>
->>>>> It's also possible to do remote wakeup in L1 for highspeed.
->>>>>
->>>>
->>>> The rw_configured flag here is in context of triggering remote wakeup from
->>>> bus suspend only.
->>>>
->>>> The remote wakeup setting for l1 in HighSpeed is controlled through LPM
->>>> token and overrides/ignores the config desc bmAttributes wakeup bit.
->>>>
->>>> Section 4.1 of USB2_LinkPowerMangement_ECN[final] spec "The host system sets the Remote Wake Flag parameter in this request to
->>>> enable or disable the addressed device
->>>> for remote wake from L1. The value of this flag will temporarily (while in
->>>> L1) override the current setting of the
->>>> Remote Wake feature settable by the standard Set/ClearFeature() commands
->>>> defined in Universal Serial Bus Specification, revision 2.0, Chapter 9."
->>>>
->>>> Please let me know if I am missing something.
->>>>
->>>
->>> It overrides the setting of the SetFeature request, not the device
->>> configuration.
->>>
->>> The rw_configured reflects the user configuration. Whether the host
->>> tries to enable the remote wakeup through SetFeature request or LPM
->>> token, the device should operate within the user configuration
->>> limitation.
->>>
->>> If the configuration indicates that it doesn't support remote wakeup, we
->>> should prevent unexpected behavior from the device. For simplicity, we
->>> can just return failure to wakeup for all states.
->>>
->>> Thanks,
->>> Thinh
->>
->> L1 entry/exit is HW controlled and the remote wakeup is conditional.(Section
->> 7.1/Table7.2 of dwc3 data book). Even though we block it from
->> SW the l1 exit will still happen from HW point of view.
->>
->> To correlate the user configuration with LPM token, I experimented by
->> disabling the wakeup bit in the bmAtrributes, but I still see remote wakeup
->> bit being set in the LPM token. From the observation it seems like there is
-> 
-> That's because the linux xhci driver enables remote wakeup bit in its
-> port without regard for the device configuration.
-> 
->> no correlation between the wakeup bit in the bmAtrributes and the wakeup bit
->> in the LPM token.
->>
-> 
-> The host can bring the device out of L1, that's probably what you saw.
-> The controller doesn't initiate remote wakeup by itself.
-> 
-> Thanks,
-> Thinh
+I did manage to finally find a quirk that seems promising though. I
+see in dwc-msm that resume_work is skipped if the enable_bus_suspend
+bit is not set
 
-Actually it seems the controller is initiating a remote wakeup by itself 
-to exit from l1 when we send a STARTTRANSFER command. I did below 
-experiment when the device was in HighSpeed
+     case DWC3_CONTROLLER_NOTIFY_OTG_EVENT:
+         dev_err(mdwc->dev, "DWC3_CONTROLLER_NOTIFY_OTG_EVENT received\n");
+         if (dwc->enable_bus_suspend) {
+             mdwc->suspend = dwc->b_suspend;
+             queue_work(mdwc->dwc3_wq, &mdwc->resume_work);
+         }
+         break;
 
-1.) Enabled l1.
-2.) Disabled the remote wakeup software path (i.e avoid calling 
-__gadget_wakeup() if link is in l1 in the gadget_ep_cmd() path).
-3.) Sent an IN packet when the link was in l1.
+and indeed we don't have it set so I tried enabling
+snps,bus-suspend-enable. Now the log looks a bit different:
 
- From the lecroy logs it looks like the controller initiated a remote 
-wakeup and sent the data.
+[  140.600806] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
+[  140.606720] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=28100C
+[  140.613873] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler link
+state = 0x0006
+[  140.621291] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+unexpected PWR_EVNT, irq_stat=281000
+[  140.714729] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
+[  140.720635] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=2C1004
+[  140.727688] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+unexpected PWR_EVNT, irq_stat=2C1000
+[  140.736782] dwc3 a600000.dwc3: dwc3_gadget_suspend_interrupt Entry to 3
+[  140.743600] dwc3 a600000.dwc3: Notify controller from
+dwc3_gadget_vbus_draw. mA = 2
+[  140.751465] msm-dwc3 a600000.ssusb:
+DWC3_CONTROLLER_SET_CURRENT_DRAW_EVENT received
+[  140.759335] dwc3 a600000.dwc3: Notify OTG from dwc3_gadget_suspend_interrupt
+[  140.766575] msm-dwc3 a600000.ssusb: DWC3_CONTROLLER_NOTIFY_OTG_EVENT received
+[  140.773906] msm-dwc3 a600000.ssusb:
+DWC3_CONTROLLER_NOTIFY_OTG_EVENT processing
+[  140.781433] msm-dwc3 a600000.ssusb: dwc3_resume_work: dwc3 resume work
+[  140.788182] msm-dwc3 a600000.ssusb: peripheral state
+[  140.793307] msm-dwc3 a600000.ssusb: BPER bsv && susp
+[  141.296798] msm-dwc3 a600000.ssusb: DWC3-msm runtime idle
+[  142.048465] msm-dwc3 a600000.ssusb: DWC3-msm runtime suspend
+[  142.054800] msm-dwc3 a600000.ssusb: DWC3 in low power mode
 
-Below are the events and the corresponding lecroy snippet
-1.)Packet(55551) ------------> LPM token from Windows Host PC.
+is the log when the host first powers off.
 
-2.) Link in l1 for 2.445 secs
+[  166.306367] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq received
+[  166.312277] msm-dwc3 a600000.ssusb: USB Resume start
+[  166.317484] msm-dwc3 a600000.ssusb: msm_dwc3_pwr_irq_thread
+[  166.323235] msm-dwc3 a600000.ssusb: dwc3_resume_work: dwc3 resume work
+[  166.330001] msm-dwc3 a600000.ssusb: dwc3_msm_resume: exiting lpm
+[  166.336493] msm-dwc3 a600000.ssusb: dwc3_msm_resume: truly resuming ss phy
+[  166.343649] msm-dwc3 a600000.ssusb: DWC3 exited from low power mode
+[  166.350125] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler irq_stat=3C1020
+[  166.357237] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+handling PWR_EVNT_LPM_OUT_L2_MASK
+[  166.366020] msm-dwc3 a600000.ssusb: dwc3_pwr_event_handler:
+unexpected PWR_EVNT, irq_stat=3C1000
+[  166.375094] msm-dwc3 a600000.ssusb: dwc3_resume_work: dwc3 resuming
+[  166.381580] msm-dwc3 a600000.ssusb: peripheral_suspend state
 
-3. ) Send a ping data from device to host
+and we get these messages when the host powers back up. I can verify
+that the timing of these changes depending on how long the host is
+held in reset, so it's definitely detecting the host here rather than
+hitting some time based event. All these events look correct though as
+it claims to be resuming, however there still isn't enumeration and
+the link state still is in U3. The last line still claims to be in the
+suspend state and this is probably what's preventing the resume from
+completing. Looking through the code it seems like it depends on the
+B_SESS_VLD  bit
 
-4. )Packet(55554) ----------------> Resume
+     if (!test_bit(B_SESS_VLD, &mdwc->inputs)) {
+         dev_err(mdwc->dev, "BSUSP: !bsv\n");
+         mdwc->drd_state = DRD_STATE_IDLE;
+         cancel_delayed_work_sync(&mdwc->sdp_check);
+         dwc3_otg_start_peripheral(mdwc, 0);
 
-5.) IN data
-
-
-Packet#
-_______|_______________________________________________________________________
-Transaction(26584) H(S) EXT(0x0F) LPM(0xC3) ADDR(11) ENDP(0) BESL(150 us)
-_______| Link State(0x1) Rem Wake(0x1) ACK(0x4B) Time Stamp(27 . 204 671 
-632)
-_______|_______________________________________________________________________Ch0 
-
-Packet(55550) Dir H(S) EXT(0x0F) ADDR(11) ENDP(0) CRC5(0x04) Pkt Len(8)
-_______| Duration(133.330 ns) Idle(200.660 ns) Time Stamp(27 . 204 671 632)
-_______|_______________________________________________________________________Ch0 
-
-Packet(55551) Dir H(S) LPM(0xC3) BESL(150 us) Link State(0x1)
-_______| Rem Wake(0x1) Rsvd(0x0) CRC5(0x04) Pkt Len(8) Duration(133.330 ns)
-_______| Idle(182.660 ns) Time Stamp(27 . 204 671 966)
-_______|_______________________________________________________________________Ch0 
-
-Packet(55552) Dir H(S) ACK(0x4B) Pkt Len(6) Duration(100.000 ns)
-_______| Idle( 11.450 us) Time Stamp(27 . 204 672 282)
-_______|_______________________________________________________________________Ch0 
-
-Packet(55553) Dir(?) Full Speed J (Suspend)( 2.445 sec)
-_______| Time Stamp(27 . 204 683 832)
-_______|_______________________________________________________________________Ch0 
-
-Packet(55554) Dir(?) Full Speed K (Resume?)( 95.168 us) Time(165.134 us)
-_______| Time Stamp(29 . 649 644 482)
-_______|_______________________________________________________________________
-Transfer(67) H(S) Bulk(IN) ADDR(11) ENDP(1) Bytes Transferred(142)
-_______| Time(309.366 us) Time Stamp(29 . 649 809 616)
-_______|_______________________________________________________________________
-Transfer(68) H(S) Bulk(OUT) ADDR(11) ENDP(1) Bytes Transferred(142)
-_______| Time(520.050 us) Time Stamp(29 . 650 118 982)
-_______|_______________________________________________________________________
-Transaction(26655) H(S) EXT(0x0F) LPM(0xC3) ADDR(11) ENDP(0) BESL(150 us)
-_______| Link State(0x1) Rem Wake(0x1) ACK(0x4B) Time( 12.168 us)
-_______| Time Stamp(29 . 650 639 032)
-_______|_______________________________________________________________________
-
-If software was solely responsible for waking up from l1, then there 
-should be no reason why the host would exit l1 in this scenario.
-I tried with different ping intervals and saw that the duration for 
-which the link was in l1 correlates with the ping interval.
-
-Thanks
-Elson
+so somehow this if statement isn't triggering. Does this seem like the
+right track?
+>
+> > I've also tried relevant looking quirks on the gadget side including
+> > ssp-u3-u0-quirk, u2exit_lfps_quirk, disable_scramble_quirk. I don't
+> > see a way to explicitly prevent the controller from entering U3 mode,
+> > is this possible with a register setting?
+> >
+> > Would appreciate any thoughts. If I haven't misunderstood anything,
+> > the next step would probably be to find a beagle 5000 analyzer and
+> > track down the LFPS messages.
+>
+> I this is still a good idea, if at least to see what's happening on the
+> signal lines at a lower level.  Would be great if it could show the
+> state of terminatination when the host is rebooting.
+Unfortunately we don't have one on hand so this will probably be a
+last resort if none of the other paths pan out.
+>
+> Hope that helps,
+> Jack
