@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C066921F2
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 16:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F586921FB
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 16:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbjBJPVx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Feb 2023 10:21:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        id S232707AbjBJPWP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Feb 2023 10:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbjBJPVv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 10:21:51 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39291B6D7D
-        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 07:21:28 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id q19so5028208edd.2
-        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 07:21:28 -0800 (PST)
+        with ESMTP id S232695AbjBJPWM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 10:22:12 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE237420B
+        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 07:22:04 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qb15so14705995ejc.1
+        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 07:22:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uir/jHBYC/5IZ284bGDQz3M0J00B5bDwpvAn9rozFo8=;
-        b=E2+G7hwqFEkVJIpKmVFoWKFBeVxaCfUXHhhqmojAnYb6RoBPcoe6jIEbQrDL94o6wa
-         vlF19vC3g7CsizGRRPT/FNWlxFblwn3/KAK6mlhYTvbyigvg7xl6N2gzSP20GWRyLumE
-         xMjo9TKc2C8zLdWWRKJVq1OJXnVe49wDhAA614GuBYubW5uS/meM3qmmXcIBxnG/JG8j
-         gnwDfKcYTMGgLLHZzuAvrh19wvGpZZDl98HuM1qcKOc5pyn/Y1U/2/WRwyghJQlm8slr
-         gN/IogL117YLEW9rPHRfh2bNv5WHdq5WqT3JEvoHmqlKmwe3SI1YBCX6W6i0sImkNz4E
-         4uWg==
+        bh=Oew11yu8MfKQXmlqds/ZdpKNPQOBOvmSSo/K5IYjTAM=;
+        b=eTv8R2vImTQQIHG54ISpCFbu/N47MXf/nxtUhciMhXMLxB/Zm67IaydkDMWL1dZm+I
+         uUWpLFxAngPa0pLGL3jSq0hdfrXH/CDO1sFsMzJZcybJnB39Ut6gm4qOibdY90vNKIAc
+         +hLM3dHS99dpMs3roN3SjtGhu381MjBqXK2fOxF8AZXur/COtMzmqA4VKYzwf7Zg2Z5C
+         Eo11DgjwieCsmdZD7/4X+bd/cn9uqcwCZ+mMIBgbCxteStmiNmtQcV4cR7MD+HGsUAV5
+         3c59fScBARO7fZEty+tzi9Jw9EeEphx0tpD9t7pVCoX47luqg2rvC7OCe9mjgzzNi+aA
+         sMKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uir/jHBYC/5IZ284bGDQz3M0J00B5bDwpvAn9rozFo8=;
-        b=pMVecB6mjYZf0CeC2O0rr+5jWuwcQQhTKnk8adJjDISL8sh2plkpJa3iNTAyV010y3
-         TWV3Wn3pnvDMpB9qGFLlFQSWFNySflAL8BwhixFQ0MnEsdWi66FTM60qU3SIsxRaL/1B
-         sHPogsC19/pcTGgF467vfkTiTl4x7PrLVa+PWnCWSTMo8pbGyc5wgyltrFdRfSeqx+aa
-         dHnA407kaT7LutLG02b9wB5FvCrsmhQRVsLTzENN36/TsJ5T+rsTHukOvx4S92aRV1dy
-         /muE82HVE5O6d0/9JMTIjhlDZNbcaV6i7TpcisYRNt47aSN5r70mR0ufhQqRNFpSYfcT
-         Fl3g==
-X-Gm-Message-State: AO0yUKXL0c9VL4oDBmzseazKXH1XtlhrkHHcaHrl5hyT55Ss7P/5H2AI
-        niFV1ihGJ4qYq9JcUF+Ph0FFPw==
-X-Google-Smtp-Source: AK7set/kiHuZpiLQV0U5126ZTrO/Hr0uei28Fo++bkTEbsF3Ihxj+xTFyTutL4xaRx1XQex7ZhXvHw==
-X-Received: by 2002:a50:cd06:0:b0:4aa:c3da:3ac5 with SMTP id z6-20020a50cd06000000b004aac3da3ac5mr17720588edi.3.1676042486655;
-        Fri, 10 Feb 2023 07:21:26 -0800 (PST)
+        bh=Oew11yu8MfKQXmlqds/ZdpKNPQOBOvmSSo/K5IYjTAM=;
+        b=y68M0T2sy534YBCELYGPdro2mkMy2JO9mm/waU7BYgglXFHTqAIjekrf9KL8fWSXep
+         RfQH1jadqap2ZnGK8Hf10RNxxl1wOFnJOftiLVH/HeGhdxLVYb040hnLJ95UqnKQaMzI
+         L3UdYtWftB4+jrBx5Krs3xWrgELryXc+rxtX9NeGhQVyvJur/1hUCy5dZjcaAmpPj67F
+         geYz3typf9V4lUfTvz5NDMVcSJaIXV6c1J2PB2idMabuAAagFTaQrdMsye4vWAETCv3R
+         7jYxXovs1lQoeash5xuq93XutBLwh09LzB80QZzsDM/mXiaisNNRRe7I6/1kJ/nq4V5a
+         YlYg==
+X-Gm-Message-State: AO0yUKWz7faRRPnHSfcrSokk3+dI+7sb3edrdmXoH3x+05jpXZCr8nma
+        k3F+6CaGzmI7h/NUMXSIda/LZQ==
+X-Google-Smtp-Source: AK7set9VjovkMb4GQDk67TMl80fnNirRSZ3EC2VnEHufl4wFD6e8omACLOkNfxVsPgfemhuSyxV0YA==
+X-Received: by 2002:a17:906:1514:b0:88c:4f0d:85af with SMTP id b20-20020a170906151400b0088c4f0d85afmr16208944ejd.75.1676042523160;
+        Fri, 10 Feb 2023 07:22:03 -0800 (PST)
 Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id ds11-20020a0564021ccb00b004a9b5c957bfsm2333161edb.77.2023.02.10.07.21.24
+        by smtp.gmail.com with ESMTPSA id i12-20020a170906250c00b008adc971f5acsm2515268ejb.178.2023.02.10.07.22.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 07:21:26 -0800 (PST)
-Message-ID: <a0a47304-3d57-40ff-421d-f040420ec0b0@linaro.org>
-Date:   Fri, 10 Feb 2023 16:21:24 +0100
+        Fri, 10 Feb 2023 07:22:02 -0800 (PST)
+Message-ID: <ea64a232-9784-c721-0ccb-8744f2eb045e@linaro.org>
+Date:   Fri, 10 Feb 2023 16:22:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 08/11] arm64: dts: qcom: sm8350-hdk: add pmic glink
+Subject: Re: [PATCH v2 09/11] arm64: dts: qcom: sm8450-hdk: add pmic glink
  node
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
@@ -70,9 +70,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v2-8-71fea256474f@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v2-9-71fea256474f@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v2-8-71fea256474f@linaro.org>
+In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v2-9-71fea256474f@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,19 +93,22 @@ On 10.02.2023 16:02, Neil Armstrong wrote:
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 77 ++++++++++++++++++++++++++++-----
->  1 file changed, 65 insertions(+), 12 deletions(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 45 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 44 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-> index 54654eb75c28..28fc9a835c5d 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-> @@ -31,6 +31,40 @@ hdmi_con: endpoint {
->  		};
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> index feef3837e4cd..1755ee3aa04c 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> @@ -87,6 +87,40 @@ lt9611_3v3: lt9611-3v3-regulator {
+>  		enable-active-high;
 >  	};
 >  
 > +	pmic-glink {
-> +		compatible = "qcom,sm8350-pmic-glink", "qcom,pmic-glink";
+> +		compatible = "qcom,sm8450-pmic-glink", "qcom,pmic-glink";
 > +		#address-cells = <1>;
 > +		#size-cells = <0>;
 > +
@@ -141,55 +144,15 @@ On 10.02.2023 16:02, Neil Armstrong wrote:
 >  	vph_pwr: vph-pwr-regulator {
 >  		compatible = "regulator-fixed";
 >  		regulator-name = "vph_pwr";
-> @@ -666,23 +700,42 @@ &usb_1 {
+> @@ -724,7 +758,16 @@ &usb_1 {
 >  };
 >  
 >  &usb_1_dwc3 {
-> -	/* TODO: Define USB-C connector properly */
 > -	dr_mode = "peripheral";
-> -};
-> +	dr_mode = "otg";
-> +	usb-role-switch;
->  
-> -&usb_1_hsphy {
-Are you removing the hsphy completely?
-
-Konrad
-> -	status = "okay";
-> +	ports {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
->  
-> -	vdda-pll-supply = <&vreg_l5b_0p88>;
-> -	vdda18-supply = <&vreg_l1c_1p8>;
-> -	vdda33-supply = <&vreg_l2b_3p07>;
-> +		port@0 {
-> +			reg = <0>;
-> +
-> +			usb_1_dwc3_hs: endpoint {
-> +				remote-endpoint = <&pmic_glink_hs_in>;
-> +			};
-> +		};
-> +
-> +		port@1 {
-> +			reg = <1>;
-> +
-> +			usb_1_dwc3_ss: endpoint {
-> +				remote-endpoint = <&pmic_glink_ss_in>;
-> +			};
-> +		};
-> +	};
->  };
->  
-> -&usb_1_qmpphy {
-> -	status = "okay";
-> +&usb_1_dwc3 {
 > +	dr_mode = "otg";
 > +	usb-role-switch;
 > +};
->  
-> -	vdda-phy-supply = <&vreg_l6b_1p2>;
-> -	vdda-pll-supply = <&vreg_l1b_0p88>;
+> +
 > +&usb_1_dwc3_hs {
 > +	remote-endpoint = <&pmic_glink_hs_in>;
 > +};
@@ -198,5 +161,5 @@ Konrad
 > +	remote-endpoint = <&pmic_glink_ss_in>;
 >  };
 >  
->  &usb_2 {
+>  &usb_1_hsphy {
 > 
