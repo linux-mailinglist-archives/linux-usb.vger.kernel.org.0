@@ -2,102 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B049C691D4C
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 11:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4933691D7B
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 12:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjBJKxl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Feb 2023 05:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
+        id S232272AbjBJLCD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Feb 2023 06:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbjBJKxj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 05:53:39 -0500
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE5D126D8
-        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 02:53:38 -0800 (PST)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-520dad0a7d2so62692047b3.5
-        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 02:53:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=jUqnHJa2PorU5DS/9f/K5xHrE2Q+e9qogm2VRF7IK3MUAuzX202WXqrYW6ul1sqUBH
-         Dmxd0GgfUS5PfPOoTddiJPaWdOotyQfpUsknRoBHTvPKeV2ns+iy8K/p7m5NXSYORca2
-         O04ObyQBA3VJLqfYCVLxLF8J2ZUMeg1jRrxCiBSVcfe1gjr8+BDQuRTrPYt5o0Sh3/+t
-         /PHnuN+vMfWcVrkiiUBnbdYeu4rxUo3rW5XZB6A/dsGJ3eTnEPX7BKEkjCibui0On8RB
-         WppS131JDJyaZiWEN1YLTY5oZbybTrCtprJXjrffDVYzDqKOaDCYTPC43CeiSuB7ajgs
-         /keQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=CUhjDQXCGPqVXWK/sslpIknRd2B5AL0BAymUeC2H8YCmML93jJugW79NDfPsBRuJQ6
-         CYgXqK+Ggcl2Bew0+ZPS2yW9YBAZA2Njkt7yF/u7K9NfX4QdgWr/0Le0+p0jk8kOGfjb
-         89Zf0o9LIE3n1c0MW383JY0u6sToJ2lV8EjCZnTAeOjA66X4VYLcsWx2Xrks4DDZ02rX
-         a8y+LdiRruwamIwa9C1rR+x4+dtBtpb/PVF4ZSZhaNDZTHpTT94wESvRZN7x6k3/eeXh
-         ojNJT7oJ/9XJDKnotA9rl6WweWTwpcrj298UbvRzNx4myhB4iNc6qgd6rhKXQIdLjGEB
-         qV7w==
-X-Gm-Message-State: AO0yUKV4okb/hKq0rNPogYI0zyy+IlD+0TZcCDBoikZW5M8Ub3REByMZ
-        MkaBwGTPzziH08IGkAT5Y9nLBCObYC9JWb7gNLs=
-X-Google-Smtp-Source: AK7set8zt0IcHyBuLuc9G2no/fpt8D/3slvc7923e4J+po4zq9nwhZ0s+LYsrVn33anVfXUJCGbYFLCRfx0loLae0W0=
-X-Received: by 2002:a81:4f57:0:b0:52e:de55:4f27 with SMTP id
- d84-20020a814f57000000b0052ede554f27mr15387ywb.294.1676026417466; Fri, 10 Feb
- 2023 02:53:37 -0800 (PST)
+        with ESMTP id S232179AbjBJLCB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 06:02:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F404B37F0F;
+        Fri, 10 Feb 2023 03:01:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94A5DB824CE;
+        Fri, 10 Feb 2023 11:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3026C433D2;
+        Fri, 10 Feb 2023 11:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676026912;
+        bh=0SjioCiP64GPWMqzyQ75xWspd1FmGySB99HbUwvewbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fuWd6/7aDLHPNmEXDV+yyDNYQmxmenV6uugq1zrDc/NHIfE2NPNC+7OUX3N+7BcM6
+         NLIFl+1kDo6H4q/SsQp4//GPRBpLMCvjHI0HIf50CBMUQSv1kXXMFAO/wyzUXfsxQe
+         bS+1MAjZUrjPJKiXNvFevfKb4Agg1fZyiL3pSWyc=
+Date:   Fri, 10 Feb 2023 12:01:49 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/7] usb: typec: ucsi: add PMIC Glink UCSI driver
+Message-ID: <Y+YkHZASzN97QtUY@kroah.com>
+References: <20230130-topic-sm8450-upstream-pmic-glink-v1-0-0b0acfad301e@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v1-1-0b0acfad301e@linaro.org>
+ <Y9jcYdc30G026/fs@kroah.com>
+ <720aee1d-87e8-5291-c6a0-ef53e830a21d@linaro.org>
+ <Y+YerQrfWgmwTErM@kroah.com>
+ <06670a10-c8e9-6f87-9c16-e88a90a74469@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:c510:b0:32d:e821:f337 with HTTP; Fri, 10 Feb 2023
- 02:53:36 -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <getw24139@gmail.com>
-Date:   Fri, 10 Feb 2023 02:53:36 -0800
-Message-ID: <CAEoTnMtorHk8PQkx3qXozFVL6V5AwJaemRbPnW-KoCXv5otu1A@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1141 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5004]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [getw24139[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [getw24139[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <06670a10-c8e9-6f87-9c16-e88a90a74469@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On Fri, Feb 10, 2023 at 11:44:22AM +0100, Neil Armstrong wrote:
+> On 10/02/2023 11:38, Greg Kroah-Hartman wrote:
+> > On Fri, Feb 10, 2023 at 11:31:08AM +0100, Neil Armstrong wrote:
+> > > On 31/01/2023 10:16, Greg Kroah-Hartman wrote:
+> > > > On Mon, Jan 30, 2023 at 10:54:32AM +0100, Neil Armstrong wrote:
+> > > > > Introduce the UCSI PMIC Glink aux driver that communicates
+> > > > > with the aDSP firmware with the UCSI protocol which handles
+> > > > > the USB-C Port(s) Power Delivery.
+> > > > > 
+> > > > > The UCSI messaging is necessary on newer Qualcomm SoCs to
+> > > > > provide USB role switch and altmode notifications.
+> > > > > 
+> > > > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > > > ---
+> > > > >    drivers/usb/typec/ucsi/Kconfig      |   7 +
+> > > > >    drivers/usb/typec/ucsi/Makefile     |   1 +
+> > > > >    drivers/usb/typec/ucsi/ucsi_glink.c | 321 ++++++++++++++++++++++++++++++++++++
+> > > > >    3 files changed, 329 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> > > > > index 8f9c4b9f31f7..dee6069e46a2 100644
+> > > > > --- a/drivers/usb/typec/ucsi/Kconfig
+> > > > > +++ b/drivers/usb/typec/ucsi/Kconfig
+> > > > > @@ -58,4 +58,11 @@ config UCSI_STM32G0
+> > > > >    	  To compile the driver as a module, choose M here: the module will be
+> > > > >    	  called ucsi_stm32g0.
+> > > > > +config UCSI_PMIC_GLINK
+> > > > > +	tristate "UCSI Qualcomm PMIC GLINK Interface Driver"
+> > > > > +	depends on QCOM_PMIC_GLINK
+> > > > 
+> > > > No way to test build this code without this option?
+> > > 
+> > > Nop, the QCOM_PMIC_GLINK is a build dependency, this can't be removed
+> > 
+> > Then perhaps the QCOM_PMIC_GLINK code needs to be fixed up to allow for
+> > it to be built on all platforms properly?  Otherwise you are
+> > guaranteeing you will not get much, if any, build coverage and api
+> > changes will cause this code to stagnate over time :(
+> 
+> The QCOM_PMIC_GLINK deps are:
+>         depends on RPMSG
+>         depends on TYPEC
+>         depends on DRM
+>         depends on NET
+>         depends on OF
+>         select AUXILIARY_BUS
+>         select QCOM_PDR_HELPERS
+> 
+> What would be the changes needed here ?
+
+I do not know, try unwinding it and maybe just adding a COMPILE_TEST
+build option in a few places is all that is needed?
+
+thanks,
+
+greg k-h
