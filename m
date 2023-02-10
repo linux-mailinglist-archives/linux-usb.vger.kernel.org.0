@@ -2,213 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7D9692252
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 16:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0310C692274
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Feb 2023 16:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbjBJPf3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Feb 2023 10:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S232457AbjBJPle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Feb 2023 10:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232735AbjBJPf2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 10:35:28 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BACE28231
-        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 07:35:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A6D0gGuoRp9oThzoBw4EDf/gN0ctPju8ku/md8HFyip9aMGPDdQ6sjG/xRJTaUZ6GvzQMtCeUBCxoW3ebJ0xXVh9Nfb8AOzrOLW1Isx8Ln8qEMc+CEVHqyTt6vnDqp8pEplzz+QZ3sCNbqnpD/ADG8hx9t2K+NvzqS2JgSMUY+9mqdBgzEkRnLw7903pjN8YHHbbdzrzqupfWeb7qJxc2jDeH/BQ24togkqYxAytRxA23KQ7KcWv/mCdoTyhnEYZMU3MtPSAhwE+8tjhAPbYgNXo6UubMuCK+Ay0tjZDViI6AnBOcNq3TgZIThTpRzp85/4hK/ie2Aupab33E2vKKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M2EMiR9elN/0OBXrbzyzt58m/h9nARBYdGxqi3vvJ8A=;
- b=ehpxyqW0x0UwKTYTcboGcGtB7ZqTHzRwxFe6PKtmxHZ2l9jBepRugVJaqvfBmE4TzdaMUn/kfKH0eHy0OvI0Rkhkm37dlDNGJAJ+q3MOeTveau/DtCsNFMIq0AirQH6s6YngCIcg6io1Xc0pRsBJJYM8oMfe/7j5NNMJnWtPD/GkHKWswljOigAhHXEKGEgkkJBm0AWjR0QHaEAS6t+Fk9+UmIO3HJhbbBTPoPm0gT4JJrm0aLJYHnMI4U2nvbb7IkxuvR66Ol1KTx+aMDjvy8cZ60WSKpcDwUvYVlLyVNHptDNtOY7yV36AYsBm1yH5hI8UlQe6DgZFUn2XIbwQQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M2EMiR9elN/0OBXrbzyzt58m/h9nARBYdGxqi3vvJ8A=;
- b=kiDH4UeRkU+cd9dLjCs0eTrv7scZ4gG9kWAkAQmx4j53MOtpCu/9djBlSNqLNmFLo+b5WPueqda2eIOflTzgb7wiG/SDKIjvqNsGt5ZZ2yjkwcwo2BnZNtxM8UoWFcKdck5jYFjUez1AAhUM9lhjr3tB2mms0d2aRc7zoVX+K/Q=
-Received: from MN2PR20CA0050.namprd20.prod.outlook.com (2603:10b6:208:235::19)
- by BL3PR12MB6617.namprd12.prod.outlook.com (2603:10b6:208:38c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Fri, 10 Feb
- 2023 15:35:21 +0000
-Received: from BL02EPF000108EB.namprd05.prod.outlook.com
- (2603:10b6:208:235:cafe::b6) by MN2PR20CA0050.outlook.office365.com
- (2603:10b6:208:235::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21 via Frontend
- Transport; Fri, 10 Feb 2023 15:35:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF000108EB.mail.protection.outlook.com (10.167.241.200) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6086.16 via Frontend Transport; Fri, 10 Feb 2023 15:35:19 +0000
-Received: from sanjuamdntb2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 10 Feb
- 2023 09:35:17 -0600
-From:   Sanjay R Mehta <Sanju.Mehta@amd.com>
-To:     <mika.westerberg@linux.intel.com>, <andreas.noever@gmail.com>,
-        <michael.jamet@intel.com>, <YehezkelShB@gmail.com>
-CC:     <Basavaraj.Natikar@amd.com>, <linux-usb@vger.kernel.org>,
-        Sanjay R Mehta <sanju.mehta@amd.com>
-Subject: [PATCH v2] thunderbolt: Disable CLx state for AMD Yellow Carp and Pink Sardine
-Date:   Fri, 10 Feb 2023 09:34:47 -0600
-Message-ID: <1676043287-119829-1-git-send-email-Sanju.Mehta@amd.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S231985AbjBJPld (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Feb 2023 10:41:33 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2B1552A6
+        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 07:41:31 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id lu11so16955563ejb.3
+        for <linux-usb@vger.kernel.org>; Fri, 10 Feb 2023 07:41:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A1Krkj0HlE9Ql2Nee9gMF+rHkVhX1QhowmXp2knlFDg=;
+        b=hp9Um3WQTsZC83hlfDAGYNtcbL+/NLkWpoGb8qtkv0tYuLR4iiTb2MIokqzcvCzXBq
+         8gZ0pc6vroLVDnr+8ca2MVt8riGEBRzuZ64GbzB2U9whlwZe7U+dnGBeLRO5v5Np3qXP
+         4J+pjrVVsj/mWHo+3yhH54t6JZQmsNFfoKNsdcHHikpwidgMek/OzHSIxLtA7nmfS5Rw
+         oGT/Vm332glf57IbR7uyQDDkBu3B9Sy+bz2FEWSddOaGttsdcfuHIHSi3ZNKoOzWC7Ma
+         8CHdtMOZ6g8IiehMMnciI4+Na7+R/pThZsq2mJTdRbx75TH5abiRzsrOsKbqMCZUa6bT
+         2nxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A1Krkj0HlE9Ql2Nee9gMF+rHkVhX1QhowmXp2knlFDg=;
+        b=DthhOdGGawnCMZ5doQoWiSvJx7TrMD+xT0wTWVJ58fu8J2kP50DDetMIq08K2aGzDG
+         CbyCxI5XfYJAEw3Ulv9gPdeu4/IQ5RD6MfKA4Z1QM18gPpHPhTDv49liBaVSSpYXcIEX
+         sl3yP4ukYrfD0/WXiiJsk3m0u860QRSNj495EMIw8w+xGwGnMMP+DLKZa3br2UJuqySc
+         qpJPEwj2XEL7dcrJdgOJ4YqDZC8xs+ntguzdBCAwyBCuG/kDTuQbvn7gRl1rSrGFP9lj
+         JxGek3Ik0P2XxwQXY1inal7s1jISDJEBpc23JcrHCW3zQ8Rsk40Pass8n6lRIadmIFCA
+         5k6Q==
+X-Gm-Message-State: AO0yUKUsKoIE9zLPbRdDiNGXaWiBhVjORHt91AG3fXW43vMDHfNndVBr
+        ptguVsE5zEoQTIjs1eZHW0lb7w==
+X-Google-Smtp-Source: AK7set+VF+YEIS/EikfHWnoUysi3pO4tkHw3TiDqGHn38RHcBhEwopxcU2G9etm2BwmzAMxSYuultw==
+X-Received: by 2002:a17:907:6e1f:b0:8aa:502c:44d3 with SMTP id sd31-20020a1709076e1f00b008aa502c44d3mr18760391ejc.41.1676043690024;
+        Fri, 10 Feb 2023 07:41:30 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170906368b00b0088519b9206bsm2489176ejc.130.2023.02.10.07.41.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 07:41:29 -0800 (PST)
+Message-ID: <f548bb4f-9940-044f-95b2-e7c7bed276aa@linaro.org>
+Date:   Fri, 10 Feb 2023 17:41:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 04/11] soc: qcom: pmic_glink: register ucsi aux device
+Content-Language: en-GB
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v2-4-71fea256474f@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v2-4-71fea256474f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000108EB:EE_|BL3PR12MB6617:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c79cab6-79f1-45f9-90e9-08db0b7c6ad1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +BWc/DA2HEG1hbwM1iEnuFDFFJUodMFTE3nFMdyEG3KQB3IFGDpSiTDsDpKav9N2qeZC3auzRlX5n5ZPcEtSbBt8fd7jqWxUXy978QlunSGF2IEtcnn3wiguqJ2AJ9FCbRq3xq/oupwTwMAE5xF60waXEJTXaPcBEcoEbQRV6A+3uxSdEJ6zL4KynMhuyySZTb2b1k7Yez4gAvrXK2JaVHybMpfNbJOAtEkwuCmjCckWrzhnCtfIMclUoW557I7OMihaYdCsj3PkC6dJWrJtnEriyXvWRJMS25iIITtIiD23eZKp/ofeint672lx2rA4mv23SnF25Ky+CeJzfLE6QwcFrVozE9KsiqZbGUlH21CO/+cuQrCyt5chh7bd8AhtgRNFpr0wpbpe4MsYhr0mmWK5zBT24cCkDY6nMmvIidFC3pvDGqPlPw/HTGoNsUWaNpYIpjunbLc9PyjgRGYulw0EZqgWvZesRJTmMb+fYfC7m8u4yJWr0mV6pg22IKfoO5CuD9MjMsdorGrez1Nx8DGba1bfyHaJeG43QJ1WW1kKd4LdyHsIiKTCww0iI36nz+ZP5Wn47gtktpIBoXn++q7i651WDrBpRqDDrFD+nOHCHy7wy+go4h9B86Z0N2sIEE+rJh+SjSDJi3R9OJf0yfMm4joPjcZF3NJqHpSjpcsJfPd7zUk/p2ZDLdf7kyeOByBuDxRSLtwZQulisIkMPVMiht7jcejiX/pg2AmOQ30=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199018)(40470700004)(46966006)(36840700001)(2906002)(36860700001)(86362001)(82310400005)(81166007)(82740400003)(40460700003)(336012)(426003)(7696005)(2616005)(16526019)(186003)(26005)(36756003)(40480700001)(356005)(47076005)(70206006)(83380400001)(54906003)(316002)(110136005)(41300700001)(6666004)(4326008)(478600001)(70586007)(8676002)(8936002)(5660300002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 15:35:19.8557
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c79cab6-79f1-45f9-90e9-08db0b7c6ad1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108EB.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6617
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sanjay R Mehta <sanju.mehta@amd.com>
+On 10/02/2023 17:02, Neil Armstrong wrote:
+> Only register UCSI on know working devices, like on the SM8450
+> or Sm8550 which requires UCSI to get USB mode switch events.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>   drivers/soc/qcom/pmic_glink.c | 67 ++++++++++++++++++++++++++++++++++++-------
+>   1 file changed, 57 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> index bb3fb57abcc6..c7f091f4a8c1 100644
+> --- a/drivers/soc/qcom/pmic_glink.c
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -4,6 +4,7 @@
+>    * Copyright (c) 2022, Linaro Ltd
+>    */
+>   #include <linux/auxiliary_bus.h>
+> +#include <linux/of_device.h>
+>   #include <linux/module.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/rpmsg.h>
+> @@ -11,12 +12,23 @@
+>   #include <linux/soc/qcom/pdr.h>
+>   #include <linux/soc/qcom/pmic_glink.h>
+>   
+> +enum {
+> +	PMIC_GLINK_CLIENT_BATT = 0,
+> +	PMIC_GLINK_CLIENT_ALTMODE,
+> +	PMIC_GLINK_CLIENT_UCSI,
+> +};
+> +
+> +#define PMIC_GLINK_CLIENT_DEFAULT	(BIT(PMIC_GLINK_CLIENT_BATT) |	\
+> +					 BIT(PMIC_GLINK_CLIENT_ALTMODE))
+> +
+>   struct pmic_glink {
+>   	struct device *dev;
+>   	struct pdr_handle *pdr;
+>   
+>   	struct rpmsg_endpoint *ept;
+>   
+> +	unsigned int client_mask;
+> +
+>   	struct auxiliary_device altmode_aux;
+>   	struct auxiliary_device ps_aux;
+>   	struct auxiliary_device ucsi_aux;
+> @@ -231,8 +243,19 @@ static struct rpmsg_driver pmic_glink_rpmsg_driver = {
+>   	},
+>   };
+>   
+> +/* Do not handle altmode for now on those platforms */
+> +static const unsigned int pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
+> +							  BIT(PMIC_GLINK_CLIENT_UCSI);
+> +
+> +static const struct of_device_id pmic_glink_of_client_mask[] = {
+> +	{ .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
+> +	{ .compatible = "qcom,sm8550-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
+> +	{}
+> +};
+> +
 
-AMD Yellow Carp and Pink Sardine don't support CLx state,
-hence disabling it.
+Squash this into pmic_glink_of_match, please. Then you can use 
+of_device_get_match_data()
 
-Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
----
- drivers/thunderbolt/nhi.h    |  6 ++++++
- drivers/thunderbolt/quirks.c |  6 ++++++
- drivers/thunderbolt/tb.h     | 35 ++++++++++++++++++++++++++++++++---
- 3 files changed, 44 insertions(+), 3 deletions(-)
+>   static int pmic_glink_probe(struct platform_device *pdev)
+>   {
+> +	const struct of_device_id *match;
+>   	struct pdr_service *service;
+>   	struct pmic_glink *pg;
+>   	int ret;
+> @@ -249,12 +272,27 @@ static int pmic_glink_probe(struct platform_device *pdev)
+>   	mutex_init(&pg->client_lock);
+>   	mutex_init(&pg->state_lock);
+>   
+> -	ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
+> -	if (ret)
+> -		return ret;
+> -	ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
+> -	if (ret)
+> -		goto out_release_altmode_aux;
+> +	match = of_match_device(pmic_glink_of_client_mask, &pdev->dev);
+> +	if (match)
+> +		pg->client_mask = *(const unsigned int *)match->data;
+> +	else
+> +		pg->client_mask = PMIC_GLINK_CLIENT_DEFAULT;
+> +
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI)) {
+> +		ret = pmic_glink_add_aux_device(pg, &pg->ucsi_aux, "ucsi");
+> +		if (ret)
+> +			return ret;
+> +	}
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE)) {
+> +		ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
+> +		if (ret)
+> +			goto out_release_ucsi_aux;
+> +	}
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT)) {
+> +		ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
+> +		if (ret)
+> +			goto out_release_altmode_aux;
+> +	}
+>   
+>   	pg->pdr = pdr_handle_alloc(pmic_glink_pdr_callback, pg);
+>   	if (IS_ERR(pg->pdr)) {
+> @@ -278,9 +316,14 @@ static int pmic_glink_probe(struct platform_device *pdev)
+>   out_release_pdr_handle:
+>   	pdr_handle_release(pg->pdr);
+>   out_release_aux_devices:
+> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
+> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
+>   out_release_altmode_aux:
+> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
+> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +out_release_ucsi_aux:
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
+> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
+>   
+>   	return ret;
+>   }
+> @@ -291,8 +334,12 @@ static int pmic_glink_remove(struct platform_device *pdev)
+>   
+>   	pdr_handle_release(pg->pdr);
+>   
+> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
+> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
+> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
+> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
+> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
+>   
+>   	mutex_lock(&__pmic_glink_lock);
+>   	__pmic_glink = NULL;
+> 
 
-diff --git a/drivers/thunderbolt/nhi.h b/drivers/thunderbolt/nhi.h
-index b071802..3d8cfaf 100644
---- a/drivers/thunderbolt/nhi.h
-+++ b/drivers/thunderbolt/nhi.h
-@@ -87,6 +87,12 @@ extern const struct tb_nhi_ops icl_nhi_ops;
- #define PCI_DEVICE_ID_INTEL_RPL_NHI0			0xa73e
- #define PCI_DEVICE_ID_INTEL_RPL_NHI1			0xa76d
- 
-+/* PCI IDs for AMD USB4 controllers */
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_NHI0		0x162e
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_NHI1		0x162f
-+#define PCI_DEVICE_ID_AMD_PINK_SARDINE_NHI0		0x1668
-+#define PCI_DEVICE_ID_AMD_PINK_SARDINE_NHI1		0x1669
-+
- #define PCI_CLASS_SERIAL_USB_USB4			0x0c0340
- 
- #endif
-diff --git a/drivers/thunderbolt/quirks.c b/drivers/thunderbolt/quirks.c
-index b5f2ec7..f38db02 100644
---- a/drivers/thunderbolt/quirks.c
-+++ b/drivers/thunderbolt/quirks.c
-@@ -63,4 +63,10 @@ void tb_check_quirks(struct tb_switch *sw)
- 
- 		q->hook(sw);
- 	}
-+
-+	/*
-+	 * CLx is not supported on AMD USB4 Yellow Carp and Pink Sardine platforms.
-+	 */
-+	if (tb_switch_is_yellow_carp(sw->tb->nhi) || tb_switch_is_pink_sardine(sw->tb->nhi))
-+		sw->quirks |= QUIRK_NO_CLX;
- }
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index f978697..d7988ad 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -23,6 +23,11 @@
- #define NVM_MAX_SIZE		SZ_512K
- #define NVM_DATA_DWORDS		16
- 
-+/* Keep link controller awake during update */
-+#define QUIRK_FORCE_POWER_LINK_CONTROLLER		BIT(0)
-+/* Disable CLx if not supported */
-+#define QUIRK_NO_CLX					BIT(1)
-+
- /**
-  * struct tb_nvm - Structure holding NVM information
-  * @dev: Owner of the NVM
-@@ -905,6 +910,30 @@ static inline bool tb_switch_is_tiger_lake(const struct tb_switch *sw)
- 	return false;
- }
- 
-+static inline bool tb_switch_is_yellow_carp(const struct tb_nhi *nhi)
-+{
-+	if (nhi->pdev->vendor == PCI_VENDOR_ID_AMD) {
-+		switch (nhi->pdev->device) {
-+		case PCI_DEVICE_ID_AMD_YELLOW_CARP_NHI0:
-+		case PCI_DEVICE_ID_AMD_YELLOW_CARP_NHI1:
-+			return true;
-+		}
-+	}
-+	return false;
-+}
-+
-+static inline bool tb_switch_is_pink_sardine(const struct tb_nhi *nhi)
-+{
-+	if (nhi->pdev->vendor == PCI_VENDOR_ID_AMD) {
-+		switch (nhi->pdev->device) {
-+		case PCI_DEVICE_ID_AMD_PINK_SARDINE_NHI0:
-+		case PCI_DEVICE_ID_AMD_PINK_SARDINE_NHI1:
-+			return true;
-+		}
-+	}
-+	return false;
-+}
-+
- /**
-  * tb_switch_is_usb4() - Is the switch USB4 compliant
-  * @sw: Switch to check
-@@ -997,6 +1026,9 @@ static inline bool tb_switch_is_clx_enabled(const struct tb_switch *sw,
-  */
- static inline bool tb_switch_is_clx_supported(const struct tb_switch *sw)
- {
-+	if (sw->quirks & QUIRK_NO_CLX)
-+		return false;
-+
- 	return tb_switch_is_usb4(sw) || tb_switch_is_titan_ridge(sw);
- }
- 
-@@ -1254,9 +1286,6 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port);
- void usb4_port_device_remove(struct usb4_port *usb4);
- int usb4_port_device_resume(struct usb4_port *usb4);
- 
--/* Keep link controller awake during update */
--#define QUIRK_FORCE_POWER_LINK_CONTROLLER		BIT(0)
--
- void tb_check_quirks(struct tb_switch *sw);
- 
- #ifdef CONFIG_ACPI
 -- 
-2.7.4
+With best wishes
+Dmitry
 
