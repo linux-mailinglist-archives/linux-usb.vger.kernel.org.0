@@ -2,36 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7A56933AC
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Feb 2023 21:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3E69340E
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Feb 2023 22:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjBKUc1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Feb 2023 15:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S229770AbjBKVlO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Feb 2023 16:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBKUc0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Feb 2023 15:32:26 -0500
+        with ESMTP id S229585AbjBKVlN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Feb 2023 16:41:13 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id ABC38199ED
-        for <linux-usb@vger.kernel.org>; Sat, 11 Feb 2023 12:32:25 -0800 (PST)
-Received: (qmail 856943 invoked by uid 1000); 11 Feb 2023 15:32:25 -0500
-Date:   Sat, 11 Feb 2023 15:32:25 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EA36A1350A
+        for <linux-usb@vger.kernel.org>; Sat, 11 Feb 2023 13:41:11 -0800 (PST)
+Received: (qmail 858280 invoked by uid 1000); 11 Feb 2023 16:41:11 -0500
+Date:   Sat, 11 Feb 2023 16:41:11 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Message-ID: <Y+f7WaMmsNBHDIcZ@rowland.harvard.edu>
-References: <1676146033-3948-1-git-send-email-quic_prashk@quicinc.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
+References: <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
+ <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
+ <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
+ <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
+ <20230208080739.1649-1-hdanton@sina.com>
+ <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
+ <Y+O6toMmAKBSILMf@rowland.harvard.edu>
+ <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
+ <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
+ <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1676146033-3948-1-git-send-email-quic_prashk@quicinc.com>
+In-Reply-To: <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -41,112 +55,129 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 01:37:13AM +0530, Prashanth K wrote:
-> Consider a case where gserial_disconnect has already cleared
-> gser->ioport. And if a wakeup interrupt triggers afterwards,
-> gserial_resume gets called, which will lead to accessing of
-> gser->ioport and thus causing null pointer dereference.Add
-> a null pointer check to prevent this.
-> 
-> Added a static spinlock to prevent gser->ioport from becoming
-> null after the newly added check.
-> 
-> Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> ---
+Lockdep is blind to the dev->mutex field of struct device, owing to
+the fact that these mutexes are assigned to lockdep's "novalidate"
+class.  Commit 1704f47b50b5 ("lockdep: Add novalidate class for
+dev->mutex conversion") did this because the hierarchical nature of
+the device tree makes it impossible in practice to determine whether
+acquiring one of these mutexes is safe or might lead to a deadlock.
 
-This looks pretty good, except for a couple of small things...
+Unfortunately, this means that lockdep is unable to help diagnose real
+deadlocks involving these mutexes when they occur in testing [1] [2]
+or in actual use, or to detect bad locking patterns that might lead to
+a deadlock.  We would like to obtain as much of lockdep's benefits as
+possible without generating a flood of false positives -- which is
+what happens if one naively removes these mutexes from the
+"novalidate" class.
 
-> v3: Fixed the spin_lock_irqsave flags.
-> 
->  drivers/usb/gadget/function/u_serial.c | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-> index 840626e..471087f 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -82,6 +82,8 @@
->  #define WRITE_BUF_SIZE		8192		/* TX only */
->  #define GS_CONSOLE_BUF_SIZE	8192
->  
-> +static DEFINE_SPINLOCK(serial_port_lock);
+Accordingly, as a middle ground the mutex in each non-static struct
+device will be placed in its own unique locking class.  This approach
+gives up some of lockdep's advantages (for example, all devices having
+a particular bus_type or device_type might reasonably be put into the
+same locking class), but it should at least allow us to gain the
+benefit of some of lockdep's capabilities.
 
-You might put a short comment before this line, explaining what the 
-purpose of serial_port_lock is.  Otherwise people will wonder what it is 
-for.
+Link: https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101 [1]
+Link: https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb [2]
+Link: https://lore.kernel.org/all/28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp/
+Suggested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: Peter Zijlstra <peterz@infradead.org>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Boqun Feng <boqun.feng@gmail.com>
 
-> +
->  /* console info */
->  struct gs_console {
->  	struct console		console;
-> @@ -1370,13 +1372,15 @@ EXPORT_SYMBOL_GPL(gserial_connect);
->  void gserial_disconnect(struct gserial *gser)
->  {
->  	struct gs_port	*port = gser->ioport;
-> -	unsigned long	flags;
-> +	unsigned long flags;
+---
 
-Unnecessary whitespace change.  Leave the original code as it is.
+I decided to take your suggestion about introducing a new
+lockdep_static_obj() function, to reduce the size of the patch.  It
+can always be combined with the original static_obj() function later
+on, if that's what the lockdep developers want.
 
->  
->  	if (!port)
->  		return;
+If Hillf Danton contributed any of the code for this patch, I haven't
+seen it in any messages sent to me or in the mailing list archives.
+That's why I didn't include a Co-developed-by: tag for him.
 
-Is it really possible for port to be NULL here?  If it is possible, 
-where would gser->ioport be set to NULL?
+ drivers/base/core.c      |    8 +++++++-
+ include/linux/device.h   |    1 +
+ include/linux/lockdep.h  |    6 ++++++
+ kernel/locking/lockdep.c |    5 +++++
+ 4 files changed, 19 insertions(+), 1 deletion(-)
 
-And if it's not possible, this test should be removed.
-
->  
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-> +
->  	/* tell the TTY glue not to do I/O here any more */
-> -	spin_lock_irqsave(&port->port_lock, flags);
-> +	spin_lock(&port->port_lock);
->  
->  	gs_console_disconnect(port);
->  
-> @@ -1391,7 +1395,8 @@ void gserial_disconnect(struct gserial *gser)
->  			tty_hangup(port->port.tty);
->  	}
->  	port->suspended = false;
-> -	spin_unlock_irqrestore(&port->port_lock, flags);
-> +	spin_unlock(&port->port_lock);
-> +	spin_unlock_irqrestore(&serial_port_lock, flags);
->  
->  	/* disable endpoints, aborting down any active I/O */
->  	usb_ep_disable(gser->out);
-> @@ -1426,9 +1431,16 @@ EXPORT_SYMBOL_GPL(gserial_suspend);
->  void gserial_resume(struct gserial *gser)
->  {
->  	struct gs_port *port = gser->ioport;
-
-You shouldn't read gser->ioport here; do it under the protection of the 
-static spinlock.  If you do the read here then there will still be a 
-data race, because gserial_disconnect() might change the value just as 
-you are reading it.
-
-> -	unsigned long	flags;
-> +	unsigned long flags;
-
-Again, unnecessary whitespace change.
-
->  
-> -	spin_lock_irqsave(&port->port_lock, flags);
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-
-Here is where you should read gser->ioport.
-
-> +	if (!port) {
-> +		spin_unlock_irqrestore(&serial_port_lock, flags);
-> +		return;
-> +	}
-> +
-> +	spin_lock(&port->port_lock);
-> +	spin_unlock(&serial_port_lock);
->  	port->suspended = false;
->  	if (!port->start_delayed) {
->  		spin_unlock_irqrestore(&port->port_lock, flags);
-
-Alan Stern
+Index: usb-devel/drivers/base/core.c
+===================================================================
+--- usb-devel.orig/drivers/base/core.c
++++ usb-devel/drivers/base/core.c
+@@ -2322,6 +2322,9 @@ static void device_release(struct kobjec
+ 	devres_release_all(dev);
+ 
+ 	kfree(dev->dma_range_map);
++	mutex_destroy(&dev->mutex);
++	if (!lockdep_static_obj(dev))
++		lockdep_unregister_key(&dev->mutex_key);
+ 
+ 	if (dev->release)
+ 		dev->release(dev);
+@@ -2941,7 +2944,10 @@ void device_initialize(struct device *de
+ 	kobject_init(&dev->kobj, &device_ktype);
+ 	INIT_LIST_HEAD(&dev->dma_pools);
+ 	mutex_init(&dev->mutex);
+-	lockdep_set_novalidate_class(&dev->mutex);
++	if (!lockdep_static_obj(dev)) {
++		lockdep_register_key(&dev->mutex_key);
++		lockdep_set_class(&dev->mutex, &dev->mutex_key);
++	}
+ 	spin_lock_init(&dev->devres_lock);
+ 	INIT_LIST_HEAD(&dev->devres_head);
+ 	device_pm_init(dev);
+Index: usb-devel/include/linux/device.h
+===================================================================
+--- usb-devel.orig/include/linux/device.h
++++ usb-devel/include/linux/device.h
+@@ -570,6 +570,7 @@ struct device {
+ 	struct mutex		mutex;	/* mutex to synchronize calls to
+ 					 * its driver.
+ 					 */
++	struct lock_class_key	mutex_key;	/* Unique key for each device */
+ 
+ 	struct dev_links_info	links;
+ 	struct dev_pm_info	power;
+Index: usb-devel/include/linux/lockdep.h
+===================================================================
+--- usb-devel.orig/include/linux/lockdep.h
++++ usb-devel/include/linux/lockdep.h
+@@ -172,6 +172,7 @@ do {							\
+ 	current->lockdep_recursion -= LOCKDEP_OFF;	\
+ } while (0)
+ 
++extern int lockdep_static_obj(const void *obj);
+ extern void lockdep_register_key(struct lock_class_key *key);
+ extern void lockdep_unregister_key(struct lock_class_key *key);
+ 
+@@ -391,6 +392,11 @@ static inline void lockdep_set_selftest_
+ # define lockdep_free_key_range(start, size)	do { } while (0)
+ # define lockdep_sys_exit() 			do { } while (0)
+ 
++static inline int lockdep_static_obj(const void *obj)
++{
++	return 0;
++}
++
+ static inline void lockdep_register_key(struct lock_class_key *key)
+ {
+ }
+Index: usb-devel/kernel/locking/lockdep.c
+===================================================================
+--- usb-devel.orig/kernel/locking/lockdep.c
++++ usb-devel/kernel/locking/lockdep.c
+@@ -857,6 +857,11 @@ static int static_obj(const void *obj)
+ 	 */
+ 	return is_module_address(addr) || is_module_percpu_address(addr);
+ }
++
++int lockdep_static_obj(const void *obj)
++{
++	return static_obj(obj);
++}
+ #endif
+ 
+ /*
