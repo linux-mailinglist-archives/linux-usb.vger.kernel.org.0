@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0788169353E
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Feb 2023 00:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAEB69354B
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Feb 2023 00:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjBKXQg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Feb 2023 18:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S229496AbjBKXgV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Feb 2023 18:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKXQf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Feb 2023 18:16:35 -0500
-X-Greylist: delayed 495 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Feb 2023 15:16:33 PST
-Received: from out-124.mta0.migadu.com (out-124.mta0.migadu.com [91.218.175.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0E81114D
-        for <linux-usb@vger.kernel.org>; Sat, 11 Feb 2023 15:16:33 -0800 (PST)
-Date:   Sat, 11 Feb 2023 18:08:05 -0500
+        with ESMTP id S229461AbjBKXgU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Feb 2023 18:36:20 -0500
+X-Greylist: delayed 690 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Feb 2023 15:36:19 PST
+Received: from out-212.mta1.migadu.com (out-212.mta1.migadu.com [95.215.58.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6F21554F
+        for <linux-usb@vger.kernel.org>; Sat, 11 Feb 2023 15:36:19 -0800 (PST)
+Date:   Sat, 11 Feb 2023 18:24:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676156895;
+        t=1676157887;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=jeaoWPG8qKepOXCpHP3PyDGxt09p0/Rrs7H163Xd+js=;
-        b=DarU0UB2DlLoHXCNgDs2QtsgHpACdjlnav1eTn8N2U9IcXU3fVuPqGhRUOQoXF+MpHrJxQ
-        7K6Bs/PBYSGysCtjf47hmJVGaz5jk3hTxJiQ5CSJ4aGzvj76/+38DZkTEq6DuhTh8c3TLR
-        ojPzF5B/YNoF/85pFZMmaiID9xvw3hM=
+        bh=sF17/Q4eBOKYKqU4TSrogsUixE7QUMHWKHgophK4mEs=;
+        b=waW6j+oiUR+ZKBXA8h22amOLp1ilh779eW+H7nNVQtPa9I7LglyH45p8do62V9ec3taCmF
+        WqOFC5DhBrBCaOGdsGIudJO2TABvrS/2AAl2ZHNN4VwCFsQs5ZDX/S5V+k551Mm1Jmxw+w
+        wwYvPZPDguq151Yv/109PE1tqLcIouA=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Kent Overstreet <kent.overstreet@linux.dev>
 To:     Kent Overstreet <kent.overstreet@gmail.com>
@@ -44,7 +44,7 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Hillf Danton <hdanton@sina.com>
 Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
  with unique class keys
-Message-ID: <Y+gf1SX9MXdBja1z@moria.home.lan>
+Message-ID: <Y+gjuqJ5RFxwLmht@moria.home.lan>
 References: <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
  <20230208080739.1649-1-hdanton@sina.com>
  <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
@@ -62,7 +62,7 @@ In-Reply-To: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,102 +70,62 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On Sat, Feb 11, 2023 at 06:06:28PM -0500, Kent Overstreet wrote:
+> On 2/11/23 16:51, Linus Torvalds wrote:
+> > On Sat, Feb 11, 2023 at 1:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > 
+> > > @@ -2941,7 +2944,10 @@ void device_initialize(struct device *de
+> > >          kobject_init(&dev->kobj, &device_ktype);
+> > >          INIT_LIST_HEAD(&dev->dma_pools);
+> > >          mutex_init(&dev->mutex);
+> > > -       lockdep_set_novalidate_class(&dev->mutex);
+> > > +       if (!lockdep_static_obj(dev)) {
+> > > +               lockdep_register_key(&dev->mutex_key);
+> > > +               lockdep_set_class(&dev->mutex, &dev->mutex_key);
+> > > +       }
+> > >          spin_lock_init(&dev->devres_lock);
+> > >          INIT_LIST_HEAD(&dev->devres_head);
+> > >          device_pm_init(dev);
+> > 
+> > So I think this is the right thing to do, but I note that while that
+> > lockdep_set_novalidate_class() was "documented" to only be for
+> > 'dev->mutex' by scripts/checkpatch.pl, that horrific thing is also
+> > used by md/bcache/btree.c for the mca_bucket_alloc().
+> > 
+> > Can we *please* get rid of it there too (it was added by the initial
+> > code, and never had any explicit excuse for it), possibly by using the
+> > same model.
+> > 
+> > And then we could get rid of lockdep_set_novalidate_class() entirely.
+> > That would be a good thing.
+> 
 > Yeah, what bcache really needs (and presumably dev->mutex as well) is just
 > to disable lockdep checking for self-deadlock of that lock type, since it's
 > got its own deadlock avoidance and the subclass thing isn't good enough.
 > 
 > I've got a patch that should do what we want, replying from my other account
 > with it.
--- >8 --
-Subject: [PATCH] locking/lockdep: lockdep_set_no_check_recursion()
 
-This adds a method to tell lockdep not to check lock ordering within a
-lock class - but to still check lock ordering w.r.t. other lock types.
+After scanning the rest of the thread: I don't think you want to create
+separate lockdep classes for each bus and device type, that's defeating
+how lockdep works. Maybe if it was only a small, _static_ number of new
+classes, but the basic premesis of lockdep is that there are static
+human understandable lock ordering rules, so lockdep figures out what
+they are and checks them: if you create a bunch of dynamic classes, the
+classes are going to be different for everyone in practice and won't
+have any real bearing on the structure of the code - that is, given a
+lockdep splat, you won't be able to do anything with it.
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
----
- include/linux/lockdep.h       |  6 ++++++
- include/linux/lockdep_types.h |  2 +-
- kernel/locking/lockdep.c      | 26 ++++++++++++++++++++++++++
- 3 files changed, 33 insertions(+), 1 deletion(-)
+If static lock ordering rules aren't working (say, because the lock
+ordering rules are determined by hardware relationships or what
+userspace is doing), then you have to do something more sophisticated.
 
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index e027c504b7..66f28553c6 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -666,4 +666,10 @@ lockdep_rcu_suspicious(const char *file, const int line, const char *s)
- }
- #endif
- 
-+#ifdef CONFIG_DEBUG_LOCK_ALLOC
-+void lockdep_set_no_check_recursion(struct lockdep_map *map);
-+#else
-+static inline void lockdep_set_no_check_recursion(struct lockdep_map *map) {}
-+#endif
-+
- #endif /* __LINUX_LOCKDEP_H */
-diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
-index d22430840b..506e769b4a 100644
---- a/include/linux/lockdep_types.h
-+++ b/include/linux/lockdep_types.h
-@@ -128,7 +128,7 @@ struct lock_class {
- 	u8				wait_type_inner;
- 	u8				wait_type_outer;
- 	u8				lock_type;
--	/* u8				hole; */
-+	u8				no_check_recursion;
- 
- #ifdef CONFIG_LOCK_STAT
- 	unsigned long			contention_point[LOCKSTAT_POINTS];
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index cae7d5f0ad..47ffb8df11 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -3023,6 +3023,9 @@ check_deadlock(struct task_struct *curr, struct held_lock *next)
- 		if ((next->read == 2) && prev->read)
- 			continue;
- 
-+		if (hlock_class(next)->no_check_recursion)
-+			continue;
-+
- 		/*
- 		 * We're holding the nest_lock, which serializes this lock's
- 		 * nesting behaviour.
-@@ -3084,6 +3087,10 @@ check_prev_add(struct task_struct *curr, struct held_lock *prev,
- 		return 2;
- 	}
- 
-+	if (hlock_class(prev) == hlock_class(next) &&
-+	    hlock_class(prev)->no_check_recursion)
-+		return 2;
-+
- 	/*
- 	 * Prove that the new <prev> -> <next> dependency would not
- 	 * create a circular dependency in the graph. (We do this by
-@@ -6617,3 +6624,22 @@ void lockdep_rcu_suspicious(const char *file, const int line, const char *s)
- 	dump_stack();
- }
- EXPORT_SYMBOL_GPL(lockdep_rcu_suspicious);
-+
-+#ifdef CONFIG_DEBUG_LOCK_ALLOC
-+void lockdep_set_no_check_recursion(struct lockdep_map *lock)
-+{
-+	struct lock_class *class = lock->class_cache[0];
-+	unsigned long flags;
-+
-+	raw_local_irq_save(flags);
-+	lockdep_recursion_inc();
-+
-+	if (!class)
-+		class = register_lock_class(lock, 0, 0);
-+	if (class)
-+		class->no_check_recursion = true;
-+	lockdep_recursion_finish();
-+	raw_local_irq_restore(flags);
-+}
-+EXPORT_SYMBOL_GPL(lockdep_set_no_check_recursion);
-+#endif
--- 
-2.39.1
+Wait/wound mutexes would be the next thing to look at, and DRM ended up
+needing them for similar reasons as what you're running up against so I
+think they bear serious consideration.
 
+ww mutexes are the simple version of dynamic deadlock avoidance -
+instead of doing full cycle detection they just compare transaction
+start times, so they come at the cost of more frequent aborts. If this
+is an issue for you, here's what full cycle detection looks like:
 
+https://evilpiepirate.org/git/bcachefs.git/tree/fs/bcachefs/btree_locking.c#n53
