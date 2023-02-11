@@ -2,38 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F874693267
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Feb 2023 17:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07DF69337D
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Feb 2023 21:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBKQ0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Feb 2023 11:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
+        id S229630AbjBKUGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Feb 2023 15:06:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBKQ0M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Feb 2023 11:26:12 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2EF3E21A1B
-        for <linux-usb@vger.kernel.org>; Sat, 11 Feb 2023 08:26:11 -0800 (PST)
-Received: (qmail 851788 invoked by uid 1000); 11 Feb 2023 11:26:10 -0500
-Date:   Sat, 11 Feb 2023 11:26:10 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Message-ID: <Y+fBopfbwwQMdBv+@rowland.harvard.edu>
-References: <1676117858-32157-1-git-send-email-quic_prashk@quicinc.com>
+        with ESMTP id S229481AbjBKUGr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Feb 2023 15:06:47 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721BC18B17;
+        Sat, 11 Feb 2023 12:06:41 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id s11so569154edd.10;
+        Sat, 11 Feb 2023 12:06:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rnqh2DLP0np8pTj2BQOmeoswoqFE/C1tlKJL7Qk99hM=;
+        b=jqa03l//+OZWkVyEyhhu3gyjhfV9r2RVrkv1RbDe5GvohjbXjGBxXW+8rYm79v41nL
+         hM+3DHLNREFTd0LZ08PHOH2dQS/TdEs7BHlXcxLUJ0NBVWUtadArp88KxqOHgd81IlX8
+         96Jw4KRqKQch+/NbX7fztSygE18gsupVnXmsMBulOf4KwALB1knlC1AhStNeonF/J9g0
+         2fIlUyjqX4iMHeeOU4hY2CYITKc5KR0jvsxIxy6ORBU8KKfQi3duPKQqCLEnzeLZ9sAp
+         x2Bdv5ch+vcS3+do/Bt6KQA7nBDCe0cpg2VWBxwoCo3Jji/88e1pi3EwSpFZxO/4Pa2n
+         6xCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rnqh2DLP0np8pTj2BQOmeoswoqFE/C1tlKJL7Qk99hM=;
+        b=ytqPf8tsbpI3A4LtpAlu50b34gDTov2TKi7BhxMP6hSUPEHJnC0kXLGbj2L7wbh3VT
+         laLi+q84ocoSsJLFAbsNJ2ZYZRKedGrLKqF98fhFrOjbNY/ESXtqv7yDSIBATRDJrX4+
+         LntphZ1IQSGPX1BFnNnqg4DH30+hWqonI3pP/zubEJA4hGUrYbt1YyzBCp2dUcmnIXFL
+         V/cPW5460sBPz1YV42GkQPk/cXgNw9MG2ZFUOO1colG9rXrX2sOUkHeQhtLJNUQ5mGov
+         ESKoalgpBeRzSW5Xcbm5gMjm1if5TuiAPLXj8RcXM7zZuwMMUQsAzWs6ff3wNWYBTXXC
+         IFIQ==
+X-Gm-Message-State: AO0yUKW6UJtqqpu37jN74BHmVF2h8j1ARrVO3EGFSLlgh5co89SRfyfH
+        MTN4/bpF/Ap7ecY0uv6FIcJsBWFPB+yH+6gEiZ8=
+X-Google-Smtp-Source: AK7set/vi99W3ZhR0iZH1E7CNMEgROCLeXaJIwHv4BojbNk9z4azaJ6NweCU9GbZaJmaAUzeji4SHBl6OptG89Q1as0=
+X-Received: by 2002:a50:9ecb:0:b0:49d:ec5d:28b4 with SMTP id
+ a69-20020a509ecb000000b0049dec5d28b4mr4808743edf.6.1676145999968; Sat, 11 Feb
+ 2023 12:06:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1676117858-32157-1-git-send-email-quic_prashk@quicinc.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20230207-b4-amlogic-g12a-usb-ctrl-bindings-fix-v1-1-c310293da7a2@linaro.org>
+In-Reply-To: <20230207-b4-amlogic-g12a-usb-ctrl-bindings-fix-v1-1-c310293da7a2@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 11 Feb 2023 21:06:29 +0100
+Message-ID: <CAFBinCBHNTj_NAJ_PgProduVdi0BqUvzYLMfMzEjWsUniVJdRQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: make G12A
+ usb3-phy0 optional
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Felipe Balbi <balbi@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,121 +74,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 05:47:38PM +0530, Prashanth K wrote:
-> Consider a case where gserial_disconnect has already cleared
-> gser->ioport. And if a wakeup interrupt triggers afterwards,
-> gserial_resume gets called, which will lead to accessing of
-> gser->ioport and thus causing null pointer dereference.Add
-> a null pointer check to prevent this.
-> 
-> Added a static spinlock to prevent gser->ioport from becoming
-> null after the newly added check.
-> 
-> Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> ---
-> v2: Added static spinlock and fixed Fixes tag.
-> 
->  drivers/usb/gadget/function/u_serial.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-> index 840626e..9ced0fa 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -82,6 +82,8 @@
->  #define WRITE_BUF_SIZE		8192		/* TX only */
->  #define GS_CONSOLE_BUF_SIZE	8192
->  
-> +static DEFINE_SPINLOCK(serial_port_lock);
-> +
->  /* console info */
->  struct gs_console {
->  	struct console		console;
-> @@ -1370,11 +1372,13 @@ EXPORT_SYMBOL_GPL(gserial_connect);
->  void gserial_disconnect(struct gserial *gser)
->  {
->  	struct gs_port	*port = gser->ioport;
-> -	unsigned long	flags;
-> +	unsigned long flags, serial_flag;
-
-You don't need two separate flags here.  The fact that you wrote this 
-indicates you don't understand how spin_lock_irqsave() and 
-spin_lock_irqrestore() work.
-
-When spin_lock_irqsave(&lock, flag) is called, it saves the current INT 
-(interrupt-enable) setting in flag, disables interrupts, and acquires 
-the lock.  When spin_unlock_irqrestore(&lock, flag) is called, it 
-releases the lock and writes the value in flag back to the INT setting.
-
-The end result is that if interrupts were enabled before 
-spin_lock_irqsave() then they will be enabled after 
-spin_unlock_irqrestore().  If interrupts were disabled beforehand, they 
-will remain disabled afterward.  And either way, interrupts will be 
-disabled between the two calls.
-
->  
->  	if (!port)
->  		return;
->  
-> +	spin_lock_irqsave(&serial_port_lock, serial_flag);
-
-So now interrupts are disabled.
-
-> +
->  	/* tell the TTY glue not to do I/O here any more */
->  	spin_lock_irqsave(&port->port_lock, flags);
-
-Hence there's no need for flag here.  You don't need to save the current 
-INT setting because you already know what it is: interrupts are 
-disabled.  You can simply call spin_lock(), which will acquire the lock 
-without doing anything to the INT setting.
-
->  
-> @@ -1392,6 +1396,7 @@ void gserial_disconnect(struct gserial *gser)
->  	}
->  	port->suspended = false;
->  	spin_unlock_irqrestore(&port->port_lock, flags);
-
-Likewise, here you can call spin_unlock().
-
-> +	spin_unlock_irqrestore(&serial_port_lock, serial_flag);
->  
->  	/* disable endpoints, aborting down any active I/O */
->  	usb_ep_disable(gser->out);
-> @@ -1426,9 +1431,16 @@ EXPORT_SYMBOL_GPL(gserial_suspend);
->  void gserial_resume(struct gserial *gser)
->  {
->  	struct gs_port *port = gser->ioport;
-> -	unsigned long	flags;
-> +	unsigned long flags, serial_flag;
-> +
-> +	spin_lock_irqsave(&serial_port_lock, serial_flag);
-> +	if (!port) {
-> +		spin_unlock_irqrestore(&serial_port_lock, serial_flag);
-> +		return;
-> +	}
-
-This is a little trickier, but the same principles apply.  Since 
-spin_lock_irqsave() was called above, interrupts are now disabled.
-
->  
->  	spin_lock_irqsave(&port->port_lock, flags);
-
-So there's no need for _irqsave here.
-
-> +	spin_unlock_irqrestore(&serial_port_lock, serial_flag);
-
-And here you must not use spin_unlock_irqrestore().  This will do the 
-wrong thing, because it will enable interrupts if they were enabled at 
-the start of the function.  Then you would be running with 
-port->port_lock held and interrupts enabled, a bad combination.
-
->  	port->suspended = false;
->  	if (!port->start_delayed) {
->  		spin_unlock_irqrestore(&port->port_lock, flags);
-
-Here, at the final unlock, is where you should restore the INT setting 
-to the value it had at the start of the function.
-
-Alan Stern
+On Tue, Feb 7, 2023 at 4:02 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> On the G12A USB complex, the USB3 PHY is shared with the PCIe controller,
+> thus on designs without PCIe enabled the USB3 PHY entry can be ommited from
+> the PHY list.
+>
+> Fixes: cdff2c946f06 ("dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add the Amlogic AXG Families USB Glue Bindings")
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
