@@ -2,22 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37E06939CA
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Feb 2023 21:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DC0693A02
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Feb 2023 21:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjBLUTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Feb 2023 15:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S229615AbjBLUvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Feb 2023 15:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBLUTS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Feb 2023 15:19:18 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 12604B777
-        for <linux-usb@vger.kernel.org>; Sun, 12 Feb 2023 12:19:16 -0800 (PST)
-Received: (qmail 886235 invoked by uid 1000); 12 Feb 2023 15:19:16 -0500
-Date:   Sun, 12 Feb 2023 15:19:16 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
+        with ESMTP id S229611AbjBLUvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Feb 2023 15:51:18 -0500
+Received: from out-41.mta0.migadu.com (out-41.mta0.migadu.com [IPv6:2001:41d0:1004:224b::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598CB10403
+        for <linux-usb@vger.kernel.org>; Sun, 12 Feb 2023 12:51:17 -0800 (PST)
+Date:   Sun, 12 Feb 2023 15:51:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676235072;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CNfkbIa/T9NybrdKfgYpOraAwp+xX3TUEvNnbtMgabA=;
+        b=nQuq/0AdnR3DerKpTIiaV1pRCkxBTGGlUZKYJpKa+9c3H2a8n/gfnDSUKI7Qc1qmdV4oXh
+        fxGR9ITBtRsFjZEGOyCX+d+4TBIuwN7WIFKK7Q8li/NpaxgXZrzy3Yqhe9xgbmcMnCLali
+        khE4bFgkO/ppKTSSOgUzNYmqW+1PleQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Coly Li <colyli@suse.de>,
@@ -34,9 +43,8 @@ Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
         Hillf Danton <hdanton@sina.com>
 Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
  with unique class keys
-Message-ID: <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
-References: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
+Message-ID: <Y+lROV3Ii+WbmZCh@moria.home.lan>
+References: <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
  <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
  <Y+gjuqJ5RFxwLmht@moria.home.lan>
  <Y+hRurRwm//1+IcK@rowland.harvard.edu>
@@ -45,116 +53,108 @@ References: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
  <Y+hYn6uzIUBaxDdV@moria.home.lan>
  <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
  <Y+k6ehYLWa0cmbvb@moria.home.lan>
+ <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+k6ehYLWa0cmbvb@moria.home.lan>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 02:14:02PM -0500, Kent Overstreet wrote:
-> On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
-> > On Sat, Feb 11, 2023 at 10:10:23PM -0500, Kent Overstreet wrote:
-> > > So IMO the more correct way to do this would be to change
-> > > device_initialize() to __device_initialize(), have it take a
-> > > lock_class_key as a parameter, and then use __mutex_init() instead of
-> > > mutex_init().
+On Sun, Feb 12, 2023 at 03:19:16PM -0500, Alan Stern wrote:
+> Maybe I didn't understand your suggestion.  Did you mean that all 
+> callers of device_initialize() (or whatever) should be able to specify 
+> their own lock_class_key?  Or were you just trying to avoid the single 
+> static allocation of a lock_class_key in device_initialize() done as a 
+> side-effect of the mutex_init() call?
+> 
+> > And whatever effect
+> > would only be when lockdep is enabled, so not a concern.
+> 
+> Not if a new function is created (i.e., __device_initialize()).
+
+Follow the same pattern as mutex_init() - have a look over that code.
+
+> > But consider that the name of a lock as registered with lockdep really
+> > should correspond to a source code location - i.e. it should be
+> > something you can grep for. (We should probably consider adding file and
+> > line number to that string, since current names are not unambiguous).
 > > 
-> > Yes, maybe.  The increase in code size might outweigh the space saved.
-> 
-> Where would the increase in code size come from?
-
-Maybe I didn't understand your suggestion.  Did you mean that all 
-callers of device_initialize() (or whatever) should be able to specify 
-their own lock_class_key?  Or were you just trying to avoid the single 
-static allocation of a lock_class_key in device_initialize() done as a 
-side-effect of the mutex_init() call?
-
-> And whatever effect
-> would only be when lockdep is enabled, so not a concern.
-
-Not if a new function is created (i.e., __device_initialize()).
-
-> But consider that the name of a lock as registered with lockdep really
-> should correspond to a source code location - i.e. it should be
-> something you can grep for. (We should probably consider adding file and
-> line number to that string, since current names are not unambiguous).
-> 
-> Whereas in your pass, you're calling lockdep_set_class(), which
-> generates a class name via stringifcation - with the same name every
-> time.
-> 
-> Definitely _don't_ do that. With your patch, the generated lockdep
-> traces will be useless.
-
-I'll revise the patch to use the device's name for the class.  While it 
-may not be globally unique, it should be sufficiently specific.
-
-(Device names are often set after the device is initialized.  Does 
-lockdep mind if a lock_class_key's name is changed after it has been 
-registered?)
-
-> > > But let's think about this more. Will there ever be situations where
-> > > lock ordering is dependent on what hardware is plugged into what, or
-> > > what hardware is plugged in first?
+> > Whereas in your pass, you're calling lockdep_set_class(), which
+> > generates a class name via stringifcation - with the same name every
+> > time.
 > > 
-> > Device lock ordering is always dependent on what hardware is plugged 
-> > into what.  However, I'm not aware of any situations where, given two 
-> > different kinds of hardware, either one could be plugged into the other.
-> > Such things may exist but I can't think of any examples.
+> > Definitely _don't_ do that. With your patch, the generated lockdep
+> > traces will be useless.
 > 
-> Different brands of hubs?
-
-As far as the kernel is concerned they wouldn't be _different kinds_ of 
-hardware; they would both be hubs.
-
-> Lots of things have hubs embedded into them these days. 15 years ago I
-> had an Apple keyboard with an embedded hub.
-
-Apple keyboards get treated as two logically separate pieces of 
-hardware: a hub and a keyboard.  The fact that they are packaged as a 
-single unit is irrelevant.
-
-> > On the other hand, there are obvious cases where two pieces of the 
-> > _same_ kind of hardware can be plugged together in either order.  USB 
-> > hubs are a good example.
-> > 
-> > Consider the possibility that a driver might want to lock all of a 
-> > device's children at once.  (I don't know if this ever happens, but it 
-> > might.)  Provided it acquires the parent device's lock first, this is 
-> > utterly safe no matter what order the children are locked in.  Try 
-> > telling that to lockdep!  In the end, we'd probably have to enforce a 
-> > single fixed ordering.
+> I'll revise the patch to use the device's name for the class.  While it 
+> may not be globally unique, it should be sufficiently specific.
 > 
-> The way you speak of hypotheticals and possibilities makes me think that
-> the actual locking rules are not ironed out at all :)
+> (Device names are often set after the device is initialized.  Does 
+> lockdep mind if a lock_class_key's name is changed after it has been 
+> registered?)
 
-You're right.  There are no explicitly documented rules for device 
-locking as far as I'm aware.  Each subsystem handles its own locking 
-independently (but self-consistently, we hope).  That's one of the 
-reasons that creating lockdep rules for devices is so difficult.
+The device name should _not_ be something dynamic, it should be
+something easily tied back to a source code location - i.e. related to
+the driver name, not the device name.
 
-The business about not locking a parent if you already own the child's 
-lock is perhaps the only universal -- and I don't know that it's written 
-down anywhere.
+That's how people read and use lockdep reports!
 
-> The patch I posted would be an improvement over the current situation,
-> because it'd get you checking w.r.t. other lock types - but with that
-> you would still have to have your own deadlock avoidance strategy, and
-> you'd have to be _really_ clear on what it is and how you know that
-> you're getting it right - you're still opting out of checking.
+Do it exactly the same way mutex_init() does it, just lift it up a level
+to a wrapper around device_initialize() - stringify the pointer to the
+mutex (embedded in struct device, embedded in what-have-you driver code)
+and use that.
 
-Same with the patch I posted, except that it opts back into checking.
+> You're right.  There are no explicitly documented rules for device 
+> locking as far as I'm aware.  Each subsystem handles its own locking 
+> independently (but self-consistently, we hope).  That's one of the 
+> reasons that creating lockdep rules for devices is so difficult.
+> 
+> The business about not locking a parent if you already own the child's 
+> lock is perhaps the only universal -- and I don't know that it's written 
+> down anywhere.
 
-> I think you should really be investigating wait/wound mutexes here.
+Yeah that's sketchy; if the rules are too complicated to be written
+down, they're too complicated.
 
-At this stage, converting would be most impractical.  And I don't think 
-it's really needed.
+One thing that could be contemplated is adding support for user-defined
+comparison functions to lockdep, to define a lock ordering within a
+class when subclass isn't sufficient.
 
-Alan Stern
+That would work for bcache - for bcache the lock ordering is parent
+nodes before children, and if multiple nodes are locked at the same
+level they have to be locked in natural key order.
+
+But, this would add a lot of complexity to lockdep, and this is the sort
+of situation where if you have a bug in the comparison function (i.e. it
+doesn't define a total ordering) it'll break things in terribly fun
+ways.
+
+> > The patch I posted would be an improvement over the current situation,
+> > because it'd get you checking w.r.t. other lock types - but with that
+> > you would still have to have your own deadlock avoidance strategy, and
+> > you'd have to be _really_ clear on what it is and how you know that
+> > you're getting it right - you're still opting out of checking.
+> 
+> Same with the patch I posted, except that it opts back into checking.
+> 
+> > I think you should really be investigating wait/wound mutexes here.
+> 
+> At this stage, converting would be most impractical.  And I don't think 
+> it's really needed.
+
+They do make you deal with lock restarts; unwinding typical stateful
+kernel code is not necessarily super practical :)
+
+Anyways, it sounds like the lockdep-class-per-driver approach will get
+you more information, that's certainly a reasonable approach for now.
+
+Cheers,
+-Kent
