@@ -2,153 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4564C69476C
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Feb 2023 14:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD3869478D
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Feb 2023 14:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjBMNuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Feb 2023 08:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
+        id S229960AbjBMN7F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Feb 2023 08:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbjBMNt5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Feb 2023 08:49:57 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B221BADC;
-        Mon, 13 Feb 2023 05:49:51 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC57266018CF;
-        Mon, 13 Feb 2023 13:49:49 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676296190;
-        bh=XiD9OByqHK9do+PqpCf1DqzfoDEHH76nlh+pxGnhaGg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WHhr2vwDOBN5R6Zl/353Iv5qjYlePv0Eh7dySXr4COAFX8kt1rPlZwOjzp4V58e3d
-         bJ5zzppDsacdsEd6A5JWK6xj/wq+5R8Xs4h5FgrRBZFTunPxXyMSwjHblC+kUbJw3R
-         2hMIvek3WlOKjRK8b2ZLr5ISAfr3sz9Fw7rOJHf7ko8662B/4p6tq5UWwgN3k5WOsD
-         pUo1zQTEoAAahZ3xhIrkH9HssmjN7pVdNwZiHrSVdmKo2L+yX47wvQClyCETMa4bWl
-         q0Sb+WI8+BR2fqaJytBfZRcbJ5vCsPMWSmTTpvlvMmTDSubqjvAEv/YoaDTdrL32nn
-         U7NiNvkuoYCSg==
-Message-ID: <bcbf9d22-c90a-a4d1-2931-0da43bc7371e@collabora.com>
-Date:   Mon, 13 Feb 2023 14:49:46 +0100
+        with ESMTP id S229581AbjBMN7E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Feb 2023 08:59:04 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6646F1969F
+        for <linux-usb@vger.kernel.org>; Mon, 13 Feb 2023 05:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676296743; x=1707832743;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PuWA/XT1VhXSkbq5nnKCwxOEV94chD1bJNVM/n7Zgzc=;
+  b=P6JxuJqoBP92Ky4YxPCmrBIL75wLb/5WYV1cKMt/yA9Uz34rcu6Ugmhb
+   JhSJ62GBtvZdWpJITN4GNKpZRiMRgAzhH7j2H58rEr0SDGCXnents88na
+   JDfFJdnNnDk5FG1SJKd+JDMZmGtocrXqMvLKRdgQvSlntrZfOqYg4yXkB
+   z+2Xy83qcONeG4QaRNdcv/oyU71bNBwGSd3G5iRb41blFIdSEdWRkMWjz
+   wJH8QuZOZ+2yPf/abL9Qx62MQ8U7wq9AdFW3RZe8JZXJvPCiuogKoXySY
+   Q7IJibcHDF0EXubxnQiAegi5JItHAkpQb38/mh8c3pjFmCqkTy6kjH1PP
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="330899074"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="330899074"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 05:59:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="662189741"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="662189741"
+Received: from senthil-nuc10i7fnh.iind.intel.com ([10.223.107.70])
+  by orsmga007.jf.intel.com with ESMTP; 13 Feb 2023 05:58:36 -0800
+From:   Saranya Gopal <saranya.gopal@intel.com>
+To:     linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org,
+        Saranya Gopal <saranya.gopal@intel.com>,
+        Rajaram Regupathy <rajaram.regupathy@intel.com>
+Subject: [PATCH v2] usb: typec: pd: Add higher_capability sysfs for sink PDO
+Date:   Mon, 13 Feb 2023 19:35:22 +0530
+Message-Id: <20230213140522.171578-1-saranya.gopal@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V3 1/2] usb: gadget: u_ether: Convert prints to device
- prints
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20230209125319.18589-1-jonathanh@nvidia.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20230209125319.18589-1-jonathanh@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jon,
+As per USB PD specification, 28th bit of sink fixed power supply
+PDO represents higher capability. If this bit is set, it indicates
+that the sink needs more than vsafe5V to provide full functionality.
+This patch replaces usb_suspend_supported sysfs with higher_capability
+sysfs for sink PDO.
 
-W dniu 9.02.2023 o 13:53, Jon Hunter pisze:
-> The USB ethernet gadget driver implements its own print macros which
-> call printk. Device drivers should use the device prints that print the
-> device name. Fortunately, the same macro names are defined in the header
-> file 'linux/usb/composite.h' and these use the device prints. Therefore,
-> remove the local definitions in the USB ethernet gadget driver and use
-> those in 'linux/usb/composite.h'. The only difference is that now the
-> device name is printed instead of the ethernet interface name.
-> 
-> Tested using ethernet gadget on Jetson AGX Orin.
-> 
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> Tested-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
-> V3: Added this patch and dropped the patch in V2 that improved some of
->      the prints.
-> 
->   drivers/usb/gadget/function/u_ether.c | 36 +--------------------------
->   1 file changed, 1 insertion(+), 35 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-> index 8f12f3f8f6ee..740331882e8d 100644
-> --- a/drivers/usb/gadget/function/u_ether.c
-> +++ b/drivers/usb/gadget/function/u_ether.c
-> @@ -17,6 +17,7 @@
->   #include <linux/etherdevice.h>
->   #include <linux/ethtool.h>
->   #include <linux/if_vlan.h>
-> +#include <linux/usb/composite.h>
->   
->   #include "u_ether.h"
->   
-> @@ -103,41 +104,6 @@ static inline int qlen(struct usb_gadget *gadget, unsigned qmult)
->   
->   /*-------------------------------------------------------------------------*/
->   
-> -/* REVISIT there must be a better way than having two sets
-> - * of debug calls ...
-> - */
-> -
-> -#undef DBG
-> -#undef VDBG
-> -#undef ERROR
-> -#undef INFO
-> -
-> -#define xprintk(d, level, fmt, args...) \
-> -	printk(level "%s: " fmt , (d)->net->name , ## args)
-> -
-> -#ifdef DEBUG
-> -#undef DEBUG
-> -#define DBG(dev, fmt, args...) \
-> -	xprintk(dev , KERN_DEBUG , fmt , ## args)
-> -#else
-> -#define DBG(dev, fmt, args...) \
-> -	do { } while (0)
-> -#endif /* DEBUG */
+Fixes: 662a60102c12 ("usb: typec: Separate USB Power Delivery from USB Type-C")
+Reported-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
+Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
+---
+Changed from v1:
+ - Added the valid values for the sysfs
+ - Wrapped the description alone to 80 characters
 
-Actually there are more (at least hypothetical) changes than the declared
-change of printed device name.
+ .../ABI/testing/sysfs-class-usb_power_delivery        | 11 ++++++++++-
+ drivers/usb/typec/pd.c                                |  9 ++++++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-If DEBUG is not set there can be _more_ messages printed
-when your patch is applied as-is (i.e. all DBG() invocations will
-expand into some dev_dbg(), whereas before the patch is applied
-they compile into nothing).
-
-> -
-> -#ifdef VERBOSE_DEBUG
-> -#define VDBG	DBG
-> -#else
-> -#define VDBG(dev, fmt, args...) \
-> -	do { } while (0)
-> -#endif /* DEBUG */
-
-In the same spirit, the above block could be considered valid.
-
-Not sure, how much of an issue it is, though.
-
-Regards,
-
-Andrzej
-
-> -
-> -#define ERROR(dev, fmt, args...) \
-> -	xprintk(dev , KERN_ERR , fmt , ## args)
-> -#define INFO(dev, fmt, args...) \
-> -	xprintk(dev , KERN_INFO , fmt , ## args)
-> -
-> -/*-------------------------------------------------------------------------*/
-> -
->   /* NETWORK DRIVER HOOKUP (to the layer above this driver) */
->   
->   static void eth_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *p)
+diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+index ce2b1b563cb3..1bf9d1d7902c 100644
+--- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
++++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+@@ -69,7 +69,7 @@ Description:
+ 		This file contains boolean value that tells does the device
+ 		support both source and sink power roles.
+ 
+-What:		/sys/class/usb_power_delivery/.../<capability>/1:fixed_supply/usb_suspend_supported
++What:		/sys/class/usb_power_delivery/.../source-capabilities/1:fixed_supply/usb_suspend_supported
+ Date:		May 2022
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+@@ -78,6 +78,15 @@ Description:
+ 		will follow the USB 2.0 and USB 3.2 rules for suspend and
+ 		resume.
+ 
++What:		/sys/class/usb_power_delivery/.../sink-capabilities/1:fixed_supply/higher_capability
++Date:		February 2023
++Contact:	Saranya Gopal <saranya.gopal@linux.intel.com>
++Description:
++		This file shows the value of the Higher capability bit in
++		vsafe5V Fixed Supply Object. If the bit is set, then the sink
++		needs more than vsafe5V(eg. 12 V) to provide full functionality.
++		Valid values: 0, 1
++
+ What:		/sys/class/usb_power_delivery/.../<capability>/1:fixed_supply/unconstrained_power
+ Date:		May 2022
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+index dc72005d68db..59c537a5e600 100644
+--- a/drivers/usb/typec/pd.c
++++ b/drivers/usb/typec/pd.c
+@@ -48,6 +48,13 @@ usb_suspend_supported_show(struct device *dev, struct device_attribute *attr, ch
+ }
+ static DEVICE_ATTR_RO(usb_suspend_supported);
+ 
++static ssize_t
++higher_capability_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", !!(to_pdo(dev)->pdo & PDO_FIXED_HIGHER_CAP));
++}
++static DEVICE_ATTR_RO(higher_capability);
++
+ static ssize_t
+ unconstrained_power_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+@@ -161,7 +168,7 @@ static struct device_type source_fixed_supply_type = {
+ 
+ static struct attribute *sink_fixed_supply_attrs[] = {
+ 	&dev_attr_dual_role_power.attr,
+-	&dev_attr_usb_suspend_supported.attr,
++	&dev_attr_higher_capability.attr,
+ 	&dev_attr_unconstrained_power.attr,
+ 	&dev_attr_usb_communication_capable.attr,
+ 	&dev_attr_dual_role_data.attr,
+-- 
+2.25.1
 
