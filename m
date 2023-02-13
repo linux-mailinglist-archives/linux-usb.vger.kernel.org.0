@@ -2,95 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F76694FA2
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Feb 2023 19:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CD16950B4
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Feb 2023 20:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjBMSq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Feb 2023 13:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
+        id S231253AbjBMTbc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Feb 2023 14:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBMSq0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Feb 2023 13:46:26 -0500
-Received: from out-150.mta1.migadu.com (out-150.mta1.migadu.com [95.215.58.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314141DBB0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Feb 2023 10:46:18 -0800 (PST)
-Date:   Mon, 13 Feb 2023 13:46:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676313975;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YioAr6XjueHplzus2lFvpvi8p2nekmVJOeyTQCK8hnU=;
-        b=is/Pm32wjeb+az5eM7cNbDFrk7BI9ydUnFRxt1jFUczcDf30rVGI+Q9fKcZ0RRo6c4z6Cr
-        lfqWphTk2GQmMTePbSQYvjrU0foEeVux1clHEa3pgBndccmPHDWoC7ReRstSF8AVU98ar3
-        Be4PBOUSrlxp9AQk1/IDHqHarvZzLuw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+qFc7Q2NfXERwYT@moria.home.lan>
-References: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
- <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
- <Y+gjuqJ5RFxwLmht@moria.home.lan>
- <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229841AbjBMTb3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Feb 2023 14:31:29 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407AC4EE4;
+        Mon, 13 Feb 2023 11:31:28 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DDuFGE021585;
+        Mon, 13 Feb 2023 19:31:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=RZnTSrTjia7ioYJJ02vHl+H8jsIOKXAYsAItBwNZ7cs=;
+ b=c2GVjhhaRFWcAu2yvusZiUo2IE25OgEYgTyr9bItuw38FI3msZzQ2pq0NGyRn3qsYARJ
+ N1UOOV0TZ80zSjvr1iej3ION0AdXQz8X14StJnw8lRTXX+6rwFGByPy/V8mSL0lmTV0O
+ p0792OoPCuSSmZGUkCxEyD5GrHKBKYHJ36B28CvDmO4+Imtf+LTKwZXwdfbg1WROnXSg
+ +gihqmasEAv+iYvk/qaLtrItT2b+FCU1DwUJ5WgNXUFVgKpGOIPYYGLxDillax0T+Ho5
+ 771naw6KqYFM0Lbez9VmmhCm2Emp1O9yHFf01VtjDHB6uniu86ixz4DSSp5PqXv5pedt 2g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np389vuy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:31:22 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31DJVMiX003260;
+        Mon, 13 Feb 2023 19:31:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 3np43m348q-1;
+        Mon, 13 Feb 2023 19:31:21 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31DJVLUw003248;
+        Mon, 13 Feb 2023 19:31:21 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 31DJVLGB003243;
+        Mon, 13 Feb 2023 19:31:21 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id 89CF920E2F; Mon, 13 Feb 2023 11:31:21 -0800 (PST)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        balbi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v4 0/5] Add function suspend/resume and remote wakeup support
+Date:   Mon, 13 Feb 2023 11:31:11 -0800
+Message-Id: <1676316676-28377-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ZMCjyimOYyxy6BT489b9266QoGFSa1D9
+X-Proofpoint-GUID: ZMCjyimOYyxy6BT489b9266QoGFSa1D9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ bulkscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=645 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302130170
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:24:13AM +0100, Peter Zijlstra wrote:
-> On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
-> > Provided it acquires the parent device's lock first, this is 
-> > utterly safe no matter what order the children are locked in.  Try 
-> > telling that to lockdep! 
-> 
-> mutex_lock_next_lock(child->lock, parent->lock) is there to express this
-> exact pattern, it allows taking multiple child->lock class locks (in any
-> order) provided parent->lock is held.
+Changes in v4
+ - Moved the wakeup bit check to bind function for warning the user at an early
+   stage itself.
+ - Added the remote wakeup configured check to gadget_wakeup() and func_wakeup()
+   routines so that wakeup can be triggered only if user has configured it.
+ - Cosmetic changes with respect to renaming the variables to reflect the operation
+   better.
 
-Perhaps I'm stupid, but I've never understood how subclasses - or this -
-are supposed to work.
+Changes in v3
+ - Modified rw_capable flag to reflect the gadgets capability for wakeup
+   signalling.
+ - Added a check to configure wakeup bit in bmAttributes only if gadget
+   is capable of triggering wakeup.
+ - Implemented a gadget op for composite layer to inform UDC whether device
+   is configured for remote wakeup.
+ - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+   device is configured for it.
+ - Cosmetic changes in dwc3_gadget_func_wakeup() API.
 
-Locks don't get a fixed subclass, so what's to prevent some code from
-going
+Changes in v2
+ - Added a flag to indicate whether the device is remote wakeup capable.
+ - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+   changes.
+ - Added flags to reflect the state of  function suspend and function remote
+   wakeup to usb_function struct rather than function specific struct (f_ecm).
+ - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+   checking the link state and then sending the device notification. Also
+   added debug log for DEVICE_NOTIFICATION generic cmd.
+ - Added changes to arm the device for remotewakeup/function remotewakeup
+   only if device is capable.
 
-/* thread 1: */
-mutex_lock(&a->lock);
-mutex_lock_nested(&b->lock, 1);
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+To achieve this an interface can invoke gadget_wakeup op and wait for the
+device to come out of LPM. But the current polling based implementation
+fails if the host takes a long time to drive the resume signaling specially
+in high speed capable devices. Switching to an interrupt based approach is
+more robust and efficient. This can be leveraged by enabling link status
+change events and triggering a gadget resume when the link comes to active
+state.
 
-/* thread 2: */
-mutex_lock(&b->lock);
-mutex_lock_nested(&a->lock, 1);
+If the device is enhanced super-speed capable, individual interfaces can
+also be put into suspend state. An interface can be in function suspend
+state even when the device is not in suspend state. Function suspend state
+is retained throughout the device suspend entry and exit process.
+A function can be put to function suspend through FUNCTION_SUSPEND feature
+selector sent by the host. This setup packet also decides whether that
+function is capable of initiating a function remote wakeup. When the
+function sends a wakeup notification to the host the link must be first
+brought to a non-U0 state and then this notification is sent.
 
-I don't see how they can be used to check that we're obeying a lock
-ordering?
+This change adds the infrastructure needed to support the above
+functionalities.
+
+Elson Roy Serrao (5):
+  usb: gadget: Properly configure the device for remote wakeup
+  usb: dwc3: Add remote wakeup handling
+  usb: gadget: Add function wakeup support
+  usb: dwc3: Add function suspend and function wakeup support
+  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
+
+ drivers/usb/dwc3/core.h               |   5 ++
+ drivers/usb/dwc3/debug.h              |   2 +
+ drivers/usb/dwc3/ep0.c                |  16 ++---
+ drivers/usb/dwc3/gadget.c             | 116 ++++++++++++++++++++++++++++++++--
+ drivers/usb/gadget/composite.c        |  42 ++++++++++++
+ drivers/usb/gadget/configfs.c         |   3 +
+ drivers/usb/gadget/function/f_ecm.c   |  68 ++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.c |  63 ++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |   4 ++
+ drivers/usb/gadget/udc/core.c         |  48 ++++++++++++++
+ drivers/usb/gadget/udc/trace.h        |   5 ++
+ include/linux/usb/composite.h         |   8 +++
+ include/linux/usb/gadget.h            |  12 ++++
+ 13 files changed, 378 insertions(+), 14 deletions(-)
+
+-- 
+2.7.4
+
