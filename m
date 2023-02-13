@@ -2,53 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EC5693A82
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Feb 2023 23:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B397693BB6
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Feb 2023 02:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBLWjc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 12 Feb 2023 17:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S229707AbjBMBXh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Feb 2023 20:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjBLWjb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Feb 2023 17:39:31 -0500
-X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Feb 2023 14:39:30 PST
-Received: from mail.ips.gov.py (mail.ips.gov.py [201.217.50.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CED9EC8;
-        Sun, 12 Feb 2023 14:39:30 -0800 (PST)
-Received: from VS-W12-EXCH-01.ips.intranet.local (10.20.11.161) by
- vs-w12-exch-02.ips.intranet.local (10.20.11.162) with Microsoft SMTP Server
- (TLS) id 15.0.1497.42; Sun, 12 Feb 2023 19:03:28 -0300
-Received: from VS-W12-EXCH-01.ips.intranet.local ([fe80::e091:595c:d9be:51af])
- by vs-w12-exch-01.ips.intranet.local ([fe80::e091:595c:d9be:51af%14]) with
- mapi id 15.00.1497.042; Sun, 12 Feb 2023 19:03:28 -0300
-From:   Silvana Lorenza Muller de Coronel <smuller@ips.gov.py>
-Subject: 
-Thread-Index: AQHZPy1TuO+EafjgckmCG/OUdwUbnA==
-Date:   Sun, 12 Feb 2023 22:03:25 +0000
-Message-ID: <1676239389384.57955@ips.gov.py>
-Accept-Language: es-PY, en-US
-Content-Language: es-PY
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [37.19.221.237]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S229485AbjBMBXg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Feb 2023 20:23:36 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CE2B6975F
+        for <linux-usb@vger.kernel.org>; Sun, 12 Feb 2023 17:23:34 -0800 (PST)
+Received: (qmail 891888 invoked by uid 1000); 12 Feb 2023 20:23:34 -0500
+Date:   Sun, 12 Feb 2023 20:23:34 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+mRFUws3dOpU8qS@rowland.harvard.edu>
+References: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+ <Y+gjuqJ5RFxwLmht@moria.home.lan>
+ <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+k6ehYLWa0cmbvb@moria.home.lan>
+ <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
+ <Y+lROV3Ii+WbmZCh@moria.home.lan>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_20,LOTS_OF_MONEY,
-        MISSING_HEADERS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+lROV3Ii+WbmZCh@moria.home.lan>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sun, Feb 12, 2023 at 03:51:05PM -0500, Kent Overstreet wrote:
+> On Sun, Feb 12, 2023 at 03:19:16PM -0500, Alan Stern wrote:
+> > I'll revise the patch to use the device's name for the class.  While it 
+> > may not be globally unique, it should be sufficiently specific.
+> > 
+> > (Device names are often set after the device is initialized.  Does 
+> > lockdep mind if a lock_class_key's name is changed after it has been 
+> > registered?)
+> 
+> The device name should _not_ be something dynamic, it should be
+> something easily tied back to a source code location - i.e. related to
+> the driver name, not the device name.
+> 
+> That's how people read and use lockdep reports!
+> 
+> Do it exactly the same way mutex_init() does it, just lift it up a level
+> to a wrapper around device_initialize() - stringify the pointer to the
+> mutex (embedded in struct device, embedded in what-have-you driver code)
+> and use that.
 
+I really don't think that's a good idea here.  When you've got a bus 
+containing multiple devices, typically all those device structures are 
+created by the same line of code.  So knowing the source code location 
+won't tell you _which_ device structure is involved in the locking 
+cycle or what driver it's using.  By contrast, knowing the device name 
+would.
 
-I am Maureen Hinckley and my foundation is donating $3,000,000.00USD to you. Contact us via my email at (marvislwfoundation@gmail.com) for further details.
+Furthermore, to the extent that the device's name identifies what kind 
+of device it is, the name would tell you what where the structure was 
+created and which driver it is using.
 
-Best Regards,
-Maureen Hinckley
-Copyright ©2023* The Maureen Hinckley Foundation* All Rights Reserved
+For example, knowing that a struct device was initialized in line 2104 
+of drivers/usb/core/message.c tells you only that the device is a USB 
+interface.  It doesn't tell you which USB interface.  But knowing that 
+the device's name is 1-7:1.1 not only tells me that the device is a USB 
+interface, it also allows me to do:
+
+$ ls -l /sys/bus/usb/devices/1-7:1.1/driver
+lrwxrwxrwx. 1 root root 0 Feb 12 19:56 /sys/bus/usb/devices/1-7:1.1/driver -> ../../../../../../bus/usb/drivers/usbhid/
+
+telling me that the device is some sort of HID device.  Probably my 
+laptop's touchpad (which could easily be verified).  Even without direct 
+interaction with the system, searching through the kernel log would give 
+me this information.
+
+> > At this stage, converting would be most impractical.  And I don't think 
+> > it's really needed.
+> 
+> They do make you deal with lock restarts; unwinding typical stateful
+> kernel code is not necessarily super practical :)
+> 
+> Anyways, it sounds like the lockdep-class-per-driver approach will get
+> you more information, that's certainly a reasonable approach for now.
+
+Thanks for the review and suggestions.
+
+Alan Stern
