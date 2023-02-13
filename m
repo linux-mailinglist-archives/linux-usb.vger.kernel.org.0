@@ -2,40 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B076940E7
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Feb 2023 10:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8904C694136
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Feb 2023 10:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjBMJYv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Feb 2023 04:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S230296AbjBMJcF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Feb 2023 04:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjBMJYq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Feb 2023 04:24:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D78BDDA;
-        Mon, 13 Feb 2023 01:24:44 -0800 (PST)
+        with ESMTP id S229799AbjBMJbh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Feb 2023 04:31:37 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E68816AD2;
+        Mon, 13 Feb 2023 01:30:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gFeqYOXczwx3CAc2qMLDLlbFrxDEgSjP5KEBsqfU5cI=; b=JJfbRNqykp3u5JZxLoa1Sb6y5s
-        lW+WGSPGaD+NXTBHbLcMRwhcADLsSvMAtIMWiLafYTjxpJrjZIGSUJjFoK2lA3rXmCZxRSmyiPfQU
-        4XPaF16EQlhBfjdrCsnY9M0asc52iUoF3HyUsF1DxVwjTlEm9/4NDuFFvzFVdJ8jEBXn+usci59nc
-        vIDK9FWG11om3OSpzNNGLqHIsbQxacsH3Qe9Eweh8DBtuQvbP6kf4hXt3Y6JH/xxUrU1J2F3ClF+N
-        eCUGWNpUqJOMGE3Rx6qBXn+BjLks6v6TEecGTuY/s4FM13n4rD+KA+uX98e4OOV5Fs3qE9kaPyT4Z
-        DouLopsg==;
+        bh=tlbtwloiMll80xsCP5JxReJzFyl0pMq9yses5MAk/Hw=; b=EYMskAFjqDUuDsKVLxh5WJIqSN
+        9XYUb/9Hr+XOo0u6+DfjwQDUegFHC1KiigfqbFKStMj5kZI8KZ1SoWFyvK0yfn/8Xa5/wGs30bpbT
+        Drh84WYjg2KkeqDXPOB9B6trmp6a9R4ODGiG9eNDZ5YauLGcoS/TjTzTuZMzQH5pw7VKlRMlI+D6V
+        VMGzZ2lHYiV6Oe3JzW8HSv7afWIG2EcS3S/MNLTg4jHV28cOk1JcamPznuzmmm5ua9WETKww8yhz0
+        rwcRU6ureLuNr7XmlGivnHo/9Ue4C7e0lf02weexO7gCw8+Y359T40Nv4v3SVdj+1BMLQ4dB57xK+
+        XwyHc/qQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRV4K-005btr-9T; Mon, 13 Feb 2023 09:24:16 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pRV6d-009Fkm-2F;
+        Mon, 13 Feb 2023 09:28:40 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A531530020C;
-        Mon, 13 Feb 2023 10:24:13 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2014F30036B;
+        Mon, 13 Feb 2023 10:27:19 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 80E8F20C6EEA1; Mon, 13 Feb 2023 10:24:13 +0100 (CET)
-Date:   Mon, 13 Feb 2023 10:24:13 +0100
+        id 0531520C6EEA1; Mon, 13 Feb 2023 10:27:18 +0100 (CET)
+Date:   Mon, 13 Feb 2023 10:27:18 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
@@ -54,10 +55,8 @@ Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
         Hillf Danton <hdanton@sina.com>
 Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
  with unique class keys
-Message-ID: <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
-References: <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
- <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
+Message-ID: <Y+oCdlIwCDtRRG6T@hirez.programming.kicks-ass.net>
+References: <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
  <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
  <Y+gjuqJ5RFxwLmht@moria.home.lan>
  <Y+hRurRwm//1+IcK@rowland.harvard.edu>
@@ -65,10 +64,12 @@ References: <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
  <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
  <Y+hYn6uzIUBaxDdV@moria.home.lan>
  <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+k6ehYLWa0cmbvb@moria.home.lan>
+ <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+In-Reply-To: <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -78,11 +79,11 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
-> Provided it acquires the parent device's lock first, this is 
-> utterly safe no matter what order the children are locked in.  Try 
-> telling that to lockdep! 
+On Sun, Feb 12, 2023 at 03:19:16PM -0500, Alan Stern wrote:
 
-mutex_lock_next_lock(child->lock, parent->lock) is there to express this
-exact pattern, it allows taking multiple child->lock class locks (in any
-order) provided parent->lock is held.
+> (Device names are often set after the device is initialized.  Does 
+> lockdep mind if a lock_class_key's name is changed after it has been 
+> registered?)
+
+It does, althought I don't at the moment recall how hard it would be to
+change that.
