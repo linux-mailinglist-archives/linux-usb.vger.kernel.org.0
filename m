@@ -2,113 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEB66958B9
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 06:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C9769597E
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 07:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjBNFzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Feb 2023 00:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S231719AbjBNGzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Feb 2023 01:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjBNFzN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 00:55:13 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18471193C4;
-        Mon, 13 Feb 2023 21:55:12 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id m12so16457456qth.4;
-        Mon, 13 Feb 2023 21:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xdJ9fniFiMZtLhBdU1wXemK+Te/gfkmtRDd7mbpe/aw=;
-        b=Vrweeo9uMQ3b/QHWBD46fjgJJsq6/b/QDXTo5slP9tdnlEQ+cPF+BdszvEzDiOq56p
-         gNS0HA6NTxaprzln+0H6wgVXH0sN/tGTXKDBuNgz6TU1LAqm1xfksUMN+TH+SSA9MDWy
-         2JDaMr1i/VCA5juuiwSvT2I8rvMd+OazwiGGPdRnyhsJN2lMzB0JV07vcV8V8aipUTKE
-         Onb+WKefS42Hztv08RH5XCJipWNgNU6/Pw83WKrvv6op9uzHscWQZxq/11akmRiOcdkj
-         7egbGj/FGPz0VZqKfRIkAwrmVeRLDYTzdcvsYm/3qqNgaFr+SBhaFf58L3q80koxsSCX
-         p5XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xdJ9fniFiMZtLhBdU1wXemK+Te/gfkmtRDd7mbpe/aw=;
-        b=E1H3NywTS3v1c78/Q0pHNNrfdlcyjk5R4fJrC1Qka87JwmzD9+SCd8vWZF6X2lhcO5
-         HTmjcg2LPOnn9IrskXdb2/Q1LipCGCS/aj0KWPgxXLTgxvLhVFnzJjropSIP3xrqSiGq
-         XHuo78f89nfXZJUZh4stQVkMHFadYg5lC14iBLBcIZCCdDAy9IByZlQrLPECbc0fn5C7
-         Vf/LDbTCfvOSBNkAkeNmVdrqIErPF5ow7aoXM9xunyrnFsCbUnsT0WGzMkZNU0X8KFXL
-         Wk6T0/AXRXq7IT9y53FAEoB47cfVrSyNGweJWDtT/sj0j8oJ3kZUtprRED1TqKN3EJ0k
-         pcgg==
-X-Gm-Message-State: AO0yUKWDhHEGQCiUpk9Ie7zjleLmIB5nKVAl8xSHebrSmZpX/s35bLe1
-        tsGyQok5A7FFV6cJBAazTZE=
-X-Google-Smtp-Source: AK7set+wO1qqpoo/DkAMSvwPKVT/5IouHMAQyS4njpu1DL+o3BJB29itHdPu38mfLiTMFJQrEUVquw==
-X-Received: by 2002:a05:622a:208:b0:3b8:6c68:6109 with SMTP id b8-20020a05622a020800b003b86c686109mr1787435qtx.21.1676354111181;
-        Mon, 13 Feb 2023 21:55:11 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id j8-20020ac85c48000000b003b9b41a32b7sm10792582qtj.81.2023.02.13.21.55.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 21:55:10 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0B84527C0054;
-        Tue, 14 Feb 2023 00:55:09 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 14 Feb 2023 00:55:10 -0500
-X-ME-Sender: <xms:PCLrYyn0Ye0pUOiSnjWFk5z96zMsGTHZ7PJNGYqkXd6LP6Svs2zYQA>
-    <xme:PCLrY53n0_8XVTgIt_uxk_nTvdCbIGvt2MsjRMbUL5RzR3ufz8v0VF936jO-pG57V
-    1VysT2r2QggIZOIXA>
-X-ME-Received: <xmr:PCLrYwoEbfH8BPIZslp6FvqZTpEwayL3yiPvsEArs4CY7nYWhP1D2jpv0-rOQwilgfLqb8SF1E6wyxSEXIa6JOQbt2kQ0sXum6w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeivddgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpefhtedvgfdtueekvdekieetieetjeeihedvteehuddujedvkedtkeefgedv
-    vdehtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
-    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
-    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:PCLrY2kgJ2dnhHXUVvqU_felNFJgjg5yaSR3QoiUF2h1if1F0Feg1Q>
-    <xmx:PCLrYw3n1j3ZOlswQu_D5wIF4DKm3iSsxNwsT0015lD0Xp2d7CRYJg>
-    <xmx:PCLrY9uq-C6iicybtnjIO5fgggyTncBOfRKWtCNDmz9J7ZtAJak16w>
-    <xmx:PSLrY1sqS6huNKqQC00jc5-bwFwtMEaEtfSuO6_WwHOyIT_GOw9Z4A>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Feb 2023 00:55:08 -0500 (EST)
-Date:   Mon, 13 Feb 2023 21:55:06 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+siOolJeC10k5D3@Boquns-Mac-mini.local>
-References: <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
- <Y+pWhyFJeE93nlWd@rowland.harvard.edu>
- <Y+plfZnEqw6mG+XH@hirez.programming.kicks-ass.net>
- <Y+rpD7QPheQQ8Lxj@boqun-archlinux>
- <Y+rr4p6njVOTSYxs@rowland.harvard.edu>
- <20230214052733.3354-1-hdanton@sina.com>
+        with ESMTP id S229655AbjBNGzI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 01:55:08 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2058.outbound.protection.outlook.com [40.107.22.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0332114EBB
+        for <linux-usb@vger.kernel.org>; Mon, 13 Feb 2023 22:55:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CEqBRy40fUKuW9hQ1r0CSGD7oci9Aw6GGpoKZV1XXOz4o1mtgpuvX6pl607LDnb327b96xULrkGt3arFMpubH32raLsDcVh9jp5Gr5AIMfvNSyvMLP/9wD+ngalOVYFgu4a9YF9BdCozHNCybHAOVspsLOXc1dCwXZSbpMhQ9UYNy8jdth0NTLO+HuQ15ePxYKi1qBQyuC4C0+QBUP/O8hvqDs/fQwIQ9/Dcze95EBjrS3xCd/LWZYMw0tGz0+qMOjHBFfl/AneM7Z0XLh64xYgZQtHrqqdWQDQbRU124/Qst2Yx69URuZ8JHISE6wjWCWST/ieGGU2mbgpaj1c3LA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kHtMdCCUCkZMj/tcGCvyqJErR/sgAGB/Gr7gLqyp6pI=;
+ b=GLB6kse+cl3cx9BiKGJPAvi98SOJsCZnzPeAqAj1fjQTUrLEXnxDuL9XkE5+UAaVC8m1SRxWdQ+wgPldyzOQI60Gz6rqQORR1851wEiTEdks31VAGbr09AifjBczUAEWPT5yKeDWRvJ1RbvvfOizTjlC0xivqZQXT2aB5XX7h2RWcXcUUJjYW75sFb3JEfUennuImFbk3ih26r+iK9OAv3XE4qzFciPkj2CcyOKRDdARwfi0grvfRf2k1YwMWcc5sIEewfUS3E3EJ3PLcc/ioGoHcuOXWwspOep/DvTUmvoSrLwZEQ7Tka/BRPs+boDzUiG88bdYUk1BchZ/Z41POA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kHtMdCCUCkZMj/tcGCvyqJErR/sgAGB/Gr7gLqyp6pI=;
+ b=cSdt9657fl6GEIxs9Xhd/XsSTi2buHWmerxXbQT5taq83zuBL3cS2Q354Gi7aTWE8Lic4PNZR/gSklPk70XyXSDH+qmrNottCuVLDenZBrTT7anwQalJJ80rXm/B+XhvJeG9B1DLVtQeLJue+zDaj05aBrB1JtdLv3mpPtp0P6E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
+ DBAPR04MB7253.eurprd04.prod.outlook.com (2603:10a6:10:1a2::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.24; Tue, 14 Feb 2023 06:55:04 +0000
+Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
+ ([fe80::f874:ee07:56fb:cbe0]) by DB7PR04MB4505.eurprd04.prod.outlook.com
+ ([fe80::f874:ee07:56fb:cbe0%6]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
+ 06:55:04 +0000
+From:   Xu Yang <xu.yang_2@nxp.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-imx@nxp.com, jun.li@nxp.com, xu.yang_2@nxp.com
+Subject: [PATCH v3] usb: typec: tcpm: fix create duplicate source/sink-capabilities file
+Date:   Tue, 14 Feb 2023 14:56:35 +0800
+Message-Id: <20230214065635.972698-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0014.apcprd02.prod.outlook.com
+ (2603:1096:4:194::19) To DB7PR04MB4505.eurprd04.prod.outlook.com
+ (2603:10a6:5:39::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214052733.3354-1-hdanton@sina.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|DBAPR04MB7253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3421616c-8ab5-409a-42f2-08db0e586672
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vwaeBCvp5M+eMk4wAMdXdsdIbP04QDRFZpUdg9zeg+P0LDcj0VHuqfZl1qRjicyUW1B3zjJICrnu1hcUmqmAcBF4MsN/orah/HvZmU2VkThQtSddeUm70hET4JotxbhoxJLbfw6LQ5UA8R9+tI8iWMqXMTvsCAoU/jGSpAtzSGLdOSQLEFd/kHrQqn3rJj95x7B3bMMzeFrJkMZdw+O/hdE0EcH3N52nKf0aRhNxzQ3HJleoF2oiMyGLsA35ES49kdxO3jrhLHtu+GsbtsSnG8ftkNiES6xRmxknKenU3FJI6PpB2fhv3ZA35re5ka3Yzk7ymzYQrmmUluXp7OJw5xYHhYpaQ1ssMf8z32Cx5cTqIQQnU0wUNU9gFdEok/kaNT4pMLJL1xWYIkLSs1FW744O6wVaPq7x/MLBpdLjlRe0puK5lWUCV9y9dL/3xh6OoHY8fJVFPekxDdQL6mk0AAhrhsI1XYZQrSvRQ0lMrQTx++B9EIZbXuexL0G8ismrZBSMrEIdfd7Rrl9x0XGodxP7VZka+n/7PzShRDQwpE9i+uXQd4m5CJ4FVO5hZEsMhDgx7+VsH4WbLaei1unHZbFMuHJ+un6MgixXBplrlM4g82ZH0juTn7Dkx4LkpjjXZKYgE/UYhwGb5FBA2pqDqGlRxljUXsws07LZNMESjxco9WLllI7BEEWCFlADgucctxaRLo2FTwiklanBqy6U2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(451199018)(36756003)(86362001)(66946007)(316002)(4326008)(1076003)(8676002)(6666004)(6486002)(52116002)(2906002)(478600001)(41300700001)(66476007)(5660300002)(8936002)(38100700002)(38350700002)(26005)(2616005)(6506007)(66556008)(83380400001)(186003)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mereNrm4VwRjqQ/akOXVkLcSTDi9RCIkelCw1/aeDI/2NstHeem3cpCauHL/?=
+ =?us-ascii?Q?jzLeh4w6fS5xGPVhyubb1iRFDUAz3LhTPklKGbjtk/MNFO/dlAAuocwmLmOf?=
+ =?us-ascii?Q?k1Y07GcW88/UIqT0/IeFX2Q6j+cVNiUeYsbWmGY9A/bdSx82k4rUAgjERiUz?=
+ =?us-ascii?Q?Ry+OV/o85BvrZpBo2pTvTbkJPW9iMKGmrZrNnVojNpQ/o6ni6w0ct6rzMKYl?=
+ =?us-ascii?Q?RqNeDpkMK4bBU1OEJ+E6uUS0qDzkyfMfzSNZonHHiPy5Mjg0UqgulA5votp7?=
+ =?us-ascii?Q?7WFObkIyw1X1bnDOi9fAqLfZ2nIM624o2ZHicalrFk4S+Mwa6x1jWvFPvvsq?=
+ =?us-ascii?Q?mHDoTqPeMF/jcdnlYyRz1AhqOVtuQETjlv5GZKMmZTlGQxP1a8fOBUQh+h87?=
+ =?us-ascii?Q?dIhaALVz4ciAGUI9V/Q1YGmOXziVbuoLUjE4hF+fpqovQsvy9Lpv7hULG45Y?=
+ =?us-ascii?Q?p45OY+dcrirjl7Af96vyDVpq2LmDwsorkhuENH7aLw/rUt4cegB5YJ03UFQX?=
+ =?us-ascii?Q?bEdjDD1PJjD092ItID2z40YuU461h9zEglQ4vCQVovzpVx/GY80BiaqiqcTu?=
+ =?us-ascii?Q?aspoLP32pc/jYkDW/q69YCO+DAvh9xMjrLnZllVoHdoMmcZqYqbmSdbbeUIf?=
+ =?us-ascii?Q?xHpkaEXNfasztG1UNrpbfreM4yBE2vDM/yd3hrgdoUJ4vKB993spFIuT5AeY?=
+ =?us-ascii?Q?1vHayHO7Q5eEBEn8Q/0m7Tw/OnuuG/M1CgwjSi+dfNK7XSQJAh66rbHBp13J?=
+ =?us-ascii?Q?bTqdWGm4okjIIzz3olFIj6faXV3t171SX5CiLJ0o2GSavvNWfPtffBZ8vdKA?=
+ =?us-ascii?Q?PrAbIUsWbd7yfveTxORX6QJqkqw0UvHcpi2v5onaL55pQ6ja1eJ6yhzGIES3?=
+ =?us-ascii?Q?JM423gXGs2QtuirYQiOvmz/GJUPFkN0pWu8rm3IUrYzoS9EuYl6TiItWp3Nt?=
+ =?us-ascii?Q?K3HjTeDhYPRw8EBcEDInh750gXu6xSxdyN0HBplT949n2DjL6d4TPtQjom7m?=
+ =?us-ascii?Q?nvzAf2uIchB//9yUFGWxITt1TwTx0lcrd0dMFgMfzM7W40tSYKiBWrCWiaMp?=
+ =?us-ascii?Q?ef6Z5AE8ZqltWtEWTc4FfyA3xQeyh1WcW/l44ygfU4/N73LJ3CsGDeVclO5F?=
+ =?us-ascii?Q?INPYbDokHOJdYAryamaxWygi0IoybxC5NGbTVhfbNvCWezclaKVbx3Zm5YM1?=
+ =?us-ascii?Q?Y+v22U2oXfnR26bzHQUa8dEHmwZXRYAfjQ+dyIouBfVUQV/Tqv/948XFNPvU?=
+ =?us-ascii?Q?wM0plW4uGQPDH10Ty+l+camoIVU3FyU92ZAcNrDfJeifC0iMiuW9OGHaE1zD?=
+ =?us-ascii?Q?ZcIkNZ2/TbH2hUaBHMezOkOjvofwbkhQpUAkoylP+9RT0ZuzlORFBg56DXdX?=
+ =?us-ascii?Q?9Opmms0WnJ7nZU32ZjMvmEOhJpT4iQDktAuhVCT/T/IrfGIF/8JPi2gzbBxc?=
+ =?us-ascii?Q?+KeYl7tEMg/wDXwhFG6wgL5zijFUuqZuEcttf1wgi6X1ZiZf+IZrFx4gP8TM?=
+ =?us-ascii?Q?VGgEKw/V9uIG9DPe4xuBBJ4mASY2RwQ6HJmqJHANy8NRNFXM/XcOTzQOIpbG?=
+ =?us-ascii?Q?4y0Bv2IZ+5TeGUMvFMY9KpiAXVdG9zw3x4t76VCj?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3421616c-8ab5-409a-42f2-08db0e586672
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 06:55:04.4857
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c+CQmXaMG95PUdrXtVd1dftzGAkD2C1VL2OixsPpcIopQM7WkX0bm3cE1mUS/CdX7LkSNYS8lhUax4FL8S5BoA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7253
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,92 +109,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 01:27:33PM +0800, Hillf Danton wrote:
-> On Mon, 13 Feb 2023 18:09:16 -0800 Boqun Feng <boqun.feng@gmail.com>
-> > On Mon, Feb 13, 2023 at 09:03:14PM -0500, Alan Stern wrote:
-> > > On Mon, Feb 13, 2023 at 05:51:11PM -0800, Boqun Feng wrote:
-> > > > Basically if you have two lock instances A and B with the same class,
-> > > > and you know that locking ordering is always A -> B, then you can do
-> > > > 
-> > > > 	mutex_lock(A);
-> > > > 	mutex_lock_nest_lock(B, A); // lock B.
-> > > > 
-> > > > to tell the lockdep this is not deadlock, plus lockdep will treat the
-> > > > acquisition of A and the precondition of acquisition B, so the following
-> > > > is not a deadlock as well:
-> > > > 
-> > > > T1:
-> > > > 	mutex_lock(A);
-> > > > 	mutex_lock(C);
-> > > > 	mutex_lock_nest_lock(B, A);
-> > > > 
-> > > > T2:
-> > > > 	mutex_lock(A);
-> > > > 	mutex_lock_nest_lock(B, A);
-> > > > 	mutex_lock(C);
-> > > 
-> > > Why isn't this treated as a deadlock?  It sure looks like a deadlock to 
-> > > me.  Is this an example where lockdep just doesn't get the right answer?
-> 
-> Syzbot reported deadlock[1] with A ignored.
-> 
-> [1] https://lore.kernel.org/linux-mm/20230130073136.59-1-hdanton@sina.com/
-> 
+The kernel will dump in the below cases:
+sysfs: cannot create duplicate filename
+'/devices/virtual/usb_power_delivery/pd1/source-capabilities'
 
-Right, I think that's a false positive, however it's not related to
-mutex_lock_nest_lock(). Anyway mutex_lock_nest_lock() cannot help that
-case since these are three different lock class.
+1. After soft reset has completed, an Explicit Contract negotiation occurs.
+The sink device will receive source capabilitys again. This will cause
+a duplicate source-capabilities file be created.
+2. Power swap twice on a device that is initailly sink role.
 
-Actually, reading the code again, I think I made a mistake, for
-mutex_lock_nest_lock(), the following *is* a deadlock to lockdep:
+This will unregister existing capabilities when above cases occurs.
 
-T1:
-	mutex_lock(A);
-	mutex_lock(C);
-	mutex_lock_nest_lock(B, A);
+Fixes: 8203d26905ee ("usb: typec: tcpm: Register USB Power Delivery Capabilities")
+cc: <stable@vger.kernel.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-T2:
-	mutex_lock(A);
-	mutex_lock_nest_lock(B, A);
-	mutex_lock(C);
+---
+v2: unregister existing capabilities on specific cases
+v3: add changelog and modify commit message
+---
+ drivers/usb/typec/tcpm/tcpm.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-and this *is not* a deadlock to lockdep:
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index a0d943d78580..7d8c53d96c3b 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4570,6 +4570,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 	case SOFT_RESET:
+ 		port->message_id = 0;
+ 		port->rx_msgid = -1;
++		/* remove existing capabilities */
++		usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+ 		tcpm_pd_send_control(port, PD_CTRL_ACCEPT);
+ 		tcpm_ams_finish(port);
+ 		if (port->pwr_role == TYPEC_SOURCE) {
+@@ -4589,6 +4591,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 	case SOFT_RESET_SEND:
+ 		port->message_id = 0;
+ 		port->rx_msgid = -1;
++		/* remove existing capabilities */
++		usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+ 		if (tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET))
+ 			tcpm_set_state_cond(port, hard_reset_state(port), 0);
+ 		else
+@@ -4718,6 +4722,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 		tcpm_set_state(port, SNK_STARTUP, 0);
+ 		break;
+ 	case PR_SWAP_SNK_SRC_SINK_OFF:
++		/* will be source, remove existing capabilities */
++		usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+ 		/*
+ 		 * Prevent vbus discharge circuit from turning on during PR_SWAP
+ 		 * as this is not a disconnect.
+-- 
+2.34.1
 
-T1:
-	mutex_lock(A);
-	mutex_lock_nest_lock(C, A);
-	mutex_lock_nest_lock(B, A);
-
-T2:
-	mutex_lock(A);
-	mutex_lock_nest_lock(B, A);
-	mutex_lock_nest_lock(C, A);
-
-The current semantics of _nest_lock() is tricky, it only provides the
-"nest" effect if it is the next lock acquired after the "parent" lock.
-Maybe we can change and make it clear a little bit to make it more
-useful.
-
-Ah, actually someone found it 7 years ago:
-
-https://lore.kernel.org/lkml/20150810095247.GA4606@fixme-laptop.cn.ibm.com/
-
-;-)
-
-Regards,
-Boqun
-
-> > Because A serializes B and C, so that particular piece of code doesn't
-> > cause deadlock. Note that you can still use you normal mutex_lock() for
-> > B, so if there is more code:
-> > 
-> > T3:
-> > 	mutex_lock(C);
-> > 	mutex_lock(B);
-> > 
-> > lockdep will report deadlock.
-> > 
-> > Regards,
-> > Boqun
-> > 
-> > > Alan Stern
