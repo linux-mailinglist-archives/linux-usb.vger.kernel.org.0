@@ -2,148 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8636967D7
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 16:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A68469685B
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 16:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbjBNPT7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Feb 2023 10:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S232900AbjBNPrO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Feb 2023 10:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjBNPT6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 10:19:58 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7127E279B7
-        for <linux-usb@vger.kernel.org>; Tue, 14 Feb 2023 07:19:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676387997; x=1707923997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r1FY3NELVfcfG1dIaPb6vBXhRxuHo1qn4hsPsgt6WNY=;
-  b=SQLyERyXvQdYJ+E2aSGw2d6QmkRwcG6uxE03e8kHqoXXFLaIHPXSy+63
-   A4SHv983d5QnT9xxTz4RRqENaiWS+B08jtJFjLdzkddZuXQlzNow4JB0p
-   7DEDQKIn/Sv1QMyvFYtPv9dBHo+f07JCPdvumMYuHGoBwKwZWjn5EXfzt
-   XcE39/nX5lC2fPLZmWJJVVUDljNj3dt42axq800dmuNRyTWcxohBVjocO
-   ZY8u1nmZuWNZhMrf5TXRMMjJ5uaqVIYLxrowxzw1jAwHeT/eJTK3+Lt5N
-   05fWhO1eUbtBbkBl+oTw9yZb5lp7/o7/38/ysG7lgku+eMHPBq0Jlsw/E
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="395797968"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="395797968"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 07:19:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812071031"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="812071031"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Feb 2023 07:19:54 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Feb 2023 17:19:53 +0200
-Date:   Tue, 14 Feb 2023 17:19:53 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Saranya Gopal <saranya.gopal@intel.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        rajaram.regupathy@intel.com
-Subject: Re: [PATCH v3 2/2] usb: typec: pd: Add higher capability sysfs for
- sink PDO
-Message-ID: <Y+ummeWDWzka55n1@kuha.fi.intel.com>
-References: <20230214114543.205103-1-saranya.gopal@intel.com>
- <20230214114543.205103-2-saranya.gopal@intel.com>
+        with ESMTP id S229657AbjBNPrN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 10:47:13 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2054.outbound.protection.outlook.com [40.107.93.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFB929431;
+        Tue, 14 Feb 2023 07:47:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I3EcrkX3jtI4d+7DQwmGFkNeSbDJWwsIp8zcrHxt3iwPkkgyZUTnyQof5eG34EqWGWfMZuRdqHorbXG9fa1+pxjz3SDs/weQ7N4SpNxoRdkD3Qyj1uLao+/wyFpPAkxl50UQ9//wfAxzD58MLx/TLhOoiTQ2x2m1A366GSqXTHDI+uxIA0EuG9xLy44qbhqbSPRIo4vpgtCAh8ZoLyRLj3LBf5+LNT5WbRLX3Pf8ktmyboWqDpuWAzTsR+cpDMY935tLZDoAQ4D9Vccy3sG6OhTHjOfFAbUUWKUG91DiX66eWVu55wZHMptXY8m8kYEEQtSEwWByIL7yW8TXt0706w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NxxUPTfyV3H0E5iB88ltNo4TGm9R40J7X7DdLHK/h2g=;
+ b=Quc86zBS80+iVLluuiljt+hmbwjWCohzLvhOi03Bv3Ggpe3Q1FYak7CP5GMl1JqSDVdV76os0vFcqGl06xJ2b6dpHhg55rw375txXE3ngINM8sjhey/finpV+J2HcBjloh7eq64WZaLiB0nWbLjUvicwaChTi+A6qR2nyqCifB/Q1W9QTwMoT8KdU+Y7o+U7EDYR67qMQ3HHXL0G5gPIE0I9hrcKuvU5J/zCtfWsVPhDUQG5OrA3E1YRIwaYhJNm4xVNwowFjTI+P4pqKsQ6DexI7fXdcLQRnrFy1NjU/U1VuX5vpatafp3+NH8Zlyng0z6MfN7Cw7iSYw0iwLH2uQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NxxUPTfyV3H0E5iB88ltNo4TGm9R40J7X7DdLHK/h2g=;
+ b=lvgIj8ojsb+FnMxbA68TwFFO+SyncWIjOLXCuME31EESeQ52tiSlpjxjEC6kz0tEJFFdA/yNppUQ5uAE/i7ySyNG8Oj6BRo2P4hVu1a6o9sYb9HM9WUjDYeNeIA8gJ1YPcuYnTAxZRFPnK41iQieGJcjCn1H6WSpfXm9iGO3Hhk=
+Received: from DM6PR02CA0119.namprd02.prod.outlook.com (2603:10b6:5:1b4::21)
+ by CH0PR12MB5282.namprd12.prod.outlook.com (2603:10b6:610:d5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 15:47:10 +0000
+Received: from DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1b4:cafe::75) by DM6PR02CA0119.outlook.office365.com
+ (2603:10b6:5:1b4::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
+ Transport; Tue, 14 Feb 2023 15:47:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT037.mail.protection.outlook.com (10.13.172.122) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6086.24 via Frontend Transport; Tue, 14 Feb 2023 15:47:10 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 14 Feb
+ 2023 09:47:09 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mika.westerberg@linux.intel.com>, <linux-usb@vger.kernel.org>
+CC:     <YehezkelShB@gmail.com>, <michael.jamet@intel.com>,
+        <andreas.noever@gmail.com>, <Sanju.Mehta@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] Fix problems fetching TBT3 DROM from AMD USB4 routers
+Date:   Tue, 14 Feb 2023 09:46:44 -0600
+Message-ID: <20230214154647.874-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214114543.205103-2-saranya.gopal@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT037:EE_|CH0PR12MB5282:EE_
+X-MS-Office365-Filtering-Correlation-Id: c676d7b2-f9ea-4c6c-2640-08db0ea2bc01
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YjXYAfsluWfFun5WcNMl6OpoBHoWZtxHtXWjyiIahQiQcqxCZlhAvFjb6eoPd8u9zYLeQVoyeREw4vHsmaf0SJhNZIc1rxUJX8E/Vmr34h/jlCV9+Nq1MyDK/aGe6iWw8yqbwCZcjeghLRp1FpK7Bfg3WJyPt1GOOqZZ+xtFgbiIwyMNw97YlqSI/CxczBQOPgJDHocWRg0I2WTKMS7zp3lzjVHaSJrm4qVx1/FT5SAoggP9Uk6wWHWlfB5gCFfUCorW9o4p5YxrcSc/iQOfu2VJZzFUyS0hVfyBCyzW0k91eXtpEv+ttWRsdjnql88lg6F6aLxr3YtHhxc/m+ounMCq4erdktcQBnkZNMpZ+iwMdSNcHyKkD5pkt96mCmAMWaJWY/SzXIfqnUOHFWBKTJXHPIaxpr/6aX0XuBUhOrkiyJFo0hY6TO+1NOtpnvGlDw/u2/GcQbetCuFwjc6v9+SRzuCAR8TQesmzUlaRCmAH8pMsvq6/uPp5zDFsBcVpQxmYuQgsdi/6INHOgg5JAV7ZJR2pTnhnqiMzAD+SvDLjud48ebrIms8nUBVzWDcB9A4rJSemE88o93+VX1Dqav4lhcw/ZENUeZ3cL/a0lUAnM0YOLAsHa552q/V9WuVe26mkcy6QJ1/OJuwoHr2fqk8cX/Be4CiD4YstwIBR4mej/BhY3zTkDgt5KyWhHp1pyqVUvutUmUJFcuGV2IuJwN4wd3KRTFNQvX7DNoYgt00=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199018)(46966006)(40470700004)(36840700001)(86362001)(36756003)(82310400005)(2906002)(8936002)(5660300002)(44832011)(41300700001)(36860700001)(81166007)(83380400001)(356005)(82740400003)(7696005)(478600001)(8676002)(16526019)(186003)(26005)(40480700001)(40460700003)(4326008)(110136005)(316002)(54906003)(70586007)(336012)(2616005)(426003)(1076003)(70206006)(47076005)(6666004)(66574015)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 15:47:10.3958
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c676d7b2-f9ea-4c6c-2640-08db0ea2bc01
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5282
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 05:15:43PM +0530, Saranya Gopal wrote:
-> 28th bit of fixed supply sink PDO represents higher capability.
-> When this bit is set, the sink device needs more than vsafe5V
-> (eg: 12 V) to provide full functionality. This patch adds
-> this higher capability sysfs interface for sink PDO.
-> 28th bit of fixed supply source PDO represents usb_suspend_supported
-> attribute. This usb_suspend_supported sysfs is already exposed for
-> source PDOs. This patch adds 'source-capabilities' in
-> usb_suspend_supported sysfs documentation for additional clarity.
-> 
-> Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
+TBT3 devices when connected to an AMD USB4 router occasionally fail to
+properly respond to requests for the DROM via bit banging.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Depending upon which part of the request failed will impact the severity.
+A number of workarounds have been put in place to let the driver handle
+the failed requests:
 
-> ---
-> Changes from v2:
->  - Patch was split into 2 and this one adds new sysfs for sink PDO
-> Changes from v1:
->  - Wrapped the description within 80 characters
->  - Added valid values for the new sysfs
-> 
->  .../ABI/testing/sysfs-class-usb_power_delivery        | 11 ++++++++++-
->  drivers/usb/typec/pd.c                                |  8 ++++++++
->  2 files changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-> index ce2b1b563cb3..1bf9d1d7902c 100644
-> --- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-> +++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-> @@ -69,7 +69,7 @@ Description:
->  		This file contains boolean value that tells does the device
->  		support both source and sink power roles.
->  
-> -What:		/sys/class/usb_power_delivery/.../<capability>/1:fixed_supply/usb_suspend_supported
-> +What:		/sys/class/usb_power_delivery/.../source-capabilities/1:fixed_supply/usb_suspend_supported
->  Date:		May 2022
->  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
->  Description:
-> @@ -78,6 +78,15 @@ Description:
->  		will follow the USB 2.0 and USB 3.2 rules for suspend and
->  		resume.
->  
-> +What:		/sys/class/usb_power_delivery/.../sink-capabilities/1:fixed_supply/higher_capability
-> +Date:		February 2023
-> +Contact:	Saranya Gopal <saranya.gopal@linux.intel.com>
-> +Description:
-> +		This file shows the value of the Higher capability bit in
-> +		vsafe5V Fixed Supply Object. If the bit is set, then the sink
-> +		needs more than vsafe5V(eg. 12 V) to provide full functionality.
-> +		Valid values: 0, 1
-> +
->  What:		/sys/class/usb_power_delivery/.../<capability>/1:fixed_supply/unconstrained_power
->  Date:		May 2022
->  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-> index b5ab26422c34..59c537a5e600 100644
-> --- a/drivers/usb/typec/pd.c
-> +++ b/drivers/usb/typec/pd.c
-> @@ -48,6 +48,13 @@ usb_suspend_supported_show(struct device *dev, struct device_attribute *attr, ch
->  }
->  static DEVICE_ATTR_RO(usb_suspend_supported);
->  
-> +static ssize_t
-> +higher_capability_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%u\n", !!(to_pdo(dev)->pdo & PDO_FIXED_HIGHER_CAP));
-> +}
-> +static DEVICE_ATTR_RO(higher_capability);
-> +
->  static ssize_t
->  unconstrained_power_show(struct device *dev, struct device_attribute *attr, char *buf)
->  {
-> @@ -161,6 +168,7 @@ static struct device_type source_fixed_supply_type = {
->  
->  static struct attribute *sink_fixed_supply_attrs[] = {
->  	&dev_attr_dual_role_power.attr,
-> +	&dev_attr_higher_capability.attr,
->  	&dev_attr_unconstrained_power.attr,
->  	&dev_attr_usb_communication_capable.attr,
->  	&dev_attr_dual_role_data.attr,
-> -- 
-> 2.25.1
+e87491a9fd4e3 ("thunderbolt: Retry DROM reads for more failure scenarios")
+a283de3ec646f ("thunderbolt: Do not resume routers if UID is not set")
+6915812bbd109 ("thunderbolt: Do not make DROM read success compulsory")
+
+Still even with these changes the failures do make it through. In comparing
+other CM implementations, they all access the DROM directly from the NVM.
+
+To avoid triggering this issue, try to get the DROM directly from the NVM
+in Linux as well before resorting to bitbanging.
+
+Mario Limonciello (2):
+  thunderbolt: Read DROM directly from NVM before trying bit banging
+  thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
+
+ drivers/thunderbolt/eeprom.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 -- 
-heikki
+2.25.1
+
