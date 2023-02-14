@@ -2,135 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB0069589A
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 06:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEB66958B9
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 06:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjBNFm2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Feb 2023 00:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S229941AbjBNFzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Feb 2023 00:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjBNFm1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 00:42:27 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC18CDC2
-        for <linux-usb@vger.kernel.org>; Mon, 13 Feb 2023 21:42:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676353344; x=1707889344;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vHqSQzUkcvj+D4jPKF07wdZ5skjzet1qzVrBL60lBaM=;
-  b=PLJ93sPREU+7esOichN2bHrFv/8uYd2au7SaFd/n2fIerxeAFZRm+XVL
-   dSYy9inzy1V0sLQOx24s7YJP6/T/2bHIcNnLsotdsuWxKEXeJV+lgP6pM
-   yfB+FHn30CVOEZ9Db8P9sZeOSFCfMrXRbOoUQ3B/Jhb/PKpuKLkivdJxL
-   7Dgbm7EMLZlUitQpgB0CJDlA2tMpKRfHfj9fM+76VmsF+YMtCImJot3AT
-   dUC6LVJVCUKsUgYLuhGWjUm3seL2P8b6jdKOsX6iL9KDFU5FhgAZjmcCf
-   k135Yjoah0PTYIFHxND6Zud7p0Zojx+eXvm8pCRtyvMUca3P1K8//CmuN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333218410"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="333218410"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 21:42:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="671110334"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="671110334"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Feb 2023 21:42:22 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id CE8F91A6; Tue, 14 Feb 2023 07:43:01 +0200 (EET)
-Date:   Tue, 14 Feb 2023 07:43:01 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] thunderbolt: Add quirk to disable CLx
-Message-ID: <Y+sfZbVjjFiSf9BU@black.fi.intel.com>
-References: <1676311911-1952-1-git-send-email-Sanju.Mehta@amd.com>
+        with ESMTP id S229637AbjBNFzN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 00:55:13 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18471193C4;
+        Mon, 13 Feb 2023 21:55:12 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id m12so16457456qth.4;
+        Mon, 13 Feb 2023 21:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xdJ9fniFiMZtLhBdU1wXemK+Te/gfkmtRDd7mbpe/aw=;
+        b=Vrweeo9uMQ3b/QHWBD46fjgJJsq6/b/QDXTo5slP9tdnlEQ+cPF+BdszvEzDiOq56p
+         gNS0HA6NTxaprzln+0H6wgVXH0sN/tGTXKDBuNgz6TU1LAqm1xfksUMN+TH+SSA9MDWy
+         2JDaMr1i/VCA5juuiwSvT2I8rvMd+OazwiGGPdRnyhsJN2lMzB0JV07vcV8V8aipUTKE
+         Onb+WKefS42Hztv08RH5XCJipWNgNU6/Pw83WKrvv6op9uzHscWQZxq/11akmRiOcdkj
+         7egbGj/FGPz0VZqKfRIkAwrmVeRLDYTzdcvsYm/3qqNgaFr+SBhaFf58L3q80koxsSCX
+         p5XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xdJ9fniFiMZtLhBdU1wXemK+Te/gfkmtRDd7mbpe/aw=;
+        b=E1H3NywTS3v1c78/Q0pHNNrfdlcyjk5R4fJrC1Qka87JwmzD9+SCd8vWZF6X2lhcO5
+         HTmjcg2LPOnn9IrskXdb2/Q1LipCGCS/aj0KWPgxXLTgxvLhVFnzJjropSIP3xrqSiGq
+         XHuo78f89nfXZJUZh4stQVkMHFadYg5lC14iBLBcIZCCdDAy9IByZlQrLPECbc0fn5C7
+         Vf/LDbTCfvOSBNkAkeNmVdrqIErPF5ow7aoXM9xunyrnFsCbUnsT0WGzMkZNU0X8KFXL
+         Wk6T0/AXRXq7IT9y53FAEoB47cfVrSyNGweJWDtT/sj0j8oJ3kZUtprRED1TqKN3EJ0k
+         pcgg==
+X-Gm-Message-State: AO0yUKWDhHEGQCiUpk9Ie7zjleLmIB5nKVAl8xSHebrSmZpX/s35bLe1
+        tsGyQok5A7FFV6cJBAazTZE=
+X-Google-Smtp-Source: AK7set+wO1qqpoo/DkAMSvwPKVT/5IouHMAQyS4njpu1DL+o3BJB29itHdPu38mfLiTMFJQrEUVquw==
+X-Received: by 2002:a05:622a:208:b0:3b8:6c68:6109 with SMTP id b8-20020a05622a020800b003b86c686109mr1787435qtx.21.1676354111181;
+        Mon, 13 Feb 2023 21:55:11 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id j8-20020ac85c48000000b003b9b41a32b7sm10792582qtj.81.2023.02.13.21.55.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 21:55:10 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0B84527C0054;
+        Tue, 14 Feb 2023 00:55:09 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 14 Feb 2023 00:55:10 -0500
+X-ME-Sender: <xms:PCLrYyn0Ye0pUOiSnjWFk5z96zMsGTHZ7PJNGYqkXd6LP6Svs2zYQA>
+    <xme:PCLrY53n0_8XVTgIt_uxk_nTvdCbIGvt2MsjRMbUL5RzR3ufz8v0VF936jO-pG57V
+    1VysT2r2QggIZOIXA>
+X-ME-Received: <xmr:PCLrYwoEbfH8BPIZslp6FvqZTpEwayL3yiPvsEArs4CY7nYWhP1D2jpv0-rOQwilgfLqb8SF1E6wyxSEXIa6JOQbt2kQ0sXum6w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeivddgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpefhtedvgfdtueekvdekieetieetjeeihedvteehuddujedvkedtkeefgedv
+    vdehtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
+    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
+    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:PCLrY2kgJ2dnhHXUVvqU_felNFJgjg5yaSR3QoiUF2h1if1F0Feg1Q>
+    <xmx:PCLrYw3n1j3ZOlswQu_D5wIF4DKm3iSsxNwsT0015lD0Xp2d7CRYJg>
+    <xmx:PCLrY9uq-C6iicybtnjIO5fgggyTncBOfRKWtCNDmz9J7ZtAJak16w>
+    <xmx:PSLrY1sqS6huNKqQC00jc5-bwFwtMEaEtfSuO6_WwHOyIT_GOw9Z4A>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 14 Feb 2023 00:55:08 -0500 (EST)
+Date:   Mon, 13 Feb 2023 21:55:06 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+siOolJeC10k5D3@Boquns-Mac-mini.local>
+References: <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
+ <Y+pWhyFJeE93nlWd@rowland.harvard.edu>
+ <Y+plfZnEqw6mG+XH@hirez.programming.kicks-ass.net>
+ <Y+rpD7QPheQQ8Lxj@boqun-archlinux>
+ <Y+rr4p6njVOTSYxs@rowland.harvard.edu>
+ <20230214052733.3354-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1676311911-1952-1-git-send-email-Sanju.Mehta@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230214052733.3354-1-hdanton@sina.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Mon, Feb 13, 2023 at 12:11:51PM -0600, Sanjay R Mehta wrote:
-> From: Sanjay R Mehta <sanju.mehta@amd.com>
+On Tue, Feb 14, 2023 at 01:27:33PM +0800, Hillf Danton wrote:
+> On Mon, 13 Feb 2023 18:09:16 -0800 Boqun Feng <boqun.feng@gmail.com>
+> > On Mon, Feb 13, 2023 at 09:03:14PM -0500, Alan Stern wrote:
+> > > On Mon, Feb 13, 2023 at 05:51:11PM -0800, Boqun Feng wrote:
+> > > > Basically if you have two lock instances A and B with the same class,
+> > > > and you know that locking ordering is always A -> B, then you can do
+> > > > 
+> > > > 	mutex_lock(A);
+> > > > 	mutex_lock_nest_lock(B, A); // lock B.
+> > > > 
+> > > > to tell the lockdep this is not deadlock, plus lockdep will treat the
+> > > > acquisition of A and the precondition of acquisition B, so the following
+> > > > is not a deadlock as well:
+> > > > 
+> > > > T1:
+> > > > 	mutex_lock(A);
+> > > > 	mutex_lock(C);
+> > > > 	mutex_lock_nest_lock(B, A);
+> > > > 
+> > > > T2:
+> > > > 	mutex_lock(A);
+> > > > 	mutex_lock_nest_lock(B, A);
+> > > > 	mutex_lock(C);
+> > > 
+> > > Why isn't this treated as a deadlock?  It sure looks like a deadlock to 
+> > > me.  Is this an example where lockdep just doesn't get the right answer?
 > 
-> Add QUIRK_NO_CLX to disable the CLx state for hardware which
-> doesn't supports it.
+> Syzbot reported deadlock[1] with A ignored.
 > 
-> AMD Yellow Carp and Pink Sardine don't support CLx state,
-> hence disabling it using QUIRK_NO_CLX.
+> [1] https://lore.kernel.org/linux-mm/20230130073136.59-1-hdanton@sina.com/
 > 
-> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
-> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> ---
->  drivers/thunderbolt/quirks.c | 19 +++++++++++++++++--
->  drivers/thunderbolt/tb.h     | 11 ++++++++---
->  2 files changed, 25 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/quirks.c b/drivers/thunderbolt/quirks.c
-> index b5f2ec7..47ff4b8 100644
-> --- a/drivers/thunderbolt/quirks.c
-> +++ b/drivers/thunderbolt/quirks.c
-> @@ -20,6 +20,11 @@ static void quirk_dp_credit_allocation(struct tb_switch *sw)
->  	}
->  }
->  
-> +static void quirk_clx_disable(struct tb_switch *sw)
-> +{
-> +	sw->quirks |= QUIRK_NO_CLX;
-> +}
-> +
->  struct tb_quirk {
->  	u16 hw_vendor_id;
->  	u16 hw_device_id;
-> @@ -37,6 +42,13 @@ static const struct tb_quirk tb_quirks[] = {
->  	 * DP buffers.
->  	 */
->  	{ 0x8087, 0x0b26, 0x0000, 0x0000, quirk_dp_credit_allocation },
-> +	/*
-> +	 * CLx is not supported on AMD USB4 Yellow Carp and Pink Sardine platforms.
-> +	 */
-> +	{ 0x0000, 0x0000, PCI_VENDOR_ID_AMD, 0x162e, quirk_clx_disable },
-> +	{ 0x0000, 0x0000, PCI_VENDOR_ID_AMD, 0x162f, quirk_clx_disable },
-> +	{ 0x0000, 0x0000, PCI_VENDOR_ID_AMD, 0x1668, quirk_clx_disable },
-> +	{ 0x0000, 0x0000, PCI_VENDOR_ID_AMD, 0x1669, quirk_clx_disable },
->  };
->  
->  /**
-> @@ -47,6 +59,7 @@ static const struct tb_quirk tb_quirks[] = {
->   */
->  void tb_check_quirks(struct tb_switch *sw)
->  {
-> +	struct tb_nhi *nhi = sw->tb->nhi;
->  	int i;
->  
->  	for (i = 0; i < ARRAY_SIZE(tb_quirks); i++) {
-> @@ -56,9 +69,11 @@ void tb_check_quirks(struct tb_switch *sw)
->  			continue;
->  		if (q->hw_device_id && q->hw_device_id != sw->config.device_id)
->  			continue;
-> -		if (q->vendor && q->vendor != sw->vendor)
-> +		if (q->vendor && (q->vendor != sw->vendor &&
-> +				  q->vendor != nhi->pdev->vendor))
 
-Can't you use the router ID here not the NHI PCI ID?
+Right, I think that's a false positive, however it's not related to
+mutex_lock_nest_lock(). Anyway mutex_lock_nest_lock() cannot help that
+case since these are three different lock class.
 
->  			continue;
-> -		if (q->device && q->device != sw->device)
-> +		if (q->device && (q->device != sw->device &&
-> +				  q->device != nhi->pdev->device))
+Actually, reading the code again, I think I made a mistake, for
+mutex_lock_nest_lock(), the following *is* a deadlock to lockdep:
 
-Ditto here.
+T1:
+	mutex_lock(A);
+	mutex_lock(C);
+	mutex_lock_nest_lock(B, A);
+
+T2:
+	mutex_lock(A);
+	mutex_lock_nest_lock(B, A);
+	mutex_lock(C);
+
+and this *is not* a deadlock to lockdep:
+
+T1:
+	mutex_lock(A);
+	mutex_lock_nest_lock(C, A);
+	mutex_lock_nest_lock(B, A);
+
+T2:
+	mutex_lock(A);
+	mutex_lock_nest_lock(B, A);
+	mutex_lock_nest_lock(C, A);
+
+The current semantics of _nest_lock() is tricky, it only provides the
+"nest" effect if it is the next lock acquired after the "parent" lock.
+Maybe we can change and make it clear a little bit to make it more
+useful.
+
+Ah, actually someone found it 7 years ago:
+
+https://lore.kernel.org/lkml/20150810095247.GA4606@fixme-laptop.cn.ibm.com/
+
+;-)
+
+Regards,
+Boqun
+
+> > Because A serializes B and C, so that particular piece of code doesn't
+> > cause deadlock. Note that you can still use you normal mutex_lock() for
+> > B, so if there is more code:
+> > 
+> > T3:
+> > 	mutex_lock(C);
+> > 	mutex_lock(B);
+> > 
+> > lockdep will report deadlock.
+> > 
+> > Regards,
+> > Boqun
+> > 
+> > > Alan Stern
