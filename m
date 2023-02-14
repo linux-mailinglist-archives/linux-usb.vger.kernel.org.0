@@ -2,116 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29777696940
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 17:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FBB696AA2
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 18:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjBNQXQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Feb 2023 11:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S232936AbjBNRAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Feb 2023 12:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjBNQXL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 11:23:11 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7845817CD7;
-        Tue, 14 Feb 2023 08:23:10 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id h24so18154382qtr.0;
-        Tue, 14 Feb 2023 08:23:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3hnAkgZ2IxOZvRal3LVcrFQf5peXSWgVRjceSuVbVnA=;
-        b=YWfk0yYBuyNo5BNqtAwoYS3qD4nOlJeEM7Q1daXTH6/12FhowxDiZkuEgFsDoeg7n8
-         q7YTEBhH5G8HZK3q1sr5ImnsmskBaPc+g0Fd5Pm3S45g831bIy2P/ARiL4xLc8fHbbAV
-         i5DZkyQ8rZxvQHSCrsfT8N4j13Gh3dXMYGmoGv0myM2Ur90/tci+CXsVvgezQFY9EdpP
-         WWRgaN143B52jgorHY58tlagcyyv/7Qf1I0kFA1IHT9Q+BuyCNSIe1HCh+eHQ+mt87na
-         yQqmiNS2Dzutb98H1nkrCdsJssKsQPHZmbZT1wAzBy7olYwKNxTLvJyHiU20LX13ELpW
-         mzSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3hnAkgZ2IxOZvRal3LVcrFQf5peXSWgVRjceSuVbVnA=;
-        b=zDuu2Jta7ZfFlp1I4eNcY9Bued/6P+cWkDegyOtqgJ6eYprGDLDT/PHMaX61pGp9TV
-         ENRCZiIzySFQhh9np70qvBBAbmgSiUqV2nEdAyQ1OHDmNGVhB70CqSpji+2jr5uRt3dQ
-         cmwiWBk9wqCGDOXi1QXXnmmqkxsG701d27Ic0Ld/inmpY2hXlgz5HCwz7TGbxriHkpBS
-         Qgg+KarnAXED2mjqoXXhSaDNyhkT3HuJi8KJp/pjLrbtTzHBnK+4H0zRhzOY6ZAQ0cTR
-         J5fTFeyBIyPk5AGfJBPpvgc2fgyu9q8a2Ewbmv0VaqGpfp8cqT2mZc7Slt8KHiSBkI8T
-         Z7Zg==
-X-Gm-Message-State: AO0yUKWJR9j70c7dH1ThoIpQFHOJruAPUmbt/dITSqV7BnYZGZr72tbn
-        xPtnbLu2drUG1NcTVonyKmbLKnLik/4=
-X-Google-Smtp-Source: AK7set8PtoBKYDLTw6SfcPIqj393orllwV0CS7JnqBqcaMxN7Vfsv797u7qWd6hRxwkrVoaShLgbcg==
-X-Received: by 2002:a05:622a:19a4:b0:3b9:ba79:80d7 with SMTP id u36-20020a05622a19a400b003b9ba7980d7mr5058645qtc.12.1676391789545;
-        Tue, 14 Feb 2023 08:23:09 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id l26-20020ac8459a000000b0039cc0fbdb61sm11608963qtn.53.2023.02.14.08.23.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 08:23:08 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 3F0F727C0054;
-        Tue, 14 Feb 2023 11:23:08 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 14 Feb 2023 11:23:08 -0500
-X-ME-Sender: <xms:arXrYyWIfIBCHjP_3B8Cm0Yp-vvzu8lUtyHrOLk_VEW8NCcxL35Jdw>
-    <xme:arXrY-lRaXfRWGn--c4CQ_Ey9CEMA17giHyHXr7dNY_0dlWILS9pvyhy1sj-8tKP9
-    0WhBQwK5OGJ4rWsrQ>
-X-ME-Received: <xmr:arXrY2aOm_8jyqxVxzg5QuOgExJLn6C5qcZoREAlcqRo49wU9akTvqGS1gs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeifedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:arXrY5WxFpaR1KUq4um45FDFjTIfJgUVZ4UMCaCf6KpN0w_t3z-qwA>
-    <xmx:arXrY8k-1XIKnDPrhObLgc5sX7jfZWXP7XokRpeiuy_e6Mk20bqdZw>
-    <xmx:arXrY-ftZiuhsNvgcOvelDviXXiiuLS5Td_N4xApCayAzAqa2oqgbA>
-    <xmx:bLXrYx9XAFkJcfd81HZ4iPeJdV-B5ejOyyVmgVnwhq8ELkvhytfdFA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Feb 2023 11:23:06 -0500 (EST)
-Date:   Tue, 14 Feb 2023 08:22:28 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229930AbjBNQ7g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 11:59:36 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0140D2E0E6;
+        Tue, 14 Feb 2023 08:59:13 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EGXk5t027870;
+        Tue, 14 Feb 2023 16:57:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2022-7-12;
+ bh=COxPmLf+paRDDdFuvH25Zi2bcrkGUWbmw1AV1Vzz6fg=;
+ b=YLvFKW+EqHo4lJihtKam5O2u/Ez9btXYR9UATFH2zB8Iu5e5Y/RW6Fp0KY6CkhCradAN
+ WTilqdKWZFcLKiqsqfa4V8mYN1ZQvBadLk2TsOnIkEtZUKsfbgOWWK7HvSPFJKd8W46X
+ 6I8lZN4dOtwp7sy+z6JM8Hyy2wb+bAGvhr+gIyRw8kVIAEWVmTfaTTf5O0Ec6XCJ2W+/
+ s+ECjqJ+6XkIgXtXUIiTIJDq/ia5qoW1iTGafvouFXOp0XKQKEIPCwqm6SXEU/hwPFGd
+ rIIwhMwB2pOtB0Be/uO7OEApgaB8P0mSiaWnOpESEKGFyDpTBPCUpGUYLIbIrtBSw8Fd aQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2mtdxts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 16:57:48 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31EGuKPb009707;
+        Tue, 14 Feb 2023 16:57:47 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f5uuka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 16:57:47 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31EGuHor039739;
+        Tue, 14 Feb 2023 16:57:45 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1f5uuff-9;
+        Tue, 14 Feb 2023 16:57:45 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Helge Deller <deller@gmx.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+u1RBMMcCkvKISZ@boqun-archlinux>
-References: <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
- <Y+pWhyFJeE93nlWd@rowland.harvard.edu>
- <Y+plfZnEqw6mG+XH@hirez.programming.kicks-ass.net>
- <Y+rpD7QPheQQ8Lxj@boqun-archlinux>
- <Y+tm59SmBEY1Ywq7@hirez.programming.kicks-ass.net>
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Len Brown <len.brown@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, alsa-devel@alsa-project.org,
+        coresight@lists.linaro.org, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, isdn4linux@listserv.isdn4linux.de,
+        keyrings@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-mm@kvack.org,
+        openrisc@lists.librecores.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org
+Subject: Re: (subset) [PATCH 00/35] Documentation: correct lots of spelling errors (series 1)
+Date:   Tue, 14 Feb 2023 11:57:35 -0500
+Message-Id: <167639371105.486235.1228754650636546815.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
+References: <20230127064005.1558-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+tm59SmBEY1Ywq7@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_11,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=997 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140144
+X-Proofpoint-GUID: F9bpdPmEiXIR5xn5JduF_4kuCVCc4so3
+X-Proofpoint-ORIG-GUID: F9bpdPmEiXIR5xn5JduF_4kuCVCc4so3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,71 +155,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:48:07AM +0100, Peter Zijlstra wrote:
-> On Mon, Feb 13, 2023 at 05:51:11PM -0800, Boqun Feng wrote:
-> > On Mon, Feb 13, 2023 at 05:29:49PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Feb 13, 2023 at 10:25:59AM -0500, Alan Stern wrote:
-> > > > On Mon, Feb 13, 2023 at 10:24:13AM +0100, Peter Zijlstra wrote:
-> > > > > On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
-> > > > > > Provided it acquires the parent device's lock first, this is 
-> > > > > > utterly safe no matter what order the children are locked in.  Try 
-> > > > > > telling that to lockdep! 
-> > > > > 
-> > > > > mutex_lock_next_lock(child->lock, parent->lock) is there to express this
-> > > > > exact pattern, it allows taking multiple child->lock class locks (in any
-> > > > > order) provided parent->lock is held.
-> > > > 
-> > > > Ah, this is news to me.  Is this sort of thing documented somewhere?
-> > 
-> > Basically if you have two lock instances A and B with the same class,
-> > and you know that locking ordering is always A -> B, then you can do
-> > 
-> > 	mutex_lock(A);
-> > 	mutex_lock_nest_lock(B, A); // lock B.
-> > 
+On Thu, 26 Jan 2023 22:39:30 -0800, Randy Dunlap wrote:
+
+> Correct many spelling errors in Documentation/ as reported by codespell.
 > 
-> No, this isn't quite right, You need at least 3 locks and 2 classes.
+> Maintainers of specific kernel subsystems are only Cc-ed on their
+> respective patches, not the entire series. [if all goes well]
 > 
-> P, C1, C2
+> These patches are based on linux-next-20230125.
 > 
-> Then:
-> 
-> 	mutex_lock(P)
-> 	mutex_lock_next_lock(C1, P)
-> 	mutex_lock_next_lock(C2, P)
-> 
-> And it will accept any order of Cn -- since it assumes that any
-> multi-lock of Cn will always hold P, therefore the ordering fully given
-> by P.
+> [...]
 
-Ah, right, I was missing the fact that it works with 2 classes...
+Applied to 6.3/scsi-queue, thanks!
 
-But I think with only one class, the nest_lock() still works, right?
-In other words, if P and Cn are the same lock class in your example.
+[28/35] Documentation: target: correct spelling
+        https://git.kernel.org/mkp/scsi/c/c57ac5748be5
 
-Also seems I gave a wrong answer to Alan, just to clarify, the following
-is not a deadlock to lockdep:
-
-T1:
-	mutex_lock(P)
-	mutex_lock_next_lock(C1, P)
-	mutex_lock_next_lock(C2, P)
-	mutex_lock(B)
-
-T2:
-	mutex_lock(P)
-	mutex_lock(B)
-	mutex_lock_next_lock(C1, P)
-	mutex_lock_next_lock(C2, P)
-
-Because of any pair of
-
-	mutex_lock(L);
-	... // other locks maybe
-	mutex_lock_nest_lock(M, L);
-
-lockdep will not add M into the dependency graph, since it's nested and
-should be serialized by L.
-
-Regards,
-Boqun
+-- 
+Martin K. Petersen	Oracle Linux Engineering
