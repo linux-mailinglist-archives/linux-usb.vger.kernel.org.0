@@ -2,23 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574D0696E42
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 21:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50423696E51
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Feb 2023 21:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjBNUFp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Feb 2023 15:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S231824AbjBNURD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Feb 2023 15:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBNUFo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 15:05:44 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D6BBB5BA0
-        for <linux-usb@vger.kernel.org>; Tue, 14 Feb 2023 12:05:42 -0800 (PST)
-Received: (qmail 958461 invoked by uid 1000); 14 Feb 2023 15:05:42 -0500
-Date:   Tue, 14 Feb 2023 15:05:42 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
+        with ESMTP id S229761AbjBNURC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Feb 2023 15:17:02 -0500
+Received: from out-123.mta1.migadu.com (out-123.mta1.migadu.com [IPv6:2001:41d0:203:375::7b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5472ED65
+        for <linux-usb@vger.kernel.org>; Tue, 14 Feb 2023 12:17:00 -0800 (PST)
+Date:   Tue, 14 Feb 2023 15:16:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676405818;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eSWzIVGczc7EzveFCTPh08T19cRLa22SeoV16DrBPTY=;
+        b=XIK5I60hDW7FVglNFGktAmCCOuOeo1nTB94Cg3f2LYMLCFfLvZWSB5c3arbq9c2E4jd2ri
+        agi3sp0rnEqIktFqknl9w1roQHmMeq2+A7o40LreGITnjyYzF2r5elDlhRf9iCAyQNwDs3
+        2GeaJFzo56Tz06m17e40OCytNcNZJ1c=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Kent Overstreet <kent.overstreet@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Coly Li <colyli@suse.de>,
@@ -34,7 +43,7 @@ Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
         Hillf Danton <hdanton@sina.com>
 Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
  with unique class keys
-Message-ID: <Y+vplu7H8k4OjlL5@rowland.harvard.edu>
+Message-ID: <Y+vsNnP9PPXPNz+M@moria.home.lan>
 References: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
  <Y+gjuqJ5RFxwLmht@moria.home.lan>
  <Y+hRurRwm//1+IcK@rowland.harvard.edu>
@@ -49,9 +58,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <Y+tq9/pUQL5bv/zC@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,46 +69,14 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On Tue, Feb 14, 2023 at 12:05:27PM +0100, Peter Zijlstra wrote:
-> Every class gets a fixed 8 subclasses (0-7) given by the unique byte
-> addresses inside the actual key object.
-> 
-> Subclasses will let you create nesting order of the same class that are
-> acceptable. Typically lock/1 nests inside lock/0, but that's not
-> hard-coded, simply convention.
+> This is lock order per decree, if you get the order function wrong
+> lockdep will not see the inversion but you *will* deadlock.
 
-Can you explain in more detail how this works in the lockdep checking 
-algorithm?  (For simplicity, let's leave out issues of interrupt status 
-and other environmental things.)
+Yeah, that's what I mean. Given that a subclass isn't a fixed thing you
+assign to a lock, just something you magic up as needed - I just don't
+see what this gets us?
 
-I've been assuming that lockdep builds up a set of links between the 
-classes -- namely, a link is created from A to B whenever a thread holds 
-a lock of class A while acquiring a lock of class B.  The checking part 
-would then amount to just making sure that these links don't form any 
-cycles.
+Why not just tell lockdep what the order function is directly?
 
-So then how do subclasses fit into the picture?  Is it just that now the 
-links are between subclasses rather than classes, so it's not 
-automatically wrong to hold a lock while acquiring another lock of the 
-same class as long as the two acquisitions are in different subclasses?  
-But you can still provoke a violation if there's a cycle among the 
-subclasses?
-
-> Then there's that nesting lock, that requires two classes and at least 3
-> locks to make sense:
-> 
->   P, C1, C2
-> 
-> Where we posit that any multi-lock of Cn is fully serialized by P
-
-Assuming the speculations above are correct, how does the algorithm take 
-lockdep nesting into account?  Does it simply avoid creating a link from 
-subclass C to itself if both C1 and C2 were acquired while holding a 
-lock of the parent subclass and both acquisitions were annotated with 
-mutex_lock_next_lock()?  Or is there more to it than that?  (And should 
-I have written class rather than subclass?)
-
-And Kent, how does your proposed lockdep_set_no_check_recursion() work?  
-Does it just prevent lockdep from creating a link between any two 
-subclasses of the specified class?  Does it do anything more?
-
-Alan
+(I know, I've been saying I'd write a patch for this, I'll get around to
+it, I swear :)
