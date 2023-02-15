@@ -2,95 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBBF697D2C
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Feb 2023 14:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2682B697D9E
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Feb 2023 14:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjBON0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Feb 2023 08:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S231549AbjBONkP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 15 Feb 2023 08:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbjBON0n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Feb 2023 08:26:43 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9498E39B95
-        for <linux-usb@vger.kernel.org>; Wed, 15 Feb 2023 05:26:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676467593; x=1708003593;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YaL9//kTR1+jf6OjfJY9LAJU5eDvWRxcX7K7GQkquLc=;
-  b=CVb6mQE1tyX9oRO8b/ApLg/hxVgsYveXvpGxRGr4TQEF7Ik+bCabMlXW
-   vTu4LAotBVshE2Cfl9EqRq8tEQB69dwaFlt/sj9o/osJW15ZO53yTJsiW
-   EyAzerzDpSgB8AavHUStF4d9mx9vQ7kxXJg4kYbPCC6XcXdQI5b41kI+L
-   jolbB8JVP5fO+7Ht/r8GurabwuKp7S5IkuzTwUgzqjPNgfE0yVLGsusKj
-   0AMqoIUoOTeR09y/rk3ndUk+9LFUPpOWPHUza8HwPV+0MkK4H5DfQqef7
-   d7Eeqrj+31o9jj1x8uwr7sU2j6YyIR1FiiZrNoUnAh8Wd0xAmrz3VACHn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="319460464"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="319460464"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 05:26:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812442098"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="812442098"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2023 05:26:31 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org
-Subject: [PATCH v2] usb: dwc3: pci: add support for the Intel Meteor Lake-M
-Date:   Wed, 15 Feb 2023 15:27:11 +0200
-Message-Id: <20230215132711.35668-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229518AbjBONkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Feb 2023 08:40:10 -0500
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E082E0E3;
+        Wed, 15 Feb 2023 05:40:06 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 03D0C18642E4;
+        Wed, 15 Feb 2023 16:40:03 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id XGOBKfcppwyV; Wed, 15 Feb 2023 16:40:02 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id A445B18642DC;
+        Wed, 15 Feb 2023 16:40:02 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eBofTCWdSboM; Wed, 15 Feb 2023 16:40:02 +0300 (MSK)
+Received: from [10.177.20.58] (unknown [10.177.20.58])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 238531864059;
+        Wed, 15 Feb 2023 16:40:02 +0300 (MSK)
+Message-ID: <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
+Date:   Wed, 15 Feb 2023 16:39:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.1
+Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20230203101828.14799-1-abelova@astralinux.ru>
+ <Y9zly1vrj9z4c1qT@kroah.com>
+From:   =?UTF-8?B?0JDQvdCw0YHRgtCw0YHQuNGPINCR0LXQu9C+0LLQsA==?= 
+        <abelova@astralinux.ru>
+In-Reply-To: <Y9zly1vrj9z4c1qT@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds the necessary PCI IDs for Intel Meteor Lake-M
-devices.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: stable@vger.kernel.org
----
-Changed since v1: Added the stable tag.
+03.02.2023 13:45, Greg Kroah-Hartman пишет:
+> On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
+>> Before dereferencing dev->driver check it for NULL.
+>>
+>> If an interrupt handler is called after assigning
+>> NULL to dev->driver, but before resetting dev->int_enable,
+>> NULL-pointer will be dereferenced.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>
+>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+>> ---
+>>   drivers/usb/gadget/udc/goku_udc.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+>> index bdc56b24b5c9..896bba8b47f1 100644
+>> --- a/drivers/usb/gadget/udc/goku_udc.c
+>> +++ b/drivers/usb/gadget/udc/goku_udc.c
+>> @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void *_dev)
+>>   pm_next:
+>>   		if (stat & INT_USBRESET) {		/* hub reset done */
+>>   			ACK(INT_USBRESET);
+>> -			INFO(dev, "USB reset done, gadget %s\n",
+>> -				dev->driver->driver.name);
+>> +			if (dev->driver)
+>> +				INFO(dev, "USB reset done, gadget %s\n",
+>> +					dev->driver->driver.name);
+> How can this ever happen?  Can you trigger this somehow?  If not, I
+> don't think this is going to be possible (also what's up with printk
+> from an irq handler???)
 
----
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Unfortunately, I can't find the way to trigger this at the moment.
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 89c9ab2b19f85..a23ddbb819795 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -47,6 +47,7 @@
- #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
- #define PCI_DEVICE_ID_INTEL_RPL			0xa70e
- #define PCI_DEVICE_ID_INTEL_RPLS		0x7a61
-+#define PCI_DEVICE_ID_INTEL_MTLM		0x7eb1
- #define PCI_DEVICE_ID_INTEL_MTLP		0x7ec1
- #define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
- #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
-@@ -467,6 +468,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_RPLS),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTLM),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
-+
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTLP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
--- 
-2.39.1
+What about printk, should trace_printk be used instead?
+
+>
+> Odds are, no one actually has this hardware anymore, right?
+
+Despite of this, such vulnerability should be fixed because
+
+there is a possibility to exploit it.
+
+> thanks,
+>
+> greg k-h
+
+Best regards,
+
+Anastasia Belova
 
