@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC236975E1
+	by mail.lfdr.de (Postfix) with ESMTP id EA7C76975E2
 	for <lists+linux-usb@lfdr.de>; Wed, 15 Feb 2023 06:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbjBOFfj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Feb 2023 00:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S233136AbjBOFfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Feb 2023 00:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbjBOFfg (ORCPT
+        with ESMTP id S232979AbjBOFfg (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Feb 2023 00:35:36 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719F534F51
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4EA34F67
         for <linux-usb@vger.kernel.org>; Tue, 14 Feb 2023 21:35:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1676439335; x=1707975335;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=STxVnNu0aU0cFaw8og//oigGE4DyDrZ9CBz7XUtxsQg=;
-  b=Q16PCkZ9IXjD2mq2FlZ9eqsWh8QZ3dRmfVNyYPf4MM8IEs0W35FHffb1
-   O03rvIsK3GE9YbjILabsLerCxQ17O7Vac9qMKFBqbCZHoTDAUEkh2kNzg
-   U+Xhvgsgd3ugCCR2qUgwYBIm1G7DhviukXl/nB3RBgKbkpVkYSWdt5T7h
-   XpSeAOqUhhcbxJgKz2vwdlDb7s93FDinbscZV6LsMh9BQZN/W1HPr443i
-   xNYeY+1LISh2vp7EGff6HTxKG2ad7MBBSgMLV1UzoBk7zRyh73yhCz8C6
-   oYvNbsCmKs9RFo8tRjW46rLaXE0CVy/11E78rWenyAtarY3FYVSBhx89L
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="315002127"
+  bh=eHwpzptikgtO4QgcBulmCG6eqEPehjs3D0WbRlcUdxw=;
+  b=CBeymJtkog7gSEXNN9lkto2uaDDGuIuPFjTX0jUNrgmZfMQllLJ72a1q
+   zvIPun4oQ/gp8A9Ua8ardH2kQ8wc7/vLOYZMWmoRjJ0oxlp8po+lg1YWZ
+   am/uHpNWDesjeinZ+LKt7yW7AF5iWEojBLBO7B1d2GKsbZk3RWrejQ9w+
+   PPvdHx9Bx9jzq72cSqyw3zlYpOEgJ9t4m3FF4rHBLC+7BsfgOfASb/qqO
+   7rfyv/VBuDPymsIrO63mojgCpv5O1MrQDNU5dYr4BzyGlzDMmQMwsnj6F
+   LV3UCFrotqmNm5Ov/j0UyVFJKmr+MkYTz0LjsQi05x4z6oOkd8RlETRD2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="315002129"
 X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="315002127"
+   d="scan'208";a="315002129"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 21:35:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="647033094"
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="647033095"
 X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="647033094"
+   d="scan'208";a="647033095"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
   by orsmga006.jf.intel.com with ESMTP; 14 Feb 2023 21:35:33 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pSAS5-00095F-0h;
+        id 1pSAS5-00095K-0p;
         Wed, 15 Feb 2023 05:35:33 +0000
-Date:   Wed, 15 Feb 2023 13:34:44 +0800
+Date:   Wed, 15 Feb 2023 13:34:51 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:rndis-removal] BUILD SUCCESS
- 4be12ffe0b05d4bf568c88bea2350cd2bfb8b881
-Message-ID: <63ec6ef4.z3RTrJrbflJYpYD3%lkp@intel.com>
+Subject: [usb:usb-next] BUILD SUCCESS
+ c4a07e264d38d5cad5d77298957cbd7d7db70b1f
+Message-ID: <63ec6efb./3pKZ49MPzwB76MM%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -62,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
-branch HEAD: 4be12ffe0b05d4bf568c88bea2350cd2bfb8b881  USB: disable all RNDIS protocol drivers
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: c4a07e264d38d5cad5d77298957cbd7d7db70b1f  Merge 6.2-rc8 into usb-next
 
 elapsed time: 1002m
 
-configs tested: 96
+configs tested: 90
 configs skipped: 4
 
 The following configs have been built successfully.
@@ -80,12 +80,10 @@ arc                              allyesconfig
 arc                                 defconfig
 arc                  randconfig-r043-20230212
 arc                  randconfig-r043-20230213
-arc                  randconfig-r043-20230214
 arm                              allmodconfig
 arm                              allyesconfig
 arm                                 defconfig
 arm                  randconfig-r046-20230212
-arm                  randconfig-r046-20230214
 arm                           sama5_defconfig
 arm64                            allyesconfig
 arm64                               defconfig
@@ -93,6 +91,9 @@ csky                                defconfig
 i386                             allyesconfig
 i386                              debian-10.3
 i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
 i386                 randconfig-a011-20230213
 i386                 randconfig-a012-20230213
 i386                 randconfig-a013-20230213
@@ -133,13 +134,10 @@ x86_64                            allnoconfig
 x86_64                           allyesconfig
 x86_64                              defconfig
 x86_64                                  kexec
-x86_64                        randconfig-a011
 x86_64               randconfig-a011-20230213
 x86_64               randconfig-a012-20230213
-x86_64                        randconfig-a013
 x86_64               randconfig-a013-20230213
 x86_64               randconfig-a014-20230213
-x86_64                        randconfig-a015
 x86_64               randconfig-a015-20230213
 x86_64               randconfig-a016-20230213
 x86_64                               rhel-8.3
@@ -148,30 +146,26 @@ clang tested configs:
 arm                  randconfig-r046-20230213
 hexagon              randconfig-r041-20230212
 hexagon              randconfig-r041-20230213
-hexagon              randconfig-r041-20230214
 hexagon              randconfig-r045-20230212
 hexagon              randconfig-r045-20230213
-hexagon              randconfig-r045-20230214
 i386                 randconfig-a001-20230213
+i386                          randconfig-a002
 i386                 randconfig-a002-20230213
 i386                 randconfig-a003-20230213
+i386                          randconfig-a004
 i386                 randconfig-a004-20230213
 i386                 randconfig-a005-20230213
+i386                          randconfig-a006
 i386                 randconfig-a006-20230213
 powerpc                 xes_mpc85xx_defconfig
 riscv                randconfig-r042-20230212
-riscv                randconfig-r042-20230214
 s390                 randconfig-r044-20230212
-s390                 randconfig-r044-20230214
 x86_64               randconfig-a001-20230213
 x86_64               randconfig-a002-20230213
 x86_64               randconfig-a003-20230213
 x86_64               randconfig-a004-20230213
 x86_64               randconfig-a005-20230213
 x86_64               randconfig-a006-20230213
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
 
 -- 
 0-DAY CI Kernel Test Service
