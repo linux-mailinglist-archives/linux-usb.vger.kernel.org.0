@@ -2,126 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29696976DE
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Feb 2023 08:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D081B697754
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Feb 2023 08:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbjBOHBm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Feb 2023 02:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
+        id S231788AbjBOHZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Feb 2023 02:25:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbjBOHBJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Feb 2023 02:01:09 -0500
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDAE171C
-        for <linux-usb@vger.kernel.org>; Tue, 14 Feb 2023 23:00:48 -0800 (PST)
-Received: by mail-il1-f206.google.com with SMTP id c11-20020a056e020bcb00b0030be9d07d63so12706346ilu.0
-        for <linux-usb@vger.kernel.org>; Tue, 14 Feb 2023 23:00:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gkVHurq1Tzdby26mZNsHbKo1ABM0N0+6mPqsATRuffg=;
-        b=rw1/w8QCE8Gziavoebm2qKTeyj22K0vo3zqh4IPkVYezbD7KvLF9IJZOo6z8aG7Wtc
-         3i3lGPN7uEf06UoQDcxwW/3Sbp80/R0WKVtu3HSXK4KwWxK+ZliEcehMmAOOdLx6LQaK
-         Kw3HQjjjCZjd80vpYoaOy0Z+LTKHd8hEU08KD6e+WimXB1BnNp9x6bzCzFszPs6prI54
-         pXsVFludECFQ/B8r3aZYyvgqVIWk5TvKT1mZUfn6i9ER/oqW4bos0V9hlizSUZhCh6IX
-         aEta2CbbNmXWocAPABij7fGRWAifKTw8VDi4z/3lC6nR+FtbVB8chLXV/VZ317w4V/bD
-         8/bg==
-X-Gm-Message-State: AO0yUKWklvLMX6tFAYReSFgS44N3iwZQEmSKV0dGEZ3AHfwoPzI8KLVE
-        28tIsRQKibDkc/xbRQSTx/x75Mgcwonzl3fFj+de3WhwLESG
-X-Google-Smtp-Source: AK7set/YbAqV35eJ0s0AwHJYpdfXhNJUM6wxJa28B5vW4JZa69HMknumDLuvr9kTy8lrWiwY4BD0vaschqtgNTo3CfnKnIFYsFcj
+        with ESMTP id S233210AbjBOHZe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Feb 2023 02:25:34 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF03128D1A;
+        Tue, 14 Feb 2023 23:25:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676445933; x=1707981933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LjjaY0wanbjM2Voc9Vtc9KSHmGP3+aYOAzgwBVYIhMI=;
+  b=KZ2L4ug0m4hsMczolIRkP2SOTRZ8RNLC9poZntUGHueDsEkqWmM/AdtB
+   3FgGcZ0TlKLMpVJQzYpKW8IMkt07zDoOTTHofOJFlRoFfoMB7yeUfEWNS
+   DVpXs58WFfaJrPY3nb7pbr7luxpof0rjA6IwBPqbblGhtCIzhNhWXZ4XT
+   qH2MVgC99XPhbu0R53LpL1zy2vAKnS6JgkuKPzhe4DGjmuKIeB6jGpkY9
+   9SGpnE3sWJOuV3EJpUxfcWsdkEsdRhbXzmCqtYifwHwnp8/vrXoa48H8l
+   hNmretR+BMU73xfyCV7Gd34pQQiqKNLcLwrwVzfrX8dV1t6sKRNVGFbp4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="358785066"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
+   d="scan'208";a="358785066"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 23:25:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="699858490"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
+   d="scan'208";a="699858490"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 14 Feb 2023 23:25:30 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id A1EF61C5; Wed, 15 Feb 2023 09:26:10 +0200 (EET)
+Date:   Wed, 15 Feb 2023 09:26:10 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>, Sanju.Mehta@amd.com,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] thunderbolt: Read DROM directly from NVM before
+ trying bit banging
+Message-ID: <Y+yJEjLa9R1JGlIu@black.fi.intel.com>
+References: <20230214154647.874-1-mario.limonciello@amd.com>
+ <20230214154647.874-2-mario.limonciello@amd.com>
+ <Y+x0cbSpnIPYjZJE@black.fi.intel.com>
+ <8f099a80-7fd1-c98a-4990-4a936a5a610a@amd.com>
+ <Y+x6pwHKDe2gXNUY@black.fi.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:9413:0:b0:310:fb90:b618 with SMTP id
- c19-20020a929413000000b00310fb90b618mr442977ili.0.1676444447808; Tue, 14 Feb
- 2023 23:00:47 -0800 (PST)
-Date:   Tue, 14 Feb 2023 23:00:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cc25bd05f4b7a3d2@google.com>
-Subject: [syzbot] WARNING in usb_tx_block/usb_submit_urb
-From:   syzbot <syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        kvalo@kernel.org, libertas-dev@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y+x6pwHKDe2gXNUY@black.fi.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, Feb 15, 2023 at 08:24:39AM +0200, Mika Westerberg wrote:
+> > I guess something else that might be less detrimental the loss of UUID
+> > by reading DROM this way would be to only read DROM this way if any CRC
+> > failed.
+> 
+> Actually we do read UUID for TBT3 devices from link controller registers
+> (see tb_lc_read_uuid()) instead so I think perhaps we can limit the
+> bitbanging just for older TBT devices with no LC or something like that?
 
-syzbot found the following issue on:
-
-HEAD commit:    f87b564686ee dt-bindings: usb: amlogic,meson-g12a-usb-ctrl..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=119f3aaf480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6d59dd45f9349215
-dashboard link: https://syzkaller.appspot.com/bug?extid=355c68b459d1d96c4d06
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db7007480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1670f2b3480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/162f005fbb8d/disk-f87b5646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/868c38dbb85a/vmlinux-f87b5646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e560670dfb35/bzImage-f87b5646.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com
-
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-------------[ cut here ]------------
-URB ffff888112baaf00 submitted while active
-WARNING: CPU: 0 PID: 12 at drivers/usb/core/urb.c:379 usb_submit_urb+0x14ec/0x1880 drivers/usb/core/urb.c:379
-Modules linked in:
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 6.2.0-rc7-syzkaller-00232-gf87b564686ee #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Workqueue: events request_firmware_work_func
-RIP: 0010:usb_submit_urb+0x14ec/0x1880 drivers/usb/core/urb.c:379
-Code: 89 de e8 87 86 88 fd 84 db 0f 85 a3 f3 ff ff e8 0a 8a 88 fd 4c 89 fe 48 c7 c7 00 2d a8 86 c6 05 14 8a 14 05 01 e8 18 06 19 02 <0f> 0b e9 81 f3 ff ff 48 89 7c 24 40 e8 e3 89 88 fd 48 8b 7c 24 40
-RSP: 0018:ffffc900000cfa00 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8881002dd400 RSI: ffffffff812db84c RDI: fffff52000019f32
-RBP: ffff888112baaf00 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 00000000c0028200
-R13: 0000000000000010 R14: 00000000fffffff0 R15: ffff888112baaf00
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f165ac57130 CR3: 000000011215a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_tx_block+0x241/0x2e0 drivers/net/wireless/marvell/libertas/if_usb.c:436
- if_usb_issue_boot_command drivers/net/wireless/marvell/libertas/if_usb.c:766 [inline]
- if_usb_prog_firmware+0x531/0xe30 drivers/net/wireless/marvell/libertas/if_usb.c:859
- lbs_fw_loaded drivers/net/wireless/marvell/libertas/firmware.c:23 [inline]
- helper_firmware_cb drivers/net/wireless/marvell/libertas/firmware.c:80 [inline]
- helper_firmware_cb+0x1e9/0x2c0 drivers/net/wireless/marvell/libertas/firmware.c:64
- request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2ee/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Just make sure UUID stays the same so that users don't need to
+re-authorize their devices.
