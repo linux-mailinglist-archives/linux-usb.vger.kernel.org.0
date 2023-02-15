@@ -2,137 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC606981E7
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Feb 2023 18:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2866981FA
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Feb 2023 18:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjBORZr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Feb 2023 12:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S229602AbjBORaA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Feb 2023 12:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjBORZp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Feb 2023 12:25:45 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2046.outbound.protection.outlook.com [40.107.92.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFBCEC4B;
-        Wed, 15 Feb 2023 09:25:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nBNwRk0q9LWojR9zYhScH5LWdhZEPOmOi3MhHz5PSk7/YonWW/wAzRCb1ykTgm3zpZ9iFThMJDwWsf1sI7PSXoPbCLwRhPzaz71Pgi0NZQrs0KtBBUimc3QK9BRaujWde6wQcdNNNUMK6mYI8UvCjwxygmDZXPSR8r1OVMikxWOQ69odYHGaVQClrnKhtZbPJ4ZRcDgAdFZLT9wlcYM7eoKT9OiEdRonYE1ozhCx14IMzX2z3VfjGR738bEFdUi+zkq4N1KX67W1sgD/Lb+pos2WgF1ZPNMC8GxGfqZdsrvxSpYPZ3iEDL6qee9bGSgUkXUkZjAvubN8AdSaIrlhcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=URgtI+FFhjL41dItnndjjqhbgFoErg3/ObhvX551pHI=;
- b=R4Ahecm/WeP1ovbutu/Lk8wgu0QuBmjZEy1dAFSbmEJfrnZvD8Ynp/FvDkCZQfKjtrFCRXMga86FPZghnc3qLjtranKOGwKZo0r+tt/Hfp1tj5u14MFWqKEOLUUUtS/cMalySxQXsBi99UtIiHG1mZlaLYY6+TqZU1GrsjUn5j9y9yd4BuA8arXns5MFjMFVOT5YLFDgfqGttAz3512EgdG5WaOJHbXCgOwQTf1ozWT7G/WBUzoANMa+RnWQpleNG2AEVRG2gxbGgClJFTa+zM0R9Wy58Wbd2G9h4RA7W0hx4YTaQLyh5tAwFPYaIyMDdth6q0H0xO+pIq6e/gZ3CQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=URgtI+FFhjL41dItnndjjqhbgFoErg3/ObhvX551pHI=;
- b=hB5VAa5swG+9EXjzyZGM82Htfey5Bhhmt/p+CmP/jFFcllyBYxmM532qKrAGudPG10EBxIBxS9C4ygBtzd5MEUNaeGp60ESdN8n/oiiOM2tKKJYWV9tMqx5IO/72jmcIDdXR5C+f7eYHXeI7xm9K5Mp7TrO0gn1vK4hlwVKB13E=
-Received: from BN8PR03CA0003.namprd03.prod.outlook.com (2603:10b6:408:94::16)
- by PH7PR12MB6585.namprd12.prod.outlook.com (2603:10b6:510:213::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Wed, 15 Feb
- 2023 17:25:37 +0000
-Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:94:cafe::9b) by BN8PR03CA0003.outlook.office365.com
- (2603:10b6:408:94::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
- Transport; Wed, 15 Feb 2023 17:25:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.12 via Frontend Transport; Wed, 15 Feb 2023 17:25:36 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 15 Feb
- 2023 11:25:36 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-CC:     <Sanju.Mehta@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
-Date:   Wed, 15 Feb 2023 11:25:20 -0600
-Message-ID: <20230215172520.8925-3-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230215172520.8925-1-mario.limonciello@amd.com>
-References: <20230215172520.8925-1-mario.limonciello@amd.com>
+        with ESMTP id S229504AbjBOR37 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Feb 2023 12:29:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F2944A3
+        for <linux-usb@vger.kernel.org>; Wed, 15 Feb 2023 09:29:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ADB0B82252
+        for <linux-usb@vger.kernel.org>; Wed, 15 Feb 2023 17:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07BA4C433D2;
+        Wed, 15 Feb 2023 17:29:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676482195;
+        bh=IADsL7HxvyLN9/hwDjCHcfOzN9TtOAKFtNmRDhHpVxU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=c7wTpuGby7uR9/Wa7div51nZlcTvMbT2O+xMadV5HUq6qSlrqT9ZSF8qopTrm/hmJ
+         fnBOpCLVftlzAXHCcTQi5CKh0Iw0Ocg6/JyW94Wtl1oBWeKOdzbtMeGFMStLSR0HqT
+         zvRs0xq+QNGq6Kid0gcsTM3nAKCUQTldlykQ6gh7lSE0Db+/uNgpXWszUqMRwVMyBq
+         HxgbDqPh4bfjNNoX5TOXNieDgAakaES9mE64Gbq2JSfMStysW+FYjhjd9AtT8v57cw
+         +DtfhTIOPYU7V9ejDU42zppNJll8I0GViSiCw+MxjgujeJH/aG0qu/4ztAGoJYad5Q
+         mbcQ+9TzAu06A==
+Message-ID: <3b530a74-0fb9-432b-b1d9-606a9694ce1e@kernel.org>
+Date:   Wed, 15 Feb 2023 19:29:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT039:EE_|PH7PR12MB6585:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55d91e9d-b628-4d70-4261-08db0f79a6f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J/+gMAi4AzyeqqjBqrTKwdP7UrGQ7U5wKd+SMsVzJs8m0StKAKq9bt/vXb+Ot06WiHz0v2S3CbaPwiJjwBzaDk2xnWTFx0HqxzBWrPwDicaXfTggbUIVKkAwRpNWOfCK1VGuBg7buspnx8VBp6+Kcfi1AhEdAF1x97iIYCZI7SmT3m+YiR0hW3dEEz1O5kreL62e6HfBnVmJwaMRdO+AWA7V+bJl2Rc1jMyO5ncQJSoxVpkG0ZIMbYsplnmDUn5m9V/iQFPUKOsNJLP/zkbm+E61S3TD1V6CvUQ4q85x0oxu7oyL9CGBrHho+Hj7EM0lVpCMxRe83sdNQF8MZ57rVrzlYBAYY/wUwp7NzA7Z9FxZslv6kIF4S2pKz/tk0PfT26iB6uDjGeNEHFGnzUMt+F86C1doPoIpCC+J4tq/EHYuoAXd/jnatfYSJDdxMXh1HC63eR4cBkjAtBh5SH/MCtXFYL9FweybXwMb3LUls8tQdNCmgcRnxR1ozf5bz/g6qhLVeHM4iPtXYiUDI9bUOwdJTpzHEMyk3a+RTCAyTEYETSOX4juAQeWkY1NFKjBoB8R43xf+jJbxQ6/gcppVhjQQT6hR7Y338QO/C/e80lGqgbcTuqK1avVKM8EKc642z1eFT6bId0L1MVPavPc9z30MzOmPtzAHPZBJaxA1HchGaiaLEfqoSP03QhRkEWdgcIABMWQwmstqPMsf9ns4vERPBc1J4bX1sHw+raLNnLphkLLDOeaHtxIGkSWXqZ0O
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(5660300002)(82740400003)(356005)(36756003)(41300700001)(36860700001)(81166007)(86362001)(82310400005)(2616005)(1076003)(336012)(83380400001)(40460700003)(2906002)(47076005)(186003)(426003)(44832011)(8936002)(6666004)(16526019)(26005)(4744005)(478600001)(110136005)(40480700001)(316002)(54906003)(8676002)(70206006)(7696005)(4326008)(70586007)(81973001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 17:25:36.9073
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55d91e9d-b628-4d70-4261-08db0f79a6f4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6585
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: dwc3: gadget suspend/resume vs system suspend/resume
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <7e28eb10-f27b-682a-dfb3-fec3e70b01f6@kernel.org>
+ <Y+z9NK6AyhvTQMir@rowland.harvard.edu>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <Y+z9NK6AyhvTQMir@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The static function `tb_eeprom_get_drom_offset` has more safety guards
-for the DROM offset fetching.  Use this instead of just `tb_sw_read`
 
-No intended functional changes.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/thunderbolt/eeprom.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On 15/02/2023 17:41, Alan Stern wrote:
+> On Wed, Feb 15, 2023 at 11:40:15AM +0200, Roger Quadros wrote:
+>> Hi Thinh,
+>>
+>> Currently dwc3 gadget disconnects from the bus in the system suspend 
+>> path. i.e. dwc3_gadget_suspend()->dwc3_disconnect_gadget().
+>>
+>> Is it reasonable to expect dwc3 gadget to do a USB suspend instead of 
+>> a USB disconnect during system suspend?
+> 
+> Gadgets can't initiate a USB suspend.  Only the host can.
+> 
+> Did you mean to ask the opposite question?  I.e., is it reasonable for a 
+> dwc3 gadget to go into system suspend when it gets a USB suspend?
 
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index d1be72b6afdb..b6572a893579 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -471,14 +471,13 @@ static int tb_drom_copy_efi(struct tb_switch *sw, u16 *size)
- 
- static int tb_drom_copy_nvm(struct tb_switch *sw, u16 *size)
- {
--	u32 drom_offset;
-+	u16 drom_offset;
- 	int ret;
- 
- 	if (!sw->dma_port)
- 		return -ENODEV;
- 
--	ret = tb_sw_read(sw, &drom_offset, TB_CFG_SWITCH,
--			 sw->cap_plug_events + 12, 1);
-+	ret = tb_eeprom_get_drom_offset(sw, &drom_offset);
- 	if (ret)
- 		return ret;
- 
--- 
-2.34.1
+Yes. Thanks for correcting. ;)
 
+> 
+> In general, it's easiest for gadgets to disconnect from the USB bus when 
+> their system suspends, if they aren't already in USB suspend.  This is 
+> because they would be unable to respond to requests from the host while 
+> sleeping.
+
+Oh in that case the gadget driver will have to prevent a system suspend till
+the gadget is put into USB suspend by the USB host.
+I think this is a reasonable expectation. It could be an application specific
+requirement. i.e. whether to disconnect on system suspend or wait
+for USB suspend before system suspend.
+
+
+> 
+>> At USB resume, system can wake up and resume and then dwc3 gadget can 
+>> resume.
+>>
+>> I'd like to know your opinion please if this is a reasonable 
+>> expectation or something just not possible to achieve. Thanks!
+> 
+> There can be exceptions, but it's a dicey thing.  The UDC hardware would 
+> have to be able to send handshake packets back to the host while 
+> remaining in low power, it would have to be able to generate a wakeup 
+> signal to bring its system back to full power, and the system would have 
+> to be able to resume in time for the gadget to respond to a request from 
+> the host before the request times out.
+> 
+> The situation is different if the gadget is already in USB suspend.  
+> Then it only needs to be able to wake up its system when it gets a USB 
+> resume signal.  But the system would still have to wake up reasonably 
+> quickly.
+
+I was more interested in this case where USB is suspended and then system suspends.
+Waking up the system on USB activity (while suspended) is taken care of by hardware.
+But I'm not sure if gadget driver will be up in time to respond to the request
+reasonably quickly. It would take a couple of seconds and is not hard time bound.
+Is this time mandated by the USB Spec or is it host implementation specific?
+
+cheers,
+-roger
