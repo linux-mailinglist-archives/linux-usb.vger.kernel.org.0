@@ -2,53 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAFA698FA5
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 10:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E49B699137
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 11:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjBPJV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Feb 2023 04:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S230033AbjBPKaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Feb 2023 05:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjBPJVX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 04:21:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E893D4A1F7;
-        Thu, 16 Feb 2023 01:21:20 -0800 (PST)
+        with ESMTP id S230020AbjBPKaV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 05:30:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FAE4A1D7;
+        Thu, 16 Feb 2023 02:30:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E674B8269E;
-        Thu, 16 Feb 2023 09:21:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D54C433EF;
-        Thu, 16 Feb 2023 09:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676539278;
-        bh=iLqghkxusX0o8rGr4tqOPw8yQl0PffBo54iGt3geCwc=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B17261F39;
+        Thu, 16 Feb 2023 10:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169CEC433EF;
+        Thu, 16 Feb 2023 10:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676543400;
+        bh=pQgiiYH8YW53nQKkaQLS7CH2z7qDXD8pnYiJrlqLTe0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kseNlNLKqXOLdaRerpLiRtO97HH9WMJ2o0rcKyXHeiEEU0PmOznCFWmhhpVxFE6jx
-         2mbZnnMRhamR6ORlFPQVaMHvCegAp2yeew5+K/mJ+iKYSpatOEKm4hY/wo0bbjS/vV
-         hg6ZKE55BTAjNnRdSZvXy8LsPzyhyydQBBr6uLq7TRM3MsFWZqXcsY84HFzamFqhE0
-         SJPAf9Tk99IRfixdgyVNbHTJyClx3oZz1ASww5JZ3k4h4HOVPL1gUkTR7OIkbIa9IX
-         iC4ZllZQtTmpqcDtfyJ9cYLyRITLRsVxcvGesX2AMvlAvpLCoKEYJkyyqTTf4FsBG2
-         kr7gYqaGUjteA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pSaT3-0002OF-Al; Thu, 16 Feb 2023 10:22:17 +0100
-Date:   Thu, 16 Feb 2023 10:22:17 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        b=I9ECIJlv23U8AB1qrZHhoEmOc69Q/y0+VSSr1mWB5yBYoOZ82K2oxgX3KE8yqezqx
+         pOZc67EOcazyAx5AJuy3gvvBjJlGxEu+dJPC6+P4rr/Fu+7MKnUPRc5m2qjLG1RyRp
+         jKt666HmLGJK5cJLqKvaozTRn9MXEKzCWzP4rULs=
+Date:   Thu, 16 Feb 2023 11:29:57 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Corentin Labbe <clabbe@baylibre.com>, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] usb: serial: add myself as maintainer of CH348
-Message-ID: <Y+31yXddQiWhz5rn@hovoldconsulting.com>
+Subject: Re: [PATCH v5 1/2] usb: serial: add support for CH348
+Message-ID: <Y+4Fpd0lcJkQrXef@kroah.com>
 References: <20230106135338.643951-1-clabbe@baylibre.com>
- <20230106135338.643951-3-clabbe@baylibre.com>
+ <20230106135338.643951-2-clabbe@baylibre.com>
+ <Y+30EYVTiAuhj1iK@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230106135338.643951-3-clabbe@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y+30EYVTiAuhj1iK@hovoldconsulting.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,37 +51,18 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 01:53:38PM +0000, Corentin Labbe wrote:
-> Since I did the driver and have hardware to test, set myself as
-> maintainer of it.
+On Thu, Feb 16, 2023 at 10:14:57AM +0100, Johan Hovold wrote:
+> > +	if (urb->actual_length < 2) {
+> > +		dev_dbg(&port->dev, "%s:%d empty rx buffer\n", __func__, __LINE__);
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  MAINTAINERS | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7729a30b9609..71b63b174703 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4915,6 +4915,11 @@ S:	Maintained
->  F:	drivers/auxdisplay/cfag12864bfb.c
->  F:	include/linux/cfag12864b.h
->  
-> +CH348 USB SERIAL ADAPTER
+> I'm sure I've asked you drop __LINE__. Please be more careful when
+> considering review comments.
 
-Please name this
+FYI, __func__ and __LINE__ are included automatically in dev_dbg() calls
+so any addition in the string for them is redundant and should never be
+there (it's also a hint that no one used this debug statement as the
+redundancy would be kind of obvious...)
 
-	USB SERIAL DRIVER FOR CH348
+thanks,
 
-to keep related entries together.
-
-> +M:	Corentin Labbe <clabbe@baylibre.com>
-> +S:	Maintained
-> +F:	drivers/usb/serial/ch348.c
-> +
->  CHAR and MISC DRIVERS
->  M:	Arnd Bergmann <arnd@arndb.de>
->  M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Johan
+greg k-h
