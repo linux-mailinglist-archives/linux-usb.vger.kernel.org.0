@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574DB699333
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 12:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FF4699332
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 12:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBPLff (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Feb 2023 06:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S230227AbjBPLfd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Feb 2023 06:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjBPLfd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 06:35:33 -0500
+        with ESMTP id S229603AbjBPLfc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 06:35:32 -0500
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90540311DB
-        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 03:35:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571B61B54D
+        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 03:35:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676547332; x=1708083332;
+  t=1676547331; x=1708083331;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=oivV/vv9OrtJGgKeU62Uf310vr8QH16+/pbrKuryjxg=;
-  b=BpBGIj4Zv+aFVkNtNkB6jUSXajMv6+ibQte+FeBWTQ3xQYrwKE5J9CwV
-   gnmY5azsrrz4+jINcAwgyjj1XNn6NzcVnZDGpCxhphWIsGCZV8dJ/f6iQ
-   zFdVY6G99PeQgBrAnMvkoidzsxzqHGjDQxswG6HiUbD0iINtrbrPiC/99
-   bACOqeecfLNbqFLkOEG4cmUX3nOsDeP8MRaDKMh+QF/tF2KZ+MNCsXLVm
-   LFM8aZPWhEA0Zmm+QKpAX3Y6gqRjF3+gFKoxKo/00WxJ9r4acs/720E2X
-   Tt5OItdN30FRuyQaGp6WZL4MRzHydk/LMK/Yfl0YaV5Exzv5i1D+gsoyR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="396336648"
+  bh=RwaqFkQAE4s7MfWXH96WW1n4urZmCqBPfnexC1EQMdA=;
+  b=crzTYOdTGkMj2iKXyYu9djf3r7ckXkhtVQX+/CaDMp3T1y9B95blNLT+
+   rYY9rOcFtvXYbapWbMmd/WJhEI+rZpwvDnjWWXZL+bpvAyE61+KD1J9qf
+   suXZ9IBb9l4CBxVJISNU0WLldrGKagdr+cXK/lu6/Y5WgmgQueSI4w0dS
+   zorrUwaz/egw/W+eato2aTfHRaCtJTN6TJ9y6yuU9IZkW+1rK2Hp3E5rT
+   3qK5yAMoeIb9+6FV304qgC3xEUN5WPvvcpaDLxYi2BIVtWrG7u20tMNP1
+   Vb2iBM/ZDyEinAGocUceNaBw1lRHZ1WAcVElP2OOHm0e95KkvhBJzCkfo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="396336644"
 X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="396336648"
+   d="scan'208";a="396336644"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 03:35:27 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="779311435"
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="779311433"
 X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="779311435"
+   d="scan'208";a="779311433"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
   by fmsmga002.fm.intel.com with ESMTP; 16 Feb 2023 03:35:25 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pScXt-000AEG-0H;
+        id 1pScXt-000AEA-09;
         Thu, 16 Feb 2023 11:35:25 +0000
-Date:   Thu, 16 Feb 2023 19:34:34 +0800
+Date:   Thu, 16 Feb 2023 19:34:43 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- c620f4d5b25bcbb851daa1f88edc764cf5f29cb6
-Message-ID: <63ee14ca.MqQwSZCZxabRYb1C%lkp@intel.com>
+Subject: [usb:usb-next] BUILD SUCCESS
+ 8e5248c3a8778f3e394e9a19195bc7a48f567ca2
+Message-ID: <63ee14d3.2CzqyJUoh8qfZNrg%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -63,10 +63,10 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: c620f4d5b25bcbb851daa1f88edc764cf5f29cb6  usb: typec: pd: Add higher capability sysfs for sink PDO
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 8e5248c3a8778f3e394e9a19195bc7a48f567ca2  usb: dwc3: pci: add support for the Intel Meteor Lake-M
 
-elapsed time: 1022m
+elapsed time: 1023m
 
 configs tested: 85
 configs skipped: 3
