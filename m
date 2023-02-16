@@ -2,148 +2,668 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831CE698EE2
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 09:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD56698F08
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 09:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjBPIkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Feb 2023 03:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S229706AbjBPIwV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Feb 2023 03:52:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjBPIkW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 03:40:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E457355AB
-        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 00:40:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95DD6B823E0
-        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 08:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD84C433D2;
-        Thu, 16 Feb 2023 08:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676536818;
-        bh=d4a3EYMDhCsRjBctuSGeENHEQESunwhkWLZiOQBA+e8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=c8QyLhE7xdmwe+c5LC8+HEjcNcTPgl5ITLLPWq+eV6aAiGUxXYz2NqUbvWJ8EkjgN
-         vSzxK3s+vNvQkTLYd4kyAWgk2DQ9liOeMmz2qT8e+b9vE/qTZCMqDfVAwb2agmatdV
-         Djkc02kvG7rAissqVIyfqv+00yw3b0diBrjv+dH83wJni69SSe6H7cYssSWiyACc2a
-         jvToZNTvebPzHzXJ5eeRffv59l8Qq14iKt2pSaSFDf6dZSKqc5Coac6kKvTfqiljr9
-         lPZJRNgGODsb1IY8dVrbjBmyGh3hdlZltreR/wYf/jNAKAw7JssoXhblUg05qZPwPI
-         HcpqgX2DbLCDw==
-Message-ID: <3b6f29e9-cc6b-d834-7c7e-7ae47b9fc44e@kernel.org>
-Date:   Thu, 16 Feb 2023 10:40:14 +0200
+        with ESMTP id S229485AbjBPIwU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 03:52:20 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBACA3A0B4
+        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 00:52:16 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id by3so1070090wrb.10
+        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 00:52:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=STizLQEo6AFp+2JHNavG4oDnohguTIhcAZn6+qlmAu4=;
+        b=POr8x7TTWt+5UiHyHkNpkATA2fBOi4I59Y1PGmWSj5Yog7+ijIU8xsVozDHY2GMhVM
+         0nAt6N8gsEohe/1B5WnCbA/ZF7qnJzmpxYh6DJRYopkQckvtKYxFndCfMx1fkZfuy02T
+         I2Yn2oT49FBkIz1JFDoATXTxrUWPGzqxq5eHbU5GMxgMGuXnbGnHgcFah87hbMji3wqM
+         2n/999p+vQJVgJx2M4a1uYa2ldbf5qNfh7o6lt2jKzTiDEgsRaKYwPgCwwNk65AgYwz6
+         RrJ/xx42waKUCzVMN6ZtzKDmADaSPaaIVuPBPeQyPTrh9+4K9j0s7q3V6xdYiGz7C/P/
+         Vp2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=STizLQEo6AFp+2JHNavG4oDnohguTIhcAZn6+qlmAu4=;
+        b=T57uWzGexRe84AZ7tlHAjxp5LoKOjnRFySccsFvjjKh+1pfJYiyT2OLUAz7yMF7pPe
+         CsjBoQJ3Nbemt9fXsE66TZB4sS4ffhNyZYswUfOvAG41hcwSXMamXlHsUOzt/ZW/SM5o
+         h5GuIbHaiVzxzrgsOLYQnFS8ZfiAMChLkBtMgDtHSRIDo2saj9j4+d1MfDlbrB+eVpPX
+         hJQFG5xUAm7EwbXQfKTA7772iwPU317h/PpwWllxB+GOYklORP2n/ms7CHZs5BUPEs5q
+         pxnMIxwsIB0/G0jPqVz+DRc0DXdZuKnl7DUeleoEhcXFd7OMu4eDQCpOBKsnVZwFSmUi
+         Fgwg==
+X-Gm-Message-State: AO0yUKWFMXx+mQPngd96ZZiJanZTIcmypPKo4iCrrKBlHQbYIBmecjGX
+        gY3u1oN2+K6wdO1YLbDA213VmA==
+X-Google-Smtp-Source: AK7set+vzp/1deCNLdAI/O0Pjpadgp1UcIZhP7Lv/ZuiLy1zAYeSIjCIaT74bAXwjZhHWkvWWqpoNA==
+X-Received: by 2002:adf:f6c2:0:b0:2c5:4c8e:ac5b with SMTP id y2-20020adff6c2000000b002c54c8eac5bmr4520119wrp.21.1676537535248;
+        Thu, 16 Feb 2023 00:52:15 -0800 (PST)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id m18-20020adfe952000000b002c56a7872f4sm910396wrn.82.2023.02.16.00.52.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 00:52:14 -0800 (PST)
+Message-ID: <be3a9a60-5a6f-4983-1822-fc3fcb8d1e66@baylibre.com>
+Date:   Thu, 16 Feb 2023 09:52:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: dwc3: gadget suspend/resume vs system suspend/resume
+Subject: Re: [PATCH v9 9/9] arm64: dts: mediatek: Initial mt8365-evk support
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <7e28eb10-f27b-682a-dfb3-fec3e70b01f6@kernel.org>
- <Y+z9NK6AyhvTQMir@rowland.harvard.edu>
- <3b530a74-0fb9-432b-b1d9-606a9694ce1e@kernel.org>
- <Y+0jZScRX80mF8tS@rowland.harvard.edu>
- <20230215225337.wuzhpmikiqz5htqk@synopsys.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230215225337.wuzhpmikiqz5htqk@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        matthias.bgg@gmail.com, khilman@baylibre.com
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-10-bero@baylibre.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230125143503.1015424-10-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Matthias,
 
+This is a gentle ping to know if you can take this patch.
 
-On 16/02/2023 00:53, Thinh Nguyen wrote:
-> On Wed, Feb 15, 2023, Alan Stern wrote:
->> On Wed, Feb 15, 2023 at 07:29:52PM +0200, Roger Quadros wrote:
->>> I was more interested in this case where USB is suspended and then system suspends.
->>> Waking up the system on USB activity (while suspended) is taken care of by hardware.
->>> But I'm not sure if gadget driver will be up in time to respond to the request
->>> reasonably quickly. It would take a couple of seconds and is not hard time bound.
->>> Is this time mandated by the USB Spec or is it host implementation specific?
->>
->> The USB spec doesn't say very much about it.  One part of the USB 2.0 
->> spec seems relevant; it says:
->>
->> 	9.2.6.2 Reset/Resume Recovery Time
->>
->> 	After a port is reset or resumed, the USB System Software is 
->> 	expected to provide a “recovery” interval of 10 ms before the 
->> 	device attached to the port is expected to respond to data 
->> 	transfers. The device may ignore any data transfers during the 
->> 	recovery interval.
->>
->> 	After the end of the recovery interval (measured from the end 
->> 	of the reset or the end of the EOP at the end of the resume 
->> 	signaling), the device must accept data transfers at any time.
->>
->> Accepting a data transfer doesn't necessarily mean completing it, 
->> though.  The Linux USB core does send a request to a device 10 ms 
->> after resuming it, but the timeout period on this request is 5 seconds.  
->> This gives you some leeway.
->>
+Best regards,
+Alex
+
+On 25/01/2023 15:35, Bernhard Rosenkränzer wrote:
+> From: Fabien Parent <fparent@baylibre.com>
 > 
-> For most standard control requests, the spec indicates that the device
-> must respond within 500ms. But that's not the case for some real devices
-
-I could not find any reference to 500ms time limit for suspend/resume case.
-The only mention of 500ms in USB2.0 spec is:
-
-	9.2.6.4 Standard Device Requests
-	...
-	For standard device requests that require data stage transfer
-	to the host, the device must be able to return the first data
-	packet to the host within 500 ms of receipt of the request.
-	For subsequent data packets, if any, the device must be able to
-	return them within 500 ms of successful completion of the
-	transmission of the previous packet. The device must then be
-	able to successfully complete the status stage within 50 ms after
-	returning the last data packet.
-
-I don't think this applies to suspend/resume.
-
-> so we have a 5 second timeout in Linux. For other requests, it's up to
-> the class drivers. For most drivers on Linux, it's typically 5 seconds
-> also.
-
-So it looks doable with Linux host. I'll have to check how other
-USB hosts behave.
-
+> This adds minimal support for the Mediatek 8365 SOC and the EVK reference
+> board, allowing the board to boot to initramfs with serial port I/O.
 > 
-> IMO, the system suspend on the gadget side should take precedence. That
-> is, it shouldn't depend on whether the usb gadget is in suspend or not
-> to go through system suspend. For that to happen, the gadget must
-> initiate soft-disconnect. Otherwise I can see we may run into
-> complications from the delay from the system suspend. For example, what
-> if the host initiates resume right after suspend while the gadget side
-> is still suspending?
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> [bero@baylibre.com: Removed parts depending on drivers that aren't upstream yet, cleanups, add CPU cache layout, add systimer, fix GIC]
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/Makefile       |   1 +
+>   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 168 +++++++++
+>   arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 377 ++++++++++++++++++++
+>   3 files changed, 546 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+> index 813e735c5b96d..d78523c5a7dd6 100644
+> --- a/arch/arm64/boot/dts/mediatek/Makefile
+> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> @@ -47,4 +47,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r2.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r3.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> new file mode 100644
+> index 0000000000000..4683704ea2355
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> @@ -0,0 +1,168 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021-2022 BayLibre, SAS.
+> + * Authors:
+> + * Fabien Parent <fparent@baylibre.com>
+> + * Bernhard Rosenkränzer <bero@baylibre.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
+> +#include "mt8365.dtsi"
+> +
+> +/ {
+> +	model = "MediaTek MT8365 Open Platform EVK";
+> +	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:921600n8";
+> +	};
+> +
+> +	firmware {
+> +		optee {
+> +			compatible = "linaro,optee-tz";
+> +			method = "smc";
+> +		};
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&gpio_keys>;
+> +
+> +		key-volume-up {
+> +			gpios = <&pio 24 GPIO_ACTIVE_LOW>;
+> +			label = "volume_up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			wakeup-source;
+> +			debounce-interval = <15>;
+> +		};
+> +	};
+> +
+> +	memory@40000000 {
+> +		device_type = "memory";
+> +		reg = <0 0x40000000 0 0xc0000000>;
+> +	};
+> +
+> +	usb_otg_vbus: regulator-0 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "otg_vbus";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		gpio = <&pio 16 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		/* 128 KiB reserved for ARM Trusted Firmware (BL31) */
+> +		bl31_secmon_reserved: secmon@43000000 {
+> +			no-map;
+> +			reg = <0 0x43000000 0 0x20000>;
+> +		};
+> +
+> +		/* 12 MiB reserved for OP-TEE (BL32)
+> +		 * +-----------------------+ 0x43e0_0000
+> +		 * |      SHMEM 2MiB       |
+> +		 * +-----------------------+ 0x43c0_0000
+> +		 * |        | TA_RAM  8MiB |
+> +		 * + TZDRAM +--------------+ 0x4340_0000
+> +		 * |        | TEE_RAM 2MiB |
+> +		 * +-----------------------+ 0x4320_0000
+> +		 */
+> +		optee_reserved: optee@43200000 {
+> +			no-map;
+> +			reg = <0 0x43200000 0 0x00c00000>;
+> +		};
+> +	};
+> +};
+> +
+> +&pio {
+> +	gpio_keys: gpio-keys-pins {
+> +		pins {
+> +			pinmux = <MT8365_PIN_24_KPCOL0__FUNC_KPCOL0>;
+> +			bias-pull-up;
+> +			input-enable;
+> +		};
+> +	};
+> +
+> +	uart0_pins: uart0-pins {
+> +		pins {
+> +			pinmux = <MT8365_PIN_35_URXD0__FUNC_URXD0>,
+> +				 <MT8365_PIN_36_UTXD0__FUNC_UTXD0>;
+> +		};
+> +	};
+> +
+> +	uart1_pins: uart1-pins {
+> +		pins {
+> +			pinmux = <MT8365_PIN_37_URXD1__FUNC_URXD1>,
+> +				 <MT8365_PIN_38_UTXD1__FUNC_UTXD1>;
+> +		};
+> +	};
+> +
+> +	uart2_pins: uart2-pins {
+> +		pins {
+> +			pinmux = <MT8365_PIN_39_URXD2__FUNC_URXD2>,
+> +				 <MT8365_PIN_40_UTXD2__FUNC_UTXD2>;
+> +		};
+> +	};
+> +
+> +	usb_pins: usb-pins {
+> +		id-pins {
+> +			pinmux = <MT8365_PIN_17_GPIO17__FUNC_GPIO17>;
+> +			input-enable;
+> +			bias-pull-up;
+> +		};
+> +
+> +		usb0-vbus-pins {
+> +			pinmux = <MT8365_PIN_16_GPIO16__FUNC_USB_DRVVBUS>;
+> +			output-high;
+> +		};
+> +
+> +		usb1-vbus-pins {
+> +			pinmux = <MT8365_PIN_18_GPIO18__FUNC_GPIO18>;
+> +			output-high;
+> +		};
+> +	};
+> +
+> +	pwm_pins: pwm-pins {
+> +		pins {
+> +			pinmux = <MT8365_PIN_19_DISP_PWM__FUNC_PWM_A>,
+> +				 <MT8365_PIN_116_I2S_BCK__FUNC_PWM_C>;
+> +		};
+> +	};
+> +};
+> +
+> +&pwm {
+> +	pinctrl-0 = <&pwm_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +};
+> +
+> +&uart0 {
+> +	pinctrl-0 = <&uart0_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +};
+> +
+> +&uart1 {
+> +	pinctrl-0 = <&uart1_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +};
+> +
+> +&uart2 {
+> +	pinctrl-0 = <&uart2_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> new file mode 100644
+> index 0000000000000..15ac4c1f09661
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> @@ -0,0 +1,377 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * (C) 2018 MediaTek Inc.
+> + * Copyright (C) 2022 BayLibre SAS
+> + * Fabien Parent <fparent@baylibre.com>
+> + * Bernhard Rosenkränzer <bero@baylibre.com>
+> + */
+> +#include <dt-bindings/clock/mediatek,mt8365-clk.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/phy/phy.h>
+> +
+> +/ {
+> +	compatible = "mediatek,mt8365";
+> +	interrupt-parent = <&sysirq>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu-map {
+> +			cluster0 {
+> +				core0 {
+> +					cpu = <&cpu0>;
+> +				};
+> +				core1 {
+> +					cpu = <&cpu1>;
+> +				};
+> +				core2 {
+> +					cpu = <&cpu2>;
+> +				};
+> +				core3 {
+> +					cpu = <&cpu3>;
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu0: cpu@0 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a53";
+> +			reg = <0x0>;
+> +			#cooling-cells = <2>;
+> +			enable-method = "psci";
+> +			i-cache-size = <0x8000>;
+> +			i-cache-line-size = <64>;
+> +			i-cache-sets = <256>;
+> +			d-cache-size = <0x8000>;
+> +			d-cache-line-size = <64>;
+> +			d-cache-sets = <256>;
+> +			next-level-cache = <&l2>;
+> +		};
+> +
+> +		cpu1: cpu@1 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a53";
+> +			reg = <0x1>;
+> +			#cooling-cells = <2>;
+> +			enable-method = "psci";
+> +			i-cache-size = <0x8000>;
+> +			i-cache-line-size = <64>;
+> +			i-cache-sets = <256>;
+> +			d-cache-size = <0x8000>;
+> +			d-cache-line-size = <64>;
+> +			d-cache-sets = <256>;
+> +			next-level-cache = <&l2>;
+> +		};
+> +
+> +		cpu2: cpu@2 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a53";
+> +			reg = <0x2>;
+> +			#cooling-cells = <2>;
+> +			enable-method = "psci";
+> +			i-cache-size = <0x8000>;
+> +			i-cache-line-size = <64>;
+> +			i-cache-sets = <256>;
+> +			d-cache-size = <0x8000>;
+> +			d-cache-line-size = <64>;
+> +			d-cache-sets = <256>;
+> +			next-level-cache = <&l2>;
+> +		};
+> +
+> +		cpu3: cpu@3 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a53";
+> +			reg = <0x3>;
+> +			#cooling-cells = <2>;
+> +			enable-method = "psci";
+> +			i-cache-size = <0x8000>;
+> +			i-cache-line-size = <64>;
+> +			i-cache-sets = <256>;
+> +			d-cache-size = <0x8000>;
+> +			d-cache-line-size = <64>;
+> +			d-cache-sets = <256>;
+> +			next-level-cache = <&l2>;
+> +		};
+> +
+> +		l2: l2-cache {
+> +			compatible = "cache";
+> +			cache-level = <2>;
+> +			cache-size = <0x80000>;
+> +			cache-line-size = <64>;
+> +			cache-sets = <512>;
+> +			cache-unified;
+> +		};
+> +	};
+> +
+> +	clk26m: oscillator {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <26000000>;
+> +		clock-output-names = "clk26m";
+> +	};
+> +
+> +	psci {
+> +		compatible = "arm,psci-1.0";
+> +		method = "smc";
+> +	};
+> +
+> +	soc {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		compatible = "simple-bus";
+> +		ranges;
+> +
+> +		gic: interrupt-controller@c000000 {
+> +			compatible = "arm,gic-v3";
+> +			#interrupt-cells = <3>;
+> +			interrupt-parent = <&gic>;
+> +			interrupt-controller;
+> +			reg = <0 0x0c000000 0 0x10000>, /* GICD */
+> +			      <0 0x0c080000 0 0x80000>, /* GICR */
+> +			      <0 0x0c400000 0 0x2000>,  /* GICC */
+> +			      <0 0x0c410000 0 0x1000>,  /* GICH */
+> +			      <0 0x0c420000 0 0x2000>;  /* GICV */
+> +
+> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+> +		topckgen: syscon@10000000 {
+> +			compatible = "mediatek,mt8365-topckgen", "syscon";
+> +			reg = <0 0x10000000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		infracfg: syscon@10001000 {
+> +			compatible = "mediatek,mt8365-infracfg", "syscon";
+> +			reg = <0 0x10001000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		pericfg: syscon@10003000 {
+> +			compatible = "mediatek,mt8365-pericfg", "syscon";
+> +			reg = <0 0x10003000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		syscfg_pctl: syscfg-pctl@10005000 {
+> +			compatible = "mediatek,mt8365-syscfg", "syscon";
+> +			reg = <0 0x10005000 0 0x1000>;
+> +		};
+> +
+> +		pio: pinctrl@1000b000 {
+> +			compatible = "mediatek,mt8365-pinctrl";
+> +			reg = <0 0x1000b000 0 0x1000>;
+> +			mediatek,pctl-regmap = <&syscfg_pctl>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +			interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+> +		apmixedsys: syscon@1000c000 {
+> +			compatible = "mediatek,mt8365-apmixedsys", "syscon";
+> +			reg = <0 0x1000c000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		keypad: keypad@10010000 {
+> +			compatible = "mediatek,mt6779-keypad";
+> +			reg = <0 0x10010000 0 0x1000>;
+> +			wakeup-source;
+> +			interrupts = <GIC_SPI 124 IRQ_TYPE_EDGE_FALLING>;
+> +			clocks = <&clk26m>;
+> +			clock-names = "kpd";
+> +			status = "disabled";
+> +		};
+> +
+> +		mcucfg: syscon@10200000 {
+> +			compatible = "mediatek,mt8365-mcucfg", "syscon";
+> +			reg = <0 0x10200000 0 0x2000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		sysirq: interrupt-controller@10200a80 {
+> +			compatible = "mediatek,mt8365-sysirq", "mediatek,mt6577-sysirq";
+> +			interrupt-controller;
+> +			#interrupt-cells = <3>;
+> +			interrupt-parent = <&gic>;
+> +			reg = <0 0x10200a80 0 0x20>;
+> +		};
+> +
+> +		infracfg_nao: infracfg@1020e000 {
+> +			compatible = "mediatek,mt8365-infracfg", "syscon";
+> +			reg = <0 0x1020e000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		rng: rng@1020f000 {
+> +			compatible = "mediatek,mt8365-rng", "mediatek,mt7623-rng";
+> +			reg = <0 0x1020f000 0 0x100>;
+> +			clocks = <&infracfg CLK_IFR_TRNG>;
+> +			clock-names = "rng";
+> +		};
+> +
+> +		apdma: dma-controller@11000280 {
+> +			compatible = "mediatek,mt8365-uart-dma", "mediatek,mt6577-uart-dma";
+> +			reg = <0 0x11000280 0 0x80>,
+> +			      <0 0x11000300 0 0x80>,
+> +			      <0 0x11000380 0 0x80>,
+> +			      <0 0x11000400 0 0x80>,
+> +			      <0 0x11000580 0 0x80>,
+> +			      <0 0x11000600 0 0x80>;
+> +			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 46 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 47 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 48 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 52 IRQ_TYPE_LEVEL_LOW>;
+> +			dma-requests = <6>;
+> +			clocks = <&infracfg CLK_IFR_AP_DMA>;
+> +			clock-names = "apdma";
+> +			#dma-cells = <1>;
+> +		};
+> +
+> +		uart0: serial@11002000 {
+> +			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
+> +			reg = <0 0x11002000 0 0x1000>;
+> +			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART0>;
+> +			clock-names = "baud", "bus";
+> +			dmas = <&apdma 0>, <&apdma 1>;
+> +			dma-names = "tx", "rx";
+> +			status = "disabled";
+> +		};
+> +
+> +		uart1: serial@11003000 {
+> +			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
+> +			reg = <0 0x11003000 0 0x1000>;
+> +			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART1>;
+> +			clock-names = "baud", "bus";
+> +			dmas = <&apdma 2>, <&apdma 3>;
+> +			dma-names = "tx", "rx";
+> +			status = "disabled";
+> +		};
+> +
+> +		uart2: serial@11004000 {
+> +			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
+> +			reg = <0 0x11004000 0 0x1000>;
+> +			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART2>;
+> +			clock-names = "baud", "bus";
+> +			dmas = <&apdma 4>, <&apdma 5>;
+> +			dma-names = "tx", "rx";
+> +			status = "disabled";
+> +		};
+> +
+> +		pwm: pwm@11006000 {
+> +			compatible = "mediatek,mt8365-pwm";
+> +			reg = <0 0x11006000 0 0x1000>;
+> +			#pwm-cells = <2>;
+> +			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&infracfg CLK_IFR_PWM_HCLK>,
+> +				 <&infracfg CLK_IFR_PWM>,
+> +				 <&infracfg CLK_IFR_PWM1>,
+> +				 <&infracfg CLK_IFR_PWM2>,
+> +				 <&infracfg CLK_IFR_PWM3>;
+> +			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
+> +		};
+> +
+> +		spi: spi@1100a000 {
+> +			compatible = "mediatek,mt8365-spi", "mediatek,mt7622-spi";
+> +			reg = <0 0x1100a000 0 0x100>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&topckgen CLK_TOP_UNIVPLL2_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_IFR_SPI0>;
+> +			clock-names = "parent-clk", "sel-clk", "spi-clk";
+> +			status = "disabled";
+> +		};
+> +
+> +		ssusb: usb@11201000 {
+> +			compatible = "mediatek,mt8365-mtu3", "mediatek,mtu3";
+> +			reg = <0 0x11201000 0 0x2e00>, <0 0x11203e00 0 0x0100>;
+> +			reg-names = "mac", "ippc";
+> +			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_LOW>;
+> +			phys = <&u2port0 PHY_TYPE_USB2>,
+> +			       <&u2port1 PHY_TYPE_USB2>;
+> +			clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
+> +				 <&infracfg CLK_IFR_SSUSB_REF>,
+> +				 <&infracfg CLK_IFR_SSUSB_SYS>,
+> +				 <&infracfg CLK_IFR_ICUSB>;
+> +			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck";
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			status = "disabled";
+> +
+> +			usb_host: usb@11200000 {
+> +				compatible = "mediatek,mt8365-xhci", "mediatek,mtk-xhci";
+> +				reg = <0 0x11200000 0 0x1000>;
+> +				reg-names = "mac";
+> +				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_LOW>;
+> +				clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
+> +					 <&infracfg CLK_IFR_SSUSB_REF>,
+> +					 <&infracfg CLK_IFR_SSUSB_SYS>,
+> +					 <&infracfg CLK_IFR_ICUSB>,
+> +					 <&infracfg CLK_IFR_SSUSB_XHCI>;
+> +				clock-names = "sys_ck", "ref_ck", "mcu_ck",
+> +					      "dma_ck", "xhci_ck";
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+> +		u3phy: t-phy@11cc0000 {
+> +			compatible = "mediatek,mt8365-tphy", "mediatek,generic-tphy-v2";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0 0 0x11cc0000 0x9000>;
+> +
+> +			u2port0: usb-phy@0 {
+> +				reg = <0x0 0x400>;
+> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
+> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
+> +				clock-names = "ref", "da_ref";
+> +				#phy-cells = <1>;
+> +			};
+> +
+> +			u2port1: usb-phy@1000 {
+> +				reg = <0x1000 0x400>;
+> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
+> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
+> +				clock-names = "ref", "da_ref";
+> +				#phy-cells = <1>;
+> +			};
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupt-parent = <&gic>;
+> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+> +	};
+> +
+> +	system_clk: dummy13m {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <13000000>;
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	systimer: timer@10017000 {
+> +		compatible = "mediatek,mt8365-systimer", "mediatek,mt6795-systimer";
+> +		reg = <0 0x10017000 0 0x10>;
+> +		interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_LOW>;
+> +		clocks = <&system_clk>;
+> +		clock-names = "clk13m";
+> +	};
+> +};
 
-In this case, system will go all the way to suspend and then wake up.
-It will take a few seconds more to respond than if system was already suspended.
-
-> What if there are other gadgets on the setup that
-> want or not want to go to suspend also? How can the system decide when
-> it can go into suspend then?
-
-I think this is a policy decision and we cannot force one way or the other
-in the kernel but allow user space to decide what must be done.
-It would really depend on what the end application needs.
-
-So, does a gadget specific user settable flag seem reasonable to decide
-if gadget driver should:
-a) disconnect on system suspend regardless of USB state (current behavior)
-b) prevent a system suspend if gadget is not in USB suspend. Allow otherwise.
-
-Or any better ideas?
-
-cheers,
--roger
