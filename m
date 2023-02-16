@@ -2,75 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC65699D45
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 20:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42129699D4E
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Feb 2023 21:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjBPT7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Feb 2023 14:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S229475AbjBPUEC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Feb 2023 15:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjBPT7k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 14:59:40 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A923B220
-        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 11:59:38 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id j22-20020a4ad6d6000000b0051fcc9bff19so343289oot.12
-        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 11:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MC8mXNoLebS4BjvTZpkKIdVBXCr5PEI2huDeMNCwnII=;
-        b=J0W4Q1LNRdS4+kGGbLHcHYfOrDuPciDULfiClaB0kVaBY30oWKI5QySF9jATJmWqfo
-         T7/CP2jtmcz2xXbbnyptSLpa1T34rttD+pMOKkv+E5CmqxchbZeyPsVoXSxSh3tIaMig
-         CCSDoDyiHsycDe9YAOLXLkckf5AfLzzEmlO5w/F9fUxdGykhBw9g9BIuiPhnpoYw/w2d
-         Bwpwm8c+eQI3Kv6QQgmfoPt7b4zwC6i/pelaKpYZ92F++4R11/7ARI8pwiOmCCtQjw2R
-         ckBM324qW4e9Md228XySYMvX3K5xX1i5TOT3jJWEJy63gnKk5RSxCS3IvkIz3lNnCiUe
-         jAiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MC8mXNoLebS4BjvTZpkKIdVBXCr5PEI2huDeMNCwnII=;
-        b=YeiXYkqHM7Os8k4FcD04owfpVtwEP7fBD77i0NUJ6kLRE5grj2MOwEuXA9zhGcJYuJ
-         kEzq0oRWuxXaowpivP8NCZz0mRHt9KFACSjQpKriIy3gkwYhxEnnBh/Xg0Kg0MStA7r1
-         bewnql7XDE8jRb35gu5UYxqoU2h8FKfh5NENsXX7kVJw4hHyyS+zJyq4ZFJqaHACXU2G
-         izjxOH9SPU6I0lBoMCOU0pjSPoeTvaPAAD4oXYJl6J+/XldRtBpObKgIedyYTBW+H3e+
-         b3I/L5htes/DDr75EjiX0Nb6CL+KdZAzXroC5nr6HtK6g6yohForvxFLL9zo6BkTueuL
-         hrhQ==
-X-Gm-Message-State: AO0yUKWKNE24n2/S/zmWZ1Ua0gOVo8ucOk/VtuNu2mNWPhTXmQBAuMp1
-        2kQ2rs9SUQkxSgdul7eZTV+mFOCHCfE=
-X-Google-Smtp-Source: AK7set8R50Ne/0pvJKhTCGRJYrzRMuLad35L7iCAIzgXi98S89veozMCov+P7wsuALHcAp2UNRqGrw==
-X-Received: by 2002:a4a:c617:0:b0:51a:4c5d:fd1e with SMTP id l23-20020a4ac617000000b0051a4c5dfd1emr2963144ooq.9.1676577578028;
-        Thu, 16 Feb 2023 11:59:38 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c25-20020a4ad799000000b004c60069d1fbsm1031670oou.11.2023.02.16.11.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 11:59:37 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0414eea3-bfb0-c806-765d-54bb612c706d@roeck-us.net>
-Date:   Thu, 16 Feb 2023 11:59:36 -0800
+        with ESMTP id S229460AbjBPUEA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Feb 2023 15:04:00 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B912D505F6
+        for <linux-usb@vger.kernel.org>; Thu, 16 Feb 2023 12:03:52 -0800 (PST)
+Received: (qmail 1031525 invoked by uid 1000); 16 Feb 2023 15:03:51 -0500
+Date:   Thu, 16 Feb 2023 15:03:51 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Roger Quadros <rogerq@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: dwc3: gadget suspend/resume vs system suspend/resume
+Message-ID: <Y+6MJ2juVmPdp15q@rowland.harvard.edu>
+References: <7e28eb10-f27b-682a-dfb3-fec3e70b01f6@kernel.org>
+ <Y+z9NK6AyhvTQMir@rowland.harvard.edu>
+ <3b530a74-0fb9-432b-b1d9-606a9694ce1e@kernel.org>
+ <Y+0jZScRX80mF8tS@rowland.harvard.edu>
+ <20230215225337.wuzhpmikiqz5htqk@synopsys.com>
+ <3b6f29e9-cc6b-d834-7c7e-7ae47b9fc44e@kernel.org>
+ <20230216181132.k2jate2uwqadpqfh@synopsys.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] usb: typec: tcpm: fix warning when handle
- discover_identity message
-Content-Language: en-US
-To:     Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-imx@nxp.com, jun.li@nxp.com
-References: <20230216031515.4151117-1-xu.yang_2@nxp.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230216031515.4151117-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216181132.k2jate2uwqadpqfh@synopsys.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,123 +42,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/15/23 19:15, Xu Yang wrote:
-> Since both source and sink device can send discover_identity message in
-> PD3, kernel may dump below warning:
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 169 at drivers/usb/typec/tcpm/tcpm.c:1446 tcpm_queue_vdm+0xe0/0xf0
-> Modules linked in:
-> CPU: 0 PID: 169 Comm: 1-0050 Not tainted 6.1.1-00038-g6a3c36cf1da2-dirty #567
-> Hardware name: NXP i.MX8MPlus EVK board (DT)
-> pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : tcpm_queue_vdm+0xe0/0xf0
-> lr : tcpm_queue_vdm+0x2c/0xf0
-> sp : ffff80000c19bcd0
-> x29: ffff80000c19bcd0 x28: 0000000000000001 x27: ffff0000d11c8ab8
-> x26: ffff0000d11cc000 x25: 0000000000000000 x24: 00000000ff008081
-> x23: 0000000000000001 x22: 00000000ff00a081 x21: ffff80000c19bdbc
-> x20: 0000000000000000 x19: ffff0000d11c8080 x18: ffffffffffffffff
-> x17: 0000000000000000 x16: 0000000000000000 x15: ffff0000d716f580
-> x14: 0000000000000001 x13: ffff0000d716f507 x12: 0000000000000001
-> x11: 0000000000000000 x10: 0000000000000020 x9 : 00000000000ee098
-> x8 : 00000000ffffffff x7 : 000000000000001c x6 : ffff0000d716f580
-> x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-> x2 : ffff80000c19bdbc x1 : 00000000ff00a081 x0 : 0000000000000004
-> Call trace:
-> tcpm_queue_vdm+0xe0/0xf0
-> tcpm_pd_rx_handler+0x340/0x1ab0
-> kthread_worker_fn+0xcc/0x18c
-> kthread+0x10c/0x110
-> ret_from_fork+0x10/0x20
-> ---[ end trace 0000000000000000 ]---
-> 
-> Below sequences may trigger this warning:
-> 
-> tcpm_send_discover_work(work)
->    tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
->     tcpm_queue_vdm(port, header, data, count);
->      port->vdm_state = VDM_STATE_READY;
-> 
-> vdm_state_machine_work(work);
-> 			<-- received discover_identity from partner
->   vdm_run_state_machine(port);
->    port->vdm_state = VDM_STATE_SEND_MESSAGE;
->     mod_vdm_delayed_work(port, x);
-> 
-> tcpm_pd_rx_handler(work);
->   tcpm_pd_data_request(port, msg);
->    tcpm_handle_vdm_request(port, msg->payload, cnt);
->     tcpm_queue_vdm(port, response[0], &response[1], rlen - 1);
-> --> WARN_ON(port->vdm_state > VDM_STATE_DONE);
-> 
-> For this case, the state machine could still send out discover
-> identity message later if we skip current discover_identity message.
-> So we should handle the received message firstly and override the pending
-> discover_identity message without warning in this case. Then, a delayed
-> send_discover work will send discover_identity message again.
-> 
-> Fixes: e00943e91678 ("usb: typec: tcpm: PD3.0 sinks can send Discover Identity even in device mode")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+On Thu, Feb 16, 2023 at 06:11:36PM +0000, Thinh Nguyen wrote:
+> On Thu, Feb 16, 2023, Roger Quadros wrote:
+> > I could not find any reference to 500ms time limit for suspend/resume case.
+> > The only mention of 500ms in USB2.0 spec is:
+> > 
+> > 	9.2.6.4 Standard Device Requests
+> > 	...
+> > 	For standard device requests that require data stage transfer
+> > 	to the host, the device must be able to return the first data
+> > 	packet to the host within 500 ms of receipt of the request.
+> > 	For subsequent data packets, if any, the device must be able to
+> > 	return them within 500 ms of successful completion of the
+> > 	transmission of the previous packet. The device must then be
+> > 	able to successfully complete the status stage within 50 ms after
+> > 	returning the last data packet.
+> > 
+> > I don't think this applies to suspend/resume.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+It's not specific to suspend/resume; it's a generic time limit.  It can 
+vary depending on the application or the driver.
 
-> 
-> ---
-> Changelogs:
-> v2: modify some code format and commit message
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 19 +++++++++++++++----
->   1 file changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 7f39cb9b3429..1ee774c263f0 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1445,10 +1445,18 @@ static int tcpm_ams_start(struct tcpm_port *port, enum tcpm_ams ams)
->   static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
->   			   const u32 *data, int cnt)
->   {
-> +	u32 vdo_hdr = port->vdo_data[0];
-> +
->   	WARN_ON(!mutex_is_locked(&port->lock));
->   
-> -	/* Make sure we are not still processing a previous VDM packet */
-> -	WARN_ON(port->vdm_state > VDM_STATE_DONE);
-> +	/* If is sending discover_identity, handle received message first */
-> +	if (PD_VDO_SVDM(vdo_hdr) && PD_VDO_CMD(vdo_hdr) == CMD_DISCOVER_IDENT) {
-> +		port->send_discover = true;
-> +		mod_send_discover_delayed_work(port, SEND_DISCOVER_RETRY_MS);
-> +	} else {
-> +		/* Make sure we are not still processing a previous VDM packet */
-> +		WARN_ON(port->vdm_state > VDM_STATE_DONE);
-> +	}
->   
->   	port->vdo_count = cnt + 1;
->   	port->vdo_data[0] = header;
-> @@ -1948,11 +1956,13 @@ static void vdm_run_state_machine(struct tcpm_port *port)
->   			switch (PD_VDO_CMD(vdo_hdr)) {
->   			case CMD_DISCOVER_IDENT:
->   				res = tcpm_ams_start(port, DISCOVER_IDENTITY);
-> -				if (res == 0)
-> +				if (res == 0) {
->   					port->send_discover = false;
-> -				else if (res == -EAGAIN)
-> +				} else if (res == -EAGAIN) {
-> +					port->vdo_data[0] = 0;
->   					mod_send_discover_delayed_work(port,
->   								       SEND_DISCOVER_RETRY_MS);
-> +				}
->   				break;
->   			case CMD_DISCOVER_SVID:
->   				res = tcpm_ams_start(port, DISCOVER_SVIDS);
-> @@ -2035,6 +2045,7 @@ static void vdm_run_state_machine(struct tcpm_port *port)
->   			unsigned long timeout;
->   
->   			port->vdm_retries = 0;
-> +			port->vdo_data[0] = 0;
->   			port->vdm_state = VDM_STATE_BUSY;
->   			timeout = vdm_ready_timeout(vdo_hdr);
->   			mod_vdm_delayed_work(port, timeout);
+> Are you referring to the handshake timeout when the host tries to
+> initiate resume at the link layer? It's relatively short compare to the
+> software timeout and will vary depending on how many hub tiers in the
+> topology. Also, that's handled by the host and device controller. We
+> should care more about the software timeout after resume completed. The
+> 500ms here applies if the device couldn't resume fast enough for the
+> driver to prepare a transfer response to the host.
 
+Also, keep in mind that we can increase the initial timeout limit 
+following a resume, if necessary (on Linux hosts with a recent kernel -- 
+obviously not on other kinds of hosts).  Or make it an adjustable 
+parameter.
+
+> > > IMO, the system suspend on the gadget side should take precedence. That
+> > > is, it shouldn't depend on whether the usb gadget is in suspend or not
+> > > to go through system suspend. For that to happen, the gadget must
+> > > initiate soft-disconnect. Otherwise I can see we may run into
+> > > complications from the delay from the system suspend. For example, what
+> > > if the host initiates resume right after suspend while the gadget side
+> > > is still suspending?
+> > 
+> > In this case, system will go all the way to suspend and then wake up.
+> > It will take a few seconds more to respond than if system was already suspended.
+> 
+> Yes, my concern is the suspend/resume is measured in seconds.
+
+It the gadget is too slow in responding, it shouldn't be a big deal.  
+The host will assume the gadget has disconnected and then will 
+re-discover it.  Pretty much the same as if the gadget had actually 
+disconnected from the bus before going into system suspend.
+
+Alan Stern
