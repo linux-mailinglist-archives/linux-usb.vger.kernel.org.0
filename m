@@ -2,226 +2,298 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABD769AFF2
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Feb 2023 16:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F201C69B11F
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Feb 2023 17:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjBQP4m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Feb 2023 10:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S230148AbjBQQjf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Feb 2023 11:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjBQP4k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Feb 2023 10:56:40 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFA9711BC;
-        Fri, 17 Feb 2023 07:56:09 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id eg30so5729527edb.7;
-        Fri, 17 Feb 2023 07:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZzFjOEEzaxMg0PoK9w/FYDQg5oh8fvu0qlQZTMdpOdc=;
-        b=XS0MdCKYhSgWKheIOrss76W3LEfboar9PfOE2US+2XUg4vqQ837Gh64TtDVfvdsKsC
-         1BnNCYdJkZBPOpyqbmLPqjnz64GvfOnWz4X9Dl9abcZH0d4+3v6v4Nrpw6NbymuRYxBO
-         BkV5Do5S9co40LjM9xzUl6aj6UOGVHqJn1wtIKysUF1ehWXb+5umYNxyfW5B5Eq2DmUs
-         h3PoyQUmecKJohCygBH3WWtdr6sALhLEfSe02TXtdtEfY4IjhzEQuvFuIc4LcN1JCSyN
-         M+eHCoEINyG18cVfLcUO08XglToGPjZqdcsPEwmswRrnUNZUdF1DHFBY4S2K8AWupjWT
-         9SoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZzFjOEEzaxMg0PoK9w/FYDQg5oh8fvu0qlQZTMdpOdc=;
-        b=yGWE4vq3qm8ZwbZwoOm6DSSFtN/50irOf3Ck6NJppZDpxwWnfS+FTGmFZkI/RzKro6
-         bySd6/vuG9BgsqZ3nSuHAAT7p5ij/0zIdH2TXNQWmBTl54q2A21mHK0SWI2XaGRmhYUL
-         O/1Fwt/bF9DC9oe1C7d7g8N+7Vm5qJw35lhzKD206GiJ8lz2jARmxWHL8wdEIZl33IWx
-         hmaCF5xmP0EkLm0ay0Dj5QfxVANI2eE7c1jpOEWA75NAW8FoajfAf/6yRbnbNNlVKXqM
-         +1Ua1VEP1Ob15BH6mdKPUM5DZ5Le4vWGeZSaf5oNp8eNCCFt7XqZuz9DFcU19UN5I8oH
-         2sUA==
-X-Gm-Message-State: AO0yUKXD1PwdhucOksiQv7lEiCPqfMZCgD7CDMZRaurCig9MSMDaFk5F
-        y1IV+yPV20Nflyj4y82EL4cWRkSD1iM=
-X-Google-Smtp-Source: AK7set/vxKzQWRPH6fDGnusk9+izTbvGUGGINVbSZdBFGVe8QIE5czO6u1CLDh4Ul2HyD2Qkzg68mA==
-X-Received: by 2002:aa7:d910:0:b0:499:4130:fae with SMTP id a16-20020aa7d910000000b0049941300faemr1124872edr.10.1676649367080;
-        Fri, 17 Feb 2023 07:56:07 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n24-20020a509358000000b0049ef70a2894sm2486213eda.38.2023.02.17.07.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 07:56:05 -0800 (PST)
-Date:   Fri, 17 Feb 2023 18:55:59 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        balbi@kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: Re: [PATCH v5 1/5] usb: gadget: Properly configure the device for
- remote wakeup
-Message-ID: <202302172243.hKUsQl2q-lkp@intel.com>
+        with ESMTP id S229520AbjBQQje (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Feb 2023 11:39:34 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3916B303;
+        Fri, 17 Feb 2023 08:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676651973; x=1708187973;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wB8bS9gaVZyffaJg0ZFoYa1F5bIUV9IsyIRY37Ib0Ic=;
+  b=c1DEMFQADbHCH0A30Vd2Be20JeLpAC5k2zN58iwz6YdouRorviwEylvt
+   y3PQdfEVGtry1bGwEHlNlqR+B5+lhlTRDD/QL/rQQgJJkikIXcL7xD7bc
+   TRhaDS8YAN7PDv2ydOSlP8Z1JNAUcpL4wz4b3Su4yNTCqi9i8EiG4lePk
+   Jp3TEhvSFsfJaCplGWRN9omV79gR8T7QMAZd9PCbhavo+USGcJlkL4Mlo
+   48a3CoCwB/nb8iHedttAvEMf74uhtWhw0e8ijDCTPCrLCZOxlgwDXyeV5
+   ssRaYykliY7aS/IRhzq/sQUBzekdz3KlXtGH32VAPsS6kVVCXixWpAxZB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="418248075"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="418248075"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 08:39:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="620438581"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="620438581"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2023 08:39:28 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pT3lf-000BeE-14;
+        Fri, 17 Feb 2023 16:39:27 +0000
+Date:   Sat, 18 Feb 2023 00:39:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     virtualization@lists.linux-foundation.org, ntfs3@lists.linux.dev,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ c068f40300a0eaa34f7105d137a5560b86951aa9
+Message-ID: <63efadb6.cR48xA1nWh81uK+0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1676586588-25989-2-git-send-email-quic_eserrao@quicinc.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Elson,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: c068f40300a0eaa34f7105d137a5560b86951aa9  Add linux-next specific files for 20230217
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Error/Warning reports:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Elson-Roy-Serrao/usb-gadget-Properly-configure-the-device-for-remote-wakeup/20230217-063114
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1676586588-25989-2-git-send-email-quic_eserrao%40quicinc.com
-patch subject: [PATCH v5 1/5] usb: gadget: Properly configure the device for remote wakeup
-config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230217/202302172243.hKUsQl2q-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+https://lore.kernel.org/oe-kbuild-all/202302062224.ByzeTXh1-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302092211.54EYDhYH-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302112104.g75cGHZd-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302161117.pNuySGWi-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302170355.Ljqlzucu-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302172104.q3ddwzqu-lkp@intel.com
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202302172243.hKUsQl2q-lkp@intel.com/
+Error/Warning: (recently discovered and may have been fixed)
 
-smatch warnings:
-drivers/usb/gadget/composite.c:1016 set_config() error: we previously assumed 'c' could be null (see line 946)
+Documentation/sphinx/templates/kernel-toc.html: 1:36 Invalid token: #}
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
+arch/mips/kernel/vpe.c:643:35: error: no member named 'mod_mem' in 'struct module'
+arch/mips/kernel/vpe.c:643:41: error: 'struct module' has no member named 'mod_mem'
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c:62:18: warning: variable 'cursor_bpp' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_detection.c:1199: warning: expecting prototype for dc_link_detect_connection_type(). Prototype was for link_detect_connection_type() instead
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:1292:32: warning: variable 'result_write_min_hblank' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training.c:1586:38: warning: variable 'result' set but not used [-Wunused-but-set-variable]
+drivers/net/ethernet/sfc/ef100_nic.c:1128:21: warning: unused variable 'net_dev' [-Wunused-variable]
+drivers/net/ethernet/sfc/ef100_nic.c:1170:9: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+drivers/net/ethernet/sfc/efx_devlink.c:185:17: error: expected declaration or statement at end of input
+drivers/net/ethernet/sfc/efx_devlink.c:185:23: error: expected ';' at end of input
+drivers/net/ethernet/sfc/efx_devlink.c:522:2: error: unterminated argument list invoking macro "memset"
+include/linux/build_bug.h:78:41: error: static assertion failed: "SKB_WITH_OVERHEAD(TEST_XDP_FRAME_SIZE - XDP_PACKET_HEADROOM) == TEST_MAX_PKT_SIZE"
 
-vim +/c +1016 drivers/usb/gadget/composite.c
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-40982be52d8f64 David Brownell    2008-06-19   910  static int set_config(struct usb_composite_dev *cdev,
-40982be52d8f64 David Brownell    2008-06-19   911  		const struct usb_ctrlrequest *ctrl, unsigned number)
-40982be52d8f64 David Brownell    2008-06-19   912  {
-40982be52d8f64 David Brownell    2008-06-19   913  	struct usb_gadget	*gadget = cdev->gadget;
-d6f4663664cbd5 Jakob Koschel     2022-03-08   914  	struct usb_configuration *c = NULL, *iter;
-40982be52d8f64 David Brownell    2008-06-19   915  	int			result = -EINVAL;
-40982be52d8f64 David Brownell    2008-06-19   916  	unsigned		power = gadget_is_otg(gadget) ? 8 : 100;
-40982be52d8f64 David Brownell    2008-06-19   917  	int			tmp;
-40982be52d8f64 David Brownell    2008-06-19   918  
-40982be52d8f64 David Brownell    2008-06-19   919  	if (number) {
-d6f4663664cbd5 Jakob Koschel     2022-03-08   920  		list_for_each_entry(iter, &cdev->configs, list) {
-d6f4663664cbd5 Jakob Koschel     2022-03-08   921  			if (iter->bConfigurationValue != number)
-d6f4663664cbd5 Jakob Koschel     2022-03-08   922  				continue;
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   923  			/*
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   924  			 * We disable the FDs of the previous
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   925  			 * configuration only if the new configuration
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   926  			 * is a valid one
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   927  			 */
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   928  			if (cdev->config)
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   929  				reset_config(cdev);
-d6f4663664cbd5 Jakob Koschel     2022-03-08   930  			c = iter;
-40982be52d8f64 David Brownell    2008-06-19   931  			result = 0;
-40982be52d8f64 David Brownell    2008-06-19   932  			break;
-40982be52d8f64 David Brownell    2008-06-19   933  		}
-40982be52d8f64 David Brownell    2008-06-19   934  		if (result < 0)
-40982be52d8f64 David Brownell    2008-06-19   935  			goto done;
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   936  	} else { /* Zero configuration value - need to reset the config */
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   937  		if (cdev->config)
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   938  			reset_config(cdev);
-40982be52d8f64 David Brownell    2008-06-19   939  		result = 0;
-bdb64d727216b4 Tatyana Brokhman  2011-06-29   940  	}
-40982be52d8f64 David Brownell    2008-06-19   941  
-1cbfb8c4f62d66 Joel Stanley      2019-09-30   942  	DBG(cdev, "%s config #%d: %s\n",
-e538dfdae85244 Michal Nazarewicz 2011-08-30   943  	    usb_speed_string(gadget->speed),
-e538dfdae85244 Michal Nazarewicz 2011-08-30   944  	    number, c ? c->label : "unconfigured");
-                                                                    ^
+drivers/tty/serial/8250/8250_dfl.c:63 dfl_uart_get_params() error: uninitialized symbol 'clk_freq'.
+drivers/tty/serial/8250/8250_dfl.c:69 dfl_uart_get_params() error: uninitialized symbol 'fifo_len'.
+drivers/tty/serial/8250/8250_dfl.c:90 dfl_uart_get_params() error: uninitialized symbol 'reg_layout'.
+drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
+drivers/virtio/virtio_ring.c:1585 virtqueue_add_packed_vring() error: uninitialized symbol 'prev'.
+drivers/virtio/virtio_ring.c:1593 virtqueue_add_packed_vring() error: uninitialized symbol 'head_flags'.
+drivers/virtio/virtio_ring.c:697 virtqueue_add_split_vring() error: uninitialized symbol 'prev'.
+fs/ntfs3/super.c:1351 ntfs_fill_super() warn: passing a valid pointer to 'PTR_ERR'
+net/mac80211/mlme.c:7124 ieee80211_setup_assoc_link() warn: variable dereferenced before check 'elem' (see line 7122)
+net/mac80211/rx.c:2947 __ieee80211_rx_h_amsdu() error: we previously assumed 'rx->sta' could be null (see line 2933)
 
-40982be52d8f64 David Brownell    2008-06-19   945  
-40982be52d8f64 David Brownell    2008-06-19  @946  	if (!c)
-                                                             ^
-Check for NULL
+Error/Warning ids grouped by kconfigs:
 
-40982be52d8f64 David Brownell    2008-06-19   947  		goto done;
-40982be52d8f64 David Brownell    2008-06-19   948  
-6027f3173e797b Peter Chen        2014-04-29   949  	usb_gadget_set_state(gadget, USB_STATE_CONFIGURED);
-40982be52d8f64 David Brownell    2008-06-19   950  	cdev->config = c;
-40982be52d8f64 David Brownell    2008-06-19   951  
-40982be52d8f64 David Brownell    2008-06-19   952  	/* Initialize all interfaces by setting them to altsetting zero. */
-40982be52d8f64 David Brownell    2008-06-19   953  	for (tmp = 0; tmp < MAX_CONFIG_INTERFACES; tmp++) {
-40982be52d8f64 David Brownell    2008-06-19   954  		struct usb_function	*f = c->interface[tmp];
-5242658d1b9777 Laurent Pinchart  2009-10-21   955  		struct usb_descriptor_header **descriptors;
-40982be52d8f64 David Brownell    2008-06-19   956  
-40982be52d8f64 David Brownell    2008-06-19   957  		if (!f)
-40982be52d8f64 David Brownell    2008-06-19   958  			break;
-40982be52d8f64 David Brownell    2008-06-19   959  
-5242658d1b9777 Laurent Pinchart  2009-10-21   960  		/*
-5242658d1b9777 Laurent Pinchart  2009-10-21   961  		 * Record which endpoints are used by the function. This is used
-5242658d1b9777 Laurent Pinchart  2009-10-21   962  		 * to dispatch control requests targeted at that endpoint to the
-5242658d1b9777 Laurent Pinchart  2009-10-21   963  		 * function's setup callback instead of the current
-5242658d1b9777 Laurent Pinchart  2009-10-21   964  		 * configuration's setup callback.
-5242658d1b9777 Laurent Pinchart  2009-10-21   965  		 */
-f3bdbe36682631 John Youn         2016-02-05   966  		descriptors = function_descriptors(f, gadget->speed);
-5242658d1b9777 Laurent Pinchart  2009-10-21   967  
-5242658d1b9777 Laurent Pinchart  2009-10-21   968  		for (; *descriptors; ++descriptors) {
-5242658d1b9777 Laurent Pinchart  2009-10-21   969  			struct usb_endpoint_descriptor *ep;
-5242658d1b9777 Laurent Pinchart  2009-10-21   970  			int addr;
-5242658d1b9777 Laurent Pinchart  2009-10-21   971  
-5242658d1b9777 Laurent Pinchart  2009-10-21   972  			if ((*descriptors)->bDescriptorType != USB_DT_ENDPOINT)
-5242658d1b9777 Laurent Pinchart  2009-10-21   973  				continue;
-5242658d1b9777 Laurent Pinchart  2009-10-21   974  
-5242658d1b9777 Laurent Pinchart  2009-10-21   975  			ep = (struct usb_endpoint_descriptor *)*descriptors;
-5242658d1b9777 Laurent Pinchart  2009-10-21   976  			addr = ((ep->bEndpointAddress & 0x80) >> 3)
-5242658d1b9777 Laurent Pinchart  2009-10-21   977  			     |  (ep->bEndpointAddress & 0x0f);
-5242658d1b9777 Laurent Pinchart  2009-10-21   978  			set_bit(addr, f->endpoints);
-5242658d1b9777 Laurent Pinchart  2009-10-21   979  		}
-5242658d1b9777 Laurent Pinchart  2009-10-21   980  
-40982be52d8f64 David Brownell    2008-06-19   981  		result = f->set_alt(f, tmp, 0);
-40982be52d8f64 David Brownell    2008-06-19   982  		if (result < 0) {
-40982be52d8f64 David Brownell    2008-06-19   983  			DBG(cdev, "interface %d (%s/%p) alt 0 --> %d\n",
-40982be52d8f64 David Brownell    2008-06-19   984  					tmp, f->name, f, result);
-40982be52d8f64 David Brownell    2008-06-19   985  
-40982be52d8f64 David Brownell    2008-06-19   986  			reset_config(cdev);
-40982be52d8f64 David Brownell    2008-06-19   987  			goto done;
-40982be52d8f64 David Brownell    2008-06-19   988  		}
-1b9ba000177ee4 Roger Quadros     2011-05-09   989  
-1b9ba000177ee4 Roger Quadros     2011-05-09   990  		if (result == USB_GADGET_DELAYED_STATUS) {
-1b9ba000177ee4 Roger Quadros     2011-05-09   991  			DBG(cdev,
-1b9ba000177ee4 Roger Quadros     2011-05-09   992  			 "%s: interface %d (%s) requested delayed status\n",
-1b9ba000177ee4 Roger Quadros     2011-05-09   993  					__func__, tmp, f->name);
-1b9ba000177ee4 Roger Quadros     2011-05-09   994  			cdev->delayed_status++;
-1b9ba000177ee4 Roger Quadros     2011-05-09   995  			DBG(cdev, "delayed_status count %d\n",
-1b9ba000177ee4 Roger Quadros     2011-05-09   996  					cdev->delayed_status);
-1b9ba000177ee4 Roger Quadros     2011-05-09   997  		}
-40982be52d8f64 David Brownell    2008-06-19   998  	}
-40982be52d8f64 David Brownell    2008-06-19   999  
-40982be52d8f64 David Brownell    2008-06-19  1000  	/* when we return, be sure our power usage is valid */
-bcacbf06c89137 Jack Pham         2021-07-20  1001  	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
-bcacbf06c89137 Jack Pham         2021-07-20  1002  		power = c->MaxPower;
-bcacbf06c89137 Jack Pham         2021-07-20  1003  	else
-bcacbf06c89137 Jack Pham         2021-07-20  1004  		power = CONFIG_USB_GADGET_VBUS_DRAW;
-bcacbf06c89137 Jack Pham         2021-07-20  1005  
-a2035411fa1d12 Jack Pham         2020-01-30  1006  	if (gadget->speed < USB_SPEED_SUPER)
-a2035411fa1d12 Jack Pham         2020-01-30  1007  		power = min(power, 500U);
-a2035411fa1d12 Jack Pham         2020-01-30  1008  	else
-a2035411fa1d12 Jack Pham         2020-01-30  1009  		power = min(power, 900U);
-40982be52d8f64 David Brownell    2008-06-19  1010  done:
-5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1011  	if (power <= USB_SELF_POWER_VBUS_MAX_DRAW)
-5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1012  		usb_gadget_set_selfpowered(gadget);
-5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1013  	else
-5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1014  		usb_gadget_clear_selfpowered(gadget);
-5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1015  
-24ee47b2693b2d Elson Roy Serrao  2023-02-16 @1016  	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes)
-                                                                                    ^^^^^^^^^^^^^^^
-Unchecked dereference
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- alpha-randconfig-c041-20230212
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- arm-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- arm64-randconfig-r031-20230212
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- i386-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- i386-randconfig-m021
+|   |-- drivers-virtio-virtio_ring.c-virtqueue_add_packed_vring()-error:uninitialized-symbol-head_flags-.
+|   |-- drivers-virtio-virtio_ring.c-virtqueue_add_packed_vring()-error:uninitialized-symbol-prev-.
+|   `-- drivers-virtio-virtio_ring.c-virtqueue_add_split_vring()-error:uninitialized-symbol-prev-.
+|-- i386-randconfig-s001
+|   |-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- i386-randconfig-s002
+|   `-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
+|-- i386-randconfig-s003
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+clang_recent_errors
+|-- i386-randconfig-a015
+|   |-- drivers-net-ethernet-sfc-ef100_nic.c:warning:unused-variable-net_dev
+|   `-- drivers-net-ethernet-sfc-ef100_nic.c:warning:variable-rc-is-uninitialized-when-used-here
+`-- mips-maltaaprp_defconfig
+    `-- arch-mips-kernel-vpe.c:error:no-member-named-mod_mem-in-struct-module
 
-24ee47b2693b2d Elson Roy Serrao  2023-02-16  1017  		usb_gadget_set_remote_wakeup(gadget, 1);
-24ee47b2693b2d Elson Roy Serrao  2023-02-16  1018  	else
-24ee47b2693b2d Elson Roy Serrao  2023-02-16  1019  		usb_gadget_set_remote_wakeup(gadget, 0);
-24ee47b2693b2d Elson Roy Serrao  2023-02-16  1020  
-40982be52d8f64 David Brownell    2008-06-19  1021  	usb_gadget_vbus_draw(gadget, power);
-1b9ba000177ee4 Roger Quadros     2011-05-09  1022  	if (result >= 0 && cdev->delayed_status)
-1b9ba000177ee4 Roger Quadros     2011-05-09  1023  		result = USB_GADGET_DELAYED_STATUS;
-40982be52d8f64 David Brownell    2008-06-19  1024  	return result;
-40982be52d8f64 David Brownell    2008-06-19  1025  }
+elapsed time: 727m
+
+configs tested: 112
+configs skipped: 5
+
+gcc tested configs:
+alpha                            allyesconfig
+alpha                               defconfig
+arc                              allyesconfig
+arc                          axs101_defconfig
+arc                                 defconfig
+arc                  randconfig-r043-20230217
+arm                              allmodconfig
+arm                              allyesconfig
+arm                         at91_dt_defconfig
+arm                                 defconfig
+arm                            hisi_defconfig
+arm                       multi_v4t_defconfig
+arm                  randconfig-c002-20230217
+arm64                            alldefconfig
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                         debian-10.3-func
+i386                   debian-10.3-kselftests
+i386                        debian-10.3-kunit
+i386                          debian-10.3-kvm
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                 randconfig-a011-20230213
+i386                 randconfig-a012-20230213
+i386                 randconfig-a013-20230213
+i386                 randconfig-a014-20230213
+i386                 randconfig-a015-20230213
+i386                 randconfig-a016-20230213
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                         amcore_defconfig
+m68k                         apollo_defconfig
+m68k                                defconfig
+m68k                        stmark2_defconfig
+m68k                           virt_defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+mips                           xway_defconfig
+nios2                               defconfig
+openrisc                    or1ksim_defconfig
+parisc                              defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                      cm5200_defconfig
+powerpc                mpc7448_hpc2_defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv             nommu_k210_sdcard_defconfig
+riscv                randconfig-r042-20230217
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+s390                 randconfig-r044-20230217
+sh                               allmodconfig
+sh                           se7619_defconfig
+sh                           se7751_defconfig
+sh                        sh7757lcr_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sparc                               defconfig
+sparc64                             defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64               randconfig-a011-20230213
+x86_64               randconfig-a012-20230213
+x86_64               randconfig-a013-20230213
+x86_64               randconfig-a014-20230213
+x86_64               randconfig-a015-20230213
+x86_64               randconfig-a016-20230213
+x86_64                               rhel-8.3
+xtensa                       common_defconfig
+
+clang tested configs:
+arm                         bcm2835_defconfig
+arm                           omap1_defconfig
+arm                          pxa168_defconfig
+arm                  randconfig-r046-20230217
+hexagon              randconfig-r041-20230217
+hexagon              randconfig-r045-20230217
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+mips                          malta_defconfig
+mips                      maltaaprp_defconfig
+mips                           mtx1_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                 mpc8313_rdb_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                      walnut_defconfig
+powerpc                 xes_mpc85xx_defconfig
+riscv                            alldefconfig
+x86_64               randconfig-a001-20230213
+x86_64               randconfig-a002-20230213
+x86_64               randconfig-a003-20230213
+x86_64               randconfig-a004-20230213
+x86_64               randconfig-a005-20230213
+x86_64               randconfig-a006-20230213
+x86_64                        randconfig-k001
+x86_64                          rhel-8.3-rust
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests
-
