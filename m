@@ -2,204 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648FD69A5F6
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Feb 2023 08:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FFC69A786
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Feb 2023 09:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjBQHPr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Feb 2023 02:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S229948AbjBQIyy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Feb 2023 03:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBQHPq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Feb 2023 02:15:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955D94C6F5;
-        Thu, 16 Feb 2023 23:15:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676618145; x=1708154145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yECA7TZIMTQGBBLaxq8M5VMtISSeJ1pEW7liYpiuwhg=;
-  b=AjV1DEzxDc93oH7VCAa/dmySL5Doo1i6R5A3CVpkbWmSYlx0wmRldkn3
-   eSZi+DsDQxjlIGZxi4jGEpDt/ns1SGv4r56sCgVtVQVlLUq3CJV0v3V0Z
-   OMgkh24HrcukaUfy2cx+jm5BaukK1XKx0m3KTnEiOY1aMqX8WMLwnscVm
-   SLRkowYNYb44lx57ZPTmobUA7+MqPR+FqG383MvdqJWMox5l7t0XZNdBF
-   hY1qAdXQd8A3VUOB1EHlmqiMpithMpGejw6tiTyCGMS7hBCiDK6Vx4Re0
-   yMXICevBwQjEt5Wtytfanf85HnWTxJk301r8O0l16/NQkQIYYKpNsE7je
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="320033255"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="320033255"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 23:13:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="700813047"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="700813047"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 16 Feb 2023 23:13:02 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSuvV-000BCF-2r;
-        Fri, 17 Feb 2023 07:13:01 +0000
-Date:   Fri, 17 Feb 2023 15:12:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pawel Laszczak <pawell@cadence.com>, gregkh@linuxfoundation.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daisy.Barrera@siriusxm.com,
-        Cliff.Holden@siriusxm.com, arnd@arndb.de, tony@atomide.com,
-        jdelvare@suse.de, neal_liu@aspeedtech.com,
-        linus.walleij@linaro.org, egtvedt@samfundet.no,
-        biju.das.jz@bp.renesas.com, herve.codina@bootlin.com,
-        Pawel Laszczak <pawell@cadence.com>
-Subject: Re: [PATCH 2/4] usb: cdns2: Add main part of Cadence USBHS driver
-Message-ID: <202302171404.Wy9aWegd-lkp@intel.com>
-References: <20230216105411.364157-3-pawell@cadence.com>
+        with ESMTP id S229962AbjBQIyt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Feb 2023 03:54:49 -0500
+X-Greylist: delayed 541 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Feb 2023 00:54:45 PST
+Received: from mail.surechiers.com (mail.surechiers.com [80.211.239.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C95604EC
+        for <linux-usb@vger.kernel.org>; Fri, 17 Feb 2023 00:54:45 -0800 (PST)
+Received: by mail.surechiers.com (Postfix, from userid 1002)
+        id C32BA82454; Fri, 17 Feb 2023 09:45:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=surechiers.com;
+        s=mail; t=1676623542;
+        bh=xg3VVY9SU+I+f+ynMyY8e0Lum0EY/KrTvpy5BYTg7yw=;
+        h=Date:From:To:Subject:From;
+        b=xkqCRy792aCha5R8bpa6SEd+aCBj6QDCgpeR1qrNY9U+09dH3SULq5SwOpDByb1Im
+         t4aowpeewXr5qqL8kXeGU86NHdNAJ+SYdWMc3/5eUJCE1Gedf68BTMxlp5dtMTgE42
+         zqGdjUANM3h+cvDABgZKxGGxpiFnTH3SkLrr3Gw/AU1j9Jy3joFiztwoeaYnA7oW8D
+         aHZQuKR90B9XmOGJmKZ72TvXROPLR5b8OwRxXB6FgIe3+dwBLVm9l26icO6VAeEero
+         l2XJ58IZyXg2I+EHE19XUmJEqqX4q6fSz4n+pHttyiBbkYZoT3bxRVGn2p/OodNkuk
+         zDEcHKXNNLXrA==
+Received: by mail.surechiers.com for <linux-usb@vger.kernel.org>; Fri, 17 Feb 2023 08:45:32 GMT
+Message-ID: <20230217084500-0.1.7.3u2.0.0jof6yhrag@surechiers.com>
+Date:   Fri, 17 Feb 2023 08:45:32 GMT
+From:   =?UTF-8?Q? "J=C3=A1chym_Zdr=C3=A1hal" ?= 
+        <jachym.zdrahal@surechiers.com>
+To:     <linux-usb@vger.kernel.org>
+Subject: Renovace podlahy
+X-Mailer: mail.surechiers.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216105411.364157-3-pawell@cadence.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: surechiers.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [80.211.239.236 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: surechiers.com]
+        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
+        *      [score: 0.0373]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  1.0 FROM_FMBLA_NEWDOM From domain was registered in last 7 days
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pawel,
+Dobr=C3=A9 r=C3=A1no,
 
-I love your patch! Perhaps something to improve:
+m=C4=9Bli byste z=C3=A1jem o beze=C5=A1v=C3=A9, chemicky, n=C3=A1razu a o=
+t=C4=9Bru odoln=C3=A9 podlahy?
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next soc/for-next linus/master v6.2-rc8 next-20230216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Zaji=C5=A1=C5=A5uj=C3=AD spolehlivost bez ohledu na to, zda je pou=C5=BE=C3=
+=ADv=C3=A1te v n=C3=A1ro=C4=8Dn=C3=BDch v=C3=BDrobn=C3=ADch prostorech, s=
+kladech, komunika=C4=8Dn=C3=ADch tras=C3=A1ch nebo komer=C4=8Dn=C3=ADch p=
+rostor=C3=A1ch.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Laszczak/usb-cdns2-Device-side-header-file-for-CDNS2-driver/20230216-195428
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230216105411.364157-3-pawell%40cadence.com
-patch subject: [PATCH 2/4] usb: cdns2: Add main part of Cadence USBHS driver
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20230217/202302171404.Wy9aWegd-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c2450201a6400c7dafcad24e4762506733b6af9b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Pawel-Laszczak/usb-cdns2-Device-side-header-file-for-CDNS2-driver/20230216-195428
-        git checkout c2450201a6400c7dafcad24e4762506733b6af9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/
+Navrhli jsme snadno =C4=8Distiteln=C3=A9, hygienick=C3=A9 a protiskluzov=C3=
+=A9 podlahy pro pr=C5=AFmyslov=C3=A9 i komer=C4=8Dn=C3=AD pou=C5=BEit=C3=AD=
+=2E
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302171404.Wy9aWegd-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/gadget/udc/cdns2/cdns2-gadget.c: In function 'cdns2_gadget_ep_enable':
->> drivers/usb/gadget/udc/cdns2/cdns2-gadget.c:1374:49: warning: variable 'comp_desc' set but not used [-Wunused-but-set-variable]
-    1374 |         const struct usb_ss_ep_comp_descriptor *comp_desc;
-         |                                                 ^~~~~~~~~
---
-   drivers/usb/gadget/udc/cdns2/cdns2-ep0.c: In function 'cdns2_ep0_stall':
->> drivers/usb/gadget/udc/cdns2/cdns2-ep0.c:88:12: warning: variable 'reg' set but not used [-Wunused-but-set-variable]
-      88 |         u8 reg;
-         |            ^~~
+Mohu nab=C3=ADdnout bezplatn=C3=BD audit va=C5=A1ich podlah spolu s kompl=
+exn=C3=AD anal=C3=BDzou podkladu. Mohu o tomhle zavolat?
 
 
-vim +/comp_desc +1374 drivers/usb/gadget/udc/cdns2/cdns2-gadget.c
-
-  1370	
-  1371	static int cdns2_gadget_ep_enable(struct usb_ep *ep,
-  1372					  const struct usb_endpoint_descriptor *desc)
-  1373	{
-> 1374		const struct usb_ss_ep_comp_descriptor *comp_desc;
-  1375		u32 reg = DMA_EP_STS_EN_TRBERREN;
-  1376		struct cdns2_endpoint *pep;
-  1377		struct cdns2_device *pdev;
-  1378		unsigned long flags;
-  1379		int enable = 1;
-  1380		int ret = 0;
-  1381	
-  1382		if (!ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT ||
-  1383		    !desc->wMaxPacketSize) {
-  1384			return -EINVAL;
-  1385		}
-  1386	
-  1387		pep = ep_to_cdns2_ep(ep);
-  1388		pdev = pep->pdev;
-  1389		comp_desc = pep->endpoint.comp_desc;
-  1390	
-  1391		if (dev_WARN_ONCE(pdev->dev, pep->ep_state & EP_ENABLED,
-  1392				  "%s is already enabled\n", pep->name))
-  1393			return 0;
-  1394	
-  1395		spin_lock_irqsave(&pdev->lock, flags);
-  1396	
-  1397		pep->type = usb_endpoint_type(desc);
-  1398		pep->interval = desc->bInterval ? BIT(desc->bInterval - 1) : 0;
-  1399	
-  1400		if (pdev->gadget.speed == USB_SPEED_FULL)
-  1401			if (pep->type == USB_ENDPOINT_XFER_INT)
-  1402				pep->interval = desc->bInterval;
-  1403	
-  1404		if (pep->interval > ISO_MAX_INTERVAL &&
-  1405		    pep->type == USB_ENDPOINT_XFER_ISOC) {
-  1406			dev_err(pdev->dev, "ISO period is limited to %d (current: %d)\n",
-  1407				ISO_MAX_INTERVAL, pep->interval);
-  1408	
-  1409			ret =  -EINVAL;
-  1410			goto exit;
-  1411		}
-  1412	
-  1413		/*
-  1414		 * During ISO OUT traffic DMA reads Transfer Ring for the EP which has
-  1415		 * never got doorbell.
-  1416		 * This issue was detected only on simulation, but to avoid this issue
-  1417		 * driver add protection against it. To fix it driver enable ISO OUT
-  1418		 * endpoint before setting DRBL. This special treatment of ISO OUT
-  1419		 * endpoints are recommended by controller specification.
-  1420		 */
-  1421		if (pep->type == USB_ENDPOINT_XFER_ISOC  && !pep->dir)
-  1422			enable = 0;
-  1423	
-  1424		ret = cdns2_alloc_tr_segment(pep);
-  1425		if (ret)
-  1426			goto exit;
-  1427	
-  1428		ret = cdns2_ep_config(pep, enable);
-  1429		if (ret) {
-  1430			cdns2_free_tr_segment(pep);
-  1431			ret =  -EINVAL;
-  1432			goto exit;
-  1433		}
-  1434	
-  1435		pep->ep_state &= ~(EP_STALLED | EP_STALL_PENDING |
-  1436				   EP_QUIRK_ISO_OUT_EN);
-  1437		pep->ep_state |= EP_ENABLED | EP_UPDATE_EP_TRBADDR;
-  1438		pep->wa1_set = 0;
-  1439		pep->ring.enqueue = 0;
-  1440		pep->ring.dequeue = 0;
-  1441		reg = readl(&pdev->adma_regs->ep_sts);
-  1442		pep->ring.pcs = !!DMA_EP_STS_CCS(reg);
-  1443		pep->ring.ccs = !!DMA_EP_STS_CCS(reg);
-  1444		/* one TRB is reserved for link TRB used in DMULT mode*/
-  1445		pep->ring.free_trbs = TRBS_PER_SEGMENT - 1;
-  1446	
-  1447	exit:
-  1448		spin_unlock_irqrestore(&pdev->lock, flags);
-  1449	
-  1450		return ret;
-  1451	}
-  1452	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+J=C3=A1chym Zdr=C3=A1hal
