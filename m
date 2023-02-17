@@ -2,280 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4725069AE36
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Feb 2023 15:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABD769AFF2
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Feb 2023 16:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjBQOkt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Feb 2023 09:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S230209AbjBQP4m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Feb 2023 10:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjBQOks (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Feb 2023 09:40:48 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E246E6D7B4;
-        Fri, 17 Feb 2023 06:40:42 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HE1JOk009662;
-        Fri, 17 Feb 2023 14:40:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Iyvw7eRyCk/qwxHWFArWiZly2cxrtMeuD6A/32dI938=;
- b=NMbhJW71+tOGGnwLhTpqMox3kmiVNJvhth4L/qk1EAcUMjjgFeuilkipaKPy+nFnQC02
- bOjlCvVWup5iKKceJHP9LtmvgEUpk8JCiAcVs66tAzs/TT9jIE1TMBnOtD/AgY3WbdYF
- 7vsNJT5AEdtYpJZaC+hQaYlMBoRMHfQRcy9QkF1N678gXcinme6MFSkRGdW6PkIa0wdq
- 2XA+kWVTDUU/rWuhUfamy+cUCiRL0zbi3LEQlwynHkXdRcO3iDDs94qhmZeSPKfPgwKZ
- lNZJ6/cYtw7QnAmCMG9m6wRjKckIiu7d81FAYi44cKs+fLg45LXfTBfVghrpdY5aPGmT oA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntayfr32e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 14:40:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31HEedTg018151
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 14:40:39 GMT
-Received: from [10.216.34.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Feb
- 2023 06:40:36 -0800
-Message-ID: <6d26bec0-689c-2130-7e95-ff5fd2383de3@quicinc.com>
-Date:   Fri, 17 Feb 2023 20:10:33 +0530
+        with ESMTP id S229942AbjBQP4k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Feb 2023 10:56:40 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFA9711BC;
+        Fri, 17 Feb 2023 07:56:09 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id eg30so5729527edb.7;
+        Fri, 17 Feb 2023 07:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZzFjOEEzaxMg0PoK9w/FYDQg5oh8fvu0qlQZTMdpOdc=;
+        b=XS0MdCKYhSgWKheIOrss76W3LEfboar9PfOE2US+2XUg4vqQ837Gh64TtDVfvdsKsC
+         1BnNCYdJkZBPOpyqbmLPqjnz64GvfOnWz4X9Dl9abcZH0d4+3v6v4Nrpw6NbymuRYxBO
+         BkV5Do5S9co40LjM9xzUl6aj6UOGVHqJn1wtIKysUF1ehWXb+5umYNxyfW5B5Eq2DmUs
+         h3PoyQUmecKJohCygBH3WWtdr6sALhLEfSe02TXtdtEfY4IjhzEQuvFuIc4LcN1JCSyN
+         M+eHCoEINyG18cVfLcUO08XglToGPjZqdcsPEwmswRrnUNZUdF1DHFBY4S2K8AWupjWT
+         9SoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZzFjOEEzaxMg0PoK9w/FYDQg5oh8fvu0qlQZTMdpOdc=;
+        b=yGWE4vq3qm8ZwbZwoOm6DSSFtN/50irOf3Ck6NJppZDpxwWnfS+FTGmFZkI/RzKro6
+         bySd6/vuG9BgsqZ3nSuHAAT7p5ij/0zIdH2TXNQWmBTl54q2A21mHK0SWI2XaGRmhYUL
+         O/1Fwt/bF9DC9oe1C7d7g8N+7Vm5qJw35lhzKD206GiJ8lz2jARmxWHL8wdEIZl33IWx
+         hmaCF5xmP0EkLm0ay0Dj5QfxVANI2eE7c1jpOEWA75NAW8FoajfAf/6yRbnbNNlVKXqM
+         +1Ua1VEP1Ob15BH6mdKPUM5DZ5Le4vWGeZSaf5oNp8eNCCFt7XqZuz9DFcU19UN5I8oH
+         2sUA==
+X-Gm-Message-State: AO0yUKXD1PwdhucOksiQv7lEiCPqfMZCgD7CDMZRaurCig9MSMDaFk5F
+        y1IV+yPV20Nflyj4y82EL4cWRkSD1iM=
+X-Google-Smtp-Source: AK7set/vxKzQWRPH6fDGnusk9+izTbvGUGGINVbSZdBFGVe8QIE5czO6u1CLDh4Ul2HyD2Qkzg68mA==
+X-Received: by 2002:aa7:d910:0:b0:499:4130:fae with SMTP id a16-20020aa7d910000000b0049941300faemr1124872edr.10.1676649367080;
+        Fri, 17 Feb 2023 07:56:07 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n24-20020a509358000000b0049ef70a2894sm2486213eda.38.2023.02.17.07.56.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 07:56:05 -0800 (PST)
+Date:   Fri, 17 Feb 2023 18:55:59 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        balbi@kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: Re: [PATCH v5 1/5] usb: gadget: Properly configure the device for
+ remote wakeup
+Message-ID: <202302172243.hKUsQl2q-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC] usb: gadget: ncm: Add support to configure wMaSegmentSize
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-To:     =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20230212175659.4480-1-quic_kriskura@quicinc.com>
- <CANP3RGerSsUPhzdExrok_sc2jst2firjsEkaLepHDgt_sFmO4w@mail.gmail.com>
- <57a5133d-4eeb-7c0b-e4ad-fb10d60157e6@quicinc.com>
-In-Reply-To: <57a5133d-4eeb-7c0b-e4ad-fb10d60157e6@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 10Gl8_CkamcVDyVHGNfNP-vdptAssEXw
-X-Proofpoint-GUID: 10Gl8_CkamcVDyVHGNfNP-vdptAssEXw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_09,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- spamscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
- mlxlogscore=999 clxscore=1015 mlxscore=0 adultscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170132
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1676586588-25989-2-git-send-email-quic_eserrao@quicinc.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Elson,
 
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On 2/14/2023 6:57 AM, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 2/14/2023 3:17 AM, Maciej Żenczykowski wrote:
->> This isn't a review per say - just some loose comments.
->>
->> On Sun, Feb 12, 2023 at 9:57 AM Krishna Kurapati
->> <quic_kriskura@quicinc.com> wrote:
->>> Currently the NCM driver restricts wMasxSegmentSize that indicates
->>
->> there's a number of spelling mistakes, here, and in the commit title
->>
->>> the datagram size coming from network layer to 1514. However the
->>> spec doesn't have any limitation.
->>>
->>> Add support to configure this value before configfs symlink is
->>> created. Also since the NTB Out/In buffer sizes are fixed at 16384
->>> bytes, limit the segment size to an upper cap of 8192 bytes so that
->>> at least 2 packets can be aggregated.
->>
->> I've experimented with increasing mtu to boost performance before
->> (have some half-baked patches/scripts somewhere).
->> And while it did improve point-to-point performance, it wasn't
->> actually useful for any real world use cases,
->> as internet mtu is simply never above 1500.
->>
->> Note that you cannot simply receive, aggregate (lro/gro) and forward
->> aggregated packets without splitting them back up.
-> One more query on this:
-> 
-> Would this problem come up if the MTU and segment size are consistent as 
-> well ? i.e., if the datagrams present in NTB are  of size <= MTU so that 
-> they can be given back safely to network stack without any further 
-> aggregation/splitup before wrap/unwrap call at usb layer ?
-> 
-> Regards,
-> Krishna,
-> 
-Hi Maciej Żenczykowski,
+url:    https://github.com/intel-lab-lkp/linux/commits/Elson-Roy-Serrao/usb-gadget-Properly-configure-the-device-for-remote-wakeup/20230217-063114
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/1676586588-25989-2-git-send-email-quic_eserrao%40quicinc.com
+patch subject: [PATCH v5 1/5] usb: gadget: Properly configure the device for remote wakeup
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230217/202302172243.hKUsQl2q-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
-     Any thoughts on this ?
-     I believe if we modify the ncm_opts->net->mtu to the datagram 
-length (excluding the header) before registering net device in bind 
-call, we wouldn't need to split/aggregate obtained data before giving it 
-to network layer right as they would definitely be of size <= MTU of the 
-net device ? I tried it out and no issue came up in iperf test.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202302172243.hKUsQl2q-lkp@intel.com/
 
-Thanks,
-Krishna,
->>
->> A change like this to be useful would require negotiating some sort of
->> gso capabilities between the two devices
->> (and thus extending the NCM standard).  I've been meaning to do
->> this... but time...
->>
->>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>> ---
->>>   drivers/usb/gadget/function/f_ncm.c | 55 +++++++++++++++++++++++++++++
->>>   drivers/usb/gadget/function/u_ncm.h |  1 +
->>>   2 files changed, 56 insertions(+)
->>>
->>> diff --git a/drivers/usb/gadget/function/f_ncm.c 
->>> b/drivers/usb/gadget/function/f_ncm.c
->>> index 424bb3b666db..1969e276017f 100644
->>> --- a/drivers/usb/gadget/function/f_ncm.c
->>> +++ b/drivers/usb/gadget/function/f_ncm.c
->>> @@ -118,6 +118,12 @@ static inline unsigned ncm_bitrate(struct 
->>> usb_gadget *g)
->>>   /* Delay for the transmit to wait before sending an unfilled NTB 
->>> frame. */
->>>   #define TX_TIMEOUT_NSECS       300000
->>>
->>> +/*
->>> + * Currently the max NTB Buffer size is set to 16384. For atleast 2 
->>> packets
->>> + * to be aggregated, the size of datagram must at max be 8192.
->>> + */
->>> +#define MAX_DATAGRAM_SIZE      8192
->>
->>  From what I recall, there's a fair bit of overhead, and 8192 x2
->> doesn't actually fit in 16384...
->> That said... is it reasonable to require 2 to fit?  why? what's wrong
->> with 15000?
->>
->>> +
->>>   #define FORMATS_SUPPORTED      (USB_CDC_NCM_NTB16_SUPPORTED |  \
->>>                                   USB_CDC_NCM_NTB32_SUPPORTED)
->>>
->>> @@ -1440,6 +1446,7 @@ static int ncm_bind(struct usb_configuration 
->>> *c, struct usb_function *f)
->>>           */
->>>          if (!ncm_opts->bound) {
->>>                  mutex_lock(&ncm_opts->lock);
->>> +               ncm_opts->net->mtu = (ncm_opts->max_segment_size - 14);
->>
->> this should use a constant, ETH_HLEN probably
->>
->>>                  gether_set_gadget(ncm_opts->net, cdev->gadget);
->>>                  status = gether_register_netdev(ncm_opts->net);
->>>                  mutex_unlock(&ncm_opts->lock);
->>> @@ -1484,6 +1491,8 @@ static int ncm_bind(struct usb_configuration 
->>> *c, struct usb_function *f)
->>>
->>>          status = -ENODEV;
->>>
->>> +       ecm_desc.wMaxSegmentSize = ncm_opts->max_segment_size;
->>> +
->>
->> Curious... wasn't this set previously?
->>
->>>          /* allocate instance-specific endpoints */
->>>          ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_in_desc);
->>>          if (!ep)
->>> @@ -1586,11 +1595,56 @@ USB_ETHERNET_CONFIGFS_ITEM_ATTR_QMULT(ncm);
->>>   /* f_ncm_opts_ifname */
->>>   USB_ETHERNET_CONFIGFS_ITEM_ATTR_IFNAME(ncm);
->>>
->>> +static ssize_t ncm_opts_max_segment_size_show(struct config_item *item,
->>> +                                               char *page)
->>> +{
->>> +       struct f_ncm_opts *opts = to_f_ncm_opts(item);
->>> +       u32 segment_size;
->>> +
->>> +       mutex_lock(&opts->lock);
->>> +       segment_size = opts->max_segment_size;
->>> +       mutex_unlock(&opts->lock);
->>> +
->>> +       return sprintf(page, "%u\n", segment_size);
->>> +}
->>> +
->>> +static ssize_t ncm_opts_max_segment_size_store(struct config_item 
->>> *item,
->>> +                                               const char *page, 
->>> size_t len)
->>> +{
->>> +       struct f_ncm_opts *opts = to_f_ncm_opts(item);
->>> +       int ret;
->>> +       u32 segment_size;
->>> +
->>> +       mutex_lock(&opts->lock);
->>> +       if (opts->refcnt) {
->>> +               ret = -EBUSY;
->>> +               goto out;
->>> +       }
->>> +
->>> +       ret = kstrtou32(page, 0, &segment_size);
->>> +       if (ret)
->>> +               goto out;
->>> +
->>> +       if (segment_size > MAX_DATAGRAM_SIZE) {
->>> +               ret = -EINVAL;
->>> +               goto out;
->>> +       }
->>> +
->>> +       opts->max_segment_size = segment_size;
->>> +       ret = len;
->>> +out:
->>> +       mutex_unlock(&opts->lock);
->>> +       return ret;
->>> +}
->>> +
->>> +CONFIGFS_ATTR(ncm_opts_, max_segment_size);
->>> +
->>>   static struct configfs_attribute *ncm_attrs[] = {
->>>          &ncm_opts_attr_dev_addr,
->>>          &ncm_opts_attr_host_addr,
->>>          &ncm_opts_attr_qmult,
->>>          &ncm_opts_attr_ifname,
->>> +       &ncm_opts_attr_max_segment_size,
->>>          NULL,
->>>   };
->>>
->>> @@ -1633,6 +1687,7 @@ static struct usb_function_instance 
->>> *ncm_alloc_inst(void)
->>>                  kfree(opts);
->>>                  return ERR_CAST(net);
->>>          }
->>> +       opts->max_segment_size = cpu_to_le16(ETH_FRAME_LEN);
->>>          INIT_LIST_HEAD(&opts->ncm_os_desc.ext_prop);
->>>
->>>          descs[0] = &opts->ncm_os_desc;
->>> diff --git a/drivers/usb/gadget/function/u_ncm.h 
->>> b/drivers/usb/gadget/function/u_ncm.h
->>> index 5408854d8407..fab99d997476 100644
->>> --- a/drivers/usb/gadget/function/u_ncm.h
->>> +++ b/drivers/usb/gadget/function/u_ncm.h
->>> @@ -31,6 +31,7 @@ struct f_ncm_opts {
->>>           */
->>>          struct mutex                    lock;
->>>          int                             refcnt;
->>> +       u32                             max_segment_size;
->>>   };
->>>
->>>   #endif /* U_NCM_H */
->>> -- 
->>> 2.39.0
->>>
+smatch warnings:
+drivers/usb/gadget/composite.c:1016 set_config() error: we previously assumed 'c' could be null (see line 946)
+
+vim +/c +1016 drivers/usb/gadget/composite.c
+
+40982be52d8f64 David Brownell    2008-06-19   910  static int set_config(struct usb_composite_dev *cdev,
+40982be52d8f64 David Brownell    2008-06-19   911  		const struct usb_ctrlrequest *ctrl, unsigned number)
+40982be52d8f64 David Brownell    2008-06-19   912  {
+40982be52d8f64 David Brownell    2008-06-19   913  	struct usb_gadget	*gadget = cdev->gadget;
+d6f4663664cbd5 Jakob Koschel     2022-03-08   914  	struct usb_configuration *c = NULL, *iter;
+40982be52d8f64 David Brownell    2008-06-19   915  	int			result = -EINVAL;
+40982be52d8f64 David Brownell    2008-06-19   916  	unsigned		power = gadget_is_otg(gadget) ? 8 : 100;
+40982be52d8f64 David Brownell    2008-06-19   917  	int			tmp;
+40982be52d8f64 David Brownell    2008-06-19   918  
+40982be52d8f64 David Brownell    2008-06-19   919  	if (number) {
+d6f4663664cbd5 Jakob Koschel     2022-03-08   920  		list_for_each_entry(iter, &cdev->configs, list) {
+d6f4663664cbd5 Jakob Koschel     2022-03-08   921  			if (iter->bConfigurationValue != number)
+d6f4663664cbd5 Jakob Koschel     2022-03-08   922  				continue;
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   923  			/*
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   924  			 * We disable the FDs of the previous
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   925  			 * configuration only if the new configuration
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   926  			 * is a valid one
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   927  			 */
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   928  			if (cdev->config)
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   929  				reset_config(cdev);
+d6f4663664cbd5 Jakob Koschel     2022-03-08   930  			c = iter;
+40982be52d8f64 David Brownell    2008-06-19   931  			result = 0;
+40982be52d8f64 David Brownell    2008-06-19   932  			break;
+40982be52d8f64 David Brownell    2008-06-19   933  		}
+40982be52d8f64 David Brownell    2008-06-19   934  		if (result < 0)
+40982be52d8f64 David Brownell    2008-06-19   935  			goto done;
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   936  	} else { /* Zero configuration value - need to reset the config */
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   937  		if (cdev->config)
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   938  			reset_config(cdev);
+40982be52d8f64 David Brownell    2008-06-19   939  		result = 0;
+bdb64d727216b4 Tatyana Brokhman  2011-06-29   940  	}
+40982be52d8f64 David Brownell    2008-06-19   941  
+1cbfb8c4f62d66 Joel Stanley      2019-09-30   942  	DBG(cdev, "%s config #%d: %s\n",
+e538dfdae85244 Michal Nazarewicz 2011-08-30   943  	    usb_speed_string(gadget->speed),
+e538dfdae85244 Michal Nazarewicz 2011-08-30   944  	    number, c ? c->label : "unconfigured");
+                                                                    ^
+
+40982be52d8f64 David Brownell    2008-06-19   945  
+40982be52d8f64 David Brownell    2008-06-19  @946  	if (!c)
+                                                             ^
+Check for NULL
+
+40982be52d8f64 David Brownell    2008-06-19   947  		goto done;
+40982be52d8f64 David Brownell    2008-06-19   948  
+6027f3173e797b Peter Chen        2014-04-29   949  	usb_gadget_set_state(gadget, USB_STATE_CONFIGURED);
+40982be52d8f64 David Brownell    2008-06-19   950  	cdev->config = c;
+40982be52d8f64 David Brownell    2008-06-19   951  
+40982be52d8f64 David Brownell    2008-06-19   952  	/* Initialize all interfaces by setting them to altsetting zero. */
+40982be52d8f64 David Brownell    2008-06-19   953  	for (tmp = 0; tmp < MAX_CONFIG_INTERFACES; tmp++) {
+40982be52d8f64 David Brownell    2008-06-19   954  		struct usb_function	*f = c->interface[tmp];
+5242658d1b9777 Laurent Pinchart  2009-10-21   955  		struct usb_descriptor_header **descriptors;
+40982be52d8f64 David Brownell    2008-06-19   956  
+40982be52d8f64 David Brownell    2008-06-19   957  		if (!f)
+40982be52d8f64 David Brownell    2008-06-19   958  			break;
+40982be52d8f64 David Brownell    2008-06-19   959  
+5242658d1b9777 Laurent Pinchart  2009-10-21   960  		/*
+5242658d1b9777 Laurent Pinchart  2009-10-21   961  		 * Record which endpoints are used by the function. This is used
+5242658d1b9777 Laurent Pinchart  2009-10-21   962  		 * to dispatch control requests targeted at that endpoint to the
+5242658d1b9777 Laurent Pinchart  2009-10-21   963  		 * function's setup callback instead of the current
+5242658d1b9777 Laurent Pinchart  2009-10-21   964  		 * configuration's setup callback.
+5242658d1b9777 Laurent Pinchart  2009-10-21   965  		 */
+f3bdbe36682631 John Youn         2016-02-05   966  		descriptors = function_descriptors(f, gadget->speed);
+5242658d1b9777 Laurent Pinchart  2009-10-21   967  
+5242658d1b9777 Laurent Pinchart  2009-10-21   968  		for (; *descriptors; ++descriptors) {
+5242658d1b9777 Laurent Pinchart  2009-10-21   969  			struct usb_endpoint_descriptor *ep;
+5242658d1b9777 Laurent Pinchart  2009-10-21   970  			int addr;
+5242658d1b9777 Laurent Pinchart  2009-10-21   971  
+5242658d1b9777 Laurent Pinchart  2009-10-21   972  			if ((*descriptors)->bDescriptorType != USB_DT_ENDPOINT)
+5242658d1b9777 Laurent Pinchart  2009-10-21   973  				continue;
+5242658d1b9777 Laurent Pinchart  2009-10-21   974  
+5242658d1b9777 Laurent Pinchart  2009-10-21   975  			ep = (struct usb_endpoint_descriptor *)*descriptors;
+5242658d1b9777 Laurent Pinchart  2009-10-21   976  			addr = ((ep->bEndpointAddress & 0x80) >> 3)
+5242658d1b9777 Laurent Pinchart  2009-10-21   977  			     |  (ep->bEndpointAddress & 0x0f);
+5242658d1b9777 Laurent Pinchart  2009-10-21   978  			set_bit(addr, f->endpoints);
+5242658d1b9777 Laurent Pinchart  2009-10-21   979  		}
+5242658d1b9777 Laurent Pinchart  2009-10-21   980  
+40982be52d8f64 David Brownell    2008-06-19   981  		result = f->set_alt(f, tmp, 0);
+40982be52d8f64 David Brownell    2008-06-19   982  		if (result < 0) {
+40982be52d8f64 David Brownell    2008-06-19   983  			DBG(cdev, "interface %d (%s/%p) alt 0 --> %d\n",
+40982be52d8f64 David Brownell    2008-06-19   984  					tmp, f->name, f, result);
+40982be52d8f64 David Brownell    2008-06-19   985  
+40982be52d8f64 David Brownell    2008-06-19   986  			reset_config(cdev);
+40982be52d8f64 David Brownell    2008-06-19   987  			goto done;
+40982be52d8f64 David Brownell    2008-06-19   988  		}
+1b9ba000177ee4 Roger Quadros     2011-05-09   989  
+1b9ba000177ee4 Roger Quadros     2011-05-09   990  		if (result == USB_GADGET_DELAYED_STATUS) {
+1b9ba000177ee4 Roger Quadros     2011-05-09   991  			DBG(cdev,
+1b9ba000177ee4 Roger Quadros     2011-05-09   992  			 "%s: interface %d (%s) requested delayed status\n",
+1b9ba000177ee4 Roger Quadros     2011-05-09   993  					__func__, tmp, f->name);
+1b9ba000177ee4 Roger Quadros     2011-05-09   994  			cdev->delayed_status++;
+1b9ba000177ee4 Roger Quadros     2011-05-09   995  			DBG(cdev, "delayed_status count %d\n",
+1b9ba000177ee4 Roger Quadros     2011-05-09   996  					cdev->delayed_status);
+1b9ba000177ee4 Roger Quadros     2011-05-09   997  		}
+40982be52d8f64 David Brownell    2008-06-19   998  	}
+40982be52d8f64 David Brownell    2008-06-19   999  
+40982be52d8f64 David Brownell    2008-06-19  1000  	/* when we return, be sure our power usage is valid */
+bcacbf06c89137 Jack Pham         2021-07-20  1001  	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
+bcacbf06c89137 Jack Pham         2021-07-20  1002  		power = c->MaxPower;
+bcacbf06c89137 Jack Pham         2021-07-20  1003  	else
+bcacbf06c89137 Jack Pham         2021-07-20  1004  		power = CONFIG_USB_GADGET_VBUS_DRAW;
+bcacbf06c89137 Jack Pham         2021-07-20  1005  
+a2035411fa1d12 Jack Pham         2020-01-30  1006  	if (gadget->speed < USB_SPEED_SUPER)
+a2035411fa1d12 Jack Pham         2020-01-30  1007  		power = min(power, 500U);
+a2035411fa1d12 Jack Pham         2020-01-30  1008  	else
+a2035411fa1d12 Jack Pham         2020-01-30  1009  		power = min(power, 900U);
+40982be52d8f64 David Brownell    2008-06-19  1010  done:
+5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1011  	if (power <= USB_SELF_POWER_VBUS_MAX_DRAW)
+5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1012  		usb_gadget_set_selfpowered(gadget);
+5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1013  	else
+5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1014  		usb_gadget_clear_selfpowered(gadget);
+5e5caf4fa8d303 Thinh Nguyen      2020-02-03  1015  
+24ee47b2693b2d Elson Roy Serrao  2023-02-16 @1016  	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes)
+                                                                                    ^^^^^^^^^^^^^^^
+Unchecked dereference
+
+24ee47b2693b2d Elson Roy Serrao  2023-02-16  1017  		usb_gadget_set_remote_wakeup(gadget, 1);
+24ee47b2693b2d Elson Roy Serrao  2023-02-16  1018  	else
+24ee47b2693b2d Elson Roy Serrao  2023-02-16  1019  		usb_gadget_set_remote_wakeup(gadget, 0);
+24ee47b2693b2d Elson Roy Serrao  2023-02-16  1020  
+40982be52d8f64 David Brownell    2008-06-19  1021  	usb_gadget_vbus_draw(gadget, power);
+1b9ba000177ee4 Roger Quadros     2011-05-09  1022  	if (result >= 0 && cdev->delayed_status)
+1b9ba000177ee4 Roger Quadros     2011-05-09  1023  		result = USB_GADGET_DELAYED_STATUS;
+40982be52d8f64 David Brownell    2008-06-19  1024  	return result;
+40982be52d8f64 David Brownell    2008-06-19  1025  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
