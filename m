@@ -2,92 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD6369BA62
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Feb 2023 15:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 530B869BBCD
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Feb 2023 21:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBROSi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Feb 2023 09:18:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S229521AbjBRUVs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Feb 2023 15:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBROSh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Feb 2023 09:18:37 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2EF1717D
-        for <linux-usb@vger.kernel.org>; Sat, 18 Feb 2023 06:18:35 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id fd2so3125447edb.2
-        for <linux-usb@vger.kernel.org>; Sat, 18 Feb 2023 06:18:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kjkoster-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KJ0+iixyqVjR+IG4rGfbCPTS5oslaTSbKWc5ctXYZ1c=;
-        b=w99nn+Y1hGbXsl0joO6c7QPMZtrB363mfCa55Y5+HraMKbWS5X/p08Ja/vopVG0Knx
-         0V19iTqYlak1wjTs6PDE9BDbLASyxmuykCMYh556LaTn5egzhZeNPoatDxZ6MdNL/fR+
-         p8I9bpQu65roZLtskUOmYECl/CjLQGShdOfHVxTo0zm8p+5ejZxamFySdJPC5jNFFOAm
-         d2L2RWTkmfMl4mQVTnPeSq17ZYf7qDN9dAXbQbnF2LoWfy2NV9XKCtDlaPFbbMtt8LE2
-         DQE7FpWvBEBayiEMmM40kVOyiRiQMstxJ0vfYQ5j35/HYY8ijQ8iZfA2u1z6BpzsYS4S
-         rpbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KJ0+iixyqVjR+IG4rGfbCPTS5oslaTSbKWc5ctXYZ1c=;
-        b=jBN3XFPW1v232DkULDhIB4kEDqxsy5OY0wPVZHVAZmjHC7IGXkOdofMSD9rdpRt1mz
-         2U/RqHFrgjXFsolxYuW5is4xGx8fvbdnu/7DfJO0lmmYB3V8EJSsIRSAgtxqyVHc7brM
-         HYNrhFTQ9d2rRKgOhxaRhvg+DzVazVD2NeiKPK/HsCiQNvhMU7wvFX51O5JNPJjdY8kU
-         UD/wzfNNXllPQEkPvqJGg3gfLxUQ1Cej97QFy0zKRAEmLxTfuz7chCm6xXgJcWukFguH
-         UIR7qu5/vQs4EgMhkOpAqdmKjbLCBoa9bu3XOTyFvnVUPdiem4W5AAXMp7W9gJF4FXka
-         PNNA==
-X-Gm-Message-State: AO0yUKUSyZOOYWP+8qDffqXdIMD1DguaC0vWcgasPT+6S/Em4rYHi0En
-        YG75ETZdGDNOpIm00hQIWCwm7Q==
-X-Google-Smtp-Source: AK7set81MOTg+XS0FbbYfh3FjFwGdKnzYMhvIKqfaV5OsZ475DR0zeMLP9Qw/QzpUkZ4PZYJI4vGLA==
-X-Received: by 2002:a17:906:1999:b0:8b1:347c:85c8 with SMTP id g25-20020a170906199900b008b1347c85c8mr1459409ejd.17.1676729913573;
-        Sat, 18 Feb 2023 06:18:33 -0800 (PST)
-Received: from riverrain.fritz.box (2a02-a440-b68c-1-815c-3912-2163-f83a.fixed6.kpn.net. [2a02:a440:b68c:1:815c:3912:2163:f83a])
-        by smtp.gmail.com with ESMTPSA id qx3-20020a170906fcc300b008b13a1c3322sm3464388ejb.149.2023.02.18.06.18.32
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 18 Feb 2023 06:18:32 -0800 (PST)
-From:   Kees Jan Koster <kjkoster@kjkoster.org>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Kees Jan Koster <kjkoster@kjkoster.org>
-Subject: [PATCH] USB: serial: cp210x: add Silicon Labs IFS-USB-DATACABLE IDs
-Date:   Sat, 18 Feb 2023 15:18:30 +0100
-Message-Id: <20230218141830.5612-1-kjkoster@kjkoster.org>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        with ESMTP id S229436AbjBRUVr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Feb 2023 15:21:47 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1311A149B4;
+        Sat, 18 Feb 2023 12:21:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676751672; x=1708287672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m3g9HARJDWSQCFbwk3Iio0QGai5OhbW12/y2dD16p5M=;
+  b=IUfsBixqMpAnrYj3iPRN1IIafYz/ZuVmCTZeGYYUb9YbQk0pFTu8gU86
+   LN24sbzd3pK9vxkva6pjlr9butU58V+EVwTox4Q6+seLN2qGgQSUvignj
+   A66O7P23N/WANBmfC0VZycuvAmzFIPkY0pYFR0kAH2+/YyRiAN99WxHTt
+   az0BdjhW55ilmjk0+2RsA1BEcFJLJ2PXR7mYgLHmLdQCHeAuThAxY/XyQ
+   gepAXIJo8B/nMbvHtYiIEvkk9+kcjjVRmD2dRg4itrs9dWDTGl+sXeZY3
+   XPvwQ/kPTIjQh92KmuIAKgn2poknIcQOeOoeTmBJk7FPTyfXeNKBveOQF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="311830881"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="311830881"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 12:20:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="794779148"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="794779148"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 18 Feb 2023 12:20:13 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTTgq-000Chd-02;
+        Sat, 18 Feb 2023 20:20:12 +0000
+Date:   Sun, 19 Feb 2023 04:19:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pawel Laszczak <pawell@cadence.com>, gregkh@linuxfoundation.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daisy.Barrera@siriusxm.com,
+        Cliff.Holden@siriusxm.com, arnd@arndb.de, tony@atomide.com,
+        jdelvare@suse.de, neal_liu@aspeedtech.com,
+        linus.walleij@linaro.org, egtvedt@samfundet.no,
+        biju.das.jz@bp.renesas.com, herve.codina@bootlin.com,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: Re: [PATCH 3/4] usb: cdns2: Add tracepoints for CDNS2 driver
+Message-ID: <202302190436.AU6zwie0-lkp@intel.com>
+References: <20230216105411.364157-4-pawell@cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216105411.364157-4-pawell@cadence.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Silicon Labs IFS-USB-DATACABLE is used in conjunction with for example
-the Quint UPSes. It is used to enable Modbus communication with the UPS to
-query configuration, power and battery status.
+Hi Pawel,
 
-Signed-off-by: Kees Jan Koster <kjkoster@kjkoster.org>
----
- drivers/usb/serial/cp210x.c | 1 +
- 1 file changed, 1 insertion(+)
+I love your patch! Perhaps something to improve:
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 832ad592b7ef..cdea1bff3b70 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -120,6 +120,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x10C4, 0x826B) }, /* Cygnal Integrated Products, Inc., Fasttrax GPS demonstration module */
- 	{ USB_DEVICE(0x10C4, 0x8281) }, /* Nanotec Plug & Drive */
- 	{ USB_DEVICE(0x10C4, 0x8293) }, /* Telegesis ETRX2USB */
-+	{ USB_DEVICE(0x10C4, 0x82AA) }, /* Silicon Labs IFS-USB-DATACABLE used with Quint UPS */
- 	{ USB_DEVICE(0x10C4, 0x82EF) }, /* CESINEL FALCO 6105 AC Power Supply */
- 	{ USB_DEVICE(0x10C4, 0x82F1) }, /* CESINEL MEDCAL EFD Earth Fault Detector */
- 	{ USB_DEVICE(0x10C4, 0x82F2) }, /* CESINEL MEDCAL ST Network Analyzer */
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next soc/for-next linus/master v6.2-rc8 next-20230217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Laszczak/usb-cdns2-Device-side-header-file-for-CDNS2-driver/20230216-195428
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230216105411.364157-4-pawell%40cadence.com
+patch subject: [PATCH 3/4] usb: cdns2: Add tracepoints for CDNS2 driver
+config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20230219/202302190436.AU6zwie0-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/edb55f1c0a0ffe341211e08b1ebf162f48dd5b83
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pawel-Laszczak/usb-cdns2-Device-side-header-file-for-CDNS2-driver/20230216-195428
+        git checkout edb55f1c0a0ffe341211e08b1ebf162f48dd5b83
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302190436.AU6zwie0-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/usb/gadget/udc/cdns2/cdns2-trace.h:29,
+                    from drivers/usb/gadget/udc/cdns2/cdns2-gadget.c:36:
+   drivers/usb/gadget/udc/cdns2/cdns2-debug.h: In function 'cdns2_decode_trb':
+>> drivers/usb/gadget/udc/cdns2/cdns2-debug.h:165:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     165 |         int ret;
+         |             ^~~
+   drivers/usb/gadget/udc/cdns2/cdns2-gadget.c: In function 'cdns2_gadget_ep_enable':
+   drivers/usb/gadget/udc/cdns2/cdns2-gadget.c:1408:49: warning: variable 'comp_desc' set but not used [-Wunused-but-set-variable]
+    1408 |         const struct usb_ss_ep_comp_descriptor *comp_desc;
+         |                                                 ^~~~~~~~~
+--
+   In file included from drivers/usb/gadget/udc/cdns2/cdns2-trace.h:29,
+                    from drivers/usb/gadget/udc/cdns2/cdns2-ep0.c:13:
+   drivers/usb/gadget/udc/cdns2/cdns2-debug.h: In function 'cdns2_decode_trb':
+>> drivers/usb/gadget/udc/cdns2/cdns2-debug.h:165:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     165 |         int ret;
+         |             ^~~
+   drivers/usb/gadget/udc/cdns2/cdns2-ep0.c: In function 'cdns2_ep0_stall':
+   drivers/usb/gadget/udc/cdns2/cdns2-ep0.c:93:12: warning: variable 'reg' set but not used [-Wunused-but-set-variable]
+      93 |         u8 reg;
+         |            ^~~
+
+
+vim +/ret +165 drivers/usb/gadget/udc/cdns2/cdns2-debug.h
+
+   160	
+   161	static inline const char *cdns2_decode_trb(char *str, size_t size, u32 flags,
+   162						   u32 length, u32 buffer)
+   163	{
+   164		int type = TRB_FIELD_TO_TYPE(flags);
+ > 165		int ret;
+   166	
+   167		switch (type) {
+   168		case TRB_LINK:
+   169			ret = snprintf(str, size,
+   170				       "LINK %08x type '%s' flags %c:%c:%c%c:%c",
+   171				       buffer, cdns2_trb_type_string(type),
+   172				       flags & TRB_CYCLE ? 'C' : 'c',
+   173				       flags & TRB_TOGGLE ? 'T' : 't',
+   174				       flags & TRB_CHAIN ? 'C' : 'c',
+   175				       flags & TRB_CHAIN ? 'H' : 'h',
+   176				       flags & TRB_IOC ? 'I' : 'i');
+   177			break;
+   178		case TRB_NORMAL:
+   179			ret = snprintf(str, size,
+   180				       "type: '%s', Buffer: %08x, length: %ld, burst len: %ld, "
+   181				       "flags %c:%c:%c%c:%c",
+   182				       cdns2_trb_type_string(type),
+   183				       buffer, TRB_LEN(length),
+   184				       TRB_FIELD_TO_BURST(length),
+   185				       flags & TRB_CYCLE ? 'C' : 'c',
+   186				       flags & TRB_ISP ? 'I' : 'i',
+   187				       flags & TRB_CHAIN ? 'C' : 'c',
+   188				       flags & TRB_CHAIN ? 'H' : 'h',
+   189				       flags & TRB_IOC ? 'I' : 'i');
+   190			break;
+   191		default:
+   192			ret = snprintf(str, size, "type '%s' -> raw %08x %08x %08x",
+   193				       cdns2_trb_type_string(type),
+   194				       buffer, length, flags);
+   195		}
+   196	
+   197		return str;
+   198	}
+   199	
+
 -- 
-2.37.1 (Apple Git-137.1)
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
