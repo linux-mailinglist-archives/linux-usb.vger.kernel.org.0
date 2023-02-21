@@ -2,81 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6C369E2EE
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 16:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 253F669E47C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 17:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbjBUPBu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Feb 2023 10:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        id S234184AbjBUQ0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Feb 2023 11:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbjBUPBo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 10:01:44 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B07E2B2BD
-        for <linux-usb@vger.kernel.org>; Tue, 21 Feb 2023 07:01:42 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id o4so4764812wrs.4
-        for <linux-usb@vger.kernel.org>; Tue, 21 Feb 2023 07:01:42 -0800 (PST)
+        with ESMTP id S233849AbjBUQ0M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 11:26:12 -0500
+X-Greylist: delayed 964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Feb 2023 08:26:08 PST
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671912748A
+        for <linux-usb@vger.kernel.org>; Tue, 21 Feb 2023 08:26:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:to:from:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cdv8s9JUYzRc9Ts93pJpZXgCJYi7eEemnXjP/YIZMiM=;
-        b=ghgNJt/tqY7m/EqvwhSBN8tEuQ+i87zpDgW8251ZKFbbZ+Ot5KAikFRhCY9/6kwkqY
-         CSAYieNwA6YzhK0gUT8MNbyeimOMRhNZ5GnNepc0LEswXhFJcB30nQ5tIOCeDv9Wlhkl
-         z2tl1I2cmkG0t2zRJNE0MdYNSFRAp2h29JCKtKPbolVFEMQNvl8Zqd7bhQa0PzmnLIEQ
-         YcBOrqdiesbIfml3OB6LlqqgAhIif9IPtVyr+iWI3jDylIAKAonOW8zLhdOoQnTM6ANl
-         QNZr6aPoGM4BYOq4iCSYbVoiKHzVa15dTydT7spJCiq3MzBl1xu4lYrCGxM9M1mM33ql
-         az3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:to:from:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cdv8s9JUYzRc9Ts93pJpZXgCJYi7eEemnXjP/YIZMiM=;
-        b=ued1wSgBpRMMZfDZr4HR0M8a8YNeKRrXp5zmNxQB1n0N/rU1nEZcYUsBVOBPRMYYQ6
-         WHEz5V7iEbBYRzykc3/xciVAl8A+0kLyqQlvjxZxwiKGp7d7aDvkG7GZHMjqLLRMfzPi
-         P9+QLUDTgNHG1kTlqVLMvstjzBi/gB4LvhC9XikH6TZKME/+FrGj852jlLWl/LXMkuvO
-         s9naTrE4maVVVsdHfkgXdmfb9kH1yvtlYBzN/KjVdPe8dxELKqhQ4CLXmhE2mYPt8zIq
-         FI2tHvM/xe6Rh2KMaV+Yx0KuNcGLunGE4CkZL62fUePzsT+ZR7vR24ifeiQUmtyvTaMw
-         3iAA==
-X-Gm-Message-State: AO0yUKWE/fh+qebuz7tlLfmYPE+YNEdmsUiZ6sk889o4X1Jj3YaQkSJo
-        vBJfPhAN0354ZK/EK90OkAXjLVT48K4=
-X-Google-Smtp-Source: AK7set9HTYQ7EoEU0eWFCsoOg+8LGAUa5Yq6exMgkBfOif8l4U5NWioubIb3dSkQL85zb/oO4/hdnA==
-X-Received: by 2002:adf:f946:0:b0:2c5:617a:5023 with SMTP id q6-20020adff946000000b002c5617a5023mr4493461wrr.71.1676991701475;
-        Tue, 21 Feb 2023 07:01:41 -0800 (PST)
-Received: from DESKTOP-L1U6HLH ([39.42.138.70])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d51cb000000b002c5804b6afasm1676651wrv.67.2023.02.21.07.01.39
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Tue, 21 Feb 2023 07:01:40 -0800 (PST)
-Message-ID: <63f4dcd4.5d0a0220.34a63.50ce@mx.google.com>
-Date:   Tue, 21 Feb 2023 07:01:40 -0800 (PST)
-X-Google-Original-Date: 21 Feb 2023 10:01:41 -0500
+        d=protonic.nl; s=202111;
+        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
+         content-transfer-encoding:content-type:mime-version:from;
+        bh=tB1CUucmQAwq5ZhrBGTWbBkWbli8ZqziqAP8HRDZv7g=;
+        b=mSM2Xy9hIHzl6N4po1m1kLi+QN88FJY6XQ3p35fNUJbdzIyKoExkhxHNC89DHxiCCgS6/28t9iH6T
+         hCQH7L6d6iYBF7Qqk/hLtzWgjJ65fjN7i1BLD0vEj7XRtfYBTTs9NjjCy5mE052wHG8iYLwcWfJHoU
+         StvRl5f47fUZTqQiysVm9fR/usUo5stcneGQJGgE3NEKpUTt0xkxi3ERslF6mbKcIBJAXR8fzjKptH
+         PFBqtPEKfMXITlrvo+VH6PtJ/X+mK4XQrcNLCiHU/iqYKMFwqXZfOYYjL+uAtHCzdKc80RyiqqDqwe
+         FwfmzyzuvV64/fpvw8MRjiKQumBxhgg==
+X-MSG-ID: 31362270-b202-11ed-829c-0050569d2c73
 MIME-Version: 1.0
-From:   trinii.dreamlandestimation@gmail.com
-To:     linux-usb@vger.kernel.org
-Subject: Building Estimates
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 21 Feb 2023 17:10:00 +0100
+From:   Robin van der Gracht <robin@protonic.nl>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
+ device_get_match_data()
+Organization: Protonic Holland
+Reply-To: robin@protonic.nl
+Mail-Reply-To: robin@protonic.nl
+In-Reply-To: <Y/TJs+Arban0ats8@smile.fi.intel.com>
+References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
+ <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
+ <Y/TJs+Arban0ats8@smile.fi.intel.com>
+Message-ID: <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
+X-Sender: robin@protonic.nl
+User-Agent: Roundcube Webmail/1.3.1 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,=0D=0A=0D=0AIn case you really want take-offs for a developmen=
-t project, we ought to be your consultancy of decision. Reach out=
- to us assuming that you have any undertakings for departure whic=
-h could utilize our administrations.=0D=0A=0D=0ASend over the pla=
-ns and notice the exact extent of work you need us to assess.=0D=0A=
-We will hit you up with a statement on our administration charges=
- and turnaround time.=0D=0AIn case you endorse that individual st=
-atement then we will continue further with the gauge.=0D=0A=0D=0A=
-For a superior comprehension of our work, go ahead and ask us que=
-stions .=0D=0A=0D=0AKind Regards=0D=0ATrinidad Pak	=0D=0ADreamlan=
-d Estimation, LLC
+Hello Andy,
 
+On 2023-02-21 14:40, Andy Shevchenko wrote:
+> On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
+>> Switching to use device_get_match_data() helps getting of
+>> i2c_of_match_device() API.
+> 
+> ...
+> 
+>> -	id = i2c_of_match_device(dev->driver->of_match_table, client);
+>> -	if (id)
+>> -		priv->type = (uintptr_t)id->data;
+>> +	priv->type = (uintptr_t)device_get_match_data(dev);
+> 
+> Looking closer the I²C ID table should provide DISP_MATRIX to keep 
+> default and
+> this needs to be not dropped.
+> 
+> So, the question is what to do with unknown type then, return -EINVAL 
+> from
+> probe()?
+
+If you leave out your addition of the DISP_UNKNOWN type, the default 
+type will
+be DISP_MATRIX if no match is found, which is as it is now.
+
+In that case the following change should suffice:
+
+@@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev, 
+struct ht16k33_priv *priv,
+  static int ht16k33_probe(struct i2c_client *client)
+  {
+      struct device *dev = &client->dev;
+-    const struct of_device_id *id;
+      struct ht16k33_priv *priv;
+      uint32_t dft_brightness;
+      int err;
+@@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client *client)
+          return -ENOMEM;
+
+      priv->client = client;
+-    id = i2c_of_match_device(dev->driver->of_match_table, client);
+-    if (id)
+-        priv->type = (uintptr_t)id->data;
++    priv->type = (uintptr_t)device_get_match_data(dev);
++
+      i2c_set_clientdata(client, priv);
+
+      err = ht16k33_initialize(priv);
+
+Or do you think falling back to DISP_MATRIX if no match is found is 
+wrong?
+
+Kind regards,
+Robin
