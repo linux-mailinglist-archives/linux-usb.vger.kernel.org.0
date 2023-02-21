@@ -2,139 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500F669E643
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 18:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8B469E7EF
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 19:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbjBURsX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Feb 2023 12:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S229683AbjBUS7E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Feb 2023 13:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233620AbjBURsV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 12:48:21 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2A972B9;
-        Tue, 21 Feb 2023 09:48:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677001697; x=1708537697;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=tQ65TR6GL53BpWNiudggJWeeHh9e4Jy+6Xr7G8niexM=;
-  b=RmAmSI4sqqsfZu0WaybAbRW/nWpvHI2IGqfB5uYXrsDAcHyjpUe6bFe+
-   ISJghtpc8zzEGn8eQsIJuWM6MzXvWLk55PY6gTDoMiXMxMVPs/5k/i0PY
-   9c7VvVRHsY2n1B5VcE2y3uD0OO7Wibc2OKFQazzJkpO7/j3d4QI3+RdeK
-   L4P2g3W2bCZD4mplgWYeWi7vOA1RoDpeYroFAtK16kHBHM9ypGsWNcVki
-   GiihpGEjiuYp7QT2UWqZGQDxL5Q9+ofWM4hLt/c9WrRpGYfK5xGkEqZBS
-   ewttqcGJ+7Qv4km8rwPa0nJjjqgT26SdjHVTc+Hho6A5j223mBVv+7AXb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="312330590"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="312330590"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 09:48:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="845772354"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="845772354"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 21 Feb 2023 09:48:14 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pUWkO-00A3i3-26;
-        Tue, 21 Feb 2023 19:48:12 +0200
-Date:   Tue, 21 Feb 2023 19:48:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Robin van der Gracht <robin@protonic.nl>
-Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Message-ID: <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
+        with ESMTP id S229651AbjBUS7D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 13:59:03 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015DE2CFF7;
+        Tue, 21 Feb 2023 10:59:03 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id t16so2590225iom.12;
+        Tue, 21 Feb 2023 10:59:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mpvGiAxJ/8Qfr2A8PGIWaRiwdzWv3C7JwhQUjCjxBgM=;
+        b=XuBW2OZhbZbdOHi7xzAGffq/bOBCjpX9sODm7nfPDRTf04pI1m/5DMyufBp/pVgGyl
+         5K9Le9MjbvT4fQq9pWQfyJ8d8lJpl8Va3zZinig0GdcX6wJmVQqRliTLL9nMmFGrZmKd
+         nwhRpsm2CV9v8XWfjkADtrVDLXz3H1/EOCgiJvD+RFCU6efKp/xf3YP6R1bsmSDH60/p
+         arD7RAczTkl99dcLl3ZlbIrt02A/GZLbzVS+uzgPRUDFYEncrKWJTErkkzJw6IADVSKI
+         8e3V+JKYcfXPqpiE8Gc+bbYj+u78Y3q1qSXULu88eZDvEHfIQb84cHeIjthWM7Mpv+/7
+         52uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpvGiAxJ/8Qfr2A8PGIWaRiwdzWv3C7JwhQUjCjxBgM=;
+        b=w6CIi/MHd5PhYhe3T6ZaZEiUdI/QT4DE8Jo4QKsW9W1dWh1pPjNheCimEkHNKfTbZp
+         y7fmfDcOFKxK6kumX8ogRbsYIfk9KhVu7FBhRKun8190zDyES/6z7rM0hPvkKbPfudNN
+         a02e8Vp5Hlwkxwn9hrFpwyk4FLKTEqHY2XlGqSxxryGaINrQqL2u/7+nDvmaMtqV7Qp+
+         qNlaC4V/MUMvOz28FWnmrJ8jYA5eDtw3gtqBaOpQU5cNlNAxwKJSGizdPqysXu/R6hPC
+         q3WEMuwRQNAFyZhPLSeZzwFWnWRPqI03vKMBnJzAXuh9Ly8eayDnqZAaey+5sqW2SJAo
+         NgDg==
+X-Gm-Message-State: AO0yUKUqRUQdMbVO5dL+H5Du8h2aiGHYr1uZolgCUIF6C6puaBWU5G0K
+        dFQmVv5d/7VLM0C7D917aylkegPheYE=
+X-Google-Smtp-Source: AK7set84a5dwvd0KJzzcx2WZSoE0v1VRaZMaG6aVz24dveyeOZQyBhct20g+5BN4a1vsShbRDMm4bA==
+X-Received: by 2002:a5d:8418:0:b0:71d:ef29:9064 with SMTP id i24-20020a5d8418000000b0071def299064mr10496861ion.17.1677005942346;
+        Tue, 21 Feb 2023 10:59:02 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v13-20020a5d940d000000b0071664d0a4d7sm734818ion.49.2023.02.21.10.59.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 10:59:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <aa9c822c-f673-9391-84b4-05487566a3c0@roeck-us.net>
+Date:   Tue, 21 Feb 2023 10:59:00 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Christian Bach <christian.bach@scs.ch>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        =?UTF-8?B?Y3lfaHVhbmco6buD5ZWf5Y6fKQ==?= <cy_huang@richtek.com>
+References: <ZR0P278MB0773545F02B32FAF648F968AEB319@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM>
+ <ZR0P278MB0773072DD153BA902AFE635AEB319@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM>
+ <Y1fYjmtQZa53dPfR@kroah.com>
+ <ZR0P278MB07731B49E8938F98DB2098ABEBA49@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM>
+ <Y/PB87qws1ko77xg@kroah.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: AW: tcpci module in Kernel 5.15.74 with PTN5110 not working
+ correctly
+In-Reply-To: <Y/PB87qws1ko77xg@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 05:10:00PM +0100, Robin van der Gracht wrote:
-> On 2023-02-21 14:40, Andy Shevchenko wrote:
-> > On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
-> > > Switching to use device_get_match_data() helps getting of
-> > > i2c_of_match_device() API.
+On 2/20/23 10:54, Greg KH wrote:
+> On Mon, Feb 20, 2023 at 04:45:32PM +0000, Christian Bach wrote:
+>> Hello everyone
+>>
+>> We finally found a solution to the problem we had with the PTN5110 Chip and the Kernel Module tcpci that manages this chip in 5.15.xx Kernel. NXP Patched their Kernel a while ago (https://source.codeaurora.org/external/imx/linux-imx/commit/drivers/usb/typec/tcpm/tcpci.c?h=lf-5.15.y&id=2a263f918b25725e0434afa9ff3b83b1bc18ef74) and we reimplemented the NXP patch for the Kernel 5.15.91. I attached my reworked patch below:
+>>
+>> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+>> index 5340a3a3a81b..0d715e091b78 100644
+>> --- a/drivers/usb/typec/tcpm/tcpci.c
+>> +++ b/drivers/usb/typec/tcpm/tcpci.c
+>> @@ -628,6 +628,9 @@ static int tcpci_init(struct tcpc_dev *tcpc)
+>>          if (ret < 0)
+>>                  return ret;
+>>
+>> +       /* Clear fault condition */
+>> +       regmap_write(tcpci->regmap, TCPC_FAULT_STATUS, 0x80);
+>> +
 
-...
+This should probably clear all fault bits. Also, the specification
+suggests to clear the fault bits prior to clearing fault alert event.
 
-> > > -	id = i2c_of_match_device(dev->driver->of_match_table, client);
-> > > -	if (id)
-> > > -		priv->type = (uintptr_t)id->data;
-> > > +	priv->type = (uintptr_t)device_get_match_data(dev);
-> > 
-> > Looking closer the I²C ID table should provide DISP_MATRIX to keep
-> > default and this needs to be not dropped.
-> > 
-> > So, the question is what to do with unknown type then, return -EINVAL
-> > from probe()?
+>>          if (tcpci->controls_vbus)
+>>                  reg = TCPC_POWER_STATUS_VBUS_PRES;
+>>          else
+>> @@ -644,7 +647,8 @@ static int tcpci_init(struct tcpc_dev *tcpc)
+>>
+>>          reg = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_FAILED |
+>>                  TCPC_ALERT_TX_DISCARDED | TCPC_ALERT_RX_STATUS |
+>> -               TCPC_ALERT_RX_HARD_RST | TCPC_ALERT_CC_STATUS;
+>> +               TCPC_ALERT_RX_HARD_RST | TCPC_ALERT_CC_STATUS |
+>> +               TCPC_ALERT_V_ALARM_LO | TCPC_ALERT_FAULT;
+>>          if (tcpci->controls_vbus)
+>>                  reg |= TCPC_ALERT_POWER_STATUS;
+>>          /* Enable VSAFE0V status interrupt when detecting VSAFE0V is supported */
+>> @@ -728,6 +732,13 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+>>                          tcpm_vbus_change(tcpci->port);
+>>          }
+>>
+>> +       /* Clear the fault status anyway */
+>> +       if (status & TCPC_ALERT_FAULT) {
+>> +               regmap_read(tcpci->regmap, TCPC_FAULT_STATUS, &raw);
+>> +               regmap_write(tcpci->regmap, TCPC_FAULT_STATUS,
+>> +                               raw | TCPC_FAULT_STATUS_MASK);
+
+TCPC_FAULT_STATUS_MASK is a register address, so this doesn't really
+make sense. If the idea is to reset all active fault bits, just write
+0xff. However, if faults are not really handled, it might be better
+to set TCPC_FAULT_STATUS_MASK to 0 instead of enabling fault alerts.
+
+It would probably be better to actually handle faults, but that may
+be more complex, and someone would have tho be able to test any
+changes.
+
+Guenter
+
+>> +       }
+>> +
+>>          if (status & TCPC_ALERT_RX_HARD_RST)
+>>                  tcpm_pd_hard_reset(tcpci->port);
+>>
+>>
+>>
+>>
+>>
+>>
+>>
 > 
-> If you leave out your addition of the DISP_UNKNOWN type, the default type
-> will be DISP_MATRIX if no match is found, which is as it is now.
+> Can you submit this as a real fix so that we can apply it properly?
 > 
-> In that case the following change should suffice:
+> thanks,
 > 
-> @@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev, struct
-> ht16k33_priv *priv,
->  static int ht16k33_probe(struct i2c_client *client)
->  {
->      struct device *dev = &client->dev;
-> -    const struct of_device_id *id;
->      struct ht16k33_priv *priv;
->      uint32_t dft_brightness;
->      int err;
-> @@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client *client)
->          return -ENOMEM;
-> 
->      priv->client = client;
-> -    id = i2c_of_match_device(dev->driver->of_match_table, client);
-> -    if (id)
-> -        priv->type = (uintptr_t)id->data;
-> +    priv->type = (uintptr_t)device_get_match_data(dev);
-> +
->      i2c_set_clientdata(client, priv);
-> 
->      err = ht16k33_initialize(priv);
-> 
-> Or do you think falling back to DISP_MATRIX if no match is found is wrong?
-
-First of all, the I²C ID table should actually use DISP_MATRIX.
-
-Second, there are two points:
-
-- It would be nice to check if the OF ID table doesn't provide a setting
-  (shouldn't we try I²C ID table and then, if still nothing, bail out?)
-
-- The I²C ID table can be extended in the future with another entry which
-  may want to have different default
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> greg k-h
 
