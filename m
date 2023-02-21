@@ -2,120 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF17769E1BF
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 14:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D6E69E26E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 15:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbjBUNxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Feb 2023 08:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S234069AbjBUOgT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Feb 2023 09:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbjBUNxp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 08:53:45 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC2C30D8;
-        Tue, 21 Feb 2023 05:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676987623; x=1708523623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+eRDC691oir3wn0epCnaH+FpHq/QnxwHp1Fu+GKbieU=;
-  b=n8UWTeEXAxr7MbRj/nquCJTs4Q2jrQ8MIawoOwub+I+vhZvwFA5MpPUn
-   dwSfWgPKNQbq1YrR0g6p6e6OkOoDCURaSgYtW6BW3yRzjOzN5t9JRiz32
-   LhNdAk1hBsyKTPeYers5ZNuJfpYn6n3iFYhyQ8xtd3osmHV8+qUEtFtn6
-   zM+bywgWOGgcaLf5nLtOgtXZ5GxbOsBfbT9z2K8kthDrvtAe0yE6XBXAl
-   9XQI2tpuY3XeH0e1q0/kseKOAdg4Rm5ohL432jjrYojjdgJSzoT8styQy
-   vo3ngdJZDJxDrdtnd3oIQ+PcZUEk8xlQSEDNJXXhH5pNPrOIwFQBuHnR5
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="320765317"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="320765317"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:53:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="814514299"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="814514299"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 21 Feb 2023 05:53:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Feb 2023 15:53:38 +0200
-Date:   Tue, 21 Feb 2023 15:53:37 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/3] usb: typec: stusb160x: Make use of
- device_get_match_data()
-Message-ID: <Y/TM4UihoGI/5Q71@kuha.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-2-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S234469AbjBUOgR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 09:36:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2B627D65;
+        Tue, 21 Feb 2023 06:36:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A834EB80EF6;
+        Tue, 21 Feb 2023 14:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577EEC4339B;
+        Tue, 21 Feb 2023 14:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676990173;
+        bh=2hPS+oTogl/FzHpiV1GOemrkrEWL+AArsdfGzHnq0no=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HG9w4alc9xC/AUJWglXlqE8HVk0CDfdryKKm5jXGSPQw7pHhAm1LBCZ3xdfN4Ti2s
+         Ysuiu39wWzK0hbogVA6cMVfsxYFrYIWP+dvBp/01/K+JCmFYTUrxqZUqXD63qETMGX
+         E1U9S1xuO2LwmtRtdx+pVynlv0AJSvSC9yq8uXF8dCIF1faXR8onNwOvQMvGi85LUY
+         WhjDFgXUIl+UclRsXRz58OwLu2fbToQDGrmkNVYyEJFJqBhMJ4p444kg1BTijNbHsX
+         qPTLOQXdx65DniBDIKg5AtkEfc2YhrWIjV0uOuYN8k/71hN14blKnn7Bkf8iAHy8HW
+         1AZUhI76nXGAg==
+Received: by mail-ua1-f49.google.com with SMTP id p18so718308uad.11;
+        Tue, 21 Feb 2023 06:36:13 -0800 (PST)
+X-Gm-Message-State: AO0yUKU8HVgPA1Z4X6KIqyOjiqAVFQcpguyFd/S3BCwE9HUrwZ6lyToQ
+        vK9rk8a2J2wNziiDFSXAPDSdQRIAWsZSS8RxLw==
+X-Google-Smtp-Source: AK7set9W5kKwUx5gjP6pl1nG9l60ZSVXMZ79pnD7g3NGwbmRQKZyPv10ew8NZGs5Mab/a0MHK6llxZLJj6o5ceW3H20=
+X-Received: by 2002:a1f:abd2:0:b0:401:42f3:5657 with SMTP id
+ u201-20020a1fabd2000000b0040142f35657mr744581vke.42.1676990172209; Tue, 21
+ Feb 2023 06:36:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221133307.20287-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221223031012.92932-1-peng.fan@oss.nxp.com> <20221223031012.92932-2-peng.fan@oss.nxp.com>
+In-Reply-To: <20221223031012.92932-2-peng.fan@oss.nxp.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 21 Feb 2023 08:36:00 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLW_YxC+S5Tp-gveHQpksKfzmrpEFXtcdLJ3xMJoX4+qw@mail.gmail.com>
+Message-ID: <CAL_JsqLW_YxC+S5Tp-gveHQpksKfzmrpEFXtcdLJ3xMJoX4+qw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: usb: usbmisc-imx: add i.MX8MM usbmisc
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, xu.yang_2@nxp.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:33:05PM +0200, Andy Shevchenko wrote:
-> Switching to use device_get_match_data() helps getting of
-> i2c_of_match_device() API.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+On Thu, Dec 22, 2022 at 9:09 PM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> Add fsl,imx8mm-usbmisc compatible for i.MX8MM
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  drivers/usb/typec/stusb160x.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
-> index 494b371151e0..70d9f68d99c9 100644
-> --- a/drivers/usb/typec/stusb160x.c
-> +++ b/drivers/usb/typec/stusb160x.c
-> @@ -11,6 +11,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/usb/role.h>
-> @@ -633,9 +634,8 @@ MODULE_DEVICE_TABLE(of, stusb160x_of_match);
->  
->  static int stusb160x_probe(struct i2c_client *client)
->  {
-> +	const struct regmap_config *regmap_config;
->  	struct stusb160x *chip;
-> -	const struct of_device_id *match;
-> -	struct regmap_config *regmap_config;
->  	struct fwnode_handle *fwnode;
->  	int ret;
->  
-> @@ -645,8 +645,8 @@ static int stusb160x_probe(struct i2c_client *client)
->  
->  	i2c_set_clientdata(client, chip);
->  
-> -	match = i2c_of_match_device(stusb160x_of_match, client);
-> -	regmap_config = (struct regmap_config *)match->data;
-> +	regmap_config = device_get_match_data(&client->dev);
-> +
->  	chip->regmap = devm_regmap_init_i2c(client, regmap_config);
->  	if (IS_ERR(chip->regmap)) {
->  		ret = PTR_ERR(chip->regmap);
+>
+> I had a V4 patchset to convert the binding to dt schema, but we are in
+> the process of ARM System-Ready 2.0 certification, directly update
+> this binding doc is the easiest way for now.
 
-thanks,
+There's been some misunderstanding (within Arm), but this is not
+sufficient for certification. There must be a schema. Besides, you've
+already done the work to convert and spent maintainers time to review
+this. So can you please repost the conversions.
 
--- 
-heikki
+Rob
