@@ -2,98 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8297F69E183
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 14:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C437569E1AA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Feb 2023 14:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbjBUNkS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Feb 2023 08:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
+        id S233732AbjBUNsw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Feb 2023 08:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjBUNkO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 08:40:14 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC60298E5;
-        Tue, 21 Feb 2023 05:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676986810; x=1708522810;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Fcsp3vX50fP7S4No3pb7xRBH3g335DQpVHo+94NekhA=;
-  b=NqJcoaSrYxkhnv7zG5g3l/rurpbPdgd8bfrvO5JHR5Nf9KCsEXy3e539
-   TzH0IzX7RiCC8/82jmC4vnucIT1N3R2/7TcjZ/NiVi+4AFDILG9tyzQqw
-   zsMMqGojWW3zq94vmTfDnwftpzQfXDVG6D6d2A58GevS2aAey4/aInJaW
-   cl5u062pFO7w6+yklAkYSNgVVEK3cSxUd1QMFrCbrnqXVEI2HrGmvS3+u
-   P2LD7zqbaFs+CYk3h/zJwNaBVkaAvKNLZeolNhdU1zb4uyKkGgA42rasx
-   KXCbKF4JQRX8v8ZOsSMdqXmmqj4U1KHfnfiCCyn9ONqQFL6dRwa1T45hz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="360103267"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="360103267"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:40:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="671657877"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="671657877"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2023 05:40:06 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pUSsG-009yFq-09;
-        Tue, 21 Feb 2023 15:40:04 +0200
-Date:   Tue, 21 Feb 2023 15:40:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Message-ID: <Y/TJs+Arban0ats8@smile.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S233681AbjBUNsv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Feb 2023 08:48:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019EA55B6;
+        Tue, 21 Feb 2023 05:48:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6D2BB80EA4;
+        Tue, 21 Feb 2023 13:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B51C433EF;
+        Tue, 21 Feb 2023 13:48:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676987327;
+        bh=2TM8cD39FcqW3UyP2lWEFylxG1JRyg7YkP7CzvuECJ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fozNm5rFYq3oCk4d5IStZhRPm4Rqil7tkfa2ClSpJE0arhrmEELp3lwRXs1n7Hnc3
+         N7FGVhjQD8elI9Dyd0ZuVhLlA7iYa2/UYTGTZeTzuasrFW2me7Dipunld+r/zB0cbd
+         KAwh9Kr84w/SC9IwYyvTtr8kabbjDv6ZWXYvr/sI=
+Date:   Tue, 21 Feb 2023 14:48:45 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ziyang Huang <hzyitc@outlook.com>
+Cc:     hminas@synopsys.com, fabrice.gasnier@foss.st.com,
+        amelie.delaunay@foss.st.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc2: drd: fix inconsistent mode if
+ role-switch-default-mode="host"
+Message-ID: <Y/TLvbMPfiBC2ujE@kroah.com>
+References: <SG2PR01MB204837BF68EDB0E343D2A375C9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
+ <Y/Sf8j5y+DJ9L4fY@kroah.com>
+ <SG2PR01MB2048B375B64A96654FA20DABC9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <SG2PR01MB2048B375B64A96654FA20DABC9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
-> Switching to use device_get_match_data() helps getting of
-> i2c_of_match_device() API.
+On Tue, Feb 21, 2023 at 08:33:32PM +0800, Ziyang Huang wrote:
+> 
+> 在 2023/2/21 18:41, Greg KH 写道:
+> > On Tue, Feb 21, 2023 at 06:30:04PM +0800, Ziyang Huang wrote:
+> > > Some boards might use USB-A female connector for USB ports, however,
+> > > the port could be connected to a dual-mode USB controller, making it
+> > > also behaves as a peripheral device if male-to-male cable is connected.
+> > > 
+> > > In this case, the dts looks like this:
+> > > 
+> > > 	&usb0 {
+> > > 		status = "okay";
+> > > 		dr_mode = "otg";
+> > > 		usb-role-switch;
+> > > 		role-switch-default-mode = "host";
+> > > 	};
+> > > 
+> > > After boot, dwc2_ovr_init() sets GOTGCTL to GOTGCTL_AVALOVAL and call
+> > > dwc2_force_mode() with parameter host=false, which causes inconsistent
+> > > mode - The hardware is in peripheral mode while the kernel status is
+> > > in host mode.
+> > > 
+> > > What we can do now is to call dwc2_drd_role_sw_set() to switch to
+> > > device mode, and everything should work just fine now, even switching
+> > > back to none(default) mode afterwards.
+> > > 
+> > > Fixes: e14acb876985 ("usb: dwc2: drd: add role-switch-default-node support")
+> > > Signed-off-by: Ziyang Huang <hzyitc@outlook.com>
+> > > ---
+> > > Changes since v1
+> > > - Use corrent name in Signed-off-by
+> > Nope, still incorrect, please use your synopsys address.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> 
+> Oh, I'm not a Synopsys employee but a free developer. This is my first time
+> submitting a kernel patch, please excuse me. Thank you.
 
-...
+Ah, my fault, sorry, I saw the synopsys email on the to: line and
+thought it was you.  Nevermind then, sorry, this will be reviewed once
+6.3-rc1 is out.
 
-> -	id = i2c_of_match_device(dev->driver->of_match_table, client);
-> -	if (id)
-> -		priv->type = (uintptr_t)id->data;
-> +	priv->type = (uintptr_t)device_get_match_data(dev);
+thanks,
 
-Looking closer the I�C ID table should provide DISP_MATRIX to keep default and
-this needs to be not dropped.
-
-So, the question is what to do with unknown type then, return -EINVAL from
-probe()?
-
-P.S. I would like to collect other comments anyway, so I will send a v2 later.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
