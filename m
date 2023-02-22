@@ -2,200 +2,285 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAEE69F9E3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Feb 2023 18:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA7D69FA20
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Feb 2023 18:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbjBVRVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Feb 2023 12:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S232499AbjBVRZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Feb 2023 12:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjBVRVf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Feb 2023 12:21:35 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DCB392A1;
-        Wed, 22 Feb 2023 09:21:34 -0800 (PST)
+        with ESMTP id S232282AbjBVRZu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Feb 2023 12:25:50 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851093E0B8;
+        Wed, 22 Feb 2023 09:25:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677086494; x=1708622494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=6S41OIRfgmiuDJ4i/nPxkW9fVgv7jxlVLFt0pVMWJSA=;
-  b=YK4GZwU4XCA9PyvwXT6wPgwz3GwI0+O1/JjObKa9YBA6U1cBtSJjgPQF
-   YJJ6kh9557Vc1mlE6qQvG0RWm+wTArCcUDlqAk0SZ123XK4g+wMhDI17X
-   saDYudt2M2KdqAtsnNrl6KgmpSoi1FNWdNHpw+ZUiSGF6P8wOZg1rh8iv
-   81wFvJ/xHBXWFiNuqAh5MomC5OfwU2yu6EPJlND+uyx7DJKLZzdDKVKvy
-   NH/rHK8zEMts//kgLyamg6Kd2sbpqBRZqcVzYJ5aXuQ9k6U59Mk5Saro5
-   ZRuT8pSwFxAYDMNCKqw3KV4IufgLGN9LFEevQSMYUJog68MC7rJLFS0QR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="332987860"
+  t=1677086737; x=1708622737;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QqvKHblnDf2/TVh9n0CqiC0hBqmmlzHaD81SoAUATbA=;
+  b=kJK9PCyzTuycm84CSvpQcRuQCWOZ2pV6Qk+NDKoBgK2dPgnsQEda7oZH
+   DJ++cgb2jmzkblW9oln0aEQ5x6l4Bd4nqQu+vfFlgls8kwPZZRcWeCafW
+   uH4nQUGqE64Tmu8xyRZnw43arXJ90OtVxdQ7mMu55KIM+2mr3fpqAaf4D
+   drajuaojzLBfsZo+EUej/3CaFn6UOnzimV7ytbZtGWIibss951wvPXTSc
+   BR4Zc0qja3R0q7AEu/IpQ2iWkTl3pfSqD0sDzhCSyDIy8S2NJy1MaQyH3
+   qIZL2viVMYw9W+bq0Jg1jD6iMbPVD1XUyrl3lOrPIfliQ7mFEYquFz4es
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="360472235"
 X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="332987860"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:20:13 -0800
+   d="scan'208";a="360472235"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:25:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="672150232"
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="735982064"
 X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="672150232"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 22 Feb 2023 09:20:10 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pUsmm-00AWyb-1C;
-        Wed, 22 Feb 2023 19:20:08 +0200
-Date:   Wed, 22 Feb 2023 19:20:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Message-ID: <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
- <0235f0fed989a8b027db720663699f5d@protonic.nl>
- <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com>
+   d="scan'208";a="735982064"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Feb 2023 09:25:26 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUsru-0000bx-12;
+        Wed, 22 Feb 2023 17:25:26 +0000
+Date:   Thu, 23 Feb 2023 01:24:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, asahi@lists.linux.dev,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ aaf70d5ad5e2b06a8050c51e278b0c3a14fabef5
+Message-ID: <63f64fe7.ONl1tGtlJc4Z5MEF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+ Cc: OF bindings people for the mess with the IDs.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: aaf70d5ad5e2b06a8050c51e278b0c3a14fabef5  Add linux-next specific files for 20230222
 
-On Wed, Feb 22, 2023 at 07:01:40PM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 22, 2023 at 05:46:00PM +0100, Robin van der Gracht wrote:
-> > On 2023-02-21 18:48, Andy Shevchenko wrote:
-> > > On Tue, Feb 21, 2023 at 05:10:00PM +0100, Robin van der Gracht wrote:
-> > > > On 2023-02-21 14:40, Andy Shevchenko wrote:
-> > > > > On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
+Error/Warning reports:
 
-...
+https://lore.kernel.org/oe-kbuild-all/202302062224.ByzeTXh1-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302092211.54EYDhYH-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302112104.g75cGHZd-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302170355.Ljqlzucu-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302210350.lynWcL4t-lkp@intel.com
 
-> > > > > > -	id = i2c_of_match_device(dev->driver->of_match_table, client);
-> > > > > > -	if (id)
-> > > > > > -		priv->type = (uintptr_t)id->data;
-> > > > > > +	priv->type = (uintptr_t)device_get_match_data(dev);
-> > > > >
-> > > > > Looking closer the I²C ID table should provide DISP_MATRIX to keep
-> > > > > default and
-> 
-> > > > > this needs to be not dropped.
-> 
-> ^^^^^ (1)
-> 
-> > > > > So, the question is what to do with unknown type then, return -EINVAL
-> > > > > from probe()?
-> > > > 
-> > > > If you leave out your addition of the DISP_UNKNOWN type, the default
-> > > > type
-> > > > will be DISP_MATRIX if no match is found, which is as it is now.
-> > > > 
-> > > > In that case the following change should suffice:
-> > > > 
-> > > > @@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev,
-> > > > struct
-> > > > ht16k33_priv *priv,
-> > > >  static int ht16k33_probe(struct i2c_client *client)
-> > > >  {
-> > > >      struct device *dev = &client->dev;
-> > > > -    const struct of_device_id *id;
-> > > >      struct ht16k33_priv *priv;
-> > > >      uint32_t dft_brightness;
-> > > >      int err;
-> > > > @@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client
-> > > > *client)
-> > > >          return -ENOMEM;
-> > > > 
-> > > >      priv->client = client;
-> > > > -    id = i2c_of_match_device(dev->driver->of_match_table, client);
-> > > > -    if (id)
-> > > > -        priv->type = (uintptr_t)id->data;
-> > > > +    priv->type = (uintptr_t)device_get_match_data(dev);
-> > > > +
-> > > >      i2c_set_clientdata(client, priv);
-> > > > 
-> > > >      err = ht16k33_initialize(priv);
-> > > > 
-> > > > Or do you think falling back to DISP_MATRIX if no match is found is
-> > > > wrong?
-> > > 
-> > > First of all, the I²C ID table should actually use DISP_MATRIX.
-> > > 
-> > > Second, there are two points:
-> > > 
-> > > - It would be nice to check if the OF ID table doesn't provide a setting
-> > >   (shouldn't we try I²C ID table and then, if still nothing, bail out?)
-> > > 
-> > > - The I²C ID table can be extended in the future with another entry
-> > > which
-> > >   may want to have different default
-> > 
-> > For my understanding, please correct me if I'm wrong;
-> > 
-> > For all methods of instantiation during ht16k33 probe, i2c_of_match_device()
-> > matches the compatible strings in the OF ID table due to a call to
-> > i2c_of_match_device_sysfs().
-> > 
-> > device_get_match_data() only matches the compatible strings in the OF ID
-> > table for devicetree instantiation because of_match_device() won't match
-> > is there is no actual of_node.
-> 
-> That's half-true. On ACPI based platforms we may have no of_node and match
-> against OF ID table.
-> 
-> > So with only device_get_match_data() and a non devicetree instantiation,
-> > priv->type will always be (uintptr_t)NULL = 0 = DISP_MATRIX.
-> 
-> Yes.
-> 
-> > Which effectively breaks i.e. user-space instantiation for other display
-> > types which now do work due to i2c_of_match_device().
-> > (so my suggestion above is not sufficient).
-> > 
-> > Are you proposing extending and searching the I2C ID table to work around
-> > that?
-> 
-> See (1) above. This is the downside I have noticed after sending this series.
-> So, the I²C ID table match has to be restored, but the above mentioned issues
-> with existing table are not gone, hence they need to be addressed in the next
-> version.
+Error/Warning: (recently discovered and may have been fixed)
 
-I see now what you mean. So, we have even more issues in this driver:
-- I²C table is not in sync with all devices supported
-- the OF ID table seems has something really badly formed for adafruit
-  (just a number after a comma)
+Documentation/sphinx/templates/kernel-toc.html: 1:36 Invalid token: #}
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c:62:18: warning: variable 'cursor_bpp' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_detection.c:1199: warning: expecting prototype for dc_link_detect_connection_type(). Prototype was for link_detect_connection_type() instead
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:1292:32: warning: variable 'result_write_min_hblank' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training.c:1586:38: warning: variable 'result' set but not used [-Wunused-but-set-variable]
+include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
 
-The latter shows how broken it is. The I²C ID table mechanism is used as
-a backward compatibility to the OF. Unfortunately, user space may not provide
-the data except in form of DT overlays, so for the legacy enumeration we
-have only device name, which is a set of 4 digits for adafruit case.
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-Now imagine if by some reason we will get adafruit2 (you name it) with
-the same schema. How I²C framework can understand that you meant adafruit
-and not adafruit2? Or did I miss something?
+drivers/iommu/apple-dart.c:1281:1: sparse: sparse: symbol 'apple_dart_pm_ops' was not declared. Should it be static?
+drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c:1087:28: warning: 'tracker' is used uninitialized [-Wuninitialized]
+drivers/thermal/qcom/tsens-v0_1.c:106:40: sparse: sparse: symbol 'tsens_9607_nvmem' was not declared. Should it be static?
+drivers/thermal/qcom/tsens-v0_1.c:26:40: sparse: sparse: symbol 'tsens_8916_nvmem' was not declared. Should it be static?
+drivers/thermal/qcom/tsens-v0_1.c:42:40: sparse: sparse: symbol 'tsens_8939_nvmem' was not declared. Should it be static?
+drivers/thermal/qcom/tsens-v0_1.c:62:40: sparse: sparse: symbol 'tsens_8974_nvmem' was not declared. Should it be static?
+drivers/thermal/qcom/tsens-v0_1.c:84:40: sparse: sparse: symbol 'tsens_8974_backup_nvmem' was not declared. Should it be static?
+drivers/thermal/qcom/tsens-v1.c:24:40: sparse: sparse: symbol 'tsens_qcs404_nvmem' was not declared. Should it be static?
+drivers/thermal/qcom/tsens-v1.c:45:40: sparse: sparse: symbol 'tsens_8976_nvmem' was not declared. Should it be static?
+drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
+|-- arm-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- i386-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- i386-randconfig-s001
+|   |-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- i386-randconfig-s002
+|   `-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
+|-- i386-randconfig-s003
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
+|-- ia64-randconfig-s032-20230222
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+|   |-- drivers-iommu-apple-dart.c:sparse:sparse:symbol-apple_dart_pm_ops-was-not-declared.-Should-it-be-static
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- loongarch-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
+
+elapsed time: 721m
+
+configs tested: 114
+configs skipped: 3
+
+gcc tested configs:
+alpha                            allyesconfig
+alpha                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+arc                  randconfig-r043-20230222
+arm                              allmodconfig
+arm                              allyesconfig
+arm                         at91_dt_defconfig
+arm                                 defconfig
+arm                           h3600_defconfig
+arm                            hisi_defconfig
+arm                  randconfig-r046-20230222
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                         debian-10.3-func
+i386                   debian-10.3-kselftests
+i386                        debian-10.3-kunit
+i386                          debian-10.3-kvm
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+i386                          randconfig-c001
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                        generic_defconfig
+ia64                            zx1_defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+mips                         db1xxx_defconfig
+mips                      maltasmvp_defconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc                generic-32bit_defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                     asp8347_defconfig
+powerpc                      chrp32_defconfig
+powerpc                      ep88xc_defconfig
+powerpc                 linkstation_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                      pasemi_defconfig
+powerpc                    sam440ep_defconfig
+powerpc                         wii_defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+sh                               allmodconfig
+sh                         ap325rxa_defconfig
+sh                            migor_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                          urquell_defconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                               rhel-8.3
+xtensa                    smp_lx200_defconfig
+
+clang tested configs:
+arm                     am200epdkit_defconfig
+arm                          ep93xx_defconfig
+arm                          moxart_defconfig
+arm                         socfpga_defconfig
+hexagon                          alldefconfig
+hexagon              randconfig-r041-20230222
+hexagon              randconfig-r045-20230222
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+mips                       lemote2f_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                      maltaaprp_defconfig
+mips                      pic32mzda_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                          g5_defconfig
+powerpc                     ksi8560_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                      obs600_defconfig
+riscv                randconfig-r042-20230222
+s390                 randconfig-r044-20230222
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-k001
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
