@@ -2,40 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738BF6A0DE7
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 17:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481096A0DEC
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 17:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbjBWQ0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Feb 2023 11:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S234437AbjBWQ0b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Feb 2023 11:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBWQ0K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 11:26:10 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0B4F113D62
-        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 08:25:53 -0800 (PST)
-Received: (qmail 1247304 invoked by uid 1000); 23 Feb 2023 11:25:53 -0500
-Date:   Thu, 23 Feb 2023 11:25:53 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: [PATCH 4/5] USB: core: Add API to change the wireless_status
-Message-ID: <Y/eTkXYlflDWllHZ@rowland.harvard.edu>
-References: <20230223132452.37958-1-hadess@hadess.net>
- <20230223132452.37958-4-hadess@hadess.net>
- <Y/eJDDPXJfYgfdfI@rowland.harvard.edu>
- <f94acf520e62676c741c0959f91c8d951d74a36c.camel@hadess.net>
+        with ESMTP id S234404AbjBWQ03 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 11:26:29 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E05F5650C;
+        Thu, 23 Feb 2023 08:26:28 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id y2so9329012pjg.3;
+        Thu, 23 Feb 2023 08:26:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f2Xji7gaTx/R4sRwqxpyLRMUl1kvpggWWzZgEu+h2Hs=;
+        b=RO70MKzA7RmhMWEv2zjrKPH5Yy1OxQOTNPTODAzW4FobJuXmUZCOuOYFAo/hubtAzl
+         YVbrPxPegwF85wSifBkR8m0j/lALw9JhwUqHwm31LwwgstaTaiH1cixhovOxhQORcCBB
+         lgROqT9E6SBqwsia7sxjZrhCrb5pP36Rc1+AY1ilLEZwis+vOHAfKU2TnIEBcXqDcwfI
+         61FcwVXPRswgtcSKumKhG/CJwZHDz7uLPDIkBfGs4ASR4jDIVwzu04uDDeVIzSNwt8Gm
+         +VMYyVHmey6fgprul9h30H48pYj7f4NYmMV13abg346ANdJ2TxVa1q+EV9ItEmb9/BiU
+         QY+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f2Xji7gaTx/R4sRwqxpyLRMUl1kvpggWWzZgEu+h2Hs=;
+        b=nM8QTmPRZV5YjlhMfFCXmF8Gse0SdLsOH454eSuAFXdyiwH8nJFSm53HQmT6p2ICFW
+         5eaXcMe7fJ61O0iqMaNa+ASlYTClXxQtR4w29Dpe3btLGJrUjj5WB22ZoZDKN32Lnrcc
+         3hp6RiQDaQW1TUBlOCMZ3u9jeKr+9AhO2a32dGcbuh6GXOzki+oo5VD1zQDXTMWXoT0D
+         8sa1LlyiSdMGMtMJAEVrl4rImaPZaMchzU8aQvxvaXQEjlviRONpcSajIlgIJXdeR8cq
+         8uL8rlvgKOyhop6qH2dUFN20jzQfxNCSy/8u7nzH2ScXJApcUcmOSCyE1MYzqOlrtG+2
+         ECXQ==
+X-Gm-Message-State: AO0yUKXotbQD9w45NwRnUJqBSxvTNbx96w/oIU3nH/MYR4sILDZ/GoIe
+        xEJNKRmMK9/ESUjwWCpYj1E=
+X-Google-Smtp-Source: AK7set85+Kcb7ih/En+3zMTceGG9ViGIQOVexUYm5kpeiI5Xqhk3mTRS1c49TRskgTscezorfZ1m/w==
+X-Received: by 2002:a17:903:2289:b0:19a:ae30:3a42 with SMTP id b9-20020a170903228900b0019aae303a42mr12864712plh.21.1677169587839;
+        Thu, 23 Feb 2023 08:26:27 -0800 (PST)
+Received: from localhost.localdomain (42-3-59-214.ptr.netvigator.com. [42.3.59.214])
+        by smtp.gmail.com with ESMTPSA id iw15-20020a170903044f00b00199190b00efsm3736210plb.97.2023.02.23.08.26.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 08:26:27 -0800 (PST)
+From:   youling257 <youling257@gmail.com>
+To:     mathias.nyman@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, hhhuuu@google.com,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH 2/7] usb: xhci: Check endpoint is valid before dereferencing it
+Date:   Fri, 24 Feb 2023 00:26:17 +0800
+Message-Id: <20230223162617.31845-1-youling257@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230116142216.1141605-3-mathias.nyman@linux.intel.com>
+References: <20230116142216.1141605-3-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f94acf520e62676c741c0959f91c8d951d74a36c.camel@hadess.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,65 +71,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 05:17:13PM +0100, Bastien Nocera wrote:
-> On Thu, 2023-02-23 at 10:41 -0500, Alan Stern wrote:
-> > On Thu, Feb 23, 2023 at 02:24:51PM +0100, Bastien Nocera wrote:
-> > > Allow device specific drivers to change the wireless status of a
-> > > device.
-> > > This will allow user-space to know whether the device is available,
-> > > whether or not specific USB interfaces can detect it.
-> > > 
-> > > This can be used by wireless headsets with USB receivers to
-> > > propagate to
-> > > user-space whether or not the headset is turned on, so as to
-> > > consider it
-> > > as unavailable, and not switch to it just because the receiver is
-> > > plugged in.
-> > > 
-> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > > ---
-> > >  drivers/usb/core/message.c | 13 +++++++++++++
-> > >  drivers/usb/core/usb.c     | 24 ++++++++++++++++++++++++
-> > >  include/linux/usb.h        |  4 ++++
-> > >  3 files changed, 41 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/core/message.c
-> > > b/drivers/usb/core/message.c
-> > > index 127fac1af676..d5c7749d515e 100644
-> > > --- a/drivers/usb/core/message.c
-> > > +++ b/drivers/usb/core/message.c
-> > > @@ -1908,6 +1908,18 @@ static void __usb_queue_reset_device(struct
-> > > work_struct *ws)
-> > >         usb_put_intf(iface);    /* Undo _get_ in
-> > > usb_queue_reset_device() */
-> > >  }
-> > >  
-> > > +/*
-> > > + * Internal function to set the wireless_status sysfs attribute
-> > > + * See usb_set_wireless_status() for more details
-> > > + */
-> > > +static void __usb_wireless_status_intf(struct work_struct *ws)
-> > > +{
-> > > +       struct usb_interface *iface =
-> > > +               container_of(ws, struct usb_interface,
-> > > wireless_status_work);
-> > > +
-> > > +       usb_update_wireless_status_attr(iface);
-> > > +       usb_put_intf(iface);    /* Undo _get_ in
-> > > usb_set_wireless_status() */
-> > > +}
-> > 
-> > Have you thought about what will happen if this routine ends up
-> > running 
-> > after the interface has been deleted?
-> 
-> I believe that usb_release_interface() will only be called once the
-> last reference to the interface is dropped, so bar any refcounting
-> bugs, the interface should always exist when this function is called.
+I used type-c 20Gbps USB3.2 GEN2x2 PCIe Expansion Card, may be this patch cause USB3.2 GEN2x2 PCIe Expansion Card not work.
 
-Yes, but what about the calls made by usb_update_wireless_status_attr(): 
-sysfs_update_group(), sysfs_notify(), and kobject_uevent()?  Will they 
-work properly when called for an object that has been unregistered from 
-sysfs?
+[    0.285088] xhci_hcd 0000:09:00.0: hcc params 0x0200ef80 hci version 0x110 quirks 0x0000000000800010
+[    0.285334] usb usb7: We don't know the algorithms for LPM for this host, disabling LPM.
+[    0.285347] xhci_hcd 0000:09:00.0: xHCI Host Controller
+[    0.285407] hub 7-0:1.0: USB hub found
+[    0.285415] hub 7-0:1.0: 4 ports detected
+[    0.285783] xhci_hcd 0000:09:00.0: new USB bus registered, assigned bus number 8
+[    0.285787] xhci_hcd 0000:09:00.0: Host supports USB 3.2 Enhanced SuperSpeed
+[    0.285889] hub 4-0:1.0: USB hub found
+[    0.285901] hub 4-0:1.0: 1 port detected
+[    0.285988] usb usb8: We don't know the algorithms for LPM for this host, disabling LPM.
+[ 3277.156054] xhci_hcd 0000:09:00.0: Abort failed to stop command ring: -110
+[ 3277.156091] xhci_hcd 0000:09:00.0: xHCI host controller not responding, assume dead
+[ 3277.156103] xhci_hcd 0000:09:00.0: HC died; cleaning up
 
-Alan Stern
+may be this patch cause "xhci_hcd 0000:09:00.0: HC died; cleaning up" problem.
