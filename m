@@ -2,68 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637406A0B95
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 15:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70E66A0C52
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 15:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234074AbjBWOM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Feb 2023 09:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S234147AbjBWO5U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Feb 2023 09:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjBWOM2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 09:12:28 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8F0570A2
-        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 06:12:27 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id b16so4299066iof.11
-        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 06:12:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p3CixMn8o5coVJaBVcuZteyvHBIoOkyvArQTFLl5Ks4=;
-        b=Xiq3SQhzZfIrcjavmZX/I0/fhs+tZJGEnNWd2PWKAdOSwL2oXKjd7QGItuGjh/i8V3
-         6aJRNdE4e4Y3N52Pvd4N5ehAb6dmIJX4UPZstwC27Mca3hMV25YPCQM7xtKBDspNrqL4
-         tnwXLNSJ3FoCeG6p9pyJDP9tNHE60zYXlpW8A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p3CixMn8o5coVJaBVcuZteyvHBIoOkyvArQTFLl5Ks4=;
-        b=O+feyX1Q7IMarxku9Oc59c17pE/OtyEQf9OLmKO8xU7wfT4U1VfkxNpGNUMzlfYlyj
-         2RCsQuf3tzXGeet+jSsKaladeHUGFklVaWNKPmElOoqWARrL6wJ090oHeu2rJUOBtvsE
-         tcrNfcxrTl+ywJVKNylNENWVgKYcWnuKJdDAwIDCanNa0O9jjlBDiNlCrFOl7ETWMDkE
-         w7FSjwb9XxxQZm/K59WIMxjuHNa7uJ8gTx8Izdr/0zPVYvQgA13mpbYu1JfbwlM5c5q4
-         exKXVRfudvyGj1O7pKwoxsHi+NL5YN5I3Wq7Lu2gzU9mejvlA/NYVwyJvIuzs4o513mB
-         UckA==
-X-Gm-Message-State: AO0yUKUuPFFl7aCc30IfuSWdcW38hLKo9esFoh2UakyWUumeU+mrZPrP
-        gy0Uh7WydwkP3swyydKLRt/1IQ==
-X-Google-Smtp-Source: AK7set/AxMedPc4AQTS0JZTAyleWnfZ/v5D2kKdQNOXEw8nG6xg1281g+GiuetM5GTanKE/5FlXelg==
-X-Received: by 2002:a5d:9306:0:b0:71a:1b72:5afc with SMTP id l6-20020a5d9306000000b0071a1b725afcmr3157849ion.19.1677161546450;
-        Thu, 23 Feb 2023 06:12:26 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id w15-20020a02cf8f000000b003b331f0bbdfsm2883337jar.97.2023.02.23.06.12.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 06:12:25 -0800 (PST)
-Date:   Thu, 23 Feb 2023 14:12:25 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anand Moon <linux.amoon@gmail.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: misc: onboard-hub: add support for Microchip
- USB2517 USB 2.0 hub
-Message-ID: <Y/d0SWMjh2oFFZ4+@google.com>
-References: <20230223073920.2912298-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S233851AbjBWO5T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 09:57:19 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5054A1FC5;
+        Thu, 23 Feb 2023 06:57:17 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6402A1C0007;
+        Thu, 23 Feb 2023 14:57:13 +0000 (UTC)
+Message-ID: <5da8d55900b9467a63f5e262f5c9d6c469cb780a.camel@hadess.net>
+Subject: Re: [PATCH 1/5] HID: logitech-hidpp: Add support for ADC
+ measurement feature
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Date:   Thu, 23 Feb 2023 15:57:12 +0100
+In-Reply-To: <Y/dwiDpaBBQItu0a@kroah.com>
+References: <20230223132452.37958-1-hadess@hadess.net>
+         <Y/dwiDpaBBQItu0a@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230223073920.2912298-1-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,12 +43,121 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 08:39:20AM +0100, Alexander Stein wrote:
-> Add support for Microchip USB2517 USB 2.0 hub to the onboard usb hub
-> driver. Adopt the generic usb-device compatible ("usbVID,PID").
-> This hub has the same reset timings as USB2514, so reuse that one.
-> There is also an USB2517I which just has industrial temperature range.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+T24gVGh1LCAyMDIzLTAyLTIzIGF0IDE0OjU2ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
+dGU6Cj4gT24gVGh1LCBGZWIgMjMsIDIwMjMgYXQgMDI6MjQ6NDhQTSArMDEwMCwgQmFzdGllbiBO
+b2NlcmEgd3JvdGU6Cj4gPiBUaGlzIGlzIHVzZWQgaW4gYSBudW1iZXIgb2YgaGVhZHNldHMgdG8g
+cmVwb3J0IHRoZSB2b2x0YWdlIG9mIHRoZQo+ID4gYmF0dGVyeS4KPiA+IAo+ID4gVGhlIHZvbHRh
+Z2UgdG8gY2FwYWNpdHkgY29udmVyc2lvbiBpcyBiYXNlZCBvbiB0aGUgQyBpbXBsZW1lbnRhdGlv
+bgo+ID4gaW4gSGVhZHNldENvbnRyb2wuCj4gCj4gV2hhdCBpcyAiSGVhZHNldENvbnRyb2wiPwoK
+SXQgdGhlIHNvZnR3YXJlIHJlZmVyZW5jZWQgaW4gdGhlIGNvbW1lbnQgYWZ0ZXIgd2hpY2ggSSBk
+b24ndCBuZWVkIGEKYmxhbmsgbGluZSwganVzdCBiZWxvdyB0aGlzIGNvbW1lbnQgOykKCj4gCj4g
+PiAKPiA+IFNpZ25lZC1vZmYtYnk6IEJhc3RpZW4gTm9jZXJhIDxoYWRlc3NAaGFkZXNzLm5ldD4K
+PiA+IEJ1Z0xpbms6IGh0dHBzOi8vYnVnemlsbGEua2VybmVsLm9yZy9zaG93X2J1Zy5jZ2k/aWQ9
+MjE2NDgzCj4gPiAtLS0KPiA+IMKgZHJpdmVycy9oaWQvaGlkLWxvZ2l0ZWNoLWhpZHBwLmMgfCAx
+NzQKPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0KPiA+IMKgMSBmaWxlIGNoYW5n
+ZWQsIDE3MiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9oaWQvaGlkLWxvZ2l0ZWNoLWhpZHBwLmMgYi9kcml2ZXJzL2hpZC9oaWQtCj4g
+PiBsb2dpdGVjaC1oaWRwcC5jCj4gPiBpbmRleCBmZjFmY2ViZjJlYzcuLmY2MzY1Y2RmMmUyMSAx
+MDA2NDQKPiA+IC0tLSBhL2RyaXZlcnMvaGlkL2hpZC1sb2dpdGVjaC1oaWRwcC5jCj4gPiArKysg
+Yi9kcml2ZXJzL2hpZC9oaWQtbG9naXRlY2gtaGlkcHAuYwo+ID4gQEAgLTk0LDYgKzk0LDcgQEAg
+TU9EVUxFX1BBUk1fREVTQyhkaXNhYmxlX3RhcF90b19jbGljaywKPiA+IMKgI2RlZmluZSBISURQ
+UF9DQVBBQklMSVRZX0hJRFBQMjBfSElfUkVTX1dIRUVMwqDCoEJJVCg3KQo+ID4gwqAjZGVmaW5l
+IEhJRFBQX0NBUEFCSUxJVFlfSElEUFAyMF9ISV9SRVNfU0NST0xMwqBCSVQoOCkKPiA+IMKgI2Rl
+ZmluZSBISURQUF9DQVBBQklMSVRZX0hJRFBQMTBfRkFTVF9TQ1JPTEzCoMKgwqBCSVQoOSkKPiA+
+ICsjZGVmaW5lIEhJRFBQX0NBUEFCSUxJVFlfQURDX01FQVNVUkVNRU5UwqDCoMKgwqDCoMKgwqBC
+SVQoMTApCj4gPiDCoAo+ID4gwqAjZGVmaW5lIGxnX21hcF9rZXlfY2xlYXIoYynCoCBoaWRfbWFw
+X3VzYWdlX2NsZWFyKGhpLCB1c2FnZSwgYml0LAo+ID4gbWF4LCBFVl9LRVksIChjKSkKPiA+IMKg
+Cj4gPiBAQCAtMTQ1LDYgKzE0Niw3IEBAIHN0cnVjdCBoaWRwcF9iYXR0ZXJ5IHsKPiA+IMKgwqDC
+oMKgwqDCoMKgwqB1OCBmZWF0dXJlX2luZGV4Owo+ID4gwqDCoMKgwqDCoMKgwqDCoHU4IHNvbGFy
+X2ZlYXR1cmVfaW5kZXg7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgdTggdm9sdGFnZV9mZWF0dXJlX2lu
+ZGV4Owo+ID4gK8KgwqDCoMKgwqDCoMKgdTggYWRjX21lYXN1cmVtZW50X2ZlYXR1cmVfaW5kZXg7
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IHBvd2VyX3N1cHBseV9kZXNjIGRlc2M7Cj4gPiDC
+oMKgwqDCoMKgwqDCoMKgc3RydWN0IHBvd2VyX3N1cHBseSAqcHM7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgY2hhciBuYW1lWzY0XTsKPiA+IEBAIC0xNzQ0LDYgKzE3NDYsMTY0IEBAIHN0YXRpYyBpbnQK
+PiA+IGhpZHBwX3NldF93aXJlbGVzc19mZWF0dXJlX2luZGV4KHN0cnVjdCBoaWRwcF9kZXZpY2Ug
+KmhpZHBwKQo+ID4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiByZXQ7Cj4gPiDCoH0KPiA+IMKgCj4g
+PiArLyogLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tCj4gPiAtLS0tLS0tLS0tLSAqLwo+ID4gKy8qIDB4MWYyMDogQURDCj4gPiBt
+ZWFzdXJlbWVudMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+Lwo+ID4gKy8qIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLQo+ID4gLS0tLS0tLS0tLS0gKi8KPiA+ICsKPiA+ICsjZGVmaW5lIEhJ
+RFBQX1BBR0VfQURDX01FQVNVUkVNRU5UIDB4MWYyMAo+ID4gKwo+ID4gKyNkZWZpbmUgQ01EX0FE
+Q19NRUFTVVJFTUVOVF9HRVRfQURDX01FQVNVUkVNRU5UIDB4MDAKPiA+ICsKPiA+ICsjZGVmaW5l
+IEVWRU5UX0FEQ19NRUFTVVJFTUVOVF9TVEFUVVNfQlJPQURDQVNUIDB4MDAKPiA+ICsKPiA+ICtz
+dGF0aWMgaW50IGhpZHBwMjBfbWFwX2FkY19tZWFzdXJlbWVudF8xZjIwX2NhcGFjaXR5KHN0cnVj
+dAo+ID4gaGlkX2RldmljZSAqaGlkX2RldiwgaW50IHZvbHRhZ2UpCj4gPiArewo+ID4gK8KgwqDC
+oMKgwqDCoMKgLyogTkI6IFRoaXMgdm9sdGFnZSBjdXJ2ZSBkb2Vzbid0IG5lY2Vzc2FyaWx5IG1h
+cCBwZXJmZWN0bHkKPiA+IHRvIGFsbAo+ID4gK8KgwqDCoMKgwqDCoMKgICogZGV2aWNlcyB0aGF0
+IGltcGxlbWVudCB0aGUgQURDX01FQVNVUkVNRU5UIGZlYXR1cmUuIFRoaXMKPiA+IGlzIGJlY2F1
+c2UKPiA+ICvCoMKgwqDCoMKgwqDCoCAqIHRoZXJlIGFyZSBhIGZldyBkZXZpY2VzIHRoYXQgdXNl
+IGRpZmZlcmVudCBiYXR0ZXJ5Cj4gPiB0ZWNobm9sb2d5Lgo+ID4gK8KgwqDCoMKgwqDCoMKgICoK
+PiA+ICvCoMKgwqDCoMKgwqDCoCAqIEFkYXB0ZWQgZnJvbToKPiA+ICvCoMKgwqDCoMKgwqDCoCAq
+Cj4gPiBodHRwczovL2dpdGh1Yi5jb20vU2FwZC9IZWFkc2V0Q29udHJvbC9ibG9iL2FjZDk3MmJl
+MDQ2OGUwMzliOTNhYWU4MTIyMWYyMGE1NGQyZDYwZjcvc3JjL2RldmljZXMvbG9naXRlY2hfZzYz
+M19nOTMzXzkzNS5jI0w0NC1MNTIKPiA+ICvCoMKgwqDCoMKgwqDCoCAqLwo+ID4gKwoKVGhpcyBp
+cyB0aGUgc29mdHdhcmUgXl5eXl5eXl5eXgoKPiBObyBuZWVkIGZvciBhIGJsYW5rIGxpbmUuCgpT
+dXJlLgoKPiA+ICvCoMKgwqDCoMKgwqDCoHN0YXRpYyBjb25zdCBpbnQgdm9sdGFnZXNbXSA9IHsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA0MDMwLCA0MDI0LCA0MDE4LCA0MDEx
+LCA0MDAzLCAzOTk0LCAzOTg1LCAzOTc1LAo+ID4gMzk2MywgMzk1MSwKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAzOTM3LCAzOTIyLCAzOTA3LCAzODkzLCAzODgwLCAzODY4LCAz
+ODU3LCAzODQ2LAo+ID4gMzgzNywgMzgyOCwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAzODIwLCAzODEyLCAzODA1LCAzNzk4LCAzNzkxLCAzNzg1LCAzNzc5LCAzNzczLAo+ID4g
+Mzc2OCwgMzc2MiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAzNzU3LCAzNzUy
+LCAzNzQ3LCAzNzQyLCAzNzM4LCAzNzMzLCAzNzI5LCAzNzI0LAo+ID4gMzcyMCwgMzcxNiwKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAzNzEyLCAzNzA4LCAzNzA0LCAzNzAwLCAz
+Njk2LCAzNjkyLCAzNjg4LCAzNjg1LAo+ID4gMzY4MSwgMzY3NywKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAzNjc0LCAzNjcwLCAzNjY3LCAzNjYzLCAzNjYwLCAzNjU3LCAzNjUz
+LCAzNjUwLAo+ID4gMzY0NiwgMzY0MywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAzNjQwLCAzNjM3LCAzNjMzLCAzNjMwLCAzNjI3LCAzNjI0LCAzNjIwLCAzNjE3LAo+ID4gMzYx
+NCwgMzYxMSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAzNjA4LCAzNjA0LCAz
+NjAxLCAzNTk4LCAzNTk1LCAzNTkyLCAzNTg5LCAzNTg1LAo+ID4gMzU4MiwgMzU3OSwKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAzNTc2LCAzNTczLCAzNTY5LCAzNTY2LCAzNTYz
+LCAzNTYwLCAzNTU2LCAzNTUzLAo+ID4gMzU1MCwgMzU0NiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAzNTQzLCAzNTM5LCAzNTM2LCAzNTMyLCAzNTI5LCAzNTI1LCAzNDk5LCAz
+NDY2LAo+ID4gMzQzMywgMzM5OSwKPiA+ICvCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDC
+oMKgwqDCoMKgwqBpbnQgaTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoEJVSUxEX0JVR19PTihB
+UlJBWV9TSVpFKHZvbHRhZ2VzKSAhPSAxMDApOwo+IAo+IFdoeSBpcyAxMDAgbWFnaWM/wqAgSWYg
+eW91IHdhbnQgaXQgdG8gYmUgMTAwLCBzYXkgc28gdXAgaW4gdGhlCj4gZGVjbGFyYWlvbgo+IHNv
+IHRoYXQgdGhlIGNvZGUgd2lsbCBlbmZvcmNlIHRoYXQuCgpJdCdzIHRoZSBzYW1lIHBhdHRlcm4g
+dXNlZCBpbiBoaWRwcDIwX21hcF9iYXR0ZXJ5X2NhcGFjaXR5KCkgaW4gdGhlCnNhbWUgZmlsZS4g
+SSdsbCBzZW5kIGEgcGF0Y2ggdG8gZml4IHRoYXQgdG9vLgoKPiAKPiA+ICsKPiA+ICvCoMKgwqDC
+oMKgwqDCoGlmICh2b2x0YWdlID09IDApCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgcmV0dXJuIDA7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBpZiAodW5saWtlbHkodm9sdGFn
+ZSA8IDM0MDAgfHwgdm9sdGFnZSA+PSA1MDAwKSkKPiAKPiBXaHkgdW5saWtlbHk/wqAgVGhhdCBz
+aG91bGQgb25seSBldmVyIGJlIHVzZWQgaWYgeW91IGNhbiBtZWFzdXJlIHRoZQo+IHBlcmZvcm1h
+bmNlIGltcGFjdCwgb3RoZXJ3aXNlIHBsZWFzZSByZW1vdmUgaXQuCj4gCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgaGlkX3dhcm5fb25jZShoaWRfZGV2LAo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICIlczogcG9z
+c2libHkgdXNpbmcgdGhlIHdyb25nIHZvbHRhZ2UKPiA+IGN1cnZlXG4iLAo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF9fZnVuY19f
+KTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGZvciAoaSA9IDA7IGkgPCBBUlJBWV9TSVpFKHZv
+bHRhZ2VzKTsgaSsrKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHZv
+bHRhZ2UgPj0gdm9sdGFnZXNbaV0pCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoHJldHVybiBBUlJBWV9TSVpFKHZvbHRhZ2VzKSAtIGk7Cj4gPiArwqDC
+oMKgwqDCoMKgwqB9Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ICt9Cj4g
+PiArCj4gPiArc3RhdGljIGludCBoaWRwcDIwX21hcF9hZGNfbWVhc3VyZW1lbnRfMWYyMCh1OCBk
+YXRhWzNdLCBpbnQKPiA+ICp2b2x0YWdlKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoGludCBz
+dGF0dXMsIGZsYWdzOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgZmxhZ3MgPSAoaW50KSBkYXRh
+WzJdOwo+IAo+IFdoeSBpcyB0aGlzIG5vdyBhbiBpbnQ/CgpTdXJlLgoKPiA+ICsKPiA+ICvCoMKg
+wqDCoMKgwqDCoHN3aXRjaCAoZmxhZ3MpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoGNhc2UgMHgwMToK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzdGF0dXMgPSBQT1dFUl9TVVBQTFlf
+U1RBVFVTX0RJU0NIQVJHSU5HOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJy
+ZWFrOwo+ID4gK8KgwqDCoMKgwqDCoMKgY2FzZSAweDAzOgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHN0YXR1cyA9IFBPV0VSX1NVUFBMWV9TVEFUVVNfQ0hBUkdJTkc7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKgwqDCoMKgwqBj
+YXNlIDB4MDc6Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RhdHVzID0gUE9X
+RVJfU1VQUExZX1NUQVRVU19GVUxMOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGJyZWFrOwo+ID4gK8KgwqDCoMKgwqDCoMKgY2FzZSAweDBGOgo+ID4gK8KgwqDCoMKgwqDCoMKg
+ZGVmYXVsdDoKPiAKPiBZb3UgYXJlIG9ubHkgY2hlY2tpbmcgaXQgZm9yIGEgcmFuZ2UgMS1mLCB1
+OCBpcyBqdXN0IGZpbmUsIHJpZ2h0PwoKU3VyZS4KCj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgc3RhdHVzID0gUE9XRVJfU1VQUExZX1NUQVRVU19VTktOT1dOOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+ID4gK8KgwqDCoMKgwqDCoMKgfQo+
+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgKnZvbHRhZ2UgPSBnZXRfdW5hbGlnbmVkX2JlMTYoZGF0
+YSk7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBkYmdfaGlkKCIlczogUGFyc2VkIDFmMjAgZGF0
+YSBhcyBmbGFnIDB4JTAyeCB2b2x0YWdlCj4gPiAlZG1WXG4iLAo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoF9fZnVuY19fLCBmbGFncywgKnZvbHRhZ2UpOwo+IAo+IEkgZG91YnQg
+eW91IG5lZWQgdGhlIF9fZnVuY19fIGxpbmUsIHJpZ2h0P8KgIGR5bmFtaWMgZGVidWcgcHJvdmlk
+ZXMKPiB0aGF0Cj4gZm9yIHlvdSBhdXRvbWF0aWNhbGx5IGlmIHlvdSBhc2sgZm9yIGl0LgoKUmVt
+b3ZlZC4K
 
-Acked-by: Matthias Kaehlcke <mka@chromium.org>
