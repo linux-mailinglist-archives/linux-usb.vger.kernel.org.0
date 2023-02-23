@@ -2,207 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A327F6A111F
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 21:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9566A11A4
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 22:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbjBWUVb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Feb 2023 15:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S229685AbjBWVIM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Feb 2023 16:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjBWUV3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 15:21:29 -0500
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4858C5C170
-        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 12:21:25 -0800 (PST)
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NJt2Ti032586;
-        Thu, 23 Feb 2023 12:21:24 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
- bh=HKG51Ozuf7l9OO+SnwyfAwkTe1ivMj9KdHdCVzVyzlU=;
- b=i61IM1FgQkcI7c3Z2ZmXO8/N60YZPIwYduaIRGV1uDgpEE4Ylw0QE0bxHi5Qa2hpK5Fr
- Pe8Jx6ylQIi/GzKA42gpH1/aOqz4LRS7d9LU+ypbbMMl040cwNrlxQvzX27kCqFM5VOt
- TSOC8Lhs3zACF1GUXFUCBbnVmdk/TPwSnce21CB/FcjR5dpg0wwYhtYAyE/kyU8I6Pi0
- XDTvtVHMARkyw6WM1AVs5BRpH6IJ0G3r3JErDalPmaj8JDES/xYR/m5XEdg47VAF2Ci3
- 7WevGzJopPZ1HTLXATVhtxN7TkqoZ/GTwshA0cb0goIIWlL4dZtVsZqSs1grLJrOdcR+ 1g== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3nwy6m7fym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 12:21:24 -0800
-Received: from mailhost.synopsys.com (badc-mailhost4.synopsys.com [10.192.0.82])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A1DC5400E1;
-        Thu, 23 Feb 2023 20:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1677183683; bh=HKG51Ozuf7l9OO+SnwyfAwkTe1ivMj9KdHdCVzVyzlU=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=CA8J4vF0DsQJUyRB/gcIl3jNlSaWhoamghlREQxYbNdad2tpU+gKZUyMOaRIV44Cv
-         YRGZuPBY5ljeeMxoBgFpZnW6ei+RGvc9Lln6ELFgoHwwRAGelBctHT2PVTjI2aSV4B
-         j1idWt+WsfAXeGnck/idT74FZ2bRywA4GLBjZlaXtAtsJYAnhqNHJQkm4+W8c5mggr
-         soX2HPGF4HlPnkpu3tY2hpl4082aqOgJg52YYcPF3f6UML9sfAOly1knwo2fcQ+S5P
-         xoJibfel0ItSYUTo+o51YyJ6ipYrzYYcN4lmg0jbLHKCh+l/jbiQXFYOOWewEKj9Om
-         Qi+4TawaioVMA==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 8A67DA006D;
-        Thu, 23 Feb 2023 20:21:23 +0000 (UTC)
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id EB6A4800C4;
-        Thu, 23 Feb 2023 20:21:22 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="hjl6XH+I";
-        dkim-atps=neutral
+        with ESMTP id S229663AbjBWVIE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 16:08:04 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2073.outbound.protection.outlook.com [40.107.101.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AD1158A2;
+        Thu, 23 Feb 2023 13:07:58 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g9Rdon/4GOZ5fjrJuLQRWhAYqz6WUZh2wn3yR9BtwAroOgA5Hex+OiFB2JyZikgX+7mBmoNX70GnN172+IT0WCRmsVOMyAiUQaq37M1kRC7mz1ivt1Ogpt7iRDAD+WTotE4MPb1K6U2awMjg2pecgAwlD9VHtNpL8K7WQyepbIo84LdPzyyYvWWFKZdFV1azvBBX1AzP+3SlfZvZyT79+mSBms+Nz2qm4dWH/Kx3IH55XeGn3akfN5Ww5x507Kp9he7Lw1S7hNAytfVsn/iBj1omXQawPGViiOkfrm+mxvNXSyO4tKkRaFq5mEo1qG/w8yrjK2SbOF3GBEJ/VHeMAw==
+ b=nsQUnD82ril0vMdzpCBhLiupj0vOTdoGX95NSBEK7A/zcU+l7CD8+xvZwwEHbgoEYwMA3Enn+6QzNpxG92sjR4+rIAsxPMtj8r6WeJ3zi71UAUDTwdtOVt7SFE4IT1oJIoB1fmLlF8XNqJg8ZjVmtHi6oPyzOTCdm1CnSFvxDCVqV0EjalGRoeybFujQbzIOZl2MOWcGKSpBi/eDP43u2/rSI2LQsUeB0dBydR7FzD/jrfft8bWxHKLsSRHeR+q21XV/Y2CT4mClrJ6s842FCGcpBQvdGJGvWmjpcGV8vtHS3A8cdD2F8NsqhoPyi9NdbqlfueZwUUypFwk7WY8UuQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HKG51Ozuf7l9OO+SnwyfAwkTe1ivMj9KdHdCVzVyzlU=;
- b=b9f5pq+66Hb8IWvTLMkFEY/d/ROWcANisEOBkEBpD+OOHJJW+6m4prmPcU/VmPYEp+5NNi8S8etBf/0CkV1+mjaRzrKqyDaodGsXVhgyu2IdRQyPWAD9SFecfILCnyCNeYhTciuU3Bx+OcODgP0FVaZcS4NFJ141GEMYsh1JX07sSoGtQsJo7QviuubdjK2ido1YNEyky1OWkOdhlBW5lNOQ1Knuo/sE6qkxkzlREVgH2LKi99AmqT9QWcnNfibbyzJih1WcyfpmZVFVMwBtoYQ2/YeI9d8xybiCUXgnPFF4t8ALu9Kh0SzkqYvxXhAjv9kPYdLh30UI1kEdH4alXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
+ bh=9You5mHFHJWIC9EAKj6Nmvq+xb9oPUCufVcykvBJ2h8=;
+ b=VWztuVHwDsTx9HqSSv2sPZDn2+oeFUl8wla3imGJXtyORAzZstw+qKSs1NnVzJP0vp0ntILKbsXyIVhrsXdu6GgyLnZQrCum5FSCBBJgKvLH/o9AB/8kb6JQZyufbkamGTLWgMsgveQvIFnqQyC/dvLgypwbFqXad3l/M7yN/1o5ilSRSd1OdozG/Sc8ZMg08XoDYGlnCntAnWGJ0Qd1kpfzmOy5JRb8m/eT2qjzPv0MiRi/kFv5fyepOez/D+HjC5s+OUojGuVb81gxvpsI9TbsXSABO4iN0y3FlSwNtUfHogQI5BysbMifIF0wFf+mlFc8LkoiTdO9dLt35qdF8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HKG51Ozuf7l9OO+SnwyfAwkTe1ivMj9KdHdCVzVyzlU=;
- b=hjl6XH+INcehH8+lwy0+RWXwCZQZ6iUSTbzrPaAwNe8XXNUiNI3NnzLfBrMjQ6+EIKznr7x2F2Vqztt8J8BGjsmHSVL5Z3NwIE1Wgc4zyjzot7LdEuMgtizk77GceWN5XPbtibduCwId2uZkVwb7eu44QGIjVxPpXyg2lHU1FJE=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by CH3PR12MB8306.namprd12.prod.outlook.com (2603:10b6:610:12c::5) with
+ bh=9You5mHFHJWIC9EAKj6Nmvq+xb9oPUCufVcykvBJ2h8=;
+ b=tuz8Hm4zta9/0gzBjEGWjcGtoyFjiF7jKN57sTXz++M8QAPUfL3hkCQiJmkHFE2mQtFojJDIsMFJPexJEw/KoMyVJxX2WyQM1RtGy2AGvsr54Jxm/V/2rj2Hu03OxT44ry/s6fePXLD8StBRwZC91DJ4nzc+FvaihGHMAkUUkhI=
+Received: from MW4PR04CA0110.namprd04.prod.outlook.com (2603:10b6:303:83::25)
+ by SJ1PR12MB6290.namprd12.prod.outlook.com (2603:10b6:a03:457::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Thu, 23 Feb
- 2023 20:21:20 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::6f3c:bd8e:8461:c28c]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::6f3c:bd8e:8461:c28c%7]) with mapi id 15.20.6134.019; Thu, 23 Feb 2023
- 20:21:20 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] docs: fixing typo in the dwc3 struct
-Thread-Topic: [PATCH] docs: fixing typo in the dwc3 struct
-Thread-Index: AQHZRSTjGDxjBqWKLEe8LJZ4UORZu67c/nkA
-Date:   Thu, 23 Feb 2023 20:21:20 +0000
-Message-ID: <20230223202116.43fh3oq5l5f77a4t@synopsys.com>
-References: <20230220121408.111541-1-vincenzopalazzodev@gmail.com>
-In-Reply-To: <20230220121408.111541-1-vincenzopalazzodev@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR12MB4791:EE_|CH3PR12MB8306:EE_
-x-ms-office365-filtering-correlation-id: 81156d4a-ee73-4cc3-aa06-08db15db8672
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oa+ndz2dtqzgEKaAUKZrDJctt33xHqjHp3V8kSub2/bAz8qeLwo/CDelsjxtQkLf1B6OjqL8DROGLL7zrMLW11ee9x2Ok1MX3fbLgTQZwgh3dsxtc12BjUWw5HPniwCgHF8HxpAWs58HvOabcrqKjnElAmQeZeENRluPeBEC7n8YWIUHG8vwpG52wouZqF7DFLvXE7UwaoVgy+0FP7zyopkqG6thg9TsgdHw0o7JMxKKVeoX1VroTr8rEpMzspa7kyaUVnsgVqnENm2KPIxlvguLdHOTa11picGTe762vFdsK4r0qx2m8iM6VJJ8LrUWhm8yyt/ZZ9qrEYA50aAfSvhEilDJYWt6YPaJF9jVEBP0MR+YZLH8JFbyWiJF+QkED1nNMfr8dWZK/1R1q4UcIlGxjmXqglyW3Cl/ekH3/vvpXgNhlWoARt4ZjcxTgLuhltYuZvY9GTG6dJnMD7jswLmOZNtr4ZR2MAj/392OdsNkaYn395tNFFrwDrRoznIab0IrlRF6LnNHLfb95vz5AWg2kwEnSg59k/4TMvj1J6oU2RJLTMuawuoO5jUbz+mmbEf8fQZQBqAvvxDhRkk4AqvS3PKX5BUUAP5HwdmF3pSPsfTQJLsoP8bfTDr4wa1Kj40mKpRxNFjvf6ww9PCI3ckZp0fVFrdjjHXi4TT2l9FXSBrBbNachOXEMAyhmkRL
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(346002)(396003)(39860400002)(376002)(451199018)(2616005)(41300700001)(83380400001)(5660300002)(478600001)(186003)(26005)(8936002)(86362001)(38100700002)(8676002)(4326008)(6916009)(38070700005)(66946007)(6512007)(76116006)(1076003)(6506007)(316002)(122000001)(6486002)(71200400001)(966005)(36756003)(66446008)(64756008)(66476007)(66556008)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YUNkUGVsVmZ6RzMvZ0pVZ3NJTkRWdzVYV3kxb0t4dnVBMkwrNWFnditha3Ba?=
- =?utf-8?B?TkVSUXhQeURHRDRORS8zNm1UUWMwc3lPd25uTkJtd1Q2U25DM0tTdTFaSXhw?=
- =?utf-8?B?b0g0ci9xQUtIbldDMmIya09wZTJrNi8rVExndThmVnhsV3d6Z3BRVUNaUkdW?=
- =?utf-8?B?aE5tdGdvMDZxZVFmWGxHbWRnWXo5M2ppRDBsdStncU1pU0FTMi9GVEpZVDhr?=
- =?utf-8?B?Nm9WSGZDMy80ZFIwSTBJQkpCaTNQVUhRcXJlYTc0Z0FNK2pmRUl5MHcrTDlz?=
- =?utf-8?B?MW80SUtobExoN0FEdlRTOEZWaGtwSmRhcDM5ZU83RVZEZ2NoN01pSHVMcjZT?=
- =?utf-8?B?cjlTVWF4TFNXTHRsaHFCMnNzeG1ZdG9PZjVVckNhQ2hUc0NrbHZvRERQcFQ5?=
- =?utf-8?B?dDFwWnl5WUpac1pLVGtQTEoxNUpEeGx5VkJ4bXZTblk4TFdUNFZwRUJRdEhX?=
- =?utf-8?B?ODZScUJpREtzcTkvZFJDVnJaaUMweW1hMjYxbENnZ3RkSitTLzBSdXVRMEZo?=
- =?utf-8?B?Y1E3ZGlZVXcwZnM3Z1AyR2FXS09ZaGVLVkNjREE1ZkQ1SENob3RLc0NPRG02?=
- =?utf-8?B?cG0wM0xSeWtMSTYyZmdxZmd1K2tCaTdSSERrNUhHMkFJRnVuTW4rQkVMSEtS?=
- =?utf-8?B?c1I1SW1RYXdTK21Xd2tlanA2c2I4VzZFT3kzYVB4ajRQeHhtaExMMmRjQmg5?=
- =?utf-8?B?SWV1N01VRXpSN0plOU1vb3RwcjBGZlB6VkZBbkpTRDFWaHA3akVreFRiamVj?=
- =?utf-8?B?YkNNbmZzMXpLbVA3ZjdWT2dhZEpvbXMxL1NJQkJjQmFueVlJU3lCWjlaZWh1?=
- =?utf-8?B?K2F1SjMvM1RuZnk5WjVWVFFSdG1KaVlUaWphR0RvTkZ2N1NOQUVxdmZSRzFw?=
- =?utf-8?B?WTBPVHNvajRPd1J1b2dUNjl1N3BUaUFSUldYV2RpdTdzWHhHdGNGaHpaZUd0?=
- =?utf-8?B?S2ZkZUVxV0t4MFl2M1ZvbVhNWnRzcU8vZ2JzVjVnZTFvOFFYRzErNGttS0d3?=
- =?utf-8?B?bTA1VjVPQnYyN3NtMFBtcGhQTXp4aHNDL1FFcE1oWEJMbno1cUZOeFJzQytX?=
- =?utf-8?B?K3JUWDI1OExlVGt2bVJkNEV1UyttNm5Ja1o2N3BiV1NvcmdDTXB0cVNpeFYw?=
- =?utf-8?B?K3VYckQ3cEdLYm03cUkrKzJSTkwwWnY4dkNOMUpvUG5aUFk5UzdkekE3d0Fi?=
- =?utf-8?B?cjhuMkdXV1ZoK3EwckM2ZUZhV3RaVmw5QkRRNkVhMGJpeGxOWmQ5eDY0a0gz?=
- =?utf-8?B?TklDOHRMeWtlZlo2WkxNeGtZcmhKYStRQnBPdmdRSWFyczhIdkpRYXVhQVVv?=
- =?utf-8?B?dWVhb0xYNk1sY1Myb3VZTVVaVmxabnJhSW5oajJWYUZjNmpJMTRPOUFMSU9s?=
- =?utf-8?B?eFoxbWNsSUttRnByL2V2Nk4rR1FGQitZV2p1R3JnQUZURDBOMWs1YnR6a2p3?=
- =?utf-8?B?Sk1ieklUM2lXUW1NVzYwR2JNSFlVaWp4Z202OWJjdnJIUmJzSjBVdElqaC9N?=
- =?utf-8?B?S21TZVFManBkVE8zKzhXTFgveVM4VXpvTjJkdUZqbm1ucGEvSGF6cFVCdzZy?=
- =?utf-8?B?R1AvcHhzSFpFemo3NmxQSkovbXRPelZ6VlQ1dmFPb1djNDRzNGQvZ3pqc3Ar?=
- =?utf-8?B?eFRoNVNMN1M3Y2ErakhUUzJQekpwR0dVRG96Q01VdnhsMnpENlFBQlJuSTB5?=
- =?utf-8?B?WDUvOXlDdkZuR1l5RzNZOUxCUXRpOFhTcE5mTUxuK3pTbGlsU3VkYU81d2Uy?=
- =?utf-8?B?SStBTDV0NWVPNHVIbUR5MUg1R2hDUDFXOFY1U0VvNEh0YzRJY1dPVENsQUxk?=
- =?utf-8?B?aUJScGxlOTEvSWFLaTlmQXNiUFZuQ2hMTjFGRlE3V0ZzVyswNGZNS1QvV3Br?=
- =?utf-8?B?eTI3cmxzNitCR1pHbEZGQ1N0TndDaC8vZ0JURm9NdGR6ZnA4Ujl4OU5ESlN0?=
- =?utf-8?B?Z3RPdUo1ckVvMjQzUDhDUEVuNlhmVGdvL1VTbGpWRE5tbVhkSlY0TUxWMG0x?=
- =?utf-8?B?and0T2lsS1pYQ25zL0lOWFdJekNBQVlxaXBUakJVOWczT3pYYS9pYVNUSFor?=
- =?utf-8?B?NUhiSG85L0k2ZTNmUVVmUGJTWGJJRTdCZjZOM2xhRVVrWU4rTXRPVWNjbzFx?=
- =?utf-8?B?RE8yenJJL2RzR0dydXh2aDQxY2NzK2tmakdvV1RadWtIcDZnSXNicWtkWi9D?=
- =?utf-8?B?ZkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <218810154D5FCB43960919CAFBAABA23@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 2023 21:07:55 +0000
+Received: from CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:83:cafe::e) by MW4PR04CA0110.outlook.office365.com
+ (2603:10b6:303:83::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21 via Frontend
+ Transport; Thu, 23 Feb 2023 21:07:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT042.mail.protection.outlook.com (10.13.174.250) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6134.24 via Frontend Transport; Thu, 23 Feb 2023 21:07:55 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 23 Feb
+ 2023 15:07:54 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mika.westerberg@linux.intel.com>, <linux-usb@vger.kernel.org>
+CC:     <Sanju.Mehta@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/3] Fix problems fetching TBT3 DROM from AMD USB4 routers
+Date:   Thu, 23 Feb 2023 15:07:40 -0600
+Message-ID: <20230223210743.9819-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: WvTQAMVI8quZQybJ3wr32y86tZuOfk1dRH+RvXGJi3cJp3/9whAo9JVYH6WtWzL9/o+WqujPxXxkRoKQuDUh1qJeNiQYBHZcQfSXhk2u5uc+Bk3zZOGgqRU4SO0VnJ+novEJB6wqEeOFloyEOS2FQP1wfOJi26SkmJ3dH36DZHztxDLN7vQ48J09xsiWW7IJLCHqf0MMzTIp0pjYQJZf/LwUdg3G6kwn6FRFZdpxPgaMYhLoIiCS+Mb4kthH++7XNKPhfVbkBP0FqIh1Q012l+ZViGQ2e2hhVEfCJJ27rLOLw13Y6EmmK+TbO6+LpgQvGKcaxnAoGNOzUAXT/lWCAZfjp8egShrt3Cl1erpVndq/0coR+9iTehMbBRYj05h8uTOujmfbTQZnqduqjCJMSdex7FaK1Fq8FVHnVedV3FQWp/6mjD3gqqmNFuFU3eQbuHxbSlhUzcj6iOymx79RiMymu5c+57YIwfAHorQ83xyNVJBKBA6RAnzkdboWT20KBZ5xw6usRoOtk5RAq6bPmFfNPGPUoTv+7ljrc1dX43dv2EZ65kx0oBo3cJS/IvVir1dQ5V5XxgcnNt+bP24iDS40MSkyCiFRN+7Z0LXkYoPfaMbEMQe2RsI78FOrBd7BUUok5yfVlBi6tClkAyqrPg2BXJisliBEXq6HzQCMJcx70XcrV0jGdB2L752L4WHtscRea1GdrpQBlz60b1H+9kHnaAYA4NCkEoixcIPaX+/hTbOnDM282yERcFvHknoK/QcYoeARqrsVv6Uig7wmEItK20GUS9nsEOJ8IT0JmOxt3CcukXWzluACb9A+JxBICD7cRHDi6E1sAlNC4nZh6Q==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81156d4a-ee73-4cc3-aa06-08db15db8672
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 20:21:20.0739
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT042:EE_|SJ1PR12MB6290:EE_
+X-MS-Office365-Filtering-Correlation-Id: 117c3b92-18dc-4fde-cb50-08db15e2089e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V8DrVc9XYB4OKlYbtl9urPUgfRtlJQfWWEbuZqrLY5AMthE8ETBnfjQaC5bgI/mYEifqGmEYTVLrKXEW17H9VVeRi0MopG1TGKIREqeeOldPduKNq6mu9x9TLhqPgPBtR9BxJvMjtN1oiThPg8upymlu+ssxm2XLBAu8+zVcioMt64jaIs+w79n7IvQwzxz+O139BUNeALkFkZBBefs0VSVlDFSrHScieLMcvOy/XFDGR1jMa/6BtIWGhoc0OayElJMBv6Ycp8tPYUpto4NEYJLgbUdffLQND+KuIUDfZfXk/+0dGOJ5XXMKJTx4MmE6a+H4bL6nL9a32xKOSJxbXGpxnLWW0i508fDGeyML8VpfEfRCmVuB7TOhzTvYy/mrPvWyW3uKgj0n1bcRU9+SCoiKl33YbqvvCcVTmV9YMAMEXa3hYIM4RQS2/5AmeH84H2FoBy4CTS8lEeR350Pp3w8Q5lPs0G7oQO52c+GXLMjWNd1QpbUP2cdbXBBP67w1JYsmLr107d7gnmvPP7XrdRCiF3qdn+oN+ZmM7vVn/xEZ+lrMCNzgPaCLpkVY4cmM9RzhkFjqbBWf7YDk4eC46gJEkx6zqQibfQPlRaRX0rGwaVo6hg/NCONQuLFKJXskHL7bBAPCz+j0MNsAmo33vgf06cRRC2fJSw/YfJrW/Phw+JYTxIhjBdB9T1dqJhqB/bPPu/3WfetBxdXgyPOeKgS+rNGlkDIJuAteH/83sp4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199018)(40470700004)(46966006)(36840700001)(82740400003)(2906002)(186003)(1076003)(26005)(16526019)(6666004)(40480700001)(478600001)(86362001)(356005)(426003)(336012)(66574015)(2616005)(47076005)(110136005)(36860700001)(54906003)(82310400005)(7696005)(40460700003)(36756003)(81166007)(83380400001)(8936002)(316002)(5660300002)(4326008)(70206006)(70586007)(8676002)(41300700001)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 21:07:55.2911
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X1EASLi0L49AUifiu6qxhUnthSIxdO9AeOFWuXzfaGUuR8RCbmZt1GkPwpeqP+oeOCSU4VCP2T8T31vzc6j+RA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8306
-X-Proofpoint-ORIG-GUID: IzrtjzBW3Nen5gMQ05dV6TMUYQSzK04X
-X-Proofpoint-GUID: IzrtjzBW3Nen5gMQ05dV6TMUYQSzK04X
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-23_13,2023-02-23_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- priorityscore=1501 adultscore=0 malwarescore=0 clxscore=1011 bulkscore=0
- mlxlogscore=618 spamscore=0 suspectscore=0 mlxscore=0 impostorscore=0
- phishscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302230169
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 117c3b92-18dc-4fde-cb50-08db15e2089e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6290
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgVmluY2Vuem8sDQoNCk9uIE1vbiwgRmViIDIwLCAyMDIzLCBWaW5jZW56byBQYWxhenpvIHdy
-b3RlOg0KPiBUaGlzIGNvbW1pdCBpcyBmaXhpbmcgYSB0eXBvIGluc2lkZSB0aGUgZHdjMw0KPiBz
-dHJ1Y3QgdGhhdCBJIGZvdW5kIHdoaWxlIEkgd2FzIHVuZGVyc3RhbmQgaG93DQo+IHRoZSBkb2Nz
-IGdlbmVyYXRpb24gd29ya3MuDQo+IA0KPiBIb3BlIHRoaXMgd2lsbCBoZWxwLg0KDQpZZXMgaXQg
-ZG9lcywgYnV0IGNhbiB5b3UgY2FuIG9taXQgdGhhdCBjb21tZW50LiBZb3UgY2FuIHJldmlldyBo
-b3cgdG8NCndyaXRlIGEgcGF0Y2ggZGVzY3JpcHRpb24gaGVyZSAoc2VlIGxpbmUgd3JhcCBhbmQg
-ImltcGVyYXRpdmUgbW9vZCINCnZvaWNlKToNCg0KaHR0cHM6Ly9kb2NzLmtlcm5lbC5vcmcvcHJv
-Y2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMuaHRtbA0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBWaW5j
-ZW56byBQYWxhenpvIDx2aW5jZW56b3BhbGF6em9kZXZAZ21haWwuY29tPg0KPiAtLS0NCj4gIGRy
-aXZlcnMvdXNiL2R3YzMvY29yZS5oIHwgMiArLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
-aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdj
-My9jb3JlLmggYi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuaA0KPiBpbmRleCA4Zjk5NTliYTlmZDQu
-LmFjODFkNTIzNzEwZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmgNCj4g
-KysrIGIvZHJpdmVycy91c2IvZHdjMy9jb3JlLmgNCj4gQEAgLTEwOTgsNyArMTA5OCw3IEBAIHN0
-cnVjdCBkd2MzX3NjcmF0Y2hwYWRfYXJyYXkgew0KPiAgICoJCQljaGFuZ2UgcXVpcmsuDQo+ICAg
-KiBAZGlzX3R4X2lwZ2FwX2xpbmVjaGVja19xdWlyazogc2V0IGlmIHdlIGRpc2FibGUgdTJtYWMg
-bGluZXN0YXRlDQo+ICAgKgkJCWNoZWNrIGR1cmluZyBIUyB0cmFuc21pdC4NCj4gLSAqIEByZXN1
-bWUtaHMtdGVybWluYXRpb25zOiBTZXQgaWYgd2UgZW5hYmxlIHF1aXJrIGZvciBmaXhpbmcgaW1w
-cm9wZXIgY3JjDQo+ICsgKiBAcmVzdW1lX2hzX3Rlcm1pbmF0aW9uczogU2V0IGlmIHdlIGVuYWJs
-ZSBxdWlyayBmb3IgZml4aW5nIGltcHJvcGVyIGNyYw0KPiAgICoJCQlnZW5lcmF0aW9uIGFmdGVy
-IHJlc3VtZSBmcm9tIHN1c3BlbmQuDQo+ICAgKiBAcGFya21vZGVfZGlzYWJsZV9zc19xdWlyazog
-c2V0IGlmIHdlIG5lZWQgdG8gZGlzYWJsZSBhbGwgU3VwZXJTcGVlZA0KPiAgICoJCQlpbnN0YW5j
-ZXMgaW4gcGFyayBtb2RlLg0KPiAtLSANCj4gMi4zOS4yDQo+IA0KDQpDYW4geW91IGFkZCBtZSAo
-Y3VycmVudCBtYWludGFpbmVyIG9mIGR3YzMpIHRvIENjIGxpc3QgZm9yIGNoYW5nZXMNCnJlbGF0
-ZWQgdG8gZHdjMz8NCg0KQWxzbywgY2FuIHlvdSByZXZpc2UgeW91ciAkc3ViamVjdCBwYXRjaCB3
-aXRoICJ1c2I6IGR3YzM6IiBwcmVmaXguDQoNClRoYW5rcywNClRoaW5o
+TBT3 devices when connected to an AMD USB4 router occasionally fail to
+properly respond to requests for the DROM via bit banging.
+
+Depending upon which part of the request failed will impact the severity.
+A number of workarounds have been put in place to let the driver handle
+the failed requests:
+
+commit e87491a9fd4e3 ("thunderbolt: Retry DROM reads for more failure scenarios")
+commit a283de3ec646f ("thunderbolt: Do not resume routers if UID is not set")
+commit 6915812bbd109 ("thunderbolt: Do not make DROM read success compulsory")
+commit f022ff7bf377 ("thunderbolt: Retry DROM read once if parsing fails")
+
+Still even with these changes the failures do make it through. In comparing
+other CM implementations utilized on AMD systems, they all access the
+DROM directly from the NVM.
+
+To avoid triggering this issue, try to get the DROM directly from the NVM
+in Linux as well when devices have an LC.
+
+v4:
+ * Style fixups
+ * Fixup for wrong path for USB4 devices
+
+Mario Limonciello (3):
+  thunderbolt: Adjust how NVM reading works
+  thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
+  thunderbolt: Refactor DROM reading
+
+ drivers/thunderbolt/eeprom.c | 219 +++++++++++++++++++----------------
+ 1 file changed, 122 insertions(+), 97 deletions(-)
+
+-- 
+2.34.1
+
