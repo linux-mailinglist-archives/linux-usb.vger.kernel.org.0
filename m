@@ -2,145 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011CF6A0569
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 10:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E29F6A0734
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 12:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbjBWJzx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 23 Feb 2023 04:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S233562AbjBWLSW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Feb 2023 06:18:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234235AbjBWJzc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 04:55:32 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743731E1E4;
-        Thu, 23 Feb 2023 01:55:31 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id h16so10030915qta.8;
-        Thu, 23 Feb 2023 01:55:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hXrWb+RJzAAA7brRcQbYGgS5+dy15Kv9F2Mt8wEyV6s=;
-        b=mnSjkLVrmE7i9bNBN2uvhvpmDHcGTk71jmgIWefTvYX/G0O46X789k8sKAv/utBb67
-         8/AL7awXVrRGUzUoBUPsvxS4ybZo53Y1ackd4Q11Wt/JKZwKv6CenVoSB0nchERYLxdl
-         gBaO6y9f4uUvZIXYFAbyZpV/CZgYQ7RS7/vrR30WjqzyPtmGMOeRF7pClC7fUeHEiT0j
-         2+gG2F4F+y8RIz0+XsIESPysyhAprvEt2xwlaV0gz4wnAHfmBPDpRb/L8mc3UMcqLnNy
-         C28UgW1RT+MHPZ+Yc6g7coKmeAxijPsU7OF9Por6HYOJEzalocim/jV0w9CHdbZMfCmm
-         EuJQ==
-X-Gm-Message-State: AO0yUKWv/DQzrxFNYDQTp/qJudhxSV4P04R+TcWu6jxa5ROHAO0jwhya
-        jYjOQCmGTC8g0WP+wJJlbpk1QCEk5XJ/siSp
-X-Google-Smtp-Source: AK7set9Qkh1P897xqvUjPFlXBSrVq5MiyA5KhOlwNl6+kMkDOkS6zeN1TRDbU3tY0VjntRLKF9PlOA==
-X-Received: by 2002:ac8:7f48:0:b0:3b8:ea00:7021 with SMTP id g8-20020ac87f48000000b003b8ea007021mr17105908qtk.28.1677146130298;
-        Thu, 23 Feb 2023 01:55:30 -0800 (PST)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05620a12cd00b007423c122457sm2057737qkl.63.2023.02.23.01.55.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 01:55:29 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-536e10ae021so131418377b3.7;
-        Thu, 23 Feb 2023 01:55:29 -0800 (PST)
-X-Received: by 2002:a81:4312:0:b0:52f:1c23:ef1 with SMTP id
- q18-20020a814312000000b0052f1c230ef1mr1756000ywa.5.1677146129399; Thu, 23 Feb
- 2023 01:55:29 -0800 (PST)
+        with ESMTP id S229583AbjBWLSV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 06:18:21 -0500
+Received: from out28-49.mail.aliyun.com (out28-49.mail.aliyun.com [115.124.28.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC9166C3;
+        Thu, 23 Feb 2023 03:18:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07649013|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0871468-0.0143109-0.898542;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.RUpMKkG_1677151093;
+Received: from 192.168.220.144(mailfrom:michael@allwinnertech.com fp:SMTPD_---.RUpMKkG_1677151093)
+          by smtp.aliyun-inc.com;
+          Thu, 23 Feb 2023 19:18:14 +0800
+Message-ID: <9bf4463c-6541-a6cb-9bbc-6d070118509a@allwinnertech.com>
+Date:   Thu, 23 Feb 2023 19:18:12 +0800
 MIME-Version: 1.0
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com> <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com> <0235f0fed989a8b027db720663699f5d@protonic.nl>
- <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com> <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
- <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org> <Y/ZoyaV10TCWhloT@smile.fi.intel.com>
-In-Reply-To: <Y/ZoyaV10TCWhloT@smile.fi.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Feb 2023 10:55:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXbYapqG1eirbRoxS9akue+URKOV338efMp1c0CbwUEKg@mail.gmail.com>
-Message-ID: <CAMuHMdXbYapqG1eirbRoxS9akue+URKOV338efMp1c0CbwUEKg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of device_get_match_data()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mice
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
+        richard.gong@amd.com
+References: <20230222013944.31095-1-michael@allwinnertech.com>
+ <Y/WwXBF37hoZBbQa@kroah.com>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <Y/WwXBF37hoZBbQa@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andy,
+Dear Greg,
 
-On Wed, Feb 22, 2023 at 8:21 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Wed, Feb 22, 2023 at 07:46:25PM +0100, Krzysztof Kozlowski wrote:
-> > On 22/02/2023 18:20, Andy Shevchenko wrote:
-> > >>> Which effectively breaks i.e. user-space instantiation for other display
-> > >>> types which now do work due to i2c_of_match_device().
-> > >>> (so my suggestion above is not sufficient).
-> > >>>
-> > >>> Are you proposing extending and searching the I2C ID table to work around
-> > >>> that?
-> > >>
-> > >> See (1) above. This is the downside I have noticed after sending this series.
-> > >> So, the I²C ID table match has to be restored, but the above mentioned issues
-> > >> with existing table are not gone, hence they need to be addressed in the next
-> > >> version.
-> > >
-> > > I see now what you mean. So, we have even more issues in this driver:
-> > > - I²C table is not in sync with all devices supported
-> >
-> > Does anything actually rely on i2c_device_id table? ACPI would match
-> > either via ACPI or OF tables. All modern ARM systems (e.g. imx6) are
-> > DT-based. Maybe just drop the I2C ID table?
->
-> For I²C it's still possible to enumerate the device via sysfs, which is ABI.
+On 2/22/2023 2:04 PM, Greg KH wrote:
+> On Wed, Feb 22, 2023 at 09:39:44AM +0800, Michael Wu wrote:
+>> This patch fixes a problem that USB mouse can't wake up the device that
+>> enters standby.
+> 
+> This not a problem, it is that way by design.
 
-Yes, and AFAIK, that worked fine. E.g.
+I got it, maybe it's a little problem to say that.
 
-    echo adafruit,3130 0x70 > /sys/class/i2c/i2c-adapter/.../new_device
+> 
+>> At present, the kernel only checks whether certain USB manufacturers
+>> support wake-up, which will easily cause inconvenience to the
+>> development work of other manufacturers and add unnecessary work to the
+>> maintenance of kernel.
+>>
+>> The USB protocol supports judging whether a usb supports the wake-up
+>> function, so it should be more reasonable to add a wake-up source by
+>> directly checking the settings from the USB protocol.
+> 
+> But you do not do that in this patch, why not?
 
-Cfr. https://lore.kernel.org/all/20211019144520.3613926-3-geert@linux-m68k.org/
+I just want to explain the background of my patch, to prove we could use 
+a similar way to avoid such a "disturbing" situation.
+To reduce the influence, my patch enables remote wakeup for USB mouse 
+devices refer to what keyboard do.
 
-Note that that example actually includes the manufacturer.
-I didn't check whether the I2C core takes that part into account when
-matching, or just strips it.
+> 
+>> There was a similar issue on the keyboard before, which was fixed by
+>> this patch (3d61510f4eca), but now the problem happened on the mouse.
+>> This patch uses a similar idea to fix this problem.
+>>
+>> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+>> ---
+>>   drivers/hid/usbhid/hid-core.c | 8 ++++++++
+>>   drivers/hid/usbhid/usbmouse.c | 1 +
+>>   2 files changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+>> index be4c731aaa65..d3a6755cca09 100644
+>> --- a/drivers/hid/usbhid/hid-core.c
+>> +++ b/drivers/hid/usbhid/hid-core.c
+>> @@ -1189,6 +1189,14 @@ static int usbhid_start(struct hid_device *hid)
+>>   		device_set_wakeup_enable(&dev->dev, 1);
+>>   	}
+>>   
+>> +	/**
+>> +	 * NOTE: enable remote wakeup by default for all mouse devices
+>> +	 * supporting the boot protocol.
+>> +	 */
+>> +	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
+>> +	    interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_MOUSE)
+>> +		device_set_wakeup_enable(&dev->dev, 1);
+> 
+> Sorry, but we can not take this unless it is proven that this will work
+> properly for all of these devices.  Other operating systems do not do
+> this last I checked, so there will be problems.
 
-> > > - the OF ID table seems has something really badly formed for adafruit
-> > >   (just a number after a comma)
-> >
-> > Maybe it is a model number? It was documented:
-> > Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
->
-> Yes, it's not a problem for ACPI/DT platforms, the problem is for the above
-> way of enumeration, so if we have more than 1 manufacturer that uses plain
-> numbers for the model, I²C framework may not distinguish which driver to use.
->
-> I.o.w. the part after comma in the compatible strings of the I²C devices must
-> be unique globally to make that enumeration disambiguous.
+As Mario Limonciello says, they has confirmed that the Microsoft Windows 
+does set a similar policy as well. Can we talk about more in this topic: 
+why does Linux not support it?
+Of course, if you have other great idea, I will appreciate that if we 
+can have some further discussion.
 
-Which is not unique to this driver?
-I bet you can find other compatible values that become non-unique
-after stripping the manufacturer.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+> 
+> thanks,
+> 
+> greg k-h
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Michael Wu
