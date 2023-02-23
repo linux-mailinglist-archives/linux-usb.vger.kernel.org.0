@@ -2,35 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F5B6A0D33
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 16:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D456A0D4C
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 16:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjBWPlJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Feb 2023 10:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S234073AbjBWPsV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Feb 2023 10:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjBWPlI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 10:41:08 -0500
+        with ESMTP id S233862AbjBWPsU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 10:48:20 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5296330F9
-        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 07:41:01 -0800 (PST)
-Received: (qmail 1245383 invoked by uid 1000); 23 Feb 2023 10:41:00 -0500
-Date:   Thu, 23 Feb 2023 10:41:00 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2385D21A3D
+        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 07:48:19 -0800 (PST)
+Received: (qmail 1245614 invoked by uid 1000); 23 Feb 2023 10:48:18 -0500
+Date:   Thu, 23 Feb 2023 10:48:18 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: [PATCH 4/5] USB: core: Add API to change the wireless_status
-Message-ID: <Y/eJDDPXJfYgfdfI@rowland.harvard.edu>
-References: <20230223132452.37958-1-hadess@hadess.net>
- <20230223132452.37958-4-hadess@hadess.net>
+To:     Seth Bollinger <seth.boll@gmail.com>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, sethb@digi.com
+Subject: Re: HC died
+Message-ID: <Y/eKwvQAihZYKUos@rowland.harvard.edu>
+References: <CA+JN8xMXu=sVQ2nyR9SgF25fquCZhH43wdsnuvfjDu+yGRv2yA@mail.gmail.com>
+ <b13655bf-4a04-bece-71e4-698bfec83e2d@linux.intel.com>
+ <CA+JN8xOOyU8yLJrxnKPwAMhQFKE70rTi=aLa3Adt7Og4dfPRVg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223132452.37958-4-hadess@hadess.net>
+In-Reply-To: <CA+JN8xOOyU8yLJrxnKPwAMhQFKE70rTi=aLa3Adt7Og4dfPRVg@mail.gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -40,89 +38,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 02:24:51PM +0100, Bastien Nocera wrote:
-> Allow device specific drivers to change the wireless status of a device.
-> This will allow user-space to know whether the device is available,
-> whether or not specific USB interfaces can detect it.
+On Thu, Feb 23, 2023 at 09:31:05AM -0600, Seth Bollinger wrote:
+> > > We're experiencing a problem with our devices in the field where our
+> > > customers attach problematic USB devices that are causing the xhci
+> > > host controller to shut down with the "HC died; cleaning up" message.
+> >
+> > Is this seen only on some specific xHC host controller?
 > 
-> This can be used by wireless headsets with USB receivers to propagate to
-> user-space whether or not the headset is turned on, so as to consider it
-> as unavailable, and not switch to it just because the receiver is
-> plugged in.
+> I don't think so.  We've seen this on pcie attached asmedia 3142 and
+> NXP ls1012a/ls1046a SOC controllers (which I think are dwc3 IP).
+> Strangely the timing seems to be much easier to reproduce on the pcie
+> attached asm3142.
 > 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
->  drivers/usb/core/message.c | 13 +++++++++++++
->  drivers/usb/core/usb.c     | 24 ++++++++++++++++++++++++
->  include/linux/usb.h        |  4 ++++
->  3 files changed, 41 insertions(+)
-> 
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 127fac1af676..d5c7749d515e 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -1908,6 +1908,18 @@ static void __usb_queue_reset_device(struct work_struct *ws)
->  	usb_put_intf(iface);	/* Undo _get_ in usb_queue_reset_device() */
->  }
->  
-> +/*
-> + * Internal function to set the wireless_status sysfs attribute
-> + * See usb_set_wireless_status() for more details
-> + */
-> +static void __usb_wireless_status_intf(struct work_struct *ws)
-> +{
-> +	struct usb_interface *iface =
-> +		container_of(ws, struct usb_interface, wireless_status_work);
-> +
-> +	usb_update_wireless_status_attr(iface);
-> +	usb_put_intf(iface);	/* Undo _get_ in usb_set_wireless_status() */
-> +}
+> > > I've narrowed this down to a timeout of the address device TRB on the
+> > > command ring (currently 5 seconds).  It sometimes takes our hardware
+> > > 9.6 to complete this TRB.  When the driver is trying to stop the cmd
 
-Have you thought about what will happen if this routine ends up running 
-after the interface has been deleted?
+Note that the USB-2.0 spec says (section 9.2.6.3, Set Address 
+Processing):
 
->  /*
->   * usb_set_configuration - Makes a particular device setting be current
-> @@ -2100,6 +2112,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
->  		intf->dev.type = &usb_if_device_type;
->  		intf->dev.groups = usb_interface_groups;
->  		INIT_WORK(&intf->reset_ws, __usb_queue_reset_device);
-> +		INIT_WORK(&intf->wireless_status_work, __usb_wireless_status_intf);
->  		intf->minor = -1;
->  		device_initialize(&intf->dev);
->  		pm_runtime_no_callbacks(&intf->dev);
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index 11b15d7b357a..5f42c5b9d209 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -871,6 +871,30 @@ int usb_get_current_frame_number(struct usb_device *dev)
->  }
->  EXPORT_SYMBOL_GPL(usb_get_current_frame_number);
->  
-> +/**
-> + * usb_set_wireless_status - sets the wireless_status struct member
-> + * @dev: the device to modify
-> + * @status: the new wireless status
-> + *
-> + * Set the wireless_status struct member to the new value, and emit
-> + * sysfs changes as necessary.
-> + *
-> + * Returns: 0 on success, -EALREADY if already set.
-> + */
-> +int usb_set_wireless_status(struct usb_interface *iface,
-> +		enum usb_wireless_status status)
-> +{
-> +	if (iface->wireless_status == status)
-> +		return -EALREADY;
-> +
-> +	usb_get_intf(iface);
-> +	iface->wireless_status = status;
-> +	schedule_work(&iface->wireless_status_work);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_set_wireless_status);
+	After the reset/resume recovery interval, if a device receives a 
+	SetAddress() request, the device must be able to complete 
+	processing of the request and be able to successfully complete 
+	the Status stage of the request within 50 ms.
 
-This routine belongs in message.c, next to __usb_wireless_status_intf().
+These devices' 9.6 seconds to process a Set-Address request is a _lot_ 
+longer than 50 ms.  No wonder they don't work properly.  Why on earth do 
+they take so long?
+
+Of course, xHCI controller drivers should be able to cancel an 
+Address-Device TRB without waiting for it to complete.
 
 Alan Stern
