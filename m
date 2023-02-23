@@ -2,107 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2FA6A01AB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 05:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C616A0251
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Feb 2023 06:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbjBWEBL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Feb 2023 23:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S233136AbjBWFSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Feb 2023 00:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbjBWEBI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Feb 2023 23:01:08 -0500
-Received: from out28-77.mail.aliyun.com (out28-77.mail.aliyun.com [115.124.28.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4D541085;
-        Wed, 22 Feb 2023 20:01:04 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08458463|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00787236-0.000697895-0.99143;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.RUUPChN_1677124861;
-Received: from 192.168.220.144(mailfrom:michael@allwinnertech.com fp:SMTPD_---.RUUPChN_1677124861)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Feb 2023 12:01:02 +0800
-Message-ID: <03a65972-f4ba-9d52-ed5c-ef5374927e53@allwinnertech.com>
-Date:   Thu, 23 Feb 2023 12:01:01 +0800
+        with ESMTP id S232817AbjBWFSt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 00:18:49 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED8E3C78F;
+        Wed, 22 Feb 2023 21:18:45 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N558kj022111;
+        Thu, 23 Feb 2023 05:18:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=uDljakYelKyMseFDA7jnuI68ogj5XTtW+0h7qI7CYjQ=;
+ b=NhxilBwCA3JnK8O9KnQ85mBIGwN/yiYnisSRX4XGmkXSGZpeb3UjXbyqaPdufsjhdeeX
+ sKZD5631CrquCTOLz1nGvOikYWL1dMqFhqbhtrOdfX4B1Zk2rjhfEYyXP2UrB6PLkxVG
+ jEcL5VfCsaC1VBOti48XY/9YttljKir/vw5Oa2QTqtSHHJKXZ/ocEFzskLw93E99hUdg
+ iq0HYBy3cTlpEktK7HGMYcDPGi3KFbzRXXvhd+B+iWRzTddG1bebHXTqwArwAPhUIFHa
+ ZfeIexcVTURgPU75Blf7atO1RUjyP2AG93m7P5/nx1vuXjqZ59guEQ7hicfnkaPy17mD Dg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwymx89y3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 05:18:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31N5Id5b028181
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 05:18:39 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 22 Feb 2023 21:18:36 -0800
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [PATCH v1 0/2] Fix vbus draw of dwc3 gadget
+Date:   Thu, 23 Feb 2023 10:48:28 +0530
+Message-ID: <1677129510-10283-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mice
-Content-Language: en-US
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>, jikos@kernel.org,
-        benjamin.tissoires@redhat.com
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230222013944.31095-1-michael@allwinnertech.com>
- <0b6f1b7b-9275-6947-b1b9-73d60ce095ab@gmail.com>
-From:   Michael Wu <michael@allwinnertech.com>
-In-Reply-To: <0b6f1b7b-9275-6947-b1b9-73d60ce095ab@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: S8if6nz20MNktqCUKjUmLrq0LUHhSP2b
+X-Proofpoint-GUID: S8if6nz20MNktqCUKjUmLrq0LUHhSP2b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_01,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 spamscore=0 clxscore=1011 mlxlogscore=245 adultscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230045
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Sergei:
+Currently dwc3 gadget processes the suspend interrupt event only
+if the device is in configured state. But consider a case where
+device is not configured and got suspend interrupt, in that case
+our gadget would still use 100mA as composite_suspend didn't happen.
+But battery charging specification (BC1.2) expects a downstream
+device to draw less than 2.5mA when unconnected OR suspended.
 
-On 2/22/2023 4:59 PM, Sergei Shtylyov wrote:
-> Hello!
-> 
-> On 2/22/23 4:39 AM, Michael Wu wrote:
-> 
->> This patch fixes a problem that USB mouse can't wake up the device that
->> enters standby.
->>
->> At present, the kernel only checks whether certain USB manufacturers
->> support wake-up, which will easily cause inconvenience to the
->> development work of other manufacturers and add unnecessary work to the
->> maintenance of kernel.
->>
->> The USB protocol supports judging whether a usb supports the wake-up
->> function, so it should be more reasonable to add a wake-up source by
->> directly checking the settings from the USB protocol.
->>
->> There was a similar issue on the keyboard before, which was fixed by
->> this patch (3d61510f4eca), but now the problem happened on the mouse.
->> This patch uses a similar idea to fix this problem.
->>
->> Signed-off-by: Michael Wu <michael@allwinnertech.com>
->> ---
->>   drivers/hid/usbhid/hid-core.c | 8 ++++++++
->>   drivers/hid/usbhid/usbmouse.c | 1 +
->>   2 files changed, 9 insertions(+)
->>
->> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
->> index be4c731aaa65..d3a6755cca09 100644
->> --- a/drivers/hid/usbhid/hid-core.c
->> +++ b/drivers/hid/usbhid/hid-core.c
->> @@ -1189,6 +1189,14 @@ static int usbhid_start(struct hid_device *hid)
->>   		device_set_wakeup_enable(&dev->dev, 1);
->>   	}
->>   
->> +	/**
-> 
+And while resuming, the gadget can draw upto 100mA if its not
+configured, but the current implementation of composite_resume
+doesnt consider the case of unconfigured device. This series
+addresses the above mentioned issues.
 
->     The kernel-doc comments should not be used here in the function body.
+Prashanth K (2):
+  usb: dwc3: gadget: Change condition for processing suspend event
+  usb: gadget: composite: Draw 100mA current if not configured
 
-We will remove the NOTE comments.
-
-> 
->> +	 * NOTE: enable remote wakeup by default for all mouse devices
->> +	 * supporting the boot protocol.
->> +	 */
->> +	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
->> +	    interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_MOUSE)
->> +		device_set_wakeup_enable(&dev->dev, 1);
->> +
->>   	mutex_unlock(&usbhid->mutex);
->>   	return 0;
->>   
-> [...]
-> 
-> MBR, Sergey
+ drivers/usb/dwc3/gadget.c      | 11 ++---------
+ drivers/usb/gadget/composite.c |  2 ++
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
 -- 
-Regards,
-Michael Wu
+2.7.4
+
