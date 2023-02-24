@@ -2,97 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C257C6A14F3
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Feb 2023 03:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC8E6A159A
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Feb 2023 04:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjBXCe0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Feb 2023 21:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S229662AbjBXDo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Feb 2023 22:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjBXCeZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 21:34:25 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1D4D91B564
-        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 18:34:24 -0800 (PST)
-Received: (qmail 22418 invoked by uid 1000); 23 Feb 2023 21:34:23 -0500
-Date:   Thu, 23 Feb 2023 21:34:22 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: [PATCH 4/5] USB: core: Add API to change the wireless_status
-Message-ID: <Y/giLni7cwDGjLpr@rowland.harvard.edu>
-References: <20230223132452.37958-1-hadess@hadess.net>
- <20230223132452.37958-4-hadess@hadess.net>
- <Y/eJDDPXJfYgfdfI@rowland.harvard.edu>
- <f94acf520e62676c741c0959f91c8d951d74a36c.camel@hadess.net>
- <Y/eTkXYlflDWllHZ@rowland.harvard.edu>
- <16aaaa1a6207e7da07faa932ecac0dcc9e5f10e3.camel@hadess.net>
- <Y/edOwVwfHVkoq9j@rowland.harvard.edu>
- <ba9eec1f2f0d41e3af8b1e73e4c804074e429cc4.camel@hadess.net>
+        with ESMTP id S229638AbjBXDo1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Feb 2023 22:44:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD16CDC0;
+        Thu, 23 Feb 2023 19:44:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 538FD617AA;
+        Fri, 24 Feb 2023 03:44:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E30C433EF;
+        Fri, 24 Feb 2023 03:44:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677210242;
+        bh=RwjySR8hWiLpxUC0dXi0nzoxYZdFGRL2DklpueF5MkU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XJPbS1UbyjIiMYfcmex9BIoKABEj3kN1KuaUZ+IvDh89zdkURSzEyIBeswY5eP+8A
+         UJOavKCO4FBaAQAPmJrDObNsAjN1U2l8foWAGxdEToy4CrvylLIruyjB/IdsLtx6sr
+         3wQ+oogSYYJHgPQYe1GN3JzKpkiUKbUtu6gOYxPKDu9BPqn2gP+Nc/anNmV9ynkrqw
+         i6ScmFDZvSa0pyYTTxR9DEMjYphSu0iHa60/M7c4nPG4Hgglit1+u0PooNACanAFsr
+         8bpIPiKVZA44qq5M9Qc1uAlSEU976FiHj/vkZ+dIE+9tfOlGA7MK8+I3cEQuMWwNls
+         HrZ8rV9sEtKmA==
+Date:   Thu, 23 Feb 2023 21:44:28 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] usb: host: oxu210hp-hcd: Replace fake flex-array with
+ flexible-array member
+Message-ID: <Y/gynI9Wv8RZTD8M@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba9eec1f2f0d41e3af8b1e73e4c804074e429cc4.camel@hadess.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 12:04:12AM +0100, Bastien Nocera wrote:
-> On Thu, 2023-02-23 at 12:07 -0500, Alan Stern wrote:
-> > The refcounting in your patch guarantees that when the work function 
-> > runs, the interface structure will still exist.� But refcounting does
-> > not guarantee that the interface will still be registered in sysfs,
-> > and 
-> > this can actually happen if the work is scheduled immediately before
-> > the 
-> > interface is unregistered.
-> > 
-> > So my question is: What will happen when sysfs_update_group(), 
-> > sysfs_notify(), and kobject_uevent() are called after the interface
-> > has 
-> > been unregistered from sysfs?� Maybe they will work okay -- I simply 
-> > don't know, and I wanted to find out whether you had considered the 
-> > issue.
-> 
-> A long week-end started for me a couple of hours ago, but I wanted to
-> dump my thoughts before either I forgot, or it took over my whole week-
-> end ;)
-> 
-> I had thought about the problem, and didn't think that sysfs files
-> would get removed before the interface got released/unref'ed and
-> usb_remove_sysfs_intf_files() got called.
-> 
-> If the device gets removed from the device bus before it's released,
-> then this patch should fix it:
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -1917,7 +1917,8 @@ static void __usb_wireless_status_intf(struct work_struct *ws)
->         struct usb_interface *iface =
->                 container_of(ws, struct usb_interface, wireless_status_work);
->  
-> -       usb_update_wireless_status_attr(iface);
-> +       if (intf->sysfs_files_created)
-> +               usb_update_wireless_status_attr(iface);
->         usb_put_intf(iface);    /* Undo _get_ in usb_set_wireless_status() */
-> 
-> The callback would be a no-op if the device's sysfs is already
-> unregistered, just unref'ing the reference it held.
-> 
-> What do you think? I'll amend that into my patchset on Monday.
+Zero-length arrays as fake flexible arrays are deprecated and we are
+moving towards adopting C99 flexible-array members instead.
 
-That's a good way to do it, but it does race with 
-usb_remove_sysfs_intf_files().  To prevent this race, you can protect 
-the test and function call with device_lock(iface->dev.parent) (that is, 
-lock the interface's parent usb_device).
+Transform zero-length array into flexible-array member in struct
+ehci_regs.
 
-Alan Stern
+Address the following warnings found with GCC-13 and
+-fstrict-flex-arrays=3 enabled:
+drivers/usb/host/oxu210hp-hcd.c:3983:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3986:38: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3971:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3978:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3523:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:2774:39: warning: array subscript port is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3569:35: warning: array subscript <unknown> is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3888:36: warning: array subscript port is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:2911:45: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
+
+Link: https://github.com/KSPP/linux/issues/21
+Link: https://github.com/KSPP/linux/issues/259
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/usb/host/oxu210hp-hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+index 3a441310c713..f998d3f1a78a 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -169,7 +169,7 @@ struct ehci_regs {
+ #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
+ 
+ 	/* PORTSC: offset 0x44 */
+-	u32		port_status[0];	/* up to N_PORTS */
++	u32		port_status[];	/* up to N_PORTS */
+ /* 31:23 reserved */
+ #define PORT_WKOC_E	(1<<22)		/* wake on overcurrent (enable) */
+ #define PORT_WKDISC_E	(1<<21)		/* wake on disconnect (enable) */
+-- 
+2.34.1
+
