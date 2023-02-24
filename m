@@ -2,91 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5056A1705
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Feb 2023 08:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4866A17B9
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Feb 2023 09:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBXHW7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Feb 2023 02:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
+        id S229679AbjBXIIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Feb 2023 03:08:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjBXHW6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Feb 2023 02:22:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B3213D45
-        for <linux-usb@vger.kernel.org>; Thu, 23 Feb 2023 23:22:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62BD26182E
-        for <linux-usb@vger.kernel.org>; Fri, 24 Feb 2023 07:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CCD89C433A4
-        for <linux-usb@vger.kernel.org>; Fri, 24 Feb 2023 07:22:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677223376;
-        bh=JcqSe6LjZjutpkF6PoFKoNbpFOInKPwPoeng2lFigXs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=NdPomUh5SfNUPZMeWGu9BGfERHhrA4R5hiqeApqnHnkx0H8Yb0C2xhQSml+xquKVu
-         aW8qE8+XCz3prhj/YOC36hpWIEKVUkrWbwcoWtNZgG0jUgVWStujPz8LbRRVpGqDO9
-         r+hEPNwYPC3OCtV8L3BffitCGTLVGqAHyI4LeGThdF5mGuB5iIllYQJiYrhn6A3HRb
-         tbMN2G74/VEwzH2AyKjobTXdAsBgnPllBL0zWXoGw1jv1UxEf7ipUOLagsMk9O1lMj
-         vtZuRHf+ALl9BN7LkMNI6klzm+/inSB6FUsgNUz4zdPSwF83+eq4zQ/PWPiq9XT74t
-         iK386aRXx5NtQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id B6186C43144; Fri, 24 Feb 2023 07:22:56 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217081] miss kzalloc check in mv_udc_probe
-Date:   Fri, 24 Feb 2023 07:22:56 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gregkh@linuxfoundation.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217081-208809-yOhoNSMcx8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217081-208809@https.bugzilla.kernel.org/>
-References: <bug-217081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229682AbjBXIIt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Feb 2023 03:08:49 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA7B410B8;
+        Fri, 24 Feb 2023 00:08:48 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id u14so11987267ple.7;
+        Fri, 24 Feb 2023 00:08:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EEL2HyedoF+UklknccP5xY2+UWWtxfoRRN75JeZ10qE=;
+        b=GUwPchEWjiNhwck/7W0OgNznTF3W7C+JaLo99cxcHdXB+TsfD0ffqJbLikn1daBxDp
+         fCurBvZEv0kLVrx+V0hnMAyQLrDcboy91DcC7fZu+Za+O+OkpRqlxO3moGxAaB1z9i7T
+         eBCWx0WdwG5A3KwKv4lriJOCvxKK+kPF/rEwlHK239VjJoZDfWkz5YUM5L1ftogtx4hY
+         cKW5qpOHbZoVcAt7WpbV6nlW5ouorKZqLKPYzNdI3KtTCPFlXC0wsY7XVSDANSQqALCJ
+         ohxn/Wf5xESdn7nK+oUMsuMMsN0Qpljq0QUuszXasU5Zu/43tsGmINhcDSCwpQsHjjge
+         DSrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EEL2HyedoF+UklknccP5xY2+UWWtxfoRRN75JeZ10qE=;
+        b=Ra+EaoUNN5gF8CM7mLaIcC4UPk6UfqVbdH2uLUEwA2b21mTCK3Ze/iXsehltH2fzq7
+         l5qVgoN7orIklRQNJJ+2upHSgngVQEz1vG80RrPq+8jSyx7CPMdAiAyKgcEnceg9P7OO
+         DLF4qfeZvF4Vx/fyehGhzVwvdKgT6sVi9rQjun1M0Fn38ZxlzuN2txhVzFxRZK5GGPov
+         qW59qem9Np7q0l/k3FkuoBsztMZb72RgE9RK5iNmOZ3qeNFVw8PqK/u8x/stB9WVZT67
+         xXU2XYmtl7YAQInwimOCWgGDt0v4/qxEZfZpQaZtKpVK96j2oj47ZheT3iuGvlP9bhwY
+         dNTA==
+X-Gm-Message-State: AO0yUKXuVJshez36Zs9K+dCjz5DRyUbGfh9csx0QzQf/hZPJBBKRZVwN
+        FGxMc3tllCze1pi1dO7J/2I=
+X-Google-Smtp-Source: AK7set9tp76k57dkBl7tLBrFxa4vTFtlsNKv7hrcBsYByGMnQw7//dCXS4AaqRB9PXs5UmsZu8PqRw==
+X-Received: by 2002:a17:902:ecc1:b0:19a:8680:ba86 with SMTP id a1-20020a170902ecc100b0019a8680ba86mr17757527plh.50.1677226128047;
+        Fri, 24 Feb 2023 00:08:48 -0800 (PST)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        by smtp.gmail.com with ESMTPSA id b10-20020a170902bd4a00b0019c2cf12d15sm10239365plx.116.2023.02.24.00.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 00:08:47 -0800 (PST)
+From:   void0red <void0red@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        void0red <void0red@gmail.com>
+Subject: [PATCH] usb: gadget: udc: add return value check of kzalloc in mv_udc_probe
+Date:   Fri, 24 Feb 2023 16:08:42 +0800
+Message-Id: <20230224080842.3104911-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217081
+Even an 8-byte kzalloc will fail when we don't have enough memory,
+so we need a nullptr check and do the cleanup when it fails.
 
---- Comment #1 from gregkh@linuxfoundation.org ---
-On Fri, Feb 24, 2023 at 07:11:13AM +0000, bugzilla-daemon@kernel.org wrote:
-> miss a null check at
->
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/mv_=
-udc_core.c#L2232
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217081
 
-Great!  Please submit a patch to resolve this issue if you think this can
-ever actually happen.
+Signed-off-by: void0red <void0red@gmail.com>
+---
+ drivers/usb/gadget/udc/mv_udc_core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-thanks,
+diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
+index b397f3a84..6dd6d52de 100644
+--- a/drivers/usb/gadget/udc/mv_udc_core.c
++++ b/drivers/usb/gadget/udc/mv_udc_core.c
+@@ -2230,6 +2230,10 @@ static int mv_udc_probe(struct platform_device *pdev)
+ 
+ 	/* allocate a small amount of memory to get valid address */
+ 	udc->status_req->req.buf = kzalloc(8, GFP_KERNEL);
++	if (!udc->status_req->req.buf) {
++		retval = -ENOMEM;
++		goto err_destroy_dma;
++	}
+ 	udc->status_req->req.dma = DMA_ADDR_INVALID;
+ 
+ 	udc->resume_state = USB_STATE_NOTATTACHED;
+-- 
+2.34.1
 
-greg k-h
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
