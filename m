@@ -2,118 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50BD6A1C19
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Feb 2023 13:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F8A6A1C5A
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Feb 2023 13:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjBXMWy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Feb 2023 07:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S229718AbjBXMnj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Feb 2023 07:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjBXMWw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Feb 2023 07:22:52 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E4B2D6C
-        for <linux-usb@vger.kernel.org>; Fri, 24 Feb 2023 04:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677241371; x=1708777371;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=9XBXHElmYjaK7Xyk9qkJT6ahzA4RstIe7M/qnposHQQ=;
-  b=BNKySdpaXwZ+NX9PfBzcW0U8qqJQjapy0G4eF/L669XlHPcfBSps5tKw
-   xkjl6yc+W2ZwJ5u34k6UhpW3X1pOrvHgShLtQIP/jFBjgGkO3q1UNLJK9
-   F4M1YDbLzYHGIie1VyW5URx5FErhjP6AGUDFSHNDtdeGUHlYBEQRJGWAA
-   IGnqEvLq4xSM06o9haJAOvyogSvjGpDeTAqN1I3rELx0Rd4+9YDR1oGhH
-   a8Ov1U1vUgOWgRJk2Ftknz4+p2P74+G4awNbKFRnwntruvSyXI2Ciy4Hc
-   93xK8gQboRR8NpFbzv5mn/uT3k5HTevsdr8N5ZbKpmNGQIVOQnJiXSKyO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331199753"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="331199753"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 04:22:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="666145238"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="666145238"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga007.jf.intel.com with ESMTP; 24 Feb 2023 04:22:49 -0800
-Message-ID: <39df1d39-f1f9-ce69-64b8-981b19731d30@linux.intel.com>
-Date:   Fri, 24 Feb 2023 14:24:14 +0200
+        with ESMTP id S229601AbjBXMni (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Feb 2023 07:43:38 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5D518158;
+        Fri, 24 Feb 2023 04:43:36 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id cy6so48829538edb.5;
+        Fri, 24 Feb 2023 04:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UePzHufhOw2aAtD6ipXcXM5r15ZRa509qtLQfzxCNL0=;
+        b=SVop/IJtSIfVHFvQzKR2ZuvITHjZW7KC2Yq6z69oPYxvyno4y1js3twma1FkqjP+Lu
+         AfgyWJyZWUy8+U+B83BemQq1sa4LNhfQIWe+8vdC6f2g1Kj/APhmZYM6r9l6+jFUvjI4
+         at+SQjD6iWObRBhJ+Uvb8JKvxfT1flO2DaIkJ/FZYsCAiUPlc+M42sU+HfflReu7be6/
+         W9nE0TbtpKMuSOxUTzJuLHAUde5g8hKU7RSHWtobdnH+fvj/nlJ/AjzerW3oUl/ew4Z+
+         muo6YXwVVfNRxFy3+n0O54PWAnco/Xs+XnUBJxozudbSwM5pX0ssHdMDBS+fv8NcRFR4
+         XTvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UePzHufhOw2aAtD6ipXcXM5r15ZRa509qtLQfzxCNL0=;
+        b=MbSk84Glu0rKMHyGifkT7bnsFnl/9pKz651i1cJKhDSWusWw/+Q75p6LNzSyywa7K7
+         vMd85iR5qJ6m5GBliHTa++K84U/4lXWxPAHH3v/R9enn9CkZoloYownd1NhvlJRHH+Z3
+         B5ZEXDGfnhEATFm+DoODx5L4v3p7smCaAWyMzOhdE0q+RjKKTY5MqJXlmDbYq0y1yHdJ
+         Rrk95l7MXe3oY+WU5/2VWz9eYO6Y8jWV7ffkP5rnYca2bSGOSj7HaVbD0SiGrf2wTI2L
+         yxsq9SMrb3BQTHHEMPdKG4Vn8rM1jgTrp4zLMsWpDoFg4VnQ75T7c09yiEvlpumRMxpa
+         LuAg==
+X-Gm-Message-State: AO0yUKUqOVNlZuPC0udLScFHQ0dIBEjdmECz/RZvVpVGttdJvMUkmItC
+        rj/JU7AX9zpB/LuDdO8Vq0BaUG7L9kTxw7mq6QT339wg2Nqqfg7SG6g=
+X-Google-Smtp-Source: AK7set9SlEUHGCv9tnfYwDDIOmZdJnA32FkeWE/CLGkDZfbQhRz8AmOY6bThTYtr9NQleNBJHnxKEO2k8gdjQQUvxbI=
+X-Received: by 2002:a17:906:48c9:b0:878:4a24:1a5c with SMTP id
+ d9-20020a17090648c900b008784a241a5cmr11063255ejt.6.1677242614533; Fri, 24 Feb
+ 2023 04:43:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Content-Language: en-US
-To:     Seth Bollinger <seth.boll@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, sethb@digi.com
-References: <CA+JN8xMXu=sVQ2nyR9SgF25fquCZhH43wdsnuvfjDu+yGRv2yA@mail.gmail.com>
- <b13655bf-4a04-bece-71e4-698bfec83e2d@linux.intel.com>
- <CA+JN8xOOyU8yLJrxnKPwAMhQFKE70rTi=aLa3Adt7Og4dfPRVg@mail.gmail.com>
- <Y/eKwvQAihZYKUos@rowland.harvard.edu>
- <CA+JN8xOWzo8ugtzyrAeSB5wN7XSxXs1-69kTZyJ-ZSPLTvFx-A@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: HC died
-In-Reply-To: <CA+JN8xOWzo8ugtzyrAeSB5wN7XSxXs1-69kTZyJ-ZSPLTvFx-A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224092044.3332374-1-void0red@gmail.com> <CAD-N9QX5i5toj8cs7DxBjYWtRGf3ZRnfTAf809sFW6iX0Ktfmw@mail.gmail.com>
+In-Reply-To: <CAD-N9QX5i5toj8cs7DxBjYWtRGf3ZRnfTAf809sFW6iX0Ktfmw@mail.gmail.com>
+From:   Kang Chen <void0red@gmail.com>
+Date:   Fri, 24 Feb 2023 20:43:22 +0800
+Message-ID: <CANE+tVq0fwuuyMmrs4yyC21s_P8w0+WUS9zYZDxwda=++YpwqA@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: udc: add return value check of kzalloc in mv_udc_probe
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23.2.2023 18.05, Seth Bollinger wrote:
->> Note that the USB-2.0 spec says (section 9.2.6.3, Set Address
->> Processing):
->>
->>          After the reset/resume recovery interval, if a device receives a
->>          SetAddress() request, the device must be able to complete
->>          processing of the request and be able to successfully complete
->>          the Status stage of the request within 50 ms.
->>
->> These devices' 9.6 seconds to process a Set-Address request is a _lot_
->> longer than 50 ms.  No wonder they don't work properly.  Why on earth do
->> they take so long?
-> 
-> The device can't actually respond as it's no longer present on the
-> bus.  The hardware is taking this long to complete the TRB when the
-> device disappears in the middle of the transaction (at least this is
-> the theory).
-> 
-> I'm not trying to argue that these devices aren't crappy.  However, it
-> does seem like there are quite a lot of crappy devices in the field.
-> It would be nice if the driver didn't die when encountering these
-> devices.
-> 
->> Of course, xHCI controller drivers should be able to cancel an
->> Address-Device TRB without waiting for it to complete.
-> 
-> Agreed.  Is there some way I could try to cancel this command ring
-> TRB?  The hardware seems hung enough that it's not responding to
-> whatever we're trying to do in the cleanup routine when the timeout
-> handler fires though.
+Hi, Dongliang,
 
-xhci driver does exactly this, but fails to stop the command ring while
-trying to abort the command TRB.
+I totally agree with you. I checked the other drivers using
+status_req->req.buf structure, they free the memory when
+the driver removed. But in this driver, I can't find such code. So,
+as you said, it needs a devm_kazlloc instead of a kzalloc to manage
+the memory and avoid a memory leak.
 
-Does increasing the timeout for stopping command ring help?
+Thanks for your correction. I will post a new patch later.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index f5b0e1ce22af..6cecbca34cca 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -397,7 +397,7 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
-          * and try to recover a -ETIMEDOUT with a host controller reset.
-          */
-         ret = xhci_handshake(&xhci->op_regs->cmd_ring,
--                       CMD_RING_RUNNING, 0, 5 * 1000 * 1000);
-+                       CMD_RING_RUNNING, 0, 10 * 1000 * 1000);
-         if (ret < 0) {
-                 xhci_err(xhci, "Abort failed to stop command ring: %d\n", ret);
-                 xhci_halt(xhci);
-Thanks
--Mathias
+Dongliang Mu <mudongliangabcd@gmail.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=8824=
+=E6=97=A5=E5=91=A8=E4=BA=94 19:06=E5=86=99=E9=81=93=EF=BC=9A
+
+>
+> On Fri, Feb 24, 2023 at 5:28 PM void0red <void0red@gmail.com> wrote:
+> >
+> > From: Kang Chen <void0red@gmail.com>
+> >
+> > Even an 8-byte kzalloc will fail when we don't have enough memory,
+> > so we need a nullptr check and do the cleanup when it fails.
+> >
+> > Reported-by: eriri <1527030098@qq.com>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217081
+> >
+> > Signed-off-by: Kang Chen <void0red@gmail.com>
+> > ---
+> >  drivers/usb/gadget/udc/mv_udc_core.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/=
+udc/mv_udc_core.c
+> > index b397f3a84..6dd6d52de 100644
+> > --- a/drivers/usb/gadget/udc/mv_udc_core.c
+> > +++ b/drivers/usb/gadget/udc/mv_udc_core.c
+> > @@ -2230,6 +2230,10 @@ static int mv_udc_probe(struct platform_device *=
+pdev)
+> >
+> >         /* allocate a small amount of memory to get valid address */
+> >         udc->status_req->req.buf =3D kzalloc(8, GFP_KERNEL);
+>
+> Hi Kang and gregkh,
+>
+> I think there is a memory leak in this kzalloc. It seems there is no
+> deallocation for this allocated object.
+>
+> As the surrounding allocation statements suggest,
+> we should turn kzalloc to devm_kzalloc.
+>
+> > +       if (!udc->status_req->req.buf) {
+> > +               retval =3D -ENOMEM;
+> > +               goto err_destroy_dma;
+> > +       }
+> >         udc->status_req->req.dma =3D DMA_ADDR_INVALID;
+> >
+> >         udc->resume_state =3D USB_STATE_NOTATTACHED;
+> > --
+> > 2.34.1
+> >
