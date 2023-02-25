@@ -2,114 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6B26A2ACE
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Feb 2023 17:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1263C6A2B07
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Feb 2023 18:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjBYQln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Feb 2023 11:41:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S229610AbjBYRLo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Feb 2023 12:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjBYQll (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Feb 2023 11:41:41 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831BE125AF;
-        Sat, 25 Feb 2023 08:41:35 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-172a623ad9aso3027885fac.13;
-        Sat, 25 Feb 2023 08:41:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rmn+cqYTvDT85OGvCMKkjTNE8FVd8ZGTaREnVmw8Y5k=;
-        b=JeAIBpYUvNiXAA121YTlLRE7xs6FpBBdLcnKmViFAKnx0CAyuikX7hInf+ybRgcPU2
-         +qxGszBkgPNH4cJ4wAI4569+t1Xqf6fh5xaaQD98MO1fYRYlLG3zyXte2pP0cX/Oe5DZ
-         iSk5+0t1cywz6YkzojDiSA0c2orMUnZLEtqT/+iPn16CmlC3iLxUIKNnWvmULxuDanUC
-         jFwxulUiH4rLfylMJcybmUuXmvj6jcewXl5auogL9CVK1z8HLdut85UvNOLa2AdE3QPn
-         RjZzs+2BDhqeqYVEVmdYunlYeDNE0J71QG7PZ4iKjxXy3svG2dNR7jHcKrEGsF4WxZQ1
-         Qbmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rmn+cqYTvDT85OGvCMKkjTNE8FVd8ZGTaREnVmw8Y5k=;
-        b=QjTgcFXsbrMfsNhCkeBMLJbhS7SoS7l+2qnEw1wNZmtXHCk7UXfH8kySz9/fUJ08r3
-         pgfIrr3+yqouF9v/KUaCdVv5sDeo0RipvoDNMzdtc2RMJrWm+iPZ3bFixPj1q5d4deDV
-         HDqdBwJVWM4mR4ZXj/BSdCt5nrzwSHVWL19t36KWa1jRd5jwKFliiXQFWWaoUIa4tUjW
-         NNdfHXW+z63ezFycliWCBL+VacKLzDMw8bO98pDnV+1VofIAum+7zH3d0oWC6TcFytcr
-         0eHOX0FZ1jnsW8Si6RcfeNGkpzQYGMVM8z+VJyqfPMjJGioYCRHuAw2rEi6X9JxWCneg
-         A78A==
-X-Gm-Message-State: AO0yUKXEj8pbiN+tUZOyP5lKiCy0pB2sjwzXFS4KAVCyeu2Rq8wv9HbS
-        UpUlqejPF2vGF49noNcTCjm0twyipIY=
-X-Google-Smtp-Source: AK7set9nFJwgKU2JNnNF/RkpGiT2OOeIvv/dN+67jI23lAI/UoG09P6nrZwOJLRbeHtMWkberKCg4w==
-X-Received: by 2002:a05:6870:910c:b0:16d:c18d:4074 with SMTP id o12-20020a056870910c00b0016dc18d4074mr15754800oae.12.1677343294607;
-        Sat, 25 Feb 2023 08:41:34 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t2-20020a05687044c200b001726cfeea97sm718811oai.29.2023.02.25.08.41.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 08:41:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Feb 2023 08:41:32 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        jic23@kernel.org, chaotian.jing@mediatek.com,
-        ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
-        chunfeng.yun@mediatek.com, broonie@kernel.org,
-        wim@linux-watchdog.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 08/17] dt-bindings: watchdog: mtk-wdt: Add MT8365 SoC
- bindings
-Message-ID: <20230225164132.GA2905933@roeck-us.net>
-References: <20220531135026.238475-1-fparent@baylibre.com>
- <20220531135026.238475-9-fparent@baylibre.com>
+        with ESMTP id S229488AbjBYRLn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Feb 2023 12:11:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5551042E;
+        Sat, 25 Feb 2023 09:11:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677345102; x=1708881102;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/wmzhNxDeMcFcsLck+WoGXoesP55t1mLA577Oo+iWV8=;
+  b=Zqi74QDS720c77fRW5MRilYBviP9dNeN7+dfD9QSVgvYcpe+TMBj2DmO
+   2G0ZNMQldVj981zyneHEwmbd/Y1mah3hHUAZ8kMbLrtuiqrLgl3NWqEGU
+   sXLlsp7/x/Q8dTCGj5wQ8M7SIvHaC7sP/q5ecyYO/lCn2RCWjJeQUnLTm
+   lhP+xsGztWi8iAKTetB1kU+16q86eQV+LPk/OkRYw+DdqVQB5QQUixrDo
+   abWbP7H7tgl3eT3Zpi+vr9XmFNk+AVyRcJWZzd1emYTL84g6/cC/vwT1s
+   ZnfduqCUswBSAhj0bUFG4KFC/CVYDFuUYYChcAlPbrTX9K6ihgnd/q+kG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="332369633"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="332369633"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 09:11:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="673233092"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="673233092"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 25 Feb 2023 09:11:39 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pVy5C-0003KB-0e;
+        Sat, 25 Feb 2023 17:11:38 +0000
+Date:   Sun, 26 Feb 2023 01:10:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-mm@kvack.org,
+        linux-bluetooth@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        io-uring@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 8232539f864ca60474e38eb42d451f5c26415856
+Message-ID: <63fa411f.ZvVOisJt5OlLzGYF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531135026.238475-9-fparent@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 31, 2022 at 03:50:17PM +0200, Fabien Parent wrote:
-> Add binding documentation for the MT8365 SoC.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 8232539f864ca60474e38eb42d451f5c26415856  Add linux-next specific files for 20230225
 
-Going through my old e-mails:
+Error/Warning reports:
 
-This patch never made it upstream and would have to be rewritten to apply
-to Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml.
+https://lore.kernel.org/oe-kbuild-all/202302040652.zkUBTjyo-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302112104.g75cGHZd-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302210350.lynWcL4t-lkp@intel.com
 
-Guenter
+Error/Warning: (recently discovered and may have been fixed)
 
-> ---
->  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> index a97418c74f6b..0e63c4ba3785 100644
-> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> @@ -19,6 +19,7 @@ Required properties:
->  	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
->  	"mediatek,mt8192-wdt": for MT8192
->  	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
-> +	"mediatek,mt8365-wdt", "mediatek,mt6589-wdt": for MT8365
->  
->  - reg : Specifies base physical address and size of the registers.
->  
+FAILED: load BTF from vmlinux: No data available
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
+drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype for function 'pcmcia_collie_init' [-Wmissing-prototypes]
+include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
+io_uring/rsrc.c:1262 io_sqe_buffer_register() error: uninitialized symbol 'folio'.
+mm/page_alloc.c:257:1: sparse: sparse: symbol 'check_pages_enabled' was not declared. Should it be static?
+net/bluetooth/hci_sync.c:2403 hci_pause_addr_resolution() warn: missing error code? 'err'
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-randconfig-s041-20230222
+|   `-- mm-page_alloc.c:sparse:sparse:symbol-check_pages_enabled-was-not-declared.-Should-it-be-static
+|-- arc-allyesconfig
+|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
+|-- arm-allmodconfig
+|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
+|-- arm-allyesconfig
+|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
+|-- arm-randconfig-s051-20230222
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- arm64-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|-- i386-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|-- i386-randconfig-s001
+|   |-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- i386-randconfig-s002
+|   `-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
+|-- i386-randconfig-s003
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- loongarch-randconfig-m041-20230225
+|   `-- io_uring-rsrc.c-io_sqe_buffer_register()-error:uninitialized-symbol-folio-.
+|-- openrisc-randconfig-r014-20230225
+|   `-- FAILED:load-BTF-from-vmlinux:No-data-available
+|-- openrisc-randconfig-s052-20230222
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- parisc-randconfig-m031-20230223
+|   `-- net-bluetooth-hci_sync.c-hci_pause_addr_resolution()-warn:missing-error-code-err
+|-- powerpc-allmodconfig
+|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
+|-- x86_64-allnoconfig
+|   `-- Warning:Documentation-devicetree-bindings-usb-rockchip-dwc3.yaml-references-a-file-that-doesn-t-exist:Documentation-devicetree-bindings-phy-phy-rockchip-inno-usb2.yaml
+|-- x86_64-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|-- x86_64-randconfig-m001
+|   `-- io_uring-rsrc.c-io_sqe_buffer_register()-error:uninitialized-symbol-folio-.
+`-- x86_64-randconfig-s021
+    `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+clang_recent_errors
+`-- arm-collie_defconfig
+    `-- drivers-pcmcia-pxa2xx_sharpsl.c:warning:no-previous-prototype-for-function-pcmcia_collie_init
+
+elapsed time: 730m
+
+configs tested: 46
+configs skipped: 5
+
+tested configs:
+alpha                               defconfig   gcc  
+arc                          axs103_defconfig   gcc  
+arc                                 defconfig   gcc  
+arm                          collie_defconfig   clang
+arm                                 defconfig   gcc  
+arm                      jornada720_defconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                                defconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                         amcore_defconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                        bcm47xx_defconfig   gcc  
+mips                       lemote2f_defconfig   clang
+mips                     loongson1c_defconfig   clang
+mips                     loongson2k_defconfig   clang
+mips                           mtx1_defconfig   clang
+mips                      pic32mzda_defconfig   clang
+mips                        qi_lb60_defconfig   clang
+mips                          rm200_defconfig   clang
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                    klondike_defconfig   gcc  
+powerpc                  mpc885_ads_defconfig   clang
+powerpc                      pasemi_defconfig   gcc  
+powerpc                     skiroot_defconfig   clang
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                                defconfig   gcc  
+sh                         apsh4a3a_defconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                          landisk_defconfig   gcc  
+sh                          polaris_defconfig   gcc  
+sh                           se7343_defconfig   gcc  
+sparc                            alldefconfig   gcc  
+sparc                               defconfig   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                              defconfig   gcc  
+xtensa                  cadence_csp_defconfig   gcc  
+xtensa                       common_defconfig   gcc  
+xtensa                generic_kc705_defconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
