@@ -2,73 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7F76A2391
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Feb 2023 22:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC8B6A2738
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Feb 2023 05:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjBXVQs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Feb 2023 16:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S229496AbjBYEL6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Feb 2023 23:11:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjBXVQr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Feb 2023 16:16:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE25A6ADC6;
-        Fri, 24 Feb 2023 13:16:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2DCAB81D3E;
-        Fri, 24 Feb 2023 21:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B15FC433EF;
-        Fri, 24 Feb 2023 21:16:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677273361;
-        bh=DtTOwbJgctcgcTgsOtwzPE7/uhJV67BRa/Bf2v+xl+4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=VhnArZJhUonp54ZBQ17HWTU0gjwopOemh12wA/F7vDYBQQqTq9GkOYn5+ZHpm8lfG
-         wmyviNaZzmZRiFHmfV7QZBAnbjwLKSX5jS01/14UmaUvranhYmo768vppFY3k2mW8i
-         GbkAOAS3WWkVFVIfQVDsG4Q8HVQFntVkFLq0g1evRpxNm0eBWfXs22c5HoJO8E8zc0
-         E9IQ/wU8+vPcwviSPi87bXAxMZ09aoTUg3k/ZfGzyrHeG6aRsjxIS6KMMVNAmrt6dd
-         0fkqxy6m2w3Ud2/sHLn9khQ2p0OS3DSQepKYuAQXWhQVbNpc6AFSxwK5URT5mi/lT6
-         JGlr9MX/4fAXg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 888F2C43151;
-        Fri, 24 Feb 2023 21:16:01 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt driver changes for 6.3-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y/iyrFP2wO97XvjD@kroah.com>
-References: <Y/iyrFP2wO97XvjD@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y/iyrFP2wO97XvjD@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.3-rc1
-X-PR-Tracked-Commit-Id: 1243741f6b02b5f2c06bca910f894c333838f994
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 72bffe7e1eb6cb82b90aa14cd786f3f5ede9e0ae
-Message-Id: <167727336155.26367.8897217865852241190.pr-tracker-bot@kernel.org>
-Date:   Fri, 24 Feb 2023 21:16:01 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229458AbjBYEL5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Feb 2023 23:11:57 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA006628ED;
+        Fri, 24 Feb 2023 20:11:54 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id c1so1514709plg.4;
+        Fri, 24 Feb 2023 20:11:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8pBEzpVd+snu5F2T0uV1kL07YHenLWu8FxH3t2VC2cg=;
+        b=mYyz2gyWDoRuHWtmyk2M3qcjPcj+6c3fcMQDYYI6zlWiLrqHDbrzc/o6nEE+cIt2Av
+         CZS0dZh4hye5IvjPsO+NUscM/CmxPLA4em51lQ+dZpgCaoKyz08QVqS5c22pMNq32BfC
+         6VtwVb4Cfmdu5RGIWbSu3PHkeuOxpXKD380Tsj/DTel2i7Lef1AkAxIgKQ4IlQqsUSSt
+         3ginx2UA+PejVsSf4okhnw19jiSmp9wwmTaZhIfsNS5z8/I+GKg0qrdTya9EaCHBfO/n
+         f8L2pV0R4euYBJfn8712YKdLsAaz0ouW/xjUOXwCAa6STvGQaYFbwKKAH6ydG6jEz64m
+         ad1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8pBEzpVd+snu5F2T0uV1kL07YHenLWu8FxH3t2VC2cg=;
+        b=u5BWmhnABKZpgo4AKNAbg91MHCs3TcFTxtMtv9Qe7OKpllcanz/JyWYpaQdf975J7E
+         ltfqzVK+TfehFTUZjoJ4G/aGlMj531IsbIyPYnFNSqSFN6ZpmFWi3Kcs4lZcsIbTmCM7
+         l8kTrem0vZ2cGazbvdaEZzSQ+QNh4dr+VgChC9kS3QLYEWf6ukUtTFnL7gIGtW2BHN6c
+         UAGoG23wItf73WN9ZlfDoVCPMajzqt6jlcd4ffQRXpnQxwsDerVkL3Rmdj8siFrkc1vb
+         DpLgdgOTnH3w3d3j6D2IA3moVfePb7tijfJve3QbLIH8t9y7Y7eHmIdDCihsva554wcD
+         xKhA==
+X-Gm-Message-State: AO0yUKXhMBSdBftPB91orVbNalqHkHVxRpR0qBs3sDZf7EJM6wWx/ugD
+        wMVz2cEX1sVmiDjyQpXIzOUgqXP3ZgF75ztgJi8=
+X-Google-Smtp-Source: AK7set/glCBFSw0P8vlJ0unVVzMrpzs4wfa6R4gYRagEqe285TdkZwTuzii2Xazd7vwjKIzB2G6n8Q==
+X-Received: by 2002:a17:90b:224f:b0:234:236f:1a8d with SMTP id hk15-20020a17090b224f00b00234236f1a8dmr21307777pjb.14.1677298314223;
+        Fri, 24 Feb 2023 20:11:54 -0800 (PST)
+Received: from DESKTOP-HHR6EMI.localdomain ([143.244.50.165])
+        by smtp.gmail.com with ESMTPSA id q89-20020a17090a756200b0022bfcf5d297sm2268428pjk.9.2023.02.24.20.11.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 20:11:53 -0800 (PST)
+From:   void0red <void0red@gmail.com>
+To:     sergei.shtylyov@gmail.com
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mudongliangabcd@gmail.com,
+        Kang Chen <void0red@gmail.com>
+Subject: [PATCH v3 1/2] usb: gadget: udc: add return value check of kzalloc in mv_udc_probe
+Date:   Sat, 25 Feb 2023 12:11:48 +0800
+Message-Id: <20230225041149.136-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <17383b82-5e1c-837c-d05f-67a3a024cace@gmail.com>
+References: <17383b82-5e1c-837c-d05f-67a3a024cace@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Fri, 24 Feb 2023 13:50:52 +0100:
+From: Kang Chen <void0red@gmail.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.3-rc1
+Even an 8-byte kzalloc will fail when we don't have enough memory,
+so we need a nullptr check and do the cleanup when it fails.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/72bffe7e1eb6cb82b90aa14cd786f3f5ede9e0ae
+Reported-by: eriri <1527030098@qq.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217081
 
-Thank you!
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+v3 -> v2: split the patch into two
+v2 -> v1: replace kzalloc with devm_kzalloc
 
+ drivers/usb/gadget/udc/mv_udc_core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
+index b397f3a84..6dd6d52de 100644
+--- a/drivers/usb/gadget/udc/mv_udc_core.c
++++ b/drivers/usb/gadget/udc/mv_udc_core.c
+@@ -2230,6 +2230,10 @@ static int mv_udc_probe(struct platform_device *pdev)
+ 
+ 	/* allocate a small amount of memory to get valid address */
+ 	udc->status_req->req.buf = kzalloc(8, GFP_KERNEL);
++	if (!udc->status_req->req.buf) {
++		retval = -ENOMEM;
++		goto err_destroy_dma;
++	}
+ 	udc->status_req->req.dma = DMA_ADDR_INVALID;
+ 
+ 	udc->resume_state = USB_STATE_NOTATTACHED;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+
