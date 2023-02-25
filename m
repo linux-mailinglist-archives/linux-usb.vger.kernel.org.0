@@ -2,79 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD926A2BC8
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Feb 2023 22:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B596A2BFA
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Feb 2023 23:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjBYVCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Feb 2023 16:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S229585AbjBYWCs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Feb 2023 17:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBYVCp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Feb 2023 16:02:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336AE14E90;
-        Sat, 25 Feb 2023 13:02:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C253B80B32;
-        Sat, 25 Feb 2023 21:02:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E37C433D2;
-        Sat, 25 Feb 2023 21:02:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1677358961;
-        bh=dAdczosGMLE3reQ+yfqGchmgVwzqD0s258AHR5QDBk8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=alNPgnU7am/djLnV5nPooemcTFnojh9BxoSgHaOyQ1zVw/FmC9FHnkLEdsZbYmyo1
-         myAxBpFmRRNHwYDF/RDFqVU53010sqZCOx0YG4deO0d5f7R/9zChC/0WdjTHh8h6rS
-         9ad9+j7MEIPfQW8G40OfvZyJ7mjkjFPib3GnbAUc=
-Date:   Sat, 25 Feb 2023 13:02:39 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-mm@kvack.org,
-        linux-bluetooth@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        io-uring@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 8232539f864ca60474e38eb42d451f5c26415856
-Message-Id: <20230225130239.d25f657955d3c4462c80d128@linux-foundation.org>
-In-Reply-To: <63fa411f.ZvVOisJt5OlLzGYF%lkp@intel.com>
-References: <63fa411f.ZvVOisJt5OlLzGYF%lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        with ESMTP id S229473AbjBYWCr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Feb 2023 17:02:47 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018EF61AF
+        for <linux-usb@vger.kernel.org>; Sat, 25 Feb 2023 14:02:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677362565; x=1708898565;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DP+iz1Hn2/7DUwfWJgDMNGRwaTqASEADi1gZrzBhuwg=;
+  b=VmEN/ukeimqpAsxah5ibdupSzZdesb9x7iF2F2YF7ryw67NkIhpm8Hxu
+   1E+La6//ly2WrWJ1g20K1Wogid1db6D3pKQowVHUGKe0+lQ484vodQNZl
+   uqs/0XF6PkjdxNCZi6BHnb/kHZZI3pbKjqqlY+wjf02wsX+cwGeuaWPrN
+   0kexQewDe3m8Xk4XjgCwDb8r2WBZCftq3UPKZ0sGuMeZch7sOXicXJBL1
+   P5BvtLXZ2hEN7TIPDgEyicpxi6BujIzJIoG+b0uTqdSTZ0wk0nuWg7VeG
+   Stcg1EZi6iOXPpOJOYusEymidpL9Of3I2AS4bM9tBOuMkf3kjQyHnLXjg
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="361215904"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="361215904"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 14:02:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="703558190"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="703558190"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2023 14:02:43 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pW2cs-0003QR-34;
+        Sat, 25 Feb 2023 22:02:42 +0000
+Date:   Sun, 26 Feb 2023 06:02:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:rndis-removal] BUILD SUCCESS
+ 30bdc1e366b976744354c5c54d8e251b31cf0d35
+Message-ID: <63fa855c.CTJ54kGkrV9LcMoh%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 26 Feb 2023 01:10:55 +0800 kernel test robot <lkp@intel.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
+branch HEAD: 30bdc1e366b976744354c5c54d8e251b31cf0d35  USB: disable all RNDIS protocol drivers
 
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> branch HEAD: 8232539f864ca60474e38eb42d451f5c26415856  Add linux-next specific files for 20230225
-> 
-> Error/Warning reports:
-> 
-> mm/page_alloc.c:257:1: sparse: sparse: symbol 'check_pages_enabled' was not declared. Should it be static?
+elapsed time: 720m
 
-It should!
+configs tested: 19
+configs skipped: 3
 
---- a/mm/page_alloc.c~mm-page_alloc-reduce-page-alloc-free-sanity-checks-fix
-+++ b/mm/page_alloc.c
-@@ -254,7 +254,7 @@ DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_FREE_DEFAULT_ON, init_on_free);
- EXPORT_SYMBOL(init_on_free);
- 
- /* perform sanity checks on struct pages being allocated or freed */
--DEFINE_STATIC_KEY_MAYBE(CONFIG_DEBUG_VM, check_pages_enabled);
-+static DEFINE_STATIC_KEY_MAYBE(CONFIG_DEBUG_VM, check_pages_enabled);
- 
- static bool _init_on_alloc_enabled_early __read_mostly
- 				= IS_ENABLED(CONFIG_INIT_ON_ALLOC_DEFAULT_ON);
-_
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+clang                                   alpha   defconfig
+gcc                                       arc   defconfig
+gcc                                       arm   defconfig
+gcc                                     arm64   defconfig
+gcc                                      csky   defconfig
+gcc                                      i386   defconfig
+gcc                                      ia64   defconfig
+gcc                                 loongarch   defconfig
+gcc                                      m68k   defconfig
+gcc                                     nios2   defconfig
+gcc                                    parisc   defconfig
+gcc                                  parisc64   defconfig
+gcc                                     riscv   defconfig
+gcc                                     riscv   rv32_defconfig
+gcc                                      s390   defconfig
+gcc                                     sparc   defconfig
+gcc                                        um   i386_defconfig
+gcc                                        um   x86_64_defconfig
+gcc                                    x86_64   defconfig
+gcc                                                  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
