@@ -2,79 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF25D6A413A
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Feb 2023 12:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897296A4239
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Feb 2023 14:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjB0Lyx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Feb 2023 06:54:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S229795AbjB0NGh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Feb 2023 08:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjB0Lyx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Feb 2023 06:54:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373D6AD15;
-        Mon, 27 Feb 2023 03:54:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D439EB80D1D;
-        Mon, 27 Feb 2023 11:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E509C433EF;
-        Mon, 27 Feb 2023 11:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677498889;
-        bh=3+0/i8GC+xWIbr+yJtM7BHcr58CXIKhSiMJd0Dac0SQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iquXKamEaZyEN/S0fEwBfCjDh7TXBd+7JvqoZfJO6rKSARtEIX01ideQGWoXCG2Wc
-         cK3K685plNkCkbXmXXZSEPdTy3su3Pwrp8zoKg/lKEk+1pVM8n5EceTORB98w9MDHV
-         97gM5p53YWaLazrPIvIlylW2ZwSYn26pTTIoy5gs=
-Date:   Mon, 27 Feb 2023 12:54:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Karina Yankevich <k.yankevich@omp.ru>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] usb: storage: sddr55: clean up variable type
-Message-ID: <Y/yaB2A8qwgRkqVO@kroah.com>
-References: <53bc0584-51eb-8bb7-de48-ca07fccafc19@gmail.com>
- <20230227112541.14849-1-k.yankevich@omp.ru>
+        with ESMTP id S229927AbjB0NGg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Feb 2023 08:06:36 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98FB1EFE8
+        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 05:06:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677503171; x=1709039171;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=b8oyPOP0yoUkd09yNuCCqtaUSqq7rHUXJvtC7ObQ2YA=;
+  b=TJw3KUD/5A4JdEqNNB8PdX7C3KNEBSL3iZjrbLsRFPiBIqQRpwyYhXtB
+   xvbqI6Nxvv/T0b0L9xtRVLcWTJKtm1euVxqFNyV2BTQWR0EPwYcNVHmwd
+   GnOmJPXm0gNeHa43A7JAfctPbqqXnQhbKQR+uw3XL823+MtGYorimoxFD
+   YRBdslCqqlwd8z4r3GkwtnAFd72a7wTd9le95itT2TTl6pyim68ufxqMh
+   NPmbZljrAbH3PApTuJPHYVNrpThuC/TBNdNHDHyHBeNddLIniA1B/ZXJ6
+   q2D0AB1A5ryF3ddP1Qug9R/NkO/UyIj8YNNGnHj8VnZqB3//Okii9w+PR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="398625681"
+X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
+   d="scan'208";a="398625681"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 05:06:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="651219624"
+X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
+   d="scan'208";a="651219624"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga006.jf.intel.com with ESMTP; 27 Feb 2023 05:06:09 -0800
+Message-ID: <d86ca3b6-6d02-6312-6e45-4ef954ff36f6@linux.intel.com>
+Date:   Mon, 27 Feb 2023 15:07:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227112541.14849-1-k.yankevich@omp.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Content-Language: en-US
+To:     Seth Bollinger <seth.boll@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        sethb@digi.com
+References: <CA+JN8xMXu=sVQ2nyR9SgF25fquCZhH43wdsnuvfjDu+yGRv2yA@mail.gmail.com>
+ <b13655bf-4a04-bece-71e4-698bfec83e2d@linux.intel.com>
+ <CA+JN8xOOyU8yLJrxnKPwAMhQFKE70rTi=aLa3Adt7Og4dfPRVg@mail.gmail.com>
+ <Y/eKwvQAihZYKUos@rowland.harvard.edu>
+ <CA+JN8xOWzo8ugtzyrAeSB5wN7XSxXs1-69kTZyJ-ZSPLTvFx-A@mail.gmail.com>
+ <39df1d39-f1f9-ce69-64b8-981b19731d30@linux.intel.com>
+ <CA+JN8xPjqCaHLvh5v9y3pFC0DxNWjBj-3jF0DJ=B1YSddvYGNg@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: HC died
+In-Reply-To: <CA+JN8xPjqCaHLvh5v9y3pFC0DxNWjBj-3jF0DJ=B1YSddvYGNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:25:41PM +0300, Karina Yankevich wrote:
-> SVACE static analyzer complains that we're possibly
-> losing information by shifting an 'unsigned int pba'
-> variables in sddr55_{read,write}_data().
-> It is a false positive, because of the card's total capacity
-> is no larger than 128 MB. But 'unsigned int' is more
-> suitable in this case.
+On 24.2.2023 15.16, Seth Bollinger wrote:
+>> xhci driver does exactly this, but fails to stop the command ring while
+>> trying to abort the command TRB.
+>>
+>> Does increasing the timeout for stopping command ring help?
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index f5b0e1ce22af..6cecbca34cca 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -397,7 +397,7 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+>>            * and try to recover a -ETIMEDOUT with a host controller reset.
+>>            */
+>>           ret = xhci_handshake(&xhci->op_regs->cmd_ring,
+>> -                       CMD_RING_RUNNING, 0, 5 * 1000 * 1000);
+>> +                       CMD_RING_RUNNING, 0, 10 * 1000 * 1000);
+>>           if (ret < 0) {
+>>                   xhci_err(xhci, "Abort failed to stop command ring: %d\n", ret);
+>>                   xhci_halt(xhci);
+> 
+> Well, for us it doesn't really help as it still ends the life of the
+> HC, but it doesn't solve the issue either (you can see the 10 second
+> timeout here).
 
-Please wrap at 72 columns.
+Ok, thanks, seems that aborting the ring does not work either.
 
-> Found by OMP on behalf of Linux Verification Center
-> (linuxtesting.org) with SVACE.
+When you earlier bumped the command ring timeout did you notice if
+transfer TRBs for other devices were completing normally while waiting
+for the address device command TRB to complete?
 
-What is "OMP"?
+If so then it could make sense to just increase the XHCI_CMD_DEFAULT_TIMEOUT
+for the address device commands to 10 seconds
 
-What is "SVACE"?
+This can probably be quickly tested by moving a USB mouse while triggering the
+address device timeout.
 
-And why change anything if there is not a real issue?
+Thanks
+Mathias
 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-That's obviously not the correct commit id for such a "fix" as this is
-not a real issue.
-
-thanks,
-
-greg k-h
