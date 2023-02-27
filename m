@@ -2,52 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7BA6A3B44
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Feb 2023 07:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BED6A3BD7
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Feb 2023 08:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjB0GdI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Feb 2023 01:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S229745AbjB0Hvt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Feb 2023 02:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjB0GdH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Feb 2023 01:33:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AEDAD18
-        for <linux-usb@vger.kernel.org>; Sun, 26 Feb 2023 22:33:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4AC9B80C6D
-        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 06:33:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015E7C433D2;
-        Mon, 27 Feb 2023 06:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677479581;
-        bh=oldy81cZorHr19ZbcsfhcvIOk5eQShHziS1YVDGjkFo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dKx1lcu9T1CwacyogIZy2BbV75c6cxFt8UtdX6M8mfKNjPLhkl7Gu8R6wHfdPhva8
-         YX6NVMm6y3z5Lz5FBXhL+Bgi3z5PUlCJCs8Zv8/G79m7k1geP1YYQ2pa/P30fjBfNd
-         3vkvPSvq+7Q93HziGPCfTToBkyf++ygUCK1ESmgU=
-Date:   Mon, 27 Feb 2023 07:32:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH v2 0/4] usb: replace some __dynamic_array() to __get_buf()
-Message-ID: <Y/xOmnDFt8XTXKyO@kroah.com>
-References: <1677465850-1396-1-git-send-email-quic_linyyuan@quicinc.com>
+        with ESMTP id S229471AbjB0Hvs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Feb 2023 02:51:48 -0500
+Received: from mail.lineo.co.jp (mail.lineo.co.jp [203.141.200.203])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E951B542
+        for <linux-usb@vger.kernel.org>; Sun, 26 Feb 2023 23:51:46 -0800 (PST)
+Received: from [172.31.17.196] (vpn1.lineo.co.jp [203.141.200.204])
+        by mail.lineo.co.jp (Postfix) with ESMTPSA id 0D9E9802BAE74;
+        Mon, 27 Feb 2023 16:51:45 +0900 (JST)
+Message-ID: <0e743482-95fc-375d-21cf-b5a237b52e0d@lineo.co.jp>
+Date:   Mon, 27 Feb 2023 16:51:44 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1677465850-1396-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RFC PATCH v2] usb: gadget: f_fs: Fix incorrect version checking
+ of OS descs
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+References: <f7e7fcd9-ddee-2c81-ca44-951b6cec1003@lineo.co.jp>
+ <57a35112-66b3-0a9d-8ced-4d47b5b7796c@collabora.com>
+Content-Language: en-US
+From:   Yuta Hayama <hayama@lineo.co.jp>
+Cc:     Yuta Hayama <hayama@lineo.co.jp>
+In-Reply-To: <57a35112-66b3-0a9d-8ced-4d47b5b7796c@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,47 +43,107 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:44:06AM +0800, Linyu Yuan wrote:
-> some trace event funciton use __dynamic_array, but it only used at output
-> time, change to __get_buf() will allocate tempary buffer for such usage.
+Hi Andrzej,
+
+On 2023/02/22 20:08, Andrzej Pietrasiewicz wrote:
+> Now that I think of it, aren't the numbers supposed to be in little endian
+> order?
 > 
+> In include/uapi/linux/usb/functionfs.h, descriptors and legacy descriptors
+> specify numbers as LE32, and below there is this sentence:
 > 
-> v2: remove Aswath Govindraju, seem mail not aviliable.
+> "All numbers must be in little endian order.".
 > 
+> And that is regardless of what endianness the machine running the gadget
+> uses. In other words, in the buffer passed through ep0 any numbers shall be
+> stored in such a way, that the least significant byte goes first.
 > 
-> Linyu Yuan (4):
->   usb: cdns3: change trace event cdns3_ring() operation
->   usb: cdns3: change some trace event __dynamic_array() to __get_buf()
->   usb: dwc3: change some trace event __dynamic_array() to __get_buf()
->   usb: xhci: change some trace event __dynamic_array() to __get_buf()
+> The tables specifying the OS descriptors use general U16/U32 type, though,
+> but struct usb_os_desc_header says:
 > 
->  drivers/usb/cdns3/cdns3-debug.h |  8 ++------
->  drivers/usb/cdns3/cdns3-trace.h | 28 +++++++++-------------------
->  drivers/usb/cdns3/cdnsp-trace.h | 12 ++++--------
->  drivers/usb/dwc3/trace.h        |  6 ++----
->  drivers/usb/host/xhci-trace.h   | 20 +++++++-------------
->  5 files changed, 24 insertions(+), 50 deletions(-)
+> /* MS OS Descriptor header */
+> struct usb_os_desc_header {
+>     __u8    interface;
+>     __le32    dwLength;
+>     __le16    bcdVersion;
+> ...
 > 
-> -- 
-> 2.7.4
+> which is a strong hint that, in particular, bcdVersion _is_ little endian.
 > 
+> And a two-byte quantity of 0x0100 stored in little endian format looks like
+> this: 0x0001.
+
+Yes, I think you are correct that each field in the (OS) descriptor must be in
+little-endian order.
+
+However, the current code does not seem to be consistent with the part that
+verifies bcd_version and the part that verifies w_index. Below are the results
+of my experiments on my ARM v7 machine (AM335X).
+
+On the userspace driver, set the values to the descriptor as follows:
+
+#include <endian.h>
+...
+	struct usb_os_desc_header ext_compat_hdr = {};
+	...
+	ext_compat_hdr.bcdVersion = htole16(0x0001);
+	ext_compat_hdr.wIndex = htole16(0x0004);
+	...
+
+In the Extended Compat ID Descriptor descriptor, the correct value for
+bcdVersion is probably 0x100 in little-endian format, and the correct value for
+wIndex is 0x4 in little-endian format. Note that the current kernel (without my
+patch) only accepts a value of 0x1 for bcdVersion, so the above is the case.
 
 
-Hi,
+On the other hand, the code to verify bcdVersion and wIndex in the kernel is as
+follows:
 
-This is the friendly semi-automated patch-bot of Greg Kroah-Hartman.
-You have sent him a patch that has triggered this response.
+	u16 bcd_version = le16_to_cpu(desc->bcdVersion);
+	u16 w_index = le16_to_cpu(desc->wIndex);
 
-Right now, the development tree you have sent a patch for is "closed"
-due to the timing of the merge window.  Don't worry, the patch(es) you
-have sent are not lost, and will be looked at after the merge window is
-over (after the -rc1 kernel is released by Linus).
+	if (bcd_version != 1) {
+		pr_vdebug("unsupported os descriptors version: %d",
+			  bcd_version);
+		return -EINVAL;
+	}
+	switch (w_index) {
+	case 0x4:
+		*next_type = FFS_OS_DESC_EXT_COMPAT;
+		break;
+	case 0x5:
+		*next_type = FFS_OS_DESC_EXT_PROP;
+		break;
+	default:
+		pr_vdebug("unsupported os descriptor type: %d", w_index);
+		return -EINVAL;
+	}
 
-So thank you for your patience and your patches will be reviewed at this
-later time, you do not have to do anything further, this is just a short
-note to let you know the patch status and so you don't worry they didn't
-make it through.
+When setting a value to a structure in the userspace driver, cpu_to_leXX() is
+used, and when checking the value in the kernel, leXX_to_cpu() is used after
+taking the value out of the structure. Therefore, I do not think we need to
+worry about endianness at the time of verification. Actually, the w_index
+verification, which expects a value of 0x4 or 0x5, seems to be working
+correctly.
 
-thanks,
+As I stated in my email below, I am confident that 0x100 is the correct value
+for bcd_version. If this is correct, shouldn't the kernel accept the value
+0x100 obtained by leXX_to_cpu()?
+https://lore.kernel.org/linux-usb/5c049a94-f848-ff9a-ffbe-c1cf335ca644@lineo.co.jp/
 
-greg k-h's patch email bot
+
+> So it seems to me the correct thing to do is to ensure that the verifying code
+> works correctly both on big and little endian machines running USB gadgets,
+> rather than adding 0x0100 as a correct value and deprecating 0x0001.
+
+Sorry, I don't have a big-endian machine, so it will take some time to prepare
+an environment for checking.
+
+The procedure is to do cpu_to_leXX() on the user space driver and then
+leXX_to_cpu() in the kernel, so I think it will work no matter what the
+endianness of the machine is....
+
+
+Regards,
+
+Yuta Hayama
