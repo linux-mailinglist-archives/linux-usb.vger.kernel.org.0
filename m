@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBEB6A4D30
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Feb 2023 22:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38696A4D42
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Feb 2023 22:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjB0VaV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Feb 2023 16:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
+        id S229684AbjB0VeQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Feb 2023 16:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjB0VaT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Feb 2023 16:30:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1953322A1F
-        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 13:30:19 -0800 (PST)
+        with ESMTP id S230057AbjB0VeP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Feb 2023 16:34:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EFA27D69
+        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 13:34:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A549860F24
-        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 21:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1488FC433D2
-        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 21:30:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F6DFB80D2B
+        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 21:33:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3F8AC4339C
+        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 21:33:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677533418;
-        bh=qz5DwpdE1M9yacS9PPZ4+WdfykAYzFhi+vULX02uvxk=;
+        s=k20201202; t=1677533637;
+        bh=eOxBbcYRll09S+qyHgxsgz2UZIlXDQoHsUGs2pf46Hk=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jBkMFmMLFukwD6QbIN2y9OGWBL4Yiq6fGdvyuTa7ZthgGhaD8MnxwkcP0vDy/N9/Q
-         YT+MNssdveNbjePizIBvSo1Hn+U8GUNT6dx9JI4gSpP/pyRGEY1S9avFAJAMSCEiXe
-         AmLncGhKsta3xJDu2RL8BE9njKwLVBaR3lMeOt7w+nxXVa2aevRl+fis5Vor2Uqb4b
-         a2lSkduSW5f8hXYobgXxR5TCZWgDq79NzeWs6rJHb1r9dVKXFP96DfjUlxFP9CpRss
-         9KwlqXClfeE39AXy1ez4TiS/p+G72VMv9lXOs1qI9BZq4B5JHRCKoojRKesOmjNYhw
-         0wMwG+dyyVehQ==
+        b=s+wMT31GMuqT6cES/VUQfpYfwT2VQL4+NRvcedt1bCY7q/Bzw/RSUXiRr99oGAwxo
+         V0JoqckJ02otVHEyQ9/zN8kV5K3Z/gZ6OsTeWuYsD9Djpbzq59iRGYmnJfDGCDWMzw
+         0HWVbozkahxwIERZsHFz4/Y9SmxNVoM2gqR9NWwQPp6V27ltmGAtxt5cf5dONl6Sym
+         ZwZ0VoXIGWqX6UMR3Xev0UR3O0ws41+18itiRYuFtxNKkkIXeyG1yUgs/fkho/QP78
+         aWQNn01rf2yXGIajMTMzpFbPPHEQsqmwnQ81OvL36lpopR2lKSUy+r2i0akZ8Z6Urk
+         SlXKBJqU4v8fw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 02BF4C43141; Mon, 27 Feb 2023 21:30:18 +0000 (UTC)
+        id 9EABEC43143; Mon, 27 Feb 2023 21:33:57 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 217088] xone23c mixer
-Date:   Mon, 27 Feb 2023 21:30:17 +0000
+Subject: [Bug 217089] xone23c mixer
+Date:   Mon, 27 Feb 2023 21:33:57 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -45,16 +45,16 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: kaufmich@valino.info
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: MOVED
+X-Bugzilla-Who: pierre2008@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution
-Message-ID: <bug-217088-208809-vTZ3ySZo3v@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217088-208809@https.bugzilla.kernel.org/>
-References: <bug-217088-208809@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217089-208809-9ivEJgWBh5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217089-208809@https.bugzilla.kernel.org/>
+References: <bug-217089-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -69,13 +69,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217088
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217089
 
-valino (kaufmich@valino.info) changed:
+--- Comment #9 from Pierre Germain (pierre2008@gmail.com) ---
+Good evening Alan Stern,
+Thanks for helping us. I have attached the following files to this bug:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|CODE_FIX                    |MOVED
+1. xone23-c dmesg and lsusb under kernel 5.4.0.33.
+This file shows the ouput of dmesg and lsusb when using kernel 5.4.0.33. As=
+ of
+this kernel everything was working great.
+
+2. UI showing the xone23-c under kernel 5.4.0.33.
+This is a png file showing the UI, showing briefly how the audio device is
+recognized as a 4x4 channel audio device.=20
+
+3. xone23-c dmesg and lsusb under kernel 5.4.0.37.=20=20
+This file shows the ouput of dmesg and lsusb when using kernel 5.4.0.37. Th=
+at's
+the first kernel I was able to install to see that the audio device is not
+recognized as a 4x4 channel audio device. I have not been able to install
+kernels between 33 and 37.
+
+4. UI showing the xone23-c under kernel 5.4.0.37.=20
+This is a png file showing the UI, showing how the audio device is recogniz=
+ed
+as a 2x2 channel audio device.
+
+Let me know If I can give you more information. Thanks.
 
 --=20
 You may reply to this email to add a comment.
