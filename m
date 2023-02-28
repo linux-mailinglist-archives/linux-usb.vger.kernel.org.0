@@ -2,64 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F417A6A578E
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 12:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B029B6A5805
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 12:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjB1LNT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 06:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S231500AbjB1L1n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Feb 2023 06:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjB1LNR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 06:13:17 -0500
+        with ESMTP id S231527AbjB1L1m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 06:27:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2B6D9
-        for <linux-usb@vger.kernel.org>; Tue, 28 Feb 2023 03:13:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A382E821
+        for <linux-usb@vger.kernel.org>; Tue, 28 Feb 2023 03:27:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0992B80D58
-        for <linux-usb@vger.kernel.org>; Tue, 28 Feb 2023 11:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86213C433D2
-        for <linux-usb@vger.kernel.org>; Tue, 28 Feb 2023 11:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677582794;
-        bh=BWYrMUmJxC3lTlQO+XsifNPETtAWwRis4u/Xl4aBp1o=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jUYYhi35gW8rU06QXT+o/XDCPqvNs9Xw7NZSyIiWG678wv/2AShr0iUDX6AHOqhmb
-         LCtB3Me5/JOpqVvGP9p4fwrxwBlsEZyTkVMlImTGBQbc924TlKf5vs/BrAFw0Nw3/k
-         EnuruLvegppKqj7bXVkODLR4ErxZMfc7SG/FIyI5Mjr5B/VuAFCqQDEWNFgYcBmAks
-         XWHLLh2pULMKdaPD5ptG8AzlydOtcwhBrAVyyJSgbrHwciZ7wh5riHPtxWyNoMmbSx
-         AqVXYk0N6Bm/FIgp2UuwbHkCbUPRC8ngCRQGlNZXPw92EQQTBY4gp2SW9DxnUU4fz6
-         teZB747/tXCGw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6FD8BC43143; Tue, 28 Feb 2023 11:13:14 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217089] xone23c mixer
-Date:   Tue, 28 Feb 2023 11:13:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pierre2008@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217089-208809-Obw6bFm61e@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217089-208809@https.bugzilla.kernel.org/>
-References: <bug-217089-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA33CB80D58
+        for <linux-usb@vger.kernel.org>; Tue, 28 Feb 2023 11:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55028C433D2;
+        Tue, 28 Feb 2023 11:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677583552;
+        bh=lV5vPNJsd5xnPb1ZH2xpOTx2YepFND5r2yjdi+r1awA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=otsO6r0ki3KLbioqxxFc7QetKoBjh3kOQF3ck7CZuu5iCnCeQIkHC4dYGUpG/1TBN
+         RwiJSbe3dQrymFWFz/Ub4P9u+I4IZBnwP8ru889kr7vYsQkV85RqXj71cd6G5QH7Pp
+         K7ReYOJs0l6JmRcpUv2nd72j6DRZymegN7esF/sA=
+Date:   Tue, 28 Feb 2023 12:25:50 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yen ChunChao <nothingstopsme@hotmail.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 1/3 RFC] net: usb: ax88179_178a: Enable FLAG_MULTI_PACKET
+ to improve tx stability
+Message-ID: <Y/3kvjoTv7UDDqTj@kroah.com>
+References: <ME3P282MB2827A82474F353487FF91CE4D15F9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
+ <ME3P282MB2827E9AD698A7F925EB1E9BAD1AC9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
+ <ME3P282MB2827F38828DB53102F370FA0D1AC9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ME3P282MB2827F38828DB53102F370FA0D1AC9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,37 +53,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217089
+On Tue, Feb 28, 2023 at 09:44:43AM +0000, Yen ChunChao wrote:
+> Problem Description:
+> The current way of handling the boundary case in tx, i.e. adding one-byte
+> padding when the size of an outbound packet is a multiple of the maximum
+> frame size used for USB bulk transfer, does not work with the hardware.
+> This can be shown by running a loading test via iperf with this hardware as
+> the sender; one can then tune the iperf parameters on the sender side (e.g.
+> "-M 510" in my testing environment) so that sent packets frequently hit the
+> boundary condition, and observe a significant drop in the transmission
+> rate. In the worst case (often after a long run), the hardware can stop
+> functioning (can not send or receive packets anymore, albeit the
+> corresponding network interface is still reported present by ifconfig).
+> 
+> It is also believed that this problem is highly relevant to this bug [1].
+> 
+> Solution:
+> Enable FLAG_MULTI_PACKET and modify both ax88179_rx_fixup() and
+> ax88179_tx_fixup() accordingly.
+> 
+> Rationale:
+> When FLAG_MULTI_PACKET is enabled (and FLAG_SEND_ZLP is off, which is the
+> case for this driver), usbnet will skip padding, and trust that each
+> sk_buff returned from the mini-driver's tx_fixup function has been taken
+> care of to cater for the requirement of its target hardware. That
+> mechanism allows this mini-driver to send, even when the boundary condition
+> is detected, "untampered" packets (no padding, no extra flags, as if in the
+> normal case) that the hardware accepts, and therefore resolves this
+> problem.
+> 
+> Note that rather than being viewed as a workaround, enabling
+> FLAG_MULTI_PACKET is intended to better match the overall behaviour of the
+> hardware, as it also echos well the rx procedure conducting multiple-packet
+> extraction from a single sk_buff in ax88179_rx_fixup().
+> 
+> Verification:
+> Only tested with this device:
+> 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+> 
+> References:
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=212731
+> 
+> Signed-off-by: Chun-Chao Yen <nothingstopsme@hotmail.com>
+> ---
+> This is the same patch as https://rb.gy/199s5m sent in Oct. 2022.
+> I just would like to know the current state of this patch.
+> Has it been rejected or still under review?
 
---- Comment #14 from Pierre Germain (pierre2008@gmail.com) ---
-(In reply to Alan Stern from comment #10)
-> The attachments are pretty clear.  The most likely explanation is that
-> something gets sent to the device under one kernel but not the other,
-> something which causes it to change its firmware.
->=20
-> The next step is to collect a usbmon trace showing what happens when the
-> device is plugged in.  As root, do:
->=20
->    cat /sys/kernel/debug/usb/usbmon/1u >FILENAME
->=20
-> before plugging in the device.  A few seconds after the Xone is plugged i=
-n,
-> kill the command with ^C and attach the output file to this bug report.  =
-Do
-> this for both of the kernels, and we'll see if anything is different betw=
-een
-> them.
+Patches marked with "RFC" are never to be applied, what needs to be done
+on this in order for you to feel comfortable enough to submit it for
+actualy inclusion?
 
-Hello Alan,
-Thanks for your reply. I have uploaded the 2 logs from usbmon:
+Please do that and then send it out properly.
 
-Kernel 33: https://bugzilla.kernel.org/attachment.cgi?id=3D303806
-Kernel 37: https://bugzilla.kernel.org/attachment.cgi?id=3D303805
+Also, I think vger still bans hotmail.com emails, sorry, please use a
+better email provider if you wish to contribute to the kernel.
 
-If you need more information I am all ears. Thanks.
+thanks,
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
