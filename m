@@ -2,205 +2,423 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64506A55EF
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 10:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC03B6A5617
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 10:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjB1JhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 04:37:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S231430AbjB1Jp1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Feb 2023 04:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjB1JhB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 04:37:01 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F165C29E30;
-        Tue, 28 Feb 2023 01:36:59 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S6wqPi010092;
-        Tue, 28 Feb 2023 09:36:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=f9iJEgKBIWtE12yxfvC3PM2+H0C+9MQfImj1Ex4J4kU=;
- b=S9Z28mtI7Cd8iBn8ilXGOG/ss7q5Q+JFX8WcSy8aLGqktU1yaumpxB6JJnNrmR3u3DKS
- jd/O4dp3Dm5aNssGEOffvcCPb8WuJ4i1HOAU3FnfmSSD5CrDcG3GZJyDPidwCS5kyk1e
- TcMQPvF5xmR3rtbJKgFhCcQN1je3FHDqJNxNZ6RejcTuHt8sj7nProat3kqRylPWgGKb
- Yw4ABnrwlC3DTwC4VpH9WVl11nYVbadstQ9N89b4eBl/1/bhqyyEkq81tsZ4tUsrN7Sc
- wXnq2YtXVok0P5V2+nBavsjisZY7qW7Z2zY7eflpgzBaOIN1Hf/gPlgwC20GwD3tOGi7 sg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1csvrde5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 09:36:57 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31S9auQq003345
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 09:36:56 GMT
-Received: from [10.110.31.193] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
- 2023 01:36:55 -0800
-Message-ID: <d01e243e-1ba2-b9cf-2b74-f77f22b5c624@quicinc.com>
-Date:   Tue, 28 Feb 2023 01:36:55 -0800
+        with ESMTP id S231400AbjB1JpU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 04:45:20 -0500
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2144.outbound.protection.outlook.com [40.92.62.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A40E3598
+        for <linux-usb@vger.kernel.org>; Tue, 28 Feb 2023 01:44:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=krfu8VsrYXfoDkc320lTKhT+wthfLBBip991JQZz2ynrks8ISZB071YO5/3pvLOR1HHuShCCR8FUf5t6g1GyvjlDv9IZcpoRmNeEntp/NHqcb3u4J14YbkuYl1WQgJpwSPQNG5GenUkAsWVo3Ccxbv6aQ7HAR8l8hqrCRJZDBeXPsIz0o/6I5x4GDaVIoT29YCvmJjK1QZto2mcAWmNU9JXNuy/aDu7GhVGqdByAGgwKojb0i3061f/CLOFFFtQS4Mb3IMVxGiTr3P+5YRzDJNHu3dWP9zadlO1HlC0aVkhznNfAcI1MAzEGn5BpqtkyVxQkKkrjpgtQlH6QggbchA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G7BRO0nVAvn3uWvbKuCLPmpCnAmVBHCp4smsdy26U80=;
+ b=YB2Ct3FVO6Yz8+GqkymJT4DEimZOm4TXI+T3c4k6xWNiBV/JuUgLYiqoqu1PU/PvhWI25IGGYYjtkHTYzCq2z2sZXMYSQpm6j645pnJzZGmEqA/Zc1fMML2kT1KTCd7oxplhkGPXn4UJ+frxZCOfVtBBO69BDnx8W3GsxTmzYSk9RMJ6vIhulm1OwXPUPQbFndZt1HSGdFtC8LctY9OZXcTmnlD0n5wWdEJYOx2qaD+QXjLQCYXrZ4314V4EDcstHowdmXaSatasCj3SlpYTMPnieJURqNc1u858vfB1st1lfJsyX48jSuCGCYEc0d3ko7YZGYVkOVEhwZwYHbTMlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G7BRO0nVAvn3uWvbKuCLPmpCnAmVBHCp4smsdy26U80=;
+ b=ZEEbeoHVo5t2Y/5ZbctsjDPZ+dx1O8bUl3LMI+YVqXvoifHF5Nycl85UeovRATPuXys3OePL5GiVieLRwDI2433nag6Z0IJ1DYjoTRh79y0SQIZMhFFa53msVycsFnhcvVnkzeWKSMD3bjLctBpzk3sQh3QFA+U0TmMAD8CjzIO/qpT/qKHQEgGQq/qJY34aFFfgPPNs/MJZPleL7VpAAMbp1zT81F+C2i/ZU3QEw3MeGix+J+kWT8fdCTtNrsBPWA0ouebJWNii9eZFO/vlo3U+mboN1flGR+tTu7vGjE6NxAZf/YqtQ9YE2OI+FCWuFhfKAa8TsT0T7bbCwD0l1Q==
+Received: from ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:13c::13)
+ by ME3P282MB0884.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:86::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 09:44:44 +0000
+Received: from ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::50ae:cb9:fc65:57f4]) by ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::50ae:cb9:fc65:57f4%5]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
+ 09:44:43 +0000
+From:   Yen ChunChao <nothingstopsme@hotmail.com>
+To:     "davem@davemloft.net" <davem@davemloft.net>
+CC:     "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: [PATCH 1/3 RFC] net: usb: ax88179_178a: Enable FLAG_MULTI_PACKET to
+ improve tx stability
+Thread-Topic: [PATCH 1/3 RFC] net: usb: ax88179_178a: Enable FLAG_MULTI_PACKET
+ to improve tx stability
+Thread-Index: AQHZS1YYZO9r/AsJ1kCdaKk5CvPGF67kFoTF
+Date:   Tue, 28 Feb 2023 09:44:43 +0000
+Message-ID: <ME3P282MB2827F38828DB53102F370FA0D1AC9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
+References: <ME3P282MB2827A82474F353487FF91CE4D15F9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
+ <ME3P282MB2827E9AD698A7F925EB1E9BAD1AC9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
+In-Reply-To: <ME3P282MB2827E9AD698A7F925EB1E9BAD1AC9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [ckyQfNv0gsCn9cgB7j5+IYFNm3VVIHa+]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ME3P282MB2827:EE_|ME3P282MB0884:EE_
+x-ms-office365-filtering-correlation-id: ccc25437-e969-4dc6-3805-08db19706bbf
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Y9Lg+x+vbkHhjk75m1dlvGY/Nk9tKyrd6+3LpKxr+z+hl79CvhEZiy0gR3Ujb+22BLf9nWO+Xo/5hKInowul0pYFDKJUQyoK6PYlipEvfvDFCdIRaxn7VkDXeYDvect+CtBrAv5O5hEN7mbcWFdF0nbPK7Equ2IdNL8be8MJYcOIsihBkJ9HpiNbx/72+WIU5LXOfQ026mS6YDzD0qanmy1AMFdUfGJEpMV2dHKQEPDoCHRax8eMRAoMTqY6IZOGxer7OFDeC4kFryCIOHMD4FCS0azgm3KTPJiWmoazBDcL5JW/A+qd/6ButQ7AWoOrNG0RBTCoX9AYDcZ6Hy9k7uvPtudOdX7iRhq8f1nWNs6kMKukDVqmrPuGnmZtNZtwDftyfNOgA5CPon4xPKwrBbh50rD+T8kqjMLK1X5MivBqAM/ne5az5SO8xkZIjnM5XQfviaKApCw72cfTo531lT14wTTf/HMciVmB0HL01FPDjCRBeBD+JQn6d5cBN0ncBMeVxY84RZKhOs5Ej2c7uF7h8F3yN6elSGYgD5/WkDLw06dBdR6ouRO+hgSJj/gbY6DxjokBFXKu04V0kR9kjQ==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?DII/GhJ6GrrTWQ9yG2FLqnZWceqSJ4SREgGcZB+VzCztLoSfsPlcjZXjbA?=
+ =?iso-8859-1?Q?4FJZ388/Ly0A3Jsrk+YKr/krTBhhJ1hcwGx8Ta8pFBBQ1SDGV0zu0Bvu77?=
+ =?iso-8859-1?Q?Q8ssxnmZM2MaTImsydjhbkdvEyTeGqXGobW9FjJpu3kp4ja7UeZhk5l1x9?=
+ =?iso-8859-1?Q?C+gnJosuPI/EZv89doypRG5WE9/kUzBrUE4GCs480cTDSFnYUNIP9cYHr6?=
+ =?iso-8859-1?Q?Vn+iGLfTNsBusolOuNq1fUKiCFxIuPHvvVKmwEWnBFaDH/zsGEkABRwSTJ?=
+ =?iso-8859-1?Q?Rig7vl/gb4WFvKGMUgH4goMwzBBsaX24dQ7k0nI3sFS+osA0e0BYh5onxA?=
+ =?iso-8859-1?Q?DCh5/Pgk8wQUCKullemgfJGPYe+rM1qySmgGMKTKiEqDRgDZVqU49PsgGA?=
+ =?iso-8859-1?Q?/q1VdDqjgsWQWQnt/B5SlWcGoTXSpxT8pTVOvLo6qngOEt7effWut1QFIZ?=
+ =?iso-8859-1?Q?+1YitFuBJ9vak+5C2ux6OkehxzT1ADfZZ9V1ujdggCUJ41k9ORQ5iTwgB4?=
+ =?iso-8859-1?Q?tgaLIVehaBKjU4tx0fE09TTpEkR/9M9rSUdbdScoDvjngP+D6LznVNKmYs?=
+ =?iso-8859-1?Q?HCrpv9+4h8kWpH8JAP/jzwxwOxOKRZt5Dixn3AU5wnfsJusrB1xirUbWl3?=
+ =?iso-8859-1?Q?owbPLIoq1szPIpyKAUtkbYdiO/1Z/ooUVUcFVL3kugu1EdyfQODvM3JJ5u?=
+ =?iso-8859-1?Q?T5uHzZXhNi/Hzs8w4TtfcoGwBZK1b/EEPXAuM6MQbyNLz4n2OzOb40cN5I?=
+ =?iso-8859-1?Q?qvrg7CRl3JJ4hNfaPpE51WwGSO4tIyHsXkR3MVpmw659m+xwu3/MbbI+1r?=
+ =?iso-8859-1?Q?+R/ABa0gU2HNuINUiSV5bfTwBIIhUnDZ+cY/ZcAQ5wbH+ss1sQ9Z/SyzdI?=
+ =?iso-8859-1?Q?Jl/F0lS1abb+75W4NIn6k9kVSHyFqATT7+9a1QnfdYEtNG+odqwIV2wMpm?=
+ =?iso-8859-1?Q?/YmndCHUYWnKGqgU4uFCX8+Ew/fxmFyvbLGbhuzNtUqTvjXPQIFrzvowYa?=
+ =?iso-8859-1?Q?+UG9MpPVTDuUEF+S0/ZpImaWQMuXi3fMkwoOR7m1caHe3ERvHLCwon6dZO?=
+ =?iso-8859-1?Q?lLlX9yLdzObtgxnBQ+/9GLMhrz0taNAKz0hT7Kmqgnh6tyCkB6ecD9xMIV?=
+ =?iso-8859-1?Q?62PK3w7aVWWtS7wLbJzo201Puxdm9BK3CqxI0NOHOTJodsIsuS435clLAK?=
+ =?iso-8859-1?Q?bpQcjSjTKraydNuCNCSi2YjfcV/3gudicaZhIR1FdOxpzcHV+RVkh3z28V?=
+ =?iso-8859-1?Q?np1iPc5HQOw/YrWpCA0nPzGYGXasHl7S9260aKzIR7VbHJj5ZxYln8vBPI?=
+ =?iso-8859-1?Q?1iLxcv0VojcTadPpxSImB+cnOA=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: dwc3: gadget: Add 100uS delay after end transfer
- command without IOC
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20230227232035.13759-1-quic_wcheng@quicinc.com>
- <20230228021925.j5bquwnwuvog3hx6@synopsys.com>
- <20230228031027.ghrfnda5lkt7qfmt@synopsys.com>
- <24af4a1b-0cc5-e65b-ac66-f767f891520e@quicinc.com>
- <20230228035625.rrda7hpitfrfx34z@synopsys.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20230228035625.rrda7hpitfrfx34z@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0dY_00VpvJP09Qw3MKlOEtSV061EgpZy
-X-Proofpoint-ORIG-GUID: 0dY_00VpvJP09Qw3MKlOEtSV061EgpZy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-28_06,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- suspectscore=0 phishscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
- adultscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280076
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: ccc25437-e969-4dc6-3805-08db19706bbf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2023 09:44:43.7625
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME3P282MB0884
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
-
-On 2/27/2023 8:02 PM, Thinh Nguyen wrote:
-> On Mon, Feb 27, 2023, Wesley Cheng wrote:
->> Hi Thinh,
->>
->> On 2/27/2023 7:10 PM, Thinh Nguyen wrote:
->>> On Tue, Feb 28, 2023, Thinh Nguyen wrote:
->>>> On Mon, Feb 27, 2023, Wesley Cheng wrote:
->>>>> Previously, there was a 100uS delay inserted after issuing an end transfer
->>>>> command for specific controller revisions.  This was due to the fact that
->>>>> there was a GUCTL2 bit field which enabled synchronous completion of the
->>>>> end transfer command once the CMDACT bit was cleared in the DEPCMD
->>>>> register.  Since this bit does not exist for all controller revisions, add
->>>>> the delay back in.
->>>>>
->>>>> An issue was seen where the USB request buffer was unmapped while the DWC3
->>>>> controller was still accessing the TRB.  However, it was confirmed that the
->>>>> end transfer command was successfully submitted. (no end transfer timeout)
->>>>
->>>> Currently we only check for command active, not completion on teardown.
->>>>
->>>>> In situations, such as dwc3_gadget_soft_disconnect() and
->>>>> __dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
->>>>> will issue the end transfer command, and follow up with
->>>>> dwc3_gadget_giveback().  At least for the USB ep disable path, it is
->>>>> required for any pending and started requests to be completed and returned
->>>>> to the function driver in the same context of the disable call.  Without
->>>>> the GUCTL2 bit, it is not ensured that the end transfer is completed before
->>>>> the buffers are unmapped.
->>>>>
->>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>>>
->>>> This is expected. We're supposed to make sure the End Transfer command
->>>> complete before accessing the request. Usually on device/endpoint
->>>> teardown, the gadget drivers don't access the stale/incomplete requests
->>>> with -ESHUTDOWN status. There will be problems if we do, and we haven't
->>>> fixed that.
->>>>
->>>> Adding 100uS may not apply for every device, and we don't need to do
->>>> that for every End Transfer command. Can you try this untested diff
->>>> instead:
->>>>
->>
->> Thanks for the code suggestion.
->>
->>>>
->>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>> index 30408bafe64e..5ae5ff4c8858 100644
->>>> --- a/drivers/usb/dwc3/gadget.c
->>>> +++ b/drivers/usb/dwc3/gadget.c
->>>> @@ -1962,6 +1962,34 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
->>>>    	return DWC3_DSTS_SOFFN(reg);
->>>>    }
->>>> +static int dwc3_poll_ep_completion(struct dwc3_ep *dep)
->>>> +{
->>>> +	if (!list_empty(&dep->started_list)) {
->>>> +		struct dwc3_request *req;
->>>> +		int timeout = 500;
->>>> +
->>>> +		req = next_request(&dep->started_list);
->>>> +		while(--timeout) {
->>>> +			/*
->>>> +			 * Note: don't check the last enqueued TRB in case
->>>> +			 * of short transfer. Check first TRB of a started
->>>> +			 * request instead.
->>>> +			 */
->>>> +			if (!(req->trb->ctrl & DWC3_TRB_CTRL_HWO))
->>>> +				break;
->>>> +
->>>> +			udelay(2);
->>>> +		}
->>>> +		if (!timeout) {
->>>> +			dev_warn(dep->dwc->dev,
->>>> +				 "%s is still in-progress\n", dep->name);
->>>> +			return -ETIMEDOUT;
->>>> +		}
->>>> +	}
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>>    /**
->>>>     * __dwc3_stop_active_transfer - stop the current active transfer
->>>>     * @dep: isoc endpoint
->>>> @@ -2003,10 +2031,12 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
->>>>    	WARN_ON_ONCE(ret);
->>>>    	dep->resource_index = 0;
->>>> -	if (!interrupt)
->>>> +	if (!interrupt) {
->>>> +		ret = dwc3_poll_ep_completion(dep);
->>>
->>> Actually, the TRB status may not get updated, so this may not work,
->>> instead of polling, may need to add the delay here instead.
->>>
->>
->> Yeah, I just gave it a try, and I get the ETIMEDOUT error all the time.
->> Don't think we can utilize the HWO bit here.
->>
-> 
-> I may be over complicating things here. With ForceRM, the controller
-> only updates the last TRB it processed. We don't care about performance
-> much during teardown. That would mean more codes for something that's
-> not need.
-> 
-
-Yes :) that is what I encountered as well.  I tried a few other things, 
-but it opened a whole new set of topics that needed to be discussed 
-further.  Hence why I proposed the simple delay, since this happens only 
-in the teardown path as you mentioned.
-
-
-> Can you add a delay here instead? Make sure it's at least 1ms and
-> applicable for dwc_usb32 also.
-> 
-
-Sure, I will update the delay to 1ms and also add USB32 check.
-
-Thanks
-Wesley Cheng
+Problem Description:=0A=
+The current way of handling the boundary case in tx, i.e. adding one-byte=
+=0A=
+padding when the size of an outbound packet is a multiple of the maximum=0A=
+frame size used for USB bulk transfer, does not work with the hardware.=0A=
+This can be shown by running a loading test via iperf with this hardware as=
+=0A=
+the sender; one can then tune the iperf parameters on the sender side (e.g.=
+=0A=
+"-M 510" in my testing environment) so that sent packets frequently hit the=
+=0A=
+boundary condition, and observe a significant drop in the transmission=0A=
+rate. In the worst case (often after a long run), the hardware can stop=0A=
+functioning (can not send or receive packets anymore, albeit the=0A=
+corresponding network interface is still reported present by ifconfig).=0A=
+=0A=
+It is also believed that this problem is highly relevant to this bug [1].=
+=0A=
+=0A=
+Solution:=0A=
+Enable FLAG_MULTI_PACKET and modify both ax88179_rx_fixup() and=0A=
+ax88179_tx_fixup() accordingly.=0A=
+=0A=
+Rationale:=0A=
+When FLAG_MULTI_PACKET is enabled (and FLAG_SEND_ZLP is off, which is the=
+=0A=
+case for this driver), usbnet will skip padding, and trust that each=0A=
+sk_buff returned from the mini-driver's tx_fixup function has been taken=0A=
+care of to cater for the requirement of its target hardware. That=0A=
+mechanism allows this mini-driver to send, even when the boundary condition=
+=0A=
+is detected, "untampered" packets (no padding, no extra flags, as if in the=
+=0A=
+normal case) that the hardware accepts, and therefore resolves this=0A=
+problem.=0A=
+=0A=
+Note that rather than being viewed as a workaround, enabling=0A=
+FLAG_MULTI_PACKET is intended to better match the overall behaviour of the=
+=0A=
+hardware, as it also echos well the rx procedure conducting multiple-packet=
+=0A=
+extraction from a single sk_buff in ax88179_rx_fixup().=0A=
+=0A=
+Verification:=0A=
+Only tested with this device:=0A=
+0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet=0A=
+=0A=
+References:=0A=
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D212731=0A=
+=0A=
+Signed-off-by: Chun-Chao Yen <nothingstopsme@hotmail.com>=0A=
+---=0A=
+This is the same patch as https://rb.gy/199s5m sent in Oct. 2022.=0A=
+I just would like to know the current state of this patch.=0A=
+Has it been rejected or still under review?=0A=
+=0A=
+Thanks=0A=
+=0A=
+=A0drivers/net/usb/ax88179_178a.c | 62 ++++++++++++++--------------------=
+=0A=
+=A01 file changed, 26 insertions(+), 36 deletions(-)=0A=
+=0A=
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.=
+c=0A=
+index aff39bf3161d..b50748b3776c 100644=0A=
+--- a/drivers/net/usb/ax88179_178a.c=0A=
++++ b/drivers/net/usb/ax88179_178a.c=0A=
+@@ -1426,58 +1426,48 @@ static int ax88179_rx_fixup(struct usbnet *dev, str=
+uct sk_buff *skb)=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if ((*pkt_hdr & (AX_RXHDR_=
+CRC_ERR | AX_RXHDR_DROP_ERR)) ||=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 pkt_len < 2 + =
+ETH_HLEN) {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 de=
+v->net->stats.rx_errors++;=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb_pul=
+l(skb, pkt_len_plus_padd);=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 continu=
+e;=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 }=0A=
+-=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /* last packet */=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (pkt_len_plus_padd =3D=3D sk=
+b->len) {=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb_tri=
+m(skb, pkt_len);=0A=
+-=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /* Skip=
+ IP alignment pseudo header */=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb_pul=
+l(skb, 2);=0A=
+-=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb->tr=
+uesize =3D SKB_TRUESIZE(pkt_len_plus_padd);=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ax88179=
+_rx_checksum(skb, pkt_hdr);=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return =
+1;=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 goto ad=
+vance_data_ptr;=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 }=0A=
+=A0=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ax_skb =3D skb_clone(skb, =
+GFP_ATOMIC);=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (!ax_skb)=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return =
+0;=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (!ax_skb) {=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /* Repo=
+rt a packet droped, and continue parsing the rest=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 */=
+=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dev->ne=
+t->stats.rx_dropped++;=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 goto ad=
+vance_data_ptr;=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 }=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb_trim(ax_skb, pkt_len);=
+=0A=
+=A0=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /* Skip IP alignment pseud=
+o header */=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb_pull(ax_skb, 2);=0A=
+=A0=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb->truesize =3D pkt_len_plus_=
+padd +=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0 SKB_DATA_ALIGN(sizeof(struct sk_buff));=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ax_skb->truesize =3D SKB_TRUESI=
+ZE(pkt_len);=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ax88179_rx_checksum(ax_skb=
+, pkt_hdr);=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 usbnet_skb_return(dev, ax_=
+skb);=0A=
+=A0=0A=
++advance_data_ptr:=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 skb_pull(skb, pkt_len_plus=
+_padd);=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 }=0A=
+=A0=0A=
+-=A0=A0=A0=A0=A0=A0 return 0;=0A=
++=A0=A0=A0=A0=A0=A0 return 1;=0A=
+=A0}=0A=
+=A0=0A=
+=A0static struct sk_buff *=0A=
+=A0ax88179_tx_fixup(struct usbnet *dev, struct sk_buff *skb, gfp_t flags)=
+=0A=
+=A0{=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 u32 tx_hdr1, tx_hdr2;=0A=
+-=A0=A0=A0=A0=A0=A0 int frame_size =3D dev->maxpacket;=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 int headroom;=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 void *ptr;=0A=
+=A0=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 tx_hdr1 =3D skb->len;=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 tx_hdr2 =3D skb_shinfo(skb)->gso_size; /* Set TSO =
+mss */=0A=
+-=A0=A0=A0=A0=A0=A0 if (((skb->len + 8) % frame_size) =3D=3D 0)=0A=
+-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 tx_hdr2 |=3D 0x80008000;=A0 /* =
+Enable padding */=0A=
+=A0=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 headroom =3D skb_headroom(skb) - 8;=0A=
+=A0=0A=
+-=A0=A0=A0=A0=A0=A0 if ((dev->net->features & NETIF_F_SG) && skb_linearize(=
+skb))=0A=
++=A0=A0=A0=A0=A0=A0 if ((dev->net->features & NETIF_F_SG) && skb_linearize(=
+skb)) {=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dev_kfree_skb_any(skb);=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return NULL;=0A=
++=A0=A0=A0=A0=A0=A0 }=0A=
+=A0=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 if ((skb_header_cloned(skb) || headroom < 0) &&=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 pskb_expand_head(skb, headroom < 0 ? 8=
+ : 0, 0, GFP_ATOMIC)) {=0A=
+@@ -1680,7 +1670,7 @@ static const struct driver_info ax88179_info =3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PA=
+CKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1693,7 +1683,7 @@ static const struct driver_info ax88178a_info =3D {=
+=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PA=
+CKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1706,7 +1696,7 @@ static const struct driver_info cypress_GX3_info =3D =
+{=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PA=
+CKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1719,7 +1709,7 @@ static const struct driver_info dlink_dub1312_info =
+=3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PA=
+CKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1732,7 +1722,7 @@ static const struct driver_info sitecom_info =3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PA=
+CKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1745,7 +1735,7 @@ static const struct driver_info samsung_info =3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PA=
+CKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1758,7 +1748,7 @@ static const struct driver_info lenovo_info =3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PA=
+CKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1771,7 +1761,7 @@ static const struct driver_info belkin_info =3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset=A0 =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop=A0=A0 =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI=
+_PACKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1784,7 +1774,7 @@ static const struct driver_info toshiba_info =3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset=A0 =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI=
+_PACKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1797,7 +1787,7 @@ static const struct driver_info mct_info =3D {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset=A0 =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop=A0=A0 =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI=
+_PACKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1810,7 +1800,7 @@ static const struct driver_info at_umc2000_info =3D {=
+=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset=A0 =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop=A0=A0 =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI=
+_PACKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1823,7 +1813,7 @@ static const struct driver_info at_umc200_info =3D {=
+=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset=A0 =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop=A0=A0 =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI=
+_PACKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+@@ -1836,7 +1826,7 @@ static const struct driver_info at_umc2000sp_info =3D=
+ {=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .link_reset =3D ax88179_link_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .reset=A0 =3D ax88179_reset,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .stop=A0=A0 =3D ax88179_stop,=0A=
+-=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX,=0A=
++=A0=A0=A0=A0=A0=A0 .flags=A0 =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI=
+_PACKET,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .rx_fixup =3D ax88179_rx_fixup,=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 .tx_fixup =3D ax88179_tx_fixup,=0A=
+=A0};=0A=
+-- =0A=
+2.32.0=
