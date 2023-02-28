@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DE96A6040
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 21:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B28846A6057
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 21:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjB1UVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 15:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
+        id S229670AbjB1UYi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Feb 2023 15:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjB1UVV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 15:21:21 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5B03252B;
-        Tue, 28 Feb 2023 12:21:20 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SJK58e002226;
-        Tue, 28 Feb 2023 20:21:17 GMT
+        with ESMTP id S229535AbjB1UYh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 15:24:37 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653382CFD7;
+        Tue, 28 Feb 2023 12:24:36 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SFat89000539;
+        Tue, 28 Feb 2023 20:24:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=KqAA328qaVjXlvcYQNwLhnwxT1t42qPLrs/l7EKKBFY=;
- b=C4JH9s5rIOwcsHwkU+xYJU8DTisWgA535mLvXLie7Bzbi9uedymI3G1Rtg4IAjjb6M3/
- rF5bGzEfUvvwCcGBBeUdJKwz9SLbANIaRy34cVEiD4bAJGGWKApn1GMXifXwyGr7jdBl
- GhBSD2agdUMsxQGSACtJexjXDHIpLOKAEuEuGD3kBBRWo1Jcb3TCXsEgMCnmlUymnsXp
- tWevy0oovT8skxX10NrcDSONoQWohuC54ZnnZRUYU3dIrA0wQIb7oNYBn6QFD0I/1bD/
- N9VTlafY/7pQsMdTp0FTDO0dehiqvvZbQK2yxsrh6zKK8R0uVBnlGslDAz/6h4mn9xF8 Kg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p0u3jvwns-1
+ bh=MWs5GaP2YVGYWhAhendLbTbrvGg9jrB0sDUAkoQfZzw=;
+ b=Q3e4KwtnwqFuQqDRCRkPzoQPA+9HZCAg4ZgcKV+dT/4WYP38GcZ4oN8fo7bokI1dwn68
+ UckKZZCH8pGJfIjFY4UNjNZ/THrdmo1e+7t/zsUjb1dZVnv5YZxMXyW9O6BYmVoq+7xS
+ ktkkzYZNxgrYiJ9wqtzRKJyHFjQsfcFBCNIoo8dBqS3YF7vAUiqRSsJq6P41ubIltHUK
+ oIS4TcrFrBd+FMTEDaJ3i1AiTIZN/fTFWxHfcL6a0EZuLioXuetCobwnJzmYd9q9QqHm
+ JayCYEai+d/mUO5T+iM9r46uCn4HheQViReyZo4514rbPAFEByFsrUFROMe/vw0CzkRl sg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1csvt9qr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 20:21:17 +0000
+        Tue, 28 Feb 2023 20:24:33 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SKLG1d010654
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SKOVwh015244
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 20:21:16 GMT
+        Tue, 28 Feb 2023 20:24:31 GMT
 Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 28 Feb 2023 12:21:16 -0800
+ 15.2.986.41; Tue, 28 Feb 2023 12:24:31 -0800
 From:   Wesley Cheng <quic_wcheng@quicinc.com>
 To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
 CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v2] usb: dwc3: gadget: Add 100uS delay after end transfer command without IOC
-Date:   Tue, 28 Feb 2023 12:21:04 -0800
-Message-ID: <20230228202104.7813-1-quic_wcheng@quicinc.com>
+Subject: [PATCH v3] usb: dwc3: gadget: Add 1ms delay after end transfer command without IOC
+Date:   Tue, 28 Feb 2023 12:24:18 -0800
+Message-ID: <20230228202418.9126-1-quic_wcheng@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -52,19 +52,19 @@ X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VNiOy2RGsv2Z_FnizWTb-D5Tj0Z_vIl3
-X-Proofpoint-GUID: VNiOy2RGsv2Z_FnizWTb-D5Tj0Z_vIl3
+X-Proofpoint-GUID: 5BvWqKXDgSMjTf4zlQnCJIsqskYYIRV9
+X-Proofpoint-ORIG-GUID: 5BvWqKXDgSMjTf4zlQnCJIsqskYYIRV9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=468
- spamscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ suspectscore=0 phishscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 mlxlogscore=464
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280168
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ definitions=main-2302280169
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,7 +76,8 @@ command for specific controller revisions.  This was due to the fact that
 there was a GUCTL2 bit field which enabled synchronous completion of the
 end transfer command once the CMDACT bit was cleared in the DEPCMD
 register.  Since this bit does not exist for all controller revisions, add
-the delay back in.
+the delay back in, and increase the duration to 1ms for the controller to
+complete the command.
 
 An issue was seen where the USB request buffer was unmapped while the DWC3
 controller was still accessing the TRB.  However, it was confirmed that the
@@ -92,6 +93,10 @@ the buffers are unmapped.
 
 Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
+Changes in v3:
+- Fixed subject title and modified commit text to reference the new 1ms
+delay
+
 Changes in v2:
 - Increase delay value to 1ms
 - Make this applicable to DWC32 revisions as well
