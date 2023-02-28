@@ -2,61 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B19C6A5BF0
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 16:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110BE6A5D05
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 17:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjB1PaT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 10:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S229610AbjB1QXh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 28 Feb 2023 11:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjB1PaN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 10:30:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F84823DA0;
-        Tue, 28 Feb 2023 07:29:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C11AA6115D;
-        Tue, 28 Feb 2023 15:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C2DC433EF;
-        Tue, 28 Feb 2023 15:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677598161;
-        bh=hcXafIxHuoahz1Cokb3IrPCYphDo8xRmiIBP8KWMMW8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2bvrZc0hDxg6mbBnAIMY0O72OpR3+QAyiBK3BjlyFb+zHGlH4G23le/063J2XMs6B
-         HZpUVrM359GPeSUL2HWAH5PPSpBnCd+DCedkVNH01gdwIvQpcTYFkUOwn+ivo09o8Z
-         u0z9zhu58bwTCwgfv2/4hxBK71fsF/L1NIFzK3VY=
-Date:   Tue, 28 Feb 2023 16:29:18 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
-        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [RFC PATCH v2 12/22] sound: usb: card: Introduce USB SND
- platform op callbacks
-Message-ID: <Y/4dzus7J07quj61@kroah.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-13-quic_wcheng@quicinc.com>
- <Y9Ui82OaI54Qx8Ft@kroah.com>
- <2c062ab0-905c-f1fe-eca2-02e23cc9fa6f@quicinc.com>
- <5e5c6481-8d5d-dc3f-e40e-986e3ac30387@quicinc.com>
- <Y/2tsfGGzAlLzxwd@kroah.com>
- <b38b317e-9c5e-a655-4364-df49c3b64b88@quicinc.com>
+        with ESMTP id S229482AbjB1QXg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 11:23:36 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921EF1A5;
+        Tue, 28 Feb 2023 08:23:34 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id F2E58240019;
+        Tue, 28 Feb 2023 16:23:28 +0000 (UTC)
+Message-ID: <cd0cabef9b434fdbf640a37c357878cdac80358b.camel@hadess.net>
+Subject: Re: [PATCH 4/5] USB: core: Add API to change the wireless_status
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Date:   Tue, 28 Feb 2023 17:23:28 +0100
+In-Reply-To: <Y/giLni7cwDGjLpr@rowland.harvard.edu>
+References: <20230223132452.37958-1-hadess@hadess.net>
+         <20230223132452.37958-4-hadess@hadess.net>
+         <Y/eJDDPXJfYgfdfI@rowland.harvard.edu>
+         <f94acf520e62676c741c0959f91c8d951d74a36c.camel@hadess.net>
+         <Y/eTkXYlflDWllHZ@rowland.harvard.edu>
+         <16aaaa1a6207e7da07faa932ecac0dcc9e5f10e3.camel@hadess.net>
+         <Y/edOwVwfHVkoq9j@rowland.harvard.edu>
+         <ba9eec1f2f0d41e3af8b1e73e4c804074e429cc4.camel@hadess.net>
+         <Y/giLni7cwDGjLpr@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b38b317e-9c5e-a655-4364-df49c3b64b88@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,100 +49,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 01:19:33AM -0800, Wesley Cheng wrote:
-> Hi Greg,
-> 
-> On 2/27/2023 11:30 PM, Greg KH wrote:
-> > On Mon, Feb 27, 2023 at 06:59:32PM -0800, Wesley Cheng wrote:
-> > > Hi Greg,
+On Thu, 2023-02-23 at 21:34 -0500, Alan Stern wrote:
+> On Fri, Feb 24, 2023 at 12:04:12AM +0100, Bastien Nocera wrote:
+> > On Thu, 2023-02-23 at 12:07 -0500, Alan Stern wrote:
+> > > The refcounting in your patch guarantees that when the work
+> > > function 
+> > > runs, the interface structure will still exist.  But refcounting
+> > > does
+> > > not guarantee that the interface will still be registered in
+> > > sysfs,
+> > > and 
+> > > this can actually happen if the work is scheduled immediately
+> > > before
+> > > the 
+> > > interface is unregistered.
 > > > 
-> > > On 2/10/2023 2:49 PM, Wesley Cheng wrote:
-> > > > Hi Greg,
-> > > > 
-> > > > On 1/28/2023 5:28 AM, Greg KH wrote:
-> > > > > On Wed, Jan 25, 2023 at 07:14:14PM -0800, Wesley Cheng wrote:
-> > > > > > Allow for different platforms to be notified on USB SND
-> > > > > > connect/disconnect
-> > > > > > seqeunces.� This allows for platform USB SND modules to properly
-> > > > > > initialize
-> > > > > > and populate internal structures with references to the USB SND chip
-> > > > > > device.
-> > > > > > 
-> > > > > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > > > > > ---
-> > > > > >  � sound/usb/card.c | 28 ++++++++++++++++++++++++++++
-> > > > > >  � sound/usb/card.h | 20 ++++++++++++++++++++
-> > > > > >  � 2 files changed, 48 insertions(+)
-> > > > > > 
-> > > > > > diff --git a/sound/usb/card.c b/sound/usb/card.c
-> > > > > > index 26268ffb8274..803230343c16 100644
-> > > > > > --- a/sound/usb/card.c
-> > > > > > +++ b/sound/usb/card.c
-> > > > > > @@ -117,6 +117,24 @@ MODULE_PARM_DESC(skip_validation, "Skip
-> > > > > > unit descriptor validation (default: no)
-> > > > > >  � static DEFINE_MUTEX(register_mutex);
-> > > > > >  � static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
-> > > > > >  � static struct usb_driver usb_audio_driver;
-> > > > > > +static struct snd_usb_platform_ops *platform_ops;
-> > > > > 
-> > > > > You can not have a single "platform_ops" pointer, this HAS to be
-> > > > > per-bus.
-> > > > > 
-> > > > 
-> > > > Agreed.
-> > > > 
-> > > 
-> > > I looked at seeing how we could implement this at a per bus level, but the
-> > > USB class driver model doesn't exactly have a good framework for supporting
-> > > this.  Reason being is because, at the time of the USB SND class driver
-> > > initialization, there is a big chance that there isn't a USB bus registered
-> > > in the system, so the point of adding the operations is not clear.  However,
-> > > we need to ensure that we've added the platform/driver operations before any
-> > > USB SND devices are detected.
+> > > So my question is: What will happen when sysfs_update_group(), 
+> > > sysfs_notify(), and kobject_uevent() are called after the
+> > > interface
+> > > has 
+> > > been unregistered from sysfs?  Maybe they will work okay -- I
+> > > simply 
+> > > don't know, and I wanted to find out whether you had considered
+> > > the 
+> > > issue.
 > > 
-> > But the offload "engine" is associated with the specific USB bus
-> > controller instance in the system, so perhaps you are just not adding
-> > this to the correct location?
+> > A long week-end started for me a couple of hours ago, but I wanted
+> > to
+> > dump my thoughts before either I forgot, or it took over my whole
+> > week-
+> > end ;)
 > > 
-> 
-> There are several parts to the offload logic:
-> 1.  XHCI interrupter/resource components - fetching addresses to the proper
-> event ring and transfer rings for the audio DSP.  This is the part which is
-> specific to the controller instance, and APIs are being directly exported
-> from the XHCI HCD, as the offloading features utilized are only specific for
-> XHCI based controllers.  This is handled in patches 1-6 in this series.
-> Each XHCI instance will have its own set of interrupters, and transfer
-> resources.
-> 
-> 2.  USB offload class driver - driver which interacts with USB SND for
-> operations like UAC descriptor parsing, USB audio device support params, and
-> USB endpoint setup (ie issuing SET_INTERFACE to enable the device to start
-> playback this is a SETUP transaction).  It will interact with the USB
-> backend and items in #1, to set up the audio playback.
-> 
-> > The sound core shouldn't care about this at all, add the logic to the
-> > USB host controller driver instead, why isn't this just another USB bus
-> > function?
+> > I had thought about the problem, and didn't think that sysfs files
+> > would get removed before the interface got released/unref'ed and
+> > usb_remove_sysfs_intf_files() got called.
 > > 
+> > If the device gets removed from the device bus before it's
+> > released,
+> > then this patch should fix it:
+> > --- a/drivers/usb/core/message.c
+> > +++ b/drivers/usb/core/message.c
+> > @@ -1917,7 +1917,8 @@ static void __usb_wireless_status_intf(struct
+> > work_struct *ws)
+> >         struct usb_interface *iface =
+> >                 container_of(ws, struct usb_interface,
+> > wireless_status_work);
+> >  
+> > -       usb_update_wireless_status_attr(iface);
+> > +       if (intf->sysfs_files_created)
+> > +               usb_update_wireless_status_attr(iface);
+> >         usb_put_intf(iface);    /* Undo _get_ in
+> > usb_set_wireless_status() */
+> > 
+> > The callback would be a no-op if the device's sysfs is already
+> > unregistered, just unref'ing the reference it held.
+> > 
+> > What do you think? I'll amend that into my patchset on Monday.
 > 
-> The intention of the platform ops here is to mainly keep track of USB SND
-> card/pcm device creation, and access to the main "struct snd_usb_audio".
-> This structure carries all the information about the different substreams
-> allocated, as well as the formats supported by the audio device.  This is
-> passed onto the USB backend, which will be utilized in my next revision to
-> allow userspace to specifically select the proper card/PCM device to enable
-> offload on.
+> That's a good way to do it, but it does race with 
+> usb_remove_sysfs_intf_files().  To prevent this race, you can protect
+> the test and function call with device_lock(iface->dev.parent) (that
+> is, 
+> lock the interface's parent usb_device).
 
-Oh, I can't wait to see that user/kernel api :)
+Perfect, I've done that locally.
 
-It's really hard to answer you here as I don't see any patches, and I
-don't know how your hardware really works.  But in general, you should
-always be working on the bus level here, and that will get rid of any
-static lists or any "single controller pointers" that you all have had
-in previous versions.
+I'll send an updated patchset once I've been able to test it against
+the hardware I have.
 
-I'll wait for patches to be able to comment further.
-
-thanks,
-
-greg k-h
+Cheers
