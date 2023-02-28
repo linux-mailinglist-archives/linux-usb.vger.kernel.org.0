@@ -2,123 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC2C6A581F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 12:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 124FA6A5878
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 12:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjB1Lck (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 06:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S231216AbjB1Ll4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Feb 2023 06:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbjB1Lcj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 06:32:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B778C163;
-        Tue, 28 Feb 2023 03:32:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E503161040;
-        Tue, 28 Feb 2023 11:32:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3B3C433D2;
-        Tue, 28 Feb 2023 11:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677583956;
-        bh=RCpz0KRyu2TfZM95YSx8sZTwRQ7CMmq0oGwTIdQKEdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rsnOSmt2mnIQ3ytA9kF0L6Ul6hXudzrHpfivYSdnX3E224xJ+oR1Q0uU1y7y38xSA
-         oIcupSoXOcAd3g/tdWhvfkvqUDpZMk8zc5u5znbucRcBmKkbTAVrQWxlsUxmLM65uT
-         POaVfX/VAEMn0lZtBiPqtE5CVHAonZKeoiRSTQ+zW3yK6JGT/xkOs2pr5xWXO+XBUd
-         Waa7LhwX8usGKFyYqFQYug40r+kkWjs66QuFDkb/ne3wnNdhvcR9FGS9Wuxn2OiXJq
-         tu3Qmpg+7YGwUoMzg4qNHCkcE2o1oJW/01u47Z56rMJXw+HyjTxy3RVJDCYMlq0Trs
-         4cOl5xoKQHkQQ==
-Date:   Tue, 28 Feb 2023 11:32:31 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>, mchehab@kernel.org,
-        kernel@tuxforce.de, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, cai.huoqing@linux.dev
-Subject: Re: [PATCH v3 0/4] Fix multiple race condition vulnerabilities in
- dvb-core and device driver
-Message-ID: <Y/3mT9uSsuviT+sa@google.com>
-References: <20221117045925.14297-1-imv4bel@gmail.com>
- <87lema8ocn.wl-tiwai@suse.de>
- <Y/YXbNgBhhWhfjwS@google.com>
+        with ESMTP id S231197AbjB1Llz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 06:41:55 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C572CC77;
+        Tue, 28 Feb 2023 03:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677584513; x=1709120513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=phj48FYIPUNxXUJbLJqKUoI6zPBm7GSV3FNYT5R+/0Y=;
+  b=m320wiyDn/sQGGSChlIuJc+Nvrr3FZSvNFjz7Wq063+10l90wiIrI9jy
+   8vCUEHKtFXw4HDv+QNPTan9hin2aPC7W73LaV14x3xEkrz/WHGZFQMQVQ
+   Ds0fXTDbgPbGfsEdC9f3auCboIi++dhMhEb+QqQl6X6Z14tPtTLwE2RQH
+   8Fv+9pU6VfELykEmYCd9i6zhRQJ5odYLBddyY2LcFHhQLN/9ssj+bNXfu
+   1J9Ze2IVHylghTHzAOWI5Nck3oqn329zSn8ZIiN+U4Va3uE1pf+TaKBmw
+   f+cCuvBSGqnW/9crhiGIvdXZ324Z3bSbqr7VjTNcQBFn2jvUVq2H4UWvV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="396681671"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="396681671"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 03:41:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="817061554"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="817061554"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 28 Feb 2023 03:41:51 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Feb 2023 13:41:50 +0200
+Date:   Tue, 28 Feb 2023 13:41:50 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: ucsi: Fix NULL pointer deref in
+ ucsi_connector_change()
+Message-ID: <Y/3ofhWfttn6gdJg@kuha.fi.intel.com>
+References: <20230228090305.9335-1-hdegoede@redhat.com>
+ <Y/3R68g6qKsqqLdL@kuha.fi.intel.com>
+ <800fcc20-8009-529f-fc09-c1394cd397fb@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/YXbNgBhhWhfjwS@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <800fcc20-8009-529f-fc09-c1394cd397fb@redhat.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 22 Feb 2023, Lee Jones wrote:
-
-> On Tue, 10 Jan 2023, Takashi Iwai wrote:
+On Tue, Feb 28, 2023 at 11:15:46AM +0100, Hans de Goede wrote:
+> Hi,
 > 
-> > On Thu, 17 Nov 2022 05:59:21 +0100,
-> > Hyunwoo Kim wrote:
-> > > 
-> > > Dear,
-> > > 
-> > > This patch set is a security patch for various race condition vulnerabilities that occur
-> > > in 'dvb-core' and 'ttusb_dec', a dvb-based device driver.
-> > > 
-> > > 
-> > > # 1. media: dvb-core: Fix use-after-free due to race condition occurring in dvb_frontend
-> > > This is a security patch for a race condition that occurs in the dvb_frontend system of dvb-core.
-> > > 
-> > > The race condition that occurs here will occur with _any_ device driver using dvb_frontend.
-> > > 
-> > > The race conditions that occur in dvb_frontend are as follows
-> 
-> [...]
-> 
-> > > # 4. media: ttusb-dec: Fix memory leak in ttusb_dec_exit_dvb()
-> > > This is a patch for a memory leak that occurs in the ttusb_dec_exit_dvb() function.
-> > > 
-> > > Because ttusb_dec_exit_dvb() does not call dvb_frontend_detach(),
-> > > several fe related structures are not kfree()d.
-> > > 
-> > > Users can trigger a memory leak just by repeating connecting and disconnecting
-> > > the ttusb_dec device.
-> > > 
-> > > 
-> > > Finally, most of these patches are similar to this one, the security patch for
-> > > CVE-2022-41218 that I reported:
-> > > https://lore.kernel.org/linux-media/20221031100245.23702-1-tiwai@suse.de/
-> > > 
-> > > 
-> > > Regards,
-> > > Hyunwoo Kim
+> On 2/28/23 11:05, Heikki Krogerus wrote:
+> > On Tue, Feb 28, 2023 at 10:03:03AM +0100, Hans de Goede wrote:
+> >> When ucsi_init() fails, ucsi->connector is NULL, yet in case of
+> >> ucsi_acpi we may still get events which cause the ucs_acpi code to call
+> >> ucsi_connector_change(), which then derefs the NULL ucsi->connector
+> >> pointer.
+> >>
+> >> Fix this by adding a check for ucsi->connector being NULL, as is
+> >> already done in ucsi_resume() for similar reasons.
+> >>
+> >> Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+> >> Cc: stable@vger.kernel.org
+> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> >> ---
+> >>  drivers/usb/typec/ucsi/ucsi.c | 8 +++++++-
+> >>  1 file changed, 7 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> >> index 1cf8947c6d66..e762897cb25a 100644
+> >> --- a/drivers/usb/typec/ucsi/ucsi.c
+> >> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> >> @@ -842,7 +842,13 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+> >>   */
+> >>  void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+> >>  {
+> >> -	struct ucsi_connector *con = &ucsi->connector[num - 1];
+> >> +	struct ucsi_connector *con;
+> >> +
+> >> +	/* Check for ucsi_init() failure */
+> >> +	if (!ucsi->connector)
+> >> +		return;
+> >> +
+> >> +	con = &ucsi->connector[num - 1];
+> >>  
+> >>  	if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
+> >>  		dev_dbg(ucsi->dev, "Bogus connector change event\n");
 > > 
-> > Are those issues still seen with the latest 6.2-rc kernel?
-> > I'm asking because there have been a few fixes in dvb-core to deal
-> > with some UAFs.
+> > I think we should try to rely on that ucsi->ntfy. Would this work:
 > > 
-> > BTW, Mauro, the issues are tagged with several CVE's:
-> > CVE-2022-45884, CVE-2022-45886, CVE-2022-45885, CVE-2022-45887.
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > index fe1963e328378..0da1e9c66971a 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -928,15 +928,13 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+> >   */
+> >  void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+> >  {
+> > -       struct ucsi_connector *con = &ucsi->connector[num - 1];
+> > -
+> >         if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
+> >                 dev_dbg(ucsi->dev, "Bogus connector change event\n");
+> >                 return;
+> >         }
+> >  
+> >         if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> > -               schedule_work(&con->work);
+> > +               schedule_work(&ucsi->connector[num - 1].work);
+> >  }
+> >  EXPORT_SYMBOL_GPL(ucsi_connector_change);
+> >  
 > 
-> Was there an answer to this question?
+> This hunk is not necessary, the con pointer pointing to lala land is
+> not an issue as long as we don't deref it. The &ucsi->connector[num - 1];
+> does not deref ucsi->connector it it simply adds an offset to it and
+> stores that in con (the backtrace I got pointed to the schedule_work call).
 > 
-> Rightly or wrongly this patch is still being touted as the fix for some
-> reported CVEs [0].
+> But I guess your way does make it more obvious that we don't
+> deref ucsi->connector.
 > 
-> Is this patch still required or has it been superseded?  If the later,
-> which patch superseded it?
+> > @@ -1404,6 +1402,7 @@ static int ucsi_init(struct ucsi *ucsi)
+> >         ucsi->connector = NULL;
+> >  
+> >  err_reset:
+> > +       ucsi->ntfy = 0;
+> >         memset(&ucsi->cap, 0, sizeof(ucsi->cap));
+> >         ucsi_reset_ppm(ucsi);
+> >  err:
 > 
-> Thanks.
+> In would expect this to fix things, but I only have access to the monitor
+> triggering this on Mondays, so I can only 100% confirm next Monday.
 > 
-> [0] https://nvd.nist.gov/vuln/detail/CVE-2022-45886
+> Note this does open the race I try to fix in patch 2/3 again.
+> 
+> So what should be done here is to make ntfy a local variable and only
+> store it in ucsi->ntfy on success.
 
-Have these issues been fixed already?
+OK.
 
-If not, is this patch set due to be merged or reviewed?
+thanks,
 
 -- 
-Lee Jones [李琼斯]
+heikki
