@@ -2,42 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2AC6A5397
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 08:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B753E6A53B5
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 08:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjB1HMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 02:12:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        id S229744AbjB1Hbh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Feb 2023 02:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjB1HMs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 02:12:48 -0500
-Received: from mail.lineo.co.jp (mail.lineo.co.jp [203.141.200.203])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481F92BECB
-        for <linux-usb@vger.kernel.org>; Mon, 27 Feb 2023 23:12:19 -0800 (PST)
-Received: from [172.31.17.196] (vpn1.lineo.co.jp [203.141.200.204])
-        by mail.lineo.co.jp (Postfix) with ESMTPSA id B41DD803DBD29;
-        Tue, 28 Feb 2023 16:11:46 +0900 (JST)
-Message-ID: <9adf6c33-060f-3654-25fa-3cf70a32e918@lineo.co.jp>
-Date:   Tue, 28 Feb 2023 16:11:46 +0900
+        with ESMTP id S229915AbjB1Hbd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 02:31:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4851167F;
+        Mon, 27 Feb 2023 23:31:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CD9460FF9;
+        Tue, 28 Feb 2023 07:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D778C4339B;
+        Tue, 28 Feb 2023 07:30:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677569459;
+        bh=e6s4tpTO5in76O06wuyEcoiAxV018g78W3FW7CWNMG8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JmEu1GdtX8gza/6UTwGHjaJOKfGTpyVRZty6nHoB8l3XBYVjcnHFvZuVD8uvAxHWu
+         dvRJX31VrceN5IU2JK5gI4TmGk0hJy8ACiJJyk4+FAjShY4+Rg1xxlVx7K4AkHVlNh
+         9CLm3iCWZAZcdGukKvVwqxtbOhrftl2jqQBTKcAE=
+Date:   Tue, 28 Feb 2023 08:30:57 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
+        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
+        robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [RFC PATCH v2 12/22] sound: usb: card: Introduce USB SND
+ platform op callbacks
+Message-ID: <Y/2tsfGGzAlLzxwd@kroah.com>
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-13-quic_wcheng@quicinc.com>
+ <Y9Ui82OaI54Qx8Ft@kroah.com>
+ <2c062ab0-905c-f1fe-eca2-02e23cc9fa6f@quicinc.com>
+ <5e5c6481-8d5d-dc3f-e40e-986e3ac30387@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [RFC PATCH v2] usb: gadget: f_fs: Fix incorrect version checking
- of OS descs
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <f7e7fcd9-ddee-2c81-ca44-951b6cec1003@lineo.co.jp>
- <57a35112-66b3-0a9d-8ced-4d47b5b7796c@collabora.com>
- <0e743482-95fc-375d-21cf-b5a237b52e0d@lineo.co.jp>
- <540eb9bc-a8e2-4515-2a80-7435366a7cf6@collabora.com>
-Content-Language: en-US
-From:   Yuta Hayama <hayama@lineo.co.jp>
-Cc:     Yuta Hayama <hayama@lineo.co.jp>
-In-Reply-To: <540eb9bc-a8e2-4515-2a80-7435366a7cf6@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+In-Reply-To: <5e5c6481-8d5d-dc3f-e40e-986e3ac30387@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,40 +62,83 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andrzej,
-
-On 2023/02/28 0:51, Andrzej Pietrasiewicz wrote:
-> After all the discussion we've had, I agree that the initial approach in your
-> patch to allow 0x100 as a legitimate value in the check performed in
-> __ffs_do_os_desc_header() is correct.
+On Mon, Feb 27, 2023 at 06:59:32PM -0800, Wesley Cheng wrote:
+> Hi Greg,
 > 
-> Whatever arrives through ep0 is in little endian format. So 0x0100 will be
-> stored as 0x0001, but then u16 bcd_version = le16_to_cpu(desc->bcdVersion);
-> will ensure bcd_version equals 0x0100 no matter what (and regardless of
-> machine's endinanness) and we *should* be comparing it with 0x0100.
-
-Thank you for your understanding. I'm sorry if my explanation was not clear.
-
-> I would probably change the message generated by this portion:
+> On 2/10/2023 2:49 PM, Wesley Cheng wrote:
+> > Hi Greg,
+> > 
+> > On 1/28/2023 5:28 AM, Greg KH wrote:
+> > > On Wed, Jan 25, 2023 at 07:14:14PM -0800, Wesley Cheng wrote:
+> > > > Allow for different platforms to be notified on USB SND
+> > > > connect/disconnect
+> > > > seqeunces.� This allows for platform USB SND modules to properly
+> > > > initialize
+> > > > and populate internal structures with references to the USB SND chip
+> > > > device.
+> > > > 
+> > > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > > > ---
+> > > > � sound/usb/card.c | 28 ++++++++++++++++++++++++++++
+> > > > � sound/usb/card.h | 20 ++++++++++++++++++++
+> > > > � 2 files changed, 48 insertions(+)
+> > > > 
+> > > > diff --git a/sound/usb/card.c b/sound/usb/card.c
+> > > > index 26268ffb8274..803230343c16 100644
+> > > > --- a/sound/usb/card.c
+> > > > +++ b/sound/usb/card.c
+> > > > @@ -117,6 +117,24 @@ MODULE_PARM_DESC(skip_validation, "Skip
+> > > > unit descriptor validation (default: no)
+> > > > � static DEFINE_MUTEX(register_mutex);
+> > > > � static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
+> > > > � static struct usb_driver usb_audio_driver;
+> > > > +static struct snd_usb_platform_ops *platform_ops;
+> > > 
+> > > You can not have a single "platform_ops" pointer, this HAS to be
+> > > per-bus.
+> > > 
+> > 
+> > Agreed.
+> > 
 > 
-> +        pr_warn("bcdVersion is expected to be 0x100, but it was 0x%x. "
-> +            "Pass for compatibility, but fix your user space driver.\n",
-> +            bcd_version);
-> 
-> to, say:
-> 
-> pr_warn("bcdVersion must be 0x0100, stored in Little Endian order. "
->     "Userspace driver should be fixed, accepting 0x0001 for compatibility.\n");
+> I looked at seeing how we could implement this at a per bus level, but the
+> USB class driver model doesn't exactly have a good framework for supporting
+> this.  Reason being is because, at the time of the USB SND class driver
+> initialization, there is a big chance that there isn't a USB bus registered
+> in the system, so the point of adding the operations is not clear.  However,
+> we need to ensure that we've added the platform/driver operations before any
+> USB SND devices are detected.
 
-It helped me because I am not good at English. I would like to replace the
-message with this in the v3 patch.
+But the offload "engine" is associated with the specific USB bus
+controller instance in the system, so perhaps you are just not adding
+this to the correct location?
 
-> and there's no need to format-print bcd_version given it is 0x1
-> in this branch of the "if" statement.
+The sound core shouldn't care about this at all, add the logic to the
+USB host controller driver instead, why isn't this just another USB bus
+function?
 
-Yes, indeed. Aside from the wording, the format specifier was not needed.
+> To add to the above, in case of OTG/DRD (dual role) designs, the USB HCD/bus
+> isn't created until we move into the host role.  At that time, using DWC3 as
+> an example, we will create the XHCI platform device, and probe the USB HCD,
+> where a USB bus is created.
 
+Great, again, tie it to the specific xhci host controler instance.
 
-Regards,
+> In general, we currently think this USB offload driver should co-exist with
+> the USB SND class driver, which handles all devices connected across every
+> bus.
 
-Yuta Hayama
+And that is incorrect, please do not do that.
+
+> We can add a check to the platform connect routine to ensure that
+> there is a reference to the USB backend.  If so, then that particular USB
+> bus/sysdev can be supported by the audio DSP.  That way, we do not falsely
+> populate USB SND cards which are present on another USB bus/controller.
+
+You should NEVER be able to populate a USB card unless the USB bus
+controller has given you the USB interface structure to control, so I do
+not understand how this is an issue.
+
+thanks,
+
+greg k-h
