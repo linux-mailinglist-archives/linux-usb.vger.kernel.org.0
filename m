@@ -2,112 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF876A61FC
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Feb 2023 22:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452866A63CB
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 00:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjB1V7I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 16:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S229630AbjB1X26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Feb 2023 18:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjB1V7D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 16:59:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8E11E9E4;
-        Tue, 28 Feb 2023 13:59:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D907BB80DE7;
-        Tue, 28 Feb 2023 21:58:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB95C4339B;
-        Tue, 28 Feb 2023 21:58:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677621538;
-        bh=EApezt/xrKSUqcwtPB/lYFfV3ScYq2GN1UtJeJ9Yc+c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cUYRfMKeK+p4AXiL2yRjGGOTvS01vXKugWnhKFkzYTZRH2viq9VagyHHpn9RYO06E
-         7161gTVDpaIwYbqDcrlmVPN0o/cugLq/+gDN1auuBxF/uZPh9OpMPhpNLHF+53h7/f
-         DoT1TtdWlebJgWhfw4OQoDjoiCvi0XiuNGbnLek0xsWC1Yu/OVJnYFJLHZprcXRPiC
-         7v5WbvF/tLxYWQO6MfSWwUmY8KP3GIJ8Wrz1RAHaWryhlvgwMlV6ERJb7McemY4aKl
-         vDe/gg3FPRtgYCN2VZVVoHhp+1BFL8FRLCFU2j+s5qzK8bnhmFkzpbIMlP6wDedOvJ
-         P7W07HuSh0APg==
-Date:   Tue, 28 Feb 2023 21:58:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Message-ID: <Y/55H2lZZf7a3Xbu@sirena.org.uk>
-References: <20230228215433.3944508-1-robh@kernel.org>
+        with ESMTP id S229585AbjB1X25 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 18:28:57 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2885F11E93;
+        Tue, 28 Feb 2023 15:28:56 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SNJ7GC003586;
+        Tue, 28 Feb 2023 23:28:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=u9p+/xBrjJGKmuK3/sn8Ey8FmIoCUMkLliFH4tdMtNg=;
+ b=HT6E0ULzNV+vBjv3O5r+SiiKcfmKy8TIc52lTLQHx4YKwzLtW/POl8uOr0NQZjbekjbh
+ sIccDYRjdtFamOEwgiLcoysOMVsZ6GKmocunPE4A/k1PG+mi1ahxR6XHR747RN7BcONi
+ Gqw8vpU2JR68PUdvV6PF0LfThlq5Vk/Hij5NqynJHbPmzUbWyxuq72F7n/gxJxDwHQ2Y
+ lwEH4MMTqUM6f9bESJMKKD75v8NlCXZRCsg4xM0EtlhedmSk3QstT+45+1pb0BevWNTB
+ dqsZacUrvOAHLQWz+os2adHyLU6nrJdNx2gZbpZroFV0cVrOAggtQ+rkx64cGiBuBe3n uQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1mwx90e2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 23:28:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SNSmCL021204
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 23:28:48 GMT
+Received: from hu-jackp-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Feb 2023 15:28:48 -0800
+Date:   Tue, 28 Feb 2023 15:28:46 -0800
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3] usb: dwc3: gadget: Add 1ms delay after end transfer
+ command without IOC
+Message-ID: <20230228232846.GB3727894@hu-jackp-lv.qualcomm.com>
+References: <20230228202418.9126-1-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MyLQObbLmZa89Gv8"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-X-Cookie: Single tasking: Just Say No.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230228202418.9126-1-quic_wcheng@quicinc.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: s85YVLxozDjdStmQg2EnhWhvVxnGeh-F
+X-Proofpoint-GUID: s85YVLxozDjdStmQg2EnhWhvVxnGeh-F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=610 malwarescore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302280187
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Feb 28, 2023 at 12:24:18PM -0800, Wesley Cheng wrote:
+> Previously, there was a 100uS delay inserted after issuing an end transfer
+> command for specific controller revisions.  This was due to the fact that
+> there was a GUCTL2 bit field which enabled synchronous completion of the
+> end transfer command once the CMDACT bit was cleared in the DEPCMD
+> register.  Since this bit does not exist for all controller revisions, add
+> the delay back in, and increase the duration to 1ms for the controller to
+> complete the command.
+> 
+> An issue was seen where the USB request buffer was unmapped while the DWC3
+> controller was still accessing the TRB.  However, it was confirmed that the
+> end transfer command was successfully submitted. (no end transfer timeout)
+> In situations, such as dwc3_gadget_soft_disconnect() and
+> __dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
+> will issue the end transfer command, and follow up with
+> dwc3_gadget_giveback().  At least for the USB ep disable path, it is
+> required for any pending and started requests to be completed and returned
+> to the function driver in the same context of the disable call.  Without
+> the GUCTL2 bit, it is not ensured that the end transfer is completed before
+> the buffers are unmapped.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+> Changes in v3:
+> - Fixed subject title and modified commit text to reference the new 1ms
+> delay
+> 
+> Changes in v2:
+> - Increase delay value to 1ms
+> - Make this applicable to DWC32 revisions as well
+> 
+>  drivers/usb/dwc3/gadget.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 3c63fa97a680..15adf07a4df4 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -1699,6 +1699,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+>   */
+>  static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
+>  {
+> +	struct dwc3 *dwc = dep->dwc;
+>  	struct dwc3_gadget_ep_cmd_params params;
+>  	u32 cmd;
+>  	int ret;
+> @@ -1722,10 +1723,14 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+>  	WARN_ON_ONCE(ret);
+>  	dep->resource_index = 0;
+>  
+> -	if (!interrupt)
+> +	if (!interrupt) {
+> +		if (DWC3_IP_IS(DWC32) || DWC3_IP_IS(DWC31) ||
+> +			DWC3_VER_IS_PRIOR(DWC3, 310A))
 
---MyLQObbLmZa89Gv8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+How about a little more succinctly:
 
-On Tue, Feb 28, 2023 at 03:54:33PM -0600, Rob Herring wrote:
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
+		if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
+?
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---MyLQObbLmZa89Gv8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP+eR4ACgkQJNaLcl1U
-h9DqWQf/fzAqwVcR5vEvDlZIOyeJ93q74mz/Rl0dA1kXgtn8VCrgOTQv1BlYjrCE
-YSIOVaCA5NiKGfDp99bOWw61eY5vrMwgY1dL8JB2fdMVGhAnk4dN0ewMN2lc2Zxs
-/aZeYDxjeMRJOEv+9UinuEKROblNzSwDJFxyTFoOddlrYg7leB2icMBQRsd3m5+h
-Thr8sNClvv0OyNBx5LchcIvla+hu2AAQSAvLHe/Q0aUCOGooYIUsdfDeNqNJa6vF
-7wjeN3etYc7wp/PyeJKwrO9AhmkCXzazy4OwW4esqLUxQEO88PTJxkHJjNW+tvu3
-lFl5XDtQUMJ9ACGlaRM0sEP28dPf5w==
-=8se/
------END PGP SIGNATURE-----
-
---MyLQObbLmZa89Gv8--
+Jack
