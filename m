@@ -2,71 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9096A702A
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 16:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DD96A7059
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 16:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjCAPsy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Mar 2023 10:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S229694AbjCAPzs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Mar 2023 10:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjCAPsw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 10:48:52 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30F9AD2F;
-        Wed,  1 Mar 2023 07:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Azuz1nJ1RPQ5tw9j2NP8VjvzoOm0XSRr/0GTTjrCmVw=; b=cTRPaFwIJqyLpIpj9YVd0O/JLi
-        iI17gu/qUl6uZnYuYDbzT5zz0Jm+kdmwY26uquzPUuLevPdxEAsnj3VR/E0iJawExL5JsSbS27+eO
-        11UNZkWTOJGcjFF0wL/PyJZcHZiBTTKbTgn121DEZWiE3o9PnTnMf9k7yxSnkAxK4rD4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pXOg7-006FUC-4j; Wed, 01 Mar 2023 16:47:39 +0100
-Date:   Wed, 1 Mar 2023 16:47:39 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Yuiko Oshino <yuiko.oshino@microchip.com>
-Cc:     enguerrand.de-ribaucourt@savoirfairelinux.com,
-        woojung.huh@microchip.com, hkallweit1@gmail.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, davem@davemloft.net,
-        UNGLinuxDriver@microchip.com, linux@armlinux.org.uk,
-        edumazet@google.com, linux-usb@vger.kernel.org, kuba@kernel.org
-Subject: Re: [PATCH v3 net] net:usb:lan78xx: fix accessing the LAN7800's
- internal phy specific registers from the MAC driver
-Message-ID: <Y/9zm981bYNxq1Az@lunn.ch>
-References: <20230301154307.30438-1-yuiko.oshino@microchip.com>
+        with ESMTP id S229564AbjCAPzr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 10:55:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E17D2E0D7
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 07:55:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA841612CE
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 15:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3660BC433A4
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 15:55:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677686145;
+        bh=0CBr6rDWVS+UybmaaUUmOP5zs3MfAc4y5OyxDcITU+A=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=U1gOHO8UXHxqYZ645/vTay+RIat+YBMUs66DNxgkPTIFTybac3qZcFsi+3wWc8m1l
+         6JgdFLwh0v29BWPVEWfvG/VNBeJRBPlLVeF8CrfzuVcTWfRa0FzSWMiHiLeBiYEwQY
+         e8ffwu+OkuAfUzhi+ChmDYDUtXbEhYC2qpPvL8ayTDZDGpLYcBK8GgfuKDDfR+/faH
+         vZ9n3FmETWeAMRy6MtLUFgGfugJVD5yolGFcnoJVxGVmgJMVn+YE8kAwMANVgb2Rd9
+         t3CMK9wk7LxQ4lyQsFqWmISQ44t7+s1ens2wW/ZZl62CpHWJ9ncZ+gONuURvuaDX97
+         ERpUB6HLMl6KA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 209B8C43165; Wed,  1 Mar 2023 15:55:45 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217089] xone23c mixer
+Date:   Wed, 01 Mar 2023 15:55:44 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: greg@kroah.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: IMPLEMENTED
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status cc resolution
+Message-ID: <bug-217089-208809-nlqhKTllYV@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217089-208809@https.bugzilla.kernel.org/>
+References: <bug-217089-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301154307.30438-1-yuiko.oshino@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 08:43:07AM -0700, Yuiko Oshino wrote:
-> Move the LAN7800 internal phy (phy ID  0x0007c132) specific register
-> accesses to the phy driver (microchip.c).
-> 
-> Fix the error reported by Enguerrand de Ribaucourt in December 2022,
-> "Some operations during the cable switch workaround modify the register
-> LAN88XX_INT_MASK of the PHY. However, this register is specific to the
-> LAN8835 PHY. For instance, if a DP8322I PHY is connected to the LAN7801,
-> that register (0x19), corresponds to the LED and MAC address
-> configuration, resulting in unapropriate behavior."
-> 
-> I did not test with the DP8322I PHY, but I tested with an EVB-LAN7800
-> with the internal PHY.
-> 
-> Fixes: 14437e3fa284 ("lan78xx: workaround of forced 100 Full/Half duplex mode error")
-> Signed-off-by: Yuiko Oshino <yuiko.oshino@microchip.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217089
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Greg Kroah-Hartman (greg@kroah.com) changed:
 
-    Andrew
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+                 CC|                            |greg@kroah.com
+         Resolution|---                         |IMPLEMENTED
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
