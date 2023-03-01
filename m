@@ -2,108 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0016A75C6
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 22:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20096A7658
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 22:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjCAVBF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Mar 2023 16:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S229589AbjCAVuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Mar 2023 16:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCAVBC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 16:01:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EDD521CD;
-        Wed,  1 Mar 2023 13:01:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD885B80EE1;
-        Wed,  1 Mar 2023 21:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742DBC4339E;
-        Wed,  1 Mar 2023 21:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677704458;
-        bh=Ijy28NfIAolHq1kijXKPv1A9Prn6Z4PgPnz0SF2ZvmE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qwnNOgDopWNiUb4dKzA0Y6sT0gASegFoNl0l1oHhxaeFwidRVACqKvo9Zw4Lq2uLa
-         DkRPAf51+Vr8EEyQ7IwC/Bj5H1tJVAjANsJyJLagfb6dQBIR+9OsGjhNPWRat2SOtH
-         5jiteysKnyeBDdmsXExcQfoBUuLwKJRarM2/PpsDCzlFSlDaYiuiIN6Yn50f7C1yat
-         Kl5hMVdu4kXvgesUhxebkvb/oOudYsbAKXyirkpGD3xB/LvTXAtTlhB/h40wU7a9WI
-         X+6tPt1WSw58XL3OkDSeUjRPC3OEETL51n26pr7wfG3C7UJmYklBJjZHN6oNtzMzrG
-         H1pgP6Xi9fu0w==
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-53852143afcso389451967b3.3;
-        Wed, 01 Mar 2023 13:00:58 -0800 (PST)
-X-Gm-Message-State: AO0yUKUkNco2rq4K5o5XxG7Qrs1MolodYnCt0+yadl9+JyNaMT4qDo7m
-        2DczIbGS4CB2Hvw33a1Rv2MKLhdYuXOfAeUKqg==
-X-Google-Smtp-Source: AK7set/B7w4SIUVUY+fuTrfn39/aDxu+LSL+nDi5aDHHQnm81UFIS2ScAXvxaj+SUvgnwt845OQ2PIVb1st0BjISJs0=
-X-Received: by 2002:a05:6102:3ca9:b0:41e:bccf:5669 with SMTP id
- c41-20020a0561023ca900b0041ebccf5669mr6637793vsv.2.1677704437053; Wed, 01 Mar
- 2023 13:00:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20230301185209.274134-1-jjhiblot@traphandler.com> <20230301185209.274134-4-jjhiblot@traphandler.com>
-In-Reply-To: <20230301185209.274134-4-jjhiblot@traphandler.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 1 Mar 2023 15:00:25 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJvYnBtaOwaRbNo5Eqp51yxhJpnSYQWEGfKjtZKjm7R4g@mail.gmail.com>
-Message-ID: <CAL_JsqJvYnBtaOwaRbNo5Eqp51yxhJpnSYQWEGfKjtZKjm7R4g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] of: irq: release the node after looking up for "interrupts-extended"
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     saravanak@google.com, clement.leger@bootlin.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        zajec5@gmail.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, afaerber@suse.de,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nishanth Menon <nm@ti.com>, ssantosh@kernel.org,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-wireless@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
+        with ESMTP id S229534AbjCAVt6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 16:49:58 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943D0367F0
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 13:49:56 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 190-20020a250dc7000000b0074747131938so1784304ybn.12
+        for <linux-usb@vger.kernel.org>; Wed, 01 Mar 2023 13:49:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677707396;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4RECI28gZMH42xFUmeyPKXZCKhhTKa9MVymREOSN0hE=;
+        b=T+pFFGwgPa4pI0wvbgJ5Nv1XTD6EzJ980GZ2CigJCMiXo/2H5AX2iP09w37S8IkDjs
+         fKurysuLB9rmkvZMmooNXV33jeMaXBLYE+5q5Hd3LoaMckW1hbMyXwpg/jW00gJz8UvF
+         XFYJqb8SbTGqi0KRJmYp9lbhlAPBOuwHK9/+l/NS4grrK6z11GVzoj/jdA5tf4L8oGCw
+         68Yk/Wz6Tlqn1Xwc2FN6OogUeAXezh7Ih9ks48KB0WwQdmIv9vQbpEF4U7gQHfJXcVKT
+         51y6dDi03TLct9Z3/7qP68F9zjaGT7rZKFKlLOUKzTf5HC359WvrKA0LAIEq8HeYF3NA
+         NkCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677707396;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4RECI28gZMH42xFUmeyPKXZCKhhTKa9MVymREOSN0hE=;
+        b=mxbgrSUYS91uDS5oRKiaoduA2bHGs+hbU3QaQ40hsVopnC26pB7Wozz+p2Bn53GbWS
+         KhxR9WexUWb0Vv4i2uJymgMnH2iWhoCGNdlnW3MtiX67rxz99q1I9kWK5Jww0GqSKdMU
+         VwXfC77ThtZeZh5o/C9Yphu08BSdR7cfxIT2p11tM/VEsYF5T3vqqXye1Lc9q2K40EWl
+         Rrbkyp42hiNRDxaIS0mT6TlhT2hosshFeZLXTfDbMhm4JMUez/Whfm4F8AEub0G8rvb/
+         asWj8Op+HI5ykhxJDX0xa6gTc3ubTZVNUlORZ0FEi5ASp9i8lyUxWzLwQXNEUNrf7dPj
+         X/JA==
+X-Gm-Message-State: AO0yUKVWjVYS1OpGkVMSlaBHQEVDV3Xkm+K21DxLnUOzXttpPruWXhca
+        IbKKtPbjXizWS0qX3b6Qjom090bxm4xV6bM=
+X-Google-Smtp-Source: AK7set9qQzjT7IWidSbI9GPtE0+6SsLSf3v2Z8moxU6S0G3hx6ZtJgjiUAecBGiGtoIpLuPquRTIbXuK7rxyQ4w=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:debf:1aed:5c45:c92])
+ (user=saravanak job=sendgmr) by 2002:a05:690c:f0d:b0:52e:e8b1:d51e with SMTP
+ id dc13-20020a05690c0f0d00b0052ee8b1d51emr7909315ywb.1.1677707395850; Wed, 01
+ Mar 2023 13:49:55 -0800 (PST)
+Date:   Wed,  1 Mar 2023 13:49:47 -0800
+Message-Id: <20230301214952.2190757-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
+Subject: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:53=E2=80=AFPM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
->
-> When of_parse_phandle_with_args() succeeds, a get() is performed on
-> out_irq->np. And another get() is performed in of_irq_parse_raw(),
-> resulting in the refcount being incremented twice.
-> Fixing this by calling put() after of_irq_parse_raw().
+Yongqin, Martin, Amelie,
 
-This looks like a band-aid to me. It only makes sense that the caller
-of of_irq_parse_raw() already holds a ref to out_irq->np. So the first
-of_node_get() in it looks wrong. It looks like the refcounting was
-originally balanced, but commit 2f53a713c4b6 ("of/irq: Fix device_node
-refcount in of_irq_parse_raw()") dropped the put on exit after 'got
-it!'. I'm not sure if just adding it back would be correct or not
-though.
+We recent refactor of fw_devlink that ends with commit fb42378dcc7f
+("mtd: mtdpart: Don't create platform device that'll never probe"),
+fw_devlink is smarter and doesn't depend on compatible property. So, I
+don't think these calls are needed anymore. But I don't have these
+devices to test on and be sure and the hardware I use to test changes
+doesn't have this issue either.
 
-All this needs some test cases to be sure we get things right...
+Can you please test these changes on the hardware where you hit the
+issue to make sure things work as expected?
 
-Rob
+Yongqin, If you didn't have the context, this affected hikey960.
+
+Greg,
+
+Let's wait for some tests before we land these.
+
+Thanks,
+Saravana
+
+Cc: Yongqin Liu <yongqin.liu@linaro.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
+
+Saravana Kannan (4):
+  usb: typec: stusb160x: Remove use of
+    fw_devlink_purge_absent_suppliers()
+  usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
+  usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
+  driver core: Delete fw_devlink_purge_absent_suppliers()
+
+ drivers/base/core.c           | 16 ----------------
+ drivers/usb/typec/stusb160x.c |  9 ---------
+ drivers/usb/typec/tcpm/tcpm.c |  9 ---------
+ drivers/usb/typec/tipd/core.c |  9 ---------
+ include/linux/fwnode.h        |  1 -
+ 5 files changed, 44 deletions(-)
+
+-- 
+2.39.2.722.g9855ee24e9-goog
+
