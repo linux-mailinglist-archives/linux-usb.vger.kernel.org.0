@@ -2,89 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0C96A6FCE
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 16:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F996A6FED
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 16:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjCAPdK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Mar 2023 10:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        id S229635AbjCAPj7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Mar 2023 10:39:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjCAPdJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 10:33:09 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3FD255FD2
-        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 07:33:08 -0800 (PST)
-Received: (qmail 209526 invoked by uid 1000); 1 Mar 2023 10:33:06 -0500
-Date:   Wed, 1 Mar 2023 10:33:06 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: [PATCH v2 5/6] USB: core: Add API to change the wireless_status
-Message-ID: <Y/9wMsqKMKJUugl4@rowland.harvard.edu>
-References: <20230301122310.3579-1-hadess@hadess.net>
- <20230301122310.3579-5-hadess@hadess.net>
+        with ESMTP id S229812AbjCAPj6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 10:39:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D548B38004
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 07:39:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B1B1B80FE1
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 15:39:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 160C8C4339B
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 15:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677685187;
+        bh=H93sCPNvIOrVekx6OzDbGEnGfY7KNEJa5IeEXdc/aPc=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=tRTv1YjQtnvHj/25QnxkIMD9gB6zgSVwpB4iXzpRFdTKPN87aRTSJv1nIbsYB0ato
+         jo0MG/U71w/ufQf08KN3WNgyWD3jbZ8LTh3gWFGHC8jejY7XBZoOiVn9w1n7rDcprO
+         Gilmrkpev5lSaaEDDgEHk3MpDQeU3W+/CbHVKQe9HJBzyrFlu1g0T0pZjV/9AhfdCj
+         nKOHm0dy5M83qPM7Ka6IqdC2OV3VoOchqgz2+4P++W2MUgmSIHNIlRio7R/gDrckkU
+         ADtVGBuWkdHQudlxd26NUCOAt7Wl1z0t55JrKyyaExZOXO7g335d/Fb3oB9RTJijFO
+         lq/M1xpRb6zpg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id F094AC43143; Wed,  1 Mar 2023 15:39:46 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217089] xone23c mixer
+Date:   Wed, 01 Mar 2023 15:39:45 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pierre2008@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217089-208809-Mdum6v1pXz@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217089-208809@https.bugzilla.kernel.org/>
+References: <bug-217089-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301122310.3579-5-hadess@hadess.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 01:23:09PM +0100, Bastien Nocera wrote:
-> This adds the API that allows device specific drivers to tell user-space
-> about whether the wireless device is connected to its receiver dongle.
-> 
-> See "USB: core: Add wireless_status sysfs attribute" for a detailed
-> explanation of what this attribute should be used for.
-> 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
-> Fixed locking/use-after-free in v2, thanks to Alan Stern
-> 
->  drivers/usb/core/message.c | 40 ++++++++++++++++++++++++++++++++++++++
->  include/linux/usb.h        |  5 +++++
->  2 files changed, 45 insertions(+)
-> 
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 127fac1af676..3867d9a85145 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -1908,6 +1908,45 @@ static void __usb_queue_reset_device(struct work_struct *ws)
->  	usb_put_intf(iface);	/* Undo _get_ in usb_queue_reset_device() */
->  }
->  
-> +/*
-> + * Internal function to set the wireless_status sysfs attribute
-> + * See usb_set_wireless_status() for more details
-> + */
-> +static void __usb_wireless_status_intf(struct work_struct *ws)
-> +{
-> +	struct usb_interface *iface =
-> +		container_of(ws, struct usb_interface, wireless_status_work);
-> +
-> +	device_lock(iface->dev.parent);
-> +	if (iface->sysfs_files_created)
-> +		usb_update_wireless_status_attr(iface);
-> +	usb_put_intf(iface);	/* Undo _get_ in usb_set_wireless_status() */
-> +	device_unlock(iface->dev.parent);
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217089
 
-Whoops!  Calling usb_put_intf() means the iface pointer is no longer 
-valid.  The device_unlock() call should come before it, not after.
+--- Comment #21 from Pierre Germain (pierre2008@gmail.com) ---
+(In reply to Alan Stern from comment #20)
+> In the meantime, you can mark this bug report closed.
 
-Alan
+Sorry Alan, I don't see that option, I think I would need more permissions.
+There should be a Edit link next to Status: NEW but I don't have that optio=
+n.
 
-PS: You might also want to edit the sysfs documentation in the preceding 
-patch, to make sure the text doesn't extend beyond the 80-column limit. 
-I know people don't pay too much attention to that restriction in code 
-any more, but in documentation it helps to keep the lines fairly short.  
-People have trouble reading text when the lines get too long.
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
