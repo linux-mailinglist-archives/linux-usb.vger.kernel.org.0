@@ -2,121 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83696A6C48
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 13:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FCB6A6EBD
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 15:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCAMXZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Mar 2023 07:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S230239AbjCAOqK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Mar 2023 09:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjCAMXW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 07:23:22 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BF71CAD8;
-        Wed,  1 Mar 2023 04:23:21 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2CEDD40009;
-        Wed,  1 Mar 2023 12:23:19 +0000 (UTC)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: [PATCH v2 6/6] HID: logitech-hidpp: Set wireless_status for G935 receiver
-Date:   Wed,  1 Mar 2023 13:23:10 +0100
-Message-Id: <20230301122310.3579-6-hadess@hadess.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230301122310.3579-1-hadess@hadess.net>
-References: <20230301122310.3579-1-hadess@hadess.net>
+        with ESMTP id S229826AbjCAOqJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Mar 2023 09:46:09 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C526A43939
+        for <linux-usb@vger.kernel.org>; Wed,  1 Mar 2023 06:45:39 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-536bf92b55cso367018647b3.12
+        for <linux-usb@vger.kernel.org>; Wed, 01 Mar 2023 06:45:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c5fRwh/q88qnR4rLODR5aN06oeaTsbFFIXqxWtKoAdA=;
+        b=Skkgc1pJVdMg4lM3S/QvC70xPPr5jlTmvz4EOn+Pc6rF3VpQhVc4iGugen9Q06wzaW
+         YU5vBuwqleOCYoFdAyxRZHQORMrJn2alOT/fjacfQLA291X6YhVykyxziMNBllMvYuaY
+         rKWSJgX2G7dhiWsfoI33lKF5ZUW3nVjhcxCb4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c5fRwh/q88qnR4rLODR5aN06oeaTsbFFIXqxWtKoAdA=;
+        b=rlCMmc/hjF99f8i7lyQmFJxVRwJJ3BCcU8bY3zTfHkYcx+pXvqkLltsj/88ZH0vRyD
+         njMEAg0IzjvlDJmZ23X4U8jZy69yUom80yBYWMg/d0T3fPxEf+NZfPsQeR+LFf9/dHOz
+         ulhZFz4we0DuNbIXffGTSUR8Iqfr4m1+7VNfAThhdY1a7hmflvBHAz5MqrhSlewi3P1W
+         SEg3hWsF96FodHmEQSo1sNCYm2THlpac2wGMsnu2v036L0/Tl2lUpZDaQTX+Ya0KvazZ
+         h5Pc51nuQcMHPIBzw/3TDK3T+5eTZUKwWnQJD3MhKcif3Rcx9C+2qasY3e3J5XDhi9H8
+         jixw==
+X-Gm-Message-State: AO0yUKW5jwPFTLPL2FOn2mGg0X07AgWZHfUrC6FEr+91y5SnhNLYhIvo
+        jR6mWs2XCV6Ajh+cX7+kqfaFU3ZPqRj6FSvNSXGnfQ==
+X-Google-Smtp-Source: AK7set/9RgMm3XRu83JsW4Wbbsi1f43oJuRNJ4GJnMD9Ynj6+QG8QTN/H949zZF90kB3oY5EYLAgq26FWAoCc+/6F5A=
+X-Received: by 2002:a81:ae0e:0:b0:53c:7c33:9d25 with SMTP id
+ m14-20020a81ae0e000000b0053c7c339d25mr726867ywh.8.1677681938671; Wed, 01 Mar
+ 2023 06:45:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230228215433.3944508-1-robh@kernel.org>
+In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
+From:   Simon Glass <sjg@chromium.org>
+Date:   Wed, 1 Mar 2023 07:45:19 -0700
+Message-ID: <CAPnjgZ1=UPMf72JjejpdSvss5+d1tnMv=efYUgJcH6T09YAKTw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Set the USB interface "wireless_status" for the G935 receiver when
-receiving battery notifications.
+On Tue, 28 Feb 2023 at 14:54, Rob Herring <robh@kernel.org> wrote:
+>
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
+>
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/spi[0-9] {/spi {/'
+>
+> With this, a few errors in examples were exposed and fixed.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> ---
 
-This will allow sound daemons such as Pipewire or PulseAudio to know
-whether or not the headset is turned on and connected.
-
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
----
- drivers/hid/hid-logitech-hidpp.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index 4708819a6d79..c7d81b4241ad 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -74,6 +74,7 @@ MODULE_PARM_DESC(disable_tap_to_click,
- #define HIDPP_QUIRK_HIDPP_EXTRA_MOUSE_BTNS	BIT(27)
- #define HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS	BIT(28)
- #define HIDPP_QUIRK_HI_RES_SCROLL_1P0		BIT(29)
-+#define HIDPP_QUIRK_WIRELESS_STATUS		BIT(30)
- 
- /* These are just aliases for now */
- #define HIDPP_QUIRK_KBD_SCROLL_WHEEL HIDPP_QUIRK_HIDPP_WHEELS
-@@ -472,6 +473,26 @@ static void hidpp_prefix_name(char **name, int name_length)
- 	*name = new_name;
- }
- 
-+/*
-+ * Updates the USB wireless_status based on whether the headset
-+ * is turned on and reachable.
-+ */
-+static void hidpp_update_usb_wireless_status(struct hidpp_device *hidpp)
-+{
-+	struct hid_device *hdev = hidpp->hid_dev;
-+	struct usb_interface *intf;
-+
-+	if (!(hidpp->quirks & HIDPP_QUIRK_WIRELESS_STATUS))
-+		return;
-+	if (!hid_is_usb(hdev))
-+		return;
-+
-+	intf = to_usb_interface(hdev->dev.parent);
-+	usb_set_wireless_status(intf, hidpp->battery.online ?
-+				USB_WIRELESS_STATUS_CONNECTED :
-+				USB_WIRELESS_STATUS_DISCONNECTED);
-+}
-+
- /**
-  * hidpp_scroll_counter_handle_scroll() - Send high- and low-resolution scroll
-  *                                        events given a high-resolution wheel
-@@ -1872,6 +1893,7 @@ static int hidpp20_query_adc_measurement_info_1f20(struct hidpp_device *hidpp)
- 								 &hidpp->battery.voltage);
- 	hidpp->battery.capacity = hidpp20_map_adc_measurement_1f20_capacity(hidpp->hid_dev,
- 									    hidpp->battery.voltage);
-+	hidpp_update_usb_wireless_status(hidpp);
- 
- 	return 0;
- }
-@@ -1896,6 +1918,7 @@ static int hidpp20_adc_measurement_event_1f20(struct hidpp_device *hidpp,
- 		hidpp->battery.capacity = hidpp20_map_adc_measurement_1f20_capacity(hidpp->hid_dev, voltage);
- 		if (hidpp->battery.ps)
- 			power_supply_changed(hidpp->battery.ps);
-+		hidpp_update_usb_wireless_status(hidpp);
- 	}
- 	return 0;
- }
-@@ -4557,7 +4580,8 @@ static const struct hid_device_id hidpp_devices[] = {
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC088) },
- 
- 	{ /* G935 Gaming Headset */
--	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0x0a87) },
-+	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0x0a87),
-+		.driver_data = HIDPP_QUIRK_WIRELESS_STATUS },
- 
- 	{ /* MX5000 keyboard over Bluetooth */
- 	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb305),
--- 
-2.39.2
-
+Reviewed-by: Simon Glass <sjg@chromium.org>
