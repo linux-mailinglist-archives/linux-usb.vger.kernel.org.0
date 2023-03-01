@@ -2,117 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AF46A63EA
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 00:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43FD6A667D
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Mar 2023 04:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjB1Xxn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Feb 2023 18:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
+        id S229793AbjCADcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Feb 2023 22:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjB1Xxm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 18:53:42 -0500
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BE820D3D;
-        Tue, 28 Feb 2023 15:53:32 -0800 (PST)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17235c8dab9so12689758fac.7;
-        Tue, 28 Feb 2023 15:53:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1aI0IGm7iAqk6zQ/LnlfcNFRLt84DlvpSajHyHkJ9AI=;
-        b=m6hxFVX85BqRKlC0rhX0/G7+8aOcOCgLBQEaMChjy6vUGZxvfslaDLkQI3TY3QkJlg
-         aKwQFDQihSVg2vn3psolp2fhxUVc1V8njHVaMizmdmqvEhOBmOiIJouEYA8I4IcawIDP
-         KTbdrf0APsO2Ax/SXVUN6U2CitzkyQpKFM9eeH9NL9DKFTY6xqw4rQeQw17UcyEnpdbL
-         12DIMxHxk38nnYEEDzX3aA+yW84T9+OoYza65fPL41Zy4Iz3gkUuKx1bk7STLW7bCtEs
-         8f1IV/nTMYGq/ZenjicM/QVqtGP9IUtCLSV4EdTMhA96QZSifGGTl5j7NJQVZEQ69pFZ
-         n/9Q==
-X-Gm-Message-State: AO0yUKVGMZtzPWbRaVElxd3GFmdAz5UT/pbvB93RxnY8XYN64Dxb5I7U
-        mi0y2ew9FG2nDn/0GqkmSC9zZ+cLPQ==
-X-Google-Smtp-Source: AK7set+JrriyX6HdMqID62LqWmw8BTkKVgjKbjm9wEZPDH7xsJa3/YNQ6EJtcOe1pqpWsp4js4lKMw==
-X-Received: by 2002:a05:6870:17a3:b0:175:72b6:ec4d with SMTP id r35-20020a05687017a300b0017572b6ec4dmr821652oae.25.1677628411329;
-        Tue, 28 Feb 2023 15:53:31 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g12-20020a4ac4cc000000b005250c840e64sm4305728ooq.3.2023.02.28.15.53.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 15:53:30 -0800 (PST)
-Received: (nullmailer pid 13474 invoked by uid 1000);
-        Tue, 28 Feb 2023 23:53:30 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: host: xhci-tegra: Drop using of_irq_parse_one()
-Date:   Tue, 28 Feb 2023 17:53:22 -0600
-Message-Id: <20230228235322.13289-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229437AbjCADcv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Feb 2023 22:32:51 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2316F37F0B;
+        Tue, 28 Feb 2023 19:32:50 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3212nqHT026307;
+        Wed, 1 Mar 2023 03:32:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=UOofnWMrLKM/1O9IUZIxmQ0b/FYL/4laLP1Mulvq4QA=;
+ b=mVs+T4W++AC4nSaTo7UY0wvfg6hxTqvtkjM+PqaJhnFupZcSnEaj/iN0Zw2oOFi5s/MI
+ k1wwc+ych2qzDoBXvCwZPnKmURdneS5JsvMmsplnAScvxbyR+Q87QNEMDpw7ZSyGh/qP
+ jO5d98mWeWn3vd16znGNaF64PY0UCSaZ9L4FUQfUkIBD6f9dzFLXswLtGFoUBD9Hmy+j
+ VBz3WT+PJ2yDyuai+s1uMgNIXzoJtTQdBVsD8ZlBdBhPm2slicsfQt+KHLyciTwkhjvE
+ /UcOo/Z2M3PZ0dtOTPRx6VMOuX1Iv+OIKrsznH57Ar/CQm1R+TPV/bF0FoLbwqWubfJa cQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1n0thf36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 03:32:47 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3213WkcM012365
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 1 Mar 2023 03:32:46 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Feb 2023 19:32:45 -0800
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v4] usb: dwc3: gadget: Add 1ms delay after end transfer command without IOC
+Date:   Tue, 28 Feb 2023 19:32:34 -0800
+Message-ID: <20230301033234.21024-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3r_biSJbJZCK53jWhZtqyaWLRaok4nYK
+X-Proofpoint-GUID: 3r_biSJbJZCK53jWhZtqyaWLRaok4nYK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_19,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0 mlxlogscore=640
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303010025
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drivers generally shouldn't be using of_irq_parse_one() directly as it
-is a low-level interrupt parsing API. The exceptions are cases that need
-the values from the 'interrupts' property.
+Previously, there was a 100uS delay inserted after issuing an end transfer
+command for specific controller revisions.  This was due to the fact that
+there was a GUCTL2 bit field which enabled synchronous completion of the
+end transfer command once the CMDACT bit was cleared in the DEPCMD
+register.  Since this bit does not exist for all controller revisions, add
+the delay back in, and increase the duration to 1ms for the controller to
+complete the command.
 
-This is not the case for Tegra XHCI driver as it just uses
-of_irq_parse_one() to test for 'interrupts' being absent or invalid.
-Instead, just make the interrupt optional on any error other than
-deferred probe. The exact reason for failing to get the interrupt is not
-that important.
+An issue was seen where the USB request buffer was unmapped while the DWC3
+controller was still accessing the TRB.  However, it was confirmed that the
+end transfer command was successfully submitted. (no end transfer timeout)
+In situations, such as dwc3_gadget_soft_disconnect() and
+__dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
+will issue the end transfer command, and follow up with
+dwc3_gadget_giveback().  At least for the USB ep disable path, it is
+required for any pending and started requests to be completed and returned
+to the function driver in the same context of the disable call.  Without
+the GUCTL2 bit, it is not ensured that the end transfer is completed before
+the buffers are unmapped.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
- drivers/usb/host/xhci-tegra.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+Changs in v4:
+- Updated DWC3 revision check logic to look for !DWC3 based IP (ie DWC32 and
+DWC31 variants)
+- Fixed incorrect delay reference in comments
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 1ff22f675930..b9349b8c8ff1 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1535,7 +1535,6 @@ static void tegra_xusb_deinit_usb_phy(struct tegra_xusb *tegra)
- 
- static int tegra_xusb_probe(struct platform_device *pdev)
+Changes in v3:
+- Fixed subject title and modified commit text to reference the new 1ms
+delay
+
+Changes in v2:
+- Increase delay value to 1ms
+- Make this applicable to DWC32 revisions as well
+
+
+ drivers/usb/dwc3/gadget.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 3c63fa97a680..cf5b4f49c3ed 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1699,6 +1699,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+  */
+ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
  {
--	struct of_phandle_args args;
- 	struct tegra_xusb *tegra;
- 	struct device_node *np;
- 	struct resource *regs;
-@@ -1594,15 +1593,13 @@ static int tegra_xusb_probe(struct platform_device *pdev)
- 		goto put_padctl;
- 	}
++	struct dwc3 *dwc = dep->dwc;
+ 	struct dwc3_gadget_ep_cmd_params params;
+ 	u32 cmd;
+ 	int ret;
+@@ -1722,10 +1723,13 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+ 	WARN_ON_ONCE(ret);
+ 	dep->resource_index = 0;
  
--	/* Older device-trees don't have padctrl interrupt */
--	err = of_irq_parse_one(np, 0, &args);
--	if (!err) {
--		tegra->padctl_irq = of_irq_get(np, 0);
--		if (tegra->padctl_irq <= 0) {
--			err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
--			goto put_padctl;
--		}
--	} else {
-+	tegra->padctl_irq = of_irq_get(np, 0);
-+	if (tegra->padctl_irq == -EPROBE_DEFER) {
-+		err = tegra->padctl_irq;
-+		goto put_padctl;
-+	} else if (tegra->padctl_irq <= 0) {
-+		/* Older device-trees don't have padctrl interrupt */
-+		tegra->padctl_irq = 0;
- 		dev_dbg(&pdev->dev,
- 			"%pOF is missing an interrupt, disabling PM support\n", np);
- 	}
--- 
-2.39.2
-
+-	if (!interrupt)
++	if (!interrupt) {
++		if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
++			mdelay(1);
+ 		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+-	else if (!ret)
++	} else if (!ret) {
+ 		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
++	}
+ 
+ 	dep->flags &= ~DWC3_EP_DELAY_STOP;
+ 	return ret;
+@@ -3774,7 +3778,11 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+ 	 * enabled, the EndTransfer command will have completed upon
+ 	 * returning from this function.
+ 	 *
+-	 * This mode is NOT available on the DWC_usb31 IP.
++	 * This mode is NOT available on the DWC_usb31 IP.  In this
++	 * case, if the IOC bit is not set, then delay by 1ms
++	 * after issuing the EndTransfer command.  This allows for the
++	 * controller to handle the command completely before DWC3
++	 * remove requests attempts to unmap USB request buffers.
+ 	 */
+ 
+ 	__dwc3_stop_active_transfer(dep, force, interrupt);
