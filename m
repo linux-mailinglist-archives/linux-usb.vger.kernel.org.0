@@ -2,136 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0EA6A7C14
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Mar 2023 08:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 329116A7D83
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Mar 2023 10:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjCBHue convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 2 Mar 2023 02:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S229820AbjCBJVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Mar 2023 04:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCBHuc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 02:50:32 -0500
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE95303DD;
-        Wed,  1 Mar 2023 23:50:18 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-172afa7bee2so17227289fac.6;
-        Wed, 01 Mar 2023 23:50:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m9NdTpfDEMV32UTE9lZbQp6kQQhUJVdsU2kqbFsl+ZA=;
-        b=tsmDfvCtJ9Aqml+rjvoBdolA55BW0s8ZxrfanyNdpKTbzx1b/2Gsc8g4BBBxCwTmMS
-         88/CyZgPpGniroEjeZ1nCocMcTRvhWbvuWWh1vEsYYJyn+I4htZfeJ8+l6ak7IPwnrMN
-         OUzUoTrAj0Rzu9/0c9ZS+SbZ00patwiEPYFtlMNoPdK4VsyKmtxnPvo7FJhuGn9sLVat
-         y5udvpN/0cLELUluNjR8NoyxRdGchGRGSDg0Tbx3VDViXK3/qOBD/zHmbsWYtdqeuuN2
-         o4/GSVWrZy+/khK7H7Ui+NZd5fZqkVLkDkvbRCuo1egOZhmGpGi+4l5MeRkXLOHBQ8X+
-         vbFQ==
-X-Gm-Message-State: AO0yUKWYxhaabFvVMNGMkZvySXZPceWN1bCFyoRhm/wNQlwNP5eh/nGp
-        DPR1VKuKS2qDF61WvVyW440ORCh+1zV3kQ==
-X-Google-Smtp-Source: AK7set8c9joX8ey0qbKnqu7pgCE8rSUDqWoyXNHH1uUotJKnAAQXnNfkwOhnn6pSu88jbBpjT8w8EA==
-X-Received: by 2002:a05:6870:d202:b0:176:4a5b:10a6 with SMTP id g2-20020a056870d20200b001764a5b10a6mr655719oac.24.1677743418034;
-        Wed, 01 Mar 2023 23:50:18 -0800 (PST)
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com. [209.85.167.173])
-        by smtp.gmail.com with ESMTPSA id eg41-20020a05687098a900b001724742cfcesm5170181oab.38.2023.03.01.23.50.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 23:50:17 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id q15so12854064oiw.11;
-        Wed, 01 Mar 2023 23:50:17 -0800 (PST)
-X-Received: by 2002:a81:ad1b:0:b0:52f:1c23:ef1 with SMTP id
- l27-20020a81ad1b000000b0052f1c230ef1mr5784211ywh.5.1677743396691; Wed, 01 Mar
- 2023 23:49:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20230301185209.274134-1-jjhiblot@traphandler.com> <20230301185209.274134-3-jjhiblot@traphandler.com>
-In-Reply-To: <20230301185209.274134-3-jjhiblot@traphandler.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Mar 2023 08:49:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
-Message-ID: <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] of: irq: make callers of of_irq_parse_one() release
- the device node
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     saravanak@google.com, clement.leger@bootlin.com,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        zajec5@gmail.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, afaerber@suse.de,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nishanth Menon <nm@ti.com>, ssantosh@kernel.org,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-wireless@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
+        with ESMTP id S229951AbjCBJUz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 04:20:55 -0500
+X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 01:19:52 PST
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1942B136D4;
+        Thu,  2 Mar 2023 01:19:51 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id EBA22F26EF;
+        Thu,  2 Mar 2023 01:13:01 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ikHPNBsCrCUU; Thu,  2 Mar 2023 01:13:00 -0800 (PST)
+Message-ID: <2a8e407f4f18c9350f8629a2b5fa18673355b2ae.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1677748380; bh=r48wB6y4CBJwYtBteM3rF7T/sJ4KdxxhAPNNK5Gf/Ec=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=oTNCEeRcVfcNOWLo+JTxt1El60vDjbozFzialHRHif8ZThhebi85cAbmlfjM9g9oY
+         ByM6aVQf7vFb+mzQIJKpOBu3VzzVKjOM2S+iAw4c94Z+uIDm1/R8qipRW6e/0J/R7G
+         kBHPE1h7tcXrYmf5O2nK+4YNEvGxTUQ8nWXWF3g6qGbIjWtse1P64ANqW9aAjFCvSL
+         ewaCdj3PRXSCKbZNrKmvKtM2jvjh34ktPqDl+X7/mEaHjWxKJX12kCqShMj+C//fed
+         SF6g+JLB+Qjj158JpSOr1kWvEaapC+bgYH34zPPR60SIYN9PDBxIaQwnk3taOkYZty
+         uC/xo/AfgJ4Cg==
+Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     Yongqin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+Date:   Thu, 02 Mar 2023 10:12:54 +0100
+In-Reply-To: <20230301214952.2190757-1-saravanak@google.com>
+References: <20230301214952.2190757-1-saravanak@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.3-1+deb11u1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jean-Jacques,
+Am Mittwoch, dem 01.03.2023 um 13:49 -0800 schrieb Saravana Kannan:
+> Yongqin, Martin, Amelie,
+> 
+> We recent refactor of fw_devlink that ends with commit fb42378dcc7f
+> ("mtd: mtdpart: Don't create platform device that'll never probe"),
+> fw_devlink is smarter and doesn't depend on compatible property. So,
+> I
+> don't think these calls are needed anymore. But I don't have these
+> devices to test on and be sure and the hardware I use to test changes
+> doesn't have this issue either.
+> 
+> Can you please test these changes on the hardware where you hit the
+> issue to make sure things work as expected?
+> 
+> Yongqin, If you didn't have the context, this affected hikey960.
+> 
+> Greg,
+> 
+> Let's wait for some tests before we land these.
+> 
+> Thanks,
+> Saravana
 
-Thanks for your patch!
+hi Sravana,
 
-On Wed, Mar 1, 2023 at 7:53 PM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
-> of_irq_parse_one() does a get() on the device node returned in out_irq->np.
-> Callers of of_irq_parse_one() must do a put() when they are done with it.
+I picked the 12 commits leading up to commit fb42378dcc7f ("mtd:
+mtdpart: Don't create platform device that'll never probe") (
+https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink
+) and included the tipd patch below to test it.
 
-What does "be done with it" really mean here?
+With that, I get the following errors:
 
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+[    0.237931] imx-uart 30890000.serial: Failed to create device link
+with regulator-gnss
+[    0.334054] nwl-dsi 30a00000.mipi-dsi: Failed to create device link
+with regulator-lcd-1v8
+[    0.346964] nwl-dsi 30a00000.mipi-dsi: Failed to create device link
+with backlight-dsi
 
-> --- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
-> +++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
-> @@ -184,6 +184,7 @@ static int __init rcar_gen2_regulator_quirk(void)
->                         kfree(quirk);
->                         continue;
->                 }
-> +               of_node_put(argsa->np);
+but they are independent of this final tipd patch below. I'll test a
+real linux-next tree soon, for completeness, maybe I missed something?
 
-The quirk object, which is a container of argsa, is still used below,
-and stored in a linked list.  I agree argsa->np is not dereferenced,
-but the pointer itself is still compared to other pointers.
-IIUIC, calling of_node_put() might cause the reference count to drop to
-zero, and the underlying struct node object to be deallocated.
-So when a future reference to the same DT node will be taken, a new
-struct node object will be allocated, and the pointer comparison below
-will fail?
+Anyways, on that tree, your tipd removal patch breaks type-c still for
+me, imx8mq-librem5.dtsi
 
-Or am I missing something?
+just to give a first reply quickly... thanks,
 
-Gr{oetje,eeting}s,
+                             martin
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> Cc: Yongqin Liu <yongqin.liu@linaro.org>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
+> 
+> Saravana Kannan (4):
+>   usb: typec: stusb160x: Remove use of
+>     fw_devlink_purge_absent_suppliers()
+>   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
+>   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
+>   driver core: Delete fw_devlink_purge_absent_suppliers()
+> 
+>  drivers/base/core.c           | 16 ----------------
+>  drivers/usb/typec/stusb160x.c |  9 ---------
+>  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
+>  drivers/usb/typec/tipd/core.c |  9 ---------
+>  include/linux/fwnode.h        |  1 -
+>  5 files changed, 44 deletions(-)
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
