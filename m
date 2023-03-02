@@ -2,38 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8453F6A851E
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Mar 2023 16:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759CF6A86D9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Mar 2023 17:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCBP16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Mar 2023 10:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        id S229563AbjCBQiW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Mar 2023 11:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjCBP1k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 10:27:40 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0D47430EAF
-        for <linux-usb@vger.kernel.org>; Thu,  2 Mar 2023 07:27:38 -0800 (PST)
-Received: (qmail 251323 invoked by uid 1000); 2 Mar 2023 10:27:38 -0500
-Date:   Thu, 2 Mar 2023 10:27:38 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        with ESMTP id S229449AbjCBQiU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 11:38:20 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8388016899
+        for <linux-usb@vger.kernel.org>; Thu,  2 Mar 2023 08:37:34 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s26so69801421edw.11
+        for <linux-usb@vger.kernel.org>; Thu, 02 Mar 2023 08:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tfY1Ul1QnfuQtui+4Ej95F51iCd9NVPI2d94LXtRwmo=;
+        b=bDoI/39/km5XuwmNOoWn9p3W5zwRXDGImrlqwgWO1zuWUu1uLGMwSch+pf0z7lOVEk
+         73JivL/5QyrKUaadxgCH/zBN/F+kuk2N5+pmDTVCqty5ou9Lp5ebIvJuY0sM6+2Ye5lX
+         Ct4Fw8SaWySke/s2OpZJIlJv6gBiooF1l0PkA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tfY1Ul1QnfuQtui+4Ej95F51iCd9NVPI2d94LXtRwmo=;
+        b=E6KivDubmNlnlZb4pnReYTO/POiiLUTMrBIQOAM3pSYYTjMmzP/miXSLSUUtRe/XqH
+         L6UjX1u7Pu8mCIZtsFc6TNmCYgNUqn+tmkZLRIJUDDD/wAFyBN10Ii2y/NPF8uOYdV1f
+         AgKM8FaIbJ3HXYB2v9Etl0QSp0fizKPATNheS6FAnfUhejgQO4OHaLubK9sw0vTcdwSI
+         5uArvBWANBMQqhr6v6p4z5YiMCqAMtkK1/0orVbf72pDwFAcRDcu/nrsEzQpV3ecOttk
+         3leXcju8zCUSHN8BTd3oxa9K+Ic2Q8Z1fLzx5DbkaiyLsRQMlDDrJ3Re9vctTNrvLqpI
+         CdEQ==
+X-Gm-Message-State: AO0yUKUf3NlpYfttR+GgKRW/hcmYvbOUn4/qi35kxrdil9djMI3NDXt3
+        /zMqufYKRAzc0HF8RHkOtjEe7z6DOahJsKj+/dCx5w==
+X-Google-Smtp-Source: AK7set9auJrOCtINNaTDbetFrZVlHmp0QiBEME8aEHEdjzC6Rn02Ru1UVtQvJaLObY5/foEdxrwdfw==
+X-Received: by 2002:a17:906:6543:b0:8a9:e031:c4ae with SMTP id u3-20020a170906654300b008a9e031c4aemr10818449ejn.2.1677775047510;
+        Thu, 02 Mar 2023 08:37:27 -0800 (PST)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id os6-20020a170906af6600b008f7f6943d1dsm7173547ejb.42.2023.03.02.08.37.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 08:37:27 -0800 (PST)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: [PATCH v3 4/6] USB: core: Add wireless_status sysfs attribute
-Message-ID: <ZADAamF1S7OrwRIO@rowland.harvard.edu>
-References: <20230302105555.51417-1-hadess@hadess.net>
- <20230302105555.51417-4-hadess@hadess.net>
+        Yadi Brar <yadi.brar01@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Felipe Balbi <balbi@ti.com>
+Cc:     alsa-devel@alsa-project.org,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: u_audio: don't let userspace block driver unbind
+Date:   Thu,  2 Mar 2023 17:36:47 +0100
+Message-Id: <20230302163648.3349669-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230302105555.51417-4-hadess@hadess.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,45 +71,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 11:55:53AM +0100, Bastien Nocera wrote:
-> Add a wireless_status sysfs attribute to USB devices to keep track of
-> whether a USB device that's comprised of a receiver dongle and an emitter
-> device over a, most of the time proprietary, wireless link has its emitter
-> connected or disconnected.
-> 
-> This will be used by user-space OS components to determine whether the
-> battery-powered part of the device is wirelessly connected or not,
-> allowing, for example:
-> - upower to hide the battery for devices where the device is turned off
->   but the receiver plugged in, rather than showing 0%, or other values
->   that could be confusing to users
-> - Pipewire to hide a headset from the list of possible inputs or outputs
->   or route audio appropriately if the headset is suddenly turned off, or
->   turned on
-> - libinput to determine whether a keyboard or mouse is present when its
->   receiver is plugged in.
-> 
-> This is done at the USB interface level as:
-> - the interface on which the wireless status is detected is sometimes
->   not the same as where it could be consumed (eg. the audio interface
->   on a headset dongle will still appear even if the headset is turned
->   off), and we cannot have synchronisation of status across subsystems.
-> - this behaviour is not specific to HID devices, even if the protocols
->   used to determine whether or not the remote device is connected can
->   be HID.
-> 
-> This is not an attribute that is meant to replace protocol specific
-> APIs, such as the ones available for WWAN, WLAN/Wi-Fi, or Bluetooth
-> or any other sort of networking, but solely for wireless devices with
-> an ad-hoc “lose it and your device is e-waste” receiver dongle.
-> 
-> The USB interface will only be exporting the wireless_status sysfs
-> attribute if it gets set through the API exported in the next commit.
-> 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-For parts 4 and 5:
+In the unbind callback for f_uac1 and f_uac2, a call to snd_card_free()
+via g_audio_cleanup() will disconnect the card and then wait for all
+resources to be released, which happens when the refcount falls to zero.
+Since userspace can keep the refcount incremented by not closing the
+relevant file descriptor, the call to unbind may block indefinitely.
+This can cause a deadlock during reboot, as evidenced by the following
+blocked task observed on my machine:
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+  task:reboot  state:D stack:0   pid:2827  ppid:569    flags:0x0000000c
+  Call trace:
+   __switch_to+0xc8/0x140
+   __schedule+0x2f0/0x7c0
+   schedule+0x60/0xd0
+   schedule_timeout+0x180/0x1d4
+   wait_for_completion+0x78/0x180
+   snd_card_free+0x90/0xa0
+   g_audio_cleanup+0x2c/0x64
+   afunc_unbind+0x28/0x60
+   ...
+   kernel_restart+0x4c/0xac
+   __do_sys_reboot+0xcc/0x1ec
+   __arm64_sys_reboot+0x28/0x30
+   invoke_syscall+0x4c/0x110
+   ...
+
+The issue can also be observed by opening the card with arecord and
+then stopping the process through the shell before unbinding:
+
+  # arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
+  Recording WAVE '/dev/null' : Signed 32 bit Little Endian, Rate 48000 Hz, Stereo
+  ^Z[1]+  Stopped                    arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
+  # echo gadget.0 > /sys/bus/gadget/drivers/configfs-gadget/unbind
+  (observe that the unbind command never finishes)
+
+Fix the problem by using snd_card_free_when_closed() instead, which will
+still disconnect the card as desired, but defer the task of freeing the
+resources to the core once userspace closes its file descriptor.
+
+Fixes: 132fcb460839 ("usb: gadget: Add Audio Class 2.0 Driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+ drivers/usb/gadget/function/u_audio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index c1f62e91b012..4a42574b4a7f 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -1422,7 +1422,7 @@ void g_audio_cleanup(struct g_audio *g_audio)
+ 	uac = g_audio->uac;
+ 	card = uac->card;
+ 	if (card)
+-		snd_card_free(card);
++		snd_card_free_when_closed(card);
+ 
+ 	kfree(uac->p_prm.reqs);
+ 	kfree(uac->c_prm.reqs);
+-- 
+2.39.1
 
