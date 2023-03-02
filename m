@@ -2,58 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C326A6A7E13
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Mar 2023 10:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D506A7EFB
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Mar 2023 10:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjCBJly (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Mar 2023 04:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
+        id S230222AbjCBJzc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Mar 2023 04:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCBJlx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 04:41:53 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52F838B43;
-        Thu,  2 Mar 2023 01:41:52 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 784EFF272B;
-        Thu,  2 Mar 2023 01:41:52 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CzSh-cZrgssQ; Thu,  2 Mar 2023 01:41:51 -0800 (PST)
-Message-ID: <e65e08c13885468675af527ffa2ab882cc9e682d.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1677750111; bh=AKyAHHMgEAhpppDSGW8O+PcZUxC+qn3covcFHabmbyg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QxpMTDykrp5vNQ3XewBokVTT/BcWWZ3kUgKBTjzrHoYkUMozNcCjPsuVJHBXeUUzO
-         e1QGqlSgVJme7e122PvvcLTHYnwuxuDA3GUvev2LOh31RM/iKAhxkLmYhssmKL6pfc
-         5PfYtky1KJLtt9zS79cKkA6mWCj81aaFH4PVexOEKKP4ClIVRNcO6Hj+x+mJmfSmQS
-         rZTRBer0yyomP4Of7P6cnoDjNtTqwea9eoaYkE2w7/0KrLL38tC+vCUA1WMUhb78Fa
-         QPHnkOIv2/fYb5QHxxInDh89oAz4Gxy4wA0UoX33buP5U10iFcpFC8bpoCpVoClQbU
-         N80LkO4bXiVoA==
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Saravana Kannan <saravanak@google.com>,
+        with ESMTP id S230251AbjCBJzO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 04:55:14 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E312E125B2;
+        Thu,  2 Mar 2023 01:55:12 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3229giH1001800;
+        Thu, 2 Mar 2023 09:55:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=R0Z4E2YGg3YStUNJXj+bRr0mBgUwf/rrCLLWjjUXfrQ=;
+ b=igbe7EPKq3hXGUNxMgZ1SQ2+4gwFIMY7uWQWz1B/3Okv4ehwnsx9+nnI/zfQXXTjmgE5
+ uFH2CW+8WOacmQdXaYzqK/r+NGslByrT5FKICncM9Hizi+GDCvr03ueQtdbw8YXfPjZh
+ OuAt0o2HIRKTqqOSkP2KgC1cRPbKQwnPKs6M/6Lnl9EkBP6MI+U4QA4p+eTAUaVu9gbw
+ xcrC1oa/2aQXAuJ9RNQFPMvtfH+7rwz65nV0tn+IfmNGRGf25Cof7pCh63rc13WBM0wR
+ Rt4XtOjPC8tQqf204FOgmX/ksiwKvQY8jXHpf5q2yRpLmiXta6uj8ugD08CnxNP5je8O /Q== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2cur1r2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 09:55:01 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3229t0nn023470
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Mar 2023 09:55:00 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Thu, 2 Mar 2023 01:54:54 -0800
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-Cc:     Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Date:   Thu, 02 Mar 2023 10:41:45 +0100
-In-Reply-To: <2a8e407f4f18c9350f8629a2b5fa18673355b2ae.camel@puri.sm>
-References: <20230301214952.2190757-1-saravanak@google.com>
-         <2a8e407f4f18c9350f8629a2b5fa18673355b2ae.camel@puri.sm>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        "Varadarajan Narayanan" <quic_varada@quicinc.com>
+Subject: [PATCH 0/8] Enable IPQ9754 USB
+Date:   Thu, 2 Mar 2023 15:24:39 +0530
+Message-ID: <cover.1677749625.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Z6URMhTjq3UewHaiTkifOH7i7DfQBNBT
+X-Proofpoint-ORIG-GUID: Z6URMhTjq3UewHaiTkifOH7i7DfQBNBT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_04,2023-03-02_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 suspectscore=0 mlxlogscore=392
+ lowpriorityscore=0 adultscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303020085
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,67 +84,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, dem 02.03.2023 um 10:12 +0100 schrieb Martin Kepplinger:
-> Am Mittwoch, dem 01.03.2023 um 13:49 -0800 schrieb Saravana Kannan:
-> > Yongqin, Martin, Amelie,
-> > 
-> > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
-> > ("mtd: mtdpart: Don't create platform device that'll never probe"),
-> > fw_devlink is smarter and doesn't depend on compatible property.
-> > So,
-> > I
-> > don't think these calls are needed anymore. But I don't have these
-> > devices to test on and be sure and the hardware I use to test
-> > changes
-> > doesn't have this issue either.
-> > 
-> > Can you please test these changes on the hardware where you hit the
-> > issue to make sure things work as expected?
-> > 
-> > Yongqin, If you didn't have the context, this affected hikey960.
-> > 
-> > Greg,
-> > 
-> > Let's wait for some tests before we land these.
-> > 
-> > Thanks,
-> > Saravana
-> 
-> hi Sravana,
-> 
-> I picked the 12 commits leading up to commit fb42378dcc7f ("mtd:
-> mtdpart: Don't create platform device that'll never probe") (
-> https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink
-> ) and included the tipd patch below to test it.
-> 
-> With that, I get the following errors:
-> 
-> [    0.237931] imx-uart 30890000.serial: Failed to create device link
-> with regulator-gnss
-> [    0.334054] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> link
-> with regulator-lcd-1v8
-> [    0.346964] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> link
-> with backlight-dsi
-> 
-> but they are independent of this final tipd patch below. I'll test a
-> real linux-next tree soon, for completeness, maybe I missed
-> something?
-> 
-> Anyways, on that tree, your tipd removal patch breaks type-c still
-> for
-> me, imx8mq-librem5.dtsi
-> 
-> just to give a first reply quickly... thanks,
-> 
->                              martin
-> 
+This patch series adds the relevant phy and controller
+configurations for enabling USB on IPQ9754
 
-just confirming: it's the same as above on next-20230302 + this patch (
-https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink_next-20230302
-) with the errors already independent from the patch. I should have
-tested earlier patches -.-
+Depends on:
+https://lore.kernel.org/all/20230217142030.16012-1-quic_devipriy@quicinc.com/
 
-                        martin
+Varadarajan Narayanan (8):
+  usb: dwc3: core: Handle fladj becoming zero
+  dt-bindings: phy: qcom,qusb2: Document IPQ9574 compatible
+  dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3 PHY
+  clk: qcom: gcc-ipq9574: Add USB related clocks
+  phy: qcom-qusb2: add QUSB2 support for IPQ9574
+  phy: qcom: qmp: Update IPQ9574 USB Phy initialization Sequence
+  arm64: dts: qcom: ipq9574: Add USB related nodes
+  arm64: dts: qcom: ipq9574: Enable USB
+
+ .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    |   1 +
+ .../devicetree/bindings/phy/qcom,qusb2-phy.yaml    |   1 +
+ arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts       |   4 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |  92 +++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                     |  35 ++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c            | 130 +++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c              |   3 +
+ drivers/usb/dwc3/core.c                            |  27 +++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h       |   2 +
+ 9 files changed, 295 insertions(+)
+
+-- 
+2.7.4
 
