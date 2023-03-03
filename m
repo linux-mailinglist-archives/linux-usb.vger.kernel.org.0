@@ -2,120 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564D36AA024
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 20:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831726AA05A
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 20:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjCCTgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Mar 2023 14:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
+        id S231287AbjCCTx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Mar 2023 14:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjCCTgA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 14:36:00 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9586C2BF13;
-        Fri,  3 Mar 2023 11:35:59 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323J1sQC023508;
-        Fri, 3 Mar 2023 19:35:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GI5hE38Wh5pXzaZ45T9z12pC0vn9FRpTmeBegJGP+GI=;
- b=G5XuCF2X7W/GDVdKoGB1Z+QLlAmffgftDEVSo4MEZRxmNzsH6Jn4riNGJjkrPLIz4VrZ
- zo+JO+7R/3kgvLV+53upiOibjo2piMlTtJC0EH6Odc8Hh7ZZcibz/uA2lWLhBZjNXOta
- R6Rut22x4szWbuWtpIQwOV6N4AjFQCl1PPu4QQD3VLNPlP4j5LNoL4niwLviCejsjOcv
- 7XG4f0YWX/HZvEyo8tySJ1iwme5PZhIR4uftTgcO2YOn5GfPxn9Rvl+FpDmUxgj26SdM
- SCu1anvPmywBLaT4ShY0hjilWMywsd08l4zEO+6ZCFSGCbm+4vy+IUDoBilOIDogt2We zw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3801tr3k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 19:35:57 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 323JZupO029331
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 19:35:56 GMT
-Received: from [10.110.79.137] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
- 11:35:56 -0800
-Message-ID: <e1fd0c4b-037e-6112-7698-dd46307246e4@quicinc.com>
-Date:   Fri, 3 Mar 2023 11:35:47 -0800
+        with ESMTP id S230482AbjCCTx6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 14:53:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3CF1689E
+        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 11:53:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6318F6185C
+        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 19:53:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C1D4DC433D2
+        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 19:53:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677873235;
+        bh=5aP7nUk3mRyKE/BBbrV7uMYqL3SEA4B74kmcogW1+XI=;
+        h=From:To:Subject:Date:From;
+        b=VpVKtmZqro3NqO1dRc6AtjUHcYOSiIJMvBQpWQapkMpbKcHVPMulsGIAs2bD4IFnj
+         yjIDA2acXQFiFTSUzcm2+oFnzfD6JTgLdOwa0OOa58bvBtg2jiACgaZeh5gk4EE1dn
+         6ke0U8WP3/CVlXILT6utSoY+86LvJDEGFzPUEZ0quAt0zfog6ECTf5zsHk9LNQk/zj
+         TUS+QhngR8OBDL+zEJ2b/oMT7eLqVfdtrPkOLeR656GsaV5xxWSSPheV4+5GsxnwzJ
+         ji1asMznSpD4WPPp7b/wR7sgGjXFPJnwLeM0L5F/OWC44RVf3Hdqm/e1p+GH2Odk8I
+         zqRiaQ74oWttQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id A1E54C43141; Fri,  3 Mar 2023 19:53:55 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217122] New: Regression in xhci driver since 6.1 "Transfer
+ event TRB DMA ptr not part of current TD"
+Date:   Fri, 03 Mar 2023 19:53:55 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: t-5@t-5.eu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-217122-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] usb: dwc3: gadget: Add 1ms delay after end transfer
- command without IOC
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20230301033234.21024-1-quic_wcheng@quicinc.com>
- <20230301224445.4gmkrhw467lopstg@synopsys.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20230301224445.4gmkrhw467lopstg@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZG7CQKFMje_EydBg5c2ndRQ5sdfZcg4b
-X-Proofpoint-GUID: ZG7CQKFMje_EydBg5c2ndRQ5sdfZcg4b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_05,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 adultscore=0
- spamscore=0 bulkscore=0 mlxscore=0 suspectscore=0 clxscore=1015
- mlxlogscore=609 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303030166
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,WEIRD_PORT autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217122
 
-On 3/1/2023 2:44 PM, Thinh Nguyen wrote:
-> On Tue, Feb 28, 2023, Wesley Cheng wrote:
->> Previously, there was a 100uS delay inserted after issuing an end transfer
->> command for specific controller revisions.  This was due to the fact that
->> there was a GUCTL2 bit field which enabled synchronous completion of the
->> end transfer command once the CMDACT bit was cleared in the DEPCMD
->> register.  Since this bit does not exist for all controller revisions, add
-> 
-> Can we also note here that we rely on End Transfer command completion
-> interrupt on newer versions.
-> 
->> the delay back in, and increase the duration to 1ms for the controller to
->> complete the command.
->>
->> An issue was seen where the USB request buffer was unmapped while the DWC3
->> controller was still accessing the TRB.  However, it was confirmed that the
->> end transfer command was successfully submitted. (no end transfer timeout)
->> In situations, such as dwc3_gadget_soft_disconnect() and
->> __dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
->> will issue the end transfer command, and follow up with
->> dwc3_gadget_giveback().  At least for the USB ep disable path, it is
->> required for any pending and started requests to be completed and returned
->> to the function driver in the same context of the disable call.  Without
->> the GUCTL2 bit, it is not ensured that the end transfer is completed before
->> the buffers are unmapped.
->>
-> 
-> I think this also needs a Fixes tag.
-> 
-> Everything else looks good to me.
-> 
+            Bug ID: 217122
+           Summary: Regression in xhci driver since 6.1 "Transfer event
+                    TRB DMA ptr not part of current TD"
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 6.2
+          Hardware: AMD
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: t-5@t-5.eu
+        Regression: No
 
-Thanks for the reviews, Thinh.  Will fix the above and resubmit.
+Created attachment 303837
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303837&action=3Dedit
+collection of txt files with various hardware/software states
 
-Thanks
-Wesley Cheng
+Occasionally this error happens:
+
+[94467.984745] xhci_hcd 0000:05:00.4: ERROR Transfer event TRB DMA ptr not =
+part
+of current TD ep_index 3 comp_code 1
+[94467.984751] xhci_hcd 0000:05:00.4: Looking for event-dma 000000010f10c730
+trb-start 000000010f10c740 trb-end 000000010f10c740 seg-start 000000010f10
+c000 seg-end 000000010f10cff0
+
+the playback software (camilladsp then reports an error:
+
+2023-03-03 05:41:37.010408 WARN [src/alsadevice.rs:260] Capture device fail=
+ed
+while waiting for available frames, error: ALSA function 'snd_pcm_wait' f
+ailed with error 'EPIPE: Broken pipe'
+2023-03-03 05:41:37.013214 ERROR [src/bin.rs:364] Capture error: ALSA funct=
+ion
+'snd_pcm_wait' failed with error 'EPIPE: Broken pipe'
+
+This did not occur in any 6.0 version and was introduced in 6.1, still pres=
+ent
+in 6.2
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
