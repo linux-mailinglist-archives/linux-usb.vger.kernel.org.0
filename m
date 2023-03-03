@@ -2,71 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71596A9B1A
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 16:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA6F6A9B56
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 17:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjCCPtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Mar 2023 10:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
+        id S231300AbjCCQGC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Mar 2023 11:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjCCPtP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 10:49:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B2A61A7;
-        Fri,  3 Mar 2023 07:49:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C514AB8184D;
-        Fri,  3 Mar 2023 15:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 444F3C4339B;
-        Fri,  3 Mar 2023 15:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677858552;
-        bh=xV/t1gEFTxzD6Xk6NPA6oK0JPckecCtoxh7uIXbFh8U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=16n/b/dfW6arYvlI9SdOKIXzs0yDJaepp73J9KTwz17Ozyu3Yfo2dJ2pv0KGxQ78K
-         Z/I3liFsy3LxMOp64z351orA30c5xjzyDpJg8nsQYCfya57b9wY1f5jAz61oQRKakR
-         5ggYfVkECP9gOTJWdJpa2BtFmuqB0A9OiAt1xuzI=
-Date:   Fri, 3 Mar 2023 16:49:10 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zheng Yejian <zhengyejian1@huawei.com>
-Cc:     stable@vger.kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, balbi@kernel.org, lee.jones@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.15] usb: dwc3: dwc3-qcom: Add missing
- platform_device_put() in dwc3_qcom_acpi_register_core
-Message-ID: <ZAIW9mkHpKKQyIK+@kroah.com>
-References: <20230303023439.774616-1-zhengyejian1@huawei.com>
+        with ESMTP id S229541AbjCCQGB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 11:06:01 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 78AB518B09
+        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 08:06:00 -0800 (PST)
+Received: (qmail 300049 invoked by uid 1000); 3 Mar 2023 11:05:59 -0500
+Date:   Fri, 3 Mar 2023 11:05:59 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>
+Subject: Re: [RFC PATCH 2/2] usb: core: hub: avoid reset hub during probe
+Message-ID: <72b4e199-4e23-487e-a9cd-8d41993d4944@rowland.harvard.edu>
+References: <1677835718-7405-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1677835718-7405-2-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303023439.774616-1-zhengyejian1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1677835718-7405-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 10:34:39AM +0800, Zheng Yejian wrote:
-> From: Miaoqian Lin <linmq006@gmail.com>
-> 
-> commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
-> 
-> Add the missing platform_device_put() before return from
-> dwc3_qcom_acpi_register_core in the error handling case.
-> 
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> CVE: CVE-2023-22995
+On Fri, Mar 03, 2023 at 05:28:38PM +0800, Linyu Yuan wrote:
+> When start probe hub, during INIT, INTT2, INIT3 stage, when link state
+> change to inactive, currently it will reset the device, maybe it will
+> trigger warning in usb_submit_urb() due to urb->hcpriv is still active.
 
-That is a bogus CVE, please go revoke it.
+You need to explain this in much greater detail.
 
-thanks,
+	What will reset the device?
 
-greg k-h
+	What is the code path for this reset?
+
+	Why will urb->hcpriv still be active?
+
+> Add a flag name init_stage to avoid reset the device.
+
+Why do you want to avoid resetting the device?
+
+Doesn't the reset code already include a check for whether the device is 
+disconnected?
+
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+>  drivers/usb/core/hub.c | 20 +++++++++++++++++++-
+>  drivers/usb/core/hub.h |  1 +
+>  2 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 97a0f8f..3cb1137 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -1290,6 +1290,7 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+>  	if (type == HUB_INIT2 || type == HUB_INIT3) {
+>  		/* Allow autosuspend if it was suppressed */
+>   disconnected:
+> +		hub->init_stage = 0;
+>  		usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
+>  		device_unlock(&hdev->dev);
+>  	}
+> @@ -1872,6 +1873,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
+>  	kref_init(&hub->kref);
+>  	hub->intfdev = &intf->dev;
+>  	hub->hdev = hdev;
+> +	hub->init_stage = 1;
+>  	INIT_DELAYED_WORK(&hub->leds, led_work);
+>  	INIT_DELAYED_WORK(&hub->init_work, NULL);
+>  	INIT_WORK(&hub->events, hub_event);
+> @@ -5587,6 +5589,21 @@ static void port_over_current_notify(struct usb_port *port_dev)
+>  	kfree(port_dev_path);
+>  }
+>  
+> +static bool port_child_avoid_reset(struct usb_device *udev)
+> +{
+> +	struct usb_hub *hub;
+> +
+> +	if (udev->descriptor.bDeviceClass == USB_CLASS_HUB &&
+> +	    udev->state == USB_STATE_CONFIGURED) {
+> +		hub = usb_get_intfdata(udev->actconfig->interface[0]);
+> +
+> +		if (hub && hub->init_stage)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  static void port_event(struct usb_hub *hub, int port1)
+>  		__must_hold(&port_dev->status_lock)
+>  {
+> @@ -5699,7 +5716,8 @@ static void port_event(struct usb_hub *hub, int port1)
+>  			dev_dbg(&port_dev->dev, "do warm reset, full device\n");
+>  			usb_unlock_port(port_dev);
+>  			usb_lock_device(udev);
+> -			usb_reset_device(udev);
+> +			if (!port_child_avoid_reset(udev))
+> +				usb_reset_device(udev);
+>  			usb_unlock_device(udev);
+
+Doesn't usb_lock_device() already prevent this code from running during 
+the INIT, INIT2, and INIT3 stages of hub preparation?
+
+Alan Stern
