@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C736A952F
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 11:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC65F6A953E
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 11:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjCCK2r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Mar 2023 05:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S230365AbjCCKaI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Mar 2023 05:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjCCK2q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 05:28:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A25149A7
-        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 02:28:45 -0800 (PST)
+        with ESMTP id S230398AbjCCK3y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 05:29:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4BE5D895
+        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 02:29:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAB35617C6
-        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 10:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE60EC433D2;
-        Fri,  3 Mar 2023 10:28:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0D62B811FB
+        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 10:29:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4406C433EF;
+        Fri,  3 Mar 2023 10:29:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677839324;
-        bh=EX/04gNQP+qW6JRjEbxXeOZngWlw+48uJ7spIKPvKxE=;
+        s=korg; t=1677839386;
+        bh=s302LYjE1Qzg7webV/GMbj90eZRCzKKth2XI4/EGzb4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qx86xCqGpockmS9mXOqZo2XTdVjdJpbI8RTCLMhb4z9hpk/4YLxD7tXvYQpnj2h4y
-         GC77J0JLJPyxdOnbOmcXe2kPSStqr8/KF6N9bau76mEp5n8Ces3sc5ptU+cN06ay7J
-         Fh4bNsAaNJABpLLXzQ4Cha1GrNOuBY5DNMk2lptM=
-Date:   Fri, 3 Mar 2023 11:28:41 +0100
+        b=dxy27baHST8PT0OmnmulRUyIdW43ckMvw+fLP08emFAfORFiezANLrW9CUOQznZgA
+         RbLcTTcKzPT1SOJt1smxLV78gSTmTkqvdEdSY1bxMJKmce8NswdGnMTWaB1o6qwDOY
+         222/1Fuzud0Koc6GBGiumt8oH5Fd7+SYlut5ZvVI=
+Date:   Fri, 3 Mar 2023 11:29:43 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Linyu Yuan <quic_linyyuan@quicinc.com>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
@@ -36,14 +36,14 @@ Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>,
         Wesley Cheng <quic_wcheng@quicinc.com>,
         Pratham Pratap <quic_ppratap@quicinc.com>
-Subject: Re: [RFC PATCH 1/2] usb: urb: show pipe information of warning
- message in usb_submit_urb()
-Message-ID: <ZAHL2Xs7MO2h25Ff@kroah.com>
+Subject: Re: [RFC PATCH 2/2] usb: core: hub: avoid reset hub during probe
+Message-ID: <ZAHMFw9Bo6nWKGFO@kroah.com>
 References: <1677835718-7405-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1677835718-7405-2-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1677835718-7405-1-git-send-email-quic_linyyuan@quicinc.com>
+In-Reply-To: <1677835718-7405-2-git-send-email-quic_linyyuan@quicinc.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,61 +53,18 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 05:28:37PM +0800, Linyu Yuan wrote:
-> it will show the urb information for debugging.
-> 
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> ---
->  drivers/usb/core/urb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-> index 9f3c540..b258203 100644
-> --- a/drivers/usb/core/urb.c
-> +++ b/drivers/usb/core/urb.c
-> @@ -376,7 +376,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
->  	if (!urb || !urb->complete)
->  		return -EINVAL;
->  	if (urb->hcpriv) {
-> -		WARN_ONCE(1, "URB %pK submitted while active\n", urb);
-> +		WARN_ONCE(1, "URB %pK pipe %x submitted while active\n", urb, urb->pipe);
->  		return -EBUSY;
->  	}
->  
-> -- 
-> 2.7.4
-> 
+On Fri, Mar 03, 2023 at 05:28:38PM +0800, Linyu Yuan wrote:
+> When start probe hub, during INIT, INTT2, INIT3 stage, when link state
+> change to inactive, currently it will reset the device, maybe it will
+> trigger warning in usb_submit_urb() due to urb->hcpriv is still active.
 
-Hi,
+I am sorry, but I do not understand this text at all.  Can you reword
+it?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+> Add a flag name init_stage to avoid reset the device.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what a proper
-  Subject: line should look like.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+I do not understand, what is "flag name"?
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
