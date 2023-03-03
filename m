@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F4C6AA299
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 22:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D936AA2CA
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 22:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbjCCVtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Mar 2023 16:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S232797AbjCCVvb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Mar 2023 16:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbjCCVsE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 16:48:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1158969CEB;
-        Fri,  3 Mar 2023 13:45:20 -0800 (PST)
+        with ESMTP id S232874AbjCCVtz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 16:49:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDC26C193;
+        Fri,  3 Mar 2023 13:46:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50042B81A1D;
-        Fri,  3 Mar 2023 21:44:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43159C4339C;
-        Fri,  3 Mar 2023 21:44:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 926FA618EF;
+        Fri,  3 Mar 2023 21:44:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A04C4339C;
+        Fri,  3 Mar 2023 21:44:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677879882;
-        bh=TRw9amU/+JqhoI9/AQoHw150q/Jlc/dyANFOAetvZtM=;
+        s=k20201202; t=1677879890;
+        bh=A/crVSRZXWfcucn7uPO0pYPF+/PRImbksZJ+WhCUuNk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=irB0G8mBo+sQuPlAyX0sH8JgDjGflrOZfMJsjYtYwLrgf4EFrTwQl2Gy7hVdnw8R+
-         bfdtxUQLs65IXIBMJgx6cGZzIFvnguB9ykbO8YRrrbr9nkkJ3FrE7OIpWEgMyNqX+P
-         Am7EboK9CmiCjkoQ1EF0ZX5DEmx5zppWFnZ3BKkNEAdjbZie6nV91wCEtjk/MgEdNI
-         OAj06F5Zxm55WqEN5yLXsYCp4rJ8BTChmk7rbbgRHg4xCs0GrBWL79jWEXW42JQ+A3
-         5spZxnGl1nE2WYKMFXmGsT5ve3XyC8rOU3Th2v4pYZBRKBzSdqi0WFfB67TExPB65C
-         dId3ue13AvorQ==
+        b=ej7TDMqSl/zD/0WBIKVImQIuoywWynPNzpN9ZRcyYe2yiZZ0/bZpS32+PKRbDw5kA
+         dVz6aioCBamZpDon4g/Qg90QiTxF6PX6fwaGz14zeLBxnQ6eD/GF57j4ixnfRfNUGw
+         UA+qX+pUscyIgO8Y82EDts9cODFw4ke0xLmpp6Uq3YhyCohLsNP9RiAbi4rbPHdVlI
+         ms5kr32HsGwaxe/+PxAhc4TIAFIQHp/AoWYiPhmKk4o0FkCAZSnKcA/nGHfgiimujl
+         z0PLMmSr1FD5ACHeAcBwEl4RqYfsBOcRkgAOG3ME7hS/3z2Iy1G6M7FBWgNWKd9VUV
+         ipxGguqyjV6EA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
+Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH AUTOSEL 6.1 40/60] USB: ene_usb6250: Allocate enough memory for full object
-Date:   Fri,  3 Mar 2023 16:42:54 -0500
-Message-Id: <20230303214315.1447666-40-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
+        w36195@motorola.com, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 42/60] usb: gadget: uvc: Make bSourceID read/write
+Date:   Fri,  3 Mar 2023 16:42:56 -0500
+Message-Id: <20230303214315.1447666-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230303214315.1447666-1-sashal@kernel.org>
 References: <20230303214315.1447666-1-sashal@kernel.org>
@@ -57,59 +57,111 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Daniel Scally <dan.scally@ideasonboard.com>
 
-[ Upstream commit ce33e64c1788912976b61314b56935abd4bc97ef ]
+[ Upstream commit b3c839bd8a07d303bc59a900d55dd35c7826562c ]
 
-The allocation of PageBuffer is 512 bytes in size, but the dereferencing
-of struct ms_bootblock_idi (also size 512) happens at a calculated offset
-within the allocation, which means the object could potentially extend
-beyond the end of the allocation. Avoid this case by just allocating
-enough space to catch any accesses beyond the end. Seen with GCC 13:
+At the moment, the UVC function graph is hardcoded IT -> PU -> OT.
+To add XU support we need the ability to insert the XU descriptors
+into the chain. To facilitate that, make the output terminal's
+bSourceID attribute writeable so that we can configure its source.
 
-../drivers/usb/storage/ene_ub6250.c: In function 'ms_lib_process_bootblock':
-../drivers/usb/storage/ene_ub6250.c:1050:44: warning: array subscript 'struct ms_bootblock_idi[0]' is partly outside array bounds of 'unsigned char[512]' [-Warray-bounds=]
- 1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
-      |                                            ^~
-../include/uapi/linux/byteorder/little_endian.h:37:51: note: in definition of macro '__le16_to_cpu'
-   37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-      |                                                   ^
-../drivers/usb/storage/ene_ub6250.c:1050:29: note: in expansion of macro 'le16_to_cpu'
- 1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
-      |                             ^~~~~~~~~~~
-In file included from ../drivers/usb/storage/ene_ub6250.c:5:
-In function 'kmalloc',
-    inlined from 'ms_lib_process_bootblock' at ../drivers/usb/storage/ene_ub6250.c:942:15:
-../include/linux/slab.h:580:24: note: at offset [256, 512] into object of size 512 allocated by 'kmalloc_trace'
-  580 |                 return kmalloc_trace(
-      |                        ^~~~~~~~~~~~~~
-  581 |                                 kmalloc_caches[kmalloc_type(flags)][index],
-      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  582 |                                 flags, size);
-      |                                 ~~~~~~~~~~~~
-
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20230204183546.never.849-kees@kernel.org
+Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+Link: https://lore.kernel.org/r/20230206161802.892954-2-dan.scally@ideasonboard.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/ene_ub6250.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../ABI/testing/configfs-usb-gadget-uvc       |  2 +-
+ drivers/usb/gadget/function/uvc_configfs.c    | 59 ++++++++++++++++++-
+ 2 files changed, 59 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
-index 6012603f3630e..97c66c0d91f4d 100644
---- a/drivers/usb/storage/ene_ub6250.c
-+++ b/drivers/usb/storage/ene_ub6250.c
-@@ -939,7 +939,7 @@ static int ms_lib_process_bootblock(struct us_data *us, u16 PhyBlock, u8 *PageDa
- 	struct ms_lib_type_extdat ExtraData;
- 	struct ene_ub6250_info *info = (struct ene_ub6250_info *) us->extra;
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+index 611b23e6488d9..feb3f2cc0c167 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+@@ -52,7 +52,7 @@ Date:		Dec 2014
+ KernelVersion:	4.0
+ Description:	Default output terminal descriptors
  
--	PageBuffer = kmalloc(MS_BYTES_PER_PAGE, GFP_KERNEL);
-+	PageBuffer = kzalloc(MS_BYTES_PER_PAGE * 2, GFP_KERNEL);
- 	if (PageBuffer == NULL)
- 		return (u32)-1;
+-		All attributes read only:
++		All attributes read only except bSourceID:
  
+ 		==============	=============================================
+ 		iTerminal	index of string descriptor
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 4303a3283ba0a..832565730d224 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -483,11 +483,68 @@ UVC_ATTR_RO(uvcg_default_output_, cname, aname)
+ UVCG_DEFAULT_OUTPUT_ATTR(b_terminal_id, bTerminalID, 8);
+ UVCG_DEFAULT_OUTPUT_ATTR(w_terminal_type, wTerminalType, 16);
+ UVCG_DEFAULT_OUTPUT_ATTR(b_assoc_terminal, bAssocTerminal, 8);
+-UVCG_DEFAULT_OUTPUT_ATTR(b_source_id, bSourceID, 8);
+ UVCG_DEFAULT_OUTPUT_ATTR(i_terminal, iTerminal, 8);
+ 
+ #undef UVCG_DEFAULT_OUTPUT_ATTR
+ 
++static ssize_t uvcg_default_output_b_source_id_show(struct config_item *item,
++						    char *page)
++{
++	struct config_group *group = to_config_group(item);
++	struct f_uvc_opts *opts;
++	struct config_item *opts_item;
++	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
++	struct uvc_output_terminal_descriptor *cd;
++	int result;
++
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
++
++	opts_item = group->cg_item.ci_parent->ci_parent->
++			ci_parent->ci_parent;
++	opts = to_f_uvc_opts(opts_item);
++	cd = &opts->uvc_output_terminal;
++
++	mutex_lock(&opts->lock);
++	result = sprintf(page, "%u\n", le8_to_cpu(cd->bSourceID));
++	mutex_unlock(&opts->lock);
++
++	mutex_unlock(su_mutex);
++
++	return result;
++}
++
++static ssize_t uvcg_default_output_b_source_id_store(struct config_item *item,
++						     const char *page, size_t len)
++{
++	struct config_group *group = to_config_group(item);
++	struct f_uvc_opts *opts;
++	struct config_item *opts_item;
++	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
++	struct uvc_output_terminal_descriptor *cd;
++	int result;
++	u8 num;
++
++	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
++
++	opts_item = group->cg_item.ci_parent->ci_parent->
++			ci_parent->ci_parent;
++	opts = to_f_uvc_opts(opts_item);
++	cd = &opts->uvc_output_terminal;
++
++	result = kstrtou8(page, 0, &num);
++	if (result)
++		return result;
++
++	mutex_lock(&opts->lock);
++	cd->bSourceID = num;
++	mutex_unlock(&opts->lock);
++
++	mutex_unlock(su_mutex);
++
++	return len;
++}
++UVC_ATTR(uvcg_default_output_, b_source_id, bSourceID);
++
+ static struct configfs_attribute *uvcg_default_output_attrs[] = {
+ 	&uvcg_default_output_attr_b_terminal_id,
+ 	&uvcg_default_output_attr_w_terminal_type,
 -- 
 2.39.2
 
