@@ -2,149 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B5A6A8E55
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 01:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788276A8F3B
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Mar 2023 03:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjCCAvR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Mar 2023 19:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S229759AbjCCCcJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Mar 2023 21:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCCAvP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 19:51:15 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB9BA1;
-        Thu,  2 Mar 2023 16:51:14 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id s17so560714pgv.4;
-        Thu, 02 Mar 2023 16:51:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677804674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qJYk4hCKjOxFQ49axmFLTnRK8yHcLGp0RaCvx6w4UZo=;
-        b=PTSN8VZY7bxIAnoE+oKlL98axPXERPDJ3I2XICKNOBUQsUqSYfN/k7TdWdpOfDO/uR
-         5RuxpBfv15zz5/XLJwLOmUePrOxW7T/HPfRZ1qnsOw7RSXLaQ1eJ2Fc1aicfCvD+rGC6
-         c3TX542Nx/WHx5i+1TrS+ITXmrU5/EEa59tdeYqoqBw5iKZGyz61IqupvT7pNcP879vP
-         gcRM7qCFoXY9Gr5EvJaNvHUisokzO2tzSK8bp6sa2D8NOAbz1Of6miZnYupjM4/10nJ7
-         s6+lnn2JB3QNeqE5/WI/23X/PmldskoYM2LUudD2tyXIG2pRmcp7oZq4xgtNWQt+1Rfj
-         Uo1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677804674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qJYk4hCKjOxFQ49axmFLTnRK8yHcLGp0RaCvx6w4UZo=;
-        b=FM/ncnBOrLmAssEi/9NmnFzu8bUTQ1B66nL/9M7+MD5N3DiG/Ixx5GSrgwTRJCWKO3
-         bB/hOLZQiJJ9S0LxCdCVJuywa3WJra0wv1JYczWTKCBlOwMnYLfHQ/ZQrY1wOTZ5VjiN
-         tnqCyx9Cz0GoVZodSZjwX0/62OiiP+Fze+Twij0fXNuTB+Ri8HPXBRpadueB9USu48LQ
-         3wrvKb0AFDTbVFWJ0BSAI9mftDQyn2d4dpupT+nCAZ/zEaMDc5v8LtRd1Q3Bo+I7jOZD
-         JWTuesBUQMGJSEhZKxxoMYmsJ67pAJv8t4XSmyXbHYgHyG/6hYqPp7Hf4XNwgG/VJ0LF
-         uhhw==
-X-Gm-Message-State: AO0yUKVa/vN53Lbwfc/IkfbVzExYEDPeg3Ue79EJLY4IYcMOuwG/mjz8
-        HmI3F3RUw+Mlv3H0zX4/dIpzY2lzhjfu5+GypbY=
-X-Google-Smtp-Source: AK7set+8913cW40rRk6iFWRxSLXX85Xkgyh4u1C4LzKcHqHle7Cfal1MiqBUSeP5RoeTmEVAjM9/SyCXFuNz4UCYoqU=
-X-Received: by 2002:a63:2b04:0:b0:503:83e8:9b54 with SMTP id
- r4-20020a632b04000000b0050383e89b54mr1454436pgr.1.1677804674271; Thu, 02 Mar
- 2023 16:51:14 -0800 (PST)
+        with ESMTP id S229586AbjCCCcI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Mar 2023 21:32:08 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6090C3B0E9;
+        Thu,  2 Mar 2023 18:32:06 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PSX635kD6zrSMw;
+        Fri,  3 Mar 2023 10:31:23 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 3 Mar 2023 10:32:04 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <balbi@kernel.org>, <lee.jones@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH 5.15] usb: dwc3: dwc3-qcom: Add missing platform_device_put() in dwc3_qcom_acpi_register_core
+Date:   Fri, 3 Mar 2023 10:34:39 +0800
+Message-ID: <20230303023439.774616-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230302163648.3349669-1-alvin@pqrs.dk>
-In-Reply-To: <20230302163648.3349669-1-alvin@pqrs.dk>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Thu, 2 Mar 2023 19:51:02 -0500
-Message-ID: <CAB=otbTiCd0RTbJQxVrp1BB=MVtH-U70eM0fTMHdFH33bC00HA@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: u_audio: don't let userspace block driver unbind
-To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yadi Brar <yadi.brar01@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Felipe Balbi <balbi@ti.com>, alsa-devel@alsa-project.org,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 11:39=E2=80=AFAM Alvin =C5=A0ipraga <alvin@pqrs.dk> =
-wrote:
->
-> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
->
-> In the unbind callback for f_uac1 and f_uac2, a call to snd_card_free()
-> via g_audio_cleanup() will disconnect the card and then wait for all
-> resources to be released, which happens when the refcount falls to zero.
-> Since userspace can keep the refcount incremented by not closing the
-> relevant file descriptor, the call to unbind may block indefinitely.
-> This can cause a deadlock during reboot, as evidenced by the following
-> blocked task observed on my machine:
->
->   task:reboot  state:D stack:0   pid:2827  ppid:569    flags:0x0000000c
->   Call trace:
->    __switch_to+0xc8/0x140
->    __schedule+0x2f0/0x7c0
->    schedule+0x60/0xd0
->    schedule_timeout+0x180/0x1d4
->    wait_for_completion+0x78/0x180
->    snd_card_free+0x90/0xa0
->    g_audio_cleanup+0x2c/0x64
->    afunc_unbind+0x28/0x60
->    ...
->    kernel_restart+0x4c/0xac
->    __do_sys_reboot+0xcc/0x1ec
->    __arm64_sys_reboot+0x28/0x30
->    invoke_syscall+0x4c/0x110
->    ...
->
-> The issue can also be observed by opening the card with arecord and
-> then stopping the process through the shell before unbinding:
->
->   # arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
->   Recording WAVE '/dev/null' : Signed 32 bit Little Endian, Rate 48000 Hz=
-, Stereo
->   ^Z[1]+  Stopped                    arecord -D hw:UAC2Gadget -f S32_LE -=
-c 2 -r 48000 /dev/null
->   # echo gadget.0 > /sys/bus/gadget/drivers/configfs-gadget/unbind
->   (observe that the unbind command never finishes)
->
-> Fix the problem by using snd_card_free_when_closed() instead, which will
-> still disconnect the card as desired, but defer the task of freeing the
-> resources to the core once userspace closes its file descriptor.
+From: Miaoqian Lin <linmq006@gmail.com>
 
-It seems nobody has tested that use-case before. Thank you for fixing it
+commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
 
-Reviewed-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Add the missing platform_device_put() before return from
+dwc3_qcom_acpi_register_core in the error handling case.
 
->
-> Fixes: 132fcb460839 ("usb: gadget: Add Audio Class 2.0 Driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
-> ---
->  drivers/usb/gadget/function/u_audio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/f=
-unction/u_audio.c
-> index c1f62e91b012..4a42574b4a7f 100644
-> --- a/drivers/usb/gadget/function/u_audio.c
-> +++ b/drivers/usb/gadget/function/u_audio.c
-> @@ -1422,7 +1422,7 @@ void g_audio_cleanup(struct g_audio *g_audio)
->         uac =3D g_audio->uac;
->         card =3D uac->card;
->         if (card)
-> -               snd_card_free(card);
-> +               snd_card_free_when_closed(card);
->
->         kfree(uac->p_prm.reqs);
->         kfree(uac->c_prm.reqs);
-> --
-> 2.39.1
->
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CVE: CVE-2023-22995
+Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 28bc7480acf3..dfd7873f645b 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -617,8 +617,10 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+ 	qcom->dwc3->dev.coherent_dma_mask = dev->coherent_dma_mask;
+ 
+ 	child_res = kcalloc(2, sizeof(*child_res), GFP_KERNEL);
+-	if (!child_res)
++	if (!child_res) {
++		platform_device_put(qcom->dwc3);
+ 		return -ENOMEM;
++	}
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!res) {
+@@ -656,9 +658,13 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to add device\n");
+ 		device_remove_software_node(&qcom->dwc3->dev);
++		goto out;
+ 	}
++	kfree(child_res);
++	return 0;
+ 
+ out:
++	platform_device_put(qcom->dwc3);
+ 	kfree(child_res);
+ 	return ret;
+ }
+-- 
+2.25.1
+
