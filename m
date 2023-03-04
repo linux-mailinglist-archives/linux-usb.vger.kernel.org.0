@@ -2,124 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2764A6AA90B
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 11:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D346F6AA92D
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 11:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjCDKAP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Mar 2023 05:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
+        id S229595AbjCDKet (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Mar 2023 05:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCDKAO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Mar 2023 05:00:14 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD0E1C7C3;
-        Sat,  4 Mar 2023 02:00:09 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id p20so5201099plw.13;
-        Sat, 04 Mar 2023 02:00:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677924009;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Osgh48C4KnLfAsi4B8h3TeoDTNi6JcyLO4dX+82DIss=;
-        b=qL+5vVkGpZdEireGkhPsYww/RsdL7mHmQQCHHuHjz8CSUm1r3iujJq0ZwIhAj4py7+
-         ygoPJN8ohHOBG+HeYt28/iYodvVE7Wj+fYmS33wX617IqW1hd0WejUCNRLQd7KoQzzYF
-         GBDjjmlctTMhTxcuvvzOLOjwIowPL/lakmhC47jZMNEVXah21h6XFNUegyY/kVEpPlWk
-         M0vQvfEIl5MQS5i87iGapXSD7DZw6Aij43dsJvSc/TWiKdb/csacibgsBQxFJY1zTPxF
-         IXIDeVKzG1WRzIEnOniBDQRIDKpuZGON+MNNF4MHSRo4IWosGYtzs/BQphe3bTKIJ4Xr
-         e+FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677924009;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Osgh48C4KnLfAsi4B8h3TeoDTNi6JcyLO4dX+82DIss=;
-        b=Al3IG+u8nyUMUyATRmCCpjSuvj0M9OrpxqnluCv29wufeNcGyFe1EGH7bbj02/dZ4Q
-         PuD0ZiwTcSEWl3tfrfcq2i0HoOSEmTJI7ZL7AuQH1Nt+/VWQ3gKjpl1cwtT1J9i9693v
-         KxImWN4TuEecD21BsrRfVpE8FqJH/Je777+rJ7776fjWY9cPUonEGRvplzGltONZvPrI
-         kRX8PAHIEpiyKbd2Vm5lliLF2TD86d802YY7+ZI//ZgKveugpVL6Zc9BuqvtweZcrOdX
-         UtP014iyF5L6/rU5xLrxn9RfJAxCUzTH54EFWB2NJwUjYmEDE9Gkx1JMnsnfq4ORFg9y
-         iY/Q==
-X-Gm-Message-State: AO0yUKWWfrCV1wYFezOH1jnN8A178ZvNwEaB/fgtwB5bNFyixitbjbIO
-        fecBxjlWDsNqcd1hTleEyKl4pd9pv1W6+A==
-X-Google-Smtp-Source: AK7set+rXOuLqCSiww8Kj5UYsgdcmDlG2Q4gggWLA18NFWgxo93C9kEBRCi3aDCg5D5B+tT9SSving==
-X-Received: by 2002:a17:902:bb90:b0:19c:dbce:dce4 with SMTP id m16-20020a170902bb9000b0019cdbcedce4mr4229627pls.15.1677924009170;
-        Sat, 04 Mar 2023 02:00:09 -0800 (PST)
-Received: from [192.168.1.2] ([218.150.75.42])
-        by smtp.gmail.com with ESMTPSA id b2-20020a170903228200b001994a0f3380sm2952808plh.265.2023.03.04.02.00.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 02:00:08 -0800 (PST)
-Message-ID: <144f843a-a5d5-4d2b-6d8e-6dfb064cbeba@gmail.com>
-Date:   Sat, 4 Mar 2023 19:00:05 +0900
+        with ESMTP id S229500AbjCDKer (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Mar 2023 05:34:47 -0500
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101D910AB8;
+        Sat,  4 Mar 2023 02:34:45 -0800 (PST)
+Received: from pro2.mail.ovh.net (unknown [10.108.20.84])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id BF00C20CD4;
+        Sat,  4 Mar 2023 10:34:40 +0000 (UTC)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 4 Mar
+ 2023 11:34:39 +0100
+Message-ID: <7fa7f07f-d1e1-1e43-992c-4981c5810284@traphandler.com>
+Date:   Sat, 4 Mar 2023 11:34:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/2] r8152: allow firmwares with NCM support
-To:     gregkh@linuxfoundation.org,
-        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>,
-        stable@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Hayes Wang <hayeswang@realtek.com>, linux-usb@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>
-References: <20230106160739.100708-1-bjorn@mork.no>
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] of: irq: make callers of of_irq_parse_one() release
+ the device node
 Content-Language: en-US
-From:   Juhyung Park <qkrwngud825@gmail.com>
-In-Reply-To: <20230106160739.100708-1-bjorn@mork.no>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     <saravanak@google.com>, <clement.leger@bootlin.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        <zajec5@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nishanth Menon <nm@ti.com>, <ssantosh@kernel.org>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-wireless@vger.kernel.org>,
+        <linux-actions@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+References: <20230301185209.274134-1-jjhiblot@traphandler.com>
+ <20230301185209.274134-3-jjhiblot@traphandler.com>
+ <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: CAS2.emp2.local (172.16.1.2) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 2216615445481994549
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtuddgudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepvdefkedugeekueeuvdeuueevjefftddvtefhleekhfefffdtteetffeigfdvtdeinecukfhppeduvdejrddtrddtrddupdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehgvggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdpsghhvghlghgrrghssehgohhoghhlvgdrtghomhdpnhhmsehtihdrtghomhdpshhsrghnthhoshhhsehkvghrnhgvlhdrohhrghdpmhgrthhhihgrshdrnhihmhgrnhesihhnthgvlhdrtghomhdpghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhthhhivghrrhihrdhrvgguihhnghesghhmrghilhdrtghomhdpjhhonhgrthhhrg
+ hnhhesnhhvihguihgrrdgtohhmpdhlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhgpdhlihhnuhigqdifihhrvghlvghsshesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqrggtthhiohhnsheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqshhunhigiheslhhishhtshdrlhhinhhugidruggvvhdpuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhfrhhofigrnhgurdhlihhsthesghhmrghilhdrtghomhdplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhhosghhodgutheskhgvrhhnvghlrdhorhhgpdhjvghrnhgvjhdrshhkrhgrsggvtgesghhmrghilhdrtghomhdpshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdgtlhgvmhgvnhhtrdhlvghgvghrsegsohhothhlihhnrdgtohhmpdhmrghgnhhushdruggrmhhmsehgmhgrihhlrdgtohhmpdhlihhnuhigsegrrhhmlhhinhhugid
+ rohhrghdruhhkpdhmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdpnhhpihhgghhinhesghhmrghilhdrtghomhdptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouhhprdgvuhdpiigrjhgvtgehsehgmhgrihhlrdgtohhmpdgurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhtghhlgieslhhinhhuthhrohhnihigrdguvgdptghlrghuughiuhdrsggviihnvggrsehmihgtrhhotghhihhprdgtohhmpdhmrgiisehkvghrnhgvlhdrohhrghdprghfrggvrhgsvghrsehsuhhsvgdruggvpdhmrghniheskhgvrhhnvghlrdhorhhgpdhprghlmhgvrhesuggrsggsvghlthdrtghomhdpphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdifvghnshestghsihgvrdhorhhgpdhsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgpdhlihhnuhigqdhtvghgrhgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdekpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi everyone,
 
-Can we have this series backported to all applicable stable kernels?
-+and future fixes:
-commit 0d4cda805a18 ("r8152: avoid to change cfg for all devices")
-commit 95a4c1d617b9 ("r8152: remove rtl_vendor_mode function")
 
-RTL8156 (2.5Gbe) is supported by r8152, but wasn't blacklisted in 
-cdc_ether.c due to having a different product ID (0x8156).
-
-Some RTL8156 users are stuck with using the cdc_ncm driver prior to this 
-patch series, which results in a far less ideal experience [1].
-
-As we (finally) have a proper fix implemented thanks to Bjørn, it seems 
-to make more than enough sense to backport this to stable kernels.
-
-I'm personally running v6.1 with this applied.
-
-Thanks, regards
-
-[1] 
-https://lore.kernel.org/netdev/CAO3ALPzKEStzf5-mgSLJ_jsCSbRq_2JzZ6de2rXuETV5RC-V8w@mail.gmail.com/
-
-On 1/7/23 01:07, Bjørn Mork wrote:
-> Some device and firmware combinations with NCM support will
-> end up using the cdc_ncm driver by default.  This is sub-
-> optimal for the same reasons we've previously accepted the
-> blacklist hack in cdc_ether.
+On 02/03/2023 08:49, Geert Uytterhoeven wrote:
+> Hi Jean-Jacques,
 > 
-> The recent support for subclassing the generic USB device
-> driver allows us to create a very slim driver with the same
-> functionality.  This patch set uses that to implement a
-> device specific configuration default which is independent
-> of any USB interface drivers.  This means that it works
-> equally whether the device initially ends up in NCM or ECM
-> mode, without depending on any code in the respective class
-> drivers.
+> Thanks for your patch!
 > 
-> Bjørn Mork (2):
->    r8152: add USB device driver for config selection
->    cdc_ether: no need to blacklist any r8152 devices
+> On Wed, Mar 1, 2023 at 7:53 PM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+>> of_irq_parse_one() does a get() on the device node returned in out_irq->np.
+>> Callers of of_irq_parse_one() must do a put() when they are done with it.
 > 
->   drivers/net/usb/cdc_ether.c | 114 ------------------------------------
->   drivers/net/usb/r8152.c     | 113 +++++++++++++++++++++++++----------
->   2 files changed, 81 insertions(+), 146 deletions(-)
+> What does "be done with it" really mean here?
+> 
+>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> 
+>> --- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+>> +++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+>> @@ -184,6 +184,7 @@ static int __init rcar_gen2_regulator_quirk(void)
+>>                          kfree(quirk);
+>>                          continue;
+>>                  }
+>> +               of_node_put(argsa->np);
+> 
+> The quirk object, which is a container of argsa, is still used below,
+> and stored in a linked list.  I agree argsa->np is not dereferenced,
+> but the pointer itself is still compared to other pointers.
+Hi Geert,
+
+I fail to see when the pointers are compared. It looks to me that only 
+the args are compared. Am I missing something ?
+In any case, looking more closely at the code, I guess that indeed the
+of_node_put() shouldn't be added here because this code expects that the
+nodes never go away. That is probably a good assertion in case of PMICs
+
+JJ
+> IIUIC, calling of_node_put() might cause the reference count to drop to
+> zero, and the underlying struct node object to be deallocated.
+> So when a future reference to the same DT node will be taken, a new
+> struct node object will be allocated, and the pointer comparison below
+> will fail?
+> 
+> Or am I missing something?
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
 > 
