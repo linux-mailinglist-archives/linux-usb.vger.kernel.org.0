@@ -2,134 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D346F6AA92D
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 11:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C358A6AA9BA
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 14:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjCDKet (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Mar 2023 05:34:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        id S229684AbjCDNDI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Mar 2023 08:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjCDKer (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Mar 2023 05:34:47 -0500
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101D910AB8;
-        Sat,  4 Mar 2023 02:34:45 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.108.20.84])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id BF00C20CD4;
-        Sat,  4 Mar 2023 10:34:40 +0000 (UTC)
-Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
- (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 4 Mar
- 2023 11:34:39 +0100
-Message-ID: <7fa7f07f-d1e1-1e43-992c-4981c5810284@traphandler.com>
-Date:   Sat, 4 Mar 2023 11:34:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] of: irq: make callers of of_irq_parse_one() release
- the device node
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     <saravanak@google.com>, <clement.leger@bootlin.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        <zajec5@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
+        with ESMTP id S229471AbjCDNDH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Mar 2023 08:03:07 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC06EC52
+        for <linux-usb@vger.kernel.org>; Sat,  4 Mar 2023 05:03:06 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id s11so20673055edy.8
+        for <linux-usb@vger.kernel.org>; Sat, 04 Mar 2023 05:03:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677934984;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OkSvhC1gVfb8PyCSyQ+RtHNDDmsSooTX9+nQ9I0Jmpg=;
+        b=CsMkJGA9hdUF74PfJmmoeCH0DL3C3DQkcn3WbRdCnBbGCyU9OkW+5cJ9QCyhnmmDQG
+         ZeSxOGq0vxhK9SIU8zRSIKAklNq2GcSW0uuq+abPjH/dBA/jpBYWsq8vD2FBWEPSRi/6
+         i5WUVB4Et5JVJF/lzyw/T9pSIABQC4LlI/SiSHl7Nd/A7qtMD2sb54A0Gd+gb8WLYNbQ
+         ZFsBKj8fum5dKIgsxzBFaEYCjNQyUjPRGYjixNwcF7GLfdybvCiXQtAv4175FJtGbAHf
+         iUSn4eOUrEaII19HtkVfd8yzWAoFEVPa6ru0QRLIS5vFahcrT9alcWYrnP4JXVipv6F5
+         9Q7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677934984;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OkSvhC1gVfb8PyCSyQ+RtHNDDmsSooTX9+nQ9I0Jmpg=;
+        b=cmOAibXM0DR56oq9jMx2HRq4j38YpNr0eeA/INhZLfdsxcMJUswQI6u03q7dIj6w1j
+         2889jd9z6QcK2LVIoA5ce3UVBa3htTZArJXuE7jXngt21KaO3K9GHylh8Nrf+/I6+2I1
+         IsSiS3+cscCovzcrgo1jjDGUYccSyn+pkg5Bsicq9+dXO5SvhT8hy2KPErNerETgVH/A
+         SxItmoQ4Z1AvMq4GeN0zFzuQgCSQgkBHODA0yM3kJSBEk/HkbdhucwTK31/5QyDw3pno
+         878kd72Q+258Qk/JcUcfwEU1edwBywgm+O2NvIEXivl1zFstWDn5L9Kh6EZbC37P1cC1
+         zyZA==
+X-Gm-Message-State: AO0yUKVjJ7rGT4sXVacT8plIjv6hthldzLOsG5RkatqabNi31LIyxbtB
+        4RETvqpgYdZUdk9dRwdxHRAQ/Wzq3m7OYRlH6Oo=
+X-Google-Smtp-Source: AK7set/bmaqwN4R25kvMcexrvDGMzPZaZh0bC495ArZrsGl7hCUyTreDKEyqyPdHv1z9BivBfzFSvQ==
+X-Received: by 2002:a17:906:4cd4:b0:8f8:eded:4254 with SMTP id q20-20020a1709064cd400b008f8eded4254mr5027030ejt.65.1677934984748;
+        Sat, 04 Mar 2023 05:03:04 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:b758:6326:1292:e2aa])
+        by smtp.gmail.com with ESMTPSA id x8-20020a170906440800b008e8e975e185sm2052734ejo.32.2023.03.04.05.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Mar 2023 05:03:04 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nishanth Menon <nm@ti.com>, <ssantosh@kernel.org>,
-        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-wireless@vger.kernel.org>,
-        <linux-actions@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
-        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>
-References: <20230301185209.274134-1-jjhiblot@traphandler.com>
- <20230301185209.274134-3-jjhiblot@traphandler.com>
- <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: usb: snps,dwc3: document extcon property
+Date:   Sat,  4 Mar 2023 14:03:02 +0100
+Message-Id: <20230304130302.51497-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: CAS2.emp2.local (172.16.1.2) To DAG1EX1.emp2.local
- (172.16.2.1)
-X-Ovh-Tracer-Id: 2216615445481994549
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtuddgudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepvdefkedugeekueeuvdeuueevjefftddvtefhleekhfefffdtteetffeigfdvtdeinecukfhppeduvdejrddtrddtrddupdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehgvggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdpsghhvghlghgrrghssehgohhoghhlvgdrtghomhdpnhhmsehtihdrtghomhdpshhsrghnthhoshhhsehkvghrnhgvlhdrohhrghdpmhgrthhhihgrshdrnhihmhgrnhesihhnthgvlhdrtghomhdpghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhthhhivghrrhihrdhrvgguihhnghesghhmrghilhdrtghomhdpjhhonhgrthhhrg
- hnhhesnhhvihguihgrrdgtohhmpdhlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhgpdhlihhnuhigqdifihhrvghlvghsshesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqrggtthhiohhnsheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqshhunhigiheslhhishhtshdrlhhinhhugidruggvvhdpuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhfrhhofigrnhgurdhlihhsthesghhmrghilhdrtghomhdplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhhosghhodgutheskhgvrhhnvghlrdhorhhgpdhjvghrnhgvjhdrshhkrhgrsggvtgesghhmrghilhdrtghomhdpshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdgtlhgvmhgvnhhtrdhlvghgvghrsegsohhothhlihhnrdgtohhmpdhmrghgnhhushdruggrmhhmsehgmhgrihhlrdgtohhmpdhlihhnuhigsegrrhhmlhhinhhugid
- rohhrghdruhhkpdhmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdpnhhpihhgghhinhesghhmrghilhdrtghomhdptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouhhprdgvuhdpiigrjhgvtgehsehgmhgrihhlrdgtohhmpdgurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhtghhlgieslhhinhhuthhrohhnihigrdguvgdptghlrghuughiuhdrsggviihnvggrsehmihgtrhhotghhihhprdgtohhmpdhmrgiisehkvghrnhgvlhdrohhrghdprghfrggvrhgsvghrsehsuhhsvgdruggvpdhmrghniheskhgvrhhnvghlrdhorhhgpdhprghlmhgvrhesuggrsggsvghlthdrtghomhdpphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdifvghnshestghsihgvrdhorhhgpdhsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgpdhlihhnuhigqdhtvghgrhgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdekpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The DWC3 USB Linux driver and several DTS use extcon property, so
+document it, even though it is deprecated, to fix warnings like:
 
+  sm6125-sony-xperia-seine-pdx201.dtb: usb@4ef8800: usb@4e00000: Unevaluated properties are not allowed ('extcon' was unexpected)
 
-On 02/03/2023 08:49, Geert Uytterhoeven wrote:
-> Hi Jean-Jacques,
-> 
-> Thanks for your patch!
-> 
-> On Wed, Mar 1, 2023 at 7:53 PM Jean-Jacques Hiblot
-> <jjhiblot@traphandler.com> wrote:
->> of_irq_parse_one() does a get() on the device node returned in out_irq->np.
->> Callers of of_irq_parse_one() must do a put() when they are done with it.
-> 
-> What does "be done with it" really mean here?
-> 
->> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> 
->> --- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
->> +++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
->> @@ -184,6 +184,7 @@ static int __init rcar_gen2_regulator_quirk(void)
->>                          kfree(quirk);
->>                          continue;
->>                  }
->> +               of_node_put(argsa->np);
-> 
-> The quirk object, which is a container of argsa, is still used below,
-> and stored in a linked list.  I agree argsa->np is not dereferenced,
-> but the pointer itself is still compared to other pointers.
-Hi Geert,
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I fail to see when the pointers are compared. It looks to me that only 
-the args are compared. Am I missing something ?
-In any case, looking more closely at the code, I guess that indeed the
-of_node_put() shouldn't be added here because this code expects that the
-nodes never go away. That is probably a good assertion in case of PMICs
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index be36956af53b..cad2efd5f8c9 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -70,6 +70,10 @@ properties:
+ 
+   dma-coherent: true
+ 
++  extcon:
++    maxItems: 1
++    deprecated: true
++
+   iommus:
+     maxItems: 1
+ 
+-- 
+2.34.1
 
-JJ
-> IIUIC, calling of_node_put() might cause the reference count to drop to
-> zero, and the underlying struct node object to be deallocated.
-> So when a future reference to the same DT node will be taken, a new
-> struct node object will be allocated, and the pointer comparison below
-> will fail?
-> 
-> Or am I missing something?
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
