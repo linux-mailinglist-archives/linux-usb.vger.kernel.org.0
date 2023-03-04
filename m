@@ -2,128 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930BA6AA690
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 01:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D3F6AA7EF
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 05:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjCDAgV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Mar 2023 19:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S229506AbjCDECi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Mar 2023 23:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjCDAfq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 19:35:46 -0500
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650136A417;
-        Fri,  3 Mar 2023 16:35:09 -0800 (PST)
-Received: by mail-pj1-f51.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so3942029pjp.2;
-        Fri, 03 Mar 2023 16:35:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677890109;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HhduX6h3yYCHv2YmAnqZZcFNVY9bFdxPxwH9qs5MhfM=;
-        b=Fx7t4afDD5bkX5h9QKUD5u9sSQke8A0fB3ZqWFLDHQ7nWuYa1G4E26UEVGFpYWYznP
-         8/M/TtQrR4rdwgBSTuoidRGodBr86L4xA8veQtzmCwS0FLItQNWJVQYr1m8Vc1fqcnOJ
-         gE1TDL9UZNo7oJwbpVL3uUoDy14DaMH1wR3Cx+H72Zcf0EafPb99JqShZCZ2tKrprNRa
-         7ZcWuY80EPPJhvQf0SXHO4yRadLOOOiygXBfiSXezZB2OMsZuGG6GMJM33/wGM7vEqXc
-         ljcPZWrQEbPCpvrzFkvAc5+krH8Qso48U2jnoaYDamjfCbGpuqJJ9EI6OB9lPoqhY6Sw
-         c9JA==
-X-Gm-Message-State: AO0yUKVlHJXh5Dzr9vFsWtHvA6HbE0NiQljRu5+QAWA7PT38N1/CyMeU
-        419R0Yqr1E2KSGBniSv53ZA=
-X-Google-Smtp-Source: AK7set/vtwcxoLqC7rPv/asFselgA+ZyMTdrYVkxjID+WEYZmuqKT3fk+gfvUEPlOvN6E0EAn07cTg==
-X-Received: by 2002:a17:902:7006:b0:19a:a815:2868 with SMTP id y6-20020a170902700600b0019aa8152868mr2828304plk.44.1677890108831;
-        Fri, 03 Mar 2023 16:35:08 -0800 (PST)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:efb8:1cdc:a06f:1b53])
-        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.35.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 16:35:08 -0800 (PST)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 80/81] usb: uas: Declare two host templates and host template pointers const
-Date:   Fri,  3 Mar 2023 16:31:02 -0800
-Message-Id: <20230304003103.2572793-81-bvanassche@acm.org>
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-In-Reply-To: <20230304003103.2572793-1-bvanassche@acm.org>
-References: <20230304003103.2572793-1-bvanassche@acm.org>
+        with ESMTP id S229455AbjCDECh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 23:02:37 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B382C2CC55
+        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 20:02:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677902555; x=1709438555;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kI77ddoQTF693S8MGV1i5B2rBz8GecY+VaA3K2NQ/t4=;
+  b=nheZBIl2ohEvdwT5Y7fO0sN5EmSxGDhb6lfJGAiwF95Efla+3Pv4Luru
+   bVLiajJ7mNh0YZ5LqvYpELykTDOQfewP8ZGG0xYaE6sIKcrhrpPc7Hk6M
+   C9M539qTFBe/lu3n7mXub7w3xwKkiX19a+86BcHXnJOdMAlq21QLLV6Cn
+   gQSB/V6gmA9KH4Gx1HagbKVv0qMi/Mezm41sk/PsfHenuhJAVJpO8BnVL
+   U7/FLkXgnwVTY0AFcly0m0hLl2XFcMdG1VH0nC+2KYv1QExbLqoyOsffA
+   SnQcSnEiDVyJZiEv1UWOuOmlgdd5e0nsIO2O/9Glee6lqwTGUfxKQ9WVK
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="333940357"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="333940357"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 20:02:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="675585086"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="675585086"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 Mar 2023 20:02:33 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pYJ6P-0001qM-0M;
+        Sat, 04 Mar 2023 04:02:33 +0000
+Date:   Sat, 04 Mar 2023 12:02:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:rndis-removal] BUILD SUCCESS
+ 98961622ac21e0a4e7c1353ab161f61393f60dcc
+Message-ID: <6402c2bf.V/BEKsH6L9B3qI2I%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Improve source code documentation by constifying host templates that are
-not modified.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
+branch HEAD: 98961622ac21e0a4e7c1353ab161f61393f60dcc  USB: disable all RNDIS protocol drivers
 
-Cc: Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/usb/image/microtek.c | 2 +-
- drivers/usb/storage/uas.c    | 2 +-
- drivers/usb/storage/usb.c    | 2 +-
- drivers/usb/storage/usb.h    | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+elapsed time: 726m
 
-diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
-index 874ea4b54ced..8c8fa71c69c4 100644
---- a/drivers/usb/image/microtek.c
-+++ b/drivers/usb/image/microtek.c
-@@ -620,7 +620,7 @@ static int mts_scsi_queuecommand_lck(struct scsi_cmnd *srb)
- 
- static DEF_SCSI_QCMD(mts_scsi_queuecommand)
- 
--static struct scsi_host_template mts_scsi_host_template = {
-+static const struct scsi_host_template mts_scsi_host_template = {
- 	.module			= THIS_MODULE,
- 	.name			= "microtekX6",
- 	.proc_name		= "microtekX6",
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index de3836412bf3..2583ee9815c5 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -894,7 +894,7 @@ static int uas_slave_configure(struct scsi_device *sdev)
- 	return 0;
- }
- 
--static struct scsi_host_template uas_host_template = {
-+static const struct scsi_host_template uas_host_template = {
- 	.module = THIS_MODULE,
- 	.name = "uas",
- 	.queuecommand = uas_queuecommand,
-diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-index ed7c6ad96a74..7b36a3334fb3 100644
---- a/drivers/usb/storage/usb.c
-+++ b/drivers/usb/storage/usb.c
-@@ -937,7 +937,7 @@ int usb_stor_probe1(struct us_data **pus,
- 		struct usb_interface *intf,
- 		const struct usb_device_id *id,
- 		const struct us_unusual_dev *unusual_dev,
--		struct scsi_host_template *sht)
-+		const struct scsi_host_template *sht)
- {
- 	struct Scsi_Host *host;
- 	struct us_data *us;
-diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
-index 0451fac1adce..fd3f32670873 100644
---- a/drivers/usb/storage/usb.h
-+++ b/drivers/usb/storage/usb.h
-@@ -187,7 +187,7 @@ extern int usb_stor_probe1(struct us_data **pus,
- 		struct usb_interface *intf,
- 		const struct usb_device_id *id,
- 		const struct us_unusual_dev *unusual_dev,
--		struct scsi_host_template *sht);
-+		const struct scsi_host_template *sht);
- extern int usb_stor_probe2(struct us_data *us);
- extern void usb_stor_disconnect(struct usb_interface *intf);
- 
+configs tested: 107
+configs skipped: 5
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r003-20230302   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230303   gcc  
+alpha                randconfig-r025-20230302   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r006-20230302   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r013-20230302   gcc  
+arc                  randconfig-r043-20230302   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r001-20230302   clang
+arm                  randconfig-r003-20230302   clang
+arm                  randconfig-r011-20230302   gcc  
+arm                  randconfig-r012-20230302   gcc  
+arm                  randconfig-r014-20230303   clang
+arm                  randconfig-r046-20230302   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r014-20230302   clang
+csky                                defconfig   gcc  
+hexagon              randconfig-r021-20230302   clang
+hexagon              randconfig-r041-20230302   clang
+hexagon              randconfig-r045-20230302   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r026-20230302   gcc  
+ia64                 randconfig-r033-20230302   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r005-20230302   clang
+mips                 randconfig-r004-20230302   clang
+mips                 randconfig-r005-20230302   clang
+nios2        buildonly-randconfig-r004-20230302   gcc  
+nios2                               defconfig   gcc  
+openrisc     buildonly-randconfig-r002-20230302   gcc  
+openrisc             randconfig-r015-20230303   gcc  
+openrisc             randconfig-r035-20230302   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r012-20230303   gcc  
+parisc               randconfig-r034-20230302   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r001-20230302   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r013-20230303   gcc  
+riscv                randconfig-r042-20230302   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r006-20230302   gcc  
+s390                 randconfig-r022-20230302   clang
+s390                 randconfig-r024-20230302   clang
+s390                 randconfig-r036-20230302   gcc  
+s390                 randconfig-r044-20230302   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r016-20230302   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r002-20230302   gcc  
+sparc                randconfig-r031-20230302   gcc  
+sparc64              randconfig-r032-20230302   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r015-20230302   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
