@@ -2,96 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEF26AA619
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 01:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930BA6AA690
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 01:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjCDALC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Mar 2023 19:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S230083AbjCDAgV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Mar 2023 19:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjCDALB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 19:11:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABB3166CF
-        for <linux-usb@vger.kernel.org>; Fri,  3 Mar 2023 16:10:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F08761941
-        for <linux-usb@vger.kernel.org>; Sat,  4 Mar 2023 00:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 82D0CC43443
-        for <linux-usb@vger.kernel.org>; Sat,  4 Mar 2023 00:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677888657;
-        bh=9izbP7XBtUOgjU2r1WDBKegqGg+vyXksEYyubNFq5zQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=riUZwsXD3r6paA72eE4H5IZfzypdSaOcNVjj5tjnXKLuu8pyDSEW5yvxUm5j7RJsq
-         pm4QBjIIUMuit1j1vI0J/VkT10jMD0u6GyvFpvmqU9DrTILK4dq9M5riWL7K4wjR+W
-         Ucd0Q0pqZKlkjLjTWZOtsRPkbRYtXH2keAFZ4lHbe6C07tpvowHnWJClIeCo1m8Xir
-         lIiTxSK+0skGwIAxVuf2cN4yctresdacjB0JZXzP53/kHHWVMD25XNcPhuYvvhf2xr
-         ln1NltBuS6xAtTrGGXSk1DEZaVWeLph+DQZL8bR+5g/5bnRe7kC4jTtGJKxrJJDxLK
-         W/JP6Z+ndACdw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 73475C43145; Sat,  4 Mar 2023 00:10:57 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Sat, 04 Mar 2023 00:10:56 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: wyattbiker@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: UNREPRODUCIBLE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-IRI0LtlAPR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229915AbjCDAfq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Mar 2023 19:35:46 -0500
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650136A417;
+        Fri,  3 Mar 2023 16:35:09 -0800 (PST)
+Received: by mail-pj1-f51.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so3942029pjp.2;
+        Fri, 03 Mar 2023 16:35:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677890109;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HhduX6h3yYCHv2YmAnqZZcFNVY9bFdxPxwH9qs5MhfM=;
+        b=Fx7t4afDD5bkX5h9QKUD5u9sSQke8A0fB3ZqWFLDHQ7nWuYa1G4E26UEVGFpYWYznP
+         8/M/TtQrR4rdwgBSTuoidRGodBr86L4xA8veQtzmCwS0FLItQNWJVQYr1m8Vc1fqcnOJ
+         gE1TDL9UZNo7oJwbpVL3uUoDy14DaMH1wR3Cx+H72Zcf0EafPb99JqShZCZ2tKrprNRa
+         7ZcWuY80EPPJhvQf0SXHO4yRadLOOOiygXBfiSXezZB2OMsZuGG6GMJM33/wGM7vEqXc
+         ljcPZWrQEbPCpvrzFkvAc5+krH8Qso48U2jnoaYDamjfCbGpuqJJ9EI6OB9lPoqhY6Sw
+         c9JA==
+X-Gm-Message-State: AO0yUKVlHJXh5Dzr9vFsWtHvA6HbE0NiQljRu5+QAWA7PT38N1/CyMeU
+        419R0Yqr1E2KSGBniSv53ZA=
+X-Google-Smtp-Source: AK7set/vtwcxoLqC7rPv/asFselgA+ZyMTdrYVkxjID+WEYZmuqKT3fk+gfvUEPlOvN6E0EAn07cTg==
+X-Received: by 2002:a17:902:7006:b0:19a:a815:2868 with SMTP id y6-20020a170902700600b0019aa8152868mr2828304plk.44.1677890108831;
+        Fri, 03 Mar 2023 16:35:08 -0800 (PST)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:efb8:1cdc:a06f:1b53])
+        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.35.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 16:35:08 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        Oliver Neukum <oliver@neukum.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 80/81] usb: uas: Declare two host templates and host template pointers const
+Date:   Fri,  3 Mar 2023 16:31:02 -0800
+Message-Id: <20230304003103.2572793-81-bvanassche@acm.org>
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+In-Reply-To: <20230304003103.2572793-1-bvanassche@acm.org>
+References: <20230304003103.2572793-1-bvanassche@acm.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+Improve source code documentation by constifying host templates that are
+not modified.
 
---- Comment #48 from wyattb (wyattbiker@gmail.com) ---
+Cc: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/usb/image/microtek.c | 2 +-
+ drivers/usb/storage/uas.c    | 2 +-
+ drivers/usb/storage/usb.c    | 2 +-
+ drivers/usb/storage/usb.h    | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Exact same issue. Not sure how to reproduce it. Just want to add my versions
-
-Operating System: Kubuntu 22.10
-KDE Plasma Version: 5.25.5
-KDE Frameworks Version: 5.98.0
-Qt Version: 5.15.6
-Kernel Version: 5.19.0-35-generic (64-bit)
-
-Graphics Platform: X11
-Processors: 16 =C3=97 12th Gen Intel=C2=AE Core=E2=84=A2 i7-1260P
-Memory: 15.3 GiB of RAM
-Graphics Processor: Mesa Intel=C2=AE Graphics
-Manufacturer: LG Electronics
-Product Name: 14ZB90Q-G.AAC6U1
-System Version: 0.1
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
+index 874ea4b54ced..8c8fa71c69c4 100644
+--- a/drivers/usb/image/microtek.c
++++ b/drivers/usb/image/microtek.c
+@@ -620,7 +620,7 @@ static int mts_scsi_queuecommand_lck(struct scsi_cmnd *srb)
+ 
+ static DEF_SCSI_QCMD(mts_scsi_queuecommand)
+ 
+-static struct scsi_host_template mts_scsi_host_template = {
++static const struct scsi_host_template mts_scsi_host_template = {
+ 	.module			= THIS_MODULE,
+ 	.name			= "microtekX6",
+ 	.proc_name		= "microtekX6",
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index de3836412bf3..2583ee9815c5 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -894,7 +894,7 @@ static int uas_slave_configure(struct scsi_device *sdev)
+ 	return 0;
+ }
+ 
+-static struct scsi_host_template uas_host_template = {
++static const struct scsi_host_template uas_host_template = {
+ 	.module = THIS_MODULE,
+ 	.name = "uas",
+ 	.queuecommand = uas_queuecommand,
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index ed7c6ad96a74..7b36a3334fb3 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -937,7 +937,7 @@ int usb_stor_probe1(struct us_data **pus,
+ 		struct usb_interface *intf,
+ 		const struct usb_device_id *id,
+ 		const struct us_unusual_dev *unusual_dev,
+-		struct scsi_host_template *sht)
++		const struct scsi_host_template *sht)
+ {
+ 	struct Scsi_Host *host;
+ 	struct us_data *us;
+diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
+index 0451fac1adce..fd3f32670873 100644
+--- a/drivers/usb/storage/usb.h
++++ b/drivers/usb/storage/usb.h
+@@ -187,7 +187,7 @@ extern int usb_stor_probe1(struct us_data **pus,
+ 		struct usb_interface *intf,
+ 		const struct usb_device_id *id,
+ 		const struct us_unusual_dev *unusual_dev,
+-		struct scsi_host_template *sht);
++		const struct scsi_host_template *sht);
+ extern int usb_stor_probe2(struct us_data *us);
+ extern void usb_stor_disconnect(struct usb_interface *intf);
+ 
