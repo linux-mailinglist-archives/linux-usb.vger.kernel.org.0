@@ -2,112 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD0F6AAAF2
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Mar 2023 16:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5871E6AAE91
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Mar 2023 09:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjCDPvr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Mar 2023 10:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
+        id S229650AbjCEIUv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Mar 2023 03:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCDPvq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Mar 2023 10:51:46 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 64D001E9F0
-        for <linux-usb@vger.kernel.org>; Sat,  4 Mar 2023 07:51:45 -0800 (PST)
-Received: (qmail 334178 invoked by uid 1000); 4 Mar 2023 10:51:44 -0500
-Date:   Sat, 4 Mar 2023 10:51:44 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        linux-usb@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 80/81] usb: uas: Declare two host templates and host
- template pointers const
-Message-ID: <4f80df61-98d4-4f27-a095-feea7f657d8f@rowland.harvard.edu>
-References: <20230304003103.2572793-1-bvanassche@acm.org>
- <20230304003103.2572793-81-bvanassche@acm.org>
+        with ESMTP id S229633AbjCEIUu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Mar 2023 03:20:50 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883A086AE
+        for <linux-usb@vger.kernel.org>; Sun,  5 Mar 2023 00:20:48 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id cw28so26563295edb.5
+        for <linux-usb@vger.kernel.org>; Sun, 05 Mar 2023 00:20:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678004447;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=x50Qlw1MrbKfPc5Y3tqZO5+1c26Aew+5oqPX3JirLAY=;
+        b=eHXA8pVDliWIbb1r2a0N52DTxiIayaflfCLNyqZh0HzUTfE29506nW4k7ShufovRhP
+         8/UB/NaXMdQ6UeuySEsnJVApEH+zhdTh83sU2c9zktoOJJeWOZnX7sKj1n/7XQUHhjpo
+         a376Ty8xPj0I9bNA4oDeRE22cmGFA+Ef3hqYBdlDyjOwo00ou7e4usbrBTyXrCcu1a92
+         Dtrn/2hPg5z5RIAUFhVbP3WgpbwrBJDOy3yhFkQhqzaT0kq4y/SlCXmmVo/87vRt7rt7
+         XnE8GYhoKCUjdcLNDcm0Sf9YYqTrSV2YB95/UtaXZUSLbR6WBClkHClsEL8FLKbqn6iB
+         c40Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678004447;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x50Qlw1MrbKfPc5Y3tqZO5+1c26Aew+5oqPX3JirLAY=;
+        b=cQIf//NWdBpcjBlqJP7EsQ+LFs++TAv/yb6rLZVxnr7niUaAMeuCs9zg2jW5AHCxGv
+         anJBLtxqIFYuKV22VWG4SWxfamJNdjItM17fbUPUdNRSP4XXmjrzLNwDzPcsQlgJl1GC
+         /32zgKLFRWMbnUbl48W4uXLgTrs2xLrf/x0dcgBspsyK+GL1804I5O6/pNGdM3oV0/sz
+         W2tHfXuMCGCB7gRUKrsMWCWiRgWPhNgQLNiS4llc1tDDA2mPg+TDl+9omKQeeL7J+H80
+         K4puyqUaf10QXtYKPM9zRu5JGZSVchhLjM1EATxp1l2PGwIdcrJ8jTi+NWxTTQ6qQLv/
+         XUqA==
+X-Gm-Message-State: AO0yUKV/CtLO6l+NU3bitAB16/d2yhj/ywTKq3AscuGv8nwus6Zi6Ocw
+        WgTJGgVMTPrMp1ZOAGvsEg8ia/fUOBYe61kNU3M=
+X-Google-Smtp-Source: AK7set9uJSc3KcKr7oA2CZN9oLrfpNigbb6rgPG6vHurVAnfTbex4bLPZdFQ4uL/Q1DTfEkmwuqdEflcEqJNYtZHZ9c=
+X-Received: by 2002:a17:906:388d:b0:877:e539:810b with SMTP id
+ q13-20020a170906388d00b00877e539810bmr3369286ejd.2.1678004446923; Sun, 05 Mar
+ 2023 00:20:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230304003103.2572793-81-bvanassche@acm.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Reply-To: vandekujohmaria@outlook.com
+Sender: xzcvxc289@gmail.com
+Received: by 2002:a05:7412:a90f:b0:c1:1578:494d with HTTP; Sun, 5 Mar 2023
+ 00:20:46 -0800 (PST)
+From:   Gerhardus Maria <vandekujohmaria@gmail.com>
+Date:   Sun, 5 Mar 2023 08:20:46 +0000
+X-Google-Sender-Auth: kN4ZuyAi5GXd_FC46xEuaOTcbPA
+Message-ID: <CAJD_Hb45zwEmW4FimuUjUyAQh8_pS+9MEc3p4fCXDWA79GND8Q@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:52d listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8865]
+        *  0.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [vandekujohmaria[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [xzcvxc289[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 04:31:02PM -0800, Bart Van Assche wrote:
-> Improve source code documentation by constifying host templates that are
-> not modified.
-> 
-> Cc: Oliver Neukum <oneukum@suse.com>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
+Hello, how are you?  My name is van der kuil Johannes gerhardus Maria.
+I am a lawyer from the Netherlands who reside in Belgium and I am
+working on the donation file of my client, Mr. Bartos Pierre
+Nationality of Belgium.  I would like to know if you will accept my
+client's donation Mr. Bartos Pierre?
 
-For the usb-storage parts:
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
->  drivers/usb/image/microtek.c | 2 +-
->  drivers/usb/storage/uas.c    | 2 +-
->  drivers/usb/storage/usb.c    | 2 +-
->  drivers/usb/storage/usb.h    | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
-> index 874ea4b54ced..8c8fa71c69c4 100644
-> --- a/drivers/usb/image/microtek.c
-> +++ b/drivers/usb/image/microtek.c
-> @@ -620,7 +620,7 @@ static int mts_scsi_queuecommand_lck(struct scsi_cmnd *srb)
->  
->  static DEF_SCSI_QCMD(mts_scsi_queuecommand)
->  
-> -static struct scsi_host_template mts_scsi_host_template = {
-> +static const struct scsi_host_template mts_scsi_host_template = {
->  	.module			= THIS_MODULE,
->  	.name			= "microtekX6",
->  	.proc_name		= "microtekX6",
-> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-> index de3836412bf3..2583ee9815c5 100644
-> --- a/drivers/usb/storage/uas.c
-> +++ b/drivers/usb/storage/uas.c
-> @@ -894,7 +894,7 @@ static int uas_slave_configure(struct scsi_device *sdev)
->  	return 0;
->  }
->  
-> -static struct scsi_host_template uas_host_template = {
-> +static const struct scsi_host_template uas_host_template = {
->  	.module = THIS_MODULE,
->  	.name = "uas",
->  	.queuecommand = uas_queuecommand,
-> diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-> index ed7c6ad96a74..7b36a3334fb3 100644
-> --- a/drivers/usb/storage/usb.c
-> +++ b/drivers/usb/storage/usb.c
-> @@ -937,7 +937,7 @@ int usb_stor_probe1(struct us_data **pus,
->  		struct usb_interface *intf,
->  		const struct usb_device_id *id,
->  		const struct us_unusual_dev *unusual_dev,
-> -		struct scsi_host_template *sht)
-> +		const struct scsi_host_template *sht)
->  {
->  	struct Scsi_Host *host;
->  	struct us_data *us;
-> diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
-> index 0451fac1adce..fd3f32670873 100644
-> --- a/drivers/usb/storage/usb.h
-> +++ b/drivers/usb/storage/usb.h
-> @@ -187,7 +187,7 @@ extern int usb_stor_probe1(struct us_data **pus,
->  		struct usb_interface *intf,
->  		const struct usb_device_id *id,
->  		const struct us_unusual_dev *unusual_dev,
-> -		struct scsi_host_template *sht);
-> +		const struct scsi_host_template *sht);
->  extern int usb_stor_probe2(struct us_data *us);
->  extern void usb_stor_disconnect(struct usb_interface *intf);
->  
+Waiting to hear from you soon
