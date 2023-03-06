@@ -2,127 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9BF6ACF8C
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 21:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC4E6ACF90
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 21:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjCFUvV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 15:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
+        id S229557AbjCFUwi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 15:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCFUvU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 15:51:20 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB66C23653
-        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 12:51:18 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id nv15so7566284qvb.7
-        for <linux-usb@vger.kernel.org>; Mon, 06 Mar 2023 12:51:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678135878;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7ZZZdjoB/M7aLHtUWeNwJwsyHFYWeUmbWoGEQvZrODI=;
-        b=SzSY1nj8c+s8d7mP0abEKeqzNJgWmsrjWmIgvp9hFPGx1W4Os0aV3TzCSzmNH5xWSW
-         wp4u53Zq8NW719CDb4R1W1Lf6YfzwSXMEQWt+7X/huwOVFDfM8ME/IhnoteDIX5UqYBX
-         53LdP9B//UB2jljf53HuACLpo6jCJFiGqcPFU6GjR8Ijd1Yij8k1ZbNcsiUVD5RG0Y0Y
-         +/gUq09GdKphxk6WE1IsaCEeZnjRlJcef8fWUWFbLW75BPlOudEMFJqLOjuMWuJpvbhL
-         fLExweHjvBUuKe+8Vhbg8qSsaDGGRldMZeSgRpCV/pTU68ge9438WQTOSlliW8G51yOl
-         Dl+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678135878;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ZZZdjoB/M7aLHtUWeNwJwsyHFYWeUmbWoGEQvZrODI=;
-        b=OBoRwsNhBxt1SWrmQZQeYi6j9wxpE/L9T/juJzeMP8YZmpoG/IV5P4iBwqY8j09ZoX
-         v+XUl8BpZ83ZTcoXwYIbBomhWP73iVwO6oNJQyzPDdB9+j9Iu5/UqpmZ/54LCw9hqWn6
-         cob8SfTm6Mdln7N3fY6P9jJ5LnEJXgBpVlQGam1pgLRw8NC9yYCfjPZ8hai8gLmnyvdh
-         B8x3u+zAJiQsmc3JJXmLV/vadfB65Zf3jyzMzrXLvSUfVRLhCYZqPIiMiXEbaNlmysLK
-         oACaPFvIIgGd68q7UkZ90ACgs7y9DyMIWl5WDIlZL+IA+WjCKaH1vKwVVhve3g1WbjJ4
-         koeg==
-X-Gm-Message-State: AO0yUKU6Yxgww2fLlEz4OG6jVu5v3A23pLDN3swCuaSi9VX/wfe0phey
-        c+Agcew69Bup0Fe32/w1fXRPkXfGYV1LSUqDYyo=
-X-Google-Smtp-Source: AK7set8GcbvRiYm/qhO6sK3ONk/RTOU2rxhAbm6K2DiDH34YZnPR0de0ew8qZtvDhcjGlZn+cRLv+D6xjZVcFIDPFXE=
-X-Received: by 2002:a05:6214:162c:b0:56f:8e7:86de with SMTP id
- e12-20020a056214162c00b0056f08e786demr3245925qvw.4.1678135878094; Mon, 06 Mar
- 2023 12:51:18 -0800 (PST)
+        with ESMTP id S229483AbjCFUwh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 15:52:37 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E777DA3
+        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 12:52:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678135956; x=1709671956;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Li/TBzFgBX00H9tLaphAit1VN/akSL+v/oQlY6HKDJI=;
+  b=MpCfC6awylQDJJcsIMXq6oYbem4vIGArvMRjfCo3NFim9Mp9p+2NgYYj
+   BZHXmzoYQgonhT5lEVOXuA1+2AivXEo0royyYrFkTHGuthmyqxsd97AVK
+   TI3h/6xSicfl7z5ftAC/xLUfff1Ns5evVF4EANGkrkC3JaVynXIHRksoS
+   SgPQ6zDMAPQqJpccYNJv/lkLyH45c9kEuluZ2LTiyIONGWcCUJi0wpP6x
+   GUDFcyHnJq6SIKEEcdVKDp0N9736xtNUERBa1XzyfqmD54gX7Kyr3xYRi
+   opbEMOGVX2RmBDTVpODIGhN/DMSekMls5lXG1vtlWig5n9FEKUGQXjTbC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="421946870"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="421946870"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 12:52:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="676309736"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="676309736"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Mar 2023 12:52:34 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZHow-0000cm-0S;
+        Mon, 06 Mar 2023 20:52:34 +0000
+Date:   Tue, 07 Mar 2023 04:51:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:rndis-removal] BUILD SUCCESS
+ d36e309bc0250fdf2acebdd1a1c2e95bef745223
+Message-ID: <64065263.EM3eo8up+T2Fm4OT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Sender: un351329@gmail.com
-Received: by 2002:a05:622a:5c13:b0:3bf:cfd0:95ff with HTTP; Mon, 6 Mar 2023
- 12:51:17 -0800 (PST)
-From:   Calib Cassim <calibcassim00@gmail.com>
-Date:   Mon, 6 Mar 2023 22:51:17 +0200
-X-Google-Sender-Auth: X4B319BzVBqrDc7PpOtHiMkvIoM
-Message-ID: <CAN_tDt_bpvyHcYyOSaa2AgzhmtMyH9WR3WHk0HcAdRrP5+fBag@mail.gmail.com>
-Subject: 
-To:     calibcassim0@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        MILLION_USD,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f35 listed in]
-        [list.dnswl.org]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [un351329[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [calibcassim00[at]gmail.com]
-        *  1.0 MILLION_USD BODY: Talks about millions of dollars
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  1.4 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-GoodDay,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
+branch HEAD: d36e309bc0250fdf2acebdd1a1c2e95bef745223  USB: disable all RNDIS protocol drivers
 
-How are you?
+elapsed time: 810m
 
-My name is Calib Cassim, I work in Eskom Holdings Limited as a
-Financial Director, Auditing and Project Implementation.
+configs tested: 132
+configs skipped: 10
 
-I got your email from my personal search on the internet for a
-reputable company or individual to assist me sincerely.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I have in my possession an overdue contract payment executed by a
-Foreign Contracting Firm through my Department, which I officially
-over-invoiced the amount of USD25 Million from the contract of
-USD500,000,000.00 (Five Hundred Million United States Dollars).
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r025-20230306   gcc  
+alpha                randconfig-r033-20230306   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r022-20230305   gcc  
+arc                  randconfig-r022-20230306   gcc  
+arc                  randconfig-r043-20230305   gcc  
+arc                  randconfig-r043-20230306   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r005-20230306   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r034-20230305   gcc  
+arm                  randconfig-r035-20230306   clang
+arm                  randconfig-r046-20230305   clang
+arm                  randconfig-r046-20230306   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r004-20230306   gcc  
+arm64                               defconfig   gcc  
+csky         buildonly-randconfig-r001-20230305   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r002-20230305   gcc  
+csky                 randconfig-r015-20230306   gcc  
+csky                 randconfig-r024-20230305   gcc  
+hexagon              randconfig-r041-20230305   clang
+hexagon              randconfig-r041-20230306   clang
+hexagon              randconfig-r045-20230305   clang
+hexagon              randconfig-r045-20230306   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230306   gcc  
+i386                 randconfig-a002-20230306   gcc  
+i386                 randconfig-a003-20230306   gcc  
+i386                 randconfig-a004-20230306   gcc  
+i386                 randconfig-a005-20230306   gcc  
+i386                 randconfig-a006-20230306   gcc  
+i386                 randconfig-a011-20230306   clang
+i386                 randconfig-a012-20230306   clang
+i386                 randconfig-a013-20230306   clang
+i386                 randconfig-a014-20230306   clang
+i386                 randconfig-a015-20230306   clang
+i386                 randconfig-a016-20230306   clang
+i386                 randconfig-r002-20230306   gcc  
+i386                 randconfig-r012-20230306   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r002-20230306   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r006-20230305   gcc  
+loongarch            randconfig-r021-20230306   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r011-20230306   gcc  
+microblaze   buildonly-randconfig-r001-20230306   gcc  
+microblaze           randconfig-r033-20230305   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r025-20230305   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r013-20230305   gcc  
+nios2                randconfig-r031-20230306   gcc  
+openrisc             randconfig-r011-20230305   gcc  
+openrisc             randconfig-r014-20230305   gcc  
+openrisc             randconfig-r024-20230306   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r016-20230305   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r036-20230305   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r003-20230305   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230306   gcc  
+riscv                randconfig-r042-20230305   gcc  
+riscv                randconfig-r042-20230306   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230305   clang
+s390                 randconfig-r023-20230305   gcc  
+s390                 randconfig-r044-20230305   gcc  
+s390                 randconfig-r044-20230306   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r026-20230306   gcc  
+sh                   randconfig-r031-20230305   gcc  
+sh                   randconfig-r034-20230306   gcc  
+sparc        buildonly-randconfig-r006-20230305   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r013-20230306   gcc  
+sparc                randconfig-r016-20230306   gcc  
+sparc                randconfig-r021-20230305   gcc  
+sparc                randconfig-r026-20230305   gcc  
+sparc                randconfig-r032-20230306   gcc  
+sparc                randconfig-r035-20230305   gcc  
+sparc64              randconfig-r003-20230305   gcc  
+sparc64              randconfig-r004-20230305   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230306   gcc  
+x86_64               randconfig-a002-20230306   gcc  
+x86_64               randconfig-a003-20230306   gcc  
+x86_64               randconfig-a004-20230306   gcc  
+x86_64               randconfig-a005-20230306   gcc  
+x86_64               randconfig-a006-20230306   gcc  
+x86_64               randconfig-a011-20230306   clang
+x86_64               randconfig-a012-20230306   clang
+x86_64               randconfig-a013-20230306   clang
+x86_64               randconfig-a014-20230306   clang
+x86_64               randconfig-a015-20230306   clang
+x86_64               randconfig-a016-20230306   clang
+x86_64               randconfig-r006-20230306   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r002-20230305   gcc  
+xtensa       buildonly-randconfig-r005-20230305   gcc  
+xtensa               randconfig-r012-20230305   gcc  
+xtensa               randconfig-r014-20230306   gcc  
+xtensa               randconfig-r015-20230305   gcc  
+xtensa               randconfig-r023-20230306   gcc  
+xtensa               randconfig-r032-20230305   gcc  
+xtensa               randconfig-r036-20230306   gcc  
 
-Though the actual contract amount has been paid to the original
-contractor, the excess balance of USD 25 Million unclaimed.
-
-Since our Reserve Bank is busy paying our foreign contractors and
-agencies, I need your urgent help to front as the beneficiary of the
-unclaimed amount as a Foreign Agency to enable me to obtain the
-payment approvals on your name for the transfer.
-
-This deal is completely safe, secured and requires confidentiality,
-and your line of business does not matter. If you are interested,
-please indicate your percentage for your time and help to receive the
-money.
-
-Kindest Regards,
-
-Mr. Calib
-Email calibcassim0@gmail.com
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
