@@ -2,61 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976F36AB615
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 06:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F636AB626
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 06:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjCFFkz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 00:40:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
+        id S229634AbjCFFtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 00:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCFFkx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 00:40:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6311A64E;
-        Sun,  5 Mar 2023 21:40:52 -0800 (PST)
+        with ESMTP id S229450AbjCFFtq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 00:49:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3ECC665;
+        Sun,  5 Mar 2023 21:49:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A4ABB80C6E;
-        Mon,  6 Mar 2023 05:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264E4C433D2;
-        Mon,  6 Mar 2023 05:40:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA0D560B9D;
+        Mon,  6 Mar 2023 05:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0779C433EF;
+        Mon,  6 Mar 2023 05:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678081249;
-        bh=ozxEJ4XFCHc0BADBdwIy4ELSX5qpfo2qbo1MrODvuy8=;
+        s=korg; t=1678081784;
+        bh=r4eUQi39HLgwCuSIOycdtHWsjI/OHiKFNufURTHBb5I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bHN+kMHiv4Jyy7FXsPSetvL8Vkg+/m76gScZIzvwjPNjP0ox220En3ejMyHiO+hFc
-         6kjMM2s7Cp9EK7OjylRuauBE0GQH6mJS59b7ZL0ffSqHwky0cchlvSfZq8MDm6OiGt
-         vGigdCflbB3O+hNGcHtpvPfI0rPp1qzxz47eFH98=
-Date:   Mon, 6 Mar 2023 06:40:46 +0100
+        b=s4ud0kZyDf+Xy/kk4Y7k5l33cRwSLDKIztikXKb1TijW17FZNl1aXSg3htfKvZ688
+         TBFgtshvmLekbxDOK4lLouoPoP4YSbwP5B/5PBYKNm86E3BLFHAFn+XemDJnBO0dwA
+         CAqL8bnm0iYcM2LNBmhKhFGwDDyWZNQY9azva72s=
+Date:   Mon, 6 Mar 2023 06:49:41 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>
-Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
-        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
-        matthias.bgg@gmail.com, daniel.lezcano@linaro.org,
-        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
-        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
-        sean.wang@mediatek.com, zhiyong.tao@mediatek.com,
-        khilman@baylibre.com
-Subject: Re: [PATCH v9 9/9] arm64: dts: mediatek: Initial mt8365-evk support
-Message-ID: <ZAV83gLh+qNqrHrg@kroah.com>
-References: <20230125143503.1015424-1-bero@baylibre.com>
- <20230125143503.1015424-10-bero@baylibre.com>
- <8c348b39-67f3-9210-1929-8b2f093be24c@baylibre.com>
- <Y/XenZUmT7Nh2qGP@kroah.com>
- <CAP2ifjPvsvPyF56=YXrc9Ti6ZSLOxEXbMCOP-Qa4ZSempfod=g@mail.gmail.com>
+To:     Zheng Yejian <zhengyejian1@huawei.com>
+Cc:     stable@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, balbi@kernel.org, lee.jones@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.15] usb: dwc3: dwc3-qcom: Add missing
+ platform_device_put() in dwc3_qcom_acpi_register_core
+Message-ID: <ZAV+9ToKbIPFKJIs@kroah.com>
+References: <20230303023439.774616-1-zhengyejian1@huawei.com>
+ <ZAIW9mkHpKKQyIK+@kroah.com>
+ <acc08af9-fdb3-5451-5c53-44784982fe2a@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP2ifjPvsvPyF56=YXrc9Ti6ZSLOxEXbMCOP-Qa4ZSempfod=g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <acc08af9-fdb3-5451-5c53-44784982fe2a@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,29 +54,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 06:02:03AM +0100, Bernhard Rosenkränzer wrote:
-> Hi,
+On Mon, Mar 06, 2023 at 09:26:31AM +0800, Zheng Yejian wrote:
+> On 2023/3/3 23:49, Greg KH wrote:
+> > On Fri, Mar 03, 2023 at 10:34:39AM +0800, Zheng Yejian wrote:
+> > > From: Miaoqian Lin <linmq006@gmail.com>
+> > > 
+> > > commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
+> > > 
+> > > Add the missing platform_device_put() before return from
+> > > dwc3_qcom_acpi_register_core in the error handling case.
+> > > 
+> > > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> > > Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > CVE: CVE-2023-22995
+> > 
+> > That is a bogus CVE, please go revoke it.
 > 
-> On Wed, Feb 22, 2023 at 10:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Feb 22, 2023 at 09:17:39AM +0100, Alexandre Mergnat wrote:
-> > > Hi Matthias,
-> > >
-> > > This is a gentle ping to know if you can take this patch please.
-> > > Sorry for the double mail, I screwed up the first send.
-> >
-> > It's the middle of the merge window, we can't take _ANYTHING_ now.
-> > Please wait until after 6.3-rc1 is out.
-> 
-> Now that 6.3-rc1 is out, can we try to get this patch merged? All the
-> i350 driver patches are waiting for this to land.
+> Agree. I see this CVE and its fixes information from NVD,
+> so try to backport this patch to fix it:
+> Link: https://nvd.nist.gov/vuln/detail/CVE-2023-22995
 
-$ mdfrm -c ~/mail/todo/
-1459 messages in /home/gregkh/mail/todo/
+Again, this is not a valid bug, the "problem" described can not ever be
+hit in a real system from what I can tell.
 
-Please relax, it's only been out for a few hours, and our review queues
-are large.  To help out, please help review patches from others to
-reduce our load.
+> Then should I just remove the "CVE: " field and send a v2 patch?
+> Or you mean "revoke" the CVE from NVD? I actually don't know how
+> to do that :(
+
+If you care about CVEs being "real", yes, please get it revoked from the
+NVD.  There is no need to backport it either from what I can determine.
 
 thanks,
 
