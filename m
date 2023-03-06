@@ -2,98 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072206AAFF0
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Mar 2023 14:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E856AB44F
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 02:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCENhS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Mar 2023 08:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S229687AbjCFB0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Mar 2023 20:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjCENhR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Mar 2023 08:37:17 -0500
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0E712875
-        for <linux-usb@vger.kernel.org>; Sun,  5 Mar 2023 05:37:15 -0800 (PST)
-Received: by mail-qt1-x842.google.com with SMTP id c19so7841369qtn.13
-        for <linux-usb@vger.kernel.org>; Sun, 05 Mar 2023 05:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678023434;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rPhVajQXAHXiBtIhnC6tYfEPxdRwtoGcOTVFE1WWvNs=;
-        b=CJDMjHa7Gf8S49yjyg0g4Cs5oYyKflnAYbThXeImkioxieh3iv7lZh7fBsf7whDcqd
-         +hfxgE/3MIawdSqiYew7rRxW7bTYDp8AccJCLsuWYEgwNhppDxNOXe6VsW2qqBH51LLj
-         Q7xiyiKE13fPHEHtevpZ2TfDJvtZaFWYukJWvDi3Gq1nSoCoVw4s14a9TxGxbgsF7Xk4
-         B8hpGlMb2ixnfvN0Vo47D/MAUfI8WeM4AqI8dMeJC3bZAp8aDN2VeO8tGfQdlv4bbB6O
-         LH29cxVQw1MJEK0UrO8JnceJH4diKuUN+gEnaVHWssTw4rrODdPoZ9uW/RwtPGMcsr4T
-         cJ3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678023434;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rPhVajQXAHXiBtIhnC6tYfEPxdRwtoGcOTVFE1WWvNs=;
-        b=DATHqvR0cPeyj7uoLUxCPz/wErwvfpwnZp0tgX+f72fXF5BCGg3fy0PYG0POf0pz6S
-         vAVa1pn4ZijJ4TNRhXcQQ5uLYnp7L9kYGXI96HW5NK8UQZnehqPr46wgpU8WGlNrXYQr
-         LeiiwAajoNjbBgrfAzUetpk3uYj6fSHUzBOFbiVQSTybtiESndQ8KdBdVXkNvIO4sJHl
-         vycWNVS1QL1oAfbyQ/fTKzITc4sFNJvgagkoAnQRTnAQHnr3ptJodw2gzeyCCTbD36J7
-         hKarXZG6vrpNTtuFplXTkZWOO+tnDwVxqu4Wjd6DYWkyIOLWGzCt52OsAxrsijFS81gs
-         LABw==
-X-Gm-Message-State: AO0yUKXtjrRis3U2bA54voMi7Se2ndcc5Eh1clWb4s24+IO7GOuKrilo
-        UACcuibWzvhRGlyi7ecLJ2l3iw+HcfPnYhHCjTI=
-X-Google-Smtp-Source: AK7set9gwa+7pdU/M/u2bz7oKmXd++Dr/sEA7f4cQHO6VS6zHD6dJXND79Y1onEZ9uEqsKzY0mcZrE00Q8IJts/gzN4=
-X-Received: by 2002:ac8:4117:0:b0:3bf:f401:37e5 with SMTP id
- q23-20020ac84117000000b003bff40137e5mr2198717qtl.13.1678023434471; Sun, 05
- Mar 2023 05:37:14 -0800 (PST)
+        with ESMTP id S229484AbjCFB0f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Mar 2023 20:26:35 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE8F97C;
+        Sun,  5 Mar 2023 17:26:33 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVLTS4DTLz9tLG;
+        Mon,  6 Mar 2023 09:24:28 +0800 (CST)
+Received: from [10.67.110.218] (10.67.110.218) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 6 Mar 2023 09:26:31 +0800
+Message-ID: <acc08af9-fdb3-5451-5c53-44784982fe2a@huawei.com>
+Date:   Mon, 6 Mar 2023 09:26:31 +0800
 MIME-Version: 1.0
-Received: by 2002:ac8:66d9:0:b0:3bf:b9d4:c139 with HTTP; Sun, 5 Mar 2023
- 05:37:14 -0800 (PST)
-Reply-To: ava014708@gmail.com
-From:   Dr Ava Smith <ava19910ava@gmail.com>
-Date:   Sun, 5 Mar 2023 14:37:14 +0100
-Message-ID: <CAE1P5ofHZ5-UELvu=dkChm9K-hTL=2c6uvYZVmat_EuYDnFdPw@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:842 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6733]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ava19910ava[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [ava014708[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 5.15] usb: dwc3: dwc3-qcom: Add missing
+ platform_device_put() in dwc3_qcom_acpi_register_core
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <balbi@kernel.org>,
+        <lee.jones@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230303023439.774616-1-zhengyejian1@huawei.com>
+ <ZAIW9mkHpKKQyIK+@kroah.com>
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <ZAIW9mkHpKKQyIK+@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.218]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
+On 2023/3/3 23:49, Greg KH wrote:
+> On Fri, Mar 03, 2023 at 10:34:39AM +0800, Zheng Yejian wrote:
+>> From: Miaoqian Lin <linmq006@gmail.com>
+>>
+>> commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
+>>
+>> Add the missing platform_device_put() before return from
+>> dwc3_qcom_acpi_register_core in the error handling case.
+>>
+>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>> Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
+>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> CVE: CVE-2023-22995
+> 
+> That is a bogus CVE, please go revoke it.
 
-Hello Dear,
-how are you today? I hope you are fine
-My name is Dr. Ava Smith, I Am an English and French nationality.
-I will give you pictures and more details about me as soon as I hear from you
-Thanks
-Ava
+Agree. I see this CVE and its fixes information from NVD,
+so try to backport this patch to fix it:
+Link: https://nvd.nist.gov/vuln/detail/CVE-2023-22995
+
+Then should I just remove the "CVE: " field and send a v2 patch?
+Or you mean "revoke" the CVE from NVD? I actually don't know how
+to do that :(
+
+> 
+> thanks,
+> 
+> greg k-h
