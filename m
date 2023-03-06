@@ -2,82 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E856AB44F
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 02:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B9D6AB471
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 02:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjCFB0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Mar 2023 20:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S229642AbjCFB4p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Mar 2023 20:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCFB0f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Mar 2023 20:26:35 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE8F97C;
-        Sun,  5 Mar 2023 17:26:33 -0800 (PST)
-Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVLTS4DTLz9tLG;
-        Mon,  6 Mar 2023 09:24:28 +0800 (CST)
-Received: from [10.67.110.218] (10.67.110.218) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 6 Mar 2023 09:26:31 +0800
-Message-ID: <acc08af9-fdb3-5451-5c53-44784982fe2a@huawei.com>
-Date:   Mon, 6 Mar 2023 09:26:31 +0800
+        with ESMTP id S229540AbjCFB4o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Mar 2023 20:56:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A75126F6
+        for <linux-usb@vger.kernel.org>; Sun,  5 Mar 2023 17:56:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E3B3B80B94
+        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 01:56:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A77AAC43444
+        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 01:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678067800;
+        bh=aJwS4PnYlNsR7NEfcaQ1iy1SNH3N5f1evmRSQn/Ms5g=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=JwubhWEfDTN8baxodIyj+ug3ijQr2mWVZnBnObc27kA9tI4NxEeM2rb5GiU++gON9
+         ZOVCE5Ig/HWP1scpgGn+v8MsSd3QHU7ZaaAgrklHpzK4UqgCDqaGopdmeOuEjgO8fq
+         mGAnKvrMx56v/vTvbhl7TEzbiOwVJPGFjJ5m4iXSkU2rv6KTVPlysxopcb4JmaIeZ4
+         2eZTgRKFO40lhAp7ociNfuJOFYX/tkp++b00GCa5x+awrUrCJHZLkRC9ERmzywwhUA
+         Rlik9AB7pVAK8gwcfpOxR3NlxSqzitwfattBIZVuunCal2gKH6aTsI2MHbzT6jkQJL
+         LXZqsEu945sSw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 9F966C43142; Mon,  6 Mar 2023 01:56:40 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Mon, 06 Mar 2023 01:56:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: wyattbiker@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: UNREPRODUCIBLE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-210425-208809-Tis1XV4kYo@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 5.15] usb: dwc3: dwc3-qcom: Add missing
- platform_device_put() in dwc3_qcom_acpi_register_core
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <balbi@kernel.org>,
-        <lee.jones@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230303023439.774616-1-zhengyejian1@huawei.com>
- <ZAIW9mkHpKKQyIK+@kroah.com>
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <ZAIW9mkHpKKQyIK+@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.218]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/3/3 23:49, Greg KH wrote:
-> On Fri, Mar 03, 2023 at 10:34:39AM +0800, Zheng Yejian wrote:
->> From: Miaoqian Lin <linmq006@gmail.com>
->>
->> commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
->>
->> Add the missing platform_device_put() before return from
->> dwc3_qcom_acpi_register_core in the error handling case.
->>
->> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
->> Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> CVE: CVE-2023-22995
-> 
-> That is a bogus CVE, please go revoke it.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-Agree. I see this CVE and its fixes information from NVD,
-so try to backport this patch to fix it:
-Link: https://nvd.nist.gov/vuln/detail/CVE-2023-22995
+--- Comment #49 from wyattb (wyattbiker@gmail.com) ---
+Created attachment 303880
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303880&action=3Dedit
+upower result unplugged
 
-Then should I just remove the "CVE: " field and send a v2 patch?
-Or you mean "revoke" the CVE from NVD? I actually don't know how
-to do that :(
+Any chance the reason the icon shows plugged in when it's not, is because p=
+ower
+supply always show as YES whether plugged in or not.
 
-> 
-> thanks,
-> 
-> greg k-h
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
