@@ -2,91 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531406AC08B
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 14:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A006AC487
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 16:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjCFNPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 08:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S230056AbjCFPMk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 10:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjCFNPm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 08:15:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947EE2CC7E
-        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 05:15:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2893360EEE
-        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 13:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A521C4339B
-        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 13:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678108524;
-        bh=lc+brChpp7eNN3Ex8kG/VEzTtU2iDBLEklCY80BpDvI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jCD14xYLzl/My9ZXuNbPVTGS9CqLXZlAEf1Rrwes67o0h3YKA0DhfcDq2/Kww4zyp
-         xfG5f+Hp52efoa1Bk6gwpu3s5lHTxWZWrLgD8S2dMwOyHfrez/UR5uB85UZftKWYlG
-         maCmIrV9ZBbosIt5gWad41hEH1yKNubps+GioG+40vTVH52t5Vy3z2rA7Dd65B9rqR
-         8OdHeY45a5kHxarXYCKkac0Ay8SQuAF5s4WwMXyCinNR4DNn3hsYiV4Rxu+rMdLONK
-         U/o8aSOoM6S1+mVrfFCQW/oLq1GjrlzT0ZVmLtHlqWyTMEhBrxckIYRKg03onfc8Lq
-         dF9JthCmhRpCQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 69A29C43141; Mon,  6 Mar 2023 13:15:24 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217122] Regression in xhci driver since 6.1 "Transfer event TRB
- DMA ptr not part of current TD"
-Date:   Mon, 06 Mar 2023 13:15:24 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217122-208809-rpJ9eDDric@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217122-208809@https.bugzilla.kernel.org/>
-References: <bug-217122-208809@https.bugzilla.kernel.org/>
+        with ESMTP id S230262AbjCFPMi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 10:12:38 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9622922A26
+        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 07:12:36 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id r27so13156007lfe.10
+        for <linux-usb@vger.kernel.org>; Mon, 06 Mar 2023 07:12:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678115555;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iMeQPhrgL/6R9Z4ZdWsGt9gB9l2W7KYsllfIptwu9o0=;
+        b=oPm7YZqA0wTAKcL20Jbyp3pZHnLlTZ4xgTmiUlE0sC1ruCfpWwasFfNzzj+qEk8qtU
+         DA0FNKIK6AW1ud31JWqnmVNGIQ2jWvZEieAw6bFMww2pCwqaoXSx3iPQdRK4+a9jDkRg
+         GW8Skmaz10UBvUmdSfNDiDPnG7wD9+kslmvIQKWPxdrqvAdPrwDhWqU7MV1iiIuIHya9
+         tZM3iGhs/+fuMGidZE1s0KJeP07dsE0hSkwQc0k2tnVf5kZkjtDK7AoQNR3FRmuCm6gM
+         J8vOyDy0V/Zc7Am26lFYLq9e46vv4E9DosWeHfCnP4xZ+6iC/wTszBWLYIBwmhh2G4MB
+         OaBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678115555;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iMeQPhrgL/6R9Z4ZdWsGt9gB9l2W7KYsllfIptwu9o0=;
+        b=QuJIZm3zsfImTU/H+Jt+d6ualbmVKYeQhu8xsr0/DmTaX5EHij+Ail+bkdgCTNs8Ls
+         eET+LFd09D8f13GAxlWq2XAth2jPuZc9FomTQfE5yMMu0WZNdDzWLPOHshmHVFqiiRuB
+         Dd76GmlXGIBCk+PrtqxBc51/fml4i+KLH4iwm4ByH5igQu1mh4pjctafq2AyaMFNYi16
+         UUc8k3O5JIb+h31hjYVQWYgXnhCH0cCLrgWeY9q1KDgcPZJgPPKGFOCQO9umwOLw+rwq
+         vrfgjTtZg0D4d6jKewbEGJkf97xR6KQXLjTrXl/WbV0PZgVSA6i2vfzjDaDEoz801a9R
+         tdaA==
+X-Gm-Message-State: AO0yUKV5babHAON2aPr5Ht8PupFiOitEHHvCWwRv/lUNOQmrJVhnBFb1
+        ZcoOl1CrdB9pfhbh5Y10ZJXdKc8UMn6+zsScxFI=
+X-Google-Smtp-Source: AK7set8IB1O9uI75qpIbP3c3N6GV8JphdyHgpHwzhHOdLAFBHg7zUQKcGd9SMsh1exy2WQzQmfvT7G30bKWPc53XTVg=
+X-Received: by 2002:ac2:5313:0:b0:4d8:5810:1ffa with SMTP id
+ c19-20020ac25313000000b004d858101ffamr3223376lfh.11.1678115554697; Mon, 06
+ Mar 2023 07:12:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20230306113605.46137-1-mika.westerberg@linux.intel.com> <20230306113605.46137-6-mika.westerberg@linux.intel.com>
+In-Reply-To: <20230306113605.46137-6-mika.westerberg@linux.intel.com>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Mon, 6 Mar 2023 17:12:18 +0200
+Message-ID: <CA+CmpXuzAGD0r4Dtky+_p9yehO=QyHmZY=8ZmosHP1eVaAToZw@mail.gmail.com>
+Subject: Re: [PATCH 5/5] thunderbolt: Use scale field when allocating USB3 bandwidth
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        =?UTF-8?Q?Christian_Schaubschl=C3=A4ger?= 
+        <christian.schaubschlaeger@gmx.at>,
+        Gil Fine <gil.fine@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217122
-
---- Comment #4 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-> So I guess it is not runtime power management related? You say there was a
-> policy change, how can I force the old policy on 6.2 to rule that out?
-
-You can change /sys/bus/pci/drivers/${xhci_pci_device}/power/control from
-"auto" to "on".
-
-> And if a bisect is necessary can you point me to some information how to =
-do
-> it?
-
-https://www.kernel.org/doc/html/next/admin-guide/bug-bisect.html
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+On Mon, Mar 6, 2023 at 1:35=E2=80=AFPM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> When tunneling aggregated USB3 (20 Gb/s) the bandwidth values that are
+> programmed to the ADP_USB3_CS_2 go higher than 4096 and that does not
+> fit anymmore to the 12-bit field. Fix this by scaling the value using
+typo: anymore
