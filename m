@@ -2,288 +2,610 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968C36AC7EF
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 17:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ACB6ACC79
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 19:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjCFQ3S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 11:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S229718AbjCFS0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 13:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjCFQ3R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 11:29:17 -0500
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on20713.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe16::713])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE893596
-        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 08:28:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ExzdgYoxZzgKtfy+RA9VfnlRs7w40+NV0440DPQhUlOHcskfpf0Vx2IAkRiiM2sOkowC/c3D1ojV5PZSdRXY4qrM6xn4QxZUIL/Mr2dBQltQUPNPUjVDvcn7SDIZttY1BD1yxCNGkgG7OGuv+eyp/5/HZ39X0PDSMnbqYzlp4i9/MUh1qNKeVALg6807htM8sqjMRd+h91s+ChOtrFEHYuQ91E+hWO4jMBg/I3hBrOAIX6ZV/v6fhS+KAbbPGKTuCQhsk0ng54Ot/emFAjoslOBqsbCeHcFg6sfFf76ZLy6bDmlC7LCbiX5yz9Ve0vjBjBz90j/DjsrMp+EvlSaRBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aHSewExkbvfgfQWm2y+K35vREyiBU/c2up7hxNM6fXQ=;
- b=btVSoEY9OK/3KFosfIHp/Mk/p9XJlCUycGoCiI2Kl4tYW2YFRXB917tzY7ulcsXDzNfcdDEF/50QqOgRzmG0KLM/IqibiJztt15pIdCyR1Y2UBoHqGdxCBF+tKv2Bq2lrHF52RFd7zis62Q7CLeqviyQU/dP9DByqnOJUIYczuBvYOssGPhRj9ROqQkXfYYp5qeaFlNSOMtgD2jkdrs6VZzKF/YOLuIhobexdRjMA6HHAvfjRbe1gUEqXv+1K+AoTHo4rwt9oETlHxSimY0CeRg9tvFxLGOt+kSD6nRzt8QNPqlzzK7Ebw02rf3xTZknPOuXJIQIXXeZOapruPgTcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=raritan.com; dmarc=pass action=none header.from=raritan.com;
- dkim=pass header.d=raritan.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grpleg.onmicrosoft.com; s=selector1-grpleg-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aHSewExkbvfgfQWm2y+K35vREyiBU/c2up7hxNM6fXQ=;
- b=GQu94153H6KH697gSINL9ZVLv36j7MHCVLYYMHDUoBg7uX8ilzkqB+y8ATr0fT8zjlNPinJFtCrQpu28UDy3cVu1oVwLkT3hay8aIp5ATf9CfGN9nPzmWxEzT2SXwxMmYQV4/9osiwcSWPCdnJD1eDZcQEE40uJccrXbX8JdGpI=
-Received: from HE1PR0601MB2586.eurprd06.prod.outlook.com (2603:10a6:3:4a::21)
- by AM6PR06MB4215.eurprd06.prod.outlook.com (2603:10a6:20b:19::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27; Mon, 6 Mar
- 2023 16:25:37 +0000
-Received: from HE1PR0601MB2586.eurprd06.prod.outlook.com
- ([fe80::ca82:366c:80db:2877]) by HE1PR0601MB2586.eurprd06.prod.outlook.com
- ([fe80::ca82:366c:80db:2877%12]) with mapi id 15.20.6156.023; Mon, 6 Mar 2023
- 16:25:37 +0000
-From:   Palak SHAH <palak.shah@raritan.com>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Maynard CABIENTE <maynard.cabiente@raritan.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: usb: gadget: dwc2: not getting audio data
-Thread-Topic: usb: gadget: dwc2: not getting audio data
-Thread-Index: AQHZRohi1FGE81YVE0iozG6O6EPfb67bcCYwgACjvICAARL2gIAAwscAgAQn7VCAAIsPgIAAnGgggAVNCQCABXzZ4A==
-Date:   Mon, 6 Mar 2023 16:25:37 +0000
-Message-ID: <HE1PR0601MB2586C22FC9F24A7101E476728DB69@HE1PR0601MB2586.eurprd06.prod.outlook.com>
-References: <HE1PR0601MB25868E34AF4BA6CEAFE06F5F8DA39@HE1PR0601MB2586.eurprd06.prod.outlook.com>
- <BYAPR12MB339948C507588E0E68556ADBA7AA9@BYAPR12MB3399.namprd12.prod.outlook.com>
- <HE1PR0601MB2586BFAE94813BA86BAB12708DAA9@HE1PR0601MB2586.eurprd06.prod.outlook.com>
- <BN8PR12MB3395053B96DF2333794DBBEDA7AB9@BN8PR12MB3395.namprd12.prod.outlook.com>
- <HE1PR0601MB25868FC836C3CD2D07B342958DAB9@HE1PR0601MB2586.eurprd06.prod.outlook.com>
- <BYAPR12MB33990B69E647DC5128417573A7A89@BYAPR12MB3399.namprd12.prod.outlook.com>
- <HE1PR0601MB25867DACFD232748FD194CEB8DAF9@HE1PR0601MB2586.eurprd06.prod.outlook.com>
- <BYAPR12MB339985F59077F180D10412D3A7AF9@BYAPR12MB3399.namprd12.prod.outlook.com>
- <HE1PR0601MB2586DB1CA3D0B4B45E7720A68DAF9@HE1PR0601MB2586.eurprd06.prod.outlook.com>
- <BYAPR12MB33993D83145BFE17DB53BF1CA7B39@BYAPR12MB3399.namprd12.prod.outlook.com>
-In-Reply-To: <BYAPR12MB33993D83145BFE17DB53BF1CA7B39@BYAPR12MB3399.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=raritan.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0601MB2586:EE_|AM6PR06MB4215:EE_
-x-ms-office365-filtering-correlation-id: 17d567dc-efba-4736-11a8-08db1e5f6b1c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 87O9jAq8mLLn3EDMa7k1tB0GLWGD4pte1eQyciC7N55j5ZsWB7HFbNwxfqkBBaf+KmyHoIdRXZsbpMH4IuXWTjXgF+FIS7tVv3JCzAqVspQ0FCFykTUtSmdhzywxaPwrgrWUmGxUyHardvGHHOVkLpgWU0ciAlXzoA8IRl8HYeXcKURws8XTZcekFJCv1aQPPv7K6zDXuttwW1/QozexEW8rKkNyfU9Nmg5Tv2oe/zJTuvu5nrqCdAU2Jbm1Od8q/PQ4nRoejmY8XayJexlIlW7YkfynuBCzysN5PGKSWLcozzdHtHzZlpdjpF/5mYpFFvEs7EgwH8ghMgDJtW/1V2V8ylR5LfXuuFPPMqJMzit4zVL0VJ5tZvZsdt+PnaZ9z3yTo27iC92iR/lXxY4UfT8u8C6G33vquqPuUCmuCBJZCZugfZkL/qXh12pTuKjLLw+sdOJUOLTWD6MiDgzFOE88YTmC7nzVFXGpigOWS0F2W8WXVFu7wQxEZVaEV5CrKFBaCIdIpH8jJGmBSouPlt45fiKBU9NCB0gkkEAuxdNnUkbumqU3T2f44AeWqCWfuAJqHRxKOMIM4MCjgvET6FysIaSam+1czd9jMDGLOnVG3GjOL1tl6X/QW2MUBt7YZ8O9ekKUYAiAFoD9dSEfdpAF3W3y9658f8WTb+5DepdxpGIzt3J5gpDZk4zC6QDi1ROV8uevGvTLGI2WBlD2g6+5h+0KxSo2lBpkqjLgrglWlm446WhWuhgO91ho/0Jp
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0601MB2586.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199018)(186003)(9686003)(122000001)(38100700002)(38070700005)(52536014)(8936002)(71200400001)(41300700001)(66556008)(66946007)(8676002)(64756008)(4326008)(2906002)(76116006)(5660300002)(66574015)(7696005)(478600001)(6506007)(66476007)(53546011)(26005)(110136005)(6636002)(55016003)(86362001)(83380400001)(66446008)(316002)(33656002)(473944003)(414714003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cHhDOFM0aGs3KzB0ck05YitzT3ZWTGtxOUxvRjRRWG5ScllkL2xMc0xFa1kz?=
- =?utf-8?B?WWUvaFBjakNjdFprbnlqVUY5SEk2VkFsT1dKT3FXSHdkN0ZlNkQ1dVBGbWc3?=
- =?utf-8?B?YklvMmVrWFRWTEdqdGhrczhuMG9haHJlRmFPbUh4REo5OE0wcm5CRGJHWU4r?=
- =?utf-8?B?RXJqVWJCak4zSmU2ZnN3THFBWlN4d0NuL3BsdFVxMlFzektObkdJMExxWVFk?=
- =?utf-8?B?VTJKc0U5dEpWMy9zVXVFNkZ1YjM2ZVBWNmhQY3h3SWE4Y1Urbk1ha3Q2cjE0?=
- =?utf-8?B?TTJDV0ptNXA1L0lCRE5iWFp4MTFtc09BL3VHeU5VNTJzM3hRd2NyVTUzSEMr?=
- =?utf-8?B?bjFIeDVJLzc5bmsrVm9kV1I0T2Z5SDdDS1VSYWxXbGNBSWUrZzZJQ3NKeUVw?=
- =?utf-8?B?Q3BJdjJNTnZYaldhZkJxckFJK3c1cUVrczlnaU5YUmV0YlI5cG15dzd2Q0J4?=
- =?utf-8?B?dGNkaXRtQ0VJT2tTQmp3bFdHOTNQZjN3WDQrdkJ5ck5UN3h5NlZlT3RMUWRT?=
- =?utf-8?B?aWpDSnNMRlNnbzluS2RDcHhlKzFqKy9NQnpGRXUvMU81QlhwWVM0L2VFWlJG?=
- =?utf-8?B?alpDa2FqejdNb3lqcStIbHo3NzM2YmtSQmNsY2gyUlZmRmpRMXBOZW9yMCtw?=
- =?utf-8?B?RThwOHFxViszTkVPQnFWU3JlMkhDZXNYUkhCY1BwZU81YUNHaTE2cEFhdkZ4?=
- =?utf-8?B?ejVFZUozTTBXQ1NIQkwzUDVhaS90WjRDVXdGbEMxbko4bnowWkZFOUFJbGZ0?=
- =?utf-8?B?R1dvVVorZ2VUWlZCME5KRDlzTGw3UE1vRVhUT20xM0RsWUtqTlB3K3k3Y0lR?=
- =?utf-8?B?VkEySklGMGdRcmtPNE1HRjNqc0VkM05kY3gzaS9DWEUyQ1ArajlEZG1QRFh3?=
- =?utf-8?B?eTdBd3ltQklMdnFUNGl6RUlpQkhaajNCWURkOXBVNWoyWTMzQUJFOVk0ODZx?=
- =?utf-8?B?aEJTSU9JaG1NT1ZOUndXRi95RVYxRU5kTE9ISFdZajJpbktJclFPd3l4V250?=
- =?utf-8?B?VldIRFhpR3l5RTVRV3phRkJnR3F1N3BVRnB0M2g2Z3VIOXJNYUJEL01FN3gv?=
- =?utf-8?B?MnM2TVp2d0hscnlVWUptUFVMZFJDbnU0YWd5RSttTytDUkh1d2VYVERqdzdx?=
- =?utf-8?B?RlhmMlFFWEYva0hlUkY1MVhNaWJOYVZlcC8yc0NuRXM5QmxVK1BkNXVTNFNC?=
- =?utf-8?B?OFQ1NnExbkRBMEhFUm9wMThwSGRpMndDTFJnVGV4QzlxSGVEaFMrRlpub3RT?=
- =?utf-8?B?cndzL1FCRWR6Q1pFY0EwZUNiMUpnbForOUJycW43c0wvZjAwVWxBVWxhZ28x?=
- =?utf-8?B?VUJ5VG5CRWRlN0NOcVpXWW0rTWsvTU0zK2htTVBpSXFvTzhGdTBmTFFFZlkx?=
- =?utf-8?B?eGJoNlZrR21ROThLc3dJRGtVaVcwMDM1TDNhRis3OTFHUTk1T3haRUk2M29G?=
- =?utf-8?B?ZUlRaEU3dUJueHpjY09JV1ZsVTlrZmJzaEFpYlN5L3VoQkJINENJUTMxc0g1?=
- =?utf-8?B?Z0xHNS9ISUlGN1dWZHFNWkVtOXo4c2VvU216VDRaRHp2VTU4U1lMbHNheW13?=
- =?utf-8?B?TmpGQUo0YW8yR3YrUHd2cTFCZ2JxZUVrMEhSYTc4QVBEaDM0Z2VHWmM3RkJQ?=
- =?utf-8?B?NnRzKzBKam10eENXUHNzcmUwdE5hblFaK3hDY05uaUZqWWtTVlZhZXJYYTNZ?=
- =?utf-8?B?UFJQUDRGU29obzFwMXlxS3BOVGZNT0krYmNZWmUwTUpzcnpzRm85RTlvMUZ6?=
- =?utf-8?B?azlqOS82eUVBbTVHTlBGV1U1aERkdlZ4eWlMYmV3bU9WNDBNbkNMNG9RSm9k?=
- =?utf-8?B?dEJ5UXdGNFBKeVVvck1FV3c5TXV5dEtEdGRYUXBFdFIvcVdoeUs0SVo5NVBj?=
- =?utf-8?B?cmZmVWR2YUJEMGo4aDFmNVF6QzRRQ0xXRy9qdDRnMjdpOXltbUNZWTJ1bUZC?=
- =?utf-8?B?S0oxaXBncUZPcjE5cnhLTGRWWEVYenQrZFJuZWxBQ214Vkl1S0RHYi9Id0Ev?=
- =?utf-8?B?L01YNnRLcDg3MDlqbkdOQ2lsQ0JyREFxT1NuVDRHVHllQlZJd2creG94S3Rl?=
- =?utf-8?B?aHkvbGxFY21PMng0ckFaZXkwRjBYWHlKWkFMWmw1TmJJNWFiSzBFOWE3VU5L?=
- =?utf-8?Q?xZ74z3c3OXK8qicDXieg2BbWT?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229688AbjCFS0F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 13:26:05 -0500
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2D464AA1;
+        Mon,  6 Mar 2023 10:25:23 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-53d277c1834so24418267b3.10;
+        Mon, 06 Mar 2023 10:25:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678127080;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BD/Jhjf26PlzqUCVGmuItktAPz+oF+XL3yTUx+Tjhy0=;
+        b=Xw8e4lhqsQ1/ZdCXH/ANIHDiZZVTLIsHgdofh/2R6gXfy/UbUhOukxT0A4cuF44p4D
+         NTfx5qPOs6tBMWSJTXaB2hw5zPevgmdYkVGT7K5CIUX/RsNrtpCK9gA3MqhGivzDM8Gn
+         XKuF4YJZQ9GEX0JHZA6yDR9bK6BbCE6c5h2B8VvSPxGe8XsZCURhN+gaoMJWMsej8zvv
+         L9hSl/0lmuvb8rhRnr70s8kzIm8Y+F1pVayIID2HkPOHhuaothY4my/zkcdwFKE9BUlx
+         WXNEAZK6sJU/iEzlUegT4c6iMN4wHVoe/pD39y47pf/oyLcpNfPL0IlKZYgmY8fRwElq
+         kA0Q==
+X-Gm-Message-State: AO0yUKWF+LAGPLcCPE6TIAT/0VwSLJNqTmp0vGX+eaquZmn/VU+TKNIr
+        W/G+Eca1PE9s4hTEUT7m6nsa/mAtDPQVezfFsAI=
+X-Google-Smtp-Source: AK7set91XTJNAHzsUBmHHmUuelTOZrzGbL6LzgDoJvlu05GvRa/fG0URhSAUYDpLLUUJ38bPUmb+PlDDv7rTXAxjTls=
+X-Received: by 2002:a81:4005:0:b0:532:e887:2c23 with SMTP id
+ l5-20020a814005000000b00532e8872c23mr7711894ywn.9.1678127079821; Mon, 06 Mar
+ 2023 10:24:39 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: raritan.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0601MB2586.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17d567dc-efba-4736-11a8-08db1e5f6b1c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2023 16:25:37.0628
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 199686b5-bef4-4960-8786-7a6b1888fee3
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OSbwXagSAjpriUHyJxr/Ym2ZOwWoppJg8yR814i/ilZwYxuxVnQDZHBVvDZmoWHAu34GpwZN6B3G3KF9Q3nxNg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR06MB4215
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230306095339.26006-1-minda.chen@starfivetech.com>
+In-Reply-To: <20230306095339.26006-1-minda.chen@starfivetech.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Mon, 6 Mar 2023 19:24:28 +0100
+Message-ID: <CANBLGcxduMYfG-3zD4RdB9cPSDjxW_iLdmC20NfotvmgoH4QEA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] usb: cdns3: add StarFive JH7110 USB glue layer
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgTWluYXMsDQoNCj5JIGNhbiByZWNvbW1lbmQgeW91Og0KPjEuIGRpc2FibGUgZGVidWcgcHJp
-bnRzIHRvIG1pbmltaXplIHBsYXRmb3JtIGxvYWRpbmcNCg0KW1BhbGFrXSBJIGFtIHdvcmtpbmcg
-b24gdGhpcw0KDQo+Mi4gY2hhbmdlIERlc2NyaXB0b3IgRE1BIG1vZGUgdG8gQnVmZmVyIERNQQ0K
-DQpbUGFsYWtdIENhbiB5b3UgcGxlYXNlIGV4cGxhaW4gdGhpcyBtb3JlLCB3aGF0IGRvZXMgdGhp
-cyBtZWFuPw0KDQpUaGFua3MsDQpQYWxhaw0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0K
-RnJvbTogTWluYXMgSGFydXR5dW55YW4gPE1pbmFzLkhhcnV0eXVueWFuQHN5bm9wc3lzLmNvbT4N
-ClNlbnQ6IFRodXJzZGF5LCBNYXJjaCAyLCAyMDIzIDExOjM1IFBNDQpUbzogUGFsYWsgU0hBSCA8
-cGFsYWsuc2hhaEByYXJpdGFuLmNvbT47IE1heW5hcmQgQ0FCSUVOVEUgPG1heW5hcmQuY2FiaWVu
-dGVAcmFyaXRhbi5jb20+DQpDYzogbGludXgtdXNiQHZnZXIua2VybmVsLm9yZw0KU3ViamVjdDog
-UkU6IHVzYjogZ2FkZ2V0OiBkd2MyOiBub3QgZ2V0dGluZyBhdWRpbyBkYXRhDQoNCkhpIFBhbGFr
-LA0KDQo+T24gMi8yOC8yMDIzIDEyOjIxIEFNLCBQYWxhayBTSEFIIHdyb3RlOg0KPkZyb206IFBh
-bGFrIFNIQUggPHBhbGFrLnNoYWhAcmFyaXRhbi5jb20+DQo+U2VudDogVHVlc2RheSwgRmVicnVh
-cnkgMjgsIDIwMjMgMTI6MjEgQU0NCj5UbzogTWluYXMgSGFydXR5dW55YW4gPGhtaW5hc0BzeW5v
-cHN5cy5jb20+OyBNYXluYXJkIENBQklFTlRFDQo+PG1heW5hcmQuY2FiaWVudGVAcmFyaXRhbi5j
-b20+DQo+Q2M6IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj5TdWJqZWN0OiBSRTogdXNiOiBn
-YWRnZXQ6IGR3YzI6IG5vdCBnZXR0aW5nIGF1ZGlvIGRhdGENCj4NCj5IaSBNaW5hcywNCj5JIGhh
-dmUgYXR0YWNoZWQgdGhlIGZvbGxvd2luZyBVU0IgdHJhY2VzIGFuZCBkZWJ1ZyBsb2cuDQo+MSkg
-ZG1lc2cgYW5kIHVzYiBzbmlmZmVyIGxvZ3MgZHVyaW5nIGRyaXZlciBsb2FkaW5nLg0KPg0KPjIp
-IEVQMShPVVQpIC0gSSBwbGF5IEFVRElPIG9uIHRoZSBIT1NULiBBbmQgSSBkbyBhcmVjb3JkIG9u
-IHRoZSBsaW51eA0KPmRldmljZSB0aGF0IGFjdHMgYXMgVVNCIGdhZGdldC4gU28gdGhlIGF1ZGlv
-IGlzIGdvaW5nIE9VVCBmcm9tIHRoZQ0KPmhvc3QuIFNvIHlvdSB3aWxsIHNlZSBFUDEgT1VULg0K
-PkkgaGF2ZSBhdHRhY2hlZCBsb2dzIGFuZCBVU0Igc25pZmZlciBkYXRhLCBkdXJpbmcgYXJlY29y
-ZC4NCj4NCj5JIGFtIG5vdCB0ZXN0aW5nIElTT0MgRVAxKElOKSB5ZXQuIEkgYW0gc3RpbGwgc2Vl
-aW5nIGFuZCBkZWJ1Z2dpbmcNCj5pc3N1ZXMgd2l0aCBFcDEob3V0KS4NCj4NCj4zKSBXaGVuIEkg
-Y2hhbmdlIFVBQzFfREVGX1JFUV9OVU0gMiBjaGFuZ2VkIHRvIDMyLCB0aGUgcHJvYmxlbSBTVElM
-TA0KPmV4aXN0IHdpdGggRVAxKE9VVCkuIE9OTFkgbG9nIGJlaGFpdm9yIGlzIGRpZmZlcmVudC4g
-SW4gdGhlIGxvZyBJIHNlZQ0KPlhmZXJDb21wbCwgYnV0IEkgZG9u4oCZdCBnZXQgYW55IGRhdGEg
-aW4gdGhlIGFyZWNvcmQuDQo+SSBoYXZlIGF0dGFjaGVkIDIgZmlsZXMuIEFyZWNvcmRfY29tbWFu
-ZC50eHQgc2hvd3Mgd2hhdCBJIHJ1bi4NCj5BcmVjb3JkX291dHB1dCBzaG93cyB3aGF0IEkgZ2V0
-IGFmdGVyIEkgcnVuIHRoZSBjb21tYW5kLg0KPg0KPjQpIEkgc2VudCB5b3UgcmVnZHVtcCwgaHdf
-cGFyYW1zLCBwYXJhbXMgYW5kIGZpZm8gaW4gdGhlIHByZXZpb3VzIGVtYWlsLg0KPg0KDQpJJ20g
-bm90IGZpbmQgYW55IGlzc3VlIGJhc2VkIG9uIHRoZSAnX2FyZWNvcmQudHh0JywganVzdCBhZ2Fp
-biA3IHNlY29uZCB0aW1lIGdhcDoNCg0KWyAgMjI4LjE3MzI3MV0gZHdjMiBmZmI0MDAwMC51c2I6
-IGR3YzJfaHNvdGdfZXBpbnQ6IEF0IHRoZSBlbmQgb2YgdGhlIGZ1bmN0aW9uLCBkd2MyX2hzb3Rn
-X2VwaW50KCkgWyAgMjI4LjE3MzI3MV0gWyAgMjM1LjUzNjI5OV0gZHdjMiBmZmI0MDAwMC51c2I6
-IGR3YzJfaHNvdGdfZXBfcXVldWUsIGVwMW91dDogcmVxIDc3N2NkMzRiOiByZXEgbGVuKDIwMClA
-cmVxIGJ1ZihhZjY1NzUwZCksICMgb2YgaW50PTAsIHJlcSB6ZXJvPTAsIHNub2soc2hvcnQgbm90
-IG9rKT0wDQoNCkkgY2FuIHJlY29tbWVuZCB5b3U6DQoxLiBkaXNhYmxlIGRlYnVnIHByaW50cyB0
-byBtaW5pbWl6ZSBwbGF0Zm9ybSBsb2FkaW5nIDIuIGNoYW5nZSBEZXNjcmlwdG9yIERNQSBtb2Rl
-IHRvIEJ1ZmZlciBETUENCg0KVGhhbmtzLA0KTWluYXMNCg0KDQo+VGhhbmtzLA0KPlBhbGFrDQo+
-DQo+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj5Gcm9tOiBNaW5hcyBIYXJ1dHl1bnlhbiA8
-TWluYXMuSGFydXR5dW55YW5Ac3lub3BzeXMuY29tPg0KPlNlbnQ6IE1vbmRheSwgRmVicnVhcnkg
-MjcsIDIwMjMgNToxOCBBTQ0KPlRvOiBQYWxhayBTSEFIIDxwYWxhay5zaGFoQHJhcml0YW4uY29t
-PjsgTWF5bmFyZCBDQUJJRU5URQ0KPjxtYXluYXJkLmNhYmllbnRlQHJhcml0YW4uY29tPg0KPkNj
-OiBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnDQo+U3ViamVjdDogUkU6IHVzYjogZ2FkZ2V0OiBk
-d2MyOiBub3QgZ2V0dGluZyBhdWRpbyBkYXRhDQo+DQo+SGkgUGFsYWssDQo+DQo+Pk9uIDIvMjcv
-MjAyMyA2OjAyIEFNLCBQYWxhayBTSEFIIHdyb3RlOg0KPj5Gcm9tOiBQYWxhayBTSEFIIDxwYWxh
-ay5zaGFoQHJhcml0YW4uY29tPg0KPj5TZW50OiBNb25kYXksIEZlYnJ1YXJ5IDI3LCAyMDIzIDY6
-MDIgQU0NCj4+VG86IE1pbmFzIEhhcnV0eXVueWFuIDxobWluYXNAc3lub3BzeXMuY29tPjsgTWF5
-bmFyZCBDQUJJRU5URQ0KPj48bWF5bmFyZC5jYWJpZW50ZUByYXJpdGFuLmNvbT4NCj4+Q2M6IGxp
-bnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj4+U3ViamVjdDogUkU6IHVzYjogZ2FkZ2V0OiBkd2My
-OiBub3QgZ2V0dGluZyBhdWRpbyBkYXRhDQo+Pg0KPj5IaSBNaW5hcywNCj4+UGxlYXNlIGZpbmQg
-YXR0YWNoZWQgdGhlIGxvZ3MgLSByZWdkdW1wLCBod19wYXJhbXMsIHBhcmFtcyBhbmQgZmlmbywN
-Cj4+dGFrZW4gd2hlbiB0aGUgZHJpdmVyIGlzIGxvYWRlZC4NCj4+DQo+Pkkgd2lsbCBzZW5kIHRo
-ZSBVU0IgdHJhY2VzIHRvbW9ycm93Lg0KPg0KPg0KPlVTQiB0cmFjZSBmb3IgYXJlY29yZCAoRVAx
-SU4gSVNPQykgYW5kIGRlYnVnIGxvZy4NCj4NCj4NCj5Db3VsZCB5b3UgcGxlYXNlIGNvbmZpcm0g
-dGhhdCBhZnRlciBkZWZpbmluZyBVQUMxX0RFRl9SRVFfTlVNIHRvIDMyDQo+cGxheWluZyBhdWRp
-byAoRVAxT1VUIElTT0MpIG5vIGFueSBpc3N1ZSBzZWVuPw0KPg0KPlRoYW5rcywNCj5NaW5hcw0K
-Pg0KPj4NCj4+VGhhbmtzLA0KPj5QYWxhaw0KPj4NCj4+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
-LS0NCj4+RnJvbTogTWluYXMgSGFydXR5dW55YW4gPE1pbmFzLkhhcnV0eXVueWFuQHN5bm9wc3lz
-LmNvbT4NCj4+U2VudDogRnJpZGF5LCBGZWJydWFyeSAyNCwgMjAyMyA1OjMzIEFNDQo+PlRvOiBQ
-YWxhayBTSEFIIDxwYWxhay5zaGFoQHJhcml0YW4uY29tPjsgTWF5bmFyZCBDQUJJRU5URQ0KPj48
-bWF5bmFyZC5jYWJpZW50ZUByYXJpdGFuLmNvbT4NCj4+Q2M6IGxpbnV4LXVzYkB2Z2VyLmtlcm5l
-bC5vcmcNCj4+U3ViamVjdDogUkU6IHVzYjogZ2FkZ2V0OiBkd2MyOiBub3QgZ2V0dGluZyBhdWRp
-byBkYXRhDQo+Pg0KPj5IaSBQb2xhaywNCj4+DQo+Pj5PbiAyLzI0LzIwMjMgMzowNCBBTSwgUGFs
-YWsgU0hBSCB3cm90ZToNCj4+PkZyb206IFBhbGFrIFNIQUggPHBhbGFrLnNoYWhAcmFyaXRhbi5j
-b20+DQo+Pj5TZW50OiBGcmlkYXksIEZlYnJ1YXJ5IDI0LCAyMDIzIDM6MDQgQU0NCj4+PlRvOiBN
-aW5hcyBIYXJ1dHl1bnlhbiA8aG1pbmFzQHN5bm9wc3lzLmNvbT47IE1heW5hcmQgQ0FCSUVOVEUN
-Cj4+PjxtYXluYXJkLmNhYmllbnRlQHJhcml0YW4uY29tPg0KPj4+Q2M6IGxpbnV4LXVzYkB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4+PlN1YmplY3Q6IFJFOiB1c2I6IGdhZGdldDogZHdjMjogbm90IGdldHRp
-bmcgYXVkaW8gZGF0YQ0KPj4+DQo+Pj5IaSBNaW5hcywNCj4+PkkgaGF2ZSBhdHRhY2hlZCB0aGUg
-bG9nIHdoZXJlIEkgY29ubmVjdCB0byB0aGUgYXVkaW8gZ2FkZ2V0IChhbmQNCj4+PnRoZXJlZm9y
-ZSwgbG9hZCB0aGUgZHJpdmVyKS4gV2UgY2FuIGRvIGl0IHVzaW5nIGNvbW1hbmQgbGluZSBvbiBh
-DQo+Pj5zZXJpYWwgcHJvbXB0IG9yIHVzaW5nIEdVSSBhbmQgY29ubmVjdGluZyB0byBBdWRpbyBn
-YWRnZXQuDQo+Pj4NCj4+Pkhvd2V2ZXIsIGluIGJvdGggY2FzZXMsIEkgZG9u4oCZdCBzZWUgYW55
-IEVQMShvdXQpIGRhdGEgYW5kIHRoZQ0KPj4+cmVnaXN0ZXINCj4+ZHVtcC4NCj4+PkVwMW91dCBj
-b21lcyBvdXQgb25seSB3aGVuIEkgcGxheSBhIHlvdSB0dWJlIHZpZGVvIGFuZCBJIGRvIGFyZWNv
-cmQNCj4+PnRvIGNhcHR1cmUgZGF0YS4NCj4+DQo+PkFjY29yZGluZyB5b3VyIGRldmljZSBjb25m
-aWd1cmF0aW9uIEVQMShvdXQpIHVzaW5nIHdoZW4geW91IHBsYXkNCj4+YXVkaW8sIGFuZA0KPj5F
-UDEoaW4pIHVzaW5nIHdoZW4geW91IHJlY29yZCBhdWRpbyBieSBhcmVjb3JkLg0KPj5TbywgYWZ0
-ZXIgZHJpdmVyIGxvYWRpbmcgdGhlc2UgYm90aCBJU09DIEVQJ3Mgd2lsbCBub3Qgc2VlbiBpbiBs
-b2cNCj4+dW50aWwgYXBsYXkvYXJlY29yZCB3aWxsIG5vdCBydW4uDQo+Pg0KPj4+DQo+Pj5QbGVh
-c2UgbGV0IG1lIGtub3cgaWYgdGhlIGxvZyBkb2VzbuKAmXQgaGF2ZSB0aGUgaW5mb3JtYXRpb24g
-eW91IG5lZWQuDQo+Pg0KPj5ObywgaXQncyBhZ2FpbiBkbWVzZy4gSSBhc2tlZCBmb3IgY29yZSBh
-bGwgcmVnaXN0ZXIgZHVtcCB3aGljaA0KPj5hdmFpbGFibGUgdW5kZXIgZGVidWdmcydzLiBkd2My
-IGRlYnVnZnMncyB1bmRlciBmb2xsb3cgZGlyZWN0b3J5Og0KPj4vc3lzL2tlcm5lbC9kZWJ1Zy91
-c2IvZHdjMi4yLmF1dG8vDQo+PkluIHlvdXIgY2FzZSAnZHdjMi4yLmF1dG8nIGNhbiBiZSBsaXR0
-bGUgYml0IGRpZmZlcmVudC4gSW4gdGhpcw0KPj5kaXJlY3RvcnkgdGhlcmUgYXJlIGZpbGVzIHJl
-Z2R1bXAsIGh3X3BhcmFtcywgcGFyYW1zLCBmaWZvLCBldGMuIEp1c3QNCj4+dXNlICdjYXQgcmVn
-ZHVtcCcNCj4+dG8gZ2V0IHJlZ2lzdGVyIGR1bXAuIFBsZWFzZSBhbHNvIHByb3ZpZGUgbWUgY2F0
-IG9mIGh3X3BhcmFtcywgcGFyYW1zDQo+PmFuZCBmaWZvLiBUaGVzZSBsYXN0IDMgZmlsZXMgbmVl
-ZCB0byBjYXQganVzdCBvbmNlIGFmdGVyIGRyaXZlciBsb2FkaW5nLg0KPj4NCj4+Pg0KPj4+QWxz
-bywgSSB0cmllZCBjaGFuZ2luZyBVQUMxX0RFRl9SRVFfTlVNIDIgY2hhbmdlZCB0byAzMi4gSSBz
-YXcgYQ0KPj4+Y2hhbmdlIGluIHRoZSBiZWhhaXZvciBvZiBsb2dzLCBJIGdvdCBYZmVyQ29tcGwg
-YWxsIHRoZSB0aW1lLCBhbmQgbm90DQo+ZXBfZGlzYWJsZWQuDQo+Pg0KPj5TbywgYWZ0ZXIgZGVm
-aW5pbmcgVUFDMV9ERUZfUkVRX05VTSB0byAzMiBwbGF5aW5nIGF1ZGlvIChlcDFvdXQpIHdvcmsN
-Cj4+d2l0aG91dCBhbnkgaXNzdWU/IEFuZCBpbmNyZWFzaW5nIHJlcSBudW1iZXIgdG8gMzIgZml4
-ZWQgaXNzdWUgd2hpY2gNCj4+d2UgZGVidWcgdGlsbCBub3c/DQo+Pg0KPj4+SG93ZXZlciwgYXJl
-Y29yZCBiZWhhaXZvciBkaWQgbm90IGNoYW5nZSwgbWVhbmluZyBJIHN0aWxsIGRpZCBub3QgZ2V0
-DQo+Pj50aGUgZGF0YS4gSXQgb25seSBjaGFuZ2VkIHRoZSBsb2dnaW5nIGJlaGFpdm9yLg0KPj4N
-Cj4+SWYgeW91IHN0aWxsIHNlZSBpc3N1ZXMgd2l0aCBhcmVjb3JkIChlcDFpbikgdGhlbiBwbGVh
-c2UgcHJvdmlkZSBtZQ0KPj5kZWJ1ZyBsb2cgZm9yIHRoaXMgY2FzZSBhbmQgVVNCIHRyYWNlIGJ5
-IEVsbGlzeXMuDQo+Pg0KPj5UaGFua3MsDQo+Pk1pbmFzDQo+Pg0KPj4NCj4+DQo+Pl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fDQo+Pg0KPj5DZSBtZXNzYWdlLCBhaW5zaSBxdWUgdG91
-cyBsZXMgZmljaGllcnMgam9pbnRzIMOgIGNlIG1lc3NhZ2UsIHBldXZlbnQNCj4+Y29udGVuaXIg
-ZGVzIGluZm9ybWF0aW9ucyBzZW5zaWJsZXMgZXQvIG91IGNvbmZpZGVudGllbGxlcyBuZSBkZXZh
-bnQNCj4+cGFzIMOqdHJlIGRpdnVsZ3XDqWVzLiBTaSB2b3VzIG4nw6p0ZXMgcGFzIGxlIGRlc3Rp
-bmF0YWlyZSBkZSBjZSBtZXNzYWdlDQo+PihvdSBxdWUgdm91cyByZWNldmV6IGNlIG1lc3NhZ2Ug
-cGFyIGVycmV1ciksIG5vdXMgdm91cyByZW1lcmNpb25zIGRlDQo+PmxlIG5vdGlmaWVyIGltbcOp
-ZGlhdGVtZW50IMOgIHNvbiBleHDDqWRpdGV1ciwgZXQgZGUgZMOpdHJ1aXJlIGNlIG1lc3NhZ2Uu
-DQo+PlRvdXRlIGNvcGllLCBkaXZ1bGdhdGlvbiwgbW9kaWZpY2F0aW9uLCB1dGlsaXNhdGlvbiBv
-dSBkaWZmdXNpb24sIG5vbg0KPj5hdXRvcmlzw6llLCBkaXJlY3RlIG91IGluZGlyZWN0ZSwgZGUg
-dG91dCBvdSBwYXJ0aWUgZGUgY2UgbWVzc2FnZSwgZXN0DQo+c3RyaWN0ZW1lbnQgaW50ZXJkaXRl
-Lg0KPj4NCj4+DQo+PlRoaXMgZS1tYWlsLCBhbmQgYW55IGRvY3VtZW50IGF0dGFjaGVkIGhlcmVi
-eSwgbWF5IGNvbnRhaW4NCj4+Y29uZmlkZW50aWFsIGFuZC9vciBwcml2aWxlZ2VkIGluZm9ybWF0
-aW9uLiBJZiB5b3UgYXJlIG5vdCB0aGUNCj4+aW50ZW5kZWQgcmVjaXBpZW50IChvciBoYXZlIHJl
-Y2VpdmVkIHRoaXMgZS1tYWlsIGluIGVycm9yKSBwbGVhc2UNCj4+bm90aWZ5IHRoZSBzZW5kZXIg
-aW1tZWRpYXRlbHkgYW5kIGRlc3Ryb3kgdGhpcyBlLW1haWwuIEFueQ0KPj51bmF1dGhvcml6ZWQs
-IGRpcmVjdCBvciBpbmRpcmVjdCwgY29weWluZywgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW9uIG9y
-DQo+Pm90aGVyIHVzZSBvZiB0aGUgbWF0ZXJpYWwgb3IgcGFydHMgdGhlcmVvZiBpcyBzdHJpY3Rs
-eSBmb3JiaWRkZW4uDQo+DQo+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4NCj5D
-ZSBtZXNzYWdlLCBhaW5zaSBxdWUgdG91cyBsZXMgZmljaGllcnMgam9pbnRzIMOgIGNlIG1lc3Nh
-Z2UsIHBldXZlbnQNCj5jb250ZW5pciBkZXMgaW5mb3JtYXRpb25zIHNlbnNpYmxlcyBldC8gb3Ug
-Y29uZmlkZW50aWVsbGVzIG5lIGRldmFudA0KPnBhcyDDqnRyZSBkaXZ1bGd1w6llcy4gU2kgdm91
-cyBuJ8OqdGVzIHBhcyBsZSBkZXN0aW5hdGFpcmUgZGUgY2UgbWVzc2FnZQ0KPihvdSBxdWUgdm91
-cyByZWNldmV6IGNlIG1lc3NhZ2UgcGFyIGVycmV1ciksIG5vdXMgdm91cyByZW1lcmNpb25zIGRl
-IGxlDQo+bm90aWZpZXIgaW1tw6lkaWF0ZW1lbnQgw6Agc29uIGV4cMOpZGl0ZXVyLCBldCBkZSBk
-w6l0cnVpcmUgY2UgbWVzc2FnZS4NCj5Ub3V0ZSBjb3BpZSwgZGl2dWxnYXRpb24sIG1vZGlmaWNh
-dGlvbiwgdXRpbGlzYXRpb24gb3UgZGlmZnVzaW9uLCBub24NCj5hdXRvcmlzw6llLCBkaXJlY3Rl
-IG91IGluZGlyZWN0ZSwgZGUgdG91dCBvdSBwYXJ0aWUgZGUgY2UgbWVzc2FnZSwgZXN0IHN0cmlj
-dGVtZW50IGludGVyZGl0ZS4NCj4NCj4NCj5UaGlzIGUtbWFpbCwgYW5kIGFueSBkb2N1bWVudCBh
-dHRhY2hlZCBoZXJlYnksIG1heSBjb250YWluIGNvbmZpZGVudGlhbA0KPmFuZC9vciBwcml2aWxl
-Z2VkIGluZm9ybWF0aW9uLiBJZiB5b3UgYXJlIG5vdCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50DQo+
-KG9yIGhhdmUgcmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IpIHBsZWFzZSBub3RpZnkgdGhl
-IHNlbmRlcg0KPmltbWVkaWF0ZWx5IGFuZCBkZXN0cm95IHRoaXMgZS1tYWlsLiBBbnkgdW5hdXRo
-b3JpemVkLCBkaXJlY3Qgb3INCj5pbmRpcmVjdCwgY29weWluZywgZGlzY2xvc3VyZSwgZGlzdHJp
-YnV0aW9uIG9yIG90aGVyIHVzZSBvZiB0aGUNCj5tYXRlcmlhbCBvciBwYXJ0cyB0aGVyZW9mIGlz
-IHN0cmljdGx5IGZvcmJpZGRlbi4NCg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18N
-Cg0KQ2UgbWVzc2FnZSwgYWluc2kgcXVlIHRvdXMgbGVzIGZpY2hpZXJzIGpvaW50cyDDoCBjZSBt
-ZXNzYWdlLCBwZXV2ZW50IGNvbnRlbmlyIGRlcyBpbmZvcm1hdGlvbnMgc2Vuc2libGVzIGV0LyBv
-dSBjb25maWRlbnRpZWxsZXMgbmUgZGV2YW50IHBhcyDDqnRyZSBkaXZ1bGd1w6llcy4gU2kgdm91
-cyBuJ8OqdGVzIHBhcyBsZSBkZXN0aW5hdGFpcmUgZGUgY2UgbWVzc2FnZSAob3UgcXVlIHZvdXMg
-cmVjZXZleiBjZSBtZXNzYWdlIHBhciBlcnJldXIpLCBub3VzIHZvdXMgcmVtZXJjaW9ucyBkZSBs
-ZSBub3RpZmllciBpbW3DqWRpYXRlbWVudCDDoCBzb24gZXhww6lkaXRldXIsIGV0IGRlIGTDqXRy
-dWlyZSBjZSBtZXNzYWdlLiBUb3V0ZSBjb3BpZSwgZGl2dWxnYXRpb24sIG1vZGlmaWNhdGlvbiwg
-dXRpbGlzYXRpb24gb3UgZGlmZnVzaW9uLCBub24gYXV0b3Jpc8OpZSwgZGlyZWN0ZSBvdSBpbmRp
-cmVjdGUsIGRlIHRvdXQgb3UgcGFydGllIGRlIGNlIG1lc3NhZ2UsIGVzdCBzdHJpY3RlbWVudCBp
-bnRlcmRpdGUuDQoNCg0KVGhpcyBlLW1haWwsIGFuZCBhbnkgZG9jdW1lbnQgYXR0YWNoZWQgaGVy
-ZWJ5LCBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgYW5kL29yIHByaXZpbGVnZWQgaW5mb3JtYXRp
-b24uIElmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQgKG9yIGhhdmUgcmVjZWl2
-ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IpIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBpbW1lZGlh
-dGVseSBhbmQgZGVzdHJveSB0aGlzIGUtbWFpbC4gQW55IHVuYXV0aG9yaXplZCwgZGlyZWN0IG9y
-IGluZGlyZWN0LCBjb3B5aW5nLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24gb3Igb3RoZXIgdXNl
-IG9mIHRoZSBtYXRlcmlhbCBvciBwYXJ0cyB0aGVyZW9mIGlzIHN0cmljdGx5IGZvcmJpZGRlbi4N
-Cg==
+On Mon, 6 Mar 2023 at 10:53, Minda Chen <minda.chen@starfivetech.com> wrote:
+>
+> There is a Cadence USB3 core for JH7110 SoCs, the cdns
+> core is the child for this glue layer device.
+>
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> ---
+>  MAINTAINERS                        |   7 +
+>  drivers/usb/cdns3/Kconfig          |  11 +
+>  drivers/usb/cdns3/Makefile         |   1 +
+>  drivers/usb/cdns3/cdns3-starfive.c | 399 +++++++++++++++++++++++++++++
+>  4 files changed, 418 insertions(+)
+>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ee21213d4388..2a9e89922cad 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19957,6 +19957,13 @@ M:     William Qiu <william.qiu@starfivetech.com>
+>  S:     Supported
+>  F:     Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
+>
+> +STARFIVE JH71X0 USB PHY DRIVERS
+> +M:     Emil Renner Berthing <kernel@esmil.dk>
+> +M:     Minda Chen <minda.chen@starfivetech.com>
+> +S:     Maintained
+> +F:     Documentation/devicetree/bindings/phy/starfive,jh7110-usb*.yaml
+> +F:     drivers/usb/cdns3/cdns3-starfive.c
+> +
+>  STATIC BRANCH/CALL
+>  M:     Peter Zijlstra <peterz@infradead.org>
+>  M:     Josh Poimboeuf <jpoimboe@kernel.org>
+> diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
+> index b98ca0a1352a..a0b0a2c5430b 100644
+> --- a/drivers/usb/cdns3/Kconfig
+> +++ b/drivers/usb/cdns3/Kconfig
+> @@ -78,6 +78,17 @@ config USB_CDNS3_IMX
+>
+>           For example, imx8qm and imx8qxp.
+>
+> +config USB_CDNS3_STARFIVE
+> +       tristate "Cadence USB3 support on StarFive SoC platforms"
+> +       depends on SOC_STARFIVE || COMPILE_TEST || USB_CDNS3
+
+This entry is already under "if USB_CDNS3" and SOC_STARFIVE will
+become ARCH_STARFIVE in 6.3, so
+depends ARCH_STARFIVE || COMPILE_TEST
+
+> +       help
+> +         Say 'Y' or 'M' here if you are building for StarFive SoCs
+> +         platforms that contain Cadence USB3 controller core.
+> +
+> +         e.g. JH7110.
+> +
+> +         If you choose to build this driver as module it will
+> +         be dynamically linked and module will be called cdns3-starfive.ko
+>  endif
+>
+>  if USB_CDNS_SUPPORT
+> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
+> index 61edb2f89276..48dfae75b5aa 100644
+> --- a/drivers/usb/cdns3/Makefile
+> +++ b/drivers/usb/cdns3/Makefile
+> @@ -24,6 +24,7 @@ endif
+>  obj-$(CONFIG_USB_CDNS3_PCI_WRAP)               += cdns3-pci-wrap.o
+>  obj-$(CONFIG_USB_CDNS3_TI)                     += cdns3-ti.o
+>  obj-$(CONFIG_USB_CDNS3_IMX)                    += cdns3-imx.o
+> +obj-$(CONFIG_USB_CDNS3_STARFIVE)               += cdns3-starfive.o
+>
+>  cdnsp-udc-pci-y                                        := cdnsp-pci.o
+>
+> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
+> new file mode 100644
+> index 000000000000..54d9978cfa59
+> --- /dev/null
+> +++ b/drivers/usb/cdns3/cdns3-starfive.c
+> @@ -0,0 +1,399 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/**
+> + * cdns-starfive.c - StarFive specific Glue layer for Cadence USB Controller
+> + *
+> + * Copyright (C) 2022 Starfive, Inc.
+> + * Author:     yanhong <yanhong.wang@starfivetech.com>
+
+Here their name is "yanhong", but below it's "YanHong Wang". I'm
+guessing the 2nd version is correct, but please make sure.
+
+> + * Author:     Mason Huo <mason.huo@starfivetech.com>
+> + * Author:     Minda Chen <minda.chen@starfivetech.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/module.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/kernel.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/io.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset.h>
+> +#include <linux/usb/otg.h>
+> +#include "core.h"
+> +
+> +#define USB_STRAP_HOST                 BIT(17)
+> +#define USB_STRAP_DEVICE               BIT(18)
+> +#define USB_STRAP_MASK                 GENMASK(18, 16)
+> +
+> +#define USB_SUSPENDM_HOST              BIT(19)
+> +#define USB_SUSPENDM_DEVICE            (0 << 19)
+> +#define USB_SUSPENDM_MASK              BIT(19)
+> +
+> +#define USB_SUSPENDM_BYPS              BIT(20)
+> +#define USB_REFCLK_MODE                        BIT(23)
+> +#define USB_PLL_EN                     BIT(22)
+> +#define USB_PDRSTN_SPLIT               BIT(17)
+> +
+> +#define PCIE_CKREF_SRC_MASK            GENMASK(19, 18)
+> +#define PCIE_CLK_SEL_MASK              GENMASK(21, 20)
+> +#define PCIE_PHY_MODE                  BIT(20)
+> +#define PCIE_PHY_MODE_MASK             GENMASK(21, 20)
+> +#define PCIE_USB3_BUS_WIDTH_MASK       GENMASK(3, 2)
+> +#define PCIE_USB3_RATE_MASK            GENMASK(6, 5)
+> +#define PCIE_USB3_RX_STANDBY_MASK      BIT(7)
+> +#define PCIE_USB3_PHY_ENABLE           BIT(4)
+> +#define PCIE_USB3_PHY_PLL_CTL_OFF      (0x1f * 4)
+> +
+> +#define USB_125M_CLK_RATE              125000000
+> +
+> +#define USB_LS_KEEPALIVE_OFF           0x4
+> +#define USB_LS_KEEPALIVE_ENABLE                BIT(4)
+> +
+> +#define USB3_DOWN_SS_MODE              BIT(4)
+> +
+> +struct cdns_starfive {
+> +       struct device *dev;
+> +       struct regmap *stg_syscon;
+> +       struct regmap *sys_syscon;
+> +       struct reset_control *resets;
+> +       struct clk_bulk_data *clks;
+> +       int num_clks;
+> +       struct clk *usb_125m_clk;
+> +       u32 sys_offset;
+> +       u32 stg_offset_4;
+> +       u32 stg_offset_196;
+> +       u32 stg_offset_328;
+> +       u32 stg_offset_500;
+> +       bool usb2_only;
+> +       enum usb_dr_mode mode;
+> +       void __iomem *phybase_20;
+> +       void __iomem *phybase_30;
+> +};
+> +
+> +static int cdns_mode_init(struct platform_device *pdev,
+> +                               struct cdns_starfive *data)
+> +{
+> +       enum usb_dr_mode mode;
+> +
+> +       /* Init usb 2.0 utmi phy */
+> +       regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+> +               USB_SUSPENDM_BYPS, USB_SUSPENDM_BYPS);
+> +       regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+> +               USB_PLL_EN, USB_PLL_EN);
+> +       regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+> +               USB_REFCLK_MODE, USB_REFCLK_MODE);
+> +
+> +       if (data->usb2_only) {
+> +               /* Disconnect usb 3.0 phy mode */
+> +               regmap_update_bits(data->sys_syscon, data->sys_offset,
+> +                       USB_PDRSTN_SPLIT, USB_PDRSTN_SPLIT);
+> +       } else {
+> +               /* Config usb 3.0 pipe phy */
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_196,
+> +                       PCIE_CKREF_SRC_MASK, 0);
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_196,
+> +                       PCIE_CLK_SEL_MASK, 0);
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_328,
+> +                       PCIE_PHY_MODE_MASK, PCIE_PHY_MODE);
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+> +                       PCIE_USB3_BUS_WIDTH_MASK, 0);
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+> +                       PCIE_USB3_RATE_MASK, 0);
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+> +                       PCIE_USB3_RX_STANDBY_MASK, 0);
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+> +                       PCIE_USB3_PHY_ENABLE, PCIE_USB3_PHY_ENABLE);
+> +
+> +               /* Connect usb 3.0 phy mode */
+> +               regmap_update_bits(data->sys_syscon, data->sys_offset,
+> +                       USB_PDRSTN_SPLIT, 0);
+> +       }
+> +       mode = usb_get_dr_mode(&pdev->dev);
+> +       data->mode = mode;
+> +
+> +       switch (mode) {
+> +       case USB_DR_MODE_HOST:
+> +               regmap_update_bits(data->stg_syscon,
+> +                       data->stg_offset_4,
+> +                       USB_STRAP_MASK,
+> +                       USB_STRAP_HOST);
+> +               regmap_update_bits(data->stg_syscon,
+> +                       data->stg_offset_4,
+> +                       USB_SUSPENDM_MASK,
+> +                       USB_SUSPENDM_HOST);
+> +               break;
+> +
+> +       case USB_DR_MODE_PERIPHERAL:
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+> +                       USB_STRAP_MASK, USB_STRAP_DEVICE);
+> +               regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+> +                       USB_SUSPENDM_MASK, USB_SUSPENDM_DEVICE);
+> +               break;
+> +
+> +       case USB_DR_MODE_UNKNOWN:
+> +       case USB_DR_MODE_OTG:
+> +       default:
+> +               break;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +
+> +static int cdns_clk_rst_init(struct cdns_starfive *data)
+> +{
+> +       int ret;
+> +
+> +       data->usb_125m_clk = devm_clk_get(data->dev, "usb_125m");
+> +       if (IS_ERR(data->usb_125m_clk)) {
+> +               dev_err(data->dev, "Failed to get usb 125m clock\n");
+> +               ret = PTR_ERR(data->usb_125m_clk);
+> +               goto exit;
+> +       }
+
+This can be
+if (IS_ERR(data->usb_125m_clk))
+  return dev_err_probe(data->dev, PTR_ERR(data->usb_125m_clk), "Failed
+to get usb 125m clock\n");
+
+This will also silence errors on -EPROBE_DEFER.
+
+> +
+> +       data->num_clks = devm_clk_bulk_get_all(data->dev, &data->clks);
+> +       if (data->num_clks < 0) {
+> +               dev_err(data->dev, "Failed to get usb clocks\n");
+> +               ret = -ENODEV;
+> +               goto exit;
+> +       }
+
+Again return dev_err_probe(data->dev, -ENODEV, ..
+
+> +
+> +       /* Needs to set the USB_125M clock explicitly,
+> +        * since it's divided from pll0 clock, and the pll0 clock
+> +        * changes per the cpu frequency.
+> +        */
+> +       ret = clk_set_rate(data->usb_125m_clk, USB_125M_CLK_RATE);
+> +       if (ret) {
+> +               dev_err(data->dev, "Failed to set usb 125m clock\n");
+> +               goto exit;
+> +       }
+
+return dev_err_probe
+
+> +       ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+> +       if (ret) {
+> +               dev_err(data->dev, "Failed to enable clocks\n");
+> +               goto exit;
+> +       }
+
+return dev_err_probe
+
+> +
+> +       data->resets = devm_reset_control_array_get_exclusive(data->dev);
+> +       if (IS_ERR(data->resets)) {
+> +               ret = PTR_ERR(data->resets);
+> +               dev_err(data->dev, "Failed to get usb resets");
+> +               goto err_clk_init;
+> +       }
+
+This can be
+ret = dev_err_probe(data->dev, PTR_ERR(data->resets), ..)
+goto err_clk_init;
+
+> +       ret = reset_control_deassert(data->resets);
+
+This is where the driver fails for me, but the only place you don't
+write why. Add return dev_err_probe to be consistent.
+
+> +       goto exit;
+> +
+> +err_clk_init:
+> +       clk_bulk_disable_unprepare(data->num_clks, data->clks);
+> +exit:
+> +       return ret;
+> +}
+> +
+> +static void cdns_starfive_set_phy(struct cdns_starfive *data)
+> +{
+> +       unsigned int val;
+> +
+> +       if (data->mode != USB_DR_MODE_PERIPHERAL) {
+> +               /* Enable the LS speed keep-alive signal */
+> +               val = readl(data->phybase_20 + USB_LS_KEEPALIVE_OFF);
+> +               val |= USB_LS_KEEPALIVE_ENABLE;
+> +               writel(val, data->phybase_20 + USB_LS_KEEPALIVE_OFF);
+> +       }
+> +
+> +       if (!data->usb2_only) {
+> +               /* Configuare spread-spectrum mode: down-spread-spectrum */
+> +               writel(USB3_DOWN_SS_MODE, data->phybase_30 + PCIE_USB3_PHY_PLL_CTL_OFF);
+> +       }
+> +}
+> +
+> +static int cdns_starfive_phy_init(struct platform_device *pdev,
+> +                                                       struct cdns_starfive *data)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       int ret = 0;
+> +
+> +       data->phybase_20 = devm_platform_ioremap_resource_byname(pdev, "usb2");
+> +       if (IS_ERR(data->phybase_20)) {
+> +               dev_err(dev, "Can't map phybase_20 IOMEM resource\n");
+> +               ret = PTR_ERR(data->phybase_20);
+> +               goto get_res_err;
+> +       }
+
+return dev_err_probe(dev, PTR_ERROR(...
+
+> +
+> +       data->phybase_30 = devm_platform_ioremap_resource_byname(pdev, "usb3");
+> +       if (IS_ERR(data->phybase_30)) {
+> +               dev_err(dev, "Can't map phybase_30 IOMEM resource\n");
+> +               ret = PTR_ERR(data->phybase_30);
+> +               goto get_res_err;
+> +       }
+
+return dev_err_probe
+
+> +
+> +       cdns_starfive_set_phy(data);
+> +
+> +get_res_err:
+> +       return ret;
+
+now this can just be return 0;
+
+> +}
+> +
+> +static int cdns_starfive_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *node = pdev->dev.of_node;
+> +       struct cdns_starfive *data;
+> +       struct of_phandle_args args;
+> +       int ret;
+> +
+> +       data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +       if (!data)
+> +               return -ENOMEM;
+> +
+> +       platform_set_drvdata(pdev, data);
+> +
+> +       data->dev = dev;
+> +
+> +       data->usb2_only = device_property_read_bool(dev, "starfive,usb2-only");
+> +       ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node,
+> +                                               "starfive,stg-syscon", 4, 0, &args);
+
+This looks like syscon_regmap_lookup_by_phandle_args
+
+> +       if (ret < 0) {
+> +               dev_err(dev, "Failed to parse starfive,stg-syscon\n");
+> +               return -EINVAL;
+> +       }
+
+return dev_err_probe(dev, ret, ..
+
+> +       data->stg_syscon = syscon_node_to_regmap(args.np);
+> +       of_node_put(args.np);
+> +       if (IS_ERR(data->stg_syscon))
+> +               return PTR_ERR(data->stg_syscon);
+> +       data->stg_offset_4 = args.args[0];
+> +       data->stg_offset_196 = args.args[1];
+> +       data->stg_offset_328 = args.args[2];
+> +       data->stg_offset_500 = args.args[3];
+> +
+> +       ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node,
+> +                                               "starfive,sys-syscon", 1, 0, &args);
+
+syscon_regmap_lookup_by_phandle_args
+
+> +       if (ret < 0) {
+> +               dev_err(dev, "Failed to parse starfive,sys-syscon\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       data->sys_syscon = syscon_node_to_regmap(args.np);
+> +       of_node_put(args.np);
+> +       if (IS_ERR(data->sys_syscon))
+> +               return PTR_ERR(data->sys_syscon);
+> +       data->sys_offset = args.args[0];
+> +
+> +       cdns_mode_init(pdev, data);
+> +
+> +       ret = cdns_clk_rst_init(data);
+> +       if (ret < 0) {
+> +               dev_err(&pdev->dev, "Failed to init usb clk reset: %d\n", ret);
+> +               goto exit;
+> +       }
+
+cdns_clk_rst_init already logs errors, so just
+if (ret)
+  return ret;
+
+> +       ret = cdns_starfive_phy_init(pdev, data);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to init sratfive usb phy: %d\n", ret);
+> +               goto exit;
+> +       }
+
+if (ret)
+  return ret;
+
+> +       ret = of_platform_populate(node, NULL, NULL, dev);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to create children: %d\n", ret);
+> +               goto exit;
+> +       }
+
+return dev_err_probe(dev, ret, "Failed to create children\n")
+
+> +       device_set_wakeup_capable(dev, true);
+> +       pm_runtime_set_active(dev);
+> +       pm_runtime_enable(dev);
+> +
+> +       dev_info(dev, "usb mode %d %s probe success\n",
+> +               data->mode, data->usb2_only ? "2.0" : "3.0");
+> +
+> +       return 0;
+> +exit:
+> +       return ret;
+> +}
+> +
+> +static int cdns_starfive_remove_core(struct device *dev, void *c)
+> +{
+> +       struct platform_device *pdev = to_platform_device(dev);
+> +
+> +       platform_device_unregister(pdev);
+> +
+> +       return 0;
+> +}
+> +
+> +static int cdns_starfive_remove(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct cdns_starfive *data = dev_get_drvdata(dev);
+> +
+> +       pm_runtime_get_sync(dev);
+> +       device_for_each_child(dev, NULL, cdns_starfive_remove_core);
+> +
+> +       reset_control_assert(data->resets);
+> +       clk_bulk_disable_unprepare(data->num_clks, data->clks);
+> +       pm_runtime_disable(dev);
+> +       pm_runtime_put_noidle(dev);
+> +       platform_set_drvdata(pdev, NULL);
+> +
+> +       return 0;
+> +}
+> +
+> +#ifdef CONFIG_PM
+> +static int cdns_starfive_resume(struct device *dev)
+> +{
+> +       struct cdns_starfive *data = dev_get_drvdata(dev);
+> +       int ret;
+> +
+> +       ret = clk_set_rate(data->usb_125m_clk, USB_125M_CLK_RATE);
+> +       if (ret)
+> +               goto err;
+
+return ret;
+
+> +
+> +       ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+> +       if (ret)
+> +               goto err;
+
+return ret;
+
+> +       ret = reset_control_deassert(data->resets);
+> +       if (ret)
+> +               goto err;
+
+return ret;
+> +       cdns_starfive_set_phy(data);
+> +err:
+> +       return ret;
+now this can just be return 0;
+> +}
+> +
+> +static int cdns_starfive_suspend(struct device *dev)
+> +{
+> +       struct cdns_starfive *data = dev_get_drvdata(dev);
+> +
+> +       clk_bulk_disable_unprepare(data->num_clks, data->clks);
+> +       reset_control_assert(data->resets);
+> +
+> +       return 0;
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops cdns_starfive_pm_ops = {
+> +       SET_RUNTIME_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume, NULL)
+> +       SET_SYSTEM_SLEEP_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume)
+> +};
+> +
+> +static const struct of_device_id cdns_starfive_of_match[] = {
+> +       { .compatible = "starfive,jh7110-usb", },
+> +       {},
+
+I like the idiom of using { /* sentinel */ } here
+
+> +};
+> +MODULE_DEVICE_TABLE(of, cdns_starfive_of_match);
+> +
+> +static struct platform_driver cdns_starfive_driver = {
+> +       .probe          = cdns_starfive_probe,
+> +       .remove         = cdns_starfive_remove,
+> +       .driver         = {
+> +               .name   = "cdns3-starfive",
+> +               .of_match_table = cdns_starfive_of_match,
+> +               .pm     = &cdns_starfive_pm_ops,
+> +       },
+> +};
+> +
+
+Empty line not needed like above.
+
+> +module_platform_driver(cdns_starfive_driver);
+> +
+> +MODULE_ALIAS("platform:cdns3-starfive");
+> +MODULE_AUTHOR("YanHong Wang <yanhong.wang@starfivetech.com>");
+> +MODULE_AUTHOR("Mason Huo <mason.huo@starfivetech.com>");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("Cadence USB3 StarFive Glue Layer");
+> --
+> 2.17.1
+>
