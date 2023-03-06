@@ -2,99 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918376ABA81
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 10:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7596ABBF9
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 11:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjCFJ5w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 04:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S229800AbjCFKYJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 05:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjCFJ5v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 04:57:51 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7D723867;
-        Mon,  6 Mar 2023 01:57:50 -0800 (PST)
+        with ESMTP id S229621AbjCFKYH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 05:24:07 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC3E11B;
+        Mon,  6 Mar 2023 02:23:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678096670; x=1709632670;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678098237; x=1709634237;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zw8ACHBTfBKbkV3WdWBT9lNUpXLLqnmCovTf6wdsoF0=;
-  b=J2L7EQU1oppjFA4+1BmVMejekS9dgMEEt9NP6sYssNDAb4GiRIDJiyWj
-   TgOyfZ6Oo60vmljF9XiEdgx7tGxjCHP8AWSU1/LlTRsew9fxPlBEYAq/N
-   zbMmgMX8/uE5fZdU3bKhFEaM3Zq4ihYg4e9Jybq/GFSNhEdkz4v/HWQTs
-   v8ICxDd6jlaWtGv0qKdrGL9qrbXEE2uj7YwlZkTZdrs+PofExemwtrIJ3
-   vNIqE7ZrTrmcm43DP0RR4d/uN2QhhtbhSTRcGigpkUsm1Tv4PsBgH/LlV
-   HVwVHsTPTzimB25DYolEdT4fuuaHbiujgJQzT/JFo3krSzb9iqYDyMmtO
+  bh=fAROdIHL4rwOPVUkhhOPISkKYjWoQ2xKz6j6/njHS2w=;
+  b=Ji5gBBQTQc3BBhnSQNfI0i1KZQHrHtKZejzQrSYtHjweZaVdREDhq/H0
+   Gxifq5xd/B3YADIgfRfjjJQgLVqvimnW4BZl+cU8JzuIL5EOcd37h7Gfw
+   aJ6ut4EJhygDU63G+IjslG4zLSVovWQZ2kVp+cygaAReE0vFYG42xmxWX
+   W3RVoozUTI6PBZcchxEDMVyHAAXGfdo4UK0Km4zwYLN4WwSrC8OS93fJE
+   VpwMLpTARxVSnLDeqe8zqW61vHxVOPNYnc82XRwLOfqF1GRrXzDj3r2tU
+   DR7BqBsW4Y28q+j4S6LTJaxzkWZXIrqq6tOwyYVvvozkq0AaRyWdZK5XN
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="319342835"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="319342835"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 01:57:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="740270615"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="740270615"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2023 01:57:10 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 831B1143; Mon,  6 Mar 2023 11:57:53 +0200 (EET)
-Date:   Mon, 6 Mar 2023 11:57:53 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     linux-usb@vger.kernel.org, Sanju.Mehta@amd.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] Fix problems fetching TBT3 DROM from AMD USB4
- routers
-Message-ID: <20230306095753.GD62143@black.fi.intel.com>
-References: <20230223210743.9819-1-mario.limonciello@amd.com>
+X-IronPort-AV: E=Sophos;i="5.98,236,1673938800"; 
+   d="asc'?scan'208";a="203456799"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Mar 2023 03:23:41 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 6 Mar 2023 03:23:41 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Mon, 6 Mar 2023 03:23:38 -0700
+Date:   Mon, 6 Mar 2023 10:23:10 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Minda Chen <minda.chen@starfivetech.com>
+CC:     Emil Renner Berthing <kernel@esmil.dk>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 0/3] Add JH7110 USB driver support
+Message-ID: <ZAW/DqprkKaop4bg@wendy>
+References: <20230306095212.25840-1-minda.chen@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zMsznMw5/Z/x33K0"
 Content-Disposition: inline
-In-Reply-To: <20230223210743.9819-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306095212.25840-1-minda.chen@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
+--zMsznMw5/Z/x33K0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 23, 2023 at 03:07:40PM -0600, Mario Limonciello wrote:
-> TBT3 devices when connected to an AMD USB4 router occasionally fail to
-> properly respond to requests for the DROM via bit banging.
-> 
-> Depending upon which part of the request failed will impact the severity.
-> A number of workarounds have been put in place to let the driver handle
-> the failed requests:
-> 
-> commit e87491a9fd4e3 ("thunderbolt: Retry DROM reads for more failure scenarios")
-> commit a283de3ec646f ("thunderbolt: Do not resume routers if UID is not set")
-> commit 6915812bbd109 ("thunderbolt: Do not make DROM read success compulsory")
-> commit f022ff7bf377 ("thunderbolt: Retry DROM read once if parsing fails")
-> 
-> Still even with these changes the failures do make it through. In comparing
-> other CM implementations utilized on AMD systems, they all access the
-> DROM directly from the NVM.
-> 
-> To avoid triggering this issue, try to get the DROM directly from the NVM
-> in Linux as well when devices have an LC.
-> 
-> v4:
->  * Style fixups
->  * Fixup for wrong path for USB4 devices
-> 
-> Mario Limonciello (3):
->   thunderbolt: Adjust how NVM reading works
->   thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
->   thunderbolt: Refactor DROM reading
+Hey Minda!
 
-I split the device side into a separate function too, renamed root
-switch to host router (as that's the correct USB4 term), and fixed a
-couple style issues and applied to thunderbolt.git/next, thanks!
+On Mon, Mar 06, 2023 at 05:52:12PM +0800, Minda Chen wrote:
+> This patchset adds USB driver for the StarFive JH7110 SoC.
+> USB work mode is peripheral and using USB 2.0 PHY in VisionFive 2 board.
+> The patch has been tested on the VisionFive 2 board.
+>=20
+> This patchset should be applied after the patchset [1] and patch [2]:
+> [1] https://lore.kernel.org/all/20230221083323.302471-1-xingyu.wu@starfiv=
+etech.com/
+> [2] https://lore.kernel.org/all/20230215113249.47727-4-william.qiu@starfi=
+vetech.com/
+>=20
+> patch 1 is usb phy dt-binding document.
+> patch 2 is the glue layer of Cadence USB3 and USB phy
+> setting. USB controller IP is Cadence USB3.=20
+> patch 3 is USB device tree configuration.
+>=20
+> Minda Chen (3):
+>   dt-bindings: phy: Add StarFive JH7110 USB dt-binding
+>   usb: cdns3: add StarFive JH7110 USB glue layer
+>   dts: usb: add StarFive JH7110 USB dts configuration.
 
-Please check that I did not mess up anything :)
+Unfortunately, this patchset hasn't really landed correctly.
+Usually, in a series, patches are sent as replies to the cover letter.
+Git's send-email will do this for you if you pass it multiple patches
+and a cover letter (I do it by passing a directory, eg patches/foo/v1)
+
+It appears that you have sent each patch separately, and to different
+recipients, which makes this harder to review.
+Please re-submit this with proper threading (and as v2 ideally, so that
+Greg's bot doesn't complain).
+
+Thanks,
+Conor.
+
+--zMsznMw5/Z/x33K0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAW/DgAKCRB4tDGHoIJi
+0n+0AQD+Y8MI2RJ1ehfJEWSWYTvb547GcgP/f/R0S9BcWwWn8wEAynmRcm59mWRh
+Rz7uCk7KLQh077VMvMhoUxx305X21gU=
+=u/Bd
+-----END PGP SIGNATURE-----
+
+--zMsznMw5/Z/x33K0--
