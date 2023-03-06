@@ -2,62 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092566ABF0F
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 13:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 339056ABF1A
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 13:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbjCFMFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 07:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        id S229639AbjCFMH7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 07:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjCFMFg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 07:05:36 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E58B29174;
-        Mon,  6 Mar 2023 04:05:33 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id s11so37477018edy.8;
-        Mon, 06 Mar 2023 04:05:33 -0800 (PST)
+        with ESMTP id S229663AbjCFMH6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 07:07:58 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D51F6
+        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 04:07:56 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id cw28so37561506edb.5
+        for <linux-usb@vger.kernel.org>; Mon, 06 Mar 2023 04:07:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678104332;
+        d=gmail.com; s=20210112; t=1678104475;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0dVpf0jOGyrhZAJR8RbJwG183fo5cC9DkfkYCpCrSQ=;
-        b=byxDqp8yV398MYIjqgnhkRB0yYS9up0LKukf+6wo1wcxdwLRfXg1FG8O8F2UVpGR2e
-         9LwDFUhnwV6nyAXybMTrp69wIJ/FWvi3q8P2gTXpLeY/vCcuCp4ihcj+h0M10gqMfCv5
-         Fzp56LM5OdFCtTOMKc5am4Ty6aokdldt87jFqOv3JTSqxh0pfOPXG4N8AoAIO0lZ/DTq
-         9G+WFYEDOqj9aDr16x6m6DaGw4opdbffBz6/xwDSe2y5MqGixSgZHyf6gFT8lAp1VU0n
-         wGtPpaqs9IttkR1rda/6biEtALWMTnnYPCkPcn/WI1J/yUygqrXThl/apM92SNtuK15x
-         4RSg==
+        bh=jyRZ01sUjiZYtp3exEpTK3bGIcYWKTpqvcLJ591WUHo=;
+        b=cBUekGfpXYqpdIhBfy/B0Svc5ntQ6qHjNwzQLLNl20grx5MQlNbx4BcBeGJXTku/YS
+         5FiFRSIEEyGWhJidxwW8E1f3LmiFwyy+ts6sB9itad+NUtlxqATM8crgtQn4Dp1L1u8T
+         6UXfDYS/fvZ9ehBYZrBMzs6+nYbJD/VeEbIryeJSeuhCRgv3Bg7beO+2I4t3bZRG3bkt
+         I3j/EaAUMeeQMLGV4xPcSiBvht2rYUmtqUy8Lh9JJ0+J03AdUsaqhj3q4PF8Eg7wgmpC
+         bbGdCyHKT89RIaL6jpNSNkyURjqM04AGghxjIc+dwSfIoLmYba6ss8dyIkt0/TebckKv
+         ZwEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678104332;
+        d=1e100.net; s=20210112; t=1678104475;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D0dVpf0jOGyrhZAJR8RbJwG183fo5cC9DkfkYCpCrSQ=;
-        b=frDTnG6CMx+3H+zs9NymDG5lRdjBQm7w3Ld22y/CDdUWsgoNo5povMYSJPmOYw1uUV
-         WFeG1ZwdjSSBnuaX/p6nrdwaanZmH308TCn5Ze9ym1Vy5YSK8sgCtXvi8A8vAY7M+xDX
-         4RnLrXcJRdya6TCrGMnnpUtT4LCX3QhmCy2pAh0nmH6hLtNKEYD3JcXeOPHutPI2Q3D4
-         Y6SFC0poJHTQXMMzmaW3d+FV2GaLIY28ijhO0MtRbBnJFkNaOCcQmB9IZbsJOKRG4JCp
-         YunlXW+wmmkiaKLy/hQ1/o4ZLj2nkukQ9aDBNohFsmt4Bcj8weP4NA4uleiL+fIG8Jef
-         Nh3A==
-X-Gm-Message-State: AO0yUKV4lTjrWc3wkB7z4q7Hmt+RkfRApUYdLvV3uOciBYrVxCpZ2dYJ
-        iiyeS7AObqXnFyJ/XvjYRkM=
-X-Google-Smtp-Source: AK7set9RhqYug2VOpjo5vosMgrEfbo0gqfrCV+7YBs5r5t+86zI1PH+O6FADojps3NmJQrHHYJ7CTg==
-X-Received: by 2002:aa7:d404:0:b0:4aa:ca81:a528 with SMTP id z4-20020aa7d404000000b004aaca81a528mr8742131edq.40.1678104331921;
-        Mon, 06 Mar 2023 04:05:31 -0800 (PST)
+        bh=jyRZ01sUjiZYtp3exEpTK3bGIcYWKTpqvcLJ591WUHo=;
+        b=P/4odfrdCru2uRpWkV1Z7/zyKX9YAs/DxCqM/thELFCG9ZqI1gGZ8HXymUgMk/Jj+O
+         F72vvJ60Xw8lEXvh3rwJCKmme1P7RtTIWaQ2V55BBXiAlDnyL9h4Xb1jzR/z/Idqr/+7
+         u3vTSwfKkI0Eg081/VnZ4JqMSIqq+dRuqoQDiiRDEVIaRemV7XWuhNS/qpRpC5fPol+D
+         rIZ++Rb1f5vDR3Xvac7+3zzTNjNxSuKD2ihzVP5TAzOQRCidbQog4ihUG1j/qceUWtge
+         Dj89amcpTNMw45TMoy9f1U6zMtOXHZGf9GCDQ8McwqmocGTqwyGHktwQuZhTYky1y3+a
+         BjkQ==
+X-Gm-Message-State: AO0yUKWZdNiN72YEr2bVoIN+qHZn0nKD2mkJphYuXE4leScexdXWFPWc
+        kW0Dmj45aGtdK9+RPezJmBk=
+X-Google-Smtp-Source: AK7set/loz6M1G4AZpz+MziwuWYCgb3tQ59rWOovhRSUqtpvZ7nY4UJDV2i2rYYa7ac8tXTVR5pVbQ==
+X-Received: by 2002:aa7:cd10:0:b0:4d4:9f84:557d with SMTP id b16-20020aa7cd10000000b004d49f84557dmr6524853edw.9.1678104474804;
+        Mon, 06 Mar 2023 04:07:54 -0800 (PST)
 Received: from labdl-itc-sw04.tmt.telital.com (host-217-57-98-66.business.telecomitalia.it. [217.57.98.66])
-        by smtp.googlemail.com with ESMTPSA id i18-20020a50d752000000b004accf3a63cbsm4979969edj.68.2023.03.06.04.05.31
+        by smtp.googlemail.com with ESMTPSA id u17-20020a50c2d1000000b004af759bc79asm5038899edf.7.2023.03.06.04.07.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 04:05:31 -0800 (PST)
+        Mon, 06 Mar 2023 04:07:54 -0800 (PST)
 From:   Enrico Sau <enrico.sau@gmail.com>
-To:     Bj?rn Mork <bjorn@mork.no>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, Enrico Sau <enrico.sau@gmail.com>
-Subject: [PATCH NET 1/1] net: usb: qmi_wwan: add Telit 0x1080 composition
-Date:   Mon,  6 Mar 2023 13:05:28 +0100
-Message-Id: <20230306120528.198842-1-enrico.sau@gmail.com>
+Subject: [PATCH 1/1] USB: serial: option: add Telit FE990 compositions
+Date:   Mon,  6 Mar 2023 13:07:41 +0100
+Message-Id: <20230306120741.198992-1-enrico.sau@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,375 +68,104 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the following Telit FE990 composition:
+Add the following Telit FE990 compositions:
 
 0x1080: tty, adb, rmnet, tty, tty, tty, tty
+0x1081: tty, adb, mbim, tty, tty, tty, tty
+0x1082: rndis, tty, adb, tty, tty, tty, tty
+0x1083: tty, adb, ecm, tty, tty, tty, tty
 
 Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
 ---
 
-This is the verbose lsusb:
+This is the usb-devices output for all compositions:
 
-Bus 001 Device 009: ID 1bc7:1080 Telit Wireless Solutions FE990
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.10
-  bDeviceClass            0 
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0        64
-  idVendor           0x1bc7 Telit Wireless Solutions
-  idProduct          0x1080 
-  bcdDevice            5.04
-  iManufacturer           1 Telit Wireless Solutions
-  iProduct                2 FE990
-  iSerial                 3 9455d1d2
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0119
-    bNumInterfaces          7
-    bConfigurationValue     1
-    iConfiguration          4 DIAG_ADB_RMNET_NMEA_DUN_DUN_SER
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol     48 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass     66 
-      bInterfaceProtocol      1 
-      iInterface              5 ADB Interface
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol     80 
-      iInterface              6 RmNet
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0008  1x 8 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8e  EP 14 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x0f  EP 15 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol     96 
-      iInterface              0 
-      ** UNRECOGNIZED:  05 24 00 10 01
-      ** UNRECOGNIZED:  05 24 01 00 00
-      ** UNRECOGNIZED:  04 24 02 02
-      ** UNRECOGNIZED:  05 24 06 00 00
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol     64 
-      iInterface              0 
-      ** UNRECOGNIZED:  05 24 00 10 01
-      ** UNRECOGNIZED:  05 24 01 00 00
-      ** UNRECOGNIZED:  04 24 02 02
-      ** UNRECOGNIZED:  05 24 06 00 00
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        5
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol     64 
-      iInterface              0 
-      ** UNRECOGNIZED:  05 24 00 10 01
-      ** UNRECOGNIZED:  05 24 01 00 00
-      ** UNRECOGNIZED:  04 24 02 02
-      ** UNRECOGNIZED:  05 24 06 00 00
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x89  EP 9 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x88  EP 8 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x05  EP 5 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        6
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol     64 
-      iInterface              0 
-      ** UNRECOGNIZED:  05 24 00 10 01
-      ** UNRECOGNIZED:  05 24 01 00 00
-      ** UNRECOGNIZED:  04 24 02 02
-      ** UNRECOGNIZED:  05 24 06 00 00
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8b  EP 11 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8a  EP 10 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x06  EP 6 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-Binary Object Store Descriptor:
-  bLength                 5
-  bDescriptorType        15
-  wTotalLength       0x002a
-  bNumDeviceCaps          3
-  USB 2.0 Extension Device Capability:
-    bLength                 7
-    bDescriptorType        16
-    bDevCapabilityType      2
-    bmAttributes   0x0000010e
-      BESL Link Power Management (LPM) Supported
-    BESL value      256 us 
-  SuperSpeed USB Device Capability:
-    bLength                10
-    bDescriptorType        16
-    bDevCapabilityType      3
-    bmAttributes         0x00
-    wSpeedsSupported   0x000f
-      Device can operate at Low Speed (1Mbps)
-      Device can operate at Full Speed (12Mbps)
-      Device can operate at High Speed (480Mbps)
-      Device can operate at SuperSpeed (5Gbps)
-    bFunctionalitySupport   1
-      Lowest fully-functional device speed is Full Speed (12Mbps)
-    bU1DevExitLat           0 micro seconds
-    bU2DevExitLat           0 micro seconds
-  SuperSpeedPlus USB Device Capability:
-    bLength                20
-    bDescriptorType        16
-    bDevCapabilityType     10
-    bmAttributes         0x00000001
-      Sublink Speed Attribute count 1
-      Sublink Speed ID count 0
-    wFunctionalitySupport   0x1100
-    bmSublinkSpeedAttr[0]   0x000a4030
-      Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
-    bmSublinkSpeedAttr[1]   0x000a40b0
-      Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0000
-  (Bus Powered)
+T:  Bus=01 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#= 12 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1080 Rev=05.04
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FE990
+S:  SerialNumber=9455d1d2
+C:  #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+
+T:  Bus=01 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#= 13 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1081 Rev=05.04
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FE990
+S:  SerialNumber=9455d1d2
+C:  #Ifs= 8 Cfg#= 1 Atr=80 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+I:  If#=0x2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+
+T:  Bus=01 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#= 11 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1082 Rev=05.04
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FE990
+S:  SerialNumber=9455d1d2
+C:  #Ifs= 8 Cfg#= 1 Atr=80 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
+I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+
+T:  Bus=01 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#= 14 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1083 Rev=05.04
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FE990
+S:  SerialNumber=9455d1d2
+C:  #Ifs= 8 Cfg#= 1 Atr=80 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+I:  If#=0x2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+I:  If#=0x3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
 
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/serial/option.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index a808d718c012..571e37e67f9c 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1364,6 +1364,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1057, 2)},	/* Telit FN980 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990 */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1080, 2)}, /* Telit FE990 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index e6d8d9b35ad0..9520935bd502 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1300,6 +1300,14 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),	/* Telit FN990 (PCIe) */
+ 	  .driver_info = RSVD(0) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1080, 0xff),	/* Telit FE990 (rmnet) */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1081, 0xff),	/* Telit FE990 (MBIM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1082, 0xff),	/* Telit FE990 (RNDIS) */
++	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1083, 0xff),	/* Telit FE990 (ECM) */
++	  .driver_info = RSVD(0) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 -- 
 2.25.1
 
