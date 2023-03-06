@@ -2,100 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AEA6AB6F3
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 08:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9D36AB81C
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Mar 2023 09:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjCFHYP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 02:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
+        id S229864AbjCFIRD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 03:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCFHYO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 02:24:14 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6132B558D;
-        Sun,  5 Mar 2023 23:24:09 -0800 (PST)
-Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVVNx6B4jzSkdJ;
-        Mon,  6 Mar 2023 15:21:05 +0800 (CST)
-Received: from [10.67.110.218] (10.67.110.218) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 6 Mar 2023 15:24:07 +0800
-Message-ID: <c0bc32ca-312f-d699-d19b-f4436c286dc7@huawei.com>
-Date:   Mon, 6 Mar 2023 15:24:07 +0800
+        with ESMTP id S229848AbjCFIRA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 03:17:00 -0500
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15931C331
+        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 00:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
+         content-transfer-encoding:content-type:mime-version:from;
+        bh=iGJBerep9CUnwc0kKc070FLg5wgjahdY5flMGzZYQMs=;
+        b=oDYibHiF3QQbdSnLfVFRXWqS6z3NQmb6kugL8YV+AzvXesLHyr5JzoQv36TlUtoc6W5KCotN1l9wN
+         9LSOB4Bu9Yfgb0XpMplMCVfXibebalo7a5aESxI1lFy0L3DA6RZo6UFgR79W8gl98jQrxQ/tLvd2T2
+         0xEQnuRgzH1ORWF+wpRq+raboR/TqFqi3nosbBYytoNMkARO5GE2FASMRvbgozacXT968pNevzID08
+         kd2Bb6hh7pzuv819gTpRFHFjwmhc4+RnlmqnZW8aNjXY3z24ty79Y1uQG7spYocRbf484LhNNLEwf4
+         6CAVA7hl0v6jQA7FXN1mdH2h85/uHYw==
+X-MSG-ID: 412d5329-bbf7-11ed-829c-0050569d2c73
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 5.15] usb: dwc3: dwc3-qcom: Add missing
- platform_device_put() in dwc3_qcom_acpi_register_core
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <balbi@kernel.org>,
-        <lee.jones@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230303023439.774616-1-zhengyejian1@huawei.com>
- <ZAIW9mkHpKKQyIK+@kroah.com>
- <acc08af9-fdb3-5451-5c53-44784982fe2a@huawei.com>
- <ZAV+9ToKbIPFKJIs@kroah.com>
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <ZAV+9ToKbIPFKJIs@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.218]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 06 Mar 2023 09:16:54 +0100
+From:   Robin van der Gracht <robin@protonic.nl>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+Organization: Protonic Holland
+Reply-To: robin@protonic.nl
+Mail-Reply-To: robin@protonic.nl
+In-Reply-To: <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
+References: <20230228215433.3944508-1-robh@kernel.org>
+ <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
+Message-ID: <61190cb766083d73ef3b1455dcf3ff61@protonic.nl>
+X-Sender: robin@protonic.nl
+User-Agent: Roundcube Webmail/1.3.1 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/3/6 13:49, Greg KH wrote:
-> On Mon, Mar 06, 2023 at 09:26:31AM +0800, Zheng Yejian wrote:
->> On 2023/3/3 23:49, Greg KH wrote:
->>> On Fri, Mar 03, 2023 at 10:34:39AM +0800, Zheng Yejian wrote:
->>>> From: Miaoqian Lin <linmq006@gmail.com>
->>>>
->>>> commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
->>>>
->>>> Add the missing platform_device_put() before return from
->>>> dwc3_qcom_acpi_register_core in the error handling case.
->>>>
->>>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
->>>> Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
->>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>> CVE: CVE-2023-22995
->>>
->>> That is a bogus CVE, please go revoke it.
->>
->> Agree. I see this CVE and its fixes information from NVD,
->> so try to backport this patch to fix it:
->> Link: https://nvd.nist.gov/vuln/detail/CVE-2023-22995
+> From: Rob Herring <robh@kernel.org>
+> Date: Tue, Feb 28, 2023 at 10:54 PM
+> Subject: [PATCH] dt-bindings: Fix SPI and I2C bus node names in 
+> examples
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: <devicetree@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+> Benson Leung <bleung@chromium.org>, Guenter Roeck
+> <groeck@chromium.org>, Stephen Boyd <sboyd@kernel.org>, Andrzej Hajda
+> <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>,
+> Robert Foss <rfoss@kernel.org>, Thierry Reding
+> <thierry.reding@gmail.com>, Sam Ravnborg <sam@ravnborg.org>, MyungJoo
+> Ham <myungjoo.ham@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+> Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+> <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+> <lee@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, David S.
+> Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+> Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+> Wolfgang Grandegger <wg@grandegger.com>, Kalle Valo
+> <kvalo@kernel.org>, Sebastian Reichel <sre@kernel.org>, Mark Brown
+> <broonie@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+> <linux-clk@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+> <linux-gpio@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+> <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
+> <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+> <linux-wireless@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+> <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>
 > 
-> Again, this is not a valid bug, the "problem" described can not ever be
-> hit in a real system from what I can tell.
-
-Agreed!
-
 > 
->> Then should I just remove the "CVE: " field and send a v2 patch?
->> Or you mean "revoke" the CVE from NVD? I actually don't know how
->> to do that :(
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
 > 
-> If you care about CVEs being "real", yes, please get it revoked from the
-> NVD.  There is no need to backport it either from what I can determine.
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e
+> 's/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e
+> 's/spi[0-9] {/spi {/'
 > 
-
-Thanks for you pationce :)
-
---
-Zheng Yejian
-
-> thanks,
+> With this, a few errors in examples were exposed and fixed.
 > 
-> greg k-h
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
+
+....
+
+>  86 files changed, 110 insertions(+), 103 deletions(-)
+> 
+> diff --git 
+> a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> index fc4873deb76f..286e726cd052 100644
+> --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> @@ -72,7 +72,7 @@ examples:
+>      #include <dt-bindings/interrupt-controller/irq.h>
+>      #include <dt-bindings/input/input.h>
+>      #include <dt-bindings/leds/common.h>
+> -    i2c1 {
+> +    i2c {
+>              #address-cells = <1>;
+>              #size-cells = <0>;
+
+Acked-by: Robin van der Gracht <robin@protonic.nl>
