@@ -2,613 +2,421 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8616C6AD875
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 08:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529326AD8D6
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 09:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjCGHtX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Mar 2023 02:49:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S229976AbjCGILy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Mar 2023 03:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjCGHtU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 02:49:20 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E487C580D1;
-        Mon,  6 Mar 2023 23:49:14 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9AD7E24E057;
-        Tue,  7 Mar 2023 15:49:12 +0800 (CST)
-Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 15:49:12 +0800
-Received: from [192.168.125.108] (183.27.97.46) by EXMBX071.cuchost.com
- (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 15:49:11 +0800
-Message-ID: <38dcb1ba-2646-ce65-8bb9-2287a5a892a6@starfivetech.com>
-Date:   Tue, 7 Mar 2023 15:49:11 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/3] usb: cdns3: add StarFive JH7110 USB glue layer
-Content-Language: en-US
-To:     Emil Renner Berthing <kernel@esmil.dk>
-CC:     Pawel Laszczak <pawell@cadence.com>,
+        with ESMTP id S229757AbjCGILw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 03:11:52 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6C410415;
+        Tue,  7 Mar 2023 00:11:27 -0800 (PST)
+X-UUID: a4aa750cbcbf11eda06fc9ecc4dadd91-20230307
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=vgduVIOHUsmEHqgZONx8uKnlTWsJSWncFzmVVWh4R04=;
+        b=WUgWrsYU4kZG7RMZ9IJwuS8qCq51Fpw4yExmwCzaAnoUHzD0KU2FqxETlzf0TBmvSUW/wSI5c9cVoEp0g93LkPH4LNng1BTx99zrer6JxzubRDP117+hayR+CPl08P0H0Ui5B1huk9T+uAbsU+vH7srDenmQ9LFBZ6hf0dCZx38=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:fa58624e-9b59-4247-b325-5e108002f59e,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
+        ION:release,TS:-55
+X-CID-META: VersionHash:25b5999,CLOUDID:5afd9327-564d-42d9-9875-7c868ee415ec,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: a4aa750cbcbf11eda06fc9ecc4dadd91-20230307
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <haozhe.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1325799970; Tue, 07 Mar 2023 16:11:20 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 7 Mar 2023 16:11:19 +0800
+Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 7 Mar 2023 16:11:17 +0800
+From:   <haozhe.chang@mediatek.com>
+To:     M Chetan Kumar <m.chetan.kumar@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
+        Liu Haijun <haijun.liu@mediatek.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        "Roger Quadros" <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20230306095339.26006-1-minda.chen@starfivetech.com>
- <CANBLGcxduMYfG-3zD4RdB9cPSDjxW_iLdmC20NfotvmgoH4QEA@mail.gmail.com>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <CANBLGcxduMYfG-3zD4RdB9cPSDjxW_iLdmC20NfotvmgoH4QEA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.46]
-X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX071.cuchost.com
- (172.16.6.81)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        haozhe chang <haozhe.chang@mediatek.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        "open list:INTEL WWAN IOSM DRIVER" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) WWAN CONTROL..." 
+        <linux-remoteproc@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <lambert.wang@mediatek.com>, <xiayu.zhang@mediatek.com>,
+        <hua.yang@mediatek.com>
+Subject: [PATCH RESEND net-next] wwan: core: Support slicing in port TX flow of WWAN subsystem
+Date:   Tue, 7 Mar 2023 16:11:04 +0800
+Message-ID: <20230307081113.67746-1-haozhe.chang@mediatek.com>
+X-Mailer: git-send-email 2.17.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: haozhe chang <haozhe.chang@mediatek.com>
 
+wwan_port_fops_write inputs the SKB parameter to the TX callback of
+the WWAN device driver. However, the WWAN device (e.g., t7xx) may
+have an MTU less than the size of SKB, causing the TX buffer to be
+sliced and copied once more in the WWAN device driver.
 
-On 2023/3/7 2:24, Emil Renner Berthing wrote:
-> On Mon, 6 Mar 2023 at 10:53, Minda Chen <minda.chen@starfivetech.com> wrote:
->>
->> There is a Cadence USB3 core for JH7110 SoCs, the cdns
->> core is the child for this glue layer device.
->>
->> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->> ---
->>  MAINTAINERS                        |   7 +
->>  drivers/usb/cdns3/Kconfig          |  11 +
->>  drivers/usb/cdns3/Makefile         |   1 +
->>  drivers/usb/cdns3/cdns3-starfive.c | 399 +++++++++++++++++++++++++++++
->>  4 files changed, 418 insertions(+)
->>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ee21213d4388..2a9e89922cad 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19957,6 +19957,13 @@ M:     William Qiu <william.qiu@starfivetech.com>
->>  S:     Supported
->>  F:     Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
->>
->> +STARFIVE JH71X0 USB PHY DRIVERS
->> +M:     Emil Renner Berthing <kernel@esmil.dk>
->> +M:     Minda Chen <minda.chen@starfivetech.com>
->> +S:     Maintained
->> +F:     Documentation/devicetree/bindings/phy/starfive,jh7110-usb*.yaml
->> +F:     drivers/usb/cdns3/cdns3-starfive.c
->> +
->>  STATIC BRANCH/CALL
->>  M:     Peter Zijlstra <peterz@infradead.org>
->>  M:     Josh Poimboeuf <jpoimboe@kernel.org>
->> diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
->> index b98ca0a1352a..a0b0a2c5430b 100644
->> --- a/drivers/usb/cdns3/Kconfig
->> +++ b/drivers/usb/cdns3/Kconfig
->> @@ -78,6 +78,17 @@ config USB_CDNS3_IMX
->>
->>           For example, imx8qm and imx8qxp.
->>
->> +config USB_CDNS3_STARFIVE
->> +       tristate "Cadence USB3 support on StarFive SoC platforms"
->> +       depends on SOC_STARFIVE || COMPILE_TEST || USB_CDNS3
-> 
-> This entry is already under "if USB_CDNS3" and SOC_STARFIVE will
-> become ARCH_STARFIVE in 6.3, so
-> depends ARCH_STARFIVE || COMPILE_TEST
-> 
->> +       help
->> +         Say 'Y' or 'M' here if you are building for StarFive SoCs
->> +         platforms that contain Cadence USB3 controller core.
->> +
->> +         e.g. JH7110.
->> +
->> +         If you choose to build this driver as module it will
->> +         be dynamically linked and module will be called cdns3-starfive.ko
->>  endif
->>
->>  if USB_CDNS_SUPPORT
->> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
->> index 61edb2f89276..48dfae75b5aa 100644
->> --- a/drivers/usb/cdns3/Makefile
->> +++ b/drivers/usb/cdns3/Makefile
->> @@ -24,6 +24,7 @@ endif
->>  obj-$(CONFIG_USB_CDNS3_PCI_WRAP)               += cdns3-pci-wrap.o
->>  obj-$(CONFIG_USB_CDNS3_TI)                     += cdns3-ti.o
->>  obj-$(CONFIG_USB_CDNS3_IMX)                    += cdns3-imx.o
->> +obj-$(CONFIG_USB_CDNS3_STARFIVE)               += cdns3-starfive.o
->>
->>  cdnsp-udc-pci-y                                        := cdnsp-pci.o
->>
->> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
->> new file mode 100644
->> index 000000000000..54d9978cfa59
->> --- /dev/null
->> +++ b/drivers/usb/cdns3/cdns3-starfive.c
->> @@ -0,0 +1,399 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/**
->> + * cdns-starfive.c - StarFive specific Glue layer for Cadence USB Controller
->> + *
->> + * Copyright (C) 2022 Starfive, Inc.
->> + * Author:     yanhong <yanhong.wang@starfivetech.com>
-> 
-> Here their name is "yanhong", but below it's "YanHong Wang". I'm
-> guessing the 2nd version is correct, but please make sure.
-> 
->> + * Author:     Mason Huo <mason.huo@starfivetech.com>
->> + * Author:     Minda Chen <minda.chen@starfivetech.com>
->> + */
->> +
->> +#include <linux/bits.h>
->> +#include <linux/clk.h>
->> +#include <linux/module.h>
->> +#include <linux/mfd/syscon.h>
->> +#include <linux/kernel.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/io.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/regmap.h>
->> +#include <linux/reset.h>
->> +#include <linux/usb/otg.h>
->> +#include "core.h"
->> +
->> +#define USB_STRAP_HOST                 BIT(17)
->> +#define USB_STRAP_DEVICE               BIT(18)
->> +#define USB_STRAP_MASK                 GENMASK(18, 16)
->> +
->> +#define USB_SUSPENDM_HOST              BIT(19)
->> +#define USB_SUSPENDM_DEVICE            (0 << 19)
->> +#define USB_SUSPENDM_MASK              BIT(19)
->> +
->> +#define USB_SUSPENDM_BYPS              BIT(20)
->> +#define USB_REFCLK_MODE                        BIT(23)
->> +#define USB_PLL_EN                     BIT(22)
->> +#define USB_PDRSTN_SPLIT               BIT(17)
->> +
->> +#define PCIE_CKREF_SRC_MASK            GENMASK(19, 18)
->> +#define PCIE_CLK_SEL_MASK              GENMASK(21, 20)
->> +#define PCIE_PHY_MODE                  BIT(20)
->> +#define PCIE_PHY_MODE_MASK             GENMASK(21, 20)
->> +#define PCIE_USB3_BUS_WIDTH_MASK       GENMASK(3, 2)
->> +#define PCIE_USB3_RATE_MASK            GENMASK(6, 5)
->> +#define PCIE_USB3_RX_STANDBY_MASK      BIT(7)
->> +#define PCIE_USB3_PHY_ENABLE           BIT(4)
->> +#define PCIE_USB3_PHY_PLL_CTL_OFF      (0x1f * 4)
->> +
->> +#define USB_125M_CLK_RATE              125000000
->> +
->> +#define USB_LS_KEEPALIVE_OFF           0x4
->> +#define USB_LS_KEEPALIVE_ENABLE                BIT(4)
->> +
->> +#define USB3_DOWN_SS_MODE              BIT(4)
->> +
->> +struct cdns_starfive {
->> +       struct device *dev;
->> +       struct regmap *stg_syscon;
->> +       struct regmap *sys_syscon;
->> +       struct reset_control *resets;
->> +       struct clk_bulk_data *clks;
->> +       int num_clks;
->> +       struct clk *usb_125m_clk;
->> +       u32 sys_offset;
->> +       u32 stg_offset_4;
->> +       u32 stg_offset_196;
->> +       u32 stg_offset_328;
->> +       u32 stg_offset_500;
->> +       bool usb2_only;
->> +       enum usb_dr_mode mode;
->> +       void __iomem *phybase_20;
->> +       void __iomem *phybase_30;
->> +};
->> +
->> +static int cdns_mode_init(struct platform_device *pdev,
->> +                               struct cdns_starfive *data)
->> +{
->> +       enum usb_dr_mode mode;
->> +
->> +       /* Init usb 2.0 utmi phy */
->> +       regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +               USB_SUSPENDM_BYPS, USB_SUSPENDM_BYPS);
->> +       regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +               USB_PLL_EN, USB_PLL_EN);
->> +       regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +               USB_REFCLK_MODE, USB_REFCLK_MODE);
->> +
->> +       if (data->usb2_only) {
->> +               /* Disconnect usb 3.0 phy mode */
->> +               regmap_update_bits(data->sys_syscon, data->sys_offset,
->> +                       USB_PDRSTN_SPLIT, USB_PDRSTN_SPLIT);
->> +       } else {
->> +               /* Config usb 3.0 pipe phy */
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_196,
->> +                       PCIE_CKREF_SRC_MASK, 0);
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_196,
->> +                       PCIE_CLK_SEL_MASK, 0);
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_328,
->> +                       PCIE_PHY_MODE_MASK, PCIE_PHY_MODE);
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +                       PCIE_USB3_BUS_WIDTH_MASK, 0);
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +                       PCIE_USB3_RATE_MASK, 0);
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +                       PCIE_USB3_RX_STANDBY_MASK, 0);
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +                       PCIE_USB3_PHY_ENABLE, PCIE_USB3_PHY_ENABLE);
->> +
->> +               /* Connect usb 3.0 phy mode */
->> +               regmap_update_bits(data->sys_syscon, data->sys_offset,
->> +                       USB_PDRSTN_SPLIT, 0);
->> +       }
->> +       mode = usb_get_dr_mode(&pdev->dev);
->> +       data->mode = mode;
->> +
->> +       switch (mode) {
->> +       case USB_DR_MODE_HOST:
->> +               regmap_update_bits(data->stg_syscon,
->> +                       data->stg_offset_4,
->> +                       USB_STRAP_MASK,
->> +                       USB_STRAP_HOST);
->> +               regmap_update_bits(data->stg_syscon,
->> +                       data->stg_offset_4,
->> +                       USB_SUSPENDM_MASK,
->> +                       USB_SUSPENDM_HOST);
->> +               break;
->> +
->> +       case USB_DR_MODE_PERIPHERAL:
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +                       USB_STRAP_MASK, USB_STRAP_DEVICE);
->> +               regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +                       USB_SUSPENDM_MASK, USB_SUSPENDM_DEVICE);
->> +               break;
->> +
->> +       case USB_DR_MODE_UNKNOWN:
->> +       case USB_DR_MODE_OTG:
->> +       default:
->> +               break;
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->> +
->> +static int cdns_clk_rst_init(struct cdns_starfive *data)
->> +{
->> +       int ret;
->> +
->> +       data->usb_125m_clk = devm_clk_get(data->dev, "usb_125m");
->> +       if (IS_ERR(data->usb_125m_clk)) {
->> +               dev_err(data->dev, "Failed to get usb 125m clock\n");
->> +               ret = PTR_ERR(data->usb_125m_clk);
->> +               goto exit;
->> +       }
-> 
-> This can be
-> if (IS_ERR(data->usb_125m_clk))
->   return dev_err_probe(data->dev, PTR_ERR(data->usb_125m_clk), "Failed
-> to get usb 125m clock\n");
-> 
-> This will also silence errors on -EPROBE_DEFER.
-> 
->> +
->> +       data->num_clks = devm_clk_bulk_get_all(data->dev, &data->clks);
->> +       if (data->num_clks < 0) {
->> +               dev_err(data->dev, "Failed to get usb clocks\n");
->> +               ret = -ENODEV;
->> +               goto exit;
->> +       }
-> 
-> Again return dev_err_probe(data->dev, -ENODEV, ..
-> 
->> +
->> +       /* Needs to set the USB_125M clock explicitly,
->> +        * since it's divided from pll0 clock, and the pll0 clock
->> +        * changes per the cpu frequency.
->> +        */
->> +       ret = clk_set_rate(data->usb_125m_clk, USB_125M_CLK_RATE);
->> +       if (ret) {
->> +               dev_err(data->dev, "Failed to set usb 125m clock\n");
->> +               goto exit;
->> +       }
-> 
-> return dev_err_probe
-> 
->> +       ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
->> +       if (ret) {
->> +               dev_err(data->dev, "Failed to enable clocks\n");
->> +               goto exit;
->> +       }
-> 
-> return dev_err_probe
-> 
->> +
->> +       data->resets = devm_reset_control_array_get_exclusive(data->dev);
->> +       if (IS_ERR(data->resets)) {
->> +               ret = PTR_ERR(data->resets);
->> +               dev_err(data->dev, "Failed to get usb resets");
->> +               goto err_clk_init;
->> +       }
-> 
-> This can be
-> ret = dev_err_probe(data->dev, PTR_ERR(data->resets), ..)
-> goto err_clk_init;
-> 
->> +       ret = reset_control_deassert(data->resets);
-> 
-> This is where the driver fails for me, but the only place you don't
-> write why. Add return dev_err_probe to be consistent.
-> 
->> +       goto exit;
->> +
->> +err_clk_init:
->> +       clk_bulk_disable_unprepare(data->num_clks, data->clks);
->> +exit:
->> +       return ret;
->> +}
->> +
->> +static void cdns_starfive_set_phy(struct cdns_starfive *data)
->> +{
->> +       unsigned int val;
->> +
->> +       if (data->mode != USB_DR_MODE_PERIPHERAL) {
->> +               /* Enable the LS speed keep-alive signal */
->> +               val = readl(data->phybase_20 + USB_LS_KEEPALIVE_OFF);
->> +               val |= USB_LS_KEEPALIVE_ENABLE;
->> +               writel(val, data->phybase_20 + USB_LS_KEEPALIVE_OFF);
->> +       }
->> +
->> +       if (!data->usb2_only) {
->> +               /* Configuare spread-spectrum mode: down-spread-spectrum */
->> +               writel(USB3_DOWN_SS_MODE, data->phybase_30 + PCIE_USB3_PHY_PLL_CTL_OFF);
->> +       }
->> +}
->> +
->> +static int cdns_starfive_phy_init(struct platform_device *pdev,
->> +                                                       struct cdns_starfive *data)
->> +{
->> +       struct device *dev = &pdev->dev;
->> +       int ret = 0;
->> +
->> +       data->phybase_20 = devm_platform_ioremap_resource_byname(pdev, "usb2");
->> +       if (IS_ERR(data->phybase_20)) {
->> +               dev_err(dev, "Can't map phybase_20 IOMEM resource\n");
->> +               ret = PTR_ERR(data->phybase_20);
->> +               goto get_res_err;
->> +       }
-> 
-> return dev_err_probe(dev, PTR_ERROR(...
-> 
->> +
->> +       data->phybase_30 = devm_platform_ioremap_resource_byname(pdev, "usb3");
->> +       if (IS_ERR(data->phybase_30)) {
->> +               dev_err(dev, "Can't map phybase_30 IOMEM resource\n");
->> +               ret = PTR_ERR(data->phybase_30);
->> +               goto get_res_err;
->> +       }
-> 
-> return dev_err_probe
-> 
->> +
->> +       cdns_starfive_set_phy(data);
->> +
->> +get_res_err:
->> +       return ret;
-> 
-> now this can just be return 0;
-> 
->> +}
->> +
->> +static int cdns_starfive_probe(struct platform_device *pdev)
->> +{
->> +       struct device *dev = &pdev->dev;
->> +       struct device_node *node = pdev->dev.of_node;
->> +       struct cdns_starfive *data;
->> +       struct of_phandle_args args;
->> +       int ret;
->> +
->> +       data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->> +       if (!data)
->> +               return -ENOMEM;
->> +
->> +       platform_set_drvdata(pdev, data);
->> +
->> +       data->dev = dev;
->> +
->> +       data->usb2_only = device_property_read_bool(dev, "starfive,usb2-only");
->> +       ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node,
->> +                                               "starfive,stg-syscon", 4, 0, &args);
-> 
-> This looks like syscon_regmap_lookup_by_phandle_args
-> 
->> +       if (ret < 0) {
->> +               dev_err(dev, "Failed to parse starfive,stg-syscon\n");
->> +               return -EINVAL;
->> +       }
-> 
-> return dev_err_probe(dev, ret, ..
-> 
->> +       data->stg_syscon = syscon_node_to_regmap(args.np);
->> +       of_node_put(args.np);
->> +       if (IS_ERR(data->stg_syscon))
->> +               return PTR_ERR(data->stg_syscon);
->> +       data->stg_offset_4 = args.args[0];
->> +       data->stg_offset_196 = args.args[1];
->> +       data->stg_offset_328 = args.args[2];
->> +       data->stg_offset_500 = args.args[3];
->> +
->> +       ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node,
->> +                                               "starfive,sys-syscon", 1, 0, &args);
-> 
-> syscon_regmap_lookup_by_phandle_args
-> 
->> +       if (ret < 0) {
->> +               dev_err(dev, "Failed to parse starfive,sys-syscon\n");
->> +               return -EINVAL;
->> +       }
->> +
->> +       data->sys_syscon = syscon_node_to_regmap(args.np);
->> +       of_node_put(args.np);
->> +       if (IS_ERR(data->sys_syscon))
->> +               return PTR_ERR(data->sys_syscon);
->> +       data->sys_offset = args.args[0];
->> +
->> +       cdns_mode_init(pdev, data);
->> +
->> +       ret = cdns_clk_rst_init(data);
->> +       if (ret < 0) {
->> +               dev_err(&pdev->dev, "Failed to init usb clk reset: %d\n", ret);
->> +               goto exit;
->> +       }
-> 
-> cdns_clk_rst_init already logs errors, so just
-> if (ret)
->   return ret;
-> 
->> +       ret = cdns_starfive_phy_init(pdev, data);
->> +       if (ret) {
->> +               dev_err(dev, "Failed to init sratfive usb phy: %d\n", ret);
->> +               goto exit;
->> +       }
-> 
-> if (ret)
->   return ret;
-> 
->> +       ret = of_platform_populate(node, NULL, NULL, dev);
->> +       if (ret) {
->> +               dev_err(dev, "Failed to create children: %d\n", ret);
->> +               goto exit;
->> +       }
-> 
-> return dev_err_probe(dev, ret, "Failed to create children\n")
-> 
->> +       device_set_wakeup_capable(dev, true);
->> +       pm_runtime_set_active(dev);
->> +       pm_runtime_enable(dev);
->> +
->> +       dev_info(dev, "usb mode %d %s probe success\n",
->> +               data->mode, data->usb2_only ? "2.0" : "3.0");
->> +
->> +       return 0;
->> +exit:
->> +       return ret;
->> +}
->> +
->> +static int cdns_starfive_remove_core(struct device *dev, void *c)
->> +{
->> +       struct platform_device *pdev = to_platform_device(dev);
->> +
->> +       platform_device_unregister(pdev);
->> +
->> +       return 0;
->> +}
->> +
->> +static int cdns_starfive_remove(struct platform_device *pdev)
->> +{
->> +       struct device *dev = &pdev->dev;
->> +       struct cdns_starfive *data = dev_get_drvdata(dev);
->> +
->> +       pm_runtime_get_sync(dev);
->> +       device_for_each_child(dev, NULL, cdns_starfive_remove_core);
->> +
->> +       reset_control_assert(data->resets);
->> +       clk_bulk_disable_unprepare(data->num_clks, data->clks);
->> +       pm_runtime_disable(dev);
->> +       pm_runtime_put_noidle(dev);
->> +       platform_set_drvdata(pdev, NULL);
->> +
->> +       return 0;
->> +}
->> +
->> +#ifdef CONFIG_PM
->> +static int cdns_starfive_resume(struct device *dev)
->> +{
->> +       struct cdns_starfive *data = dev_get_drvdata(dev);
->> +       int ret;
->> +
->> +       ret = clk_set_rate(data->usb_125m_clk, USB_125M_CLK_RATE);
->> +       if (ret)
->> +               goto err;
-> 
-> return ret;
-> 
->> +
->> +       ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
->> +       if (ret)
->> +               goto err;
-> 
-> return ret;
-> 
->> +       ret = reset_control_deassert(data->resets);
->> +       if (ret)
->> +               goto err;
-> 
-> return ret;
->> +       cdns_starfive_set_phy(data);
->> +err:
->> +       return ret;
-> now this can just be return 0;
->> +}
->> +
->> +static int cdns_starfive_suspend(struct device *dev)
->> +{
->> +       struct cdns_starfive *data = dev_get_drvdata(dev);
->> +
->> +       clk_bulk_disable_unprepare(data->num_clks, data->clks);
->> +       reset_control_assert(data->resets);
->> +
->> +       return 0;
->> +}
->> +#endif
->> +
->> +static const struct dev_pm_ops cdns_starfive_pm_ops = {
->> +       SET_RUNTIME_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume, NULL)
->> +       SET_SYSTEM_SLEEP_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume)
->> +};
->> +
->> +static const struct of_device_id cdns_starfive_of_match[] = {
->> +       { .compatible = "starfive,jh7110-usb", },
->> +       {},
-> 
-> I like the idiom of using { /* sentinel */ } here
-> 
->> +};
->> +MODULE_DEVICE_TABLE(of, cdns_starfive_of_match);
->> +
->> +static struct platform_driver cdns_starfive_driver = {
->> +       .probe          = cdns_starfive_probe,
->> +       .remove         = cdns_starfive_remove,
->> +       .driver         = {
->> +               .name   = "cdns3-starfive",
->> +               .of_match_table = cdns_starfive_of_match,
->> +               .pm     = &cdns_starfive_pm_ops,
->> +       },
->> +};
->> +
-> 
-> Empty line not needed like above.
-> 
+This patch implements the slicing in the WWAN subsystem and gives
+the WWAN devices driver the option to slice(by frag_len) or not. By
+doing so, the additional memory copy is reduced.
 
-ok, thanks. I will follow all the comments and change.
->> +module_platform_driver(cdns_starfive_driver);
->> +
->> +MODULE_ALIAS("platform:cdns3-starfive");
->> +MODULE_AUTHOR("YanHong Wang <yanhong.wang@starfivetech.com>");
->> +MODULE_AUTHOR("Mason Huo <mason.huo@starfivetech.com>");
->> +MODULE_LICENSE("GPL v2");
->> +MODULE_DESCRIPTION("Cadence USB3 StarFive Glue Layer");
->> --
->> 2.17.1
->>
+Meanwhile, this patch gives WWAN devices driver the option to reserve
+headroom in fragments for the device-specific metadata.
+
+Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+
+---
+Changes in v2
+  -send fragments to device driver by skb frag_list.
+
+Changes in v3
+  -move frag_len and headroom_len setting to wwan_create_port.
+
+Changes in v4
+  -change unreadable parameters to macro definition.
+
+Changes in v5
+  -optimize comments for WWAN_NO_HEADROOM, WWAN_NO_FRAGMENT.
+
+Changes in v6
+  -add reviewer to patch commit.
+---
+ drivers/net/wwan/iosm/iosm_ipc_port.c  |  3 +-
+ drivers/net/wwan/mhi_wwan_ctrl.c       |  3 +-
+ drivers/net/wwan/rpmsg_wwan_ctrl.c     |  3 +-
+ drivers/net/wwan/t7xx/t7xx_port_wwan.c | 34 +++++++--------
+ drivers/net/wwan/wwan_core.c           | 59 ++++++++++++++++++++------
+ drivers/net/wwan/wwan_hwsim.c          |  1 +
+ drivers/usb/class/cdc-wdm.c            |  3 +-
+ include/linux/wwan.h                   | 16 +++++++
+ 8 files changed, 87 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_port.c b/drivers/net/wwan/iosm/iosm_ipc_port.c
+index b6d81c627277..7798348f61d0 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_port.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_port.c
+@@ -63,7 +63,8 @@ struct iosm_cdev *ipc_port_init(struct iosm_imem *ipc_imem,
+ 	ipc_port->ipc_imem = ipc_imem;
+ 
+ 	ipc_port->iosm_port = wwan_create_port(ipc_port->dev, port_type,
+-					       &ipc_wwan_ctrl_ops, ipc_port);
++					       &ipc_wwan_ctrl_ops, WWAN_NO_FRAGMENT,
++					       WWAN_NO_HEADROOM, ipc_port);
+ 
+ 	return ipc_port;
+ }
+diff --git a/drivers/net/wwan/mhi_wwan_ctrl.c b/drivers/net/wwan/mhi_wwan_ctrl.c
+index f7ca52353f40..c397aa53db5d 100644
+--- a/drivers/net/wwan/mhi_wwan_ctrl.c
++++ b/drivers/net/wwan/mhi_wwan_ctrl.c
+@@ -237,7 +237,8 @@ static int mhi_wwan_ctrl_probe(struct mhi_device *mhi_dev,
+ 
+ 	/* Register as a wwan port, id->driver_data contains wwan port type */
+ 	port = wwan_create_port(&cntrl->mhi_dev->dev, id->driver_data,
+-				&wwan_pops, mhiwwan);
++				&wwan_pops, WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
++				mhiwwan);
+ 	if (IS_ERR(port)) {
+ 		kfree(mhiwwan);
+ 		return PTR_ERR(port);
+diff --git a/drivers/net/wwan/rpmsg_wwan_ctrl.c b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+index 31c24420ab2e..fc6c228b7e1c 100644
+--- a/drivers/net/wwan/rpmsg_wwan_ctrl.c
++++ b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+@@ -129,7 +129,8 @@ static int rpmsg_wwan_ctrl_probe(struct rpmsg_device *rpdev)
+ 
+ 	/* Register as a wwan port, id.driver_data contains wwan port type */
+ 	port = wwan_create_port(parent, rpdev->id.driver_data,
+-				&rpmsg_wwan_pops, rpwwan);
++				&rpmsg_wwan_pops, WWAN_NO_FRAGMENT,
++				WWAN_NO_HEADROOM, rpwwan);
+ 	if (IS_ERR(port))
+ 		return PTR_ERR(port);
+ 
+diff --git a/drivers/net/wwan/t7xx/t7xx_port_wwan.c b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+index 33931bfd78fd..b75bb272f861 100644
+--- a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
++++ b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+@@ -54,13 +54,13 @@ static void t7xx_port_ctrl_stop(struct wwan_port *port)
+ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+ {
+ 	struct t7xx_port *port_private = wwan_port_get_drvdata(port);
+-	size_t len, offset, chunk_len = 0, txq_mtu = CLDMA_MTU;
+ 	const struct t7xx_port_conf *port_conf;
++	struct sk_buff *cur = skb, *cloned;
+ 	struct t7xx_fsm_ctl *ctl;
+ 	enum md_state md_state;
++	int cnt = 0, ret;
+ 
+-	len = skb->len;
+-	if (!len || !port_private->chan_enable)
++	if (!port_private->chan_enable)
+ 		return -EINVAL;
+ 
+ 	port_conf = port_private->port_conf;
+@@ -72,23 +72,21 @@ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+ 		return -ENODEV;
+ 	}
+ 
+-	for (offset = 0; offset < len; offset += chunk_len) {
+-		struct sk_buff *skb_ccci;
+-		int ret;
+-
+-		chunk_len = min(len - offset, txq_mtu - sizeof(struct ccci_header));
+-		skb_ccci = t7xx_port_alloc_skb(chunk_len);
+-		if (!skb_ccci)
+-			return -ENOMEM;
+-
+-		skb_put_data(skb_ccci, skb->data + offset, chunk_len);
+-		ret = t7xx_port_send_skb(port_private, skb_ccci, 0, 0);
++	while (cur) {
++		cloned = skb_clone(cur, GFP_KERNEL);
++		cloned->len = skb_headlen(cur);
++		ret = t7xx_port_send_skb(port_private, cloned, 0, 0);
+ 		if (ret) {
+-			dev_kfree_skb_any(skb_ccci);
++			dev_kfree_skb(cloned);
+ 			dev_err(port_private->dev, "Write error on %s port, %d\n",
+ 				port_conf->name, ret);
+-			return ret;
++			return cnt ? cnt + ret : ret;
+ 		}
++		cnt += cur->len;
++		if (cur == skb)
++			cur = skb_shinfo(skb)->frag_list;
++		else
++			cur = cur->next;
+ 	}
+ 
+ 	dev_kfree_skb(skb);
+@@ -154,13 +152,15 @@ static int t7xx_port_wwan_disable_chl(struct t7xx_port *port)
+ static void t7xx_port_wwan_md_state_notify(struct t7xx_port *port, unsigned int state)
+ {
+ 	const struct t7xx_port_conf *port_conf = port->port_conf;
++	unsigned int header_len = sizeof(struct ccci_header);
+ 
+ 	if (state != MD_STATE_READY)
+ 		return;
+ 
+ 	if (!port->wwan_port) {
+ 		port->wwan_port = wwan_create_port(port->dev, port_conf->port_type,
+-						   &wwan_ops, port);
++						   &wwan_ops, CLDMA_MTU - header_len,
++						   header_len, port);
+ 		if (IS_ERR(port->wwan_port))
+ 			dev_err(port->dev, "Unable to create WWWAN port %s", port_conf->name);
+ 	}
+diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+index 62e9f7d6c9fe..8d35513bcd4c 100644
+--- a/drivers/net/wwan/wwan_core.c
++++ b/drivers/net/wwan/wwan_core.c
+@@ -67,6 +67,8 @@ struct wwan_device {
+  * @rxq: Buffer inbound queue
+  * @waitqueue: The waitqueue for port fops (read/write/poll)
+  * @data_lock: Port specific data access serialization
++ * @headroom_len: SKB reserved headroom size
++ * @frag_len: Length to fragment packet
+  * @at_data: AT port specific data
+  */
+ struct wwan_port {
+@@ -79,6 +81,8 @@ struct wwan_port {
+ 	struct sk_buff_head rxq;
+ 	wait_queue_head_t waitqueue;
+ 	struct mutex data_lock;	/* Port specific data access serialization */
++	size_t headroom_len;
++	size_t frag_len;
+ 	union {
+ 		struct {
+ 			struct ktermios termios;
+@@ -422,6 +426,8 @@ static int __wwan_port_dev_assign_name(struct wwan_port *port, const char *fmt)
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata)
+ {
+ 	struct wwan_device *wwandev;
+@@ -455,6 +461,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
+ 
+ 	port->type = type;
+ 	port->ops = ops;
++	port->frag_len = frag_len ? frag_len : SIZE_MAX;
++	port->headroom_len = headroom_len;
+ 	mutex_init(&port->ops_lock);
+ 	skb_queue_head_init(&port->rxq);
+ 	init_waitqueue_head(&port->waitqueue);
+@@ -698,30 +706,53 @@ static ssize_t wwan_port_fops_read(struct file *filp, char __user *buf,
+ static ssize_t wwan_port_fops_write(struct file *filp, const char __user *buf,
+ 				    size_t count, loff_t *offp)
+ {
++	struct sk_buff *skb, *head = NULL, *tail = NULL;
+ 	struct wwan_port *port = filp->private_data;
+-	struct sk_buff *skb;
++	size_t frag_len, remain = count;
+ 	int ret;
+ 
+ 	ret = wwan_wait_tx(port, !!(filp->f_flags & O_NONBLOCK));
+ 	if (ret)
+ 		return ret;
+ 
+-	skb = alloc_skb(count, GFP_KERNEL);
+-	if (!skb)
+-		return -ENOMEM;
++	do {
++		frag_len = min(remain, port->frag_len);
++		skb = alloc_skb(frag_len + port->headroom_len, GFP_KERNEL);
++		if (!skb) {
++			ret = -ENOMEM;
++			goto freeskb;
++		}
++		skb_reserve(skb, port->headroom_len);
++
++		if (!head) {
++			head = skb;
++		} else if (!tail) {
++			skb_shinfo(head)->frag_list = skb;
++			tail = skb;
++		} else {
++			tail->next = skb;
++			tail = skb;
++		}
+ 
+-	if (copy_from_user(skb_put(skb, count), buf, count)) {
+-		kfree_skb(skb);
+-		return -EFAULT;
+-	}
++		if (copy_from_user(skb_put(skb, frag_len), buf + count - remain, frag_len)) {
++			ret = -EFAULT;
++			goto freeskb;
++		}
+ 
+-	ret = wwan_port_op_tx(port, skb, !!(filp->f_flags & O_NONBLOCK));
+-	if (ret) {
+-		kfree_skb(skb);
+-		return ret;
+-	}
++		if (skb != head) {
++			head->data_len += skb->len;
++			head->len += skb->len;
++			head->truesize += skb->truesize;
++		}
++	} while (remain -= frag_len);
++
++	ret = wwan_port_op_tx(port, head, !!(filp->f_flags & O_NONBLOCK));
++	if (!ret)
++		return count;
+ 
+-	return count;
++freeskb:
++	kfree_skb(head);
++	return ret;
+ }
+ 
+ static __poll_t wwan_port_fops_poll(struct file *filp, poll_table *wait)
+diff --git a/drivers/net/wwan/wwan_hwsim.c b/drivers/net/wwan/wwan_hwsim.c
+index ff09a8cedf93..7fb54cb51628 100644
+--- a/drivers/net/wwan/wwan_hwsim.c
++++ b/drivers/net/wwan/wwan_hwsim.c
+@@ -205,6 +205,7 @@ static struct wwan_hwsim_port *wwan_hwsim_port_new(struct wwan_hwsim_dev *dev)
+ 
+ 	port->wwan = wwan_create_port(&dev->dev, WWAN_PORT_AT,
+ 				      &wwan_hwsim_port_ops,
++				      WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
+ 				      port);
+ 	if (IS_ERR(port->wwan)) {
+ 		err = PTR_ERR(port->wwan);
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 1f0951be15ab..e0f0bc878bbd 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -929,7 +929,8 @@ static void wdm_wwan_init(struct wdm_device *desc)
+ 		return;
+ 	}
+ 
+-	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops, desc);
++	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops,
++				WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM, desc);
+ 	if (IS_ERR(port)) {
+ 		dev_err(&intf->dev, "%s: Unable to create WWAN port\n",
+ 			dev_name(intf->usb_dev));
+diff --git a/include/linux/wwan.h b/include/linux/wwan.h
+index 5ce2acf444fb..adaf1f4a8652 100644
+--- a/include/linux/wwan.h
++++ b/include/linux/wwan.h
+@@ -62,11 +62,25 @@ struct wwan_port_ops {
+ 			    poll_table *wait);
+ };
+ 
++/*
++ * Used to indicate that the WWAN core should not fragment control packages.
++ */
++#define WWAN_NO_FRAGMENT	0
++
++/*
++ * Used to indicate that the WWAN core should not reserve headroom in control packages.
++ */
++#define WWAN_NO_HEADROOM	0
++
+ /**
+  * wwan_create_port - Add a new WWAN port
+  * @parent: Device to use as parent and shared by all WWAN ports
+  * @type: WWAN port type
+  * @ops: WWAN port operations
++ * @frag_len: WWAN port TX fragments length, if WWAN_NO_FRAGMENT is set,
++ *            the WWAN core don't fragment control packages.
++ * @headroom_len: WWAN port TX fragments reserved headroom length, if WWAN_NO_HEADROOM
++ *                is set, the WWAN core don't reserve headroom in control packages.
+  * @drvdata: Pointer to caller driver data
+  *
+  * Allocate and register a new WWAN port. The port will be automatically exposed
+@@ -84,6 +98,8 @@ struct wwan_port_ops {
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata);
+ 
+ /**
+-- 
+2.17.0
+
