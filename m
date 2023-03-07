@@ -2,124 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6246AE6A4
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 17:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AB26AF61C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 20:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCGQcQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Mar 2023 11:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S231526AbjCGTuc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 Mar 2023 14:50:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjCGQbh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 11:31:37 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0734898E5
-        for <linux-usb@vger.kernel.org>; Tue,  7 Mar 2023 08:31:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=FoqjTA8Za4V7Be
-        7RYCx6I7pfuapKZ/gfbeqrJ+oZq7U=; b=lVTYO2h09AuGHmx0lS5IH2B2gRy/0H
-        EZD0zooyaK8UpeBrlro8t4Tzzbzcz4t9pOD+XRaWvoigrKiZgaGBHxlTPDr7IlC8
-        VzNsnewjdkjffMs9YN5AVi8287uiSh8D+GZn/VX/mx8ejokS/1pNbbDjHEUBQLKl
-        jwU1HcVVWmawE=
-Received: (qmail 752222 invoked from network); 7 Mar 2023 17:31:09 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Mar 2023 17:31:09 +0100
-X-UD-Smtp-Session: l3s3148p1@ggVo8FH2io0gAQnoAFQ+AGEn9EY5VOxJ
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11] usb: gadget: udc: renesas_usb3: remove R-Car H3 ES1.* handling
-Date:   Tue,  7 Mar 2023 17:30:39 +0100
-Message-Id: <20230307163041.3815-12-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
+        with ESMTP id S231363AbjCGTuM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 14:50:12 -0500
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C73BB9BFD
+        for <linux-usb@vger.kernel.org>; Tue,  7 Mar 2023 11:41:22 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id h8so15280056plf.10
+        for <linux-usb@vger.kernel.org>; Tue, 07 Mar 2023 11:41:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678218046;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:to:from:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CWFDL0Togo3L/5bvFloyMlrVxNWJz2dZaxBpDesLPPY=;
+        b=zinZItF2f8sq5bPk9gplUNc5SQ6WSELIGRR7dk3XeynfAna67M7QtF22/6pum1GWrU
+         6rLywIkSM1x8o+OOnAeY2R1ZOUKxN9KttWYMZkB+MMR+EKmdN2dTS6nSwNGmx8YkCYrO
+         ZslfyWoWQlU/UAmrz9mZRFlucfb3GFHBQltdeDb0UCENgjGcnbfPM7bYxPpejvwaxD51
+         254Ul5mNhFHuKuIg/Z59D/sBxR/xRNR+l4Bo8xhQ8XnGTbxPUOccmVY/42Cfb8aVTC9h
+         P7hg2ObH2Q0yp6b2gLVMWE8poDw9O+erSeRG1rASCFAGRtcp9CX0ktylloM5LYXMPXer
+         ZKgg==
+X-Gm-Message-State: AO0yUKVzOR3yJ11rRc41Gn2pcGEAdqzFnhzdCW9x3hC/Vw2llPJUfz1N
+        sMYwtLDyOs5OUTOZ6C6UWsAbm8WKfjr23S04eUU=
+X-Google-Smtp-Source: AK7set9Pfl0SQYm8o4d/CzeLw+E0U3nXeg314CNzFcmKQNtPX+Scglz04h5m+eRyrouDFqS1XFo04A==
+X-Received: by 2002:a17:90b:4b49:b0:234:234c:72d9 with SMTP id mi9-20020a17090b4b4900b00234234c72d9mr16195349pjb.14.1678218046516;
+        Tue, 07 Mar 2023 11:40:46 -0800 (PST)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id fy1-20020a17090b020100b0022bfcf5d297sm9742902pjb.9.2023.03.07.11.40.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 11:40:45 -0800 (PST)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Bernhard =?utf-8?Q?Rosenkr?= =?utf-8?Q?=C3=A4nzer?= 
+        <bero@baylibre.com>, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        linus.walleij@linaro.org, gregkh@linuxfoundation.org,
+        daniel.lezcano@linaro.org, chunfeng.yun@mediatek.com,
+        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
+        allen-kh.cheng@mediatek.com, sean.wang@mediatek.com,
+        zhiyong.tao@mediatek.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v9 8/9] dt-bindings: serial: mediatek,uart: add MT8365
+In-Reply-To: <0dec66ce-424c-e682-3f73-594e5b1edb65@gmail.com>
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-9-bero@baylibre.com>
+ <0dec66ce-424c-e682-3f73-594e5b1edb65@gmail.com>
+Date:   Tue, 07 Mar 2023 11:40:45 -0800
+Message-ID: <7httywfiyq.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-R-Car H3 ES1.* was only available to an internal development group and
-needed a lot of quirks and workarounds. These become a maintenance
-burden now, so our development group decided to remove upstream support
-and disable booting for this SoC. Public users only have ES2 onwards.
+Hi Matthias,
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-Please apply individually per subsystem. There are no dependencies and the SoC
-doesn't boot anymore since v6.3-rc1.
+Matthias Brugger <matthias.bgg@gmail.com> writes:
 
- drivers/usb/gadget/udc/renesas_usb3.c | 23 +----------------------
- 1 file changed, 1 insertion(+), 22 deletions(-)
+> On 25/01/2023 15:35, Bernhard Rosenkränzer wrote:
+>> Add binding description for mediatek,mt8365-uart
+>> 
+>> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> Greg will you take 5,6 and 8 from this series through your branch or are you Ok 
+> if I take them. They are all just adding a new compatible string to the 
+> following files:
+> Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> and
+> Documentation/devicetree/bindings/serial/mediatek,uart.yaml
 
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index bee6bceafc4f..f2ac6447b748 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -22,7 +22,6 @@
- #include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/string.h>
--#include <linux/sys_soc.h>
- #include <linux/uaccess.h>
- #include <linux/usb/ch9.h>
- #include <linux/usb/gadget.h>
-@@ -2781,13 +2780,6 @@ static void renesas_usb3_init_ram(struct renesas_usb3 *usb3, struct device *dev,
- 	}
- }
- 
--static const struct renesas_usb3_priv renesas_usb3_priv_r8a7795_es1 = {
--	.ramsize_per_ramif = SZ_16K,
--	.num_ramif = 2,
--	.ramsize_per_pipe = SZ_4K,
--	.workaround_for_vbus = true,
--};
--
- static const struct renesas_usb3_priv renesas_usb3_priv_gen3 = {
- 	.ramsize_per_ramif = SZ_16K,
- 	.num_ramif = 4,
-@@ -2829,14 +2821,6 @@ static const struct of_device_id usb3_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, usb3_of_match);
- 
--static const struct soc_device_attribute renesas_usb3_quirks_match[] = {
--	{
--		.soc_id = "r8a7795", .revision = "ES1.*",
--		.data = &renesas_usb3_priv_r8a7795_es1,
--	},
--	{ /* sentinel */ }
--};
--
- static const unsigned int renesas_usb3_cable[] = {
- 	EXTCON_USB,
- 	EXTCON_USB_HOST,
-@@ -2854,13 +2838,8 @@ static int renesas_usb3_probe(struct platform_device *pdev)
- 	struct renesas_usb3 *usb3;
- 	int irq, ret;
- 	const struct renesas_usb3_priv *priv;
--	const struct soc_device_attribute *attr;
- 
--	attr = soc_device_match(renesas_usb3_quirks_match);
--	if (attr)
--		priv = attr->data;
--	else
--		priv = of_device_get_match_data(&pdev->dev);
-+	priv = of_device_get_match_data(&pdev->dev);
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
--- 
-2.35.1
+Might I gently suggest that you take these along with patch 9 through
+your tree?
 
+The driver portions were all been merged and the bindings and DT all
+reviewed since end of January.
+
+Thanks,
+
+Kevin
